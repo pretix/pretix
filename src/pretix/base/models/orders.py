@@ -1167,9 +1167,7 @@ class Order(LockModel, LoggedModel):
                          only be attached for this position and child positions, the link will only point to the
                          position and the attendee email will be used if available.
         """
-        from pretix.base.services.mail import (
-            SendMailException, mail, render_mail,
-        )
+        from pretix.base.services.mail import mail, render_mail
 
         if not self.email and not (position and position.attendee_email):
             return
@@ -1179,35 +1177,31 @@ class Order(LockModel, LoggedModel):
             if position and position.attendee_email:
                 recipient = position.attendee_email
 
-            try:
-                email_content = render_mail(template, context)
-                subject = format_map(subject, context)
-                mail(
-                    recipient, subject, template, context,
-                    self.event, self.locale, self, headers=headers, sender=sender,
-                    invoices=invoices, attach_tickets=attach_tickets,
-                    position=position, auto_email=auto_email, attach_ical=attach_ical,
-                    attach_other_files=attach_other_files, attach_cached_files=attach_cached_files,
-                )
-            except SendMailException:
-                raise
-            else:
-                self.log_action(
-                    log_entry_type,
-                    user=user,
-                    auth=auth,
-                    data={
-                        'subject': subject,
-                        'message': email_content,
-                        'position': position.positionid if position else None,
-                        'recipient': recipient,
-                        'invoices': [i.pk for i in invoices] if invoices else [],
-                        'attach_tickets': attach_tickets,
-                        'attach_ical': attach_ical,
-                        'attach_other_files': attach_other_files,
-                        'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
-                    }
-                )
+            email_content = render_mail(template, context)
+            subject = format_map(subject, context)
+            mail(
+                recipient, subject, template, context,
+                self.event, self.locale, self, headers=headers, sender=sender,
+                invoices=invoices, attach_tickets=attach_tickets,
+                position=position, auto_email=auto_email, attach_ical=attach_ical,
+                attach_other_files=attach_other_files, attach_cached_files=attach_cached_files,
+            )
+            self.log_action(
+                log_entry_type,
+                user=user,
+                auth=auth,
+                data={
+                    'subject': subject,
+                    'message': email_content,
+                    'position': position.positionid if position else None,
+                    'recipient': recipient,
+                    'invoices': [i.pk for i in invoices] if invoices else [],
+                    'attach_tickets': attach_tickets,
+                    'attach_ical': attach_ical,
+                    'attach_other_files': attach_other_files,
+                    'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
+                }
+            )
 
     def resend_link(self, user=None, auth=None):
         with language(self.locale, self.event.settings.region):
@@ -2024,40 +2018,30 @@ class OrderPayment(models.Model):
             transmit_invoice.apply_async(args=(self.order.event_id, invoice.pk, False))
 
     def _send_paid_mail_attendee(self, position, user):
-        from pretix.base.services.mail import SendMailException
-
         with language(self.order.locale, self.order.event.settings.region):
             email_template = self.order.event.settings.mail_text_order_paid_attendee
             email_subject = self.order.event.settings.mail_subject_order_paid_attendee
             email_context = get_email_context(event=self.order.event, order=self.order, position=position)
-            try:
-                position.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_paid', user,
-                    invoices=[],
-                    attach_tickets=True,
-                    attach_ical=self.order.event.settings.mail_attach_ical
-                )
-            except SendMailException:
-                logger.exception('Order paid email could not be sent')
+            position.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.order_paid', user,
+                invoices=[],
+                attach_tickets=True,
+                attach_ical=self.order.event.settings.mail_attach_ical
+            )
 
     def _send_paid_mail(self, invoice, user, mail_text):
-        from pretix.base.services.mail import SendMailException
-
         with language(self.order.locale, self.order.event.settings.region):
             email_template = self.order.event.settings.mail_text_order_paid
             email_subject = self.order.event.settings.mail_subject_order_paid
             email_context = get_email_context(event=self.order.event, order=self.order, payment_info=mail_text)
-            try:
-                self.order.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_paid', user,
-                    invoices=[invoice] if invoice else [],
-                    attach_tickets=True,
-                    attach_ical=self.order.event.settings.mail_attach_ical
-                )
-            except SendMailException:
-                logger.exception('Order paid email could not be sent')
+            self.order.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.order_paid', user,
+                invoices=[invoice] if invoice else [],
+                attach_tickets=True,
+                attach_ical=self.order.event.settings.mail_attach_ical
+            )
 
     @property
     def refunded_amount(self):
@@ -2915,45 +2899,39 @@ class OrderPosition(AbstractPosition):
         :param attach_tickets: Attach tickets of this order, if they are existing and ready to download
         :param attach_ical: Attach relevant ICS files
         """
-        from pretix.base.services.mail import (
-            SendMailException, mail, render_mail,
-        )
+        from pretix.base.services.mail import mail, render_mail
 
         if not self.attendee_email:
             return
 
         with language(self.order.locale, self.order.event.settings.region):
             recipient = self.attendee_email
-            try:
-                email_content = render_mail(template, context)
-                subject = format_map(subject, context)
-                mail(
-                    recipient, subject, template, context,
-                    self.event, self.order.locale, order=self.order, headers=headers, sender=sender,
-                    position=self,
-                    invoices=invoices,
-                    attach_tickets=attach_tickets,
-                    attach_ical=attach_ical,
-                    attach_other_files=attach_other_files,
-                )
-            except SendMailException:
-                raise
-            else:
-                self.order.log_action(
-                    log_entry_type,
-                    user=user,
-                    auth=auth,
-                    data={
-                        'subject': subject,
-                        'message': email_content,
-                        'recipient': recipient,
-                        'invoices': [i.pk for i in invoices] if invoices else [],
-                        'attach_tickets': attach_tickets,
-                        'attach_ical': attach_ical,
-                        'attach_other_files': attach_other_files,
-                        'attach_cached_files': [],
-                    }
-                )
+            email_content = render_mail(template, context)
+            subject = format_map(subject, context)
+            mail(
+                recipient, subject, template, context,
+                self.event, self.order.locale, order=self.order, headers=headers, sender=sender,
+                position=self,
+                invoices=invoices,
+                attach_tickets=attach_tickets,
+                attach_ical=attach_ical,
+                attach_other_files=attach_other_files,
+            )
+            self.order.log_action(
+                log_entry_type,
+                user=user,
+                auth=auth,
+                data={
+                    'subject': subject,
+                    'message': email_content,
+                    'recipient': recipient,
+                    'invoices': [i.pk for i in invoices] if invoices else [],
+                    'attach_tickets': attach_tickets,
+                    'attach_ical': attach_ical,
+                    'attach_other_files': attach_other_files,
+                    'attach_cached_files': [],
+                }
+            )
 
     def resend_link(self, user=None, auth=None):
 

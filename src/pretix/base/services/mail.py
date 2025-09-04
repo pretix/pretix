@@ -42,7 +42,7 @@ import smtplib
 import warnings
 from email.mime.image import MIMEImage
 from email.utils import formataddr
-from typing import Any, Dict, List, Sequence, Union
+from typing import Any, Dict, Sequence, Union
 from urllib.parse import urljoin, urlparse
 from zoneinfo import ZoneInfo
 
@@ -51,16 +51,13 @@ from celery import chain
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.files.storage import default_storage
-from django.core.mail import (
-    EmailMultiAlternatives, SafeMIMEMultipart, get_connection,
-)
+from django.core.mail import EmailMultiAlternatives, SafeMIMEMultipart
 from django.core.mail.message import SafeMIMEText
 from django.db import transaction
 from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.timezone import now, override
 from django.utils.translation import gettext as _, pgettext
-from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 from text_unidecode import unidecode
 
@@ -68,13 +65,15 @@ from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Customer, Event, Invoice, InvoiceAddress, Order, OrderPosition,
-    Organizer, User,
+    Organizer,
 )
+from pretix.base.models.mail import OutgoingMail
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
 from pretix.base.signals import email_filter, global_email_filter
 from pretix.celery_app import app
+from pretix.helpers import OF_SELF
 from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -91,6 +90,9 @@ class TolerantDict(dict):
 
 
 class SendMailException(Exception):
+    """
+    Deprecated, not thrown any more.
+    """
     pass
 
 
@@ -202,162 +204,120 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     if no_order_links and not plain_text_only:
         raise ValueError('If you set no_order_links, you also need to set plain_text_only.')
 
+    settings_holder = event or organizer
+
     headers = headers or {}
     if auto_email:
         headers['X-Auto-Response-Suppress'] = 'OOF, NRN, AutoReply, RN'
         headers['Auto-Submitted'] = 'auto-generated'
     headers.setdefault('X-Mailer', 'pretix')
 
+    bcc = list(bcc or [])
+    if settings_holder and settings_holder.settings.mail_bcc:
+        for bcc_mail in settings_holder.settings.mail_bcc.split(','):
+            bcc.append(bcc_mail.strip())
+
+    if (settings_holder
+            and settings_holder.settings.mail_from in (settings.DEFAULT_FROM_EMAIL, settings.MAIL_FROM_ORGANIZERS)
+            and settings_holder.settings.contact_mail and not headers.get('Reply-To')):
+        headers['Reply-To'] = settings_holder.settings.contact_mail
+
+    if settings_holder:
+        timezone = settings_holder.timezone
+    elif user:
+        timezone = ZoneInfo(user.timezone)
+    else:
+        timezone = ZoneInfo(settings.TIME_ZONE)
+
+    if event and attach_tickets and not event.settings.mail_attach_tickets:
+        attach_tickets = False
+
     with language(locale):
         if isinstance(context, dict) and order:
-            try:
-                context.update({
-                    'invoice_name': order.invoice_address.name,
-                    'invoice_company': order.invoice_address.company
-                })
-            except InvoiceAddress.DoesNotExist:
-                context.update({
-                    'invoice_name': '',
-                    'invoice_company': ''
-                })
-        renderer = ClassicMailRenderer(None, organizer)
+            _autoextend_context(context, order)
+
+        # Build raw content
         body_plain = render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN)
-        subject = str(subject).format_map(TolerantDict(context))
-        sender = (
-            sender or
-            (event.settings.get('mail_from') if event else None) or
-            (organizer.settings.get('mail_from') if organizer else None) or
-            settings.MAIL_FROM
-        )
-        if event:
-            sender_name = clean_sender_name(event.settings.mail_from_name or str(event.name))
-            sender = formataddr((sender_name, sender))
-        elif organizer:
-            sender_name = clean_sender_name(organizer.settings.mail_from_name or str(organizer.name))
-            sender = formataddr((sender_name, sender))
-        else:
-            sender = formataddr((clean_sender_name(settings.PRETIX_INSTANCE_NAME), sender))
-
-        subject = raw_subject = str(subject).replace('\n', ' ').replace('\r', '')[:900]
-        signature = ""
-
-        bcc = list(bcc or [])
-
-        settings_holder = event or organizer
-
-        if event:
-            timezone = event.timezone
-        elif user:
-            timezone = ZoneInfo(user.timezone)
-        elif organizer:
-            timezone = organizer.timezone
-        else:
-            timezone = ZoneInfo(settings.TIME_ZONE)
-
         if settings_holder:
-            if settings_holder.settings.mail_bcc:
-                for bcc_mail in settings_holder.settings.mail_bcc.split(','):
-                    bcc.append(bcc_mail.strip())
-
-            if settings_holder.settings.mail_from in (settings.DEFAULT_FROM_EMAIL, settings.MAIL_FROM_ORGANIZERS) \
-                    and settings_holder.settings.contact_mail and not headers.get('Reply-To'):
-                headers['Reply-To'] = settings_holder.settings.contact_mail
-
-            subject = prefix_subject(settings_holder, subject)
-
-            body_plain += "\r\n\r\n-- \r\n"
-
             signature = str(settings_holder.settings.get('mail_text_signature'))
-            if signature:
-                signature = signature.format(event=event.name if event else '')
-                body_plain += signature
-                body_plain += "\r\n\r\n-- \r\n"
+        else:
+            signature = ""
 
-        if event:
-            renderer = event.get_html_mail_renderer()
-
-            if order and order.testmode:
-                subject = "[TESTMODE] " + subject
-
-            if order and position and not no_order_links:
-                body_plain += _(
-                    "You are receiving this email because someone placed an order for {event} for you."
-                ).format(event=event.name)
-                body_plain += "\r\n"
-                body_plain += _(
-                    "You can view your order details at the following URL:\n{orderurl}."
-                ).replace("\n", "\r\n").format(
-                    event=event.name, orderurl=build_absolute_uri(
-                        order.event, 'presale:event.order.position', kwargs={
-                            'order': order.code,
-                            'secret': position.web_secret,
-                            'position': position.positionid,
-                        }
-                    )
-                )
-            elif order and not no_order_links:
-                body_plain += _(
-                    "You are receiving this email because you placed an order for {event}."
-                ).format(event=event.name)
-                body_plain += "\r\n"
-                body_plain += _(
-                    "You can view your order details at the following URL:\n{orderurl}."
-                ).replace("\n", "\r\n").format(
-                    event=event.name, orderurl=build_absolute_uri(
-                        order.event, 'presale:event.order.open', kwargs={
-                            'order': order.code,
-                            'secret': order.secret,
-                            'hash': order.email_confirm_secret()
-                        }
-                    )
-                )
-            body_plain += "\r\n"
-
-        with override(timezone):
-            try:
-                content_plain = render_mail(template, context, placeholder_mode=None)
-                if plain_text_only:
-                    body_html = None
-                elif 'context' in inspect.signature(renderer.render).parameters:
-                    body_html = renderer.render(content_plain, signature, raw_subject, order, position, context)
-                elif 'position' in inspect.signature(renderer.render).parameters:
-                    # Backwards compatibility
-                    warnings.warn('Email renderer called without context argument because context argument is not '
-                                  'supported.',
-                                  DeprecationWarning)
-                    body_html = renderer.render(content_plain, signature, raw_subject, order, position)
-                else:
-                    # Backwards compatibility
-                    warnings.warn('Email renderer called without position argument because position argument is not '
-                                  'supported.',
-                                  DeprecationWarning)
-                    body_html = renderer.render(content_plain, signature, raw_subject, order)
-            except:
-                logger.exception('Could not render HTML body')
-                body_html = None
-
+        # Build full plain-text body
+        body_plain = _wrap_plain_body(body_plain, signature, event, order, position, no_order_links)
         body_plain = format_map(body_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
 
-        send_task = mail_send_task.si(
+        # Build subject
+        subject = str(subject).format_map(TolerantDict(context))
+        subject = raw_subject = subject.replace('\n', ' ').replace('\r', '')[:900]
+        if settings_holder:
+            subject = prefix_subject(settings_holder, subject)
+        if (order and order.testmode) or (not order and event and event.testmode):
+            subject = "[TESTMODE] " + subject
+
+        # Build sender
+        sender = _full_sender(sender, event, organizer)
+
+        # Build HTML body
+        if plain_text_only:
+            body_html = None
+        else:
+            if event:
+                renderer = event.get_html_mail_renderer()
+            else:
+                renderer = ClassicMailRenderer(None, organizer)
+
+            with override(timezone):
+                content_plain = render_mail(template, context, placeholder_mode=None)
+                try:
+                    if 'context' in inspect.signature(renderer.render).parameters:
+                        body_html = renderer.render(content_plain, signature, raw_subject, order, position, context)
+                    elif 'position' in inspect.signature(renderer.render).parameters:
+                        # Backwards compatibility
+                        warnings.warn('Email renderer called without context argument because context argument is not '
+                                      'supported.',
+                                      DeprecationWarning)
+                        body_html = renderer.render(content_plain, signature, raw_subject, order, position)
+                    else:
+                        # Backwards compatibility
+                        warnings.warn('Email renderer called without position argument because position argument is not '
+                                      'supported.',
+                                      DeprecationWarning)
+                        body_html = renderer.render(content_plain, signature, raw_subject, order)
+                except:
+                    logger.exception('Could not render HTML body')
+                    body_html = None
+
+        m = OutgoingMail.objects.create(
+            organizer=organizer,
+            event=event,
+            order=order,
+            orderposition=position,
+            customer=customer,
+            user=user,
             to=[email] if isinstance(email, str) else list(email),
-            cc=cc,
-            bcc=bcc,
+            cc=cc or [],
+            bcc=bcc or [],
             subject=subject,
-            body=body_plain,
-            html=body_html,
+            body_plain=body_plain,
+            body_html=body_html,
             sender=sender,
-            event=event.id if event else None,
             headers=headers,
-            invoices=[i.pk for i in invoices] if invoices and not position else [],
-            order=order.pk if order else None,
-            position=position.pk if position else None,
-            attach_tickets=attach_tickets,
-            attach_ical=attach_ical,
-            user=user.pk if user else None,
-            organizer=organizer.pk if organizer else None,
-            customer=customer.pk if customer else None,
-            attach_cached_files=[(cf.id if isinstance(cf, CachedFile) else cf) for cf in attach_cached_files] if attach_cached_files else [],
-            attach_other_files=attach_other_files,
+            should_attach_tickets=attach_tickets,
+            should_attach_ical=attach_ical,
+            should_attach_other_files=attach_other_files or [],
+        )
+        if invoices and not position:
+            m.should_attach_invoices.add(*invoices)
+        if attach_cached_files:
+            for cf in attach_cached_files:
+                if not isinstance(cf, CachedFile):
+                    m.should_attach_cached_files.add(CachedFile.objects.get(pk=cf))
+                else:
+                    m.should_attach_cached_files.add(cf)
+
+        send_task = mail_send_task.si(
+            outgoing_mail=m.id
         )
 
         if invoices:
@@ -392,194 +352,197 @@ class CustomEmail(EmailMultiAlternatives):
 
 
 @app.task(base=TransactionAwareTask, bind=True, acks_late=True)
-def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
-                   event: int = None, position: int = None, headers: dict = None, cc: List[str] = None, bcc: List[str] = None,
-                   invoices: List[int] = None, order: int = None, attach_tickets=False, user=None,
-                   organizer=None, customer=None, attach_ical=False, attach_cached_files: List[int] = None,
-                   attach_other_files: List[str] = None) -> bool:
-    email = CustomEmail(subject, body, sender, to=to, cc=cc, bcc=bcc, headers=headers)
-    if html is not None:
+def mail_send_task(self, *args, outgoing_mail: int) -> bool:
+    with transaction.atomic():
+        outgoing_mail = OutgoingMail.objects.select_for_update(of=OF_SELF).get(pk=outgoing_mail)
+        if outgoing_mail.status == OutgoingMail.STATUS_INFLIGHT:
+            logger.info("Ignoring job for inflight email")
+            return False
+        elif outgoing_mail.status in (OutgoingMail.STATUS_SENT, OutgoingMail.STATUS_FAILED):
+            logger.info(f"Ignoring job for email in final state {outgoing_mail.status}")
+            return False
+        outgoing_mail.status = OutgoingMail.STATUS_INFLIGHT
+        outgoing_mail.save(update_fields=["status"])
+
+    email = CustomEmail(
+        subject=outgoing_mail.subject,
+        body=outgoing_mail.body_plain,
+        from_email=outgoing_mail.sender,
+        to=outgoing_mail.to,
+        cc=outgoing_mail.cc,
+        bcc=outgoing_mail.bcc,
+        headers=outgoing_mail.headers,
+    )
+
+    # Rewrite all <img> tags from real URLs or data URLs to inline attachments referred to by content ID
+    if outgoing_mail.body_html is not None:
         html_message = SafeMIMEMultipart(_subtype='related', encoding=settings.DEFAULT_CHARSET)
-        html_with_cid, cid_images = replace_images_with_cid_paths(html)
+        html_with_cid, cid_images = replace_images_with_cid_paths(outgoing_mail.body_html)
         html_message.attach(SafeMIMEText(html_with_cid, 'html', settings.DEFAULT_CHARSET))
         attach_cid_images(html_message, cid_images, verify_ssl=True)
         email.attach_alternative(html_message, "multipart/related")
 
-    log_target = None
+    log_target, error_log_action_type = outgoing_mail.log_parameters()
+    invoices_attached = []
+    actual_attachments = []
 
-    if user:
-        user = User.objects.get(pk=user)
-        error_log_action_type = 'pretix.user.email.error'
-        log_target = user
+    with outgoing_mail.scope_manager():
+        # Attach tickets
+        if outgoing_mail.should_attach_tickets and outgoing_mail.order:
+            with language(outgoing_mail.order.locale, outgoing_mail.event.settings.region):
+                args = []
+                attach_size = 0
+                for name, ct in get_tickets_for_order(outgoing_mail.order, base_position=outgoing_mail.orderposition):
+                    try:
+                        content = ct.file.read()
+                        args.append((name, content, ct.type))
+                        attach_size += len(content)
+                    except Exception:
+                        # This sometimes fails e.g. with FileNotFoundError. We haven't been able to figure out
+                        # why (probably some race condition with ticket cache invalidation?), so retry later.
+                        try:
+                            self.retry(max_retries=5, countdown=60)
+                        except MaxRetriesExceededError:
+                            # Well then, something is really wrong, let's send it without attachment before we
+                            # don't sent at all
+                            logger.exception('Could not attach tickets to email')
+                            pass
 
-    if event:
-        with scopes_disabled():
-            event = Event.objects.get(id=event)
-            organizer = event.organizer
-        backend = event.get_mail_backend()
-        cm = lambda: scope(organizer=event.organizer)  # noqa
-    elif organizer:
-        with scopes_disabled():
-            organizer = Organizer.objects.get(id=organizer)
-        backend = organizer.get_mail_backend()
-        cm = lambda: scope(organizer=organizer)  # noqa
-    else:
-        backend = get_connection(fail_silently=False)
-        cm = lambda: scopes_disabled()  # noqa
-
-    with cm():
-        if customer:
-            customer = Customer.objects.get(pk=customer)
-            if not user:
-                error_log_action_type = 'pretix.customer.email.error'
-                log_target = customer
-
-        if event:
-            if order:
-                try:
-                    order = event.orders.get(pk=order)
-                    error_log_action_type = 'pretix.event.order.email.error'
-                    log_target = order
-                except Order.DoesNotExist:
-                    order = None
+                if attach_size * 1.37 < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1024 * 1024:
+                    # Do not attach more than (limit - 1 MB) in tickets (1MB space for invoice, email itself, …),
+                    # it will bounce way too often.
+                    # 1 MB is the buffer for the rest of the email (text, invoice, calendar, pictures)
+                    # 1.37 is the factor for base64 encoding https://en.wikipedia.org/wiki/Base64
+                    for a in args:
+                        try:
+                            email.attach(*a)
+                        except:
+                            pass
                 else:
-                    with language(order.locale, event.settings.region):
-                        if not event.settings.mail_attach_tickets:
-                            attach_tickets = False
-                        if position:
-                            try:
-                                position = order.positions.get(pk=position)
-                            except OrderPosition.DoesNotExist:
-                                attach_tickets = False
-                        if attach_tickets:
-                            args = []
-                            attach_size = 0
-                            for name, ct in get_tickets_for_order(order, base_position=position):
-                                try:
-                                    content = ct.file.read()
-                                    args.append((name, content, ct.type))
-                                    attach_size += len(content)
-                                except:
-                                    # This sometimes fails e.g. with FileNotFoundError. We haven't been able to figure out
-                                    # why (probably some race condition with ticket cache invalidation?), so retry later.
-                                    try:
-                                        self.retry(max_retries=5, countdown=60)
-                                    except MaxRetriesExceededError:
-                                        # Well then, something is really wrong, let's send it without attachment before we
-                                        # don't sent at all
-                                        logger.exception('Could not attach invoice to email')
-                                        pass
+                    outgoing_mail.order.log_action(
+                        'pretix.event.order.email.attachments.skipped',
+                        data={
+                            'subject': 'Attachments skipped',
+                            'message': 'Attachment have not been send because {} bytes are likely too large to arrive.'.format(attach_size),
+                            'recipient': '',
+                            'invoices': [],
+                        }
+                    )
 
-                            if attach_size * 1.37 < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1024 * 1024:
-                                # Do not attach more than (limit - 1 MB) in tickets (1MB space for invoice, email itself, …),
-                                # it will bounce way to often.
-                                # 1 MB is the buffer for the rest of the email (text, invoice, calendar, pictures)
-                                # 1.37 is the factor for base64 encoding https://en.wikipedia.org/wiki/Base64
-                                for a in args:
-                                    try:
-                                        email.attach(*a)
-                                    except:
-                                        pass
-                            else:
-                                order.log_action(
-                                    'pretix.event.order.email.attachments.skipped',
-                                    data={
-                                        'subject': 'Attachments skipped',
-                                        'message': 'Attachment have not been send because {} bytes are likely too large to arrive.'.format(attach_size),
-                                        'recipient': '',
-                                        'invoices': [],
-                                    }
-                                )
-                        if attach_ical:
-                            fname = re.sub('[^a-zA-Z0-9 ]', '-', unidecode(pgettext('attachment_filename', 'Calendar invite')))
-                            for i, cal in enumerate(get_private_icals(event, [position] if position else order.positions.all())):
-                                email.attach('{}{}.ics'.format(fname, f'-{i + 1}' if i > 0 else ''), cal.serialize(), 'text/calendar')
-
-            email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
+        # Attach calendar files
+        if outgoing_mail.should_attach_ical and outgoing_mail.order:
+            fname = re.sub('[^a-zA-Z0-9 ]', '-', unidecode(pgettext('attachment_filename', 'Calendar invite')))
+            icals = get_private_icals(
+                outgoing_mail.event,
+                [outgoing_mail.orderposition] if outgoing_mail.orderposition else outgoing_mail.order.positions.all()
+            )
+            for i, cal in enumerate(icals):
+                name = '{}{}.ics'.format(fname, f'-{i + 1}' if i > 0 else '')
+                content = cal.serialize()
+                mimetype = 'text/calendar'
+                email.attach(name, content, mimetype)
 
         invoices_to_mark_transmitted = []
-        if invoices:
-            invoices = Invoice.objects.filter(pk__in=invoices)
-            for inv in invoices:
-                if inv.file:
-                    try:
-                        # We try to give the invoice a more human-readable name, e.g. "Invoice_ABC-123.pdf" instead of
-                        # just "ABC-123.pdf", but we only do so if our currently selected language allows to do this
-                        # as ASCII text. For example, we would not want a "فاتورة_" prefix for our filename since this
-                        # has shown to cause deliverability problems of the email and deliverability wins.
-                        with language(order.locale if order else inv.locale, event.settings.region if event else None):
-                            filename = pgettext('invoice', 'Invoice {num}').format(num=inv.number).replace(' ', '_') + '.pdf'
-                        if not re.match("^[a-zA-Z0-9-_%./,&:# ]+$", filename):
-                            filename = inv.number.replace(' ', '_') + '.pdf'
-                        filename = re.sub("[^a-zA-Z0-9-_.]+", "_", filename)
-                        with language(inv.order.locale):
-                            email.attach(
-                                filename,
-                                inv.file.file.read(),
-                                'application/pdf'
+        for inv in outgoing_mail.should_attach_invoices.all():
+            if inv.file:
+                try:
+                    # We try to give the invoice a more human-readable name, e.g. "Invoice_ABC-123.pdf" instead of
+                    # just "ABC-123.pdf", but we only do so if our currently selected language allows to do this
+                    # as ASCII text. For example, we would not want a "فاتورة_" prefix for our filename since this
+                    # has shown to cause deliverability problems of the email and deliverability wins.
+                    with language(outgoing_mail.order.locale if outgoing_mail.order else inv.locale, outgoing_mail.event.settings.region):
+                        filename = pgettext('invoice', 'Invoice {num}').format(num=inv.number).replace(' ', '_') + '.pdf'
+                    if not re.match("^[a-zA-Z0-9-_%./,&:# ]+$", filename):
+                        filename = inv.number.replace(' ', '_') + '.pdf'
+                    filename = re.sub("[^a-zA-Z0-9-_.]+", "_", filename)
+                    content = inv.file.file.read()
+                    with language(inv.order.locale):
+                        email.attach(
+                            filename,
+                            content,
+                            'application/pdf'
+                        )
+                    invoices_attached.append(inv)
+                except Exception:
+                    logger.exception('Could not attach invoice to email')
+                    pass
+                else:
+                    if inv.transmission_type == "email":
+                        # Mark invoice as sent when it was sent to the requested address *either* at the time of invoice
+                        # creation *or* as of right now.
+                        expected_recipients = [
+                            (inv.invoice_to_transmission_info or {}).get("transmission_email_address")
+                            or inv.order.email,
+                        ]
+                        try:
+                            expected_recipients.append(
+                                (inv.order.invoice_address.transmission_info or {}).get("transmission_email_address")
+                                or inv.order.email
                             )
+                        except InvoiceAddress.DoesNotExist:
+                            pass
+                        if any(t in expected_recipients for t in outgoing_mail.to):
+                            invoices_to_mark_transmitted.append(inv)
 
-                        if inv.transmission_type == "email":
-                            # Mark invoice as sent when it was sent to the requested address *either* at the time of
-                            # invoice creation *or* as of right now.
-                            expected_recipients = [
-                                (inv.invoice_to_transmission_info or {}).get("transmission_email_address")
-                                or inv.order.email,
-                            ]
-                            try:
-                                expected_recipients.append(
-                                    (inv.order.invoice_address.transmission_info or {}).get("transmission_email_address")
-                                    or inv.order.email
-                                )
-                            except InvoiceAddress.DoesNotExist:
-                                pass
-                            if any(t in expected_recipients for t in to):
-                                invoices_to_mark_transmitted.append(inv)
-                    except:
-                        logger.exception('Could not attach invoice to email')
-                        pass
+        for fname in outgoing_mail.should_attach_other_files:
+            ftype, _ = mimetypes.guess_type(fname)
+            data = default_storage.open(fname).read()
+            try:
+                email.attach(
+                    clean_filename(os.path.basename(fname)),
+                    data,
+                    ftype
+                )
+            except:
+                logger.exception('Could not attach file to email')
+                pass
 
-        if attach_other_files:
-            for fname in attach_other_files:
-                ftype, _ = mimetypes.guess_type(fname)
-                data = default_storage.open(fname).read()
+        for cf in outgoing_mail.should_attach_cached_files.all():
+            if cf.file:
                 try:
                     email.attach(
-                        clean_filename(os.path.basename(fname)),
-                        data,
-                        ftype
+                        cf.filename,
+                        cf.file.file.read(),
+                        cf.type,
                     )
                 except:
                     logger.exception('Could not attach file to email')
                     pass
 
-        if attach_cached_files:
-            for cf in CachedFile.objects.filter(id__in=attach_cached_files):
-                if cf.file:
-                    try:
-                        email.attach(
-                            cf.filename,
-                            cf.file.file.read(),
-                            cf.type,
-                        )
-                    except:
-                        logger.exception('Could not attach file to email')
-                        pass
+        if outgoing_mail.event:
+            with outgoing_mail.scope_manager():
+                email = email_filter.send_chained(
+                    outgoing_mail.event, 'message', message=email, order=outgoing_mail.order, user=outgoing_mail.user
+                )
 
-        email = global_email_filter.send_chained(event, 'message', message=email, user=user, order=order,
-                                                 organizer=organizer, customer=customer)
+        email = global_email_filter.send_chained(
+            outgoing_mail.event, 'message', message=email, user=outgoing_mail.user, order=outgoing_mail.order,
+            organizer=outgoing_mail.organizer, customer=outgoing_mail.customer
+        )
 
+        outgoing_mail.actual_attachments = [
+            {
+                "name": a[0],
+                "size": len(a[1]),
+                "type": a[2],
+            } for a in email.attachments
+        ]
+
+        backend = outgoing_mail.get_mail_backend()
         try:
             backend.send_messages([email])
-        except (smtplib.SMTPResponseException, smtplib.SMTPSenderRefused) as e:
-            if e.smtp_code in (101, 111, 421, 422, 431, 432, 442, 447, 452):
-                if e.smtp_code == 432 and settings.HAS_REDIS:
-                    # This is likely Microsoft Exchange Online which has a pretty bad rate limit of max. 3 concurrent
-                    # SMTP connections which is *easily* exceeded with many celery threads. Just retrying with exponential
-                    # backoff won't be good enough if we have a lot of emails, instead we'll need to make sure our retry
-                    # intervals scatter such that the email won't all be retried at the same time again and cause the
-                    # same problem.
-                    # See also https://docs.microsoft.com/en-us/exchange/troubleshoot/send-emails/smtp-submission-improvements
+        except Exception as e:
+            logger.exception('Error sending email')
+            retry_strategy = _retry_strategy(e)
+            err, err_detail = _format_error(e)
+
+            outgoing_mail.error = err
+            outgoing_mail.error_detail = err_detail
+            outgoing_mail.sent = now()
+
+            # Run retries
+            try:
+                if retry_strategy == "microsoft_concurrency" and settings.HAS_REDIS:
                     from django_redis import get_redis_connection
 
                     redis_key = "pretix_mail_retry_" + hashlib.sha1(f"{getattr(backend, 'username', '_')}@{getattr(backend, 'host', '_')}".encode()).hexdigest()
@@ -589,124 +552,70 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
 
                     max_retries = 10
                     retry_after = min(30 + cnt * 10, 1800)
-                else:
-                    # Most likely some other kind of temporary failure, retry again (but pretty soon)
+
+                    outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
+                    outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent"])
+                    self.retry(max_retries=max_retries, countdown=retry_after)  # throws RetryException, ends function flow
+                elif retry_strategy in ("microsoft_concurrency", "quick"):
                     max_retries = 5
                     retry_after = [10, 30, 60, 300, 900, 900][self.request.retries]
+                    outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
+                    outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent"])
+                    self.retry(max_retries=max_retries, countdown=retry_after)  # throws RetryException, ends function flow
 
-                try:
-                    self.retry(max_retries=max_retries, countdown=retry_after)
-                except MaxRetriesExceededError:
-                    if log_target:
-                        log_target.log_action(
-                            error_log_action_type,
-                            data={
-                                'subject': 'SMTP code {}, max retries exceeded'.format(e.smtp_code),
-                                'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
-                                'recipient': '',
-                                'invoices': [],
-                            }
-                        )
-                    for i in invoices_to_mark_transmitted:
-                        i.set_transmission_failed(provider="email_pdf", data={
-                            "reason": "exception",
-                            "exception": "SMTP code {}, max retries exceeded".format(e.smtp_code),
-                        })
-                    raise e
+                elif retry_strategy == "slow":
+                    outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
+                    outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent"])
+                    self.retry(max_retries=5, countdown=[60, 300, 600, 1200, 1800, 1800][self.request.retries])  # throws RetryException, ends function flow
 
-            logger.exception('Error sending email')
+            except MaxRetriesExceededError:
+                for i in invoices_to_mark_transmitted:
+                    i.set_transmission_failed(provider="email_pdf", data={
+                        "reason": "exception",
+                        "exception": "{}, max retries exceeded".format(err),
+                        "detail": err_detail,
+                    })
+
+                if log_target:
+                    log_target.log_action(
+                        error_log_action_type,
+                        data={
+                            'subject': f'{err} (max retries exceeded)',
+                            'message': err_detail,
+                            'recipient': '',
+                            'invoices': [],
+                        }
+                    )
+                return False
+
+            # If we reach this, it's a non-retryable error
+            outgoing_mail.status = OutgoingMail.STATUS_FAILED
+            outgoing_mail.sent = now()
+            outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent"])
+            for i in invoices_to_mark_transmitted:
+                i.set_transmission_failed(provider="email_pdf", data={
+                    "reason": "exception",
+                    "exception": err,
+                    "detail": err_detail,
+                })
             if log_target:
                 log_target.log_action(
                     error_log_action_type,
                     data={
-                        'subject': 'SMTP code {}'.format(e.smtp_code),
-                        'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
+                        'subject': err,
+                        'message': err_detail,
                         'recipient': '',
                         'invoices': [],
                     }
                 )
-            for i in invoices_to_mark_transmitted:
-                i.set_transmission_failed(provider="email_pdf", data={
-                    "reason": "exception",
-                    "exception": "SMTP code {}".format(e.smtp_code),
-                })
-
-            raise SendMailException('Failed to send an email to {}.'.format(to))
-        except smtplib.SMTPRecipientsRefused as e:
-            smtp_codes = [a[0] for a in e.recipients.values()]
-
-            if not any(c >= 500 for c in smtp_codes) or any(b'Message is too large' in a[1] for a in e.recipients.values()):
-                # This is not a permanent failure (mailbox full, service unavailable), retry later, but with large
-                # intervals. One would think that "Message is too lage" is a permanent failure, but apparently it is not.
-                # We have documented cases of emails to Microsoft returning the error occasionally and then later
-                # allowing the very same email.
-                try:
-                    self.retry(max_retries=5, countdown=[60, 300, 600, 1200, 1800, 1800][self.request.retries])
-                except MaxRetriesExceededError:
-                    # ignore and go on with logging the error
-                    pass
-
-            logger.exception('Error sending email')
-            if log_target:
-                message = []
-                for e, val in e.recipients.items():
-                    message.append(f'{e}: {val[0]} {val[1].decode()}')
-
-                log_target.log_action(
-                    error_log_action_type,
-                    data={
-                        'subject': 'SMTP error',
-                        'message': '\n'.join(message),
-                        'recipient': '',
-                        'invoices': [],
-                    }
-                )
-            for i in invoices_to_mark_transmitted:
-                i.set_transmission_failed(provider="email_pdf", data={
-                    "reason": "exception",
-                    "exception": "SMTP error",
-                })
-
-            raise SendMailException('Failed to send an email to {}.'.format(to))
-        except Exception as e:
-            if isinstance(e, OSError) and not isinstance(e, smtplib.SMTPNotSupportedError):
-                try:
-                    self.retry(max_retries=5, countdown=[10, 30, 60, 300, 900, 900][self.request.retries])
-                except MaxRetriesExceededError:
-                    if log_target:
-                        log_target.log_action(
-                            error_log_action_type,
-                            data={
-                                'subject': 'Internal error',
-                                'message': f'Max retries exceeded after error "{str(e)}"',
-                                'recipient': '',
-                                'invoices': [],
-                            }
-                        )
-                    for i in invoices_to_mark_transmitted:
-                        i.set_transmission_failed(provider="email_pdf", data={
-                            "reason": "exception",
-                            "exception": "Internal error",
-                        })
-                    raise e
-            if log_target:
-                log_target.log_action(
-                    error_log_action_type,
-                    data={
-                        'subject': 'Internal error',
-                        'message': str(e),
-                        'recipient': '',
-                        'invoices': [],
-                    }
-                )
-            for i in invoices_to_mark_transmitted:
-                i.set_transmission_failed(provider="email_pdf", data={
-                    "reason": "exception",
-                    "exception": "Internal error",
-                })
-            logger.exception('Error sending email')
-            raise SendMailException('Failed to send an email to {}.'.format(to))
+            return False
         else:
+            outgoing_mail.status = OutgoingMail.STATUS_SENT
+            outgoing_mail.error = None
+            outgoing_mail.error_detail = None
+            outgoing_mail.actual_attachments = actual_attachments
+            outgoing_mail.sent = now()
+            outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent", "actual_attachments"])
             for i in invoices_to_mark_transmitted:
                 if i.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
                     i.transmission_date = now()
@@ -751,7 +660,7 @@ def mail_send(*args, **kwargs):
     mail_send_task.apply_async(args=args, kwargs=kwargs)
 
 
-def render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN):
+def render_mail(template, context, placeholder_mode: Optional[int]=SafeFormatter.MODE_RICH_TO_PLAIN):
     if isinstance(template, LazyI18nString):
         body = str(template)
         if context and placeholder_mode:
@@ -866,3 +775,121 @@ def normalize_image_url(url):
         else:
             url = urljoin(settings.MEDIA_URL, url)
     return url
+
+
+def _autoextend_context(context, order):
+    try:
+        context.update({
+            'invoice_name': order.invoice_address.name,
+            'invoice_company': order.invoice_address.company
+        })
+    except InvoiceAddress.DoesNotExist:
+        context.update({
+            'invoice_name': '',
+            'invoice_company': ''
+        })
+
+
+def _full_sender(sender_address, event, organizer):
+    sender_address = (
+        sender_address or
+        (event.settings.get('mail_from') if event else None) or
+        (organizer.settings.get('mail_from') if organizer else None) or
+        settings.MAIL_FROM
+    )
+    if event:
+        sender_name = event.settings.mail_from_name or str(event.name)
+    elif organizer:
+        sender_name = organizer.settings.mail_from_name or str(organizer.name)
+    else:
+        sender_name = settings.PRETIX_INSTANCE_NAME
+
+    sender = formataddr((clean_sender_name(sender_name), sender_address))
+    return sender
+
+
+def _wrap_plain_body(content_plain, signature, event, order, position, no_order_links):
+    body_plain = content_plain
+    body_plain += "\r\n\r\n-- \r\n"
+
+    if signature:
+        signature = signature.format(event=event.name if event else '')
+        body_plain += signature
+        body_plain += "\r\n\r\n-- \r\n"
+
+    if event and order and position and not no_order_links:
+        body_plain += _(
+            "You are receiving this email because someone placed an order for {event} for you."
+        ).format(event=event.name)
+        body_plain += "\r\n"
+        body_plain += _(
+            "You can view your order details at the following URL:\n{orderurl}."
+        ).replace("\n", "\r\n").format(
+            event=event.name, orderurl=build_absolute_uri(
+                order.event, 'presale:event.order.position', kwargs={
+                    'order': order.code,
+                    'secret': position.web_secret,
+                    'position': position.positionid,
+                }
+            )
+        )
+    elif event and order and not no_order_links:
+        body_plain += _(
+            "You are receiving this email because you placed an order for {event}."
+        ).format(event=event.name)
+        body_plain += "\r\n"
+        body_plain += _(
+            "You can view your order details at the following URL:\n{orderurl}."
+        ).replace("\n", "\r\n").format(
+            event=event.name, orderurl=build_absolute_uri(
+                order.event, 'presale:event.order.open', kwargs={
+                    'order': order.code,
+                    'secret': order.secret,
+                    'hash': order.email_confirm_secret()
+                }
+            )
+        )
+    body_plain += "\r\n"
+
+    return body_plain
+
+
+def _retry_strategy(e: Exception):
+    if isinstance(e, (smtplib.SMTPResponseException, smtplib.SMTPSenderRefused)):
+        if e.smtp_code == 432:
+            # This is likely Microsoft Exchange Online which has a pretty bad rate limit of max. 3 concurrent
+            # SMTP connections which is *easily* exceeded with many celery threads. Just retrying with exponential
+            # backoff won't be good enough if we have a lot of emails, instead we'll need to make sure our retry
+            # intervals scatter such that the email won't all be retried at the same time again and cause the
+            # same problem.
+            # See also https://docs.microsoft.com/en-us/exchange/troubleshoot/send-emails/smtp-submission-improvements
+            return "microsoft_concurrncy"
+
+        if e.smtp_code in (101, 111, 421, 422, 431, 432, 442, 447, 452):
+            return "quick"
+
+    elif isinstance(e, smtplib.SMTPRecipientsRefused):
+        smtp_codes = [a[0] for a in e.recipients.values()]
+
+        if not any(c >= 500 for c in smtp_codes) or any(b'Message is too large' in a[1] for a in e.recipients.values()):
+            # This is not a permanent failure (mailbox full, service unavailable), retry later, but with large
+            # intervals. One would think that "Message is too lage" is a permanent failure, but apparently it is not.
+            # We have documented cases of emails to Microsoft returning the error occasionally and then later
+            # allowing the very same email.
+            return "slow"
+
+    elif isinstance(e, OSError) and not isinstance(e, smtplib.SMTPNotSupportedError):
+        # Most likely some other kind of temporary failure, retry again (but pretty soon)
+        return "quick"
+
+
+def _format_error(e: Exception):
+    if isinstance(e, (smtplib.SMTPResponseException, smtplib.SMTPSenderRefused)):
+        return 'SMTP code {}'.format(e.smtp_code), e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error)
+    elif isinstance(e, smtplib.SMTPRecipientsRefused):
+        message = []
+        for e, val in e.recipients.items():
+            message.append(f'{e}: {val[0]} {val[1].decode()}')
+        return 'SMTP recipients refudes', '\n'.join(message)
+    else:
+        return 'Internal error', str(e)

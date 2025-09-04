@@ -65,7 +65,6 @@ from pretix.base.forms.auth import (
 )
 from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
-from pretix.base.services.mail import SendMailException
 from pretix.helpers.http import get_client_ip, redirect_to_url
 from pretix.helpers.security import handle_login_source
 
@@ -345,9 +344,6 @@ class Forgot(TemplateView):
 
             except User.DoesNotExist:
                 logger.warning('Backend password reset for unregistered e-mail \"' + email + '\" requested.')
-
-            except SendMailException:
-                logger.exception('Sending password reset email to \"' + email + '\" failed.')
 
             except RepeatedResetDenied:
                 pass

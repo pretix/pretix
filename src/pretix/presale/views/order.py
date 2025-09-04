@@ -77,7 +77,6 @@ from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
     invoice_qualified,
 )
-from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _try_auto_refund, cancel_order,
     change_payment_provider, error_messages,
@@ -656,10 +655,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 amount=Decimal('0.00'),
                 fee=None
             )
-            try:
-                p.confirm()
-            except SendMailException:
-                pass
+            p.confirm()
         else:
             p._mark_order_paid(
                 payment_refund_sum=self.order.payment_refund_sum
