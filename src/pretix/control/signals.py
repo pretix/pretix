@@ -246,7 +246,7 @@ hybrid plugins, will receive it if they're active for the current organizer.
 
 **Deprecation Notice:** Currently, event plugins can always receive this signal,
 regardless of activation. In the future, event plugins will not be allowed to register
-to organizer-level signals. 
+to organizer-level signals.
 
 Receivers will be passed the keyword arguments ``organizer`` and ``request``.
 """
