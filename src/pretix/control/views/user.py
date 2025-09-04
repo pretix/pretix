@@ -37,6 +37,7 @@ import json
 import logging
 import time
 from collections import defaultdict
+from hmac import compare_digest
 from urllib.parse import quote
 
 import webauthn
@@ -59,6 +60,7 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 from django_scopes import scopes_disabled
 from webauthn.helpers import generate_challenge, generate_user_handle
 
+from django.core.cache import cache
 from pretix.base.auth import get_auth_backends
 from pretix.base.forms.auth import ReauthForm
 from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
@@ -74,6 +76,7 @@ from pretix.control.permissions import (
 from pretix.control.views.auth import get_u2f_appid, get_webauthn_rp_id
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.u2f import websafe_encode
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 REAL_DEVICE_TYPES = (TOTPDevice, WebAuthnDevice, U2FDevice)
 logger = logging.getLogger(__name__)
@@ -253,9 +256,12 @@ class UserSettings(UpdateView):
             msgs.append(_('Your email address has been changed to {email}.').format(email=form.cleaned_data['email']))
 
         if msgs:
-            self.request.user.send_security_notice(msgs, email=form.cleaned_data['email'])
             if self._old_email != form.cleaned_data['email']:
                 self.request.user.send_security_notice(msgs, email=self._old_email)
+                token = self.request.user.generate_email_verification_token()
+                link = build_absolute_uri(False, 'control:user.email.confirm', kwargs={'token': token})
+                msgs.append(_('Please click the following link to confirm your new email address: {link}').format(link=link))
+            self.request.user.send_security_notice(msgs, email=form.cleaned_data['email'])
 
         sup = super().form_valid(form)
         self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data=data)
@@ -834,3 +840,28 @@ class EditStaffSession(StaffMemberRequiredMixin, UpdateView):
             return get_object_or_404(StaffSession, pk=self.kwargs['id'])
         else:
             return get_object_or_404(StaffSession, pk=self.kwargs['id'], user=self.request.user)
+
+
+class ConfirmEmailView(View):
+
+    def get(self, request, token, *args, **kwargs):
+        try:
+            uid = int(token.split("-")[0])
+        except ValueError:
+            uid = None
+        if uid and compare_digest(cache.get('confirm_email_token:' + str(uid)), token):
+            user = User.objects.get(pk=uid)
+            with transaction.atomic():
+                if user.email != user.verified_email:
+                    user.log_action("user.email.confirmed", data={
+                        "old_email": user.verified_email,
+                        "new_email": user.email,
+                    })
+                    user.verified_email = user.email
+                    user.save()
+                    messages.success(request, _('Your email has been confirmed.'))
+                else:
+                    messages.success(request, _('Your email was already confirmed.'))
+        else:
+            messages.error(request, _('Invalid confirmation link. Please try again.'))
+        return redirect("control:user.settings")

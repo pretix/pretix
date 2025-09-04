@@ -110,6 +110,7 @@ urlpatterns = [
             name='user.settings.2fa.confirm.webauthn'),
     re_path(r'^settings/2fa/(?P<devicetype>[^/]+)/(?P<device>[0-9]+)/delete', user.User2FADeviceDeleteView.as_view(),
             name='user.settings.2fa.delete'),
+    re_path(r'^confirm/(?P<token>[a-zA-Z0-9-]+)$', user.ConfirmEmailView.as_view(), name='user.email.confirm'),
     re_path(r'^organizers/$', organizer.OrganizerList.as_view(), name='organizers'),
     re_path(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
     re_path(r'^organizers/select2$', typeahead.organizer_select2, name='organizers.select2'),
