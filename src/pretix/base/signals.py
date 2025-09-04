@@ -99,7 +99,7 @@ def is_app_active(sender, app, allow_legacy_plugins=False):
         elif isinstance(sender, Organizer) and allow_legacy_plugins:
             # Deprecated behaviour: Event plugins that are registered on organizer level are considered active for
             # all organizers in the context of signals that used to be global signals before the introduction of
-            # organizer plugin. A deprecation warning is emitted at .connect() time.
+            # organizer plugins. A deprecation warning is emitted at .connect() time.
             enabled = True
         else:
             raise ImproperlyConfigured(f"Cannot check if event plugin is active on {type(sender)}")
