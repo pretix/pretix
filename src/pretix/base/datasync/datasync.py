@@ -260,7 +260,7 @@ class OutboundSyncProvider:
             with language(self.event.settings.locale):
                 raise SyncConfigError([_(
                     'Field "{field_name}" requires {required_input}, but got only {available_inputs}. Please check your {provider_name} settings.'
-                ).format(field_name=key, required_input=field.required_input, available_inputs=",".join(inputs.keys()), provider_name=self.display_name)])
+                ).format(field_name=key, required_input=field.required_input, available_inputs=", ".join(inputs.keys()), provider_name=self.display_name)])
         val = field.getter(input)
         if isinstance(val, list):
             if field.enum_opts and mapping_entry.get("value_map"):
