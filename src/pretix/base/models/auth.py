@@ -43,7 +43,7 @@ from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin,
 )
-from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.db import IntegrityError, models, transaction
@@ -244,7 +244,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
     email = models.EmailField(unique=True, db_index=True, null=True, blank=True,
                               verbose_name=_('Email'), max_length=190)
-    is_verified = models.BooleanField(default=True, verbose_name=_('Verified email address'))
+    is_verified = models.BooleanField(default=False, verbose_name=_('Verified email address'))
     fullname = models.CharField(max_length=255, blank=True, null=True,
                                 verbose_name=_('Full name'))
     is_active = models.BooleanField(default=True,
@@ -634,9 +634,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         self.save(update_fields=['session_token'])
 
     def generate_email_verification_token(self):
-        token = str(self.pk) + '-' + get_random_string(length=32)
-        cache.set("confirm_email_token:" + str(self.pk), token, 3 * 86400)
-        return token
+        return EmailVerificationTokenGenerator().make_token(self)
 
 
 class UserKnownLoginSource(models.Model):

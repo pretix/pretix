@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="user",
             name="is_verified",
-            field=models.BooleanField(default=True),
+            field=models.BooleanField(default=False),
         ),
     ]
