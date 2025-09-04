@@ -35,6 +35,7 @@
 import binascii
 import json
 import operator
+import random
 from datetime import timedelta
 from functools import reduce
 
@@ -42,8 +43,9 @@ from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin,
 )
-from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.db import IntegrityError, models, transaction
 from django.db.models import Q
 from django.utils.crypto import get_random_string, salted_hmac
@@ -242,6 +244,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
     email = models.EmailField(unique=True, db_index=True, null=True, blank=True,
                               verbose_name=_('Email'), max_length=190)
+    is_verified = models.BooleanField(default=False, verbose_name=_('Verified email address'))
     fullname = models.CharField(max_length=255, blank=True, null=True,
                                 verbose_name=_('Full name'))
     is_active = models.BooleanField(default=True,
@@ -352,6 +355,43 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             )
         except SendMailException:
             pass  # Already logged
+
+    def send_confirmation_code(self, reason, email=None):
+        from pretix.base.services.mail import mail
+
+        with language(self.locale):
+            if reason == 'email_change':
+                msg = str(_('to confirm changing your email address from {old_email}\nto {new_email}, use the following code:').format(
+                    old_email=self.email, new_email=email,
+                ))
+            else:
+                raise Exception('Invalid confirmation code reason')
+
+        code = "%07d" % random.randint(0, 9999999)
+        cache.set('user_confirmation_code:' + str(self.pk), code + ':' + reason + ':' + str(email), 1800)
+
+        mail(
+            email or self.email,
+            _('pretix confirmation code'),
+            'pretixcontrol/email/confirmation_code.txt',
+            {
+                'user': self,
+                'reason': msg,
+                'code': code,
+            },
+            event=None,
+            user=self,
+            locale=self.locale
+        )
+
+    def check_confirmation_code(self, reason, code):
+        stored = cache.get('user_confirmation_code:' + str(self.pk))
+        if not stored:
+            return None
+        stored_code, stored_reason, email = stored.split(":", maxsplit=2)
+        if int(stored_code) == int(code) and stored_reason == reason:
+            return email
+
 
     def send_password_reset(self):
         from pretix.base.services.mail import mail
@@ -592,6 +632,9 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     def update_session_token(self):
         self.session_token = generate_session_token()
         self.save(update_fields=['session_token'])
+
+    def generate_email_verification_token(self):
+        return EmailVerificationTokenGenerator().make_token(self)
 
 
 class UserKnownLoginSource(models.Model):
