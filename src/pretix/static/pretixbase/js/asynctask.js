@@ -42,8 +42,8 @@ function async_task_schedule_check(context, timeout) {
 
 function async_task_on_success(data) {
     "use strict";
+    waitingDialog.hide();
     if ((async_task_is_download && data.success) || async_task_dont_redirect) {
-        waitingDialog.hide();
         if (location.href.indexOf("async_id") !== -1) {
             history.replaceState({}, "pretix", async_task_old_url);
         }
