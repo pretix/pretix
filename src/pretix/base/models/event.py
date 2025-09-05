@@ -396,7 +396,6 @@ class EventMixin:
                     ),
                     has_active_variations_with_waitinglist=Exists(
                         sq_active_variation.filter(item__allow_waitinglist=True),
-                        output_field=models.TextField()
                     ),
                 ).exclude(
                     Q(active_items="") & Q(active_variations="")
