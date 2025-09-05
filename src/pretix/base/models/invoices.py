@@ -42,6 +42,7 @@ from django.db.models.functions import Cast
 from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django_scopes import ScopedManager
 
@@ -367,6 +368,22 @@ class Invoice(models.Model):
     def transmission_type_instance(self):
         from pretix.base.invoicing.transmission import transmission_types
         return transmission_types.get(identifier=self.transmission_type)[0]
+
+    def set_transmission_failed(self, provider, data):
+        self.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
+        self.transmission_date = now()
+        if not self.transmission_provider and provider:
+            self.transmission_provider = provider
+        self.save(update_fields=["transmission_status", "transmission_date", "transmission_provider"])
+        self.order.log_action(
+            "pretix.event.order.invoice.sending_failed",
+            data={
+                "full_invoice_no": self.full_invoice_no,
+                "transmission_provider": provider,
+                "transmission_type": self.transmission_type,
+                "data": data,
+            }
+        )
 
 
 class InvoiceLine(models.Model):
