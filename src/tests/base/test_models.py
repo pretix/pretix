@@ -2625,7 +2625,7 @@ class SubEventTest(TestCase):
         q2.items.add(item2)
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 2
-        assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 2, False)
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 2, True)
         assert obj.best_availability_is_low
 
         # 1 quota - 2 items. Quota is not counted twice!
@@ -2637,7 +2637,7 @@ class SubEventTest(TestCase):
         assert obj.best_availability == (Quota.AVAILABILITY_OK, 9, 10, False)
         assert not obj.best_availability_is_low
 
-        # Unlimited quota
+        # Unlimited quota, but no waiting list
         q.size = None
         q.save()
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
