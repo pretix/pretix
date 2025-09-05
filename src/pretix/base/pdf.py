@@ -41,8 +41,6 @@ import os
 import re
 import subprocess
 import tempfile
-import pypdf
-import pypdf.generic
 import unicodedata
 import uuid
 from collections import OrderedDict, defaultdict
@@ -50,6 +48,8 @@ from functools import partial
 from io import BytesIO
 
 import jsonschema
+import pypdf
+import pypdf.generic
 import reportlab.rl_config
 from bidi import get_display
 from django.conf import settings
