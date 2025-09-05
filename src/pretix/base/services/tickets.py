@@ -161,6 +161,10 @@ def get_tickets_for_order(order, base_position=None):
                     if not retval:
                         continue
                     ct = CachedCombinedTicket.objects.get(pk=retval)
+
+                if ct.type == 'text/uri-list':
+                    continue
+
                 tickets.append((
                     "{}-{}-{}{}".format(
                         order.event.slug.upper(), order.code, ct.provider, ct.extension,
