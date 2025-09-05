@@ -243,8 +243,16 @@ class EventMixin:
     def waiting_list_active(self):
         if not self.settings.waiting_list_enabled:
             return False
+
         if self.settings.waiting_list_auto_disable:
-            return self.settings.waiting_list_auto_disable.datetime(self) > time_machine_now()
+            if self.settings.waiting_list_auto_disable.datetime(self) <= time_machine_now():
+                return False
+
+        if hasattr(self, 'active_quotas'):
+            # Only run when called with computed quotas, i.e. event calendar
+            if not self.best_availability[3]:
+                return False
+
         return True
 
     @property
@@ -322,9 +330,7 @@ class EventMixin:
         sq_active_item = Item.objects.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).filter(
             Q(variations__isnull=True)
             & Q(quotas__pk=OuterRef('pk'))
-        ).order_by().values_list('quotas__pk').annotate(
-            items=GroupConcat('pk', delimiter=',')
-        ).values('items')
+        )
 
         q_variation = (
             Q(active=True)
@@ -357,9 +363,7 @@ class EventMixin:
             q_variation &= Q(hide_without_voucher=False)
             q_variation &= Q(item__hide_without_voucher=False)
 
-        sq_active_variation = ItemVariation.objects.filter(q_variation).order_by().values_list('quotas__pk').annotate(
-            items=GroupConcat('pk', delimiter=',')
-        ).values('items')
+        sq_active_variation = ItemVariation.objects.filter(q_variation)
         quota_base_qs = Quota.objects.using(settings.DATABASE_REPLICA).filter(
             ignore_for_event_availability=False
         )
@@ -376,8 +380,30 @@ class EventMixin:
                 'quotas',
                 to_attr='active_quotas',
                 queryset=quota_base_qs.annotate(
-                    active_items=Subquery(sq_active_item, output_field=models.TextField()),
-                    active_variations=Subquery(sq_active_variation, output_field=models.TextField()),
+                    active_items=Subquery(
+                        sq_active_item.order_by().values_list('quotas__pk').annotate(
+                            items=GroupConcat('pk', delimiter=',')
+                        ).values('items'),
+                        output_field=models.TextField()
+                    ),
+                    active_variations=Subquery(
+                        sq_active_variation.order_by().values_list('quotas__pk').annotate(
+                            items=GroupConcat('pk', delimiter=',')
+                        ).values('items'),
+                        output_field=models.TextField()),
+                    active_items_with_waitinglist=Subquery(
+                        sq_active_item.filter(allow_waitinglist=True).order_by().values_list('quotas__pk').annotate(
+                            items=GroupConcat('pk', delimiter=',')
+                        ).values('items'),
+                        output_field=models.TextField()
+                    ),
+                    active_variations_with_waitinglist=Subquery(
+                        sq_active_variation.filter(item__allow_waitinglist=True).order_by().values_list(
+                            'quotas__pk').annotate(
+                            items=GroupConcat('pk', delimiter=',')
+                        ).values('items'),
+                        output_field=models.TextField()
+                    ),
                 ).exclude(
                     Q(active_items="") & Q(active_variations="")
                 ).select_related('event', 'subevent')
@@ -406,11 +432,12 @@ class EventMixin:
     @cached_property
     def best_availability(self):
         """
-        Returns a 3-tuple of
+        Returns a 4-tuple of
 
         - The availability state of this event (one of the ``Quota.AVAILABILITY_*`` constants)
         - The number of tickets currently available (or ``None``)
         - The number of tickets "originally" available (or ``None``)
+        - Whether a sold out product has the waiting list enabled
 
         This can only be called on objects obtained through a queryset that has been passed through ``.annotated()``.
         """
@@ -433,6 +460,8 @@ class EventMixin:
         r = getattr(self, '_quota_cache', {})
         quotas_for_item = defaultdict(list)
         quotas_for_variation = defaultdict(list)
+        items_with_waiting_list = set()
+        vars_with_waiting_list = set()
         for q in self.active_quotas:
             if q not in r:
                 r[q] = q.availability(allow_cache=True)
@@ -441,14 +470,18 @@ class EventMixin:
                 for item_id in q.active_items.split(","):
                     if item_id not in items_disabled:
                         quotas_for_item[item_id].append(q)
+            if q.active_items_with_waitinglist:
+                items_with_waiting_list |= set(q.active_items_with_waitinglist.split(","))
             if q.active_variations:
                 for var_id in q.active_variations.split(","):
                     if var_id not in vars_disabled:
                         quotas_for_variation[var_id].append(q)
+            if q.active_variations_with_waitinglist:
+                vars_with_waiting_list |= set(q.active_variations_with_waitinglist.split(","))
 
         if not self.active_quotas or (not quotas_for_item and not quotas_for_variation):
             # No item is enabled for this event, treat the event as "unknown"
-            return None, None, None
+            return None, None, None, False
 
         # We iterate over all items and variations and keep track of
         # - `best_state_found` - the best availability state we have seen so far. If one item is available, the event is available!
@@ -467,7 +500,7 @@ class EventMixin:
             quotas_that_are_not_unlimited = [q for q in quota_list if q.size is not None]
             if not quotas_that_are_not_unlimited:
                 # We found an unlimited ticket, no more need to do anything else
-                return Quota.AVAILABILITY_OK, None, None
+                return Quota.AVAILABILITY_OK, None, None, False
 
             if worst_state_for_ticket == Quota.AVAILABILITY_OK:
                 availability_of_this = min(max(0, r[q][1] - quota_used_for_found_tickets[q]) for q in quotas_that_are_not_unlimited)
@@ -481,7 +514,22 @@ class EventMixin:
                 quota_used_for_possible_tickets[q] += possible_of_this
 
             best_state_found = max(best_state_found, worst_state_for_ticket)
-        return best_state_found, num_tickets_found, num_tickets_possible
+
+        waiting_list_found = False
+        if best_state_found < Quota.AVAILABILITY_OK:
+            for k, quota_list in quotas_for_item.items():
+                worst_state_for_ticket = min(r[q][0] for q in quota_list)
+                if worst_state_for_ticket < Quota.AVAILABILITY_OK and k in items_with_waiting_list:
+                    waiting_list_found = True
+                    break
+            else:
+                for k, quota_list in quotas_for_variation.items():
+                    worst_state_for_ticket = min(r[q][0] for q in quota_list)
+                    if worst_state_for_ticket < Quota.AVAILABILITY_OK and k in vars_with_waiting_list:
+                        waiting_list_found = True
+                        break
+
+        return best_state_found, num_tickets_found, num_tickets_possible, waiting_list_found
 
     def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
         assert isinstance(sales_channel, str) or sales_channel is None
