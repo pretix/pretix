@@ -64,7 +64,7 @@ from pretix.testutils.scope import classscope
 
 @pytest.fixture(scope='function')
 def event():
-    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(),
@@ -1441,7 +1441,7 @@ class OrderCancelTests(TestCase):
 class OrderChangeManagerTests(TestCase):
     def setUp(self):
         super().setUp()
-        self.o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
         with scope(organizer=self.o):
             self.event = Event.objects.create(organizer=self.o, name='Dummy', slug='dummy', date_from=now(),
                                               plugins='pretix.plugins.banktransfer')

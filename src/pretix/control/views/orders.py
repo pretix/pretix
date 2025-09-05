@@ -2575,6 +2575,11 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
                 self.request.event,
                 fees=True
             )
+        ctx['subevent'] = (
+            self.request.event.has_subevents and
+            self.filter_form.is_valid() and
+            self.filter_form.cleaned_data.get('subevent')
+        )
         ctx['subevent_warning'] = (
             self.request.event.has_subevents and
             self.filter_form.is_valid() and

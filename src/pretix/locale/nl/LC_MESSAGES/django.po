@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-07-06 01:00+0000\n"
+"PO-Revision-Date: 2025-08-26 19:00+0000\n"
 "Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -144,7 +144,7 @@ msgstr "Spaans"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "Spaans (Latijns-Amerika)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -559,22 +559,16 @@ msgid "Event series date deleted"
 msgstr "Evenementenreeks: datum verwijderd"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "Productnaam"
+msgstr "Product is veranderd"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
-"Product veranderd (inclusief product toegevoegd of verwijderd en inclusief "
-"veranderingen aan geneste objecten zoals variaties of bundels)"
+"Dit omvat toegevoegd of verwijderde product en wijzigingen in geneste "
+"objecten zoals variaties of bundels."
 
 #: pretix/api/webhooks.py:380
 msgid "Shop taken live"
@@ -609,28 +603,24 @@ msgid "Waiting list entry received voucher"
 msgstr "Wachtlijstitem heeft voucher ontvangen"
 
 #: pretix/api/webhooks.py:412
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "Vouchercode"
+msgstr "Voucher toegevoegd"
 
 #: pretix/api/webhooks.py:416
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "Voucher toegewezen"
+msgstr "Voucher gewijzigd"
 
 #: pretix/api/webhooks.py:417
 msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
 msgstr ""
+"Omvat alleen expliciete wijzigingen aan de voucher, niet bijvoorbeeld een "
+"toename van het aantal inwisselingen."
 
 #: pretix/api/webhooks.py:421
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "Voucher verzilverd"
+msgstr "Voucher verwijderd"
 
 #: pretix/api/webhooks.py:425
 msgid "Customer account created"
@@ -874,17 +864,13 @@ msgid "Invoice address"
 msgstr "Factuuradres"
 
 #: pretix/base/datasync/sourcefields.py:134
-#, fuzzy
-#| msgid "Meta information"
 msgid "Event information"
-msgstr "Meta-informatie"
+msgstr "Event-informatie"
 
 #: pretix/base/datasync/sourcefields.py:135
-#, fuzzy
-#| msgid "Send recovery information"
 msgctxt "subevent"
 msgid "Event or date information"
-msgstr "Stuur herstelinformatie"
+msgstr "Event- of datuminformatie"
 
 #: pretix/base/datasync/sourcefields.py:175
 #: pretix/base/exporters/orderlist.py:604
@@ -909,10 +895,8 @@ msgstr "Naam van aanwezige"
 #: pretix/base/datasync/sourcefields.py:187
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:628
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee"
-msgstr "Naam van aanwezige"
+msgstr "Aanwezige"
 
 #: pretix/base/datasync/sourcefields.py:207
 #: pretix/base/exporters/orderlist.py:611 pretix/base/forms/questions.py:685
@@ -926,10 +910,8 @@ msgid "Attendee email"
 msgstr "E-mailadres van aanwezige"
 
 #: pretix/base/datasync/sourcefields.py:219
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee or order email"
-msgstr "E-mailadres van aanwezige"
+msgstr "E-mailadres van de aanwezige of de bestelling"
 
 #: pretix/base/datasync/sourcefields.py:232 pretix/base/pdf.py:186
 #: pretix/control/templates/pretixcontrol/order/index.html:595
@@ -941,28 +923,20 @@ msgid "Attendee company"
 msgstr "Bedrijf aanwezige"
 
 #: pretix/base/datasync/sourcefields.py:241
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address street"
-msgstr "Adres van gast"
+msgstr "Adres aanwezige: straat"
 
 #: pretix/base/datasync/sourcefields.py:250
-#, fuzzy
-#| msgid "Attendee ZIP code"
 msgid "Attendee address ZIP code"
-msgstr "Adres gast: postcode"
+msgstr "Adres aanwezige: postcode"
 
 #: pretix/base/datasync/sourcefields.py:259
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address city"
-msgstr "Adres van gast"
+msgstr "Adres aanwezige: plaats"
 
 #: pretix/base/datasync/sourcefields.py:268
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address country"
-msgstr "Adres van gast"
+msgstr "Adres aanwezige: land"
 
 #: pretix/base/datasync/sourcefields.py:279 pretix/base/pdf.py:344
 msgid "Invoice address company"
@@ -997,16 +971,12 @@ msgid "Invoice address country"
 msgstr "Factuuradres: land"
 
 #: pretix/base/datasync/sourcefields.py:353
-#, fuzzy
-#| msgid "Order details"
 msgid "Order email"
-msgstr "Bestellingsdetails"
+msgstr "Emailadres bestelling"
 
 #: pretix/base/datasync/sourcefields.py:362
-#, fuzzy
-#| msgid "Organizer domain"
 msgid "Order email domain"
-msgstr "Domein van de organisator"
+msgstr "E-maildomein van de bestelling"
 
 #: pretix/base/datasync/sourcefields.py:371
 #: pretix/base/exporters/invoices.py:201 pretix/base/exporters/invoices.py:328
@@ -1037,10 +1007,8 @@ msgid "Order code"
 msgstr "Bestelcode"
 
 #: pretix/base/datasync/sourcefields.py:380
-#, fuzzy
-#| msgid "End order date"
 msgid "Event and order code"
-msgstr "Einddatum bestelling"
+msgstr "Code van event en bestelling"
 
 #: pretix/base/datasync/sourcefields.py:389
 #: pretix/base/exporters/orderlist.py:262 pretix/base/notifications.py:201
@@ -1052,10 +1020,8 @@ msgid "Order total"
 msgstr "Totaalbedrag van bestelling"
 
 #: pretix/base/datasync/sourcefields.py:398
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Product and variation name"
-msgstr "Productnaam en variant"
+msgstr "Product- en variantnaam"
 
 #: pretix/base/datasync/sourcefields.py:410 pretix/base/exporters/items.py:57
 #: pretix/base/exporters/orderlist.py:597

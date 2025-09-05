@@ -78,8 +78,6 @@ def control_nav_orga_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
     if not request.user.has_organizer_permission(request.organizer, 'can_change_orders', request=request):
         return []
-    if not request.organizer.events.filter(plugins__icontains='pretix.plugins.banktransfer'):
-        return []
     return [
         {
             'label': _("Bank transfer"),

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-19 17:33+0000\n"
+"PO-Revision-Date: 2025-08-22 16:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -34886,7 +34886,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:19
 #: pretix/presale/templates/pretixpresale/event/order.html:50
 msgid "We successfully received your payment. See below for details."
-msgstr "Wir haben deine Zahlung erfolgreich erhalten."
+msgstr "Wir haben deine Zahlung erfolgreich erhalten. Details siehe unten."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""

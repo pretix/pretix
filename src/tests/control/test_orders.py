@@ -60,7 +60,7 @@ from pretix.base.services.tax import VATIDFinalError, VATIDTemporaryError
 
 @pytest.fixture
 def env():
-    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.stripe,tests.testdummy'
@@ -71,7 +71,7 @@ def env():
     t.members.add(user)
     t.limit_events.add(event)
     o = Order.objects.create(
-        code='FOO', event=event, email='dummy@dummy.test',
+        code='ABC32', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=14, locale='en',
@@ -105,47 +105,48 @@ def env():
 
 @pytest.mark.django_db
 def test_order_list(client, env):
+    o = env[2]
     with scopes_disabled():
         otherticket = Item.objects.create(event=env[0], name='Early-bird ticket',
                                           category=None, default_price=23,
                                           admission=True, personalized=True)
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/')
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?query=peter')
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?query=hans')
-    assert 'FOO' not in response.content.decode()
+    assert o.code not in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?query=dummy')
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?status=p')
-    assert 'FOO' not in response.content.decode()
+    assert o.code not in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?status=n')
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?status=ne')
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?item=%s' % otherticket.id)
-    assert 'FOO' not in response.content.decode()
+    assert o.code not in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?item=%s' % env[3].id)
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?provider=free')
-    assert 'FOO' not in response.content.decode()
+    assert o.code not in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?provider=banktransfer')
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
 
     response = client.get('/control/event/dummy/dummy/orders/?status=o')
-    assert 'FOO' not in response.content.decode()
+    assert o.code not in response.content.decode()
     env[2].expires = now() - timedelta(days=10)
     env[2].save()
     response = client.get('/control/event/dummy/dummy/orders/?status=o')
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
 
     response = client.get('/control/event/dummy/dummy/orders/?status=pa')
-    assert 'FOO' not in response.content.decode()
+    assert o.code not in response.content.decode()
     env[2].require_approval = True
     env[2].save()
     response = client.get('/control/event/dummy/dummy/orders/?status=pa')
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
 
     with scopes_disabled():
         q = Question.objects.create(event=env[0], question="Q", type="N", required=True)
@@ -153,9 +154,9 @@ def test_order_list(client, env):
         op = env[2].positions.first()
         qa = QuestionAnswer.objects.create(question=q, orderposition=op, answer="12")
     response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=12' % q.pk)
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=13' % q.pk)
-    assert 'FOO' not in response.content.decode()
+    assert o.code not in response.content.decode()
 
     q.type = "C"
     q.save()
@@ -164,24 +165,24 @@ def test_order_list(client, env):
         qo2 = q.options.create(answer="Bar")
         qa.options.add(qo1)
     response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=%d' % (q.pk, qo1.pk))
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
     response = client.get('/control/event/dummy/dummy/orders/?question=%d&answer=%d' % (q.pk, qo2.pk))
-    assert 'FOO' not in response.content.decode()
+    assert o.code not in response.content.decode()
 
     response = client.get('/control/event/dummy/dummy/orders/?status=testmode')
-    assert 'FOO' not in response.content.decode()
+    assert o.code not in response.content.decode()
     assert 'TEST MODE' not in response.content.decode()
     env[2].testmode = True
     env[2].save()
     response = client.get('/control/event/dummy/dummy/orders/?status=testmode')
-    assert 'FOO' in response.content.decode()
+    assert o.code in response.content.decode()
     assert 'TEST MODE' in response.content.decode()
 
 
 @pytest.mark.django_db
 def test_order_detail(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/')
+    response = client.get('/control/event/dummy/dummy/orders/ABC32/')
     assert 'Early-bird' in response.content.decode()
     assert 'Peter' in response.content.decode()
     assert 'Lukas Gelöscht' in response.content.decode()
@@ -193,7 +194,7 @@ def test_order_detail_show_test_mode(client, env):
     env[2].testmode = True
     env[2].save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/')
+    response = client.get('/control/event/dummy/dummy/orders/ABC32/')
     assert 'TEST MODE' in response.content.decode()
 
 
@@ -203,7 +204,7 @@ def test_order_set_contact(client, env):
         q = Quota.objects.create(event=env[0], size=0)
         q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/orders/FOO/contact', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/contact', {
         'email': 'admin@rami.io'
     })
     with scopes_disabled():
@@ -218,7 +219,7 @@ def test_order_set_customer(client, env):
         c = org.customers.create(email='foo@example.org')
         org.settings.customer_accounts = True
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/orders/FOO/contact', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/contact', {
         'email': 'admin@rami.io',
         'customer': c.pk
     }, follow=True)
@@ -233,7 +234,7 @@ def test_order_set_locale(client, env):
         q = Quota.objects.create(event=env[0], size=0)
     q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/orders/FOO/locale', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/locale', {
         'locale': 'de'
     })
     with scopes_disabled():
@@ -247,7 +248,7 @@ def test_order_set_locale_with_invalid_locale_value(client, env):
         q = Quota.objects.create(event=env[0], size=0)
         q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/orders/FOO/locale', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/locale', {
         'locale': 'fr'
     })
     with scopes_disabled():
@@ -261,7 +262,7 @@ def test_order_set_comment(client, env):
         q = Quota.objects.create(event=env[0], size=0)
         q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/orders/FOO/comment', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/comment', {
         'comment': 'Foo'
     })
     with scopes_disabled():
@@ -275,7 +276,7 @@ def test_order_transition_to_expired_success(client, env):
         q = Quota.objects.create(event=env[0], size=0)
     q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'e'
     })
     with scopes_disabled():
@@ -289,7 +290,7 @@ def test_order_transition_to_paid_in_time_success(client, env):
         q = Quota.objects.create(event=env[0], size=0)
     q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'amount': str(env[2].pending_sum),
         'payment_date': now().date().isoformat(),
         'status': 'p'
@@ -308,7 +309,7 @@ def test_order_transition_to_paid_expired_quota_left(client, env):
         q = Quota.objects.create(event=env[0], size=10)
     q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    res = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    res = client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'p',
         'payment_date': now().date().isoformat(),
         'amount': str(o.pending_sum),
@@ -329,7 +330,7 @@ def test_order_approve(client, env):
         q = Quota.objects.create(event=env[0], size=10)
     q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    res = client.post('/control/event/dummy/dummy/orders/FOO/approve', {
+    res = client.post('/control/event/dummy/dummy/orders/ABC32/approve', {
     })
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
@@ -348,7 +349,7 @@ def test_order_deny(client, env):
         q = Quota.objects.create(event=env[0], size=10)
         q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    res = client.post('/control/event/dummy/dummy/orders/FOO/deny', {
+    res = client.post('/control/event/dummy/dummy/orders/ABC32/deny', {
     })
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
@@ -360,10 +361,10 @@ def test_order_deny(client, env):
 @pytest.mark.django_db
 def test_order_delete_require_testmode(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    res = client.get('/control/event/dummy/dummy/orders/FOO/delete', {}, follow=True)
+    res = client.get('/control/event/dummy/dummy/orders/ABC32/delete', {}, follow=True)
     assert 'alert-danger' in res.content.decode()
     assert 'Only orders created in test mode can be deleted' in res.content.decode()
-    client.post('/control/event/dummy/dummy/orders/FOO/delete', {}, follow=True)
+    client.post('/control/event/dummy/dummy/orders/ABC32/delete', {}, follow=True)
     with scopes_disabled():
         assert Order.objects.get(id=env[2].id)
 
@@ -375,7 +376,7 @@ def test_order_delete(client, env):
     o.testmode = True
     o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/event/dummy/dummy/orders/FOO/delete', {}, follow=True)
+    client.post('/control/event/dummy/dummy/orders/ABC32/delete', {}, follow=True)
     with scopes_disabled():
         assert not Order.objects.filter(id=env[2].id).exists()
 
@@ -401,8 +402,8 @@ def test_order_transition(client, env, process):
     o.status = process[0]
     o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=' + process[1])
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/transition?status=' + process[1])
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'amount': str(o.pending_sum),
         'payment_date': now().date().isoformat(),
         'status': process[1]
@@ -423,8 +424,8 @@ def test_order_cancel_free(client, env):
     o.total = Decimal('0.00')
     o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'c'
     })
     with scopes_disabled():
@@ -441,8 +442,8 @@ def test_order_cancel_paid_keep_fee(client, env):
         o.save()
         o.event.tax_rules.create(rate=Decimal('7.00'), default=True)
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'c',
         'cancellation_fee': '6.00'
     })
@@ -471,8 +472,8 @@ def test_order_cancel_paid_keep_fee_taxed(client, env):
         o.save()
         tr7 = o.event.tax_rules.create(rate=Decimal('7.00'), default=True)
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'c',
         'cancellation_fee': '6.00'
     })
@@ -509,8 +510,8 @@ def test_order_cancel_paid_keep_fee_tax_split(client, env):
         op2._calculate_tax(tax_rule=tr19)
         op2.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'c',
         'cancellation_fee': '6.00'
     })
@@ -543,8 +544,8 @@ def test_order_cancel_pending_keep_fee(client, env):
         o.status = Order.STATUS_PENDING
         o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'c',
         'cancellation_fee': '6.00'
     })
@@ -568,8 +569,8 @@ def test_order_cancel_pending_fee_too_high(client, env):
         o.status = Order.STATUS_PENDING
         o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'c',
         'cancellation_fee': '26.00'
     })
@@ -584,8 +585,8 @@ def test_order_cancel_pending_fee_too_high(client, env):
 @pytest.mark.django_db
 def test_order_cancel_unpaid_fees_allowed(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
-    client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/transition?status=c')
+    client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'c',
         'cancellation_fee': '6.00'
     })
@@ -601,7 +602,7 @@ def test_order_cancel_unpaid_fees_allowed(client, env):
 def test_order_invoice_create_forbidden(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     env[0].settings.set('invoice_generate', 'no')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoice', {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoice', {}, follow=True)
     assert 'alert-danger' in response.content.decode()
 
 
@@ -611,7 +612,7 @@ def test_order_invoice_create_duplicate(client, env):
     with scopes_disabled():
         generate_invoice(env[2])
     env[0].settings.set('invoice_generate', 'admin')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoice', {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoice', {}, follow=True)
     assert 'alert-danger' in response.content.decode()
 
 
@@ -619,7 +620,7 @@ def test_order_invoice_create_duplicate(client, env):
 def test_order_invoice_create_ok(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     env[0].settings.set('invoice_generate', 'admin')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoice', {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoice', {}, follow=True)
     assert 'alert-success' in response.content.decode()
     with scopes_disabled():
         assert env[2].invoices.exists()
@@ -632,7 +633,7 @@ def test_order_invoice_retransmit(client, env):
         i = generate_invoice(env[2])
         i.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
         i.save()
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/retransmit' % i.pk, {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoices/%d/retransmit' % i.pk, {}, follow=True)
     assert 'alert-success' in response.content.decode()
     i.refresh_from_db()
     assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
@@ -645,7 +646,7 @@ def test_order_invoice_regenerate(client, env):
         i = generate_invoice(env[2])
         InvoiceAddress.objects.create(name_parts={'full_name': 'Foo', "_scheme": "full"}, order=env[2])
         env[0].settings.set('invoice_generate', 'admin')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/regenerate' % i.pk, {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoices/%d/regenerate' % i.pk, {}, follow=True)
     assert 'alert-success' in response.content.decode()
     i.refresh_from_db()
     assert 'Foo' in i.invoice_to
@@ -659,14 +660,14 @@ def test_order_invoice_regenerate_canceled(client, env):
     with scopes_disabled():
         i = generate_invoice(env[2])
         generate_cancellation(i)
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/regenerate' % i.pk, {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoices/%d/regenerate' % i.pk, {}, follow=True)
     assert 'alert-danger' in response.content.decode()
 
 
 @pytest.mark.django_db
 def test_order_invoice_regenerate_unknown(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/regenerate' % 3, {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoices/%d/regenerate' % 3, {}, follow=True)
     assert 'alert-danger' in response.content.decode()
 
 
@@ -677,7 +678,7 @@ def test_order_invoice_reissue(client, env):
         i = generate_invoice(env[2])
         InvoiceAddress.objects.create(name_parts={'full_name': 'Foo', "_scheme": "full"}, order=env[2])
         env[0].settings.set('invoice_generate', 'admin')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/reissue' % i.pk, {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoices/%d/reissue' % i.pk, {}, follow=True)
     assert 'alert-success' in response.content.decode()
     i.refresh_from_db()
     with scopes_disabled():
@@ -693,14 +694,14 @@ def test_order_invoice_reissue_canceled(client, env):
     with scopes_disabled():
         i = generate_invoice(env[2])
         generate_cancellation(i)
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/reissue' % i.pk, {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoices/%d/reissue' % i.pk, {}, follow=True)
     assert 'alert-danger' in response.content.decode()
 
 
 @pytest.mark.django_db
 def test_order_invoice_reissue_unknown(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/invoices/%d/reissue' % 3, {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/invoices/%d/reissue' % 3, {}, follow=True)
     assert 'alert-danger' in response.content.decode()
 
 
@@ -708,9 +709,9 @@ def test_order_invoice_reissue_unknown(client, env):
 def test_order_resend_link(client, env):
     mail.outbox = []
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/resend', {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/resend', {}, follow=True)
     assert 'alert-success' in response.content.decode()
-    assert 'FOO' in mail.outbox[0].body
+    assert 'ABC32' in mail.outbox[0].body
 
 
 @pytest.mark.django_db
@@ -720,9 +721,9 @@ def test_order_reactivate_not_canceled(client, env):
         o.status = Order.STATUS_PAID
         o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/reactivate', follow=True)
+    response = client.get('/control/event/dummy/dummy/orders/ABC32/reactivate', follow=True)
     assert 'alert-danger' in response.content.decode()
-    response = client.post('/control/event/dummy/dummy/orders/FOO/reactivate', follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/reactivate', follow=True)
     assert 'alert-danger' in response.content.decode()
 
 
@@ -735,7 +736,7 @@ def test_order_reactivate(client, env):
         o.status = Order.STATUS_CANCELED
         o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/reactivate', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/reactivate', {
     }, follow=True)
     assert 'alert-success' in response.content.decode()
     with scopes_disabled():
@@ -750,9 +751,9 @@ def test_order_extend_not_pending(client, env):
         o.status = Order.STATUS_PAID
         o.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/extend', follow=True)
+    response = client.get('/control/event/dummy/dummy/orders/ABC32/extend', follow=True)
     assert 'alert-danger' in response.content.decode()
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', follow=True)
     assert 'alert-danger' in response.content.decode()
 
 
@@ -765,7 +766,7 @@ def test_order_extend_not_expired(client, env):
         generate_invoice(o)
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert 'alert-success' in response.content.decode()
@@ -785,7 +786,7 @@ def test_order_extend_overdue_quota_empty(client, env):
         q.items.add(env[3])
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert 'alert-success' in response.content.decode()
@@ -808,7 +809,7 @@ def test_order_extend_overdue_quota_blocked_by_waiting_list(client, env):
 
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert 'alert-success' in response.content.decode()
@@ -833,7 +834,7 @@ def test_order_extend_expired_quota_left(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     with scopes_disabled():
         assert o.invoices.count() == 2
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert b'alert-success' in response.content
@@ -857,7 +858,7 @@ def test_order_extend_expired_quota_empty(client, env):
         q.items.add(env[3])
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert b'alert-danger' in response.content
@@ -878,7 +879,7 @@ def test_order_extend_expired_quota_empty_ignore(client, env):
         q.items.add(env[3])
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate,
         'quota_ignore': 'on'
     }, follow=True)
@@ -905,7 +906,7 @@ def test_order_extend_expired_seat_free(client, env):
         newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
         client.login(email='dummy@dummy.dummy', password='dummy')
         assert o.invoices.count() == 2
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert b'alert-success' in response.content
@@ -933,7 +934,7 @@ def test_order_extend_expired_seat_blocked(client, env):
         q.items.add(env[3])
         newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert b'alert-danger' in response.content
@@ -976,7 +977,7 @@ def test_order_extend_expired_seat_taken(client, env):
         q.items.add(env[3])
         newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
         client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert b'alert-danger' in response.content
@@ -1005,7 +1006,7 @@ def test_order_extend_expired_quota_partial(client, env):
         q.items.add(env[3])
     newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert b'alert-danger' in response.content
@@ -1035,7 +1036,7 @@ def test_order_extend_expired_voucher_budget_ok(client, env):
         q.items.add(env[3])
         newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert b'alert-success' in response.content
@@ -1066,7 +1067,7 @@ def test_order_extend_expired_voucher_budget_fail(client, env):
         q.items.add(env[3])
         newdate = (now() + timedelta(days=20)).strftime("%Y-%m-%d")
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/extend', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/extend', {
         'expires': newdate
     }, follow=True)
     assert b'alert-danger' in response.content
@@ -1090,7 +1091,7 @@ def test_order_mark_paid_overdue_quota_blocked_by_waiting_list(client, env):
         env[0].waitinglistentries.create(item=env[3], email='foo@bar.com')
 
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'p',
         'payment_date': now().date().isoformat(),
         'amount': str(o.pending_sum),
@@ -1112,7 +1113,7 @@ def test_order_mark_paid_blocked(client, env):
         q.items.add(env[3])
 
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'amount': str(o.pending_sum),
         'payment_date': now().date().isoformat(),
         'status': 'p'
@@ -1137,7 +1138,7 @@ def test_order_mark_paid_overpaid_expired(client, env):
         q.items.add(env[3])
 
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'p',
         'payment_date': now().date().isoformat(),
         'amount': '0.00',
@@ -1162,7 +1163,7 @@ def test_order_mark_paid_forced(client, env):
         q.items.add(env[3])
 
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'p',
         'payment_date': now().date().isoformat(),
         'amount': str(o.pending_sum),
@@ -1206,7 +1207,7 @@ def test_order_mark_paid_expired_seat_taken(client, env):
         q = Quota.objects.create(event=env[0], size=100)
         q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'p',
         'payment_date': now().date().isoformat(),
         'amount': str(o.pending_sum),
@@ -1236,7 +1237,7 @@ def test_order_mark_paid_expired_blocked(client, env):
         q = Quota.objects.create(event=env[0], size=100)
         q.items.add(env[3])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'p',
         'payment_date': now().date().isoformat(),
         'amount': str(o.pending_sum),
@@ -1250,7 +1251,7 @@ def test_order_mark_paid_expired_blocked(client, env):
 
     env[0].settings.seating_allow_blocked_seats_for_channel = ["bar"]
 
-    response = client.post('/control/event/dummy/dummy/orders/FOO/transition', {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/transition', {
         'status': 'p',
         'payment_date': now().date().isoformat(),
         'amount': str(o.pending_sum),
@@ -1265,22 +1266,22 @@ def test_order_mark_paid_expired_blocked(client, env):
 @pytest.mark.django_db
 def test_order_go_lowercase(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/go?code=DuMmyfoO')
-    assert response['Location'].endswith('/control/event/dummy/dummy/orders/FOO/')
+    response = client.get('/control/event/dummy/dummy/orders/go?code=DuMmyabC32')
+    assert response['Location'].endswith('/control/event/dummy/dummy/orders/ABC32/')
 
 
 @pytest.mark.django_db
 def test_order_go_with_slug(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/go?code=DUMMYFOO')
-    assert response['Location'].endswith('/control/event/dummy/dummy/orders/FOO/')
+    response = client.get('/control/event/dummy/dummy/orders/go?code=DUMMYABC32')
+    assert response['Location'].endswith('/control/event/dummy/dummy/orders/ABC32/')
 
 
 @pytest.mark.django_db
 def test_order_go_found(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/go?code=FOO')
-    assert response['Location'].endswith('/control/event/dummy/dummy/orders/FOO/')
+    response = client.get('/control/event/dummy/dummy/orders/go?code=ABC32')
+    assert response['Location'].endswith('/control/event/dummy/dummy/orders/ABC32/')
 
 
 @pytest.mark.django_db
@@ -1768,7 +1769,7 @@ def test_check_vatid(client, env):
         ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='ATU1234567', country=Country('AT'))
     with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
         mock_validate.return_value = 'AT123456'
-        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        response = client.post('/control/event/dummy/dummy/orders/ABC32/checkvatid', {}, follow=True)
         assert 'alert-success' in response.content.decode()
         ia.refresh_from_db()
         assert ia.vat_id_validated
@@ -1781,7 +1782,7 @@ def test_check_vatid_no_entered(client, env):
         ia = InvoiceAddress.objects.create(order=env[2], is_business=True, country=Country('AT'))
     with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
         mock_validate.return_value = 'AT123456'
-        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        response = client.post('/control/event/dummy/dummy/orders/ABC32/checkvatid', {}, follow=True)
         assert 'alert-danger' in response.content.decode()
         ia.refresh_from_db()
         assert not ia.vat_id_validated
@@ -1792,7 +1793,7 @@ def test_check_vatid_invalid_country(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     with scopes_disabled():
         ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='ATU1234567', country=Country('FR'))
-    response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/checkvatid', {}, follow=True)
     assert 'alert-danger' in response.content.decode()
     ia.refresh_from_db()
     assert not ia.vat_id_validated
@@ -1805,7 +1806,7 @@ def test_check_vatid_noneu_country(client, env):
         ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='CHU1234567', country=Country('CH'))
     with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
         mock_validate.return_value = 'AT123456'
-        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        response = client.post('/control/event/dummy/dummy/orders/ABC32/checkvatid', {}, follow=True)
         assert 'alert-danger' in response.content.decode()
         ia.refresh_from_db()
         assert not ia.vat_id_validated
@@ -1818,7 +1819,7 @@ def test_check_vatid_no_country(client, env):
         ia = InvoiceAddress.objects.create(order=env[2], is_business=True, vat_id='ATU1234567')
     with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
         mock_validate.return_value = 'AT123456'
-        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        response = client.post('/control/event/dummy/dummy/orders/ABC32/checkvatid', {}, follow=True)
         assert 'alert-danger' in response.content.decode()
         ia.refresh_from_db()
         assert not ia.vat_id_validated
@@ -1829,7 +1830,7 @@ def test_check_vatid_no_invoiceaddress(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
         mock_validate.return_value = 'AT123456'
-        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        response = client.post('/control/event/dummy/dummy/orders/ABC32/checkvatid', {}, follow=True)
         assert 'alert-danger' in response.content.decode()
 
 
@@ -1843,7 +1844,7 @@ def test_check_vatid_invalid(client, env):
             raise VATIDFinalError('Fail')
 
         mock_validate.side_effect = raiser
-        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        response = client.post('/control/event/dummy/dummy/orders/ABC32/checkvatid', {}, follow=True)
         assert 'alert-danger' in response.content.decode()
         ia.refresh_from_db()
         assert not ia.vat_id_validated
@@ -1859,7 +1860,7 @@ def test_check_vatid_unavailable(client, env):
             raise VATIDTemporaryError('Fail')
 
         mock_validate.side_effect = raiser
-        response = client.post('/control/event/dummy/dummy/orders/FOO/checkvatid', {}, follow=True)
+        response = client.post('/control/event/dummy/dummy/orders/ABC32/checkvatid', {}, follow=True)
         assert 'alert-danger' in response.content.decode()
         ia.refresh_from_db()
         assert not ia.vat_id_validated
@@ -1870,11 +1871,11 @@ def test_cancel_payment(client, env):
     with scopes_disabled():
         p = env[2].payments.last()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/cancel'.format(p.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/payments/{}/cancel'.format(p.pk), {}, follow=True)
     assert 'alert-success' in response.content.decode()
     p.refresh_from_db()
     assert p.state == OrderPayment.PAYMENT_STATE_CANCELED
-    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/cancel'.format(p.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/payments/{}/cancel'.format(p.pk), {}, follow=True)
     assert 'alert-danger' in response.content.decode()
 
 
@@ -1889,13 +1890,13 @@ def test_cancel_refund(client, env):
             execution_date=now(),
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/cancel'.format(r.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refunds/{}/cancel'.format(r.pk), {}, follow=True)
     assert 'alert-success' in response.content.decode()
     r.refresh_from_db()
     assert r.state == OrderRefund.REFUND_STATE_CANCELED
     r.state = OrderRefund.REFUND_STATE_DONE
     r.save()
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/cancel'.format(r.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refunds/{}/cancel'.format(r.pk), {}, follow=True)
     assert 'alert-danger' in response.content.decode()
     r.refresh_from_db()
     assert r.state == OrderRefund.REFUND_STATE_DONE
@@ -1912,7 +1913,7 @@ def test_process_refund(client, env):
             execution_date=now(),
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/process'.format(r.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refunds/{}/process'.format(r.pk), {}, follow=True)
     assert 'alert-success' in response.content.decode()
     r.refresh_from_db()
     assert r.state == OrderRefund.REFUND_STATE_DONE
@@ -1939,7 +1940,7 @@ def test_process_refund_overpaid_externally(client, env):
             execution_date=now(),
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/process'.format(r.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refunds/{}/process'.format(r.pk), {}, follow=True)
     assert 'alert-success' in response.content.decode()
     r.refresh_from_db()
     assert r.state == OrderRefund.REFUND_STATE_DONE
@@ -1959,7 +1960,7 @@ def test_process_refund_invalid_state(client, env):
             execution_date=now(),
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/process'.format(r.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refunds/{}/process'.format(r.pk), {}, follow=True)
     assert 'alert-danger' in response.content.decode()
     r.refresh_from_db()
     assert r.state == OrderRefund.REFUND_STATE_CANCELED
@@ -1976,7 +1977,7 @@ def test_process_refund_mark_refunded(client, env):
             execution_date=now(),
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/process'.format(r.pk), {'action': 'r'},
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refunds/{}/process'.format(r.pk), {'action': 'r'},
                            follow=True)
     assert 'alert-success' in response.content.decode()
     r.refresh_from_db()
@@ -1996,7 +1997,7 @@ def test_done_refund(client, env):
             execution_date=now(),
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/done'.format(r.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refunds/{}/done'.format(r.pk), {}, follow=True)
     assert 'alert-success' in response.content.decode()
     r.refresh_from_db()
     assert r.state == OrderRefund.REFUND_STATE_DONE
@@ -2013,7 +2014,7 @@ def test_done_refund_invalid_state(client, env):
             execution_date=now(),
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refunds/{}/done'.format(r.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refunds/{}/done'.format(r.pk), {}, follow=True)
     assert 'alert-danger' in response.content.decode()
     r.refresh_from_db()
     assert r.state == OrderRefund.REFUND_STATE_EXTERNAL
@@ -2024,7 +2025,7 @@ def test_confirm_payment(client, env):
     with scopes_disabled():
         p = env[2].payments.last()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/payments/{}/confirm'.format(p.pk), {
         'amount': str(p.amount),
         'payment_date': str(now().date().isoformat()),
     }, follow=True)
@@ -2042,7 +2043,7 @@ def test_confirm_payment_invalid_state(client, env):
     p.state = OrderPayment.PAYMENT_STATE_FAILED
     p.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/payments/{}/confirm'.format(p.pk), {
         'amount': str(p.amount),
         'payment_date': str(now().date().isoformat()),
     }, follow=True)
@@ -2060,7 +2061,7 @@ def test_confirm_payment_partal_amount(client, env):
     p.amount -= Decimal(5.00)
     p.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/payments/{}/confirm'.format(p.pk), {
         'amount': str(p.amount),
         'payment_date': str(now().date().isoformat()),
     }, follow=True)
@@ -2077,15 +2078,15 @@ def test_refund_paid_order_fully_mark_as_refunded(client, env):
         p = env[2].payments.last()
         p.confirm()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/refund')
+    response = client.get('/control/event/dummy/dummy/orders/ABC32/refund')
     doc = BeautifulSoup(response.content.decode(), "lxml")
     assert doc.select("input[name$=partial_amount]")[0]["value"] == "14.00"
-    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '14.00',
         'start-mode': 'full',
         'start-action': 'mark_refunded'
     }, follow=True)
-    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '14.00',
         'start-mode': 'full',
         'start-action': 'mark_refunded',
@@ -2111,10 +2112,10 @@ def test_refund_paid_order_fully_mark_as_pending(client, env):
         p = env[2].payments.last()
         p.confirm()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/refund')
+    response = client.get('/control/event/dummy/dummy/orders/ABC32/refund')
     doc = BeautifulSoup(response.content.decode(), "lxml")
     assert doc.select("input[name$=partial_amount]")[0]["value"] == "14.00"
-    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '14.00',
         'start-mode': 'full',
         'start-action': 'mark_pending',
@@ -2140,15 +2141,15 @@ def test_refund_paid_order_partially_mark_as_pending(client, env):
         p = env[2].payments.last()
         p.confirm()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/refund')
+    response = client.get('/control/event/dummy/dummy/orders/ABC32/refund')
     doc = BeautifulSoup(response.content.decode(), "lxml")
     assert doc.select("input[name$=partial_amount]")[0]["value"] == "14.00"
-    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending'
     }, follow=True)
-    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2178,8 +2179,8 @@ def test_refund_propose_lower_payment(client, env):
             amount=Decimal('6.00'), provider='stripe', state=OrderPayment.PAYMENT_STATE_CONFIRMED
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/refund')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/refund')
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending'
@@ -2199,8 +2200,8 @@ def test_refund_propose_equal_payment(client, env):
             amount=Decimal('7.00'), provider='stripe', state=OrderPayment.PAYMENT_STATE_CONFIRMED
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/refund')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/refund')
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending'
@@ -2220,8 +2221,8 @@ def test_refund_propose_higher_payment(client, env):
             amount=Decimal('8.00'), provider='stripe', state=OrderPayment.PAYMENT_STATE_CONFIRMED
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.get('/control/event/dummy/dummy/orders/FOO/refund')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.get('/control/event/dummy/dummy/orders/ABC32/refund')
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending'
@@ -2237,7 +2238,7 @@ def test_refund_amount_does_not_match_or_invalid(client, env):
         p = env[2].payments.last()
         p.confirm()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    resp = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    resp = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2249,7 +2250,7 @@ def test_refund_amount_does_not_match_or_invalid(client, env):
     }, follow=True)
     assert b'alert-danger' in resp.content
     assert b'do not match the' in resp.content
-    resp = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    resp = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '15.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2261,7 +2262,7 @@ def test_refund_amount_does_not_match_or_invalid(client, env):
     }, follow=True)
     assert b'alert-danger' in resp.content
     assert b'The refund amount needs to be positive' in resp.content
-    resp = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    resp = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2273,7 +2274,7 @@ def test_refund_amount_does_not_match_or_invalid(client, env):
     }, follow=True)
     assert b'alert-danger' in resp.content
     assert b'do not match the' in resp.content
-    resp = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    resp = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2311,7 +2312,7 @@ def test_refund_paid_order_automatically_failed(client, env, monkeypatch):
     monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
     monkeypatch.setattr("stripe.Refund.create", refund_create)
 
-    r = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    r = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2359,7 +2360,7 @@ def test_refund_paid_order_automatically(client, env, monkeypatch):
     monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
     monkeypatch.setattr("stripe.Refund.create", refund_create)
 
-    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '7.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2386,7 +2387,7 @@ def test_refund_paid_order_offsetting_to_unknown(client, env):
         p.confirm()
     client.login(email='dummy@dummy.dummy', password='dummy')
 
-    r = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    r = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '5.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2422,7 +2423,7 @@ def test_refund_paid_order_offsetting_to_wrong_currency(client, env):
         )
         o.positions.create(price=5, item=ticket2)
 
-    r = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    r = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '5.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2450,7 +2451,7 @@ def test_refund_paid_order_offsetting(client, env):
             total=5, locale='en'
         )
 
-    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '5.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2492,7 +2493,7 @@ def test_refund_prevent_duplicate_submit(client, env):
         )
         env[2].refunds.create(provider="manual", amount=Decimal("2.00"), state=OrderRefund.REFUND_STATE_CREATED)
 
-    r = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    r = client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '5.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2514,7 +2515,7 @@ def test_refund_paid_order_giftcard(client, env):
         p.confirm()
         client.login(email='dummy@dummy.dummy', password='dummy')
 
-    client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+    client.post('/control/event/dummy/dummy/orders/ABC32/refund', {
         'start-partial_amount': '5.00',
         'start-mode': 'partial',
         'start-action': 'mark_pending',
@@ -2582,7 +2583,7 @@ def test_delete_cancellation_request(client, env):
             refund_as_giftcard=True
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/cancellationrequests/{}/delete'.format(r.pk), {},
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/cancellationrequests/{}/delete'.format(r.pk), {},
                            follow=True)
     assert 'alert-success' in response.content.decode()
     assert not env[2].cancellation_requests.exists()
@@ -2600,10 +2601,10 @@ def test_approve_cancellation_request(client, env):
             refund_as_giftcard=True
         )
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c&req={}'.format(r.pk), {})
+    response = client.get('/control/event/dummy/dummy/orders/ABC32/transition?status=c&req={}'.format(r.pk), {})
     doc = BeautifulSoup(response.content.decode(), "lxml")
     assert doc.select('input[name=cancellation_fee]')[0]['value'] == '4.00'
-    response = client.post('/control/event/dummy/dummy/orders/FOO/transition?req={}'.format(r.pk), {
+    response = client.post('/control/event/dummy/dummy/orders/ABC32/transition?req={}'.format(r.pk), {
         'status': 'c',
         'cancellation_fee': '4.00'
     }, follow=True)

@@ -43,8 +43,8 @@ class OrganizerTest(SoupTest):
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-        self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
-        self.orga2 = Organizer.objects.create(name='MRM', slug='mrm')
+        self.orga1 = Organizer.objects.create(name='CCC', slug='ccc', plugins='pretix.plugins.banktransfer')
+        self.orga2 = Organizer.objects.create(name='MRM', slug='mrm', plugins='pretix.plugins.banktransfer')
         self.event1 = Event.objects.create(
             organizer=self.orga1, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),

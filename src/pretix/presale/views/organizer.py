@@ -976,7 +976,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             return ctx
 
         events = ebd[self.date]
-        shortest_duration = self._get_shortest_duration(events).total_seconds() // 60
+        shortest_duration = max(self._get_shortest_duration(events).total_seconds() // 60, 1)
         # pick the next biggest tick_duration based on shortest_duration, max. 180 minutes
         tick_duration = next((d for d in [5, 10, 15, 30, 60, 120, 180] if d >= shortest_duration), 180)
 

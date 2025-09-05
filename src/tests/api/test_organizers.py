@@ -31,7 +31,7 @@ TEST_ORGANIZER_RES = {
     "name": "Dummy",
     "slug": "dummy",
     "public_url": "http://example.com/dummy/",
-    "plugins": [],
+    "plugins": ["pretix.plugins.banktransfer"],
 }
 
 

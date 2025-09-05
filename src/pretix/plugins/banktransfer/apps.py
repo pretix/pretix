@@ -24,6 +24,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from pretix import __version__ as version
+from pretix.base.plugins import PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID
 
 
 class BankTransferApp(AppConfig):
@@ -45,6 +46,7 @@ class BankTransferApp(AppConfig):
             ((_("Bank transfer"), _("Import bank data")), "plugins:banktransfer:import", {}),
             ((_("Bank transfer"), _("Export refunds")), "plugins:banktransfer:refunds.list", {}),
         ]
+        level = PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID
 
     def ready(self):
         from . import signals  # NOQA

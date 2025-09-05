@@ -55,7 +55,7 @@ class BaseOrdersTest(TestCase):
     @scopes_disabled()
     def setUp(self):
         super().setUp()
-        self.orga = Organizer.objects.create(name='CCC', slug='ccc')
+        self.orga = Organizer.objects.create(name='CCC', slug='ccc', plugins='pretix.plugins.banktransfer')
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),

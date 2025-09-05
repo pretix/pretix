@@ -107,11 +107,16 @@ def get_all_payment_providers():
             return Event
 
     with rolledback_transaction():
+        plugins = ",".join([app.name for app in apps.get_app_configs()])
+        organizer = Organizer.objects.create(
+            name="INTERNAL",
+            plugins=plugins,
+        )
         event = Event.objects.create(
-            plugins=",".join([app.name for app in apps.get_app_configs()]),
+            plugins=plugins,
             name="INTERNAL",
             date_from=now(),
-            organizer=Organizer.objects.create(name="INTERNAL")
+            organizer=organizer,
         )
         event = FakeEvent(event)
         provs = register_payment_providers.send(
@@ -220,6 +225,7 @@ class OrderFilterForm(FilterForm):
             (_('Cancellations'), (
                 (Order.STATUS_CANCELED, _('Canceled (fully)')),
                 ('cp', _('Canceled (fully or with paid fee)')),
+                ('cany', _('Canceled (at least one position)')),
                 ('rc', _('Cancellation requested')),
                 ('cni', _('Fully canceled but invoice not canceled')),
             )),
@@ -396,6 +402,16 @@ class OrderFilterForm(FilterForm):
                 ).filter(
                     Q(status=Order.STATUS_PAID, has_pc=False) | Q(status=Order.STATUS_CANCELED)
                 )
+            elif s == 'cany':
+                s = OrderPosition.all.filter(
+                    order=OuterRef('pk'),
+                    canceled=True,
+                )
+                qs = qs.annotate(
+                    has_pc_c=Exists(s)
+                ).filter(
+                    Q(has_pc_c=True) | Q(status=Order.STATUS_CANCELED)
+                )
 
         if fdata.get('ordering'):
             qs = qs.order_by(*get_deterministic_ordering(Order, self.get_order_by()))
@@ -474,16 +490,31 @@ class EventOrderFilterForm(OrderFilterForm):
         fdata = self.cleaned_data
         qs = super().filter_qs(qs)
 
+        # This is a little magic, but there's no option that does not confuse people and let's hope this confuses less
+        # people.
+        only_match_noncanceled_products = fdata.get('status') in (
+            Order.STATUS_PAID,
+            Order.STATUS_PAID + 'v',
+            Order.STATUS_PENDING,
+            Order.STATUS_PENDING + Order.STATUS_PAID,
+        )
+        if only_match_noncanceled_products:
+            canceled_filter = Q(all_positions__canceled=False)
+        elif fdata.get('status') in ('cp', 'cany'):
+            canceled_filter = Q(all_positions__canceled=True) | Q(status=Order.STATUS_CANCELED)
+        else:
+            canceled_filter = Q()
+
         item = fdata.get('item')
         if item:
             if '-' in item:
                 var = item.split('-')[1]
-                qs = qs.filter(all_positions__variation_id=var, all_positions__canceled=False).distinct()
+                qs = qs.filter(canceled_filter, all_positions__variation_id=var).distinct()
             else:
-                qs = qs.filter(all_positions__item_id=fdata.get('item'), all_positions__canceled=False).distinct()
+                qs = qs.filter(canceled_filter, all_positions__item_id=fdata.get('item')).distinct()
 
         if fdata.get('subevent'):
-            qs = qs.filter(all_positions__subevent=fdata.get('subevent'), all_positions__canceled=False).distinct()
+            qs = qs.filter(canceled_filter, all_positions__subevent=fdata.get('subevent')).distinct()
 
         if fdata.get('question') and fdata.get('answer') is not None:
             q = fdata.get('question')
