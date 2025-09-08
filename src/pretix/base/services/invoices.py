@@ -84,6 +84,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
 
     min_period_start = None
     max_period_end = None
+    now_dt = now()
 
     with (language(invoice.locale, invoice.event.settings.region)):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
@@ -272,7 +273,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                     location=_location_oneliner(location)
                 )
 
-            period_start, period_end = _service_period_for_position(invoice, p)
+            period_start, period_end = _service_period_for_position(invoice, p, now_dt)
             min_period_start = min(min_period_start or period_start, period_start)
             max_period_end = min(max_period_end or period_end, period_end)
 
@@ -376,7 +377,7 @@ def build_cancellation(invoice: Invoice):
     return invoice
 
 
-def _service_period_for_position(invoice, position):
+def _service_period_for_position(invoice, position, invoice_dt):
     if invoice.event.settings.invoice_period in ("auto", "auto_no_event"):
         if position.valid_from or position.valid_until:
             period_start = position.valid_from or now()
@@ -384,12 +385,18 @@ def _service_period_for_position(invoice, position):
         elif memberships := list(position.granted_memberships.all()):
             period_start = min(m.date_start for m in memberships)
             period_end = max(m.date_end for m in memberships)
-        elif invoice.event.has_subevents and position.subevent:
-            period_start = position.subevent.date_from
-            period_end = position.subevent.date_to
+        elif invoice.event.has_subevents:
+            if position.subevent:
+                period_start = position.subevent.date_from
+                period_end = position.subevent.date_to
+            else:
+                # Currently impossible case, but might not be in the future and never makes
+                # sense to use the event date here
+                period_start = invoice_dt
+                period_end = invoice_dt
         elif invoice.event.settings.invoice_period == "auto_no_event":
-            period_start = now()
-            period_end = now()
+            period_start = invoice_dt
+            period_end = invoice_dt
         else:
             period_start = invoice.event.date_from
             period_end = invoice.event.date_to
@@ -404,7 +411,7 @@ def _service_period_for_position(invoice, position):
             period_start = invoice.event.date_from
             period_end = invoice.event.date_to
     elif invoice.event.settings.invoice_period == "invoice_date":
-        period_start = period_end = now()
+        period_start = period_end = invoice_dt
     else:
         raise ValueError(f"Invalid invoice period setting '{invoice.event.settings.invoice_period}'")
 

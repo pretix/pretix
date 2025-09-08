@@ -666,6 +666,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         has_taxes = any(il.tax_value for il in self.invoice.lines.all()) or self.invoice.reverse_charge
         header_dates = self._date_range_in_header()
         tz = self.invoice.event.timezone
+        has_multiple_service_dates = len(set(
+            (il.period_start, il.period_end) for il in self.invoice.lines.all()
+        )) > 1
+        request_show_service_date = False
 
         story = [
             NextPageTemplate('FirstPage'),
@@ -741,7 +745,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     period_line = ""
 
                 else:
-                    period_line = f"\n{date_format(day(period_start), 'SHORT_DATE_FORMAT')} – {date_format(day(period_end), 'SHORT_DATE_FORMAT')}"
+                    period_line = f"{date_format(day(period_start), 'SHORT_DATE_FORMAT')} – {date_format(day(period_end), 'SHORT_DATE_FORMAT')}"
 
             elif period_start or period_end:
                 # It's a single-day period
@@ -765,12 +769,17 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     period_line = ""
 
                 else:
-                    period_line = f"\n{date_format(delivery_day, 'SHORT_DATE_FORMAT')}"
+                    period_line = date_format(delivery_day, 'SHORT_DATE_FORMAT')
             else:
                 # No period known
                 period_line = ""
 
-            description += period_line
+            if not has_multiple_service_dates and period_line:
+                # Group together at the end of the invoice
+                request_show_service_date = period_line
+            else:
+                description += "\n" + period_line
+
             lines = list(lines)
             if has_taxes:
                 if len(lines) > 1:
@@ -883,6 +892,12 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         story.append(table)
 
         story.append(Spacer(1, 10 * mm))
+
+        if request_show_service_date:
+            story.append(FontFallbackParagraph(
+                self._normalize(pgettext('invoice', 'Invoice period: {daterange}').format(daterange=request_show_service_date)),
+                self.stylesheet['Normal']
+            ))
 
         if self.invoice.payment_provider_text:
             story.append(FontFallbackParagraph(
