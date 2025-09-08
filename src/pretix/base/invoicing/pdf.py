@@ -533,7 +533,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             self.invoice.event.date_to.astimezone(tz).date() != self.invoice.event.date_from.astimezone(tz).date()
         )
         if show_end_date:
-            return self.invoice.event.date_from.astimezone(tz).date(), self.invoice.event.date_to.astimezone(tz).date
+            return self.invoice.event.date_from.astimezone(tz).date(), self.invoice.event.date_to.astimezone(tz).date()
         else:
             return self.invoice.event.date_from.astimezone(tz).date(), None
 
@@ -741,7 +741,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     period_line = ""
 
                 else:
-                    period_line = f"\n{date_format(day(period_start), 'SHORT_DATE_FORMAT')} – {date_format(day(period_end), 'SHORT_END_FORMAT')}"
+                    period_line = f"\n{date_format(day(period_start), 'SHORT_DATE_FORMAT')} – {date_format(day(period_end), 'SHORT_DATE_FORMAT')}"
 
             elif period_start or period_end:
                 # It's a single-day period
@@ -765,7 +765,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     period_line = ""
 
                 else:
-                    period_line = f"\n{date_format(day(delivery_day), 'SHORT_DATE_FORMAT')}"
+                    period_line = f"\n{date_format(delivery_day, 'SHORT_DATE_FORMAT')}"
             else:
                 # No period known
                 period_line = ""
