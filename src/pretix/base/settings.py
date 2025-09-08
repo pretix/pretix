@@ -1098,6 +1098,32 @@ DEFAULTS = {
             help_text=_("Invoices will never be automatically generated for free orders.")
         )
     },
+    'invoice_period': {
+        'default': 'auto',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('auto', _('Ticket-specific validity or event series date or event date')),
+                ('auto_no_event', _('Ticket-specific validity or event series date or invoice date')),
+                ('order_date', _('Order date')),
+                ('invoice_date', _('Invoice date')),
+            ),
+        ),
+        'form_kwargs': dict(
+            label=_("Date of service"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('auto', _('Ticket-specific validity or event series date or event date')),
+                ('auto_no_event', _('Ticket-specific validity or event series date or invoice date')),
+                ('order_date', _('Order date')),
+                ('invoice_date', _('Invoice date')),
+            ),
+            help_text=_("This controls what dates are shown on the invoice, but is especially important for "
+                        "electronic invoicing."),
+        )
+    },
     'invoice_reissue_after_modify': {
         'default': 'False',
         'type': bool,

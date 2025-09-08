@@ -277,8 +277,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 item=p.item,
                 variation=p.variation,
                 attendee_name=p.attendee_name if invoice.event.settings.invoice_attendee_name else None,
-                event_date_from=p.subevent.date_from if invoice.event.has_subevents else invoice.event.date_from,
-                event_date_to=p.subevent.date_to if invoice.event.has_subevents else invoice.event.date_to,
+                period_start=p.subevent.date_from if invoice.event.has_subevents else invoice.event.date_from,
+                period_end=p.subevent.date_to if invoice.event.has_subevents else invoice.event.date_to,
                 event_location=location if invoice.event.settings.invoice_event_location else None,
                 tax_rate=p.tax_rate,
                 tax_code=p.tax_code,
@@ -306,8 +306,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 invoice=invoice,
                 description=fee_title,
                 gross_value=fee.value,
-                event_date_from=None if invoice.event.has_subevents else invoice.event.date_from,
-                event_date_to=None if invoice.event.has_subevents else invoice.event.date_to,
+                period_start=None if invoice.event.has_subevents else invoice.event.date_from,
+                period_end=None if invoice.event.has_subevents else invoice.event.date_to,
                 event_location=(
                     None if invoice.event.has_subevents
                     else (str(invoice.event.location)
@@ -506,8 +506,8 @@ def build_preview_invoice_pdf(event):
                         invoice=invoice, description=_("Sample product {}").format(i + 1),
                         gross_value=tax.gross, tax_value=tax.tax,
                         tax_rate=tax.rate, tax_name=tax.name, tax_code=tax.code,
-                        event_date_from=event.date_from,
-                        event_date_to=event.date_to,
+                        period_start=event.date_from,
+                        period_end=event.date_to,
                         event_location=event.settings.invoice_event_location,
                     )
         else:
@@ -515,8 +515,8 @@ def build_preview_invoice_pdf(event):
                 InvoiceLine.objects.create(
                     invoice=invoice, description=_("Sample product A"),
                     gross_value=100, tax_value=0, tax_rate=0, tax_code=None,
-                    event_date_from=event.date_from,
-                    event_date_to=event.date_to,
+                    period_start=event.date_from,
+                    period_end=event.date_to,
                     event_location=event.settings.invoice_event_location,
                 )
 
