@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-05-16 17:00+0000\n"
-"Last-Translator: David <davemachala@gmail.com>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"PO-Revision-Date: 2025-09-08 11:00+0000\n"
+"Last-Translator: Alois Pospíšil <alois.pospisil@gmail.com>\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -688,7 +688,7 @@ msgstr "{system} Uživatel"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:31
 #: pretix/presale/templates/pretixpresale/event/order.html:300
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/auth.py:675
@@ -1083,7 +1083,7 @@ msgstr "Krátká forma"
 #: pretix/control/templates/pretixcontrol/events/index.html:68
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 msgid "Event name"
-msgstr "Název akce"
+msgstr "Název události"
 
 #: pretix/base/datasync/sourcefields.py:446
 #: pretix/base/exporters/invoices.py:326
@@ -1254,7 +1254,7 @@ msgstr "Nahrání souborů s odpověďmi na otázky"
 #: pretix/plugins/reports/exporters.py:662
 msgctxt "export_category"
 msgid "Order data"
-msgstr "Údaje o objednávce"
+msgstr "Data objednávky"
 
 #: pretix/base/exporters/answers.py:56
 msgid ""
@@ -1414,7 +1414,7 @@ msgstr "Celé jméno"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:35
 #: pretix/presale/templates/pretixpresale/event/order.html:312
 msgid "Name"
-msgstr "Jméno"
+msgstr "Název"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:99
 msgid "Account active"
@@ -2310,7 +2310,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:115 pretix/control/forms/event.py:1671
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
-msgstr "Odkaz akce"
+msgstr "Zkratka události"
 
 #: pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:452
@@ -3568,7 +3568,7 @@ msgstr "Příjemce"
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "Stránka %d z %d"
+msgstr ""
 
 #: pretix/base/invoicing/pdf.py:378
 msgctxt "invoice"
@@ -4780,7 +4780,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:583 pretix/base/models/organizer.py:89
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr "Krátká forma může obsahovat pouze písmena, číslice, tečky a pomlčky."
+msgstr "Zkratka smí obsahovat pouze písmena, čísla, tečky a pomlčky."
 
 #: pretix/base/models/event.py:600 pretix/base/models/event.py:1495
 msgid "Show in lists"
@@ -5866,7 +5866,7 @@ msgstr "Upload souborů"
 #: pretix/base/models/items.py:1657
 #: pretix/control/templates/pretixcontrol/event/settings.html:240
 msgid "Date and time"
-msgstr "Datum a hodina"
+msgstr "Datum a čas"
 
 #: pretix/base/models/items.py:1658
 msgid "Country code (ISO 3166-1 alpha-2)"
@@ -6667,7 +6667,6 @@ msgstr "Pozvání do týmu \"{team}\" pro \"{email}\""
 
 #: pretix/base/models/organizer.py:604
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
-#, fuzzy
 msgid "Identifier"
 msgstr "Identifikátor"
 
@@ -30204,7 +30203,7 @@ msgstr "Stránka %d z %d"
 #: pretix/plugins/reports/exporters.py:211
 #, python-format
 msgid "Page %d"
-msgstr "Strana %d"
+msgstr "Strana %dd"
 
 #: pretix/plugins/reports/exporters.py:213
 #, python-format
@@ -34485,6 +34484,8 @@ msgid ""
 "Please tick a checkbox or enter a quantity for one of the ticket types to "
 "add to the cart."
 msgstr ""
+"Zaškrtněte políčko nebo zadejte množství pro jeden z typů vstupenek, které "
+"chcete přidat do košíku."
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
