@@ -1105,8 +1105,9 @@ DEFAULTS = {
         'serializer_class': serializers.ChoiceField,
         'serializer_kwargs': dict(
             choices=(
-                ('auto', _('Ticket-specific validity or event series date or event date')),
-                ('auto_no_event', _('Ticket-specific validity or event series date or invoice date')),
+                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date)')),
+                ('auto_no_event', _('Automatic, but prefer invoice date over event date')),
+                ('event_date', _('Event date')),
                 ('order_date', _('Order date')),
                 ('invoice_date', _('Invoice date')),
             ),
@@ -1115,13 +1116,15 @@ DEFAULTS = {
             label=_("Date of service"),
             widget=forms.RadioSelect,
             choices=(
-                ('auto', _('Ticket-specific validity or event series date or event date')),
-                ('auto_no_event', _('Ticket-specific validity or event series date or invoice date')),
+                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date)')),
+                ('auto_no_event', _('Automatic, but prefer invoice date over event date')),
+                ('event_date', _('Event date')),
                 ('order_date', _('Order date')),
                 ('invoice_date', _('Invoice date')),
             ),
             help_text=_("This controls what dates are shown on the invoice, but is especially important for "
                         "electronic invoicing."),
+            required=True,
         )
     },
     'invoice_reissue_after_modify': {

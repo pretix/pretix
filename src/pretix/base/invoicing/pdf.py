@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import datetime
 import logging
 import re
 import unicodedata
@@ -522,6 +523,20 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Event'))))
         canvas.drawText(textobject)
 
+    def _date_range_in_header(self):
+        if self.invoice.event.has_subevents or not self.invoice.event.settings.show_dates_on_frontpage:
+            return None, None
+        tz = self.invoice.event.timezone
+        show_end_date = (
+            self.invoice.event.settings.show_date_to and
+            self.invoice.event.date_to and
+            self.invoice.event.date_to.astimezone(tz).date() != self.invoice.event.date_from.astimezone(tz).date()
+        )
+        if show_end_date:
+            return self.invoice.event.date_from.astimezone(tz).date(), self.invoice.event.date_to.astimezone(tz).date
+        else:
+            return self.invoice.event.date_from.astimezone(tz).date(), None
+
     def _draw_event(self, canvas):
         def shorten(txt):
             txt = str(txt)
@@ -535,25 +550,17 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 p_size = p.wrap(self.event_width, self.event_height)
             return txt
 
-        if not self.invoice.event.has_subevents and self.invoice.event.settings.show_dates_on_frontpage:
-            tz = self.invoice.event.timezone
-            show_end_date = (
-                self.invoice.event.settings.show_date_to and
-                self.invoice.event.date_to and
-                self.invoice.event.date_to.astimezone(tz).date() != self.invoice.event.date_from.astimezone(tz).date()
+        d_from, d_to = self._date_range_in_header()
+        if d_from and d_to:
+            p_str = (
+                shorten(self.invoice.event.name) + '\n' +
+                pgettext('invoice', '{from_date}\nuntil {to_date}').format(
+                    from_date=date_format(d_from, "DATE_FORMAT"),
+                    to_date=date_format(d_to, "DATE_FORMAT"),
+                )
             )
-            if show_end_date:
-                p_str = (
-                    shorten(self.invoice.event.name) + '\n' +
-                    pgettext('invoice', '{from_date}\nuntil {to_date}').format(
-                        from_date=self.invoice.event.get_date_from_display(show_times=False),
-                        to_date=self.invoice.event.get_date_to_display(show_times=False)
-                    )
-                )
-            else:
-                p_str = (
-                    shorten(self.invoice.event.name) + '\n' + self.invoice.event.get_date_from_display(show_times=False)
-                )
+        elif d_from:
+            p_str = shorten(self.invoice.event.name) + '\n' + date_format(d_from, "DATE_FORMAT")
         else:
             p_str = shorten(self.invoice.event.name)
 
@@ -657,6 +664,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
     def _get_story(self, doc):
         has_taxes = any(il.tax_value for il in self.invoice.lines.all()) or self.invoice.reverse_charge
+        header_dates = self._date_range_in_header()
+        tz = self.invoice.event.timezone
 
         story = [
             NextPageTemplate('FirstPage'),
@@ -700,15 +709,68 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             )]
 
         def _group_key(line):
-            return (line.description, line.tax_rate, line.tax_name, line.net_value, line.gross_value, line.subevent_id,
-                    line.event_date_from, line.event_date_to)
+            return (line.description, line.tax_rate, line.tax_name, line.net_value, line.gross_value, line.subevent,
+                    line.period_start, line.period_end)
+
+        def day(dt: datetime.datetime) -> datetime.date:
+            if dt is None:
+                return None
+            return dt.astimezone(tz).date()
 
         total = Decimal('0.00')
-        for (description, tax_rate, tax_name, net_value, gross_value, *ignored), lines in addon_aware_groupby(
+        for (description, tax_rate, tax_name, net_value, gross_value, subevent, period_start, period_end), lines in addon_aware_groupby(
             self.invoice.lines.all(),
             key=_group_key,
             is_addon=lambda l: l.description.startswith("  +"),
         ):
+            # Try to be clever and figure out when organizers would want to show the period. This heuristic is
+            # not perfect and the only "fully correct" way would be to include the period on every line always,
+            # however this will cause confusion (a) due to useless repetition of the same date all over the invoice
+            # (b) due to not respecting the show_date_to setting of events in cases where we could have respected it.
+            # Still, we want to show the date explicitly if its different to the event or invoice date.
+            if period_start and period_end and day(period_end) != day(period_start):
+                # It's a multi-day period, such as the validity of the ticket or an event date period
+
+                if day(period_start) == header_dates[0] and day(period_end) == header_dates[1]:
+                    # This is the exact event period we already printed in the header, no need to repeat it.
+                    period_line = ""
+
+                elif (self.event.has_subevents and subevent and day(subevent.date_from) == day(period_start) and
+                      day(subevent.date_to) == day(period_end)):
+                    # For subevents, build_invoice already includes the date in the description in the event-default format.
+                    period_line = ""
+
+                else:
+                    period_line = f"\n{date_format(day(period_start), 'SHORT_DATE_FORMAT')} – {date_format(day(period_end), 'SHORT_END_FORMAT')}"
+
+            elif period_start or period_end:
+                # It's a single-day period
+
+                delivery_day = day(period_end or period_start)
+                if delivery_day in (header_dates[0], header_dates[1]):
+                    # This is the event date we already printed in the header, no need to repeat it.
+                    period_line = ""
+
+                elif self.event.has_subevents and subevent and delivery_day in (day(subevent.date_from), day(subevent.date_to)):
+                    # For subevents, build_invoice already includes the date in the description in the event-default format.
+                    period_line = ""
+
+                elif (delivery_day == self.invoice.date) and header_dates[0] is None:
+                    # This is a shop that doesn't show the date of the event in the header, and the period is the invoice
+                    # date. We assume that this is an 'everything is executed immediately' situation and do not want to
+                    # confuse with showing additional dates on the invoice. This is the case that is not guaranteed to be
+                    # correct in all cases and might need to change in the future. If customers have legal concerns, a
+                    # quick fix is including a sentence like "Delivery date is the invoice date unless otherwise indicated:"
+                    # in a custom text on the invoice.
+                    period_line = ""
+
+                else:
+                    period_line = f"\n{date_format(day(delivery_day), 'SHORT_DATE_FORMAT')}"
+            else:
+                # No period known
+                period_line = ""
+
+            description += period_line
             lines = list(lines)
             if has_taxes:
                 if len(lines) > 1:
@@ -717,6 +779,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                         gross_price=money_filter(gross_value, self.invoice.event.currency),
                     )
                     description = description + "\n" + single_price_line
+
                 tdata.append((
                     FontFallbackParagraph(
                         self._clean_text(description, tags=['br']),
