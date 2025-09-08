@@ -674,6 +674,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                 'invoices': [],
                             }
                         )
+                    for i in invoices_to_mark_transmitted:
+                        i.set_transmission_failed(provider="email_pdf", data={
+                            "reason": "exception",
+                            "exception": "Internal error",
+                        })
                     raise e
             if log_target:
                 log_target.log_action(
