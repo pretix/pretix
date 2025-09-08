@@ -38,7 +38,6 @@ from pretix.base.models import (
     fields,
 )
 from pretix.base.models.base import LoggingMixin
-from pretix.base.services.mail import SendMailException
 
 
 class ScheduledMail(models.Model):
@@ -180,13 +179,10 @@ class ScheduledMail(models.Model):
                         invoice_address=ia,
                         event_or_subevent=self.subevent or e,
                     )
-                    try:
-                        o.send_mail(self.rule.subject, self.rule.template, email_ctx,
-                                    attach_ical=self.rule.attach_ical,
-                                    log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
-                        o_sent = True
-                    except SendMailException:
-                        ...  # ¯\_(ツ)_/¯
+                    o.send_mail(self.rule.subject, self.rule.template, email_ctx,
+                                attach_ical=self.rule.attach_ical,
+                                log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
+                    o_sent = True
 
                 if send_to_attendees:
                     if not self.rule.all_products:
@@ -195,31 +191,28 @@ class ScheduledMail(models.Model):
                         positions = [p for p in positions if p.subevent_id == self.subevent_id]
 
                     for p in positions:
-                        try:
-                            if p.attendee_email and (p.attendee_email != o.email or not o_sent):
-                                email_ctx = get_email_context(
-                                    event=e,
-                                    order=o,
-                                    invoice_address=ia,
-                                    position=p,
-                                    event_or_subevent=self.subevent or e,
-                                )
-                                p.send_mail(self.rule.subject, self.rule.template, email_ctx,
-                                            attach_ical=self.rule.attach_ical,
-                                            log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
-                            elif not o_sent and o.email:
-                                email_ctx = get_email_context(
-                                    event=e,
-                                    order=o,
-                                    invoice_address=ia,
-                                    event_or_subevent=self.subevent or e,
-                                )
-                                o.send_mail(self.rule.subject, self.rule.template, email_ctx,
-                                            attach_ical=self.rule.attach_ical,
-                                            log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
-                                o_sent = True
-                        except SendMailException:
-                            ...  # ¯\_(ツ)_/¯
+                        if p.attendee_email and (p.attendee_email != o.email or not o_sent):
+                            email_ctx = get_email_context(
+                                event=e,
+                                order=o,
+                                invoice_address=ia,
+                                position=p,
+                                event_or_subevent=self.subevent or e,
+                            )
+                            p.send_mail(self.rule.subject, self.rule.template, email_ctx,
+                                        attach_ical=self.rule.attach_ical,
+                                        log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
+                        elif not o_sent and o.email:
+                            email_ctx = get_email_context(
+                                event=e,
+                                order=o,
+                                invoice_address=ia,
+                                event_or_subevent=self.subevent or e,
+                            )
+                            o.send_mail(self.rule.subject, self.rule.template, email_ctx,
+                                        attach_ical=self.rule.attach_ical,
+                                        log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
+                            o_sent = True
 
                 self.last_successful_order_id = o.pk
 
