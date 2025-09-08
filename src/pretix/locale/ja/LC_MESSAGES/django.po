@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-28 23:00+0000\n"
+"PO-Revision-Date: 2025-09-08 11:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -4413,7 +4413,7 @@ msgstr "障害を持つ"
 #: pretix/base/models/customers.py:310 pretix/base/models/orders.py:1538
 #: pretix/base/models/orders.py:3280 pretix/base/settings.py:1150
 msgid "Company name"
-msgstr "企業名"
+msgstr "会社名"
 
 #: pretix/base/models/customers.py:314 pretix/base/models/orders.py:1542
 #: pretix/base/models/orders.py:3287 pretix/base/settings.py:83
@@ -14119,7 +14119,7 @@ msgstr "検索クエリ"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:133
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:39
 msgid "active"
-msgstr "アクティブ"
+msgstr "有効"
 
 #: pretix/control/forms/filter.py:1499
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:44
