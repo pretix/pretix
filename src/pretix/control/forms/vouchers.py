@@ -236,7 +236,7 @@ class VoucherForm(I18nModelForm):
         try:
             Voucher.clean_max_usages(data, self.instance.redeemed)
         except ValidationError as e:
-            raise ValidationError({"max_usages": e.message})
+            raise ValidationError({"max_usages": e})
         check_quota = Voucher.clean_quota_needs_checking(
             data, self.initial_instance_data,
             item_changed=data.get('itemvar') != self.initial.get('itemvar'),
