@@ -135,7 +135,6 @@ def get_sizes(size, imgsize):
     wfactor = min(1, size[0] / imgsize[0])
     hfactor = min(1, size[1] / imgsize[1])
     limited_by_input = size[1] > imgsize[1] and size[0] > imgsize[0]
-    print(size, imgsize, size[1] / imgsize[1], size[0] / imgsize[0], limited_by_input)
 
     if crop:
         # currently crop and min-size cannot be combined
