@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-02 07:00+0000\n"
+"PO-Revision-Date: 2025-09-10 05:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -3431,15 +3431,15 @@ msgid ""
 "up. Please note: to use literal \"{\" or \"}\", you need to double them as "
 "\"{{\" and \"}}\"."
 msgstr ""
-"Há um erro na sintaxe de seu placeholder. Verifique se os colchetes “{” de "
-"abertura e “}” de fechamento em seus placeholders estão corretos. "
-"Observação: para usar literalmente “{” ou “}”, você precisa duplicá-los como "
-"“{{” e “}}”."
+"Há um erro com a sintaxe dos seus marcadores. Por favor, verifique se os "
+"colchetes de abertura \"{\" e os de fechamento \"}\" estão pareados "
+"corretamente. Note que: para usar colchetes literais \"{\" ou \"}\", você "
+"precisa duplicá-los como \"{{\" e \"}}\"."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:851
 #, python-format
 msgid "Invalid placeholder: {%(value)s}"
-msgstr "Espaço reservado inválido: %(value)s"
+msgstr "Marcador inválido: {%(value)s}"
 
 #: pretix/base/forms/widgets.py:68
 #, python-format
@@ -3449,7 +3449,7 @@ msgstr "Amostra: %s"
 #: pretix/base/forms/widgets.py:71
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "Espaços reservados disponíveis: {list}"
+msgstr "Marcadores disponíveis: {list}"
 
 #: pretix/base/forms/widgets.py:214 pretix/base/models/items.py:1656
 #: pretix/plugins/checkinlists/exporters.py:754
@@ -4506,10 +4506,8 @@ msgid "Temporary error, auto-retry limit exceeded"
 msgstr ""
 
 #: pretix/base/models/datasync.py:54
-#, fuzzy
-#| msgid "Stripe reported an error: %s"
 msgid "Provider reported a permanent error"
-msgstr "Stripe reportou um erro: %s"
+msgstr "Provedor reportou um erro permanente"
 
 #: pretix/base/models/datasync.py:55
 msgid "Misconfiguration, please check provider settings"
@@ -7644,10 +7642,10 @@ msgid ""
 "payment. You can use the placeholders {order}, {amount}, {currency} and "
 "{amount_with_currency}."
 msgstr ""
-"Este texto será incluído para o espaço reservado do {payment_info} nos "
-"emails de confirmação do pedido. Ele deve instruir o usuário sobre como "
-"proceder com o pagamento. Você pode usar os espaços reservados {order}, "
-"{amount}, {currency} e {amount_with_currency}."
+"Este texto será incluído no marcador do {payment_info} nos e-mails de "
+"confirmação do pedido. Ele instruirá o usuário sobre como proceder com o "
+"pagamento. Você pode usar os marcadores {order}, {amount}, {currency} e "
+"{amount_with_currency}."
 
 #: pretix/base/payment.py:1258
 msgid "Payment process description for pending orders"
@@ -7660,9 +7658,9 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
-"Este texto será mostrado na página de confirmação do pedido para pedidos "
-"pendentes. Ele deve instruir o usuário sobre como proceder com o pagamento. "
-"Você pode usar os espaços reservados {order}, {amount}, {currency} e "
+"Este texto será exibido na página de confirmação do pedido para pedidos "
+"pendentes. Ele instruirá o usuário sobre como proceder com o pagamento. Você "
+"pode usar os marcadores {order}, {amount}, {currency} e "
 "{amount_with_currency}."
 
 #: pretix/base/payment.py:1267 pretix/plugins/banktransfer/payment.py:144
@@ -11188,12 +11186,15 @@ msgid ""
 "data as calendar entries are often shared with an unspecified number of "
 "people."
 msgstr ""
-"Você pode usar isso para compartilhar informações com os participantes, como "
-"informações de viagem ou o link para um evento digital. Se você o mantiver "
-"vazio, colocaremos um link para a loja do evento, o horário de admissão e o "
-"nome do organizador. Não permitimos o uso de marcadores de posição com dados "
-"confidenciais específicos de pessoas, pois as entradas de calendário "
-"geralmente são compartilhadas com um número não especificado de pessoas."
+"Você pode utilizar isto para compartilhar informações com os seus "
+"participantes, como por exemplo informações de viagem ou o link para um "
+"evento digital. Se você mantiver vazio, colocaremos um link para sua loja do "
+"evento, o horário de admissão e o seu nome de organizador. Não permitimos o "
+"uso de marcadores com informações sensíveis de pessoas específicas, dado que "
+"as entradas de calendário geralmente são compartilhadas com um número de "
+"pessoas não especificado.e marcadores de posição com dados confidenciais "
+"específicos de pessoas, pois as entradas de calendário geralmente são "
+"compartilhadas com um número não especificado de pessoas."
 
 #: pretix/base/settings.py:2201
 msgid "Subject prefix"
@@ -13843,8 +13844,7 @@ msgstr "Assinatura"
 #: pretix/control/forms/event.py:998
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
-msgstr ""
-"Isto será anexado a todos os e-mails. Espaços reservados disponíveis: {event}"
+msgstr "Isto será anexado a todos os e-mails. Marcadores disponíveis: {event}"
 
 #: pretix/control/forms/event.py:1003 pretix/control/forms/organizer.py:601
 msgid "e.g. your contact details"
@@ -15429,8 +15429,8 @@ msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
 msgstr ""
-"Será incluído no e-mail de notificação quando o respectivo espaço reservado "
-"estiver presente no texto do e-mail configurado."
+"Será incluído no e-mail de notificação quando o marcador respectivo estiver "
+"presente no texto configurado do e-mail."
 
 #: pretix/control/forms/orders.py:204
 msgid ""
@@ -20422,10 +20422,8 @@ msgid "Not available"
 msgstr "Não disponível"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:93
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can only be disabled for the entire organizer account."
-msgstr "Este plugin não pode ser ativado pelos seguintes motivos:"
+msgstr "Este plugin só pode ser desabilitado para toda conta de organizador."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:98
 msgid ""
@@ -20447,10 +20445,8 @@ msgstr "Ir para"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:130
 #: pretix/control/templates/pretixcontrol/event/plugins.html:147
-#, fuzzy
-#| msgid "Organizer settings"
 msgid "Open in organizer settings"
-msgstr "Configurações de organizador"
+msgstr "Abrir nas configurações do organizador"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:134
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:15
@@ -22070,7 +22066,7 @@ msgstr "Ingresso de admissão personalizado"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:104
 msgid "Admission ticket without personalization"
-msgstr ""
+msgstr "Ingresso de admissão sem personalização"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:112
 msgid "Product with variations"
@@ -22990,10 +22986,8 @@ msgid "Invoice is currently in transmission"
 msgstr "Esta loja de ingressos está em modo de teste."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:307
-#, fuzzy
-#| msgid "live and in test mode"
 msgid "Invoice not transmitted in test mode"
-msgstr "ativa e em modo de teste"
+msgstr "Fatura não transmitida em modo teste"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:312
 msgid "Invoice transmission failed"
@@ -24854,20 +24848,15 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:8
-#, fuzzy
-#| msgid ""
-#| "On this page, you can choose plugins you want to enable for your event. "
-#| "Plugins might bring additional software functionality, connect your event "
-#| "to third-party services, or apply other forms of customizations."
 msgid ""
 "On this page, you can choose plugins you want to enable for your organizer "
 "account. Plugins might bring additional software functionality, connect your "
 "events to third-party services, or apply other forms of customizations."
 msgstr ""
-"Nesta página, você pode escolher os plug-ins que deseja ativar para o seu "
-"evento. Os plug-ins podem trazer funcionalidades adicionais de software, "
-"conectar seu evento a serviços de terceiros ou aplicar outras formas de "
-"personalização."
+"Nesta página, você pode escolher os plugins que deseja habilitar para sua "
+"conta de organizador. Plugins podem trazer funcionalidades adicionais de "
+"software, conectar seu evento a serviços de terceiros ou aplicar outras "
+"formas de customização."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:80
 msgid "Active (all events)"
@@ -24895,10 +24884,9 @@ msgid "Manage events"
 msgstr "Gerenciar eventos"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:162
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can be enabled or disabled for events individually."
-msgstr "Este plugin não pode ser ativado pelos seguintes motivos:"
+msgstr ""
+"Este plugin pode ser habilidado ou desabilitado para eventos individualmente."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -25203,7 +25191,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:93
 msgid "This webhook did not receive any events in the last 30 days."
-msgstr ""
+msgstr "Este webhook não recebeu nenhum evento nos últimos 30 dias."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:9
 msgid ""
@@ -25277,10 +25265,8 @@ msgid "Text box"
 msgstr "Caixa de texto"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:59
-#, fuzzy
-#| msgid "Code"
 msgid "QR Code"
-msgstr "Código"
+msgstr "QR Code"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:64
 msgid "QR code for Check-In"
@@ -25394,10 +25380,8 @@ msgstr "Idioma de preferência"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:260
 #: pretix/control/templates/pretixcontrol/pdf/index.html:270
-#, fuzzy
-#| msgid "Upload custom background"
 msgid "Upload PDF as background"
-msgstr "Enviar plano de fundo personalizado"
+msgstr "Enviar PDF como papel de parede"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:262
 msgid ""
@@ -25410,10 +25394,8 @@ msgid "Download current background"
 msgstr "Baixar plano de fundo atual"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:284
-#, fuzzy
-#| msgid "Date chosen by customer"
 msgid "Or choose custom paper size"
-msgstr "Data escolhida pelo cliente"
+msgstr "Ou escolha um tamanho de papel customizado"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:286
 msgid ""
@@ -25478,10 +25460,8 @@ msgid "Other…"
 msgstr "Outro…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:362
-#, fuzzy
-#| msgid "Invalid placeholder(s): %(value)s"
 msgid "Show available placeholders"
-msgstr "Valores padrão inválido(s): %(value)s"
+msgstr "Exibir marcadores disponíveis"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:369
 msgid "x (mm)"
@@ -25546,10 +25526,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:16
-#, fuzzy
-#| msgid "Invalid placeholder(s): %(value)s"
 msgid "Available placeholders"
-msgstr "Valores padrão inválido(s): %(value)s"
+msgstr "Marcadores disponíveis"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:19
 msgid ""
@@ -25560,10 +25538,17 @@ msgid ""
 "however most of them can also be empty in some cases depending on "
 "configuration."
 msgstr ""
+"Você pode utilizar marcadores em textos customizados nos ingressos para "
+"melhorar o seu texto com dadaos individuais. Quais marcadores estarão "
+"disponíveis dependerão das suas configurações de evento, plugins ativados, o "
+"produto selecionado e os dados fornecidos pelo usuário. Esta página lista "
+"todos os marcadores tecnicamente disponíveis para o seu evento, no entanto, "
+"muitos deles podem estar vazioa em alguns casos dependendo de outras "
+"configurações."
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:31
 msgid "Placeholder"
-msgstr ""
+msgstr "Marcador"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:33
 msgid "Formatting example"
@@ -25685,7 +25670,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:46
 msgid "Data selection"
-msgstr ""
+msgstr "Seleção de dados"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:63
 msgid ""
@@ -27269,7 +27254,7 @@ msgstr "Ingresso regular"
 
 #: pretix/control/views/event.py:1680
 msgid "Reduced ticket"
-msgstr ""
+msgstr "Ingresso reduzido"
 
 #: pretix/control/views/global_settings.py:69
 #: pretix/control/views/global_settings.py:92
@@ -27319,6 +27304,10 @@ msgid ""
 "license terms as pretix (AGPLv3 + additional restrictions). Make sure to "
 "keep it up to date!"
 msgstr ""
+"Você deve manter todas as mudanças que você fizer no código do pretix "
+"disponíveis livremente para toda pessoa que visite o seu site sob os mesmos "
+"termos de licença do pretix (APGLv3 + restrições adicionais). Garanta que "
+"isso seja mantido atualizado!"
 
 #: pretix/control/views/global_settings.py:232
 msgid ""
@@ -27374,7 +27363,7 @@ msgstr ""
 
 #: pretix/control/views/item.py:321
 msgid "The new category has been created."
-msgstr ""
+msgstr "A nova categoria foi criada"
 
 #: pretix/control/views/item.py:369
 msgid "The order of categories has been updated."
@@ -27549,6 +27538,8 @@ msgid ""
 "We could not identify the character encoding of the CSV file. Some "
 "characters were replaced with a placeholder."
 msgstr ""
+"Não conseguimos identificar a codificação de caractere do arquivo CSV. "
+"Alguns caracteres serão substituídos por um marcador."
 
 #: pretix/control/views/modelimport.py:174
 msgid "The import was successful."
@@ -29871,7 +29862,7 @@ msgstr "Check-in automático"
 #: pretix/plugins/checkinlists/exporters.py:759
 #: pretix/plugins/paypal/payment.py:124 pretix/plugins/paypal2/payment.py:121
 msgid "Secret"
-msgstr ""
+msgstr "Segredo"
 
 #: pretix/plugins/checkinlists/exporters.py:672
 msgid "Valid check-in codes"
@@ -30210,7 +30201,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:183
 msgid "Enable Buy Now Pay Later"
-msgstr ""
+msgstr "Habilitar Compre Agora Pague Depois"
 
 #: pretix/plugins/paypal2/payment.py:185
 msgid ""
@@ -34155,17 +34146,12 @@ msgstr ""
 "que você nos informou."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:59
-#, fuzzy
-#| msgid ""
-#| "Please save the following link if you want to access your order later. We "
-#| "also sent you an email containing the link to the address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email to the address you specified containing the link."
 msgstr ""
-"Por favor, salve o link a seguit se você quiser acessar o seu pedido no "
-"futuro. Nós também enviamos um email contando o link no endereço de email "
-"que você nos informou."
+"Salve o link a seguir se quiser acessar o seu pedido no futuro. Você também "
+"receberá este link no endereço de e-mail fornecido."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:74
 #: pretix/presale/templates/pretixpresale/event/position.html:18
