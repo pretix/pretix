@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-08-23 21:00+0000\n"
-"Last-Translator: \"Luca Sorace \\\"Stranck\\\"\" <strdjn@gmail.com>\n"
+"PO-Revision-Date: 2025-09-10 21:00+0000\n"
+"Last-Translator: Davide Wayan Mores <racecondition99@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -566,22 +566,16 @@ msgid "Event series date deleted"
 msgstr "Date della serie di eventi cancellate"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "Nome del prodotto"
+msgstr "Prodotto modificato"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
-"Prodotto modificato (compresi i prodotti aggiunti o eliminati e le modifiche "
-"agli oggetti annidati come le varianti o i pacchetti)"
+"Questo comprende i prodotti aggiunti o eliminati e le modifiche agli oggetti "
+"annidati come le varianti o i pacchetti."
 
 #: pretix/api/webhooks.py:380
 msgid "Shop taken live"
@@ -616,16 +610,12 @@ msgid "Waiting list entry received voucher"
 msgstr "La voce in lista d'attesa ha ricevuto un voucher"
 
 #: pretix/api/webhooks.py:412
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "Codice del buono"
+msgstr "Buono aggiunto"
 
 #: pretix/api/webhooks.py:416
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "Buono assegnato"
+msgstr "Buono modificato"
 
 #: pretix/api/webhooks.py:417
 msgid ""
@@ -636,10 +626,8 @@ msgstr ""
 "l'aumento del numero di riscatti."
 
 #: pretix/api/webhooks.py:421
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "Buono riscattato"
+msgstr "Buono eliminato"
 
 #: pretix/api/webhooks.py:425
 msgid "Customer account created"
@@ -742,16 +730,14 @@ msgstr ""
 "possono essere utilizzate per integrazioni personalizzate."
 
 #: pretix/base/context.py:38
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr "fornito da {name} basato su <a {a_attr}>pretix</a>"
+msgstr "<a {a_name_attr}>fornito da {name}</a> <a {a_attr}>basato su pretix</a>"
 
 #: pretix/base/context.py:48
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "fornito da {name} basato su <a {a_attr}>pretix</a>"
+msgstr "<a {a_attr}>fornito da {name} basato su pretix</a>"
 
 #: pretix/base/context.py:55
 #, python-format
@@ -836,18 +822,16 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
+"Per favore aggiorna il valore per il campo \"{field_name}\" - opzione "
+"\"{val}\" non assegnata"
 
 #: pretix/base/datasync/sourcefields.py:128
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "Posizioni degli ordini"
+msgstr "Dettagli sulle posizioni degli ordini"
 
 #: pretix/base/datasync/sourcefields.py:129
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "Email partecipante"
+msgstr "Dettagli partecipante"
 
 #: pretix/base/datasync/sourcefields.py:130 pretix/base/exporters/answers.py:66
 #: pretix/base/models/items.py:1767 pretix/control/navigation.py:172
@@ -857,10 +841,8 @@ msgid "Questions"
 msgstr "Domande"
 
 #: pretix/base/datasync/sourcefields.py:131
-#, fuzzy
-#| msgid "Product data"
 msgid "Product details"
-msgstr "Dati del prodotto"
+msgstr "Dettagli del prodotto"
 
 #: pretix/base/datasync/sourcefields.py:132
 #: pretix/control/templates/pretixcontrol/event/settings.html:280
