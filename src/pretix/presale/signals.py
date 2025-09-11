@@ -415,3 +415,19 @@ consent state. Receivers should return a list of ``pretix.presale.cookies.Cookie
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+filter_subevents = GlobalSignal()
+"""
+Arguments: ``subevents``, ``sales_channel``
+
+This signal allows you to filter which subevents are publicly available. Receivers are passed a
+list of subevents that are about to be shown to the user and are expected to return a list of the
+same format, with all subevents removed that should not be available for sale.
+
+``sales_channels`` is a ``SalesChannel`` instance.
+
+This is not an event-plugin signal as this will also be called on the organizer level when showing
+a list of subevents across events. Expect that the subevents in the input are mixed from different
+events. However, receivers will only receive subevents of events that the plugin is active for and
+can only filter out these.
+"""
