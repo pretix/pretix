@@ -91,6 +91,21 @@ def get_all_payment_providers():
         def __getattr__(self, item):
             return getattr(self.orig_settings, item)
 
+    class FakeOrganizer:
+        def __init__(self, orig_organizer):
+            self.orig_organizer = orig_organizer
+
+        @property
+        def settings(self):
+            return FakeSettings(self.orig_organizer.settings)
+
+        def __getattr__(self, item):
+            return getattr(self.orig_organizer, item)
+
+        @property
+        def __class__(self):  # hackhack
+            return Organizer
+
     class FakeEvent:
         def __init__(self, orig_event):
             self.orig_event = orig_event
@@ -116,7 +131,7 @@ def get_all_payment_providers():
             plugins=plugins,
             name="INTERNAL",
             date_from=now(),
-            organizer=organizer,
+            organizer=FakeOrganizer(organizer),
         )
         event = FakeEvent(event)
         provs = register_payment_providers.send(
