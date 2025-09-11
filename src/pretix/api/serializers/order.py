@@ -1757,12 +1757,14 @@ class LinePositionField(serializers.IntegerField):
 
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
     position = LinePositionField(read_only=True)
+    event_date_from = serializers.DateTimeField(read_only=True, source="period_start")
+    event_date_to = serializers.DateTimeField(read_only=True, source="period_end")
 
     class Meta:
         model = InvoiceLine
         fields = ('position', 'description', 'item', 'variation', 'subevent', 'attendee_name', 'event_date_from',
-                  'event_date_to', 'gross_value', 'tax_value', 'tax_rate', 'tax_code', 'tax_name', 'fee_type',
-                  'fee_internal_type', 'event_location')
+                  'event_date_to', 'period_start', 'period_end', 'gross_value', 'tax_value', 'tax_rate', 'tax_code',
+                  'tax_name', 'fee_type', 'fee_internal_type', 'event_location')
 
 
 class InvoiceSerializer(I18nAwareModelSerializer):
