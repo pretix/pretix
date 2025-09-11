@@ -564,6 +564,8 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
 
 
 def filter_subevents_with_plugins(subevents, sales_channel=None):
+    # Special-case of GlobalSignal.send_chained() that only sends subevents that have the plugin enabled
+    # and then mixes the results back together.
     from pretix.base.signals import (
         _populate_app_cache, app_cache, get_defining_app, is_app_active,
     )
@@ -574,8 +576,6 @@ def filter_subevents_with_plugins(subevents, sales_channel=None):
     if not app_cache:
         _populate_app_cache()
 
-    # Special-case of GlobalSignal.send_chained() that only sends subevents that have the plugin enabled
-    # and then mixes the results back together.
     for receiver in filter_subevents._live_receivers(None):
         app = get_defining_app(receiver)
         event_state = {}

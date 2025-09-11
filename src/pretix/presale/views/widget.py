@@ -73,7 +73,8 @@ from pretix.presale.views.event import (
 )
 from pretix.presale.views.organizer import (
     EventListMixin, add_events_for_days, add_subevents_for_days,
-    days_for_template, filter_qs_by_attr, weeks_for_template,
+    days_for_template, filter_qs_by_attr, filter_subevents_with_plugins,
+    weeks_for_template,
 )
 
 logger = logging.getLogger(__name__)
@@ -403,6 +404,14 @@ class WidgetAPIProductList(EventListMixin, View):
                     return self.response({
                         'error': gettext('The selected date does not exist in this event series.')
                     })
+
+                # Prevent direct access to subevents that are hidden by a plugin
+                subevents = filter_subevents_with_plugins([self.subevent], request.sales_channel)
+                if self.subevent not in subevents:
+                    return self.response({
+                        'error': gettext('The selected date is not available.')
+                    })
+
             else:
                 return self._get_event_list(request, **kwargs)
         else:
