@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import math
 import re
 import unicodedata
 from collections import defaultdict
@@ -223,6 +224,9 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         stylesheet.add(ParagraphStyle(name='FineprintHeading', fontName=self.font_bold, fontSize=8, leading=12))
         stylesheet.add(ParagraphStyle(name='Fineprint', fontName=self.font_regular, fontSize=8, leading=10))
         stylesheet.add(ParagraphStyle(name='FineprintRight', fontName=self.font_regular, fontSize=8, leading=10, alignment=TA_RIGHT))
+        stylesheet.add(ParagraphStyle(name='WarningBlock', fontName=self.font_bold, fontSize=10, leading=12,
+                                      alignment=TA_LEFT, borderWidth=1 * mm, borderColor=colors.black,
+                                      borderPadding=2 * mm, spaceBefore=5 * mm, spaceAfter=5 * mm))
         return stylesheet
 
     def _register_fonts(self):
@@ -576,11 +580,28 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             canvas.drawRightString(self.pagesize[0] - 20 * mm, (297 - 100) * mm, self._normalize(gettext('TEST MODE')))
             canvas.restoreState()
 
+    def _draw_watermark(self, canvas):
+        watermark = self.invoice.transmission_type_instance.pdf_watermark()
+        if watermark:
+            canvas.saveState()
+            for font_size in range(200, 20, -10):
+                width = stringWidth(watermark, self.font_bold, font_size)
+                if width < self.pagesize[0]:
+                    break
+
+            canvas.translate(self.pagesize[0] / 2, self.pagesize[1] / 2)
+            canvas.rotate(math.atan(self.pagesize[1] / self.pagesize[0]) / math.pi * 180)
+            canvas.setFont(self.font_bold, font_size)
+            canvas.setFillColorRGB(.92, .92, .92)
+            canvas.drawCentredString(0, - font_size / 2, self._normalize(watermark))
+            canvas.restoreState()
+
     def _on_first_page(self, canvas: Canvas, doc):
         canvas.setCreator('pretix.eu')
         canvas.setTitle(pgettext('invoice', 'Invoice {num}').format(num=self.invoice.number))
 
         canvas.saveState()
+        self._draw_watermark(canvas)
         self._draw_footer(canvas)
         self._draw_testmode(canvas)
         self._draw_invoice_from_label(canvas)
@@ -610,6 +631,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
     def _get_intro(self):
         story = []
+
+        type_info_text = self.invoice.transmission_type_instance.pdf_info_text()
+        if type_info_text:
+            story.append(FontFallbackParagraph(
+                type_info_text,
+                self.stylesheet['WarningBlock']
+            ))
+
         if self.invoice.custom_field:
             story.append(FontFallbackParagraph(
                 '{}: {}'.format(
