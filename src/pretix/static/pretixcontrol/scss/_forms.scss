@@ -936,3 +936,11 @@ details {
     }
   }
 }
+
+
+@media (min-width: $screen-lg-min) {
+  .centered-form {
+    margin: 80px auto;
+    max-width: 500px;
+  }
+}
