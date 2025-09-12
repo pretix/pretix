@@ -126,7 +126,7 @@ class Organizer(LoggedModel):
         self.settings.cookie_consent = True
 
         plugins = [p for p in settings.PRETIX_PLUGINS_ORGANIZER_DEFAULT.split(",") if p]
-        if plugins:
+        if plugins and not self.get_plugins():
             self.set_active_plugins(plugins, allow_restricted=plugins)
             self.save()
 
