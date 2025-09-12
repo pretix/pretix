@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-09 04:00+0000\n"
+"PO-Revision-Date: 2025-09-12 14:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -23149,7 +23149,7 @@ msgstr "払い戻しオプション"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:8
 msgid "Send out emails"
-msgstr "メールを送出する"
+msgstr "メールを送る"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:54
 msgid ""
