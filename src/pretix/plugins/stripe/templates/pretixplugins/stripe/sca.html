@@ -28,7 +28,11 @@
 
         </div>
         <div class="panel-body embed-responsive embed-responsive-sca" id="scacontainer">
-
+            {% if payment_intent_promptpay_image_url %}
+                <div class="text-center">
+                    <img src="{{ payment_intent_promptpay_image_url }}" alt="{% trans 'PromptPay QR code' %}" />
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="row checkout-button-row">
