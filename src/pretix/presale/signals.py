@@ -426,10 +426,10 @@ same format, with all subevents removed that should not be available for sale.
 
 ``sales_channels`` is a ``str`` with the sales channel identifier.
 
-This is not an event-plugin signal as this will also be called on other levels level when showing
+This is not an event-plugin signal as this will also be called on other levels when showing
 a list of subevents across events. Expect that the subevents in the input are mixed from different
 events **or even different organizers**. However, receivers will only receive subevents of events
-that the plugin is active for and can only filter out these. It is recommended that receives
+that the plugin is active for and can only filter out these. It is recommended that receivers
 return a subset of the same subevent instances that are passed in, not new instances, to ensure
 `prefetch_related` calls on the caller side are not pointless.
 """
