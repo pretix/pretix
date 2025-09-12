@@ -424,10 +424,12 @@ This signal allows you to filter which subevents are publicly available. Receive
 list of subevents that are about to be shown to the user and are expected to return a list of the
 same format, with all subevents removed that should not be available for sale.
 
-``sales_channels`` is a ``SalesChannel`` instance.
+``sales_channels`` is a ``str`` with the sales channel identifier.
 
-This is not an event-plugin signal as this will also be called on the organizer level when showing
+This is not an event-plugin signal as this will also be called on other levels level when showing
 a list of subevents across events. Expect that the subevents in the input are mixed from different
-events. However, receivers will only receive subevents of events that the plugin is active for and
-can only filter out these.
+events **or even different organizers**. However, receivers will only receive subevents of events
+that the plugin is active for and can only filter out these. It is recommended that receives
+return a subset of the same subevent instances that are passed in, not new instances, to ensure
+`prefetch_related` calls on the caller side are not pointless.
 """
