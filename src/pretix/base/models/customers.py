@@ -295,7 +295,7 @@ class Customer(LoggedModel):
             organizer=self.organizer,
         )
 
-    def usable_gift_cards(self):
+    def usable_gift_cards(self, used_cards=[]):
         s = GiftCardTransaction.objects.filter(
             card=OuterRef('pk')
         ).order_by().values('card').annotate(s=Sum('value')).values('s')
@@ -305,7 +305,8 @@ class Customer(LoggedModel):
         ne_qs = qs.filter(
             Q(expires__isnull=True) | Q(expires__gte=now()),
         )
-        return ne_qs.filter(cached_value__gt=0)
+        ex_qs = ne_qs.exclude(id__in=used_cards)
+        return ex_qs.filter(cached_value__gt=0)
 
 
 class AttendeeProfile(models.Model):
