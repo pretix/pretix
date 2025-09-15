@@ -1379,14 +1379,16 @@ class GiftCardPayment(BasePaymentProvider):
     def customer_gift_cards(self):
         if not self.request:
             return None
+        if not self.used_cards:
+            self.used_cards = []
         cs = cart_session(self.request)
         customer = getattr(self.request, "customer", None)
         if customer:
-            return customer.usable_gift_cards
+            return customer.usable_gift_cards(self.used_cards)
         elif cs.get('customer_mode', 'guest') == 'login':
             try:
                 customer = self.request.organizer.customers.get(pk=cs["customer"])
-                return customer.usable_gift_cards
+                return customer.usable_gift_cards(self.used_cards)
             except Customer.DoesNotExist:
                 return None
 
@@ -1400,6 +1402,7 @@ class GiftCardPayment(BasePaymentProvider):
         # Unfortunately, in payment_form we do not know if we're in checkout
         # or in an existing order. But we need to do the validation logic in the
         # form to get the error messages in the right places for accessbility :-(
+        # used_cards = []
         if 'checkout' in request.resolver_match.url_name:
             cs = cart_session(request)
             used_cards = [
@@ -1416,6 +1419,7 @@ class GiftCardPayment(BasePaymentProvider):
             testmode = order.testmode
 
         self.request = request
+        self.used_cards = used_cards
 
         form = self.payment_form_class(
             event=self.event,
