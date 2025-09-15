@@ -1381,11 +1381,12 @@ class GiftCardPayment(BasePaymentProvider):
             return None
         if not self.used_cards:
             self.used_cards = []
-        cs = cart_session(self.request)
+        if 'checkout' in self.request.resolver_match.url_name:
+            cs = cart_session(self.request)
         customer = getattr(self.request, "customer", None)
         if customer:
             return customer.usable_gift_cards(self.used_cards)
-        elif cs.get('customer_mode', 'guest') == 'login':
+        elif cs and cs.get('customer_mode', 'guest') == 'login':
             try:
                 customer = self.request.organizer.customers.get(pk=cs["customer"])
                 return customer.usable_gift_cards(self.used_cards)
