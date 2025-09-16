@@ -82,7 +82,7 @@ lines                                 list of objects            The actual invo
                                                                  all lines not created by a fee (e.g. a product).
 ├ period_start                        datetime                   Start date of the service or delivery period of the invoice line.
                                                                  Can be ``null`` if not known.
-├ period_end                        datetime                     End date of the service or delivery period of the invoice line.
+├ period_end                          datetime                   End date of the service or delivery period of the invoice line.
                                                                  Can be ``null`` if not known.
 ├ event_date_from                     datetime                   Deprecated alias of ``period_start``.
 ├ event_date_to                       datetime                   Deprecated alias of ``period_end``.
