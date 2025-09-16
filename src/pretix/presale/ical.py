@@ -123,12 +123,14 @@ def get_private_icals(event, positions):
 
     creation_time = datetime.datetime.now(datetime.timezone.utc)
     calobjects = []
-    calentries = set()
+    calentries = set()  # using set for automatic deduplication of CalEntries
     CalEntry = namedtuple('CalEntry', ['summary', 'description', 'location', 'dtstart', 'dtend', 'uid'])
 
+    # collecting the positions' calendar entries, preferring the most exact date and time available (positions > subevent > event)
     for p in positions:
         program_times = p.item.item_program_times.all()
         if program_times:
+            # if program times have been configured, they are preferred for the position's calendar entries
             url = build_absolute_uri(event, 'presale:event.index')
             for index, pt in enumerate(program_times):
                 summary = _('Program time {number} for {item}').format(number=index + 1, item=p.item.name)
@@ -159,10 +161,17 @@ def get_private_icals(event, positions):
                     urlparse(url).netloc
                 )
                 calentries.add(CalEntry(summary, description, location, dtstart, dtend, uid))
-        elif p.subevent:
-            url = build_absolute_uri(event, 'presale:event.index', {
-                'subevent': p.subevent.pk
-            })
+        else:
+            # without program times, the subevent or event times are used for calendar entries, preferring subevents
+            if p.subevent:
+                ev = p.subevent
+                url = build_absolute_uri(event, 'presale:event.index', {
+                    'subevent': p.subevent.pk
+                })
+            else:
+                ev = event
+                url = build_absolute_uri(event, 'presale:event.index')
+
             if event.settings.mail_attach_ical_description:
                 ctx = get_email_context(event=event, event_or_subevent=p.subevent)
                 description = format_map(str(event.settings.mail_attach_ical_description), ctx)
@@ -170,78 +179,36 @@ def get_private_icals(event, positions):
                 # Default description
                 descr = []
                 descr.append(_('Tickets: {url}').format(url=url))
-                if p.subevent.date_admission:
+                if ev.date_admission:
                     descr.append(str(_('Admission: {datetime}')).format(
-                        datetime=date_format(p.subevent.date_admission.astimezone(tz), 'SHORT_DATETIME_FORMAT')
+                        datetime=date_format(ev.date_admission.astimezone(tz), 'SHORT_DATETIME_FORMAT')
                     ))
 
                 # Actual ical organizer field is not useful since it will cause "your invitation was accepted" emails to the organizer
                 descr.append(_('Organizer: {organizer}').format(organizer=event.organizer.name))
                 description = '\n'.join(descr)
-            summary = str(p.subevent.name)
-            if p.subevent.location:
-                location = ", ".join(l.strip() for l in str(p.subevent.location).splitlines() if l.strip())
+            summary = str(ev.name)
+            if ev.location:
+                location = ", ".join(l.strip() for l in str(ev.location).splitlines() if l.strip())
             else:
                 location = None
             if event.settings.show_times:
-                dtstart = p.subevent.date_from.astimezone(tz)
+                dtstart = ev.date_from.astimezone(tz)
             else:
-                dtstart = p.subevent.date_from.astimezone(tz).date()
-            if event.settings.show_date_to and p.subevent.date_to:
+                dtstart = ev.date_from.astimezone(tz).date()
+            if event.settings.show_date_to and ev.date_to:
                 if event.settings.show_times:
-                    dtend = p.subevent.date_to.astimezone(tz)
+                    dtend = ev.date_to.astimezone(tz)
                 else:
                     # with full-day events date_to in pretix is included (e.g. last day)
                     # whereas dtend in vcalendar is non-inclusive => add one day for export
-                    dtend = p.subevent.date_to.astimezone(tz).date() + datetime.timedelta(days=1)
+                    dtend = ev.date_to.astimezone(tz).date() + datetime.timedelta(days=1)
             else:
                 dtend = None
             uid = 'pretix-{}-{}-{}@{}'.format(
                 event.organizer.slug,
                 event.slug,
-                p.subevent.pk,
-                urlparse(url).netloc
-            )
-            calentries.add(CalEntry(summary, description, location, dtstart, dtend, uid))
-        else:
-            url = build_absolute_uri(event, 'presale:event.index')
-            if event.settings.mail_attach_ical_description:
-                ctx = get_email_context(event=event, event_or_subevent=event)
-                description = format_map(str(event.settings.mail_attach_ical_description), ctx)
-            else:
-                # Default description
-                descr = []
-                descr.append(_('Tickets: {url}').format(url=url))
-                if event.date_admission:
-                    descr.append(str(_('Admission: {datetime}')).format(
-                        datetime=date_format(event.date_admission.astimezone(tz), 'SHORT_DATETIME_FORMAT')
-                    ))
-
-                # Actual ical organizer field is not useful since it will cause "your invitation was accepted" emails to the organizer
-                descr.append(_('Organizer: {organizer}').format(organizer=event.organizer.name))
-                description = '\n'.join(descr)
-            summary = str(event.name)
-            if event.location:
-                location = ", ".join(l.strip() for l in str(event.location).splitlines() if l.strip())
-            else:
-                location = None
-            if event.settings.show_times:
-                dtstart = event.date_from.astimezone(tz)
-            else:
-                dtstart = event.date_from.astimezone(tz).date()
-            if event.settings.show_date_to and event.date_to:
-                if event.settings.show_times:
-                    dtend = event.date_to.astimezone(tz)
-                else:
-                    # with full-day events date_to in pretix is included (e.g. last day)
-                    # whereas dtend in vcalendar is non-inclusive => add one day for export
-                    dtend = event.date_to.astimezone(tz).date() + datetime.timedelta(days=1)
-            else:
-                dtend = None
-            uid = 'pretix-{}-{}-{}@{}'.format(
-                event.organizer.slug,
-                event.slug,
-                '0',
+                ev.pk if p.subevent else '0',
                 urlparse(url).netloc
             )
             calentries.add(CalEntry(summary, description, location, dtstart, dtend, uid))
