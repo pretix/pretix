@@ -490,6 +490,12 @@ DEFAULT_VARIABLES = OrderedDict((
             "TIME_FORMAT"
         ) if op.valid_until else ""
     }),
+    ("program_times", {
+        "label": _("Program times: date and time"),
+        "editor_sample": _(
+            "2017-05-31 10:00 – 2017-05-31 12:00\n2017-05-31 14:00 – 2017-05-31 16:00"),
+        "evaluate": lambda op, order, ev: get_program_times(op, ev)
+    }),
     ("medium_identifier", {
         "label": _("Reusable Medium ID"),
         "editor_sample": "ABC1234DEF4567",
@@ -732,6 +738,20 @@ def get_seat(op: OrderPosition):
     if op.addon_to_id:
         return op.addon_to.seat
     return None
+
+
+def get_program_times(op: OrderPosition, ev: Event):
+    program_times = op.item.item_program_times.all()  # todo: get this to work with addons as well
+    pt_list = []
+    pt_str = ''
+    if program_times:
+        for pt in program_times:
+            pt_list.append(str(_('{start_datetime} – {end_datetime}')).format(
+                start_datetime=date_format(pt.start.astimezone(ev.timezone), 'SHORT_DATETIME_FORMAT'),
+                end_datetime=date_format(pt.end.astimezone(ev.timezone), 'SHORT_DATETIME_FORMAT')
+            ))
+        pt_str = '\n'.join(pt_list)
+    return pt_str
 
 
 def generate_compressed_addon_list(op, order, event):
