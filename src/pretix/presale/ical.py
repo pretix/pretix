@@ -25,6 +25,7 @@ from urllib.parse import urlparse
 
 import vobject
 from django.conf import settings
+from django.db.models import prefetch_related_objects
 from django.utils.formats import date_format
 from django.utils.translation import gettext as _
 
@@ -127,13 +128,14 @@ def get_private_icals(event, positions):
     CalEntry = namedtuple('CalEntry', ['summary', 'description', 'location', 'dtstart', 'dtend', 'uid'])
 
     # collecting the positions' calendar entries, preferring the most exact date and time available (positions > subevent > event)
+    prefetch_related_objects(positions, 'item__item_program_times')
     for p in positions:
         program_times = p.item.item_program_times.all()
         if program_times:
             # if program times have been configured, they are preferred for the position's calendar entries
             url = build_absolute_uri(event, 'presale:event.index')
             for index, pt in enumerate(program_times):
-                summary = _('Program time {number} for {item}').format(number=index + 1, item=p.item.name)
+                summary = _('{event} - {item}').format(event=event, item=p.item.name)
                 if event.settings.mail_attach_ical_description:
                     ctx = get_email_context(event=event, event_or_subevent=event)
                     description = format_map(str(event.settings.mail_attach_ical_description), ctx)
@@ -156,7 +158,7 @@ def get_private_icals(event, positions):
                 uid = 'pretix-{}-{}-{}-{}@{}'.format(
                     event.organizer.slug,
                     event.slug,
-                    'programtime',
+                    p.item.id,
                     index,
                     urlparse(url).netloc
                 )
