@@ -1381,6 +1381,7 @@ class GiftCardPayment(BasePaymentProvider):
             return None
         if not self.used_cards:
             self.used_cards = []
+        cs = None
         if 'checkout' in self.request.resolver_match.url_name:
             cs = cart_session(self.request)
         customer = getattr(self.request, "customer", None)
