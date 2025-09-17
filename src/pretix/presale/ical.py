@@ -142,7 +142,7 @@ def get_private_icals(event, positions):
                 else:
                     # Default description
                     descr = []
-                    descr.append(_('Program time {index}: {url}').format(index=index, url=url))
+                    descr.append(_('{event} - {item}: {url}').format(event=event, item=p.item.name, url=url))
                     descr.append(str(_('Start: {datetime}')).format(
                         datetime=date_format(pt.start.astimezone(tz), 'SHORT_DATETIME_FORMAT')
                     ))
