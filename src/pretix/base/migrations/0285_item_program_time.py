@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0284_ordersyncresult_ordersyncqueue'),
+        ('pretixbase', '0288_invoice_transmission'),
     ]
 
     operations = [
@@ -15,8 +15,8 @@ class Migration(migrations.Migration):
             name='ItemProgramTime',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False)),
-                ('start', models.DateTimeField(blank=True, null=True)),
-                ('end', models.DateTimeField(blank=True, null=True)),
+                ('start', models.DateTimeField),
+                ('end', models.DateTimeField),
                 ('item',
                  models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='item_program_times',
                                    to='pretixbase.item')),
