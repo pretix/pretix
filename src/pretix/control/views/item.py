@@ -1580,6 +1580,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
         ])
         if not self.object.has_variations:
             del f['variations']
+        if self.item.event.has_subevents:
+            del f['program_times']
 
         i = 0
         for rec, resp in item_formsets.send(sender=self.request.event, item=self.item, request=self.request):
