@@ -1404,7 +1404,6 @@ class GiftCardPayment(BasePaymentProvider):
         # Unfortunately, in payment_form we do not know if we're in checkout
         # or in an existing order. But we need to do the validation logic in the
         # form to get the error messages in the right places for accessbility :-(
-        # used_cards = []
         if 'checkout' in request.resolver_match.url_name:
             cs = cart_session(request)
             used_cards = [
