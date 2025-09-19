@@ -24,5 +24,3 @@ local/
 .project
 .pydevproject
 .DS_Store
-.direnv/
-Session.vim
