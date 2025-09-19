@@ -67,7 +67,8 @@ class RRuleForm(forms.Form):
     )
     count = forms.IntegerField(
         label=_('Number of repetitions'),
-        initial=10
+        initial=10,
+        min_value=1,
     )
     until = forms.DateField(
         widget=forms.DateInput(

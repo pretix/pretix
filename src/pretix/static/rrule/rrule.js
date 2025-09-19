@@ -1934,7 +1934,7 @@ function buildPoslist(bysetpos, timeset, start, end, ii, dayset) {
 function iter(iterResult, options) {
     var dtstart = options.dtstart, freq = options.freq, interval = options.interval, until = options.until, bysetpos = options.bysetpos;
     var count = options.count;
-    if (count === 0 || interval === 0) {
+    if (count <= 0 || interval <= 0) {
         return emitResult(iterResult);
     }
     var counterDate = datetime_DateTime.fromDate(dtstart);
