@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-12 14:00+0000\n"
+"PO-Revision-Date: 2025-09-21 17:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -1992,7 +1992,7 @@ msgstr "バリエーション"
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:75
 #: pretix/control/templates/pretixcontrol/users/index.html:51
 msgid "Active"
-msgstr "アクティブ"
+msgstr "有効"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/discount.py:77
 #: pretix/control/forms/event.py:976 pretix/control/navigation.py:520
@@ -2000,7 +2000,7 @@ msgstr "アクティブ"
 #: pretix/plugins/autocheckin/models.py:64
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:30
 msgid "Sales channels"
-msgstr "販売チャンネル"
+msgstr "販売チャネル"
 
 #: pretix/base/exporters/items.py:73 pretix/base/models/items.py:497
 #: pretix/base/models/items.py:1166
@@ -3192,7 +3192,7 @@ msgstr "この組み合わせの資格情報は、当社のシステムには登
 #: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:57
 #: pretix/presale/forms/customer.py:385 pretix/presale/forms/customer.py:457
 msgid "For security reasons, please wait 5 minutes before you try again."
-msgstr "セキュリティ上の理由で、5分間経ってから再度お試しください。"
+msgstr "セキュリティ上の理由により、5分お待ちいただいてから再度お試しください。"
 
 #: pretix/base/forms/auth.py:67 pretix/base/forms/auth.py:273
 msgid "This account is inactive."
@@ -3201,9 +3201,8 @@ msgstr "このアカウントは非アクティブです。"
 #: pretix/base/forms/auth.py:156
 msgid ""
 "You already registered with that email address, please use the login form."
-msgstr ""
-"そのメールアドレスは、すでに登録済みです。ログインフォームを使用してくださ"
-"い。"
+msgstr "そのメールアドレスはすでに登録されています。ログインフォームをご利用ください"
+"。"
 
 #: pretix/base/forms/auth.py:157 pretix/base/forms/auth.py:215
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
@@ -4706,8 +4705,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:583 pretix/base/models/organizer.py:89
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr ""
-"スラッグには、文字、数字、ドットまたはダッシュのみ含めることができます。"
+msgstr "スラッグには文字、数字、ドット、ダッシュのみ使用できます。"
 
 #: pretix/base/models/event.py:600 pretix/base/models/event.py:1495
 msgid "Show in lists"
@@ -6158,7 +6156,7 @@ msgstr "保留"
 #: pretix/base/models/orders.py:203 pretix/base/payment.py:568
 #: pretix/base/services/invoices.py:486
 msgid "paid"
-msgstr "支払い済み"
+msgstr "支払済"
 
 #: pretix/base/models/orders.py:204 pretix/control/forms/filter.py:1571
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:37
@@ -7181,7 +7179,7 @@ msgstr "日付"
 #: pretix/plugins/reports/accountingreport.py:318
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:442
 msgid "Net total"
-msgstr "純合計"
+msgstr "正味合計"
 
 #: pretix/base/notifications.py:202
 msgid "Pending amount"
@@ -12489,7 +12487,7 @@ msgstr "不正なリクエスト"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
-msgstr "リクエストをパースできませんでした。"
+msgstr "リクエストを解析できませんでした。"
 
 #: pretix/base/templates/400.html:12 pretix/base/templates/400_hostname.html:47
 #: pretix/base/templates/403.html:12 pretix/base/templates/404.html:12
@@ -12583,15 +12581,15 @@ msgstr "内部サーバーエラー"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr "リクエストの処理で問題が発生しました。"
+msgstr "リクエストの処理に問題が発生しました。"
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
-msgstr "障害が続く場合は、私たちにご連絡ください。"
+msgstr "この問題が続く場合は、お問い合わせください。"
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
-msgstr "連絡をいただく際は、次のコードをお知らせください:"
+msgstr "お問い合わせの際は、以下のコードをお送りください："
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
@@ -15495,7 +15493,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:195
 msgid "You need to choose an event."
-msgstr "イベントの選択が必要です。"
+msgstr "イベントを選択する必要があります。"
 
 #: pretix/control/forms/organizer.py:227
 msgid "You may set only one organizer domain."
@@ -17568,7 +17566,7 @@ msgstr "デバイス"
 #: pretix/control/permissions.py:72 pretix/control/permissions.py:109
 #: pretix/control/permissions.py:140 pretix/control/permissions.py:157
 msgid "You do not have permission to view this content."
-msgstr "この情報を見る権限がありません。"
+msgstr "このコンテンツを表示する権限がありません。"
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:42
 #: pretix/control/templates/pretixcontrol/base.html:358
@@ -19052,26 +19050,26 @@ msgstr "主催者の設定をリセットします"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr "これは、あなたのドメインで見つかったSPFレコードです:"
+msgstr "これは、あなたのドメインで見つかったSPFレコードです："
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
-msgstr "修正する場合は、次の部分を最後の単語の前に含めてください:"
+msgstr "これを修正するには、最後の単語の前に以下の部分を含めてください："
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:38
 msgid "Your new SPF record could look like this:"
-msgstr "新しいSPFレコードは、つぎの通りです:"
+msgstr "新しいSPFレコードは次のようになります："
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:43
 msgid ""
 "Please keep in mind that updates to DNS might require multiple hours to take "
 "effect."
-msgstr "DNSの更新が反映されるまで、長時間かかることをご理解ください。"
+msgstr "DNS の更新が有効になるまでに数時間かかる場合があることに注意してください。"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:48
 msgid "We found an SPF record on your domain that includes this system. Great!"
-msgstr ""
-"このシステムが含まれるあなたのドメインのSPFレコードが見つかりました。すごい！"
+msgstr "あなたのドメインでこのシステムを含むSPFレコードが見つかりました。素晴らしいで"
+"す！"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:54
 msgid "Verification"
@@ -22038,7 +22036,7 @@ msgstr "あなた自身のアプリを管理してください"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:18
 msgid "Permissions"
-msgstr "パーミッション"
+msgstr "権限"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:59
 msgid "No applications have access to your pretix account."
@@ -23051,7 +23049,7 @@ msgstr "メールをプレビュー"
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:44
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:89
 msgid "Send"
-msgstr "送付"
+msgstr "送信"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:5
 #: pretix/control/templates/pretixcontrol/order/transactions.html:8
@@ -24850,7 +24848,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:13
 msgid "Read documentation"
-msgstr "文書を読む"
+msgstr "ドキュメントを読む"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:19
 msgid "You haven't created any webhooks yet."
@@ -25026,7 +25024,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:217
 #: pretix/control/templates/pretixcontrol/pdf/index.html:233
 msgid "Loading…"
-msgstr "ロード中…"
+msgstr "読み込み中…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:220
 msgid "Start editing"
@@ -26541,7 +26539,7 @@ msgstr ""
 
 #: pretix/control/templatetags/hierarkey_form.py:79
 msgid "Unlock"
-msgstr "アンロック"
+msgstr "ロック解除"
 
 #: pretix/control/templatetags/hierarkey_form.py:80
 msgid "Go to organizer settings"
@@ -26669,7 +26667,7 @@ msgstr "新しいチェックインリストが作成されました。"
 #: pretix/plugins/stripe/views.py:682
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
-msgstr "変更を保存できませんでした。詳細は下記参照。"
+msgstr "変更を保存できませんでした。詳細は以下をご覧ください。"
 
 #: pretix/control/views/checkin.py:420 pretix/control/views/checkin.py:457
 msgid "The requested list does not exist."
@@ -27797,7 +27795,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:579
 msgid "The new organizer has been created."
-msgstr "主催者が新規に生成されました。"
+msgstr "新しい主催者が作成されました。"
 
 #: pretix/control/views/organizer.py:582
 msgid "Administrators"
@@ -28412,7 +28410,7 @@ msgstr "一連のイベントのための代替の組織者のドメイン"
 
 #: pretix/multidomain/models.py:38
 msgid "Event domain"
-msgstr "イベントのドメイン"
+msgstr "イベントドメイン"
 
 #: pretix/multidomain/models.py:44
 msgid "Domain name"
@@ -30066,7 +30064,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:335 pretix/plugins/paypal2/views.py:250
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr "PayPalへの接続で、エラーが発生しました。再度お試しください。"
+msgstr "PayPalとの接続中にエラーが発生しました。もう一度お試しください。"
 
 #: pretix/plugins/paypal2/payment.py:467 pretix/plugins/paypal2/payment.py:599
 #: pretix/plugins/paypal2/payment.py:673 pretix/plugins/paypal2/payment.py:736
@@ -30277,25 +30275,22 @@ msgstr ""
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
-msgstr ""
-"PayPalから戻る際にエラーが発生しました: リクエストのパラメータがありません。"
-"再度お試しください。"
+msgstr "PayPalからの戻り処理でエラーが発生しました：リクエストパラメータが不足してい"
+"ます。もう一度お試しください。"
 
 #: pretix/plugins/paypal2/views.py:259
 msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
-msgstr ""
-"PayPalから戻る際にエラーが発生: リザルトのパラメータがありません。再度お試し"
-"ください。"
+msgstr "PayPalからの戻り処理でエラーが発生しました：結果パラメータが不足しています。"
+"もう一度お試しください。"
 
 #: pretix/plugins/paypal2/views.py:264
 msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
-msgstr ""
-"PayPalから戻る際にエラーが発生: セッションのパラメーターが一致しません。再度"
-"お試しください。"
+msgstr "PayPalからの戻り処理でエラーが発生しました：セッションパラメータが一致しませ"
+"ん。もう一度お試しください。"
 
 #: pretix/plugins/paypal2/views.py:269
 msgid ""
@@ -31338,7 +31333,7 @@ msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:366
 msgid "SEPA Direct Debit"
-msgstr "SEPA直接デビット"
+msgstr "SEPA ダイレクトデビット"
 
 #: pretix/plugins/stripe/payment.py:369
 msgid ""
@@ -31459,15 +31454,14 @@ msgstr "Stripe支払いを利用するにはJavaScriptを有効にする必要�
 #: pretix/plugins/stripe/payment.py:929 pretix/plugins/stripe/payment.py:1051
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr "Stripeが次のカードのエラーを報告しました: %s"
+msgstr "Stripeがあなたのカードでエラーを報告しました：%s"
 
 #: pretix/plugins/stripe/payment.py:947 pretix/plugins/stripe/payment.py:1063
 msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
-msgstr ""
-"Stripeとの通信で問題が生じました。再度お試しいただくか、問題が継続する場合は"
-"私たちにお知らせください。"
+msgstr "Stripeとの通信に問題が発生しました。もう一度お試しいただき、この問題が続く場"
+"合はお問い合わせください。"
 
 #: pretix/plugins/stripe/payment.py:988
 msgid ""
@@ -31848,7 +31842,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:19
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr "クレジットカード決済は、JavaScriptを有効にしてください。"
+msgstr "クレジットカード決済には、JavaScriptを有効にしてください。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:25
 msgid ""
@@ -31865,8 +31859,9 @@ msgid ""
 "Your payment will be processed by Stripe, Inc. Your credit card data will be "
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
-"支払いは、Stripe, Inc.で処理されます。あなたのクレジットカードの情報は、"
-"Stripeに直接送信され、私たちのサーバを経由しません。"
+"お客様の決済はStripe, "
+"Inc.により処理されます。お客様のクレジットカード情報はStripeに直接送信され、"
+"弊社のサーバーには一切保存されません。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:13
 msgid "For a SEPA Debit payment, please turn on JavaScript."
