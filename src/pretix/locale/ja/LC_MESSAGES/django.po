@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-21 17:00+0000\n"
+"PO-Revision-Date: 2025-09-22 06:08+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -1165,7 +1165,7 @@ msgstr "CSV（コンマ付き）"
 
 #: pretix/base/exporter.py:191 pretix/base/exporter.py:313
 msgid "CSV (Excel-style)"
-msgstr "CSV（エクセルスタイル）"
+msgstr "CSV（Excel形式）"
 
 #: pretix/base/exporter.py:192 pretix/base/exporter.py:314
 msgid "CSV (with semicolons)"
@@ -1173,7 +1173,7 @@ msgstr "CSV（セミコロン付き）"
 
 #: pretix/base/exporter.py:308
 msgid "Combined Excel (.xlsx)"
-msgstr "結合されたエクセル（.xlsx）"
+msgstr "結合されたExcel（.xlsx）"
 
 #: pretix/base/exporters/answers.py:54
 msgid "Question answer file uploads"
