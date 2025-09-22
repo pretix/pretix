@@ -2833,9 +2833,7 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
         return self.get_scheduled_queryset()
 
     def has_permission(self):
-        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, "can_view_orders"):
-            return False
-        return True
+        return self.request.user.has_event_permission(self.request.organizer, self.request.event, "can_view_orders")
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
