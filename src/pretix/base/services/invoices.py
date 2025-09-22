@@ -61,7 +61,9 @@ from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.tasks import (
     TransactionAwareProfiledEventTask, TransactionAwareTask,
 )
-from pretix.base.signals import invoice_line_text, periodic_task
+from pretix.base.signals import (
+    build_invoice_data, invoice_line_text, periodic_task,
+)
 from pretix.celery_app import app
 from pretix.helpers.database import OF_SELF, rolledback_transaction
 from pretix.helpers.models import modelcopy
@@ -362,6 +364,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         invoice.reverse_charge = reverse_charge
         invoice.save()
 
+        build_invoice_data.send(sender=invoice.event, invoice=invoice)
         return invoice
 
 
