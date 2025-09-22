@@ -125,15 +125,15 @@ class PeppolIdValidator:
 
     def __call__(self, value):
         if ":" not in value:
-            raise ValidationError(_("A PEPPOL participant ID always starts with a prefix, followed by a colon (:)."))
+            raise ValidationError(_("A Peppol participant ID always starts with a prefix, followed by a colon (:)."))
 
         prefix, second = value.split(":", 1)
         if prefix not in self.regex_rules:
-            raise ValidationError(_("The PEPPOL participant ID prefix %(number)s is not known to our system. Please "
+            raise ValidationError(_("The Peppol participant ID prefix %(number)s is not known to our system. Please "
                                     "reach out to us if you are sure this ID is correct."), params={"number": prefix})
 
         if not re.match(self.regex_rules[prefix], second):
-            raise ValidationError(_("The PEPPOL participant ID does not match the validation rules for the prefix "
+            raise ValidationError(_("The Peppol participant ID does not match the validation rules for the prefix "
                                     "%(number)s. Please reach out to us if you are sure this ID is correct."),
                                   params={"number": prefix})
         return value
@@ -142,7 +142,7 @@ class PeppolIdValidator:
 @transmission_types.new()
 class PeppolTransmissionType(TransmissionType):
     identifier = "peppol"
-    verbose_name = "PEPPOL"
+    verbose_name = "Peppol"
     priority = 250
     enforce_transmission = True
 
@@ -153,7 +153,7 @@ class PeppolTransmissionType(TransmissionType):
     def invoice_address_form_fields(self) -> dict:
         return {
             "transmission_peppol_participant_id": forms.CharField(
-                label=_("PEPPOL participant ID"),
+                label=_("Peppol participant ID"),
                 validators=[
                     PeppolIdValidator(),
                 ]

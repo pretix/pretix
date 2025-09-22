@@ -243,7 +243,7 @@ PayPals
 PayU
 PCI
 Personalisierung
-PEPPOL
+Peppol
 PKCE
 Platzhalterzeichen
 Play

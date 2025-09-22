@@ -3628,25 +3628,25 @@ msgstr ""
 
 #: pretix/base/invoicing/peppol.py:128
 msgid ""
-"A PEPPOL participant ID always starts with a prefix, followed by a colon (:)."
+"A Peppol participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
 
 #: pretix/base/invoicing/peppol.py:132
 #, python-format
 msgid ""
-"The PEPPOL participant ID prefix %(number)s is not known to our system. "
+"The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
 
 #: pretix/base/invoicing/peppol.py:136
 #, python-format
 msgid ""
-"The PEPPOL participant ID does not match the validation rules for the prefix "
+"The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
 
 #: pretix/base/invoicing/peppol.py:156
-msgid "PEPPOL participant ID"
+msgid "Peppol participant ID"
 msgstr ""
 
 #: pretix/base/logentrytype_registry.py:43

@@ -3775,34 +3775,34 @@ msgstr "Fecha del evento: {date_range}"
 
 #: pretix/base/invoicing/peppol.py:128
 msgid ""
-"A PEPPOL participant ID always starts with a prefix, followed by a colon (:)."
+"A Peppol participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
-"El identificador de participante PEPPOL siempre comienza con un prefijo, "
+"El identificador de participante Peppol siempre comienza con un prefijo, "
 "seguido de dos puntos (:)."
 
 #: pretix/base/invoicing/peppol.py:132
 #, python-format
 msgid ""
-"The PEPPOL participant ID prefix %(number)s is not known to our system. "
+"The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
-"El prefijo de identificación de participante PEPPOL %(number)s no se conoce "
+"El prefijo de identificación de participante Peppol %(number)s no se conoce "
 "en nuestro sistema. Póngase en contacto con nosotros si está seguro de que "
 "esta identificación es correcta."
 
 #: pretix/base/invoicing/peppol.py:136
 #, python-format
 msgid ""
-"The PEPPOL participant ID does not match the validation rules for the prefix "
+"The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
-"El ID de participante PEPPOL no coincide con las reglas de validación para "
+"El ID de participante Peppol no coincide con las reglas de validación para "
 "el prefijo %(number)s. Póngase en contacto con nosotros si está seguro de "
 "que este ID es correcto."
 
 #: pretix/base/invoicing/peppol.py:156
-msgid "PEPPOL participant ID"
-msgstr "Identificador de participante PEPPOL"
+msgid "Peppol participant ID"
+msgstr "Identificador de participante Peppol"
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""

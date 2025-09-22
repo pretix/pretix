@@ -163,10 +163,10 @@ transmission_email_address            string                     Optional. An em
                                                                  Business customers only.
 ===================================== ========================== =======================================================
 
-PEPPOL
+Peppol
 """"""
 
-The identifier ``"peppol"`` represents the transmission of XML invoices through the `PEPPOL`_ network.
+The identifier ``"peppol"`` represents the transmission of XML invoices through the `Peppol`_ network.
 This is only available for business addresses.
 This is not supported by pretix out of the box and requires the use of a suitable plugin.
 The ``transmission_info`` object may contain the following properties:
@@ -176,7 +176,7 @@ The ``transmission_info`` object may contain the following properties:
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
-transmission_peppol_participant_id    string                     Required. The PEPPOL participant ID of the recipient.
+transmission_peppol_participant_id    string                     Required. The Peppol participant ID of the recipient.
 ===================================== ========================== =======================================================
 
 Italian Exchange System
@@ -605,5 +605,5 @@ but in other cases transmission may need to be triggered manually.
    :statuscode 409: The invoice is currently in transmission
 
 
-.. _PEPPOL: https://en.wikipedia.org/wiki/PEPPOL
+.. _Peppol: https://en.wikipedia.org/wiki/PEPPOL
 .. _Sistema di Interscambio: https://it.wikipedia.org/wiki/Fattura_elettronica_in_Italia
