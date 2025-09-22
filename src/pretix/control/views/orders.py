@@ -2832,11 +2832,23 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     def get_queryset(self):
         return self.get_scheduled_queryset()
 
+    def has_permission(self):
+        return self.request.user.has_event_permission(self.request.organizer, self.request.event, "can_view_orders")
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         if "schedule" in self.request.POST or self.scheduled:
-            ctx['schedule_form'] = self.schedule_form
-            ctx['rrule_form'] = self.rrule_form
+            if "schedule" in self.request.POST and not self.has_permission():
+                messages.error(
+                    self.request,
+                    _(
+                        "Your user account does not have sufficient permission to run this report, therefore "
+                        "you cannot schedule it."
+                    )
+                )
+            else:
+                ctx['schedule_form'] = self.schedule_form
+                ctx['rrule_form'] = self.rrule_form
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:
