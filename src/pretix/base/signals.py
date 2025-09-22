@@ -596,18 +596,6 @@ multiple events. Receivers should return a subclass of pretix.base.exporter.Base
 The ``sender`` keyword argument will contain an organizer.
 """
 
-build_invoice_data = EventPluginSignal()
-"""
-Arguments: ``invoice``
-
-This signal is sent out every time an invoice is built, after the invoice model was created
-and filled and before the PDF generation task is started. You can use this to make changes
-to the invoice, but we recommend to mostly use it to add content to ``Invoice.plugin_data``.
-You are responsible for saving any changes to the database.
-
-As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
-"""
-
 validate_order = EventPluginSignal()
 """
 Arguments: ``payments``, ``positions``, ``email``, ``locale``, ``invoice_address``,

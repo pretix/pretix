@@ -201,7 +201,6 @@ class Invoice(models.Model):
     transmission_info = models.JSONField(null=True, blank=True)
 
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename, max_length=255)
-    plugin_data = models.JSONField(default=dict)
 
     objects = ScopedManager(organizer='event__organizer')
 
