@@ -23,7 +23,7 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext
 from django_countries.fields import Country
 
 from pretix.base.invoicing.transmission import (
@@ -165,3 +165,13 @@ class PeppolTransmissionType(TransmissionType):
             "company", "street", "zipcode", "city", "country",
         }
         return base | {"transmission_peppol_participant_id"}
+
+    def pdf_watermark(self) -> str:
+        return pgettext("peppol_invoice", "Visual copy")
+
+    def pdf_info_text(self) -> str:
+        return pgettext(
+            "peppol_invoice",
+            "This PDF document is a visual copy of the invoice and does not constitute an invoice for VAT "
+            "purposes. The original invoice is issued in XML format and transmitted through the Peppol network."
+        )
