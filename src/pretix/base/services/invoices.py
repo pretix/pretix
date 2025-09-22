@@ -387,7 +387,7 @@ def _service_period_for_position(invoice, position, invoice_dt):
             period_end = position.valid_until
         elif position.valid_from:
             period_start = position.valid_from
-            period_end = position.valid_from  # weird, but we have nothing else ot base this on
+            period_end = position.valid_from  # weird, but we have nothing else to base this on
         elif position.valid_until:
             period_start = min(invoice.order.datetime, position.valid_until)
             period_end = position.valid_until
