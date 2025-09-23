@@ -1669,6 +1669,9 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         else:
             mark_refunded = request.data.get('mark_canceled', False)
 
+        if not isinstance(request.data.get("comment", ""), str):
+            return Response({'comment': 'Invalid type.'}, status=status.HTTP_400_BAD_REQUEST)
+
         if payment.state != OrderPayment.PAYMENT_STATE_CONFIRMED:
             return Response({'detail': 'Invalid state of payment.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1695,6 +1698,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             amount=amount,
             provider=payment.provider,
             info='{}',
+            comment=request.data.get("comment"),
         )
         payment.order.log_action('pretix.event.order.refund.created', {
             'local_id': r.local_id,
