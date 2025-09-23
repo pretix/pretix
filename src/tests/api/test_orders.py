@@ -845,6 +845,7 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         organizer.slug, event.slug, order.code, p1.local_id
     ), format='json', data={
         'amount': '23.00',
+        'comment': 'Foo',
         'mark_canceled': False,
     })
     assert resp.status_code == 200
@@ -853,6 +854,7 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         assert r.provider == "stripe"
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+        assert r.comment == "Foo"
 
 
 @pytest.mark.django_db
