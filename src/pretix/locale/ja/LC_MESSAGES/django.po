@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-22 06:08+0000\n"
+"PO-Revision-Date: 2025-09-23 12:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -2589,7 +2589,7 @@ msgstr "座席位置注文リンク"
 
 #: pretix/base/exporters/orderlist.py:840
 msgid "Order transaction data"
-msgstr "注文が再開されました"
+msgstr "注文取引データ"
 
 #: pretix/base/exporters/orderlist.py:842
 msgid ""
@@ -24389,7 +24389,7 @@ msgstr "手動でギフトカードを発行"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
 msgid "Last transaction"
-msgstr "注文が再開されました"
+msgstr "最新の取引"
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
@@ -30378,11 +30378,11 @@ msgstr "{datetime}時点のギフトカードの総額"
 
 #: pretix/plugins/reports/accountingreport.py:771
 msgid "Gift card transactions (credit)"
-msgstr "注文が再開されました"
+msgstr "ギフトカード取引（入金）"
 
 #: pretix/plugins/reports/accountingreport.py:781
 msgid "Gift card transactions (debit)"
-msgstr "注文が再開されました"
+msgstr "ギフトカード取引（出金）"
 
 #: pretix/plugins/reports/accountingreport.py:883
 msgid "Open items"
@@ -30997,7 +30997,7 @@ msgstr "メッセージはキューに入れられ、数分以内に%sの連絡�
 
 #: pretix/plugins/sendmail/views.py:250
 msgid "Orders or attendees"
-msgstr "注文が再開されました"
+msgstr "注文または参加者"
 
 #: pretix/plugins/sendmail/views.py:251
 msgid ""
