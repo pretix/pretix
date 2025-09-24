@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-02-21 19:00+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-09-25 03:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -5059,9 +5059,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:583 pretix/base/models/organizer.py:89
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr ""
-"Описательная часть URL-адреса может содержать только буквы, цифры, точки и "
-"тире."
+msgstr "Слизень может содержать только буквы, цифры, точки и тире."
 
 #: pretix/base/models/event.py:600 pretix/base/models/event.py:1495
 msgid "Show in lists"
