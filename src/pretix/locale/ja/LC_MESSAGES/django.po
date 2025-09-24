@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-23 12:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2025-09-25 03:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -2666,7 +2666,7 @@ msgstr "内部参考資料"
 #: pretix/base/exporters/orderlist.py:915
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "日付"
+msgstr "日付ID"
 
 #: pretix/base/exporters/orderlist.py:920
 msgid "Tax rule ID"
@@ -2675,12 +2675,12 @@ msgstr "税制ルールID"
 #: pretix/base/exporters/orderlist.py:923
 #: pretix/plugins/reports/accountingreport.py:320
 msgid "Gross total"
-msgstr "ご注文合計"
+msgstr "総計"
 
 #: pretix/base/exporters/orderlist.py:924
 #: pretix/plugins/reports/accountingreport.py:319
 msgid "Tax total"
-msgstr "税"
+msgstr "税額合計"
 
 #: pretix/base/exporters/orderlist.py:934
 msgid ""
@@ -6156,7 +6156,7 @@ msgstr "保留"
 #: pretix/base/models/orders.py:203 pretix/base/payment.py:568
 #: pretix/base/services/invoices.py:486
 msgid "paid"
-msgstr "支払済"
+msgstr "支払済み"
 
 #: pretix/base/models/orders.py:204 pretix/control/forms/filter.py:1571
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:37
@@ -7493,7 +7493,7 @@ msgstr "無料"
 
 #: pretix/base/payment.py:1166
 msgid "Box office"
-msgstr "興行収入"
+msgstr "ボックスオフィス"
 
 #: pretix/base/payment.py:1214 pretix/base/payment.py:1233
 #: pretix/plugins/manualpayment/apps.py:30
@@ -14856,7 +14856,7 @@ msgstr "バンドル製品"
 #: pretix/control/forms/item.py:1243 pretix/control/forms/orders.py:379
 #: pretix/control/forms/orders.py:568
 msgid "inactive"
-msgstr "無効"
+msgstr "非アクティブ"
 
 #: pretix/control/forms/mailsetup.py:42
 msgid "Hostname"
@@ -17988,7 +17988,7 @@ msgstr "トレース番号"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
 msgctxt "terminal_zvt"
 msgid "Payment type"
-msgstr "支払い方法"
+msgstr "支払いの種類"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:24
 msgctxt "terminal_zvt"
@@ -18053,7 +18053,7 @@ msgstr "サーバー取引コード"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:75
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 msgid "Payment reference"
-msgstr "内部参考資料"
+msgstr "支払リファレンス"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:78
 msgid "Payment Application"
@@ -18514,7 +18514,7 @@ msgstr "カスタムチェックインルール"
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:117
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:85
 msgid "Edit"
-msgstr "編集します"
+msgstr "編集する"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:89
 msgid "Visualize"
@@ -25592,7 +25592,7 @@ msgstr "複数の新規日程を作る"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:96
 #: pretix/plugins/reports/accountingreport.py:121
 msgid "Begin"
-msgstr "始めます"
+msgstr "開始"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:176
 msgid "Show orders"
@@ -29636,7 +29636,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:374
 msgctxt "tablehead"
 msgid "paid"
-msgstr "支払済"
+msgstr "支払済み"
 
 #: pretix/plugins/checkinlists/exporters.py:477
 msgid ""
