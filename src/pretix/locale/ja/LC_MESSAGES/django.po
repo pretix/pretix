@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-25 03:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2025-09-25 19:00+0000\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -5251,7 +5251,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:532
 msgid "Is a personalized ticket"
-msgstr "個人用チケットです"
+msgstr "パーソナライズされたチケットです"
 
 #: pretix/base/models/items.py:534
 msgid "Whether or not buying this product allows to enter attendee information"
@@ -9445,7 +9445,7 @@ msgstr "出席者の名前を尋ねる"
 
 #: pretix/base/settings.py:359
 msgid "Ask for a name for all personalized tickets."
-msgstr "すべての記名式チケットで名前を尋ねる。"
+msgstr "すべてのパーソナライズチケットで名前を尋ねる。"
 
 #: pretix/base/settings.py:368
 msgid "Require attendee names"
@@ -9471,11 +9471,12 @@ msgid ""
 "enable this in the email settings."
 msgstr ""
 "通常、pretixは注文ごとに1つのメールアドレスを要求し、注文確認はそのメールアド"
-"レスのみに送信されます。このオプションを有効にすると、システムは個人用チケッ"
-"トごとに個別のメールアドレスも追加で要求します。これは、グループ注文の場合で"
-"も参加者全員の個別のアドレスを取得したい場合に便利です。ただし、pretixは既定"
-"では注文確認を主要なメールアドレス1つのみに送信し、参加者別のアドレスには送信"
-"しません。これはメール設定で有効にすることができます。"
+"レスにのみ送信されます。このオプションを有効にすると、システムはさらにパーソ"
+"ナライズされたチケットごとに個別のメールアドレスを要求します。これは、グルー"
+"プ注文の場合でも、すべての参加者の個別のアドレスを取得したい場合に便利です。"
+"ただし、pretixはデフォルトでは注文確認を1つの主要なメールアドレスにのみ送信し"
+"、参加者ごとのアドレスには送信しません。ただし、メール設定でこれを有効にする"
+"ことができます。"
 
 #: pretix/base/settings.py:394
 msgid "Require email addresses per ticket"
@@ -9487,9 +9488,9 @@ msgid ""
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
-"すべての個人用チケットに個別のメールアドレスの入力を顧客に要求します。詳細は"
-"上記のオプションをご覧ください。この設定に関係なく、注文確認用のメールアドレ"
-"スは常に1つ必要です。"
+"すべてのパーソナライズされたチケットについて、顧客に個別のメールアドレスの入"
+"力を必須とします。詳細については上記のオプションを参照してください。この設定"
+"に関係なく、注文確認のため、メールアドレス一つは常に必要です。"
 
 #: pretix/base/settings.py:407
 msgid "Ask for company per ticket"
@@ -12060,8 +12061,8 @@ msgid ""
 "This text will be shown above the questions asked for every personalized "
 "product. You can use it e.g. to explain why you need information from them."
 msgstr ""
-"このテキストは、個々の製品に関する質問の上に表示されます。例えば、彼らから情"
-"報を得る理由を説明するために使用することができます。"
+"このテキストは、すべてのパーソナライズされた製品について質問する際の上部に表"
+"示されます。例えば、なぜその情報が必要なのかを説明するために使用できます。"
 
 #: pretix/base/settings.py:3190
 msgid "Additional success message"
@@ -14791,10 +14792,10 @@ msgid ""
 "the membership later. If you want the membership to be non-personalized, set "
 "the membership type to be transferable."
 msgstr ""
-"製品は譲渡不可の会員資格を付与し、したがって個人に適した入場券である必要があ"
-"ります。そうでないと、顧客は後で会員資格を使用できないかもしれません。会員資"
-"格を個人に適さないようにしたい場合は、会員資格の種類を譲渡可能に設定してくだ"
-"さい。"
+"お客様の製品は譲渡不可能なメンバーシップを付与するため、パーソナライズされた"
+"入場チケットである必要があります。そうでなければ、お客様は後でメンバーシップ"
+"を使用できない可能性があります。メンバーシップを非パーソナライズにしたい場合"
+"は、メンバーシップタイプを譲渡可能に設定してください。"
 
 #: pretix/control/forms/item.py:812
 msgid "The start of validity must be before the end of validity."
@@ -19026,10 +19027,10 @@ msgid ""
 "directly from you, but it also might require some extra steps to ensure good "
 "deliverability."
 msgstr ""
-"システムのデフォルトサーバーを介して電子メールが送信されますが、送信者のアド"
-"レスはあなた自身のものになります。これにより、あなたの電子メールはより個人的"
-"なものに見え、直接あなたから送信されたものに見えますが、配信可能性を確保する"
-"ために追加の手順が必要になるかもしれません。"
+"メールはシステムのデフォルトサーバーを通じて送信されますが、独自の送信者アド"
+"レスを使用します。これによりメールはよりパーソナライズされ、お客様から直接送"
+"信されているように見えますが、良好な配信率を確保するために追加の手順が必要に"
+"なる場合があります。"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:84
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:18
@@ -20156,7 +20157,7 @@ msgstr "請求書の設定を見る"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:96
 msgid "Attendee data (once per personalized ticket)"
-msgstr "参加者データ（個別のチケットごとに1回）"
+msgstr "参加者データ（パーソナライズされたチケットごとに1回）"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:105
 msgid "Custom fields"
@@ -21084,7 +21085,7 @@ msgstr "例：商品、寄付、ギフトカード、メインチケットに追
 #: pretix/control/templates/pretixcontrol/item/create.html:68
 #: pretix/control/templates/pretixcontrol/item/index.html:76
 msgid "Personalization"
-msgstr "個人化"
+msgstr "パーソナライズ"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:76
 #: pretix/control/templates/pretixcontrol/item/index.html:89
@@ -21112,7 +21113,7 @@ msgstr "設定を変更します"
 #: pretix/control/templates/pretixcontrol/item/create.html:96
 #: pretix/control/templates/pretixcontrol/item/index.html:109
 msgid "Non-personalized ticket"
-msgstr "非個人化チケット"
+msgstr "パーソナライズされていないチケット"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:98
 #: pretix/control/templates/pretixcontrol/item/index.html:111
@@ -21599,7 +21600,7 @@ msgstr "新しい商品を作成"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:102
 msgid "Personalized admission ticket"
-msgstr "記名式入場券"
+msgstr "パーソナライズされた入場チケット"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:104
 msgid "Admission ticket without personalization"
