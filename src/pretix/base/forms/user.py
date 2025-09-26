@@ -190,6 +190,7 @@ class UserEmailChangeForm(forms.Form):
         'duplicate_identifier': _("There already is an account associated with this email address. "
                                   "Please choose a different one."),
     }
+    old_email = forms.EmailField(label=_('Old email address'), disabled=True)
     new_email = forms.EmailField(label=_('New email address'))
 
     def __init__(self, *args, **kwargs):

@@ -864,6 +864,11 @@ class UserEmailChangeView(RecentAuthenticationRequiredMixin, FormView):
             "user": self.request.user,
         }
 
+    def get_initial(self):
+        return {
+            "old_email": self.request.user.email
+        }
+
     def form_valid(self, form):
         self.request.user.send_confirmation_code('email_change', form.cleaned_data['new_email'])
         return redirect(reverse('control:user.settings.email.confirm', kwargs={}))
