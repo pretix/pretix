@@ -829,6 +829,9 @@ class UserPasswordChangeView(FormView):
     template_name = 'pretixcontrol/user/change_password.html'
 
     def get_form_kwargs(self):
+        if self.request.user.auth_backend != 'native':
+            raise PermissionDenied
+
         return {
             **super().get_form_kwargs(),
             "user": self.request.user,
@@ -867,6 +870,9 @@ class UserEmailChangeView(RecentAuthenticationRequiredMixin, FormView):
     template_name = 'pretixcontrol/user/change_email.html'
 
     def get_form_kwargs(self):
+        if self.request.user.auth_backend != 'native':
+            raise PermissionDenied
+
         return {
             **super().get_form_kwargs(),
             "user": self.request.user,
