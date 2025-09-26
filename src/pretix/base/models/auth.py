@@ -67,6 +67,10 @@ class EmailAddressTakenError(IntegrityError):
     pass
 
 
+class EmailVerificationTokenGenerator(PasswordResetTokenGenerator):
+    key_salt = "pretix.base.models.auth.EmailVerificationTokenGenerator"
+
+
 class UserManager(BaseUserManager):
     """
     This is the user manager for our custom user model. See the User
