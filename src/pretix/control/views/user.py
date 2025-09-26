@@ -847,10 +847,16 @@ class UserPasswordChangeView(FormView):
 
             update_session_auth_hash(self.request, self.request.user)
         return redirect(reverse('control:user.settings', kwargs={}))
+        return redirect(self.get_success_url())
 
     def form_invalid(self, form):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return super().form_invalid(form)
+
+    def get_success_url(self):
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
+            return self.request.GET.get("next")
+        return reverse('control:user.settings')
 
 
 class UserEmailChangeView(RecentAuthenticationRequiredMixin, FormView):
