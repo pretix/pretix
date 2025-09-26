@@ -10,12 +10,12 @@
         {% bootstrap_form_errors form type='all' layout='inline' %}
         {% bootstrap_field form.code %}
 		<div class="form-group buttons">
-            <button type="submit" class="btn btn-primary">
-                {% trans "Okay" %}
-            </button>
-            <a href="{{ cancel_url }}" class="btn btn-default">
+            <a href="{{ cancel_url }}" class="btn btn-lg btn-default">
                 {% trans "Cancel" %}
             </a>
+            <button type="submit" class="btn btn-lg btn-primary">
+                {% trans "Continue" %}
+            </button>
 		</div>
 	</form>
 {% endblock %}
