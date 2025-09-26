@@ -69,6 +69,7 @@ class UserEditForm(forms.ModelForm):
             'email',
             'require_2fa',
             'is_active',
+            'is_verified',
             'is_staff',
             'needs_password_change',
             'last_login'
