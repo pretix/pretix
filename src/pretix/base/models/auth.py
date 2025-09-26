@@ -35,7 +35,7 @@
 import binascii
 import json
 import operator
-import random
+import secrets
 from datetime import timedelta
 from functools import reduce
 
@@ -45,7 +45,7 @@ from django.contrib.auth.models import (
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator, default_token_generator
 from django.contrib.contenttypes.models import ContentType
-from django.core.cache import cache
+from django.core.exceptions import BadRequest, PermissionDenied
 from django.db import IntegrityError, models, transaction
 from django.db.models import Q
 from django.utils.crypto import get_random_string, salted_hmac
@@ -245,6 +245,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+    MAX_CONFIRMATION_CODE_ATTEMPTS = 10
 
     email = models.EmailField(unique=True, db_index=True, null=True, blank=True,
                               verbose_name=_('Email'), max_length=190)
@@ -360,7 +361,16 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         except SendMailException:
             pass  # Already logged
 
-    def send_confirmation_code(self, reason, email=None):
+    def send_confirmation_code(self, session, reason, email=None, state=None):
+        """
+        Sends a confirmation code via email to the user. The code is only valid for the action specified by `reason`.
+        The email is either sent to the email address currently on file for the user, or to the one given in the optional `email` parameter.
+        A `state` value can be provided which is bound to this confirmation code, and returned on successfully checking the code.
+        :param session: the user's request session
+        :param reason: the action which should be confirmed using this confirmation code (currently, only `email_change` is allowed)
+        :param email: optional, the email address to send the confirmation code to
+        :param state: optional
+        """
         from pretix.base.services.mail import mail
 
         with language(self.locale):
@@ -371,9 +381,12 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             else:
                 raise Exception('Invalid confirmation code reason')
 
-        code = "%07d" % random.randint(0, 9999999)
-        cache.set('user_confirmation_code:' + str(self.pk), code + ':' + reason + ':' + str(email), 1800)
-
+        code = "%07d" % secrets.SystemRandom().randint(0, 9999999)
+        session['user_confirmation_code:' + reason] = {
+            'code': code,
+            'state': state,
+            'attempts': 0,
+        }
         mail(
             email or self.email,
             _('pretix confirmation code'),
@@ -388,14 +401,32 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             locale=self.locale
         )
 
-    def check_confirmation_code(self, reason, code):
-        stored = cache.get('user_confirmation_code:' + str(self.pk))
-        if not stored:
-            return None
-        stored_code, stored_reason, email = stored.split(":", maxsplit=2)
-        if int(stored_code) == int(code) and stored_reason == reason:
-            return email
+    def check_confirmation_code(self, session, reason, code):
+        """
+        Checks a confirmation code entered by the user against the valid code stored in the session.
+        If the code is correct, an optional state bound to the code is returned.
+        If the code is incorrect, PermissionDenied is raised. If the code could not be validated, either because no
+        code for the given reason is stored, or the number of input attempts is exceeded, BadRequest is raised.
 
+        :param session: the user's request session
+        :param reason: the action which should be confirmed using this confirmation code
+        :param code: the code entered by the user
+        :return: optional state bound to this code using the state parameter of send_confirmation_code, None otherwise
+        """
+        stored = session.get('user_confirmation_code:' + reason)
+        if not stored:
+            raise BadRequest
+
+        if stored['attempts'] > User.MAX_CONFIRMATION_CODE_ATTEMPTS:
+            raise BadRequest
+
+        if int(stored['code']) == int(code):
+            del session['user_confirmation_code:' + reason]
+            return stored['state']
+        else:
+            stored['attempts'] += 1
+            session['user_confirmation_code:' + reason] = stored
+            raise PermissionDenied
 
     def send_password_reset(self):
         from pretix.base.services.mail import mail
