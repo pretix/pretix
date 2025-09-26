@@ -846,7 +846,8 @@ class UserPasswordChangeView(FormView):
             self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data={'new_pw': True})
 
             update_session_auth_hash(self.request, self.request.user)
-        return redirect(reverse('control:user.settings', kwargs={}))
+
+        messages.success(self.request, _('Your changes have been saved.'))
         return redirect(self.get_success_url())
 
     def form_invalid(self, form):
