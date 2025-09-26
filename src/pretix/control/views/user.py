@@ -45,6 +45,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import BadRequest, PermissionDenied
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -870,7 +871,12 @@ class UserEmailChangeView(RecentAuthenticationRequiredMixin, FormView):
         }
 
     def form_valid(self, form):
-        self.request.user.send_confirmation_code('email_change', form.cleaned_data['new_email'])
+        self.request.user.send_confirmation_code(
+            session=self.request.session,
+            reason='email_change',
+            email=form.cleaned_data['new_email'],
+            state=form.cleaned_data['new_email'],
+        )
         return redirect(reverse('control:user.settings.email.confirm', kwargs={}))
 
     def form_invalid(self, form):
@@ -891,9 +897,17 @@ class UserEmailConfirmView(FormView):
 
     @transaction.atomic()
     def form_valid(self, form):
-        new_email = self.request.user.check_confirmation_code('email_change', form.cleaned_data['code'])
-        if not new_email:
+        try:
+            new_email = self.request.user.check_confirmation_code(
+                session=self.request.session,
+                reason='email_change',
+                code=form.cleaned_data['code'],
+            )
+        except PermissionDenied:
             return self.form_invalid(form)
+        except BadRequest:
+            messages.error(self.request, _('Your email address could not be changed, because we were unable to verify your confirmation code. Please try again.'))
+            return redirect(reverse('control:user.settings', kwargs={}))
 
         msgs = []
         msgs.append(_('Your email address has been changed to {email}.').format(email=new_email))
@@ -915,5 +929,5 @@ class UserEmailConfirmView(FormView):
         return redirect(reverse('control:user.settings', kwargs={}))
 
     def form_invalid(self, form):
-        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        messages.error(self.request, _('The entered confirmation code is not correct. Please try again.'))
         return super().form_invalid(form)
