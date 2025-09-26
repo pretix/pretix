@@ -40,7 +40,6 @@ from django.contrib.auth.password_validation import (
 )
 from django.db.models import Q
 from django.urls.base import reverse
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from pytz import common_timezones
 
@@ -116,20 +115,20 @@ class UserPasswordChangeForm(forms.Form):
                              disabled=True,
                              label=_("Your email address"),
                              widget=forms.EmailInput(
-                                        attrs={'autocomplete': 'username'},
-                                    ))
+                                 attrs={'autocomplete': 'username'},
+                             ))
     old_pw = forms.CharField(max_length=255,
                              required=False,
                              label=_("Your current password"),
                              widget=forms.PasswordInput(
-                                        attrs={'autocomplete': 'current-password'},
-                                    ))
+                                 attrs={'autocomplete': 'current-password'},
+                             ))
     new_pw = forms.CharField(max_length=255,
                              required=False,
                              label=_("New password"),
                              widget=forms.PasswordInput(
-                                        attrs={'autocomplete': 'new-password'},
-                                    ))
+                                 attrs={'autocomplete': 'new-password'},
+                             ))
     new_pw_repeat = forms.CharField(max_length=255,
                                     required=False,
                                     label=_("Repeat new password"),
@@ -182,7 +181,6 @@ class UserPasswordChangeForm(forms.Form):
                 self.error_messages['pw_mismatch'],
                 code='pw_mismatch'
             )
-
 
 
 class UserEmailChangeForm(forms.Form):
