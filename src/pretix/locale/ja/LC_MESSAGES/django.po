@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-09-25 19:00+0000\n"
-"Last-Translator: Aki <aki.onetime@gmail.com>\n"
+"POT-Creation-Date: 2025-08-19 16:35+0000\n"
+"PO-Revision-Date: 2025-09-26 11:10+0000\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -444,7 +444,7 @@ msgstr "新しい注文には承認が必要です"
 
 #: pretix/api/webhooks.py:270 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr "注文が支払い済みとして設定されました"
+msgstr "支払い済みとしてマークされた注文"
 
 #: pretix/api/webhooks.py:274 pretix/base/models/checkin.py:355
 #: pretix/base/notifications.py:251
@@ -6219,7 +6219,7 @@ msgstr "保留"
 #: pretix/base/models/orders.py:203 pretix/base/payment.py:568
 #: pretix/base/services/invoices.py:486
 msgid "paid"
-msgstr "支払済み"
+msgstr "支払い済み"
 
 #: pretix/base/models/orders.py:204 pretix/control/forms/filter.py:1602
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:37
@@ -6285,7 +6285,7 @@ msgstr "承認保留中"
 #: pretix/base/models/orders.py:416
 msgctxt "order state"
 msgid "pending (confirmed)"
-msgstr "支払い済みの注文"
+msgstr "保留中（確認済み）"
 
 #: pretix/base/models/orders.py:418
 msgid "canceled (paid fee)"
@@ -6385,7 +6385,7 @@ msgstr "作成済み"
 #: pretix/base/models/orders.py:2124
 msgctxt "refund_state"
 msgid "in transit"
-msgstr "輸送中"
+msgstr "配送中"
 
 #: pretix/base/models/orders.py:2125
 msgctxt "refund_state"
@@ -7275,7 +7275,7 @@ msgstr "新しい注文があり、承認が必要です：{order.code}"
 #: pretix/base/notifications.py:246
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr "注文{order.code}は支払い済みとマークされました。"
+msgstr "注文 {order.code} が支払い済みとしてマークされました。"
 
 #: pretix/base/notifications.py:252
 #, python-brace-format
@@ -7574,9 +7574,8 @@ msgstr "手動支払い"
 msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
-msgstr ""
-"テストモードでは、作成後にバックエンドでこの注文を手動で支払い済みにマークす"
-"ることができます。"
+msgstr "テストモードでは、注文が作成された後、バックエンドでこの注文を手動で支払い済"
+"みとしてマークできます。"
 
 #: pretix/base/payment.py:1240 pretix/base/payment.py:1427
 #: pretix/plugins/banktransfer/payment.py:149
@@ -9727,9 +9726,8 @@ msgstr "一部支払い済みの請求書に支払い済み金額を表示"
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
-msgstr ""
-"もし請求書が部分的に支払われている場合、このオプションは支払済みと未払いの金"
-"額を請求書に追加します。"
+msgstr "請求書が既に部分的に支払われている場合、このオプションは支払い済み金額と保留"
+"中金額を請求書に追加します。"
 
 #: pretix/base/settings.py:641
 msgid "Show free products on invoices"
@@ -9933,10 +9931,10 @@ msgid ""
 "methods. Please note that for technical reasons, the actual time frame might "
 "be a few minutes longer before the order is marked as expired."
 msgstr ""
-"注文後の支払い期限は、ユーザーが予約を保持するために持っている分数です。これ"
-"はリアルタイムの支払い方法のみを提供している場合にのみ使用してください。技術"
-"的な理由から、実際の時間枠が注文が期限切れとマークされる前に数分長くなること"
-"がありますので、ご注意ください。"
+"注文後、ユーザーが予約を保持するために支払いを完了しなければならない時間（分"
+"）。リアルタイム支払い方法のみを提供する場合のみ使用してください。技術的な理"
+"由により、注文が期限切れとしてマークされるまでの実際の時間枠は数分長くなる場"
+"合があることにご注意ください。"
 
 #: pretix/base/settings.py:934
 msgid "Last date of payments"
@@ -10065,7 +10063,7 @@ msgstr "ユーザーのリクエストに応じて自動的に"
 
 #: pretix/base/settings.py:1082 pretix/base/settings.py:1095
 msgid "Automatically on user request for paid orders"
-msgstr "支払い済み注文をユーザのリクエストに応じて自動的に"
+msgstr "支払い済み注文に対してユーザーの要求時に自動的に"
 
 #: pretix/base/settings.py:1083
 msgid "Automatically for all created orders"
@@ -10491,8 +10489,8 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
-"オフにすると、チケットは製品設定で「入場券」としてマークされた製品にのみ発行"
-"されます。また、個々の製品ごとにチケットの発行をオフにすることもできます。"
+"無効にした場合、チケットは商品設定で「入場券」としてマークされた商品に対して"
+"のみ発行されます。各商品で個別にチケット発行を無効にすることも可能です。"
 
 #: pretix/base/settings.py:1618
 msgid "Generate tickets for pending orders"
@@ -10502,9 +10500,8 @@ msgstr "保留中の注文のチケットを生成します"
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
-msgstr ""
-"電源を切った場合、チケットのダウンロードは、注文が支払い済みとマークされた後"
-"にのみ可能です。"
+msgstr "無効にした場合、チケットのダウンロードは注文が支払い済みとしてマークされた後"
+"にのみ可能になります。"
 
 #: pretix/base/settings.py:1630
 msgid "Do not issue ticket before email address is validated"
@@ -10760,15 +10757,14 @@ msgstr "その後のキャンセルは許可しない"
 
 #: pretix/base/settings.py:1912
 msgid "Customers can cancel their paid orders"
-msgstr "お客様は支払い済みの注文をキャンセル可能"
+msgstr "顧客は支払い済み注文をキャンセルできます"
 
 #: pretix/base/settings.py:1913
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
-msgstr ""
-"払われた金額は、決済方法が対応している場合は自動的に払い戻されます。対応して"
-"いない場合は、手動で処理するための手動払い戻しが作成されます。"
+msgstr "決済方法が対応している場合、支払われた金額は自動的に返金されます。対応してい"
+"ない場合は、手動で処理するための手動返金が作成されます。"
 
 #: pretix/base/settings.py:1926 pretix/control/forms/orders.py:909
 msgid "Keep a fixed cancellation fee"
@@ -10799,9 +10795,9 @@ msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
-"ただし、私たちがここで運営を続けられるよう支援していただける場合は、下のスラ"
-"イダーを使用してより少ない払い戻し金額をリクエストすることをご検討ください。"
-"ありがとうございます！"
+"ただし、ここでサービスを継続できるようサポートしていただける場合は、以下のス"
+"ライダーを使用してより少額の返金を選択していただくことをご検討ください。あり"
+"がとうございます！"
 
 #: pretix/base/settings.py:1969
 msgid "Voluntary lower refund explanation"
@@ -13129,7 +13125,7 @@ msgstr "お客様は無料または未払いの注文をキャンセルするこ
 #: pretix/base/timeline.py:155
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
-msgstr "お客様はもはや支払い済みの注文をキャンセルすることができません"
+msgstr "顧客は支払い済み注文をキャンセルできなくなりました"
 
 #: pretix/base/timeline.py:167
 msgctxt "timeline"
@@ -13563,9 +13559,8 @@ msgstr "チェックアウトメールの販売チャネル"
 msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
-msgstr ""
-"注文済みおよび支払い済みメールは、これらの販売チャネルからの注文にのみ送信さ"
-"れます。オンラインショップを有効にする必要があります。"
+msgstr "注文完了メールおよび支払い完了メールは、これらの販売チャネルからの注文にのみ"
+"送信されます。オンラインショップを有効にする必要があります。"
 
 #: pretix/control/forms/event.py:977
 msgid ""
@@ -13919,9 +13914,9 @@ msgid ""
 "then import your bank statements to process the payments within pretix, or "
 "mark them as paid manually."
 msgstr ""
-"お客様には、お客様の口座に送金するよう指示されます。その後、pretix内で銀行取"
-"引明細をインポートして支払いを処理するか、手動で支払い済みとしてマークするこ"
-"とができます。"
+"顧客にはあなたのアカウントに送金するよう指示されます。その後、銀行取引明細書"
+"をインポートしてpretix内で支払いを処理するか、手動で支払い済みとしてマークで"
+"きます。"
 
 #: pretix/control/forms/event.py:1781
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
@@ -13962,7 +13957,7 @@ msgstr "支払われた（または支払われた手数料でキャンセルさ
 #: pretix/control/forms/filter.py:221
 #: pretix/control/templates/pretixcontrol/items/question.html:27
 msgid "Paid or confirmed"
-msgstr "支払い済みの注文"
+msgstr "支払い済みまたは確認済み"
 
 #: pretix/control/forms/filter.py:222
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:47
@@ -13976,7 +13971,7 @@ msgstr "保留中"
 #: pretix/control/forms/filter.py:223
 #: pretix/control/templates/pretixcontrol/items/question.html:29
 msgid "Pending or paid"
-msgstr "保留中または支払済"
+msgstr "保留中または支払い済み"
 
 #: pretix/control/forms/filter.py:225
 msgid "Cancellations"
@@ -14032,7 +14027,7 @@ msgstr "未払い（ただし、確認済み）"
 
 #: pretix/control/forms/filter.py:239
 msgid "Pending (but fully paid)"
-msgstr "保留中（ただし支払済み）"
+msgstr "保留中（ただし完全支払い済み）"
 
 #: pretix/control/forms/filter.py:240
 msgid "Pending (but no current payment)"
@@ -14144,7 +14139,7 @@ msgstr "作成された支払（まで）"
 
 #: pretix/control/forms/filter.py:1072
 msgid "Paid from"
-msgstr "支払い済みの注文"
+msgstr "支払い元"
 
 #: pretix/control/forms/filter.py:1077
 msgid "Paid until"
@@ -15060,7 +15055,7 @@ msgstr "グループ化列に基づいて複数行を同じ注文にまとめま
 
 #: pretix/control/forms/modelimport.py:87
 msgid "Create orders as fully paid"
-msgstr "注文を完全に支払い済みにする"
+msgstr "注文を完全支払い済みとして作成"
 
 #: pretix/control/forms/modelimport.py:88
 msgid "Create orders as pending and still require payment"
@@ -15092,13 +15087,12 @@ msgid ""
 "deadline arrives, since we expect that you want to collect the amount "
 "somehow and not auto-cancel the order."
 msgstr ""
-"このボックスをチェックすると、この注文はまだ支払われていないにもかかわらず、"
-"ほとんどの目的で支払い済みの注文のように振る舞います。これは、お客様がイベン"
-"トの設定に関係なくすでにチケットをダウンロードして使用できることを意味し、一"
-"部のプラグインによって支払い済みとして扱われる可能性があります。このボックス"
-"をチェックすると、支払い期限が到達してもこの注文は自動的に「期限切れ」にマー"
-"クされません。なぜなら、金額をどうにかして集めたいと思っていると予想されるた"
-"め、注文を自動的にキャンセルしたくないからです。"
+"このボックスをチェックすると、まだ支払いが完了していなくても、ほとんどの目的"
+"においてこの注文は支払い済み注文として動作します。これにより、イベント設定に"
+"関係なく顧客がすでにチケットをダウンロードして使用でき、一部のプラグインによ"
+"って支払い済みとして扱われる場合があります。これをチェックした場合、何らかの"
+"方法で金額を回収したいと考えているため注文が自動キャンセルされることはなく、"
+"支払い期限が到来してもこの注文は自動的に「期限切れ」としてマークされません。"
 
 #: pretix/control/forms/orders.py:94
 msgid "Overbook quota"
@@ -16376,7 +16370,7 @@ msgstr "注文の詳細が変更されました。"
 
 #: pretix/control/logdisplay.py:500
 msgid "The order has been marked as unpaid."
-msgstr "注文は未払いとしてマークされています。"
+msgstr "注文が未払いとしてマークされました。"
 
 #: pretix/control/logdisplay.py:501
 msgid "The order's secret has been changed."
@@ -16400,7 +16394,7 @@ msgstr "注文は期限切れとしてマークされました。"
 
 #: pretix/control/logdisplay.py:506 pretix/control/views/orders.py:1469
 msgid "The order has been marked as paid."
-msgstr "注文は支払い済みとマークされました。"
+msgstr "注文が支払い済みとしてマークされました。"
 
 #: pretix/control/logdisplay.py:507
 msgid "The cancellation request has been deleted."
@@ -17324,7 +17318,7 @@ msgstr "支払い{local_id}が失敗しました。"
 #: pretix/control/logdisplay.py:914
 #, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr "注文は支払い済みとしてマークされませんでした：{message}"
+msgstr "注文を支払い済みとしてマークできませんでした: {message}"
 
 #: pretix/control/logdisplay.py:915
 msgid "The order has been overpaid."
@@ -18419,7 +18413,7 @@ msgstr "結果"
 #: pretix/control/templates/pretixcontrol/order/index.html:432
 #, python-format
 msgid "Automatically marked not present: %(date)s"
-msgstr "自動的にマークされていません：%(date)s"
+msgstr "自動的に不参加とマーク済み: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:82
 #: pretix/control/templates/pretixcontrol/order/index.html:437
@@ -19229,9 +19223,9 @@ msgid ""
 "take manual action. However, you have currently turned off notifications for "
 "this event."
 msgstr ""
-"ユーザーが支払い済み注文のキャンセルを要求し、選択された決済方法などの理由で"
-"自動的に払い戻しができない場合、手動での対応が必要になります。ただし、このイ"
-"ベントの通知を現在オフにしています。"
+"ユーザーが支払い済み注文のキャンセルを要求し、選択された支払い方法などの理由"
+"により自動的に返金できない場合、手動による対応が必要になります。しかし、この"
+"イベントの通知は現在無効になっています。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:46
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
@@ -19566,10 +19560,10 @@ msgid ""
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
-"このイベントには、支払い済みとマークされていない<strong>完全支払い済み注文</"
-"strong>が含まれています。これは、支払いが到着した時点で枠が残っていなかったこ"
-"とが原因と考えられます。該当するケースを確認し、顧客への払い戻しまたは追加枠"
-"の作成を検討してください。"
+"このイベントには、支払いが到着した時点でクォータが残っていなかったため、支払"
+"い済みとしてマークされていない<strong>完全に支払い済みの注文</strong>が含まれ"
+"ています。個別に確認し、顧客への払い戻しまたはより多くの枠の確保を検討してく"
+"ださい。"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:79
 msgid "Show affected orders"
@@ -19758,9 +19752,9 @@ msgid ""
 "As long as the shop is in test mode, all orders that are created are marked "
 "as test orders and can be deleted again."
 msgstr ""
-"テスト注文を行いたい場合は、ショップのテストモードを有効にすることができま"
-"す。ショップがテストモードにある限り、作成されたすべての注文はテスト注文とし"
-"てマークされ、再度削除することができます。"
+"テスト注文を行いたい場合は、ショップのテストモードを有効にできます。ショップ"
+"がテストモード中の間、作成されるすべての注文はテスト注文としてマークされ、再"
+"度削除できます。"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:104
 msgid ""
@@ -21799,7 +21793,7 @@ msgstr "質問を編集"
 #: pretix/plugins/reports/exporters.py:397
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:23
 msgid "Paid"
-msgstr "支払済み"
+msgstr "支払い済み"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:66
 msgid "No matching answers found."
@@ -22548,7 +22542,7 @@ msgstr "拒絶"
 #: pretix/control/templates/pretixcontrol/order/index.html:58
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:37
 msgid "Mark as paid"
-msgstr "支払済みを記録する"
+msgstr "支払い済みとしてマーク"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:73
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:5
@@ -22953,7 +22947,7 @@ msgstr "カレンダーの招待"
 #: pretix/control/templates/pretixcontrol/order/pay.html:5
 #: pretix/control/templates/pretixcontrol/order/pay.html:9
 msgid "Mark order as paid"
-msgstr "注文を支払い済みにします"
+msgstr "注文を支払い済みとしてマーク"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
 msgid "Do you really want to create a manual payment for this order?"
@@ -22990,9 +22984,9 @@ msgid ""
 "products in the order are still available. If the order is pending payment, "
 "the expiry date will be reset."
 msgstr ""
-"注文を再度アクティブにすることで、そのキャンセルを取り消し、保留中または支払"
-"済みの注文に戻すことができます。これは、注文内のすべての商品がまだ利用可能で"
-"ある限りのみ可能です。注文が支払い保留中の場合、有効期限がリセットされます。"
+"注文を再有効化すると、キャンセルが取り消され、保留中または支払い済みの注文に"
+"戻ります。これは、注文内のすべての商品がまだ利用可能である限り可能です。注文"
+"が支払い保留中の場合、有効期限がリセットされます。"
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:34
 msgid "Reactivate"
@@ -23041,9 +23035,9 @@ msgid ""
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
 msgstr ""
-"自動払い戻しに選択した支払いについては、直ちに関連する決済事業者に払い戻し要"
-"求が送信されます。手動払い戻しは保留中の払い戻しとして作成され、実際に顧客へ"
-"の資金返金が完了した後で完了済みとしてマークできます。"
+"自動払い戻しに選択した支払いは、該当する決済プロバイダーに払い戻し要求が即座"
+"に通知されます。手動払い戻しは保留中の払い戻しとして作成され、実際に顧客に送"
+"金した後で完了済みとしてマークできます。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:32
 msgid "Refund to original payment method"
@@ -23218,7 +23212,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
 msgid "Modify orders"
-msgstr "支払い済みの注文"
+msgstr "注文を変更"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:12
 #, python-format
@@ -23653,7 +23647,7 @@ msgstr "フィルターを除去"
 #: pretix/control/templates/pretixcontrol/orders/index.html:145
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:207
 msgid "Order paid / total"
-msgstr "支払済の注文 / 合計"
+msgstr "支払い済みの注文 / 合計"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:176
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:109
@@ -25733,7 +25727,7 @@ msgstr "開始"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:176
 msgid "Show orders"
-msgstr "支払い済みの注文"
+msgstr "注文を表示"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:187
 msgctxt "subevent"
@@ -26781,11 +26775,11 @@ msgstr "選択されたチェックインが元に戻されました。"
 
 #: pretix/control/views/checkin.py:283
 msgid "The selected tickets have been marked as checked out."
-msgstr "選択されたチケットはチェックアウト済みとしてマークされました。"
+msgstr "選択されたチケットがチェックアウト済みとしてマークされました。"
 
 #: pretix/control/views/checkin.py:285
 msgid "The selected tickets have been marked as checked in."
-msgstr "選択されたチケットはチェックイン済みとしてマークされました。"
+msgstr "選択されたチケットがチェックイン済みとしてマークされました。"
 
 #: pretix/control/views/checkin.py:374
 msgid "The new check-in list has been created."
@@ -27375,10 +27369,10 @@ msgid ""
 "the domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
-"使用しようとしているドメインのSPFレコードが見つかりませんでした。これは、ほと"
-"んどのメールが拒否されるかスパムとしてマークされる可能性が非常に高いことを意"
-"味します。ドメインにSPFレコードを設定することを強く推奨します。これは、ドメイ"
-"ンを登録したプロバイダーのDNS設定で行うことができます。"
+"使用しようとしているドメインに設定されたSPFレコードが見つかりませんでした。こ"
+"れは、ほとんどのメールが拒否されるかスパムとしてマークされる可能性が非常に高"
+"いことを意味します。ドメインにSPFレコードを設定することを強く推奨します。これ"
+"は、ドメインを登録したプロバイダーのDNS設定から行えます。"
 
 #: pretix/control/views/mailsetup.py:207
 msgid ""
@@ -28658,7 +28652,7 @@ msgstr "新しい注文が入りました"
 
 #: pretix/plugins/autocheckin/models.py:37
 msgid "After order was paid"
-msgstr "支払い済みと表示された商品"
+msgstr "注文の支払い後"
 
 #: pretix/plugins/autocheckin/models.py:48
 msgid ""
@@ -28733,7 +28727,7 @@ msgstr "新しいチェックインルールを作成"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:32
 msgid "Payment methods"
-msgstr "支払い済みの注文"
+msgstr "支払い方法"
 
 #: pretix/plugins/autocheckin/views.py:119 pretix/plugins/sendmail/views.py:603
 msgid "Your rule has been created."
@@ -29613,8 +29607,9 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
-"%(date)s 日間、 %(cnt)s 件の注文に対する、合計 %(sum)s件の払戻し情報のエクス"
-"ポートファイルのダウンロードしようとしています。"
+"%(date)s 日間、 %(cnt)s 件の注文に対する、合計 "
+"%(sum)s件の払い戻し情報のエクスポートファイルのダウンロードしようとしています"
+"。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
@@ -29814,7 +29809,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:374
 msgctxt "tablehead"
 msgid "paid"
-msgstr "支払済み"
+msgstr "支払い済み"
 
 #: pretix/plugins/checkinlists/exporters.py:477
 msgid ""
@@ -34541,7 +34536,7 @@ msgstr "チケットの変更を確認してください。"
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:5
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:8
 msgid "Modify ticket"
-msgstr "支払い済みの注文"
+msgstr "チケットを変更"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
