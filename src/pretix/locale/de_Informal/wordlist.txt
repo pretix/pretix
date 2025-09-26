@@ -286,6 +286,7 @@ PayPal-Zahlungen
 PayPal-Zahlungs-ID
 PayU
 PCI-DSS-Formulare
+Peppol-Netzwerk
 Peppol-Teilnehmer-ID
 Peppol-Teilnehmer-IDs
 Personalisierung
