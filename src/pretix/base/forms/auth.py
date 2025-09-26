@@ -214,12 +214,14 @@ class PasswordRecoverForm(forms.Form):
     error_messages = {
         'pw_mismatch': _("Please enter the same password twice"),
     }
-    email = forms.EmailField(max_length=255,
-                             disabled=True,
-                             label=_("Your email address"),
-                             widget=forms.EmailInput(
-                                        attrs={'autocomplete': 'username'},
-                                    ))
+    email = forms.EmailField(
+        max_length=255,
+        disabled=True,
+        label=_("Your email address"),
+        widget=forms.EmailInput(
+            attrs={'autocomplete': 'username'},
+        ),
+    )
     password = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput(attrs={
@@ -325,4 +327,3 @@ class ConfirmationCodeForm(forms.Form):
         label='',
         widget=forms.NumberInput(attrs={'class': 'confirmation-code-input', 'inputmode': 'numeric', 'type': 'text'}),
     )
-

@@ -37,7 +37,6 @@ import json
 import logging
 import time
 from collections import defaultdict
-from hmac import compare_digest
 from urllib.parse import quote
 
 import webauthn
@@ -61,10 +60,12 @@ from django_otp.plugins.otp_totp.models import TOTPDevice
 from django_scopes import scopes_disabled
 from webauthn.helpers import generate_challenge, generate_user_handle
 
-from django.core.cache import cache
 from pretix.base.auth import get_auth_backends
 from pretix.base.forms.auth import ConfirmationCodeForm, ReauthForm
-from pretix.base.forms.user import User2FADeviceAddForm, UserEmailChangeForm, UserPasswordChangeForm, UserSettingsForm
+from pretix.base.forms.user import (
+    User2FADeviceAddForm, UserEmailChangeForm, UserPasswordChangeForm,
+    UserSettingsForm,
+)
 from pretix.base.models import (
     Event, LogEntry, NotificationSetting, U2FDevice, User, WebAuthnDevice,
 )
@@ -77,7 +78,6 @@ from pretix.control.permissions import (
 from pretix.control.views.auth import get_u2f_appid, get_webauthn_rp_id
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.u2f import websafe_encode
-from pretix.multidomain.urlreverse import build_absolute_uri
 
 REAL_DEVICE_TYPES = (TOTPDevice, WebAuthnDevice, U2FDevice)
 logger = logging.getLogger(__name__)
@@ -906,7 +906,10 @@ class UserEmailConfirmView(FormView):
         except PermissionDenied:
             return self.form_invalid(form)
         except BadRequest:
-            messages.error(self.request, _('Your email address could not be changed, because we were unable to verify your confirmation code. Please try again.'))
+            messages.error(self.request, _(
+                'Your email address could not be changed, because we were unable to '
+                'verify your confirmation code. Please try again.'
+            ))
             return redirect(reverse('control:user.settings', kwargs={}))
 
         msgs = []
