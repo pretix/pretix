@@ -12,6 +12,7 @@
         <p class="text-muted">
             {% trans "This changes the email address used to login to your account, as well as where we send email notifications." %}
         </p>
+        {% bootstrap_field form.old_email %}
         {% bootstrap_field form.new_email %}
         <p>
             {% trans "We will send a confirmation code to your new email address, which you need to enter in the next step to confirm the email address is correct." %}
