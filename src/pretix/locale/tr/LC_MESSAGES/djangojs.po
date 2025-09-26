@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:02+0000\n"
+"POT-Creation-Date: 2025-09-26 11:16+0000\n"
 "PO-Revision-Date: 2023-11-16 04:00+0000\n"
 "Last-Translator: Ramazan Sancar <ramazansancar4545@gmail.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -365,14 +365,14 @@ msgstr "Hiçbiri"
 msgid "close"
 msgstr "Kapalı"
 
-#: pretix/static/pretixbase/js/addressform.js:105
-#: pretix/static/pretixpresale/js/ui/main.js:509
+#: pretix/static/pretixbase/js/addressform.js:90
+#: pretix/static/pretixpresale/js/ui/main.js:519
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Sepetinizin süresi doldu"
 
-#: pretix/static/pretixbase/js/asynctask.js:12
+#: pretix/static/pretixbase/js/asynctask.js:13
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -384,7 +384,7 @@ msgstr ""
 "İsteğiniz sunucuda sıraya alındı ve şimdi işlenecek. Etkinliğinizin boyutuna "
 "bağlı olarak, bu birkaç dakika sürebilir."
 
-#: pretix/static/pretixbase/js/asynctask.js:16
+#: pretix/static/pretixbase/js/asynctask.js:17
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -394,7 +394,7 @@ msgstr ""
 "İsteğiniz sunucuda sıraya alındı ve şimdi işlenecek. Etkinliğinizin boyutuna "
 "bağlı olarak, bu birkaç dakika sürebilir."
 
-#: pretix/static/pretixbase/js/asynctask.js:20
+#: pretix/static/pretixbase/js/asynctask.js:21
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. If "
@@ -409,14 +409,14 @@ msgstr ""
 "uzun sürerse lütfen bizimle iletişime geçin veya tarayıcınıza geri dönün ve "
 "tekrar deneyin."
 
-#: pretix/static/pretixbase/js/asynctask.js:119
-#: pretix/static/pretixbase/js/asynctask.js:176
-#: pretix/static/pretixbase/js/asynctask.js:180
+#: pretix/static/pretixbase/js/asynctask.js:125
+#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:186
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "{Code} türünde bir hata oluştu."
 
-#: pretix/static/pretixbase/js/asynctask.js:122
+#: pretix/static/pretixbase/js/asynctask.js:128
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -424,25 +424,25 @@ msgstr ""
 "Şu anda sunucuya ulaşamıyoruz, ancak denemeye devam ediyoruz. Son hata kodu: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:156
+#: pretix/static/pretixbase/js/asynctask.js:162
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 #, fuzzy
 #| msgid "The request took to long. Please try again."
 msgid "The request took too long. Please try again."
 msgstr "İstek uzun sürdü. Lütfen tekrar deneyin."
 
-#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:188
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Şu anda sunucuya ulaşamıyoruz. Lütfen tekrar deneyin. Hata kodu: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:210
+#: pretix/static/pretixbase/js/asynctask.js:216
 msgid "We are processing your request …"
 msgstr "İsteğinizi işliyoruz…"
 
-#: pretix/static/pretixbase/js/asynctask.js:213
+#: pretix/static/pretixbase/js/asynctask.js:219
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -452,11 +452,11 @@ msgstr ""
 "sürerse, lütfen İnternet bağlantınızı kontrol edin ve ardından bu sayfayı "
 "tekrar yükleyin ve tekrar deneyin."
 
-#: pretix/static/pretixbase/js/asynctask.js:270
+#: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:325
+#: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
 msgstr "Mesajı kapat"
 
@@ -827,7 +827,7 @@ msgstr "% (para birimi) s% (fiyat) s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:554
+#: pretix/static/pretixpresale/js/ui/main.js:564
 msgid "Your local time:"
 msgstr ""
 
