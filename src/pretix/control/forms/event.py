@@ -857,6 +857,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_show_payments',
         'invoice_reissue_after_modify',
         'invoice_generate',
+        'invoice_period',
         'invoice_attendee_name',
         'invoice_event_location',
         'invoice_include_expire_date',
