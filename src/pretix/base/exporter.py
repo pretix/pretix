@@ -217,6 +217,7 @@ class ListExporter(BaseExporter):
             writer = csv.writer(output_file, **kwargs)
             total = 0
             counter = 0
+            rows_written = 0
             for line in self.iterate_list(form_data):
                 if isinstance(line, self.ProgressSetTotal):
                     total = line.total
@@ -230,12 +231,18 @@ class ListExporter(BaseExporter):
                     if counter % max(10, total // 100) == 0:
                         self.progress_callback(counter / total * 100)
                 writer.writerow(line)
+                rows_written += 1
+            
+            if rows_written <= 1:  # Only header or no rows
+                return None
+            
             return self.get_filename() + '.csv', 'text/csv', None
         else:
             output = io.StringIO()
             writer = csv.writer(output, **kwargs)
             total = 0
             counter = 0
+            rows_written = 0
             for line in self.iterate_list(form_data):
                 if isinstance(line, self.ProgressSetTotal):
                     total = line.total
@@ -249,6 +256,11 @@ class ListExporter(BaseExporter):
                     if counter % max(10, total // 100) == 0:
                         self.progress_callback(counter / total * 100)
                 writer.writerow(line)
+                rows_written += 1
+            
+            if rows_written <= 1:  # Only header or no rows
+                return None
+            
             return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode(self.get_csv_encoding(), errors='replace')
 
     def prepare_xlsx_sheet(self, ws):
@@ -264,6 +276,7 @@ class ListExporter(BaseExporter):
             pass
         total = 0
         counter = 0
+        rows_written = 0
         for i, line in enumerate(self.iterate_list(form_data)):
             if isinstance(line, self.ProgressSetTotal):
                 total = line.total
@@ -275,6 +288,10 @@ class ListExporter(BaseExporter):
                 counter += 1
                 if counter % max(10, total // 100) == 0:
                     self.progress_callback(counter / total * 100)
+            rows_written += 1
+
+        if rows_written <= 1:  # Only header or no rows
+            return None
 
         if output_file:
             wb.save(output_file)
