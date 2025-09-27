@@ -264,7 +264,10 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
 
     num_invoices = order.invoices.filter(is_cancellation=False).count()
     if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices and invoice_qualified(order):
-        generate_invoice(order)
+        try:
+            generate_invoice(order)
+        except Exception:
+            logger.exception("Could not generate invoice.")
 
 
 def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_pending: bool=None, user: User=None, auth=None):
@@ -312,7 +315,10 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
         if was_expired:
             num_invoices = order.invoices.filter(is_cancellation=False).count()
             if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices and invoice_qualified(order):
-                generate_invoice(order)
+                try:
+                    generate_invoice(order)
+                except Exception:
+                    logger.exception("Could not generate invoice.")
             order.create_transactions()
 
     with transaction.atomic():
@@ -397,13 +403,16 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
 
     if order.event.settings.get('invoice_generate') == 'True' and invoice_qualified(order):
         if not invoice:
-            invoice = generate_invoice(
-                order,
-                # send_mail will trigger PDF generation later
-                trigger_pdf=not transmit_invoice_mail
-            )
-            if transmit_invoice_task:
-                transmit_invoice.apply_async(args=(order.event_id, invoice.pk, False))
+            try:
+                invoice = generate_invoice(
+                    order,
+                    # send_mail will trigger PDF generation later
+                    trigger_pdf=not transmit_invoice_mail
+                )
+                if transmit_invoice_task:
+                    transmit_invoice.apply_async(args=(order.event_id, invoice.pk, False))
+            except Exception:
+                logger.exception("Could not generate invoice.")
 
     if send_mail:
         with language(order.locale, order.event.settings.region):
@@ -608,7 +617,10 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
             order.save(update_fields=['status', 'cancellation_date', 'total'])
 
             if cancel_invoice and i:
-                invoices.append(generate_invoice(order))
+                try:
+                    invoices.append(generate_invoice(order))
+                except Exception:
+                    logger.exception("Could not generate invoice.")
         else:
             order.status = Order.STATUS_CANCELED
             order.cancellation_date = now()
@@ -1306,13 +1318,16 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             )
         )
         if invoice_required:
-            invoice = generate_invoice(
-                order,
-                # send_mail will trigger PDF generation later
-                trigger_pdf=not transmit_invoice_mail
-            )
-            if transmit_invoice_task:
-                transmit_invoice.apply_async(args=(event.pk, invoice.pk, False))
+            try:
+                invoice = generate_invoice(
+                    order,
+                    # send_mail will trigger PDF generation later
+                    trigger_pdf=not transmit_invoice_mail
+                )
+                if transmit_invoice_task:
+                    transmit_invoice.apply_async(args=(event.pk, invoice.pk, False))
+            except Exception:
+                logger.exception("Could not generate invoice.")
 
     if order.email:
         if order.require_approval:
@@ -2701,7 +2716,10 @@ class OrderChangeManager:
             )
 
         if split_order.total != Decimal('0.00') and self.order.invoices.filter(is_cancellation=False).last():
-            generate_invoice(split_order)
+            try:
+                generate_invoice(split_order)
+            except Exception:
+                logger.exception("Could not generate invoice.")
 
         order_split.send(sender=self.order.event, original=self.order, split_order=split_order)
         return split_order
@@ -2814,7 +2832,10 @@ class OrderChangeManager:
                 if invoice_should_be_generated_now:
                     if i and not i.canceled:
                         self._invoices.append(generate_cancellation(i))
-                    self._invoices.append(generate_invoice(self.order))
+                    try:
+                        self._invoices.append(generate_invoice(self.order))
+                    except Exception:
+                        logger.exception("Could not generate invoice.")
                 elif invoice_should_be_generated_later:
                     self.order.invoice_dirty = True
                     self.order.save(update_fields=["invoice_dirty"])
@@ -3246,8 +3267,11 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
         has_active_invoice = i and not i.canceled
 
         if has_active_invoice and order.total != oldtotal:
-            generate_cancellation(i)
-            generate_invoice(order)
+            try:
+                generate_cancellation(i)
+                generate_invoice(order)
+            except Exception:
+                logger.exception("Could not generate invoice.")
             new_invoice_created = True
 
         elif (not has_active_invoice or order.invoice_dirty) and invoice_qualified(order):
@@ -3255,13 +3279,16 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
                 order.event.settings.get('invoice_generate') == 'paid' and
                 new_payment.payment_provider.requires_invoice_immediately
             ):
-                if has_active_invoice:
-                    generate_cancellation(i)
-                i = generate_invoice(order)
-                new_invoice_created = True
-                order.log_action('pretix.event.order.invoice.generated', data={
-                    'invoice': i.pk
-                })
+                try:
+                    if has_active_invoice:
+                        generate_cancellation(i)
+                    i = generate_invoice(order)
+                    new_invoice_created = True
+                    order.log_action('pretix.event.order.invoice.generated', data={
+                        'invoice': i.pk
+                    })
+                except Exception:
+                    logger.exception("Could not generate invoice.")
 
     order.create_transactions()
     return old_fee, new_fee, fee, new_payment, new_invoice_created
