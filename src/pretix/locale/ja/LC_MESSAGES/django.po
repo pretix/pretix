@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-26 11:10+0000\n"
+"PO-Revision-Date: 2025-09-27 16:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -2589,7 +2589,7 @@ msgstr "注文コメント"
 
 #: pretix/base/exporters/orderlist.py:631
 msgid "Add-on to position ID"
-msgstr "ポジションIDの追加部分"
+msgstr "ポジションIDのアドオン"
 
 #: pretix/base/exporters/orderlist.py:661
 msgctxt "address"
@@ -4334,8 +4334,8 @@ msgid ""
 "there is always exactly one matching add-on ticket. Ambiguous scans will be "
 "rejected.."
 msgstr ""
-"スキャンは、チェックインリストが常に正確に1つの追加チケットに一致するように構"
-"成されている場合にのみ可能です。曖昧なスキャンは拒否されます。"
+"スキャンは、チェックインリストが常に正確に1つの一致するアドオンチケットが存在"
+"するように構成されている場合にのみ可能です。曖昧なスキャンは拒否されます。"
 
 #: pretix/base/models/checkin.py:85 pretix/control/navigation.py:652
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
@@ -4607,7 +4607,7 @@ msgstr "特定の製品に申し込む"
 
 #: pretix/base/models/discount.py:110
 msgid "Count add-on products"
-msgstr "アドオン製品を数えます"
+msgstr "アドオン製品をカウント"
 
 #: pretix/base/models/discount.py:111 pretix/base/models/discount.py:166
 msgid "Discounts never apply to bundled products"
@@ -4679,7 +4679,7 @@ msgstr ""
 
 #: pretix/base/models/discount.py:165
 msgid "Apply to add-on products"
-msgstr "アドオン製品に申し込む"
+msgstr "アドオン製品に適用"
 
 #: pretix/base/models/discount.py:171
 msgid ""
@@ -4688,10 +4688,10 @@ msgid ""
 "to e.g. unlock a hidden product or gain access to sold-out quota will still "
 "receive the discount."
 msgstr ""
-"このオプションがチェックされている場合、すでにバウチャーを使用して割引を受け"
-"た商品には割引が適用されません。ただし、バウチャーを使用して隠し商品を解除し"
-"たり、完売したクォータにアクセスするために使用する商品には引き続き割引が適用"
-"されます。"
+"このオプションがチェックされている場合、既にバウチャーによって割引を受けた製"
+"品は割引されません。ただし、隠された製品のロック解除や売り切れクォータへのア"
+"クセス権取得などの目的でのみバウチャーを使用する製品については、引き続き割引"
+"が適用されます。"
 
 #: pretix/base/models/discount.py:177
 msgctxt "subevent"
@@ -4707,9 +4707,8 @@ msgstr "利用可能な開催日：終了日"
 msgid ""
 "You can either set a minimum number of matching products or a minimum value, "
 "not both."
-msgstr ""
-"一致する商品の最小数を設定するか、最小値を設定するかのどちらかを選択できます"
-"が、両方を選択することはできません。"
+msgstr "最低一致製品数または最低価格のいずれかを設定できますが、両方は設定できません"
+"。"
 
 #: pretix/base/models/discount.py:219
 msgid ""
@@ -4737,9 +4736,8 @@ msgstr ""
 msgid ""
 "You cannot apply the discount to a different set of products if the discount "
 "is only valid for bookings of different dates."
-msgstr ""
-"もし割引が異なる日付の予約にのみ有効な場合、その割引を異なる商品セットに適用"
-"することはできません。"
+msgstr "異なる日程の予約限定の割引では、それとは異なる製品セットに割引を適用すること"
+"はできません。"
 
 #: pretix/base/models/event.py:88
 msgid "The end of the presale period has to be later than its start."
@@ -4783,9 +4781,8 @@ msgstr ""
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
-msgstr ""
-"任意です。この日付以降に商品は販売されません。この値を設定しない場合、前売り"
-"はイベントの終了日後に終了します。"
+msgstr "任意。この日付以降は製品の販売が停止されます。この値を設定しない場合、前売り"
+"販売はイベントの終了日後に終了します。"
 
 #: pretix/base/models/event.py:635 pretix/base/models/event.py:1540
 #: pretix/control/forms/subevents.py:94
@@ -5143,8 +5140,8 @@ msgid ""
 "their own. They can only be bought in combination with a product that has "
 "this category configured as a possible source for add-ons."
 msgstr ""
-"選択された場合、このカテゴリに属する製品は単独で販売されません。このカテゴリ"
-"をアドオンの可能なソースとして構成した製品との組み合わせでのみ購入できます。"
+"選択すると、このカテゴリに属する製品は単独では販売されません。このカテゴリを"
+"アドオンの可能なソースとして設定した製品と組み合わせた場合のみ購入できます。"
 
 #: pretix/base/models/items.py:114 pretix/base/models/items.py:159
 #: pretix/control/forms/item.py:97
@@ -5178,7 +5175,7 @@ msgstr "クロスセリング条件"
 
 #: pretix/base/models/items.py:137
 msgid "Cross-selling condition products"
-msgstr "クロスセリングの関連商品"
+msgstr "クロスセリング条件製品"
 
 #: pretix/base/models/items.py:143
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
@@ -5298,10 +5295,9 @@ msgid ""
 "have without the free price option. This will be ignored if a voucher is "
 "used that lowers the price."
 msgstr ""
-"この価格は、入力フィールドのデフォルト値として使用されます。ユーザーはより低"
-"い値を選択することができますが、無料価格オプションなしでこの商品の価格が下が"
-"ることはありません。また、価格を下げるバウチャーが使用された場合は無視されま"
-"す。"
+"この価格は入力フィールドのデフォルト値として使用されます。ユーザーはより低い"
+"値を選択できますが、自由価格オプションなしでこの製品が持つ価格を下回ることは"
+"できません。価格を下げるバウチャーが使用された場合、この設定は無視されます。"
 
 #: pretix/base/models/items.py:527
 msgid "Whether or not buying this product allows a person to enter your event"
@@ -5772,7 +5768,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1477
 msgid "Allow the same product to be selected multiple times"
-msgstr "同じ商品を複数回選択できるようにする"
+msgstr "同じ製品を複数回選択することを許可"
 
 #: pretix/base/models/items.py:1496
 msgid "The add-on's category must belong to the same event as the item."
@@ -6075,9 +6071,9 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
-"これを有効にすると、イベントカレンダーでイベントの有効性を判定する際、この"
-"クォータが無視されます。これは例えば、各イベントに追加されているが、イベント"
-"が売り切れとして表示されることを妨げるべきではない商品などに有効です。"
+"これを有効にすると、イベントカレンダーでイベントの空き状況を判定する際にこの"
+"クォータは無視されます。これは例えば、各イベントに追加されるグッズなどで、イ"
+"ベントが売り切れとして表示されることを妨げるべきでない場合に便利です。"
 
 #: pretix/base/models/items.py:2100
 msgid "Close this quota permanently once it is sold out"
@@ -6312,7 +6308,7 @@ msgstr "この注文はまだイベント主催者によって承認されてい
 #: pretix/base/models/orders.py:1060
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
-msgstr "注文した商品「{item}」はもう利用できません。"
+msgstr "注文された製品「{item}」は利用できません。"
 
 #: pretix/base/models/orders.py:1061
 #, python-brace-format
@@ -6746,7 +6742,7 @@ msgstr "税金免除（理由なし）"
 #: pretix/base/models/tax.py:177
 msgctxt "tax_code"
 msgid "Zero-rated goods"
-msgstr "ゼロ税率の商品"
+msgstr "ゼロ税率商品"
 
 #: pretix/base/models/tax.py:180
 msgctxt "tax_code"
@@ -6756,8 +6752,8 @@ msgstr "無料の輸出品のため、消費税やVATは課税されません"
 #: pretix/base/models/tax.py:183
 msgctxt "tax_code"
 msgid "VAT exempt for EEA intra-community supply of goods and services"
-msgstr ""
-"EEA（欧州経済領域）内での商品やサービスの国内供給は、VAT(付加価値税）が免除"
+msgstr "EEA（欧州経済領域）域内事業者間取引における商品・サービス供給のVAT(付加価値税"
+"）免税"
 
 #: pretix/base/models/tax.py:187
 msgid "Special cases"
@@ -7004,10 +7000,10 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
-"もし複数に設定されている場合、バウチャーは初回使用時にこの数の商品と引き換え"
-"る必要があります。後の使用では、より少ない数の商品にも使用できます。ただし、"
-"これは一部の場合において、例えばキャンセルの場合には、合計の使用回数がこの制"
-"限よりも少なくなることを意味します。"
+"複数（1を超える値）に設定した場合、バウチャーは初回使用時にこの数の製品と引き"
+"換える必要があります。その後の使用では、より少ない数の製品にも使用できます。"
+"ただし、キャンセルなどの場合には、合計使用回数がこの制限を下回ることがありま"
+"す。"
 
 #: pretix/base/models/vouchers.py:217
 msgid ""
@@ -7082,17 +7078,15 @@ msgstr "異なるイベントに属するクォータを選択することはで
 
 #: pretix/base/models/vouchers.py:344
 msgid "You cannot select a quota and a specific product at the same time."
-msgstr "特定の商品とクォータを同時に選択することはできません。"
+msgstr "クォータと特定の製品を同時に選択することはできません。"
 
 #: pretix/base/models/vouchers.py:347
 msgid ""
 "You cannot select a product that is only available as an add-on product or "
 "as part of a bundle, since vouchers cannot be applied to add-on products or "
 "bundled products."
-msgstr ""
-"追加商品またはバンドル商品としてのみ利用可能な商品を選択することはできませ"
-"ん。なぜなら、バウチャーは追加商品やバンドル商品に適用することができないから"
-"です。"
+msgstr "アドオン製品またはバンドルの一部としてのみ利用可能な製品は選択できません。バ"
+"ウチャーはアドオン製品やバンドル製品には適用できないためです。"
 
 #: pretix/base/models/vouchers.py:351
 msgid "You cannot select a product that belongs to a different event."
@@ -7118,9 +7112,8 @@ msgstr "現在、アドオン製品のためのバウチャーを作成するこ
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
-msgstr ""
-"このバウチャーでチケットを予約する場合は、特定の商品やクォータを選択する必要"
-"があります。"
+msgstr "このバウチャーでチケットを予約する場合は、特定の製品またはクォータを選択する"
+"必要があります。"
 
 #: pretix/base/models/vouchers.py:370
 #, python-format
@@ -7154,9 +7147,8 @@ msgstr ""
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
-msgstr ""
-"選択した商品やクォータが売り切れまたは完全に予約済みのため、クォータをブロッ"
-"クするバウチャーを作成することはできません。"
+msgstr "選択した製品・クォータが現在売り切れまたは完全に予約済みのため、クォータをブ"
+"ロックするバウチャーを作成することはできません。"
 
 #: pretix/base/models/vouchers.py:507
 #, python-brace-format
@@ -7553,7 +7545,7 @@ msgstr "この決済プロバイダーは自動払い戻しに対応していま
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
-msgstr "支払いは必要ありません。この注文には無料の商品のみが含まれています。"
+msgstr "この注文は無料の製品のみが含まれているため、支払いは不要です。"
 
 #: pretix/base/payment.py:1134
 msgid "Free of charge"
@@ -7696,7 +7688,7 @@ msgstr "製品の説明"
 #: pretix/base/pdf.py:134 pretix/base/services/tickets.py:99
 #: pretix/control/views/event.py:889 pretix/control/views/pdf.py:95
 msgid "Sample product description"
-msgstr "サンプル商品説明"
+msgstr "サンプル製品説明"
 
 #: pretix/base/pdf.py:138
 msgid "Product name and variation"
@@ -7712,7 +7704,7 @@ msgstr "製品のバリエーションの説明"
 
 #: pretix/base/pdf.py:147
 msgid "Sample product variation description"
-msgstr "サンプル商品のバリエーション説明"
+msgstr "サンプル製品バリエーション説明"
 
 #: pretix/base/pdf.py:154
 msgid "Ticket category"
@@ -7724,11 +7716,11 @@ msgstr "123.45 EUR"
 
 #: pretix/base/pdf.py:165
 msgid "Price including bundled products"
-msgstr "バンドル商品を含む価格"
+msgstr "バンドル製品を含む価格"
 
 #: pretix/base/pdf.py:174
 msgid "Price including add-ons and bundled products"
-msgstr "アドオンおよびバンドル商品を含む価格"
+msgstr "アドオンおよびバンドル製品を含む価格"
 
 #: pretix/base/pdf.py:184 pretix/base/pdf.py:342
 #: pretix/base/services/invoices.py:487
@@ -8172,7 +8164,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:105 pretix/presale/views/cart.py:262
 msgid "You did not select any products."
-msgstr "選択した商品がありません。"
+msgstr "製品が選択されていません。"
 
 #: pretix/base/services/cart.py:106
 msgid "Unknown cart position."
@@ -8185,7 +8177,7 @@ msgstr "日付は指定されていません。"
 
 #: pretix/base/services/cart.py:108 pretix/base/services/orders.py:192
 msgid "You selected a product which is not available for sale."
-msgstr "選択した商品は販売されていません。"
+msgstr "販売されていない製品が選択されています。"
 
 #: pretix/base/services/cart.py:110
 msgid ""
@@ -8232,17 +8224,14 @@ msgstr[0] "1つの注文には %s を超えるアイテムを選択すること�
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] ""
-"商品 %(product)sについて、 %(max)s 個を超えるアイテムを選択することはできませ"
-"ん。"
+msgstr[0] "製品%(product)sは%(max)s個を超えて選択することはできません。"
 
 #: pretix/base/services/cart.py:136 pretix/base/services/orders.py:1603
 #, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] ""
-"商品 %(product)sについて、最低でも %(min)s 件のアイテムを選択してください。"
+msgstr[0] "製品%(product)sは最低%(min)s個選択する必要があります。"
 
 #: pretix/base/services/cart.py:141
 #, python-format
@@ -8364,9 +8353,8 @@ msgstr ""
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
-msgstr ""
-"このバウチャーはすでに使用されています。別の商品に使用する場合は、関連する行"
-"をカートから削除してください。"
+msgstr "このバウチャーコードは既に使用されています。別の製品に使用したい場合は、関連"
+"する行をカートから削除してください。"
 
 #: pretix/base/services/cart.py:182
 msgid "This voucher is expired."
@@ -8374,7 +8362,7 @@ msgstr "このバウチャーは期限切れです。"
 
 #: pretix/base/services/cart.py:183
 msgid "This voucher is not valid for this product."
-msgstr "このバウチャーはこの商品には有効ではありません。"
+msgstr "このバウチャーはこの製品には有効ではありません。"
 
 #: pretix/base/services/cart.py:184
 msgid "This voucher is not valid for this seat."
@@ -8392,7 +8380,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:191
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr "ご利用いただけるバウチャーは、現在販売されていない商品に有効です。"
+msgstr "お客様のバウチャーは現在販売されていない製品に対して有効です。"
 
 #: pretix/base/services/cart.py:192
 msgctxt "subevent"
@@ -8401,7 +8389,7 @@ msgstr "このバウチャーはこのイベント日には有効ではありま
 
 #: pretix/base/services/cart.py:193
 msgid "You need a valid voucher code to order this product."
-msgstr "この商品を注文するには有効なバウチャーコードが必要です。"
+msgstr "この製品を注文するには有効なバウチャーコードが必要です。"
 
 #: pretix/base/services/cart.py:194
 msgctxt "subevent"
@@ -8806,14 +8794,16 @@ msgstr "カレンダーの招待"
 msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
-msgstr "選択した商品「{product}」にはメンバーシップが必要ありません。"
+msgstr "製品「{product}」にメンバーシップを選択しましたが、この製品はメンバーシップを"
+"必要としません。"
 
 #: pretix/base/services/memberships.py:116
 #, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
-msgstr "選択した商品は「{product}」ですが、有効なメンバーシップが必要です。"
+msgstr "製品「{product}」を選択しましたが、この製品はアクティブなメンバーシップの選択"
+"が必要です。"
 
 #: pretix/base/services/memberships.py:149
 msgid ""
@@ -9032,9 +9022,8 @@ msgstr ""
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
-msgstr ""
-"お客様のカート内の商品の1つに使用されたバウチャーコードは既に多く使用されてい"
-"ます。私たちはカート内の商品の価格を調整しました。"
+msgstr "カートの商品の一つに使用されているバウチャーコードは既に使用回数を超えていま"
+"す。カート内の商品価格を調整しました。"
 
 #: pretix/base/services/orders.py:175
 msgid ""
@@ -9089,7 +9078,7 @@ msgstr ""
 
 #: pretix/base/services/orders.py:207
 msgid "Paid products not supported without a valid currency."
-msgstr "有効な通貨がないと、有料商品はサポートされません。"
+msgstr "有効な通貨がない場合、有料製品はサポートされません。"
 
 #: pretix/base/services/orders.py:223
 msgid "The order was not canceled."
@@ -9435,7 +9424,7 @@ msgstr ""
 
 #: pretix/base/settings.py:192
 msgid "Activate re-usable media"
-msgstr "再利用可能なメディアをアクティブにします"
+msgstr "再利用可能メディアを有効化"
 
 #: pretix/base/settings.py:193
 msgid ""
@@ -9731,15 +9720,13 @@ msgstr "請求書が既に部分的に支払われている場合、このオプ
 
 #: pretix/base/settings.py:641
 msgid "Show free products on invoices"
-msgstr "請求書に無料商品を表示"
+msgstr "請求書に無料製品を表示"
 
 #: pretix/base/settings.py:642
 msgid ""
 "Note that invoices will never be generated for orders that contain only free "
 "products."
-msgstr ""
-"無料の商品のみを含む注文については、請求書は発行されませんことに注意してくだ"
-"さい。"
+msgstr "無料製品のみを含む注文については請求書は生成されませんので、ご注意ください。"
 
 #: pretix/base/settings.py:652
 msgid "Show expiration date of order"
@@ -9769,7 +9756,7 @@ msgstr "請求書を連番で生成"
 
 #: pretix/base/settings.py:676
 msgid "If deactivated, the order code will be used in the invoice number."
-msgstr "非アクティブ化された場合、注文コードは請求書番号に使用されます。"
+msgstr "無効化されている場合、請求書番号に注文コードが使用されます。"
 
 #: pretix/base/settings.py:685
 msgid "Invoice number prefix"
@@ -9839,8 +9826,7 @@ msgstr "ユーザーのカート内のアイテムがユーザーによって予
 #: pretix/base/settings.py:808
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
-msgstr ""
-"商品がカートに追加されたら直接チェックアウトにリダイレクトしてください。"
+msgstr "製品がカートに追加された後、チェックアウトに直接リダイレクトする。"
 
 #: pretix/base/settings.py:817
 msgid "End of presale text"
@@ -9915,10 +9901,9 @@ msgid ""
 "some countries by civil law. This will not effect the last date of payments "
 "configured below."
 msgstr ""
-"もしもこれがアクティブになっており、注文の支払い期日が土曜日または日曜日に終"
-"了する場合、それは代わりに翌月曜日に移動されます。これは一部の国で民法によっ"
-"て必要とされています。これは以下で設定された支払いの最終日に影響を与えませ"
-"ん。"
+"もしもこれが有効化されており、注文の支払い期日が土曜日または日曜日に終了する"
+"場合、それは代わりに翌月曜日に移動されます。これは一部の国で民法によって必要"
+"とされています。これは以下で設定された支払いの最終日に影響を与えません。"
 
 #: pretix/base/settings.py:910
 msgid "Payment term in minutes"
@@ -10283,7 +10268,7 @@ msgstr "無効にすると、イベントの開始日と終了日が日中の時
 
 #: pretix/base/settings.py:1389
 msgid "Hide all products that are sold out"
-msgstr "全ての売り切れ商品を非表示にしてください"
+msgstr "売り切れの製品をすべて非表示にする"
 
 #: pretix/base/settings.py:1399 pretix/control/forms/event.py:1691
 msgid "Publicly show how many tickets of a certain type are still available."
@@ -10406,7 +10391,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1539
 msgid "Maximum number of entries per email address for the same product"
-msgstr "同一商品に対するメールアドレス当たりの最大登録件数"
+msgstr "同じ製品に対する1つのメールアドレスあたりの最大エントリー数"
 
 #: pretix/base/settings.py:1543
 msgid ""
@@ -10416,10 +10401,10 @@ msgid ""
 "if they want more than one ticket, as every entry only grants one single "
 "ticket at a time."
 msgstr ""
-"上限を増やすことで、顧客は同一の固有のメールアドレスを使用して特定の商品に対"
-"して複数のチケットを申請できます。ただし、この設定に関係なく、複数のチケット"
-"が必要な場合は空席待ちリストフォームを複数回記入する必要があります。各登録に"
-"つき一度に1枚のチケットのみが付与されるためです。"
+"上限を増やすことで、顧客は同一の固有メールアドレスを使用して特定の製品に対し"
+"て複数のチケットを申請できます。ただし、この設定に関係なく、複数のチケットが"
+"必要な場合は空席待ちリストフォームを複数回記入する必要があります。各登録につ"
+"き一度に1枚のチケットのみが付与されるためです。"
 
 #: pretix/base/settings.py:1555
 msgid "Show number of check-ins to customer"
@@ -10467,7 +10452,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1591
 msgid "Generate tickets for add-on products and bundled products"
-msgstr "追加製品やバンドル製品のチケットを生成します"
+msgstr "アドオン製品とバンドル製品のチケットを生成"
 
 #: pretix/base/settings.py:1592
 msgid ""
@@ -10489,8 +10474,8 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
-"無効にした場合、チケットは商品設定で「入場券」としてマークされた商品に対して"
-"のみ発行されます。各商品で個別にチケット発行を無効にすることも可能です。"
+"オフにすると、製品設定で「入場券」としてマークされた製品に対してのみチケット"
+"が発行されます。各製品で個別にチケット発行をオフにすることもできます。"
 
 #: pretix/base/settings.py:1618
 msgid "Generate tickets for pending orders"
@@ -10649,7 +10634,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1774
 msgid "Customers can change the variation of the products they purchased"
-msgstr "お客様は購入した商品のバリエーションを変更することができます"
+msgstr "顧客は購入した製品のバリエーションを変更できます"
 
 #: pretix/base/settings.py:1783
 msgid "Customers can change their selected add-on products"
@@ -11145,10 +11130,10 @@ msgid ""
 msgstr ""
 "こんにちは、\n"
 "\n"
-"{event}の注文が完了しました。\n"
-"無料の商品のみを注文したため、支払いは必要ありません。\n"
+"{event}のご注文が完了しました。無料製品のみのご注文のため、\n"
+"お支払いは不要です。\n"
 "\n"
-"注文の詳細の変更と確認は、以下のURLをご覧ください。\n"
+"注文の詳細の変更やステータス確認は、以下のURLから行えます：\n"
 "{url}\n"
 "\n"
 "よろしくお願いいたします。\n"
@@ -11172,10 +11157,10 @@ msgstr ""
 "こんにちは\n"
 "\n"
 "{event}のご注文を正常に受け付けました。\n"
-"イベント主催者の承認が必要な商品をご注文されましたので、\n"
+"イベント主催者の承認が必要な製品をご注文されましたので、\n"
 "次回のメールまでしばらくお待ちください。\n"
 "\n"
-"ご注文の詳細変更および状況確認は以下でご確認いただけます：\n"
+"ご注文の詳細変更およびステータス確認は以下でご確認いただけます：\n"
 "{url}\n"
 "\n"
 "よろしくお願いいたします\n"
@@ -11669,10 +11654,9 @@ msgstr ""
 "こんにちは、\n"
 "\n"
 "{event}のご注文を承認し、当イベントへのご参加を心よりお待ちしております。無料"
-"の商品のみをご注文いただいたため、お支払いは必要ありません。\n"
+"の製品のみをご注文いただいたため、お支払いは必要ありません。\n"
 "\n"
-"ご注文の詳細を変更したり、ご注文の状況をご確認いただくには、以下のURLからご確"
-"認いただけます。\n"
+"注文の詳細変更やステータス確認は以下のURLから行えます：\n"
 "\n"
 "{url}\n"
 "\n"
@@ -11815,7 +11799,7 @@ msgstr ""
 #: pretix/base/settings.py:2756
 #, python-brace-format
 msgid "Activate your account at {organizer}"
-msgstr "{organizer}でアカウントをアクティブにする"
+msgstr "{organizer}でアカウントを有効化"
 
 #: pretix/base/settings.py:2760
 #, python-brace-format
@@ -13178,7 +13162,7 @@ msgstr "製品バリエーション「{product} – {variation}」が提供可�
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
-msgstr "商品バリエーション \"{product} – {variation}\" が提供不能になりました"
+msgstr "製品バリエーション「{product} – {variation}」が利用不可になります"
 
 #: pretix/base/timeline.py:351
 #, python-brace-format
@@ -14215,7 +14199,7 @@ msgstr "有効"
 #: pretix/control/forms/filter.py:1530
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:44
 msgid "not yet activated"
-msgstr "まだアクティブ化されていません"
+msgstr "まだ有効化されていません"
 
 #: pretix/control/forms/filter.py:1534
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:110
@@ -14353,7 +14337,7 @@ msgstr "バウチャーを検索"
 #: pretix/control/views/vouchers.py:132
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr "クォータ”{quota}”にある任意の商品"
+msgstr "クォータ「{quota}」内のすべての製品"
 
 #: pretix/control/forms/filter.py:2312
 msgid "Refund status"
@@ -14763,7 +14747,7 @@ msgstr "カテゴリーなし"
 
 #: pretix/control/forms/item.py:410
 msgid "Copy product information"
-msgstr "商品情報のコピー"
+msgstr "製品情報をコピー"
 
 #: pretix/control/forms/item.py:419
 msgid "No taxation"
@@ -14923,15 +14907,14 @@ msgstr "アドオン"
 
 #: pretix/control/forms/item.py:1110
 msgid "You added the same add-on category twice"
-msgstr "同じアドオンカテゴリーを2回追加しました"
+msgstr "同じアドオンカテゴリを2回追加しました"
 
 #: pretix/control/forms/item.py:1155
 msgid ""
 "Be aware that setting a minimal number makes it impossible to buy this "
 "product if all available add-ons are sold out."
-msgstr ""
-"最小数を設定すると、すべての利用可能なアドオンが売り切れの場合、この製品を購"
-"入することができなくなりますので、ご注意ください。"
+msgstr "最小数を設定すると、利用可能なアドオンがすべて売り切れた場合、この製品を購入"
+"できなくなることにご注意ください。"
 
 #: pretix/control/forms/item.py:1162
 msgid "Bundled products"
@@ -14995,9 +14978,8 @@ msgstr "一般的にポート465で有効です。"
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
-msgstr ""
-"SSLとSTARTTLSのセキュリティをそれぞれアクティブにすることはできますが、同時に"
-"両方をアクティブにすることはできません。"
+msgstr "SSLまたはSTARTTLSセキュリティのいずれかを有効化できますが、両方を同時に有効化"
+"することはできません。"
 
 #: pretix/control/forms/mailsetup.py:95 pretix/control/forms/mailsetup.py:100
 msgid ""
@@ -15266,7 +15248,8 @@ msgstr "メンバーシップ"
 
 #: pretix/control/forms/orders.py:356
 msgid "Including taxes, if any. Keep empty for the product's default price"
-msgstr "税金を含めると、商品のデフォルト価格になります"
+msgstr "税込み価格（該当する場合）。製品のデフォルト価格の場合は空欄のままにしてくだ"
+"さい"
 
 #: pretix/control/forms/orders.py:470 pretix/control/forms/orders.py:474
 #: pretix/control/forms/orders.py:502 pretix/control/forms/orders.py:544
@@ -15742,11 +15725,11 @@ msgid ""
 "will grant the other organizer access to cryptographic key material required "
 "to interact with the media type."
 msgstr ""
-"これは、他の主催者が共有システムに参加するために必要です。例えば、NFC支払い"
-"チップなどのシステムに参加するために必要です。このオプションは信頼できる主催"
-"者にのみ使用すべきです。なぜなら（アクティブ化されたメディアタイプに依存し"
-"て）、これにより他の主催者がメディアタイプとやり取りするために必要な暗号鍵素"
-"材にアクセスできるようになるからです。"
+"これは、他の主催者が共有システムに参加するために必要です。例えば、NFC支払いチ"
+"ップなどのシステムに参加するために必要です。このオプションは信頼できる主催者"
+"にのみ使用すべきです。なぜなら（有効化されたメディアタイプに依存して）、これ"
+"により他の主催者がメディアタイプとやり取りするために必要な暗号鍵素材にアクセ"
+"スできるようになるからです。"
 
 #: pretix/control/forms/organizer.py:1168
 msgid "The selected organizer does not exist or cannot be invited."
@@ -15872,9 +15855,8 @@ msgstr "選択された製品は無効です。"
 msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
-msgstr ""
-"そのバウチャーは非表示商品にのみ適用されますが、それを表示するように選択して"
-"いません。"
+msgstr "バウチャーは非表示製品のみに一致しますが、それらを表示する設定が選択されてい"
+"ません。"
 
 #: pretix/control/forms/vouchers.py:271
 msgid "Codes"
@@ -16406,7 +16388,7 @@ msgstr "注文が払い戻しされました。"
 
 #: pretix/control/logdisplay.py:509 pretix/control/views/orders.py:1886
 msgid "The order has been reactivated."
-msgstr "注文が再度アクティブ化されました。"
+msgstr "注文が再有効化されました。"
 
 #: pretix/control/logdisplay.py:510
 msgid "The order has been created."
@@ -19250,9 +19232,8 @@ msgstr ""
 msgid ""
 "It is possible to switch to a different variation of the same product, but "
 "not to an entirely different product (except for add-on products)."
-msgstr ""
-"同じ製品の異なるバリエーションに切り替えることは可能ですが、完全に異なる製品"
-"に切り替えることはできません（アドオン製品を除く）。"
+msgstr "同じ製品の異なるバリエーションに切り替えることは可能ですが、まったく異なる製"
+"品（アドオン製品を除く）に切り替えることはできません。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:62
 msgid ""
@@ -19275,17 +19256,15 @@ msgstr ""
 msgid ""
 "If an add-on product is newly added, the system currently does not validate "
 "if there are required questions or fields that need to be filled out."
-msgstr ""
-"新しいアドオン製品が追加された場合、現在のシステムは必須の質問や入力フィール"
-"ドが埋められているかどうかを検証しません。"
+msgstr "アドオン製品が新しく追加された場合、システムは現在、記入が必要な必須の質問や"
+"フィールドがあるかどうかを検証しません。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:65
 msgid ""
 "Customers currently cannot switch to a product variation or add an add-on "
 "product that requires them to use a voucher or membership."
-msgstr ""
-"現在、顧客は製品のバリエーションを切り替えたり、バウチャーやメンバーシップを"
-"使用する必要があるアドオン製品を追加することができません。"
+msgstr "顧客は現在、バウチャーやメンバーシップの使用を必要とする製品バリエーションに"
+"切り替えたり、アドオン製品を追加したりすることはできません。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:66
 msgid ""
@@ -20147,9 +20126,8 @@ msgid ""
 "You can scroll down and create your first ticket products quickly, or you "
 "can use the navigation on the left to modify the settings of your event in "
 "much more detail."
-msgstr ""
-"すばやく最初のチケット商品を作成するためにスクロールダウンするか、左側のナビ"
-"ゲーションを使用してイベントの設定を詳細に変更することができます。"
+msgstr "下にスクロールして最初のチケット製品を素早く作成するか、左側のナビゲーション"
+"を使用してイベントの設定をより詳細に変更することができます。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:36
 msgid "Create ticket types"
@@ -20337,7 +20315,7 @@ msgstr "表示"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:244
 msgid "Product list"
-msgstr "商品リスト"
+msgstr "製品リスト"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:253
 #: pretix/control/templates/pretixcontrol/event/settings.html:389
@@ -20454,13 +20432,12 @@ msgstr "クローンイベント"
 msgid ""
 "You can now scroll down and modify the settings in more detail, if you want, "
 "or you can create your first product to start selling tickets right away!"
-msgstr ""
-"今、詳細な設定をスクロールして変更することができます。または、すぐにチケット"
-"販売を開始するために最初の商品を作成することもできます！"
+msgstr "必要に応じて下にスクロールして設定をより詳細に変更することもできますし、最初"
+"の製品を作成してすぐにチケットの販売を開始することもできます！"
 
 #: pretix/control/templates/pretixcontrol/event/settings_base.html:23
 msgid "Create a first product"
-msgstr "最初の商品を作成"
+msgstr "最初の製品を作成"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:4
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:6
@@ -20588,9 +20565,9 @@ msgid ""
 "You activated ticket downloads but no output provider is enabled. Be sure to "
 "enable a plugin and activate an output provider."
 msgstr ""
-"チケットのダウンロードを有効にしましたが、出力プロバイダが有効になっていませ"
-"ん。プラグインを有効にし、出力プロバイダをアクティブにするようにしてくださ"
-"い。"
+"チケットのダウンロードを有効化しましたが、利用可能な出力プロバイダがありませ"
+"ん。プラグインが利用可能で、出力プロバイダが有効化されていることを確認してく"
+"ださい。"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:28
 msgid "Download formats"
@@ -20604,7 +20581,7 @@ msgid ""
 "output plugins."
 msgstr ""
 "チケットの出力が利用できません。 <a %(plugin_settings_href)s>プラグイン設定</"
-"a> に移動して、1つ以上のチケット出力プラグインを有効にしてください。"
+"a> に移動して、1つ以上のチケット出力プラグインを有効化してください。"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:62
 msgid "Download time"
@@ -21203,7 +21180,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/item/create.html:58
 #: pretix/control/templates/pretixcontrol/item/index.html:66
 msgid "Examples: Merchandise, donations, gift cards, add-ons to a main ticket."
-msgstr "例：商品、寄付、ギフトカード、メインチケットに追加するアドオン。"
+msgstr "例：グッズ、寄付、ギフトカード、メインチケットのアドオン。"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:68
 #: pretix/control/templates/pretixcontrol/item/index.html:76
@@ -21271,9 +21248,9 @@ msgid ""
 "\"reduced\", merchandise with variations for different sizes, workshop add-"
 "on with variations for simultaneous workshops."
 msgstr ""
-"例：「全額」および「割引」のバリエーションを持つチケットカテゴリ、異なるサイ"
-"ズのバリエーションを持つ商品、同時ワークショップのバリエーションを持つワーク"
-"ショップアドオン。"
+"例：「通常料金」と「割引」のバリエーションがあるチケットカテゴリ、異なるサイ"
+"ズのバリエーションがあるグッズ、同時開催ワークショップのバリエーションがある"
+"ワークショップアドオン。"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:165
 msgid "Quota settings"
@@ -21323,14 +21300,13 @@ msgstr "影響を受けるバウチャーを表示します"
 msgid ""
 "You cannot delete the product <strong>%(item)s</strong> because it already "
 "has been ordered, but you can deactivate it."
-msgstr ""
-"製品<strong>%(item)s</strong>はすでに注文されているため削除できませんが、非ア"
-"クティブにすることはできます。"
+msgstr "製品 <strong>%(item)s</strong> "
+"は既に注文されているため削除できませんが、無効化することができます。"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:41
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:36
 msgid "Deactivate"
-msgstr "無効にする"
+msgstr "無効化"
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:5
 msgid ""
@@ -21532,7 +21508,7 @@ msgstr "カテゴリーの歴史"
 #: pretix/control/templates/pretixcontrol/items/category_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/category_delete.html:6
 msgid "Delete product category"
-msgstr "商品カテゴリを削除"
+msgstr "製品カテゴリを削除"
 
 #: pretix/control/templates/pretixcontrol/items/category_delete.html:9
 #, python-format
@@ -21593,9 +21569,9 @@ msgstr "割引を削除してもよろしいですか、<strong>%(name)s</strong
 msgid ""
 "You cannot delete the discount <strong>%(name)s</strong> because it already "
 "has been used as part of an order, but you can deactivate it."
-msgstr ""
-"割引<strong>%(name)s</strong>はすでに注文の一部として使用されているため、削除"
-"することはできませんが、無効にすることはできます。"
+msgstr "割引 <strong>%(name)s</strong> "
+"は既に注文の一部として使用されているため削除できませんが、無効化することがで"
+"きます。"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:4
 #: pretix/control/templates/pretixcontrol/items/discounts.html:6
@@ -21642,9 +21618,8 @@ msgid ""
 "Every product in the cart can only be affected by one discount. If you have "
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
-msgstr ""
-"カート内のすべての商品は1つの割引のみが適用されます。重複する割引がある場合、"
-"以下のリストの順に最初の割引が適用されます。"
+msgstr "カート内の各製品は1つの割引のみが適用されます。重複する割引がある場合、以下の"
+"リストの順序で最初のものが適用されます。"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:37
 msgid "You haven't created any discounts yet."
@@ -21719,7 +21694,7 @@ msgstr "まだ製品を作成していません。"
 #: pretix/control/templates/pretixcontrol/items/index.html:25
 #: pretix/control/templates/pretixcontrol/items/index.html:30
 msgid "Create a new product"
-msgstr "新しい商品を作成"
+msgstr "新しい製品を作成"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:102
 msgid "Personalized admission ticket"
@@ -21740,11 +21715,11 @@ msgstr "1 つまたは複数の日付に対する座席プランに割り当て�
 
 #: pretix/control/templates/pretixcontrol/items/index.html:118
 msgid "Product assigned to seating plan"
-msgstr "座席プランが割り当てられている商品"
+msgstr "座席表に割り当てられた製品"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:126
 msgid "Only available as an add-on product"
-msgstr "追加商品としてのみ利用可能"
+msgstr "アドオン製品としてのみ利用可能"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:129
 msgid "Only available as part of a bundle"
@@ -21801,7 +21776,7 @@ msgstr "一致する回答が見つかりませんでした。"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:72
 msgid "You need to assign the question to a product to collect answers."
-msgstr "質問を正しい答えの商品に割り当てる必要があります。"
+msgstr "回答を収集するには、質問を製品に割り当てる必要があります。"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Count"
@@ -21994,10 +21969,8 @@ msgstr "このクォータは現在%(num)sチケット分超過予約されて�
 msgid ""
 "Your event contains vouchers that affect products covered by this quota and "
 "that allow a user to buy products even if this quota is sold out."
-msgstr ""
-"あなたのイベントには、このクォータが対象とする商品に影響するバウチャーが含ま"
-"れており、このクォータが完売していてもユーザーが商品を購入できるようになって"
-"います。"
+msgstr "このイベントには、このクォータの対象製品に影響し、クォータが売り切れでもユー"
+"ザーが製品を購入できるバウチャーが含まれています。"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:104
 msgid "Quota history"
@@ -22027,9 +22000,9 @@ msgid ""
 "applied to. If you apply two quotas to the same product, it will only be "
 "available if <strong>both</strong> quotas have capacity left."
 msgstr ""
-"このクォータを適用する商品または商品バリエーションを選択してください。同じ商"
+"このクォータを適用する製品または製品バリエーションを選択してください。同じ製"
 "品に2つのクォータを適用した場合、<strong>両方</strong>のクォータに残り容量が"
-"ある場合にのみ利用可能になります。"
+"ある場合のみ利用可能になります。"
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:41
 msgid "Advanced options"
@@ -22286,7 +22259,7 @@ msgid ""
 "implications, e.g. the payment method fee might change or additional "
 "questions can be added to the order that need to be answered by the user."
 msgstr ""
-"このツールを使用して、注文した商品を変更したり、注文を部分的にキャンセルした"
+"このツールを使用して、注文した製品を変更したり、注文を部分的にキャンセルした"
 "りできます。注文を変更すると、支払い方法の手数料が変更されたり、ユーザーが回"
 "答する必要がある追加の質問が注文に追加されたりする可能性があるなど、いくつか"
 "の影響があることに注意してください。"
@@ -22364,9 +22337,9 @@ msgid ""
 "will not affect the membership. Memberships can be managed in the customer "
 "account."
 msgstr ""
-"このポジションの販売により、メンバーシップが作成されました。ここで商品を変更"
-"してもメンバーシップに影響はありません。メンバーシップは顧客アカウントで管理"
-"できます。"
+"このポジションの販売によりメンバーシップが作成されました。ここで製品を変更し"
+"てもメンバーシップには影響しません。メンバーシップは顧客アカウントで管理でき"
+"ます。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:220
 msgid "Ticket block"
@@ -22428,7 +22401,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:358
 #: pretix/control/templates/pretixcontrol/order/change.html:386
 msgid "Add product"
-msgstr "すべての商品"
+msgstr "製品を追加"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:446
 msgid ""
@@ -22548,7 +22521,7 @@ msgstr "支払い済みとしてマーク"
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:5
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:9
 msgid "Reactivate order"
-msgstr "注文を再度有効にする"
+msgstr "注文を再有効化"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:81
 msgid "View order as user"
@@ -22597,8 +22570,9 @@ msgid ""
 "can choose to refund the money below or reactivate it by extending the "
 "payment deadline."
 msgstr ""
-"この注文は%(amount)sの支払いを受け取ったにもかかわらず期限切れです。以下で払"
-"い戻しを選択するか、支払い期限を延長して再度有効にすることができます。"
+"この注文は %(amount)s "
+"の支払いを受けたにもかかわらず期限切れです。下記で返金するか、支払い期限を延"
+"長して再有効化することができます。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:143
 msgid "Cancellation request"
@@ -22768,9 +22742,8 @@ msgid ""
 "The price of this product was reduced because of an automatic discount or "
 "this product was part of the discount calculation for a different product in "
 "this order."
-msgstr ""
-"この製品の価格が割引されたのは、自動割引のためであるか、この製品が別の商品の"
-"割引計算の一部であるためです。"
+msgstr "この製品の価格は自動割引により減額されたか、この製品がこの注文の別の製品の割"
+"引計算の一部になっています。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:491
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:103
@@ -22984,13 +22957,13 @@ msgid ""
 "products in the order are still available. If the order is pending payment, "
 "the expiry date will be reset."
 msgstr ""
-"注文を再有効化すると、キャンセルが取り消され、保留中または支払い済みの注文に"
-"戻ります。これは、注文内のすべての商品がまだ利用可能である限り可能です。注文"
-"が支払い保留中の場合、有効期限がリセットされます。"
+"注文を再有効化することで、キャンセルを取り消し、保留中または支払い済みの注文"
+"に戻します。これは注文内のすべての製品がまだ利用可能な場合にのみ可能です。注"
+"文が支払い保留中の場合、有効期限がリセットされます。"
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:34
 msgid "Reactivate"
-msgstr "再起動します"
+msgstr "再有効化"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:8
@@ -23009,9 +22982,9 @@ msgid ""
 "will just mark this transfer as aborted in pretix. This will also not "
 "reactivate the order, it will just allow you to choose a new refund method."
 msgstr ""
-"資金が既に返金処理中の場合、この操作で資金の移動は停止されませんが、pretixで"
-"はこの転送が中止されたとマークされます。また、注文が再有効化されることもな"
-"く、単に新しい払い戻し方法を選択できるようになるだけです。"
+"払い戻しが既に処理中の場合、これによって払い戻しは停止されず、pretix内でこの"
+"転送が中止としてマークされるだけです。これは注文を再有効化することもなく、新"
+"しい払い戻し方法を選択できるようになるだけです。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
@@ -23240,7 +23213,7 @@ msgid ""
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
 "イベントを中止する必要がある場合、このページを使用して全注文を一度にキャンセ"
-"ルし払い戻すことができます。これにより全商品も無効化され、新しい注文は作成で"
+"ルし払い戻すことができます。これにより全製品も無効化され、新しい注文は作成で"
 "きなくなります。その後、手動で対処する必要がある過払い注文や保留中の払い戻し"
 "がないか必ず確認してください。"
 
@@ -24272,9 +24245,9 @@ msgid ""
 "same barcode may be re-used during the sale of a different product."
 msgstr ""
 "「バーコードメディア」とは、バーコードの印刷物またはデジタル表現のことです。"
-"このメディアは、まず商品の販売によって作成され、その商品にはメディアの使用が"
+"このメディアは、まず製品の販売によって作成され、その製品にはメディアの使用が"
 "必要なメディアポリシーがあり、また「再利用可能メディアID」がQRコードとしてチ"
-"ケットやバッジのレイアウトに含まれています。後に、同じバーコードは異なる商品"
+"ケットやバッジのレイアウトに含まれています。後に、同じバーコードは異なる製品"
 "の販売時に再利用されることがあります。"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:239
@@ -24488,10 +24461,9 @@ msgid ""
 "on the activated medium types) this will grant the other organizer access to "
 "cryptographic key material required to interact with the media type."
 msgstr ""
-"信頼できる主催者にのみこのオプションを使用するべきです。なぜなら（アクティブ"
-"化されたメディアタイプによって異なりますが）、これにより他の主催者がメディア"
-"タイプとやり取りするために必要な暗号鍵素材にアクセスできるようになるからで"
-"す。"
+"このオプションは信頼できる主催者に対してのみ使用してください。なぜなら（有効"
+"化されたメディアの種類によっては）これにより他の主催者がメディアの種類とやり"
+"取りするために必要な暗号鍵素材にアクセスできるようになるからです。"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:106
 msgid "Invite new organizer"
@@ -24506,8 +24478,8 @@ msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
-"まだギフトカードを発行していません。ギフトカードを販売するためにイベント"
-"ショップで商品を設定するか、手動でギフトカードを発行することができます。"
+"まだギフトカードを発行していません。ギフトカードを販売するためにイベントショ"
+"ップで製品を設定するか、手動でギフトカードを発行することができます。"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:20
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:50
@@ -24580,7 +24552,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:15
 msgid ""
 "This can be used to enable products like year passes, tickets of ten, etc."
-msgstr "これは年間パスや10枚券などの商品を有効にするために使用できます。"
+msgstr "これは年間パスや10枚券などの製品を有効にするために使用できます。"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
@@ -25747,11 +25719,11 @@ msgstr "選択したものを削除します"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:214
 msgid "Activate selected"
-msgstr "選択されたものをアクティブにします"
+msgstr "選択されたものを有効化"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:217
 msgid "Deactivate selected"
-msgstr "選択したものを無効にします"
+msgstr "選択されたものを無効化"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -25966,7 +25938,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:49
 msgid "Please activate two-factor authentication using the button below."
-msgstr "以下のボタンを使用して、二段階認証を有効にしてください。"
+msgstr "以下のボタンを使用して二要素認証を有効化してください。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:53
 #, python-format
@@ -26600,12 +26572,12 @@ msgid ""
 "                                        "
 msgstr ""
 "\n"
-"                                            待機中、商品 %(num)sx 提供可能\n"
+"                                            待機中、製品 %(num)sx 提供可能\n"
 "                                        "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:246
 msgid "Waiting, product unavailable"
-msgstr "お待ちください。商品は利用できません"
+msgstr "空席待ち中、製品は利用できません"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:256
 msgid "Send a voucher"
@@ -26961,7 +26933,7 @@ msgstr "選択した割引が削除されました。"
 
 #: pretix/control/views/discounts.py:85
 msgid "The selected discount has been deactivated."
-msgstr "選択された割引は無効になりました。"
+msgstr "選択された割引が無効化されました。"
 
 #: pretix/control/views/discounts.py:176
 msgid "The new discount has been created."
@@ -27321,16 +27293,14 @@ msgstr "要求されたアイテムは存在しません。"
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
-msgstr ""
-"製品がアドオン自体としてのみ利用可能な場合、その製品にアドオンを追加すること"
-"はできません。"
+msgstr "それ自体がアドオンとしてのみ利用可能な製品にアドオンを追加することはできませ"
+"ん。"
 
 #: pretix/control/views/item.py:1390
 msgid ""
 "You cannot add bundles to a product that is only available as an add-on "
 "itself."
-msgstr ""
-"製品がアドオン自体としてのみ利用可能な場合、バンドルを追加することはできませ"
+msgstr "それ自体がアドオンとしてのみ利用可能な製品にバンドルを追加することはできませ"
 "ん。"
 
 #: pretix/control/views/item.py:1522
@@ -27359,7 +27329,7 @@ msgstr "選択した製品は削除されました。"
 
 #: pretix/control/views/item.py:1633
 msgid "The selected product has been deactivated."
-msgstr "選択された製品は無効になりました。"
+msgstr "選択された製品が無効化されました。"
 
 #: pretix/control/views/mailsetup.py:200
 msgid ""
@@ -28658,9 +28628,7 @@ msgstr "注文の支払い後"
 msgid ""
 "If you keep this empty, all lists that match the purchased product will be "
 "used."
-msgstr ""
-"もし空欄のままにしておくと、購入した商品に一致するすべてのリストが使用されま"
-"す。"
+msgstr "空欄のままにすると、購入した製品に一致するすべてのリストが使用されます。"
 
 #: pretix/plugins/autocheckin/models.py:59
 msgid "All sales channels"
@@ -30178,9 +30146,9 @@ msgid ""
 "pay in multiple installments or within 30 days. You, as the merchant, are "
 "getting your money right away."
 msgstr ""
-"お客様には、一定の限度額までの商品を今すぐ購入し、複数回の分割払いまたは30日"
-"以内に支払うことができるオプションを提供しています。これにより、販売者として"
-"はすぐにお金を受け取ることができます。"
+"顧客には、一定の限度額まで今すぐ購入し、複数回の分割払いまたは30日以内に支払"
+"うことができる選択肢を提供します。販売者であるあなたは、すぐに代金を受け取る"
+"ことができます。"
 
 #: pretix/plugins/paypal2/payment.py:217
 msgid "-- Automatic --"
@@ -31539,8 +31507,8 @@ msgid ""
 msgstr ""
 "Stripeを介したSEPAダイレクトデビット支払いは即座に処理されるわけでは<strong>"
 "ありません</strong>が、場合によっては最大<strong>14日</strong>かかることがあ"
-"ります。この遅延を考慮して、お支払い条件が許容する場合のみ、この支払い方法を"
-"有効にしてください。"
+"ります。この遅延を考慮して、お支払い条件が許容する場合のみ、この決済方法を有"
+"効化してください。"
 
 #: pretix/plugins/stripe/payment.py:380
 msgid "SEPA Creditor Mandate Name"
@@ -31731,8 +31699,8 @@ msgid ""
 "banking account and login information available."
 msgstr ""
 "giropayは、ほとんどのドイツの銀行の顧客に利用可能なオンライン決済方法です。通"
-"常、一度だけのアクティベーション後に利用できます。オンラインバンキングの口座"
-"とログイン情報を手元に用意してください。"
+"常、一度だけの有効化後に利用できます。オンラインバンキングの口座とログイン情"
+"報を手元に用意してください。"
 
 #: pretix/plugins/stripe/payment.py:1505 pretix/plugins/stripe/payment.py:1573
 #: pretix/plugins/stripe/payment.py:1686
@@ -32427,9 +32395,7 @@ msgstr "メンバーシップ"
 msgid ""
 "Your cart includes a product that requires an active membership to be "
 "selected."
-msgstr ""
-"お客様のカートには、選択するためにアクティブなメンバーシップが必要な商品が含"
-"まれています。"
+msgstr "カートに含まれている製品は、選択するために有効なメンバーシップが必要です。"
 
 #: pretix/presale/checkoutflow.py:489
 msgctxt "checkoutflow"
@@ -32461,9 +32427,8 @@ msgid ""
 "Due to the invoice address you entered, we need to apply a different tax "
 "rate to your purchase and the price of the products in your cart has changed "
 "accordingly."
-msgstr ""
-"入力された請求先住所により、ご購入に異なる税率を適用する必要があり、カート内"
-"の商品価格がそれに応じて変更されました。"
+msgstr "入力された請求書宛先により、ご購入に異なる税率を適用する必要があり、カート内"
+"の製品の価格がそれに応じて変更されました。"
 
 #: pretix/presale/checkoutflow.py:1024 pretix/presale/checkoutflow.py:1030
 msgid "Please enter a valid email address."
@@ -32851,13 +32816,12 @@ msgstr ""
 msgid ""
 "A product in your cart is only sold in combination with add-on products that "
 "are not available. Please contact the event organizer."
-msgstr ""
-"カート内の商品は、利用できないアドオン商品との組み合わせでのみ販売されていま"
+msgstr "カート内の製品は、利用できないアドオン製品との組み合わせでのみ販売されていま"
 "す。イベント主催者にお問い合わせください。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "We're now trying to book these add-ons for you!"
-msgstr "これらのアドオンを予約しようとしています！"
+msgstr "これらのアドオンを予約しています！"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
 msgid "Additional options for"
@@ -33055,9 +33019,8 @@ msgstr ""
 msgid ""
 "Some of the products in your cart can only be purchased if there is an "
 "active membership on your account."
-msgstr ""
-"カート内の一部の商品は、アカウントに有効なメンバーシップがある場合のみ購入で"
-"きます。"
+msgstr "カート内の一部の製品は、アカウントに有効なメンバーシップがある場合にのみ購入"
+"できます。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:34
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:112
@@ -33118,7 +33081,7 @@ msgstr "支払いプロバイダーは有効になっていません。"
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:117
 msgid ""
 "Please go to the payment settings and activate one or more payment providers."
-msgstr "支払い設定に移動し、1つ以上の支払いプロバイダーを有効にしてください。"
+msgstr "決済設定に移動し、1つ以上の決済事業者を有効化してください。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:9
 msgid "Before we continue, we need you to answer some questions."
@@ -33352,11 +33315,11 @@ msgstr "数量を増やしてください"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:379
 msgid "There are no add-ons available for this product."
-msgstr "この製品には利用可能なアドオンはありません。"
+msgstr "この製品に利用可能なアドオンはありません。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
 msgid "Enter a voucher code below to buy this product."
-msgstr "この商品を購入するために、下記にバウチャーコードを入力してください。"
+msgstr "この製品を購入するには、以下にバウチャーコードを入力してください。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:14
@@ -33389,8 +33352,7 @@ msgstr "予約済み"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:39
 msgid "All remaining products are reserved but might become available again."
-msgstr ""
-"すべての残りの商品は予約済みですが、再度利用可能になる可能性があります。"
+msgstr "残りの製品はすべて予約済みですが、再び利用可能になる可能性があります。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:18
 msgid "Price per item"
@@ -33611,7 +33573,7 @@ msgstr "\"%(old_item)s\"から\"%(new_item)s\"への%(positionid)s座席を変�
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:106
 #, python-format
 msgid "Add-on product to position #%(positionid)s"
-msgstr "＃%(positionid)sの追加製品"
+msgstr "ポジション #%(positionid)s へのアドオン製品"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:40
 #, python-format
@@ -34181,7 +34143,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/position.html:33
 msgid "Change ordered items"
-msgstr "注文された商品を変更します"
+msgstr "注文した商品を変更"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:200
 #: pretix/presale/templates/pretixpresale/event/order.html:291
@@ -34594,7 +34556,7 @@ msgstr ""
 msgid ""
 "There are currently no products available that can be bought with this "
 "voucher."
-msgstr "現在、このバウチャーで購入できる商品はありません。"
+msgstr "現在、このバウチャーで購入できる製品はありません。"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:52
 msgid ""
@@ -35156,7 +35118,7 @@ msgstr "正の数のみ入力してください。"
 
 #: pretix/presale/views/cart.py:441
 msgid "We applied the voucher to as many products in your cart as we could."
-msgstr "カート内の商品に可能な限りバウチャーを適用しました。"
+msgstr "カート内の製品に可能な限りバウチャーを適用しました。"
 
 #: pretix/presale/views/cart.py:476 pretix/presale/views/cart.py:484
 msgid ""
@@ -35177,7 +35139,7 @@ msgstr "カートのタイムアウトが延長されました。"
 
 #: pretix/presale/views/cart.py:584
 msgid "The products have been successfully added to your cart."
-msgstr "商品が正常にカートに追加されました。"
+msgstr "製品が正常にカートに追加されました。"
 
 #: pretix/presale/views/cart.py:608 pretix/presale/views/event.py:543
 #: pretix/presale/views/widget.py:396
@@ -35188,8 +35150,7 @@ msgstr "このイベントのチケットは、この販売チャンネルでは
 msgid ""
 "The gift card has been saved to your cart. Please now select the products "
 "you want to purchase."
-msgstr ""
-"ギフトカードがカートに追加されました。購入したい商品を選択してください。"
+msgstr "ギフトカードがカートに追加されました。購入したい製品を選択してください。"
 
 #: pretix/presale/views/cart.py:791
 msgctxt "subevent"
