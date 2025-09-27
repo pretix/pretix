@@ -2611,3 +2611,11 @@ def test_approve_cancellation_request(client, env):
     doc = BeautifulSoup(response.content.decode(), "lxml")
     assert doc.select('input[name=refund-new-giftcard]')[0]['value'] == '10.00'
     assert not env[2].cancellation_requests.exists()
+
+
+@pytest.mark.django_db
+def test_view_as_user(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.get('/%s/%s/order/%s/%s/' % (env[0].organizer.slug, env[0].slug, env[2].code, env[2].secret))
+    assert response.status_code == 200
+    assert env[2].code in response.content.decode()
