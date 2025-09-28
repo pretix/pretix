@@ -99,24 +99,24 @@ def is_app_active(sender, app, allow_legacy_plugins=False):
         elif isinstance(sender, Organizer) and allow_legacy_plugins:
             # Deprecated behaviour: Event plugins that are registered on organizer level are considered active for
             # all organizers in the context of signals that used to be global signals before the introduction of
-            # organizer-level plugin. A deprecation warning is emitted at .connect() time.
+            # organizer plugins. A deprecation warning is emitted at .connect() time.
             enabled = True
         else:
-            raise ImproperlyConfigured(f"Cannot check if event-level plugin is active on {type(sender)}")
+            raise ImproperlyConfigured(f"Cannot check if event plugin is active on {type(sender)}")
     elif level == PLUGIN_LEVEL_ORGANIZER:
         if isinstance(sender, Organizer):
             enabled = app.name in sender.get_plugins()
         elif isinstance(sender, Event):
             enabled = app.name in sender.organizer.get_plugins()
         else:
-            raise ImproperlyConfigured(f"Cannot check if organizer-level plugin is active on {type(sender)}")
+            raise ImproperlyConfigured(f"Cannot check if organizer plugin is active on {type(sender)}")
     elif level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
         if isinstance(sender, Organizer):
             enabled = app.name in sender.get_plugins()
         elif isinstance(sender, Event):
             enabled = app.name in sender.get_plugins() and app.name in sender.organizer.get_plugins()
         else:
-            raise ImproperlyConfigured(f"Cannot check if hybrid event/organizer-level plugin is active on {type(sender)}")
+            raise ImproperlyConfigured(f"Cannot check if hybrid event/organizer plugin is active on {type(sender)}")
     else:
         raise ImproperlyConfigured("Unknown plugin level")
 
@@ -230,7 +230,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
 class EventPluginSignal(PluginSignal[Event]):
     """
     This is an extension to Django's built-in signals which differs in a way that it sends
-    out it's events only to receivers which belong to plugins that are enabled for the given
+    out its events only to receivers which belong to plugins that are enabled for the given
     Event.
     """
     type = Event
@@ -254,7 +254,7 @@ class EventPluginSignal(PluginSignal[Event]):
 class OrganizerPluginSignal(PluginSignal[Organizer]):
     """
     This is an extension to Django's built-in signals which differs in a way that it sends
-    out it's events only to receivers which belong to plugins that are enabled for the given
+    out its events only to receivers which belong to plugins that are enabled for the given
     Organizer.
     """
     type = Organizer
@@ -898,7 +898,7 @@ This signals allows you to add fees to an order while it is being created. You a
 return a list of ``OrderFee`` objects that are not yet saved to the database
 (because there is no order yet).
 
-As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``positions``
+As with all event plugin signals, the ``sender`` keyword argument will contain the event. A ``positions``
 argument will contain the cart positions and ``invoice_address`` the invoice address (useful for
 tax calculation). The argument ``meta_info`` contains the order's meta dictionary. The ``total``
 keyword argument will contain the total cart sum without any fees. You should not rely on this
@@ -916,7 +916,7 @@ This signals allows you to return a human-readable description for a fee type ba
 and ``internal_type`` attributes of the ``OrderFee`` model that you get as keyword arguments. You are
 expected to return a string or None, if you don't know about this fee.
 
-As with all plugin signals, the ``sender`` keyword argument will contain the event.
+As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
 allow_ticket_download = EventPluginSignal()

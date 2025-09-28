@@ -97,7 +97,7 @@ class TestSdiTransmissionProvider(TransmissionProvider):
 class TestPeppolTransmissionProvider(TransmissionProvider):
     identifier = "peppol_test"
     type = "peppol"
-    verbose_name = "PEPPOL Test"
+    verbose_name = "Peppol Test"
 
     def is_ready(self, event) -> bool:
         return True

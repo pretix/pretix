@@ -664,20 +664,7 @@ def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
             break
 
     if not provider:
-        invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
-        invoice.transmission_date = now()
-        invoice.save(update_fields=["transmission_status", "transmission_date"])
-        invoice.order.log_action(
-            "pretix.event.order.invoice.sending_failed",
-            data={
-                "full_invoice_no": invoice.full_invoice_no,
-                "transmission_provider": None,
-                "transmission_type": invoice.transmission_type,
-                "data": {
-                    "reason": "no_provider",
-                },
-            }
-        )
+        invoice.set_transmission_failed(provider=None, data={"reason": "no_provider"})
         return
 
     if invoice.order.testmode and not provider.testmode_supported:
@@ -698,18 +685,7 @@ def transmit_invoice(sender, invoice_id, allow_retransmission=True, **kwargs):
         provider.transmit(invoice)
     except Exception as e:
         logger.exception(f"Transmission of invoice {invoice.pk} failed with exception.")
-        invoice.transmission_status = Invoice.TRANSMISSION_STATUS_FAILED
-        invoice.transmission_date = now()
-        invoice.save(update_fields=["transmission_status", "transmission_date"])
-        invoice.order.log_action(
-            "pretix.event.order.invoice.sending_failed",
-            data={
-                "full_invoice_no": invoice.full_invoice_no,
-                "transmission_provider": None,
-                "transmission_type": invoice.transmission_type,
-                "data": {
-                    "reason": "exception",
-                    "exception": str(e),
-                },
-            }
-        )
+        invoice.set_transmission_failed(provider=provider.identifier, data={
+            "reason": "exception",
+            "exception": str(e),
+        })

@@ -104,6 +104,18 @@ class TransmissionType:
     def transmission_info_to_form_data(self, transmission_info: dict) -> dict:
         return transmission_info
 
+    def pdf_watermark(self) -> Optional[str]:
+        """
+        Return a watermark that should be rendered across the PDF file.
+        """
+        return None
+
+    def pdf_info_text(self) -> Optional[str]:
+        """
+        Return an info text that should be rendered on the PDF file.
+        """
+        return None
+
 
 class TransmissionProvider:
     """

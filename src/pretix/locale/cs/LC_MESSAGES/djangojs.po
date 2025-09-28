@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:02+0000\n"
-"PO-Revision-Date: 2025-05-16 17:00+0000\n"
-"Last-Translator: David <davemachala@gmail.com>\n"
+"POT-Creation-Date: 2025-09-26 11:16+0000\n"
+"PO-Revision-Date: 2025-09-08 18:57+0000\n"
+"Last-Translator: Alois Pospíšil <alois.pospisil@gmail.com>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "cs/>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -345,12 +345,12 @@ msgstr "Ne"
 msgid "close"
 msgstr "zavřít"
 
-#: pretix/static/pretixbase/js/addressform.js:105
-#: pretix/static/pretixpresale/js/ui/main.js:509
+#: pretix/static/pretixbase/js/addressform.js:90
+#: pretix/static/pretixpresale/js/ui/main.js:519
 msgid "required"
 msgstr "povinný"
 
-#: pretix/static/pretixbase/js/asynctask.js:12
+#: pretix/static/pretixbase/js/asynctask.js:13
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
@@ -358,11 +358,11 @@ msgstr ""
 "Váš požadavek je právě zpracováván. V závislosti na velikosti vaší udalosti, "
 "to může trvat několik minut."
 
-#: pretix/static/pretixbase/js/asynctask.js:16
+#: pretix/static/pretixbase/js/asynctask.js:17
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr "Váš požadavek byl vložem do fronty serveru a brzy bude zpracován."
 
-#: pretix/static/pretixbase/js/asynctask.js:20
+#: pretix/static/pretixbase/js/asynctask.js:21
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -372,14 +372,14 @@ msgstr ""
 "Pokud to trvá více jak dvě minuty, prosím kontaktuje nás nebo se vraťte do "
 "vašeho prohlížeče a zkuste to znovu."
 
-#: pretix/static/pretixbase/js/asynctask.js:119
-#: pretix/static/pretixbase/js/asynctask.js:176
-#: pretix/static/pretixbase/js/asynctask.js:180
+#: pretix/static/pretixbase/js/asynctask.js:125
+#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:186
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Vyskytla se chyba {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:122
+#: pretix/static/pretixbase/js/asynctask.js:128
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -387,12 +387,12 @@ msgstr ""
 "Momentálně nemůžeme kontaktovat server, ale stále se o to pokoušíme. "
 "Poslední chybový kód: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:156
+#: pretix/static/pretixbase/js/asynctask.js:162
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "Zpracování požadavku trvá příliš dlouho. Prosím zkuste to znovu."
 
-#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:188
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -400,11 +400,11 @@ msgstr ""
 "Momentálně nemůžeme kontaktovat server. Prosím zkuste to znovu. Chybový kód: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:210
+#: pretix/static/pretixbase/js/asynctask.js:216
 msgid "We are processing your request …"
 msgstr "Zpracováváme váš požadavek …"
 
-#: pretix/static/pretixbase/js/asynctask.js:213
+#: pretix/static/pretixbase/js/asynctask.js:219
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -414,11 +414,11 @@ msgstr ""
 "prosím zkontrolujte své internetové připojení a znovu načtěte stránku a "
 "zkuste to znovu."
 
-#: pretix/static/pretixbase/js/asynctask.js:270
+#: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:325
+#: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
 msgstr "Zavřít zprávu"
 
@@ -640,19 +640,15 @@ msgid "Unknown error."
 msgstr "Neznámá chyba."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:292
-#, fuzzy
-#| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
-msgstr "Tato barva má velmi dobrý kontrast a je velmi dobře čitelná!"
+msgstr "Tato barva má velmi dobrý kontrast a je velmi dobře čitelná."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:296
-#, fuzzy
-#| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr ""
-"Tato barva má slušný kontrast a pravděpodobně je dostatečně dobře čitelná!"
+"Tato barva má slušný kontrast a pravděpodobně je dostatečně dobře čitelná."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:300
 msgid ""
@@ -735,7 +731,7 @@ msgstr "Nákupní košík vypršel"
 #: pretix/static/pretixpresale/js/ui/cart.js:58
 #: pretix/static/pretixpresale/js/ui/cart.js:84
 msgid "Your cart is about to expire."
-msgstr ""
+msgstr "Nákupní košík brzy vyprší."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:62
 msgid "The items in your cart are reserved for you for one minute."
@@ -748,10 +744,8 @@ msgstr[2] ""
 "Produkty v nákupním košíku jsou pro vás rezervovány na dalších {num} minut."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Your cart has expired."
-msgstr "Nákupní košík vypršel"
+msgstr "Nákupní košík vypršel."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
 #, fuzzy
@@ -785,7 +779,7 @@ msgstr "Dostanete %(currency)s %(amount)s zpět"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Zadejte částku, kterou si organizátor může ponechat."
 
-#: pretix/static/pretixpresale/js/ui/main.js:554
+#: pretix/static/pretixpresale/js/ui/main.js:564
 msgid "Your local time:"
 msgstr "Místní čas:"
 
@@ -811,12 +805,12 @@ msgstr "Zvýšit počet"
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Filter events by"
-msgstr ""
+msgstr "Filtrovat události"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Filter"
-msgstr ""
+msgstr "Filtrovat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
@@ -933,7 +927,7 @@ msgstr "Již není k dispozici"
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "Currently not available"
-msgstr "Momentálně není k dispozici."
+msgstr "Momentálně není k dispozici"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 #, javascript-format
@@ -968,7 +962,7 @@ msgstr "Obchod vstupenek otevřit"
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
 msgid "Checkout"
-msgstr "Checkout"
+msgstr "Přejít k platbě"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
@@ -1090,7 +1084,7 @@ msgstr "Předchozí týden"
 #: pretix/static/pretixpresale/js/widget/widget.js:74
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr "Otevřete výběr sedadla"
+msgstr "Otevřete výběr míst"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:75
 msgctxt "widget"

@@ -2603,7 +2603,7 @@ class SubEventTest(TestCase):
         q.items.add(item)
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 1
-        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1)
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1, True)
 
         # 2 quotas - 1 item. Lowest quota wins.
         q2 = Quota.objects.create(event=self.event, name='Quota 2', size=2,
@@ -2611,14 +2611,21 @@ class SubEventTest(TestCase):
         q2.items.add(item)
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 2
-        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1)
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1, True)
+
+        # Same, but waiting list not allowed
+        item.allow_waitinglist = False
+        item.save()
+        obj = SubEvent.annotated(SubEvent.objects, 'web').first()
+        assert len(obj.active_quotas) == 2
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1, False)
 
         # 2 quotas - 2 items. Higher quota wins since second item is only connected to second quota.
         item2 = Item.objects.create(event=self.event, name='Regular ticket', default_price=10, active=True)
         q2.items.add(item2)
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 2
-        assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 2)
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 2, True)
         assert obj.best_availability_is_low
 
         # 1 quota - 2 items. Quota is not counted twice!
@@ -2627,14 +2634,14 @@ class SubEventTest(TestCase):
         q2.delete()
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 1
-        assert obj.best_availability == (Quota.AVAILABILITY_OK, 9, 10)
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, 9, 10, False)
         assert not obj.best_availability_is_low
 
-        # Unlimited quota
+        # Unlimited quota, but no waiting list
         q.size = None
         q.save()
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
-        assert obj.best_availability == (Quota.AVAILABILITY_OK, None, None)
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, None, None, False)
         assert not obj.best_availability_is_low
 
 

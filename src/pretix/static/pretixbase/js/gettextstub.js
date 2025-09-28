@@ -13,6 +13,13 @@ function ngettext(singular, plural, count) {
     return plural;
 }
 
+function pgettext(context, msgid) {
+    if (typeof django !== 'undefined' && typeof django.pgettext !== 'undefined') {
+        return django.pgettext(context, msgid);
+    }
+    return msgid;
+}
+
 function interpolate(fmt, object, named) {
     if (named) {
         return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});

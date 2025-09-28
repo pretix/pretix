@@ -64,6 +64,16 @@ def daterange(df, dt, as_html=False):
             return format_html(base_format, _date(df, "j."), mark_safe(until.strip()), _date(dt, "j. F Y"))
         elif df.year == dt.year:
             return format_html(base_format, _date(df, "j. F"), until, _date(dt, "j. F Y"))
+    elif lng == "en-nz":
+        if df.year == dt.year and df.month == dt.month and df.day == dt.day:
+            # Mon, 15 January 2024
+            return format_html(base_format, _date(df, "D, j F Y"))
+        elif df.year == dt.year and df.month == dt.month:
+            # 1 – 3 January 2024
+            return format_html(base_format, _date(df, "j"), until, _date(dt, "j F Y"))
+        elif df.year == dt.year:
+            # 1 January – 3 April 2024
+            return format_html(base_format, _date(df, "j F"), until, _date(dt, "j F Y"))
     elif lng.startswith("en"):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
             return format_html(base_format, _date(df, "D, N jS, Y"))

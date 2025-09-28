@@ -39,7 +39,7 @@ def npm_install():
         node_prefix = os.path.join(here, 'static.dist', 'node_prefix')
         os.makedirs(node_prefix, exist_ok=True)
         shutil.copytree(os.path.join(here, 'static', 'npm_dir'), node_prefix, dirs_exist_ok=True)
-        subprocess.check_call('npm install', shell=True, cwd=node_prefix)
+        subprocess.check_call('npm ci', shell=True, cwd=node_prefix)
         npm_installed = True
 
 

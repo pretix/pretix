@@ -710,9 +710,9 @@ class UserNotificationsEditView(TemplateView):
 
             messages.success(request, _('Your notification settings have been saved.'))
             if request.user.notifications_send:
-                self.request.user.log_action('pretix.user.settings.notifications.disabled', user=self.request.user)
-            else:
                 self.request.user.log_action('pretix.user.settings.notifications.enabled', user=self.request.user)
+            else:
+                self.request.user.log_action('pretix.user.settings.notifications.disabled', user=self.request.user)
             return redirect(
                 reverse('control:user.settings.notifications') +
                 ('?event={}'.format(self.event.pk) if self.event else '')
