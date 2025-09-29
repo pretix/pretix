@@ -1105,7 +1105,7 @@ DEFAULTS = {
         'serializer_class': serializers.ChoiceField,
         'serializer_kwargs': dict(
             choices=(
-                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date)')),
+                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date')),
                 ('auto_no_event', _('Automatic, but prefer invoice date over event date')),
                 ('event_date', _('Event date')),
                 ('order_date', _('Order date')),
@@ -1116,7 +1116,7 @@ DEFAULTS = {
             label=_("Date of service"),
             widget=forms.RadioSelect,
             choices=(
-                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date)')),
+                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date')),
                 ('auto_no_event', _('Automatic, but prefer invoice date over event date')),
                 ('event_date', _('Event date')),
                 ('order_date', _('Order date')),
