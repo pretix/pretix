@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-08-26 19:00+0000\n"
+"PO-Revision-Date: 2025-09-30 01:00+0000\n"
 "Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -3808,6 +3808,8 @@ msgstr "Evenementdatum: {date_range}"
 msgid ""
 "A Peppol participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
+"Een Peppol deelnemer-ID begint altijd met een prefix, gevolgd door een "
+"dubbele punt (:)."
 
 #: pretix/base/invoicing/peppol.py:132
 #, python-format
@@ -3815,6 +3817,8 @@ msgid ""
 "The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"De prefix van de Peppol deelnemer-ID %(number)s is niet bekend in ons "
+"systeem. Neem contact met ons op als u zeker weet dat deze ID correct is."
 
 #: pretix/base/invoicing/peppol.py:136
 #, python-format
@@ -3822,17 +3826,18 @@ msgid ""
 "The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"De Peppol deelnemer-ID komt niet overeen met de validatieregels voor het "
+"prefix %(number)s. Neem contact met ons op als u zeker weet dat deze ID "
+"correct is."
 
 #: pretix/base/invoicing/peppol.py:156
 msgid "Peppol participant ID"
-msgstr ""
+msgstr "Peppol deelnemer-ID"
 
 #: pretix/base/invoicing/peppol.py:170
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "peppol_invoice"
 msgid "Visual copy"
-msgstr "Cadeauboncode"
+msgstr "Visuele kopie"
 
 #: pretix/base/invoicing/peppol.py:175
 msgctxt "peppol_invoice"
@@ -3841,6 +3846,9 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
+"Dit PDF-document is een visuele kopie van de factuur en vormt geen factuur "
+"voor BTW-doeleinden. De originele factuur wordt opgemaakt in XML-formaat en "
+"verzonden via het Peppol-netwerk."
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
