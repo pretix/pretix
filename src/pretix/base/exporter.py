@@ -106,6 +106,18 @@ class BaseExporter:
         return False
 
     @property
+    def repeatable_read(self) -> bool:
+        """
+        If ``True``, this exporter will be run in a REPEATABLE READ transaction. This ensures consistent results for
+        all queries performed by the exporter, but creates a performance burden on the database server. We recommend to
+        disable this for exporters that take very long to run and do not rely on this behavior, such as export of lists
+        to CSV files.
+
+        Defaults to ``True`` for now, but default may change in future versions.
+        """
+        return True
+
+    @property
     def identifier(self) -> str:
         """
         A short and unique identifier for this exporter.

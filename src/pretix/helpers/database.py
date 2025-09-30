@@ -21,7 +21,8 @@
 #
 import contextlib
 
-from django.core.exceptions import FieldDoesNotExist
+from django.conf import settings
+from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured
 from django.db import connection, transaction
 from django.db.models import (
     Aggregate, Expression, F, Field, Lookup, OrderBy, Value,
@@ -60,6 +61,39 @@ def casual_reads():
     Kept for backwards compatibility.
     """
     yield
+
+
+@contextlib.contextmanager
+def repeatable_reads_transaction():
+    """
+    pretix, and Django, operate in the transaction isolation level READ COMMITTED by default. This is not a strong level
+    of isolation, but we NEED to use it: Otherwise e.g. our quota logic breaks, because we need to be able to get the
+    *current* number of tickets sold at any time in a transaction, not the number of tickets sold *before* our transaction
+    started.
+
+    However, this isolation mode has drawbacks, for example during reporting. When a user retrieves a report from the
+    system, it should return numbers that are consistent with each other. However, if the report makes multiple SQL
+    queries in READ COMMITTED mode, the results might be different for each query, causing numbers to be inconsistent
+    with each other.
+
+    This decorator creates a transaction that is running in REPEATABLE READ mode to avoid this problem.
+
+    **You should only make read-only queries during this transaction and not rely on quota calculations.**
+    """
+    try:
+        with transaction.atomic(durable=True):
+            with connection.cursor() as cursor:
+                if 'postgresql' in settings.DATABASES['default']['ENGINE']:
+                    cursor.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;')
+                elif 'sqlite' in settings.DATABASES['default']['ENGINE']:
+                    pass  # noop
+                else:
+                    raise ImproperlyConfigured("Cannot set transaction isolation mode on this database backend")
+
+            connection.tx_in_repeatable_read = True
+            yield
+    finally:
+        connection.tx_in_repeatable_read = False
 
 
 class GroupConcat(Aggregate):

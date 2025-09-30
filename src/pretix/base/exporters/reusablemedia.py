@@ -34,6 +34,7 @@ class ReusableMediaExporter(OrganizerLevelExportMixin, ListExporter):
     verbose_name = _('Reusable media')
     category = pgettext_lazy('export_category', 'Reusable media')
     description = _('Download a spread sheet with the data of all reusable medias on your account.')
+    repeatable_read = False
 
     def iterate_list(self, form_data):
         media = ReusableMedium.objects.filter(

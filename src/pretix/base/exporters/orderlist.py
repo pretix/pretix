@@ -90,6 +90,7 @@ class OrderListExporter(MultiSheetListExporter):
                                'with a line for every order, one with a line for every order position, and one with '
                                'a line for every additional fee charged in an order.')
     featured = True
+    repeatable_read = False
 
     @cached_property
     def providers(self):
@@ -842,6 +843,7 @@ class TransactionListExporter(ListExporter):
     description = gettext_lazy('Download a spreadsheet of all substantial changes to orders, i.e. all changes to '
                                'products, prices or tax rates. The information is only accurate for changes made with '
                                'pretix versions released after October 2021.')
+    repeatable_read = False
 
     @cached_property
     def providers(self):
@@ -1020,6 +1022,7 @@ class PaymentListExporter(ListExporter):
     category = pgettext_lazy('export_category', 'Order data')
     description = gettext_lazy('Download a spreadsheet of all payments or refunds of every order.')
     featured = True
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):
@@ -1159,7 +1162,7 @@ class QuotaListExporter(ListExporter):
         yield headers
 
         quotas = list(self.event.quotas.select_related('subevent'))
-        qa = QuotaAvailability(full_results=True)
+        qa = QuotaAvailability(full_results=True, ignore_repeatable_read=True)
         qa.queue(*quotas)
         qa.compute()
 
@@ -1200,6 +1203,7 @@ class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
     organizer_required_permission = 'can_manage_gift_cards'
     category = pgettext_lazy('export_category', 'Gift cards')
     description = gettext_lazy('Download a spreadsheet of all gift card transactions.')
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):
@@ -1258,6 +1262,7 @@ class GiftcardRedemptionListExporter(ListExporter):
     verbose_name = gettext_lazy('Gift card redemptions')
     category = pgettext_lazy('export_category', 'Order data')
     description = gettext_lazy('Download a spreadsheet of all payments or refunds that involve gift cards.')
+    repeatable_read = False
 
     def iterate_list(self, form_data):
         payments = OrderPayment.objects.filter(
