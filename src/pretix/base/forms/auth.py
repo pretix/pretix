@@ -239,12 +239,12 @@ class PasswordRecoverForm(forms.Form):
     )
 
     def __init__(self, user_id=None, *args, **kwargs):
+        initial = kwargs.pop('initial', {})
         try:
             self.user = User.objects.get(id=user_id)
+            initial['email'] = self.user.email
         except User.DoesNotExist:
             self.user = None
-        initial = kwargs.pop('initial', {})
-        initial['email'] = self.user.email
         super().__init__(*args, initial=initial, **kwargs)
 
     def clean(self):
