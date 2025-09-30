@@ -119,10 +119,12 @@ class OutboundSyncProvider:
         :param order: the Order that should be synced
         :param triggered_by: the reason why the order should be synced, e.g. name of the signal
                              (currently only used internally for logging)
+        :return: Return a tuple (queue_item, created), where created is a boolean
+                 specifying whether a new queue item was created.
         """
         if not hasattr(cls, 'identifier'):
             raise TypeError('Call this method on a derived class that defines an "identifier" attribute.')
-        OrderSyncQueue.objects.update_or_create(
+        return OrderSyncQueue.objects.update_or_create(
             order=order,
             sync_provider=cls.identifier,
             in_flight=False,
