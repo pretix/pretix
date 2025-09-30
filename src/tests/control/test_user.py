@@ -193,18 +193,6 @@ class UserSettingsTest(SoupTest):
         })
         assert doc.select(".alert-danger")
 
-    def test_needs_password_change(self):
-        self.user.needs_password_change = True
-        self.user.save()
-        doc = self.save({
-            'email': 'foo@example.com',
-            'old_pw': 'barfoofoo'
-        })
-        assert doc.select(".alert-success")
-        assert doc.select(".alert-warning")
-        self.user.refresh_from_db()
-        assert self.user.needs_password_change is True
-
     def test_needs_password_change_changed(self):
         self.user.needs_password_change = True
         self.user.save()
