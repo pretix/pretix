@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-08-30 02:00+0000\n"
+"PO-Revision-Date: 2025-09-30 16:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -810,28 +810,23 @@ msgstr ""
 "Primero verifique la dirección de correo electrónico en su cuenta de cliente."
 
 #: pretix/base/datasync/datasync.py:255
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
-#| "your {provider_name} settings."
+#, python-brace-format
 msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
 msgstr ""
-"El campo «{field_name}» no es válido para {available_inputs}. Comprueba la "
-"configuración de {provider_name}."
+"El campo «{field_name}» no existe. Comprueba la configuración de "
+"{provider_name}."
 
 #: pretix/base/datasync/datasync.py:262
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
-#| "your {provider_name} settings."
+#, python-brace-format
 msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
-"El campo «{field_name}» no es válido para {available_inputs}. Comprueba la "
-"configuración de {provider_name}."
+"El campo «{field_name}» requiere {required_input}, pero solo se ha "
+"introducido {available_inputs}. Comprueba la configuración de "
+"{provider_name}."
 
 #: pretix/base/datasync/datasync.py:273
 #, python-brace-format
@@ -3559,6 +3554,11 @@ msgid ""
 "in accordance with the procedures and terms set forth in No. 89757/2018 of "
 "April 30, 2018, issued by the Director of the Revenue Agency."
 msgstr ""
+"Este documento PDF es una copia visual de la factura y no constituye una "
+"factura a efectos del IVA. La factura se emite en formato XML, transmitida "
+"de acuerdo con los procedimientos y términos establecidos en el n.º 89757/"
+"2018, de 30 de abril de 2018, emitido por el Director de la Agencia "
+"Tributaria."
 
 #: pretix/base/invoicing/pdf.py:141
 #, python-format
@@ -3829,12 +3829,9 @@ msgid "Peppol participant ID"
 msgstr "Identificador de participante Peppol"
 
 #: pretix/base/invoicing/peppol.py:170
-#, fuzzy
-#| msgctxt "italian_invoice"
-#| msgid "Fiscal code"
 msgctxt "peppol_invoice"
 msgid "Visual copy"
-msgstr "Código fiscal"
+msgstr "Copia visual"
 
 #: pretix/base/invoicing/peppol.py:175
 msgctxt "peppol_invoice"
@@ -3843,6 +3840,9 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
+"Este documento PDF es una copia visual de la factura y no constituye una "
+"factura a efectos del IVA. La factura original se emite en formato XML y se "
+"transmite a través de la red Peppol."
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
@@ -14387,10 +14387,8 @@ msgid "Canceled (fully or with paid fee)"
 msgstr "Cancelado (totalmente o con tarifa pagada)"
 
 #: pretix/control/forms/filter.py:228
-#, fuzzy
-#| msgid "Cancel this position"
 msgid "Canceled (at least one position)"
-msgstr "Cancelar posición"
+msgstr "Cancelado (al menos una posición)"
 
 #: pretix/control/forms/filter.py:229
 msgid "Cancellation requested"
@@ -17130,10 +17128,9 @@ msgid "The voucher has been deleted."
 msgstr "El vale de compra fue eliminado."
 
 #: pretix/control/logdisplay.py:584
-#, fuzzy, python-brace-format
-#| msgid "The voucher has been sent to {email} through the waiting list."
+#, python-brace-format
 msgid "The voucher has been assigned to {email} through the waiting list."
-msgstr "El vale se ha enviado a {email} a través de la lista de espera."
+msgstr "El vale se ha asignado a {email} a través de la lista de espera."
 
 #: pretix/control/logdisplay.py:593
 #, python-brace-format
@@ -27677,11 +27674,11 @@ msgstr ""
 "próximos minutos."
 
 #: pretix/control/views/datasync.py:90 pretix/control/views/datasync.py:104
-#, fuzzy
-#| msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgid ""
 "The sync job could not be found. It may have been processed in the meantime."
-msgstr "El vale de compra {voucher} ya ha sido utilizado."
+msgstr ""
+"No se ha encontrado la tarea de sincronización. Es posible que se haya "
+"procesado mientras tanto."
 
 #: pretix/control/views/datasync.py:93 pretix/control/views/datasync.py:107
 msgid "The sync job is already in progress."
@@ -28674,12 +28671,12 @@ msgstr ""
 "programado para {name}."
 
 #: pretix/control/views/orders.py:2849 pretix/control/views/organizer.py:2207
-#, fuzzy
-#| msgid "You do not have sufficient permission to perform this export."
 msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot schedule it."
-msgstr "No tiene permiso suficiente para realizar esta exportación."
+msgstr ""
+"Su cuenta de usuario no tiene permisos suficientes para ejecutar este "
+"informe, por lo que no puede programarlo."
 
 #: pretix/control/views/orders.py:2902 pretix/control/views/organizer.py:2259
 msgid ""
@@ -29044,17 +29041,14 @@ msgid "A date can not be deleted if orders already have been placed."
 msgstr "No se puede borrar una fecha si ya se han realizado pedidos."
 
 #: pretix/control/views/subevents.py:203
-#, fuzzy
-#| msgid ""
-#| "The channel could not be deleted as some constraints (e.g. data created "
-#| "by plug-ins) did not allow it."
 msgctxt "subevent"
 msgid ""
 "The date could not be deleted as some constraints (e.g. data created by plug-"
 "ins) did not allow it. The date was disabled instead."
 msgstr ""
-"El canal no ha podido borrarse porque algunas restricciones (por ejemplo, "
-"datos creados por plug-ins) no lo permitían."
+"La fecha no se pudo eliminar debido a que algunas restricciones (por "
+"ejemplo, datos creados por complementos) no lo permitían. En su lugar, se "
+"desactivó la fecha."
 
 #: pretix/control/views/subevents.py:207
 msgctxt "subevent"
@@ -33878,18 +33872,12 @@ msgstr ""
 "formar un contrato válido."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:192
-#, fuzzy
-#| msgid ""
-#| "After you submitted your order using the button below, it will require "
-#| "approval by the event organizer before it can be confirmed and forms a "
-#| "valid contract."
 msgid ""
 "After you submitted your order using the button below, it will require "
 "approval by the event organizer."
 msgstr ""
-"Después de enviar su pedido usando el botón a continuación, requerirá la "
-"aprobación del organizador del evento antes de que pueda confirmarse y "
-"formar un contrato válido."
+"Después de enviar el pedido mediante el botón que aparece a continuación, "
+"será necesario que el organizador del evento lo apruebe."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
 msgid ""
@@ -36448,10 +36436,8 @@ msgid "The selected date does not exist in this event series."
 msgstr "La fecha seleccionada no existe en esta serie de eventos."
 
 #: pretix/presale/views/widget.py:412
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The selected date is not available."
-msgstr "El asiento seleccionado {seat} no está disponible."
+msgstr "La fecha seleccionada no está disponible."
 
 #: pretix/presale/views/widget.py:476
 #, python-format
