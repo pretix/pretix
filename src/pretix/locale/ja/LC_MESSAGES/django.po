@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-27 16:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2025-09-30 16:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -796,28 +796,21 @@ msgstr ""
 "メールアドレスを先に検証してください。"
 
 #: pretix/base/datasync/datasync.py:255
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
-#| "your {provider_name} settings."
+#, python-brace-format
 msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
-msgstr ""
-"フィールド\"{field_name}\"は{available_inputs}に対して有効ではありません。"
-"{provider_name}の設定を確認してください。"
+msgstr "フィールド「{field_name}」は存在しません。{provider_name}の設定を確認してくだ"
+"さい。"
 
 #: pretix/base/datasync/datasync.py:262
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
-#| "your {provider_name} settings."
+#, python-brace-format
 msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
-"フィールド\"{field_name}\"は{available_inputs}に対して有効ではありません。"
-"{provider_name}の設定を確認してください。"
+"フィールド「{field_name}」には{required_input}が必要ですが、{available_inputs"
+"}しか取得できませんでした。{provider_name}の設定を確認してください。"
 
 #: pretix/base/datasync/datasync.py:273
 #, python-brace-format
@@ -3527,6 +3520,9 @@ msgid ""
 "in accordance with the procedures and terms set forth in No. 89757/2018 of "
 "April 30, 2018, issued by the Director of the Revenue Agency."
 msgstr ""
+"この PDF ドキュメントは請求書の画像情報の写しであり、VAT "
+"のための請求書を構成するものではありません。請求書はXML形式で発行され、"
+"2018年4月30日のNo. 89757/2018に定められた手順と条件に従って送信されます。"
 
 #: pretix/base/invoicing/pdf.py:141
 #, python-format
@@ -3794,12 +3790,9 @@ msgid "Peppol participant ID"
 msgstr "Peppol参加者ID"
 
 #: pretix/base/invoicing/peppol.py:170
-#, fuzzy
-#| msgctxt "italian_invoice"
-#| msgid "Fiscal code"
 msgctxt "peppol_invoice"
 msgid "Visual copy"
-msgstr "納税者番号"
+msgstr "写しの画像"
 
 #: pretix/base/invoicing/peppol.py:175
 msgctxt "peppol_invoice"
@@ -3808,6 +3801,10 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
+"この PDF "
+"ドキュメントは請求書の画像情報の写しであり、VATのための請求書を構成するもので"
+"はありません。請求書の原本はXML形式で発行され、Peppolネットワークを介して送信"
+"されます。"
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
@@ -13970,10 +13967,8 @@ msgid "Canceled (fully or with paid fee)"
 msgstr "キャンセル（全額返金または手数料を支払って）"
 
 #: pretix/control/forms/filter.py:228
-#, fuzzy
-#| msgid "Cancel this position"
 msgid "Canceled (at least one position)"
-msgstr "このポジションをキャンセルします"
+msgstr "キャンセル済み（少なくとも1つのポジション）"
 
 #: pretix/control/forms/filter.py:229
 msgid "Cancellation requested"
@@ -16622,10 +16617,9 @@ msgid "The voucher has been deleted."
 msgstr "そのバウチャーは削除されました。"
 
 #: pretix/control/logdisplay.py:584
-#, fuzzy, python-brace-format
-#| msgid "The voucher has been sent to {email} through the waiting list."
+#, python-brace-format
 msgid "The voucher has been assigned to {email} through the waiting list."
-msgstr "バウチャーが空席待ちリストを通じて{email}に送信されました。"
+msgstr "バウチャーは、空席待ちリストを通じて{email}に割り当てられました。"
 
 #: pretix/control/logdisplay.py:593
 #, python-brace-format
@@ -26896,11 +26890,9 @@ msgid "The sync job has been enqueued and will run in the next minutes."
 msgstr "同期ジョブがキューに追加されました。数分以内に実行されます。"
 
 #: pretix/control/views/datasync.py:90 pretix/control/views/datasync.py:104
-#, fuzzy
-#| msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgid ""
 "The sync job could not be found. It may have been processed in the meantime."
-msgstr "そのバウチャー「{voucher}」はすでに使用されています。"
+msgstr "同期ジョブが見つかりませんでした。その間に処理されていたかもしれません。"
 
 #: pretix/control/views/datasync.py:93 pretix/control/views/datasync.py:107
 msgid "The sync job is already in progress."
@@ -27862,12 +27854,11 @@ msgstr ""
 "このメールに、{name}の新しい定期レポートを添付しています。"
 
 #: pretix/control/views/orders.py:2849 pretix/control/views/organizer.py:2207
-#, fuzzy
-#| msgid "You do not have sufficient permission to perform this export."
 msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot schedule it."
-msgstr "このエクスポートを実行するための十分な権限がありません。"
+msgstr "ユーザーアカウントにはこのレポートを実行するのに十分な権限がないため、スケジ"
+"ュールを設定できません。"
 
 #: pretix/control/views/orders.py:2902 pretix/control/views/organizer.py:2259
 msgid ""
@@ -28229,17 +28220,12 @@ msgid "A date can not be deleted if orders already have been placed."
 msgstr "注文がすでにある場合、日付を削除することはできません。"
 
 #: pretix/control/views/subevents.py:203
-#, fuzzy
-#| msgid ""
-#| "The channel could not be deleted as some constraints (e.g. data created "
-#| "by plug-ins) did not allow it."
 msgctxt "subevent"
 msgid ""
 "The date could not be deleted as some constraints (e.g. data created by plug-"
 "ins) did not allow it. The date was disabled instead."
-msgstr ""
-"チャンネルは削除できませんでした。プラグインによって作成されたデータなど、い"
-"くつかの制約がそれを許可していませんでした。"
+msgstr "日付は、いくつかの制約（プラグインによって作成されたデータなど）で許可されて"
+"いないため、削除できませんでした。代わりに日付が無効になりました。"
 
 #: pretix/control/views/subevents.py:207
 msgctxt "subevent"
@@ -32934,17 +32920,10 @@ msgstr ""
 "ます。その後、有効な契約が形成されます。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:192
-#, fuzzy
-#| msgid ""
-#| "After you submitted your order using the button below, it will require "
-#| "approval by the event organizer before it can be confirmed and forms a "
-#| "valid contract."
 msgid ""
 "After you submitted your order using the button below, it will require "
 "approval by the event organizer."
-msgstr ""
-"以下のボタンを使用して注文を送信した後、イベント主催者による承認が必要となり"
-"ます。その後、有効な契約が形成されます。"
+msgstr "下のボタンを使って注文を送信した後、イベント主催者の承認が必要になります。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
 msgid ""
@@ -35434,10 +35413,8 @@ msgid "The selected date does not exist in this event series."
 msgstr "選択された日付は、このイベントシリーズに存在しません。"
 
 #: pretix/presale/views/widget.py:412
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The selected date is not available."
-msgstr "選択した座席 \"{seat}\"はご利用になれません。"
+msgstr "選択した日付は利用できません。"
 
 #: pretix/presale/views/widget.py:476
 #, python-format
