@@ -221,7 +221,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
 
             for o in orders:
                 with language(o.locale, event.settings.region):
-                    order_placed.send(event, order=o)
+                    order_placed.send(event, order=o, interactive=False)
                     if o.status == Order.STATUS_PAID:
                         order_paid.send(event, order=o)
 

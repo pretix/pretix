@@ -1091,7 +1091,7 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
         for msg in meta_info.get('confirm_messages', []):
             order.log_action('pretix.event.order.consent', data={'msg': msg})
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, interactive=False)
     return order, payments
 
 
