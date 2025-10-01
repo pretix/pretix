@@ -665,14 +665,13 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 
 order_placed = EventPluginSignal()
 """
-Arguments: ``order``, ``interactive``
+Arguments: ``order``, ``bulk``
 
 This signal is sent out every time an order is placed. The order object is given
-as the first argument. The ``interactive`` argument specifies whether the order was
-placed interactively, by a customer (as opposed to via a bulk import or the REST API).
-This signal is *not* sent out if an order is created through
-splitting an existing order, so you can not expect to see all orders by listening
-to this signal.
+as the first argument. The ``bulk`` argument specifies whether the order was placed
+as part of a bulk action, e.g. an import from a file.
+This signal is *not* sent out if an order is created through splitting an existing order,
+so you can not expect to see all orders by listening to this signal.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
