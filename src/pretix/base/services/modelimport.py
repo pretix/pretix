@@ -33,8 +33,8 @@ from pretix.base.modelimport import DataImportError, ImportColumn, parse_csv
 from pretix.base.modelimport_orders import get_order_import_columns
 from pretix.base.modelimport_vouchers import get_voucher_import_columns
 from pretix.base.models import (
-    CachedFile, Event, InvoiceAddress, Order, OrderPayment, OrderPosition,
-    User, Voucher,
+    CachedFile, Event, InvoiceAddress, LogEntry, Order, OrderPayment,
+    OrderPosition, User, Voucher,
 )
 from pretix.base.models.orders import Transaction
 from pretix.base.services.invoices import generate_invoice, invoice_qualified
@@ -175,6 +175,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                             raise DataImportError(_('The seat you selected has already been taken. Please select a different seat.'))
 
                 save_transactions = []
+                save_logentries = []
                 for o in orders:
                     o.total = sum([c.price for c in o._positions])  # currently no support for fees
                     if o.total == Decimal('0.00'):
@@ -211,13 +212,15 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                     o._address.save()
                     for c in cols:
                         c.save(o)
-                    o.log_action(
+                    save_logentries.append(o.log_action(
                         'pretix.event.order.placed',
                         user=user,
-                        data={'source': 'import'}
-                    )
+                        data={'source': 'import'},
+                        save=False
+                    ))
                     save_transactions += o.create_transactions(is_new=True, fees=[], positions=o._positions, save=False)
                 Transaction.objects.bulk_create(save_transactions)
+                LogEntry.bulk_create_and_postprocess(save_logentries)
 
             for o in orders:
                 with language(o.locale, event.settings.region):
@@ -286,13 +289,16 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
                         raise DataImportError(
                             _('The seat you selected has already been taken. Please select a different seat.'))
 
+            save_logentries = []
             for v in vouchers:
                 v.save()
-                v.log_action(
+                save_logentries.append(v.log_action(
                     'pretix.voucher.added',
                     user=user,
-                    data={'source': 'import'}
-                )
+                    data={'source': 'import'},
+                    save=False,
+                ))
                 for c in cols:
                     c.save(v)
+            LogEntry.bulk_create_and_postprocess(save_logentries)
     cf.delete()
