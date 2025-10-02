@@ -76,7 +76,7 @@ def repeatable_reads_transaction():
     queries in READ COMMITTED mode, the results might be different for each query, causing numbers to be inconsistent
     with each other.
 
-    This decorator creates a transaction that is running in REPEATABLE READ mode to avoid this problem.
+    This context manager creates a transaction that is running in REPEATABLE READ mode to avoid this problem.
 
     **You should only make read-only queries during this transaction and not rely on quota calculations.**
     """
