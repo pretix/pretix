@@ -439,8 +439,12 @@ def register_default_webhook_events(sender, **kwargs):
 def notify_webhooks(logentry_ids: list):
     if not isinstance(logentry_ids, list):
         logentry_ids = [logentry_ids]
-    qs = LogEntry.all.select_related('event', 'event__organizer', 'organizer').filter(id__in=logentry_ids)
-    _org, _at, webhooks = None, None, None
+    qs = LogEntry.all.select_related(
+        'event', 'event__organizer', 'organizer'
+    ).order_by(
+        'action_type', 'organizer_id', 'event_id',
+    ).filter(id__in=logentry_ids)
+    _org, _at, _ev, webhooks = None, None, None, None
     for logentry in qs:
         if not logentry.organizer:
             break  # We need to know the organizer
@@ -450,7 +454,7 @@ def notify_webhooks(logentry_ids: list):
         if not notification_type:
             break  # Ignore, no webhooks for this event type
 
-        if _org != logentry.organizer or _at != logentry.action_type or webhooks is None:
+        if _org != logentry.organizer or _at != logentry.action_type or webhooks is None or _ev != logentry.event_id:
             _org = logentry.organizer
             _at = logentry.action_type
 
