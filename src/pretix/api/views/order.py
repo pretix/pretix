@@ -743,7 +743,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                     user=request.user if request.user.is_authenticated else None,
                     auth=request.auth,
                 )
-            order_placed.send(self.request.event, order=order)
+            order_placed.send(self.request.event, order=order, bulk=False)
             if order.status == Order.STATUS_PAID:
                 order_paid.send(self.request.event, order=order)
                 order.log_action(
