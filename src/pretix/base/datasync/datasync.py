@@ -106,7 +106,7 @@ class OutboundSyncProvider:
         return str(cls.identifier)
 
     @classmethod
-    def enqueue_order(cls, order, triggered_by, not_before=None):
+    def enqueue_order(cls, order, triggered_by, not_before=None, immediate=False):
         """
         Adds an order to the sync queue. May only be called on derived classes which define an ``identifier`` attribute.
 
@@ -119,12 +119,14 @@ class OutboundSyncProvider:
         :param order: the Order that should be synced
         :param triggered_by: the reason why the order should be synced, e.g. name of the signal
                              (currently only used internally for logging)
+        :param immediate: whether a new sync task should run immediately for this order, instead
+                          of waiting for the next periodic_task interval
         :return: Return a tuple (queue_item, created), where created is a boolean
                  specifying whether a new queue item was created.
         """
         if not hasattr(cls, 'identifier'):
             raise TypeError('Call this method on a derived class that defines an "identifier" attribute.')
-        return OrderSyncQueue.objects.update_or_create(
+        queue_item, created = OrderSyncQueue.objects.update_or_create(
             order=order,
             sync_provider=cls.identifier,
             in_flight=False,
@@ -135,6 +137,10 @@ class OutboundSyncProvider:
                 "need_manual_retry": None,
             },
         )
+        if immediate:
+            from pretix.base.services.datasync import sync_single
+            sync_single.apply_async(args=(queue_item.pk,))
+        return queue_item, created
 
     @classmethod
     def get_external_link_info(cls, event, external_link_href, external_link_display_name):
