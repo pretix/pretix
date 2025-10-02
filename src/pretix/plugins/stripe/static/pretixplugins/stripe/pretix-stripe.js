@@ -325,6 +325,8 @@ $(function () {
     } else if ($("#stripe_payment_intent_next_action_redirect_url").length) {
         let payment_intent_next_action_redirect_url = $.trim($("#stripe_payment_intent_next_action_redirect_url").html());
         pretixstripe.handlePaymentRedirectAction(payment_intent_next_action_redirect_url);
+    } else if ($.trim($("#stripe_payment_intent_action_type").html()) === "promptpay_display_qr_code") {
+        waitingDialog.hide();
     } else if ($.trim($("#stripe_payment_intent_action_type").html()) === "wechat_pay_display_qr_code") {
         let payment_intent_client_secret = $.trim($("#stripe_payment_intent_client_secret").html());
         pretixstripe.handleWechatAction(payment_intent_client_secret);
