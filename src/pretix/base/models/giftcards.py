@@ -195,20 +195,21 @@ class GiftCardTransaction(models.Model):
                 return response
 
         if self.order_id:
-            if not self.text:
-                if not customer_facing:
-                    return format_html(
-                        '<a href="{}">{}</a>',
-                        reverse(
-                            "control:event.order",
-                            kwargs={
-                                "event": self.order.event.slug,
-                                "organizer": self.order.event.organizer.slug,
-                                "code": self.order.code,
-                            }
-                        ),
-                        self.order.full_code
-                    )
+            if not customer_facing:
+                return format_html(
+                    '<a href="{}">{}</a> {}',
+                    reverse(
+                        "control:event.order",
+                        kwargs={
+                            "event": self.order.event.slug,
+                            "organizer": self.order.event.organizer.slug,
+                            "code": self.order.code,
+                        }
+                    ),
+                    self.order.full_code,
+                    self.text or "",
+                )
+            elif not self.text:
                 return self.order.full_code
             else:
                 return self.text
