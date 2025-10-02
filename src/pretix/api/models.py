@@ -22,6 +22,7 @@
 from datetime import timedelta
 
 from django.db import models
+from django.db.models import Exists, OuterRef, Q
 from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -111,6 +112,24 @@ class OAuthRefreshToken(AbstractRefreshToken):
     )
 
 
+class WebHookQuerySet(models.QuerySet):
+    def for_notification(self, action_type, organizer, event):
+        event_listener = WebHookEventListener.objects.filter(
+            webhook=OuterRef('pk'),
+            action_type=action_type
+        )
+        webhooks = WebHook.objects.annotate(has_el=Exists(event_listener)).filter(
+            organizer=organizer,
+            has_el=True,
+            enabled=True
+        )
+        if event:
+            webhooks = webhooks.filter(
+                Q(all_events=True) | Q(limit_events__pk=event.pk if not isinstance(event, int) else event)
+            )
+        return webhooks
+
+
 class WebHook(models.Model):
     organizer = models.ForeignKey('pretixbase.Organizer', on_delete=models.CASCADE, related_name='webhooks')
     enabled = models.BooleanField(default=True, verbose_name=_("Enable webhook"))
@@ -118,6 +137,8 @@ class WebHook(models.Model):
     all_events = models.BooleanField(default=True, verbose_name=_("All events (including newly created ones)"))
     limit_events = models.ManyToManyField('pretixbase.Event', verbose_name=_("Limit to events"), blank=True)
     comment = models.CharField(verbose_name=_("Comment"), max_length=255, null=True, blank=True)
+
+    objects = models.Manager.from_queryset(WebHookQuerySet)()
 
     class Meta:
         ordering = ('id',)

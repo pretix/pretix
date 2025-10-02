@@ -38,7 +38,10 @@ import logging
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections, models
+from django.db.models import Q
 from django.utils.functional import cached_property
+
+from pretix.api.models import WebHook
 
 
 class VisibleOnlyManager(models.Manager):
@@ -181,12 +184,56 @@ class LogEntry(models.Model):
     @classmethod
     def bulk_postprocess(cls, objects):
         from pretix.api.webhooks import notify_webhooks
+        from pretix.base.models import NotificationSetting
 
         from ..services.notifications import notify
 
-        to_notify = [o.id for o in objects if o.notification_type]
+        # Regular LogEntry.save() always kicks off notify and notify_webhooks tasks, regardless of whether a webhook
+        # listener exists. However, in bulk processing, it makes sense to check once and then only create the task if
+        # there is something to do.
+        _webhook_active_cache = {}
+        _notification_active_cache = {}
+
+        def _is_webhook_active(logentry):
+            nonlocal _webhook_active_cache
+
+            key = (logentry.action_type, logentry.organizer_id, logentry.event_id)
+            if key not in _webhook_active_cache:
+                notification_type = logentry.webhook_type
+                _webhook_active_cache[key] = notification_type and WebHook.objects.for_notification(
+                    notification_type.action_type, logentry.organizer, logentry.event_id
+                ).exists()
+            return _webhook_active_cache[key]
+
+        def _is_notification_active(logentry):
+            nonlocal _notification_active_cache
+
+            key = (logentry.action_type, logentry.organizer_id, logentry.event_id)
+            if key not in _notification_active_cache:
+                notification_type = logentry.notification_type
+                if notification_type and logentry.event:
+                    # We only have event-related notifications right now
+                    users = logentry.event.get_users_with_permission(
+                        notification_type.required_permission
+                    ).filter(notifications_send=True, is_active=True)
+
+                    _notification_active_cache[key] = NotificationSetting.objects.filter(
+                        # This is not technically fully correct since it's returning True if a user has the
+                        # notification enabled on the global level and then disabled on the per-event-level,
+                        # but it's good enough as a first check to avoid useless celery tasks for bulk actions
+                        Q(event_id=logentry.event_id) | Q(event__isnull=True),
+                        action_type=notification_type.action_type,
+                        user__pk__in=users.values_list('pk', flat=True),
+                        enabled=True,
+                    ).exists()
+
+                else:
+                    _webhook_active_cache[key] = False
+            return _notification_active_cache[key]
+
+        to_notify = [o.id for o in objects if _is_notification_active(o)]
         if to_notify:
             notify.apply_async(args=(to_notify,))
-        to_wh = [o.id for o in objects if o.webhook_type]
+        to_wh = [o.id for o in objects if _is_webhook_active(o)]
         if to_wh:
             notify_webhooks.apply_async(args=(to_wh,))

@@ -27,16 +27,13 @@ from datetime import timedelta
 
 import requests
 from django.db import DatabaseError, connection, transaction
-from django.db.models import Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import scope, scopes_disabled
 from requests import RequestException
 
-from pretix.api.models import (
-    WebHook, WebHookCall, WebHookCallRetry, WebHookEventListener,
-)
+from pretix.api.models import WebHook, WebHookCall, WebHookCallRetry
 from pretix.api.signals import register_webhook_events
 from pretix.base.models import LogEntry
 from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
@@ -454,20 +451,9 @@ def notify_webhooks(logentry_ids: list):
             _org = logentry.organizer
             _at = logentry.action_type
 
-            # All webhooks that registered for this notification
-            event_listener = WebHookEventListener.objects.filter(
-                webhook=OuterRef('pk'),
-                action_type=notification_type.action_type
+            webhooks = WebHook.objects.for_notification(
+                notification_type.action_type, logentry.organizer, logentry.event_id
             )
-            webhooks = WebHook.objects.annotate(has_el=Exists(event_listener)).filter(
-                organizer=logentry.organizer,
-                has_el=True,
-                enabled=True
-            )
-            if logentry.event_id:
-                webhooks = webhooks.filter(
-                    Q(all_events=True) | Q(limit_events__pk=logentry.event_id)
-                )
 
         for wh in webhooks:
             send_webhook.apply_async(args=(logentry.id, notification_type.action_type, wh.pk))
