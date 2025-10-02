@@ -207,7 +207,7 @@ class GiftCardTransaction(models.Model):
                         }
                     ),
                     self.order.full_code,
-                    self.text,
+                    self.text or "",
                 )
             elif not self.text:
                 return self.order.full_code
