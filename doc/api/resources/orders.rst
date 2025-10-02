@@ -2508,6 +2508,7 @@ Order payment endpoints
 
       {
         "amount": "23.00",
+        "comment": "Overpayment",
         "mark_canceled": false
       }
 
