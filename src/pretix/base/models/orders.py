@@ -1840,6 +1840,10 @@ class OrderPayment(models.Model):
                 ))
                 return False
 
+            if locked_instance.state == OrderPayment.PAYMENT_STATE_CANCELED:
+                # Never send mails when the payment was already canceled intentionally
+                send_mail = False
+
             if isinstance(info, str):
                 locked_instance.info = info
             elif info:
@@ -1854,6 +1858,10 @@ class OrderPayment(models.Model):
             'info': info,
             'data': log_data,
         }, user=user, auth=auth)
+
+        if self.order.status in (Order.STATUS_PAID, Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
+            # No reason to send mail, as the payment is no longer really expected
+            send_mail = False
 
         if send_mail:
             with language(self.order.locale, self.order.event.settings.region):
