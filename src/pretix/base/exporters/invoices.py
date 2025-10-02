@@ -180,6 +180,7 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                     'includes two sheets, one with a line for every invoice, and one with a line for every position of '
                     'every invoice.')
     featured = True
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):

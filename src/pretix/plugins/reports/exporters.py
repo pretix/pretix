@@ -661,6 +661,7 @@ class OrderTaxListReport(MultiSheetListExporter):
     verbose_name = gettext_lazy('Tax split list')
     category = pgettext_lazy('export_category', 'Order data')
     description = gettext_lazy("Download a spreadsheet with the tax amounts included in each order.")
+    repeatable_read = False
 
     @property
     def sheets(self):
