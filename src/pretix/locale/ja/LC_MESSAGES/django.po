@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-19 16:35+0000\n"
-"PO-Revision-Date: 2025-09-30 16:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2025-10-03 20:00+0000\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -30760,7 +30760,7 @@ msgstr "このイベントのメール設定でチケットの添付が無効に
 #: pretix/plugins/sendmail/forms.py:234 pretix/plugins/sendmail/forms.py:386
 #: pretix/plugins/sendmail/views.py:267
 msgid "payment pending but already confirmed"
-msgstr "支払い保留中ですが、すでに確認済み"
+msgstr "支払い保留中だが確認済み"
 
 #: pretix/plugins/sendmail/forms.py:235 pretix/plugins/sendmail/forms.py:388
 #: pretix/plugins/sendmail/views.py:268
