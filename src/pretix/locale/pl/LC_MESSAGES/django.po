@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-06-02 23:00+0000\n"
-"Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
+"PO-Revision-Date: 2025-10-04 10:10+0000\n"
+"Last-Translator: Sebastian Bożek <sebastian@log-mar.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -90,7 +90,7 @@ msgstr "Grecki"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebrajski"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -146,7 +146,7 @@ msgstr "Hiszpański"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "Hiszpański (Ameryka Łacińska)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -2328,7 +2328,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:115 pretix/control/forms/event.py:1671
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
-msgstr "Kod wydarzenia"
+msgstr "Fragment adresu URL, który pojawia się po nazwie domeny."
 
 #: pretix/base/exporters/orderlist.py:262
 #: pretix/base/exporters/orderlist.py:452
