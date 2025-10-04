@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-09-30 01:00+0000\n"
+"PO-Revision-Date: 2025-10-04 19:00+0000\n"
 "Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -808,6 +808,8 @@ msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
 msgstr ""
+"Het veld \"{field_name}\" bestaat niet. Controleer uw {provider_name} "
+"instellingen."
 
 #: pretix/base/datasync/datasync.py:262
 #, python-brace-format
@@ -815,6 +817,8 @@ msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
+"Het veld \"{field_name}\" vereist {required_input}, maar heeft alleen "
+"{available_inputs}. Controleer uw {provider_name} instellingen."
 
 #: pretix/base/datasync/datasync.py:273
 #, python-brace-format
@@ -822,18 +826,16 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
+"Werk de mapping van de waarden bij voor veld \"{field_name}\" - optie "
+"\"{val}\" is niet toegewezen"
 
 #: pretix/base/datasync/sourcefields.py:128
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "Bestelde producten"
+msgstr "Details bestelde producten"
 
 #: pretix/base/datasync/sourcefields.py:129
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "E-mailadres van aanwezige"
+msgstr "Details van aanwezige"
 
 #: pretix/base/datasync/sourcefields.py:130 pretix/base/exporters/answers.py:66
 #: pretix/base/models/items.py:1767 pretix/control/navigation.py:172
@@ -843,10 +845,8 @@ msgid "Questions"
 msgstr "Vragen"
 
 #: pretix/base/datasync/sourcefields.py:131
-#, fuzzy
-#| msgid "Product data"
 msgid "Product details"
-msgstr "Productgegevens"
+msgstr "Productdetails"
 
 #: pretix/base/datasync/sourcefields.py:132
 #: pretix/control/templates/pretixcontrol/event/settings.html:280
@@ -1038,16 +1038,12 @@ msgid "Product ID"
 msgstr "Product ID"
 
 #: pretix/base/datasync/sourcefields.py:419
-#, fuzzy
-#| msgid "Non-admission product"
 msgid "Product is admission product"
-msgstr "Geen toegangsbewijs"
+msgstr "Product is een toegangsbewijs"
 
 #: pretix/base/datasync/sourcefields.py:428
-#, fuzzy
-#| msgid "Event short name"
 msgid "Event short form"
-msgstr "Korte naam evenement"
+msgstr "Kort formulier evenement"
 
 #: pretix/base/datasync/sourcefields.py:437 pretix/base/exporters/events.py:57
 #: pretix/base/exporters/orderlist.py:262
@@ -1090,10 +1086,8 @@ msgid "Order code and position number"
 msgstr "Bestelcode en plaatsnummer"
 
 #: pretix/base/datasync/sourcefields.py:482
-#, fuzzy
-#| msgid "Ticket page"
 msgid "Ticket price"
-msgstr "Ticketpagina"
+msgstr "Ticketprijs"
 
 #: pretix/base/datasync/sourcefields.py:491 pretix/base/notifications.py:204
 #: pretix/control/forms/filter.py:216 pretix/control/forms/modelimport.py:85
@@ -1101,22 +1095,16 @@ msgid "Order status"
 msgstr "Bestelstatus"
 
 #: pretix/base/datasync/sourcefields.py:500
-#, fuzzy
-#| msgid "Device status"
 msgid "Ticket status"
-msgstr "Apparaatstatus"
+msgstr "Ticketstatus"
 
 #: pretix/base/datasync/sourcefields.py:509
-#, fuzzy
-#| msgid "Purchase date and time"
 msgid "Order date and time"
-msgstr "Aankoopdatum en -tijd"
+msgstr "Besteldatum en -tijd"
 
 #: pretix/base/datasync/sourcefields.py:518
-#, fuzzy
-#| msgid "Printing date and time"
 msgid "Payment date and time"
-msgstr "Printdatum en -tijd"
+msgstr "Betaaldatum en -tijd"
 
 #: pretix/base/datasync/sourcefields.py:527
 #: pretix/base/exporters/orderlist.py:271
@@ -1127,23 +1115,17 @@ msgid "Order locale"
 msgstr "Taal van bestelling"
 
 #: pretix/base/datasync/sourcefields.py:536
-#, fuzzy
-#| msgid "Order position"
 msgid "Order position ID"
-msgstr "Besteld product"
+msgstr "ID besteld product"
 
 #: pretix/base/datasync/sourcefields.py:545
 #: pretix/base/exporters/orderlist.py:291
-#, fuzzy
-#| msgid "Order time"
 msgid "Order link"
-msgstr "Besteltijd"
+msgstr "Bestellink"
 
 #: pretix/base/datasync/sourcefields.py:560
-#, fuzzy
-#| msgid "Ticket block"
 msgid "Ticket link"
-msgstr "Ticketblok"
+msgstr "Ticketlink"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, fuzzy, python-brace-format
