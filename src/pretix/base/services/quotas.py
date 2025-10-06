@@ -65,7 +65,7 @@ class QuotaAvailability:
     """
 
     def __init__(self, count_waitinglist=True, ignore_closed=False, full_results=False, early_out=True,
-                 ignore_repeatable_read=False):
+                 allow_repeatable_read=False):
         """
         Initialize a new quota availability calculator
 
@@ -88,7 +88,7 @@ class QuotaAvailability:
                           do not care about keeping the cache up to date, you can set this to ``False`` for further
                           performance improvements.
 
-        :param ignore_repeatable_read: Allow to run this even in REPEATABLE READ mode, generally not advised.
+        :param allow_repeatable_read: Allow to run this even in REPEATABLE READ mode, generally not advised.
         """
         self._queue = []
         self._count_waitinglist = count_waitinglist
@@ -98,7 +98,7 @@ class QuotaAvailability:
         self._var_to_quotas = defaultdict(set)
         self._early_out = early_out
         self._quota_objects = {}
-        self._ignore_repeatable_read = ignore_repeatable_read
+        self._allow_repeatable_read = allow_repeatable_read
         self.results = {}
         self.count_paid_orders = defaultdict(int)
         self.count_pending_orders = defaultdict(int)
@@ -123,7 +123,7 @@ class QuotaAvailability:
         Compute the queued quotas. If ``allow_cache`` is set, results may also be taken from a cache that might
         be a few minutes outdated. In this case, you may not rely on the results in the ``count_*`` properties.
         """
-        if not self._ignore_repeatable_read and getattr(connection, "tx_in_repeatable_read", False):
+        if not self._allow_repeatable_read and getattr(connection, "tx_in_repeatable_read", False):
             raise ValueError("You cannot compute quotas in REPEATABLE READ mode unless you explicitly opted in to "
                              "do so.")
 
