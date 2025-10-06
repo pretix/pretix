@@ -41,7 +41,11 @@ def notify(logentry_ids: list):
     if not isinstance(logentry_ids, list):
         logentry_ids = [logentry_ids]
 
-    qs = LogEntry.all.select_related('event', 'event__organizer').filter(id__in=logentry_ids)
+    qs = LogEntry.all.select_related(
+        'event', 'event__organizer'
+    ).order_by(
+        'action_type', 'event_id',
+    ).filter(id__in=logentry_ids)
 
     _event, _at, notify_specific, notify_global = None, None, None, None
     for logentry in qs:
