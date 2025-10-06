@@ -80,15 +80,19 @@ def repeatable_reads_transaction():
 
     **You should only make read-only queries during this transaction and not rely on quota calculations.**
     """
+    is_under_test = 'tests.testdummy' in settings.INSTALLED_APPS
     try:
-        with transaction.atomic(durable=True):
-            with connection.cursor() as cursor:
-                if 'postgresql' in settings.DATABASES['default']['ENGINE']:
-                    cursor.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;')
-                elif 'sqlite' in settings.DATABASES['default']['ENGINE']:
-                    pass  # noop
-                else:
-                    raise ImproperlyConfigured("Cannot set transaction isolation mode on this database backend")
+        with transaction.atomic(durable=not is_under_test):
+            if not is_under_test:
+                # We're not running this in tests, where we can basically not use this since the test runner does its
+                # own transaction logic for efficiency
+                with connection.cursor() as cursor:
+                    if 'postgresql' in settings.DATABASES['default']['ENGINE']:
+                        cursor.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;')
+                    elif 'sqlite' in settings.DATABASES['default']['ENGINE']:
+                        pass  # noop
+                    else:
+                        raise ImproperlyConfigured("Cannot set transaction isolation mode on this database backend")
 
             connection.tx_in_repeatable_read = True
             yield
