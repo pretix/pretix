@@ -95,6 +95,12 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
   }
 }
 
+.submit-group-sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+}
+
 .panel .form-group:last-child {
   margin-bottom: 0;
 }
