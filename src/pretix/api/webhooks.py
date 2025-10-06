@@ -454,7 +454,7 @@ def notify_webhooks(logentry_ids: list):
         if not notification_type:
             break  # Ignore, no webhooks for this event type
 
-        if _org != logentry.organizer or _at != logentry.action_type or webhooks is None or _ev != logentry.event_id:
+        if _org != logentry.organizer or _at != logentry.action_type or _ev != logentry.event_id or webhooks is None:
             _org = logentry.organizer
             _at = logentry.action_type
 
