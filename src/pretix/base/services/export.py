@@ -49,7 +49,7 @@ from pretix.base.signals import (
     periodic_task, register_data_exporters, register_multievent_data_exporters,
 )
 from pretix.celery_app import app
-from pretix.helpers import OF_SELF
+from pretix.helpers import OF_SELF, repeatable_reads_transaction
 from pretix.helpers.urls import build_absolute_uri
 
 logger = logging.getLogger(__name__)
@@ -80,7 +80,12 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
                 continue
             ex = response(event, event.organizer, set_progress)
             if ex.identifier == provider:
-                d = ex.render(form_data)
+                if ex.repeatable_read:
+                    with repeatable_reads_transaction():
+                        d = ex.render(form_data)
+                else:
+                    d = ex.render(form_data)
+
                 if d is None:
                     raise ExportError(
                         gettext('Your export did not contain any data.')
@@ -151,7 +156,11 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
                         gettext('You do not have sufficient permission to perform this export.')
                     )
 
-                d = ex.render(form_data)
+                if ex.repeatable_read:
+                    with repeatable_reads_transaction():
+                        d = ex.render(form_data)
+                else:
+                    d = ex.render(form_data)
                 if d is None:
                     raise ExportError(
                         gettext('Your export did not contain any data.')
@@ -209,7 +218,11 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
         try:
             if not exporter:
                 raise ExportError("Export type not found.")
-            d = exporter.render(schedule.export_form_data)
+            if exporter.repeatable_read:
+                with repeatable_reads_transaction():
+                    d = exporter.render(schedule.export_form_data)
+            else:
+                d = exporter.render(schedule.export_form_data)
             if d is None:
                 raise ExportEmptyError(
                     gettext('Your export did not contain any data.')

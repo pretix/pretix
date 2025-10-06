@@ -476,6 +476,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
     category = pgettext_lazy('export_category', 'Check-in')
     description = gettext_lazy("Download a spreadsheet with all attendees that are included in a check-in list.")
     featured = True
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):
@@ -673,6 +674,7 @@ class CSVCheckinCodeList(CheckInListMixin, ListExporter):
     category = pgettext_lazy('export_category', 'Check-in')
     description = gettext_lazy("Download a spreadsheet with all valid check-in barcodes e.g. for import into a "
                                "different system. Does not included blocked codes or personal data.")
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):
@@ -743,6 +745,7 @@ class CheckinLogList(ListExporter):
     category = pgettext_lazy('export_category', 'Check-in')
     description = gettext_lazy("Download a spreadsheet with one line for every scan that happened at your check-in "
                                "stations.")
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):
