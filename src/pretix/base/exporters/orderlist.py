@@ -1162,7 +1162,7 @@ class QuotaListExporter(ListExporter):
         yield headers
 
         quotas = list(self.event.quotas.select_related('subevent'))
-        qa = QuotaAvailability(full_results=True, allow_repeatable_read=False)
+        qa = QuotaAvailability(full_results=True, allow_repeatable_read=True)
         qa.queue(*quotas)
         qa.compute()
 
