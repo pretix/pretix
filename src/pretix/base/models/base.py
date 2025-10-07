@@ -134,12 +134,12 @@ class LoggingMixin:
             if logentry.notification_type:
                 notify.apply_async(
                     args=(logentry.pk,),
-                    priority=get_task_priority("notifications", self.organizer_id),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
                 )
             if logentry.webhook_type:
                 notify_webhooks.apply_async(
                     args=(logentry.pk,),
-                    priority=get_task_priority("notifications", self.organizer_id),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
                 )
 
         return logentry
