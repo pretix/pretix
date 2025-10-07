@@ -2848,9 +2848,9 @@ class OrderChangeManager:
 
             if order_now_qualified:
                 if invoice_should_be_generated_now:
-                    if i and not i.canceled:
-                        self._invoices.append(generate_cancellation(i))
                     try:
+                        if i and not i.canceled:
+                            self._invoices.append(generate_cancellation(i))
                         self._invoices.append(generate_invoice(self.order))
                     except Exception as e:
                         logger.exception("Could not generate invoice.")
@@ -2861,8 +2861,14 @@ class OrderChangeManager:
                     self.order.invoice_dirty = True
                     self.order.save(update_fields=["invoice_dirty"])
             else:
-                if i and not i.canceled:
-                    self._invoices.append(generate_cancellation(i))
+                try:
+                    if i and not i.canceled:
+                        self._invoices.append(generate_cancellation(i))
+                except Exception as e:
+                    logger.exception("Could not generate invoice.")
+                    self.order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
 
     def _check_complete_cancel(self):
         current = self.order.positions.count()
