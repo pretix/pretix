@@ -455,7 +455,7 @@ class OrderDataSyncSuccessLogEntryType(OrderDataSyncLogEntryType):
                     links.append(", ".join(
                         prov.get_external_link_html(logentry.event, obj['external_link_href'], obj['external_link_display_name'])
                         for obj in objs
-                        if obj and 'external_link_href' in obj and 'external_link_display_name' in obj
+                        if obj and obj.get('external_link_href') and obj.get('external_link_display_name')
                     ))
 
         return mark_safe(escape(super().display(logentry, data)) + "".join("<p>" + link + "</p>" for link in links))
