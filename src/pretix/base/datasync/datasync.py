@@ -391,7 +391,7 @@ class OutboundSyncProvider:
     def sync_order(self, order):
         if not self.should_sync_order(order):
             logger.debug("Skipping order %r", order)
-            return
+            return {}
 
         logger.debug("Syncing order %r", order)
         positions = list(
