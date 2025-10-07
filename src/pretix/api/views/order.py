@@ -766,8 +766,11 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             if gen_invoice:
                 try:
                     invoice = generate_invoice(order, trigger_pdf=True)
-                except Exception:
+                except Exception as e:
                     logger.exception("Could not generate invoice.")
+                    order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
 
             # Refresh serializer only after running signals
             prefetch_related_objects([order], self._positions_prefetch(request))

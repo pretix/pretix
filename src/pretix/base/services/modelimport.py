@@ -235,8 +235,11 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                     if gen_invoice:
                         try:
                             generate_invoice(o, trigger_pdf=True)
-                        except Exception:
+                        except Exception as e:
                             logger.exception("Could not generate invoice.")
+                            o.log_action("pretix.event.order.invoice.failed", data={
+                                "exception": str(e)
+                            })
         except DataImportError:
             raise ValidationError(_('We were not able to process your request completely as the server was too busy. '
                                     'Please try again.'))

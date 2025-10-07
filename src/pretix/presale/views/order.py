@@ -743,8 +743,11 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
                     'invoice': i.pk
                 })
                 messages.success(self.request, _('The invoice has been generated.'))
-            except Exception:
+            except Exception as e:
                 logger.exception("Could not generate invoice.")
+                self.order.log_action("pretix.event.order.invoice.failed", data={
+                    "exception": str(e)
+                })
                 messages.error(self.request, _('Invoice generation has failed, please reach out to the organizer.'))
         return redirect(self.get_order_url())
 
@@ -820,8 +823,11 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
                         'invoice': i.pk
                     })
                     messages.success(self.request, _('The invoice has been generated.'))
-                except Exception:
+                except Exception as e:
                     logger.exception("Could not generate invoice.")
+                    self.order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
                     messages.error(self.request, _('Invoice generation has failed, please reach out to the organizer.'))
         elif self.request.event.settings.invoice_reissue_after_modify:
             if self.invoice_form.changed_data:
@@ -837,7 +843,10 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
                             'invoice': inv.pk
                         })
                         messages.success(self.request, _('The invoice has been reissued.'))
-                except Exception:
+                except Exception as e:
+                    self.order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
                     logger.exception("Could not generate invoice.")
 
         invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})

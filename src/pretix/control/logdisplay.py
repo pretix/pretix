@@ -522,6 +522,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.customer.changed': _('The customer account has been changed.'),
     'pretix.event.order.locale.changed': _('The order locale has been changed.'),
     'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
+    'pretix.event.order.invoice.failed': _('The invoice could not be generated.'),
     'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
     'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
     'pretix.event.order.invoice.sent': _('The invoice {full_invoice_no} has been sent.'),

@@ -1970,8 +1970,11 @@ class OrderPayment(models.Model):
                         self.order,
                         trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment
                     )
-                except Exception:
+                except Exception as e:
                     logger.exception("Could not generate invoice.")
+                    self.order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
 
         transmit_invoice_task = invoice_transmission_separately(invoice)
         transmit_invoice_mail = not transmit_invoice_task and self.order.event.settings.invoice_email_attachment and self.order.email

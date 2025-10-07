@@ -266,8 +266,11 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
     if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices and invoice_qualified(order):
         try:
             generate_invoice(order)
-        except Exception:
+        except Exception as e:
             logger.exception("Could not generate invoice.")
+            order.log_action("pretix.event.order.invoice.failed", data={
+                "exception": str(e)
+            })
 
 
 def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_pending: bool=None, user: User=None, auth=None):
@@ -317,8 +320,11 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
             if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices and invoice_qualified(order):
                 try:
                     generate_invoice(order)
-                except Exception:
+                except Exception as e:
                     logger.exception("Could not generate invoice.")
+                    order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
             order.create_transactions()
 
     with transaction.atomic():
@@ -411,8 +417,11 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 )
                 if transmit_invoice_task:
                     transmit_invoice.apply_async(args=(order.event_id, invoice.pk, False))
-            except Exception:
+            except Exception as e:
                 logger.exception("Could not generate invoice.")
+                order.log_action("pretix.event.order.invoice.failed", data={
+                    "exception": str(e)
+                })
 
     if send_mail:
         with language(order.locale, order.event.settings.region):
@@ -619,8 +628,11 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
             if cancel_invoice and i:
                 try:
                     invoices.append(generate_invoice(order))
-                except Exception:
+                except Exception as e:
                     logger.exception("Could not generate invoice.")
+                    order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
         else:
             order.status = Order.STATUS_CANCELED
             order.cancellation_date = now()
@@ -1326,8 +1338,11 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                 )
                 if transmit_invoice_task:
                     transmit_invoice.apply_async(args=(event.pk, invoice.pk, False))
-            except Exception:
+            except Exception as e:
                 logger.exception("Could not generate invoice.")
+                order.log_action("pretix.event.order.invoice.failed", data={
+                    "exception": str(e)
+                })
 
     if order.email:
         if order.require_approval:
@@ -2718,8 +2733,11 @@ class OrderChangeManager:
         if split_order.total != Decimal('0.00') and self.order.invoices.filter(is_cancellation=False).last():
             try:
                 generate_invoice(split_order)
-            except Exception:
+            except Exception as e:
                 logger.exception("Could not generate invoice.")
+                split_order.log_action("pretix.event.order.invoice.failed", data={
+                    "exception": str(e)
+                })
 
         order_split.send(sender=self.order.event, original=self.order, split_order=split_order)
         return split_order
@@ -2834,8 +2852,11 @@ class OrderChangeManager:
                         self._invoices.append(generate_cancellation(i))
                     try:
                         self._invoices.append(generate_invoice(self.order))
-                    except Exception:
+                    except Exception as e:
                         logger.exception("Could not generate invoice.")
+                        self.order.log_action("pretix.event.order.invoice.failed", data={
+                            "exception": str(e)
+                        })
                 elif invoice_should_be_generated_later:
                     self.order.invoice_dirty = True
                     self.order.save(update_fields=["invoice_dirty"])
@@ -3270,8 +3291,11 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
             try:
                 generate_cancellation(i)
                 generate_invoice(order)
-            except Exception:
+            except Exception as e:
                 logger.exception("Could not generate invoice.")
+                order.log_action("pretix.event.order.invoice.failed", data={
+                    "exception": str(e)
+                })
             new_invoice_created = True
 
         elif (not has_active_invoice or order.invoice_dirty) and invoice_qualified(order):
@@ -3287,8 +3311,11 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
                     order.log_action('pretix.event.order.invoice.generated', data={
                         'invoice': i.pk
                     })
-                except Exception:
+                except Exception as e:
                     logger.exception("Could not generate invoice.")
+                    order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
 
     order.create_transactions()
     return old_fee, new_fee, fee, new_payment, new_invoice_created
