@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
 from decimal import Decimal
 from typing import List
 
@@ -42,6 +43,8 @@ from pretix.base.services.locking import lock_objects
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.signals import order_paid, order_placed
 from pretix.celery_app import app
+
+logger = logging.getLogger(__name__)
 
 
 def _validate(cf: CachedFile, charset: str, cols: List[ImportColumn], settings: dict):
@@ -233,7 +236,13 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                         (event.settings.get('invoice_generate') == 'paid' and o.status == Order.STATUS_PAID)
                     ) and not o.invoices.last()
                     if gen_invoice:
-                        generate_invoice(o, trigger_pdf=True)
+                        try:
+                            generate_invoice(o, trigger_pdf=True)
+                        except Exception as e:
+                            logger.exception("Could not generate invoice.")
+                            o.log_action("pretix.event.order.invoice.failed", data={
+                                "exception": str(e)
+                            })
         except DataImportError:
             raise ValidationError(_('We were not able to process your request completely as the server was too busy. '
                                     'Please try again.'))
