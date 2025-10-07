@@ -671,6 +671,7 @@ def send_invoices_to_organizer(sender, **kwargs):
                             event=i.event,
                             invoices=[i],
                             auto_email=True,
+                            plain_text_only=True,
                         )
                     i.sent_to_organizer = True
                 else:
