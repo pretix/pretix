@@ -125,6 +125,7 @@ class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
     identifier = 'invoices'
     verbose_name = _('All invoices')
     description = _('Download all invoices created by the system as a ZIP file of PDF files.')
+    repeatable_read = False
 
     def render(self, form_data: dict, output_file=None):
         qs = self.invoices_queryset(form_data).filter(shredded=False)
