@@ -63,10 +63,6 @@ td > .form-group > .checkbox {
   @include box-shadow(none);
 }
 
-div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], div[data-nested-formset-body], details[data-formset-form] {
-  width: 100%;
-}
-
 .form-plugins .panel-title {
   line-height: 34px;
 }
