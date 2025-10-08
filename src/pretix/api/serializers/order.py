@@ -1005,7 +1005,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
                   'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until',
-                  'requested_valid_from', 'use_reusable_medium')
+                  'requested_valid_from', 'use_reusable_medium', 'discount')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1101,6 +1101,10 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                     {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
                 )
 
+        if data.get('price') is None and data.get('discount'):
+            raise ValidationError(
+                {'discount': ['You can only specify a discount if you do the price computation, but price is not set.']}
+            )
         return data
 
 
@@ -1160,6 +1164,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['positions'].child.fields['voucher'].queryset = self.context['event'].vouchers.all()
+        self.fields['positions'].child.fields['discount'].queryset = self.context['event'].discounts.all()
         self.fields['customer'].queryset = self.context['event'].organizer.customers.all()
         self.fields['expires'].required = False
         self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
@@ -1567,19 +1572,22 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
 
         order_positions = [pos_data['__instance'] for pos_data in positions_data]
-        discount_results = apply_discounts(
-            self.context['event'],
-            order.sales_channel,
-            [
-                (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.price,
-                 bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
-                for cp in order_positions
-            ]
-        )
-        for cp, (new_price, discount) in zip(order_positions, discount_results):
-            if new_price != pos.price and pos._auto_generated_price:
-                pos.price = new_price
-            pos.discount = discount
+        if not any([p.get("discount") for p in positions_data]):
+            # If any discount is set by the client (i.e. pretixPOS), we do not recalculate but believe the client
+            # to avoid differences in end results.
+            discount_results = apply_discounts(
+                self.context['event'],
+                order.sales_channel,
+                [
+                    (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.price,
+                     bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
+                    for cp in order_positions
+                ]
+            )
+            for cp, (new_price, discount) in zip(order_positions, discount_results):
+                if new_price != pos.price and pos._auto_generated_price:
+                    pos.price = new_price
+                pos.discount = discount
 
         # Save instances
         for pos_data in positions_data:
