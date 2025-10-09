@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2022-04-28 02:00+0000\n"
+"PO-Revision-Date: 2025-10-09 16:00+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ro/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -528,10 +528,8 @@ msgid "Refund of payment completed"
 msgstr "Plată finalizată."
 
 #: pretix/api/webhooks.py:318
-#, fuzzy
-#| msgid "Refund {local_id} has been canceled."
 msgid "Refund of payment canceled"
-msgstr "Rambursarea {local_id} a fost anulată."
+msgstr "Rambursarea plății a fost anulată."
 
 #: pretix/api/webhooks.py:322
 #, fuzzy
@@ -36461,18 +36459,14 @@ msgid "Change or cancel your order"
 msgstr "Modificați sau anulați comanda dvs"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:356
-#, fuzzy
-#| msgid "Change order"
 msgctxt "action"
 msgid "Change your order"
 msgstr "Modificați comanda"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:358
-#, fuzzy
-#| msgid "Cancel order"
 msgctxt "action"
 msgid "Cancel your order"
-msgstr "Anulează comanda"
+msgstr "Anulați comanda"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:366
 msgid ""
