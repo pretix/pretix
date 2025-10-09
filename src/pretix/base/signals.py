@@ -170,7 +170,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         second receiver and so on. The return value of the last receiver is returned by this method.
         """
         if sender and not isinstance(sender, self.type):
-            raise ValueError("Sender needs to be an event.")
+            raise ValueError(f"Sender needs to be of type {self.type}.")
 
         response = named.get(chain_kwarg_name)
         if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
@@ -192,7 +192,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         stopping the response chain at the offending receiver.
         """
         if sender and not isinstance(sender, self.type):
-            raise ValueError("Sender needs to be an event.")
+            raise ValueError(f"Sender needs to be of type {self.type}.")
 
         responses = []
         if (
