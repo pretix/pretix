@@ -485,6 +485,7 @@ var form_handlers = function (el) {
             theme: "bootstrap",
             language: $("body").attr("data-select2-locale"),
             data: JSON.parse($(this.getAttribute('data-select2-src')).text()),
+            width: '100%',
         }).val(selectedValue).trigger('change');
     });
 
