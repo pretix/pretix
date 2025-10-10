@@ -32,6 +32,7 @@ from django_scopes import scope, scopes_disabled
 
 from pretix.base.datasync.datasync import datasync_providers
 from pretix.base.models.datasync import OrderSyncQueue
+from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
 
@@ -89,7 +90,7 @@ def sync_all():
         run_sync(queue)
 
 
-@app.task()
+@app.task(base=TransactionAwareTask)
 def sync_single(queue_item_id: int):
     with scopes_disabled():
         queue = (
