@@ -390,7 +390,8 @@ class QuotaFormSet(I18nInlineFormSet):
             use_required_attribute=False,
             locales=self.locales,
             event=self.event,
-            items=self.items
+            items=self.items,
+            searchable_selection=self.searchable_selection,
         )
         self.add_fields(form, None)
         return form
