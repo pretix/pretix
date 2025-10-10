@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-10-10 07:16+0000\n"
+"PO-Revision-Date: 2025-10-10 17:00+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/sv/>\n"
@@ -982,9 +982,6 @@ msgid "Open ticket shop"
 msgstr "Öppna biljettbutik"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Checkout"
 msgstr "Fortsätt med din bokning"
@@ -1019,7 +1016,6 @@ msgstr ""
 "fler produkter, kommer de att läggas till i din befintliga bokning."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
-#, fuzzy
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Fortsätt med din bokning"
@@ -1045,9 +1041,6 @@ msgid "Close"
 msgstr "Stäng"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Close checkout"
 msgstr "Fortsätt med din bokning"
