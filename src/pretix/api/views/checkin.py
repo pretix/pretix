@@ -56,7 +56,8 @@ from pretix.api.serializers.checkin import (
 )
 from pretix.api.serializers.item import QuestionSerializer
 from pretix.api.serializers.order import (
-    CheckinListOrderPositionSerializer, FailedCheckinSerializer,
+    CheckinListOrderPositionSerializer, CheckinSerializer,
+    FailedCheckinSerializer,
 )
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
@@ -95,6 +96,16 @@ with scopes_disabled():
                 )
             )
             return queryset.filter(expr)
+
+    class CheckinFilter(FilterSet):
+        created_since = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='gte')
+        created_before = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='lt')
+        datetime_since = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='gte')
+        datetime_before = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='lt')
+
+        class Meta:
+            model = Checkin
+            fields = ['successful', 'error_reason', 'list', 'type', 'gate', 'device', 'auto_checked_in']
 
 
 class CheckinListViewSet(viewsets.ModelViewSet):
@@ -1080,3 +1091,25 @@ class CheckinRPCAnnulView(views.APIView):
             checkin_annulled.send(ci.position.order.event, checkin=ci)
 
         return Response({"status": "ok"}, status=status.HTTP_200_OK)
+
+
+class CheckinViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CheckinSerializer
+    queryset = Checkin.all.none()
+    filter_backends = (DjangoFilterBackend, RichOrderingFilter)
+    filterset_class = CheckinFilter
+    ordering = ('created', 'id')
+    ordering_fields = ('created', 'datetime', 'id',)
+    permission = 'can_view_orders'
+
+    def get_queryset(self):
+        qs = Checkin.all.filter().select_related(
+            "position",
+            "device",
+        )
+        return qs
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
