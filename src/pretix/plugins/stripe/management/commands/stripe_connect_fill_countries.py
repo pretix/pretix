@@ -19,12 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import stripe
 from django.core.management.base import BaseCommand
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Event
 from pretix.base.settings import GlobalSettingsObject
+from pretix.plugins.stripe.utils import get_stripe_client
 
 
 class Command(BaseCommand):
@@ -34,7 +34,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         cache = {}
         gs = GlobalSettingsObject()
-        api_key = gs.settings.payment_stripe_connect_secret_key or gs.settings.payment_stripe_connect_test_secret_key
+        api_key = (
+            gs.settings.payment_stripe_connect_secret_key
+            or gs.settings.payment_stripe_connect_test_secret_key
+        )
         if not api_key:
             self.stderr.write(self.style.ERROR("Stripe Connect is not set up!"))
             return
@@ -46,11 +49,13 @@ class Command(BaseCommand):
                     e.settings.payment_stripe_merchant_country = cache[uid]
                 else:
                     try:
-                        account = stripe.Account.retrieve(
+                        stripe_client = get_stripe_client(api_key)
+                        account = stripe_client.accounts.retrieve(
                             uid,
-                            api_key=api_key
                         )
                     except Exception as e:
                         print(e)
                     else:
-                        e.settings.payment_stripe_merchant_country = cache[uid] = account.get('country')
+                        e.settings.payment_stripe_merchant_country = cache[uid] = (
+                            account.get("country")
+                        )
