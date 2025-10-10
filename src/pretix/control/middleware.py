@@ -72,7 +72,7 @@ class PermissionMiddleware:
     )
 
     EXCEPTIONS_FORCED_PW_CHANGE = (
-        "user.settings",
+        "user.settings.password.change",
         "auth.logout"
     )
 
@@ -139,7 +139,7 @@ class PermissionMiddleware:
                 return redirect_to_url(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
         except SessionPasswordChangeRequired:
             if url_name not in self.EXCEPTIONS_FORCED_PW_CHANGE:
-                return redirect_to_url(reverse('control:user.settings') + '?next=' + quote(request.get_full_path()))
+                return redirect_to_url(reverse('control:user.settings.password.change') + '?next=' + quote(request.get_full_path()))
         except Session2FASetupRequired:
             if url_name not in self.EXCEPTIONS_2FA:
                 return redirect_to_url(reverse('control:user.settings.2fa'))

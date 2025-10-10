@@ -56,6 +56,7 @@
                     {% if form.new_pw %}
                         {% bootstrap_field form.new_pw layout='control' %}
                         {% bootstrap_field form.new_pw_repeat layout='control' %}
+                        {% bootstrap_field form.is_verified layout='control' %}
                     {% endif %}
                     {% bootstrap_field form.last_login layout='control' %}
                     {% bootstrap_field form.require_2fa layout='control' %}

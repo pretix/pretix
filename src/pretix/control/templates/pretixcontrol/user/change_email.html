@@ -1,0 +1,29 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Change login email address" %}{% endblock %}
+{% block content %}
+    <form action="" method="post" class="form centered-form">
+        <h1>
+            {% trans "Change login email address" %}
+        </h1>
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <p class="text-muted">
+            {% trans "This changes the email address used to login to your account, as well as where we send email notifications." %}
+        </p>
+        {% bootstrap_field form.old_email %}
+        {% bootstrap_field form.new_email %}
+        <p>
+            {% trans "We will send a confirmation code to your new email address, which you need to enter in the next step to confirm the email address is correct." %}
+        </p>
+        <div class="form-group submit-group">
+            <a href="{% url "control:user.settings" %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-primary btn-save btn-lg">
+                {% trans "Continue" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
