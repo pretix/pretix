@@ -77,7 +77,9 @@ from pretix.base.forms.widgets import (
 from pretix.base.i18n import (
     get_babel_locale, get_language_without_region, language,
 )
-from pretix.base.invoicing.transmission import get_transmission_types
+from pretix.base.invoicing.transmission import (
+    get_transmission_types, transmission_types,
+)
 from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
@@ -1142,9 +1144,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if (not kwargs.get('instance') or not kwargs['instance'].country) and not kwargs["initial"].get("country"):
             kwargs['initial']['country'] = guess_country_from_request(self.request, self.event)
 
-        if kwargs.get('instance'):
-            kwargs['initial'].update(kwargs['instance'].transmission_info or {})
-            kwargs['initial']['transmission_type'] = kwargs['instance'].transmission_type
+        if kwargs.get('instance') and kwargs['instance'].transmission_type:
+            ttype, meta = transmission_types.get(identifier=kwargs['instance'].transmission_type)
+            if ttype:
+                kwargs['initial'].update(ttype.transmission_info_to_form_data(kwargs['instance'].transmission_info or {}))
+                kwargs['initial']['transmission_type'] = ttype.identifier
 
         super().__init__(*args, **kwargs)
 
@@ -1394,9 +1398,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                         raise ValidationError({r: _("This field is required for the selected type of invoice transmission.")})
 
                 self.instance.transmission_type = transmission_type.identifier
-                self.instance.transmission_info = {
-                    k: data.get(k) for k in transmission_type.invoice_address_form_fields
-                }
+                self.instance.transmission_info = transmission_type.form_data_to_transmission_info(data)
             elif transmission_type.exclusive:
                 if transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
                     raise ValidationError({
