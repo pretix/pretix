@@ -170,7 +170,7 @@ OPTIONS = OrderedDict([
         'cols': 2,
         'rows': 6,
         'margins': [28.5 * mm, 30 * mm, 28.5 * mm, 30 * mm],
-        'offsets': [93 * mm, 60 * mm],
+        'offsets': [75 * mm, 40 * mm],
         'pagesize': pagesizes.A4,
     }),
     ('herma_50x80', {

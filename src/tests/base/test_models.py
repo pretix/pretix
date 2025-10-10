@@ -64,6 +64,7 @@ from pretix.base.models.items import (
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.orders import OrderError, cancel_order, perform_order
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.helpers import repeatable_reads_transaction
 from pretix.testutils.scope import classscope
 
 
@@ -97,6 +98,29 @@ class BaseQuotaTestCase(TestCase):
         self.var1 = ItemVariation.objects.create(item=self.item2, value='S')
         self.var2 = ItemVariation.objects.create(item=self.item2, value='M')
         self.var3 = ItemVariation.objects.create(item=self.item3, value='Fancy')
+
+
+@pytest.mark.django_db(transaction=True)
+@scopes_disabled()
+def test_verify_repeatable_read_check():
+    if 'sqlite' in settings.DATABASES['default']['ENGINE']:
+        pytest.skip('Not supported on SQLite')
+
+    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=o, name='Dummy', slug='dummy',
+        date_from=now(), plugins='tests.testdummy'
+    )
+    quota = Quota.objects.create(name="Test", size=2, event=event)
+
+    with repeatable_reads_transaction():
+        with pytest.raises(ValueError):
+            qa = QuotaAvailability(full_results=True)
+            qa.queue(quota)
+            qa.compute()
+        qa = QuotaAvailability(full_results=True, allow_repeatable_read=True)
+        qa.queue(quota)
+        qa.compute()
 
 
 @pytest.mark.usefixtures("fakeredis_client")

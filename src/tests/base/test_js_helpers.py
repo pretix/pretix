@@ -201,7 +201,7 @@ def test_email_peppol_choice(client, event):
         'transmission_type': {'visible': True},
         'transmission_types': [
             {'code': 'email', 'name': 'Email'},
-            {'code': 'peppol', 'name': 'PEPPOL'},
+            {'code': 'peppol', 'name': 'Peppol'},
         ],
         'vat_id': {'required': False, 'visible': True},
         'zipcode': {'required': 'if_any'}
@@ -227,7 +227,7 @@ def test_email_peppol_choice(client, event):
         'transmission_type': {'visible': True},
         'transmission_types': [
             {'code': 'email', 'name': 'Email'},
-            {'code': 'peppol', 'name': 'PEPPOL'},
+            {'code': 'peppol', 'name': 'Peppol'},
         ],
         'vat_id': {'required': False, 'visible': True},
         'zipcode': {'required': True}

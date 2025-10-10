@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:02+0000\n"
+"POT-Creation-Date: 2025-09-26 11:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -346,68 +346,68 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: pretix/static/pretixbase/js/addressform.js:105
-#: pretix/static/pretixpresale/js/ui/main.js:509
+#: pretix/static/pretixbase/js/addressform.js:90
+#: pretix/static/pretixpresale/js/ui/main.js:519
 msgid "required"
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:12
+#: pretix/static/pretixbase/js/asynctask.js:13
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:16
+#: pretix/static/pretixbase/js/asynctask.js:17
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:20
+#: pretix/static/pretixbase/js/asynctask.js:21
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:119
-#: pretix/static/pretixbase/js/asynctask.js:176
-#: pretix/static/pretixbase/js/asynctask.js:180
+#: pretix/static/pretixbase/js/asynctask.js:125
+#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:186
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:122
+#: pretix/static/pretixbase/js/asynctask.js:128
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:156
+#: pretix/static/pretixbase/js/asynctask.js:162
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:188
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:210
+#: pretix/static/pretixbase/js/asynctask.js:216
 msgid "We are processing your request …"
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:213
+#: pretix/static/pretixbase/js/asynctask.js:219
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:270
+#: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:325
+#: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
 msgstr ""
 
@@ -742,7 +742,7 @@ msgstr ""
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:554
+#: pretix/static/pretixpresale/js/ui/main.js:564
 msgid "Your local time:"
 msgstr ""
 

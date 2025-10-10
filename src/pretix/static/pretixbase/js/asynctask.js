@@ -330,9 +330,11 @@ var ajaxErrDialog = {
         $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
                                   + gettext("Close message") + "</a>");
         $("body").addClass("ajaxerr has-modal-dialog");
+        $("#ajaxerr").prop("hidden", false);
     },
     hide: function () {
         "use strict";
         $("body").removeClass("ajaxerr has-modal-dialog");
+        $("#ajaxerr").prop("hidden", true);
     },
 };

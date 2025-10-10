@@ -819,7 +819,7 @@ class Renderer:
             # and does not deal with our default value here properly
             content = op.secret
         else:
-            content = self._get_text_content(op, order, o)
+            content = self._get_text_content(op, order, o).strip()
 
         if len(content) == 0:
             return

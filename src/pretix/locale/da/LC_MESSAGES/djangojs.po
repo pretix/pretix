@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:02+0000\n"
+"POT-Creation-Date: 2025-09-26 11:16+0000\n"
 "PO-Revision-Date: 2024-07-10 15:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -357,14 +357,14 @@ msgstr "Nej"
 msgid "close"
 msgstr "Luk"
 
-#: pretix/static/pretixbase/js/addressform.js:105
-#: pretix/static/pretixpresale/js/ui/main.js:509
+#: pretix/static/pretixbase/js/addressform.js:90
+#: pretix/static/pretixpresale/js/ui/main.js:519
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Kurv udløbet"
 
-#: pretix/static/pretixbase/js/asynctask.js:12
+#: pretix/static/pretixbase/js/asynctask.js:13
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -376,7 +376,7 @@ msgstr ""
 "Din forespørgsel er under behandling. Alt efter størrelsen af din event kan "
 "der gå op til et par minutter."
 
-#: pretix/static/pretixbase/js/asynctask.js:16
+#: pretix/static/pretixbase/js/asynctask.js:17
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -386,7 +386,7 @@ msgstr ""
 "Din forespørgsel er under behandling. Alt efter størrelsen af din event kan "
 "der gå op til et par minutter."
 
-#: pretix/static/pretixbase/js/asynctask.js:20
+#: pretix/static/pretixbase/js/asynctask.js:21
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -395,14 +395,14 @@ msgstr ""
 "Din forespørgsel er under behandling. Hvis der går mere end to minutter, så "
 "kontakt os eller gå tilbage og prøv igen."
 
-#: pretix/static/pretixbase/js/asynctask.js:119
-#: pretix/static/pretixbase/js/asynctask.js:176
-#: pretix/static/pretixbase/js/asynctask.js:180
+#: pretix/static/pretixbase/js/asynctask.js:125
+#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:186
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Der er sket en fejl ({code})."
 
-#: pretix/static/pretixbase/js/asynctask.js:122
+#: pretix/static/pretixbase/js/asynctask.js:128
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -410,12 +410,12 @@ msgstr ""
 "Vi kan ikke komme i kontakt med serveren, men prøver igen. Seneste fejlkode: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:156
+#: pretix/static/pretixbase/js/asynctask.js:162
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "Forespørgslen tog for lang tid. Prøv igen."
 
-#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:188
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -423,11 +423,11 @@ msgstr ""
 "Vi kan i øjeblikket ikke komme i kontakt med serveren. Prøv igen. Fejlkode: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:210
+#: pretix/static/pretixbase/js/asynctask.js:216
 msgid "We are processing your request …"
 msgstr "Vi behandler din bestilling …"
 
-#: pretix/static/pretixbase/js/asynctask.js:213
+#: pretix/static/pretixbase/js/asynctask.js:219
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -436,11 +436,11 @@ msgstr ""
 "Din forespørgsel bliver sendt til serveren. Hvis det tager mere end et "
 "minut, så tjek din internetforbindelse, genindlæs siden og prøv igen."
 
-#: pretix/static/pretixbase/js/asynctask.js:270
+#: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:325
+#: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
 msgstr "Luk besked"
 
@@ -810,7 +810,7 @@ msgstr "fra %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:554
+#: pretix/static/pretixpresale/js/ui/main.js:564
 msgid "Your local time:"
 msgstr "Din lokaltid:"
 

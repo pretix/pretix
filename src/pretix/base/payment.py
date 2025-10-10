@@ -1627,6 +1627,7 @@ class GiftCardPayment(BasePaymentProvider):
             order=refund.order,
             refund=refund,
             acceptor=self.event.organizer,
+            text=refund.comment,
         )
         refund.info_data = {
             'gift_card': gc.pk,

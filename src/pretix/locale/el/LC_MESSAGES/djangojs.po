@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-19 16:02+0000\n"
+"POT-Creation-Date: 2025-09-26 11:16+0000\n"
 "PO-Revision-Date: 2024-12-22 00:00+0000\n"
 "Last-Translator: Dimitris Tsimpidis <tsimpidisd@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -361,14 +361,14 @@ msgstr "Όχι"
 msgid "close"
 msgstr "Κλείσιμο"
 
-#: pretix/static/pretixbase/js/addressform.js:105
-#: pretix/static/pretixpresale/js/ui/main.js:509
+#: pretix/static/pretixbase/js/addressform.js:90
+#: pretix/static/pretixpresale/js/ui/main.js:519
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Το καλάθι έληξε"
 
-#: pretix/static/pretixbase/js/asynctask.js:12
+#: pretix/static/pretixbase/js/asynctask.js:13
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -381,7 +381,7 @@ msgstr ""
 "επεξεργασία. Ανάλογα με το μέγεθος του συμβάντος σας, αυτό μπορεί να "
 "διαρκέσει μερικά λεπτά."
 
-#: pretix/static/pretixbase/js/asynctask.js:16
+#: pretix/static/pretixbase/js/asynctask.js:17
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -392,7 +392,7 @@ msgstr ""
 "επεξεργασία. Ανάλογα με το μέγεθος του συμβάντος σας, αυτό μπορεί να "
 "διαρκέσει μερικά λεπτά."
 
-#: pretix/static/pretixbase/js/asynctask.js:20
+#: pretix/static/pretixbase/js/asynctask.js:21
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -402,14 +402,14 @@ msgstr ""
 "του. Αν αυτό διαρκεί περισσότερο από δύο λεπτά, επικοινωνήστε μαζί μας ή "
 "επιστρέψτε στο πρόγραμμα περιήγησής σας και δοκιμάστε ξανά."
 
-#: pretix/static/pretixbase/js/asynctask.js:119
-#: pretix/static/pretixbase/js/asynctask.js:176
-#: pretix/static/pretixbase/js/asynctask.js:180
+#: pretix/static/pretixbase/js/asynctask.js:125
+#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:186
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Παρουσιάστηκε σφάλμα τύπου {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:122
+#: pretix/static/pretixbase/js/asynctask.js:128
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -417,14 +417,14 @@ msgstr ""
 "Αυτήν τη στιγμή δεν μπορούμε να φτάσουμε στο διακομιστή, αλλά συνεχίζουμε να "
 "προσπαθούμε. Τελευταίος κωδικός σφάλματος: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:156
+#: pretix/static/pretixbase/js/asynctask.js:162
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 #, fuzzy
 #| msgid "The request took to long. Please try again."
 msgid "The request took too long. Please try again."
 msgstr "Το αίτημα διήρκησε πολύ. Παρακαλώ προσπαθήστε ξανά."
 
-#: pretix/static/pretixbase/js/asynctask.js:182
+#: pretix/static/pretixbase/js/asynctask.js:188
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -432,11 +432,11 @@ msgstr ""
 "Αυτήν τη στιγμή δεν μπορούμε να συνδεθούμε με το διακομιστή. Παρακαλώ "
 "προσπαθήστε ξανά. Κωδικός σφάλματος: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:210
+#: pretix/static/pretixbase/js/asynctask.js:216
 msgid "We are processing your request …"
 msgstr "Επεξεργαζόμαστε το αίτημά σας …"
 
-#: pretix/static/pretixbase/js/asynctask.js:213
+#: pretix/static/pretixbase/js/asynctask.js:219
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -446,11 +446,11 @@ msgstr ""
 "περισσότερο από ένα λεπτό, ελέγξτε τη σύνδεσή σας στο διαδίκτυο και στη "
 "συνέχεια επαναλάβετε τη φόρτωση αυτής της σελίδας και δοκιμάστε ξανά."
 
-#: pretix/static/pretixbase/js/asynctask.js:270
+#: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:325
+#: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
 msgstr "Κλείσιμο μηνύματος"
 
@@ -820,7 +820,7 @@ msgstr "απο %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:554
+#: pretix/static/pretixpresale/js/ui/main.js:564
 msgid "Your local time:"
 msgstr ""
 

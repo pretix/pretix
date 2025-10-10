@@ -327,6 +327,26 @@ def test_enqueue_order_twice(event):
         SimpleOrderSync.enqueue_order(order, 'testcase_2nd')
 
 
+class DoNothingSync(SimpleOrderSync):
+
+    def should_sync_order(self, order):
+        return False
+
+
+@pytest.mark.django_db
+def test_should_not_sync(event):
+    _register_with_fake_plugin_name(datasync_providers, DoNothingSync, 'testplugin')
+
+    DoNothingSync.fake_api_client = FakeSyncAPI()
+
+    for order in event.orders.order_by("code").all():
+        DoNothingSync.enqueue_order(order, 'testcase')
+
+    sync_all()
+
+    assert DoNothingSync.fake_api_client.fake_database == {}
+
+
 StaticMappingWithAssociations = namedtuple('StaticMappingWithAssociations', (
     'id', 'pretix_model', 'external_object_type', 'pretix_id_field', 'external_id_field', 'property_mappings', 'association_mappings'
 ))

@@ -78,8 +78,8 @@ class ControlSyncJob(OrderView):
         prov, meta = datasync_providers.get(active_in=self.request.event, identifier=provider)
 
         if self.request.POST.get("queue_sync") == "true":
-            prov.enqueue_order(self.order, 'user')
-            messages.success(self.request, _('The sync job has been enqueued and will run in the next minutes.'))
+            prov.enqueue_order(self.order, 'user', immediate=True)
+            messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
         elif self.request.POST.get("cancel_job"):
             with transaction.atomic():
                 try:
