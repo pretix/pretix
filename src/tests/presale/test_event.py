@@ -1621,7 +1621,7 @@ class EventLocaleTest(EventTestMixin, SoupTest):
             '/%s/%s/' % (self.orga.slug, self.event.slug)
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Thu, Dec. 26th,', response.rendered_content)
+        self.assertIn('Thu, Dec. 26,', response.rendered_content)
         self.assertIn('14:00', response.rendered_content)
 
     def test_english_region_US(self):
@@ -1631,7 +1631,7 @@ class EventLocaleTest(EventTestMixin, SoupTest):
             '/%s/%s/' % (self.orga.slug, self.event.slug)
         )
         self.assertEqual(response.status_code, 200)
-        self.assertIn('Thu, Dec. 26th,', response.rendered_content)
+        self.assertIn('Thu, Dec. 26,', response.rendered_content)
         self.assertIn('2 p.m.', response.rendered_content)
 
     def test_german_region_US(self):
