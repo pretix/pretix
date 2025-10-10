@@ -275,6 +275,35 @@ $(function () {
           _update();
         })
         _update()
+
+        function check_for_invalid_ids(valid_products, valid_variations, rule) {
+          if (rule["and"]) {
+            for(const child of rule["and"])
+              check_for_invalid_ids(valid_products, valid_variations, child);
+          } else if (rule["or"]) {
+            for(const child of rule["or"])
+              check_for_invalid_ids(valid_products, valid_variations, child);
+          } else if (rule["inList"] && rule["inList"][0]["var"] === "product") {
+            for(const item of rule["inList"][1]["objectList"]) {
+              if (!valid_products[item["lookup"][1]])
+                item["lookup"][2] = "[" + gettext('Error: Product not found!') + "]";
+              else
+                item["lookup"][2] = valid_products[item["lookup"][1]];
+            }
+          } else if (rule["inList"] && rule["inList"][0]["var"] === "variation") {
+            for(const item of rule["inList"][1]["objectList"]) {
+              if (!valid_variations[item["lookup"][1]])
+                item["lookup"][2] = "[" + gettext('Error: Variation not found!') + "]";
+              else
+                item["lookup"][2] = valid_variations[item["lookup"][1]];
+            }
+          }
+        }
+        check_for_invalid_ids(
+            Object.fromEntries(this.items.map(p => [p.id, p.name])),
+            Object.fromEntries(this.items.flatMap(p => p.variations?.map(v => [v.id, p.name + ' – ' + v.name]))),
+            this.rules
+        );
       }
     },
     watch: {
