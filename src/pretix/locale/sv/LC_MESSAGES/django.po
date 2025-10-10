@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-10-09 16:00+0000\n"
+"PO-Revision-Date: 2025-10-10 17:00+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -19251,8 +19251,6 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:46
-#, fuzzy
-#| msgid "Proceed with checkout"
 msgid "Proceed with reset"
 msgstr "Fortsätt med din bokning"
 
@@ -35073,25 +35071,16 @@ msgstr ""
 "processen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to access "
-#| "your order later. We also sent you an email containing the link to the "
-#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email to the address you specified "
 "containing the link to this page."
 msgstr ""
-"Vänligen bokmärk eller spara länken till denna exakta sida om du vill komma "
-"åt din order senare. Vi har också skickat en e-post med länken till den "
-"adress du angav."
+"Vänligen markera som bokmärke eller spara länken till denna exakta sida om "
+"du vill komma åt din order senare. Vi har också skickat en e-post med länken "
+"till den adress du angav."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:59
-#, fuzzy
-#| msgid ""
-#| "Please save the following link if you want to access your order later. We "
-#| "also sent you an email containing the link to the address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email to the address you specified containing the link."
@@ -35105,19 +35094,18 @@ msgid "View in backend"
 msgstr "Visa i backend"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:91
-#, fuzzy, python-format
+#, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr "En faktura på totalt  %(total)s kommer att skickas från Coeo"
+msgstr "En faktura på totalt  %(total)s kommer att skickas från Coeo."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:96
-#, python-format
+#, fuzzy, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr "Var god slutför din betalning före %(date)s"
+msgstr "Tack för din bokning!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:108
-#, fuzzy
 msgid "Re-try payment or choose another payment method"
-msgstr "Tack för din bokning!"
+msgstr "Tack"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:126
 msgid ""
