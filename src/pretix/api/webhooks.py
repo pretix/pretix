@@ -43,6 +43,7 @@ from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
+from pretix.helpers.celery import get_task_priority
 
 logger = logging.getLogger(__name__)
 _ALL_EVENTS = None
@@ -474,7 +475,10 @@ def notify_webhooks(logentry_ids: list):
                 )
 
         for wh in webhooks:
-            send_webhook.apply_async(args=(logentry.id, notification_type.action_type, wh.pk))
+            send_webhook.apply_async(
+                args=(logentry.id, notification_type.action_type, wh.pk),
+                priority=get_task_priority("notifications", logentry.organizer_id),
+            )
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=60, acks_late=True, autoretry_for=(DatabaseError,),)
