@@ -369,6 +369,12 @@ class CustomerAccountBaseMixin(CustomerRequiredMixin):
                 'icon': 'id-badge',
             },
             {
+                'label': _('Gift cards'),
+                'url': eventreverse(self.request.organizer, 'presale:organizer.customer.giftcards', kwargs={}),
+                'active': url_name.startswith('organizer.customer.giftcard'),
+                'icon': 'gift',
+            },
+            {
                 'label': _('Addresses'),
                 'url': eventreverse(self.request.organizer, 'presale:organizer.customer.addresses', kwargs={}),
                 'active': url_name.startswith('organizer.customer.address'),
@@ -459,6 +465,15 @@ class MembershipUsageView(CustomerAccountBaseMixin, ListView):
         ctx['membership'] = self.membership
         ctx['is_paginated'] = True
         return ctx
+
+
+class GiftcardView(CustomerAccountBaseMixin, ListView):
+    template_name = 'pretixpresale/organizers/customer_giftcards.html'
+    context_object_name = 'gift_cards'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return self.request.customer.customer_gift_cards.all()
 
 
 class AddressView(CustomerAccountBaseMixin, ListView):

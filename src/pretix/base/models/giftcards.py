@@ -80,6 +80,13 @@ class GiftCard(LoggedModel):
         null=True, blank=True,
         verbose_name=_('Owned by ticket holder')
     )
+    customer = models.ForeignKey(
+        'Customer',
+        related_name='customer_gift_cards',
+        on_delete=models.PROTECT,
+        null=True, blank=True,
+        verbose_name=_('Owned by customer account')
+    )
     issuance = models.DateTimeField(
         auto_now_add=True,
     )

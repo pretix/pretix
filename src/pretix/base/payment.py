@@ -38,6 +38,7 @@ import json
 import logging
 from collections import OrderedDict
 from decimal import ROUND_HALF_UP, Decimal
+from functools import cached_property
 from typing import Any, Dict, Union
 from zoneinfo import ZoneInfo
 
@@ -57,8 +58,8 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.forms import I18nMarkdownTextarea, PlaceholderValidator
 from pretix.base.models import (
-    CartPosition, Event, GiftCard, InvoiceAddress, Order, OrderPayment,
-    OrderRefund, Quota, TaxRule,
+    CartPosition, Customer, Event, GiftCard, InvoiceAddress, Order,
+    OrderPayment, OrderRefund, Quota, TaxRule,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
@@ -99,6 +100,7 @@ class PaymentProviderForm(Form):
 
 class GiftCardPaymentForm(PaymentProviderForm):
     def __init__(self, *args, **kwargs):
+        self.customer_gift_cards = kwargs.pop('customer_gift_cards') if 'customer_gift_cards' in kwargs else None
         self.event = kwargs.pop('event')
         self.testmode = kwargs.pop('testmode')
         self.positions = kwargs.pop('positions')
@@ -1373,6 +1375,31 @@ class GiftCardPayment(BasePaymentProvider):
     payment_form_class = GiftCardPaymentForm
     payment_form_template_name = 'pretixcontrol/giftcards/checkout.html'
 
+    @cached_property
+    def customer_gift_cards(self):
+        if not self.request:
+            return None
+        if not self.used_cards:
+            self.used_cards = []
+        cs = None
+        if 'checkout' in self.request.resolver_match.url_name:
+            cs = cart_session(self.request)
+        customer = getattr(self.request, "customer", None)
+        if customer:
+            return customer.usable_gift_cards(self.used_cards)
+        elif cs and cs.get('customer_mode', 'guest') == 'login':
+            try:
+                customer = self.request.organizer.customers.get(pk=cs["customer"])
+                return customer.usable_gift_cards(self.used_cards)
+            except Customer.DoesNotExist:
+                return None
+
+    def payment_form_render(self, request: HttpRequest, total: Decimal, order: Order = None) -> str:
+        form = self.payment_form(request)
+        template = get_template(self.payment_form_template_name)
+        ctx = {'request': request, 'form': form, 'customer_gift_cards': form.customer_gift_cards, }
+        return template.render(ctx)
+
     def payment_form(self, request: HttpRequest) -> Form:
         # Unfortunately, in payment_form we do not know if we're in checkout
         # or in an existing order. But we need to do the validation logic in the
@@ -1392,8 +1419,12 @@ class GiftCardPayment(BasePaymentProvider):
             positions = order.positions.all()
             testmode = order.testmode
 
+        self.request = request
+        self.used_cards = used_cards
+
         form = self.payment_form_class(
             event=self.event,
+            customer_gift_cards=self.customer_gift_cards,
             used_cards=used_cards,
             positions=positions,
             testmode=testmode,

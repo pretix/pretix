@@ -3087,6 +3087,7 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
                 expires=order.event.organizer.default_gift_card_expiry if giftcard_expires is _unset else giftcard_expires,
                 conditions=giftcard_conditions,
                 currency=order.event.currency,
+                customer=order.customer,
                 testmode=order.testmode
             )
             giftcard.log_action('pretix.giftcards.created', data={})

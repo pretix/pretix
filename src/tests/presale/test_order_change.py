@@ -1915,6 +1915,47 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             r = self.order.refunds.get()
             assert r.provider == 'giftcard'
 
+    def test_refund_giftcard_to_customer_account(self):
+        with scopes_disabled():
+            customer = self.orga.customers.create(email='john@example.org', is_verified=True)
+            customer.set_password('foo')
+            customer.save()
+
+        self.order.customer = customer
+        self.event.settings.cancel_allow_user_paid_refund_as_giftcard = 'force'
+        with scopes_disabled():
+            gc = customer.usable_gift_cards()
+            assert len(gc) == 0
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"},
+            )
+            self.order.status = Order.STATUS_PAID
+            self.order.total += Decimal("12")
+            self.order.save()
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total,
+                                       state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {},
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            form_data, follow=True
+        )
+
+        with scopes_disabled():
+            gc = customer.usable_gift_cards()
+            assert len(gc) == 1
+
     def test_attendee(self):
         self.workshop2a.default_price = Decimal('0.00')
         self.workshop2a.save()
