@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-10-03 01:00+0000\n"
-"Last-Translator: Mira <weller@rami.io>\n"
+"PO-Revision-Date: 2025-10-11 21:00+0000\n"
+"Last-Translator: Peter Schlaile <peter@schlaile.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -15944,7 +15944,7 @@ msgstr "Informationen an die Warteliste verschicken"
 #: pretix/control/forms/orders.py:955 pretix/control/forms/orders.py:981
 #, python-brace-format
 msgid "Canceled: {event}"
-msgstr "Storniert: {event}"
+msgstr "Abgesagt: {event}"
 
 #: pretix/control/forms/orders.py:966
 #, python-brace-format
