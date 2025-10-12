@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-10-04 19:00+0000\n"
-"Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
+"PO-Revision-Date: 2025-10-13 06:00+0000\n"
+"Last-Translator: Tim Maurizio Dullaart <Tim.maurizio@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1128,16 +1128,14 @@ msgid "Ticket link"
 msgstr "Ticketlink"
 
 #: pretix/base/datasync/sourcefields.py:578
-#, fuzzy, python-brace-format
-#| msgid "Check-in list {val}"
+#, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "Inchecklijst {val}"
+msgstr "Incheck datum en tijd lijst {}"
 
 #: pretix/base/datasync/sourcefields.py:590
-#, fuzzy, python-brace-format
-#| msgid "Question: %(name)s"
+#, python-brace-format
 msgid "Question: {name}"
-msgstr "Vraag: %(name)s"
+msgstr "Vraag: {name}"
 
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:614 pretix/base/settings.py:3559
@@ -2611,10 +2609,8 @@ msgid "Check-in lists"
 msgstr "Inchecklijsten"
 
 #: pretix/base/exporters/orderlist.py:671
-#, fuzzy
-#| msgid "Resend order link"
 msgid "Position order link"
-msgstr "Bestellink opnieuw versturen"
+msgstr "Positie bestellink"
 
 #: pretix/base/exporters/orderlist.py:840
 msgid "Order transaction data"
@@ -3332,14 +3328,12 @@ msgstr ""
 "verkoper heeft u dit misschien nodig om belasting terug te kunnen vragen."
 
 #: pretix/base/forms/questions.py:1177
-#, fuzzy
-#| msgid "Cancellation requested"
 msgid "No invoice requested"
 msgstr "Annulering aangevraagd"
 
 #: pretix/base/forms/questions.py:1179
 msgid "Invoice transmission method"
-msgstr ""
+msgstr "Factuur verzendmethode"
 
 #: pretix/base/forms/questions.py:1325
 msgid "You need to provide a company name."
@@ -3354,25 +3348,29 @@ msgid ""
 "If you enter an invoice address, you also need to select an invoice "
 "transmission method."
 msgstr ""
+"Als u een factuuradres invult, moet u ook een factuur verzendmethode "
+"selecteren."
 
 #: pretix/base/forms/questions.py:1381
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid ""
 "The selected transmission type is not available in your country or for your "
 "type of address."
 msgstr ""
-"Het geselecteerde mediatype is niet ingeschakeld in uw organizerinstellingen."
+"Het geselecteerde verzend is niet beschikbaar in uw land voor dit type adres."
 
 #: pretix/base/forms/questions.py:1390
 msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
 msgstr ""
+"De geselecteerde type van factuur verzending heeft een veld nodig dat "
+"momenteel nog niet beschikbaar is, neem alstublieft contact op met de "
+"organisator."
 
 #: pretix/base/forms/questions.py:1394
 msgid "This field is required for the selected type of invoice transmission."
 msgstr ""
+"Dit veld is verplicht voor het geselecteerde type van factuur verzending."
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 msgid ""
@@ -3485,60 +3483,49 @@ msgid "Individual customer"
 msgstr "Particuliere klant"
 
 #: pretix/base/invoicing/email.py:50
-#, fuzzy
-#| msgid ""
-#| "Please additionally send my invoice directly to our accounting department"
 msgid "Email invoice directly to accounting department"
-msgstr "Gelieve de factuur ook direct naar onze boekhouding te versturen"
+msgstr "Email factuur direct naar de boekhoudafdeling"
 
 #: pretix/base/invoicing/email.py:51
-#, fuzzy
-#| msgid "The invoice was sent to the designated email address."
 msgid ""
 "If not selected, the invoice will be sent to you using the email address "
 "listed above."
-msgstr "De factuur is verstuurd naar het aangegeven e-mailadres."
+msgstr ""
+"Als het niet geselecteerd is, word de factuur verstuurd naar u middels het "
+"bovenstaande e-mailadres."
 
 #: pretix/base/invoicing/email.py:55
-#, fuzzy
-#| msgid "Email address verified"
 msgid "Email address for invoice"
-msgstr "E-mailadres gecontroleerd"
+msgstr "E-mailadres voor facturen"
 
 #: pretix/base/invoicing/email.py:91
-#, fuzzy
-#| msgid "Preview email"
 msgid "PDF via email"
-msgstr "Toon voorbeeld email"
+msgstr "PDF via email"
 
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr ""
+msgstr "Italiaanse wissel systeem (SdI)"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
 msgid "Exchange System (SdI)"
-msgstr ""
+msgstr "Wisselsysteem (SdI)"
 
 #: pretix/base/invoicing/national.py:49
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "italian_invoice"
 msgid "Fiscal code"
-msgstr "Cadeauboncode"
+msgstr "Fiscale code"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
-msgstr ""
+msgstr "Adres voor gecertificeerde electronische mail"
 
 #: pretix/base/invoicing/national.py:57
-#, fuzzy
-#| msgid "Recipient"
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr "Ontvanger"
+msgstr "Ontvanger code"
 
 #: pretix/base/invoicing/national.py:81
 msgctxt "italian_invoice"
@@ -3548,6 +3535,10 @@ msgid ""
 "in accordance with the procedures and terms set forth in No. 89757/2018 of "
 "April 30, 2018, issued by the Director of the Revenue Agency."
 msgstr ""
+"Dit PDF-document is een visuele kopie van de factuur en vormt geen factuur "
+"voor btw-doeleinden. De factuur wordt in XML-formaat verzonden volgens de "
+"procedures en voorwaarden zoals vastgelegd in nr. 89757/2018 van 30 april "
+"2018, uitgegeven door de directeur van de belastingdienst."
 
 #: pretix/base/invoicing/pdf.py:141
 #, python-format
@@ -3945,7 +3936,7 @@ msgstr "Er zijn meerdere overeenkomende datums gevonden."
 
 #: pretix/base/modelimport_orders.py:73
 msgid "Grouping"
-msgstr ""
+msgstr "Groepering"
 
 #: pretix/base/modelimport_orders.py:75
 msgid ""
@@ -3953,6 +3944,10 @@ msgid ""
 "together...\". Lines with the same grouping value will be put in the same "
 "order, but MUST be consecutive lines of the input file."
 msgstr ""
+"Alleen toepasbaar wanneer \"Importeer methode\" is ingesteld op "
+"\"Groepeer meerde lijnen samen...\". Lijnen met de zelfde groeperings waarde "
+"zullen in dezelfde volgorde gestopt, maar MOETEN opeenvolgende regels van "
+"het invoerbestand zijn."
 
 #: pretix/base/modelimport_orders.py:101
 msgid "Enter a valid phone number."
@@ -3964,6 +3959,8 @@ msgid ""
 "The date can be specified through its full name, full date and time, or "
 "internal ID, provided only one date in the system matches the input."
 msgstr ""
+"De datum kan gespecificeerd worden door de volledige naam, datum en tijd, of "
+"interne ID, mits alleen één datum in het systeem hetzelfde is als de invoer."
 
 #: pretix/base/modelimport_orders.py:120 pretix/presale/views/waiting.py:157
 msgctxt "subevent"
@@ -3974,6 +3971,8 @@ msgstr "U moet een datum selecteren."
 msgid ""
 "The product can be specified by its internal ID, full name or internal name."
 msgstr ""
+"Het product kan worden gespecificeerd door zijn interne ID, volledige naam "
+"of interne naam."
 
 #: pretix/base/modelimport_orders.py:149
 #: pretix/base/modelimport_vouchers.py:194
@@ -3994,6 +3993,7 @@ msgstr "Productvariant"
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
 msgstr ""
+"De variatie kan worden gespecificeerd door zijn interne ID of volledige naam."
 
 #: pretix/base/modelimport_orders.py:181
 #: pretix/base/modelimport_vouchers.py:225
@@ -4012,10 +4012,9 @@ msgid "You need to select a variation for this product."
 msgstr "U moet een variant van dit product selecteren."
 
 #: pretix/base/modelimport_orders.py:265 pretix/base/modelimport_orders.py:417
-#, fuzzy
-#| msgid "The count needs to be equal to or greater than zero."
 msgid "The country needs to be specified using a two-letter country code."
-msgstr "Het aantal moet gelijk zijn aan of groter zijn dan nul."
+msgstr ""
+"Het land moet worden gespecificeerd worden door een twee-letterige landcode."
 
 #: pretix/base/modelimport_orders.py:281 pretix/base/modelimport_orders.py:432
 msgid "Please enter a valid country code."
@@ -4024,6 +4023,8 @@ msgstr "Vul een geldige landcode in."
 #: pretix/base/modelimport_orders.py:290 pretix/base/modelimport_orders.py:441
 msgid "The state can be specified by its short form or full name."
 msgstr ""
+"De staat kan worden gespecificeerd worden door zijn korte vorm of volledige "
+"naam."
 
 #: pretix/base/modelimport_orders.py:300 pretix/base/modelimport_orders.py:450
 msgid "States are not supported for this country."
@@ -4080,16 +4081,16 @@ msgid ""
 "The sales channel can be specified by it's internal identifier or its full "
 "name."
 msgstr ""
+"De verkoop kanalen kunnen worden gespecificeerd door zijn interne "
+"identificatie of zijn volledige naam."
 
 #: pretix/base/modelimport_orders.py:599 pretix/base/modelimport_orders.py:601
 msgid "Please enter a valid sales channel."
 msgstr "Vul een geldig verkoopkanaal in."
 
 #: pretix/base/modelimport_orders.py:611
-#, fuzzy
-#| msgid "The refund amount needs to be positive and less than {}."
 msgid "The seat needs to be specified by its internal ID."
-msgstr "Het bedrag van de terugbetaling moet positief zijn en minder dan {}."
+msgstr "De zetel moet worden gespecificeerd worden door zijn interne ID."
 
 #: pretix/base/modelimport_orders.py:626
 #: pretix/base/modelimport_vouchers.py:291
@@ -4453,10 +4454,8 @@ msgid "Ticket not valid at this time"
 msgstr "Ticket is op dit moment niet geldig"
 
 #: pretix/base/models/checkin.py:368
-#, fuzzy
-#| msgid "Check-in status"
 msgid "Check-in annulled"
-msgstr "Incheckstatus"
+msgstr "Incheck is nietig verklaard"
 
 #: pretix/base/models/customers.py:55
 msgid "Provider name"
@@ -4558,21 +4557,19 @@ msgstr "Scheid meerdere waarden door spaties"
 
 #: pretix/base/models/datasync.py:53
 msgid "Temporary error, auto-retry limit exceeded"
-msgstr ""
+msgstr "Tijdelijke fout, geautomatiseerde opnieuw proberen limiet overschreden"
 
 #: pretix/base/models/datasync.py:54
-#, fuzzy
-#| msgid "Stripe reported an error: %s"
 msgid "Provider reported a permanent error"
-msgstr "Stripe meldde een fout: %s"
+msgstr "Aanbieder rapporteerde een permanente fout"
 
 #: pretix/base/models/datasync.py:55
 msgid "Misconfiguration, please check provider settings"
-msgstr ""
+msgstr "Verkeerde configuratie, alstublieft kijk uw aanbieders instellingen na"
 
 #: pretix/base/models/datasync.py:56 pretix/base/models/datasync.py:57
 msgid "System error, needs manual intervention"
-msgstr ""
+msgstr "Systeem fout, heeft handmatige interventie nodig"
 
 #: pretix/base/models/devices.py:70 pretix/base/models/items.py:1675
 msgid "Internal identifier"
@@ -5128,21 +5125,16 @@ msgid "Manual transaction"
 msgstr "Handmatige transactie"
 
 #: pretix/base/models/invoices.py:121
-#, fuzzy
-#| msgid "Pending amount"
 msgid "pending transmission"
-msgstr "Openstaand bedrag"
+msgstr "openstaand verzending"
 
 #: pretix/base/models/invoices.py:122
 msgid "currently being transmitted"
-msgstr ""
+msgstr "momenteel word verzonden"
 
 #: pretix/base/models/invoices.py:123
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "transmitted"
-msgstr "Geen datum geselecteerd."
+msgstr "verstuurd"
 
 #: pretix/base/models/invoices.py:124 pretix/plugins/sendmail/models.py:52
 msgid "failed"
@@ -5154,10 +5146,8 @@ msgid "unknown"
 msgstr "onbekend"
 
 #: pretix/base/models/invoices.py:126
-#, fuzzy
-#| msgid "in private test mode"
 msgid "not transmitted due to test mode"
-msgstr "in privétestmodus"
+msgstr "niet verstuurd vanwege test modus"
 
 #: pretix/base/models/invoices.py:218
 #, python-format
@@ -6603,10 +6593,8 @@ msgstr ""
 "administratie gebruiken."
 
 #: pretix/base/models/orders.py:3422
-#, fuzzy
-#| msgid "Transaction time"
 msgid "Transmission type"
-msgstr "Transactietijdstip"
+msgstr "Verzending type"
 
 #: pretix/base/models/orders.py:3520
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
@@ -7865,16 +7853,12 @@ msgid "123.45 EUR"
 msgstr "€123,45"
 
 #: pretix/base/pdf.py:165
-#, fuzzy
-#| msgid "Price including add-ons"
 msgid "Price including bundled products"
-msgstr "Prijs inclusief add-ons"
+msgstr "Prijs inclusief de bundel van producten"
 
 #: pretix/base/pdf.py:174
-#, fuzzy
-#| msgid "Price including add-ons"
 msgid "Price including add-ons and bundled products"
-msgstr "Prijs inclusief add-ons"
+msgstr "Prijs inclusief add-ons en bundel van producten"
 
 #: pretix/base/pdf.py:184 pretix/base/pdf.py:342
 #: pretix/base/services/invoices.py:487
