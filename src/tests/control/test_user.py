@@ -98,6 +98,20 @@ class UserSettingsTest(SoupTest):
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.email == 'dummy@dummy.dummy'
 
+
+class UserPasswordChangeTest(SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'barfoofoo')
+        self.client.login(email='dummy@dummy.dummy', password='barfoofoo')
+        doc = self.get_doc('/control/settings/password/change')
+        self.form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+
+    def save(self, data):
+        form_data = self.form_data.copy()
+        form_data.update(data)
+        return self.post_doc('/control/settings/password/change', form_data)
+
     def test_change_password_require_password(self):
         doc = self.save({
             'new_pw': 'foo',
@@ -192,18 +206,6 @@ class UserSettingsTest(SoupTest):
             'old_pw': '9UQl4lSwHLMVUIMgw0L1X8XEFmyvdn',
         })
         assert doc.select(".alert-danger")
-
-    def test_needs_password_change(self):
-        self.user.needs_password_change = True
-        self.user.save()
-        doc = self.save({
-            'email': 'foo@example.com',
-            'old_pw': 'barfoofoo'
-        })
-        assert doc.select(".alert-success")
-        assert doc.select(".alert-warning")
-        self.user.refresh_from_db()
-        assert self.user.needs_password_change is True
 
     def test_needs_password_change_changed(self):
         self.user.needs_password_change = True

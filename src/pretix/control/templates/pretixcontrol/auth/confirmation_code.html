@@ -4,16 +4,17 @@
 {% load i18n %}
 {% block content %}
 	<form class="form-signin" action="" method="post">
-        <h3>{% trans "Set new password" %}</h3>
+        <h3>{% trans "Enter confirmation code" %}</h3>
         {% csrf_token %}
+        <p>{{ message }}</p>
         {% bootstrap_form_errors form type='all' layout='inline' %}
-        {% bootstrap_field form.email %}
-        {% bootstrap_field form.password %}
-        {% bootstrap_field form.password_repeat %}
+        {% bootstrap_field form.code %}
 		<div class="form-group buttons">
-
-            <button type="submit" class="btn btn-primary">
-                {% trans "Save" %}
+            <a href="{{ cancel_url }}" class="btn btn-lg btn-default">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-lg btn-primary">
+                {% trans "Continue" %}
             </button>
 		</div>
 	</form>
