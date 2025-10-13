@@ -236,6 +236,21 @@ TEST_LIST_RES = {
     "rules": {}
 }
 
+TEST_HISTORY_RES = {
+    "successful": True,
+    "error_reason": None,
+    "error_explanation": None,
+    "position": 1234,
+    "datetime": "2017-12-25T12:45:23Z",
+    "created": "2017-12-25T12:45:23Z",
+    "list": 2,
+    "auto_checked_in": False,
+    "gate": None,
+    "device": None,
+    "device_id": None,
+    "type": "entry",
+}
+
 
 @pytest.fixture
 def clist(event, item):
@@ -1366,3 +1381,57 @@ def test_expand(token_client, organizer, event, clist, clist_all, item, other_it
     ))
     assert resp.status_code == 200
     assert 'value' in resp.data['results'][0]['variation']
+
+
+@pytest.mark.django_db
+def test_history(token_client, organizer, event, clist, order):
+    with scopes_disabled():
+        ci = order.positions.first().checkins.create(list=clist, type=Checkin.TYPE_ENTRY, datetime=now())
+    res = dict(TEST_HISTORY_RES)
+    res["id"] = ci.pk
+    res["datetime"] = ci.datetime.isoformat().replace('+00:00', 'Z')
+    res["created"] = ci.created.isoformat().replace('+00:00', 'Z')
+    res["list"] = clist.pk
+    res["position"] = ci.position_id
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkins/'.format(
+        organizer.slug, event.slug,
+    ))
+    assert resp.status_code == 200
+    assert res == resp.data['results'][0]
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkins/?auto_checked_in=false'.format(
+        organizer.slug, event.slug,
+    ))
+    assert len(resp.data['results']) == 1
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkins/?auto_checked_in=true'.format(
+        organizer.slug, event.slug,
+    ))
+    assert len(resp.data['results']) == 0
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkins/?successful=true'.format(
+        organizer.slug, event.slug,
+    ))
+    assert len(resp.data['results']) == 1
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkins/?successful=false'.format(
+        organizer.slug, event.slug,
+    ))
+    assert len(resp.data['results']) == 0
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkins/?type=entry'.format(
+        organizer.slug, event.slug,
+    ))
+    assert len(resp.data['results']) == 1
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkins/?type=exit'.format(
+        organizer.slug, event.slug,
+    ))
+    assert len(resp.data['results']) == 0
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkins/?created_before=2099-01-01T00:00:00Z'.format(
+        organizer.slug, event.slug,
+    ))
+    assert len(resp.data['results']) == 1
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkins/?created_before=2017-01-01T00:00:00Z'.format(
+        organizer.slug, event.slug,
+    ))
+    assert len(resp.data['results']) == 0

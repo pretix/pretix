@@ -325,7 +325,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
         return data
 
 
-class CheckinSerializer(I18nAwareModelSerializer):
+class InlineCheckinSerializer(I18nAwareModelSerializer):
     device_id = serializers.SlugRelatedField(
         source='device',
         slug_field='device_id',
@@ -335,6 +335,21 @@ class CheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
         fields = ('id', 'datetime', 'list', 'auto_checked_in', 'gate', 'device', 'device_id', 'type')
+
+
+class CheckinSerializer(I18nAwareModelSerializer):
+    device_id = serializers.SlugRelatedField(
+        source='device',
+        slug_field='device_id',
+        read_only=True,
+    )
+
+    class Meta:
+        model = Checkin
+        fields = (
+            'id', 'successful', 'error_reason', 'error_explanation', 'position', 'datetime', 'list', 'created',
+            'auto_checked_in', 'gate', 'device', 'device_id', 'type'
+        )
 
 
 class PrintLogSerializer(serializers.ModelSerializer):
@@ -560,7 +575,7 @@ class OrderPositionPluginDataField(serializers.Field):
 
 
 class OrderPositionSerializer(I18nAwareModelSerializer):
-    checkins = CheckinSerializer(many=True, read_only=True)
+    checkins = InlineCheckinSerializer(many=True, read_only=True)
     print_logs = PrintLogSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True)
     downloads = PositionDownloadsField(source='*', read_only=True)
