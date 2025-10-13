@@ -1639,20 +1639,16 @@ class SubEvent(EventMixin, LoggedModel):
 
     @cached_property
     def item_overrides(self):
-        from .items import SubEventItem
-
         return {
             si.item_id: si
-            for si in SubEventItem.objects.filter(subevent=self)
+            for si in self.subeventitem_set.all()
         }
 
     @cached_property
     def var_overrides(self):
-        from .items import SubEventItemVariation
-
         return {
             si.variation_id: si
-            for si in SubEventItemVariation.objects.filter(subevent=self)
+            for si in self.subeventitemvariation_set.all()
         }
 
     @property
