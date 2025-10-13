@@ -6,6 +6,7 @@
 {% load eventurl %}
 {% load safelink %}
 {% load rich_text %}
+{% load anonymize_email %}
 {% block thetitle %}
     {% if messages %}
         {{ messages|join:" " }} :: 
@@ -219,7 +220,7 @@
 {% endblock %}
 {% block footernav %}
     {% if request.event.settings.contact_mail %}
-        <li><a href="mailto:{{ request.event.settings.contact_mail }}" target="_blank" rel="noopener">{% trans "Contact" %}</a></li>
+        <li><a href="mailto:{{ request.event.settings.contact_mail|anon_email }}" target="_blank" rel="noopener">{% trans "Contact" %}</a></li>
     {% endif %}
     {% if request.event.settings.privacy_url %}
         <li><a href="{% safelink request.event.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a></li>
