@@ -23,6 +23,7 @@ import datetime
 import logging
 import math
 import re
+import textwrap
 import unicodedata
 from collections import defaultdict
 from decimal import Decimal
@@ -757,6 +758,9 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             key=_group_key,
             is_addon=lambda l: l.description.startswith("  +"),
         ):
+            # make sure description fits in a table cell on a single page otherwise PDF-build fails
+            if len(description) > 1280:
+                description = textwrap.wrap(description, 1279)[0] + "…"
             # Try to be clever and figure out when organizers would want to show the period. This heuristic is
             # not perfect and the only "fully correct" way would be to include the period on every line always,
             # however this will cause confusion (a) due to useless repetition of the same date all over the invoice
