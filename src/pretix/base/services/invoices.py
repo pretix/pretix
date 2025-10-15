@@ -377,6 +377,8 @@ def build_cancellation(invoice: Invoice):
         line.gross_value *= -1
         line.tax_value *= -1
         line.save()
+
+    build_invoice_data.send(sender=invoice.event, invoice=invoice)
     return invoice
 
 
