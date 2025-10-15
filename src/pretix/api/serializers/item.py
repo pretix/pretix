@@ -550,7 +550,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
         if full_data.get('show_during_checkin') and full_data.get('type') in Question.SHOW_DURING_CHECKIN_UNSUPPORTED:
             raise ValidationError(_('This type of question cannot be shown during check-in.'))
 
-        Question.clean_items(event, full_data.get('items'))
+        Question.clean_items(event, full_data.get('items') or [])
         return data
 
     def validate_options(self, value):
@@ -566,7 +566,7 @@ class QuestionSerializer(I18nAwareModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         options_data = validated_data.pop('options') if 'options' in validated_data else []
-        items = validated_data.pop('items')
+        items = validated_data.pop('items', [])
 
         question = Question.objects.create(**validated_data)
         question.items.set(items)
