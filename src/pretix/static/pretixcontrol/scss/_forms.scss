@@ -91,6 +91,12 @@ td > .form-group > .checkbox {
   }
 }
 
+.submit-group-sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+}
+
 .panel .form-group:last-child {
   margin-bottom: 0;
 }
