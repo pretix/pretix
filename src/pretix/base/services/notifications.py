@@ -32,6 +32,7 @@ from pretix.base.services.mail import mail_send_task
 from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
 from pretix.base.signals import notification
 from pretix.celery_app import app
+from pretix.helpers.celery import get_task_priority
 from pretix.helpers.urls import build_absolute_uri
 
 
@@ -88,12 +89,18 @@ def notify(logentry_ids: list):
         for um, enabled in notify_specific.items():
             user, method = um
             if enabled:
-                send_notification.apply_async(args=(logentry.id, notification_type.action_type, user.pk, method))
+                send_notification.apply_async(
+                    args=(logentry.id, notification_type.action_type, user.pk, method),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
+                )
 
         for um, enabled in notify_global.items():
             user, method = um
             if enabled and um not in notify_specific:
-                send_notification.apply_async(args=(logentry.id, notification_type.action_type, user.pk, method))
+                send_notification.apply_async(
+                    args=(logentry.id, notification_type.action_type, user.pk, method),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
+                )
 
         notification.send(logentry.event, logentry_id=logentry.id, notification_type=notification_type.action_type)
 

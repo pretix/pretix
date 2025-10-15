@@ -31,6 +31,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 
+from pretix.helpers.celery import get_task_priority
 from pretix.helpers.json import CustomJSONEncoder
 
 
@@ -131,9 +132,15 @@ class LoggingMixin:
             logentry.save()
 
             if logentry.notification_type:
-                notify.apply_async(args=(logentry.pk,))
+                notify.apply_async(
+                    args=(logentry.pk,),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
+                )
             if logentry.webhook_type:
-                notify_webhooks.apply_async(args=(logentry.pk,))
+                notify_webhooks.apply_async(
+                    args=(logentry.pk,),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
+                )
 
         return logentry
 
