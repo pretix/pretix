@@ -702,6 +702,46 @@ class OrdersTest(BaseOrdersTest):
             assert r.provider == "giftcard"
             assert r.amount == Decimal('20.00')
 
+    def test_orders_cancel_autorefund_gift_card_customer(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        with scopes_disabled():
+            customer = self.orga.customers.create(email='john@example.org', is_verified=True)
+            customer.set_password('foo')
+            customer.save()
+        self.order.customer = customer
+        self.order.save()
+        with scopes_disabled():
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total,
+                                       state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        self.event.settings.cancel_allow_user_paid = True
+        self.event.settings.cancel_allow_user_paid_refund_as_giftcard = 'option'
+        gc = customer.usable_gift_cards()
+        assert len(gc) == 0
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'manually' not in response.content.decode()
+        assert "gift card" in response.content.decode()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                'giftcard': 'true'
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        assert "gift card" in response.content.decode()
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_CANCELED
+        with scopes_disabled():
+            r = self.order.refunds.get()
+            assert r.provider == "giftcard"
+            assert r.amount == Decimal('23.00')
+            gc = customer.usable_gift_cards()
+            assert len(gc) == 1
+
     def test_orders_cancel_unpaid_fee(self):
         self.order.status = Order.STATUS_PENDING
         self.order.save()
@@ -1582,6 +1622,35 @@ class OrdersTest(BaseOrdersTest):
         assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
         assert self.order.status == Order.STATUS_PAID
         assert gc.value == Decimal('87.00')
+
+    def test_change_paymentmethod_customeraccount_giftcard_offered(self):
+        with scopes_disabled():
+            self.orga.settings.customer_accounts = True
+            customer = self.orga.customers.create(email='john@example.org', is_verified=True)
+            customer.set_password('foo')
+            customer.save()
+            self.order.customer = customer
+            self.order.payments.create(
+                provider='manual',
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=Decimal('10.00'),
+            )
+            gc = self.orga.issued_gift_cards.create(currency="EUR", customer=customer)
+            gc.transactions.create(value=100, acceptor=self.orga)
+            ugc = customer.usable_gift_cards()
+            assert len(ugc) == 1
+        r = self.client.post('/%s/account/login' % (self.orga.slug), {
+            'email': 'john@example.org',
+            'password': 'foo',
+        })
+        assert r.status_code == 302
+        r = self.client.get('/%s/account/' % (self.orga.slug))
+        assert r.status_code == 200
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+        )
+        assert 'Gift card' in response.content.decode()
+        assert '1 available' in response.content.decode()
 
     def test_answer_download_token(self):
         with scopes_disabled():
