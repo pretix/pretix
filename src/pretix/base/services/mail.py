@@ -470,9 +470,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                         logger.exception('Could not attach invoice to email')
                                         pass
 
-                            if attach_size < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1024 * 1024:
+                            if attach_size * 1.37 < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1024 * 1024:
                                 # Do not attach more than (limit - 1 MB) in tickets (1MB space for invoice, email itself, …),
                                 # it will bounce way to often.
+                                # 1 MB is the buffer for the rest of the email (text, invoice, calendar, pictures)
+                                # 1.37 is the factor for base64 encoding https://en.wikipedia.org/wiki/Base64
                                 for a in args:
                                     try:
                                         email.attach(*a)
