@@ -765,49 +765,41 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         ):
             # split description into multiple Paragraphs so each fits in a table cell on a single page
             # otherwise PDF-build fails
-            # strip first line from description as label set in Normal, set rest in Fineprint
-            label = description[:description.find("\n")]
-            label = label[:label.find("<br")]
-            while True:
-                label_p = FontFallbackParagraph(
-                    self._clean_text(label, tags=['br']),
-                    self.stylesheet['Normal']
-                )
-                num_lines = label_p.wrap(colwidths[0], doc.height)[1] // self.stylesheet['Normal'].leading
-                if num_lines == 1:
-                    break
-                if num_lines > 2:
-                    # quickly bring the text-length down to a managable length to then stepwise reduce 
-                    label = label[:len(label) // (num_lines-1)]
-                else:
-                    # shorten by 5%
-                    label = label[:-math.ceil(len(label)**0.05)]
 
             description_p_list = []
-            description = description[len(label):].lstrip()
-            if description.startswith("<br"):
-                description = description[description.find(">")+1:]
-            curr_description = description
-            max_height = 0.8 * doc.height
+            # normalize linebreaks so we can safely substring description
+            description = description.replace('<br>', '<br />').replace('<br />\n', '\n').replace('<br />', '\n')
+
+            # start first line with different settings than the rest of the description
+            curr_description = description[:description.find("\n")]
+            max_width = colwidths[0]
+            max_height = self.stylesheet['Normal'].leading
+            p_style = self.stylesheet['Normal']
             while True:
                 p = FontFallbackParagraph(
                     self._clean_text(curr_description, tags=['br']),
-                    self.stylesheet['Fineprint']
+                    p_style
                 )
-                h = p.wrap(colwidths[0], doc.height)[1]
+                h = p.wrap(max_width, doc.height)[1]
                 if h <= max_height:
                     description_p_list.append(p)
                     if curr_description == description:
                         break
                     curr_description = description = description[len(curr_description):].lstrip()
+                    # use different settings for all except first line
+                    #max_width = colwidths[0] # sum(colwidths[0:3]) depending on has_taxes
+                    max_height = 0.2 * doc.height
+                    p_style = self.stylesheet['Fineprint']
                     continue
 
-                # TODO: stripping strings is problematic when we might have <br> in there
-                elif h > max_height * 1.1:
+                if h > max_height * 1.25:
                     # quickly bring the text-length down to a managable length to then stepwise reduce 
-                    curr_description = curr_description[:math.ceil(len(curr_description) * max_height * 1.1 / h)]
+                    wrap_to = math.ceil(len(curr_description) * max_height * 1.25 / h)
                 else:
-                    curr_description = curr_description[:-10]
+                    # long trimming long texts by percent creates to big jumps, but trimming short texts
+                    # by e.g. static 10 chars might be to much also
+                    wrap_to = max(len(curr_description) - 10, math.ceil(len(curr_description) * 0.95))
+                curr_description = textwrap.wrap(curr_description, wrap_to)[0]
 
             # Try to be clever and figure out when organizers would want to show the period. This heuristic is
             # not perfect and the only "fully correct" way would be to include the period on every line always,
@@ -880,7 +872,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     ))
 
                 tdata.append((
-                    label_p,
+                    description_p_list.pop(0),
                     str(len(lines)),
                     localize(tax_rate) + " %",
                     FontFallbackParagraph(
@@ -904,7 +896,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                         self.stylesheet['Normal']
                     ))
                 tdata.append((
-                    label_p,
+                    description_p_list.pop(0),
                     str(len(lines)),
                     FontFallbackParagraph(
                         money_filter(gross_value * len(lines), self.invoice.event.currency).replace('\xa0', ' '),
