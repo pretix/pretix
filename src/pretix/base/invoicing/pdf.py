@@ -909,13 +909,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             tstyledata += [
                 (
                     'BOTTOMPADDING',
-                    (0, len(tdata) - len(description_p_list) - 1),
+                    (0, len(tdata) - len(description_p_list)),
                     (-1, len(tdata) - 2), 
                     0
                 ),
                 (
                     'TOPPADDING',
-                    (0, len(tdata) - len(description_p_list)),
+                    (0, len(tdata) - len(description_p_list) + 1),
                     (-1, len(tdata) - 1),
                     0
                 ),
