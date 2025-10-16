@@ -787,7 +787,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                         break
                     curr_description = description = description[len(curr_description):].lstrip()
                     # use different settings for all except first line
-                    #max_width = colwidths[0] # sum(colwidths[0:3]) depending on has_taxes
+                    max_width = sum(colwidths[0:(3 if has_taxes else 2)]) 
                     max_height = 0.2 * doc.height
                     p_style = self.stylesheet['Fineprint']
                     continue
@@ -886,6 +886,11 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ))
                 for p in description_p_list:
                     tdata.append((p, "", "", "", ""))
+                    tstyledata.append((
+                        'SPAN',
+                        (0, len(tdata) - 1),
+                        (2, len(tdata) - 1),
+                    ))
             else:
                 if len(lines) > 1:
                     single_price_line = pgettext('invoice', 'Single price: {price}').format(
@@ -905,6 +910,11 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ))
                 for p in description_p_list:
                     tdata.append((p, "", ""))
+                    tstyledata.append((
+                        'SPAN',
+                        (0, len(tdata) - 1),
+                        (1, len(tdata) - 1),
+                    ))
 
             tstyledata += [
                 (
