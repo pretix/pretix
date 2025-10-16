@@ -905,6 +905,21 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ))
                 for p in description_p_list:
                     tdata.append((p, "", ""))
+
+            tstyledata += [
+                (
+                    'BOTTOMPADDING',
+                    (0, len(tdata) - len(description_p_list) - 1),
+                    (-1, len(tdata) - 2), 
+                    0
+                ),
+                (
+                    'TOPPADDING',
+                    (0, len(tdata) - len(description_p_list)),
+                    (-1, len(tdata) - 1),
+                    0
+                ),
+            ]
             taxvalue_map[tax_rate, tax_name] += (gross_value - net_value) * len(lines)
             grossvalue_map[tax_rate, tax_name] += gross_value * len(lines)
             total += gross_value * len(lines)
