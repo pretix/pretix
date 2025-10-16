@@ -787,13 +787,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                         break
                     curr_description = description = description[len(curr_description):].lstrip()
                     # use different settings for all except first line
-                    max_width = sum(colwidths[0:(3 if has_taxes else 2)]) 
+                    max_width = sum(colwidths[0:(3 if has_taxes else 2)])
                     max_height = 0.2 * doc.height
                     p_style = self.stylesheet['Fineprint']
                     continue
 
                 if h > max_height * 1.25:
-                    # quickly bring the text-length down to a managable length to then stepwise reduce 
+                    # quickly bring the text-length down to a managable length to then stepwise reduce
                     wrap_to = math.ceil(len(curr_description) * max_height * 1.25 / h)
                 else:
                     # long trimming long texts by percent creates to big jumps, but trimming short texts
@@ -920,7 +920,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 (
                     'BOTTOMPADDING',
                     (0, len(tdata) - len(description_p_list)),
-                    (-1, len(tdata) - 2), 
+                    (-1, len(tdata) - 2),
                     0
                 ),
                 (
