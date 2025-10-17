@@ -772,8 +772,9 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
             # start first line with different settings than the rest of the description
             curr_description = description[:description.find("\n")]
-            max_width = colwidths[0]
             max_height = self.stylesheet['Normal'].leading
+            cellpadding = 6 # default cellpadding is only set on right side of column
+            max_width = colwidths[0] - cellpadding
             p_style = self.stylesheet['Normal']
             while True:
                 p = FontFallbackParagraph(
@@ -787,8 +788,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                         break
                     curr_description = description = description[len(curr_description):].lstrip()
                     # use different settings for all except first line
-                    max_width = sum(colwidths[0:(3 if has_taxes else 2)])
                     max_height = 0.2 * doc.height
+                    max_width = sum(colwidths[0:3 if has_taxes else 2]) - cellpadding
                     p_style = self.stylesheet['Fineprint']
                     continue
 
