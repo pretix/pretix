@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-02-13 22:00+0000\n"
-"Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
+"PO-Revision-Date: 2025-10-17 02:04+0000\n"
+"Last-Translator: Vasco Baleia <vb2003.12@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -9587,7 +9587,7 @@ msgstr ""
 #: pretix/base/services/placeholders.py:478
 #: pretix/base/templates/pretixbase/email/order_details.html:49
 msgid "View registration details"
-msgstr "Ver detalhes do registro"
+msgstr "Ver detalhes do registo"
 
 #: pretix/base/services/placeholders.py:575
 msgid "Sample Corporation"
@@ -11770,7 +11770,7 @@ msgstr ""
 #: pretix/base/settings.py:2441
 #, python-brace-format
 msgid "Event registration confirmed: {code}"
-msgstr "Registro de Evento confirmado: {code}"
+msgstr "Registo de Evento confirmado: {code}"
 
 #: pretix/base/settings.py:2445
 #, python-brace-format
@@ -18443,7 +18443,7 @@ msgstr "Login"
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr "Registro"
+msgstr "Registo"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
@@ -19926,7 +19926,7 @@ msgstr "Redefinir para configurações de organizador"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr "Este é o registro do SPF que encontramos em seu domínio:"
+msgstr "Este é o registo do SPF que encontramos em seu domínio:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
@@ -19934,7 +19934,7 @@ msgstr "Para consertar isso, inclua a parte seguinte antes da última palavra:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:38
 msgid "Your new SPF record could look like this:"
-msgstr "Seu novo registro do SPF pode ficar assim:"
+msgstr "O seu novo registo de SPF pode ficar assim:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:43
 msgid ""
@@ -19947,8 +19947,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:48
 msgid "We found an SPF record on your domain that includes this system. Great!"
 msgstr ""
-"Encontramos um registro SPF em seu domínio que inclui este sistema. "
-"Excelente!"
+"Encontramos um registo SPF em seu domínio que inclui este sistema. Excelente!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:54
 msgid "Verification"
@@ -21870,16 +21869,12 @@ msgid "October"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:26
-#, fuzzy
-#| msgid "Member"
 msgid "November"
-msgstr "Membro"
+msgstr "novembro"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:27
-#, fuzzy
-#| msgid "Member"
 msgid "December"
-msgstr "Membro"
+msgstr "dezembro"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:32
 #, fuzzy
@@ -26521,7 +26516,7 @@ msgid ""
 msgstr ""
 "Para a maioria das categorias de dados, será capaz de descarregar "
 "parcialmente os dados para armazená-lo offline. Alguns tipos de dados (como "
-"algumas informações de pagamento), bem como dados de registro histórico não "
+"algumas informações de pagamento), bem como dados de registo histórico não "
 "podem ser descarregados no momento."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:46
@@ -28469,11 +28464,11 @@ msgid ""
 "the domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
-"Não conseguimos encontrar um conjunto de registros SPF para o domínio que "
+"Não conseguimos encontrar um conjunto de registos SPF para o domínio que "
 "você está tentando usar. Você ainda pode prosseguir, mas aumentará a chance "
 "de os e -mails irem spam ou serem rejeitados. Recomendamos fortemente "
-"definir um registro SPF no domínio. Você pode fazê -lo através das "
-"configurações do DNS no provedor com o qual registrou seu domínio."
+"definir um registo SPF no domínio. Você pode fazê -lo através das "
+"configurações do DNS no provedor com o qual registou seu domínio."
 
 #: pretix/control/views/mailsetup.py:207
 msgid ""
@@ -28483,11 +28478,11 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
-"Encontramos um conjunto de registros SPF para o domínio que você está "
+"Encontramos um conjunto de registos SPF para o domínio que você está "
 "tentando usar, mas ele não inclui o servidor de email deste sistema. Isso "
 "significa que há uma chance muito alta que a maioria dos e -mails seja "
 "rejeitada ou marcada como spam. Você deve atualizar as configurações do DNS "
-"do seu domínio para incluir este sistema no registro SPF."
+"do seu domínio para incluir este sistema no registo SPF."
 
 #: pretix/control/views/mailsetup.py:216
 msgid "The verification code was incorrect, please try again."
@@ -29488,7 +29483,7 @@ msgstr "O dispositivo foi verificado e agora pode ser usado."
 
 #: pretix/control/views/user.py:504
 msgid "The registration could not be completed. Please try again."
-msgstr "O registro não pôde ser concluído. Por favor, tente novamente."
+msgstr "O registo não pôde ser concluído. Por favor, tente novamente."
 
 #: pretix/control/views/user.py:564
 msgid ""
@@ -34058,7 +34053,7 @@ msgstr "tem erros"
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
 msgctxt "form"
 msgid "required"
-msgstr "mandatório"
+msgstr "obrigatório"
 
 #: pretix/presale/ical.py:85 pretix/presale/ical.py:141
 #, python-brace-format
@@ -35923,11 +35918,11 @@ msgstr "Total: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
 msgid "Registration details"
-msgstr "Detalhes do registro"
+msgstr "Detalhes do registo"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:10
 msgid "Your registration"
-msgstr "O seu registro"
+msgstr "O seu registo"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:31
 msgid "Your items"
