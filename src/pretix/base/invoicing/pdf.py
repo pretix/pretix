@@ -800,7 +800,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     # long trimming long texts by percent creates to big jumps, but trimming short texts
                     # by e.g. static 10 chars might be to much also
                     wrap_to = max(len(curr_description) - 10, math.ceil(len(curr_description) * 0.95))
-                curr_description = textwrap.wrap(curr_description, wrap_to)[0]
+                curr_description = textwrap.wrap(curr_description, wrap_to, replace_whitespace=False, drop_whitespace=False)[0]
 
             # Try to be clever and figure out when organizers would want to show the period. This heuristic is
             # not perfect and the only "fully correct" way would be to include the period on every line always,
