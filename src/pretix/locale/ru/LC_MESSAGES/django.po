@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
 "PO-Revision-Date: 2025-10-17 16:55+0000\n"
-"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
+"Last-Translator: fd <fd@denkena-consulting.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
@@ -22,157 +22,159 @@ msgstr ""
 
 #: pretix/_base_settings.py:87
 msgid "English"
-msgstr ""
+msgstr "английский язык"
 
 #: pretix/_base_settings.py:88
 msgid "German"
-msgstr ""
+msgstr "Немецкий"
 
 #: pretix/_base_settings.py:89
 msgid "German (informal)"
-msgstr ""
+msgstr "Немецкий (разговорный)"
 
 #: pretix/_base_settings.py:90
 msgid "Arabic"
-msgstr ""
+msgstr "Арабский"
 
 #: pretix/_base_settings.py:91
 msgid "Basque"
-msgstr ""
+msgstr "Баскский"
 
 #: pretix/_base_settings.py:92
 msgid "Catalan"
-msgstr ""
+msgstr "Каталанский"
 
 #: pretix/_base_settings.py:93
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Китайский (упрощённый)"
 
 #: pretix/_base_settings.py:94
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Китайский (традиционный)"
 
 #: pretix/_base_settings.py:95
 msgid "Czech"
-msgstr ""
+msgstr "Чешский"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "Хорватский"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
-msgstr ""
+msgstr "Датский"
 
 #: pretix/_base_settings.py:98
 msgid "Dutch"
-msgstr ""
+msgstr "Нидерландский"
 
 #: pretix/_base_settings.py:99
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Нидерландский (разговорный)"
 
 #: pretix/_base_settings.py:100
 msgid "French"
-msgstr ""
+msgstr "Французский"
 
 #: pretix/_base_settings.py:101
 msgid "Finnish"
-msgstr ""
+msgstr "Финский"
 
 #: pretix/_base_settings.py:102
 msgid "Galician"
-msgstr ""
+msgstr "Галисийский"
 
 #: pretix/_base_settings.py:103
 msgid "Greek"
-msgstr ""
+msgstr "Греческий"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "Иврит"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
-msgstr ""
+msgstr "Индонезийский"
 
 #: pretix/_base_settings.py:106
 msgid "Italian"
-msgstr ""
+msgstr "Итальянский"
 
 #: pretix/_base_settings.py:107
 msgid "Japanese"
-msgstr ""
+msgstr "Японский"
 
 #: pretix/_base_settings.py:108
 msgid "Latvian"
-msgstr ""
+msgstr "Латышский"
 
 #: pretix/_base_settings.py:109
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Норвежский (букмол)"
 
 #: pretix/_base_settings.py:110
 msgid "Polish"
-msgstr ""
+msgstr "Польский"
 
 #: pretix/_base_settings.py:111
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Португальский (Португалия)"
 
 #: pretix/_base_settings.py:112
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Португальский (Бразилия)"
 
 #: pretix/_base_settings.py:113
 msgid "Romanian"
-msgstr ""
+msgstr "Romanian"
 
 #: pretix/_base_settings.py:114
 msgid "Russian"
-msgstr ""
+msgstr "Русский"
 
 #: pretix/_base_settings.py:115
 msgid "Slovak"
-msgstr ""
+msgstr "Словацкий"
 
 #: pretix/_base_settings.py:116
 msgid "Swedish"
-msgstr ""
+msgstr "Шведский"
 
 #: pretix/_base_settings.py:117
 msgid "Spanish"
-msgstr ""
+msgstr "Испанский"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "Spanish (Latin America)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
-msgstr ""
+msgstr "Турецкий"
 
 #: pretix/_base_settings.py:120
 msgid "Ukrainian"
-msgstr ""
+msgstr "Украинский"
 
 #: pretix/api/auth/devicesecurity.py:58
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Полный доступ к устройству (чтение и изменение заказов и подарочных карт, "
+"чтение продуктов и настроек)"
 
 #: pretix/api/auth/devicesecurity.py:80
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:118
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (режим киоска, без синхронизации заказов, без поиска)"
 
 #: pretix/api/auth/devicesecurity.py:153
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (только онлайн, без синхронизации заказов)"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:402
 msgid "Application name"
@@ -180,17 +182,15 @@ msgstr "Название приложения"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:425
 msgid "Redirection URIs"
-msgstr ""
+msgstr "URI перенаправления"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:426
 msgid "Allowed URIs list, space separated"
 msgstr "Список разрешённых URI, разделённых пробелами"
 
 #: pretix/api/models.py:47
-#, fuzzy
-#| msgid "Allowed URIs list, space separated"
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Список разрешённых URI, разделённых пробелами"
+msgstr "Список разрешённых URI после выхода, разделённых пробелами"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:406
 #: pretix/plugins/paypal/payment.py:114 pretix/plugins/paypal2/payment.py:111
@@ -199,7 +199,7 @@ msgstr "ID клиента"
 
 #: pretix/api/models.py:55
 msgid "Client secret"
-msgstr ""
+msgstr "Секрет клиента"
 
 #: pretix/api/models.py:116
 msgid "Enable webhook"
@@ -208,7 +208,7 @@ msgstr "Включить вебхук"
 #: pretix/api/models.py:117
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "адрес назначения (URL)"
 
 #: pretix/api/models.py:118 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:352
@@ -231,12 +231,12 @@ msgstr "Ограничиться мероприятиями"
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:524
 msgid "Comment"
-msgstr ""
+msgstr "примечание"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1466
 #, python-brace-format
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Продукт \"{}\" не ассоциирован с квотой распределения."
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1722
 #: pretix/base/models/items.py:1917 pretix/base/models/items.py:2203
@@ -254,96 +254,105 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Мероприятия нельзя создать в статусе \"активно\". Необходимо добавить квоты "
+"и способы оплаты, прежде чем продажи станут доступны."
 
 #: pretix/api/serializers/event.py:234 pretix/api/serializers/event.py:554
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Свойство метаданных '{name}' не существует."
 
 #: pretix/api/serializers/event.py:237 pretix/api/serializers/event.py:557
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr ""
+msgstr "Свойство метаданных '{name}' не допускает значение '{value}'."
 
 #: pretix/api/serializers/event.py:283 pretix/api/serializers/organizer.py:85
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Неизвестный плагин: '{name}'."
 
 #: pretix/api/serializers/event.py:286 pretix/api/serializers/organizer.py:88
 #, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr ""
+msgstr "Ограниченный плагин: '{name}'."
 
 #: pretix/api/serializers/item.py:86 pretix/api/serializers/item.py:148
 #: pretix/api/serializers/item.py:359
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Свойство метаданных элемента '{name}' не существует."
 
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:1274
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr ""
+"Элемент в комплекте не должен совпадать с элементом, формирующим комплект."
 
 #: pretix/api/serializers/item.py:210 pretix/control/forms/item.py:1276
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Элемент в комплекте не должен содержать собственных наборов."
 
 #: pretix/api/serializers/item.py:298
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"Методы PATCH/PUT не поддерживают обновление дополнений, комплектов или "
+"вариаций; используйте соответствующую вложенную конечную точку API."
 
 #: pretix/api/serializers/item.py:306
 msgid "Only admission products can currently be personalized."
 msgstr ""
+"Только продукты для входа могут быть персонализированы в настоящее время."
 
 #: pretix/api/serializers/item.py:317
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Подарочные карты не должны быть связаны с ненулевыми налоговыми ставками, "
+"поскольку налог с продаж применяется при их использовании."
 
 #: pretix/api/serializers/item.py:322 pretix/control/forms/item.py:781
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "Подарочные карты не должны одновременно быть продуктами для входа."
 
 #: pretix/api/serializers/item.py:524
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Методы PATCH/PUT не поддерживают обновление опций; используйте "
+"соответствующую вложенную конечную точку API."
 
 #: pretix/api/serializers/item.py:538 pretix/control/forms/item.py:176
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "Вопрос не может зависеть от вопроса, заданного во время регистрации."
 
 #: pretix/api/serializers/item.py:543 pretix/control/forms/item.py:181
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Обнаружена циклическая зависимость между вопросами."
 
 #: pretix/api/serializers/item.py:548 pretix/control/forms/item.py:190
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Этот тип вопроса не может быть задан во время регистрации."
 
 #: pretix/api/serializers/item.py:551 pretix/control/forms/item.py:198
-#, fuzzy
-#| msgid "This question will only show up in the backend."
 msgid "This type of question cannot be shown during check-in."
-msgstr "Этот вопрос будет отображаться только в серверной части."
+msgstr "Этот тип вопроса не может быть отображён во время регистрации."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
+"Носитель с таким же идентификатором и типом уже существует в вашем аккаунте "
+"организатора."
 
 #: pretix/api/serializers/order.py:81
-#, fuzzy, python-brace-format
-#| msgid "Your gift card has been applied."
+#, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "Ваш подарочный сертификат использован."
+msgstr "\"{input}\" не является допустимым выбором."
 
 #: pretix/api/serializers/order.py:1427 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1589
@@ -352,23 +361,20 @@ msgid "The selected seat \"{seat}\" is not available."
 msgstr "Выбранное место \"{seat}\" недоступно."
 
 #: pretix/api/serializers/order.py:1453 pretix/api/serializers/order.py:1460
-#, fuzzy, python-brace-format
-#| msgid "The ordered product \"{item}\" is no longer available."
+#, python-brace-format
 msgid "The product \"{}\" is not available on this date."
-msgstr "Заказанный продукт \"{item}\" более не доступен."
+msgstr "Продукт \"{}\" недоступен на эту дату."
 
 #: pretix/api/serializers/order.py:1475 pretix/api/views/cart.py:200
 #, python-brace-format
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
+msgstr "Недостаточно квоты в \"{}\" для выполнения операции."
 
 #: pretix/api/serializers/organizer.py:145
 #: pretix/control/forms/organizer.py:893 pretix/presale/forms/customer.py:458
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "An account with this email address is already registered."
-msgstr "Ваучер с этим кодом уже существует."
+msgstr "Аккаунт с этим адресом электронной почты уже зарегистрирован."
 
 #: pretix/api/serializers/organizer.py:278
 #: pretix/control/forms/organizer.py:746
@@ -376,35 +382,32 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Подарочная карта с таким же секретом уже существует в вашем или связанном "
+"аккаунте организатора."
 
 #: pretix/api/serializers/organizer.py:369
 #: pretix/control/views/organizer.py:1042
 msgid "pretix account invitation"
-msgstr ""
+msgstr "Приглашение в аккаунт pretix"
 
 #: pretix/api/serializers/organizer.py:391
 #: pretix/control/views/organizer.py:1141
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Этот пользователь уже приглашён в данную команду."
 
 #: pretix/api/serializers/organizer.py:407
 #: pretix/control/views/organizer.py:1158
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "Этот пользователь уже имеет разрешения для данной команды."
 
 #: pretix/api/views/cart.py:209
-#, fuzzy
-#| msgid ""
-#| "This voucher code has already been used the maximum number of times "
-#| "allowed."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr ""
-"Этот код ваучера уже был использован максимально допустимое количество раз."
+msgstr "Указанный ваучер уже использован максимальное количество раз."
 
 #: pretix/api/views/checkin.py:616 pretix/api/views/checkin.py:623
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Носитель подключён к другому мероприятию"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:754
 #, python-brace-format
@@ -412,6 +415,8 @@ msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
+"Приложение \"{application_name}\" получило разрешение на доступ к вашему "
+"аккаунту."
 
 #: pretix/api/views/order.py:608 pretix/control/views/orders.py:1601
 #: pretix/presale/views/order.py:733 pretix/presale/views/order.py:806
@@ -427,13 +432,12 @@ msgstr "Счёт для данного заказа уже существует.
 #: pretix/control/views/users.py:145
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
+"Произошла ошибка при отправке письма. Пожалуйста, попробуйте снова позже."
 
 #: pretix/api/views/order.py:719 pretix/base/services/cart.py:216
 #: pretix/base/services/orders.py:191 pretix/presale/views/order.py:790
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "One of the selected products is not available in the selected country."
-msgstr "Выбранный продукт не позволяет выбрать место."
+msgstr "Один из выбранных продуктов недоступен в указанной стране."
 
 #: pretix/api/webhooks.py:262 pretix/base/notifications.py:233
 msgid "New order placed"
@@ -452,23 +456,19 @@ msgstr "Заказ помечен как оплаченный"
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1562
 msgid "Order canceled"
-msgstr ""
+msgstr "Заказ отменён"
 
 #: pretix/api/webhooks.py:278 pretix/base/notifications.py:257
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order reactivated"
-msgstr "Срок действия заказа истёк"
+msgstr "Заказ восстановлен"
 
 #: pretix/api/webhooks.py:282 pretix/base/notifications.py:263
 msgid "Order expired"
 msgstr "Срок действия заказа истёк"
 
 #: pretix/api/webhooks.py:286
-#, fuzzy
-#| msgid "Order information changed"
 msgid "Order expiry date changed"
-msgstr "Информация в заказе изменена"
+msgstr "Дата истечения заказа изменена"
 
 #: pretix/api/webhooks.py:290 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -481,13 +481,11 @@ msgstr "Контактный адрес заказа изменён"
 #: pretix/api/webhooks.py:298 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr ""
+msgstr "Заказ изменён"
 
 #: pretix/api/webhooks.py:302
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Refund of payment created"
-msgstr "Активировать способ оплаты"
+msgstr "Возврат платежа создан"
 
 #: pretix/api/webhooks.py:306 pretix/base/notifications.py:293
 msgid "External refund of payment"
@@ -495,25 +493,19 @@ msgstr "Внешний возврат оплаты"
 
 #: pretix/api/webhooks.py:310
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "Возврат платежа запрошен клиентом"
 
 #: pretix/api/webhooks.py:314
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Refund of payment completed"
-msgstr "Активировать способ оплаты"
+msgstr "Возврат платежа завершён"
 
 #: pretix/api/webhooks.py:318
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment canceled"
-msgstr "Внешний возврат оплаты"
+msgstr "Возврат платежа отменён"
 
 #: pretix/api/webhooks.py:322
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment failed"
-msgstr "Внешний возврат оплаты"
+msgstr "Возврат платежа не удался"
 
 #: pretix/api/webhooks.py:326
 #, fuzzy
@@ -15818,7 +15810,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:93
 msgid "This slug is already in use. Please choose a different one."
-msgstr ""
+msgstr "Этот идентификатор уже используется. Пожалуйста, выберите другой."
 
 #: pretix/control/forms/organizer.py:172
 msgid "You cannot choose the base domain of this installation."
@@ -15860,6 +15852,8 @@ msgid ""
 "The changes could not be saved because there would be no remaining team with "
 "the permission to change teams and permissions."
 msgstr ""
+"Изменения не могут быть сохранены, так как не останется команды с правом "
+"изменять команды и разрешения."
 
 #: pretix/control/forms/organizer.py:369 pretix/control/forms/organizer.py:407
 msgid ""
@@ -35181,7 +35175,7 @@ msgstr "Заплатить сейчас"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:77
 #: pretix/presale/views/widget.py:445 pretix/presale/views/widget.py:468
 msgid "Book now"
-msgstr "Забронировать"
+msgstr "Забронировать сейчас"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:104
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:110
@@ -35189,7 +35183,7 @@ msgstr "Забронировать"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:73
 #: pretix/presale/views/widget.py:460
 msgid "Fully booked"
-msgstr ""
+msgstr "Полностью забронировано"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:114
 #, python-format
