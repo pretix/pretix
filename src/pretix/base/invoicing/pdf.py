@@ -771,8 +771,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             description = description.replace('<br>', '<br />').replace('<br />\n', '\n').replace('<br />', '\n')
 
             # start first line with different settings than the rest of the description
-            curr_description = description.split("\n", maxsplit = 1)[0]
-            cellpadding = 6 # default cellpadding is only set on right side of column
+            curr_description = description.split("\n", maxsplit=1)[0]
+            cellpadding = 6  # default cellpadding is only set on right side of column
             max_width = colwidths[0] - cellpadding
             max_height = self.stylesheet['Normal'].leading * 5
             p_style = self.stylesheet['Normal']
@@ -787,7 +787,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     if curr_description == description:
                         break
                     description = description[len(curr_description):].lstrip()
-                    curr_description = description.split("\n", maxsplit = 1)[0]
+                    curr_description = description.split("\n", maxsplit=1)[0]
                     # use different settings for all except first line
                     max_width = sum(colwidths[0:3 if has_taxes else 2]) - cellpadding
                     max_height = self.stylesheet['Fineprint'].leading * 8
