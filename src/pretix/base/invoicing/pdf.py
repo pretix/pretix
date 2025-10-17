@@ -771,10 +771,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             description = description.replace('<br>', '<br />').replace('<br />\n', '\n').replace('<br />', '\n')
 
             # start first line with different settings than the rest of the description
-            max_height = self.stylesheet['Normal'].leading
             curr_description = description.split("\n", maxsplit = 1)[0]
             cellpadding = 6 # default cellpadding is only set on right side of column
             max_width = colwidths[0] - cellpadding
+            max_height = self.stylesheet['Normal'].leading * 5
             p_style = self.stylesheet['Normal']
             while True:
                 p = FontFallbackParagraph(
@@ -789,13 +789,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     description = description[len(curr_description):].lstrip()
                     curr_description = description.split("\n", maxsplit = 1)[0]
                     # use different settings for all except first line
-                    max_height = 0.2 * doc.height
                     max_width = sum(colwidths[0:3 if has_taxes else 2]) - cellpadding
+                    max_height = self.stylesheet['Fineprint'].leading * 8
                     p_style = self.stylesheet['Fineprint']
                     continue
 
                 if not description_p_list:
-                    # first "manual" line is larger than 8 "real" lines => only allow one line and set rest in Fineprint
+                    # first "manual" line is larger than 5 "real" lines => only allow one line and set rest in Fineprint
                     max_height = self.stylesheet['Normal'].leading
 
                 if h > max_height * 1.1:
