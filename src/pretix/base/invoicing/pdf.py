@@ -767,12 +767,12 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             # otherwise PDF-build fails
 
             description_p_list = []
-            # normalize linebreaks so we can safely substring description
+            # normalize linebreaks to newlines instead of HTML so we can safely substring
             description = description.replace('<br>', '<br />').replace('<br />\n', '\n').replace('<br />', '\n')
 
             # start first line with different settings than the rest of the description
-            curr_description = description[:description.find("\n")]
             max_height = self.stylesheet['Normal'].leading
+            curr_description = description.split("\n", maxsplit = 1)[0]
             cellpadding = 6 # default cellpadding is only set on right side of column
             max_width = colwidths[0] - cellpadding
             p_style = self.stylesheet['Normal']
@@ -786,7 +786,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     description_p_list.append(p)
                     if curr_description == description:
                         break
-                    curr_description = description = description[len(curr_description):].lstrip()
+                    description = description[len(curr_description):].lstrip()
+                    curr_description = description.split("\n", maxsplit = 1)[0]
                     # use different settings for all except first line
                     max_height = 0.2 * doc.height
                     max_width = sum(colwidths[0:3 if has_taxes else 2]) - cellpadding
