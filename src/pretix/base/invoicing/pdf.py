@@ -793,9 +793,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     p_style = self.stylesheet['Fineprint']
                     continue
 
-                if h > max_height * 1.25:
+                if not description_p_list:
+                    # first "manual" line is larger than 8 "real" lines => only allow one line and set rest in Fineprint
+                    max_height = self.stylesheet['Normal'].leading
+
+                if h > max_height * 1.1:
                     # quickly bring the text-length down to a managable length to then stepwise reduce
-                    wrap_to = math.ceil(len(curr_description) * max_height * 1.25 / h)
+                    wrap_to = math.ceil(len(curr_description) * max_height * 1.1 / h)
                 else:
                     # long trimming long texts by percent creates to big jumps, but trimming short texts
                     # by e.g. static 10 chars might be to much also
