@@ -8,20 +8,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-09-09 04:00+0000\n"
-"Last-Translator: Alois Pospíšil <alois.pospisil@gmail.com>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"PO-Revision-Date: 2025-10-17 16:55+0000\n"
+"Last-Translator: Petr Čermák <pcermak@live.com>\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13.2\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
-msgstr "AngličDodací adresatina"
+msgstr "Angličtina"
 
 #: pretix/_base_settings.py:88
 msgid "German"
@@ -89,7 +89,7 @@ msgstr "Řečtina"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebrejština"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -554,22 +554,16 @@ msgid "Event series date deleted"
 msgstr "Datum série akcí byla odstraněna"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "Název produktu"
+msgstr "Produkt změněn"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
-"Změna produktu (včetně přidání nebo odstranění produktu a včetně změn "
-"dílčích objektů, jako jsou varianty nebo obsažené produkty)"
+"Včetně přidání nebo odstranění produktu a včetně změn dílčích objektů, jako "
+"jsou varianty nebo obsažené produkty."
 
 #: pretix/api/webhooks.py:380
 msgid "Shop taken live"
@@ -604,28 +598,24 @@ msgid "Waiting list entry received voucher"
 msgstr "Zápis na čekací listinu obdržel poukaz"
 
 #: pretix/api/webhooks.py:412
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "Kód poukázky"
+msgstr "Dárkový poukaz přidán"
 
 #: pretix/api/webhooks.py:416
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "Dárkový poukaz přiřazen"
+msgstr "Dárkový poukaz změněn"
 
 #: pretix/api/webhooks.py:417
 msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
 msgstr ""
+"Zahrnuje pouze výslovné změny dárkového poukazu; nezahrnuje například "
+"navýšení počtu uplatnění."
 
 #: pretix/api/webhooks.py:421
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "Dárkový poukaz uplatněn"
+msgstr "Dárkový poukaz smazán"
 
 #: pretix/api/webhooks.py:425
 msgid "Customer account created"
@@ -732,16 +722,17 @@ msgstr ""
 "pro vlastní integrace."
 
 #: pretix/base/context.py:38
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr "od: {name} postaveno na systému <a {a_attr}>pretix</a>"
+msgstr ""
+"<a {a_name_attr}>Běží na systému {name}</a>, který je založen na systému <a "
+"{a_attr}>pretix</a>"
 
 #: pretix/base/context.py:48
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "od: {name} postaveno na systému <a {a_attr}>pretix</a>"
+msgstr ""
+"<a {a_attr}>Běží na systému {name}, který je založen na systému pretix</a>"
 
 #: pretix/base/context.py:55
 #, python-format
@@ -816,6 +807,8 @@ msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
 msgstr ""
+"Pole \"{field_name}\" neexistuje. Zkontrolujte prosím nastavení u "
+"{provider_name}."
 
 #: pretix/base/datasync/datasync.py:262
 #, python-brace-format
@@ -823,6 +816,8 @@ msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
+"Pole „{field_name}“ vyžaduje {required_input}, ale bylo zadáno pouze "
+"{available_inputs}. Zkontrolujte prosím nastavení u {provider_name}."
 
 #: pretix/base/datasync/datasync.py:273
 #, python-brace-format
@@ -830,18 +825,16 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
+"Aktualizujte prosím mapování hodnot pro pole „{field_name}“ – možnost „{val}“"
+" není přiřazena"
 
 #: pretix/base/datasync/sourcefields.py:128
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "Pořadí objednávky"
+msgstr "Detaily pořadí objednávky"
 
 #: pretix/base/datasync/sourcefields.py:129
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "Email účastníka"
+msgstr "Detaily účastníka"
 
 #: pretix/base/datasync/sourcefields.py:130 pretix/base/exporters/answers.py:66
 #: pretix/base/models/items.py:1767 pretix/control/navigation.py:172
@@ -851,10 +844,8 @@ msgid "Questions"
 msgstr "Otázky"
 
 #: pretix/base/datasync/sourcefields.py:131
-#, fuzzy
-#| msgid "Product data"
 msgid "Product details"
-msgstr "Údaje o produktu"
+msgstr "Detaily o produktu"
 
 #: pretix/base/datasync/sourcefields.py:132
 #: pretix/control/templates/pretixcontrol/event/settings.html:280
@@ -15716,7 +15707,7 @@ msgstr "Potvrďte prosím, že chcete zrušit VŠECHNY termíny této série akc
 
 #: pretix/control/forms/organizer.py:93
 msgid "This slug is already in use. Please choose a different one."
-msgstr "Tato zkratka se již používá. Zvolte prosím jinou."
+msgstr "Tento slug se již používá. Použijte prosím jiný."
 
 #: pretix/control/forms/organizer.py:172
 msgid "You cannot choose the base domain of this installation."
@@ -32975,9 +32966,8 @@ msgid "There are no add-ons available for this product."
 msgstr "Pro tento produkt nejsou k dispozici žádné doplňky."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
-#, fuzzy
 msgid "Enter a voucher code below to buy this product."
-msgstr "Pro zakoupení této vstupenky zadejte níže kód poukázky."
+msgstr "Pro objednání této vstupenky zadejte níže kód poukazu."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:14
@@ -33426,7 +33416,7 @@ msgstr "Kdy se akce koná?"
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:25
 #, python-format
 msgid "Begin: %(time)s"
-msgstr "Začátek: %(time)s)"
+msgstr "Začátek: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:34
 #, python-format
