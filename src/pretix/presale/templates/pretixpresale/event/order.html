@@ -226,6 +226,9 @@
             {% endif %}
         </div>
     </div>
+    {% if show_confirm_texts %}
+        {% include "pretixpresale/event/fragment_confirm_text.html" with show_only=True %}
+    {% endif %}
     {% eventsignal event "pretix.presale.signals.order_info" order=order request=request %}
     <div class="row">
         {% if invoices %}

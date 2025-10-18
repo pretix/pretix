@@ -92,7 +92,10 @@ from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.forms.order import OrderPositionChangeForm
-from pretix.presale.signals import question_form_fields_overrides
+from pretix.presale.signals import (
+    checkout_all_optional, checkout_confirm_messages,
+    question_form_fields_overrides,
+)
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
 )
@@ -237,6 +240,23 @@ class TicketPageMixin:
 class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin, TemplateView):
     template_name = "pretixpresale/event/order.html"
 
+    @cached_property
+    def all_optional(self):
+        for recv, resp in checkout_all_optional.send(sender=self.request.event, request=self.request):
+            if resp:
+                return True
+        return False
+
+    @cached_property
+    def confirm_messages(self):
+        if self.all_optional:
+            return {}
+        msgs = {}
+        responses = checkout_confirm_messages.send(self.request.event)
+        for receiver, response in responses:
+            msgs.update(response)
+        return msgs
+
     def get(self, request, *args, **kwargs):
         self.kwargs = kwargs
         if not self.order:
@@ -257,6 +277,8 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         )
         ctx = super().get_context_data(**kwargs)
 
+        ctx['confirm_messages'] = self.confirm_messages
+        ctx['show_confirm_texts'] = self.request.event.settings.show_confirm_texts_on_order_detail
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
