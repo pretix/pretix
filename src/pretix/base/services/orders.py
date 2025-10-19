@@ -37,6 +37,7 @@ import json
 import logging
 import operator
 import sys
+from abc import ABC, abstractmethod
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
@@ -1656,6 +1657,12 @@ class OrderChangeManager:
     AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
     RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
 
+    class CustomOperation(ABC):
+        @abstractmethod
+        def execute(self, ocm: 'OrderChangeManager', nextposid: int, split_positions: list,
+                    secret_dirty: set, position_cache: dict, fee_cache: dict):
+            pass
+
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
         self.order = order
         self.user = user
@@ -2632,6 +2639,8 @@ class OrderChangeManager:
                         except BlockedTicketSecret.DoesNotExist:
                             pass
                 # todo: revoke list handling
+            elif isinstance(op, self.CustomOperation):
+                op.execute(self, nextposid, split_positions, secret_dirty, position_cache, fee_cache)
 
         for p in secret_dirty:
             assign_ticket_secret(
