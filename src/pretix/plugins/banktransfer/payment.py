@@ -48,6 +48,7 @@ from localflavor.generic.forms import BICFormField, IBANFormField
 from localflavor.generic.validators import IBANValidator
 from text_unidecode import unidecode
 
+from pretix.base.forms import I18nMarkdownTextarea
 from pretix.base.models import InvoiceAddress, Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.templatetags.money import money_filter
@@ -124,7 +125,7 @@ class BankTransfer(BasePaymentProvider):
             )),
             ('bank_details', I18nFormField(
                 label=_('Bank account details'),
-                widget=I18nTextarea,
+                widget=I18nMarkdownTextarea,
                 help_text=_(
                     'Include everything else that your customers might need to send you a bank transfer payment. '
                     'If you have lots of international customers, they might need your full address and your '
