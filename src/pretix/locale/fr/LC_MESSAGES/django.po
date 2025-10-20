@@ -4,9 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-10-17 16:55+0000\n"
-"Last-Translator: Maximilian Wintergerst <maximilian.wintergerst@leo-clubs.de>"
-"\n"
+"PO-Revision-Date: 2025-10-20 19:00+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -12810,7 +12809,7 @@ msgstr "M."
 #: pretix/base/settings.py:3527
 msgctxt "person_name_salutation"
 msgid "Mx"
-msgstr "Non binaire ou ne souhaite pas répondre"
+msgstr "NB"
 
 #: pretix/base/settings.py:3564 pretix/base/settings.py:3580
 #: pretix/base/settings.py:3596 pretix/base/settings.py:3611
