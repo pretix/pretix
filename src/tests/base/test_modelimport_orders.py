@@ -471,7 +471,7 @@ def test_variation_wrong_item(user, event, item):
         import_orders.apply(
             args=(event.pk, inputfile_factory(data).id, settings, 'en', user.pk)
         ).get()
-    assert 'Error while importing value "1" for column "Product variation" in line "1": No matching variation was found.' in str(excinfo.value)
+    assert f'Error while importing value "{str(v1.pk)}" for column "Product variation" in line "1": No matching variation was found.' in str(excinfo.value)
 
 
 @pytest.mark.django_db
