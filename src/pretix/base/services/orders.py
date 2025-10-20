@@ -1866,7 +1866,7 @@ class OrderChangeManager:
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: OrderPosition = None,
                      subevent: SubEvent = None, seat: Seat = None, membership: Membership = None,
-                     valid_from: datetime = None, valid_until: datetime = None, callback = None):
+                     valid_from: datetime = None, valid_until: datetime = None, callback=None):
         if isinstance(seat, str):
             if not seat:
                 seat = None
