@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-09-30 16:00+0000\n"
+"PO-Revision-Date: 2025-10-20 19:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -12686,7 +12686,7 @@ msgstr "Sr."
 #: pretix/base/settings.py:3527
 msgctxt "person_name_salutation"
 msgid "Mx"
-msgstr "Srx."
+msgstr "NB"
 
 #: pretix/base/settings.py:3564 pretix/base/settings.py:3580
 #: pretix/base/settings.py:3596 pretix/base/settings.py:3611
