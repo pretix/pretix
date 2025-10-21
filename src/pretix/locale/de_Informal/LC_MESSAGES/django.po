@@ -3745,12 +3745,10 @@ msgid "Remaining amount"
 msgstr "Restbetrag"
 
 #: pretix/base/invoicing/pdf.py:930
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Event date: {date_range}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "Rechnungsperiode: {date_range}"
+msgstr "Rechnungsperiode: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:961
 msgctxt "invoice"
