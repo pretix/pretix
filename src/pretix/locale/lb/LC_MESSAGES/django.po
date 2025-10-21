@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-21 07:26+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-10-21 08:03+0000\n"
+"Last-Translator: Sven Muhlen <sven.muhlen@bnl.etat.lu>\n"
+"Language-Team: Luxembourgish <https://translate.pretix.eu/projects/pretix/"
+"pretix/lb/>\n"
 "Language: lb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -1401,7 +1403,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:827
 #: pretix/plugins/checkinlists/exporters.py:828
 msgid "Yes"
-msgstr ""
+msgstr "Jo"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -1425,7 +1427,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:827
 #: pretix/plugins/checkinlists/exporters.py:828
 msgid "No"
-msgstr ""
+msgstr "Nee"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
 msgctxt "export_category"
@@ -4273,7 +4275,7 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:363
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Ticket-Code ass net eendeiteg op der Lëscht"
 
 #: pretix/base/models/checkin.py:364
 msgid "Server error"
@@ -4285,7 +4287,7 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:366
 msgid "Order not approved"
-msgstr ""
+msgstr "Bestellung net autoriséiert"
 
 #: pretix/base/models/checkin.py:367
 msgid "Ticket not valid at this time"
