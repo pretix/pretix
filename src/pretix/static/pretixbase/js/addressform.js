@@ -95,10 +95,6 @@ $(function () {
         }
 
         const update = function (ev) {
-            if (xhr) {
-                xhr.abort();
-            }
-
             dependents.state.prop("data-selected-value", dependents.state.val());
             if (dependents.transmission_type) {
                 dependents.transmission_type.prop("data-selected-value", dependents.transmission_type.val());
@@ -119,17 +115,24 @@ $(function () {
                 url.searchParams.append("transmission_type_required", !dependents.transmission_type.find("option[value='-']").length);
             }
 
+            if (xhr && url in responseCache) {
+                if (responseCache[url] == xhr) {
+                    // already requested this, but XHR is still running and will resolve promise
+                    // only re-resolve promise for JSON-data in responseCache[url]
+                    return;
+                } else {
+                    // abort current xhr as it is not the one we want
+                    // aborting deletes responseCache[url] but async
+                    xhr.abort();
+                }
+            }
+
             if (!(url in responseCache)) {
-                responseCache[url] = new Promise((resolve, reject) => {
-                    xhr = $.ajax({
-                        dataType: "json",
-                        url: url,
-                        timeout: 3000,
-                        success: resolve,
-                    }).fail(function(){
-                        reject();
-                    });
-                })
+                responseCache[url] = xhr = $.ajax({
+                    dataType: "json",
+                    url: url,
+                    timeout: 3000,
+                });
             }
 
             Promise.resolve(responseCache[url]).then(function (data) {
