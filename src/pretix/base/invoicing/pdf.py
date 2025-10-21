@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -19,7 +19,9 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import datetime
 import logging
+import math
 import re
 import unicodedata
 from collections import defaultdict
@@ -223,6 +225,9 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         stylesheet.add(ParagraphStyle(name='FineprintHeading', fontName=self.font_bold, fontSize=8, leading=12))
         stylesheet.add(ParagraphStyle(name='Fineprint', fontName=self.font_regular, fontSize=8, leading=10))
         stylesheet.add(ParagraphStyle(name='FineprintRight', fontName=self.font_regular, fontSize=8, leading=10, alignment=TA_RIGHT))
+        stylesheet.add(ParagraphStyle(name='WarningBlock', fontName=self.font_bold, fontSize=10, leading=12,
+                                      alignment=TA_LEFT, borderWidth=1 * mm, borderColor=colors.black,
+                                      borderPadding=2 * mm, spaceBefore=5 * mm, spaceAfter=5 * mm))
         return stylesheet
 
     def _register_fonts(self):
@@ -522,6 +527,20 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Event'))))
         canvas.drawText(textobject)
 
+    def _date_range_in_header(self):
+        if self.invoice.event.has_subevents or not self.invoice.event.settings.show_dates_on_frontpage:
+            return None, None
+        tz = self.invoice.event.timezone
+        show_end_date = (
+            self.invoice.event.settings.show_date_to and
+            self.invoice.event.date_to and
+            self.invoice.event.date_to.astimezone(tz).date() != self.invoice.event.date_from.astimezone(tz).date()
+        )
+        if show_end_date:
+            return self.invoice.event.date_from.astimezone(tz).date(), self.invoice.event.date_to.astimezone(tz).date()
+        else:
+            return self.invoice.event.date_from.astimezone(tz).date(), None
+
     def _draw_event(self, canvas):
         def shorten(txt):
             txt = str(txt)
@@ -535,25 +554,17 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 p_size = p.wrap(self.event_width, self.event_height)
             return txt
 
-        if not self.invoice.event.has_subevents and self.invoice.event.settings.show_dates_on_frontpage:
-            tz = self.invoice.event.timezone
-            show_end_date = (
-                self.invoice.event.settings.show_date_to and
-                self.invoice.event.date_to and
-                self.invoice.event.date_to.astimezone(tz).date() != self.invoice.event.date_from.astimezone(tz).date()
+        d_from, d_to = self._date_range_in_header()
+        if d_from and d_to:
+            p_str = (
+                shorten(self.invoice.event.name) + '\n' +
+                pgettext('invoice', '{from_date}\nuntil {to_date}').format(
+                    from_date=date_format(d_from, "DATE_FORMAT"),
+                    to_date=date_format(d_to, "DATE_FORMAT"),
+                )
             )
-            if show_end_date:
-                p_str = (
-                    shorten(self.invoice.event.name) + '\n' +
-                    pgettext('invoice', '{from_date}\nuntil {to_date}').format(
-                        from_date=self.invoice.event.get_date_from_display(show_times=False),
-                        to_date=self.invoice.event.get_date_to_display(show_times=False)
-                    )
-                )
-            else:
-                p_str = (
-                    shorten(self.invoice.event.name) + '\n' + self.invoice.event.get_date_from_display(show_times=False)
-                )
+        elif d_from:
+            p_str = shorten(self.invoice.event.name) + '\n' + date_format(d_from, "DATE_FORMAT")
         else:
             p_str = shorten(self.invoice.event.name)
 
@@ -576,11 +587,28 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             canvas.drawRightString(self.pagesize[0] - 20 * mm, (297 - 100) * mm, self._normalize(gettext('TEST MODE')))
             canvas.restoreState()
 
+    def _draw_watermark(self, canvas):
+        watermark = self.invoice.transmission_type_instance.pdf_watermark()
+        if watermark:
+            canvas.saveState()
+            for font_size in range(200, 20, -10):
+                width = stringWidth(watermark, self.font_bold, font_size)
+                if width < self.pagesize[0]:
+                    break
+
+            canvas.translate(self.pagesize[0] / 2, self.pagesize[1] / 2)
+            canvas.rotate(math.atan(self.pagesize[1] / self.pagesize[0]) / math.pi * 180)
+            canvas.setFont(self.font_bold, font_size)
+            canvas.setFillColorRGB(.92, .92, .92)
+            canvas.drawCentredString(0, - font_size / 2, self._normalize(watermark))
+            canvas.restoreState()
+
     def _on_first_page(self, canvas: Canvas, doc):
         canvas.setCreator('pretix.eu')
         canvas.setTitle(pgettext('invoice', 'Invoice {num}').format(num=self.invoice.number))
 
         canvas.saveState()
+        self._draw_watermark(canvas)
         self._draw_footer(canvas)
         self._draw_testmode(canvas)
         self._draw_invoice_from_label(canvas)
@@ -610,6 +638,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
     def _get_intro(self):
         story = []
+
+        type_info_text = self.invoice.transmission_type_instance.pdf_info_text()
+        if type_info_text:
+            story.append(FontFallbackParagraph(
+                type_info_text,
+                self.stylesheet['WarningBlock']
+            ))
+
         if self.invoice.custom_field:
             story.append(FontFallbackParagraph(
                 '{}: {}'.format(
@@ -656,7 +692,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         return story
 
     def _get_story(self, doc):
-        has_taxes = any(il.tax_value for il in self.invoice.lines.all()) or self.invoice.reverse_charge
+        all_lines = list(self.invoice.lines.all())
+        has_taxes = any(il.tax_value for il in all_lines) or self.invoice.reverse_charge
+        header_dates = self._date_range_in_header()
+        tz = self.invoice.event.timezone
+        has_multiple_service_dates = len(set(
+            (il.period_start, il.period_end) for il in all_lines
+        )) > 1
+        request_show_service_date = False
 
         story = [
             NextPageTemplate('FirstPage'),
@@ -700,15 +743,75 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             )]
 
         def _group_key(line):
-            return (line.description, line.tax_rate, line.tax_name, line.net_value, line.gross_value, line.subevent_id,
-                    line.event_date_from, line.event_date_to)
+            return (line.description, line.tax_rate, line.tax_name, line.net_value, line.gross_value, line.subevent,
+                    line.period_start, line.period_end)
+
+        def day(dt: datetime.datetime) -> datetime.date:
+            if dt is None:
+                return None
+            return dt.astimezone(tz).date()
 
         total = Decimal('0.00')
-        for (description, tax_rate, tax_name, net_value, gross_value, *ignored), lines in addon_aware_groupby(
-            self.invoice.lines.all(),
+        for (description, tax_rate, tax_name, net_value, gross_value, subevent, period_start, period_end), lines in addon_aware_groupby(
+            all_lines,
             key=_group_key,
             is_addon=lambda l: l.description.startswith("  +"),
         ):
+            # Try to be clever and figure out when organizers would want to show the period. This heuristic is
+            # not perfect and the only "fully correct" way would be to include the period on every line always,
+            # however this will cause confusion (a) due to useless repetition of the same date all over the invoice
+            # (b) due to not respecting the show_date_to setting of events in cases where we could have respected it.
+            # Still, we want to show the date explicitly if its different to the event or invoice date.
+            period_start_day = day(period_start)
+            period_end_day = day(period_end)
+            if period_start and period_end and period_end_day != period_start_day:
+                # It's a multi-day period, such as the validity of the ticket or an event date period
+
+                if period_start_day == header_dates[0] and period_end_day == header_dates[1]:
+                    # This is the exact event period we already printed in the header, no need to repeat it.
+                    period_line = ""
+
+                elif (self.event.has_subevents and subevent and day(subevent.date_from) == period_start_day and
+                      day(subevent.date_to) == period_end_day):
+                    # For subevents, build_invoice already includes the date in the description in the event-default format.
+                    period_line = ""
+
+                else:
+                    period_line = f"{date_format(period_start_day, 'SHORT_DATE_FORMAT')} – {date_format(period_end_day, 'SHORT_DATE_FORMAT')}"
+
+            elif period_start or period_end:
+                # It's a single-day period
+
+                delivery_day = period_end_day or period_start_day
+                if delivery_day in header_dates:
+                    # This is the event date we already printed in the header, no need to repeat it.
+                    period_line = ""
+
+                elif self.event.has_subevents and subevent and delivery_day in (day(subevent.date_from), day(subevent.date_to)):
+                    # For subevents, build_invoice already includes the date in the description in the event-default format.
+                    period_line = ""
+
+                elif (delivery_day == self.invoice.date) and header_dates[0] is None:
+                    # This is a shop that doesn't show the date of the event in the header, and the period is the invoice
+                    # date. We assume that this is an 'everything is executed immediately' situation and do not want to
+                    # confuse with showing additional dates on the invoice. This is the case that is not guaranteed to be
+                    # correct in all cases and might need to change in the future. If customers have legal concerns, a
+                    # quick fix is including a sentence like "Delivery date is the invoice date unless otherwise indicated:"
+                    # in a custom text on the invoice.
+                    period_line = ""
+
+                else:
+                    period_line = date_format(delivery_day, 'SHORT_DATE_FORMAT')
+            else:
+                # No period known
+                period_line = ""
+
+            if not has_multiple_service_dates and period_line:
+                # Group together at the end of the invoice
+                request_show_service_date = period_line
+            elif period_line:
+                description += "\n" + period_line
+
             lines = list(lines)
             if has_taxes:
                 if len(lines) > 1:
@@ -717,6 +820,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                         gross_price=money_filter(gross_value, self.invoice.event.currency),
                     )
                     description = description + "\n" + single_price_line
+
                 tdata.append((
                     FontFallbackParagraph(
                         self._clean_text(description, tags=['br']),
@@ -820,6 +924,12 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         story.append(table)
 
         story.append(Spacer(1, 10 * mm))
+
+        if request_show_service_date:
+            story.append(FontFallbackParagraph(
+                self._normalize(pgettext('invoice', 'Invoice period: {daterange}').format(daterange=request_show_service_date)),
+                self.stylesheet['Normal']
+            ))
 
         if self.invoice.payment_provider_text:
             story.append(FontFallbackParagraph(

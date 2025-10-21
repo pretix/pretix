@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -73,7 +73,8 @@ from pretix.presale.views.event import (
 )
 from pretix.presale.views.organizer import (
     EventListMixin, add_events_for_days, add_subevents_for_days,
-    days_for_template, filter_qs_by_attr, weeks_for_template,
+    days_for_template, filter_qs_by_attr, filter_subevents_with_plugins,
+    weeks_for_template,
 )
 
 logger = logging.getLogger(__name__)
@@ -403,6 +404,14 @@ class WidgetAPIProductList(EventListMixin, View):
                     return self.response({
                         'error': gettext('The selected date does not exist in this event series.')
                     })
+
+                # Prevent direct access to subevents that are hidden by a plugin
+                subevents = filter_subevents_with_plugins([self.subevent], request.sales_channel)
+                if self.subevent not in subevents:
+                    return self.response({
+                        'error': gettext('The selected date is not available.')
+                    })
+
             else:
                 return self._get_event_list(request, **kwargs)
         else:
@@ -568,8 +577,9 @@ class WidgetAPIProductList(EventListMixin, View):
                             Q(event__limit_sales_channels=self.request.sales_channel),
                         ), self.request
                     ),
-                    limit_before, after, ebd, set(), self.request.event,
-                    kwargs.get('cart_namespace')
+                    before=limit_before, after=after, ebd=ebd, timezones=set(), event=self.request.event,
+                    cart_namespace=kwargs.get('cart_namespace'),
+                    sales_channel=self.request.sales_channel,
                 )
             else:
                 timezones = set()
@@ -580,17 +590,27 @@ class WidgetAPIProductList(EventListMixin, View):
                             Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
                         ), self.request
                     ),
-                    limit_before, after, ebd, timezones
+                    before=limit_before,
+                    after=after,
+                    ebd=ebd,
+                    timezones=timezones,
                 )
-                add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
-                    Q(event__all_sales_channels=True) |
-                    Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
-                    event__organizer=self.request.organizer,
-                    event__is_public=True,
-                    event__live=True,
-                ).prefetch_related(
-                    'event___settings_objects', 'event__organizer___settings_objects'
-                ), self.request.sales_channel), self.request), limit_before, after, ebd, timezones)
+                add_subevents_for_days(
+                    filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+                        Q(event__all_sales_channels=True) |
+                        Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
+                        event__organizer=self.request.organizer,
+                        event__is_public=True,
+                        event__live=True,
+                    ).prefetch_related(
+                        'event___settings_objects', 'event__organizer___settings_objects'
+                    ), self.request.sales_channel), self.request),
+                    before=limit_before,
+                    after=after,
+                    ebd=ebd,
+                    timezones=timezones,
+                    sales_channel=self.request.sales_channel,
+                )
 
             data['weeks'] = weeks_for_template(ebd, self.year, self.month)
             for w in data['weeks']:
@@ -624,8 +644,9 @@ class WidgetAPIProductList(EventListMixin, View):
             if hasattr(self.request, 'event'):
                 add_subevents_for_days(
                     filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel), self.request),
-                    limit_before, after, ebd, set(), self.request.event,
-                    kwargs.get('cart_namespace')
+                    before=limit_before, after=after, ebd=ebd, timezones=set(), event=self.request.event,
+                    cart_namespace=kwargs.get('cart_namespace'),
+                    sales_channel=self.request.sales_channel,
                 )
             else:
                 timezones = set()
@@ -634,13 +655,20 @@ class WidgetAPIProductList(EventListMixin, View):
                     filter_qs_by_attr(Event.annotated(self.request.organizer.events, self.request.sales_channel), self.request),
                     limit_before, after, ebd, timezones
                 )
-                add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
-                    event__organizer=self.request.organizer,
-                    event__is_public=True,
-                    event__live=True,
-                ).prefetch_related(
-                    'event___settings_objects', 'event__organizer___settings_objects'
-                ), self.request.sales_channel), self.request), limit_before, after, ebd, timezones)
+                add_subevents_for_days(
+                    filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+                        event__organizer=self.request.organizer,
+                        event__is_public=True,
+                        event__live=True,
+                    ).prefetch_related(
+                        'event___settings_objects', 'event__organizer___settings_objects'
+                    ), self.request.sales_channel), self.request),
+                    before=limit_before,
+                    after=after,
+                    ebd=ebd,
+                    timezones=timezones,
+                    sales_channel=self.request.sales_channel,
+                )
 
             data['days'] = days_for_template(ebd, week)
             for d in data['days']:

@@ -108,7 +108,7 @@ overpayment
 OXXO
 Pago
 PayU
-PEPPOL
+Peppol
 PCI
 PKCE
 PDFs

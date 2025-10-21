@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -54,7 +54,7 @@ def test_sales_channel_all(event, item, order, checkin_list):
         mode=AutoCheckinRule.MODE_PLACED,
         all_sales_channels=True,
     )
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert order.positions.first().checkins.exists()
 
 
@@ -67,12 +67,12 @@ def test_sales_channel_limit(event, item, order, checkin_list):
         all_sales_channels=False,
     )
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert not order.positions.first().checkins.exists()
 
     acr.limit_sales_channels.add(order.sales_channel)
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert order.positions.first().checkins.exists()
 
 
@@ -84,7 +84,7 @@ def test_items_all(event, item, order, checkin_list):
         mode=AutoCheckinRule.MODE_PLACED,
         all_products=True,
     )
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert order.positions.first().checkins.exists()
 
 
@@ -97,12 +97,12 @@ def test_items_limit(event, item, order, checkin_list):
         all_products=False,
     )
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert not order.positions.first().checkins.exists()
 
     acr.limit_products.add(item)
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert order.positions.first().checkins.exists()
 
 
@@ -124,7 +124,7 @@ def test_variations_limit_mixed_order(event, item, order, checkin_list):
     )
     acr.limit_variations.add(var)
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert order.positions.first().checkins.exists()
     assert not order.positions.last().checkins.exists()
 
@@ -143,19 +143,19 @@ def test_variations_limit(event, item, order, checkin_list):
         all_products=False,
     )
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert not order.positions.first().checkins.exists()
 
     acr.limit_variations.add(var)
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert order.positions.first().checkins.exists()
 
     order.positions.first().checkins.all().delete()
     acr.limit_products.add(item)
     acr.limit_variations.clear()
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert order.positions.first().checkins.exists()
 
 
@@ -170,7 +170,7 @@ def test_mode_placed(event, item, order, checkin_list):
     order_paid.send(event, order=order)
     assert not order.positions.first().checkins.exists()
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert order.positions.first().checkins.exists()
 
 
@@ -182,7 +182,7 @@ def test_mode_paid(event, item, order, checkin_list):
         mode=AutoCheckinRule.MODE_PAID,
     )
 
-    order_placed.send(event, order=order)
+    order_placed.send(event, order=order, bulk=False)
     assert not order.positions.first().checkins.exists()
 
     order_paid.send(event, order=order)

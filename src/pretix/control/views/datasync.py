@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -78,8 +78,8 @@ class ControlSyncJob(OrderView):
         prov, meta = datasync_providers.get(active_in=self.request.event, identifier=provider)
 
         if self.request.POST.get("queue_sync") == "true":
-            prov.enqueue_order(self.order, 'user')
-            messages.success(self.request, _('The sync job has been enqueued and will run in the next minutes.'))
+            prov.enqueue_order(self.order, 'user', immediate=True)
+            messages.success(self.request, _('The sync job has been set to run as soon as possible.'))
         elif self.request.POST.get("cancel_job"):
             with transaction.atomic():
                 try:

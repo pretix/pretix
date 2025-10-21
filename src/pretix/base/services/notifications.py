@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -41,7 +41,11 @@ def notify(logentry_ids: list):
     if not isinstance(logentry_ids, list):
         logentry_ids = [logentry_ids]
 
-    qs = LogEntry.all.select_related('event', 'event__organizer').filter(id__in=logentry_ids)
+    qs = LogEntry.all.select_related(
+        'event', 'event__organizer'
+    ).order_by(
+        'action_type', 'event_id',
+    ).filter(id__in=logentry_ids)
 
     _event, _at, notify_specific, notify_global = None, None, None, None
     for logentry in qs:

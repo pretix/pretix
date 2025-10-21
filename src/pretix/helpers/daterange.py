@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -64,13 +64,23 @@ def daterange(df, dt, as_html=False):
             return format_html(base_format, _date(df, "j."), mark_safe(until.strip()), _date(dt, "j. F Y"))
         elif df.year == dt.year:
             return format_html(base_format, _date(df, "j. F"), until, _date(dt, "j. F Y"))
+    elif lng == "en-nz":
+        if df.year == dt.year and df.month == dt.month and df.day == dt.day:
+            # Mon, 15 January 2024
+            return format_html(base_format, _date(df, "D, j F Y"))
+        elif df.year == dt.year and df.month == dt.month:
+            # 1 – 3 January 2024
+            return format_html(base_format, _date(df, "j"), until, _date(dt, "j F Y"))
+        elif df.year == dt.year:
+            # 1 January – 3 April 2024
+            return format_html(base_format, _date(df, "j F"), until, _date(dt, "j F Y"))
     elif lng.startswith("en"):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
-            return format_html(base_format, _date(df, "D, N jS, Y"))
+            return format_html(base_format, _date(df, "D, N j, Y"))
         elif df.year == dt.year and df.month == dt.month:
-            return format_html(base_format, _date(df, "N jS"), until, _date(dt, "jS, Y"))
+            return format_html(base_format, _date(df, "N j"), until, _date(dt, "j, Y"))
         elif df.year == dt.year:
-            return format_html(base_format, _date(df, "N jS"), until, _date(dt, "N jS, Y"))
+            return format_html(base_format, _date(df, "N j"), until, _date(dt, "N j, Y"))
     elif lng.startswith("es"):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
             return format_html(base_format, _date(df, "DATE_FORMAT"))

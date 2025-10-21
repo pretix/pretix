@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -805,6 +805,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_reissue_after_modify',
         'invoice_include_free',
         'invoice_generate',
+        'invoice_period',
         'invoice_numbers_consecutive',
         'invoice_numbers_prefix',
         'invoice_numbers_prefix_cancellations',

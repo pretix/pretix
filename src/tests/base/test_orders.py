@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -29,7 +29,7 @@ import pytest
 from django.conf import settings
 from django.core import mail as djmail
 from django.db.models import F, Sum
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
 from django_scopes import scope
@@ -808,6 +808,57 @@ def test_mark_invoices_as_sent(event):
     )
     i.refresh_from_db()
     assert i.transmission_status == Invoice.TRANSMISSION_STATUS_COMPLETED
+    assert i.transmission_provider == "email_pdf"
+
+
+@pytest.mark.django_db(transaction=True)
+@override_settings(EMAIL_BACKEND='pretix.testutils.mail.FailingEmailBackend')
+def test_mark_invoices_as_failed(event):
+    djmail.outbox = []
+    event.settings.invoice_address_asked = True
+    event.settings.invoice_address_required = True
+    event.settings.invoice_generate = "True"
+    event.settings.invoice_email_attachment = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"},
+        positionid=1
+    )
+    ia = InvoiceAddress.objects.create(
+        order=o1,
+        is_business=True,
+        country=Country('AT'),
+        transmission_type="email",
+        transmission_info={
+            "transmission_email_address": "invoice@example.org",
+        }
+    )
+    o1.create_transactions()
+    i = generate_invoice(o1)
+    assert i.transmission_type == "email"
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
+    assert not i.transmission_provider
+
+    # If no other address is there, order address will be accepted
+    ia.transmission_info = {}
+    ia.save()
+    o1.send_mail(
+        subject=LazyI18nString({"en": "Hey"}),
+        template=LazyI18nString({"en": "Just wanted to send this invoice"}),
+        context={},
+        invoices=[i]
+    )
+    i.refresh_from_db()
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_FAILED
     assert i.transmission_provider == "email_pdf"
 
 

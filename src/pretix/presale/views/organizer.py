@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -49,6 +49,7 @@ from django.db.models import (
     Case, Exists, F, Max, Min, OuterRef, Prefetch, Q, Value, When,
 )
 from django.db.models.functions import Coalesce, Greatest
+from django.dispatch.dispatcher import NO_RECEIVERS
 from django.http import Http404, HttpResponse, QueryDict
 from django.templatetags.static import static
 from django.utils.decorators import method_decorator
@@ -76,6 +77,7 @@ from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.organizer import EventListFilterForm
 from pretix.presale.ical import get_public_ical
+from pretix.presale.signals import filter_subevents
 from pretix.presale.views import OrganizerViewMixin
 
 
@@ -561,16 +563,56 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
             })
 
 
-def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_namespace=None, voucher=None):
+def filter_subevents_with_plugins(subevents, sales_channel=None):
+    # Special-case of GlobalSignal.send_chained() that only sends subevents that have the plugin enabled
+    # and then mixes the results back together.
+    from pretix.base.signals import (
+        _populate_app_cache, app_cache, get_defining_app, is_app_active,
+    )
+
+    if not filter_subevents.receivers or filter_subevents.sender_receivers_cache.get(None) is NO_RECEIVERS:
+        return subevents
+
+    if not app_cache:
+        _populate_app_cache()
+
+    for receiver in filter_subevents._live_receivers(None):
+        app = get_defining_app(receiver)
+        event_state = {}
+
+        def app_active(event):
+            if event.pk not in event_state:
+                event_state[event.pk] = is_app_active(event, app, allow_legacy_plugins=True)
+            return event_state[event.pk]
+
+        subevents_passed_to_receiver = [
+            s for s in subevents if app_active(s.event)
+        ]
+        response = receiver(
+            signal=filter_subevents,
+            sender=None,
+            subevents=subevents_passed_to_receiver,
+            sales_channel=sales_channel,
+        )
+        subevents = [
+            s for s in subevents if s in response or s not in subevents_passed_to_receiver
+        ]
+
+    return subevents
+
+
+def add_subevents_for_days(qs, before, after, ebd, timezones, sales_channel, event=None, cart_namespace=None,
+                           voucher=None):
     qs = qs.filter(active=True, is_public=True).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
         Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
     ).order_by(
         'date_from'
     )
+    subevents = filter_subevents_with_plugins(list(qs), sales_channel)
 
     quotas_to_compute = []
-    for se in qs:
+    for se in subevents:
         if se.presale_is_running:
             quotas_to_compute += se.active_quotas
             for q in se.active_quotas:
@@ -588,7 +630,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
         qa.compute(allow_cache=True)
         qcache.update(qa.results)
 
-    for se in qs:
+    for se in subevents:
         if qcache:
             se._quota_cache = qcache
         if event is not None:  # save database lookup later
@@ -763,24 +805,31 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ).filter(
             Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
         ), before, after, ebd, timezones)
-        add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
-            Q(event__all_sales_channels=True) |
-            Q(event__limit_sales_channels=self.request.sales_channel),
-            event__organizer=self.request.organizer,
-            event__is_public=True,
-            event__live=True,
-        ).prefetch_related(
-            Prefetch(
-                'event',
-                queryset=Event.objects.prefetch_related(
-                    '_settings_objects',
-                    Prefetch(
-                        'organizer',
-                        queryset=Organizer.objects.prefetch_related('_settings_objects')
+        add_subevents_for_days(
+            filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+                Q(event__all_sales_channels=True) |
+                Q(event__limit_sales_channels=self.request.sales_channel),
+                event__organizer=self.request.organizer,
+                event__is_public=True,
+                event__live=True,
+            ).prefetch_related(
+                Prefetch(
+                    'event',
+                    queryset=Event.objects.prefetch_related(
+                        '_settings_objects',
+                        Prefetch(
+                            'organizer',
+                            queryset=Organizer.objects.prefetch_related('_settings_objects')
+                        )
                     )
                 )
-            )
-        ), self.request.sales_channel), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+            ), self.request.sales_channel), self.request).using(settings.DATABASE_REPLICA),
+            before=before,
+            after=after,
+            ebd=ebd,
+            timezones=timezones,
+            sales_channel=self.request.sales_channel,
+        )
         self._multiple_timezones = len(timezones) > 1
         return ebd
 
@@ -860,24 +909,31 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ).filter(
             Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
         ), before, after, ebd, timezones)
-        add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
-            Q(event__all_sales_channels=True) |
-            Q(event__limit_sales_channels=self.request.sales_channel),
-            event__organizer=self.request.organizer,
-            event__is_public=True,
-            event__live=True,
-        ).prefetch_related(
-            Prefetch(
-                'event',
-                queryset=Event.objects.prefetch_related(
-                    '_settings_objects',
-                    Prefetch(
-                        'organizer',
-                        queryset=Organizer.objects.prefetch_related('_settings_objects')
+        add_subevents_for_days(
+            filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+                Q(event__all_sales_channels=True) |
+                Q(event__limit_sales_channels=self.request.sales_channel),
+                event__organizer=self.request.organizer,
+                event__is_public=True,
+                event__live=True,
+            ).prefetch_related(
+                Prefetch(
+                    'event',
+                    queryset=Event.objects.prefetch_related(
+                        '_settings_objects',
+                        Prefetch(
+                            'organizer',
+                            queryset=Organizer.objects.prefetch_related('_settings_objects')
+                        )
                     )
                 )
-            )
-        ), self.request.sales_channel), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+            ), self.request.sales_channel), self.request).using(settings.DATABASE_REPLICA),
+            before=before,
+            after=after,
+            ebd=ebd,
+            timezones=timezones,
+            sales_channel=self.request.sales_channel,
+        )
         self._multiple_timezones = len(timezones) > 1
         return ebd
 
@@ -1211,24 +1267,31 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ).filter(
             Q(all_sales_channels=True) | Q(limit_sales_channels=self.request.sales_channel),
         ), before, after, ebd, timezones)
-        add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
-            Q(event__all_sales_channels=True) |
-            Q(event__limit_sales_channels=self.request.sales_channel),
-            event__organizer=self.request.organizer,
-            event__is_public=True,
-            event__live=True,
-        ).prefetch_related(
-            Prefetch(
-                'event',
-                queryset=Event.objects.prefetch_related(
-                    '_settings_objects',
-                    Prefetch(
-                        'organizer',
-                        queryset=Organizer.objects.prefetch_related('_settings_objects')
+        add_subevents_for_days(
+            filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+                Q(event__all_sales_channels=True) |
+                Q(event__limit_sales_channels=self.request.sales_channel),
+                event__organizer=self.request.organizer,
+                event__is_public=True,
+                event__live=True,
+            ).prefetch_related(
+                Prefetch(
+                    'event',
+                    queryset=Event.objects.prefetch_related(
+                        '_settings_objects',
+                        Prefetch(
+                            'organizer',
+                            queryset=Organizer.objects.prefetch_related('_settings_objects')
+                        )
                     )
                 )
-            )
-        ), self.request.sales_channel), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+            ), self.request.sales_channel), self.request).using(settings.DATABASE_REPLICA),
+            before=before,
+            after=after,
+            ebd=ebd,
+            timezones=timezones,
+            sales_channel=self.request.sales_channel,
+        )
         self._multiple_timezones = len(timezones) > 1
         return ebd
 

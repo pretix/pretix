@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -476,6 +476,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
     category = pgettext_lazy('export_category', 'Check-in')
     description = gettext_lazy("Download a spreadsheet with all attendees that are included in a check-in list.")
     featured = True
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):
@@ -673,6 +674,7 @@ class CSVCheckinCodeList(CheckInListMixin, ListExporter):
     category = pgettext_lazy('export_category', 'Check-in')
     description = gettext_lazy("Download a spreadsheet with all valid check-in barcodes e.g. for import into a "
                                "different system. Does not included blocked codes or personal data.")
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):
@@ -743,6 +745,7 @@ class CheckinLogList(ListExporter):
     category = pgettext_lazy('export_category', 'Check-in')
     description = gettext_lazy("Download a spreadsheet with one line for every scan that happened at your check-in "
                                "stations.")
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -414,4 +414,22 @@ This signal is sent out to get all cookie providers that could set a cookie on t
 consent state. Receivers should return a list of ``pretix.presale.cookies.CookieProvider`` objects.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+filter_subevents = GlobalSignal()
+"""
+Arguments: ``subevents``, ``sales_channel``
+
+This signal allows you to filter which subevents are publicly available. Receivers are passed a
+list of subevents that are about to be shown to the user and are expected to return a list of the
+same format, with all subevents removed that should not be available for sale.
+
+``sales_channels`` is a ``str`` with the sales channel identifier.
+
+This is not an event-plugin signal as this will also be called on other levels when showing
+a list of subevents across events. Expect that the subevents in the input are mixed from different
+events **or even different organizers**. However, receivers will only receive subevents of events
+that the plugin is active for and can only filter out these. It is recommended that receivers
+return a subset of the same subevent instances that are passed in, not new instances, to ensure
+`prefetch_related` calls on the caller side are not pointless.
 """

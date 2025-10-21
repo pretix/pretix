@@ -6,4 +6,4 @@ sphinxcontrib-images
 sphinxcontrib-jquery
 sphinxcontrib-spelling==8.*
 sphinxemoji
-pyenchant==3.2.*
+pyenchant==3.3.*

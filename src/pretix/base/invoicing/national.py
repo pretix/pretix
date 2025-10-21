@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -22,7 +22,7 @@
 
 from django import forms
 from django.core.validators import RegexValidator
-from django.utils.translation import pgettext_lazy
+from django.utils.translation import pgettext, pgettext_lazy
 from django_countries.fields import Country
 from localflavor.it.forms import ITSocialSecurityNumberField
 
@@ -73,3 +73,12 @@ class ItalianSdITransmissionType(TransmissionType):
         if is_business:
             return base | {"company", "vat_id", "transmission_it_sdi_pec", "transmission_it_sdi_recipient_code"}
         return base | {"transmission_it_sdi_codice_fiscale"}
+
+    def pdf_info_text(self) -> str:
+        # Watermark is not necessary as this is a usual precaution in Italy
+        return pgettext(
+            "italian_invoice",
+            "This PDF document is a visual copy of the invoice and does not constitute an invoice for VAT "
+            "purposes. The invoice is issued in XML format, transmitted in accordance with the procedures and terms "
+            "set forth in No. 89757/2018 of April 30, 2018, issued by the Director of the Revenue Agency."
+        )

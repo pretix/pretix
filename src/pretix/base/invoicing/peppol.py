@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -23,7 +23,7 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext
 from django_countries.fields import Country
 
 from pretix.base.invoicing.transmission import (
@@ -125,15 +125,15 @@ class PeppolIdValidator:
 
     def __call__(self, value):
         if ":" not in value:
-            raise ValidationError(_("A PEPPOL participant ID always starts with a prefix, followed by a colon (:)."))
+            raise ValidationError(_("A Peppol participant ID always starts with a prefix, followed by a colon (:)."))
 
         prefix, second = value.split(":", 1)
         if prefix not in self.regex_rules:
-            raise ValidationError(_("The PEPPOL participant ID prefix %(number)s is not known to our system. Please "
+            raise ValidationError(_("The Peppol participant ID prefix %(number)s is not known to our system. Please "
                                     "reach out to us if you are sure this ID is correct."), params={"number": prefix})
 
         if not re.match(self.regex_rules[prefix], second):
-            raise ValidationError(_("The PEPPOL participant ID does not match the validation rules for the prefix "
+            raise ValidationError(_("The Peppol participant ID does not match the validation rules for the prefix "
                                     "%(number)s. Please reach out to us if you are sure this ID is correct."),
                                   params={"number": prefix})
         return value
@@ -142,7 +142,7 @@ class PeppolIdValidator:
 @transmission_types.new()
 class PeppolTransmissionType(TransmissionType):
     identifier = "peppol"
-    verbose_name = "PEPPOL"
+    verbose_name = "Peppol"
     priority = 250
     enforce_transmission = True
 
@@ -153,7 +153,7 @@ class PeppolTransmissionType(TransmissionType):
     def invoice_address_form_fields(self) -> dict:
         return {
             "transmission_peppol_participant_id": forms.CharField(
-                label=_("PEPPOL participant ID"),
+                label=_("Peppol participant ID"),
                 validators=[
                     PeppolIdValidator(),
                 ]
@@ -165,3 +165,13 @@ class PeppolTransmissionType(TransmissionType):
             "company", "street", "zipcode", "city", "country",
         }
         return base | {"transmission_peppol_participant_id"}
+
+    def pdf_watermark(self) -> str:
+        return pgettext("peppol_invoice", "Visual copy")
+
+    def pdf_info_text(self) -> str:
+        return pgettext(
+            "peppol_invoice",
+            "This PDF document is a visual copy of the invoice and does not constitute an invoice for VAT "
+            "purposes. The original invoice is issued in XML format and transmitted through the Peppol network."
+        )

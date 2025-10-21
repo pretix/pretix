@@ -60,7 +60,7 @@ var i18nToString = function (i18nstring) {
 $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     waitingDialog.hide();
     var c = $(jqXHR.responseText).filter('.container');
-    if (jqXHR.responseText.indexOf("<!-- pretix-login-marker -->") !== -1) {
+    if (jqXHR.responseText && jqXHR.responseText.indexOf("<!-- pretix-login-marker -->") !== -1) {
         location.href = '/control/login?next=' + encodeURIComponent(location.pathname + location.search + location.hash)
     } else if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
@@ -485,6 +485,7 @@ var form_handlers = function (el) {
             theme: "bootstrap",
             language: $("body").attr("data-select2-locale"),
             data: JSON.parse($(this.getAttribute('data-select2-src')).text()),
+            width: '100%',
         }).val(selectedValue).trigger('change');
     });
 

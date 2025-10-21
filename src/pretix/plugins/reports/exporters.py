@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -661,6 +661,7 @@ class OrderTaxListReport(MultiSheetListExporter):
     verbose_name = gettext_lazy('Tax split list')
     category = pgettext_lazy('export_category', 'Order data')
     description = gettext_lazy("Download a spreadsheet with the tax amounts included in each order.")
+    repeatable_read = False
 
     @property
     def sheets(self):

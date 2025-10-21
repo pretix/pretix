@@ -454,7 +454,8 @@ details.details-open .panel-title::before {
 td > p:last-child,
 .panel-body > dl:last-child,
 .panel-body > .table:last-child,
-.panel-body > .table-responsive:last-child > .table:last-child {
+.panel-body > .table-responsive:last-child > .table:last-child,
+table td ul:last-child {
     margin-bottom: 0;
 }
 .alert > p + p, .alert > p + ul, .alert > ul + p {

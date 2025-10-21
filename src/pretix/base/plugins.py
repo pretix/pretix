@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -29,6 +29,7 @@ from django.apps import AppConfig, apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
+from django_scopes import scope
 from packaging.requirements import Requirement
 
 PLUGIN_LEVEL_EVENT = 'event'
@@ -71,7 +72,8 @@ def get_all_plugins(*, event=None, organizer=None) -> List[type]:
                         continue
                 elif organizer and hasattr(app, 'is_available'):
                     if not event_fallback_used:
-                        event_fallback = organizer.events.first()
+                        with scope(organizer=organizer):
+                            event_fallback = organizer.events.first()
                         event_fallback_used = True
                     if not event_fallback or not app.is_available(event_fallback):
                         continue

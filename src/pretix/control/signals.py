@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -310,9 +310,13 @@ an instance of a form class that you bind yourself when appropriate. Your form w
 as part of the standard validation and rendering cycle and rendered using default bootstrap
 styles. It is advisable to set a prefix for your form to avoid clashes with other plugins.
 
-Your forms may also have two special properties: ``template`` with a template that will be
-included to render the form, and ``title``, which will be used as a headline. Your template
-will be passed a ``form`` variable with your form.
+Your forms may also have special properties:
+
+- ``template`` with a template that will be included to render the form. Your template will be passed a ``form``
+  variable with your form.
+- ``title``, which will be used as a headline.
+- ``ìs_layouts = True``, if your form should be grouped with the ticket layout settings (mutually exclusive with setting ``title``).
+- ``group_with_formset = True``, if your form should be grouped with a formset of the same ``title``
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """

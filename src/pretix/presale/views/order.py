@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -36,6 +36,7 @@ import copy
 import hmac
 import inspect
 import json
+import logging
 import mimetypes
 import os
 import re
@@ -97,6 +98,8 @@ from pretix.presale.views import (
 )
 from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.robots import NoSearchIndexViewMixin
+
+logger = logging.getLogger(__name__)
 
 
 class OrderDetailMixin(NoSearchIndexViewMixin):
@@ -734,11 +737,18 @@ class OrderInvoiceCreate(EventViewMixin, OrderDetailMixin, View):
         elif self.order.invoices.exists():
             messages.error(self.request, _('An invoice for this order already exists.'))
         else:
-            i = generate_invoice(self.order)
-            self.order.log_action('pretix.event.order.invoice.generated', data={
-                'invoice': i.pk
-            })
-            messages.success(self.request, _('The invoice has been generated.'))
+            try:
+                i = generate_invoice(self.order)
+                self.order.log_action('pretix.event.order.invoice.generated', data={
+                    'invoice': i.pk
+                })
+                messages.success(self.request, _('The invoice has been generated.'))
+            except Exception as e:
+                logger.exception("Could not generate invoice.")
+                self.order.log_action("pretix.event.order.invoice.failed", data={
+                    "exception": str(e)
+                })
+                messages.error(self.request, _('Invoice generation has failed, please reach out to the organizer.'))
         return redirect(self.get_order_url())
 
 
@@ -807,24 +817,37 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
             elif self.order.invoices.exists():
                 messages.error(self.request, _('An invoice for this order already exists.'))
             else:
-                i = generate_invoice(self.order)
-                self.order.log_action('pretix.event.order.invoice.generated', data={
-                    'invoice': i.pk
-                })
-                messages.success(self.request, _('The invoice has been generated.'))
+                try:
+                    i = generate_invoice(self.order)
+                    self.order.log_action('pretix.event.order.invoice.generated', data={
+                        'invoice': i.pk
+                    })
+                    messages.success(self.request, _('The invoice has been generated.'))
+                except Exception as e:
+                    logger.exception("Could not generate invoice.")
+                    self.order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
+                    messages.error(self.request, _('Invoice generation has failed, please reach out to the organizer.'))
         elif self.request.event.settings.invoice_reissue_after_modify:
             if self.invoice_form.changed_data:
-                inv = self.order.invoices.last()
-                if inv and not inv.canceled and not inv.shredded:
-                    c = generate_cancellation(inv)
-                    if self.order.status != Order.STATUS_CANCELED:
-                        inv = generate_invoice(self.order)
-                    else:
-                        inv = c
-                    self.order.log_action('pretix.event.order.invoice.reissued', data={
-                        'invoice': inv.pk
+                try:
+                    inv = self.order.invoices.last()
+                    if inv and not inv.canceled and not inv.shredded:
+                        c = generate_cancellation(inv)
+                        if self.order.status != Order.STATUS_CANCELED:
+                            inv = generate_invoice(self.order)
+                        else:
+                            inv = c
+                        self.order.log_action('pretix.event.order.invoice.reissued', data={
+                            'invoice': inv.pk
+                        })
+                        messages.success(self.request, _('The invoice has been reissued.'))
+                except Exception as e:
+                    self.order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
                     })
-                    messages.success(self.request, _('The invoice has been reissued.'))
+                    logger.exception("Could not generate invoice.")
 
         invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
         CachedTicket.objects.filter(order_position__order=self.order).delete()
@@ -1146,11 +1169,15 @@ class OrderDownloadMixin:
                     )
                 return resp
         elif isinstance(value, CachedCombinedTicket):
-            resp = FileResponse(value.file.file, content_type=value.type)
-            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
-                self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
-            )
-            return resp
+            if value.type == 'text/uri-list':
+                resp = HttpResponseRedirect(value.file.file.read())
+                return resp
+            else:
+                resp = FileResponse(value.file.file, content_type=value.type)
+                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
+                    self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
+                )
+                return resp
         else:
             return redirect(self.get_self_url())
 

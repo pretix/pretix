@@ -177,6 +177,18 @@
                     {% for v in formsets.values %}
                         <fieldset>
                             <legend>{{ v.title }}</legend>
+
+                            {% for f in plugin_forms %}
+                                {% if f.group_with_formset and f.title == v.title %}
+                                    {% if f.template and not "template" in f.fields %}
+                                        {% include f.template with form=f %}
+                                    {% else %}
+                                        {% bootstrap_form f layout="control" %}
+                                    {% endif %}
+                                    <hr />
+                                {% endif %}
+                            {% endfor %}
+
                             {% include v.template with formset=v %}
                         </fieldset>
                     {% endfor %}
@@ -276,7 +288,7 @@
                         {% endfor %}
                     </fieldset>
                     {% for f in plugin_forms %}
-                        {% if not f.is_layouts and f.title %}
+                        {% if not f.is_layouts and not f.group_with_formset and f.title %}
                             <fieldset>
                                 <legend>{{ f.title }}</legend>
                                 {% if f.template and not "template" in f.fields %}

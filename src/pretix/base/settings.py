@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -1096,6 +1096,35 @@ DEFAULTS = {
                 ('admin', _('Only manually in admin panel')),
             ),
             help_text=_("Invoices will never be automatically generated for free orders.")
+        )
+    },
+    'invoice_period': {
+        'default': 'auto',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date')),
+                ('auto_no_event', _('Automatic, but prefer invoice date over event date')),
+                ('event_date', _('Event date')),
+                ('order_date', _('Order date')),
+                ('invoice_date', _('Invoice date')),
+            ),
+        ),
+        'form_kwargs': dict(
+            label=_("Date of service"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date')),
+                ('auto_no_event', _('Automatic, but prefer invoice date over event date')),
+                ('event_date', _('Event date')),
+                ('order_date', _('Order date')),
+                ('invoice_date', _('Invoice date')),
+            ),
+            help_text=_("This controls what dates are shown on the invoice, but is especially important for "
+                        "electronic invoicing."),
+            required=True,
         )
     },
     'invoice_reissue_after_modify': {

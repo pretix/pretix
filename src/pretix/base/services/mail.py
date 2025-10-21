@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -470,9 +470,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                         logger.exception('Could not attach invoice to email')
                                         pass
 
-                            if attach_size < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1:
+                            if attach_size * 1.37 < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1024 * 1024:
                                 # Do not attach more than (limit - 1 MB) in tickets (1MB space for invoice, email itself, …),
                                 # it will bounce way to often.
+                                # 1 MB is the buffer for the rest of the email (text, invoice, calendar, pictures)
+                                # 1.37 is the factor for base64 encoding https://en.wikipedia.org/wiki/Base64
                                 for a in args:
                                     try:
                                         email.attach(*a)
@@ -495,7 +497,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
 
-        invoices_sent = []
+        invoices_to_mark_transmitted = []
         if invoices:
             invoices = Invoice.objects.filter(pk__in=invoices)
             for inv in invoices:
@@ -516,7 +518,23 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                 inv.file.file.read(),
                                 'application/pdf'
                             )
-                        invoices_sent.append(inv)
+
+                        if inv.transmission_type == "email":
+                            # Mark invoice as sent when it was sent to the requested address *either* at the time of
+                            # invoice creation *or* as of right now.
+                            expected_recipients = [
+                                (inv.invoice_to_transmission_info or {}).get("transmission_email_address")
+                                or inv.order.email,
+                            ]
+                            try:
+                                expected_recipients.append(
+                                    (inv.order.invoice_address.transmission_info or {}).get("transmission_email_address")
+                                    or inv.order.email
+                                )
+                            except InvoiceAddress.DoesNotExist:
+                                pass
+                            if any(t in expected_recipients for t in to):
+                                invoices_to_mark_transmitted.append(inv)
                     except:
                         logger.exception('Could not attach invoice to email')
                         pass
@@ -589,6 +607,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                 'invoices': [],
                             }
                         )
+                    for i in invoices_to_mark_transmitted:
+                        i.set_transmission_failed(provider="email_pdf", data={
+                            "reason": "exception",
+                            "exception": "SMTP code {}, max retries exceeded".format(e.smtp_code),
+                        })
                     raise e
 
             logger.exception('Error sending email')
@@ -602,6 +625,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         'invoices': [],
                     }
                 )
+            for i in invoices_to_mark_transmitted:
+                i.set_transmission_failed(provider="email_pdf", data={
+                    "reason": "exception",
+                    "exception": "SMTP code {}".format(e.smtp_code),
+                })
 
             raise SendMailException('Failed to send an email to {}.'.format(to))
         except smtplib.SMTPRecipientsRefused as e:
@@ -633,6 +661,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         'invoices': [],
                     }
                 )
+            for i in invoices_to_mark_transmitted:
+                i.set_transmission_failed(provider="email_pdf", data={
+                    "reason": "exception",
+                    "exception": "SMTP error",
+                })
 
             raise SendMailException('Failed to send an email to {}.'.format(to))
         except Exception as e:
@@ -650,6 +683,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                 'invoices': [],
                             }
                         )
+                    for i in invoices_to_mark_transmitted:
+                        i.set_transmission_failed(provider="email_pdf", data={
+                            "reason": "exception",
+                            "exception": "Internal error",
+                        })
                     raise e
             if log_target:
                 log_target.log_action(
@@ -661,59 +699,52 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         'invoices': [],
                     }
                 )
+            for i in invoices_to_mark_transmitted:
+                i.set_transmission_failed(provider="email_pdf", data={
+                    "reason": "exception",
+                    "exception": "Internal error",
+                })
             logger.exception('Error sending email')
             raise SendMailException('Failed to send an email to {}.'.format(to))
         else:
-            for i in invoices_sent:
-                if i.transmission_type == "email":
-                    # Mark invoice as sent when it was sent to the requested address *either* at the time of invoice
-                    # creation *or* as of right now.
-                    expected_recipients = [
-                        (i.invoice_to_transmission_info or {}).get("transmission_email_address") or i.order.email,
-                    ]
-                    try:
-                        expected_recipients.append((i.order.invoice_address.transmission_info or {}).get("transmission_email_address") or i.order.email)
-                    except InvoiceAddress.DoesNotExist:
-                        pass
-                    if not any(t in expected_recipients for t in to):
-                        continue
-                    if i.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
-                        i.transmission_date = now()
-                        i.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
-                        i.transmission_provider = "email_pdf"
-                        i.transmission_info = {
-                            "sent": [
-                                {
-                                    "recipients": to,
-                                    "datetime": now().isoformat(),
-                                }
-                            ]
-                        }
-                        i.save(update_fields=[
-                            "transmission_date", "transmission_provider", "transmission_status",
-                            "transmission_info"
-                        ])
-                    elif i.transmission_provider == "email_pdf":
-                        i.transmission_info["sent"].append(
+            for i in invoices_to_mark_transmitted:
+                if i.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
+                    i.transmission_date = now()
+                    i.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
+                    i.transmission_provider = "email_pdf"
+                    i.transmission_info = {
+                        "sent": [
                             {
                                 "recipients": to,
                                 "datetime": now().isoformat(),
                             }
-                        )
-                        i.save(update_fields=[
-                            "transmission_info"
-                        ])
-                    i.order.log_action(
-                        "pretix.event.order.invoice.sent",
-                        data={
-                            "full_invoice_no": i.full_invoice_no,
-                            "transmission_provider": "email_pdf",
-                            "transmission_type": "email",
-                            "data": {
-                                "recipients": [to],
-                            },
+                        ]
+                    }
+                    i.save(update_fields=[
+                        "transmission_date", "transmission_provider", "transmission_status",
+                        "transmission_info"
+                    ])
+                elif i.transmission_provider == "email_pdf":
+                    i.transmission_info["sent"].append(
+                        {
+                            "recipients": to,
+                            "datetime": now().isoformat(),
                         }
                     )
+                    i.save(update_fields=[
+                        "transmission_info"
+                    ])
+                i.order.log_action(
+                    "pretix.event.order.invoice.sent",
+                    data={
+                        "full_invoice_no": i.full_invoice_no,
+                        "transmission_provider": "email_pdf",
+                        "transmission_type": "email",
+                        "data": {
+                            "recipients": [to],
+                        },
+                    }
+                )
 
 
 def mail_send(*args, **kwargs):

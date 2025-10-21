@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -39,7 +39,7 @@ def npm_install():
         node_prefix = os.path.join(here, 'static.dist', 'node_prefix')
         os.makedirs(node_prefix, exist_ok=True)
         shutil.copytree(os.path.join(here, 'static', 'npm_dir'), node_prefix, dirs_exist_ok=True)
-        subprocess.check_call('npm install', shell=True, cwd=node_prefix)
+        subprocess.check_call('npm ci', shell=True, cwd=node_prefix)
         npm_installed = True
 
 

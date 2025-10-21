@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -97,7 +97,7 @@ class TestSdiTransmissionProvider(TransmissionProvider):
 class TestPeppolTransmissionProvider(TransmissionProvider):
     identifier = "peppol_test"
     type = "peppol"
-    verbose_name = "PEPPOL Test"
+    verbose_name = "Peppol Test"
 
     def is_ready(self, event) -> bool:
         return True

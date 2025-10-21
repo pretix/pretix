@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -69,9 +69,6 @@ def generate_order(order: int, provider: str):
             prov = response(order.event)
             if prov.identifier == provider:
                 filename, ttype, data = prov.generate_order(order)
-                if ttype == 'text/uri-list':
-                    continue
-
                 path, ext = os.path.splitext(filename)
                 for ct in CachedCombinedTicket.objects.filter(order=order, provider=provider):
                     ct.delete()

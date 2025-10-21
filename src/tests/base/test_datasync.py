@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -325,6 +325,26 @@ def test_enqueue_order_twice(event):
 
     for order in event.orders.order_by("code").all():
         SimpleOrderSync.enqueue_order(order, 'testcase_2nd')
+
+
+class DoNothingSync(SimpleOrderSync):
+
+    def should_sync_order(self, order):
+        return False
+
+
+@pytest.mark.django_db
+def test_should_not_sync(event):
+    _register_with_fake_plugin_name(datasync_providers, DoNothingSync, 'testplugin')
+
+    DoNothingSync.fake_api_client = FakeSyncAPI()
+
+    for order in event.orders.order_by("code").all():
+        DoNothingSync.enqueue_order(order, 'testcase')
+
+    sync_all()
+
+    assert DoNothingSync.fake_api_client.fake_database == {}
 
 
 StaticMappingWithAssociations = namedtuple('StaticMappingWithAssociations', (

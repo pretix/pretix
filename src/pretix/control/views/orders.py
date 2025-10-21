@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -711,11 +711,15 @@ class OrderDownload(AsyncAction, OrderView):
                 )
                 return resp
         elif isinstance(value, CachedCombinedTicket):
-            resp = FileResponse(value.file.file, content_type=value.type)
-            resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
-                self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
-            )
-            return resp
+            if value.type == 'text/uri-list':
+                resp = HttpResponseRedirect(value.file.file.read())
+                return resp
+            else:
+                resp = FileResponse(value.file.file, content_type=value.type)
+                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
+                    self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
+                )
+                return resp
         else:
             return redirect(self.get_self_url())
 
@@ -1217,6 +1221,7 @@ class OrderRefundView(OrderView):
                 giftcard = self.request.organizer.issued_gift_cards.create(
                     expires=expires,
                     currency=self.request.event.currency,
+                    customer=order.customer,
                     testmode=order.testmode
                 )
                 giftcard.log_action('pretix.giftcards.created', user=self.request.user, data={})
@@ -2832,11 +2837,23 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     def get_queryset(self):
         return self.get_scheduled_queryset()
 
+    def has_permission(self):
+        return self.request.user.has_event_permission(self.request.organizer, self.request.event, "can_view_orders")
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         if "schedule" in self.request.POST or self.scheduled:
-            ctx['schedule_form'] = self.schedule_form
-            ctx['rrule_form'] = self.rrule_form
+            if "schedule" in self.request.POST and not self.has_permission():
+                messages.error(
+                    self.request,
+                    _(
+                        "Your user account does not have sufficient permission to run this report, therefore "
+                        "you cannot schedule it."
+                    )
+                )
+            else:
+                ctx['schedule_form'] = self.schedule_form
+                ctx['rrule_form'] = self.rrule_form
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:

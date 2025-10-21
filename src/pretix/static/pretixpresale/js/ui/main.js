@@ -222,9 +222,25 @@ var form_handlers = function (el) {
             }
         });
     }
+
+    el.find('.use_giftcard').on("click", function () {
+        var value = $(this).data('value');
+        $('#id_payment_giftcard-code').val(value)
+    })
+
 };
 
 function setup_basics(el) {
+    el.find("form").attr("novalidate", true).on("submit", function (e) {
+        if (!this.checkValidity()) {
+            var input = this.querySelector(":invalid:not(fieldset)");
+            (input.labels[0] || input).scrollIntoView();
+            // only use reportValidity, which usually sets focus on element
+            // input.focus() opens dropdowns, which is not what we want
+            input.reportValidity();
+            e.preventDefault();
+        }
+    });
     el.find("input[data-toggle=radiocollapse]").change(function () {
         $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
         $($(this).attr("data-target")).collapse('show');

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
 import pytest
@@ -42,6 +42,7 @@ from django.utils.itercompat import is_iterable
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scope, scopes_disabled
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.invoice import addon_aware_groupby
 from pretix.base.models import (
@@ -62,7 +63,8 @@ def env():
     with scope(organizer=o):
         event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
-            date_from=now(), plugins='pretix.plugins.banktransfer'
+            date_from=datetime(2024, 12, 1, 9, 0, 0, tzinfo=timezone.utc),
+            plugins='pretix.plugins.banktransfer'
         )
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
@@ -660,3 +662,154 @@ def test_addon_aware_groupby():
             [True, 102, 3.00],
         ]],
     ]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("period", ["auto", "event_date"])
+def test_period_from_event_start(env, period):
+    event, order = env
+    event.settings.invoice_period = period
+    inv = generate_invoice(order)
+    l1 = inv.lines.first()
+    assert l1.period_start == event.date_from
+    assert l1.period_end == event.date_from
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("period", ["auto", "event_date"])
+def test_period_from_event_range(env, period):
+    event, order = env
+    event.date_to = event.date_from + timedelta(days=1)
+    event.settings.invoice_period = period
+    inv = generate_invoice(order)
+    l1 = inv.lines.first()
+    assert l1.period_start == event.date_from
+    assert l1.period_end == event.date_to
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("period", ["auto", "auto_no_event"])
+def test_period_from_ticket_validity(env, period):
+    event, order = env
+    p1 = order.positions.first()
+    p1.valid_from = datetime(2025, 1, 1, 0, 0, 0, tzinfo=event.timezone)
+    p1.valid_until = datetime(2025, 12, 31, 23, 59, 59, tzinfo=event.timezone)
+    p1.save()
+    event.date_to = event.date_from + timedelta(days=1)
+    event.settings.invoice_period = period
+    inv = generate_invoice(order)
+    l1 = inv.lines.first()
+    assert l1.period_start == p1.valid_from
+    assert l1.period_end == p1.valid_until
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("period", ["auto", "auto_no_event"])
+def test_period_from_subevent(env, period):
+    event, order = env
+    event.has_subevents = True
+    event.save()
+    se1 = event.subevents.create(
+        name=event.name,
+        active=True,
+        date_from=datetime((now().year + 1), 7, 31, 9, 0, 0, tzinfo=timezone.utc),
+        date_to=datetime((now().year + 1), 7, 31, 17, 0, 0, tzinfo=timezone.utc),
+    )
+    p1 = order.positions.first()
+    p1.subevent = se1
+    p1.save()
+    event.date_to = event.date_from + timedelta(days=1)
+    event.settings.invoice_period = period
+    inv = generate_invoice(order)
+    l1 = inv.lines.first()
+    assert l1.period_start == se1.date_from
+    assert l1.period_end == se1.date_to
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("period", ["auto", "auto_no_event"])
+def test_period_from_memberships(env, period):
+    event, order = env
+    event.date_to = event.date_from + timedelta(days=1)
+    event.settings.invoice_period = period
+    p1 = order.positions.first()
+    membershiptype = event.organizer.membership_types.create(
+        name=LazyI18nString({"en": "Week pass"}),
+        transferable=True,
+        allow_parallel_usage=False,
+        max_usages=15,
+    )
+    customer = event.organizer.customers.create(
+        identifier="8WSAJCJ",
+        email="foo@example.org",
+        name_parts={"_legacy": "Foo"},
+        name_cached="Foo",
+        is_verified=False,
+    )
+    m = customer.memberships.create(
+        membership_type=membershiptype,
+        granted_in=p1,
+        date_start=datetime(2021, 4, 1, 0, 0, 0, 0, tzinfo=timezone.utc),
+        date_end=datetime(2021, 4, 8, 23, 59, 59, 999999, tzinfo=timezone.utc),
+        attendee_name_parts={
+            "_scheme": "given_family",
+            'given_name': 'John',
+            'family_name': 'Doe',
+        }
+    )
+    inv = generate_invoice(order)
+    l1 = inv.lines.first()
+    assert l1.period_start == m.date_start
+    assert l1.period_end == m.date_end
+
+
+@pytest.mark.django_db
+def test_period_auto_no_event_from_invoice(env):
+    event, order = env
+    event.settings.invoice_period = "auto_no_event"
+    inv = generate_invoice(order)
+    l1 = inv.lines.first()
+    assert abs(l1.period_start - now()) < timedelta(seconds=10)
+    assert abs(l1.period_end - now()) < timedelta(seconds=10)
+
+
+@pytest.mark.django_db
+def test_period_always_invoice_date(env):
+    event, order = env
+    p1 = order.positions.first()
+    p1.valid_from = datetime(2025, 1, 1, 0, 0, 0, tzinfo=event.timezone)
+    p1.valid_until = datetime(2025, 12, 31, 23, 59, 59, tzinfo=event.timezone)
+    p1.save()
+    event.settings.invoice_period = "invoice_date"
+    inv = generate_invoice(order)
+    l1 = inv.lines.first()
+    assert abs(l1.period_start - now()) < timedelta(seconds=10)
+    assert abs(l1.period_end - now()) < timedelta(seconds=10)
+
+
+@pytest.mark.django_db
+def test_period_always_event_date(env):
+    event, order = env
+    p1 = order.positions.first()
+    p1.valid_from = datetime(2025, 1, 1, 0, 0, 0, tzinfo=event.timezone)
+    p1.valid_until = datetime(2025, 12, 31, 23, 59, 59, tzinfo=event.timezone)
+    p1.save()
+    event.settings.invoice_period = "event_date"
+    inv = generate_invoice(order)
+    l1 = inv.lines.first()
+    assert l1.period_start == event.date_from
+    assert l1.period_end == event.date_from
+
+
+@pytest.mark.django_db
+def test_period_always_order_date(env):
+    event, order = env
+    p1 = order.positions.first()
+    p1.valid_from = datetime(2025, 1, 1, 0, 0, 0, tzinfo=event.timezone)
+    p1.valid_until = datetime(2025, 12, 31, 23, 59, 59, tzinfo=event.timezone)
+    p1.save()
+    event.settings.invoice_period = "order_date"
+    inv = generate_invoice(order)
+    l1 = inv.lines.first()
+    assert l1.period_start == order.datetime
+    assert l1.period_end == order.datetime

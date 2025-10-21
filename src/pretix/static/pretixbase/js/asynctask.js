@@ -48,8 +48,13 @@ function async_task_on_success(data) {
             history.replaceState({}, "pretix", async_task_old_url);
         }
     }
-    if (!async_task_dont_redirect)
+    if (!async_task_dont_redirect) {
+        $(window).one("pageshow", function (e) {
+            // hide waitingDialog when using browser's history back
+            waitingDialog.hide();
+        });
         location.href = data.redirect;
+    }
     $(this).trigger('pretix:async-task-success', data);
 }
 
@@ -325,9 +330,11 @@ var ajaxErrDialog = {
         $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
                                   + gettext("Close message") + "</a>");
         $("body").addClass("ajaxerr has-modal-dialog");
+        $("#ajaxerr").prop("hidden", false);
     },
     hide: function () {
         "use strict";
         $("body").removeClass("ajaxerr has-modal-dialog");
+        $("#ajaxerr").prop("hidden", true);
     },
 };

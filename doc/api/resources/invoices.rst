@@ -80,17 +80,12 @@ lines                                 list of objects            The actual invo
                                                                  for all invoice lines
                                                                  created before this field was introduced as well as for
                                                                  all lines not created by a fee (e.g. a product).
-├ event_date_from                     datetime                   Start date of the (sub)event this line was created for as it
-                                                                 was set during invoice creation. Can be ``null`` for all invoice
-                                                                 lines created before this was introduced as well as for lines in
-                                                                 an event series not created by a product (e.g. shipping or
-                                                                 cancellation fees).
-├ event_date_to                       datetime                   End date of the (sub)event this line was created for as it
-                                                                 was set during invoice creation. Can be ``null`` for all invoice
-                                                                 lines created before this was introduced as well as for lines in
-                                                                 an event series not created by a product (e.g. shipping or
-                                                                 cancellation fees) as well as whenever the respective (sub)event
-                                                                 has no end date set.
+├ period_start                        datetime                   Start date of the service or delivery period of the invoice line.
+                                                                 Can be ``null`` if not known.
+├ period_end                          datetime                   End date of the service or delivery period of the invoice line.
+                                                                 Can be ``null`` if not known.
+├ event_date_from                     datetime                   Deprecated alias of ``period_start``.
+├ event_date_to                       datetime                   Deprecated alias of ``period_end``.
 ├ event_location                      string                     Location of the (sub)event this line was created for as it
                                                                  was set during invoice creation. Can be ``null`` for all invoice
                                                                  lines created before this was introduced as well as for lines in
@@ -163,10 +158,10 @@ transmission_email_address            string                     Optional. An em
                                                                  Business customers only.
 ===================================== ========================== =======================================================
 
-PEPPOL
+Peppol
 """"""
 
-The identifier ``"peppol"`` represents the transmission of XML invoices through the `PEPPOL`_ network.
+The identifier ``"peppol"`` represents the transmission of XML invoices through the `Peppol`_ network.
 This is only available for business addresses.
 This is not supported by pretix out of the box and requires the use of a suitable plugin.
 The ``transmission_info`` object may contain the following properties:
@@ -176,7 +171,7 @@ The ``transmission_info`` object may contain the following properties:
 ===================================== ========================== =======================================================
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
-transmission_peppol_participant_id    string                     Required. The PEPPOL participant ID of the recipient.
+transmission_peppol_participant_id    string                     Required. The Peppol participant ID of the recipient.
 ===================================== ========================== =======================================================
 
 Italian Exchange System
@@ -274,6 +269,8 @@ List of all invoices
                 "fee_internal_type": null,
                 "event_date_from": "2017-12-27T10:00:00Z",
                 "event_date_to": null,
+                "period_start": "2017-12-27T10:00:00Z",
+                "period_end": "2017-12-27T10:00:00Z",
                 "event_location": "Heidelberg",
                 "attendee_name": null,
                 "gross_value": "23.00",
@@ -420,6 +417,8 @@ Fetching individual invoices
             "fee_internal_type": null,
             "event_date_from": "2017-12-27T10:00:00Z",
             "event_date_to": null,
+            "period_start": "2017-12-27T10:00:00Z",
+            "period_end": "2017-12-27T10:00:00Z",
             "event_location": "Heidelberg",
             "attendee_name": null,
             "gross_value": "23.00",
@@ -605,5 +604,5 @@ but in other cases transmission may need to be triggered manually.
    :statuscode 409: The invoice is currently in transmission
 
 
-.. _PEPPOL: https://en.wikipedia.org/wiki/PEPPOL
+.. _Peppol: https://en.wikipedia.org/wiki/PEPPOL
 .. _Sistema di Interscambio: https://it.wikipedia.org/wiki/Fattura_elettronica_in_Italia

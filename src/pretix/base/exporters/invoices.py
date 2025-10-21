@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -125,6 +125,7 @@ class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
     identifier = 'invoices'
     verbose_name = _('All invoices')
     description = _('Download all invoices created by the system as a ZIP file of PDF files.')
+    repeatable_read = False
 
     def render(self, form_data: dict, output_file=None):
         qs = self.invoices_queryset(form_data).filter(shredded=False)
@@ -180,6 +181,7 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                     'includes two sheets, one with a line for every invoice, and one with a line for every position of '
                     'every invoice.')
     featured = True
+    repeatable_read = False
 
     @property
     def additional_form_fields(self):

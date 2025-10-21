@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -1639,20 +1639,16 @@ class SubEvent(EventMixin, LoggedModel):
 
     @cached_property
     def item_overrides(self):
-        from .items import SubEventItem
-
         return {
             si.item_id: si
-            for si in SubEventItem.objects.filter(subevent=self)
+            for si in self.subeventitem_set.all()
         }
 
     @cached_property
     def var_overrides(self):
-        from .items import SubEventItemVariation
-
         return {
             si.variation_id: si
-            for si in SubEventItemVariation.objects.filter(subevent=self)
+            for si in self.subeventitemvariation_set.all()
         }
 
     @property

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -1840,6 +1840,10 @@ class OrderPayment(models.Model):
                 ))
                 return False
 
+            if locked_instance.state == OrderPayment.PAYMENT_STATE_CANCELED:
+                # Never send mails when the payment was already canceled intentionally
+                send_mail = False
+
             if isinstance(info, str):
                 locked_instance.info = info
             elif info:
@@ -1854,6 +1858,10 @@ class OrderPayment(models.Model):
             'info': info,
             'data': log_data,
         }, user=user, auth=auth)
+
+        if self.order.status in (Order.STATUS_PAID, Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
+            # No reason to send mail, as the payment is no longer really expected
+            send_mail = False
 
         if send_mail:
             with language(self.order.locale, self.order.event.settings.region):
@@ -1961,14 +1969,20 @@ class OrderPayment(models.Model):
                 self.order.invoice_dirty
             )
             if gen_invoice:
-                if invoices:
-                    last_i = self.order.invoices.filter(is_cancellation=False).last()
-                    if not last_i.canceled:
-                        generate_cancellation(last_i)
-                invoice = generate_invoice(
-                    self.order,
-                    trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment
-                )
+                try:
+                    if invoices:
+                        last_i = self.order.invoices.filter(is_cancellation=False).last()
+                        if not last_i.canceled:
+                            generate_cancellation(last_i)
+                    invoice = generate_invoice(
+                        self.order,
+                        trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment
+                    )
+                except Exception as e:
+                    logger.exception("Could not generate invoice.")
+                    self.order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
 
         transmit_invoice_task = invoice_transmission_separately(invoice)
         transmit_invoice_mail = not transmit_invoice_task and self.order.event.settings.invoice_email_attachment and self.order.email
