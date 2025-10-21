@@ -445,6 +445,37 @@ def test_variation_invalid(user, event, item):
 
 @pytest.mark.django_db
 @scopes_disabled()
+def test_variation_wrong_item(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['variation'] = 'csv:E'
+    item2 = Item.objects.create(event=event, name="Ticket", default_price=23)
+    v1 = item2.variations.create(value='Foo')
+    data = [{
+        'A': 'Dieter',
+        'B': 'Schneider',
+        'C': 'schneider@example.org',
+        'D': 'Test',
+        'E': str(v1.pk),
+        'F': '0.00',
+        'G': 'US',
+        'H': 'Texas',
+        'I': 'Foo',
+        'J': '2021-06-28 11:00:00',
+        'K': '06221/32177-50',
+        'L': 'True',
+        'M': 'baz',
+        'N': 'Seat-1',
+    }]
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory(data).id, settings, 'en', user.pk)
+        ).get()
+    assert f'Error while importing value "{str(v1.pk)}" for column "Product variation" in line "1": No matching variation was found.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
 def test_variation_dynamic(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
     settings['item'] = 'static:{}'.format(item.pk)
