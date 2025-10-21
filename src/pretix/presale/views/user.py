@@ -107,4 +107,10 @@ class UnlockHashView(EventViewMixin, View):
         hashes = request.session.get('pretix_unlock_hashes', [])
         hashes.append(kwargs.get('hash'))
         request.session['pretix_unlock_hashes'] = hashes
+
+        if 'voucher' in request.GET:
+            return redirect_to_url(
+                eventreverse(self.request.event, 'presale:event.redeem') + f'?{request.META["QUERY_STRING"]}'
+            )
+
         return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
