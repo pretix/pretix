@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-21 07:27+0000\n"
-"PO-Revision-Date: 2025-08-28 23:00+0000\n"
+"PO-Revision-Date: 2025-10-22 16:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -565,11 +565,11 @@ msgstr "absent"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
 msgid "Error: Product not found!"
-msgstr ""
+msgstr "Erreur : produit introuvable !"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
 msgid "Error: Variation not found!"
-msgstr ""
+msgstr "Erreur : Variation introuvable !"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
