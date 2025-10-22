@@ -1567,6 +1567,30 @@ class OrderChangeManagerTests(TestCase):
         )
 
     @classscope(attr='o')
+    def test_custom_ocm_operation(self):
+        class CustomOCM(OrderChangeManager):
+            class NopOp(OrderChangeManager.CustomOperation):
+                l = None
+                val = None
+
+                def __init__(self, l: list, val: int):
+                    self.l = l
+                    self.val = val
+                def execute(self, ocm: OrderChangeManager, nextposid: int, split_positions: list,
+                            secret_dirty: set, position_cache: dict, fee_cache: dict):
+                    self.l.append((nextposid, self.val))
+
+            def nop(self, l: list, val: int):
+                self._operations.append(self.NopOp(l, val))
+
+        ocm = CustomOCM(self.order, None)
+        final_obj = []
+        ocm.nop(final_obj, 4316)
+        ocm.nop(final_obj, 42)
+        ocm.commit()
+        assert final_obj == [(3, 4316), (3, 42)]
+
+    @classscope(attr='o')
     def test_multiple_commits_forbidden(self):
         self.ocm.change_price(self.op1, Decimal('10.00'))
         self.ocm.commit()
@@ -2407,6 +2431,16 @@ class OrderChangeManagerTests(TestCase):
         assert nop.item == self.ticket
         assert nop.price == Decimal('12.00')
         assert nop.subevent == se1
+
+    @classscope(attr='o')
+    def test_add_item_callback(self):
+        positions = {}
+        self.ocm.add_position(self.shirt, None, None, None, callback=lambda op, pos: positions.setdefault(op.item, pos))
+        self.ocm.add_position(self.ticket2, None, None, None, callback=lambda op, pos: positions.setdefault(op.item, pos))
+        self.ocm.commit()
+        assert len(positions) == 2
+        assert positions[self.shirt].item == self.shirt
+        assert positions[self.ticket2].item == self.ticket2
 
     @classscope(attr='o')
     def test_reissue_invoice(self):

@@ -37,6 +37,7 @@ import json
 import logging
 import operator
 import sys
+from abc import ABC, abstractmethod
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
@@ -1644,7 +1645,7 @@ class OrderChangeManager:
     MembershipOperation = namedtuple('MembershipOperation', ('position', 'membership'))
     CancelOperation = namedtuple('CancelOperation', ('position', 'price_diff'))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership',
-                                               'valid_from', 'valid_until', 'is_bundled'))
+                                               'valid_from', 'valid_until', 'is_bundled', 'callback'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
@@ -1655,6 +1656,12 @@ class OrderChangeManager:
     ChangeValidUntilOperation = namedtuple('ChangeValidUntilOperation', ('position', 'valid_until'))
     AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
     RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
+
+    class CustomOperation(ABC):
+        @abstractmethod
+        def execute(self, ocm: 'OrderChangeManager', nextposid: int, split_positions: list,
+                    secret_dirty: set, position_cache: dict, fee_cache: dict):
+            pass
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
         self.order = order
@@ -1859,7 +1866,7 @@ class OrderChangeManager:
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: OrderPosition = None,
                      subevent: SubEvent = None, seat: Seat = None, membership: Membership = None,
-                     valid_from: datetime = None, valid_until: datetime = None):
+                     valid_from: datetime = None, valid_until: datetime = None, callback=None):
         if isinstance(seat, str):
             if not seat:
                 seat = None
@@ -1919,7 +1926,7 @@ class OrderChangeManager:
         if seat:
             self._seatdiff.update([seat])
         self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership,
-                                                  valid_from, valid_until, is_bundled))
+                                                  valid_from, valid_until, is_bundled, callback))
 
     def split(self, position: OrderPosition):
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
@@ -2533,6 +2540,8 @@ class OrderChangeManager:
                     'valid_from': op.valid_from.isoformat() if op.valid_from else None,
                     'valid_until': op.valid_until.isoformat() if op.valid_until else None,
                 })
+                if op.callback:
+                    op.callback(op, pos)
             elif isinstance(op, self.SplitOperation):
                 position = position_cache.setdefault(op.position.pk, op.position)
                 split_positions.append(position)
@@ -2632,6 +2641,8 @@ class OrderChangeManager:
                         except BlockedTicketSecret.DoesNotExist:
                             pass
                 # todo: revoke list handling
+            elif isinstance(op, self.CustomOperation):
+                op.execute(self, nextposid, split_positions, secret_dirty, position_cache, fee_cache)
 
         for p in secret_dirty:
             assign_ticket_secret(
