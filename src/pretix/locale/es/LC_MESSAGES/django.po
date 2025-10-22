@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-21 07:26+0000\n"
-"PO-Revision-Date: 2025-10-20 19:00+0000\n"
+"PO-Revision-Date: 2025-10-22 16:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -3757,12 +3757,10 @@ msgid "Remaining amount"
 msgstr "Importe restante"
 
 #: pretix/base/invoicing/pdf.py:930
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Event date: {date_range}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "Fecha del evento: {date_range}"
+msgstr "Período de facturación: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:961
 msgctxt "invoice"
@@ -5154,10 +5152,8 @@ msgid "Owned by ticket holder"
 msgstr "Propietario del titular del billete"
 
 #: pretix/base/models/giftcards.py:88
-#, fuzzy
-#| msgid "View customer account"
 msgid "Owned by customer account"
-msgstr "Ver cuenta de usuario"
+msgstr "Propiedad de la cuenta del cliente"
 
 #: pretix/base/models/giftcards.py:100
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
@@ -10394,30 +10390,29 @@ msgid ""
 "Automatic based on ticket-specific validity, membership validity, event "
 "series date, or event date"
 msgstr ""
+"Automático, según la validez específica del billete, la validez de la "
+"membresía, la fecha de la serie de eventos o la fecha del evento"
 
 #: pretix/base/settings.py:1109 pretix/base/settings.py:1120
 msgid "Automatic, but prefer invoice date over event date"
 msgstr ""
+"Automático, pero se prefiere la fecha de la factura sobre la fecha del evento"
 
 #: pretix/base/settings.py:1112 pretix/base/settings.py:1123
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice date"
 msgstr "Fecha de la factura"
 
 #: pretix/base/settings.py:1116
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Date ordering"
 msgid "Date of service"
-msgstr "Fecha de pedido"
+msgstr "Fecha de servicio"
 
 #: pretix/base/settings.py:1125
 msgid ""
 "This controls what dates are shown on the invoice, but is especially "
 "important for electronic invoicing."
 msgstr ""
+"Esto controla qué fechas se muestran en la factura, pero es especialmente "
+"importante para la facturación electrónica."
 
 #: pretix/base/settings.py:1136
 msgid "Automatically cancel and reissue invoice on address changes"
@@ -13201,15 +13196,13 @@ msgid "Contact:"
 msgstr "Contacto:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-format
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
 msgstr ""
-"Usted está recibiendo este correo electrónico porque realizó un pedido para "
-"{event}."
+"Está recibiendo este correo electrónico porque realizó un pedido para "
+"<strong>%(event)s</strong>."
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
@@ -15294,7 +15287,7 @@ msgstr "Tamaño"
 
 #: pretix/control/forms/item.py:455
 msgid "Number of tickets"
-msgstr "Número de entradas"
+msgstr "Número de billetes"
 
 #: pretix/control/forms/item.py:587
 msgid "Quota name is required."
@@ -15564,10 +15557,10 @@ msgid "Create orders as test mode orders"
 msgstr "Crear los pedidos en modo de prueba"
 
 #: pretix/control/forms/modelimport.py:102
-#, fuzzy
-#| msgid "Only orders created in test mode can be deleted."
 msgid "Orders not created in test mode cannot be deleted again after import."
-msgstr "Solamente los pedidos creados en modo de prueba pueden ser eliminados."
+msgstr ""
+"Los pedidos que no se hayan creado en modo de prueba no se pueden volver a "
+"eliminar después de la importación."
 
 #: pretix/control/forms/modelimport.py:123
 msgid "A grouping cannot be specified for this import mode."
@@ -17011,10 +17004,8 @@ msgid "The invoice has been generated."
 msgstr "Se ha generado la factura."
 
 #: pretix/control/logdisplay.py:525
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "The invoice could not be generated."
-msgstr "Se ha generado la factura."
+msgstr "No se ha podido generar la factura."
 
 #: pretix/control/logdisplay.py:526 pretix/control/views/orders.py:1683
 msgid "The invoice has been regenerated."
@@ -20249,6 +20240,9 @@ msgid ""
 "be shown. Therefore, we recommend that you set the date of service to a "
 "different option."
 msgstr ""
+"Ha configurado su tienda para que no sea un evento y que la fecha del evento "
+"no se muestre. Por lo tanto, le recomendamos que establezca la fecha del "
+"servicio en otra opción."
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:40
 msgid "Address form"
@@ -21576,13 +21570,12 @@ msgstr "Información"
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:15
 msgid "The following gift cards are available in your customer account:"
 msgstr ""
+"Las siguientes tarjetas de regalo están disponibles en su cuenta de cliente:"
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:25
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:29
-#, fuzzy
-#| msgid "Issued gift cards"
 msgid "Use gift card"
-msgstr "Tarjetas regalo emitidas"
+msgstr "Canjear tarjeta de regalo"
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:27
 #: pretix/control/templates/pretixcontrol/pdf/index.html:156
@@ -34090,12 +34083,11 @@ msgstr "Seleccione cómo desea pagar el saldo restante:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:110
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:45
-#, fuzzy, python-format
-#| msgid "%(num)s available"
+#, python-format
 msgid "(%(count)s available)"
 msgid_plural "(%(count)s available)"
-msgstr[0] "%(num)s disponible"
-msgstr[1] "%(num)s disponible"
+msgstr[0] "(%(count)s disponible)"
+msgstr[1] "(%(count)s disponibles)"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:129
 msgid "This sales channel does not provide support for test mode."
@@ -36027,40 +36019,36 @@ msgid "customer account information"
 msgstr "información sobre la cuenta de cliente"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:28
-#, fuzzy, python-format
-#| msgid "Denied scan: %(date)s"
+#, python-format
 msgid "Issued on %(date)s"
-msgstr "Escaneo denegado: %(date)s"
+msgstr "Emitido el %(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:38
-#, fuzzy, python-format
-#| msgid "Expired since"
+#, python-format
 msgid "Expired since %(date)s"
-msgstr "Caducado desde"
+msgstr "Vencido desde el %(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:46
-#, fuzzy, python-format
-#| msgid "Valid until %(datetime)s"
+#, python-format
 msgid "Valid until %(date)s"
-msgstr "Válido hasta %(datetime)s"
+msgstr "Válido hasta el %(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:66
-#, fuzzy
-#| msgid "Remaining balance"
 msgid "Remaining value:"
-msgstr "Saldo pendiente"
+msgstr "Valor restante:"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:76
-#, fuzzy
-#| msgid "You don’t have any orders in your account yet."
 msgid "You don’t have any gift cards in your account currently."
-msgstr "Aún no tiene ningún pedido en su cuenta."
+msgstr "Actualmente, no tiene ninguna tarjeta de regalo en su cuenta."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:77
 msgid ""
 "Currently, only gift cards resulting from refunds show up here, any "
 "purchased gift cards show up under the orders tab."
 msgstr ""
+"Actualmente, aquí solo se muestran las tarjetas de regalo resultantes de "
+"reembolsos; las tarjetas de regalo compradas aparecen en la pestaña de "
+"pedidos."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 msgid "Account information"
@@ -36408,6 +36396,8 @@ msgstr "Se ha generado una factura."
 #: pretix/presale/views/order.py:751 pretix/presale/views/order.py:831
 msgid "Invoice generation has failed, please reach out to the organizer."
 msgstr ""
+"La generación de la factura ha fallado; por favor, póngase en contacto con "
+"el organizador."
 
 #: pretix/presale/views/order.py:866 pretix/presale/views/order.py:938
 msgid "You cannot modify this order"
