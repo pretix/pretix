@@ -74,8 +74,32 @@ from pretix.base.templatetags.rich_text import (
             '<a href="https://goodsite.com.evilsite.com" rel="noopener" target="_blank">https://goodsite.com.evilsite.com</a>',
         ),
         (
+            '<a href="https://evilsite.com/deep/path">evilsite.com/bad/path/</a>',
+            '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">https://evilsite.com/deep/path</a>',
+        ),
+        (
+            '<a href="https://evilsite.com/deep/path">evilsite.com/deep</a>',
+            '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">evilsite.com/deep</a>',
+        ),
+        (
             '<a href="https://evilsite.com/deep/path">evilsite.com</a>',
             '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">evilsite.com</a>',
+        ),
+        (
+            '<a href="https://user:pass@evilsite.com/deep/path">evilsite.com</a>',
+            '<a href="https://user:pass@evilsite.com/deep/path" rel="noopener" target="_blank">evilsite.com</a>',
+        ),
+        (
+            '<a href="https://foo:bar@evilsite.com/deep/path">https://foo:bar@goodsite.com</a>',
+            '<a href="https://foo:bar@evilsite.com/deep/path" rel="noopener" target="_blank">https://foo:bar@evilsite.com/deep/path</a>',
+        ),
+        (
+            '<a href="https://pretix.social/@pretix">@pretix@pretix.social</a>',
+            '<a href="https://pretix.social/@pretix" rel="noopener" target="_blank">@pretix@pretix.social</a>',
+        ),
+        (
+            '<a href="https://evilsite.social/@pretix">@pretix@pretix.social</a>',
+            '<a href="https://evilsite.social/@pretix" rel="noopener" target="_blank">https://evilsite.social/@pretix</a>',
         ),
         ("<a>broken</a>", "<a>broken</a>"),
     ],
