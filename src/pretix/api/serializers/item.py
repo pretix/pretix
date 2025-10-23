@@ -50,6 +50,7 @@ from pretix.base.models import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, ItemVariation,
     ItemVariationMetaValue, Question, QuestionOption, Quota, SalesChannel,
 )
+from pretix.base.models.items import ItemProgramTime
 
 
 class InlineItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
@@ -212,6 +213,26 @@ class ItemBundleSerializer(serializers.ModelSerializer):
         return data
 
 
+class ItemProgramTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemProgramTime
+        fields = ('id', 'start', 'end')
+
+    def validate(self, data):
+        data = super().validate(data)
+
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
+        start = self.context['start']
+        end = self.context['end']
+
+        if start and end and start > end:
+            raise ValidationError(_("The program end must not be before the program start."))
+
+        return data
+
+
 class ItemAddOnSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemAddOn
@@ -364,6 +385,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         variations_data = validated_data.pop('variations') if 'variations' in validated_data else {}
         addons_data = validated_data.pop('addons') if 'addons' in validated_data else {}
         bundles_data = validated_data.pop('bundles') if 'bundles' in validated_data else {}
+        program_times_data = validated_data.pop('program_times') if 'program_times' in validated_data else {}
         meta_data = validated_data.pop('meta_data', None)
         picture = validated_data.pop('picture', None)
         require_membership_types = validated_data.pop('require_membership_types', [])
@@ -398,6 +420,8 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             ItemAddOn.objects.create(base_item=item, **addon_data)
         for bundle_data in bundles_data:
             ItemBundle.objects.create(base_item=item, **bundle_data)
+        for program_times_data in program_times_data:
+            ItemProgramTime.objects.create(item=item, **program_times_data)
 
         # Meta data
         if meta_data is not None:
