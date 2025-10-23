@@ -574,6 +574,8 @@ class ItemCreateForm(I18nModelForm):
             for b in self.cleaned_data['copy_from'].bundles.all():
                 instance.bundles.create(bundled_item=b.bundled_item, bundled_variation=b.bundled_variation,
                                         count=b.count, designated_price=b.designated_price)
+            for pt in self.cleaned_data['copy_from'].item_program_times.all():
+                instance.item_program_times.create(start=pt.start, end=pt.end)
 
             item_copy_data.send(sender=self.event, source=self.cleaned_data['copy_from'], target=instance)
 

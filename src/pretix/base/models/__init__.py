@@ -36,7 +36,7 @@ from .giftcards import GiftCard, GiftCardAcceptance, GiftCardTransaction
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaProperty, ItemMetaValue,
-    ItemVariation, ItemVariationMetaValue, Question, QuestionOption, Quota,
+    ItemVariation, ItemVariationMetaValue, ItemProgramTime, Question, QuestionOption, Quota,
     SubEventItem, SubEventItemVariation, itempicture_upload_to,
 )
 from .log import LogEntry
