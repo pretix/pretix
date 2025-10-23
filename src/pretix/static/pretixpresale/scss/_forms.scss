@@ -173,7 +173,7 @@ output {
   }
 }
 @media (min-width: $screen-md-min) {
-  .form-group:not(:has(.checkbox)) {
+  .form-group:not(:has(.checkbox)), .form-group:has(.checkbox + .checkbox) {
     .label-required {
       display: block;
     }
