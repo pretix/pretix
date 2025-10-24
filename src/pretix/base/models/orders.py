@@ -1340,6 +1340,7 @@ class QuestionAnswer(models.Model):
     objects = ScopedManager(organizer='question__event__organizer')
 
     class Meta:
+        ordering = ('question__position', 'question__id')
         unique_together = [['orderposition', 'question'], ['cartposition', 'question']]
 
     @property
