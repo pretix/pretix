@@ -1,0 +1,85 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load eventsignal %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}{% trans "Cancel event" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Cancel event" %}</h1>
+    <form action="" method="post" class="form-horizontal" data-asynctask data-asynctask-download data-asynctask-long>
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <p>
+            {% blocktrans trimmed %}
+                If you proceed, the system will do the following:
+            {% endblocktrans %}
+        </p>
+        <ul>
+            <li>
+                {% blocktrans trimmed count count=dryrun_result.cancel_full_total %}
+                    {{ count }} order will be canceled fully
+                {% plural %}
+                    {{ count }} orders will be canceled fully
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed count count=dryrun_result.cancel_partial_total %}
+                    {{ count }} order will be canceled partially
+                {% plural %}
+                    {{ count }} orders will be canceled partially
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% if dryrun_result.kwargs.auto_refund and dryrun_result.refund_total %}
+                    <strong>
+                {% endif %}
+                {% blocktrans trimmed with amount=dryrun_result.refund_total|money:request.event.currency %}
+                    {{ amount }} are eligible for refunds.
+                {% endblocktrans %}
+                {% if dryrun_result.kwargs.auto_refund %}
+                    {% trans "The system will attempt to refund the money automatically if supported by the payment method." %}
+                {% elif dryrun_result.kwargs.manual_refund %}
+                    {% trans "The system will create manual refunds that you need to execute." %}
+                {% else %}
+                    {% trans "Refunds will not happen automatically." %}
+                {% endif %}
+                {% if dryrun_result.kwargs.auto_refund %}
+                    </strong>
+                {% endif %}
+            </li>
+            {% if dryrun_result.kwargs.send %}
+                <li>
+                    {% trans "Inform all customers via email." %}
+                </li>
+            {% endif %}
+            {% if dryrun_result.kwargs.send_waitinglist %}
+                <li>
+                    {% trans "Inform all waiting list contacts via email." %}
+                </li>
+            {% endif %}
+        </ul>
+        <p>
+            {% blocktrans trimmed %}
+                These numbers are estimates and may change if the data in your event recently changed.
+            {% endblocktrans %}
+        </p>
+        {% bootstrap_form_errors form %}
+        {% if form.confirmation_code %}
+            {% bootstrap_field form.confirm layout="control" %}
+            {% bootstrap_field form.confirmation_code layout="control" %}
+        {% else %}
+            {% bootstrap_field form.confirm layout="inline" form_group_class="" %}
+        {% endif %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-danger btn-save">
+                {% if dryrun_result.kwargs.auto_refund and dryrun_result.refund_total %}
+                    {% blocktrans trimmed with amount=dryrun_result.refund_total|money:request.event.currency %}
+                        Proceed and refund approx. {{ amount }}
+                    {% endblocktrans %}
+                {% else %}
+                    {% trans "Proceed and cancel orders" %}
+                {% endif %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

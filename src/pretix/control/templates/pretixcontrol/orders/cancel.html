@@ -79,9 +79,15 @@
             {% bootstrap_field form.send_waitinglist_message layout="horizontal" %}
         </fieldset>
         <div class="form-group submit-group">
-            <button type="submit" class="btn btn-danger btn-save">
-                {% trans "Cancel all orders" %}
-            </button>
+            {% if dry_run_supported %}
+                <button type="submit" class="btn btn-default btn-save">
+                    {% trans "Preview refund amount" %}
+                </button>
+            {% else %}
+                <button type="submit" class="btn btn-danger btn-save">
+                    {% trans "Cancel all orders" %}
+                </button>
+            {% endif %}
         </div>
     </form>
 {% endblock %}
