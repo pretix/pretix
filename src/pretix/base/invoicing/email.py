@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -77,7 +77,7 @@ class EmailTransmissionType(TransmissionType):
         }
 
     def form_data_to_transmission_info(self, form_data: dict) -> dict:
-        if form_data.get("transmission_email_other") and form_data.get("transmission_email_address"):
+        if form_data.get("is_business") and form_data.get("transmission_email_other") and form_data.get("transmission_email_address"):
             return {
                 "transmission_email_address": form_data["transmission_email_address"],
             }

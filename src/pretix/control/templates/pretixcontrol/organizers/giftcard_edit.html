@@ -16,6 +16,9 @@
         {% bootstrap_field form.expires layout="control" %}
         {% bootstrap_field form.owner_ticket layout="control" %}
         {% bootstrap_field form.conditions layout="control" %}
+        {% if form.customer %}
+            {% bootstrap_field form.customer layout="control" %}
+        {% endif %}
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}

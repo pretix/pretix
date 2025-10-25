@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load ibanformat %}
 {% load bootstrap3 %}
+{% load rich_text %}
 
 {% if details or code %}
     <p>{% blocktrans trimmed %}
@@ -18,7 +19,7 @@
         </dl>
     {% endif %}
 
-    {{ details|linebreaks }}
+    {{ details | rich_text }}
     {% if not code %}</div>{% endif %}
 
     {% if code %}

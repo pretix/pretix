@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -5488,3 +5488,22 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             assert order.positions.first().used_membership == m_correct1
             assert order.positions.first().attendee_name == 'John Doe'
+
+    def test_giftcard_customer_offered(self):
+        with scopes_disabled():
+            gc = self.orga.issued_gift_cards.create(currency="EUR", customer=self.customer)
+            gc.transactions.create(value=23, acceptor=self.orga)
+            ugc = self.customer.usable_gift_cards()
+            assert len(ugc) == 1
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'login',
+            'login-email': 'john@example.org',
+            'login-password': 'foo',
+        }, follow=True)
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        assert 'Gift card' in response.content.decode()
+        assert '(1 available)' in response.content.decode()

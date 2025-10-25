@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -3087,6 +3087,7 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
                 expires=order.event.organizer.default_gift_card_expiry if giftcard_expires is _unset else giftcard_expires,
                 conditions=giftcard_conditions,
                 currency=order.event.currency,
+                customer=order.customer,
                 testmode=order.testmode
             )
             giftcard.log_action('pretix.giftcards.created', data={})

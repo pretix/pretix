@@ -51,42 +51,46 @@
     </div>
 {% else %}
     <div class="order-info">
-        {% trans "You are receiving this email because you placed an order for the following event:" %}
+        {% blocktrans trimmed with event=event.name %}
+            You are receiving this email because you placed an order for <strong>{{ event }}</strong>.
+        {% endblocktrans %}
     </div>
     <table class="order-details">
         <tr>
             <td>
-                <strong>{% trans "Event:" %}</strong>
-            </td>
-            <td>
-                {{ event.name }}
-                {% if not event.has_subevents %}
-                    {% if event.settings.show_dates_on_frontpage %}
-                        <br>
-                        {{ event.get_date_range_display }}
-                        {% if event.settings.show_times %}
-                            {{ event.date_from|date:"TIME_FORMAT" }}
-                        {% endif %}
-                    {% endif %}
-                    {% if event.location %}
-                        <br>
-                        {{ event.location|oneline }}
-                    {% endif %}
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <strong>{% trans "Order code:" %}</strong>
+                <strong>{% trans "Order code" %}:</strong>
             </td>
             <td>
                 {{ order.code }} ({{ order.datetime|date:"SHORT_DATE_FORMAT" }})
             </td>
         </tr>
+        {% if not event.has_subevents and event.settings.show_dates_on_frontpage %}
+            <tr>
+                <td>
+                    <strong>{% trans "Date" %}:</strong>
+                </td>
+                <td>
+                    {{ event.get_date_range_display }}
+                    {% if event.settings.show_times %}
+                        {{ event.date_from|date:"TIME_FORMAT" }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+        {% if not event.has_subevents and event.location %}
+            <tr>
+                <td>
+                    <strong>{% trans "Location" %}:</strong>
+                </td>
+                <td>
+                    {{ event.location|oneline }}
+                </td>
+            </tr>
+        {% endif %}
         {% if cart %}
             <tr>
                 <td>
-                    <strong>{% trans "Details:" %}</strong>
+                    <strong>{% trans "Details" %}:</strong>
                 </td>
                 <td>
                     <table class="cart-table">
@@ -129,7 +133,7 @@
         {% endif %}
         <tr>
             <td>
-                <strong>{% trans "Contact:" %}</strong>
+                <strong>{% trans "Contact" %}:</strong>
             </td>
             <td>
                 {{ event.organizer }}

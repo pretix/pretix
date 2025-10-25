@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -32,6 +32,7 @@ from django_scopes import scope, scopes_disabled
 
 from pretix.base.datasync.datasync import datasync_providers
 from pretix.base.models.datasync import OrderSyncQueue
+from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
 
@@ -89,7 +90,7 @@ def sync_all():
         run_sync(queue)
 
 
-@app.task()
+@app.task(base=TransactionAwareTask)
 def sync_single(queue_item_id: int):
     with scopes_disabled():
         queue = (

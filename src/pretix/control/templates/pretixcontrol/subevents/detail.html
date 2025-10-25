@@ -130,30 +130,32 @@
                         {% trans "These settings are optional, if you leave them empty, the default values from the product settings will be used." %}
                     </p>
                     {% for f in itemvar_forms %}
-                        {% bootstrap_form_errors f %}
-                        <div class="form-group subevent-itemvar-group">
-                            <label class="col-md-3 control-label" for="id_{{ f.prefix }}-price">
-                                {% if f.variation %}{{ f.item }} – {{ f.variation }}{% else %}{{ f.item }}{% endif %}
-                            </label>
-                            <div class="col-md-4">
-                                <label for="{{ f.price.id_for_label }}" class="text-muted">{% trans "Price" %}</label><br>
-                                {% bootstrap_field f.price addon_after=request.event.currency form_group_class="" layout="inline" %}
+                        <div data-itemvar="{{ f.item.id }}{% if f.variation %}-{{ f.variation.id }}{% endif %}">
+                            {% bootstrap_form_errors f %}
+                            <div class="form-group subevent-itemvar-group">
+                                <label class="col-md-3 control-label" for="id_{{ f.prefix }}-price">
+                                    {% if f.variation %}{{ f.item }} – {{ f.variation }}{% else %}{{ f.item }}{% endif %}
+                                </label>
+                                <div class="col-md-4">
+                                    <label for="{{ f.price.id_for_label }}" class="text-muted">{% trans "Price" %}</label><br>
+                                    {% bootstrap_field f.price addon_after=request.event.currency form_group_class="" layout="inline" %}
+                                </div>
+                                <div class="col-md-4">
+                                    <br>
+                                    {% bootstrap_field f.disabled layout="inline" form_group_class="" %}
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <br>
-                                {% bootstrap_field f.disabled layout="inline" form_group_class="" %}
-                            </div>
-                        </div>
-                        <div class="form-group subevent-itemvar-group">
-                            <div class="col-md-4 col-md-offset-3">
-                                <label for="{{ f.available_from.id_for_label }}" class="text-muted">{% trans "Available from" %}</label>
-                                {% include "pretixcontrol/subevents/fragment_unavail_mode_indicator.html" with mode=f.available_from_mode %}<br>
-                                {% bootstrap_field f.available_from form_group_class="foo" layout="inline" %}
-                            </div>
-                            <div class="col-md-4">
-                                <label for="{{ f.available_until.id_for_label }}" class="text-muted">{% trans "Available until" %}</label>
-                                {% include "pretixcontrol/subevents/fragment_unavail_mode_indicator.html" with mode=f.available_until_mode %}<br>
-                                {% bootstrap_field f.available_until form_group_class="" layout="inline" %}
+                            <div class="form-group subevent-itemvar-group">
+                                <div class="col-md-4 col-md-offset-3">
+                                    <label for="{{ f.available_from.id_for_label }}" class="text-muted">{% trans "Available from" %}</label>
+                                    {% include "pretixcontrol/subevents/fragment_unavail_mode_indicator.html" with mode=f.available_from_mode %}<br>
+                                    {% bootstrap_field f.available_from form_group_class="foo" layout="inline" %}
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ f.available_until.id_for_label }}" class="text-muted">{% trans "Available until" %}</label>
+                                    {% include "pretixcontrol/subevents/fragment_unavail_mode_indicator.html" with mode=f.available_until_mode %}<br>
+                                    {% bootstrap_field f.available_until form_group_class="" layout="inline" %}
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
@@ -282,7 +284,7 @@
                 </div>
             {% endif %}
         </div>
-        <div class="form-group submit-group">
+        <div class="form-group submit-group submit-group-sticky">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
             </button>
