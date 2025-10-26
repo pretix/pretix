@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-21 07:26+0000\n"
-"PO-Revision-Date: 2025-10-13 06:00+0000\n"
-"Last-Translator: Tim Maurizio Dullaart <Tim.maurizio@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2025-10-26 18:00+0000\n"
+"Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -3737,12 +3737,10 @@ msgid "Remaining amount"
 msgstr "Openstaand bedrag"
 
 #: pretix/base/invoicing/pdf.py:930
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Event date: {date_range}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "Evenementdatum: {date_range}"
+msgstr "Facturatieperiode: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:961
 msgctxt "invoice"
@@ -9138,6 +9136,8 @@ msgid ""
 "The grouping \"%(value)s\" occurs on non-consecutive lines (seen again on "
 "line %(row)s)."
 msgstr ""
+"De groepering \"%(value)s\" komt voor op niet opeenvolgende regels "
+"(is ook het geval op regel %(row)s)."
 
 #: pretix/base/services/modelimport.py:154
 #, python-brace-format
@@ -9145,6 +9145,8 @@ msgid ""
 "Inconsistent data in row {row}: Column {col} contains value \"{val_line}\", "
 "but for this order, the value has already been set to \"{val_order}\"."
 msgstr ""
+"Inconsistente gegevens in rij {row}: Kolom {col} bevat waarde \"{val_line}\""
+", maar voor deze bestelling is de waarde al ingesteld op \"{val_order}\"."
 
 #: pretix/base/services/modelimport.py:168
 #: pretix/base/services/modelimport.py:289
@@ -10287,17 +10289,13 @@ msgstr "Toon de startdatum van de voorverkoop voor de voorverkoop is begonnen."
 
 #: pretix/base/settings.py:1037 pretix/base/settings.py:1045
 #: pretix/base/settings.py:1059 pretix/base/settings.py:1068
-#, fuzzy
-#| msgid "Default tax code"
 msgid "Use default tax rate"
-msgstr "Standaard belastingstarief"
+msgstr "Gebruik het standaard belastingstarief"
 
 #: pretix/base/settings.py:1038 pretix/base/settings.py:1046
 #: pretix/base/settings.py:1057 pretix/base/settings.py:1066
-#, fuzzy
-#| msgid "Charge updated."
 msgid "Charge no taxes"
-msgstr "Transactie bijgewerkt."
+msgstr "Reken geen belasting aan"
 
 #: pretix/base/settings.py:1042
 #, fuzzy
@@ -10360,10 +10358,13 @@ msgid ""
 "Automatic based on ticket-specific validity, membership validity, event "
 "series date, or event date"
 msgstr ""
+"Automatisch op basis van ticket-specifieke geldigheid, geldigheid "
+"lidmaatschap, datum reeks evenement of datum evenement"
 
 #: pretix/base/settings.py:1109 pretix/base/settings.py:1120
 msgid "Automatic, but prefer invoice date over event date"
 msgstr ""
+"Automatisch, maar geef de voorkeur aan factuurdatum boven evenementdatum"
 
 #: pretix/base/settings.py:1112 pretix/base/settings.py:1123
 #, fuzzy
