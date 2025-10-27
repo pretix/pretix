@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-21 07:26+0000\n"
-"PO-Revision-Date: 2025-10-03 20:00+0000\n"
+"PO-Revision-Date: 2025-10-27 12:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -3723,12 +3723,10 @@ msgid "Remaining amount"
 msgstr "残高"
 
 #: pretix/base/invoicing/pdf.py:930
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Event date: {date_range}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "イベントの日程: {date_range}"
+msgstr "請求期間: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:961
 msgctxt "invoice"
@@ -5091,10 +5089,8 @@ msgid "Owned by ticket holder"
 msgstr "チケット保持者が所有"
 
 #: pretix/base/models/giftcards.py:88
-#, fuzzy
-#| msgid "View customer account"
 msgid "Owned by customer account"
-msgstr "顧客アカウントを表示します"
+msgstr "顧客アカウントが保持"
 
 #: pretix/base/models/giftcards.py:100
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
@@ -7788,11 +7784,11 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
-"John Doe\n"
-"Sample company\n"
-"Sesame Street 42\n"
-"12345 Any City\n"
-"Atlantis"
+"山田 太郎\n"
+"サンプル株式会社\n"
+"丸の内1-2-3\n"
+"100-0001 東京都千代田区\n"
+"日本"
 
 #: pretix/base/pdf.py:198
 msgid "Attendee street"
@@ -10122,31 +10118,26 @@ msgstr "無料の注文については、請求書は自動的に生成されま
 msgid ""
 "Automatic based on ticket-specific validity, membership validity, event "
 "series date, or event date"
-msgstr ""
+msgstr "チケット固有の有効期限、会員資格の有効期限、イベントシリーズの日付、またはイ"
+"ベントの日付に基づいて自動設定"
 
 #: pretix/base/settings.py:1109 pretix/base/settings.py:1120
 msgid "Automatic, but prefer invoice date over event date"
-msgstr ""
+msgstr "自動、ただしイベントの日付より請求書の日付を優先"
 
 #: pretix/base/settings.py:1112 pretix/base/settings.py:1123
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice date"
 msgstr "請求日"
 
 #: pretix/base/settings.py:1116
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Date ordering"
 msgid "Date of service"
-msgstr "日付の順序付け"
+msgstr "サービス提供日"
 
 #: pretix/base/settings.py:1125
 msgid ""
 "This controls what dates are shown on the invoice, but is especially "
 "important for electronic invoicing."
-msgstr ""
+msgstr "これは請求書に表示される日付を制御しますが、特に電子請求において重要です。"
 
 #: pretix/base/settings.py:1136
 msgid "Automatically cancel and reissue invoice on address changes"
@@ -12826,13 +12817,11 @@ msgid "Contact:"
 msgstr "連絡先："
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-format
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
-msgstr "「{event}」の注文をいただいたため、このメールをお送りしています。"
+msgstr "<strong>%(event)s</strong>の注文をされたため、このメールを受信しています。"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
@@ -15144,10 +15133,9 @@ msgid "Create orders as test mode orders"
 msgstr "テストモードの注文を作成"
 
 #: pretix/control/forms/modelimport.py:102
-#, fuzzy
-#| msgid "Only orders created in test mode can be deleted."
 msgid "Orders not created in test mode cannot be deleted again after import."
-msgstr "テストモードで作成された注文のみ削除できます。"
+msgstr "テストモードで作成されていない注文は、インポート後に削除することはできません"
+"。"
 
 #: pretix/control/forms/modelimport.py:123
 msgid "A grouping cannot be specified for this import mode."
@@ -16546,10 +16534,8 @@ msgid "The invoice has been generated."
 msgstr "請求書が生成されました。"
 
 #: pretix/control/logdisplay.py:525
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "The invoice could not be generated."
-msgstr "請求書が生成されました。"
+msgstr "請求書を生成できませんでした。"
 
 #: pretix/control/logdisplay.py:526 pretix/control/views/orders.py:1683
 msgid "The invoice has been regenerated."
@@ -19702,6 +19688,8 @@ msgid ""
 "be shown. Therefore, we recommend that you set the date of service to a "
 "different option."
 msgstr ""
+"ショップがイベントではなく、イベントの日付を表示しないように設定されています"
+"。そのため、サービス提供日を別のオプションに設定することをお勧めします。"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:40
 msgid "Address form"
@@ -20980,14 +20968,12 @@ msgstr "情報"
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:10
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:15
 msgid "The following gift cards are available in your customer account:"
-msgstr ""
+msgstr "顧客アカウントで以下のギフトカードが利用可能です:"
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:25
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:29
-#, fuzzy
-#| msgid "Issued gift cards"
 msgid "Use gift card"
-msgstr "発行されたギフトカード"
+msgstr "ギフトカードを使用"
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:27
 #: pretix/control/templates/pretixcontrol/pdf/index.html:156
@@ -33173,11 +33159,10 @@ msgstr "残額を支払う方法を選択:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:110
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:45
-#, fuzzy, python-format
-#| msgid "%(num)s available"
+#, python-format
 msgid "(%(count)s available)"
 msgid_plural "(%(count)s available)"
-msgstr[0] "%(num)s 提供可能"
+msgstr[0] "(%(count)s枚利用可能)"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:129
 msgid "This sales channel does not provide support for test mode."
@@ -35067,40 +35052,34 @@ msgid "customer account information"
 msgstr "国"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:28
-#, fuzzy, python-format
-#| msgid "Denied scan: %(date)s"
+#, python-format
 msgid "Issued on %(date)s"
-msgstr "スキャンは拒否されました: %(date)s"
+msgstr "発行日: %(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:38
-#, fuzzy, python-format
-#| msgid "Expired since"
+#, python-format
 msgid "Expired since %(date)s"
-msgstr "期限切れです"
+msgstr "%(date)s以降失効"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:46
-#, fuzzy, python-format
-#| msgid "Valid until %(datetime)s"
+#, python-format
 msgid "Valid until %(date)s"
-msgstr "%(datetime)s まで有効"
+msgstr "%(date)s以降期限切れ"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:66
-#, fuzzy
-#| msgid "Remaining balance"
 msgid "Remaining value:"
-msgstr "残高"
+msgstr "残高:"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:76
-#, fuzzy
-#| msgid "You don’t have any orders in your account yet."
 msgid "You don’t have any gift cards in your account currently."
-msgstr "まだアカウントに注文はありません。"
+msgstr "現在、アカウントにギフトカードはありません。"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:77
 msgid ""
 "Currently, only gift cards resulting from refunds show up here, any "
 "purchased gift cards show up under the orders tab."
-msgstr ""
+msgstr "現在、ここには払い戻しによるギフトカードのみが表示されます。購入したギフトカ"
+"ードは注文タブに表示されます。"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 msgid "Account information"
@@ -35436,7 +35415,7 @@ msgstr "請求書が生成されました。"
 
 #: pretix/presale/views/order.py:751 pretix/presale/views/order.py:831
 msgid "Invoice generation has failed, please reach out to the organizer."
-msgstr ""
+msgstr "請求書の生成に失敗しました。主催者にお問い合わせください。"
 
 #: pretix/presale/views/order.py:866 pretix/presale/views/order.py:938
 msgid "You cannot modify this order"
