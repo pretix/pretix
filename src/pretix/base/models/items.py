@@ -2308,14 +2308,8 @@ class ItemProgramTime(models.Model):
     :type end: datetime
     """
     item = models.ForeignKey('Item', related_name='item_program_times', on_delete=models.CASCADE)
-    start = models.DateTimeField(
-        verbose_name=_("Start"),
-        null=True, blank=True
-    )
-    end = models.DateTimeField(
-        verbose_name=_("End"),
-        null=True, blank=True
-    )
+    start = models.DateTimeField(verbose_name=_("Start"))
+    end = models.DateTimeField(verbose_name=_("End"))
 
     def clean(self):
         if self.start and self.end and self.start > self.end:

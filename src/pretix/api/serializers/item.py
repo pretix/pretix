@@ -224,10 +224,15 @@ class ItemProgramTimeSerializer(serializers.ModelSerializer):
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
 
-        start = self.context['start']
-        end = self.context['end']
+        start = full_data.get('start')
+        if not start:
+            raise ValidationError(_("The program start must not be empty."))
 
-        if start and end and start > end:
+        end = full_data.get('end')
+        if not end:
+            raise ValidationError(_("The program end must not be empty."))
+
+        if start > end:
             raise ValidationError(_("The program end must not be before the program start."))
 
         return data

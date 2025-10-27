@@ -847,7 +847,7 @@ class Event(EventMixin, LoggedModel):
         from ..signals import event_copy_data
         from . import (
             Discount, Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue,
-            ItemVariationMetaValue, ItemProgramTime, Question, Quota,
+            ItemProgramTime, ItemVariationMetaValue, Question, Quota,
         )
 
         #  Note: avoid self.set_active_plugins(), it causes trouble e.g. for the badges plugin.
