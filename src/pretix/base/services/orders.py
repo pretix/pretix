@@ -923,7 +923,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
         ]
     )
     for cp, (new_price, discount) in zip(sorted_positions, discount_results):
-        if cp.price - cp.price_includes_rounding_correction != new_price or cp.discount_id != (discount.pk if discount else None):
+        if cp.gross_price_before_rounding != new_price or cp.discount_id != (discount.pk if discount else None):
             cp.price = new_price
             cp.price_includes_rounding_correction = Decimal("0.00")
             cp.discount = discount
@@ -954,7 +954,7 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
                              meta_info: dict, event: Event, require_approval=False):
     fees = []
     # Pre-rounding, pre-fee total is used for fee calculation
-    total = sum([c.price - c.price_includes_rounding_correction for c in positions])
+    total = sum([c.gross_price_before_rounding for c in positions])
 
     gift_cards = []  # for backwards compatibility
     for p in payment_requests:
@@ -1764,7 +1764,7 @@ class OrderChangeManager:
         if position.issued_gift_cards.exists():
             raise OrderError(self.error_messages['gift_card_change'])
 
-        self._totaldiff_guesstimate += price.gross - position.price + position.price_includes_rounding_correction
+        self._totaldiff_guesstimate += price.gross - position.gross_price_before_rounding
 
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00') or position.price != Decimal('0.00'):
             self._invoice_dirty = True
