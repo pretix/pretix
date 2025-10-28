@@ -425,8 +425,8 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             ItemAddOn.objects.create(base_item=item, **addon_data)
         for bundle_data in bundles_data:
             ItemBundle.objects.create(base_item=item, **bundle_data)
-        for program_times_data in program_times_data:
-            ItemProgramTime.objects.create(item=item, **program_times_data)
+        for program_time_data in program_times_data:
+            ItemProgramTime.objects.create(item=item, **program_time_data)
 
         # Meta data
         if meta_data is not None:
