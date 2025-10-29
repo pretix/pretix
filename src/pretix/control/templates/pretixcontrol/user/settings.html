@@ -18,7 +18,7 @@
         {% bootstrap_field form.locale layout='horizontal' %}
         {% bootstrap_field form.timezone layout='horizontal' %}
         <div class="form-group">
-            <label class="col-md-3 control-label" for="id_new_pw_repeat">{% trans "Notifications" %}</label>
+            <label class="col-md-3 control-label">{% trans "Notifications" %}</label>
             <div class="col-md-9 static-form-row">
                 {% if request.user.notifications_send and request.user.notification_settings.exists %}
                     <span class="label label-success">
