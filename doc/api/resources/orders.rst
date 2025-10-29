@@ -1030,8 +1030,8 @@ Creating orders
       * ``internal_reference``
       * ``vat_id``
       * ``vat_id_validated`` (optional) – If you need support for reverse charge (rarely the case), you need to check
-         yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
-         trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
+        yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
+        trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
      * ``transmission_type`` (optional, defaults to ``email``)
      * ``transmission_info`` (optional, see also :ref:`rest-transmission-types`)
 
