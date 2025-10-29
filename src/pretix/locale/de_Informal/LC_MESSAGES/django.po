@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-29 07:54+0000\n"
-"PO-Revision-Date: 2025-10-21 08:03+0000\n"
+"PO-Revision-Date: 2025-10-29 09:24+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8339,10 +8339,8 @@ msgid "Event canceled"
 msgstr "Veranstaltung abgesagt"
 
 #: pretix/base/services/cancelevent.py:392
-#, fuzzy
-#| msgid "Create configuration"
 msgid "Bulk-refund confirmation"
-msgstr "App-Konfiguration erstellen"
+msgstr "Bestätigung einer Massenerstattung"
 
 #: pretix/base/services/cart.py:102 pretix/base/services/modelimport.py:247
 #: pretix/base/services/orders.py:155
@@ -13135,18 +13133,20 @@ msgstr ""
 msgid ""
 "You have requested us to cancel an event which includes a larger bulk-refund:"
 msgstr ""
+"Du hast angefordert, dass eine Veranstaltung abgesagt wird, wodurch eine "
+"größere Erstattung vorgenommen wird:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:6
-#, fuzzy
-#| msgid "Initiate a refund of %(amount)s"
 msgid "Estimated refund amount"
-msgstr "%(amount)s zurückerstatten"
+msgstr "Voraussichtlicher Erstattungsbetrag"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:8
 msgid ""
 "Please confirm that you want to proceed by coping the following confirmation "
 "code into the cancellation form:"
 msgstr ""
+"Bitte bestätige, dass du fortfahren willst, indem du den folgenden "
+"Bestätigungscode in das Absageformular kopierst:"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -16110,6 +16110,8 @@ msgstr ""
 #: pretix/control/forms/orders.py:1037
 msgid "I understand that this is not reversible and want to continue"
 msgstr ""
+"Ich verstehe, dass dies nicht rückgängig gemacht werden kann und möchte "
+"fortfahren"
 
 #: pretix/control/forms/orders.py:1041
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
@@ -16120,12 +16122,12 @@ msgstr "Bestätigungs-Code"
 msgid ""
 "We have just emailed you a confirmation code to enter to confirm this action"
 msgstr ""
+"Wir haben dir soeben einen Bestätigungscode per E-Mail zugeschickt, mit dem "
+"du diese Aktion bestätigen kannst"
 
 #: pretix/control/forms/orders.py:1055
-#, fuzzy
-#| msgid "The confirm code you entered was incorrect."
 msgid "The confirmation code is incorrect."
-msgstr "Der eingegebene Bestätigungscode war nicht korrekt."
+msgstr "Der Bestätigungscode ist nicht korrekt."
 
 #: pretix/control/forms/organizer.py:93
 msgid "This slug is already in use. Please choose a different one."
@@ -24099,83 +24101,77 @@ msgstr ""
 "auswählen, sonst erhält jeder auf der Warteliste mehrere E-Mails."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:84
-#, fuzzy
-#| msgid "Refund amount"
 msgid "Preview refund amount"
-msgstr "Erstattungsbetrag"
+msgstr "Vorschau des Erstattungsbetrags"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:88
 msgid "Cancel all orders"
 msgstr "Alle Bestellungen stornieren"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:13
-#, fuzzy
-#| msgid "If you contact us, please send us the following code:"
 msgid "If you proceed, the system will do the following:"
-msgstr "Wenn du uns kontaktierst, nenne bitte den folgenden Code:"
+msgstr "Wenn du fortfährst, wird das System folgendes tun:"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:19
 #, python-format
 msgid "%(count)s order will be canceled fully"
 msgid_plural "%(count)s orders will be canceled fully"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s Bestellung wird komplett storniert"
+msgstr[1] "%(count)s Bestellungen werden komplett storniert"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:26
 #, python-format
 msgid "%(count)s order will be canceled partially"
 msgid_plural "%(count)s orders will be canceled partially"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s Bestellung wird partiell storniert"
+msgstr[1] "%(count)s Bestellungen werden partiell storniert"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:36
 #, python-format
 msgid "%(amount)s are eligible for refunds."
-msgstr ""
+msgstr "%(amount)s werden zur Rückerstattung eingeplant."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:40
 msgid ""
 "The system will attempt to refund the money automatically if supported by "
 "the payment method."
 msgstr ""
+"Das System wird versuchen, die Rückerstattungen automatisch durchzuführen, "
+"sofern die Zahlungsmethode es unterstützt."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:42
 msgid "The system will create manual refunds that you need to execute."
 msgstr ""
+"Das System wird manuelle Rückerstattungen anlegen, die du ausführen musst."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:44
-#, fuzzy
-#| msgid "Text (if order will not expire automatically)"
 msgid "Refunds will not happen automatically."
-msgstr "Text (wenn Bestellung nicht automatisch abläuft)"
+msgstr "Rückerstattungen werden nicht automatisch durchgeführt."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:52
-#, fuzzy
-#| msgid "Require all customers to provide an email address."
 msgid "Inform all customers via email."
-msgstr "Erfordere eine E-Mail-Adresse von allen Käufern."
+msgstr "Alle Kunden werden per E-Mail informiert."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:57
 msgid "Inform all waiting list contacts via email."
-msgstr ""
+msgstr "Alle Wartelistenkontakte werden per E-Mail informiert."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:62
 msgid ""
 "These numbers are estimates and may change if the data in your event "
 "recently changed."
 msgstr ""
+"Diese Zahlen sind Schätzungen und das Ergebnis kann abweichen, wenn der "
+"Datenbestand in der Veranstaltung sich kürzlich geändert hat."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:76
-#, fuzzy, python-format
-#| msgid "Initiate a refund of %(amount)s"
+#, python-format
 msgid "Proceed and refund approx. %(amount)s"
-msgstr "%(amount)s zurückerstatten"
+msgstr "Fortfahren und ca. %(amount)s zurückerstatten"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:80
-#, fuzzy
-#| msgid "Yes, cancel order"
 msgid "Proceed and cancel orders"
-msgstr "Ja, Bestellung stornieren"
+msgstr "Fortfahren und Bestellungen stornieren"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
