@@ -324,6 +324,6 @@ class ReauthForm(forms.Form):
 
 class ConfirmationCodeForm(forms.Form):
     code = forms.IntegerField(
-        label='',
+        label='Confirmation code',
         widget=forms.NumberInput(attrs={'class': 'confirmation-code-input', 'inputmode': 'numeric', 'type': 'text'}),
     )

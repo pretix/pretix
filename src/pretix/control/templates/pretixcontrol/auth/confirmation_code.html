@@ -8,7 +8,7 @@
         {% csrf_token %}
         <p>{{ message }}</p>
         {% bootstrap_form_errors form type='all' layout='inline' %}
-        {% bootstrap_field form.code %}
+        {% bootstrap_field form.code label_class="sr-only" %}
 		<div class="form-group buttons">
             <a href="{{ cancel_url }}" class="btn btn-lg btn-default">
                 {% trans "Cancel" %}
