@@ -2995,16 +2995,16 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
 
     def get_success_url(self, value):
         if settings.HAS_CELERY:
-          return reverse('control:event.cancel.confirm', kwargs={
-              'organizer': self.request.organizer.slug,
-              'event': self.request.event.slug,
-              'task': value["id"],
-          })
+            return reverse('control:event.cancel.confirm', kwargs={
+                'organizer': self.request.organizer.slug,
+                'event': self.request.event.slug,
+                'task': value["id"],
+            })
         else:
-          return reverse('control:event.cancel', kwargs={
-              'organizer': self.request.organizer.slug,
-              'event': self.request.event.slug,
-          })
+            return reverse('control:event.cancel', kwargs={
+                'organizer': self.request.organizer.slug,
+                'event': self.request.event.slug,
+            })
 
     def get_error_url(self):
         return reverse('control:event.cancel', kwargs={
