@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('start', models.DateTimeField()),
                 ('end', models.DateTimeField()),
                 ('item',
-                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='item_program_times',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='program_times',
                                    to='pretixbase.item')),
             ],
         ),

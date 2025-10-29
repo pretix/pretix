@@ -741,7 +741,7 @@ def get_seat(op: OrderPosition):
 
 
 def get_program_times(op: OrderPosition, ev: Event):
-    program_times = op.item.item_program_times.all()
+    program_times = op.item.program_times.all()
     pt_list = []
     pt_str = ''
     if program_times:

@@ -294,7 +294,7 @@ class ItemProgramTimeViewSet(viewsets.ModelViewSet):
         return get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
 
     def get_queryset(self):
-        return self.item.item_program_times.all()
+        return self.item.program_times.all()
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -306,7 +306,7 @@ class ItemProgramTimeViewSet(viewsets.ModelViewSet):
         item = get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
         serializer.save(item=item)
         item.log_action(
-            'pretix.event.item.item_program_times.added',
+            'pretix.event.item.program_times.added',
             user=self.request.user,
             auth=self.request.auth,
             data=merge_dicts(self.request.data, {'id': serializer.instance.pk})
@@ -315,7 +315,7 @@ class ItemProgramTimeViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.item.log_action(
-            'pretix.event.item.item_program_times.changed',
+            'pretix.event.item.program_times.changed',
             user=self.request.user,
             auth=self.request.auth,
             data=merge_dicts(self.request.data, {'id': serializer.instance.pk})
@@ -324,7 +324,7 @@ class ItemProgramTimeViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
         instance.item.log_action(
-            'pretix.event.item.item_program_times.removed',
+            'pretix.event.item.program_times.removed',
             user=self.request.user,
             auth=self.request.auth,
             data={'start': instance.start, 'end': instance.end}

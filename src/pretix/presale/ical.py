@@ -128,9 +128,9 @@ def get_private_icals(event, positions):
     CalEntry = namedtuple('CalEntry', ['summary', 'description', 'location', 'dtstart', 'dtend', 'uid'])
 
     # collecting the positions' calendar entries, preferring the most exact date and time available (positions > subevent > event)
-    prefetch_related_objects(positions, 'item__item_program_times')
+    prefetch_related_objects(positions, 'item__program_times')
     for p in positions:
-        program_times = p.item.item_program_times.all()
+        program_times = p.item.program_times.all()
         if program_times:
             # if program times have been configured, they are preferred for the position's calendar entries
             url = build_absolute_uri(event, 'presale:event.index')
