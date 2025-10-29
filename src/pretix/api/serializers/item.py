@@ -47,10 +47,10 @@ from pretix.api.serializers.event import MetaDataField
 from pretix.api.serializers.fields import UploadedFileField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
-    Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, ItemVariation,
-    ItemVariationMetaValue, Question, QuestionOption, Quota, SalesChannel,
+    Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, ItemProgramTime,
+    ItemVariation, ItemVariationMetaValue, Question, QuestionOption, Quota,
+    SalesChannel,
 )
-from pretix.base.models.items import ItemProgramTime
 
 
 class InlineItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):

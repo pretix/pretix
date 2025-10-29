@@ -56,11 +56,10 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
+    Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
+    QuestionOption, Quota,
 )
-from pretix.base.models.items import (
-    ItemAddOn, ItemBundle, ItemMetaValue, ItemProgramTime,
-)
+from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,

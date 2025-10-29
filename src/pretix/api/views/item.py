@@ -51,10 +51,9 @@ from pretix.api.serializers.item import (
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    CartPosition, Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation,
-    Question, QuestionOption, Quota,
+    CartPosition, Item, ItemAddOn, ItemBundle, ItemCategory, ItemProgramTime,
+    ItemVariation, Question, QuestionOption, Quota,
 )
-from pretix.base.models.items import ItemProgramTime
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.i18n import i18ncomp

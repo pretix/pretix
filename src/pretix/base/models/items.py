@@ -2315,6 +2315,6 @@ class ItemProgramTime(models.Model):
         self.clean_start_end(start=self.start, end=self.end)
         super().clean()
 
-    def clean_start_end(start: datetime = None, end: datetime = None):
+    def clean_start_end(self, start: datetime = None, end: datetime = None):
         if start and end and start > end:
             raise ValidationError(_("The program end must not be before the program start."))

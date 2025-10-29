@@ -44,8 +44,9 @@ from pypdf.errors import PdfReadError
 from reportlab.lib.units import mm
 
 from pretix.base.i18n import language
-from pretix.base.models import CachedFile, InvoiceAddress, OrderPosition
-from pretix.base.models.items import ItemProgramTime
+from pretix.base.models import (
+    CachedFile, InvoiceAddress, ItemProgramTime, OrderPosition,
+)
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.control.permissions import EventPermissionRequiredMixin

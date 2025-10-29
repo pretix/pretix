@@ -65,14 +65,12 @@ from pretix.api.serializers.item import (
 )
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CartPosition, Item, ItemCategory, ItemVariation, Order, OrderPosition,
-    Question, QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping,
-    Voucher,
+    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Order,
+    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
+    SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import (
-    ItemAddOn, ItemBundle, ItemMetaValue, ItemProgramTime,
-)
+from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
