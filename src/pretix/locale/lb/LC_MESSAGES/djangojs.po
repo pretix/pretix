@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-21 07:27+0000\n"
+"POT-Creation-Date: 2025-10-29 07:55+0000\n"
 "PO-Revision-Date: 2025-10-28 17:00+0000\n"
 "Last-Translator: Sven Muhlen <sven.muhlen@bnl.etat.lu>\n"
 "Language-Team: Luxembourgish <https://translate.pretix.eu/projects/pretix/"
@@ -655,40 +655,40 @@ msgstr ""
 "Är Faarf huet net genuch Kontrast. D'Accessibilitéit vun Ärer Säit wäert "
 "beanträchtegt sinn."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:418
+#: pretix/static/pretixcontrol/js/ui/main.js:438
 msgid "Search query"
 msgstr "Sich"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:435
+#: pretix/static/pretixcontrol/js/ui/main.js:436
 msgid "All"
 msgstr "All"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:437
 msgid "None"
 msgstr "Keen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:440
+#: pretix/static/pretixcontrol/js/ui/main.js:441
 msgid "Selected only"
 msgstr "Nëmmen ausgewielten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:813
+#: pretix/static/pretixcontrol/js/ui/main.js:814
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Gitt eng Säitenzuel tëscht 1 an %(max)s un."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:816
+#: pretix/static/pretixcontrol/js/ui/main.js:817
 msgid "Invalid page number."
 msgstr "Ongülteg Säitenzuel."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:974
+#: pretix/static/pretixcontrol/js/ui/main.js:975
 msgid "Use a different name internally"
 msgstr "Intern en aneren Numm benotzen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1014
+#: pretix/static/pretixcontrol/js/ui/main.js:1015
 msgid "Click to close"
 msgstr "Klickt fir zouzemaachen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1095
+#: pretix/static/pretixcontrol/js/ui/main.js:1096
 msgid "You have unsaved changes!"
 msgstr "Dir hutt net gespäichert Ännerungen!"
 
@@ -959,7 +959,8 @@ msgstr "Bestellung ofschléissen"
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr "De Weenche konnt net erstallt ginn. Probéiert méi spéit nach eemol wgl."
+msgstr ""
+"De Weenche konnt net erstallt ginn. Probéiert méi spéit nach eemol wgl."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"

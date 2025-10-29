@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-21 07:26+0000\n"
+"POT-Creation-Date: 2025-10-29 07:54+0000\n"
 "PO-Revision-Date: 2025-10-27 12:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -232,7 +232,7 @@ msgstr "イベント上限"
 msgid "Comment"
 msgstr "コメント"
 
-#: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1466
+#: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1471
 #, python-brace-format
 msgid "The product \"{}\" is not assigned to a quota."
 msgstr "製品「{}」にクォータが割り当てられていません。"
@@ -350,18 +350,18 @@ msgstr ""
 msgid "\"{input}\" is not a valid choice."
 msgstr "「{input}」は有効な選択肢ではありません。"
 
-#: pretix/api/serializers/order.py:1427 pretix/api/views/cart.py:224
+#: pretix/api/serializers/order.py:1432 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1619
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
 msgstr "選択した座席 \"{seat}\"はご利用になれません。"
 
-#: pretix/api/serializers/order.py:1453 pretix/api/serializers/order.py:1460
+#: pretix/api/serializers/order.py:1458 pretix/api/serializers/order.py:1465
 #, python-brace-format
 msgid "The product \"{}\" is not available on this date."
 msgstr "製品「{}」はこの日付では利用できません。"
 
-#: pretix/api/serializers/order.py:1475 pretix/api/views/cart.py:200
+#: pretix/api/serializers/order.py:1480 pretix/api/views/cart.py:200
 #, python-brace-format
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
@@ -414,17 +414,17 @@ msgstr ""
 "申請者 \"{application_name}\"はあなたのアカウントへのアクセス権を持っていま"
 "す。"
 
-#: pretix/api/views/order.py:608 pretix/control/views/orders.py:1602
+#: pretix/api/views/order.py:608 pretix/control/views/orders.py:1603
 #: pretix/presale/views/order.py:736 pretix/presale/views/order.py:816
 msgid "You cannot generate an invoice for this order."
 msgstr "この注文には請求書を発行することができません。"
 
-#: pretix/api/views/order.py:613 pretix/control/views/orders.py:1604
+#: pretix/api/views/order.py:613 pretix/control/views/orders.py:1605
 #: pretix/presale/views/order.py:738 pretix/presale/views/order.py:818
 msgid "An invoice for this order already exists."
 msgstr "この注文の請求書は発行済です。"
 
-#: pretix/api/views/order.py:639 pretix/control/views/orders.py:1763
+#: pretix/api/views/order.py:639 pretix/control/views/orders.py:1764
 #: pretix/control/views/users.py:145
 msgid "There was an error sending the mail. Please try again later."
 msgstr "メールの送信に失敗しました。再送信してください。"
@@ -449,7 +449,7 @@ msgstr "支払い済みとしてマークされた注文"
 #: pretix/api/webhooks.py:274 pretix/base/models/checkin.py:355
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
-#: pretix/control/views/orders.py:1563
+#: pretix/control/views/orders.py:1564
 msgid "Order canceled"
 msgstr "注文がキャンセルされました"
 
@@ -636,8 +636,8 @@ msgstr "顧客アカウントが匿名化されました"
 #: pretix/control/forms/event.py:798 pretix/control/forms/event.py:838
 #: pretix/control/forms/event.py:1455 pretix/control/forms/mailsetup.py:87
 #: pretix/control/forms/mailsetup.py:129 pretix/control/forms/subevents.py:181
-#: pretix/plugins/banktransfer/payment.py:506
-#: pretix/plugins/banktransfer/payment.py:512
+#: pretix/plugins/banktransfer/payment.py:507
+#: pretix/plugins/banktransfer/payment.py:513
 #: pretix/presale/forms/customer.py:152
 msgid "This field is required."
 msgstr "この項目は必須です。"
@@ -2632,7 +2632,9 @@ msgstr "この日以降に作成された注文に限る。"
 #: pretix/base/models/items.py:468 pretix/base/models/items.py:2060
 #: pretix/base/models/orders.py:233 pretix/base/models/orders.py:3111
 #: pretix/base/models/vouchers.py:184 pretix/base/models/waitinglist.py:55
-#: pretix/base/notifications.py:187 pretix/control/forms/filter.py:1025
+#: pretix/base/notifications.py:187
+#: pretix/base/templates/pretixbase/email/cancel_confirm.txt:4
+#: pretix/control/forms/filter.py:1025
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:206
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:42
 #: pretix/control/templates/pretixcontrol/search/orders.html:51
@@ -2799,8 +2801,8 @@ msgstr "ステータスコード"
 #: pretix/control/templates/pretixcontrol/order/index.html:892
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:70
 #: pretix/control/templates/pretixcontrol/search/payments.html:98
-#: pretix/plugins/banktransfer/payment.py:298
-#: pretix/plugins/banktransfer/payment.py:307
+#: pretix/plugins/banktransfer/payment.py:299
+#: pretix/plugins/banktransfer/payment.py:308
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
@@ -3926,9 +3928,9 @@ msgstr "{value}をyes/noの値として解析できませんでした。"
 msgid "Could not parse {value} as a date and time."
 msgstr "{value}を日付と時刻として解析できませんでした。"
 
-#: pretix/base/modelimport.py:239 pretix/control/views/orders.py:1173
-#: pretix/control/views/orders.py:1202 pretix/control/views/orders.py:1247
-#: pretix/control/views/orders.py:1282 pretix/control/views/orders.py:1305
+#: pretix/base/modelimport.py:239 pretix/control/views/orders.py:1174
+#: pretix/control/views/orders.py:1203 pretix/control/views/orders.py:1248
+#: pretix/control/views/orders.py:1283 pretix/control/views/orders.py:1306
 msgid "You entered an invalid number."
 msgstr "無効な番号が入力されました。"
 
@@ -7595,7 +7597,7 @@ msgstr "ボックスオフィス"
 msgid "Manual payment"
 msgstr "手動支払い"
 
-#: pretix/base/payment.py:1221 pretix/plugins/banktransfer/payment.py:195
+#: pretix/base/payment.py:1221 pretix/plugins/banktransfer/payment.py:196
 msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
@@ -7604,7 +7606,7 @@ msgstr ""
 "みとしてマークできます。"
 
 #: pretix/base/payment.py:1242 pretix/base/payment.py:1458
-#: pretix/plugins/banktransfer/payment.py:149
+#: pretix/plugins/banktransfer/payment.py:150
 msgid "Payment method name"
 msgstr "支払い方法の名称"
 
@@ -7652,7 +7654,7 @@ msgstr ""
 "示を含める必要があります。{order}、{amount}、{currency}、"
 "{amount_with_currency} のプレースホルダを使用してください。"
 
-#: pretix/base/payment.py:1269 pretix/plugins/banktransfer/payment.py:144
+#: pretix/base/payment.py:1269 pretix/plugins/banktransfer/payment.py:145
 msgid ""
 "Create an invoice for orders using bank transfer immediately if the event is "
 "otherwise configured to create invoices after payment is completed."
@@ -7664,7 +7666,7 @@ msgstr ""
 msgid "Offsetting"
 msgstr "オフセットする"
 
-#: pretix/base/payment.py:1334 pretix/control/views/orders.py:1256
+#: pretix/base/payment.py:1334 pretix/control/views/orders.py:1257
 msgid "You entered an order that could not be found."
 msgstr "注文が見つかりませんでした。"
 
@@ -8182,10 +8184,16 @@ msgstr ""
 "ティクスを変更します。詳細についてはドキュメントまたはサポートを参照してくだ"
 "さい）"
 
-#: pretix/base/services/cancelevent.py:230
-#: pretix/base/services/cancelevent.py:308
+#: pretix/base/services/cancelevent.py:277
+#: pretix/base/services/cancelevent.py:363
 msgid "Event canceled"
 msgstr "イベントがキャンセルされました"
+
+#: pretix/base/services/cancelevent.py:392
+#, fuzzy
+#| msgid "Add confirmation text"
+msgid "Bulk-refund confirmation"
+msgstr "確認テキストを追加"
 
 #: pretix/base/services/cart.py:102 pretix/base/services/modelimport.py:247
 #: pretix/base/services/orders.py:155
@@ -10118,7 +10126,8 @@ msgstr "無料の注文については、請求書は自動的に生成されま
 msgid ""
 "Automatic based on ticket-specific validity, membership validity, event "
 "series date, or event date"
-msgstr "チケット固有の有効期限、会員資格の有効期限、イベントシリーズの日付、またはイ"
+msgstr ""
+"チケット固有の有効期限、会員資格の有効期限、イベントシリーズの日付、またはイ"
 "ベントの日付に基づいて自動設定"
 
 #: pretix/base/settings.py:1109 pretix/base/settings.py:1120
@@ -10137,7 +10146,8 @@ msgstr "サービス提供日"
 msgid ""
 "This controls what dates are shown on the invoice, but is especially "
 "important for electronic invoicing."
-msgstr "これは請求書に表示される日付を制御しますが、特に電子請求において重要です。"
+msgstr ""
+"これは請求書に表示される日付を制御しますが、特に電子請求において重要です。"
 
 #: pretix/base/settings.py:1136
 msgid "Automatically cancel and reissue invoice on address changes"
@@ -12751,6 +12761,23 @@ msgid ""
 "us."
 msgstr "数分以上かかる場合は、このページを更新するか、お問い合わせください。"
 
+#: pretix/base/templates/pretixbase/email/cancel_confirm.txt:2
+msgid ""
+"You have requested us to cancel an event which includes a larger bulk-refund:"
+msgstr ""
+
+#: pretix/base/templates/pretixbase/email/cancel_confirm.txt:6
+#, fuzzy
+#| msgid "Initiate a refund of %(amount)s"
+msgid "Estimated refund amount"
+msgstr "%(amount)sの払い戻しを開始する"
+
+#: pretix/base/templates/pretixbase/email/cancel_confirm.txt:8
+msgid ""
+"Please confirm that you want to proceed by coping the following confirmation "
+"code into the cancellation form:"
+msgstr ""
+
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
@@ -12821,7 +12848,8 @@ msgstr "連絡先："
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
-msgstr "<strong>%(event)s</strong>の注文をされたため、このメールを受信しています。"
+msgstr ""
+"<strong>%(event)s</strong>の注文をされたため、このメールを受信しています。"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
@@ -15134,8 +15162,9 @@ msgstr "テストモードの注文を作成"
 
 #: pretix/control/forms/modelimport.py:102
 msgid "Orders not created in test mode cannot be deleted again after import."
-msgstr "テストモードで作成されていない注文は、インポート後に削除することはできません"
-"。"
+msgstr ""
+"テストモードで作成されていない注文は、インポート後に削除することはできませ"
+"ん。"
 
 #: pretix/control/forms/modelimport.py:123
 msgid "A grouping cannot be specified for this import mode."
@@ -15637,6 +15666,26 @@ msgstr "日付範囲を設定する場合は、開始日と終了日の両方を
 msgid "Please confirm that you want to cancel ALL dates in this event series."
 msgstr ""
 "このイベントシリーズのすべての日程をキャンセルすることを確認してください。"
+
+#: pretix/control/forms/orders.py:1037
+msgid "I understand that this is not reversible and want to continue"
+msgstr ""
+
+#: pretix/control/forms/orders.py:1041
+#: pretix/control/templates/pretixcontrol/shredder/download.html:53
+msgid "Confirmation code"
+msgstr "確認コード"
+
+#: pretix/control/forms/orders.py:1042
+msgid ""
+"We have just emailed you a confirmation code to enter to confirm this action"
+msgstr ""
+
+#: pretix/control/forms/orders.py:1055
+#, fuzzy
+#| msgid "The confirm code you entered was incorrect."
+msgid "The confirmation code is incorrect."
+msgstr "入力した確認コードが間違っています。"
 
 #: pretix/control/forms/organizer.py:93
 msgid "This slug is already in use. Please choose a different one."
@@ -16379,7 +16428,7 @@ msgstr "ユーザーは次のメッセージを確認しました: \"{}\""
 msgid "The order has been canceled (comment: \"{comment}\")."
 msgstr "注文はキャンセルされました（コメント：\"{comment}\"）。"
 
-#: pretix/control/logdisplay.py:416 pretix/control/views/orders.py:1566
+#: pretix/control/logdisplay.py:416 pretix/control/views/orders.py:1567
 #: pretix/presale/views/order.py:1072
 msgid "The order has been canceled."
 msgstr "注文はキャンセルされました。"
@@ -16463,11 +16512,11 @@ msgstr "注文は支払われる前に使用可能に設定されています。
 msgid "The order has been set to require payment before use."
 msgstr "注文は使用前に支払いが必要となっています。"
 
-#: pretix/control/logdisplay.py:505 pretix/control/views/orders.py:1571
+#: pretix/control/logdisplay.py:505 pretix/control/views/orders.py:1572
 msgid "The order has been marked as expired."
 msgstr "注文は期限切れとしてマークされました。"
 
-#: pretix/control/logdisplay.py:506 pretix/control/views/orders.py:1470
+#: pretix/control/logdisplay.py:506 pretix/control/views/orders.py:1471
 msgid "The order has been marked as paid."
 msgstr "注文が支払い済みとしてマークされました。"
 
@@ -16479,7 +16528,7 @@ msgstr "キャンセルリクエストは削除されました。"
 msgid "The order has been refunded."
 msgstr "注文が払い戻しされました。"
 
-#: pretix/control/logdisplay.py:509 pretix/control/views/orders.py:1887
+#: pretix/control/logdisplay.py:509 pretix/control/views/orders.py:1888
 msgid "The order has been reactivated."
 msgstr "注文が再有効化されました。"
 
@@ -16491,7 +16540,7 @@ msgstr "注文が作成されました。"
 msgid "The order requires approval before it can continue to be processed."
 msgstr "この注文は処理が続行される前に承認が必要です。"
 
-#: pretix/control/logdisplay.py:513 pretix/control/views/orders.py:790
+#: pretix/control/logdisplay.py:513 pretix/control/views/orders.py:791
 msgid "The order has been approved."
 msgstr "注文は承認されました。"
 
@@ -16528,7 +16577,7 @@ msgstr "顧客アカウントが変更されました。"
 msgid "The order locale has been changed."
 msgstr "注文のロケールが変更されました。"
 
-#: pretix/control/logdisplay.py:524 pretix/control/views/orders.py:1610
+#: pretix/control/logdisplay.py:524 pretix/control/views/orders.py:1611
 #: pretix/presale/views/order.py:745 pretix/presale/views/order.py:825
 msgid "The invoice has been generated."
 msgstr "請求書が生成されました。"
@@ -16537,11 +16586,11 @@ msgstr "請求書が生成されました。"
 msgid "The invoice could not be generated."
 msgstr "請求書を生成できませんでした。"
 
-#: pretix/control/logdisplay.py:526 pretix/control/views/orders.py:1683
+#: pretix/control/logdisplay.py:526 pretix/control/views/orders.py:1684
 msgid "The invoice has been regenerated."
 msgstr "請求書が再発行されました。"
 
-#: pretix/control/logdisplay.py:527 pretix/control/views/orders.py:1745
+#: pretix/control/logdisplay.py:527 pretix/control/views/orders.py:1746
 #: pretix/presale/views/order.py:845
 msgid "The invoice has been reissued."
 msgstr "請求書が再発行されました。"
@@ -18255,8 +18304,8 @@ msgid "Transaction ID"
 msgstr "取引ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:98
-#: pretix/plugins/banktransfer/payment.py:297
-#: pretix/plugins/banktransfer/payment.py:306
+#: pretix/plugins/banktransfer/payment.py:298
+#: pretix/plugins/banktransfer/payment.py:307
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
 msgid "Reference"
@@ -18407,7 +18456,7 @@ msgstr "キャンセル"
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:16
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:15
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:36
-#: pretix/control/views/orders.py:387
+#: pretix/control/views/orders.py:388
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:15
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:16
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:15
@@ -19413,6 +19462,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:5
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:7
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:6
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:8
 msgid "Cancel event"
 msgstr "イベントをキャンセルします"
 
@@ -19688,8 +19739,8 @@ msgid ""
 "be shown. Therefore, we recommend that you set the date of service to a "
 "different option."
 msgstr ""
-"ショップがイベントではなく、イベントの日付を表示しないように設定されています"
-"。そのため、サービス提供日を別のオプションに設定することをお勧めします。"
+"ショップがイベントではなく、イベントの日付を表示しないように設定されていま"
+"す。そのため、サービス提供日を別のオプションに設定することをお勧めします。"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:40
 msgid "Address form"
@@ -22638,13 +22689,13 @@ msgstr "注文の詳細: %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:46
 #: pretix/control/templates/pretixcontrol/orders/index.html:297
-#: pretix/control/views/orders.py:311
+#: pretix/control/views/orders.py:312
 msgid "Approve"
 msgstr "承認"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:51
 #: pretix/control/templates/pretixcontrol/orders/index.html:304
-#: pretix/control/views/orders.py:325
+#: pretix/control/views/orders.py:326
 msgid "Deny"
 msgstr "拒絶"
 
@@ -22685,7 +22736,7 @@ msgstr ""
 "います。クォータ容量を解放するには、手動で期限切れとして設定できます。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:116
-#: pretix/control/views/orders.py:373
+#: pretix/control/views/orders.py:374
 msgid "Refund for overpayment"
 msgstr "過払い分の払い戻し"
 
@@ -23418,9 +23469,82 @@ msgstr ""
 "同じイベントに対してこの機能を複数回実行すべきではありません。そうしないと、"
 "空席待ちリストのすべての人が複数のメールを受け取ることになります。"
 
-#: pretix/control/templates/pretixcontrol/orders/cancel.html:83
+#: pretix/control/templates/pretixcontrol/orders/cancel.html:84
+#, fuzzy
+#| msgid "Refund amount"
+msgid "Preview refund amount"
+msgstr "払い戻し金額"
+
+#: pretix/control/templates/pretixcontrol/orders/cancel.html:88
 msgid "Cancel all orders"
 msgstr "すべての注文をキャンセルします"
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:13
+#, fuzzy
+#| msgid "If you contact us, please send us the following code:"
+msgid "If you proceed, the system will do the following:"
+msgstr "お問い合わせの際は、以下のコードをお送りください："
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:19
+#, python-format
+msgid "%(count)s order will be canceled fully"
+msgid_plural "%(count)s orders will be canceled fully"
+msgstr[0] ""
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:26
+#, python-format
+msgid "%(count)s order will be canceled partially"
+msgid_plural "%(count)s orders will be canceled partially"
+msgstr[0] ""
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:36
+#, python-format
+msgid "%(amount)s are eligible for refunds."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:40
+msgid ""
+"The system will attempt to refund the money automatically if supported by "
+"the payment method."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:42
+msgid "The system will create manual refunds that you need to execute."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:44
+#, fuzzy
+#| msgid "Text (if order will not expire automatically)"
+msgid "Refunds will not happen automatically."
+msgstr "テキスト（注文が自動的に期限切れにならない場合）"
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:52
+#, fuzzy
+#| msgid "Send information via email"
+msgid "Inform all customers via email."
+msgstr "メールで情報を送信する"
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:57
+msgid "Inform all waiting list contacts via email."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:62
+msgid ""
+"These numbers are estimates and may change if the data in your event "
+"recently changed."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:76
+#, fuzzy, python-format
+#| msgid "Initiate a refund of %(amount)s"
+msgid "Proceed and refund approx. %(amount)s"
+msgstr "%(amount)sの払い戻しを開始する"
+
+#: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:80
+#, fuzzy
+#| msgid "Yes, cancel order"
+msgid "Proceed and cancel orders"
+msgstr "はい、注文をキャンセルします"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
@@ -23837,12 +23961,12 @@ msgid "Select action"
 msgstr "アクションを選択"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:311
-#: pretix/control/views/orders.py:357
+#: pretix/control/views/orders.py:358
 msgid "Refund overpaid amount"
 msgstr "過払い分を払い戻す"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:319
-#: pretix/control/views/orders.py:342
+#: pretix/control/views/orders.py:343
 msgid "Mark as expired if overdue"
 msgstr "支払期限が過ぎている場合は、無効の印をつける"
 
@@ -25525,10 +25649,6 @@ msgstr ""
 "いうテキストファイルが含まれています。ファイルのダウンロードが成功したことを"
 "確認するために、このコードをこちらに入力してください。"
 
-#: pretix/control/templates/pretixcontrol/shredder/download.html:53
-msgid "Confirmation code"
-msgstr "確認コード"
-
 #: pretix/control/templates/pretixcontrol/shredder/download.html:59
 msgid ""
 "Depending on the amount of data in your event, the following step may take a "
@@ -27101,7 +27221,7 @@ msgstr "あなたの注文: %(code)s"
 msgid "Unknown email renderer."
 msgstr "不明なメールレンダラーです。"
 
-#: pretix/control/views/event.py:920 pretix/control/views/orders.py:678
+#: pretix/control/views/event.py:920 pretix/control/views/orders.py:679
 #: pretix/presale/views/order.py:1111 pretix/presale/views/order.py:1118
 msgid "You requested an invalid ticket output type."
 msgstr "無効なチケット出力タイプをリクエストしました。"
@@ -27155,11 +27275,11 @@ msgstr ""
 "特に、次のプラグインには、このイベントに依存するデータがまだ含まれています："
 "{plugin_names}"
 
-#: pretix/control/views/event.py:1251 pretix/control/views/orders.py:771
+#: pretix/control/views/event.py:1251 pretix/control/views/orders.py:772
 msgid "The comment has been updated."
 msgstr "コメントが更新されました。"
 
-#: pretix/control/views/event.py:1253 pretix/control/views/orders.py:773
+#: pretix/control/views/event.py:1253 pretix/control/views/orders.py:774
 msgid "Could not update the comment."
 msgstr "コメントを更新できませんでした。"
 
@@ -27551,11 +27671,11 @@ msgstr ""
 msgid "Access for the selected application has been revoked."
 msgstr "選択されたアプリケーションへのアクセスが取り消されました。"
 
-#: pretix/control/views/orders.py:193
+#: pretix/control/views/orders.py:194
 msgid "We could not process your input. See below for details."
 msgstr "入力内容を処理できませんでした。詳細は下記参照。"
 
-#: pretix/control/views/orders.py:266
+#: pretix/control/views/orders.py:267
 #, python-brace-format
 msgid ""
 "Successfully executed the action \"{label}\" on {success} of {total} orders."
@@ -27563,7 +27683,7 @@ msgstr ""
 "注文のうち、{total}件のうち{success}件で\"{label}\"アクションを正常に実行しま"
 "した。"
 
-#: pretix/control/views/orders.py:680 pretix/presale/views/order.py:161
+#: pretix/control/views/orders.py:681 pretix/presale/views/order.py:161
 #: pretix/presale/views/order.py:243 pretix/presale/views/order.py:337
 #: pretix/presale/views/order.py:364 pretix/presale/views/order.py:432
 #: pretix/presale/views/order.py:499 pretix/presale/views/order.py:545
@@ -27575,15 +27695,15 @@ msgstr ""
 msgid "Unknown order code or not authorized to access this order."
 msgstr "不明な注文コード、またはこの注文に対する許可されていないアクセス。"
 
-#: pretix/control/views/orders.py:682 pretix/presale/views/order.py:1125
+#: pretix/control/views/orders.py:683 pretix/presale/views/order.py:1125
 msgid "Ticket download is not enabled for this product."
 msgstr "この製品にはチケットのダウンロードが有効になっていません。"
 
-#: pretix/control/views/orders.py:807
+#: pretix/control/views/orders.py:808
 msgid "The order has been deleted."
 msgstr "注文は削除されました。"
 
-#: pretix/control/views/orders.py:814
+#: pretix/control/views/orders.py:815
 msgid ""
 "The order could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
@@ -27591,53 +27711,53 @@ msgstr ""
 "制約（例：プラグインによって作成されたデータなど）により、注文を削除できませ"
 "んでした。"
 
-#: pretix/control/views/orders.py:822
+#: pretix/control/views/orders.py:823
 msgid "Only orders created in test mode can be deleted."
 msgstr "テストモードで作成された注文のみ削除できます。"
 
-#: pretix/control/views/orders.py:843
+#: pretix/control/views/orders.py:844
 msgid "The order has been denied and is therefore now canceled."
 msgstr "注文は拒否されたため、キャンセルされました。"
 
-#: pretix/control/views/orders.py:883
+#: pretix/control/views/orders.py:884
 msgid "This payment has been canceled."
 msgstr "この支払いはキャンセルされました。"
 
-#: pretix/control/views/orders.py:885
+#: pretix/control/views/orders.py:886
 msgid "This payment can not be canceled at the moment."
 msgstr "現時点ではこの支払いはキャンセルできません。"
 
-#: pretix/control/views/orders.py:911
+#: pretix/control/views/orders.py:912
 msgid "The refund has been canceled."
 msgstr "払い戻しがキャンセルされました。"
 
-#: pretix/control/views/orders.py:913
+#: pretix/control/views/orders.py:914
 msgid "This refund can not be canceled at the moment."
 msgstr "この払い戻しは現時点ではキャンセルできません。"
 
-#: pretix/control/views/orders.py:947
+#: pretix/control/views/orders.py:948
 msgid "The refund has been processed."
 msgstr "払い戻しが処理されました。"
 
-#: pretix/control/views/orders.py:949 pretix/control/views/orders.py:975
+#: pretix/control/views/orders.py:950 pretix/control/views/orders.py:976
 msgid "This refund can not be processed at the moment."
 msgstr "この払い戻しは現在処理できません。"
 
-#: pretix/control/views/orders.py:973
+#: pretix/control/views/orders.py:974
 msgid "The refund has been marked as done."
 msgstr "払い戻しが完了済みとしてマークされました。"
 
-#: pretix/control/views/orders.py:999
+#: pretix/control/views/orders.py:1000
 msgid "The request has been removed. If you want, you can now inform the user."
 msgstr ""
 "リクエストは削除されました。もしよろしければ、ユーザーにお知らせいただけま"
 "す。"
 
-#: pretix/control/views/orders.py:1006
+#: pretix/control/views/orders.py:1007
 msgid "Your cancellation request"
 msgstr "あなたのキャンセルリクエスト"
 
-#: pretix/control/views/orders.py:1007
+#: pretix/control/views/orders.py:1008
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -27654,7 +27774,7 @@ msgstr ""
 "\n"
 "{event}チーム"
 
-#: pretix/control/views/orders.py:1063
+#: pretix/control/views/orders.py:1064
 msgid ""
 "The payment has been marked as complete, but we were unable to send a "
 "confirmation mail."
@@ -27662,15 +27782,15 @@ msgstr ""
 "支払いは完了とマークされましたが、確認メールを送信することができませんでし"
 "た。"
 
-#: pretix/control/views/orders.py:1066
+#: pretix/control/views/orders.py:1067
 msgid "The payment has been marked as complete."
 msgstr "支払いは完了とマークされました。"
 
-#: pretix/control/views/orders.py:1068
+#: pretix/control/views/orders.py:1069
 msgid "This payment can not be confirmed at the moment."
 msgstr "現時点ではこの支払いは確認できません。"
 
-#: pretix/control/views/orders.py:1159
+#: pretix/control/views/orders.py:1160
 msgid ""
 "The refund was prevented due to a refund already being processed at the same "
 "time. Please have a look at the order details and check if your refund is "
@@ -27679,24 +27799,24 @@ msgstr ""
 "同時に他の払い戻しが処理されているため、この払い戻しは実行されませんでした。"
 "注文詳細を確認し、払い戻しがまだ必要かご確認ください。"
 
-#: pretix/control/views/orders.py:1260
+#: pretix/control/views/orders.py:1261
 msgid "You entered an order in an event with a different currency."
 msgstr "イベントで異なる通貨で注文を入力しました。"
 
-#: pretix/control/views/orders.py:1311
+#: pretix/control/views/orders.py:1312
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
 msgstr "まだ払い戻されていない支払い金額を超える払い戻しはできません。"
 
-#: pretix/control/views/orders.py:1316
+#: pretix/control/views/orders.py:1317
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
 msgstr ""
 "全額払い戻しのみに対応している決済方法に対して、部分払い戻しを選択しました。"
 
-#: pretix/control/views/orders.py:1346
+#: pretix/control/views/orders.py:1347
 #, python-brace-format
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
@@ -27705,12 +27825,12 @@ msgstr ""
 "払い戻しの1つが処理に失敗しました。別の方法で払い戻しを再試行してください。エ"
 "ラーメッセージ：{}"
 
-#: pretix/control/views/orders.py:1352
+#: pretix/control/views/orders.py:1353
 #, python-brace-format
 msgid "A refund of {} has been processed."
 msgstr "{}の払い戻しが処理されました。"
 
-#: pretix/control/views/orders.py:1356
+#: pretix/control/views/orders.py:1357
 #, python-brace-format
 msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
@@ -27719,18 +27839,18 @@ msgstr ""
 "{}の払い戻しが保存されましたが、まだ完全に実行されていません。以下で完了済み"
 "としてマークできます。"
 
-#: pretix/control/views/orders.py:1385
+#: pretix/control/views/orders.py:1386
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
 msgstr ""
 "新しいギフトカードが作成されました。ユーザーにギフトカードコードを送信できま"
 "す。"
 
-#: pretix/control/views/orders.py:1393
+#: pretix/control/views/orders.py:1394
 msgid "Your gift card code"
 msgstr "ギフトカードのコード"
 
-#: pretix/control/views/orders.py:1395
+#: pretix/control/views/orders.py:1396
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -27751,11 +27871,11 @@ msgstr ""
 "\n"
 "{event}チーム一同"
 
-#: pretix/control/views/orders.py:1406
+#: pretix/control/views/orders.py:1407
 msgid "The refunds you selected do not match the selected total refund amount."
 msgstr "選択した各払い戻し額の合計が、指定された総払い戻し額と一致しません。"
 
-#: pretix/control/views/orders.py:1536
+#: pretix/control/views/orders.py:1537
 msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
@@ -27763,94 +27883,94 @@ msgstr ""
 "注文は支払い済みとマークされていますが、確認メールを送信することができません"
 "でした。"
 
-#: pretix/control/views/orders.py:1539
+#: pretix/control/views/orders.py:1540
 msgid "The payment has been created successfully."
 msgstr "支払いは正常に作成されました。"
 
-#: pretix/control/views/orders.py:1553
+#: pretix/control/views/orders.py:1554
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
 msgstr "注文はキャンセルされました。今、ユーザーに返金する方法を選択できます。"
 
-#: pretix/control/views/orders.py:1624 pretix/control/views/orders.py:1628
+#: pretix/control/views/orders.py:1625 pretix/control/views/orders.py:1629
 msgid "No VAT ID specified."
 msgstr "税番号(VAT ID等)が指定されていません。"
 
-#: pretix/control/views/orders.py:1632
+#: pretix/control/views/orders.py:1633
 msgid "No country specified."
 msgstr "国が指定されていません。"
 
-#: pretix/control/views/orders.py:1636
+#: pretix/control/views/orders.py:1637
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
 "税番号(消費税やVAT ID等)は、この国がサポートされていないため、確認できません"
 "でした。"
 
-#: pretix/control/views/orders.py:1647
+#: pretix/control/views/orders.py:1648
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
 msgstr ""
 "VAT IDは確認できませんでした。国のVAT確認サービスが現在利用できないためです。"
 
-#: pretix/control/views/orders.py:1650
+#: pretix/control/views/orders.py:1651
 msgid "This VAT ID is valid."
 msgstr "この税番号は有効です。"
 
-#: pretix/control/views/orders.py:1664 pretix/control/views/orders.py:1698
-#: pretix/control/views/orders.py:1730
+#: pretix/control/views/orders.py:1665 pretix/control/views/orders.py:1699
+#: pretix/control/views/orders.py:1731
 msgid "Unknown invoice."
 msgstr "不明な請求書。"
 
-#: pretix/control/views/orders.py:1667
+#: pretix/control/views/orders.py:1668
 msgid "Invoices may not be changed after they are created."
 msgstr "請求書は作成された後に変更することはできません。"
 
-#: pretix/control/views/orders.py:1669
+#: pretix/control/views/orders.py:1670
 msgid "Invoices may not be changed after they are transmitted."
 msgstr "請求書は送信後に変更することはできません。"
 
-#: pretix/control/views/orders.py:1671 pretix/control/views/orders.py:1733
+#: pretix/control/views/orders.py:1672 pretix/control/views/orders.py:1734
 msgid "The invoice has already been canceled."
 msgstr "請求書はすでにキャンセルされています。"
 
-#: pretix/control/views/orders.py:1673
+#: pretix/control/views/orders.py:1674
 msgid "The invoice file has already been exported."
 msgstr "請求書ファイルはすでにエクスポートされています。"
 
-#: pretix/control/views/orders.py:1675
+#: pretix/control/views/orders.py:1676
 msgid "The invoice file is too old to be regenerated."
 msgstr "請求書ファイルは再生成するには古すぎます。"
 
-#: pretix/control/views/orders.py:1677 pretix/control/views/orders.py:1735
+#: pretix/control/views/orders.py:1678 pretix/control/views/orders.py:1736
 msgid "The invoice has been cleaned of personal data."
 msgstr "請求書から個人データが削除されました。"
 
-#: pretix/control/views/orders.py:1702
+#: pretix/control/views/orders.py:1703
 msgid ""
 "The invoice is currently being transmitted. You can start a new attempt "
 "after the current one has been completed."
 msgstr ""
 "請求書は現在送信中です。現在の処理が完了した後、新しい試行を開始できます。"
 
-#: pretix/control/views/orders.py:1709
+#: pretix/control/views/orders.py:1710
 msgid "The invoice has been scheduled for retransmission."
 msgstr "請求書の再送信が予定されました。"
 
-#: pretix/control/views/orders.py:1766
+#: pretix/control/views/orders.py:1767
 msgid "The email has been queued to be sent."
 msgstr "メールが送信待ちキューに追加されました。"
 
-#: pretix/control/views/orders.py:1790 pretix/presale/views/order.py:1306
+#: pretix/control/views/orders.py:1791 pretix/presale/views/order.py:1306
 msgid "This invoice has not been found"
 msgstr "この請求書は見つかりませんでした"
 
-#: pretix/control/views/orders.py:1797 pretix/presale/views/order.py:1313
+#: pretix/control/views/orders.py:1798 pretix/presale/views/order.py:1313
 msgid "The invoice file is no longer stored on the server."
 msgstr "請求書ファイルはもはやサーバーに保存されていません。"
 
-#: pretix/control/views/orders.py:1802 pretix/presale/views/order.py:1318
+#: pretix/control/views/orders.py:1803 pretix/presale/views/order.py:1318
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
@@ -27858,68 +27978,68 @@ msgstr ""
 "請求書ファイルはまだ生成されていません。今すぐ生成しますので、数秒後にもう一"
 "度お試しください。"
 
-#: pretix/control/views/orders.py:1830
+#: pretix/control/views/orders.py:1831
 msgid "The payment term has been changed."
 msgstr "支払条件が変更されました。"
 
-#: pretix/control/views/orders.py:1835 pretix/control/views/orders.py:1892
+#: pretix/control/views/orders.py:1836 pretix/control/views/orders.py:1893
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
 msgstr "サーバーが忙しかったため、リクエストを完全に処理できませんでした。"
 
-#: pretix/control/views/orders.py:1843
+#: pretix/control/views/orders.py:1844
 msgid "This action is only allowed for pending orders."
 msgstr "このアクションは保留中の注文に対してのみ許可されています。"
 
-#: pretix/control/views/orders.py:1898
+#: pretix/control/views/orders.py:1899
 msgid "This action is only allowed for canceled orders."
 msgstr "このアクションはキャンセルされた注文に対してのみ許可されています。"
 
-#: pretix/control/views/orders.py:2155 pretix/presale/views/order.py:1592
+#: pretix/control/views/orders.py:2156 pretix/presale/views/order.py:1592
 msgid "An error occurred. Please see the details below."
 msgstr "エラーが発生しました。詳細は以下をご覧ください。"
 
-#: pretix/control/views/orders.py:2163
+#: pretix/control/views/orders.py:2164
 msgid "The order has been changed and the user has been notified."
 msgstr "注文は変更され、ユーザーに通知されました。"
 
-#: pretix/control/views/orders.py:2165 pretix/control/views/orders.py:2301
-#: pretix/control/views/orders.py:2338 pretix/presale/views/order.py:1627
+#: pretix/control/views/orders.py:2166 pretix/control/views/orders.py:2302
+#: pretix/control/views/orders.py:2339 pretix/presale/views/order.py:1627
 msgid "The order has been changed."
 msgstr "注文が変更されました。"
 
-#: pretix/control/views/orders.py:2192 pretix/presale/checkoutflow.py:945
+#: pretix/control/views/orders.py:2193 pretix/presale/checkoutflow.py:945
 #: pretix/presale/views/order.py:793 pretix/presale/views/order.py:911
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr "入力を処理する際に問題が発生しました。以下のエラーを確認してください。"
 
-#: pretix/control/views/orders.py:2303
+#: pretix/control/views/orders.py:2304
 msgid "Nothing about the order had to be changed."
 msgstr "注文について変更する必要はありませんでした。"
 
-#: pretix/control/views/orders.py:2384 pretix/plugins/sendmail/views.py:176
+#: pretix/control/views/orders.py:2385 pretix/plugins/sendmail/views.py:176
 msgid "We could not send the email. See below for details."
 msgstr "メールを送信できませんでした。詳細は以下をご覧ください。"
 
-#: pretix/control/views/orders.py:2400 pretix/control/views/orders.py:2470
+#: pretix/control/views/orders.py:2401 pretix/control/views/orders.py:2471
 #: pretix/plugins/sendmail/views.py:204 pretix/plugins/sendmail/views.py:671
 #, python-brace-format
 msgid "Subject: {subject}"
 msgstr "Subject: {subject}"
 
-#: pretix/control/views/orders.py:2419 pretix/control/views/orders.py:2490
+#: pretix/control/views/orders.py:2420 pretix/control/views/orders.py:2491
 #, python-brace-format
 msgid "Your message has been queued and will be sent to {}."
 msgstr "あなたのメッセージはキューに入れられ、{}に送信されます。"
 
-#: pretix/control/views/orders.py:2423 pretix/control/views/orders.py:2493
+#: pretix/control/views/orders.py:2424 pretix/control/views/orders.py:2494
 #, python-brace-format
 msgid "Failed to send mail to the following user: {}"
 msgstr "以下のユーザーにメールを送信できませんでした: {}"
 
-#: pretix/control/views/orders.py:2546 pretix/presale/views/order.py:1085
+#: pretix/control/views/orders.py:2547 pretix/presale/views/order.py:1085
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -27927,21 +28047,21 @@ msgstr ""
 "このリンクはもう有効ではありません。戻って、ページを更新して、もう一度試して"
 "ください。"
 
-#: pretix/control/views/orders.py:2627
+#: pretix/control/views/orders.py:2628
 msgid "There is no order with the given order code."
 msgstr "指定された注文コードには注文がありません。"
 
-#: pretix/control/views/orders.py:2733 pretix/control/views/organizer.py:2074
+#: pretix/control/views/orders.py:2734 pretix/control/views/organizer.py:2074
 msgid "The selected exporter was not found."
 msgstr "選択されたエクスポーターが見つかりませんでした。"
 
-#: pretix/control/views/orders.py:2743 pretix/control/views/organizer.py:2084
+#: pretix/control/views/orders.py:2744 pretix/control/views/organizer.py:2084
 msgid "There was a problem processing your input. See below for error details."
 msgstr ""
 "入力の処理中に問題が発生しました。エラーの詳細については以下を参照してくださ"
 "い。"
 
-#: pretix/control/views/orders.py:2778 pretix/control/views/organizer.py:2127
+#: pretix/control/views/orders.py:2779 pretix/control/views/organizer.py:2127
 #, python-brace-format
 msgid ""
 "Your export schedule has been saved. The next export will start around "
@@ -27950,18 +28070,18 @@ msgstr ""
 "エクスポートスケジュールが保存されました。次のエクスポートは{datetime}頃に開"
 "始されます。"
 
-#: pretix/control/views/orders.py:2783 pretix/control/views/organizer.py:2132
+#: pretix/control/views/orders.py:2784 pretix/control/views/organizer.py:2132
 msgid "Your export schedule has been saved, but no next export is planned."
 msgstr ""
 "あなたのエクスポートのスケジュールは保存されましたが、次のエクスポートは計画"
 "されていません。"
 
-#: pretix/control/views/orders.py:2822 pretix/control/views/organizer.py:2172
+#: pretix/control/views/orders.py:2823 pretix/control/views/organizer.py:2172
 #, python-brace-format
 msgid "Export: {title}"
 msgstr "エクスポート: {title}"
 
-#: pretix/control/views/orders.py:2823 pretix/control/views/organizer.py:2174
+#: pretix/control/views/orders.py:2824 pretix/control/views/organizer.py:2174
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -27972,7 +28092,7 @@ msgstr ""
 "\n"
 "このメールに、{name}の新しい定期レポートを添付しています。"
 
-#: pretix/control/views/orders.py:2850 pretix/control/views/organizer.py:2207
+#: pretix/control/views/orders.py:2851 pretix/control/views/organizer.py:2207
 msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot schedule it."
@@ -27980,7 +28100,7 @@ msgstr ""
 "ユーザーアカウントにはこのレポートを実行するのに十分な権限がないため、スケ"
 "ジュールを設定できません。"
 
-#: pretix/control/views/orders.py:2903 pretix/control/views/organizer.py:2259
+#: pretix/control/views/orders.py:2904 pretix/control/views/organizer.py:2259
 msgid ""
 "Your export is queued to start soon. The results will be send via email. "
 "Depending on system load and type and size of export, this may take a few "
@@ -27989,11 +28109,11 @@ msgstr ""
 "エクスポートが間もなく開始される予定です。結果はメールで送信されます。システ"
 "ムの負荷やエクスポートの種類・サイズによっては、数分かかる場合があります。"
 
-#: pretix/control/views/orders.py:2982
+#: pretix/control/views/orders.py:2991 pretix/control/views/orders.py:3072
 msgid "All orders have been canceled."
 msgstr "すべての注文がキャンセルされました。"
 
-#: pretix/control/views/orders.py:2984
+#: pretix/control/views/orders.py:2993 pretix/control/views/orders.py:3074
 #, python-brace-format
 msgid ""
 "The orders have been canceled. An error occurred with {count} orders, please "
@@ -28002,7 +28122,7 @@ msgstr ""
 "注文はキャンセルされました。{count} 件の注文でエラーが発生しましたので、すべ"
 "てのキャンセルされていない注文を確認してください。"
 
-#: pretix/control/views/orders.py:3005
+#: pretix/control/views/orders.py:3021 pretix/control/views/orders.py:3095
 msgid "Your input was not valid."
 msgstr "入力が無効です。"
 
@@ -29078,7 +29198,7 @@ msgstr "バッジのレイアウト: {}"
 #: pretix/plugins/banktransfer/apps.py:43
 #: pretix/plugins/banktransfer/apps.py:46
 #: pretix/plugins/banktransfer/apps.py:47
-#: pretix/plugins/banktransfer/payment.py:60
+#: pretix/plugins/banktransfer/payment.py:61
 #: pretix/plugins/banktransfer/signals.py:48
 #: pretix/plugins/banktransfer/signals.py:83
 msgid "Bank transfer"
@@ -29115,7 +29235,7 @@ msgstr ""
 "CSVのインポート機能を向上させるために、Pythonパッケージの「chardet」をインス"
 "トールしてください。"
 
-#: pretix/plugins/banktransfer/payment.py:68
+#: pretix/plugins/banktransfer/payment.py:69
 msgid ""
 "I have understood that people will pay the ticket price directly to my bank "
 "account and pretix cannot automatically know what payments arrived. "
@@ -29128,23 +29248,23 @@ msgstr ""
 "支払いを手動で完了としてマークするか、定期的にデジタル銀行取引明細をインポー"
 "トしてpretixに必要な情報を提供することになります。"
 
-#: pretix/plugins/banktransfer/payment.py:75
+#: pretix/plugins/banktransfer/payment.py:76
 msgid "Bank account type"
 msgstr "銀行口座の種類"
 
-#: pretix/plugins/banktransfer/payment.py:78
+#: pretix/plugins/banktransfer/payment.py:79
 msgid "SEPA bank account"
 msgstr "SEPA銀行口座"
 
-#: pretix/plugins/banktransfer/payment.py:79
+#: pretix/plugins/banktransfer/payment.py:80
 msgid "Other bank account"
 msgstr "他の銀行口座"
 
-#: pretix/plugins/banktransfer/payment.py:84
+#: pretix/plugins/banktransfer/payment.py:85
 msgid "Name of account holder"
 msgstr "アカウント名の保持者"
 
-#: pretix/plugins/banktransfer/payment.py:86
+#: pretix/plugins/banktransfer/payment.py:87
 msgid ""
 "Please note: special characters other than letters, numbers, and some "
 "punctuation can cause problems with some banks."
@@ -29152,35 +29272,35 @@ msgstr ""
 "注意してください：一部の銀行では、文字や数字以外の特殊文字が問題を引き起こす"
 "可能性があります。"
 
-#: pretix/plugins/banktransfer/payment.py:96
-#: pretix/plugins/banktransfer/payment.py:300
-#: pretix/plugins/banktransfer/payment.py:490
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:15
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:14
+#: pretix/plugins/banktransfer/payment.py:97
+#: pretix/plugins/banktransfer/payment.py:301
+#: pretix/plugins/banktransfer/payment.py:491
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:16
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:15
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/new_refund_control_form.html:6
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:24
 msgid "IBAN"
 msgstr "IBAN"
 
-#: pretix/plugins/banktransfer/payment.py:106
-#: pretix/plugins/banktransfer/payment.py:301
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:16
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:15
+#: pretix/plugins/banktransfer/payment.py:107
+#: pretix/plugins/banktransfer/payment.py:302
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:17
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:16
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
 msgid "BIC"
 msgstr "BIC"
 
-#: pretix/plugins/banktransfer/payment.py:116
+#: pretix/plugins/banktransfer/payment.py:117
 msgid "Name of bank"
 msgstr "銀行の名前"
 
-#: pretix/plugins/banktransfer/payment.py:126
+#: pretix/plugins/banktransfer/payment.py:127
 msgid "Bank account details"
 msgstr "銀行口座の詳細"
 
-#: pretix/plugins/banktransfer/payment.py:129
+#: pretix/plugins/banktransfer/payment.py:130
 msgid ""
 "Include everything else that your customers might need to send you a bank "
 "transfer payment. If you have lots of international customers, they might "
@@ -29190,7 +29310,7 @@ msgstr ""
 "海外の顧客が多い場合は、あなたの完全な住所と銀行の完全な住所が必要になる場合"
 "があります。"
 
-#: pretix/plugins/banktransfer/payment.py:135
+#: pretix/plugins/banktransfer/payment.py:136
 msgid ""
 "For SEPA accounts, you can leave this empty. Otherwise, please add "
 "everything that your customers need to transfer the money, e.g. account "
@@ -29200,27 +29320,27 @@ msgstr ""
 "送金するために必要なすべての情報を追加してください。例：口座番号、ルーティン"
 "グ番号、住所など。"
 
-#: pretix/plugins/banktransfer/payment.py:154
+#: pretix/plugins/banktransfer/payment.py:155
 msgid "Do not include hyphens in the payment reference."
 msgstr "支払い参照にはハイフンを含めないでください。"
 
-#: pretix/plugins/banktransfer/payment.py:155
+#: pretix/plugins/banktransfer/payment.py:156
 msgid "This is required in some countries."
 msgstr "これは一部の国で必要です。"
 
-#: pretix/plugins/banktransfer/payment.py:159
+#: pretix/plugins/banktransfer/payment.py:160
 msgid "Include invoice number in the payment reference."
 msgstr "支払い参照に請求書番号を含めてください。"
 
-#: pretix/plugins/banktransfer/payment.py:163
+#: pretix/plugins/banktransfer/payment.py:164
 msgid "Prefix for the payment reference"
 msgstr "支払い参照の接頭辞"
 
-#: pretix/plugins/banktransfer/payment.py:167
+#: pretix/plugins/banktransfer/payment.py:168
 msgid "Additional text to show on pending orders"
 msgstr "保留中の注文に表示する追加テキスト"
 
-#: pretix/plugins/banktransfer/payment.py:168
+#: pretix/plugins/banktransfer/payment.py:169
 msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
 "addition to the standard text."
@@ -29228,11 +29348,11 @@ msgstr ""
 "このテキストは、標準テキストに加えて、保留中の注文の注文確認ページに表示され"
 "ます。"
 
-#: pretix/plugins/banktransfer/payment.py:177
+#: pretix/plugins/banktransfer/payment.py:178
 msgid "IBAN blocklist for refunds"
 msgstr "払い戻しのためのIBANブロックリスト"
 
-#: pretix/plugins/banktransfer/payment.py:180
+#: pretix/plugins/banktransfer/payment.py:181
 msgid ""
 "Put one IBAN or IBAN prefix per line. The system will not attempt to send "
 "refunds to any of these IBANs. Useful e.g. if you receive a lot of "
@@ -29249,11 +29369,11 @@ msgstr ""
 "時に無視されるため、例えばDE0012345を禁止することで、銀行識別子が12345で始ま"
 "るすべてのドイツのIBANを禁止できます。"
 
-#: pretix/plugins/banktransfer/payment.py:207
+#: pretix/plugins/banktransfer/payment.py:208
 msgid "Restrict to business customers"
 msgstr "ビジネス顧客に制限"
 
-#: pretix/plugins/banktransfer/payment.py:208
+#: pretix/plugins/banktransfer/payment.py:209
 msgid ""
 "Only allow choosing this payment provider for customers who enter an invoice "
 "address and select \"Business or institutional customer\"."
@@ -29261,26 +29381,26 @@ msgstr ""
 "請求先住所を入力し、「法人または機関のお客様」と選択した顧客に対して、この支"
 "払いプロバイダーを選択できるようにします。"
 
-#: pretix/plugins/banktransfer/payment.py:238
+#: pretix/plugins/banktransfer/payment.py:239
 msgid "Please fill out your bank account details."
 msgstr "銀行口座の詳細を記入してください。"
 
-#: pretix/plugins/banktransfer/payment.py:242
+#: pretix/plugins/banktransfer/payment.py:243
 msgid "Please enter your bank account details."
 msgstr ""
 "申し訳ございませんが、個人情報や銀行口座の詳細を提供することはできません。個"
 "人情報の保護とセキュリティを重視しておりますので、安全な方法で取引を行うよう"
 "にしてください。"
 
-#: pretix/plugins/banktransfer/payment.py:291
+#: pretix/plugins/banktransfer/payment.py:292
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:15
 msgid "Please transfer the full amount to the following bank account:"
 msgstr "次の銀行口座に全額を送金してください:"
 
-#: pretix/plugins/banktransfer/payment.py:299
-#: pretix/plugins/banktransfer/payment.py:487
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:14
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:13
+#: pretix/plugins/banktransfer/payment.py:300
+#: pretix/plugins/banktransfer/payment.py:488
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:15
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:14
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/new_refund_control_form.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:23
 #: pretix/plugins/banktransfer/views.py:829
@@ -29290,9 +29410,9 @@ msgstr "次の銀行口座に全額を送金してください:"
 msgid "Account holder"
 msgstr "口座名義人"
 
-#: pretix/plugins/banktransfer/payment.py:302
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:17
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:16
+#: pretix/plugins/banktransfer/payment.py:303
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:18
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:17
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:26
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:23
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:31
@@ -29302,25 +29422,25 @@ msgstr "口座名義人"
 msgid "Bank"
 msgstr "銀行"
 
-#: pretix/plugins/banktransfer/payment.py:381
+#: pretix/plugins/banktransfer/payment.py:382
 msgid "Invalid IBAN/BIC"
 msgstr "無効なIBAN/BIC"
 
-#: pretix/plugins/banktransfer/payment.py:457
+#: pretix/plugins/banktransfer/payment.py:458
 #, python-brace-format
 msgid "Bank account {iban}"
 msgstr "銀行口座 {iban}"
 
-#: pretix/plugins/banktransfer/payment.py:473
+#: pretix/plugins/banktransfer/payment.py:474
 msgid "Can only create a bank transfer refund from an existing payment."
 msgstr "既存の支払いからのみ、銀行振込払い戻しを作成できます。"
 
-#: pretix/plugins/banktransfer/payment.py:493
+#: pretix/plugins/banktransfer/payment.py:494
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/new_refund_control_form.html:7
 msgid "BIC (optional)"
 msgstr "BIC (任意)"
 
-#: pretix/plugins/banktransfer/payment.py:532
+#: pretix/plugins/banktransfer/payment.py:533
 msgid "Your input was invalid, please see below for details."
 msgstr "入力が無効です。詳細は下記を参照。"
 
@@ -29355,8 +29475,8 @@ msgstr "注文はすでにキャンセルされています。"
 msgid "Currencies do not match."
 msgstr "通貨が一致しません。"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:6
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:5
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:7
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:6
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
@@ -29364,8 +29484,8 @@ msgstr ""
 "ご購入手続きが完了しましたら、以下の銀行口座にお振込いただくようお願いいたし"
 "ます。個人用の参照コードを使用してください:"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:11
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:10
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:12
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
 msgid ""
 "Please do not yet start a payment. We'll assign you a personal reference "
 "code after you completed the order."
@@ -29373,21 +29493,21 @@ msgstr ""
 "支払いをまだ開始しないでください。注文が完了した後、個人用の参照コードを割り"
 "当てます。"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:26
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:25
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:27
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:39
 msgid "Reference code (important):"
 msgstr "リファレンス・コード (重要):"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:31
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:30
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:32
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:31
 msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
 msgstr "ご注文完了後に、個人用の参照コードを割り当てます。"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:36
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:35
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:37
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to our "
 "bank account, using a personal reference code."
@@ -35078,8 +35198,9 @@ msgstr "現在、アカウントにギフトカードはありません。"
 msgid ""
 "Currently, only gift cards resulting from refunds show up here, any "
 "purchased gift cards show up under the orders tab."
-msgstr "現在、ここには払い戻しによるギフトカードのみが表示されます。購入したギフトカ"
-"ードは注文タブに表示されます。"
+msgstr ""
+"現在、ここには払い戻しによるギフトカードのみが表示されます。購入したギフト"
+"カードは注文タブに表示されます。"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 msgid "Account information"
