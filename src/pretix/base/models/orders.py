@@ -1457,7 +1457,22 @@ class QuestionAnswer(models.Model):
         super().delete(**kwargs)
 
 
-class AbstractPosition(models.Model):
+class RoundingCorrectionMixin:
+
+    @property
+    def gross_price_before_rounding(self):
+        return self.price - self.price_includes_rounding_correction
+
+    @property
+    def tax_value_before_rounding(self):
+        return self.tax_value - self.tax_value_includes_rounding_correction
+
+    @property
+    def net_price_before_rounding(self):
+        return self.gross_price_before_rounding - self.tax_value_before_rounding
+
+
+class AbstractPosition(RoundingCorrectionMixin, models.Model):
     """
     A position can either be one line of an order or an item placed in a cart.
 
@@ -2283,7 +2298,7 @@ class ActivePositionManager(ScopedManager(organizer='order__event__organizer')._
         return super().get_queryset().filter(canceled=False)
 
 
-class OrderFee(models.Model):
+class OrderFee(RoundingCorrectionMixin, models.Model):
     """
     An OrderFee object represents a fee that is added to the order total independently of
     the actual positions. This might for example be a payment or a shipping fee.
@@ -3248,10 +3263,10 @@ class CartPosition(AbstractPosition):
 
     @property
     def tax_value(self):
-        price = self.price - self.price_includes_rounding_correction
+        price = self.gross_price_before_rounding
         net = round_decimal(price - (price * (1 - 100 / (100 + self.tax_rate))),
                             self.event.currency)
-        return self.price - self.price_includes_rounding_correction - net + self.tax_value_includes_rounding_correction
+        return self.gross_price_before_rounding - net + self.tax_value_includes_rounding_correction
 
     @tax_value.setter
     def tax_value(self, value):

@@ -1430,8 +1430,8 @@ class CartManager:
         )
 
         for cp, (new_price, discount) in zip(positions, discount_results):
-            if (cp.price - cp.price_includes_rounding_correction) != new_price or cp.discount_id != (discount.pk if discount else None):
-                diff += new_price - (cp.price - cp.price_includes_rounding_correction)
+            if cp.gross_price_before_rounding != new_price or cp.discount_id != (discount.pk if discount else None):
+                diff += new_price - cp.gross_price_before_rounding
                 cp.price = new_price
                 cp.price_includes_rounding_correction = Decimal("0.00")
                 cp.discount = discount
@@ -1515,7 +1515,7 @@ def get_fees(event, request, _total_ignored_=None, invoice_address=None, payment
         raise TypeError("Must pass positions, parameter is only optional for backwards-compat reasons")
 
     fees = []
-    total = sum([c.price - c.price_includes_rounding_correction for c in positions])
+    total = sum([c.gross_price_before_rounding for c in positions])
     for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
                                                     positions=positions, total=total, payment_requests=payments):
         if resp:
