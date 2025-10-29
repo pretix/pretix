@@ -2994,11 +2994,17 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
                      'check all uncanceled orders.').format(count=value)
 
     def get_success_url(self, value):
-        return reverse('control:event.cancel.confirm', kwargs={
-            'organizer': self.request.organizer.slug,
-            'event': self.request.event.slug,
-            'task': value["id"],
-        })
+        if settings.HAS_CELERY:
+          return reverse('control:event.cancel.confirm', kwargs={
+              'organizer': self.request.organizer.slug,
+              'event': self.request.event.slug,
+              'task': value["id"],
+          })
+        else:
+          return reverse('control:event.cancel', kwargs={
+              'organizer': self.request.organizer.slug,
+              'event': self.request.event.slug,
+          })
 
     def get_error_url(self):
         return reverse('control:event.cancel', kwargs={
