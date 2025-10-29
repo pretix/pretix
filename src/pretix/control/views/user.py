@@ -899,13 +899,13 @@ class UserEmailChangeView(RecentAuthenticationRequiredMixin, FormView):
 
 class UserEmailConfirmView(FormView):
     form_class = ConfirmationCodeForm
-    template_name = 'pretixcontrol/auth/confirmation_code.html'
+    template_name = 'pretixcontrol/user/confirmation_code_dialog.html'
 
     def get_context_data(self, **kwargs):
         return {
             **super().get_context_data(**kwargs),
             "cancel_url": reverse('control:user.settings', kwargs={}),
-            "message": _("Please enter the confirmation code we sent to your new email address:"),
+            "message": _("Please enter the confirmation code we sent to your new email address."),
         }
 
     @transaction.atomic()

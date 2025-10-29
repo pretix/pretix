@@ -1,0 +1,21 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Enter confirmation code" %}{% endblock %}
+{% block content %}
+    <form action="" method="post" class="form centered-form">
+        <h1>
+            {% trans "Enter confirmation code" %}
+        </h1>
+        {% csrf_token %}
+        {% bootstrap_form_errors form type='all' layout='inline' %}
+        <p>{{ message }}</p>
+        {% bootstrap_field form.code %}
+        <div class="form-group submit-group">
+            <a href="{{ cancel_url }}" class="btn btn-default btn-cancel">{% trans "Cancel" %}</a>
+            <button type="submit" class="btn btn-primary btn-save btn-lg">
+                {% trans "Continue" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
