@@ -84,6 +84,7 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
+from pretix.helpers.daterange import datetimerange
 from pretix.helpers.reportlab import ThumbnailingImageReader, reshaper
 from pretix.presale.style import get_fonts
 
@@ -493,7 +494,7 @@ DEFAULT_VARIABLES = OrderedDict((
     ("program_times", {
         "label": _("Program times: date and time"),
         "editor_sample": _(
-            "2017-05-31 10:00 – 2017-05-31 12:00\n2017-05-31 14:00 – 2017-05-31 16:00"),
+            "2017-05-31 10:00 – 12:00\n2017-05-31 14:00 – 16:00\n2017-05-31 14:00 – 2017-06-01 14:00"),
         "evaluate": lambda op, order, ev: get_program_times(op, ev)
     }),
     ("medium_identifier", {
@@ -746,9 +747,10 @@ def get_program_times(op: OrderPosition, ev: Event):
     pt_str = ''
     if program_times:
         for pt in program_times:
-            pt_list.append(str(_('{start_datetime} – {end_datetime}')).format(
-                start_datetime=date_format(pt.start.astimezone(ev.timezone), 'SHORT_DATETIME_FORMAT'),
-                end_datetime=date_format(pt.end.astimezone(ev.timezone), 'SHORT_DATETIME_FORMAT')
+            pt_list.append(datetimerange(
+                pt.start.astimezone(ev.timezone),
+                pt.end.astimezone(ev.timezone),
+                as_html=False
             ))
         pt_str = '\n'.join(pt_list)
     return pt_str
