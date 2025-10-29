@@ -188,6 +188,12 @@ class InlineItemAddOnSerializer(serializers.ModelSerializer):
                   'position', 'price_included', 'multi_allowed')
 
 
+class InlineItemProgramTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ItemProgramTime
+        fields = ('start', 'end')
+
+
 class ItemBundleSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemBundle
@@ -276,6 +282,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     addons = InlineItemAddOnSerializer(many=True, required=False)
     bundles = InlineItemBundleSerializer(many=True, required=False)
     variations = InlineItemVariationSerializer(many=True, required=False)
+    program_times = InlineItemProgramTimeSerializer(many=True, required=False)
     tax_rate = ItemTaxRateField(source='*', read_only=True)
     meta_data = MetaDataField(required=False, source='*')
     picture = UploadedFileField(required=False, allow_null=True, allowed_types=(
@@ -297,7 +304,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                   'available_from', 'available_from_mode', 'available_until', 'available_until_mode',
                   'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'checkin_text', 'has_variations', 'variations',
-                  'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets',
+                  'addons', 'bundles', 'program_times', 'original_price', 'require_approval', 'generate_tickets',
                   'show_quota_left', 'hidden_if_available', 'hidden_if_item_available', 'hidden_if_item_available_mode', 'allow_waitinglist',
                   'issue_giftcard', 'meta_data',
                   'require_membership', 'require_membership_types', 'require_membership_hidden', 'grant_membership_type',
@@ -320,9 +327,9 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
-        if self.instance and ('addons' in data or 'variations' in data or 'bundles' in data):
-            raise ValidationError(_('Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use the '
-                                    'dedicated nested endpoint.'))
+        if self.instance and ('addons' in data or 'variations' in data or 'bundles' in data or 'program_times' in data):
+            raise ValidationError(_('Updating add-ons, bundles, program times or variations via PATCH/PUT is not '
+                                    'supported. Please use the dedicated nested endpoint.'))
 
         Item.clean_per_order(data.get('min_per_order'), data.get('max_per_order'))
         Item.clean_available(data.get('available_from'), data.get('available_until'))
@@ -371,6 +378,13 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                 ItemAddOn.clean_min_count(addon_data.get('min_count', 0))
                 ItemAddOn.clean_max_count(addon_data.get('max_count', 0))
                 ItemAddOn.clean_max_min_count(addon_data.get('max_count', 0), addon_data.get('min_count', 0))
+        return value
+
+    def validate_program_times(self, value):
+        if not self.instance:
+            for program_time_data in value:
+                ItemProgramTime.clean_start_end(start=program_time_data.get('start', None),
+                                                end=program_time_data.get('end', None))
         return value
 
     @cached_property
