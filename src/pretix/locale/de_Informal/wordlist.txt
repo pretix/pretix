@@ -1,5 +1,6 @@
 ABGEKÜNDIGT
 ABN
+Absageformular
 Absenderadresse
 Absenderinformation
 Absendername
@@ -139,6 +140,7 @@ Enterprise-Plugins
 eps
 EPS
 Erstattungsbetrag
+Erstattungsbetrags
 Erstattungsliste
 Erstattungsmethode
 Erstattungsoptionen
