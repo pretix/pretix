@@ -1356,22 +1356,6 @@ class ItemProgramTimeFormSet(I18nFormSet):
         self.add_fields(form, None)
         return form
 
-    def clean(self):
-        super().clean()
-        dts = set()
-        for i in range(0, self.total_form_count()):
-            form = self.forms[i]
-            if self.can_delete:
-                if self._should_delete_form(form):
-                    # This form is going to be deleted so any of its errors
-                    # should not cause the entire formset to be invalid.
-                    try:
-                        dts.remove(form.cleaned_data['start'])
-                        dts.remove(form.cleaned_data['end'])
-                    except KeyError:
-                        pass
-                    continue
-
 
 class ItemProgramTimeForm(I18nModelForm):
 
