@@ -460,6 +460,7 @@ urlpatterns = [
         re_path(r'^orders/search$', orders.OrderSearch.as_view(), name='event.orders.search'),
         re_path(r'^dangerzone/$', event.DangerZone.as_view(), name='event.dangerzone'),
         re_path(r'^cancel/$', orders.EventCancel.as_view(), name='event.cancel'),
+        re_path(r'^cancel/(?P<task>[^/]+)/$', orders.EventCancelConfirm.as_view(), name='event.cancel.confirm'),
         re_path(r'^shredder/$', shredder.StartShredView.as_view(), name='event.shredder.start'),
         re_path(r'^shredder/export$', shredder.ShredExportView.as_view(), name='event.shredder.export'),
         re_path(r'^shredder/download/(?P<file>[^/]+)/$', shredder.ShredDownloadView.as_view(), name='event.shredder.download'),
