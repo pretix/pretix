@@ -1092,6 +1092,57 @@ def test_item_create_with_bundle(token_client, organizer, event, item, category,
     assert resp.content.decode() == '{"bundles":["The chosen variation does not belong to this item."]}'
 
 
+@pytest.mark.django_db
+def test_item_create_with_product_time(token_client, organizer, event, item, category, taxrule):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "issue_giftcard": False,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "checkin_text": None,
+            "has_variations": False,
+            "program_times": [
+                {
+                    "start": "2017-12-27T00:00:00Z",
+                    "end": "2017-12-28T00:00:00Z",
+                },
+                {
+                    "start": "2017-12-29T00:00:00Z",
+                    "end": "2017-12-30T00:00:00Z",
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        new_item = Item.objects.get(pk=resp.data['id'])
+        assert new_item.program_times.first().start == datetime(2017, 12, 27, 0, 0, 0, tzinfo=timezone.utc)
+        assert new_item.program_times.first().end == datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc)
+        assert new_item.program_times.last().start == datetime(2017, 12, 29, 0, 0, 0, tzinfo=timezone.utc)
+        assert new_item.program_times.last().end == datetime(2017, 12, 30, 0, 0, 0, tzinfo=timezone.utc)
+
+
 @pytest.mark.django_db(transaction=True)
 def test_item_update(token_client, organizer, event, item, category, item2, category2, taxrule2):
     resp = token_client.patch(

@@ -383,7 +383,7 @@ class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     def validate_program_times(self, value):
         if not self.instance:
             for program_time_data in value:
-                ItemProgramTime.clean_start_end(start=program_time_data.get('start', None),
+                ItemProgramTime.clean_start_end(self, start=program_time_data.get('start', None),
                                                 end=program_time_data.get('end', None))
         return value
 
