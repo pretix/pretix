@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -34,6 +34,7 @@ class ReusableMediaExporter(OrganizerLevelExportMixin, ListExporter):
     verbose_name = _('Reusable media')
     category = pgettext_lazy('export_category', 'Reusable media')
     description = _('Download a spread sheet with the data of all reusable medias on your account.')
+    repeatable_read = False
 
     def iterate_list(self, form_data):
         media = ReusableMedium.objects.filter(

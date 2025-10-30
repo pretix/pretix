@@ -60,7 +60,7 @@ var i18nToString = function (i18nstring) {
 $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     waitingDialog.hide();
     var c = $(jqXHR.responseText).filter('.container');
-    if (jqXHR.responseText.indexOf("<!-- pretix-login-marker -->") !== -1) {
+    if (jqXHR.responseText && jqXHR.responseText.indexOf("<!-- pretix-login-marker -->") !== -1) {
         location.href = '/control/login?next=' + encodeURIComponent(location.pathname + location.search + location.hash)
     } else if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
@@ -348,7 +348,7 @@ var form_handlers = function (el) {
         dependency.on("change", update);
     });
 
-    el.find("div[data-display-dependency], textarea[data-display-dependency], input[data-display-dependency], select[data-display-dependency]").each(function () {
+    el.find("div[data-display-dependency], textarea[data-display-dependency], input[data-display-dependency], select[data-display-dependency], button[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = findDependency($(this).attr("data-display-dependency"), this),
             update = function (ev) {
@@ -373,10 +373,11 @@ var form_handlers = function (el) {
                     enabled = !enabled;
                 }
                 var $toggling = dependent;
-                if (dependent.attr("data-disable-dependent")) {
+                if (dependent.is("[data-disable-dependent]")) {
                     $toggling.attr('disabled', !enabled).trigger("change");
                 }
-                if (dependent.get(0).tagName.toLowerCase() !== "div") {
+                const tagName = dependent.get(0).tagName.toLowerCase()
+                if (tagName !== "div" && tagName !== "button") {
                     $toggling = dependent.closest('.form-group');
                 }
                 if (ev) {
@@ -485,6 +486,7 @@ var form_handlers = function (el) {
             theme: "bootstrap",
             language: $("body").attr("data-select2-locale"),
             data: JSON.parse($(this.getAttribute('data-select2-src')).text()),
+            width: '100%',
         }).val(selectedValue).trigger('change');
     });
 

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -306,6 +306,7 @@ TEST_ORDER_RES = {
     "url": "http://example.com/dummy/dummy/order/FOO/k24fiuwvu8kxz3y1/",
     "payment_provider": "banktransfer",
     "total": "23.00",
+    "tax_rounding_mode": "line",
     "comment": "",
     "api_meta": {},
     "custom_followup_at": None,
@@ -845,6 +846,7 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         organizer.slug, event.slug, order.code, p1.local_id
     ), format='json', data={
         'amount': '23.00',
+        'comment': 'Foo',
         'mark_canceled': False,
     })
     assert resp.status_code == 200
@@ -853,6 +855,7 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         assert r.provider == "stripe"
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+        assert r.comment == "Foo"
 
 
 @pytest.mark.django_db

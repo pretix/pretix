@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
 from decimal import Decimal
 from typing import List
 
@@ -33,8 +34,8 @@ from pretix.base.modelimport import DataImportError, ImportColumn, parse_csv
 from pretix.base.modelimport_orders import get_order_import_columns
 from pretix.base.modelimport_vouchers import get_voucher_import_columns
 from pretix.base.models import (
-    CachedFile, Event, InvoiceAddress, Order, OrderPayment, OrderPosition,
-    User, Voucher,
+    CachedFile, Event, InvoiceAddress, LogEntry, Order, OrderPayment,
+    OrderPosition, User, Voucher,
 )
 from pretix.base.models.orders import Transaction
 from pretix.base.services.invoices import generate_invoice, invoice_qualified
@@ -42,6 +43,8 @@ from pretix.base.services.locking import lock_objects
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.signals import order_paid, order_placed
 from pretix.celery_app import app
+
+logger = logging.getLogger(__name__)
 
 
 def _validate(cf: CachedFile, charset: str, cols: List[ImportColumn], settings: dict):
@@ -175,6 +178,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                             raise DataImportError(_('The seat you selected has already been taken. Please select a different seat.'))
 
                 save_transactions = []
+                save_logentries = []
                 for o in orders:
                     o.total = sum([c.price for c in o._positions])  # currently no support for fees
                     if o.total == Decimal('0.00'):
@@ -211,17 +215,19 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                     o._address.save()
                     for c in cols:
                         c.save(o)
-                    o.log_action(
+                    save_logentries.append(o.log_action(
                         'pretix.event.order.placed',
                         user=user,
-                        data={'source': 'import'}
-                    )
+                        data={'source': 'import'},
+                        save=False,
+                    ))
                     save_transactions += o.create_transactions(is_new=True, fees=[], positions=o._positions, save=False)
                 Transaction.objects.bulk_create(save_transactions)
+                LogEntry.bulk_create_and_postprocess(save_logentries)
 
             for o in orders:
                 with language(o.locale, event.settings.region):
-                    order_placed.send(event, order=o)
+                    order_placed.send(event, order=o, bulk=True)
                     if o.status == Order.STATUS_PAID:
                         order_paid.send(event, order=o)
 
@@ -230,7 +236,13 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                         (event.settings.get('invoice_generate') == 'paid' and o.status == Order.STATUS_PAID)
                     ) and not o.invoices.last()
                     if gen_invoice:
-                        generate_invoice(o, trigger_pdf=True)
+                        try:
+                            generate_invoice(o, trigger_pdf=True)
+                        except Exception as e:
+                            logger.exception("Could not generate invoice.")
+                            o.log_action("pretix.event.order.invoice.failed", data={
+                                "exception": str(e)
+                            })
         except DataImportError:
             raise ValidationError(_('We were not able to process your request completely as the server was too busy. '
                                     'Please try again.'))
@@ -286,13 +298,16 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
                         raise DataImportError(
                             _('The seat you selected has already been taken. Please select a different seat.'))
 
+            save_logentries = []
             for v in vouchers:
                 v.save()
-                v.log_action(
+                save_logentries.append(v.log_action(
                     'pretix.voucher.added',
                     user=user,
-                    data={'source': 'import'}
-                )
+                    data={'source': 'import'},
+                    save=False,
+                ))
                 for c in cols:
                     c.save(v)
+            LogEntry.bulk_create_and_postprocess(save_logentries)
     cf.delete()

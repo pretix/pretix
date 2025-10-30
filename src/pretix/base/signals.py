@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -170,7 +170,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         second receiver and so on. The return value of the last receiver is returned by this method.
         """
         if sender and not isinstance(sender, self.type):
-            raise ValueError("Sender needs to be an event.")
+            raise ValueError(f"Sender needs to be of type {self.type}.")
 
         response = named.get(chain_kwarg_name)
         if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
@@ -192,7 +192,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         stopping the response chain at the offending receiver.
         """
         if sender and not isinstance(sender, self.type):
-            raise ValueError("Sender needs to be an event.")
+            raise ValueError(f"Sender needs to be of type {self.type}.")
 
         responses = []
         if (
@@ -665,12 +665,13 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 
 order_placed = EventPluginSignal()
 """
-Arguments: ``order``
+Arguments: ``order``, ``bulk``
 
 This signal is sent out every time an order is placed. The order object is given
-as the first argument. This signal is *not* sent out if an order is created through
-splitting an existing order, so you can not expect to see all orders by listening
-to this signal.
+as the first argument. The ``bulk`` argument specifies whether the order was placed
+as part of a bulk action, e.g. an import from a file.
+This signal is *not* sent out if an order is created through splitting an existing order,
+so you can not expect to see all orders by listening to this signal.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

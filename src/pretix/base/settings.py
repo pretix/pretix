@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -76,6 +76,13 @@ from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
 )
 from pretix.helpers.countries import CachedCountries
+
+ROUNDING_MODES = (
+    ('line', _('Compute taxes for every line individually')),
+    ('sum_by_net', _('Compute taxes based on net total')),
+    ('sum_by_net_keep_gross', _('Compute taxes based on net total with stable gross prices')),
+    # We could also have sum_by_gross, but we're not aware of any use-cases for it
+)
 
 
 def country_choice_kwargs():
@@ -324,7 +331,7 @@ DEFAULTS = {
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
-            label=_("Show net prices instead of gross prices in the product list (not recommended!)"),
+            label=_("Show net prices instead of gross prices in the product list"),
             help_text=_("Independent of your choice, the cart will show gross prices as this is the price that needs to be "
                         "paid."),
 
@@ -464,6 +471,25 @@ DEFAULTS = {
             label=_("Require a phone number per order"),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-order_phone_asked'}),
         )
+    },
+    'tax_rounding': {
+        'default': 'line',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'form_kwargs': dict(
+            label=_("Rounding of taxes"),
+            widget=forms.RadioSelect,
+            choices=ROUNDING_MODES,
+            help_text=_(
+                "Note that if you transfer your sales data from pretix to an external system for tax reporting, you "
+                "need to make sure to account for possible rounding differences if your external system rounds "
+                "differently than pretix."
+            )
+        ),
+        'serializer_kwargs': dict(
+            choices=ROUNDING_MODES,
+        ),
     },
     'invoice_address_asked': {
         'default': 'True',

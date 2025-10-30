@@ -26,6 +26,7 @@ $(document).on("pretix:bind-forms", function () {
         }
     }
 
+    // RRule editor
     function rrule_preview() {
         var ruleset = new rrule.RRuleSet();
 
@@ -79,7 +80,7 @@ $(document).on("pretix:bind-forms", function () {
 
             var end = $form.find("input[name*=end]:checked").val();
             if (end === "count") {
-                rule_args.count = parseInt($form.find("input[name*=count]").val()) || 1;
+                rule_args.count = Math.max(parseInt($form.find("input[name*=count]").val()) || 1, 1);
             } else {
                 var date = $form.find("input[name*=until]").data("DateTimePicker").date();
                 if (date !== null) {
@@ -121,7 +122,14 @@ $(document).on("pretix:bind-forms", function () {
             });
         }
     }
+    $("#rrule-formset").on("change keydown keyup keypress dp.change", "input, select", function () {
+        rrule_preview();
+    });
+    rrule_preview();
 
+    $("#rrule-formset").on("formAdded", "div", function (event) {rrule_bind_form($(event.target)); });
+
+    // Timeslot editor
     $("#subevent_add_many_slots_go").on("click", function () {
         $("#time-formset [data-formset-form]").each(function () {
             var tf = $(this).find("[name$=time_from]").val()
@@ -167,13 +175,45 @@ $(document).on("pretix:bind-forms", function () {
        $(this).addClass("hidden");
     });
 
-    $("#rrule-formset").on("change keydown keyup keypress dp.change", "input, select", function () {
-        rrule_preview();
-    });
-    rrule_preview();
+    // Hide config for products that are not for sale
+    function quota_form_handlers(el) {
+        // searchable_selection = True
+        el.find('[id^="id_quotas-"]').on("select2:select select2:unselect", () => {
+            update_item_visibility();
+        });
+        // searchable_selection = False
+        el.find('input[id^="id_quotas-"][id*=itemvars_]').on("change", () => {
+            update_item_visibility();
+        });
+    }
+    function update_item_visibility() {
+        const itemvars = [];
 
-    $("#rrule-formset").on("formAdded", "div", function (event) { rrule_bind_form($(event.target)); });
+        // searchable_selection = True
+        $("select[id^=id_quotas-][id$=-itemvars]").filter((idx, el) => {
+            return !$(el).closest('[data-formset-form]').is('[data-formset-form-deleted]');
+        }).each((_, e) => itemvars.push(...$(e).val()));
+        // searchable_selection = False
+        $("input[id^=id_quotas-][id*=itemvars_]:checked").filter((idx, el) => {
+            return !$(el).closest('[data-formset-form]').is('[data-formset-form-deleted]');
+        }).each((_, e) => itemvars.push($(e).val()));
 
+        $("div[data-itemvar]").each(function (idx, e) {
+            const el = $(e);
+            el.prop("hidden", !itemvars.includes(el.attr("data-itemvar")) && !el.find(".has-error, .alert-danger").length);
+        });
+    }
+
+    $('[data-formset-prefix="quotas"]').on("formDeleted", "div", () => {
+        update_item_visibility();
+    }).on("formAdded", "div", (event) => {
+        quota_form_handlers($(event.target));
+        update_item_visibility();
+    })
+    quota_form_handlers($("body"));
+    update_item_visibility();
+
+    // Auto-set name of check-in list
     var $namef = $("input[id^=id_name]").first();
     var lastValue = $namef.val();
     $namef.change(function () {

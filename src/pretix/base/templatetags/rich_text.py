@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -53,6 +53,19 @@ from markdown.treeprocessors import UnescapeTreeprocessor
 from tlds import tld_set
 
 register = template.Library()
+
+
+def build_fediverse_re(tlds):
+    return re.compile(
+        r"""\(*  # Match any opening parentheses.
+        @[^@]+@
+        ([\w-]+\.)+(?:{0})(?:\:[0-9]+)?(?!\.\w)\b   # xx.yy.tld(:##)?
+        """.format(
+            "|".join(sorted(tlds))
+        ),
+        re.IGNORECASE | re.VERBOSE | re.UNICODE,
+    )
+
 
 ALLOWED_TAGS_SNIPPET = {
     'a',
@@ -112,6 +125,8 @@ URL_RE = SimpleLazyObject(lambda: build_url_re(tlds=sorted(tld_set, key=len, rev
 
 EMAIL_RE = SimpleLazyObject(lambda: build_email_re(tlds=sorted(tld_set, key=len, reverse=True)))
 
+FEDIVERSE_RE = SimpleLazyObject(lambda: build_fediverse_re(tlds=sorted(tld_set, key=len, reverse=True)))
+
 DOT_ESCAPE = "|escaped-dot-sGnY9LMK|"
 
 
@@ -144,9 +159,11 @@ def truelink_callback(attrs, new=False):
 
         <a href="https://maps.google.com/location/foo">https://maps.google.com</a>
     """
-    text = re.sub(r'[^a-zA-Z0-9.\-/_ ]', '', attrs.get('_text'))  # clean up link text
+    text = re.sub(r'[^a-zA-Z0-9.\-/_@: ]', '', attrs.get('_text'))  # clean up link text
     url = attrs.get((None, 'href'), '/')
     href_url = urllib.parse.urlparse(url)
+
+    # Verify server name of URL names
     if (None, 'href') in attrs and URL_RE.match(text) and href_url.scheme not in ('tel', 'mailto'):
         # link text looks like a url
         if text.startswith('//'):
@@ -155,9 +172,19 @@ def truelink_callback(attrs, new=False):
             text = 'https://' + text
 
         text_url = urllib.parse.urlparse(text)
+        if text_url.netloc.split("@")[-1] != href_url.netloc.split("@")[-1] or not href_url.path.startswith(text_url.path):
+            # link text contains an URL that has a different base than the actual URL
+            attrs['_text'] = attrs[None, 'href']
+
+    # Verify server name of mastodon display names (@name@server.tld)
+    if (None, 'href') in attrs and FEDIVERSE_RE.match(text):
+        parts = text.split('@')
+        text = f'https://{parts[2]}/@{parts[1]}'
+        text_url = urllib.parse.urlparse(text)
         if text_url.netloc != href_url.netloc or not href_url.path.startswith(href_url.path):
             # link text contains an URL that has a different base than the actual URL
             attrs['_text'] = attrs[None, 'href']
+
     return attrs
 
 

@@ -63,10 +63,6 @@ td > .form-group > .checkbox {
   @include box-shadow(none);
 }
 
-div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], div[data-nested-formset-body], details[data-formset-form] {
-  width: 100%;
-}
-
 .form-plugins .panel-title {
   line-height: 34px;
 }
@@ -93,6 +89,12 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
     // btn-lg
     @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
   }
+}
+
+.submit-group-sticky {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
 }
 
 .panel .form-group:last-child {

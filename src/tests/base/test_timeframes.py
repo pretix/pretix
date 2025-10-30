@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -48,10 +48,10 @@ ref_date = date(2023, 3, 28)
     (ref_date, 'days_tomorrow', date(2023, 3, 29), date(2023, 3, 29), None),
     (ref_date, 'days_next7', date(2023, 3, 29), date(2023, 4, 4), None),
     (ref_date, 'days_next14', date(2023, 3, 29), date(2023, 4, 11), None),
-    (ref_date, 'week_this', date(2023, 3, 27), date(2023, 4, 2), 'W 13, 2023 - March 27th – April 2nd, 2023'),
-    (ref_date, 'week_to_date', date(2023, 3, 27), date(2023, 3, 28), 'W 13, 2023 - March 27th – 28th, 2023'),
-    (ref_date, 'week_previous', date(2023, 3, 20), date(2023, 3, 26), 'W 12, 2023 - March 20th – 26th, 2023'),
-    (ref_date, 'week_next', date(2023, 4, 3), date(2023, 4, 9), 'W 14, 2023 - April 3rd – 9th, 2023'),
+    (ref_date, 'week_this', date(2023, 3, 27), date(2023, 4, 2), 'W 13, 2023 - March 27 – April 2, 2023'),
+    (ref_date, 'week_to_date', date(2023, 3, 27), date(2023, 3, 28), 'W 13, 2023 - March 27 – 28, 2023'),
+    (ref_date, 'week_previous', date(2023, 3, 20), date(2023, 3, 26), 'W 12, 2023 - March 20 – 26, 2023'),
+    (ref_date, 'week_next', date(2023, 4, 3), date(2023, 4, 9), 'W 14, 2023 - April 3 – 9, 2023'),
     (ref_date, 'month_this', date(2023, 3, 1), date(2023, 3, 31), 'March 2023'),
     (ref_date, 'month_to_date', date(2023, 3, 1), date(2023, 3, 28), 'March 2023'),
     (ref_date, 'month_previous', date(2023, 2, 1), date(2023, 2, 28), 'February 2023'),

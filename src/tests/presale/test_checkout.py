@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -77,7 +77,7 @@ class BaseCheckoutTestCase:
             plugins='pretix.plugins.stripe,pretix.plugins.banktransfer,tests.testdummy',
             live=True
         )
-        self.tr19 = self.event.tax_rules.create(rate=19)
+        self.tr19 = self.event.tax_rules.create(rate=19, default=True)
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
@@ -501,6 +501,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         assert cr1.price == Decimal('23.00')
 
     def test_custom_tax_rules_blocked_on_fee(self):
+        self.tr19.default = False
+        self.tr19.save()
         self.tr7 = self.event.tax_rules.create(rate=7, default=True)
         self.tr7.custom_rules = json.dumps([
             {'country': 'AT', 'address_type': 'business_vat_id', 'action': 'reverse'},
@@ -2351,6 +2353,252 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
+
+    def test_rounding_sum_by_net(self):
+        self.event.settings.tax_rounding = "sum_by_net"
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.ticket.default_price = Decimal("100.00")
+        self.ticket.save()
+        with scopes_disabled():
+            cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
+            cm.add_new_items([{
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 2
+            }])
+            cm.commit()
+
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        assert b"199.99" in response.content
+        assert b"200.00" not in response.content
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        assert response.context_data['cart']['total'] == Decimal('199.99')
+        assert response.context_data['cart']['net_total'] == Decimal('84.03') * 2
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            p1 = o.payments.get()
+            assert p1.amount == Decimal('199.99')
+            assert o.total == Decimal("199.99")
+            op1, op2 = o.positions.all()
+            assert op1.price == Decimal("99.99")
+            assert op1.price_includes_rounding_correction == Decimal("-0.01")
+            assert op1.tax_value == Decimal("15.96")
+            assert op1.tax_value_includes_rounding_correction == Decimal("-0.01")
+            assert op2.price == Decimal("100.00")
+            assert op2.price_includes_rounding_correction == Decimal("0.00")
+            assert op2.tax_value == Decimal("15.97")
+            assert op2.tax_value_includes_rounding_correction == Decimal("0.00")
+
+    def test_rounding_sum_by_net_keep_gross(self):
+        self.event.settings.tax_rounding = "sum_by_net_keep_gross"
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.ticket.default_price = Decimal("100.00")
+        self.ticket.save()
+        with scopes_disabled():
+            cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
+            cm.add_new_items([{
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 2
+            }])
+            cm.commit()
+
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        assert b"199.99" not in response.content
+        assert b"200.00" in response.content
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        assert response.context_data['cart']['total'] == Decimal('200.00')
+        assert response.context_data['cart']['net_total'] == Decimal('84.03') + Decimal('84.04')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            p1 = o.payments.get()
+            assert p1.amount == Decimal('200.00')
+            assert o.total == Decimal("200.00")
+            op1, op2 = o.positions.all()
+            assert op1.price == Decimal("100.00")
+            assert op1.price_includes_rounding_correction == Decimal("0.00")
+            assert op1.tax_value == Decimal("15.96")
+            assert op1.tax_value_includes_rounding_correction == Decimal("-0.01")
+            assert op2.price == Decimal("100.00")
+            assert op2.price_includes_rounding_correction == Decimal("0.00")
+            assert op2.tax_value == Decimal("15.97")
+            assert op2.tax_value_includes_rounding_correction == Decimal("0.00")
+
+    def test_rounding_line(self):
+        self.event.settings.tax_rounding = "line"
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.ticket.default_price = Decimal("100.00")
+        self.ticket.save()
+        with scopes_disabled():
+            cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
+            cm.add_new_items([{
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 2
+            }])
+            cm.commit()
+
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        assert b"199.99" not in response.content
+        assert b"200.00" in response.content
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        assert response.context_data['cart']['total'] == Decimal('200.00')
+        assert response.context_data['cart']['net_total'] == Decimal('84.03') * 2
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            p1 = o.payments.get()
+            assert p1.amount == Decimal('200.00')
+            assert o.total == Decimal("200.00")
+            op1, op2 = o.positions.all()
+            assert op1.price == Decimal("100.00")
+            assert op1.price_includes_rounding_correction == Decimal("0.00")
+            assert op1.tax_value == Decimal("15.97")
+            assert op1.tax_value_includes_rounding_correction == Decimal("0.00")
+            assert op2.price == Decimal("100.00")
+            assert op2.price_includes_rounding_correction == Decimal("0.00")
+            assert op2.tax_value == Decimal("15.97")
+            assert op2.tax_value_includes_rounding_correction == Decimal("0.00")
+
+    def test_rounding_sum_by_net_with_payment_fee(self):
+        self.event.settings.tax_rounding = "sum_by_net"
+        self.event.settings.tax_rule_payment = "default"
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_banktransfer__fee_abs', Decimal("100.00"))
+        self.ticket.default_price = Decimal("100.00")
+        self.ticket.save()
+        with scopes_disabled():
+            cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
+            cm.add_new_items([{
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }])
+            cm.commit()
+
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        assert b"100.00" in response.content
+        assert b"99.99" not in response.content
+        assert b"199.99" not in response.content
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        assert response.context_data['cart']['total'] == Decimal('199.99')
+        assert response.context_data['cart']['net_total'] == Decimal('84.03') * 2
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            p1 = o.payments.get()
+            assert p1.amount == Decimal('199.99')
+            assert o.total == Decimal("199.99")
+            op1 = o.positions.get()
+            of1 = o.fees.get()
+            assert op1.price == Decimal("99.99")
+            assert op1.price_includes_rounding_correction == Decimal("-0.01")
+            assert op1.tax_value == Decimal("15.96")
+            assert op1.tax_value_includes_rounding_correction == Decimal("-0.01")
+            assert of1.price == Decimal("100.00")
+            assert of1.price_includes_rounding_correction == Decimal("0.00")
+            assert of1.tax_value == Decimal("15.97")
+            assert of1.tax_value_includes_rounding_correction == Decimal("0.00")
+
+    def test_rounding_sum_by_net_with_payment_fee_that_makes_card_insufficient(self):
+        # Our built-in gift card payment does not actually support setting a payment fee, but we still want to
+        # test the core behavior in case a gift-card plugin does
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=199.96, acceptor=self.orga)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_giftcard__fee_abs', "99.98")
+        self.event.settings.set('payment_giftcard__fee_reverse_calc', False)
+        self.event.settings.tax_rounding = "sum_by_net"
+        self.event.settings.tax_rule_payment = "default"
+        self.ticket.default_price = Decimal("99.98")
+        self.ticket.save()
+        with scopes_disabled():
+            cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
+            cm.add_new_items([{
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }])
+            cm.commit()
+
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        assert b"99.98" in response.content
+        assert b"99.99" not in response.content
+        assert b"199.97" not in response.content
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'payment_giftcard-code': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        assert response.context_data['cart']['total'] == Decimal('199.97')
+        assert response.context_data['cart']['net_total'] == Decimal('84.02') * 2
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            p1, p2 = o.payments.all()
+            assert p1.amount == Decimal('199.96')
+            assert p2.amount == Decimal('0.01')
+            assert o.total == Decimal("199.97")
+            op1 = o.positions.get()
+            of1 = o.fees.get()
+            assert op1.price == Decimal("99.99")
+            assert op1.price_includes_rounding_correction == Decimal("0.01")
+            assert op1.tax_value == Decimal("15.97")
+            assert op1.tax_value_includes_rounding_correction == Decimal("0.01")
+            assert of1.price == Decimal("99.98")
+            assert of1.price_includes_rounding_correction == Decimal("0.00")
+            assert of1.tax_value == Decimal("15.96")
+            assert of1.tax_value_includes_rounding_correction == Decimal("0.00")
 
     def test_subevent(self):
         self.event.has_subevents = True
@@ -5488,3 +5736,22 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             assert order.positions.first().used_membership == m_correct1
             assert order.positions.first().attendee_name == 'John Doe'
+
+    def test_giftcard_customer_offered(self):
+        with scopes_disabled():
+            gc = self.orga.issued_gift_cards.create(currency="EUR", customer=self.customer)
+            gc.transactions.create(value=23, acceptor=self.orga)
+            ugc = self.customer.usable_gift_cards()
+            assert len(ugc) == 1
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'login',
+            'login-email': 'john@example.org',
+            'login-password': 'foo',
+        }, follow=True)
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        assert 'Gift card' in response.content.decode()
+        assert '(1 available)' in response.content.decode()

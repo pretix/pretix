@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -99,7 +99,9 @@ class TransmissionType:
         return {}
 
     def form_data_to_transmission_info(self, form_data: dict) -> dict:
-        return form_data
+        return {
+            k: form_data.get(k) for k in self.invoice_address_form_fields
+        }
 
     def transmission_info_to_form_data(self, transmission_info: dict) -> dict:
         return transmission_info

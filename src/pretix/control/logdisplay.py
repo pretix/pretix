@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -455,7 +455,7 @@ class OrderDataSyncSuccessLogEntryType(OrderDataSyncLogEntryType):
                     links.append(", ".join(
                         prov.get_external_link_html(logentry.event, obj['external_link_href'], obj['external_link_display_name'])
                         for obj in objs
-                        if obj and 'external_link_href' in obj and 'external_link_display_name' in obj
+                        if obj and obj.get('external_link_href') and obj.get('external_link_display_name')
                     ))
 
         return mark_safe(escape(super().display(logentry, data)) + "".join("<p>" + link + "</p>" for link in links))
@@ -522,6 +522,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.customer.changed': _('The customer account has been changed.'),
     'pretix.event.order.locale.changed': _('The order locale has been changed.'),
     'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
+    'pretix.event.order.invoice.failed': _('The invoice could not be generated.'),
     'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
     'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
     'pretix.event.order.invoice.sent': _('The invoice {full_invoice_no} has been sent.'),

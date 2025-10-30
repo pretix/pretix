@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -64,6 +64,7 @@ class PdfTicketOutput(BaseTicketOutput):
     download_button_text = _('PDF')
     multi_download_button_text = _('Download tickets (PDF)')
     long_download_button_text = _('Download ticket (PDF)')
+    override_layout_signal = override_layout
 
     def __init__(self, event, override_layout=None, override_background=None, override_channel=None):
         self.override_layout = override_layout
@@ -116,7 +117,7 @@ class PdfTicketOutput(BaseTicketOutput):
         merger = PdfWriter()
         with language(order.locale, self.event.settings.region):
             for op in self.get_tickets_to_print(order):
-                layout = override_layout.send_chained(
+                layout = self.override_layout_signal.send_chained(
                     order.event, 'layout', orderposition=op, layout=self.layout_map.get(
                         (op.item_id, self.override_channel or order.sales_channel.identifier),
                         self.layout_map.get(
@@ -137,7 +138,7 @@ class PdfTicketOutput(BaseTicketOutput):
     def generate(self, op):
         order = op.order
 
-        layout = override_layout.send_chained(
+        layout = self.override_layout_signal.send_chained(
             order.event, 'layout', orderposition=op, layout=self.layout_map.get(
                 (op.item_id, self.override_channel or order.sales_channel.identifier),
                 self.layout_map.get(

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -344,6 +344,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
+        ctx['auth'] = self.request.auth
         ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         return ctx
 
@@ -743,7 +744,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                     user=request.user if request.user.is_authenticated else None,
                     auth=request.auth,
                 )
-            order_placed.send(self.request.event, order=order)
+            order_placed.send(self.request.event, order=order, bulk=False)
             if order.status == Order.STATUS_PAID:
                 order_paid.send(self.request.event, order=order)
                 order.log_action(
@@ -764,7 +765,13 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             ) and not order.invoices.last()
             invoice = None
             if gen_invoice:
-                invoice = generate_invoice(order, trigger_pdf=True)
+                try:
+                    invoice = generate_invoice(order, trigger_pdf=True)
+                except Exception as e:
+                    logger.exception("Could not generate invoice.")
+                    order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
 
             # Refresh serializer only after running signals
             prefetch_related_objects([order], self._positions_prefetch(request))
@@ -1663,6 +1670,9 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         else:
             mark_refunded = request.data.get('mark_canceled', False)
 
+        if not isinstance(request.data.get("comment", ""), str):
+            return Response({'comment': 'Invalid type.'}, status=status.HTTP_400_BAD_REQUEST)
+
         if payment.state != OrderPayment.PAYMENT_STATE_CONFIRMED:
             return Response({'detail': 'Invalid state of payment.'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -1689,6 +1699,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             amount=amount,
             provider=payment.provider,
             info='{}',
+            comment=request.data.get("comment"),
         )
         payment.order.log_action('pretix.event.order.refund.created', {
             'local_id': r.local_id,
