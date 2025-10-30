@@ -3262,7 +3262,6 @@ def test_order_create_auto_pricing_explicit_discount_not_allowed(token_client, o
     }
 
 
-
 @pytest.mark.django_db
 def test_order_create_rounding_mode(token_client, organizer, event, item, quota, question, taxrule):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)

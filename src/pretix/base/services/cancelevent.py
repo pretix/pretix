@@ -350,7 +350,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                     ocm.add_fee(f)
 
             if dry_run:
-                refund_total += max(payment_refund_sum - (o.total + ocm._totaldiff), Decimal("0.00"))
+                refund_total += max(payment_refund_sum - (o.total + ocm._totaldiff_guesstimate), Decimal("0.00"))
             else:
                 ocm.commit()
                 refund_amount = payment_refund_sum - o.total
