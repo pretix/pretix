@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0292_giftcard_customer'),
+        ('pretixbase', '0293_cartposition_price_includes_rounding_correction_and_more'),
     ]
 
     operations = [
