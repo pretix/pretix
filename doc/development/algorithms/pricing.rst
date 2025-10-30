@@ -262,7 +262,7 @@ The net price of the tickets always stay the same.
 **This is the algorithm intended by EN 16931 invoices and our recommendation to use for e-invoicing when (primarily) business customers are involved.**
 
 The main downside is that it might be confusing when selling to consumers, since the amounts to be paid change in unexpected ways.
-For the example above, the customer expects to pay 5 times 500.00, but they are are in fact charged 499.98:
+For the example above, the customer expects to pay 5 times 100.00, but they are are in fact charged 499.98:
 
  ========== ========== =========== ============================== ==============================
    Product   Tax rate   Net price                            Tax                    Gross price
