@@ -27,7 +27,7 @@
                     <dt>{% trans "BIC" %}:</dt><dd>{{ settings.bank_details_sepa_bic }}</dt>
                     <dt>{% trans "Bank" %}:</dt><dd>{{ settings.bank_details_sepa_bank }}</dt>
                 {% endif %}
-              </dl>
+            </dl>
             {% if details %}
                 {{ details | rich_text }}
             {% endif %}
