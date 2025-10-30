@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 10:55+0000\n"
-"PO-Revision-Date: 2025-10-29 09:24+0000\n"
+"PO-Revision-Date: 2025-10-30 20:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -9664,15 +9664,15 @@ msgstr "Der Gutschein wurde an {recipient} verschickt."
 
 #: pretix/base/settings.py:81
 msgid "Compute taxes for every line individually"
-msgstr ""
+msgstr "Berechne Steuern für jede Position einzeln"
 
 #: pretix/base/settings.py:82
 msgid "Compute taxes based on net total"
-msgstr ""
+msgstr "Berechne Steuern auf Basis der Nettosumme"
 
 #: pretix/base/settings.py:83
 msgid "Compute taxes based on net total with stable gross prices"
-msgstr ""
+msgstr "Berechne Steuern auf Basis der Nettosumme mit konstanten Bruttopreisen"
 
 #: pretix/base/settings.py:133
 msgid "Allow usage of restricted plugins"
@@ -9762,13 +9762,8 @@ msgid "Add-on products will not be counted."
 msgstr "Zusatzprodukte werden nicht mitgezählt."
 
 #: pretix/base/settings.py:334
-#, fuzzy
-#| msgid ""
-#| "Show net prices instead of gross prices in the product list (not "
-#| "recommended!)"
 msgid "Show net prices instead of gross prices in the product list"
-msgstr ""
-"Zeige Netto- statt Bruttopreisen in den Produktlisten (nicht empfohlen)"
+msgstr "Zeigen Nettopreise statt Bruttopreisen in der Produktliste"
 
 #: pretix/base/settings.py:335
 msgid ""
@@ -9885,10 +9880,8 @@ msgid "Require a phone number per order"
 msgstr "Telefonnummer pro Bestellung erfordern"
 
 #: pretix/base/settings.py:481
-#, fuzzy
-#| msgid "including all taxes"
 msgid "Rounding of taxes"
-msgstr "inklusive aller Steuern"
+msgstr "Rundung der Steuern"
 
 #: pretix/base/settings.py:485
 msgid ""
@@ -9896,6 +9889,10 @@ msgid ""
 "for tax reporting, you need to make sure to account for possible rounding "
 "differences if your external system rounds differently than pretix."
 msgstr ""
+"Bitte beachten Sie, dass bei der Übertragung der Verkaufsdaten in ein "
+"externes Buchhaltungssystem darauf geachtet werden muss, dass potentielle "
+"Rundungsabweichungen behandelt werden, wenn das externe System anders rundet "
+"als pretix."
 
 #: pretix/base/settings.py:500
 msgid "Ask for invoice address"
@@ -14037,31 +14034,24 @@ msgstr ""
 "Ausstellung ablaufen."
 
 #: pretix/control/forms/event.py:806
-#, fuzzy
-#| msgid "including all taxes"
 msgid "Prices including tax"
-msgstr "inklusive aller Steuern"
+msgstr "Preis inklusive Steuern"
 
 #: pretix/control/forms/event.py:807
 msgid "Recommended if you sell tickets at least partly to consumers."
-msgstr ""
+msgstr "Empfohlen, wenn mindestens teilweise an Verbraucher verkauft wird."
 
 #: pretix/control/forms/event.py:811
-#, fuzzy
-#| msgctxt "reporting_timeframe"
-#| msgid "All future (excluding today)"
 msgid "Prices excluding tax"
-msgstr "Zukunft (ab morgen)"
+msgstr "Preise exklusive Steuern"
 
 #: pretix/control/forms/event.py:812
 msgid "Recommended only if you sell tickets primarily to business customers."
-msgstr ""
+msgstr "Empfohlen, wenn primär an Geschäftskunden verkauft wird."
 
 #: pretix/control/forms/event.py:848
-#, fuzzy
-#| msgid "Date chosen by customer"
 msgid "Prices shown to customer"
-msgstr "Wunschdatum des Kunden"
+msgstr "Preisanzeige für Kunden"
 
 #: pretix/control/forms/event.py:852
 msgid ""
@@ -14070,6 +14060,10 @@ msgid ""
 "product, the total tax amount can differ from when it would be computed from "
 "the order total."
 msgstr ""
+"Empfohlen, wenn keine E-Rechnungen benötigt werden. Jedes Produkt wird zum "
+"beworbenen Netto- und Bruttopreis verkauft. Im Fall von Bestellungen mit "
+"mehreren Produkten kann die Gesamt-Steuersumme höher oder niedriger sein als "
+"die, die sich aus der Bestellsumme berechnen würde."
 
 #: pretix/control/forms/event.py:857
 msgid ""
@@ -14078,6 +14072,11 @@ msgid ""
 "may be changed to ensure correct rounding, while the net prices will be kept "
 "as configured. This may cause the actual payment amount to differ."
 msgstr ""
+"Empfohlen für E-Rechnungen, wenn primär an Geschäftskunden verkauft wird und "
+"Kunden Nettopreise angezeigt werden. Der Bruttopreis einzelner Produkte kann "
+"sich automatisch ändern, um ein korrektes Rundungsverhalten sicherzustellen, "
+"während die Nettopreise immer den eingestellten Preisen entsprechen. Der "
+"resultierende Zahlungsbetrag kann durch die Rundung abweichen."
 
 #: pretix/control/forms/event.py:863
 msgid ""
@@ -14087,6 +14086,13 @@ msgid ""
 "configured whenever possible. Gross prices may still change if they are "
 "impossible to derive from a rounded net price."
 msgstr ""
+"Empfohlen für E-Rechnungen, wenn primär an Verbraucher verkauft wird und "
+"Kunden Bruttopreise angezeigt werden. Der Netto- oder Bruttopreis einzelner "
+"Produkte kann sich automatisch ändern, um ein korrektes Rundungsverhalten "
+"sicherzustellen. Dabei versucht das System, die Bruttopreise möglichst bei "
+"den eingestellten Preisen zu belassen. Die Bruttopreise können sich dennoch "
+"ändern, wenn sie durch Errechnung von einem gerundeten Nettopreis nicht "
+"erreichbar sind."
 
 #: pretix/control/forms/event.py:961
 msgid "Generate invoices for Sales channels"
@@ -21278,6 +21284,10 @@ msgid ""
 "optionally contain additional rules that depend on the customer's country "
 "and type."
 msgstr ""
+"Steuer-Regeln definieren unterschiedliche Besteuerungsszenarien, die dann "
+"den verschiedenen Produkten zugewiesen werden können. Jede Steuer-Regel "
+"enthält einen Standard-Steuersatz und kann optional zusätzliche Regeln "
+"enthalten, die auf die Art und Herkunft des Kunden Bezug nehmen."
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:21
 msgid "You haven't created any tax rules yet."
@@ -21304,13 +21314,11 @@ msgid "Make default"
 msgstr "Zum Standard machen"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:67
-#, fuzzy, python-format
-#| msgid "%(count)s event"
-#| msgid_plural "%(count)s events"
+#, python-format
 msgid "%(count)s product"
 msgid_plural "%(count)s products"
-msgstr[0] "%(count)s Veranstaltung"
-msgstr[1] "%(count)s Veranstaltungen"
+msgstr[0] "%(count)s Produkt"
+msgstr[1] "%(count)s Produkte"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:75
 #, python-format
@@ -21323,16 +21331,12 @@ msgid "excl. %(rate)s %%"
 msgstr "zzgl. %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:80
-#, fuzzy
-#| msgid "Custom rules"
 msgid "with custom rules"
-msgstr "Eigene Regeln"
+msgstr "mit eigenen Regeln"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:110
-#, fuzzy
-#| msgid "Base settings"
 msgid "Tax settings"
-msgstr "Grundeinstellungen"
+msgstr "Steuer-Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:4
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:6
@@ -24149,7 +24153,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/transactions.html:73
 #, python-format
 msgid "incl. %(amount)s rounding correction"
-msgstr ""
+msgstr "inkl. %(amount)s Rundungskorrektur"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
