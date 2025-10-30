@@ -26,8 +26,8 @@
                     <dt>{% trans "IBAN" %}:</dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dt>
                     <dt>{% trans "BIC" %}:</dt><dd>{{ settings.bank_details_sepa_bic }}</dt>
                     <dt>{% trans "Bank" %}:</dt><dd>{{ settings.bank_details_sepa_bank }}</dt>
+                {% endif %}
               </dl>
-            {% endif %}
             {% if details %}
                 {{ details | rich_text }}
             {% endif %}
