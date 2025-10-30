@@ -18,20 +18,18 @@
 
 <div class="row">
     <div class="{% if settings.bank_details_type == "sepa" %}col-md-6{% else %}col-md-12{% endif %} col-xs-12">
-            {% if settings.bank_details_type == "sepa" %}
-                <dl class="dl-horizontal">
-                    <dt>{% trans "Reference code (important):" %}</dt><dd><b>{{ code }}</b></dd>
-                    <dt>{% trans "Amount:" %}</dt><dd>{{ amount|money:event.currency }}</dd>
+            <dl class="dl-horizontal">
+                <dt>{% trans "Reference code (important):" %}</dt><dd><b>{{ code }}</b></dd>
+                <dt>{% trans "Amount:" %}</dt><dd>{{ amount|money:event.currency }}</dd>
+                {% if settings.bank_details_type == "sepa" %}
                     <dt>{% trans "Account holder" %}:</dt><dd>{{ settings.bank_details_sepa_name }}</dt>
                     <dt>{% trans "IBAN" %}:</dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dt>
                     <dt>{% trans "BIC" %}:</dt><dd>{{ settings.bank_details_sepa_bic }}</dt>
                     <dt>{% trans "Bank" %}:</dt><dd>{{ settings.bank_details_sepa_bank }}</dt>
-                {% if details %}
-                </dl>
-                {% endif %}
+              </dl>
             {% endif %}
             {% if details %}
-                {{ details|linebreaks }}
+                {{ details | rich_text }}
             {% endif %}
         </dl>
         <p class="text-muted">

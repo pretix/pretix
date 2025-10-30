@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-21 07:27+0000\n"
+"POT-Creation-Date: 2025-10-29 07:55+0000\n"
 "PO-Revision-Date: 2022-04-29 04:00+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -678,40 +678,40 @@ msgid ""
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:418
+#: pretix/static/pretixcontrol/js/ui/main.js:438
 msgid "Search query"
 msgstr "Caută sintaxa"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:435
+#: pretix/static/pretixcontrol/js/ui/main.js:436
 msgid "All"
 msgstr "Toate"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:437
 msgid "None"
 msgstr "Niciunul"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:440
+#: pretix/static/pretixcontrol/js/ui/main.js:441
 msgid "Selected only"
 msgstr "Doar selecția"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:813
+#: pretix/static/pretixcontrol/js/ui/main.js:814
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:816
+#: pretix/static/pretixcontrol/js/ui/main.js:817
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:974
+#: pretix/static/pretixcontrol/js/ui/main.js:975
 msgid "Use a different name internally"
 msgstr "Folosește un nume intern diferit"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1014
+#: pretix/static/pretixcontrol/js/ui/main.js:1015
 msgid "Click to close"
 msgstr "Click pentru a închide"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1095
+#: pretix/static/pretixcontrol/js/ui/main.js:1096
 msgid "You have unsaved changes!"
 msgstr "Ai modificări nesalvate!"
 

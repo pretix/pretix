@@ -1030,8 +1030,8 @@ Creating orders
       * ``internal_reference``
       * ``vat_id``
       * ``vat_id_validated`` (optional) – If you need support for reverse charge (rarely the case), you need to check
-         yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
-         trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
+        yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
+        trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
      * ``transmission_type`` (optional, defaults to ``email``)
      * ``transmission_info`` (optional, see also :ref:`rest-transmission-types`)
 
@@ -1058,6 +1058,7 @@ Creating orders
       * ``valid_until`` (optional, if both ``valid_from`` and ``valid_until`` are **missing** (not ``null``) the availability will be computed from the given product)
       * ``requested_valid_from`` (optional, can be set **instead** of ``valid_from`` and ``valid_until`` to signal a user choice for the start time that may or may not be respected)
       * ``use_reusable_medium`` (optional, causes the new ticket to take over the given reusable medium, identified by its ID)
+      * ``discount`` (optional, only possible if ``price`` is set; attention: if this is set to not-``null`` on any position, automatic calculation of discounts will not run)
       * ``answers``
 
         * ``question``
