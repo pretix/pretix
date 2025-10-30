@@ -1044,7 +1044,7 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
 def _create_order(event: Event, *, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_requests: List[dict], sales_channel: SalesChannel, locale: str=None,
                   address: InvoiceAddress=None, meta_info: dict=None, shown_total=None,
-                  customer=None, valid_if_pending=False, api_meta: dict=None):
+                  customer=None, valid_if_pending=False, api_meta: dict=None, tax_rounding_mode=None):
     payments = []
 
     try:
@@ -1077,7 +1077,7 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
         sales_channel=sales_channel,
         customer=customer,
         valid_if_pending=valid_if_pending,
-        tax_rounding_mode=event.settings.tax_rounding,
+        tax_rounding_mode=tax_rounding_mode or event.settings.tax_rounding,
     )
     if customer:
         order.email_known_to_work = customer.is_verified
@@ -1180,7 +1180,7 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
 
 def _perform_order(event: Event, payment_requests: List[dict], position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web',
-                   shown_total=None, customer=None, api_meta: dict=None):
+                   shown_total=None, customer=None, api_meta: dict=None, tax_rounding_mode=None):
     for p in payment_requests:
         p['pprov'] = event.get_payment_providers(cached=True)[p['provider']]
         if not p['pprov']:
@@ -1286,6 +1286,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                 customer=customer,
                 valid_if_pending=valid_if_pending,
                 api_meta=api_meta,
+                tax_rounding_mode=tax_rounding_mode,
             )
 
             try:
