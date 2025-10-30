@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0284_ordersyncresult_ordersyncqueue"),
+        ("pretixbase", "0292_giftcard_customer"),
     ]
 
     operations = [
