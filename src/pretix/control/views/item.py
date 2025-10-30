@@ -1443,6 +1443,9 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                     'pretix.event.item.{}.added'.format(log_base),
                     user=self.request.user, data=change_data
                 )
+                if key == 'program_times':
+                    # a change in program times warrants rebuilding tickets
+                    invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'item': self.object.pk})
 
     @transaction.atomic
     def form_valid(self, form):
