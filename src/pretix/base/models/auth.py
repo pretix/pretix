@@ -380,6 +380,10 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                 msg = str(_('to confirm changing your email address from {old_email}\nto {new_email}, use the following code:').format(
                     old_email=self.email, new_email=email,
                 ))
+            elif reason == 'email_verify':
+                msg = str(_('to confirm that your email address {email} belongs to your pretix account, use the following code:').format(
+                    email=self.email,
+                ))
             else:
                 raise Exception('Invalid confirmation code reason')
 

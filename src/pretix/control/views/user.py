@@ -50,6 +50,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
+from django.utils.html import format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -890,11 +891,28 @@ class UserEmailChangeView(RecentAuthenticationRequiredMixin, FormView):
             email=form.cleaned_data['new_email'],
             state=form.cleaned_data['new_email'],
         )
-        return redirect(reverse('control:user.settings.email.confirm', kwargs={}))
+        self.request.session['email_confirmation_destination'] = form.cleaned_data['new_email']
+        return redirect(reverse('control:user.settings.email.confirm', kwargs={}) + '?reason=email_change')
 
     def form_invalid(self, form):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return super().form_invalid(form)
+
+
+class UserEmailVerifyView(View):
+    def post(self, request, *args, **kwargs):
+        if self.request.user.is_verified:
+            messages.success(self.request, _('Your email address was already verified.'))
+            return redirect(reverse('control:user.settings', kwargs={}))
+
+        self.request.user.send_confirmation_code(
+            session=self.request.session,
+            reason='email_verify',
+            email=self.request.user.email,
+            state=self.request.user.email,
+        )
+        self.request.session['email_confirmation_destination'] = self.request.user.email
+        return redirect(reverse('control:user.settings.email.confirm', kwargs={}) + '?reason=email_verify')
 
 
 class UserEmailConfirmView(FormView):
@@ -905,43 +923,52 @@ class UserEmailConfirmView(FormView):
         return {
             **super().get_context_data(**kwargs),
             "cancel_url": reverse('control:user.settings', kwargs={}),
-            "message": _("Please enter the confirmation code we sent to your new email address."),
+            "message": format_html(
+                _("Please enter the confirmation code we sent to your email address <strong>{email}</strong>."),
+                email=self.request.session.get('email_confirmation_destination', ''),
+            ),
         }
 
     @transaction.atomic()
     def form_valid(self, form):
+        reason = self.request.GET['reason']
+        if reason not in ('email_change', 'email_verify'):
+            raise PermissionDenied
         try:
             new_email = self.request.user.check_confirmation_code(
                 session=self.request.session,
-                reason='email_change',
+                reason=reason,
                 code=form.cleaned_data['code'],
             )
         except PermissionDenied:
             return self.form_invalid(form)
         except BadRequest:
             messages.error(self.request, _(
-                'Your email address could not be changed, because we were unable to '
-                'verify your confirmation code. Please try again.'
+                'We were unable to verify your confirmation code. Please try again.'
             ))
             return redirect(reverse('control:user.settings', kwargs={}))
 
-        msgs = []
-        msgs.append(_('Your email address has been changed to {email}.').format(email=new_email))
-        old_email = self.request.user.email
-        self.request.user.send_security_notice(msgs, email=old_email)
-        self.request.user.send_security_notice(msgs, email=new_email)
-
-        self.request.user.email = new_email
-        self.request.user.is_verified = True
-        self.request.user.save()
-        self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data={
-            'old_email': old_email,
+        log_data = {
             'email': new_email,
             'email_verified': True,
-        })
+        }
+        if reason == 'email_change':
+            msgs = []
+            msgs.append(_('Your email address has been changed to {email}.').format(email=new_email))
+            log_data['old_email'] = old_email = self.request.user.email
+            self.request.user.send_security_notice(msgs, email=old_email)
+            self.request.user.send_security_notice(msgs, email=new_email)
+
+            self.request.user.email = new_email
+        self.request.user.is_verified = True
+        self.request.user.save()
+        self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data=log_data)
         update_session_auth_hash(self.request, self.request.user)
 
-        messages.success(self.request, _('Your email address has been changed successfully.'))
+        if reason == 'email_change':
+            messages.success(self.request, _('Your email address has been changed successfully.'))
+        else:
+            messages.success(self.request, _('Your email address has been confirmed successfully.'))
         return redirect(reverse('control:user.settings', kwargs={}))
 
     def form_invalid(self, form):
