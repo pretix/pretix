@@ -1,0 +1,120 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Taxes" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Taxes" %}</h1>
+    {% bootstrap_form_errors form layout="control" %}
+    <fieldset>
+        <legend>{% trans "Tax rules" %}</legend>
+        <p>
+            {% blocktrans trimmed %}
+                Tax rules define different taxation scenarios that can then be assigned to the individual products.
+                Each tax rule contains a default tax rate and can optionally contain additional rules that depend
+                on the customer's country and type.
+            {% endblocktrans %}
+        </p>
+
+        {% if taxrules|length == 0 %}
+            <div class="empty-collection">
+                <p>
+                    {% blocktrans trimmed %}
+                        You haven't created any tax rules yet.
+                    {% endblocktrans %}
+                </p>
+
+                <a href="{% url "control:event.settings.tax.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new tax rule" %}</a>
+            </div>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-hover table-quotas">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Default" %}</th>
+                        <th>{% trans "Usage" %}</th>
+                        <th>{% trans "Rate" %}</th>
+                        <th class="action-col-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for tr in taxrules %}
+                        <tr>
+                            <td>
+                                <strong><a
+                                        href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}">
+                                    {{ tr.internal_name|default:tr.name }}
+                                </a></strong>
+                            </td>
+                            <td>
+                                {% if tr.default %}
+                                    <span class="text-success">
+                                    <span class="fa fa-check"></span>
+                                    {% trans "Default" %}
+                                </span>
+                                {% else %}
+                                    <form class="form-inline" method="post"
+                                          action="{% url "control:event.settings.tax.default" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-default btn-sm">
+                                            {% trans "Make default" %}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% blocktrans trimmed count count=tr.c_items %}
+                                    {{ count }} product
+                                {% plural %}
+                                    {{ count }} products
+                                {% endblocktrans %}
+                            </td>
+                            <td>
+                                {% if tr.price_includes_tax %}
+                                    {% blocktrans with rate=tr.rate %}incl. {{ rate }} %{% endblocktrans %}
+                                {% else %}
+                                    {% blocktrans with rate=tr.rate %}excl. {{ rate }} %{% endblocktrans %}
+                                {% endif %}
+                                {% if tr.has_custom_rules %}
+                                    <br><small>{% trans "with custom rules" %}</small>
+                                {% elif tr.eu_reverse_charge %}
+                                    <br><small>{% trans "reverse charge enabled" %}</small>
+                                {% endif %}
+                            </td>
+                            <td class="text-right flip">
+                                <a href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}"
+                                   class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "control:event.settings.tax.delete" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}"
+                                   class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="5">
+                            <a href="{% url "control:event.settings.tax.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                               class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new tax rule" %}
+                            </a>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        {% endif %}
+    </fieldset>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Tax settings" %}</legend>
+            {% bootstrap_field form.tax_rounding layout="control" %}
+            {% bootstrap_field form.display_net_prices layout="control" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

@@ -420,6 +420,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
             }
         ],
         'total': '21.75',
+        'tax_rounding_mode': 'line',
         'comment': '',
         'api_meta': {},
         "custom_followup_at": None,
@@ -3259,3 +3260,79 @@ def test_order_create_auto_pricing_explicit_discount_not_allowed(token_client, o
             }
         ]
     }
+
+
+@pytest.mark.django_db
+def test_order_create_rounding_mode(token_client, organizer, event, item, quota, question, taxrule):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res["tax_rounding_mode"] = "sum_by_net"
+    res['fees'][0]['_split_taxes_like_products'] = True
+    res['fees'][0]['value'] = Decimal("100.00")
+    res['positions'] = [
+        {
+            "item": item.pk,
+            "price": "100.00",
+        }
+    ] * 4
+
+    for simulate in (True, False):
+        res["simulate"] = simulate
+        resp = token_client.post(
+            '/api/v1/organizers/{}/events/{}/orders/'.format(
+                organizer.slug, event.slug
+            ), format='json', data=res
+        )
+        assert resp.status_code == 201
+        assert resp.data["total"] == "499.98"
+        assert resp.data["positions"][0]["price"] == "99.99"
+        assert resp.data["positions"][-1]["price"] == "100.00"
+
+    res["tax_rounding_mode"] = "sum_by_net_keep_gross"
+    for simulate in (True, False):
+        res["simulate"] = simulate
+        resp = token_client.post(
+            '/api/v1/organizers/{}/events/{}/orders/'.format(
+                organizer.slug, event.slug
+            ), format='json', data=res
+        )
+        assert resp.status_code == 201
+        assert resp.data["total"] == "500.00"
+        assert resp.data["positions"][0]["tax_value"] == "15.96"
+        assert resp.data["positions"][-1]["tax_value"] == "15.97"
+
+
+@pytest.mark.django_db
+def test_order_create_rounding_default_pretixpos_fallback(device, device_client, organizer, event, item, quota, question, taxrule):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['_split_taxes_like_products'] = True
+    res['fees'][0]['value'] = Decimal("100.00")
+    res['positions'] = [
+        {
+            "item": item.pk,
+            "price": "100.00",
+        }
+    ] * 4
+
+    event.settings.tax_rounding = "sum_by_net"
+
+    resp = device_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data["total"] == "499.98"
+    assert resp.data["positions"][0]["price"] == "99.99"
+    assert resp.data["positions"][-1]["price"] == "100.00"
+
+    device.software_brand = "pretixPOS Android"
+    device.save()
+    resp = device_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data["total"] == "500.00"
+    assert resp.data["positions"][0]["price"] == "100.00"
+    assert resp.data["positions"][-1]["price"] == "100.00"
