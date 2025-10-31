@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-29 07:55+0000\n"
-"PO-Revision-Date: 2025-10-28 17:00+0000\n"
+"PO-Revision-Date: 2025-10-31 17:00+0000\n"
 "Last-Translator: Núria Masclans <nuriamasclansserrat@gmail.com>\n"
-"Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/ca/>\n"
+"Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ca/>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -651,6 +651,8 @@ msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
+"El color no té prou contrast amb el blanc i pot afectar a l'accessibilitat "
+"del lloc web."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:418
 #: pretix/static/pretixcontrol/js/ui/main.js:438
@@ -712,229 +714,226 @@ msgstr[0] "(una data més)"
 msgstr[1] "({num} dates més)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:47
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "El contingut de la cistella ja no el teniu reservat."
+msgstr ""
+"Ja no tens reservat el contingut de la cistella. Encara pots completar la "
+"comanda si els articles seleccionats continuen disponibles."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:49
 msgid "Cart expired"
-msgstr "Cistella expirada"
+msgstr "Cistella caducada"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:58
 #: pretix/static/pretixpresale/js/ui/cart.js:84
 msgid "Your cart is about to expire."
-msgstr ""
+msgstr "La teva cistella està a punt de caducar."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:62
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "El contingut de la cistella ja no el teniu reservat."
-msgstr[1] "El contingut de la cistella ja no el teniu reservat."
+msgstr[0] "El contingut de la teva cistella està reservat durant un minut."
+msgstr[1] "El contingut de la teva cistella està reservat durant {num} minuts."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Your cart has expired."
-msgstr "Cistella expirada"
+msgstr "La teva cistella ha caducat."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
-msgstr "El contingut de la cistella ja no el teniu reservat."
+msgstr ""
+"Ja no teniu reservat el contingut de la cistella. Encara podeu completar la "
+"comanda si els articles continuen disponibles."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
-msgstr ""
+msgstr "Vols ampliar el temps de reserva?"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Renew reservation"
-msgstr ""
+msgstr "Renovar reserva"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr ""
+msgstr "L'entitat organitzadora es queda %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:202
 msgid "You get %(currency)s %(amount)s back"
-msgstr ""
+msgstr "Rebràs %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:218
 msgid "Please enter the amount the organizer can keep."
-msgstr ""
+msgstr "Introdueix l’import que es queda l’organitzador."
 
 #: pretix/static/pretixpresale/js/ui/main.js:570
 msgid "Your local time:"
-msgstr ""
+msgstr "La teva hora local:"
 
 #: pretix/static/pretixpresale/js/walletdetection.js:39
+#, fuzzy
 msgid "Google Pay"
-msgstr ""
+msgstr "Google Pay"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Quantity"
-msgstr ""
+msgstr "Quantitat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Disminueix quantitat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr ""
+msgstr "Augmenta quantitat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Filter events by"
-msgstr ""
+msgstr "Filtra els esdeveniments per"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Filter"
-msgstr ""
+msgstr "Filtra"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "Preu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
-msgstr ""
+msgstr "Preu original: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
-msgstr ""
+msgstr "Nou preu: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "Select"
-msgstr ""
+msgstr "Selecciona"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr ""
+msgstr "Selecciona %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr ""
+msgstr "Selecciona la variant %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Esgotat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Compra"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Registrar-vos"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Reservat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "GRATUÏT"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "des de %(price)s %(currency)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
-msgstr ""
+msgstr "Imatge de %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "Inclòs %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "més %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "incl. impostos"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "més impostos"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "disponibles: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Només disponible amb un cupó"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Not yet available"
-msgstr ""
+msgstr "Encara no disponible"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "Ja no està disponible"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "Currently not available"
-msgstr ""
+msgstr "No disponible"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "Comanda mínima: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Tanca la botiga d'entrades"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "No s'ha pogut carregar la botiga d'entrades."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
