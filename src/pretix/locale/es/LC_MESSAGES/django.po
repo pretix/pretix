@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 10:55+0000\n"
-"PO-Revision-Date: 2025-10-22 16:00+0000\n"
+"PO-Revision-Date: 2025-10-31 17:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8346,10 +8346,8 @@ msgid "Event canceled"
 msgstr "Evento cancelado"
 
 #: pretix/base/services/cancelevent.py:392
-#, fuzzy
-#| msgid "Create configuration"
 msgid "Bulk-refund confirmation"
-msgstr "Crear configuración"
+msgstr "Confirmación de reembolso masivo"
 
 #: pretix/base/services/cart.py:102 pretix/base/services/modelimport.py:247
 #: pretix/base/services/orders.py:155
@@ -9655,15 +9653,16 @@ msgstr "El vale de compra ha sido enviado a {recipient}."
 
 #: pretix/base/settings.py:81
 msgid "Compute taxes for every line individually"
-msgstr ""
+msgstr "Calcular los impuestos para cada línea individualmente"
 
 #: pretix/base/settings.py:82
 msgid "Compute taxes based on net total"
-msgstr ""
+msgstr "Calcular los impuestos basándose en el total neto"
 
 #: pretix/base/settings.py:83
 msgid "Compute taxes based on net total with stable gross prices"
 msgstr ""
+"Calcular los impuestos basándose en el total neto con precios brutos estables"
 
 #: pretix/base/settings.py:133
 msgid "Allow usage of restricted plugins"
@@ -9755,14 +9754,9 @@ msgid "Add-on products will not be counted."
 msgstr "Los productos adicionales no se contarán."
 
 #: pretix/base/settings.py:334
-#, fuzzy
-#| msgid ""
-#| "Show net prices instead of gross prices in the product list (not "
-#| "recommended!)"
 msgid "Show net prices instead of gross prices in the product list"
 msgstr ""
-"Mostrar precios netos en lugar de precios brutos en la lista de productos "
-"(¡no recomendado!)"
+"Mostrar precios netos en lugar de precios brutos en la lista de productos"
 
 #: pretix/base/settings.py:335
 msgid ""
@@ -9883,10 +9877,8 @@ msgid "Require a phone number per order"
 msgstr "Requerir un número de teléfono por pedido"
 
 #: pretix/base/settings.py:481
-#, fuzzy
-#| msgid "including all taxes"
 msgid "Rounding of taxes"
-msgstr "impuestos incluidos"
+msgstr "Redondeo de impuestos"
 
 #: pretix/base/settings.py:485
 msgid ""
@@ -9894,6 +9886,10 @@ msgid ""
 "for tax reporting, you need to make sure to account for possible rounding "
 "differences if your external system rounds differently than pretix."
 msgstr ""
+"Tenga en cuenta que si transfiere sus datos de ventas desde pretix a un "
+"sistema externo para la declaración de impuestos, debe asegurarse de tener "
+"en cuenta las posibles diferencias de redondeo si su sistema externo "
+"redondea de forma diferente a pretix."
 
 #: pretix/base/settings.py:500
 msgid "Ask for invoice address"
@@ -13164,18 +13160,20 @@ msgstr ""
 msgid ""
 "You have requested us to cancel an event which includes a larger bulk-refund:"
 msgstr ""
+"Nos ha solicitado cancelar un evento que incluye un reembolso masivo de "
+"mayor importe:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:6
-#, fuzzy
-#| msgid "Initiate a refund of %(amount)s"
 msgid "Estimated refund amount"
-msgstr "Iniciar un reembolso de %(amount)s"
+msgstr "Importe estimado del reembolso"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:8
 msgid ""
 "Please confirm that you want to proceed by coping the following confirmation "
 "code into the cancellation form:"
 msgstr ""
+"Confirme que desea continuar copiando el siguiente código de confirmación en "
+"el formulario de cancelación:"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -14017,31 +14015,25 @@ msgstr ""
 "año en el que se emite la tarjeta de regalo."
 
 #: pretix/control/forms/event.py:806
-#, fuzzy
-#| msgid "including all taxes"
 msgid "Prices including tax"
-msgstr "impuestos incluidos"
+msgstr "Precios con impuestos incluidos"
 
 #: pretix/control/forms/event.py:807
 msgid "Recommended if you sell tickets at least partly to consumers."
-msgstr ""
+msgstr "Recomendado si se venden entradas, al menos en parte, a consumidores."
 
 #: pretix/control/forms/event.py:811
-#, fuzzy
-#| msgctxt "reporting_timeframe"
-#| msgid "All future (excluding today)"
 msgid "Prices excluding tax"
-msgstr "Todo el futuro (excepto hoy)"
+msgstr "Precios sin impuestos"
 
 #: pretix/control/forms/event.py:812
 msgid "Recommended only if you sell tickets primarily to business customers."
 msgstr ""
+"Recomendado solo si vende entradas principalmente a clientes empresariales."
 
 #: pretix/control/forms/event.py:848
-#, fuzzy
-#| msgid "Date chosen by customer"
 msgid "Prices shown to customer"
-msgstr "Fecha elegida por el cliente"
+msgstr "Precios mostrados a los clientes"
 
 #: pretix/control/forms/event.py:852
 msgid ""
@@ -14050,6 +14042,10 @@ msgid ""
 "product, the total tax amount can differ from when it would be computed from "
 "the order total."
 msgstr ""
+"Recomendado cuando no se requiere facturación electrónica. Cada producto se "
+"venderá con el precio neto y bruto anunciado. Sin embargo, en pedidos de más "
+"de un producto, el importe total de los impuestos puede diferir del que se "
+"calcularía a partir del total del pedido."
 
 #: pretix/control/forms/event.py:857
 msgid ""
@@ -14058,6 +14054,12 @@ msgid ""
 "may be changed to ensure correct rounding, while the net prices will be kept "
 "as configured. This may cause the actual payment amount to differ."
 msgstr ""
+"Recomendado para la facturación electrónica cuando se vende principalmente a "
+"clientes empresariales y se muestran los precios a los clientes sin "
+"impuestos. El precio bruto de algunos productos puede modificarse para "
+"garantizar un redondeo correcto, mientras que los precios netos se "
+"mantendrán tal y como están configurados. Esto puede provocar que el importe "
+"real del pago sea diferente."
 
 #: pretix/control/forms/event.py:863
 msgid ""
@@ -14067,6 +14069,12 @@ msgid ""
 "configured whenever possible. Gross prices may still change if they are "
 "impossible to derive from a rounded net price."
 msgstr ""
+"Recomendado para la facturación electrónica cuando se vende principalmente a "
+"consumidores. El precio bruto o neto de algunos productos puede modificarse "
+"automáticamente para garantizar el redondeo correcto del total del pedido. "
+"El sistema intenta mantener los precios brutos tal y como se han configurado "
+"siempre que sea posible. Los precios brutos pueden seguir cambiando si no es "
+"posible obtenerlos a partir de un precio neto redondeado."
 
 #: pretix/control/forms/event.py:961
 msgid "Generate invoices for Sales channels"
@@ -16185,7 +16193,7 @@ msgstr "Confirme que desea cancelar TODAS las fechas de esta serie de eventos."
 
 #: pretix/control/forms/orders.py:1037
 msgid "I understand that this is not reversible and want to continue"
-msgstr ""
+msgstr "Entiendo que esto no es reversible y deseo continuar"
 
 #: pretix/control/forms/orders.py:1041
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
@@ -16196,12 +16204,12 @@ msgstr "Código de confirmación"
 msgid ""
 "We have just emailed you a confirmation code to enter to confirm this action"
 msgstr ""
+"Acabamos de enviarle por correo electrónico un código de confirmación que "
+"deberá introducir para confirmar esta acción"
 
 #: pretix/control/forms/orders.py:1055
-#, fuzzy
-#| msgid "The confirm code you entered was incorrect."
 msgid "The confirmation code is incorrect."
-msgstr "El código de confirmación que introdujo era incorrecto."
+msgstr "El código de confirmación es incorrecto."
 
 #: pretix/control/forms/organizer.py:93
 msgid "This slug is already in use. Please choose a different one."
@@ -21268,6 +21276,10 @@ msgid ""
 "optionally contain additional rules that depend on the customer's country "
 "and type."
 msgstr ""
+"Las normas fiscales definen diferentes escenarios fiscales que luego se "
+"pueden asignar a los productos individuales. Cada norma fiscal contiene un "
+"tipo impositivo predeterminado y, opcionalmente, puede contener normas "
+"adicionales que dependen del país y el tipo de cliente."
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:21
 msgid "You haven't created any tax rules yet."
@@ -21294,13 +21306,11 @@ msgid "Make default"
 msgstr "Establecer por defecto"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:67
-#, fuzzy, python-format
-#| msgid "%(count)s event"
-#| msgid_plural "%(count)s events"
+#, python-format
 msgid "%(count)s product"
 msgid_plural "%(count)s products"
-msgstr[0] "%(count)s elemento"
-msgstr[1] "%(count)s elementos"
+msgstr[0] "%(count)s producto"
+msgstr[1] "%(count)s productos"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:75
 #, python-format
@@ -21313,16 +21323,12 @@ msgid "excl. %(rate)s %%"
 msgstr "excluido %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:80
-#, fuzzy
-#| msgid "Custom rules"
 msgid "with custom rules"
-msgstr "Reglas personalizadas"
+msgstr "con reglas personalizadas"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:110
-#, fuzzy
-#| msgid "Base settings"
 msgid "Tax settings"
-msgstr "Ajustes básicos"
+msgstr "Configuración de impuestos"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:4
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:6
@@ -24141,7 +24147,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/transactions.html:73
 #, python-format
 msgid "incl. %(amount)s rounding correction"
-msgstr ""
+msgstr "incl. %(amount)s corrección de redondeo"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
@@ -24247,84 +24253,77 @@ msgstr ""
 "los que estén en la lista de espera recibirán varios correos electrónicos."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:84
-#, fuzzy
-#| msgid "Refund amount"
 msgid "Preview refund amount"
-msgstr "Importe del reembolso"
+msgstr "Previsualizar el importe del reembolso"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:88
 msgid "Cancel all orders"
 msgstr "Cancelar todos los pedidos"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:13
-#, fuzzy
-#| msgid "If you contact us, please send us the following code:"
 msgid "If you proceed, the system will do the following:"
-msgstr ""
-"Si se pone en contacto con nosotros, por favor envíenos el siguiente código:"
+msgstr "Si continúa, el sistema hará lo siguiente:"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:19
 #, python-format
 msgid "%(count)s order will be canceled fully"
 msgid_plural "%(count)s orders will be canceled fully"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s pedido se cancelará por completo"
+msgstr[1] "%(count)s pedidos se cancelarán por completo"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:26
 #, python-format
 msgid "%(count)s order will be canceled partially"
 msgid_plural "%(count)s orders will be canceled partially"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s pedido se cancelará parcialmente"
+msgstr[1] "%(count)s pedidos se cancelarán parcialmente"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:36
 #, python-format
 msgid "%(amount)s are eligible for refunds."
-msgstr ""
+msgstr "%(amount)s son reembolsables."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:40
 msgid ""
 "The system will attempt to refund the money automatically if supported by "
 "the payment method."
 msgstr ""
+"El sistema intentará reembolsar el dinero automáticamente si el método de "
+"pago lo permite."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:42
 msgid "The system will create manual refunds that you need to execute."
-msgstr ""
+msgstr "El sistema creará reembolsos manuales que deberá ejecutar."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:44
-#, fuzzy
-#| msgid "Text (if order will not expire automatically)"
 msgid "Refunds will not happen automatically."
-msgstr "Texto (si el pedido no caducará automáticamente)"
+msgstr "Los reembolsos no se realizarán automáticamente."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:52
-#, fuzzy
-#| msgid "Send information via email"
 msgid "Inform all customers via email."
-msgstr "Enviar información por correo electrónico"
+msgstr "Informar a todos los clientes por correo electrónico."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:57
 msgid "Inform all waiting list contacts via email."
 msgstr ""
+"Informar a todos los contactos de la lista de espera por correo electrónico."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:62
 msgid ""
 "These numbers are estimates and may change if the data in your event "
 "recently changed."
 msgstr ""
+"Estas cifras son estimaciones y pueden variar si los datos del evento han "
+"cambiado recientemente."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:76
-#, fuzzy, python-format
-#| msgid "Initiate a refund of %(amount)s"
+#, python-format
 msgid "Proceed and refund approx. %(amount)s"
-msgstr "Iniciar un reembolso de %(amount)s"
+msgstr "Proseguir y reembolsar aprox. %(amount)s"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:80
-#, fuzzy
-#| msgid "Yes, cancel order"
 msgid "Proceed and cancel orders"
-msgstr "Sí, cancelar pedido"
+msgstr "Proceder y cancelar pedidos"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
