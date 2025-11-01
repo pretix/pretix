@@ -56,8 +56,26 @@
                 <td>{{ t.get_tax_code_display }}</td>
                 <td class="text-right flip">{{ t.count }} &times;</td>
                 <td class="text-right flip">{{ t.price|money:request.event.currency }}</td>
-                <td class="text-right flip">{{ t.full_tax_value|money:request.event.currency }}</td>
-                <td class="text-right flip">{{ t.full_price|money:request.event.currency }}</td>
+                <td class="text-right flip">
+                    {{ t.full_tax_value|money:request.event.currency }}
+                    {% if t.full_price_includes_rounding_correction %}
+                        <br><small>
+                            {% blocktrans trimmed with amount=t.full_tax_value_includes_rounding_correction|money:request.event.currency %}
+                                incl. {{ amount }} rounding correction
+                            {% endblocktrans %}
+                        </small>
+                    {% endif %}
+                </td>
+                <td class="text-right flip">
+                    {{ t.full_price|money:request.event.currency }}
+                    {% if t.full_price_includes_rounding_correction %}
+                        <br><small>
+                        {% blocktrans trimmed with amount=t.full_price_includes_rounding_correction|money:request.event.currency %}
+                            incl. {{ amount }} rounding correction
+                        {% endblocktrans %}
+                    </small>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

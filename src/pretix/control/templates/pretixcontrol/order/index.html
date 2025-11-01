@@ -681,6 +681,16 @@
                                         </small>
                                     {% endif %}
                                 {% endif %}
+                                {% if django_settings.DEBUG %}
+                                    <br/>
+                                    <small class="admin-only">
+                                        price = {{ line.price|floatformat:2 }}<br>
+                                        rounding_correction = {{ line.price_includes_rounding_correction|floatformat:2 }}<br>
+                                        tax_value = {{ line.tax_value|floatformat:2 }}<br>
+                                        tax_value_rounding_correction = {{ line.tax_value_includes_rounding_correction|floatformat:2 }}<br>
+                                        voucher_budget_use = {{ line.voucher_budget_use|floatformat:2 }}
+                                    </small>
+                                {% endif %}
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -721,6 +731,16 @@
                                         </small>
                                     {% endif %}
                                 {% endif %}
+                                {% if django_settings.DEBUG %}
+                                    <br/>
+                                    <small class="admin-only">
+                                        price = {{ fee.value|floatformat:2 }}<br>
+                                        rounding_correction = {{ fee.value_includes_rounding_correction|floatformat:2 }}<br>
+                                        tax_value = {{ fee.tax_value|floatformat:2 }}<br>
+                                        tax_value_rounding_correction = {{ fee.tax_value_includes_rounding_correction|floatformat:2 }}<br>
+                                        voucher_budget_use = {{ fee.voucher_budget_use|floatformat:2 }}
+                                    </small>
+                                {% endif %}
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -749,6 +769,12 @@
                         </div>
                         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
                             <strong>{{ items.total|money:event.currency }}</strong>
+                            {% if django_settings.DEBUG %}
+                                <br/>
+                                <small class="admin-only">
+                                    tax_rounding_mode = {{ order.tax_rounding_mode }}
+                                </small>
+                            {% endif %}
                         </div>
                         <div class="clearfix"></div>
                     </div>

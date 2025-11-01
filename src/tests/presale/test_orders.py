@@ -1334,6 +1334,56 @@ class OrdersTest(BaseOrdersTest):
         p.refresh_from_db()
         assert p.state == OrderPayment.PAYMENT_STATE_CREATED
 
+    def test_change_paymentmethod_with_rounding_change(self):
+        tr19 = self.event.tax_rules.create(
+            name='VAT',
+            rate=Decimal('19.00'),
+            default=True
+        )
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.ticket_pos.price = Decimal("100.00")
+        self.ticket_pos.tax_rule = tr19
+        self.ticket_pos._calculate_tax()
+        self.ticket_pos.save()
+        self.order.total = Decimal("100.00")
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+
+        self.event.settings.tax_rounding = "sum_by_net"
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_testdummy__enabled', True)
+        self.event.settings.set('payment_testdummy__fee_reverse_calc', False)
+        self.event.settings.set('payment_testdummy__fee_abs', '100.00')
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+        )
+        assert 'Test dummy' in response.content.decode()
+        assert '+ €100.00' in response.content.decode()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'testdummy'
+            }, follow=True
+        )
+        assert 'Total: €199.99' in response.content.decode()
+        self.order.refresh_from_db()
+        with scopes_disabled():
+            assert self.order.payments.last().provider == 'testdummy'
+            fee = self.order.fees.filter(fee_type=OrderFee.FEE_TYPE_PAYMENT).last()
+            assert fee.value == Decimal('100.00')
+            assert fee.tax_value == Decimal('15.97')
+            self.ticket_pos.refresh_from_db()
+            assert self.ticket_pos.price == Decimal("99.99")
+            assert self.ticket_pos.price_includes_rounding_correction == Decimal("-0.01")
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('199.99')
+            p = self.order.payments.last()
+            assert p.provider == 'testdummy'
+            assert p.state == OrderPayment.PAYMENT_STATE_CREATED
+            assert p.amount == Decimal('199.99')
+
     def test_change_paymentmethod_to_same(self):
         with scopes_disabled():
             p_old = self.order.payments.create(

@@ -178,3 +178,124 @@ Flowchart
 ---------
 
 .. image:: /images/cart_pricing.png
+
+
+.. _`algorithms-rounding`:
+
+Rounding of taxes
+-----------------
+
+pretix internally always stores taxes on a per-line level, like this:
+
+ ========== ========== =========== ======= =============
+   Product   Tax rate   Net price     Tax   Gross price
+ ========== ========== =========== ======= =============
+  Ticket A       19 %       84.03   15.97        100.00
+  Ticket B       19 %       84.03   15.97        100.00
+  Ticket C       19 %       84.03   15.97        100.00
+  Ticket D       19 %       84.03   15.97        100.00
+  Ticket E       19 %       84.03   15.97        100.00
+       Sum                 420.15   79.85        500.00
+ ========== ========== =========== ======= =============
+
+Whether the net price is computed from the gross price or vice versa is configured on the tax rule and may differ for every line.
+
+The line-based computation has a few significant advantages:
+
+- We can report both net and gross prices for every individual ticket.
+
+- We can report both net and gross prices for every filter imaginable, such as the gross sum of all sales of Ticket A
+  or the net sum of all sales for a specific date in an event series. All numbers will be exact.
+
+- When splitting the order into two, both net price and gross price are split without any changes in rounding.
+
+The main disadvantage is that the tax looks "wrong" when computed from the sum. Taking the sum of net prices (420.15)
+and multiplying it with the tax rate (19%) yields a tax amount of 79.83 (instead of 79.85) and a gross sum of 499.98
+(instead of 499.98). This becomes a problem when juristictions, data formats, or external systems expect this calculation
+to work on the level of the entire order. A prominent example is the EN 16931 standard for e-invoicing that
+does not allow the computation as created by pretix.
+
+However, calculating the tax rate from the net total has significant disadvantages:
+
+- It is impossible to guarantee a stable gross price this way, i.e. if you advertise a price of €100 per ticket to
+  consumers, they will be confused when they only need to pay €499.98 for 5 tickets.
+
+- Some prices are impossible, e.g. you cannot sell a ticket for a gross price of €99.99 at a 19% tax rate, since there
+  is no two-decimal net price that would be computed to a gross price of €99.99.
+
+- When splitting an order into two, the combined of the new orders is not guaranteed to be the same as the total of the
+  original order. Therefore, additional payments or refunds of very small amounts might be necessary.
+
+To allow organizers to make their own choices on this matter, pretix provides the following options:
+
+Compute taxes for every line individually
+"""""""""""""""""""""""""""""""""""""""""
+
+Algorithm identifier: ``line``
+
+This is our original algorithm where the tax value is rounded for every line individually.
+
+**This is our current default algorithm and we recommend it whenever you do not have different requirements** (see below).
+For the example above:
+
+ ========== ========== =========== ======= =============
+   Product   Tax rate   Net price     Tax   Gross price
+ ========== ========== =========== ======= =============
+  Ticket A       19 %       84.03   15.97        100.00
+  Ticket B       19 %       84.03   15.97        100.00
+  Ticket C       19 %       84.03   15.97        100.00
+  Ticket D       19 %       84.03   15.97        100.00
+  Ticket E       19 %       84.03   15.97        100.00
+       Sum                 420.15   79.85        500.00
+ ========== ========== =========== ======= =============
+
+
+Compute taxes based on net total
+""""""""""""""""""""""""""""""""
+
+Algorithm identifier: ``sum_by_net``
+
+In this algorithm, the tax value and gross total are computed from the sum of the net prices. To accomplish this within
+our data model, the gross price and tax of some of the tickets will be changed by the minimum currency unit (e.g. €0.01).
+The net price of the tickets always stay the same.
+
+**This is the algorithm intended by EN 16931 invoices and our recommendation to use for e-invoicing when (primarily) business customers are involved.**
+
+The main downside is that it might be confusing when selling to consumers, since the amounts to be paid change in unexpected ways.
+For the example above, the customer expects to pay 5 times 100.00, but they are are in fact charged 499.98:
+
+ ========== ========== =========== ============================== ==============================
+   Product   Tax rate   Net price                            Tax                    Gross price
+ ========== ========== =========== ============================== ==============================
+  Ticket A       19 %       84.03   15.96 (incl. -0.01 rounding)   99.99 (incl. -0.01 rounding)
+  Ticket B       19 %       84.03   15.96 (incl. -0.01 rounding)   99.99 (incl. -0.01 rounding)
+  Ticket C       19 %       84.03                          15.97                         100.00
+  Ticket D       19 %       84.03                          15.97                         100.00
+  Ticket E       19 %       84.03                          15.97                         100.00
+       Sum                 420.15                          78.83                         499.98
+ ========== ========== =========== ============================== ==============================
+
+Compute taxes based on net total with stable gross prices
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Algorithm identifier: ``sum_by_net_keep_gross``
+
+In this algorithm, the tax value and gross total are computed from the sum of the net prices. However, the net prices
+of some of the tickets will be changed automatically by the minimum currency unit (e.g. €0.01) such that the resulting
+gross prices stay the same.
+
+**This is less confusing to consumers and the end result is still compliant to EN 16931, so we recommend this for e-invoicing when (primarily) consumers are involved.**
+
+The main downside is that it might be confusing when selling to business customers, since the prices of the identical tickets appear to be different.
+Full computation for the example above:
+
+ ========== ========== ============================= ============================== =============
+   Product   Tax rate                     Net price                            Tax   Gross price
+ ========== ========== ============================= ============================== =============
+  Ticket A       19 %   84.04 (incl. 0.01 rounding)   15.96 (incl. -0.01 rounding)        100.00
+  Ticket B       19 %   84.04 (incl. 0.01 rounding)   15.96 (incl. -0.01 rounding)        100.00
+  Ticket C       19 %                         84.03                          15.97        100.00
+  Ticket D       19 %                         84.03                          15.97        100.00
+  Ticket E       19 %                         84.03                          15.97        100.00
+       Sum                                   420.17                          79.83        500.00
+ ========== ========== ============================= ============================== =============

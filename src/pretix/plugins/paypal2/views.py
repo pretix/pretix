@@ -73,7 +73,7 @@ from pretix.plugins.paypal2.payment import (
     PaypalMethod, PaypalMethod as Paypal, PaypalWallet,
 )
 from pretix.plugins.paypal.models import ReferencedPayPalObject
-from pretix.presale.views import get_cart, get_cart_total
+from pretix.presale.views import get_cart
 from pretix.presale.views.cart import cart_session
 
 logger = logging.getLogger('pretix.plugins.paypal2')
@@ -147,7 +147,7 @@ class XHRView(View):
 
             cart_total = order.pending_sum + fee
         else:
-            cart_total = get_cart_total(request)
+            cart = get_cart(request)
             cart_payments = cart_session(request).get('payments', [])
             multi_use_cart_payments = [p for p in cart_payments if p.get('multi_use_supported')]
             simulated_payments = multi_use_cart_payments + [{
@@ -159,12 +159,13 @@ class XHRView(View):
             }]
 
             try:
-                for fee in get_fees(request.event, request, cart_total, None, simulated_payments, get_cart(request)):
-                    cart_total += fee.value
+                fees = get_fees(event=request.event, request=request, invoice_address=None,
+                                payments=simulated_payments, positions=cart)
             except TaxRule.SaleNotAllowed:
                 # ignore for now, will fail on order creation
-                pass
+                fees = []
 
+            cart_total = sum([c.price for c in cart]) + sum([f.value for f in fees])
             total_remaining = cart_total
             for p in multi_use_cart_payments:
                 if p.get('min_value') and total_remaining < Decimal(p['min_value']):

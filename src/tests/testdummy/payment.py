@@ -35,7 +35,7 @@ class DummyPaymentProvider(BasePaymentProvider):
     abort_pending_allowed = False
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
-        pass
+        return True
 
     def checkout_confirm_render(self, request) -> str:
         pass

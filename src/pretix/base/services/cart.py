@@ -66,8 +66,8 @@ from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException, lock_objects
 from pretix.base.services.pricing import (
-    apply_discounts, get_line_price, get_listed_price, get_price,
-    is_included_for_free,
+    apply_discounts, apply_rounding, get_line_price, get_listed_price,
+    get_price, is_included_for_free,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask
@@ -1430,11 +1430,12 @@ class CartManager:
         )
 
         for cp, (new_price, discount) in zip(positions, discount_results):
-            if cp.price != new_price or cp.discount_id != (discount.pk if discount else None):
-                diff += new_price - cp.price
+            if cp.gross_price_before_rounding != new_price or cp.discount_id != (discount.pk if discount else None):
+                diff += new_price - cp.gross_price_before_rounding
                 cp.price = new_price
+                cp.price_includes_rounding_correction = Decimal("0.00")
                 cp.discount = discount
-                cp.save(update_fields=['price', 'discount'])
+                cp.save(update_fields=['price', 'price_includes_rounding_correction', 'discount'])
 
         return diff
 
@@ -1493,30 +1494,53 @@ def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: D
     add_payment_to_cart_session(cs, provider, min_value, max_value, info_data)
 
 
-def get_fees(event, request, total, invoice_address, payments, positions):
+def get_fees(event, request, _total_ignored_=None, invoice_address=None, payments=None, positions=None):
+    """
+    Return all fees that would be created for the current cart. Also implicitly applies rounding on the order
+    positions. A recommended usage pattern to compute the total looks like this::
+
+        cart = get_cart(request)
+        fees = get_fees(
+            event=request.event,
+            request=request,
+            invoice_address=cached_invoice_address(request),
+            payments=None,
+            positions=cart,
+        )
+        total = sum([c.price for c in cart]) + sum([f.value for f in fees])
+    """
     if payments and not isinstance(payments, list):
         raise TypeError("payments must now be a list")
+    if positions is None:
+        raise TypeError("Must pass positions, parameter is only optional for backwards-compat reasons")
 
     fees = []
+    total = sum([c.gross_price_before_rounding for c in positions])
     for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
-                                                    total=total, positions=positions, payment_requests=payments):
+                                                    positions=positions, total=total, payment_requests=payments):
         if resp:
             fees += resp
 
-    total = total + sum(f.value for f in fees)
+    for fee in fees:
+        fee._calculate_tax(invoice_address=invoice_address, event=event)
+        if fee.tax_rule and not fee.tax_rule.pk:
+            fee.tax_rule = None  # TODO: deprecate
+
+    apply_rounding(event.settings.tax_rounding, event.currency, [*positions, *fees])
+    total = sum([c.price for c in positions]) + sum([f.value for f in fees])
 
     if total != 0 and payments:
-        total_remaining = total
+        payments_assigned = Decimal("0.00")
         for p in payments:
             # This algorithm of treating min/max values and fees needs to stay in sync between the following
             # places in the code base:
             # - pretix.base.services.cart.get_fees
             # - pretix.base.services.orders._get_fees
             # - pretix.presale.views.CartMixin.current_selected_payments
-            if p.get('min_value') and total_remaining < Decimal(p['min_value']):
+            if p.get('min_value') and total - payments_assigned < Decimal(p['min_value']):
                 continue
 
-            to_pay = total_remaining
+            to_pay = max(total - payments_assigned, Decimal("0.00"))
             if p.get('max_value') and to_pay > Decimal(p['max_value']):
                 to_pay = min(to_pay, Decimal(p['max_value']))
 
@@ -1525,28 +1549,32 @@ def get_fees(event, request, total, invoice_address, payments, positions):
                 continue
 
             payment_fee = pprov.calculate_fee(to_pay)
-            total_remaining += payment_fee
-            to_pay += payment_fee
-
-            if p.get('max_value') and to_pay > Decimal(p['max_value']):
-                to_pay = min(to_pay, Decimal(p['max_value']))
-
-            total_remaining -= to_pay
-
             if payment_fee:
                 if event.settings.tax_rule_payment == "default":
                     payment_fee_tax_rule = event.cached_default_tax_rule or TaxRule.zero()
                 else:
                     payment_fee_tax_rule = TaxRule.zero()
                 payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross', invoice_address=invoice_address)
-                fees.append(OrderFee(
+                pf = OrderFee(
                     fee_type=OrderFee.FEE_TYPE_PAYMENT,
                     value=payment_fee,
                     tax_rate=payment_fee_tax.rate,
                     tax_value=payment_fee_tax.tax,
                     tax_code=payment_fee_tax.code,
                     tax_rule=payment_fee_tax_rule
-                ))
+                )
+                fees.append(pf)
+
+                # Re-apply rounding as grand total has changed
+                apply_rounding(event.settings.tax_rounding, event.currency, [*positions, *fees])
+                total = sum([c.price for c in positions]) + sum([f.value for f in fees])
+
+                # Re-calculate to_pay as grand total has changed
+                to_pay = max(total - payments_assigned, Decimal("0.00"))
+                if p.get('max_value') and to_pay > Decimal(p['max_value']):
+                    to_pay = min(to_pay, Decimal(p['max_value']))
+
+            payments_assigned += to_pay
 
     return fees
 

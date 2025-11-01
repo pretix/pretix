@@ -54,7 +54,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
-from django.db.models import ProtectedError
+from django.db.models import Count, ProtectedError
 from django.forms import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed,
@@ -90,7 +90,7 @@ from pretix.control.forms.event import (
     EventFooterLinkFormset, EventMetaValueForm, EventSettingsForm,
     EventUpdateForm, InvoiceSettingsForm, ItemMetaPropertyForm,
     MailSettingsForm, PaymentSettingsForm, ProviderForm, QuickSetupForm,
-    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
+    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet, TaxSettingsForm,
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -645,6 +645,25 @@ class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
             p.sales_channels = [sales_channels[channel] for channel in p.settings.get('_restrict_to_sales_channels', as_type=list, default=['web'])]
             if p.is_meta:
                 p.show_enabled = p.settings._enabled in (True, 'True')
+        return context
+
+
+class TaxSettings(EventSettingsViewMixin, EventSettingsFormView):
+    template_name = 'pretixcontrol/event/tax.html'
+    form_class = TaxSettingsForm
+    permission = 'can_change_event_settings'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tax', kwargs={
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['taxrules'] = self.request.event.tax_rules.annotate(
+            c_items=Count("item")
+        ).all()
         return context
 
 
@@ -1261,16 +1280,6 @@ class EventComment(EventPermissionRequiredMixin, View):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug
         })
-
-
-class TaxList(EventSettingsViewMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):
-    model = TaxRule
-    context_object_name = 'taxrules'
-    template_name = 'pretixcontrol/event/tax_index.html'
-    permission = 'can_change_event_settings'
-
-    def get_queryset(self):
-        return self.request.event.tax_rules.all()
 
 
 class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView):

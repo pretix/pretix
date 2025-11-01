@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-21 07:27+0000\n"
+"POT-Creation-Date: 2025-10-29 07:55+0000\n"
 "PO-Revision-Date: 2025-06-25 06:56+0000\n"
 "Last-Translator: 조정화 <junghwa.jo@om.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -660,40 +660,40 @@ msgid ""
 "will be impacted."
 msgstr "색상 대비가 흰색이 부족합니다. 사이트 접근성에 영향을 미칩니다."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:418
+#: pretix/static/pretixcontrol/js/ui/main.js:438
 msgid "Search query"
 msgstr "질문을 검색하다"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:435
+#: pretix/static/pretixcontrol/js/ui/main.js:436
 msgid "All"
 msgstr "전부"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:437
 msgid "None"
 msgstr "아무것도 없다"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:440
+#: pretix/static/pretixcontrol/js/ui/main.js:441
 msgid "Selected only"
 msgstr "선택된 경우에만"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:813
+#: pretix/static/pretixcontrol/js/ui/main.js:814
 msgid "Enter page number between 1 and %(max)s."
 msgstr "페이지 번호를 1에서 %(최대)초 사이로 입력합니다."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:816
+#: pretix/static/pretixcontrol/js/ui/main.js:817
 msgid "Invalid page number."
 msgstr "페이지 번호가 잘못되었습니다."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:974
+#: pretix/static/pretixcontrol/js/ui/main.js:975
 msgid "Use a different name internally"
 msgstr "내부적으로 다른 이름을 사용합니다"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1014
+#: pretix/static/pretixcontrol/js/ui/main.js:1015
 msgid "Click to close"
 msgstr "종료를 클릭해 주세요"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1095
+#: pretix/static/pretixcontrol/js/ui/main.js:1096
 msgid "You have unsaved changes!"
 msgstr "귀하는 변경을 저장하지 않았습니다"
 
