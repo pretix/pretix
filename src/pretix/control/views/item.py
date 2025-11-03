@@ -1500,7 +1500,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 )
             elif k == 'program_times':
                 self.save_formset(
-                    'program_times', 'program_times', 'item', order=False,
+                    'program_times', 'program_times', order=False,
                     serializer=ItemProgramTimeSerializer
                 )
                 if not change_data:
