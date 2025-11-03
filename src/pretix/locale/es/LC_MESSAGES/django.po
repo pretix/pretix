@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 10:55+0000\n"
-"PO-Revision-Date: 2025-10-31 17:00+0000\n"
+"PO-Revision-Date: 2025-11-03 16:40+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -24145,7 +24145,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:63
 #: pretix/control/templates/pretixcontrol/order/transactions.html:73
-#, python-format
+#, fuzzy, python-format
 msgid "incl. %(amount)s rounding correction"
 msgstr "incl. %(amount)s corrección de redondeo"
 
@@ -24272,7 +24272,7 @@ msgstr[0] "%(count)s pedido se cancelará por completo"
 msgstr[1] "%(count)s pedidos se cancelarán por completo"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:26
-#, python-format
+#, fuzzy, python-format
 msgid "%(count)s order will be canceled partially"
 msgid_plural "%(count)s orders will be canceled partially"
 msgstr[0] "%(count)s pedido se cancelará parcialmente"
