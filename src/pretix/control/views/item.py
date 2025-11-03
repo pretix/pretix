@@ -1403,7 +1403,6 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
 
     def save_formset(self, key, log_base, attr='item', order=True, serializer=None,
                      rm_verb='removed'):
-        program_times_changed = False
         for form in self.formsets[key].deleted_forms:
             if not form.instance.pk:
                 continue
@@ -1415,8 +1414,6 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
             self.get_object().log_action(
                 'pretix.event.item.{}.{}'.format(log_base, rm_verb), user=self.request.user, data=d
             )
-            if key == 'program_times':
-                program_times_changed = True
             form.instance.delete()
             form.instance.pk = None
 
@@ -1446,11 +1443,6 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                     'pretix.event.item.{}.added'.format(log_base),
                     user=self.request.user, data=change_data
                 )
-                if key == 'program_times':
-                    program_times_changed = True
-        if program_times_changed:
-            # a change in program times warrants rebuilding tickets
-            invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'item': self.object.pk})
 
     @transaction.atomic
     def form_valid(self, form):
@@ -1511,6 +1503,11 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                     'program_times', 'program_times', 'item', order=False,
                     serializer=ItemProgramTimeSerializer
                 )
+                if not change_data:
+                    for form in v.forms:
+                        if (form in v.deleted_forms and form.instance.pk) or form.has_changed():
+                            invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'item': self.object.pk})
+                            break
             else:
                 v.save()
 
