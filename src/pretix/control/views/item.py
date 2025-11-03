@@ -1504,8 +1504,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                     serializer=ItemProgramTimeSerializer
                 )
                 if not change_data:
-                    for form in v.forms:
-                        if (form in v.deleted_forms and form.instance.pk) or form.has_changed():
+                    for f in v.forms:
+                        if (f in v.deleted_forms and f.instance.pk) or f.has_changed():
                             invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'item': self.object.pk})
                             break
             else:
