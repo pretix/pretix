@@ -1330,14 +1330,8 @@ class ItemProgramTimeFormSet(I18nFormSet):
     template = "pretixcontrol/item/include_program_times.html"
     title = _('Program times')
 
-    def __init__(self, *args, **kwargs):
-        self.event = kwargs.get('event')
-        self.item = kwargs.pop('item')
-        super().__init__(*args, **kwargs)
-
     def _construct_form(self, i, **kwargs):
         kwargs['event'] = self.event
-        kwargs['item'] = self.item
         return super()._construct_form(i, **kwargs)
 
     @property
@@ -1349,7 +1343,6 @@ class ItemProgramTimeFormSet(I18nFormSet):
             empty_permitted=True,
             use_required_attribute=False,
             locales=self.locales,
-            item=self.item,
             event=self.event
         )
         self.add_fields(form, None)
@@ -1359,11 +1352,7 @@ class ItemProgramTimeFormSet(I18nFormSet):
 class ItemProgramTimeForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
-        self.item = kwargs.pop('item')
         super().__init__(*args, **kwargs)
-        initial = kwargs.get('initial', {})
-        kwargs['initial'] = initial
-
         self.fields['end'].widget.attrs['data-date-after'] = '#id_{prefix}-start_0'.format(prefix=self.prefix)
 
     class Meta:

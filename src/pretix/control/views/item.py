@@ -1573,12 +1573,11 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
             ('program_times', inlineformset_factory(
                 Item, ItemProgramTime,
                 form=ItemProgramTimeForm, formset=ItemProgramTimeFormSet,
-                fk_name='item',
                 can_order=False, can_delete=True, extra=0
             )(
                 self.request.POST if self.request.method == "POST" else None,
                 queryset=ItemProgramTime.objects.filter(item=self.get_object()),
-                event=self.request.event, item=self.item, prefix="program_times"
+                event=self.request.event, prefix="program_times"
             )),
         ])
         if not self.object.has_variations:
