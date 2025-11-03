@@ -1432,7 +1432,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 form.instance.position = i
             setattr(form.instance, attr, self.get_object())
             created = not form.instance.pk
-            form.save()
+            if form.has_changed():
+                form.save()
             if form.has_changed() and any(a for a in form.changed_data if a != 'ORDER'):
                 change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
                 if key == 'variations':
