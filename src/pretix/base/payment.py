@@ -1377,7 +1377,7 @@ class GiftCardPayment(BasePaymentProvider):
     execute_payment_needs_user = False
     verbose_name = _("Gift card")
     payment_form_class = GiftCardPaymentForm
-    payment_form_template_name = 'pretixcontrol/giftcards/checkout.html'
+    payment_form_template_name = 'pretixpresale/giftcard/checkout.html'
 
     @cached_property
     def customer_gift_cards(self):
@@ -1504,7 +1504,7 @@ class GiftCardPayment(BasePaymentProvider):
         return super().order_change_allowed(order) and self.event.organizer.has_gift_cards
 
     def checkout_confirm_render(self, request, order=None, info_data=None) -> str:
-        return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({
+        return get_template('pretixpresale/giftcard/checkout_confirm.html').render({
             'info_data': info_data,
         })
 
