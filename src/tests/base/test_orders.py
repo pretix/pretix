@@ -2477,6 +2477,7 @@ class OrderChangeManagerTests(TestCase):
         assert res_shirt.position.item == self.shirt
         assert res_ticket2.position.item == self.ticket2
 
+    @classscope(attr='o')
     def test_add_item_with_rounding(self):
         self.order.tax_rounding_mode = "sum_by_net"
         self.order.save()
