@@ -60,6 +60,16 @@ class UserSettingsTest(SoupTest):
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.fullname == 'Peter Miller'
 
+    def test_set_locale_and_timezone(self):
+        doc = self.save({
+            'locale': 'fr',
+            'timezone': 'Europe/Paris',
+        })
+        assert doc.select(".alert-success")
+        self.user = User.objects.get(pk=self.user.pk)
+        assert self.user.locale == 'fr'
+        assert self.user.timezone == 'Europe/Paris'
+
 
 class UserEmailChangeTest(SoupTest):
     def setUp(self):
