@@ -72,7 +72,7 @@ from pretix.helpers.countries import CachedCountries
 from pretix.helpers.format import format_map
 from pretix.helpers.money import DecimalTextInput
 from pretix.multidomain.urlreverse import build_absolute_uri
-from pretix.presale.views import get_cart, get_cart_total
+from pretix.presale.views import get_cart
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
@@ -1149,12 +1149,16 @@ class FreeOrderProvider(BasePaymentProvider):
         from .services.cart import get_fees
 
         cart = get_cart(request)
-        total = get_cart_total(request)
+
         try:
-            total += sum([f.value for f in get_fees(self.event, request, total, None, None, cart)])
+            fees = get_fees(event=request.event, request=request,
+                            invoice_address=None,
+                            payments=None, positions=cart)
         except TaxRule.SaleNotAllowed:
             # ignore for now, will fail on order creation
-            pass
+            fees = []
+        total = sum([c.price for c in cart]) + sum([f.value for f in fees])
+
         return total == 0
 
     def order_change_allowed(self, order: Order) -> bool:
@@ -1373,7 +1377,7 @@ class GiftCardPayment(BasePaymentProvider):
     execute_payment_needs_user = False
     verbose_name = _("Gift card")
     payment_form_class = GiftCardPaymentForm
-    payment_form_template_name = 'pretixcontrol/giftcards/checkout.html'
+    payment_form_template_name = 'pretixpresale/giftcard/checkout.html'
 
     @cached_property
     def customer_gift_cards(self):
@@ -1500,7 +1504,7 @@ class GiftCardPayment(BasePaymentProvider):
         return super().order_change_allowed(order) and self.event.organizer.has_gift_cards
 
     def checkout_confirm_render(self, request, order=None, info_data=None) -> str:
-        return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({
+        return get_template('pretixpresale/giftcard/checkout_confirm.html').render({
             'info_data': info_data,
         })
 

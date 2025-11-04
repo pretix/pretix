@@ -1,0 +1,33 @@
+{% load i18n %}
+{% load bootstrap3 %}
+{% load money %}
+{% load rich_text %}
+
+{{ request.event.settings.payment_giftcard_public_description|rich_text }}
+{% if customer_gift_cards %}
+    <p><strong>
+        <span class="sr-only">{% trans "Information" %}</span>
+        {% trans "The following gift cards are available in your customer account:" %}
+    </strong></p>
+    {% csrf_token %}
+    <ul class="list-group">
+        {% for c in customer_gift_cards %}
+            <li class="list-group-item row row-no-gutters">
+                <div class="col-sm-8 col-md-9" id="gc-code-{{ forloop.counter }}">
+                    {{ c }}
+                </div>
+                <div class="col-sm-2 text-right" id="gc-value-{{ forloop.counter }}">
+                    {{ c.value|money:c.currency }}
+                </div>
+                <div class="col-sm-2 col-md-1 text-right">
+                    <button name="use_giftcard" class="btn btn-primary btn-xs use_giftcard" data-value="{{ c.secret }}"
+                            title="{% trans "Use gift card" %}"
+                            aria-describedby="gc-code-{{ forloop.counter }} gc-value-{{ forloop.counter }}">
+                        {% trans "Apply" %}
+                    </button>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+{% bootstrap_form form layout='checkout' %}

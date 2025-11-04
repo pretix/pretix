@@ -60,6 +60,19 @@ def test_from_gross_price(event):
     assert tp.rate == Decimal('10.00')
     assert tp.code == 'S/standard'
 
+    tr = TaxRule(
+        event=event,
+        rate=Decimal('19.00'),
+        code=None,
+        price_includes_tax=True,
+    )
+    tp = tr.tax(Decimal('99.99'))
+    assert tp.gross == Decimal('99.99')
+    assert tp.net == Decimal('84.03')
+    assert tp.tax == Decimal('15.96')
+    assert tp.rate == Decimal('19.00')
+    assert tp.code is None
+
 
 @pytest.mark.django_db
 def test_from_net_price(event):
@@ -978,7 +991,7 @@ def test_split_fees(event):
     op2 = OrderPosition(price=Decimal("10.70"), item=item)
     op2._calculate_tax(tax_rule=tr7, invoice_address=InvoiceAddress())
     of1 = OrderFee(value=Decimal("5.00"), fee_type=OrderFee.FEE_TYPE_SHIPPING)
-    of1._calculate_tax(tax_rule=tr7, invoice_address=InvoiceAddress())
+    of1._calculate_tax(tax_rule=tr7, invoice_address=InvoiceAddress(), event=event)
 
     # Example of a 10% service fee
     assert split_fee_for_taxes([op1, op2], Decimal("2.26"), event) == [
