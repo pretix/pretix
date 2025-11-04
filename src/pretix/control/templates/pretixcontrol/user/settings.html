@@ -22,7 +22,7 @@
     </div>
 {% endif %}
 <h1>{% trans "Account settings" %}</h1>
-<form action="" method="post" class="form-horizontal">
+<form action="" method="post" class="form-horizontal" data-testid="usersettingsform">
     {% csrf_token %}
     {% bootstrap_form_errors form %}
     <fieldset>

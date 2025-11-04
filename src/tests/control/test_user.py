@@ -45,7 +45,7 @@ class UserSettingsTest(SoupTest):
         self.user = User.objects.create_user('dummy@dummy.dummy', 'barfoofoo')
         self.client.login(email='dummy@dummy.dummy', password='barfoofoo')
         doc = self.get_doc('/control/settings')
-        self.form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        self.form_data = extract_form_fields(doc.select('form[data-testid="usersettingsform"]')[0])
 
     def save(self, data):
         form_data = self.form_data.copy()
