@@ -258,9 +258,15 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 if resp:
                     desc += "<br/>" + resp
 
-            for answ in p.answers.all():
-                if not answ.question.print_on_invoice:
-                    continue
+            answers_qs = p.answers.filter(
+                question__print_on_invoice=True
+            ).select_related(
+                'question'
+            ).order_by(
+                'question__position',
+                'question__id'
+            )
+            for answ in answers_qs:
                 desc += "<br />{}{} {}".format(
                     answ.question.question,
                     "" if str(answ.question.question).endswith("?") else ":",
