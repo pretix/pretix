@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 10:55+0000\n"
-"PO-Revision-Date: 2025-11-03 16:40+0000\n"
+"PO-Revision-Date: 2025-11-04 10:25+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -24322,9 +24322,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:63
 #: pretix/control/templates/pretixcontrol/order/transactions.html:73
-#, fuzzy, python-format
+#, python-format
 msgid "incl. %(amount)s rounding correction"
-msgstr "y compris correction d'arrondi de %(amount)s"
+msgstr "y compris %(amount)s de correction d'arrondi"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
