@@ -78,21 +78,6 @@ class UserSettingsForm(forms.ModelForm):
             'link': reverse('control:user.settings.email.change')
         })
 
-    def clean(self):
-        password1 = self.cleaned_data.get('new_pw')
-        old_pw = self.cleaned_data.get('old_pw')
-
-        if password1 and password1 == old_pw:
-            raise forms.ValidationError(
-                self.error_messages['pw_equal'],
-                code='pw_equal'
-            )
-
-        if password1:
-            self.instance.set_password(password1)
-
-        return self.cleaned_data
-
 
 class User2FADeviceAddForm(forms.Form):
     name = forms.CharField(label=_('Device name'), max_length=64)
