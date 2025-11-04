@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 10:55+0000\n"
-"PO-Revision-Date: 2025-10-27 12:00+0000\n"
+"PO-Revision-Date: 2025-11-04 10:25+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -8190,10 +8190,8 @@ msgid "Event canceled"
 msgstr "イベントがキャンセルされました"
 
 #: pretix/base/services/cancelevent.py:392
-#, fuzzy
-#| msgid "Add confirmation text"
 msgid "Bulk-refund confirmation"
-msgstr "確認テキストを追加"
+msgstr "一括払い戻しの確認"
 
 #: pretix/base/services/cart.py:102 pretix/base/services/modelimport.py:247
 #: pretix/base/services/orders.py:155
@@ -9431,15 +9429,15 @@ msgstr "バウチャーは、{recipient}あてに送信されました。"
 
 #: pretix/base/settings.py:81
 msgid "Compute taxes for every line individually"
-msgstr ""
+msgstr "各行ごとに税額を計算する"
 
 #: pretix/base/settings.py:82
 msgid "Compute taxes based on net total"
-msgstr ""
+msgstr "税抜合計に基づいて税額を計算する"
 
 #: pretix/base/settings.py:83
 msgid "Compute taxes based on net total with stable gross prices"
-msgstr ""
+msgstr "税込価格を固定して税抜合計に基づいて税額を計算する"
 
 #: pretix/base/settings.py:133
 msgid "Allow usage of restricted plugins"
@@ -9527,12 +9525,8 @@ msgid "Add-on products will not be counted."
 msgstr "アドオン製品はカウントされません。"
 
 #: pretix/base/settings.py:334
-#, fuzzy
-#| msgid ""
-#| "Show net prices instead of gross prices in the product list (not "
-#| "recommended!)"
 msgid "Show net prices instead of gross prices in the product list"
-msgstr "製品リストには、総額ではなく純額を表示してください（お勧めしません！）"
+msgstr "製品リストに税込価格ではなく税抜価格を表示する"
 
 #: pretix/base/settings.py:335
 msgid ""
@@ -9646,10 +9640,8 @@ msgid "Require a phone number per order"
 msgstr "1注文につき1つの電話番号が必要"
 
 #: pretix/base/settings.py:481
-#, fuzzy
-#| msgid "including all taxes"
 msgid "Rounding of taxes"
-msgstr "すべての税金を含めて"
+msgstr "税額の端数処理"
 
 #: pretix/base/settings.py:485
 msgid ""
@@ -9657,6 +9649,9 @@ msgid ""
 "for tax reporting, you need to make sure to account for possible rounding "
 "differences if your external system rounds differently than pretix."
 msgstr ""
+"pretixから外部システムに販売データを転送して税務申告を行う場合、外部システム"
+"の端数処理がpretixと異なる場合は、端数処理の差異を考慮する必要があることに注"
+"意してください。"
 
 #: pretix/base/settings.py:500
 msgid "Ask for invoice address"
@@ -12791,19 +12786,18 @@ msgstr "数分以上かかる場合は、このページを更新するか、お
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:2
 msgid ""
 "You have requested us to cancel an event which includes a larger bulk-refund:"
-msgstr ""
+msgstr "大量の払い戻しを伴うイベントのキャンセルをリクエストされました:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:6
-#, fuzzy
-#| msgid "Initiate a refund of %(amount)s"
 msgid "Estimated refund amount"
-msgstr "%(amount)sの払い戻しを開始する"
+msgstr "推定払い戻し金額"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:8
 msgid ""
 "Please confirm that you want to proceed by coping the following confirmation "
 "code into the cancellation form:"
-msgstr ""
+msgstr "以下の確認コードをキャンセルフォームにコピーして、続行することを確認してくだ"
+"さい:"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -13624,31 +13618,24 @@ msgid ""
 msgstr "ギフトカードの有効期限を発行年を含めた{}年に設定しました。"
 
 #: pretix/control/forms/event.py:806
-#, fuzzy
-#| msgid "including all taxes"
 msgid "Prices including tax"
-msgstr "すべての税金を含めて"
+msgstr "税込価格"
 
 #: pretix/control/forms/event.py:807
 msgid "Recommended if you sell tickets at least partly to consumers."
-msgstr ""
+msgstr "少なくとも一部を消費者に販売する場合に推奨されます。"
 
 #: pretix/control/forms/event.py:811
-#, fuzzy
-#| msgctxt "reporting_timeframe"
-#| msgid "All future (excluding today)"
 msgid "Prices excluding tax"
-msgstr "すべての未来（今日を除く）"
+msgstr "税込価格"
 
 #: pretix/control/forms/event.py:812
 msgid "Recommended only if you sell tickets primarily to business customers."
-msgstr ""
+msgstr "主に法人顧客にチケットを販売する場合のみ推奨されます。"
 
 #: pretix/control/forms/event.py:848
-#, fuzzy
-#| msgid "Date chosen by customer"
 msgid "Prices shown to customer"
-msgstr "お客様が選んだ日付"
+msgstr "顧客に表示される価格"
 
 #: pretix/control/forms/event.py:852
 msgid ""
@@ -13657,6 +13644,9 @@ msgid ""
 "product, the total tax amount can differ from when it would be computed from "
 "the order total."
 msgstr ""
+"電子インボイスが不要な場合に推奨されます。各製品は表示された税抜価格と税込価"
+"格で販売されます。ただし、複数の製品を含む注文では、合計税額が注文合計から計"
+"算した場合と異なる可能性があります。"
 
 #: pretix/control/forms/event.py:857
 msgid ""
@@ -13665,6 +13655,10 @@ msgid ""
 "may be changed to ensure correct rounding, while the net prices will be kept "
 "as configured. This may cause the actual payment amount to differ."
 msgstr ""
+"主に法人顧客に販売し、顧客に税抜価格を表示する場合の電子インボイスに推奨され"
+"ます。正確な端数処理を確保するために、一部の製品の税込価格が変更される場合が"
+"ありますが、税抜価格は設定どおりに保たれます。これにより実際の支払い金額が異"
+"なる場合があります。"
 
 #: pretix/control/forms/event.py:863
 msgid ""
@@ -13674,6 +13668,11 @@ msgid ""
 "configured whenever possible. Gross prices may still change if they are "
 "impossible to derive from a rounded net price."
 msgstr ""
+"主に消費者に販売する場合の電子インボイスに推奨されます。注文合計の正確な端数"
+"処理を確保するために、一部の製品の税込価格または税抜価格が自動的に変更される"
+"場合があります。システムは可能な限り設定どおりの税込価格を維持しようとします"
+"。ただし、端数処理された税抜価格から算出できない場合は、税込価格が変更される"
+"ことがあります。"
 
 #: pretix/control/forms/event.py:961
 msgid "Generate invoices for Sales channels"
@@ -14127,7 +14126,7 @@ msgstr "有効な注文"
 
 #: pretix/control/forms/filter.py:220
 msgid "Paid (or canceled with paid fee)"
-msgstr "支払われた（または支払われた手数料でキャンセルされた）"
+msgstr "支払い済み (または支払い済み手数料でキャンセルされた)"
 
 #: pretix/control/forms/filter.py:221
 #: pretix/control/templates/pretixcontrol/items/question.html:27
@@ -14154,7 +14153,7 @@ msgstr "キャンセル"
 
 #: pretix/control/forms/filter.py:226
 msgid "Canceled (fully)"
-msgstr "キャンセルされました（完全に）"
+msgstr "キャンセル済み (全額)"
 
 #: pretix/control/forms/filter.py:227
 msgid "Canceled (fully or with paid fee)"
@@ -14166,11 +14165,11 @@ msgstr "キャンセル済み（少なくとも1つのポジション）"
 
 #: pretix/control/forms/filter.py:229
 msgid "Cancellation requested"
-msgstr "キャンセルがリクエストされました"
+msgstr "キャンセル申請済み"
 
 #: pretix/control/forms/filter.py:230
 msgid "Fully canceled but invoice not canceled"
-msgstr "完全にキャンセルされましたが、請求書はキャンセルされていません"
+msgstr "キャンセル済み(請求書は未キャンセル)"
 
 #: pretix/control/forms/filter.py:232
 msgid "Payment process"
@@ -14188,11 +14187,11 @@ msgstr "保留中（期限切れ）"
 
 #: pretix/control/forms/filter.py:236
 msgid "Overpaid"
-msgstr "過剰な給料"
+msgstr "過払い済み"
 
 #: pretix/control/forms/filter.py:237
 msgid "Partially paid"
-msgstr "部分的に支払われました"
+msgstr "一部支払い済み"
 
 #: pretix/control/forms/filter.py:238
 msgid "Underpaid (but confirmed)"
@@ -15748,7 +15747,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:1037
 msgid "I understand that this is not reversible and want to continue"
-msgstr ""
+msgstr "これは元に戻せないことを理解し、続行します"
 
 #: pretix/control/forms/orders.py:1041
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
@@ -15758,13 +15757,11 @@ msgstr "確認コード"
 #: pretix/control/forms/orders.py:1042
 msgid ""
 "We have just emailed you a confirmation code to enter to confirm this action"
-msgstr ""
+msgstr "この操作を確認するための確認コードをメールで送信しました"
 
 #: pretix/control/forms/orders.py:1055
-#, fuzzy
-#| msgid "The confirm code you entered was incorrect."
 msgid "The confirmation code is incorrect."
-msgstr "入力した確認コードが間違っています。"
+msgstr "確認コードが正しくありません。"
 
 #: pretix/control/forms/organizer.py:93
 msgid "This slug is already in use. Please choose a different one."
@@ -20693,6 +20690,9 @@ msgid ""
 "optionally contain additional rules that depend on the customer's country "
 "and type."
 msgstr ""
+"税ルールは、個々の製品に割り当てることができるさまざまな課税シナリオを定義し"
+"ます。各税ルールには既定の税率が含まれ、オプションで顧客の国や種別に応じた追"
+"加ルールを含めることができます。"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:21
 msgid "You haven't created any tax rules yet."
@@ -20719,12 +20719,10 @@ msgid "Make default"
 msgstr "デフォルトに設定"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:67
-#, fuzzy, python-format
-#| msgid "%(count)s event"
-#| msgid_plural "%(count)s events"
+#, python-format
 msgid "%(count)s product"
 msgid_plural "%(count)s products"
-msgstr[0] "%(count)s 件のイベント"
+msgstr[0] "%(count)s個の製品"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:75
 #, python-format
@@ -20737,16 +20735,12 @@ msgid "excl. %(rate)s %%"
 msgstr "%(rate)s %%を除く"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:80
-#, fuzzy
-#| msgid "Custom rules"
 msgid "with custom rules"
-msgstr "国"
+msgstr "カスタムルールあり"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:110
-#, fuzzy
-#| msgid "Base settings"
 msgid "Tax settings"
-msgstr "ベースの設定"
+msgstr "税の設定"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:4
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:6
@@ -23487,7 +23481,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/transactions.html:73
 #, python-format
 msgid "incl. %(amount)s rounding correction"
-msgstr ""
+msgstr "%(amount)sの端数処理調整を含む"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
@@ -23590,81 +23584,71 @@ msgstr ""
 "空席待ちリストのすべての人が複数のメールを受け取ることになります。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:84
-#, fuzzy
-#| msgid "Refund amount"
 msgid "Preview refund amount"
-msgstr "払い戻し金額"
+msgstr "払い戻し金額のプレビュー"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:88
 msgid "Cancel all orders"
 msgstr "すべての注文をキャンセルします"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:13
-#, fuzzy
-#| msgid "If you contact us, please send us the following code:"
 msgid "If you proceed, the system will do the following:"
-msgstr "お問い合わせの際は、以下のコードをお送りください："
+msgstr "続行すると、システムは以下を実行します:"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:19
 #, python-format
 msgid "%(count)s order will be canceled fully"
 msgid_plural "%(count)s orders will be canceled fully"
-msgstr[0] ""
+msgstr[0] "%(count)s件の注文が全額キャンセルされます"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:26
 #, python-format
 msgid "%(count)s order will be canceled partially"
 msgid_plural "%(count)s orders will be canceled partially"
-msgstr[0] ""
+msgstr[0] "%(count)s件の注文が一部キャンセルされます"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:36
 #, python-format
 msgid "%(amount)s are eligible for refunds."
-msgstr ""
+msgstr "%(amount)sが払い戻し対象です。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:40
 msgid ""
 "The system will attempt to refund the money automatically if supported by "
 "the payment method."
-msgstr ""
+msgstr "当該の決済方法に対応している場合、システムは自動的に払い戻しを試みます。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:42
 msgid "The system will create manual refunds that you need to execute."
-msgstr ""
+msgstr "システムは手動払い戻しを作成しますので、ご自身で実行する必要があります。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:44
-#, fuzzy
-#| msgid "Text (if order will not expire automatically)"
 msgid "Refunds will not happen automatically."
-msgstr "テキスト（注文が自動的に期限切れにならない場合）"
+msgstr "払い戻しは自動的には実行されません。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:52
-#, fuzzy
-#| msgid "Send information via email"
 msgid "Inform all customers via email."
-msgstr "メールで情報を送信する"
+msgstr "メールで情報を送信する。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:57
 msgid "Inform all waiting list contacts via email."
-msgstr ""
+msgstr "すべての空席待ちリストの連絡先にメールで通知する。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:62
 msgid ""
 "These numbers are estimates and may change if the data in your event "
 "recently changed."
-msgstr ""
+msgstr "これらの数値は推定値であり、イベントのデータが最近変更された場合は変わる可能"
+"性があります。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:76
-#, fuzzy, python-format
-#| msgid "Initiate a refund of %(amount)s"
+#, python-format
 msgid "Proceed and refund approx. %(amount)s"
-msgstr "%(amount)sの払い戻しを開始する"
+msgstr "続行して約%(amount)sを払い戻す"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:80
-#, fuzzy
-#| msgid "Yes, cancel order"
 msgid "Proceed and cancel orders"
-msgstr "はい、注文をキャンセルします"
+msgstr "続行して注文をキャンセルする"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
@@ -24059,7 +24043,7 @@ msgstr "請求書はキャンセルされていません"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:251
 msgid "Sum over all pages"
-msgstr "すべてのページに渡り合計する"
+msgstr "全ページの合計"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:254
 #, python-format
@@ -30213,7 +30197,7 @@ msgstr "手動処理用の完全にカスタマイズ可能な支払い方法。
 #: pretix/plugins/paypal2/payment.py:1097
 #: pretix/plugins/paypal2/payment.py:1098 pretix/plugins/stripe/payment.py:1816
 msgid "PayPal"
-msgstr "ペイパル"
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/apps.py:53
 msgid ""
@@ -30233,7 +30217,7 @@ msgstr ""
 
 #: pretix/plugins/paypal/payment.py:104
 msgid "PayPal account"
-msgstr "ペイパルアカウント"
+msgstr "PayPalアカウント"
 
 #: pretix/plugins/paypal/payment.py:117 pretix/plugins/paypal2/payment.py:114
 #, python-brace-format
@@ -30330,7 +30314,7 @@ msgstr "PayPalの支払いID"
 
 #: pretix/plugins/paypal/payment.py:711 pretix/plugins/paypal2/payment.py:1080
 msgid "PayPal sale ID"
-msgstr "ペイパルの売上ID"
+msgstr "PayPalの売上ID"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:19
