@@ -130,19 +130,20 @@ def get_private_icals(event, positions):
     # collecting the positions' calendar entries, preferring the most exact date and time available (positions > subevent > event)
     prefetch_related_objects(positions, 'item__program_times')
     for p in positions:
+        ev = p.subevent or event
         program_times = p.item.program_times.all()
         if program_times:
             # if program times have been configured, they are preferred for the position's calendar entries
             url = build_absolute_uri(event, 'presale:event.index')
             for index, pt in enumerate(program_times):
-                summary = _('{event} - {item}').format(event=event, item=p.item.name)
+                summary = _('{event} - {item}').format(event=ev, item=p.item.name)
                 if event.settings.mail_attach_ical_description:
-                    ctx = get_email_context(event=event, event_or_subevent=event)
+                    ctx = get_email_context(event=event, event_or_subevent=ev)
                     description = format_map(str(event.settings.mail_attach_ical_description), ctx)
                 else:
                     # Default description
                     descr = []
-                    descr.append(_('{event} - {item}: {url}').format(event=event, item=p.item.name, url=url))
+                    descr.append(_('{event} - {item}: {url}').format(event=ev, item=p.item.name, url=url))
                     descr.append(str(_('Start: {datetime}')).format(
                         datetime=date_format(pt.start.astimezone(tz), 'SHORT_DATETIME_FORMAT')
                     ))
