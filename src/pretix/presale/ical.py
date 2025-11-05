@@ -174,7 +174,7 @@ def get_private_icals(event, positions):
                 url = build_absolute_uri(event, 'presale:event.index')
 
             if event.settings.mail_attach_ical_description:
-                ctx = get_email_context(event=event, event_or_subevent=p.subevent)
+                ctx = get_email_context(event=event, event_or_subevent=ev)
                 description = format_map(str(event.settings.mail_attach_ical_description), ctx)
             else:
                 # Default description
