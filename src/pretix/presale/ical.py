@@ -167,12 +167,10 @@ def get_private_icals(event, positions):
         else:
             # without program times, the subevent or event times are used for calendar entries, preferring subevents
             if p.subevent:
-                ev = p.subevent
                 url = build_absolute_uri(event, 'presale:event.index', {
                     'subevent': p.subevent.pk
                 })
             else:
-                ev = event
                 url = build_absolute_uri(event, 'presale:event.index')
 
             if event.settings.mail_attach_ical_description:
