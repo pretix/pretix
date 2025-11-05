@@ -742,18 +742,13 @@ def get_seat(op: OrderPosition):
 
 
 def get_program_times(op: OrderPosition, ev: Event):
-    program_times = op.item.program_times.all()
-    pt_list = []
-    pt_str = ''
-    if program_times:
-        for pt in program_times:
-            pt_list.append(datetimerange(
-                pt.start.astimezone(ev.timezone),
-                pt.end.astimezone(ev.timezone),
-                as_html=False
-            ))
-        pt_str = '\n'.join(pt_list)
-    return pt_str
+    return '\n'.join([
+        datetimerange(
+            pt.start.astimezone(ev.timezone),
+            pt.end.astimezone(ev.timezone),
+            as_html=False
+        ) for pt in op.item.program_times.all()
+    ])
 
 
 def generate_compressed_addon_list(op, order, event):
