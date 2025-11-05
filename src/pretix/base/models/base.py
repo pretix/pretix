@@ -80,6 +80,7 @@ class LoggingMixin:
         from pretix.api.models import OAuthAccessToken, OAuthApplication
         from pretix.api.webhooks import notify_webhooks
 
+        from ..logentrytype_registry import log_entry_types
         from ..services.notifications import notify
         from .devices import Device
         from .event import Event
@@ -124,7 +125,13 @@ class LoggingMixin:
                     if (sensitivekey in k) and v:
                         data[k] = "********"
 
+            type, meta = log_entry_types.get(action_type=action)
+            if not type:
+                raise TypeError("Undefined log entry type '%s'" % action)
+
             logentry.data = json.dumps(data, cls=CustomJSONEncoder, sort_keys=True)
+
+            type.validate_data(json.loads(logentry.data))
         elif data:
             raise TypeError("You should only supply dictionaries as log data.")
         if save:
