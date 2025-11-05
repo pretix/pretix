@@ -146,6 +146,10 @@ error_messages = {
     'race_condition': gettext_lazy("This order was changed by someone else simultaneously. Please check if your "
                                    "changes are still accurate and try again."),
     'empty': gettext_lazy("Your cart is empty."),
+    'max_items': ngettext_lazy(
+        "You cannot select more than %s item per order.",
+        "You cannot select more than %s items per order."
+    ),
     'max_items_per_product': ngettext_lazy(
         "You cannot select more than %(max)s item of the product %(product)s. We removed the surplus items from your cart.",
         "You cannot select more than %(max)s items of the product %(product)s. We removed the surplus items from your cart.",
@@ -762,6 +766,11 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
                 [op.seat for op in sorted_positions if op.seat],
                 shared_lock_objects=[event]
             )
+
+    # Check maximum order size
+    limit = min(int(event.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)
+    if sum(1 for cp in sorted_positions if not cp.addon_to) > limit:
+        err = err or (error_messages['max_items'] % limit)
 
     # Check availability
     for i, cp in enumerate(sorted_positions):
