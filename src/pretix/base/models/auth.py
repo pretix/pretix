@@ -43,9 +43,7 @@ from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin,
 )
-from django.contrib.auth.tokens import (
-    PasswordResetTokenGenerator, default_token_generator,
-)
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import BadRequest, PermissionDenied
 from django.db import IntegrityError, models, transaction
