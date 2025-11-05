@@ -503,7 +503,6 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.valid_if_pending.set': _('The order has been set to be usable before it is paid.'),
     'pretix.event.order.valid_if_pending.unset': _('The order has been set to require payment before use.'),
     'pretix.event.order.expired': _('The order has been marked as expired.'),
-    'pretix.event.order.paid': _('The order has been marked as paid.'),
     'pretix.event.order.cancellationrequest.deleted': _('The cancellation request has been deleted.'),
     'pretix.event.order.refunded': _('The order has been refunded.'),
     'pretix.event.order.reactivated': _('The order has been reactivated.'),
@@ -575,6 +574,21 @@ class CoreOrderLogEntryType(OrderLogEntryType):
     pass
 
 
+@log_entry_types.new()
+class OrderPaidLogEntryType(CoreOrderLogEntryType):
+    action_type = 'pretix.event.order.paid'
+    plain = _('The order has been marked as paid.')
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "provider": {"type": ["null", "string"], "shred": False, },
+            "info": {"type": ["null", "string", "object"], "shred": True, },
+            "date": {"type": ["null", "string"], "shred": False, },
+            "force": {"type": "boolean", "shred": False, },
+        },
+    }
+
+
 @log_entry_types.new_from_dict({
     'pretix.voucher.added': _('The voucher has been created.'),
     'pretix.voucher.sent': _('The voucher has been sent to {recipient}.'),
@@ -585,13 +599,55 @@ class CoreOrderLogEntryType(OrderLogEntryType):
     'pretix.voucher.added.waitinglist': _('The voucher has been assigned to {email} through the waiting list.'),
 })
 class CoreVoucherLogEntryType(VoucherLogEntryType):
-    pass
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "item": {"type": "number", "shred": False, },
+            "variation": {"type": ["null", "number"], "shred": False, },
+            "tag": {"type": "string", "shred": False,},
+            "block_quota": {"type": "boolean", "shred": False, },
+            "valid_until": {"type": ["null", "string"], "shred": False, },
+            "min_usages": {"type": "number", "shred": False, },
+            "max_usages": {"type": "number", "shred": False, },
+            "subevent": {"type": ["null", "number"], "shred": False, },
+            "source": {"type": "string", "shred": False,},
+            "allow_ignore_quota": {"type": "boolean", "shred": False, },
+            "code": {"type": "string", "shred": False,},
+            "comment": {"type": "string", "shred": True,},
+            "price_mode": {"type": "string", "shred": False,},
+            "seat": {"type": "string", "shred": False,},
+            "quota": {"type": ["null", "number"], "shred": False,},
+            "value": {"type": "string", "shred": False,},
+            "redeemed": {"type": "number", "shred": False,},
+            "all_addons_included": {"type": "boolean", "shred": False, },
+            "all_bundles_included": {"type": "boolean", "shred": False, },
+            "budget": {"type": ["null", "number"], "shred": False, },
+            "itemvar": {"type": "string", "shred": False,},
+            "show_hidden_items": {"type": "boolean", "shred": False, },
+
+            # pretix.voucher.sent
+            "recipient": {"type": "string", "shred": True,},
+            "name": {"type": "string", "shred": True,},
+            "subject": {"type": "string", "shred": False,},
+            "message": {"type": "string", "shred": True,},
+
+            # pretix.voucher.added.waitinglist
+            "email": {"type": "string", "shred": True,},
+            "waitinglistentry": {"type": "number", "shred": False, },
+        },
+    }
 
 
 @log_entry_types.new()
 class VoucherRedeemedLogEntryType(VoucherLogEntryType):
     action_type = 'pretix.voucher.redeemed'
     plain = _('The voucher has been redeemed in order {order_code}.')
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "order_code": {"type": "string", "shred": False, },
+        },
+    }
 
     def display(self, logentry, data):
         url = reverse('control:event.order', kwargs={
@@ -636,7 +692,13 @@ class TeamMembershipLogEntryType(LogEntryType):
     'pretix.team.invite.resent': _('Invite for {user} has been resent.'),
 })
 class CoreTeamMembershipLogEntryType(TeamMembershipLogEntryType):
-    pass
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "email": {"type": "string", "shred": True, },
+            "user": {"type": "number", "shred": False, },
+        },
+    }
 
 
 @log_entry_types.new()
