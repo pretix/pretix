@@ -69,10 +69,6 @@ class EmailAddressTakenError(IntegrityError):
     pass
 
 
-class EmailVerificationTokenGenerator(PasswordResetTokenGenerator):
-    key_salt = "pretix.base.models.auth.EmailVerificationTokenGenerator"
-
-
 class UserManager(BaseUserManager):
     """
     This is the user manager for our custom user model. See the User
@@ -673,9 +669,6 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     def update_session_token(self):
         self.session_token = generate_session_token()
         self.save(update_fields=['session_token'])
-
-    def generate_email_verification_token(self):
-        return EmailVerificationTokenGenerator().make_token(self)
 
 
 class UserKnownLoginSource(models.Model):
