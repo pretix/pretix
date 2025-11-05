@@ -143,7 +143,7 @@ def get_private_icals(event, positions):
                 else:
                     # Default description
                     descr = []
-                    descr.append(_('{event} - {item}: {url}').format(event=ev, item=p.item.name, url=url))
+                    descr.append(_('Tickets: {url}').format(url=url))
                     descr.append(str(_('Start: {datetime}')).format(
                         datetime=date_format(pt.start.astimezone(tz), 'SHORT_DATETIME_FORMAT')
                     ))
