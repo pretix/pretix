@@ -534,7 +534,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
                                               'toggled.'),
     'pretix.event.order.checkin_text': _('The order\'s check-in text has been changed.'),
-    'pretix.event.order.pretix.event.order.valid_if_pending': _('The order\'s flag to be considered valid even if '
+    'pretix.event.order.valid_if_pending': _('The order\'s flag to be considered valid even if '
                                                                 'unpaid has been toggled.'),
     'pretix.event.order.payment.changed': _('A new payment {local_id} has been started instead of the previous one.'),
     'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
@@ -690,6 +690,7 @@ class TeamMembershipLogEntryType(LogEntryType):
     'pretix.team.member.removed': _('{user} has been removed from the team.'),
     'pretix.team.invite.created': _('{user} has been invited to the team.'),
     'pretix.team.invite.resent': _('Invite for {user} has been resent.'),
+    'pretix.team.invite.deleted': _('Invite for {user} has been deleted.'),
 })
 class CoreTeamMembershipLogEntryType(TeamMembershipLogEntryType):
     data_schema = {
@@ -895,6 +896,10 @@ class OrganizerPluginStateLogEntryType(LogEntryType):
     'pretix.event.permissions.invited': _('A user has been invited to the event team.'),
     'pretix.event.permissions.changed': _('A user\'s permissions have been changed.'),
     'pretix.event.permissions.deleted': _('A user has been removed from the event team.'),
+    'pretix.event.seats.blocks.changed': _('A seat in the seating plan has been blocked or unblocked.'),
+    'pretix.seatingplan.added': _('A seating plan has been added.'),
+    'pretix.seatingplan.changed': _('A seating plan has been changed.'),
+    'pretix.seatingplan.deleted': _('A seating plan has been deleted.'),
 })
 class CoreEventLogEntryType(EventLogEntryType):
     pass
