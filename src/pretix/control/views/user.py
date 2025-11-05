@@ -958,11 +958,14 @@ class UserEmailConfirmView(FormView):
             log_data['old_email'] = old_email = self.request.user.email
             self.request.user.send_security_notice(msgs, email=old_email)
             self.request.user.send_security_notice(msgs, email=new_email)
+            log_action = 'pretix.user.email.changed'
+        else:
+            log_action = 'pretix.user.email.confirmed'
 
-            self.request.user.email = new_email
+        self.request.user.email = new_email
         self.request.user.is_verified = True
         self.request.user.save()
-        self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data=log_data)
+        self.request.user.log_action(log_action, user=self.request.user, data=log_data)
         update_session_auth_hash(self.request, self.request.user)
 
         if reason == 'email_change':
