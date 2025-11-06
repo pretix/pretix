@@ -802,7 +802,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     # quickly bring the text-length down to a managable length to then stepwise reduce
                     wrap_to = math.ceil(len(curr_description) * max_height * 1.1 / h)
                 else:
-                    # trim to 95% length, but at most 10 chars
+                    # trim to 95% length, but at most 10 chars to not have strangely short lines in the middle of a paragraph
                     wrap_to = max(len(curr_description) - 10, math.ceil(len(curr_description) * 0.95))
                 curr_description = textwrap.wrap(curr_description, wrap_to, replace_whitespace=False, drop_whitespace=False)[0]
 
