@@ -861,7 +861,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             elif period_line:
                 description_p_list.append(FontFallbackParagraph(
                     period_line,
-                    self.stylesheet['Normal']
+                    self.stylesheet['Fineprint']
                 ))
 
             lines = list(lines)
@@ -873,7 +873,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     )
                     description_p_list.append(FontFallbackParagraph(
                         single_price_line,
-                        self.stylesheet['Normal']
+                        self.stylesheet['Fineprint']
                     ))
 
                 tdata.append((
