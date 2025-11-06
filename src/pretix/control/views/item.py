@@ -60,13 +60,14 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
 
 from pretix.api.serializers.item import (
-    ItemAddOnSerializer, ItemBundleSerializer, ItemVariationSerializer,
+    ItemAddOnSerializer, ItemBundleSerializer, ItemProgramTimeSerializer,
+    ItemVariationSerializer,
 )
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CartPosition, Item, ItemCategory, ItemVariation, Order, OrderPosition,
-    Question, QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping,
-    Voucher,
+    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Order,
+    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
+    SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
@@ -75,9 +76,9 @@ from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
-    ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemUpdateForm,
-    ItemVariationForm, ItemVariationsFormSet, QuestionForm, QuestionOptionForm,
-    QuotaForm,
+    ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
+    ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
+    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -1431,7 +1432,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 form.instance.position = i
             setattr(form.instance, attr, self.get_object())
             created = not form.instance.pk
-            form.save()
+            if form.has_changed():
+                form.save()
             if form.has_changed() and any(a for a in form.changed_data if a != 'ORDER'):
                 change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
                 if key == 'variations':
@@ -1497,6 +1499,16 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                     'bundles', 'bundles', 'base_item', order=False,
                     serializer=ItemBundleSerializer
                 )
+            elif k == 'program_times':
+                self.save_formset(
+                    'program_times', 'program_times', order=False,
+                    serializer=ItemProgramTimeSerializer
+                )
+                if not change_data:
+                    for f in v.forms:
+                        if (f in v.deleted_forms and f.instance.pk) or f.has_changed():
+                            invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'item': self.object.pk})
+                            break
             else:
                 v.save()
 
@@ -1559,9 +1571,20 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 queryset=ItemBundle.objects.filter(base_item=self.get_object()),
                 event=self.request.event, item=self.item, prefix="bundles"
             )),
+            ('program_times', inlineformset_factory(
+                Item, ItemProgramTime,
+                form=ItemProgramTimeForm, formset=ItemProgramTimeFormSet,
+                can_order=False, can_delete=True, extra=0
+            )(
+                self.request.POST if self.request.method == "POST" else None,
+                queryset=ItemProgramTime.objects.filter(item=self.get_object()),
+                event=self.request.event, prefix="program_times"
+            )),
         ])
         if not self.object.has_variations:
             del f['variations']
+        if self.item.event.has_subevents:
+            del f['program_times']
 
         i = 0
         for rec, resp in item_formsets.send(sender=self.request.event, item=self.item, request=self.request):

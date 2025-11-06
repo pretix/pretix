@@ -2294,3 +2294,27 @@ class ItemVariationMetaValue(LoggedModel):
 
     class Meta:
         unique_together = ('variation', 'property')
+
+
+class ItemProgramTime(models.Model):
+    """
+    This model can be used to add a program time to an item.
+
+    :param item: The item the program time applies to
+    :type item: Item
+    :param start: The date and time this program time starts
+    :type start: datetime
+    :param end: The date and time this program time ends
+    :type end: datetime
+    """
+    item = models.ForeignKey('Item', related_name='program_times', on_delete=models.CASCADE)
+    start = models.DateTimeField(verbose_name=_("Start"))
+    end = models.DateTimeField(verbose_name=_("End"))
+
+    def clean(self):
+        self.clean_start_end(start=self.start, end=self.end)
+        super().clean()
+
+    def clean_start_end(self, start: datetime = None, end: datetime = None):
+        if start and end and start > end:
+            raise ValidationError(_("The program end must not be before the program start."))

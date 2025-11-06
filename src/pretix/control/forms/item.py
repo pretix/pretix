@@ -56,7 +56,8 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
+    Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
+    QuestionOption, Quota,
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
@@ -572,6 +573,8 @@ class ItemCreateForm(I18nModelForm):
             for b in self.cleaned_data['copy_from'].bundles.all():
                 instance.bundles.create(bundled_item=b.bundled_item, bundled_variation=b.bundled_variation,
                                         count=b.count, designated_price=b.designated_price)
+            for pt in self.cleaned_data['copy_from'].program_times.all():
+                instance.program_times.create(start=pt.start, end=pt.end)
 
             item_copy_data.send(sender=self.event, source=self.cleaned_data['copy_from'], target=instance)
 
@@ -1320,4 +1323,50 @@ class ItemMetaValueForm(forms.ModelForm):
         fields = ['value']
         widgets = {
             'value': forms.TextInput()
+        }
+
+
+class ItemProgramTimeFormSet(I18nFormSet):
+    template = "pretixcontrol/item/include_program_times.html"
+    title = _('Program times')
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        self.is_valid()
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            use_required_attribute=False,
+            locales=self.locales,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form
+
+
+class ItemProgramTimeForm(I18nModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['end'].widget.attrs['data-date-after'] = '#id_{prefix}-start_0'.format(prefix=self.prefix)
+
+    class Meta:
+        model = ItemProgramTime
+        localized_fields = '__all__'
+        fields = [
+            'start',
+            'end',
+        ]
+        field_classes = {
+            'start': forms.SplitDateTimeField,
+            'end': forms.SplitDateTimeField,
+        }
+        widgets = {
+            'start': SplitDateTimePickerWidget(),
+            'end': SplitDateTimePickerWidget(),
         }

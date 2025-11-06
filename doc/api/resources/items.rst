@@ -139,6 +139,9 @@ has_variations                          boolean                    Shows whether
 variations                              list of objects            A list with one object for each variation of this item.
                                                                    Can be empty. Only writable during creation,
                                                                    use separate endpoint to modify this later.
+program_times                           list of objects            A list with one object for each program time of this item.
+                                                                   Can be empty. Only writable during creation,
+                                                                   use separate endpoint to modify this later.
 ├ id                                    integer                    Internal ID of the variation
 ├ value                                 multi-lingual string       The "name" of the variation
 ├ default_price                         money (string)             The price set directly for this variation or ``null``
@@ -225,6 +228,10 @@ meta_data                               object                     Values set fo
 
    The ``hidden_if_item_available_mode`` attributes has been added.
 
+.. versionchanged:: 2025.9
+
+   The ``program_times`` attribute has been added.
+
 Notes
 -----
 
@@ -232,9 +239,9 @@ Please note that an item either always has variations or never has. Once created
 change to an item without and vice versa. To create an item with variations ensure that you POST an item with at least
 one variation.
 
-Also note that ``variations``, ``bundles``, and  ``addons`` are only supported on ``POST``. To update/delete variations,
-bundles, and add-ons please use the dedicated nested endpoints. By design this endpoint does not support ``PATCH`` and ``PUT``
-with nested ``variations``, ``bundles`` and/or ``addons``.
+Also note that ``variations``, ``bundles``, ``addons`` and  ``program_times`` are only supported on ``POST``. To update/delete variations,
+bundles, add-ons and program times please use the dedicated nested endpoints. By design this endpoint does not support ``PATCH`` and ``PUT``
+with nested ``variations``, ``bundles``, ``addons`` and/or ``program_times``.
 
 Endpoints
 ---------
@@ -373,7 +380,8 @@ Endpoints
               }
             ],
             "addons": [],
-            "bundles": []
+            "bundles": [],
+            "program_times": []
           }
         ]
       }
@@ -525,7 +533,8 @@ Endpoints
           }
         ],
         "addons": [],
-        "bundles": []
+        "bundles": [],
+        "program_times": []
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -653,7 +662,13 @@ Endpoints
           }
         ],
         "addons": [],
-        "bundles": []
+        "bundles": [],
+        "program_times": [
+          {
+            "start": "2025-08-14T22:00:00Z",
+            "end": "2025-08-15T00:00:00Z"
+          }
+        ]
       }
 
    **Example response**:
@@ -773,7 +788,13 @@ Endpoints
           }
         ],
         "addons": [],
-        "bundles": []
+        "bundles": [],
+        "program_times": [
+          {
+            "start": "2025-08-14T22:00:00Z",
+            "end": "2025-08-15T00:00:00Z"
+          }
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer of the event to create an item for
@@ -789,8 +810,9 @@ Endpoints
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
-   You can change all fields of the resource except the ``has_variations``, ``variations`` and the ``addon`` field. If
-   you need to update/delete variations or add-ons please use the nested dedicated endpoints.
+   You can change all fields of the resource except the ``has_variations``, ``variations``, ``addon`` and the
+   ``program_times`` field. If you need to update/delete variations, add-ons or program times, please use the nested
+   dedicated endpoints.
 
    **Example request**:
 
@@ -924,7 +946,8 @@ Endpoints
           }
         ],
         "addons": [],
-        "bundles": []
+        "bundles": [],
+        "program_times": []
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
