@@ -1686,13 +1686,14 @@ class OrderChangeManager:
                 raise ValueError("OrderPosition has not been created yet. Call commit() first on the original OrderChangeManager")
             return self._position
 
-    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
+    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True, allow_blocked_seats=False):
         self.order = order
         self.user = user
         self.auth = auth
         self.event = order.event
         self.split_order = None
         self.reissue_invoice = reissue_invoice
+        self.allow_blocked_seats = allow_blocked_seats
         self._committed = False
         self._totaldiff_guesstimate = 0
         self._quotadiff = Counter()
@@ -2217,7 +2218,7 @@ class OrderChangeManager:
         for seat, diff in self._seatdiff.items():
             if diff <= 0:
                 continue
-            if not seat.is_available(sales_channel=self.order.sales_channel, ignore_distancing=True) or diff > 1:
+            if not seat.is_available(sales_channel=self.order.sales_channel, ignore_distancing=True, always_allow_blocked=self.allow_blocked_seats) or diff > 1:
                 raise OrderError(self.error_messages['seat_unavailable'].format(seat=seat.name))
 
         if self.event.has_subevents:

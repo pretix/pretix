@@ -882,6 +882,9 @@ class EventPluginStateLogEntryType(EventLogEntryType):
     'pretix.event.item.bundles.added': _('A bundled item has been added to this product.'),
     'pretix.event.item.bundles.removed': _('A bundled item has been removed from this product.'),
     'pretix.event.item.bundles.changed': _('A bundled item has been changed on this product.'),
+    'pretix.event.item.program_times.added': _('A program time has been added to this product.'),
+    'pretix.event.item.program_times.changed': _('A program time has been changed on this product.'),
+    'pretix.event.item.program_times.removed': _('A program time has been removed from this product.'),
 })
 class CoreItemLogEntryType(ItemLogEntryType):
     pass

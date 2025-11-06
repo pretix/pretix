@@ -2146,7 +2146,8 @@ class OrderChange(OrderView):
             self.order,
             user=self.request.user,
             notify=notify,
-            reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True
+            reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True,
+            allow_blocked_seats=True,
         )
         form_valid = (self._process_add_fees(ocm) and
                       self._process_add_positions(ocm) and
