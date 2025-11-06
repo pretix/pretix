@@ -23,6 +23,7 @@ import datetime
 import logging
 import math
 import re
+import textwrap
 import unicodedata
 from collections import defaultdict
 from decimal import Decimal
@@ -752,11 +753,59 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             return dt.astimezone(tz).date()
 
         total = Decimal('0.00')
+        if has_taxes:
+            colwidths = [a * doc.width for a in (.50, .05, .15, .15, .15)]
+        else:
+            colwidths = [a * doc.width for a in (.65, .20, .15)]
+
         for (description, tax_rate, tax_name, net_value, gross_value, subevent, period_start, period_end), lines in addon_aware_groupby(
             all_lines,
             key=_group_key,
             is_addon=lambda l: l.description.startswith("  +"),
         ):
+            # split description into multiple Paragraphs so each fits in a table cell on a single page
+            # otherwise PDF-build fails
+
+            description_p_list = []
+            # normalize linebreaks to newlines instead of HTML so we can safely substring
+            description = description.replace('<br>', '<br />').replace('<br />\n', '\n').replace('<br />', '\n')
+
+            # start first line with different settings than the rest of the description
+            curr_description = description.split("\n", maxsplit=1)[0]
+            cellpadding = 6  # default cellpadding is only set on right side of column
+            max_width = colwidths[0] - cellpadding
+            max_height = self.stylesheet['Normal'].leading * 5
+            p_style = self.stylesheet['Normal']
+            for __ in range(1000):
+                p = FontFallbackParagraph(
+                    self._clean_text(curr_description, tags=['br']),
+                    p_style
+                )
+                h = p.wrap(max_width, doc.height)[1]
+                if h <= max_height:
+                    description_p_list.append(p)
+                    if curr_description == description:
+                        break
+                    description = description[len(curr_description):].lstrip()
+                    curr_description = description.split("\n", maxsplit=1)[0]
+                    # use different settings for all except first line
+                    max_width = sum(colwidths[0:3 if has_taxes else 2]) - cellpadding
+                    max_height = self.stylesheet['Fineprint'].leading * 8
+                    p_style = self.stylesheet['Fineprint']
+                    continue
+
+                if not description_p_list:
+                    # first "manual" line is larger than 5 "real" lines => only allow one line and set rest in Fineprint
+                    max_height = self.stylesheet['Normal'].leading
+
+                if h > max_height * 1.1:
+                    # quickly bring the text-length down to a managable length to then stepwise reduce
+                    wrap_to = math.ceil(len(curr_description) * max_height * 1.1 / h)
+                else:
+                    # trim to 95% length, but at most 10 chars to not have strangely short lines in the middle of a paragraph
+                    wrap_to = max(len(curr_description) - 10, math.ceil(len(curr_description) * 0.95))
+                curr_description = textwrap.wrap(curr_description, wrap_to, replace_whitespace=False, drop_whitespace=False)[0]
+
             # Try to be clever and figure out when organizers would want to show the period. This heuristic is
             # not perfect and the only "fully correct" way would be to include the period on every line always,
             # however this will cause confusion (a) due to useless repetition of the same date all over the invoice
@@ -810,7 +859,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 # Group together at the end of the invoice
                 request_show_service_date = period_line
             elif period_line:
-                description += "\n" + period_line
+                description_p_list.append(FontFallbackParagraph(
+                    period_line,
+                    self.stylesheet['Fineprint']
+                ))
 
             lines = list(lines)
             if has_taxes:
@@ -819,13 +871,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                         net_price=money_filter(net_value, self.invoice.event.currency),
                         gross_price=money_filter(gross_value, self.invoice.event.currency),
                     )
-                    description = description + "\n" + single_price_line
+                    description_p_list.append(FontFallbackParagraph(
+                        single_price_line,
+                        self.stylesheet['Fineprint']
+                    ))
 
                 tdata.append((
-                    FontFallbackParagraph(
-                        self._clean_text(description, tags=['br']),
-                        self.stylesheet['Normal']
-                    ),
+                    description_p_list.pop(0),
                     str(len(lines)),
                     localize(tax_rate) + " %",
                     FontFallbackParagraph(
@@ -837,23 +889,52 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                         self.stylesheet['NormalRight']
                     ),
                 ))
+                for p in description_p_list:
+                    tdata.append((p, "", "", "", ""))
+                    tstyledata.append((
+                        'SPAN',
+                        (0, len(tdata) - 1),
+                        (2, len(tdata) - 1),
+                    ))
             else:
                 if len(lines) > 1:
                     single_price_line = pgettext('invoice', 'Single price: {price}').format(
                         price=money_filter(gross_value, self.invoice.event.currency),
                     )
-                    description = description + "\n" + single_price_line
+                    description_p_list.append(FontFallbackParagraph(
+                        single_price_line,
+                        self.stylesheet['Fineprint']
+                    ))
                 tdata.append((
-                    FontFallbackParagraph(
-                        self._clean_text(description, tags=['br']),
-                        self.stylesheet['Normal']
-                    ),
+                    description_p_list.pop(0),
                     str(len(lines)),
                     FontFallbackParagraph(
                         money_filter(gross_value * len(lines), self.invoice.event.currency).replace('\xa0', ' '),
                         self.stylesheet['NormalRight']
                     ),
                 ))
+                for p in description_p_list:
+                    tdata.append((p, "", ""))
+                    tstyledata.append((
+                        'SPAN',
+                        (0, len(tdata) - 1),
+                        (1, len(tdata) - 1),
+                    ))
+
+            tstyledata += [
+                (
+                    'BOTTOMPADDING',
+                    (0, len(tdata) - len(description_p_list)),
+                    (-1, len(tdata) - 2),
+                    0
+                ),
+                (
+                    'TOPPADDING',
+                    (0, len(tdata) - len(description_p_list)),
+                    (-1, len(tdata) - 1),
+                    0
+                ),
+            ]
             taxvalue_map[tax_rate, tax_name] += (gross_value - net_value) * len(lines)
             grossvalue_map[tax_rate, tax_name] += gross_value * len(lines)
             total += gross_value * len(lines)
@@ -863,13 +944,11 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 FontFallbackParagraph(self._normalize(pgettext('invoice', 'Invoice total')), self.stylesheet['Bold']), '', '', '',
                 money_filter(total, self.invoice.event.currency)
             ])
-            colwidths = [a * doc.width for a in (.50, .05, .15, .15, .15)]
         else:
             tdata.append([
                 FontFallbackParagraph(self._normalize(pgettext('invoice', 'Invoice total')), self.stylesheet['Bold']), '',
                 money_filter(total, self.invoice.event.currency)
             ])
-            colwidths = [a * doc.width for a in (.65, .20, .15)]
 
         if not self.invoice.is_cancellation:
             if self.invoice.event.settings.invoice_show_payments and self.invoice.order.status == Order.STATUS_PENDING:
