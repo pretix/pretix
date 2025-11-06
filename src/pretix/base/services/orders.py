@@ -1670,13 +1670,14 @@ class OrderChangeManager:
     AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
     RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
 
-    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
+    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True, allow_blocked_seats=False):
         self.order = order
         self.user = user
         self.auth = auth
         self.event = order.event
         self.split_order = None
         self.reissue_invoice = reissue_invoice
+        self.allow_blocked_seats = allow_blocked_seats
         self._committed = False
         self._totaldiff_guesstimate = 0
         self._quotadiff = Counter()
@@ -2197,7 +2198,7 @@ class OrderChangeManager:
         for seat, diff in self._seatdiff.items():
             if diff <= 0:
                 continue
-            if not seat.is_available(sales_channel=self.order.sales_channel, ignore_distancing=True) or diff > 1:
+            if not seat.is_available(sales_channel=self.order.sales_channel, ignore_distancing=True, always_allow_blocked=self.allow_blocked_seats) or diff > 1:
                 raise OrderError(self.error_messages['seat_unavailable'].format(seat=seat.name))
 
         if self.event.has_subevents:
