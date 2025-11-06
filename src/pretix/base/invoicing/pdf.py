@@ -776,7 +776,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             max_width = colwidths[0] - cellpadding
             max_height = self.stylesheet['Normal'].leading * 5
             p_style = self.stylesheet['Normal']
-            while True:
+            for __ in range(1000):
                 p = FontFallbackParagraph(
                     self._clean_text(curr_description, tags=['br']),
                     p_style
