@@ -930,7 +930,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ),
                 (
                     'TOPPADDING',
-                    (0, len(tdata) - len(description_p_list) + 1),
+                    (0, len(tdata) - len(description_p_list)),
                     (-1, len(tdata) - 1),
                     0
                 ),
