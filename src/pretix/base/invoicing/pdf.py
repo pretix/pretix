@@ -903,7 +903,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     )
                     description_p_list.append(FontFallbackParagraph(
                         single_price_line,
-                        self.stylesheet['Normal']
+                        self.stylesheet['Fineprint']
                     ))
                 tdata.append((
                     description_p_list.pop(0),
