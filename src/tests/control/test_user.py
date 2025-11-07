@@ -19,22 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
-# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
-# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
-#
-# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
-# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
-#
-# This file contains Apache-licensed contributions copyrighted by: Jason Estibeiro
-#
-# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
-# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations under the License.
-
+import re
 import time
 
 import pytest
+from django.core import mail as djmail
 from django.utils.timezone import now
 from django_otp.oath import TOTP
 from django_otp.plugins.otp_static.models import StaticDevice
@@ -56,7 +45,7 @@ class UserSettingsTest(SoupTest):
         self.user = User.objects.create_user('dummy@dummy.dummy', 'barfoofoo')
         self.client.login(email='dummy@dummy.dummy', password='barfoofoo')
         doc = self.get_doc('/control/settings')
-        self.form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        self.form_data = extract_form_fields(doc.select('form[data-testid="usersettingsform"]')[0])
 
     def save(self, data):
         form_data = self.form_data.copy()
@@ -71,32 +60,106 @@ class UserSettingsTest(SoupTest):
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.fullname == 'Peter Miller'
 
-    def test_change_email_require_password(self):
+    def test_set_locale_and_timezone(self):
         doc = self.save({
-            'email': 'foo@example.com',
+            'locale': 'fr',
+            'timezone': 'Europe/Paris',
         })
-        assert doc.select(".alert-danger")
+        assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
-        assert self.user.email == 'dummy@dummy.dummy'
+        assert self.user.locale == 'fr'
+        assert self.user.timezone == 'Europe/Paris'
+
+
+class UserEmailChangeTest(SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'barfoofoo')
+        self.client.login(email='dummy@dummy.dummy', password='barfoofoo')
+        session = self.client.session
+        session['pretix_auth_login_time'] = int(time.time())
+        session.save()
+        doc = self.get_doc('/control/settings/email/change')
+        self.form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+
+    def test_require_reauth(self):
+        session = self.client.session
+        session['pretix_auth_login_time'] = int(time.time()) - 3600 * 2
+        session.save()
+
+        response = self.client.get('/control/settings/email/change')
+        self.assertIn('/control/reauth', response['Location'])
+        self.assertEqual(response.status_code, 302)
+
+        response = self.client.post('/control/reauth/?next=/control/settings/email/change', {
+            'password': 'barfoofoo'
+        })
+        self.assertIn('/control/settings/email/change', response['Location'])
+        self.assertEqual(response.status_code, 302)
+
+    def submit_step_1(self, data):
+        form_data = self.form_data.copy()
+        form_data.update(data)
+        return self.post_doc('/control/settings/email/change', form_data)
+
+    def submit_step_2(self, data):
+        form_data = self.form_data.copy()
+        form_data.update(data)
+        return self.post_doc('/control/settings/email/confirm?reason=email_change', form_data)
 
     def test_change_email_success(self):
-        doc = self.save({
-            'email': 'foo@example.com',
-            'old_pw': 'barfoofoo'
+        djmail.outbox = []
+        doc = self.submit_step_1({
+            'new_email': 'foo@example.com',
+        })
+        assert len(djmail.outbox) == 1
+        assert djmail.outbox[0].to == ['foo@example.com']
+        code = re.search("[0-9]{7}", djmail.outbox[0].body).group(0)
+        doc = self.submit_step_2({
+            'code': code,
         })
         assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.email == 'foo@example.com'
 
-    def test_change_email_no_duplicates(self):
-        User.objects.create_user('foo@example.com', 'foo')
-        doc = self.save({
-            'email': 'foo@example.com',
-            'old_pw': 'barfoofoo'
+    def test_change_email_wrong_code(self):
+        djmail.outbox = []
+        doc = self.submit_step_1({
+            'new_email': 'foo@example.com',
+        })
+        assert len(djmail.outbox) == 1
+        assert djmail.outbox[0].to == ['foo@example.com']
+        code = re.search("[0-9]{7}", djmail.outbox[0].body).group(0)
+        wrong_code = '0000000' if code == '1234567' else '1234567'
+        doc = self.submit_step_2({
+            'code': wrong_code,
         })
         assert doc.select(".alert-danger")
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.email == 'dummy@dummy.dummy'
+
+    def test_change_email_no_duplicates(self):
+        User.objects.create_user('foo@example.com', 'foo')
+        doc = self.submit_step_1({
+            'new_email': 'foo@example.com',
+        })
+        assert doc.select(".alert-danger")
+        self.user = User.objects.get(pk=self.user.pk)
+        assert self.user.email == 'dummy@dummy.dummy'
+
+
+class UserPasswordChangeTest(SoupTest):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'barfoofoo')
+        self.client.login(email='dummy@dummy.dummy', password='barfoofoo')
+        doc = self.get_doc('/control/settings/password/change')
+        self.form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+
+    def save(self, data):
+        form_data = self.form_data.copy()
+        form_data.update(data)
+        return self.post_doc('/control/settings/password/change', form_data)
 
     def test_change_password_require_password(self):
         doc = self.save({
@@ -192,18 +255,6 @@ class UserSettingsTest(SoupTest):
             'old_pw': '9UQl4lSwHLMVUIMgw0L1X8XEFmyvdn',
         })
         assert doc.select(".alert-danger")
-
-    def test_needs_password_change(self):
-        self.user.needs_password_change = True
-        self.user.save()
-        doc = self.save({
-            'email': 'foo@example.com',
-            'old_pw': 'barfoofoo'
-        })
-        assert doc.select(".alert-success")
-        assert doc.select(".alert-warning")
-        self.user.refresh_from_db()
-        assert self.user.needs_password_change is True
 
     def test_needs_password_change_changed(self):
         self.user.needs_password_change = True

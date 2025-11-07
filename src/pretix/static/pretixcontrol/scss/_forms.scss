@@ -938,3 +938,25 @@ details {
     }
   }
 }
+
+
+@media (min-width: $screen-lg-min) {
+  .centered-form {
+    margin: 80px auto;
+    max-width: 800px;
+    border: 1px solid #ddd;
+    padding: 20px 40px 0;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px #eee;
+  }
+
+  .form.centered-form .submit-group {
+    margin: 25px -40px 0 !important;
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+
+  .centered-form p {
+    margin: 20px 0;
+  }
+}

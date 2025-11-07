@@ -263,3 +263,11 @@ svg.svg-icon {
 @include table-row-variant('warning', var(--pretix-brand-warning-lighten-40), var(--pretix-brand-warning-lighten-35));
 @include table-row-variant('danger', var(--pretix-brand-danger-lighten-30), var(--pretix-brand-danger-lighten-25));
 
+.confirmation-code-input {
+  font-size: 200%;
+  font-family: monospace;
+  font-stretch: expanded;
+  text-align: center;
+  height: 50px;
+  margin: 10px 0;
+}

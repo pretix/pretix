@@ -667,6 +667,14 @@ class UserSettingsChangedLogEntryType(LogEntryType):
         return text
 
 
+@log_entry_types.new_from_dict({
+    'pretix.user.email.changed': _('Your email address has been changed from {old_email} to {email}.'),
+    'pretix.user.email.confirmed': _('Your email address {email} has been confirmed.'),
+})
+class UserEmailChangedLogEntryType(LogEntryType):
+    pass
+
+
 class UserImpersonatedLogEntryType(LogEntryType):
     def display(self, logentry, data):
         return self.plain.format(data['other_email'])
