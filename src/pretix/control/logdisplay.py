@@ -602,14 +602,14 @@ class CoreVoucherLogEntryType(VoucherLogEntryType):
     data_schema = {
         "type": "object",
         "properties": {
-            "item": {"type": "number", "shred": False, },
+            "item": {"type": ["null", "number"], "shred": False, },
             "variation": {"type": ["null", "number"], "shred": False, },
             "tag": {"type": "string", "shred": False,},
             "block_quota": {"type": "boolean", "shred": False, },
             "valid_until": {"type": ["null", "string"], "shred": False, },
             "min_usages": {"type": "number", "shred": False, },
             "max_usages": {"type": "number", "shred": False, },
-            "subevent": {"type": ["null", "number"], "shred": False, },
+            "subevent": {"type": ["null", "number", "object"], "shred": False, },
             "source": {"type": "string", "shred": False,},
             "allow_ignore_quota": {"type": "boolean", "shred": False, },
             "code": {"type": "string", "shred": False,},
@@ -617,13 +617,21 @@ class CoreVoucherLogEntryType(VoucherLogEntryType):
             "price_mode": {"type": "string", "shred": False,},
             "seat": {"type": "string", "shred": False,},
             "quota": {"type": ["null", "number"], "shred": False,},
-            "value": {"type": "string", "shred": False,},
+            "value": {"type": ["null", "string"], "shred": False,},
             "redeemed": {"type": "number", "shred": False,},
             "all_addons_included": {"type": "boolean", "shred": False, },
             "all_bundles_included": {"type": "boolean", "shred": False, },
             "budget": {"type": ["null", "number"], "shred": False, },
             "itemvar": {"type": "string", "shred": False,},
             "show_hidden_items": {"type": "boolean", "shred": False, },
+
+            # bulk create:
+            "bulk": {"type": "boolean", "shred": False,},
+            "seats": {"type": "array", "shred": False,},
+            "send": {"type": ["string", "boolean"], "shred": False,},
+            "send_recipients": {"type": "array", "shred": True,},
+            "send_subject": {"type": "string", "shred": False,},
+            "send_message": {"type": "string", "shred": True,},
 
             # pretix.voucher.sent
             "recipient": {"type": "string", "shred": True,},
