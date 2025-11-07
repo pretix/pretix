@@ -149,7 +149,7 @@ class ItemDataExporter(ListExporter):
                     row += [
                         _("Yes") if i.active and v.active else "",
                         ", ".join([str(sn.label) for sn in sales_channels]),
-                        v.default_price or i.default_price,
+                        v.default_price if v.default_price is not None else i.default_price,
                         _("Yes") if i.free_price else "",
                         str(i.tax_rule) if i.tax_rule else "",
                         _("Yes") if i.admission else "",
