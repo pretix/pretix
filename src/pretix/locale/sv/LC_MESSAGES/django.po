@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 10:55+0000\n"
-"PO-Revision-Date: 2025-10-10 17:00+0000\n"
+"PO-Revision-Date: 2025-11-07 23:00+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8899,10 +8899,10 @@ msgstr ""
 "exporter."
 
 #: pretix/base/services/invoices.py:115
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "."
+msgstr "{expire_date}."
 
 #: pretix/base/services/invoices.py:127
 #, python-brace-format
@@ -35400,9 +35400,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
-msgstr ""
-"Observera att vi fortfarande väntar på din betalning för att slutföra "
-"processen."
+msgstr "."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
 msgid ""
