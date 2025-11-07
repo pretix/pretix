@@ -3625,6 +3625,47 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             self.assertEqual(Order.objects.count(), 1)
             self.assertEqual(OrderPosition.objects.count(), 1)
 
+    def test_max_items_per_order_failed(self):
+        self.event.settings.max_items_per_order = 2
+        self.ticket.save()
+        with scopes_disabled():
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat)
+            cp = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10),
+            )
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.workshop1, addon_to=cp,
+                price=12, expires=now() + timedelta(minutes=10),
+            )
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10),
+            )
+            to_delete = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10),
+            )
+        self._set_payment()
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 4)
+            self.assertEqual(len(doc.select(".alert-danger")), 1)
+            self.assertFalse(Order.objects.exists())
+
+        with scopes_disabled():
+            to_delete.delete()
+        self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug))  # required for session['shown_total']
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        with scopes_disabled():
+            self.assertEqual(len(doc.select(".thank-you")), 1)
+            self.assertEqual(Order.objects.count(), 1)
+            self.assertEqual(OrderPosition.objects.count(), 3)
+
     def test_subevent_confirm_expired_partial(self):
         self.event.has_subevents = True
         self.event.save()
