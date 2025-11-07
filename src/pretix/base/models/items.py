@@ -2312,6 +2312,8 @@ class ItemProgramTime(models.Model):
     end = models.DateTimeField(verbose_name=_("End"))
 
     def clean(self):
+        if self.item.event.has_subevents:
+            raise ValidationError(_("You cannot use program times on an event series."))
         self.clean_start_end(start=self.start, end=self.end)
         super().clean()
 
