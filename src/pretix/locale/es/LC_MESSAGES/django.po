@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 10:55+0000\n"
-"PO-Revision-Date: 2025-11-04 10:25+0000\n"
+"PO-Revision-Date: 2025-11-10 01:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14\n"
+"X-Generator: Weblate 5.14.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -1096,7 +1096,7 @@ msgstr "Código de pedido y número de posición"
 
 #: pretix/base/datasync/sourcefields.py:482
 msgid "Ticket price"
-msgstr "Precio del billete"
+msgstr "Precio de la entrada"
 
 #: pretix/base/datasync/sourcefields.py:491 pretix/base/notifications.py:204
 #: pretix/control/forms/filter.py:216 pretix/control/forms/modelimport.py:90
@@ -1105,7 +1105,7 @@ msgstr "Estado del pedido"
 
 #: pretix/base/datasync/sourcefields.py:500
 msgid "Ticket status"
-msgstr "Estado del billete"
+msgstr "Estado de la entrada"
 
 #: pretix/base/datasync/sourcefields.py:509
 msgid "Order date and time"
@@ -1134,7 +1134,7 @@ msgstr "Enlace para realizar el pedido"
 
 #: pretix/base/datasync/sourcefields.py:560
 msgid "Ticket link"
-msgstr "Enlace al billete"
+msgstr "Enlace a la entrada"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, python-brace-format
@@ -2427,7 +2427,7 @@ msgstr "Pagado con {method}"
 #: pretix/base/exporters/orderlist.py:458
 #: pretix/base/exporters/orderlist.py:914
 msgid "Fee type"
-msgstr "Tarifa por billete"
+msgstr "Tarifa por entrada"
 
 #: pretix/base/exporters/orderlist.py:460
 #: pretix/base/exporters/orderlist.py:601
@@ -2542,7 +2542,7 @@ msgstr "ID Seudónimo"
 #: pretix/base/exporters/orderlist.py:621 pretix/control/forms/filter.py:709
 #: pretix/control/templates/pretixcontrol/order/change.html:280
 msgid "Ticket secret"
-msgstr "Secreto del billete"
+msgstr "Secreto de la entrada"
 
 #: pretix/base/exporters/orderlist.py:622 pretix/base/modelimport_orders.py:610
 #: pretix/base/modelimport_vouchers.py:272
@@ -4431,7 +4431,7 @@ msgstr "Permitir volver a entrar después de un escaneo de salida"
 
 #: pretix/base/models/checkin.py:94
 msgid "Allow multiple entries per ticket"
-msgstr "Permitir varias entradas por billete"
+msgstr "Permitir varios accesos por entrada"
 
 #: pretix/base/models/checkin.py:95
 msgid ""
@@ -5151,7 +5151,7 @@ msgstr "Ningún valor debe contener el carácter delimitador."
 #: pretix/base/models/giftcards.py:81
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
 msgid "Owned by ticket holder"
-msgstr "Propietario del titular del billete"
+msgstr "Propietario del titular de la entrada"
 
 #: pretix/base/models/giftcards.py:88
 msgid "Owned by customer account"
@@ -5647,8 +5647,8 @@ msgstr ""
 "normalmente NO es necesario cambiar este valor. El ajuste predeterminado "
 "significa que el tiempo de validez de las entradas no lo decidirá el "
 "producto, sino el evento y la configuración del check-in. Utilice las otras "
-"opciones sólo si las necesita para realizar, p. una reserva de un billete de "
-"un año con fecha de inicio dinámica. Tenga en cuenta que la validez se "
+"opciones sólo si las necesita para realizar, p. una reserva de una entrada "
+"de un año con fecha de inicio dinámica. Tenga en cuenta que la validez se "
 "almacenará con la entrada, por lo que si cambia la configuración aquí más "
 "adelante, las entradas existentes no se verán afectadas por el cambio, pero "
 "mantendrán su validez actual."
@@ -8831,7 +8831,7 @@ msgstr "La posición de este pedido ha sido cancelado."
 
 #: pretix/base/services/checkin.py:981
 msgid "This ticket has been blocked."
-msgstr "Este billete ha sido bloqueado."
+msgstr "Esta entrada ha sido bloqueada."
 
 #: pretix/base/services/checkin.py:990
 msgid "This order is not yet approved."
@@ -8840,12 +8840,12 @@ msgstr "Este pedido aún no está aprobado."
 #: pretix/base/services/checkin.py:999 pretix/base/services/checkin.py:1003
 #, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr "Este billete sólo es válido después del {datetime}."
+msgstr "Esta entrada sólo es válida después del {datetime}."
 
 #: pretix/base/services/checkin.py:1013 pretix/base/services/checkin.py:1017
 #, python-brace-format
 msgid "This ticket was only valid before {datetime}."
-msgstr "Este billete sólo era válido antes del {datetime}."
+msgstr "Esta entrada sólo era válida antes del {datetime}."
 
 #: pretix/base/services/checkin.py:1048
 msgid "This order position has an invalid product for this check-in list."
@@ -9082,7 +9082,7 @@ msgid ""
 "a ticket that starts to be valid on {date}."
 msgstr ""
 "Ha seleccionado una suscripción valida de {start} a {end}, pero ha "
-"seleccionado un billete que empieza a ser valido el {date}."
+"seleccionado una entrada que empieza a ser valido el {date}."
 
 #: pretix/base/services/memberships.py:188
 #, python-brace-format
@@ -9843,7 +9843,7 @@ msgstr ""
 
 #: pretix/base/settings.py:414
 msgid "Ask for company per ticket"
-msgstr "Preguntar por compañía por billete"
+msgstr "Preguntar por compañía por entrada"
 
 #: pretix/base/settings.py:423
 msgid "Require company per ticket"
@@ -10135,7 +10135,7 @@ msgstr "Fuente"
 
 #: pretix/base/settings.py:796
 msgid "Length of ticket codes"
-msgstr "Longitud de los códigos de los billetes"
+msgstr "Longitud de los códigos de las entradas"
 
 #: pretix/base/settings.py:823
 msgid "Reservation period"
@@ -10421,7 +10421,7 @@ msgid ""
 "Automatic based on ticket-specific validity, membership validity, event "
 "series date, or event date"
 msgstr ""
-"Automático, según la validez específica del billete, la validez de la "
+"Automático, según la validez específica de la entrada, la validez de la "
 "membresía, la fecha de la serie de eventos o la fecha del evento"
 
 #: pretix/base/settings.py:1135 pretix/base/settings.py:1146
@@ -10865,7 +10865,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1660
 msgid "Generate tickets for all products"
-msgstr "Generar billetes para todos los productos"
+msgstr "Generar entradas para todos los productos"
 
 #: pretix/base/settings.py:1661
 msgid ""
@@ -10873,9 +10873,9 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
-"Si está desactivado, los billete solo se emiten para productos marcados como "
+"Si está desactivado, las entrada solo se emiten para productos marcados como "
 "\"entradas\" en la configuración del producto. También puedes desactivar la "
-"emisión de billetes en cada producto por separado."
+"emisión de entradas en cada producto por separado."
 
 #: pretix/base/settings.py:1673
 msgid "Generate tickets for pending orders"
@@ -11095,7 +11095,7 @@ msgstr "No permitir cambios después"
 
 #: pretix/base/settings.py:1884
 msgid "Allow change even though the ticket has already been checked in"
-msgstr "Permitir cambio aunque el billete ya haya sido facturado"
+msgstr "Permitir cambio aunque la entrada ya haya sido facturada"
 
 #: pretix/base/settings.py:1885
 msgid ""
@@ -14685,7 +14685,7 @@ msgstr "Suma máxima de pagos y devoluciones"
 
 #: pretix/control/forms/filter.py:624
 msgid "At least one ticket with check-in"
-msgstr "Al menos un billete con check-in"
+msgstr "Al menos una entrada con check-in"
 
 #: pretix/control/forms/filter.py:628
 msgid "Affected quota"
@@ -15399,7 +15399,7 @@ msgstr "Tamaño"
 
 #: pretix/control/forms/item.py:455
 msgid "Number of tickets"
-msgstr "Número de billetes"
+msgstr "Número de entradas"
 
 #: pretix/control/forms/item.py:587
 msgid "Quota name is required."
@@ -15907,7 +15907,7 @@ msgstr "Precio nuevo (bruto)"
 
 #: pretix/control/forms/orders.py:484
 msgid "Ticket is blocked"
-msgstr "El billete está bloqueado"
+msgstr "La entrada está bloqueada"
 
 #: pretix/control/forms/orders.py:489
 msgid "Validity start"
@@ -15926,8 +15926,8 @@ msgid ""
 "This affects both the ticket secret (often used as a QR code) as well as the "
 "link used to individually access the ticket."
 msgstr ""
-"Esto afecta tanto al secreto del billete (a menudo utilizado como código QR) "
-"así como al enlace utilizado para acceder individualmente al billete."
+"Esto afecta tanto al secreto de la entrada(a menudo utilizado como código QR)"
+" así como al enlace utilizado para acceder individualmente a la entrada."
 
 #: pretix/control/forms/orders.py:512
 msgid "Cancel this position"
@@ -19127,7 +19127,7 @@ msgstr "Su búsqueda no ha encontrado ningún registro de check-in."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:52
 msgid "You haven't scanned any tickets yet."
-msgstr "Aún no ha escaneado ningún billete."
+msgstr "Aún no ha escaneado ninguna entrada."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:63
 msgid "Time of scan"
@@ -22073,9 +22073,9 @@ msgid ""
 msgstr ""
 "Esta opción debe configurarse para la mayoría de las cosas que llamaría "
 "\"una entrada\". Para productos complementarios o paquetes, esto debe "
-"configurarse en el billete principal, excepto si los productos "
-"complementarios o productos combinados representan personas adicionales (por "
-"ejemplo, paquetes grupales)."
+"configurarse en la entrada principal, excepto si los productos "
+"complementarios o productos combinados representan personas adicionales "
+"(por ejemplo, paquetes grupales)."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:50
 #: pretix/control/templates/pretixcontrol/item/index.html:58
@@ -22354,8 +22354,8 @@ msgstr ""
 "Si seleccionas una duración expresada en días, meses o años, la validez "
 "siempre finalizará al finalizar un día completo (medianoche), más el número "
 "de minutos y horas seleccionados anteriormente. La fecha de inicio está "
-"incluida en el cálculo, por lo que si introduces \"1 día\", el billete será "
-"válido hasta el final del día de inicio."
+"incluida en el cálculo, por lo que si introduces \"1 día\", la entrada será "
+"válida hasta el final del día de inicio."
 
 #: pretix/control/templates/pretixcontrol/item/index.html:254
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:619
@@ -22727,7 +22727,7 @@ msgstr "%% de respuestas"
 #: pretix/control/templates/pretixcontrol/items/question.html:93
 #, python-format
 msgid "%% of tickets"
-msgstr "%% de billetes"
+msgstr "%% de entradas"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:112
 #: pretix/control/templates/pretixcontrol/order/transactions.html:85
@@ -23339,9 +23339,9 @@ msgid ""
 "ticket here will not affect the membership. Memberships can be managed in "
 "the customer account."
 msgstr ""
-"La venta de esta plaza creó una suscripción. Cambiar la validez del billete "
-"aquí no afectará a la suscripción. Las suscripcionies se pueden gestionar en "
-"la cuenta de cliente."
+"La venta de esta plaza creó una suscripción. Cambiar la validez de la "
+"entrada aquí no afectará a la suscripción. Las suscripciones se pueden "
+"gestionar en la cuenta de cliente."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:296
 msgid ""
@@ -25610,8 +25610,8 @@ msgstr ""
 msgid ""
 "This can be used to enable products like year passes, tickets of ten, etc."
 msgstr ""
-"Esto se puede utilizar para habilitar productos como abonos de año, billetes "
-"de diez, etc."
+"Esto se puede utilizar para habilitar productos como abonos al año, bonos de "
+"diez, etc."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
@@ -30919,7 +30919,7 @@ msgstr "Incluir código QR secreto"
 
 #: pretix/plugins/checkinlists/exporters.py:101
 msgid "Only tickets requiring special attention"
-msgstr "Sólo los billetes que requieren una atención especial"
+msgstr "Sólo las entradas que requieren una atención especial"
 
 #: pretix/plugins/checkinlists/exporters.py:134
 msgid "Include questions"
@@ -32147,7 +32147,8 @@ msgstr "El pedido recibió un correo electrónico masivo."
 #: pretix/plugins/sendmail/signals.py:129
 msgid "A ticket holder of this order received a mass email."
 msgstr ""
-"El titular de un billete de este pedido recibió un correo electrónico masivo."
+"El titular de una entrada de este pedido recibió un correo electrónico "
+"masivo."
 
 #: pretix/plugins/sendmail/signals.py:134
 msgid "The person on the waiting list received a mass email."
@@ -32370,8 +32371,8 @@ msgid ""
 "Send an email to every customer, or to every person a ticket has been "
 "purchased for, or a combination of both."
 msgstr ""
-"Envíe un correo electrónico a cada cliente, o a cada persona para la que se "
-"haya comprado un billete, o una combinación de ambos."
+"Enviar un correo electrónico a cada cliente, o a cada persona para las "
+"cuales haya comprado una entrada, o una combinación de ambos."
 
 #: pretix/plugins/sendmail/views.py:417
 #, python-format
@@ -32656,7 +32657,7 @@ msgid ""
 "Stripe Dashboard."
 msgstr ""
 "pretix intentará verificar si el navegador web del cliente admite métodos de "
-"pago basados en billetera como Apple Pay o Google Pay y los mostrará de "
+"pago que emplea carteras como Apple Pay o Google Pay y los mostrará de "
 "manera destacada junto con el método de pago con tarjeta de crédito. Esta "
 "detección no tiene en cuenta si Google Pay/Apple Pay se ha desactivado en el "
 "Panel de Stripe."
@@ -33507,7 +33508,7 @@ msgstr "Entrada alternativa"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
 msgid "Ticket layout"
-msgstr "Diseño de billetes"
+msgstr "Diseño de entradas"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
@@ -36749,8 +36750,8 @@ msgid ""
 "No ticket types are available for the waiting list, have a look at the "
 "ticket shop instead."
 msgstr ""
-"No hay billetes disponibles en la lista de espera, revise la taquilla "
-"virtual podría encontrar billetes disponibles."
+"No hay entradas disponibles en la lista de espera, revise la taquilla "
+"virtual podría encontrar entradas disponibles."
 
 #: pretix/presale/views/waiting.py:137 pretix/presale/views/waiting.py:161
 msgid "Waiting lists are disabled for this event."
