@@ -197,6 +197,7 @@ TEST_INVOICE_RES = {
     "invoice_from": "",
     "invoice_from_zipcode": "",
     "invoice_from_city": "",
+    "invoice_from_state": "",
     "invoice_from_country": None,
     "invoice_from_tax_id": "",
     "invoice_from_vat_id": "",

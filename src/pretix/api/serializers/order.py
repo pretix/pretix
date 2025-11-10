@@ -1831,7 +1831,7 @@ class InvoiceSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Invoice
         fields = ('event', 'order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
-                  'invoice_from_city', 'invoice_from_country', 'invoice_from_tax_id', 'invoice_from_vat_id',
+                  'invoice_from_city', 'invoice_from_state', 'invoice_from_country', 'invoice_from_tax_id', 'invoice_from_vat_id',
                   'invoice_to', 'invoice_to_is_business', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street',
                   'invoice_to_zipcode', 'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id',
                   'invoice_to_beneficiary', 'invoice_to_transmission_info', 'custom_field', 'date', 'refers', 'locale',

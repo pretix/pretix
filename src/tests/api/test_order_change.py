@@ -578,6 +578,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         "invoice_from": "",
         "invoice_from_zipcode": "",
         "invoice_from_city": "",
+        "invoice_from_state": "",
         "invoice_from_country": None,
         "invoice_from_tax_id": "",
         "invoice_from_vat_id": "",

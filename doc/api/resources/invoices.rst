@@ -22,6 +22,7 @@ invoice_from_name                     string                     Sender address:
 invoice_from                          string                     Sender address: Address lines
 invoice_from_zipcode                  string                     Sender address: ZIP code
 invoice_from_city                     string                     Sender address: City
+invoice_from_state                    string                     Sender address: State (only used in some countries)
 invoice_from_country                  string                     Sender address: Country code
 invoice_from_tax_id                   string                     Sender address: Local Tax ID
 invoice_from_vat_id                   string                     Sender address: EU VAT ID
@@ -233,6 +234,7 @@ List of all invoices
             "invoice_from": "Demo street 12",
             "invoice_from_zipcode":"",
             "invoice_from_city":"Demo town",
+            "invoice_from_state":"CA",
             "invoice_from_country":"US",
             "invoice_from_tax_id":"",
             "invoice_from_vat_id":"",
@@ -381,6 +383,7 @@ Fetching individual invoices
         "invoice_from": "Demo street 12",
         "invoice_from_zipcode":"",
         "invoice_from_city":"Demo town",
+        "invoice_from_state":"CA",
         "invoice_from_country":"US",
         "invoice_from_tax_id":"",
         "invoice_from_vat_id":"",

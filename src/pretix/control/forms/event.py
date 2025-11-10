@@ -67,8 +67,9 @@ from pretix.base.models.tax import TAX_CODE_LISTS
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.settings import (
-    COUNTRIES_WITH_STATE_IN_ADDRESS, DEFAULTS, PERSON_NAME_SCHEMES,
-    PERSON_NAME_TITLE_GROUPS, ROUNDING_MODES, validate_event_settings,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, COUNTRY_STATE_LABEL, DEFAULTS,
+    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, ROUNDING_MODES,
+    validate_event_settings,
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
@@ -945,6 +946,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_address_from',
         'invoice_address_from_zipcode',
         'invoice_address_from_city',
+        'invoice_address_from_state',
         'invoice_address_from_country',
         'invoice_address_from_tax_id',
         'invoice_address_from_vat_id',
@@ -1016,6 +1018,26 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         self.fields['invoice_renderer_font'].choices += [
             (a, a) for a in get_fonts(event, pdf_support_required=True).keys()
         ]
+
+        if 'invoice_address_from_country' in self.data:
+            cc = str(self.data['invoice_address_from_country'])
+        elif 'invoice_address_from_country' in self.initial:
+            cc = str(self.initial['invoice_address_from_country'])
+        else:
+            cc = self.obj.settings.invoice_address_from_country
+        c = [('', '---')]
+        state_label = pgettext_lazy('address', 'State')
+        if cc and cc in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
+            statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
+            c += sorted([(s.code[3:], s.name) for s in statelist], key=lambda s: s[1])
+            if cc in COUNTRY_STATE_LABEL:
+                state_label = COUNTRY_STATE_LABEL[cc]
+        elif 'invoice_address_from_state' in self.data:
+            self.data = self.data.copy()
+            del self.data['invoice_address_from_state']
+        self.fields['invoice_address_from_state'].choices = c
+        self.fields['invoice_address_from_state'].label = state_label
 
 
 def contains_web_channel_validate(val):
