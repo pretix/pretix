@@ -114,6 +114,7 @@ $(function () {
     var $val = $("#id_dependency_values");
     var $dq = $("#id_dependency_question");
     var oldval = JSON.parse($("#dependency_value_val").text());
+    var countries = JSON.parse($("#countries").text());
     function update_dependency_options() {
         $val.parent().find(".loading-indicator").remove();
         $("#id_dependency_values option").remove();
@@ -135,6 +136,10 @@ $(function () {
             if (data.type === "B") {
                 $val.append($("<option>").attr("value", "True").text(gettext("Yes")));
                 $val.append($("<option>").attr("value", "False").text(gettext("No")));
+            } else if (data.type === "CC") {
+                for (var c of countries) {
+                    $val.append($("<option>").attr("value", c.id).text(c.name));
+                }
             } else {
                 for (var i = 0; i < data.options.length; i++) {
                     var opt = data.options[i];

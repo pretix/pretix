@@ -1058,6 +1058,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 return (
                     ('True' in qvals and answ[parentid].answer == 'True')
                     or ('False' in qvals and answ[parentid].answer == 'False')
+                    or (parentq.type == Question.TYPE_COUNTRYCODE and answ[parentid].answer in qvals)
                     or (any(qval in [o.identifier for o in answ[parentid].options.all()] for qval in qvals))
                 )
 

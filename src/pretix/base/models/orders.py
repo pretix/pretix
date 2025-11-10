@@ -1623,6 +1623,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             return (
                 ('True' in qvals and self.answ[parentid].answer == 'True')
                 or ('False' in qvals and self.answ[parentid].answer == 'False')
+                or (parentq.type == Question.TYPE_COUNTRYCODE and self.answ[parentid].answer in qvals)
                 or (any(qval in [o.identifier for o in self.answ[parentid].options.all()] for qval in qvals))
             )
 

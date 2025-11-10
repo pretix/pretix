@@ -155,7 +155,7 @@ class QuestionForm(I18nModelForm):
         self.fields['items'].queryset = self.instance.event.items.all()
         self.fields['items'].required = True
         self.fields['dependency_question'].queryset = self.instance.event.questions.filter(
-            type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE),
+            type__in=(Question.TYPE_BOOLEAN, Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE, Question.TYPE_COUNTRYCODE),
             ask_during_checkin=False
         )
         if self.instance.pk:
