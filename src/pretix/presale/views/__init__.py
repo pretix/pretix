@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import copy
 import warnings
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
 from functools import wraps
@@ -242,6 +242,10 @@ class CartMixin:
             minutes_left = None
             seconds_left = None
 
+        itemvarsums = Counter()
+        for p in cartpos:
+            itemvarsums[p.variation or p.item] += 1
+
         return {
             'positions': positions,
             'invoice_address': self.invoice_address,
@@ -258,6 +262,7 @@ class CartMixin:
             'max_expiry_extend': max_expiry_extend,
             'is_ordered': bool(order),
             'itemcount': sum(c.count for c in positions if not c.addon_to),
+            'itemvarsums': itemvarsums,
             'current_selected_payments': [
                 p for p in self.current_selected_payments(positions, fees, self.invoice_address)
                 if p.get('multi_use_supported')
