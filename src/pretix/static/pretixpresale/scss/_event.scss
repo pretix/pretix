@@ -164,9 +164,6 @@ article.item-with-variations .product-row:last-child:after {
         display: block;
         line-height: 1;
     }
-    h2 .badge, h3 .badge, h4 .badge, h5 .badge, h6 .badge {
-        vertical-align: top;
-    }
 
     &.total {
         border-top: 1px solid $table-border-color;

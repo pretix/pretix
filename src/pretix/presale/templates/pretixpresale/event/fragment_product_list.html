@@ -126,7 +126,7 @@
                                     <h{{ headline_level|default:3|add:2 }} class="h5" id="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend">
                                         {{ var }}
                                         {% if cart.itemvarsums|getitem:var %}
-                                            <span class="badge badge-success">
+                                            <span class="textbubble-success">
                                                 {% icon "shopping-cart" %}
                                                 {% blocktrans trimmed count amount=cart.itemvarsums|getitem:var %}
                                                     {{ amount }}× in your cart
@@ -283,7 +283,7 @@
                             <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">
                                 {{ item.name }}
                                 {% if cart.itemvarsums|getitem:item %}
-                                    <span class="badge badge-success">
+                                    <span class="textbubble-success">
                                         {% icon "shopping-cart" %}
                                         {% blocktrans trimmed count amount=cart.itemvarsums|getitem:item %}
                                             {{ amount }}× in your cart
