@@ -3,6 +3,8 @@
 {% load eventurl %}
 {% load money %}
 {% load thumb %}
+{% load icon %}
+{% load getitem %}
 {% load eventsignal %}
 {% load rich_text %}
 {% for tup in items_by_category %}{% with category=tup.0 items=tup.1 form_prefix=tup.2 %}
@@ -43,7 +45,9 @@
                                 </a>
                             {% endif %}
                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h{{ headline_level|default:3|add:1 }}>
+                                <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">
+                                    {{ item.name }}
+                                </h{{ headline_level|default:3|add:1 }}>
                                 {% if item.description %}
                                     <div id="{{ form_prefix }}item-{{ item.pk }}-description" class="product-description">
                                         {{ item.description|localize|rich_text }}
@@ -119,7 +123,19 @@
                                 data-price="{% if event.settings.display_net_prices %}{{ var.display_price.net|unlocalize }}{% else %}{{ var.display_price.gross|unlocalize }}{% endif %}"
                             {% endif %}>
                                 <div class="col-md-8 col-sm-6 col-xs-12">
-                                    <h{{ headline_level|default:3|add:2 }} class="h5" id="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend">{{ var }}</h{{ headline_level|default:3|add:2 }}>
+                                    <h{{ headline_level|default:3|add:2 }} class="h5" id="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend">
+                                        {{ var }}
+                                        {% if cart.itemvarsums|getitem:var %}
+                                            <span class="textbubble-success">
+                                                {% icon "shopping-cart" %}
+                                                {% blocktrans trimmed count amount=cart.itemvarsums|getitem:var %}
+                                                    {{ amount }}× in your cart
+                                                {% plural %}
+                                                    {{ amount }}× in your cart
+                                                {% endblocktrans %}
+                                            </span>
+                                        {% endif %}
+                                    </h{{ headline_level|default:3|add:2 }}>
                                     {% if var.description %}
                                         <div id="{{ form_prefix }}item-{{ item.pk }}-{{ var.pk }}-description" class="variation-description">
                                             {{ var.description|localize|rich_text }}
@@ -264,7 +280,19 @@
                             </a>
                         {% endif %}
                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                            <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h{{ headline_level|default:3|add:1 }}>
+                            <h{{ headline_level|default:3|add:1 }} class="h4" id="{{ form_prefix }}item-{{ item.pk }}-legend">
+                                {{ item.name }}
+                                {% if cart.itemvarsums|getitem:item %}
+                                    <span class="textbubble-success">
+                                        {% icon "shopping-cart" %}
+                                        {% blocktrans trimmed count amount=cart.itemvarsums|getitem:item %}
+                                            {{ amount }}× in your cart
+                                        {% plural %}
+                                            {{ amount }}× in your cart
+                                        {% endblocktrans %}
+                                    </span>
+                                {% endif %}
+                            </h{{ headline_level|default:3|add:1 }}>
                             {% if item.description %}
                                 <div id="{{ form_prefix }}item-{{ item.pk }}-description" class="product-description">
                                     {{ item.description|localize|rich_text }}

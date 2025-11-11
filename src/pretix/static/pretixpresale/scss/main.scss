@@ -574,6 +574,7 @@ h2 .label {
 
 
 .textbubble-success, .textbubble-success-warning, .textbubble-info, .textbubble-warning, .textbubble-danger {
+  display: inline-block;
   padding: 0 .4em;
   border-radius: $border-radius-base;
   font-weight: bold;
