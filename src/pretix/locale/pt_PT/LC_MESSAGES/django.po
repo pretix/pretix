@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-30 10:55+0000\n"
-"PO-Revision-Date: 2025-10-17 02:04+0000\n"
-"Last-Translator: Vasco Baleia <vb2003.12@gmail.com>\n"
+"PO-Revision-Date: 2025-11-11 21:00+0000\n"
+"Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -12736,7 +12736,7 @@ msgid ""
 "confirmation including a link that you need to access your order later."
 msgstr ""
 "Certifica-te de que escreves um endereço de email válido. Iremos enviar-te "
-"uma confirmação do pedido incluindo um link que precisas para aceder o teu "
+"uma confirmação do pedido incluindo um link que precisas para aceder ao teu "
 "pedido mais tarde."
 
 #: pretix/base/settings.py:3272
@@ -29249,7 +29249,7 @@ msgstr "O pedido foi alterado."
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr ""
-"Tivemos dificuldades a processar os dados introduzidos. Verifique os erros "
+"Tivemos dificuldades a processar os dados introduzidos. Verifica os erros "
 "abaixo."
 
 #: pretix/control/views/orders.py:2306
@@ -35065,10 +35065,8 @@ msgid "There are no add-ons available for this product."
 msgstr "Não há add-ons disponíveis para este produto."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
-#, fuzzy
-#| msgid "Enter a voucher code below to buy this ticket."
 msgid "Enter a voucher code below to buy this product."
-msgstr "Introduza um código promocional abaixo para comprar este bilhete."
+msgstr "Indica o código do voucher abaixo para adquirires esta opção."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:14
