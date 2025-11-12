@@ -820,12 +820,13 @@ def organizer_select2(request):
     total = qs.count()
     pagesize = 20
     offset = (page - 1) * pagesize
+    display_slug = 'display_slug' in request.GET
 
     doc = {
         "results": [
             {
                 'id': o.pk,
-                'text': str(o.name)
+                'text': '{} — {}'.format(o.slug, o.name) if display_slug else str(o.name)
             } for o in qs[offset:offset + pagesize]
         ],
         "pagination": {
