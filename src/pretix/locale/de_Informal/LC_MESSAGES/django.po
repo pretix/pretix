@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-12 15:15+0000\n"
+"PO-Revision-Date: 2025-11-12 15:21+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -297,10 +297,8 @@ msgid "The program start must not be empty."
 msgstr "Der Programmstart darf nicht leer sein."
 
 #: pretix/api/serializers/item.py:239
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "Die Zahlung kommt zu spät, um akzeptiert werden zu können."
+msgstr "Das Programmende darf nicht leer sein."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2320
 msgid "The program end must not be before the program start."
@@ -17508,10 +17506,9 @@ msgstr ""
 "Deine E-Mail-Adresse wurde von \"{old_email}\" auf \"{email}\" geändert."
 
 #: pretix/control/logdisplay.py:672
-#, fuzzy, python-brace-format
-#| msgid "Your email address has been updated."
+#, python-brace-format
 msgid "Your email address {email} has been confirmed."
-msgstr "Deine E-Mail-Adresse wurde aktualisiert."
+msgstr "Deine E-Mail-Adresse {email} wurde bestätigt."
 
 #: pretix/control/logdisplay.py:684
 #, python-brace-format
@@ -18070,22 +18067,16 @@ msgid "A bundled item has been changed on this product."
 msgstr "Ein enthaltenes Produkt wurde bearbeitet."
 
 #: pretix/control/logdisplay.py:893
-#, fuzzy
-#| msgid "An add-on has been added to this product."
 msgid "A program time has been added to this product."
-msgstr "Eine Kategorie für Zusatzprodukte wurde zum Produkt hinzugefügt."
+msgstr "Eine Programmzeit wurde diesem Produkt hinzugefügt."
 
 #: pretix/control/logdisplay.py:894
-#, fuzzy
-#| msgid "An add-on has been changed on this product."
 msgid "A program time has been changed on this product."
-msgstr "Eine Kategorie für Zusatzprodukte wurde bearbeitet."
+msgstr "Eine Programmzeit wurde bei diesem Produkt geändert."
 
 #: pretix/control/logdisplay.py:895
-#, fuzzy
-#| msgid "An add-on has been removed from this product."
 msgid "A program time has been removed from this product."
-msgstr "Eine Kategorie für Zusatzprodukte wurde vom Produkt entfernt."
+msgstr "Eine Programmzeit wurde von diesem Produkt entfernt."
 
 #: pretix/control/logdisplay.py:902
 #, python-brace-format
@@ -19789,6 +19780,19 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Hallo,\n"
+"\n"
+"%(reason)s\n"
+"\n"
+"    %(code)s\n"
+"\n"
+"Bitte gib diesen Code nie an eine andere Person weiter. Unser Support-Team "
+"wird nie nach diesem Code fragen.\n"
+"\n"
+"Wenn du diesen Code nicht angefragt hast, kontaktiere uns bitte sofort.\n"
+"\n"
+"Viele Grüße,\n"
+"Dein pretix-Team\n"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt:1
 #, python-format
@@ -22358,19 +22362,20 @@ msgid ""
 "happen at different times than your event in general. This will not affect "
 "access control, but will affect calendar invites and ticket output."
 msgstr ""
+"Mit Programmzeiten kannst du spezifische Daten und Uhrzeiten für dieses "
+"Produkt hinterlegen. Das ist nützlich, wenn das Produkt einen Teil deiner "
+"Veranstaltung repräsentiert, der zu anderen Zeiten stattfindet als deine "
+"Veranstaltung insgesamt. Dies beeinflusst nicht die Zugangsberechtigungen, "
+"aber die verschickten Kalandereinladungen und ausgegebenen Tickets."
 
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:25
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:51
-#, fuzzy
-#| msgid "Printing time"
 msgid "Program time"
-msgstr "Druckzeit"
+msgstr "Programmzeit"
 
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:68
-#, fuzzy
-#| msgid "Add a single time slot"
 msgid "Add a program time"
-msgstr "Einzelnes Zeitfenster hinzufügen"
+msgstr "Programmzeit hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:35
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:161
@@ -27204,22 +27209,24 @@ msgstr "Die alten Tokens werden nicht mehr funktionieren."
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:4
 #: pretix/control/templates/pretixcontrol/user/change_email.html:8
-#, fuzzy
-#| msgid "Verified email address"
 msgid "Change login email address"
-msgstr "Verifizierte E-Mail-Adresse"
+msgstr "Login-E-Mail-Adresse ändern"
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:13
 msgid ""
 "This changes the email address used to login to your account, as well as "
 "where we send email notifications."
 msgstr ""
+"Dies ändert die E-Mail-Adresse, mit der du sich in dein Konto einloggst, "
+"sowie die Adresse, an die wir Benachrichtigungen senden."
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:18
 msgid ""
 "We will send a confirmation code to your new email address, which you need "
 "to enter in the next step to confirm the email address is correct."
 msgstr ""
+"Wir senden einen Bestätigungscode an deine neue E-Mail-Adresse, den du im "
+"nächsten Schritt eingeben musst, um die E-Mail-Adresse zu bestätigen."
 
 #: pretix/control/templates/pretixcontrol/user/change_password.html:4
 #: pretix/control/templates/pretixcontrol/user/change_password.html:8
@@ -27231,10 +27238,8 @@ msgstr "Passwort ändern"
 
 #: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html:4
 #: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html:8
-#, fuzzy
-#| msgid "Confirmation code"
 msgid "Enter confirmation code"
-msgstr "Bestätigungs-Code"
+msgstr "Bestätigungs-Code eingeben"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:4
 #: pretix/control/templates/pretixcontrol/user/notifications.html:6
@@ -27335,12 +27340,13 @@ msgid ""
 "confirm your email address using a confirmation code we will send to your "
 "email address."
 msgstr ""
+"Deine E-Mail-Adresse ist noch nicht bestätigt. Um dein Konto abzusichern, "
+"bestätige bitte die E-Mail-Adresse mittels eines Bestätigungs-Codes, den wir "
+"dir per E-Mail senden."
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:18
-#, fuzzy
-#| msgid "Send information via email"
 msgid "Send confirmation email"
-msgstr "Informationen per E-Mail verschicken"
+msgstr "Bestätigungs-E-Mail verschicken"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:53
 msgid "Login settings"
@@ -29675,10 +29681,8 @@ msgid "Your comment has been saved."
 msgstr "Dein Kommentar wurde gespeichert."
 
 #: pretix/control/views/user.py:905
-#, fuzzy
-#| msgid "Your email address has been updated."
 msgid "Your email address was already verified."
-msgstr "Deine E-Mail-Adresse wurde aktualisiert."
+msgstr "Deine E-Mail-Adresse war bereits bestätigt."
 
 #: pretix/control/views/user.py:927
 #, python-brace-format
@@ -29686,32 +29690,27 @@ msgid ""
 "Please enter the confirmation code we sent to your email address "
 "<strong>{email}</strong>."
 msgstr ""
+"Bitte gib den Betätigungs-Code ein, den wir dir an <strong>{email}</strong> "
+"geschickt haben."
 
 #: pretix/control/views/user.py:947
-#, fuzzy
-#| msgid "We failed to process your authentication request, please try again."
 msgid "We were unable to verify your confirmation code. Please try again."
 msgstr ""
-"Wir konnten deine Authentifizierung nicht durchführen, bitte versuche es "
+"Wir konnten deinen Bestätigungscode nicht überprüfen. Bitte versuche es "
 "erneut."
 
 #: pretix/control/views/user.py:972
-#, fuzzy
-#| msgid "Your email address has been changed to {email}."
 msgid "Your email address has been changed successfully."
-msgstr "Die E-Mail-Adresse wurde zu {email} geändert."
+msgstr "Deine E-Mail-Adresse wurde erfolgreich geändert."
 
 #: pretix/control/views/user.py:974
-#, fuzzy
-#| msgid "Your email address has been changed to {email}."
 msgid "Your email address has been confirmed successfully."
-msgstr "Die E-Mail-Adresse wurde zu {email} geändert."
+msgstr "Deine E-Mail-Adresse wurde bestätigt."
 
 #: pretix/control/views/user.py:978
-#, fuzzy
-#| msgid "The verification code was incorrect, please try again."
 msgid "The entered confirmation code is not correct. Please try again."
-msgstr "Der Bestätigungscode war falsch, bitte erneut versuchen."
+msgstr ""
+"Der eingegebene Bestätigungscode war nicht korrekt. Bitte erneut versuchen."
 
 #: pretix/control/views/users.py:150
 msgid "We sent out an email containing further instructions."
@@ -34095,22 +34094,19 @@ msgid "Organizer: {organizer}"
 msgstr "Veranstalter: {organizer}"
 
 #: pretix/presale/ical.py:139
-#, fuzzy, python-brace-format
-#| msgid "{event}-{code}"
+#, python-brace-format
 msgid "{event} - {item}"
-msgstr "{event}-{code}"
+msgstr "{event} - {item}"
 
 #: pretix/presale/ical.py:147
-#, fuzzy, python-brace-format
-#| msgid "Start date"
+#, python-brace-format
 msgid "Start: {datetime}"
-msgstr "Beginn"
+msgstr "Beginn: {datetime}"
 
 #: pretix/presale/ical.py:150
-#, fuzzy, python-brace-format
-#| msgid "Admission: {datetime}"
+#, python-brace-format
 msgid "End: {datetime}"
-msgstr "Einlass: {datetime}"
+msgstr "Ende: {datetime}"
 
 #: pretix/presale/templates/pretixpresale/base.html:44
 msgctxt "skip-to-main-nav"
@@ -35287,13 +35283,11 @@ msgstr "Zeige Bild von %(item)s in voller Größe"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:131
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:288
-#, fuzzy, python-format
-#| msgid "%(count)s product"
-#| msgid_plural "%(count)s products"
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "%(count)s Produkt"
-msgstr[1] "%(count)s Produkte"
+msgstr[0] "%(amount)s× in deinem Warenkorb"
+msgstr[1] "%(amount)s× in deinem Warenkorb"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:209
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:374
