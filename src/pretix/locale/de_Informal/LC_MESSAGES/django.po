@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-12 15:21+0000\n"
+"PO-Revision-Date: 2025-11-12 16:08+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -22366,7 +22366,7 @@ msgstr ""
 "Produkt hinterlegen. Das ist nützlich, wenn das Produkt einen Teil deiner "
 "Veranstaltung repräsentiert, der zu anderen Zeiten stattfindet als deine "
 "Veranstaltung insgesamt. Dies beeinflusst nicht die Zugangsberechtigungen, "
-"aber die verschickten Kalandereinladungen und ausgegebenen Tickets."
+"aber die verschickten Kalendereinladungen und ausgegebenen Tickets."
 
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:25
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:51
