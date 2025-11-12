@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-10-30 20:00+0000\n"
+"PO-Revision-Date: 2025-11-12 15:04+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -293,10 +293,8 @@ msgstr ""
 "Ein Produkt darf keine Produkte enthalten, die weitere Produkte enthalten."
 
 #: pretix/api/serializers/item.py:235
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "Die Zahlung kommt zu spät, um akzeptiert werden zu können."
+msgstr "Der Programmstart darf nicht leer sein."
 
 #: pretix/api/serializers/item.py:239
 #, fuzzy
