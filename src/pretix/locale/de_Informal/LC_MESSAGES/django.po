@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-12 15:04+0000\n"
+"PO-Revision-Date: 2025-11-12 15:15+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -303,22 +303,16 @@ msgid "The program end must not be empty."
 msgstr "Die Zahlung kommt zu spät, um akzeptiert werden zu können."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2320
-#, fuzzy
-#| msgid "The maximum date must not be before the minimum value."
 msgid "The program end must not be before the program start."
-msgstr "Das späteste Datum darf nicht vor dem frühesten Datum liegen."
+msgstr "Das Programmende darf nicht vor dem Start liegen."
 
 #: pretix/api/serializers/item.py:331
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
-#| "Please use the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, program times or variations via PATCH/PUT is not "
 "supported. Please use the dedicated nested endpoint."
 msgstr ""
-"Varianten, Zusatzprodukte und Bundles können nicht per PATCH/PUT geändert "
-"werden, bitte nutze die separate Ressource."
+"Varianten, Zusatzprodukte, Programmzeiten und Bundles können nicht per PATCH/"
+"PUT geändert werden, bitte nutze die separate Ressource."
 
 #: pretix/api/serializers/item.py:339
 msgid "Only admission products can currently be personalized."
@@ -3296,10 +3290,8 @@ msgid "Repeat password"
 msgstr "Passwort wiederholen"
 
 #: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:101
-#, fuzzy
-#| msgid "Your address"
 msgid "Your email address"
-msgstr "Deine Adresse"
+msgstr "Deine E-Mail-Adresse"
 
 #: pretix/base/forms/auth.py:327 pretix/control/forms/orders.py:1041
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
@@ -3447,10 +3439,8 @@ msgstr ""
 "Zeitzone der Veranstaltung verwendet."
 
 #: pretix/base/forms/user.py:77
-#, fuzzy
-#| msgid "Attendee email address"
 msgid "Change email address"
-msgstr "Teilnehmer*innen-E-Mail-Adresse"
+msgstr "E-Mail-Adresse ändern"
 
 #: pretix/base/forms/user.py:83
 msgid "Device name"
@@ -3508,16 +3498,12 @@ msgstr ""
 "wähle eine andere."
 
 #: pretix/base/forms/user.py:176
-#, fuzzy
-#| msgid "Email address"
 msgid "Old email address"
-msgstr "E-Mail-Adresse"
+msgstr "Alte E-Mail-Adresse"
 
 #: pretix/base/forms/user.py:177
-#, fuzzy
-#| msgid "Email address"
 msgid "New email address"
-msgstr "E-Mail-Adresse"
+msgstr "Neue E-Mail-Adresse"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -4388,6 +4374,8 @@ msgid ""
 "to confirm changing your email address from {old_email}\n"
 "to {new_email}, use the following code:"
 msgstr ""
+"um zu bestätigen, dass du deine E-Mail-Adresse von {old_email}\n"
+"zu {new_email} ändern möchtest, verwende den folgenden Code:"
 
 #: pretix/base/models/auth.py:378
 #, python-brace-format
@@ -4395,12 +4383,12 @@ msgid ""
 "to confirm that your email address {email} belongs to your pretix account, "
 "use the following code:"
 msgstr ""
+"um zu bestätigen, dass die E-Mail-Adresse {email} zu deinem pretix-Account "
+"gehört, verwende bitte den folgenden Code:"
 
 #: pretix/base/models/auth.py:392
-#, fuzzy
-#| msgid "Confirmation code"
 msgid "pretix confirmation code"
-msgstr "Bestätigungs-Code"
+msgstr "pretix-Bestätigungscode"
 
 #: pretix/base/models/auth.py:435
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
@@ -6360,11 +6348,8 @@ msgstr ""
 "erlaubten Wert pro Zeile ein."
 
 #: pretix/base/models/items.py:2311
-#, fuzzy
-#| msgctxt "timeframe"
-#| msgid "Start"
 msgid "Start"
-msgstr "Beginn"
+msgstr "Start"
 
 #: pretix/base/models/items.py:2312
 #: pretix/plugins/reports/accountingreport.py:129
@@ -8249,10 +8234,8 @@ msgid "Validity end time"
 msgstr "Gültigkeitsende: Uhrzeit"
 
 #: pretix/base/pdf.py:495
-#, fuzzy
-#| msgid "Payment date and time"
 msgid "Program times: date and time"
-msgstr "Zahlungsdatum und Uhrzeit"
+msgstr "Programmzeiten: Datum und Uhrzeit"
 
 #: pretix/base/pdf.py:497
 msgid ""
@@ -8260,6 +8243,9 @@ msgid ""
 "2017-05-31 14:00 – 16:00\n"
 "2017-05-31 14:00 – 2017-06-01 14:00"
 msgstr ""
+"31.05.2017 10:00 – 12:00\n"
+"31.05.2017 14:00 – 16:00\n"
+"31.05.2017 14:00 – 31.05.2017 14:00"
 
 #: pretix/base/pdf.py:501
 msgid "Reusable Medium ID"
@@ -15643,10 +15629,8 @@ msgid "inactive"
 msgstr "inaktiv"
 
 #: pretix/control/forms/item.py:1331
-#, fuzzy
-#| msgid "Printing time"
 msgid "Program times"
-msgstr "Druckzeit"
+msgstr "Programmzeiten"
 
 #: pretix/control/forms/mailsetup.py:42
 msgid "Hostname"
@@ -17518,13 +17502,10 @@ msgid "Your account has been disabled."
 msgstr "Das Benutzerkonto wurde deaktiviert."
 
 #: pretix/control/logdisplay.py:671
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The email address has been changed from \"{old_email}\" to \"{new_email}"
-#| "\"."
+#, python-brace-format
 msgid "Your email address has been changed from {old_email} to {email}."
 msgstr ""
-"Die E-Mail-Adresse wurde von \"{old_email}\" auf \"{new_email}\" geändert."
+"Deine E-Mail-Adresse wurde von \"{old_email}\" auf \"{email}\" geändert."
 
 #: pretix/control/logdisplay.py:672
 #, fuzzy, python-brace-format
