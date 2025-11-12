@@ -302,8 +302,10 @@ PPRO
 prefix
 Prefix
 pretix
+pretix-Account
 pretix-Apps
 pretix-Benutzerkennung
+pretix-Bestätigungscode
 pretixdesk-Apps
 pretixdroid
 pretix-Enterprise-Lizenz
