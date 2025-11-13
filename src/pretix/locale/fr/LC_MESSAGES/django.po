@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-04 10:25+0000\n"
+"PO-Revision-Date: 2025-11-13 21:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.14\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -290,34 +290,25 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "Un produit groupé ne doit pas contenir des produits groupés."
 
 #: pretix/api/serializers/item.py:235
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "Le paiement est trop tard pour être accepté."
+msgstr "Le début du programme ne doit pas être vide."
 
 #: pretix/api/serializers/item.py:239
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "Le paiement est trop tard pour être accepté."
+msgstr "La fin du programme ne doit pas être vide."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2320
-#, fuzzy
-#| msgid "The maximum date must not be before the minimum value."
 msgid "The program end must not be before the program start."
-msgstr "La date limite ne doit pas être antérieure à la date de début."
+msgstr "La fin du programme ne doit pas être antérieure au début du programme."
 
 #: pretix/api/serializers/item.py:331
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
-#| "Please use the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, program times or variations via PATCH/PUT is not "
 "supported. Please use the dedicated nested endpoint."
 msgstr ""
-"La mise à jour des variantes, Add-Ons ou forfaits via PATCH/PUT n'est pas "
-"prise en charge. Veuillez utiliser le point de terminaison imbriqué dédié."
+"La mise à jour des modules complémentaires, des offres groupées, des "
+"horaires ou des variations via PATCH/PUT n'est pas prise en charge. Veuillez "
+"utiliser le point de terminaison correspondant."
 
 #: pretix/api/serializers/item.py:339
 msgid "Only admission products can currently be personalized."
@@ -3309,10 +3300,8 @@ msgid "Repeat password"
 msgstr "Répéter le mot de passe"
 
 #: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:101
-#, fuzzy
-#| msgid "Your address"
 msgid "Your email address"
-msgstr "Votre adresse"
+msgstr "Votre adresse e-mail"
 
 #: pretix/base/forms/auth.py:327 pretix/control/forms/orders.py:1041
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
@@ -3463,10 +3452,8 @@ msgstr ""
 "la place."
 
 #: pretix/base/forms/user.py:77
-#, fuzzy
-#| msgid "Attendee email address"
 msgid "Change email address"
-msgstr "Adresse e-mail du participant"
+msgstr "Modifier l'adresse e-mail"
 
 #: pretix/base/forms/user.py:83
 msgid "Device name"
@@ -3525,16 +3512,12 @@ msgstr ""
 "une autre."
 
 #: pretix/base/forms/user.py:176
-#, fuzzy
-#| msgid "Email address"
 msgid "Old email address"
-msgstr "Adresse e-mail"
+msgstr "Ancienne adresse e-mail"
 
 #: pretix/base/forms/user.py:177
-#, fuzzy
-#| msgid "Email address"
 msgid "New email address"
-msgstr "Adresse e-mail"
+msgstr "Nouvelle adresse e-mail"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -4403,6 +4386,8 @@ msgid ""
 "to confirm changing your email address from {old_email}\n"
 "to {new_email}, use the following code:"
 msgstr ""
+"Pour confirmer le changement de votre adresse e-mail de {old_email}\n"
+"à {new_email}, utiliser le code suivant :"
 
 #: pretix/base/models/auth.py:378
 #, python-brace-format
@@ -4410,12 +4395,12 @@ msgid ""
 "to confirm that your email address {email} belongs to your pretix account, "
 "use the following code:"
 msgstr ""
+"Pour confirmer que votre adresse e-mail {email} appartient bien à votre "
+"compte pretix, utilisez le code suivant :"
 
 #: pretix/base/models/auth.py:392
-#, fuzzy
-#| msgid "Confirmation code"
 msgid "pretix confirmation code"
-msgstr "Code de confirmation"
+msgstr "code de confirmation pretix"
 
 #: pretix/base/models/auth.py:435
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
@@ -6394,11 +6379,8 @@ msgstr ""
 "saisissez une valeur possible par ligne."
 
 #: pretix/base/models/items.py:2311
-#, fuzzy
-#| msgctxt "timeframe"
-#| msgid "Start"
 msgid "Start"
-msgstr "Début"
+msgstr "Démarrer"
 
 #: pretix/base/models/items.py:2312
 #: pretix/plugins/reports/accountingreport.py:129
@@ -8307,10 +8289,8 @@ msgid "Validity end time"
 msgstr "Heure de fin de validité"
 
 #: pretix/base/pdf.py:495
-#, fuzzy
-#| msgid "Payment date and time"
 msgid "Program times: date and time"
-msgstr "Date et heure du paiement"
+msgstr "Horaires du programme : date et heure"
 
 #: pretix/base/pdf.py:497
 msgid ""
@@ -8318,6 +8298,9 @@ msgid ""
 "2017-05-31 14:00 – 16:00\n"
 "2017-05-31 14:00 – 2017-06-01 14:00"
 msgstr ""
+"2017-05-31 10:00 – 12:00\n"
+"2017-05-31 14:00 – 16:00\n"
+"2017-05-31 14:00 – 2017-06-01 14:00"
 
 #: pretix/base/pdf.py:501
 msgid "Reusable Medium ID"
@@ -15786,10 +15769,8 @@ msgid "inactive"
 msgstr "inactif"
 
 #: pretix/control/forms/item.py:1331
-#, fuzzy
-#| msgid "Printing time"
 msgid "Program times"
-msgstr "Heure d’impression"
+msgstr "Horaires du programme"
 
 #: pretix/control/forms/mailsetup.py:42
 msgid "Hostname"
@@ -17669,18 +17650,14 @@ msgid "Your account has been disabled."
 msgstr "Votre compte a été désactivé."
 
 #: pretix/control/logdisplay.py:671
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The email address has been changed from \"{old_email}\" to \"{new_email}"
-#| "\"."
+#, python-brace-format
 msgid "Your email address has been changed from {old_email} to {email}."
-msgstr "L'adresse e-mail a été changée de \"{old_email}\" en \"{new_email}\"."
+msgstr "Votre adresse e-mail a été modifiée de {old_email} à {email}."
 
 #: pretix/control/logdisplay.py:672
-#, fuzzy, python-brace-format
-#| msgid "Your email address has been updated."
+#, python-brace-format
 msgid "Your email address {email} has been confirmed."
-msgstr "Votre adresse e-mail a été mise à jour."
+msgstr "Votre adresse e-mail {email} a été confirmée."
 
 #: pretix/control/logdisplay.py:684
 #, python-brace-format
@@ -18243,22 +18220,16 @@ msgid "A bundled item has been changed on this product."
 msgstr "Un article groupé a été modifié sur ce produit."
 
 #: pretix/control/logdisplay.py:893
-#, fuzzy
-#| msgid "An add-on has been added to this product."
 msgid "A program time has been added to this product."
-msgstr "Un add-on a été ajouté à ce produit."
+msgstr "Une durée de programme a été ajoutée à ce produit."
 
 #: pretix/control/logdisplay.py:894
-#, fuzzy
-#| msgid "An add-on has been changed on this product."
 msgid "A program time has been changed on this product."
-msgstr "Un add-on a été modifié sur ce produit."
+msgstr "La durée du programme a été modifiée sur ce produit."
 
 #: pretix/control/logdisplay.py:895
-#, fuzzy
-#| msgid "An add-on has been removed from this product."
 msgid "A program time has been removed from this product."
-msgstr "Un add-on a été retiré de ce produit."
+msgstr "Une durée de programme a été supprimée de ce produit."
 
 #: pretix/control/logdisplay.py:902
 #, python-brace-format
@@ -19972,6 +19943,20 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"Bonjour,\n"
+"\n"
+"%(reason)s\n"
+"\n"
+"    %(code)s\n"
+"\n"
+"Veuillez ne jamais communiquer ce code à une autre personne. Notre équipe d’"
+"assistance ne vous demandera jamais ce code.\n"
+"\n"
+"Si vous n’êtes pas à l’origine de cette demande, contactez-nous "
+"immédiatement.\n"
+"\n"
+"Cordialement,\n"
+"L’équipe pretix\n"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt:1
 #, python-format
@@ -22570,19 +22555,21 @@ msgid ""
 "happen at different times than your event in general. This will not affect "
 "access control, but will affect calendar invites and ticket output."
 msgstr ""
+"Avec les horaires du programme, vous pouvez définir des dates et des heures "
+"spécifiques pour ce produit. Cela est utile si ce produit donne accès à "
+"certaines parties de votre événement qui ont lieu à des moments différents "
+"de l'événement en général. Cela n'aura aucune incidence sur le contrôle "
+"d'accès, mais aura une incidence sur les invitations du calendrier et "
+"l'impression des billets."
 
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:25
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:51
-#, fuzzy
-#| msgid "Printing time"
 msgid "Program time"
-msgstr "Heure d’impression"
+msgstr "Durée du programme"
 
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:68
-#, fuzzy
-#| msgid "Add a single time slot"
 msgid "Add a program time"
-msgstr "Ajouter un seul créneau horaire"
+msgstr "Ajouter une heure de programme"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:35
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:161
@@ -27464,22 +27451,25 @@ msgstr "Les anciens codes ne fonctionneront plus."
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:4
 #: pretix/control/templates/pretixcontrol/user/change_email.html:8
-#, fuzzy
-#| msgid "Verified email address"
 msgid "Change login email address"
-msgstr "Adresse email vérifiée"
+msgstr "Modifier l'adresse e-mail de connexion"
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:13
 msgid ""
 "This changes the email address used to login to your account, as well as "
 "where we send email notifications."
 msgstr ""
+"Cela modifie l'adresse e-mail utilisée pour vous connecter à votre compte, "
+"ainsi que l'adresse à laquelle nous envoyons les notifications par e-mail."
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:18
 msgid ""
 "We will send a confirmation code to your new email address, which you need "
 "to enter in the next step to confirm the email address is correct."
 msgstr ""
+"Nous vous enverrons un code de confirmation à votre nouvelle adresse e-mail. "
+"Vous devrez le saisir à l'étape suivante afin de confirmer que l'adresse e-"
+"mail est correcte."
 
 #: pretix/control/templates/pretixcontrol/user/change_password.html:4
 #: pretix/control/templates/pretixcontrol/user/change_password.html:8
@@ -27491,10 +27481,8 @@ msgstr "Modifier le mot de passe"
 
 #: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html:4
 #: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html:8
-#, fuzzy
-#| msgid "Confirmation code"
 msgid "Enter confirmation code"
-msgstr "Code de confirmation"
+msgstr "Entrez le code de confirmation"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:4
 #: pretix/control/templates/pretixcontrol/user/notifications.html:6
@@ -27593,12 +27581,13 @@ msgid ""
 "confirm your email address using a confirmation code we will send to your "
 "email address."
 msgstr ""
+"Votre adresse e-mail n'est pas encore confirmée. Pour sécuriser votre "
+"compte, veuillez confirmer votre adresse e-mail à l'aide du code de "
+"confirmation que nous vous enverrons à votre adresse e-mail."
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:18
-#, fuzzy
-#| msgid "Send information via email"
 msgid "Send confirmation email"
-msgstr "Envoyer des informations par e-mail"
+msgstr "Envoyer un e-mail de confirmation"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:53
 msgid "Login settings"
@@ -29964,10 +29953,8 @@ msgid "Your comment has been saved."
 msgstr "Votre commentaire a été enregistré."
 
 #: pretix/control/views/user.py:905
-#, fuzzy
-#| msgid "Your email address has been updated."
 msgid "Your email address was already verified."
-msgstr "Votre adresse e-mail a été mise à jour."
+msgstr "Votre adresse e-mail a déjà été vérifiée."
 
 #: pretix/control/views/user.py:927
 #, python-brace-format
@@ -29975,32 +29962,25 @@ msgid ""
 "Please enter the confirmation code we sent to your email address "
 "<strong>{email}</strong>."
 msgstr ""
+"Veuillez saisir le code de confirmation que nous avons envoyé à votre "
+"adresse e-mail <strong>{email}</strong>."
 
 #: pretix/control/views/user.py:947
-#, fuzzy
-#| msgid "We failed to process your authentication request, please try again."
 msgid "We were unable to verify your confirmation code. Please try again."
 msgstr ""
-"Nous n’avons pas pu traiter votre demande d’authentification, veuillez "
-"réessayer."
+"Nous n'avons pas pu vérifier votre code de confirmation. Veuillez réessayer."
 
 #: pretix/control/views/user.py:972
-#, fuzzy
-#| msgid "Your email address has been changed to {email}."
 msgid "Your email address has been changed successfully."
-msgstr "Votre adresse e-mail a été changée en {email}."
+msgstr "Votre adresse e-mail a été modifiée avec succès."
 
 #: pretix/control/views/user.py:974
-#, fuzzy
-#| msgid "Your email address has been changed to {email}."
 msgid "Your email address has been confirmed successfully."
-msgstr "Votre adresse e-mail a été changée en {email}."
+msgstr "Votre adresse e-mail a été confirmée avec succès."
 
 #: pretix/control/views/user.py:978
-#, fuzzy
-#| msgid "The verification code was incorrect, please try again."
 msgid "The entered confirmation code is not correct. Please try again."
-msgstr "Le code de vérification était incorrect, veuillez réessayer."
+msgstr "Le code de confirmation saisi est incorrect. Veuillez réessayer."
 
 #: pretix/control/views/users.py:150
 msgid "We sent out an email containing further instructions."
@@ -34448,22 +34428,19 @@ msgid "Organizer: {organizer}"
 msgstr "Organisateur : {organizer}"
 
 #: pretix/presale/ical.py:139
-#, fuzzy, python-brace-format
-#| msgid "{event}-{code}"
+#, python-brace-format
 msgid "{event} - {item}"
-msgstr "{event}-{code}"
+msgstr "{event} - {item}"
 
 #: pretix/presale/ical.py:147
-#, fuzzy, python-brace-format
-#| msgid "Start date"
+#, python-brace-format
 msgid "Start: {datetime}"
-msgstr "Date de début"
+msgstr "Début : {datetime}"
 
 #: pretix/presale/ical.py:150
-#, fuzzy, python-brace-format
-#| msgid "Admission: {datetime}"
+#, python-brace-format
 msgid "End: {datetime}"
-msgstr "Admission : {datetime}"
+msgstr "Fin : {datetime}"
 
 #: pretix/presale/templates/pretixpresale/base.html:44
 msgctxt "skip-to-main-nav"
@@ -35643,13 +35620,11 @@ msgstr "Afficher l’image en pleine résolution de %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:131
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:288
-#, fuzzy, python-format
-#| msgid "%(count)s product"
-#| msgid_plural "%(count)s products"
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "%(count)s produit"
-msgstr[1] "%(count)s produits"
+msgstr[0] "%(amount)s× dans votre panier"
+msgstr[1] "%(amount)s× dans votre panier"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:209
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:374
