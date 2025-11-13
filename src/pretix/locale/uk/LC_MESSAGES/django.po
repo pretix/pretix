@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-02-21 19:00+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-11-13 21:00+0000\n"
+"Last-Translator: Andrii Andriiashyn <andr_andrey@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -38,11 +38,11 @@ msgstr "Арабська"
 
 #: pretix/_base_settings.py:91
 msgid "Basque"
-msgstr ""
+msgstr "Баська"
 
 #: pretix/_base_settings.py:92
 msgid "Catalan"
-msgstr ""
+msgstr "Каталонська"
 
 #: pretix/_base_settings.py:93
 msgid "Chinese (simplified)"
@@ -50,7 +50,7 @@ msgstr "Китайська (спрощена)"
 
 #: pretix/_base_settings.py:94
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Китайська (традиційна)"
 
 #: pretix/_base_settings.py:95
 msgid "Czech"
@@ -58,7 +58,7 @@ msgstr "Чеська"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "Хорватська"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -94,7 +94,7 @@ msgstr ""
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
-msgstr ""
+msgstr "Індонезійська"
 
 #: pretix/_base_settings.py:106
 msgid "Italian"
@@ -102,7 +102,7 @@ msgstr "Італійська"
 
 #: pretix/_base_settings.py:107
 msgid "Japanese"
-msgstr ""
+msgstr "Японська"
 
 #: pretix/_base_settings.py:108
 msgid "Latvian"
@@ -126,7 +126,7 @@ msgstr "Португальська (Бразилія)"
 
 #: pretix/_base_settings.py:113
 msgid "Romanian"
-msgstr ""
+msgstr "Румунська"
 
 #: pretix/_base_settings.py:114
 msgid "Russian"
@@ -134,11 +134,11 @@ msgstr "Російська"
 
 #: pretix/_base_settings.py:115
 msgid "Slovak"
-msgstr ""
+msgstr "Словацька"
 
 #: pretix/_base_settings.py:116
 msgid "Swedish"
-msgstr ""
+msgstr "Шведська"
 
 #: pretix/_base_settings.py:117
 msgid "Spanish"
@@ -146,7 +146,7 @@ msgstr "Іспанська"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "Іспанська (Латинська Америка)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -154,7 +154,7 @@ msgstr "Турецька"
 
 #: pretix/_base_settings.py:120
 msgid "Ukrainian"
-msgstr ""
+msgstr "Українська"
 
 #: pretix/api/auth/devicesecurity.py:58
 msgid ""
@@ -275,10 +275,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Невідомий плагін: '{name}'."
 
 #: pretix/api/serializers/event.py:286 pretix/api/serializers/organizer.py:88
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Невідомий плагін: '{name}'."
+msgstr "Обмежений плагін: '{name}'."
 
 #: pretix/api/serializers/item.py:87 pretix/api/serializers/item.py:149
 #: pretix/api/serializers/item.py:399
@@ -295,22 +294,16 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "Зв'язана одиниця не повинна мати власне прив'язування."
 
 #: pretix/api/serializers/item.py:235
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "Ви не можемо прийняти платіж, бо пройшов дедлайн."
+msgstr "Старт програми не повинен бути пустим."
 
 #: pretix/api/serializers/item.py:239
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "Ви не можемо прийняти платіж, бо пройшов дедлайн."
+msgstr "Кінець програми не повинен бути пустим."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2320
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The program end must not be before the program start."
-msgstr "Максимальна кількість має бути вище ніж мінімальна кількість."
+msgstr "Кінець програми не повинен бути раніше старту програми."
 
 #: pretix/api/serializers/item.py:331
 #, fuzzy
@@ -1609,10 +1602,8 @@ msgstr "Квиток на подію {event}-{code}"
 #: pretix/plugins/reports/exporters.py:472
 #: pretix/plugins/reports/exporters.py:710
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date range"
-msgstr "Дата і час"
+msgstr "Період"
 
 #: pretix/base/exporters/dekodi.py:237 pretix/base/exporters/invoices.py:77
 #, fuzzy
@@ -2818,10 +2809,8 @@ msgid "Quantity"
 msgstr "Кількість"
 
 #: pretix/base/exporters/orderlist.py:915
-#, fuzzy
-#| msgid "Internal reference"
 msgid "Internal fee type"
-msgstr "Внутрішнє посилання"
+msgstr "Внутрішній тип комісії"
 
 #: pretix/base/exporters/orderlist.py:917
 msgctxt "subevent"
@@ -29936,7 +29925,7 @@ msgstr "Назва компанії"
 
 #: pretix/multidomain/models.py:50
 msgid "Mode"
-msgstr ""
+msgstr "Режим"
 
 #: pretix/multidomain/models.py:69
 msgid "Known domain"
@@ -31831,12 +31820,9 @@ msgstr ""
 
 #: pretix/plugins/reports/accountingreport.py:63
 #: pretix/plugins/reports/exporters.py:257
-#, fuzzy
-#| msgctxt "cookie_usage"
-#| msgid "Analytics"
 msgctxt "export_category"
 msgid "Analysis"
-msgstr "Аналітика"
+msgstr "Аналіз"
 
 #: pretix/plugins/reports/accountingreport.py:83
 #, fuzzy
