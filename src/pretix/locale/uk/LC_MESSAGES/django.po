@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-13 21:00+0000\n"
+"PO-Revision-Date: 2025-11-14 06:00+0000\n"
 "Last-Translator: Andrii Andriiashyn <andr_andrey@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -357,28 +357,21 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Питання такого типу не можна задавати під час реєстрації."
 
 #: pretix/api/serializers/item.py:594 pretix/control/forms/item.py:199
-#, fuzzy
-#| msgid "This type of question cannot be asked during check-in."
 msgid "This type of question cannot be shown during check-in."
-msgstr "Питання такого типу не можна задавати під час реєстрації."
+msgstr "Питання такого типу не можна показувати під час реєстрації."
 
 #: pretix/api/serializers/media.py:108
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Подарунковий сертифікат з таким секретом вже існує в вашому або в "
-"афілійованому кабінеті організатора."
+"Носій з вказаним ідентифікатором і типом вже існує у вашому акаунті "
+"організатора."
 
 #: pretix/api/serializers/order.py:85
-#, fuzzy, python-brace-format
-#| msgid "{value} is not a valid email address."
+#, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "{value} не є дійсною адресою електронної пошти."
+msgstr "\"{input}\" не є валідним вибором."
 
 #: pretix/api/serializers/order.py:1453 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1633
@@ -427,14 +420,13 @@ msgid "This user already has permissions for this team."
 msgstr "В цього користувача вже є дозвіл в цій команді."
 
 #: pretix/api/views/cart.py:209
-#, fuzzy
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr "Цей код ваучера вже використано максимально дозволену кількість разів."
+msgstr "Цей ваучер вже був використаний максимальну кількість разів."
 
 #: pretix/api/views/checkin.py:627 pretix/api/views/checkin.py:634
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Середовище підключене до події"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:763
 #, python-brace-format
