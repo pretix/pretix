@@ -278,7 +278,7 @@ def invite(request, token):
                     form.cleaned_data['email'], form.cleaned_data['password'],
                     locale=request.LANGUAGE_CODE,
                     timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE,
-                    is_verified=form.cleaned_data['email'] == inv.email.lower()
+                    is_verified=form.cleaned_data['email'].lower() == inv.email.lower()
                 )
                 user = authenticate(request=request, email=user.email, password=form.cleaned_data['password'])
                 user.log_action('pretix.control.auth.user.created', user=user)
