@@ -25,7 +25,6 @@ import re
 
 import dns.resolver
 from django import forms
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _, pgettext
 from django_countries.fields import Country
@@ -127,9 +126,8 @@ class PeppolIdValidator:
         "9959": ".*",
     }
 
-    def __init__(self, validate_online=False, allow_testmode=False):
+    def __init__(self, validate_online=False):
         self.validate_online = validate_online
-        self.allow_testmode = allow_testmode
 
     def __call__(self, value):
         if ":" not in value:
@@ -146,9 +144,7 @@ class PeppolIdValidator:
                                   params={"number": prefix})
 
         if self.validate_online:
-            base_hostnames = ['edelivery.tech.ec.europa.eu']
-            if self.allow_testmode:
-                base_hostnames.append('acc.edelivery.tech.ec.europa.eu')
+            base_hostnames = ['edelivery.tech.ec.europa.eu', 'acc.edelivery.tech.ec.europa.eu']
             smp_id = base64.b32encode(hashlib.sha256(value.lower().encode()).digest()).decode().rstrip("=")
             found = False
             for base_hostname in base_hostnames:
@@ -192,7 +188,6 @@ class PeppolTransmissionType(TransmissionType):
                 validators=[
                     PeppolIdValidator(
                         validate_online=True,
-                        allow_testmode=settings.DEBUG,
                     ),
                 ]
             ),
