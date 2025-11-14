@@ -423,7 +423,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                 ('method_revolut_pay',
                  forms.BooleanField(
                      label='Revolut Pay',
-                     disabled=self.event.currency not in ['EUR', 'GBP'],
+                     disabled=self.event.currency not in ['EUR', 'GBP', 'RON', 'HUF', 'PLN', 'DKK'],
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
                                  'before they work properly.'),
                      required=False,
