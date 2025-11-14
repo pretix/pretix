@@ -254,6 +254,9 @@ def invite(request, token):
             return redirect('control:index')
         else:
             with transaction.atomic():
+                if request.user.email.lower() == inv.email.lower():
+                    request.user.is_verified = True
+                    request.user.save(update_fields=['is_verified'])
                 inv.team.members.add(request.user)
                 inv.team.log_action(
                     'pretix.team.member.joined', data={
@@ -274,7 +277,8 @@ def invite(request, token):
                 user = User.objects.create_user(
                     form.cleaned_data['email'], form.cleaned_data['password'],
                     locale=request.LANGUAGE_CODE,
-                    timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
+                    timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE,
+                    is_verified=form.cleaned_data['email'].lower() == inv.email.lower()
                 )
                 user = authenticate(request=request, email=user.email, password=form.cleaned_data['password'])
                 user.log_action('pretix.control.auth.user.created', user=user)
