@@ -415,16 +415,25 @@ var form_handlers = function (el) {
 
     el.find("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {
         var dependent = $(this),
-            dependency = $($(this).attr("data-required-if")),
+            dependencies = $($(this).attr("data-required-if")),
             update = function (ev) {
-                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                var enabled = true;
+                dependencies.each(function () {
+                    var dependency = $(this);
+                    var e = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                    console.log(dependent, dependency, e)
+                    enabled = enabled && e;
+                });
                 dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled).find('.optional').stop().animate({
                     'opacity': enabled ? 0 : 1
                 }, ev ? 500 : 1);
             };
         update();
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        dependencies.each(function () {
+            var dependency = $(this);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        });
     });
 
     el.find("div.scrolling-choice:not(.no-search)").each(function () {

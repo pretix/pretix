@@ -513,24 +513,24 @@ $(function () {
 
     $("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {
         var dependent = $(this),
-            dependentLabel = $("label[for="+this.id+"]"),
-            dependency = $($(this).attr("data-required-if")),
+            dependencies = $($(this).attr("data-required-if")),
             update = function (ev) {
-                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
-                if (!dependent.is("[data-no-required-attr]")) {
-                    dependent.prop('required', enabled);
-                }
-                dependent.closest('.form-group').toggleClass('required', enabled);
-                if (enabled) {
-                    dependentLabel.append('<i class="label-required">' + gettext('required') + '</i>');
-                }
-                else {
-                    dependentLabel.find(".label-required").remove();
-                }
+                var enabled = true;
+                dependencies.each(function () {
+                    var dependency = $(this);
+                    var e = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                    enabled = enabled && e;
+                });
+                dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled).find('.optional').stop().animate({
+                    'opacity': enabled ? 0 : 1
+                }, ev ? 500 : 1);
             };
         update();
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        dependencies.each(function () {
+            var dependency = $(this);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        });
     });
 
     $("input[data-display-dependency], div[data-display-dependency], select[data-display-dependency], textarea[data-display-dependency]").each(function () {
