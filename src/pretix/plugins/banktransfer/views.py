@@ -674,7 +674,7 @@ def _unite_transaction_rows(transaction_rows):
         united_transactions_rows.append({
             "iban": iban,
             "bic": bic,
-            "locale": rows[0]['locale'],
+            "locale": rows[0].get('locale', 'en'),
             "id": ", ".join(sorted(set(r['id'] for r in rows))),
             "payer": ", ".join(sorted(set(r['payer'] for r in rows))),
             "amount": sum(r['amount'] for r in rows),
