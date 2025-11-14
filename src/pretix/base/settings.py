@@ -40,6 +40,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
+import pycountry
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -1229,13 +1230,32 @@ DEFAULTS = {
             label=_("City"),
         )
     },
+    'invoice_address_from_state': {
+        'default': '',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': {
+            'choices': [('', '')],
+        },
+        'form_kwargs': {
+            "label": pgettext_lazy('address', 'State'),
+            'choices': [('', '')],
+        },
+    },
     'invoice_address_from_country': {
         'default': '',
         'type': str,
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
         'serializer_kwargs': lambda: dict(**country_choice_kwargs()),
-        'form_kwargs': lambda: dict(label=_('Country'), **country_choice_kwargs()),
+        'form_kwargs': lambda: dict(
+            label=_('Country'),
+            widget=forms.Select(attrs={
+                'data-trigger-address-info': 'on',
+            }),
+            **country_choice_kwargs()
+        ),
     },
     'invoice_address_from_tax_id': {
         'default': '',
@@ -3971,6 +3991,16 @@ def validate_event_settings(event, settings_dict):
         raise ValidationError({
             'invoice_address_company_required': _('You have to require invoice addresses to require for company names.')
         })
+    if settings_dict.get('invoice_address_from_state') and settings_dict.get('invoice_address_from_country'):
+        cc = str(settings_dict.get('invoice_address_from_country'))
+        if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            raise ValidationError(
+                {'invoice_address_from_state': ['States are not supported in country "{}".'.format(cc)]}
+            )
+        if not pycountry.subdivisions.get(code=cc + '-' + settings_dict.get('invoice_address_from_state')):
+            raise ValidationError(
+                {'invoice_address_from_state': ['"{}" is not a known subdivision of the country "{}".'.format(settings_dict.get('invoice_address_from_state'), cc)]}
+            )
 
     payment_term_last = settings_dict.get('payment_term_last')
     if payment_term_last and event.presale_end:

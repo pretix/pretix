@@ -142,6 +142,7 @@ class Invoice(models.Model):
     invoice_from_name = models.CharField(max_length=190, null=True)
     invoice_from_zipcode = models.CharField(max_length=190, null=True)
     invoice_from_city = models.CharField(max_length=190, null=True)
+    invoice_from_state = models.CharField(max_length=190, null=True)
     invoice_from_country = FastCountryField(null=True)
     invoice_from_tax_id = models.CharField(max_length=190, null=True)
     invoice_from_vat_id = models.CharField(max_length=190, null=True)
@@ -218,10 +219,23 @@ class Invoice(models.Model):
                 taxidrow = "ABN: %s" % self.invoice_from_tax_id
             else:
                 taxidrow = pgettext("invoice", "Tax ID: %s") % self.invoice_from_tax_id
+
+        state_name = ""
+        if self.invoice_from_state:
+            state_name = self.invoice_from_state
+            if str(self.invoice_from_country) in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.invoice_from_country)][1] == 'long':
+                    try:
+                        state_name = pycountry.subdivisions.get(
+                            code='{}-{}'.format(self.invoice_from_country, self.invoice_from_state)
+                        ).name
+                    except:
+                        pass
+
         parts = [
             self.invoice_from_name,
             self.invoice_from,
-            (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
+            ((self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or "") + " " + (state_name or "")).strip(),
             self.invoice_from_country.name if self.invoice_from_country else "",
             pgettext("invoice", "VAT-ID: %s") % self.invoice_from_vat_id if self.invoice_from_vat_id else "",
             taxidrow,
@@ -230,10 +244,22 @@ class Invoice(models.Model):
 
     @property
     def address_invoice_from(self):
+        state_name = ""
+        if self.invoice_from_state:
+            state_name = self.invoice_from_state
+            if str(self.invoice_from_country) in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.invoice_from_country)][1] == 'long':
+                    try:
+                        state_name = pycountry.subdivisions.get(
+                            code='{}-{}'.format(self.invoice_from_country, self.invoice_from_state)
+                        ).name
+                    except:
+                        pass
+
         parts = [
             self.invoice_from_name,
             self.invoice_from,
-            (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
+            " ".join(s for s in [self.invoice_from_zipcode, self.invoice_from_city, state_name] if s)
             self.invoice_from_country.name if self.invoice_from_country else "",
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])

@@ -49,13 +49,14 @@
                 {% bootstrap_field form.invoice_address_custom_field_helptext layout="control" %}
                 {% bootstrap_field form.invoice_address_explanation_text layout="control" %}
             </fieldset>
-            <fieldset>
+            <fieldset data-address-information-url="{% url "js_helpers.address_form" %}">
                 <legend>{% trans "Issuer details" %}</legend>
                 {% bootstrap_field form.invoice_address_from_name layout="control" %}
                 {% bootstrap_field form.invoice_address_from layout="control" %}
                 {% bootstrap_field form.invoice_address_from_zipcode layout="control" %}
                 {% bootstrap_field form.invoice_address_from_city layout="control" %}
                 {% bootstrap_field form.invoice_address_from_country layout="control" %}
+                {% bootstrap_field form.invoice_address_from_state layout="control" %}
                 {% bootstrap_field form.invoice_address_from_tax_id layout="control" %}
                 {% bootstrap_field form.invoice_address_from_vat_id layout="control" %}
             </fieldset>

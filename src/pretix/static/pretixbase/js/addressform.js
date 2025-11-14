@@ -5,6 +5,14 @@ $(function () {
     // to prevent fetching the same thing many times.
     var responseCache = {};
 
+    const cleanName = (name) => {
+        // Remove form prefix
+        name = name.split("-").pop();
+        // Remove settings prefix
+        name = name.replace(/^invoice_address_from_/, "");
+        return name
+    }
+
     $("[data-address-information-url]").each(function () {
         let xhr;
         const form = $(this);
@@ -22,7 +30,7 @@ $(function () {
         };
 
         form.find("select[name*=transmission_], textarea[name*=transmission_], input[name*=transmission_]").each(function () {
-            dependents[$(this).attr("name").split("-").pop()] = $(this)
+            dependents[cleanName($(this).attr("name"))] = $(this)
         })
 
         if (!Object.values(dependents).some((el) => el.length)) {
@@ -109,7 +117,7 @@ $(function () {
                 if (($(this).attr("type") === "radio" || $(this).attr("type") === "checkbox") && !$(this).prop("checked")) {
                     return
                 }
-                url.searchParams.append($(this).attr("name").split("-").pop(), $(this).val());
+                url.searchParams.append(cleanName($(this).attr("name")), $(this).val());
             })
             if (dependents.transmission_type) {
                 url.searchParams.append("transmission_type_required", !dependents.transmission_type.find("option[value='-']").length);
