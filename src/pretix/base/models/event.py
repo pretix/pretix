@@ -990,10 +990,11 @@ class Event(EventMixin, LoggedModel):
                 ia.bundled_variation = variation_map[ia.bundled_variation.pk]
             ia.save(force_insert=True)
 
-        for ipt in ItemProgramTime.objects.filter(item__event=other).prefetch_related('item'):
-            ipt.pk = None
-            ipt.item = item_map[ipt.item.pk]
-            ipt.save(force_insert=True)
+        if not self.has_subevents and not other.has_subevents:
+            for ipt in ItemProgramTime.objects.filter(item__event=other).prefetch_related('item'):
+                ipt.pk = None
+                ipt.item = item_map[ipt.item.pk]
+                ipt.save(force_insert=True)
 
         quota_map = {}
         for q in Quota.objects.filter(event=other, subevent__isnull=True).prefetch_related('items', 'variations'):

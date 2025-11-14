@@ -241,6 +241,12 @@ class ItemProgramTimeSerializer(serializers.ModelSerializer):
         if start > end:
             raise ValidationError(_("The program end must not be before the program start."))
 
+        event = self.context['event']
+        if event.has_subevents:
+            raise ValidationError({
+                _("You cannot use program times on an event series.")
+            })
+
         return data
 
 

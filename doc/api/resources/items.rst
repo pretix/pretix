@@ -142,6 +142,7 @@ variations                              list of objects            A list with o
 program_times                           list of objects            A list with one object for each program time of this item.
                                                                    Can be empty. Only writable during creation,
                                                                    use separate endpoint to modify this later.
+                                                                   Not available for items in event series.
 ├ id                                    integer                    Internal ID of the variation
 ├ value                                 multi-lingual string       The "name" of the variation
 ├ default_price                         money (string)             The price set directly for this variation or ``null``
@@ -242,6 +243,8 @@ one variation.
 Also note that ``variations``, ``bundles``, ``addons`` and  ``program_times`` are only supported on ``POST``. To update/delete variations,
 bundles, add-ons and program times please use the dedicated nested endpoints. By design this endpoint does not support ``PATCH`` and ``PUT``
 with nested ``variations``, ``bundles``, ``addons`` and/or ``program_times``.
+
+``program_times`` is not available to items in event series.
 
 Endpoints
 ---------

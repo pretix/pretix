@@ -5,6 +5,7 @@ Resource description
 --------------------
 
 Program times for products (items) that can be set in addition to event times, e.g. to display seperate schedules within an event.
+Note that ``program_times`` are not available for items inside event series.
 The program times resource contains the following public fields:
 
 .. rst-class:: rest-resource-table
