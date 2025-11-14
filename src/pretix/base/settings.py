@@ -3999,7 +3999,11 @@ def validate_event_settings(event, settings_dict):
             )
         if not pycountry.subdivisions.get(code=cc + '-' + settings_dict.get('invoice_address_from_state')):
             raise ValidationError(
-                {'invoice_address_from_state': ['"{}" is not a known subdivision of the country "{}".'.format(settings_dict.get('invoice_address_from_state'), cc)]}
+                {'invoice_address_from_state': [
+                    '"{}" is not a known subdivision of the country "{}".'.format(
+                        settings_dict.get('invoice_address_from_state'), cc
+                    )
+                ]}
             )
 
     payment_term_last = settings_dict.get('payment_term_last')
