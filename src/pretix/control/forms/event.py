@@ -374,6 +374,13 @@ class EventUpdateForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         if not self.change_slug:
             self.fields['slug'].widget.attrs['readonly'] = 'readonly'
+
+        if self.instance.orders.exists():
+            self.fields['currency'].disabled = True
+            self.fields['currency'].help_text = _(
+                'The currency cannot be changed because orders already exist.'
+            )
+
         self.fields['location'].widget.attrs['rows'] = '3'
         self.fields['location'].widget.attrs['placeholder'] = _(
             'Sample Conference Center\nHeidelberg, Germany'
