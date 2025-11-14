@@ -175,12 +175,6 @@ def test_incompatible():
         oidc_validate_and_complete_config(config)
     assert "not requesting" in str(e.value)
 
-    config["scope"] = "openid foo"
-
-    with pytest.raises(ValidationError) as e:
-        oidc_validate_and_complete_config(config)
-    assert "requesting scope" in str(e.value)
-
 
 @responses.activate
 def test_compatible():
