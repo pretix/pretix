@@ -112,13 +112,6 @@ def oidc_validate_and_complete_config(config):
                 scope="openid",
             ))
 
-    for scope in config["scope"].split(" "):
-        if scope not in provider_config.get("scopes_supported", []):
-            raise ValidationError(_('You are requesting scope "{scope}" but provider only supports these: {scopes}.').format(
-                scope=scope,
-                scopes=", ".join(provider_config.get("scopes_supported", []))
-            ))
-
     if "claims_supported" in provider_config:
         claims_supported = provider_config.get("claims_supported", [])
         for k, v in config.items():
