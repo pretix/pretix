@@ -259,7 +259,7 @@ class Invoice(models.Model):
         parts = [
             self.invoice_from_name,
             self.invoice_from,
-            ((self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or "") + " " + (state_name or "")).strip(),
+            " ".join(s for s in [self.invoice_from_zipcode, self.invoice_from_city, state_name] if s)
             self.invoice_from_country.name if self.invoice_from_country else "",
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])
