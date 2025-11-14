@@ -674,6 +674,7 @@ def _unite_transaction_rows(transaction_rows):
         united_transactions_rows.append({
             "iban": iban,
             "bic": bic,
+            "locale": rows[0]['locale'],
             "id": ", ".join(sorted(set(r['id'] for r in rows))),
             "payer": ", ".join(sorted(set(r['payer'] for r in rows))),
             "amount": sum(r['amount'] for r in rows),
@@ -726,6 +727,7 @@ class RefundExportListView(ListView):
                     "amount": refund.amount,
                     "id": refund.full_id,
                     "comment": refund.comment,
+                    "locale": refund.order.locale,
                     **{key: data.get(key) for key in ("payer", "iban", "bic")}
                 })
                 refund.done(user=self.request.user)
@@ -788,7 +790,6 @@ class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExpo
             order__event__organizer=self.request.organizer,
             provider__in=['banktransfer', 'sepadebit'],
             state=OrderRefund.REFUND_STATE_CREATED,
-            order__testmode=False,
         )
 
 
