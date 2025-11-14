@@ -80,6 +80,23 @@ var form_handlers = function (el) {
     el.find("[data-formset]").on("formAdded", "div", function (event) {
         form_handlers($(event.target));
     });
+    el.find("[data-formset] [data-formset-sort]").on("click", function (event) {
+        // Sort forms alphabetically by their first field
+        var $formset = $(this).closest("[data-formset]");
+        var $forms = $formset.find("[data-formset-form]").not("[data-formset-form-deleted]")
+        var compareForms = function(form_a, form_b) {
+            var a = $(form_a).find('input:not([name*=-ORDER]):not([name*=-DELETE]):not([name*=-id])').val();
+            var b = $(form_b).find('input:not([name*=-ORDER]):not([name*=-DELETE]):not([name*=-id])').val();
+            return a.localeCompare(b);
+        }
+        $forms = $forms.sort(compareForms);
+        $forms.each(function(i, form) {
+            var $order = $(form).find('[name*=-ORDER]');
+            $order.val(i + 1);
+        });
+        // Trigger visual reorder
+        $formset.find("[name*=-ORDER]").first().trigger("change");
+    });
 
     // Vouchers
     el.find("#voucher-bulk-codes-generate").click(function () {
