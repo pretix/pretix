@@ -271,7 +271,7 @@ class BankTransfer(BasePaymentProvider):
             'request': request,
             'event': self.event,
             'settings': self.settings,
-            'code': self._code(order) if order else None,
+            'code': self._code(order, force=False) if order else None,
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }
         return template.render(ctx)
@@ -295,7 +295,7 @@ class BankTransfer(BasePaymentProvider):
         md_nl2br = "  \n"
         if self.settings.get('bank_details_type') == 'sepa':
             bankdetails = (
-                (_("Reference"), self._code(order)),
+                (_("Reference"), self._code(order, force=True)),
                 (_("Amount"), money_filter(payment.amount, self.event.currency)),
                 (_("Account holder"), self.settings.get('bank_details_sepa_name')),
                 (_("IBAN"), ibanformat(self.settings.get('bank_details_sepa_iban'))),
@@ -304,7 +304,7 @@ class BankTransfer(BasePaymentProvider):
             )
         else:
             bankdetails = (
-                (_("Reference"), self._code(order)),
+                (_("Reference"), self._code(order, force=True)),
                 (_("Amount"), money_filter(payment.amount, self.event.currency)),
             )
         t += md_nl2br.join([f"**{k}:** {v}" for k, v in bankdetails])
@@ -351,7 +351,7 @@ class BankTransfer(BasePaymentProvider):
             '',  # debtor address
             'NON',
             '',  # structured reference
-            self._code(payment.order),
+            self._code(payment.order, force=True),
             'EPD',
         ]
 
@@ -362,7 +362,7 @@ class BankTransfer(BasePaymentProvider):
         template = get_template('pretixplugins/banktransfer/pending.html')
         ctx = {
             'event': self.event,
-            'code': self._code(payment.order),
+            'code': self._code(payment.order, force=True),
             'order': payment.order,
             'amount': payment.amount,
             'payment_info': payment.info_data,
@@ -385,15 +385,24 @@ class BankTransfer(BasePaymentProvider):
     def _render_control_info(self, request, order, info_data, **extra_context):
         template = get_template('pretixplugins/banktransfer/control.html')
         ctx = {'request': request, 'event': self.event,
-               'code': self._code(order),
+               'code': self._code(order, force=True),
                'payment_info': info_data, 'order': order,
                **extra_context}
         return template.render(ctx)
 
-    def _code(self, order):
+    def _code(self, order, force=False):
         prefix = self.settings.get('prefix', default='')
         li = order.invoices.last()
         invoice_number = li.number if self.settings.get('include_invoice_number', as_type=bool) and li else ''
+
+        invoice_will_be_generated = (
+            not li and
+            self.settings.get('include_invoice_number', as_type=bool) and
+            order.event.settings.get('invoice_generate') == 'paid' and
+            self.requires_invoice_immediately
+        )
+        if invoice_will_be_generated and not force:
+            return None
 
         code = " ".join((prefix, order.full_code, invoice_number)).strip(" ")
 
