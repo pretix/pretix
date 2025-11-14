@@ -146,15 +146,13 @@ class PeppolIdValidator:
         if self.validate_online:
             base_hostnames = ['edelivery.tech.ec.europa.eu', 'acc.edelivery.tech.ec.europa.eu']
             smp_id = base64.b32encode(hashlib.sha256(value.lower().encode()).digest()).decode().rstrip("=")
-            found = False
             for base_hostname in base_hostnames:
                 smp_domain = f'{smp_id}.iso6523-actorid-upis.{base_hostname}'
                 resolver = dns.resolver.Resolver()
                 try:
                     answers = resolver.resolve(smp_domain, 'NAPTR', lifetime=1.0)
                     if answers:
-                        found = True
-                        break
+                        return value
                 except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
                     # ID not registered, do not set found=True
                     pass
@@ -162,10 +160,9 @@ class PeppolIdValidator:
                     # Error likely on our end or infrastructure is down, allow user to proceed
                     return value
 
-            if not found:
-                raise ValidationError(
-                    _("The Peppol participant ID is not registered on the Peppol network."),
-                )
+            raise ValidationError(
+                _("The Peppol participant ID is not registered on the Peppol network."),
+            )
 
         return value
 
