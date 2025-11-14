@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-10-11 21:00+0000\n"
-"Last-Translator: adminauen <danilo.inauen@gmail.com>\n"
+"PO-Revision-Date: 2025-11-14 13:23+0000\n"
+"Last-Translator: Sanny <s.logiudice@comune.venariareale.to.it>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -1577,7 +1577,7 @@ msgstr "Biglietto dell'evento {event}-{code}"
 #: pretix/plugins/reports/exporters.py:710
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
 msgid "Date range"
-msgstr "Intervallo di date"
+msgstr "Periodo"
 
 #: pretix/base/exporters/dekodi.py:237 pretix/base/exporters/invoices.py:77
 msgid ""
@@ -8955,7 +8955,7 @@ msgstr "sabato"
 
 #: pretix/base/services/checkin.py:364 pretix/control/forms/filter.py:1273
 msgid "Sunday"
-msgstr "domenica"
+msgstr "Domenica"
 
 #: pretix/base/services/checkin.py:368
 #, python-brace-format
