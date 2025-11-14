@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-13 21:00+0000\n"
+"PO-Revision-Date: 2025-11-14 08:55+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -17650,7 +17650,7 @@ msgid "Your account has been disabled."
 msgstr "Votre compte a été désactivé."
 
 #: pretix/control/logdisplay.py:671
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Your email address has been changed from {old_email} to {email}."
 msgstr "Votre adresse e-mail a été modifiée de {old_email} à {email}."
 
