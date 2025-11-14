@@ -790,6 +790,7 @@ class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExpo
             order__event__organizer=self.request.organizer,
             provider__in=['banktransfer', 'sepadebit'],
             state=OrderRefund.REFUND_STATE_CREATED,
+            order__testmode=False,
         )
 
 
