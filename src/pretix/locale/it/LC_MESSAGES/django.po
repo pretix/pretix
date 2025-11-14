@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-14 13:23+0000\n"
+"PO-Revision-Date: 2025-11-14 22:00+0000\n"
 "Last-Translator: Sanny <s.logiudice@comune.venariareale.to.it>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -2489,8 +2489,9 @@ msgstr "Pagato con {method}"
 
 #: pretix/base/exporters/orderlist.py:458
 #: pretix/base/exporters/orderlist.py:914
+#, fuzzy
 msgid "Fee type"
-msgstr "Tipo di tariffa"
+msgstr "Tipo di tassa"
 
 #: pretix/base/exporters/orderlist.py:460
 #: pretix/base/exporters/orderlist.py:601
@@ -2742,7 +2743,7 @@ msgstr "Evento"
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:75
 msgid "Currency"
-msgstr "Valuta"
+msgstr "Moneta"
 
 #: pretix/base/exporters/orderlist.py:903
 msgid "Transaction date"
@@ -8935,23 +8936,23 @@ msgstr "Giorno della settimana"
 
 #: pretix/base/services/checkin.py:358 pretix/control/forms/filter.py:1267
 msgid "Monday"
-msgstr "lunedì"
+msgstr "Lunedì"
 
 #: pretix/base/services/checkin.py:359 pretix/control/forms/filter.py:1268
 msgid "Tuesday"
-msgstr "martedì"
+msgstr "Martedì"
 
 #: pretix/base/services/checkin.py:360 pretix/control/forms/filter.py:1269
 msgid "Wednesday"
-msgstr "mercoledì"
+msgstr "Mercoledì"
 
 #: pretix/base/services/checkin.py:361 pretix/control/forms/filter.py:1270
 msgid "Thursday"
-msgstr "giovedì"
+msgstr "Giovedì"
 
 #: pretix/base/services/checkin.py:363 pretix/control/forms/filter.py:1272
 msgid "Saturday"
-msgstr "sabato"
+msgstr "Sabato"
 
 #: pretix/base/services/checkin.py:364 pretix/control/forms/filter.py:1273
 msgid "Sunday"
@@ -10632,7 +10633,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1256
 msgid "EU VAT ID"
-msgstr "IVA EU"
+msgstr "partita IVA"
 
 #: pretix/base/settings.py:1269
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -13959,7 +13960,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/mail.html:88
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:119
 msgid "Text"
-msgstr ""
+msgstr "Testo"
 
 #: pretix/control/forms/event.py:1178
 msgid "Subject (sent by admin)"
@@ -14101,7 +14102,7 @@ msgstr "individuale"
 
 #: pretix/control/forms/event.py:1581
 msgid "Business"
-msgstr ""
+msgstr "Affari"
 
 #: pretix/control/forms/event.py:1582
 msgid "Business with valid VAT ID"
@@ -14530,9 +14531,8 @@ msgstr "Chiave di ricerca"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:126
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:133
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:39
-#, fuzzy
 msgid "active"
-msgstr "é attivo"
+msgstr "attivo"
 
 #: pretix/control/forms/filter.py:1530
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:45
@@ -17820,7 +17820,7 @@ msgstr "Widget"
 #: pretix/plugins/returnurl/apps.py:40
 #: pretix/plugins/ticketoutputpdf/apps.py:55
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
 #: pretix/control/navigation.py:164
 msgid "Categories"
@@ -17947,9 +17947,8 @@ msgstr ""
 
 #: pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
-#, fuzzy
 msgid "Event metadata"
-msgstr "Data di Inizio"
+msgstr "metadata dell'evento"
 
 #: pretix/control/navigation.py:527
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
@@ -20775,7 +20774,7 @@ msgstr "Motivo"
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:137
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:251
 msgid "Add a new rule"
-msgstr ""
+msgstr "Aggiungi una nuova regola"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:153
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:391
@@ -26616,7 +26615,7 @@ msgstr ""
 
 #: pretix/control/templatetags/hierarkey_form.py:79
 msgid "Unlock"
-msgstr ""
+msgstr "Sblocca"
 
 #: pretix/control/templatetags/hierarkey_form.py:80
 #, fuzzy
@@ -28476,7 +28475,7 @@ msgstr "Ragione sociale"
 
 #: pretix/multidomain/models.py:50
 msgid "Mode"
-msgstr ""
+msgstr "Modalità"
 
 #: pretix/multidomain/models.py:69
 msgid "Known domain"
