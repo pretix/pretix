@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-14 08:55+0000\n"
+"PO-Revision-Date: 2025-11-15 18:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -4387,7 +4387,7 @@ msgstr ""
 "a {new_email}, utiliza el siguiente código:"
 
 #: pretix/base/models/auth.py:378
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "to confirm that your email address {email} belongs to your pretix account, "
 "use the following code:"
@@ -22406,7 +22406,7 @@ msgstr "Hora del programa"
 
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:68
 msgid "Add a program time"
-msgstr "Añadir un horario para el programa"
+msgstr "Añadir un horario de programa"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:35
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:161
