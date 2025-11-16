@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-15 18:00+0000\n"
+"PO-Revision-Date: 2025-11-16 18:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -2114,7 +2114,7 @@ msgstr "Liste d'attente"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:172
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:150
 msgid "Available from"
-msgstr "Disponible à partir de"
+msgstr "Disponible à partir du"
 
 #: pretix/base/exporters/items.py:81 pretix/base/models/discount.py:87
 #: pretix/base/models/items.py:229 pretix/base/models/items.py:285
@@ -14858,7 +14858,7 @@ msgstr "Suivi dû"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:119
 #: pretix/plugins/sendmail/models.py:251
 msgid "All products"
-msgstr "Tous les produits"
+msgstr "Tous les articles"
 
 #: pretix/control/forms/filter.py:482 pretix/control/forms/filter.py:2184
 #: pretix/control/forms/filter.py:2488 pretix/control/forms/vouchers.py:139
