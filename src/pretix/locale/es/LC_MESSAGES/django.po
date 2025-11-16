@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-15 18:00+0000\n"
+"PO-Revision-Date: 2025-11-16 18:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -2114,7 +2114,7 @@ msgstr "Lista de espera"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:172
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:150
 msgid "Available from"
-msgstr "Disponible desde"
+msgstr "Disponible a partir de"
 
 #: pretix/base/exporters/items.py:81 pretix/base/models/discount.py:87
 #: pretix/base/models/items.py:229 pretix/base/models/items.py:285
@@ -4725,7 +4725,7 @@ msgstr "Posición"
 
 #: pretix/base/models/discount.py:72
 msgid "All supported sales channels"
-msgstr "Todos los canales de ventas"
+msgstr "Todos los canales de venta compatibles"
 
 #: pretix/base/models/discount.py:93
 msgid "Event series handling"
@@ -19804,7 +19804,7 @@ msgstr ""
 "\n"
 "%(reason)s\n"
 "\n"
-"    %(code)s\n"
+"   \t%(code)s\n"
 "\n"
 "Por favor, nunca compartas este código con otra persona. Nuestro equipo de "
 "asistencia nunca te pedirá este código.\n"
