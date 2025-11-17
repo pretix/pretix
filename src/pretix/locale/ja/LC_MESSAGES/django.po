@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-08 13:00+0000\n"
+"PO-Revision-Date: 2025-11-17 12:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -291,34 +291,24 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "バンドル製品は、他のバンドル製品を含む製品を含むことはできません。"
 
 #: pretix/api/serializers/item.py:235
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "支払いが遅すぎて受け入れられません。"
+msgstr "プログラムの開始日時を入力してください。"
 
 #: pretix/api/serializers/item.py:239
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "支払いが遅すぎて受け入れられません。"
+msgstr "プログラムの終了日時を入力してください。"
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2320
-#, fuzzy
-#| msgid "The maximum date must not be before the minimum value."
 msgid "The program end must not be before the program start."
-msgstr "最大日付は、最小値より前でなければなりません。"
+msgstr "プログラムの終了日時は開始日時より後に設定してください。"
 
 #: pretix/api/serializers/item.py:331
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
-#| "Please use the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, program times or variations via PATCH/PUT is not "
 "supported. Please use the dedicated nested endpoint."
 msgstr ""
-"PATCH/PUTによるアドオン、バンドル、またはバリエーションの更新はサポートされて"
-"いません。専用のネストされたエンドポイントを使用してください。"
+"PATCH/PUTによるアドオン、バンドル、プログラム時間、またはバリエーションの更新"
+"には対応していません。専用のネストされたエンドポイントをご利用ください。"
 
 #: pretix/api/serializers/item.py:339
 msgid "Only admission products can currently be personalized."
@@ -3283,8 +3273,6 @@ msgid "Repeat password"
 msgstr "パスワードを再入力してください"
 
 #: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:101
-#, fuzzy
-#| msgid "Email address"
 msgid "Your email address"
 msgstr "メールアドレス"
 
@@ -3430,10 +3418,8 @@ msgstr ""
 "ビューについては、イベントのタイムゾーンが代わりに使用されます。"
 
 #: pretix/base/forms/user.py:77
-#, fuzzy
-#| msgid "Attendee email address"
 msgid "Change email address"
-msgstr "出席者のメールアドレス"
+msgstr "メールアドレスを変更"
 
 #: pretix/base/forms/user.py:83
 msgid "Device name"
@@ -3491,16 +3477,12 @@ msgstr ""
 "レスを選択してください。"
 
 #: pretix/base/forms/user.py:176
-#, fuzzy
-#| msgid "Email address"
 msgid "Old email address"
-msgstr "メールアドレス"
+msgstr "現在のメールアドレス"
 
 #: pretix/base/forms/user.py:177
-#, fuzzy
-#| msgid "Email address"
 msgid "New email address"
-msgstr "メールアドレス"
+msgstr "新しいメールアドレス"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -4350,19 +4332,20 @@ msgid ""
 "to confirm changing your email address from {old_email}\n"
 "to {new_email}, use the following code:"
 msgstr ""
+"メールアドレスを{old_email}から{new_email}に変更\n"
+"するには、以下のコードを入力してください:"
 
 #: pretix/base/models/auth.py:378
 #, python-brace-format
 msgid ""
 "to confirm that your email address {email} belongs to your pretix account, "
 "use the following code:"
-msgstr ""
+msgstr "メールアドレス{email}があなたのpretixアカウントに属していることを確認するには"
+"、以下のコードを入力してください:"
 
 #: pretix/base/models/auth.py:392
-#, fuzzy
-#| msgid "Confirmation code"
 msgid "pretix confirmation code"
-msgstr "確認コード"
+msgstr "pretix 確認コード"
 
 #: pretix/base/models/auth.py:435
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
@@ -6259,11 +6242,8 @@ msgstr ""
 "1つの可能な値を入力してください。"
 
 #: pretix/base/models/items.py:2311
-#, fuzzy
-#| msgctxt "timeframe"
-#| msgid "Start"
 msgid "Start"
-msgstr "開始日"
+msgstr "開始"
 
 #: pretix/base/models/items.py:2312
 #: pretix/plugins/reports/accountingreport.py:129
@@ -8099,10 +8079,8 @@ msgid "Validity end time"
 msgstr "イベント終了時間"
 
 #: pretix/base/pdf.py:495
-#, fuzzy
-#| msgid "Payment date and time"
 msgid "Program times: date and time"
-msgstr "支払日時"
+msgstr "プログラム時間:日付と時刻"
 
 #: pretix/base/pdf.py:497
 msgid ""
@@ -8110,6 +8088,9 @@ msgid ""
 "2017-05-31 14:00 – 16:00\n"
 "2017-05-31 14:00 – 2017-06-01 14:00"
 msgstr ""
+"2017-05-31 10:00 – 12:00\n"
+"2017-05-31 14:00 – 16:00\n"
+"2017-05-31 14:00 – 2017-06-01 14:00"
 
 #: pretix/base/pdf.py:501
 msgid "Reusable Medium ID"
@@ -15222,10 +15203,8 @@ msgid "inactive"
 msgstr "非アクティブ"
 
 #: pretix/control/forms/item.py:1331
-#, fuzzy
-#| msgid "Printing time"
 msgid "Program times"
-msgstr "印刷時間"
+msgstr "プログラム時間"
 
 #: pretix/control/forms/mailsetup.py:42
 msgid "Hostname"
@@ -17026,18 +17005,14 @@ msgid "Your account has been disabled."
 msgstr "あなたのアカウントは無効になりました。"
 
 #: pretix/control/logdisplay.py:671
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The email address has been changed from \"{old_email}\" to \"{new_email}"
-#| "\"."
+#, python-brace-format
 msgid "Your email address has been changed from {old_email} to {email}."
-msgstr "メールアドレスは\"{old_email}\"から\"{new_email}\"に変更されました。"
+msgstr "メールアドレスが{old_email}から{email}に変更されました。"
 
 #: pretix/control/logdisplay.py:672
-#, fuzzy, python-brace-format
-#| msgid "Your email address has been updated."
+#, python-brace-format
 msgid "Your email address {email} has been confirmed."
-msgstr "メールアドレスが更新されました。"
+msgstr "メールアドレス{email}が確認されました。"
 
 #: pretix/control/logdisplay.py:684
 #, python-brace-format
@@ -17591,22 +17566,16 @@ msgid "A bundled item has been changed on this product."
 msgstr "この製品のバンドル商品が変更されました。"
 
 #: pretix/control/logdisplay.py:893
-#, fuzzy
-#| msgid "An add-on has been added to this product."
 msgid "A program time has been added to this product."
-msgstr "この製品にアドオンが追加されました。"
+msgstr "この製品にプログラム時間が追加されました。"
 
 #: pretix/control/logdisplay.py:894
-#, fuzzy
-#| msgid "An add-on has been changed on this product."
 msgid "A program time has been changed on this product."
-msgstr "この製品のアドオンが変更されました。"
+msgstr "この製品のプログラム時間が変更されました。"
 
 #: pretix/control/logdisplay.py:895
-#, fuzzy
-#| msgid "An add-on has been removed from this product."
 msgid "A program time has been removed from this product."
-msgstr "この製品からアドオンが削除されました。"
+msgstr "この製品からプログラム時間が削除されました。"
 
 #: pretix/control/logdisplay.py:902
 #, python-brace-format
@@ -19287,6 +19256,19 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"こんにちは、\n"
+"\n"
+"%(reason)s\n"
+"\n"
+"    %(code)ss\n"
+"\n"
+"このコードは絶対に他人に教えないでください。サポートチームがこのコードを尋ね"
+"ることはありません。\n"
+"\n"
+"このコードにお心当たりがない場合は、直ちにご連絡ください。\n"
+"\n"
+"よろしくお願いいたします。\n"
+"pretixチーム\n"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt:1
 #, python-format
@@ -21777,19 +21759,19 @@ msgid ""
 "happen at different times than your event in general. This will not affect "
 "access control, but will affect calendar invites and ticket output."
 msgstr ""
+"プログラム時間を設定すると、この製品に特定の日時を指定できます。この製品がイ"
+"ベント全体とは異なる時間帯に開催される部分へのアクセスを表す場合に便利です。"
+"これはアクセス制御には影響しませんが、カレンダー招待状とチケット出力には影響"
+"します。"
 
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:25
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:51
-#, fuzzy
-#| msgid "Printing time"
 msgid "Program time"
-msgstr "印刷時間"
+msgstr "プログラム時間"
 
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:68
-#, fuzzy
-#| msgid "Add a single time slot"
 msgid "Add a program time"
-msgstr "単一の時間枠を追加します"
+msgstr "プログラム時間を追加"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:35
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:161
@@ -26502,22 +26484,22 @@ msgstr "古いコードはもう機能しません。"
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:4
 #: pretix/control/templates/pretixcontrol/user/change_email.html:8
-#, fuzzy
-#| msgid "Verified email address"
 msgid "Change login email address"
-msgstr "確認済みメールアドレス"
+msgstr "ログイン用メールアドレスを変更"
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:13
 msgid ""
 "This changes the email address used to login to your account, as well as "
 "where we send email notifications."
-msgstr ""
+msgstr "これにより、アカウントへのログインに使用するメールアドレスと、通知メールの送"
+"信先が変更されます。"
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:18
 msgid ""
 "We will send a confirmation code to your new email address, which you need "
 "to enter in the next step to confirm the email address is correct."
-msgstr ""
+msgstr "新しいメールアドレスに確認コードを送信しますので、次のステップでそのコードを"
+"入力して、メールアドレスが正しいことを確認してください。"
 
 #: pretix/control/templates/pretixcontrol/user/change_password.html:4
 #: pretix/control/templates/pretixcontrol/user/change_password.html:8
@@ -26529,10 +26511,8 @@ msgstr "パスワードを変更します"
 
 #: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html:4
 #: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html:8
-#, fuzzy
-#| msgid "Confirmation code"
 msgid "Enter confirmation code"
-msgstr "確認コード"
+msgstr "確認コードを入力"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:4
 #: pretix/control/templates/pretixcontrol/user/notifications.html:6
@@ -26631,12 +26611,12 @@ msgid ""
 "confirm your email address using a confirmation code we will send to your "
 "email address."
 msgstr ""
+"メールアドレスがまだ確認されていません。アカウントを保護するため、メールアド"
+"レスに送信される確認コードを使用して、メールアドレスを確認してください。"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:18
-#, fuzzy
-#| msgid "Send information via email"
 msgid "Send confirmation email"
-msgstr "メールで情報を送信する"
+msgstr "確認メールを送信"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:53
 msgid "Login settings"
@@ -28913,41 +28893,32 @@ msgid "Your comment has been saved."
 msgstr "あなたのコメントは保存されました。"
 
 #: pretix/control/views/user.py:905
-#, fuzzy
-#| msgid "Your email address has been updated."
 msgid "Your email address was already verified."
-msgstr "メールアドレスが更新されました。"
+msgstr "メールアドレスは既に確認済みです。"
 
 #: pretix/control/views/user.py:927
 #, python-brace-format
 msgid ""
 "Please enter the confirmation code we sent to your email address "
 "<strong>{email}</strong>."
-msgstr ""
+msgstr "メールアドレス<strong>{email}</strong>に送信した確認コードを入力してください"
+"。"
 
 #: pretix/control/views/user.py:947
-#, fuzzy
-#| msgid "We failed to process your authentication request, please try again."
 msgid "We were unable to verify your confirmation code. Please try again."
-msgstr "認証リクエストの処理に失敗しました。もう一度お試しください。"
+msgstr "確認コードを検証できませんでした。もう一度お試しください。"
 
 #: pretix/control/views/user.py:972
-#, fuzzy
-#| msgid "Your email address has been changed to {email}."
 msgid "Your email address has been changed successfully."
-msgstr "あなたのメールアドレスは{email}に変更されました。"
+msgstr "メールアドレスが正常に変更されました。"
 
 #: pretix/control/views/user.py:974
-#, fuzzy
-#| msgid "Your email address has been changed to {email}."
 msgid "Your email address has been confirmed successfully."
-msgstr "あなたのメールアドレスは{email}に変更されました。"
+msgstr "メールアドレスが正常に確認されました。"
 
 #: pretix/control/views/user.py:978
-#, fuzzy
-#| msgid "The verification code was incorrect, please try again."
 msgid "The entered confirmation code is not correct. Please try again."
-msgstr "検証コードが間違っています。もう一度お試しください。"
+msgstr "入力された確認コードが正しくありません。もう一度お試しください。"
 
 #: pretix/control/views/users.py:150
 msgid "We sent out an email containing further instructions."
@@ -33242,19 +33213,17 @@ msgstr "主催者: {organizer}"
 #: pretix/presale/ical.py:139
 #, python-brace-format
 msgid "{event} - {item}"
-msgstr ""
+msgstr "{event} - {item}"
 
 #: pretix/presale/ical.py:147
-#, fuzzy, python-brace-format
-#| msgid "Start date"
+#, python-brace-format
 msgid "Start: {datetime}"
-msgstr "開始日"
+msgstr "開始:{datetime}"
 
 #: pretix/presale/ical.py:150
-#, fuzzy, python-brace-format
-#| msgid "Admission: {datetime}"
+#, python-brace-format
 msgid "End: {datetime}"
-msgstr "入場: {datetime}"
+msgstr "終了:{datetime}"
 
 #: pretix/presale/templates/pretixpresale/base.html:44
 msgctxt "skip-to-main-nav"
@@ -34392,12 +34361,10 @@ msgstr "%(item)sのフルサイズの画像を表示"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:131
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:288
-#, fuzzy, python-format
-#| msgid "%(count)s product"
-#| msgid_plural "%(count)s products"
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "%(count)s個の製品"
+msgstr[0] "%(amount)s個がカートに入っています"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:209
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:374
