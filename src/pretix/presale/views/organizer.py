@@ -768,7 +768,7 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             raise Http404()
 
         tz = get_current_timezone()
-        before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
+        before = datetime(self.year, self.month, 1, 23, 59, 59, tzinfo=tz) - timedelta(days=1)
         after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
 
         ctx['date'] = date(self.year, self.month, 1)
@@ -854,7 +854,7 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         tz = get_current_timezone()
         week = isoweek.Week(self.year, self.week)
         before = datetime(
-            week.monday().year, week.monday().month, week.monday().day, 0, 0, 0, tzinfo=tz,
+            week.monday().year, week.monday().month, week.monday().day, 23, 59, 59, tzinfo=tz,
         ) - timedelta(days=1)
         after = datetime(
             week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz,
@@ -1001,7 +1001,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         tz = get_current_timezone()
         before = datetime(
-            self.date.year, self.date.month, self.date.day, 0, 0, 0, tzinfo=tz,
+            self.date.year, self.date.month, self.date.day, 23, 59, 59, tzinfo=tz,
         ) - timedelta(days=1)
         after = datetime(
             self.date.year, self.date.month, self.date.day, 0, 0, 0, tzinfo=tz,
