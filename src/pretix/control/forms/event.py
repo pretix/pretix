@@ -42,7 +42,7 @@ import pycountry
 from django import forms
 from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxLengthValidator, MaxValueValidator
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import formset_factory, inlineformset_factory
 from django.urls import reverse
@@ -1001,6 +1001,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
             (c.identifier, c.label) for c in event.organizer.sales_channels.all()
         )
         self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
+        self.fields['invoice_address_from_name'].validators.append(MaxLengthValidator(190))
 
         pps = [str(pp.verbose_name) for pp in event.get_payment_providers().values() if pp.requires_invoice_immediately]
         if pps:
