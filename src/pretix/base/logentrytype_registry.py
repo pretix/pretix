@@ -20,9 +20,10 @@
 # <https://www.gnu.org/licenses/>.
 #
 import json
+import logging
 from collections import defaultdict
-from typing import Optional
 from functools import cached_property
+from typing import Optional
 
 import jsonschema
 from django.urls import reverse
@@ -31,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix.base.signals import PluginAwareRegistry
 
+logger = logging.getLogger(__name__)
 
 def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
     if a_map:
@@ -179,7 +181,11 @@ class LogEntryType:
     def validate_data(self, parsed_data):
         if not self._prepared_schema:
             return
-        jsonschema.validate(parsed_data, self._prepared_schema)
+        try:
+            jsonschema.validate(parsed_data, self._prepared_schema)
+        except jsonschema.exceptions.ValidationError as ex:
+            logger.warning("%s schema validation failed: %s %s", type(self).__name__, ex.json_path, ex.message)
+            raise
 
     @cached_property
     def _prepared_schema(self):
