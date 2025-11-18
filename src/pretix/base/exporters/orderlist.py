@@ -610,7 +610,7 @@ class OrderListExporter(MultiSheetListExporter):
                 headers.append(_('Attendee name') + ': ' + str(label))
         headers += [
             _('Attendee email'),
-            _('Company'),
+            _('Attendee company'),
             _('Address'),
             _('ZIP code'),
             _('City'),
@@ -650,7 +650,7 @@ class OrderListExporter(MultiSheetListExporter):
                         options[q.pk].append(o)
                 headers.append(str(q.question))
         headers += [
-            _('Company'),
+            _('Invoice address company'),
             _('Invoice address name'),
         ]
         if name_scheme and len(name_scheme['fields']) > 1:
