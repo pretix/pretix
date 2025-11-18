@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-29 07:55+0000\n"
-"PO-Revision-Date: 2025-05-06 16:20+0000\n"
-"Last-Translator: KC Tseng <tkc0204@gmail.com>\n"
+"PO-Revision-Date: 2025-11-18 17:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix-js/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -628,18 +628,14 @@ msgid "Unknown error."
 msgstr "不知名錯誤。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:292
-#, fuzzy
-#| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
-msgstr "你的顏色對比度很高，非常易於閱讀！"
+msgstr "你的顏色對比度很高，非常易於閱讀。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:296
-#, fuzzy
-#| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
-msgstr "你的色彩有不錯的對比度，大慨好閱讀！"
+msgstr "你的顏色有不錯的對比度，足以滿足最低的可訪問性要求。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:300
 msgid ""
@@ -728,10 +724,8 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "購物車中的商品將為你保留{num}分鐘。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Your cart has expired."
-msgstr "購物車過期"
+msgstr "您的購物車已過期。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
 #, fuzzy
