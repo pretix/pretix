@@ -46,7 +46,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.core.validators import (
-    MaxValueValidator, MinValueValidator, RegexValidator,
+    MaxLengthValidator, MaxValueValidator, MinValueValidator, RegexValidator,
 )
 from django.db.models import Model
 from django.utils.functional import lazy
@@ -725,7 +725,8 @@ DEFAULTS = {
                     message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
                         allowed='A-Z, a-z, 0-9, -./:#'
                     ), str)()
-                )
+                ),
+                MaxLengthValidator(160)
             ],
         )
     },
@@ -747,7 +748,8 @@ DEFAULTS = {
                     message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
                         allowed='A-Z, a-z, 0-9, -./:#'
                     ), str)()
-                )
+                ),
+                MaxLengthValidator(160)
             ],
         )
     },
@@ -1203,6 +1205,7 @@ DEFAULTS = {
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
+            validators=[MaxLengthValidator(190)],
             label=_("Company name"),
         )
     },
@@ -1216,6 +1219,7 @@ DEFAULTS = {
                 'placeholder': '12345'
             }),
             label=_("ZIP code"),
+            validators=[MaxLengthValidator(190)],
         )
     },
     'invoice_address_from_city': {
@@ -1228,6 +1232,7 @@ DEFAULTS = {
                 'placeholder': _('Random City')
             }),
             label=_("City"),
+            validators=[MaxLengthValidator(190)],
         )
     },
     'invoice_address_from_state': {
@@ -1264,7 +1269,8 @@ DEFAULTS = {
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("Domestic tax ID"),
-            help_text=_("e.g. tax number in Germany, ABN in Australia, …")
+            help_text=_("e.g. tax number in Germany, ABN in Australia, …"),
+            validators=[MaxLengthValidator(190)],
         )
     },
     'invoice_address_from_vat_id': {
@@ -1274,6 +1280,7 @@ DEFAULTS = {
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("EU VAT ID"),
+            validators=[MaxLengthValidator(190)],
         )
     },
     'invoice_introductory_text': {
