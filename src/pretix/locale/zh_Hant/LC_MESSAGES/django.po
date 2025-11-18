@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-07-23 01:00+0000\n"
+"PO-Revision-Date: 2025-11-18 17:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -570,15 +570,10 @@ msgid "Product changed"
 msgstr "商品名稱"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
-msgstr ""
-"產品已更改（包括添加或刪除的產品，以及對嵌套對象（如變體或捆綁包）的更改）"
+msgstr "這包括新增或刪除的產品，以及對變體或捆綁等巢狀物件的更改。"
 
 #: pretix/api/webhooks.py:380
 msgid "Shop taken live"
@@ -1173,16 +1168,14 @@ msgid "Ticket link"
 msgstr "票封鎖"
 
 #: pretix/base/datasync/sourcefields.py:578
-#, fuzzy, python-brace-format
-#| msgid "Check-in list {val}"
+#, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "簽到清單 {val}"
+msgstr "登記日期和時間在列表中{}"
 
 #: pretix/base/datasync/sourcefields.py:590
-#, fuzzy, python-brace-format
-#| msgid "Question: %(name)s"
+#, python-brace-format
 msgid "Question: {name}"
-msgstr "問題%(name)s"
+msgstr "問題:{name}"
 
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:614 pretix/base/settings.py:3614
@@ -3767,12 +3760,10 @@ msgid "Remaining amount"
 msgstr "剩餘金額"
 
 #: pretix/base/invoicing/pdf.py:1009
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Event date: {date_range}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "活動日期: {date_range}"
+msgstr "發票期限：{daterange}"
 
 #: pretix/base/invoicing/pdf.py:1040
 msgctxt "invoice"
@@ -5129,11 +5120,8 @@ msgid "currently being transmitted"
 msgstr ""
 
 #: pretix/base/models/invoices.py:124
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "transmitted"
-msgstr "未選擇日期。"
+msgstr "已經傳輸"
 
 #: pretix/base/models/invoices.py:125 pretix/plugins/sendmail/models.py:52
 msgid "failed"
@@ -9880,10 +9868,8 @@ msgstr "預設稅碼"
 
 #: pretix/base/settings.py:1064 pretix/base/settings.py:1072
 #: pretix/base/settings.py:1083 pretix/base/settings.py:1092
-#, fuzzy
-#| msgid "Charge updated."
 msgid "Charge no taxes"
-msgstr "費用已更新。"
+msgstr "不徵稅"
 
 #: pretix/base/settings.py:1068
 #, fuzzy
@@ -11554,17 +11540,7 @@ msgid "Invoice {invoice_number}"
 msgstr "發票{invoice_number}"
 
 #: pretix/base/settings.py:2761
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "somebody requested a list of your orders for {event}.\n"
-#| "The list is as follows:\n"
-#| "\n"
-#| "{orders}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11575,15 +11551,13 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"你好\n"
+"你好，\n"
 "\n"
-"有人請求了{event}的訂單清單。\n"
-"清單如下：\n"
+"隨函附上{event}訂單{code}的新發票。 此訂單已由{order_email}下達。\n"
 "\n"
-"{orders}\n"
+"致以最誠摯的問候，\n"
 "\n"
-"此致敬意\n"
-"你的 {event} 團隊"
+"您的{event}團隊"
 
 #: pretix/base/settings.py:2779 pretix/base/settings.py:2795
 #, python-brace-format
@@ -12563,13 +12537,11 @@ msgid "Contact:"
 msgstr "聯絡："
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-format
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
-msgstr "你收到此電子郵件是因為你下了 {event} 訂單。"
+msgstr "您之所以收到這封電子郵件，是因為您訂購了<strong>%(event)s</strong>。"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
@@ -13418,10 +13390,8 @@ msgid "Bcc address"
 msgstr "密件抄送位址"
 
 #: pretix/control/forms/event.py:1061 pretix/control/forms/organizer.py:585
-#, fuzzy
-#| msgid "All emails will be sent to this address as a Bcc copy"
 msgid "All emails will be sent to this address as a Bcc copy."
-msgstr "所有電子郵件將作為密件抄送副本發送到此位址"
+msgstr "所有電子郵件都將以Bcc副本的形式傳送到此地址。"
 
 #: pretix/control/forms/event.py:1069 pretix/control/forms/organizer.py:593
 msgid "Signature"
@@ -15183,10 +15153,9 @@ msgid "Recipient"
 msgstr "收件人"
 
 #: pretix/control/forms/orders.py:778
-#, fuzzy, python-brace-format
-#| msgid "Attach ticket files"
+#, python-brace-format
 msgid "Attach {file}"
-msgstr "附件{files}"
+msgstr "附件{file}"
 
 #: pretix/control/forms/orders.py:806
 msgid ""
@@ -15996,48 +15965,30 @@ msgstr ""
 "拒絕掃描位置 #{posid} 以獲取清單{list}，鍵入{type}”，錯誤代碼{errorcode}。"
 
 #: pretix/control/logdisplay.py:325
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
-#| "\"{type}\", error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\"."
-msgstr ""
-"在 {datetime} 拒絕掃描位置 #{posid} 以獲取清單{list}”，鍵入{type}”，錯誤代碼"
-"{errorcode}”。"
+msgstr "取消在{datetime}對列表「{list}」的位置#{posid}的掃描，型別為「{type}」。"
 
 #: pretix/control/logdisplay.py:326
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", "
-#| "error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} for list \"{list}\", type \"{type}\"."
-msgstr ""
-"拒絕掃描位置 #{posid} 以獲取清單{list}，鍵入{type}”，錯誤代碼{errorcode}。"
+msgstr "列表「{list}」的位置#{posid}的取消掃描，鍵入「{type}」。"
 
 #: pretix/control/logdisplay.py:329
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
-#| "\"{type}\", error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} at {datetime} for list \"{list}\", "
 "type \"{type}\"."
-msgstr ""
-"在 {datetime} 拒絕掃描位置 #{posid} 以獲取清單{list}”，鍵入{type}”，錯誤代碼"
-"{errorcode}”。"
+msgstr "忽略了列表「{list}」型別「{type}」的{datetime}位置#{posid}的取消。"
 
 #: pretix/control/logdisplay.py:330
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", "
-#| "error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} for list \"{list}\", type \"{type}\"."
-msgstr ""
-"拒絕掃描位置 #{posid} 以獲取清單{list}，鍵入{type}”，錯誤代碼{errorcode}。"
+msgstr "忽略了列表「{list}」的位置#{posid}的取消，鍵入「{type}」。"
 
 #: pretix/control/logdisplay.py:332 pretix/control/logdisplay.py:333
 #, python-brace-format
@@ -16266,10 +16217,9 @@ msgid "The invoice has been reissued."
 msgstr "發票已新開。"
 
 #: pretix/control/logdisplay.py:528
-#, fuzzy, python-brace-format
-#| msgid "The invite has been resent."
+#, python-brace-format
 msgid "The invoice {full_invoice_no} has been sent."
-msgstr "邀請已重新發送。"
+msgstr "發票{full_invoice_no}已傳送。"
 
 #: pretix/control/logdisplay.py:529
 #, python-brace-format
@@ -16429,10 +16379,9 @@ msgid "The voucher has been deleted."
 msgstr "優惠券已被刪除。"
 
 #: pretix/control/logdisplay.py:585
-#, fuzzy, python-brace-format
-#| msgid "A voucher has been sent to a person on the waiting list."
+#, python-brace-format
 msgid "The voucher has been assigned to {email} through the waiting list."
-msgstr "優惠券已發送給候補名單上的人。"
+msgstr "憑證已透過候補名單分配給{email}。"
 
 #: pretix/control/logdisplay.py:594
 #, python-brace-format
@@ -16514,18 +16463,14 @@ msgid "Your account has been disabled."
 msgstr "你的帳戶已停用。"
 
 #: pretix/control/logdisplay.py:671
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The email address has been changed from \"{old_email}\" to \"{new_email}"
-#| "\"."
+#, python-brace-format
 msgid "Your email address has been changed from {old_email} to {email}."
-msgstr "電子郵件位址已從“{old_email}”更改為“{new_email}”。"
+msgstr "您的電子郵件地址已從{old_email}更改為{email}。"
 
 #: pretix/control/logdisplay.py:672
-#, fuzzy, python-brace-format
-#| msgid "Your email address has been updated."
+#, python-brace-format
 msgid "Your email address {email} has been confirmed."
-msgstr "你的電子郵箱位址已更新。"
+msgstr "您的電子郵件地址{email}已確認。"
 
 #: pretix/control/logdisplay.py:684
 #, python-brace-format
@@ -18541,10 +18486,8 @@ msgid_plural ""
 msgstr[0] ""
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:30
-#, fuzzy
-#| msgid "The transaction could not be reversed."
 msgid "This cannot be reverted!"
-msgstr "交易無法撤銷。"
+msgstr "這無法恢復！"
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:34
 msgid ""
@@ -18715,10 +18658,8 @@ msgid "Temporary error, will retry after %(datetime)s"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:63
-#, fuzzy
-#| msgid "No products"
 msgid "No problems."
-msgstr "沒有產品"
+msgstr "沒有問題。"
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:74
 #, fuzzy
@@ -19855,10 +19796,8 @@ msgid "Not available"
 msgstr "無法使用"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:93
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can only be disabled for the entire organizer account."
-msgstr "由於以下原因，無法啟用此插件程式："
+msgstr "此外掛只能對整個組織者帳戶停用。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:98
 msgid ""
@@ -19898,10 +19837,8 @@ msgstr "禁用"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:141
 #: pretix/control/views/organizer.py:807
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can only be enabled for the entire organizer account."
-msgstr "由於以下原因，無法啟用此插件程式："
+msgstr "此外掛只能為整個組織者帳戶啟用。"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:154
 msgid ""
@@ -22411,13 +22348,8 @@ msgid "Invoice was not yet emailed to customer"
 msgstr "發票尚未透過電子郵件發送給客戶"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:294
-#, fuzzy
-#| msgid "One webhook is scheduled to be retried."
-#| msgid_plural "%(count)s webhooks are scheduled to be retried."
 msgid "Invoice is scheduled to be transmitted"
-msgstr ""
-"計劃重試一項網路鉤子。\n"
-"%(count)s網路鉤子計劃重試。"
+msgstr "發票計劃傳送"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:299
 #, fuzzy
@@ -22426,10 +22358,8 @@ msgid "Invoice is not yet transmitted"
 msgstr "發票尚未透過電子郵件發送給客戶"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:302
-#, fuzzy
-#| msgid "This ticket shop is currently disabled."
 msgid "Invoice is currently in transmission"
-msgstr "該售票商店目前停用。"
+msgstr "發票目前正在傳送中"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:307
 #, fuzzy
@@ -22438,10 +22368,8 @@ msgid "Invoice not transmitted in test mode"
 msgstr "即時和測試模式"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:312
-#, fuzzy
-#| msgid "Device registration failed."
 msgid "Invoice transmission failed"
-msgstr "設備註冊失敗。"
+msgstr "發票傳送失敗"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:317
 #, fuzzy
@@ -23101,16 +23029,12 @@ msgid "The system will create manual refunds that you need to execute."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:44
-#, fuzzy
-#| msgid "Text (if order will not expire automatically)"
 msgid "Refunds will not happen automatically."
-msgstr "文字（如果訂單不會自動過期）"
+msgstr "退款不會自動進行。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:52
-#, fuzzy
-#| msgid "Send information via email"
 msgid "Inform all customers via email."
-msgstr "透過電子郵件發送資訊"
+msgstr "透過電子郵件通知所有客戶。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:57
 msgid "Inform all waiting list contacts via email."
@@ -24365,10 +24289,9 @@ msgstr "這可用於啟用年票、十張票等產品。"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
-#, fuzzy, python-format
-#| msgid "Show next month, %(month)s"
+#, python-format
 msgid "Events with plugin %(name)s"
-msgstr "顯示下月,%(month)s"
+msgstr "帶有外掛%(name)s的事件"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:18
 #, python-format
@@ -24434,10 +24357,8 @@ msgid "Manage events"
 msgstr "單項活動"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:164
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can be enabled or disabled for events individually."
-msgstr "由於以下原因，無法啟用此插件程式："
+msgstr "此外掛可以單獨為事件啟用或停用。"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -26797,10 +26718,9 @@ msgid "The plugin {} is now active, you can configure it here:"
 msgstr ""
 
 #: pretix/control/views/event.py:482 pretix/control/views/organizer.py:722
-#, fuzzy, python-brace-format
-#| msgid "The relevant plugin is currently not active."
+#, python-brace-format
 msgid "The plugin {} is now active."
-msgstr "相關插件當前未啟用。"
+msgstr "外掛{}現在處於活動狀態。"
 
 #: pretix/control/views/event.py:547
 msgid ""
@@ -32451,10 +32371,9 @@ msgid "{event} - {item}"
 msgstr ""
 
 #: pretix/presale/ical.py:147
-#, fuzzy, python-brace-format
-#| msgid "Start date"
+#, python-brace-format
 msgid "Start: {datetime}"
-msgstr "起始"
+msgstr "開始：{datetime}"
 
 #: pretix/presale/ical.py:150
 #, fuzzy, python-brace-format
@@ -32845,11 +32764,10 @@ msgstr "請選擇你希望如何支付剩餘餘額："
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:82
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:45
-#, fuzzy, python-format
-#| msgid "%(num)s available"
+#, python-format
 msgid "(%(count)s available)"
 msgid_plural "(%(count)s available)"
-msgstr[0] "%(num)s可用"
+msgstr[0] "(%(count)s 可用)"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:101
 msgid "This sales channel does not provide support for test mode."
@@ -33599,11 +33517,10 @@ msgstr "顯示%(item)s的全尺寸圖片"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:131
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:288
-#, fuzzy, python-format
-#| msgid "%(count)s elements"
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "%(count)s元件"
+msgstr[0] "%(amount)s×在您的購物車中"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:209
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:374
@@ -34695,10 +34612,9 @@ msgstr "留意此檢視中的活動位於不同的時區。"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:8
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:25
-#, fuzzy, python-format
-#| msgid "Entry scan: %(date)s"
+#, python-format
 msgid "Events on %(day)s"
-msgstr "條目掃描：%(date)s"
+msgstr "%(day)s上的事件"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:56
 #, fuzzy
@@ -34762,22 +34678,18 @@ msgid "Issued on %(date)s"
 msgstr "拒絕掃描%(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:38
-#, fuzzy, python-format
-#| msgid "Expired"
+#, python-format
 msgid "Expired since %(date)s"
-msgstr "過期"
+msgstr "自%(date)s起過期"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:46
-#, fuzzy, python-format
-#| msgid "Valid until %(datetime)s"
+#, python-format
 msgid "Valid until %(date)s"
-msgstr "有效期至 %(datetime)s"
+msgstr "有效期至 %(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:66
-#, fuzzy
-#| msgid "Remaining balance"
 msgid "Remaining value:"
-msgstr "餘額"
+msgstr "餘額:"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:76
 #, fuzzy
