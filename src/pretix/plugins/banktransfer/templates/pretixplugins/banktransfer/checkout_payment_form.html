@@ -25,6 +25,12 @@
         <dl class="dl-horizontal">
             <dt>{% trans "Reference code (important):" %} </dt><dd><strong>{{ code }}</strong></dd>
         </dl>
+    {% elif order %}
+        <p>
+            <strong>
+                {% trans "We will assign you a personal reference code in the next step." %}
+            </strong>
+        </p>
     {% else %}
         <p>
             <strong>
