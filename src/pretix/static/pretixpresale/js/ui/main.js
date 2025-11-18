@@ -514,13 +514,17 @@ $(function () {
     $("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {
         var dependent = $(this),
             dependentLabel = $("label[for="+this.id+"]"),
-            dependency = $($(this).attr("data-required-if")),
+            dependencies = $($(this).attr("data-required-if")),
             update = function (ev) {
-                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                var enabled = true;
+                dependencies.each(function () {
+                    var dependency = $(this);
+                    var e = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                    enabled = enabled && e;
+                });
                 if (!dependent.is("[data-no-required-attr]")) {
                     dependent.prop('required', enabled);
                 }
-                dependent.closest('.form-group').toggleClass('required', enabled);
                 if (enabled) {
                     dependentLabel.append('<i class="label-required">' + gettext('required') + '</i>');
                 }
@@ -529,8 +533,11 @@ $(function () {
                 }
             };
         update();
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        dependencies.each(function () {
+            var dependency = $(this);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        });
     });
 
     $("input[data-display-dependency], div[data-display-dependency], select[data-display-dependency], textarea[data-display-dependency]").each(function () {

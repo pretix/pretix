@@ -1867,7 +1867,11 @@ class QuickSetupForm(I18nForm):
         self.fields['payment_banktransfer_bank_details'].required = False
         for f in self.fields.values():
             if 'data-required-if' in f.widget.attrs:
-                del f.widget.attrs['data-required-if']
+                f.widget.attrs['data-required-if'] += ",#id_payment_banktransfer__enabled"
+
+        self.fields['payment_banktransfer_bank_details'].widget.attrs["data-required-if"] = (
+            "#id_payment_banktransfer_bank_details_type_1,#id_payment_banktransfer__enabled"
+        )
 
     def clean(self):
         cleaned_data = super().clean()
