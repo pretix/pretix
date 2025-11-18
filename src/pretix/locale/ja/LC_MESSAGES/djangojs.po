@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-10-29 07:55+0000\n"
-"PO-Revision-Date: 2025-11-08 13:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2025-11-18 17:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -134,7 +134,7 @@ msgstr "Mercado Pago"
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
-msgstr "次へ"
+msgstr "続ける"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:244
@@ -449,7 +449,7 @@ msgstr "="
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
-msgstr "商品"
+msgstr "製品"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
