@@ -60,7 +60,6 @@ from pretix.base.models import (
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.timeline import timeline_for_event
-from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
 )
@@ -341,6 +340,8 @@ def welcome_wizard_widget(sender, **kwargs):
 
 
 def event_index(request, organizer, event):
+    from pretix.control.forms.event import CommentForm
+
     subevent = None
     if request.GET.get("subevent", "") != "" and request.event.has_subevents:
         i = request.GET.get("subevent", "")
