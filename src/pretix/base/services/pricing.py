@@ -231,7 +231,7 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_keep
     """
 
     def _key(line):
-        return (line.tax_rate, line.tax_code)
+        return (line.tax_rate, line.tax_code or "")
 
     places = settings.CURRENCY_PLACES.get(currency, 2)
     minimum_unit = Decimal('1') / 10 ** places
