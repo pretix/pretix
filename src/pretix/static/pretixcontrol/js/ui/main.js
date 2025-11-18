@@ -421,7 +421,6 @@ var form_handlers = function (el) {
                 dependencies.each(function () {
                     var dependency = $(this);
                     var e = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
-                    console.log(dependent, dependency, e)
                     enabled = enabled && e;
                 });
                 dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled).find('.optional').stop().animate({
