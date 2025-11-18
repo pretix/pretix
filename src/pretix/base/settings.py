@@ -728,7 +728,7 @@ DEFAULTS = {
                     ), str)()
                 ),
             ],
-            max_length=160,
+            max_length=155,
         )
     },
     'invoice_numbers_prefix_cancellations': {
@@ -751,7 +751,7 @@ DEFAULTS = {
                     ), str)()
                 ),
             ],
-            max_length=160,
+            max_length=155,
         )
     },
     'invoice_renderer_highlight_order_code': {
