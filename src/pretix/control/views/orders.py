@@ -131,13 +131,16 @@ from pretix.control.forms.orders import (
     ReactivateOrderForm,
 )
 from pretix.control.forms.rrule import RRuleForm
-from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.permissions import (
+    AdministratorPermissionRequiredMixin, EventPermissionRequiredMixin,
+)
 from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
 from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
+from pretix.helpers.json import CustomJSONEncoder
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
 
@@ -1750,6 +1753,25 @@ class OrderInvoiceReissue(OrderView):
 
     def get(self, *args, **kwargs):  # NOQA
         return HttpResponseNotAllowed(['POST'])
+
+
+class OrderInvoiceInspect(AdministratorPermissionRequiredMixin, OrderView):
+
+    def get(self, *args, **kwargs):  # NOQA
+        inv = get_object_or_404(self.order.invoices, pk=kwargs.get('id'))
+        d = {"lines": []}
+        for f in inv._meta.fields:
+            v = getattr(inv, f.name)
+            d[f.name] = v
+
+        for il in inv.lines.all():
+            line = {}
+            for f in il._meta.fields:
+                v = getattr(il, f.name)
+                line[f.name] = v
+            d["lines"].append(line)
+
+        return JsonResponse(d, encoder=CustomJSONEncoder)
 
 
 class OrderResendLink(OrderView):
