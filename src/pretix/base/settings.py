@@ -690,6 +690,7 @@ DEFAULTS = {
             label=_("Minimum length of invoice number after prefix"),
             help_text=_("The part of your invoice number after your prefix will be filled up with leading zeros up to this length, e.g. INV-001 or INV-00001."),
             max_value=12,
+            min_value=1,
             required=True,
         )
     },
@@ -725,8 +726,9 @@ DEFAULTS = {
                     message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
                         allowed='A-Z, a-z, 0-9, -./:#'
                     ), str)()
-                )
+                ),
             ],
+            max_length=155,
         )
     },
     'invoice_numbers_prefix_cancellations': {
@@ -747,8 +749,9 @@ DEFAULTS = {
                     message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
                         allowed='A-Z, a-z, 0-9, -./:#'
                     ), str)()
-                )
+                ),
             ],
+            max_length=155,
         )
     },
     'invoice_renderer_highlight_order_code': {
@@ -1203,6 +1206,7 @@ DEFAULTS = {
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
+            max_length=190,
             label=_("Company name"),
         )
     },
@@ -1216,6 +1220,7 @@ DEFAULTS = {
                 'placeholder': '12345'
             }),
             label=_("ZIP code"),
+            max_length=190,
         )
     },
     'invoice_address_from_city': {
@@ -1228,6 +1233,7 @@ DEFAULTS = {
                 'placeholder': _('Random City')
             }),
             label=_("City"),
+            max_length=190,
         )
     },
     'invoice_address_from_state': {
@@ -1264,7 +1270,8 @@ DEFAULTS = {
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("Domestic tax ID"),
-            help_text=_("e.g. tax number in Germany, ABN in Australia, …")
+            help_text=_("e.g. tax number in Germany, ABN in Australia, …"),
+            max_length=190,
         )
     },
     'invoice_address_from_vat_id': {
@@ -1274,6 +1281,7 @@ DEFAULTS = {
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("EU VAT ID"),
+            max_length=190,
         )
     },
     'invoice_introductory_text': {
