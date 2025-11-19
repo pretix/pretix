@@ -54,6 +54,7 @@ VAT_ID_PATTERNS = {
     #
     #  - http://en.wikipedia.org/wiki/VAT_identification_number
     #  - http://ec.europa.eu/taxation_customs/vies/faq.html
+    #  - https://euipo.europa.eu/tunnel-web/secure/webdav/guest/document_library/Documents/COSME/VAT%20numbers%20EU.pdf
     #  - http://www.skatteetaten.no/en/International-pages/Felles-innhold-benyttes-i-flere-malgrupper/Brochure/Guide-to-value-added-tax-in-Norway/?chapter=7159
     'AT': {  # Austria
         'regex': '^U\\d{8}$',
@@ -66,6 +67,10 @@ VAT_ID_PATTERNS = {
     'BG': {  # Bulgaria
         'regex': '^\\d{9,10}$',
         'country_code': 'BG'
+    },
+    'CH': {  # Switzerland
+        'regex': '^\\dE{9}$',
+        'country_code': 'CH'
     },
     'CY': {  # Cyprus
         'regex': '^\\d{8}[A-Z]$',
@@ -187,7 +192,7 @@ class VATIDTemporaryError(VATIDError):
     pass
 
 
-def normalize_vat_id(vat_id):
+def normalize_vat_id(vat_id, country_code):
     """
     Accepts a VAT ID and normaizes it, getting rid of spaces, periods, dashes
     etc and converting it to upper case.
@@ -211,29 +216,33 @@ def normalize_vat_id(vat_id):
     vat_id = vat_id.replace('.', '')
     vat_id = vat_id.upper()
 
-    country_prefix = vat_id[0:2]
-
-    if country_prefix == "CH":
+    # Clean the different shapes a number can take in Switzerland depending on purpse
+    if country_code == "CH":
         vat_id = re.sub('[^A-Z0-9]', '', vat_id.replace('HR', '').replace('MWST', ''))
 
     # Fix people using GR prefix for Greece
-    if country_prefix == 'GR':
-        vat_id = 'EL' + vat_id[2:]
-        country_prefix = 'EL'
+    if vat_id[0:2] == "GR" and country_code == "GR":
+        vat_id = "EL" + vat_id[2:]
 
-    if country_prefix not in VAT_ID_PATTERNS:
-        return None
+    # Check if we already have a valid country prefix. If not, we try to figure out if we can
+    # add one, since in some countries (e.g. Italy) it's very custom to enter it without the prefix
+    if vat_id[:2] in VAT_ID_PATTERNS and re.match(VAT_ID_PATTERNS[vat_id[0:2]]['regex'], vat_id[2:]):
+        # Prefix set and prefix matches pattern, nothing to do
+        pass
+    elif re.match(VAT_ID_PATTERNS[cc_to_vat_prefix(country_code)]['regex'], vat_id):
+        # Prefix not set but adding it fixes pattern
+        vat_id = cc_to_vat_prefix(country_code) + vat_id
+    else:
+        # We have no idea what this is
+        pass
 
     return vat_id
 
 
 def _validate_vat_id_NO(vat_id, country_code):
     # Inspired by vat_moss library
-    if not vat_id.startswith("NO"):
-        # prefix is not usually used in Norway, but expected by vat_moss library
-        vat_id = "NO" + vat_id
     try:
-        vat_id = normalize_vat_id(vat_id)
+        vat_id = normalize_vat_id(vat_id, country_code)
     except ValueError:
         raise VATIDFinalError(error_messages['invalid'])
 
@@ -267,7 +276,7 @@ def _validate_vat_id_NO(vat_id, country_code):
 def _validate_vat_id_EU(vat_id, country_code):
     # Inspired by vat_moss library
     try:
-        vat_id = normalize_vat_id(vat_id)
+        vat_id = normalize_vat_id(vat_id, country_code)
     except ValueError:
         raise VATIDFinalError(error_messages['invalid'])
 
@@ -275,7 +284,6 @@ def _validate_vat_id_EU(vat_id, country_code):
         raise VATIDFinalError(error_messages['invalid'])
 
     number = vat_id[2:]
-
     if vat_id[:2] != cc_to_vat_prefix(country_code):
         raise VATIDFinalError(error_messages['country_mismatch'])
 
@@ -338,10 +346,10 @@ def _validate_vat_id_EU(vat_id, country_code):
 
 def _validate_vat_id_CH(vat_id, country_code):
     if vat_id[:3] != 'CHE':
-        raise VATIDFinalError(_('Your VAT ID does not match the selected country.'))
+        raise VATIDFinalError(error_messages['country_mismatch'])
 
     try:
-        vat_id = normalize_vat_id(vat_id)
+        vat_id = normalize_vat_id(vat_id, country_code)
     except ValueError:
         raise VATIDFinalError(error_messages['invalid'])
     try:
