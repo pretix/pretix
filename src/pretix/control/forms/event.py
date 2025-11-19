@@ -927,6 +927,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_address_asked',
         'invoice_address_required',
         'invoice_address_vatid',
+        'invoice_address_vatid_required_countries',
         'invoice_address_company_required',
         'invoice_address_beneficiary',
         'invoice_address_custom_field',

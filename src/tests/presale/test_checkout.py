@@ -411,6 +411,69 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
         with scopes_disabled():
             ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
+        assert ia.vat_id == "AT123456"
+        assert not ia.vat_id_validated
+
+    def test_reverse_charge_vatid_required(self):
+        self.event.settings.invoice_address_vatid = True
+        self.event.settings.invoice_address_vatid_required_countries = ["AT"]
+
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        resp = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name': 'Bar',
+            'street': 'Baz',
+            'zipcode': '1234',
+            'city': 'Here',
+            'country': 'AT',
+            'email': 'admin@localhost',
+            'transmission_type': 'email',
+        }, follow=True)
+        assert 'has-error' in resp.content.decode()
+
+    def test_reverse_charge_vatid_check_unavailable_but_required(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+        self.event.settings.invoice_address_vatid_required_countries = ["AT"]
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            def raiser(*args, **kwargs):
+                raise VATIDTemporaryError('temp')
+
+            mock_validate.side_effect = raiser
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '1234',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost',
+                'transmission_type': 'email',
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.00')
+
+        with scopes_disabled():
+            ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
+        assert ia.vat_id == "AT123456"
         assert not ia.vat_id_validated
 
     def test_reverse_charge_keep_gross(self):
@@ -448,6 +511,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
         with scopes_disabled():
             ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
+        assert ia.vat_id == "AT123456"
         assert ia.vat_id_validated
 
     def test_custom_tax_rules(self):
@@ -1452,7 +1516,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'transmission_type': 'it_sdi',
             'vat_id': '',
         }, follow=True)
-        assert "This field is required for the selected type" in response.content.decode()
+        assert "This field is required" in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             'is_business': 'business',
@@ -1468,6 +1532,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             'state': 'MI',
             'email': 'admin@localhost',
             'transmission_type': 'email',
+            'vat_id': 'IT01234567890',
         }, follow=True)
         assert "must be used for this country" in response.content.decode()
 

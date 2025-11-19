@@ -67,6 +67,7 @@ def _info(cc):
             'visible': cc in VAT_ID_COUNTRIES,
             'required': False,
             'label': VAT_ID_LABELS.get(cc, gettext("VAT ID")),
+            'helptext_visible': True,
         },
     }
     if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
@@ -143,5 +144,9 @@ def address_form(request):
                         "visible": transmission_type.identifier == selected_transmission_type and k in visible,
                         "required": transmission_type.identifier == selected_transmission_type and k in required
                     }
+
+            if is_business and country in event.settings.invoice_address_vatid_required_countries and info["vat_id"]["visible"]:
+                info["vat_id"]["required"] = True
+                info["vat_id"]["helptext_visible"] = False
 
     return JsonResponse(info)

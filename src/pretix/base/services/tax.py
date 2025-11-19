@@ -41,9 +41,8 @@ logger = logging.getLogger(__name__)
 error_messages = {
     'unavailable': _(
         'Your VAT ID could not be checked, as the VAT checking service of '
-        'your country is currently not available. We will therefore '
-        'need to charge VAT on your invoice. You can get the tax amount '
-        'back via the VAT reimbursement process.'
+        'your country is currently not available. We will therefore need to '
+        'charge you the same tax rate as if you did not enter a VAT ID.'
     ),
     'invalid': _('This VAT ID is not valid. Please re-check your input.'),
     'country_mismatch': _('Your VAT ID does not match the selected country.'),
