@@ -696,7 +696,7 @@ def retry_stuck_invoices(sender, **kwargs):
     with transaction.atomic():
         qs = Invoice.objects.filter(
             transmission_status=Invoice.TRANSMISSION_STATUS_INFLIGHT,
-            transmission_date__lte=now() - timedelta(hours=24),
+            transmission_date__lte=now() - timedelta(hours=48),
         ).select_for_update(
             of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked
         )
