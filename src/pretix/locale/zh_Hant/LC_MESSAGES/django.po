@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 13:20+0000\n"
-"PO-Revision-Date: 2025-11-18 17:00+0000\n"
+"PO-Revision-Date: 2025-11-19 16:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
@@ -16379,7 +16379,7 @@ msgid "The voucher has been deleted."
 msgstr "優惠券已被刪除。"
 
 #: pretix/control/logdisplay.py:585
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The voucher has been assigned to {email} through the waiting list."
 msgstr "憑證已透過候補名單分配給{email}。"
 
