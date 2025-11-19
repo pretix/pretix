@@ -22,7 +22,7 @@
 import pycountry
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.utils.translation import pgettext
+from django.utils.translation import gettext, pgettext, pgettext_lazy
 from django_countries.fields import Country
 from django_scopes import scope
 
@@ -36,6 +36,22 @@ from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, COUNTRY_STATE_LABEL,
 )
 
+VAT_ID_LABELS = {
+    # VAT ID is a EU concept and Switzerland has a distinct, but differently-named concept
+    "CH": pgettext_lazy("tax_id_swiss", "UID"),  # Translators: Only translate to French (IDE) and Italien (IDI), otherwise keep the same
+
+    # Awareness around VAT IDs differes by EU country. For example, in Germany the VAT ID is assigned
+    # separately to each company and only used in cross-country transactions. Therefore, it makes sense
+    # to call it just "VAT ID" on the form, and people will either know their VAT ID or they don't.
+    # In contrast, in Italy the EU-compatible VAT ID is not separately assigned, but is just "IT" + the national tax
+    # number (Partita IVA) and also used on domestic transactions. So someone who never purchased something international
+    # for their company, might still know the value, if we call it the right way and not just "VAT ID".
+    "IT": pgettext_lazy("tax_id_italy", "VAT ID / P.IVA"),  # Translators: Translate to only "P.IVA" in Italian, keep second part as-is in other languages
+    "GR": pgettext_lazy("tax_id_greece", "VAT ID / TIN"),  # Translators: Translate to only "ΑΦΜ" in Greek
+    "ES": pgettext_lazy("tax_id_spain", "VAT ID / NIF"),  # Translators: Translate to only "NIF" in Spanish
+    "PT": pgettext_lazy("tax_id_portugal", "VAT ID / NIF"),  # Translators: Translate to only "NIF" in Portuguese
+}
+
 
 def _info(cc):
     info = {
@@ -47,7 +63,11 @@ def _info(cc):
             'required': 'if_any' if cc in COUNTRIES_WITH_STATE_IN_ADDRESS else False,
             'label': COUNTRY_STATE_LABEL.get(cc, pgettext('address', 'State')),
         },
-        'vat_id': {'visible': cc in VAT_ID_COUNTRIES, 'required': False},
+        'vat_id': {
+            'visible': cc in VAT_ID_COUNTRIES,
+            'required': False,
+            'label': VAT_ID_LABELS.get(cc, gettext("VAT ID")),
+        },
     }
     if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
         return {'data': [], **info}
