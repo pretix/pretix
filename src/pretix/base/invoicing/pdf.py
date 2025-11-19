@@ -32,7 +32,6 @@ from itertools import groupby
 from typing import Tuple
 
 import bleach
-import vat_moss.exchange_rates
 from bidi import get_display
 from django.contrib.staticfiles import finders
 from django.db.models import Sum
@@ -1059,7 +1058,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         def fmt(val):
             try:
-                return vat_moss.exchange_rates.format(val, self.invoice.foreign_currency_display)
+                return money_filter(val, self.invoice.foreign_currency_display)
             except ValueError:
                 return localize(val) + ' ' + self.invoice.foreign_currency_display
 
