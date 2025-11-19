@@ -1671,19 +1671,15 @@ class OrderChangeManager:
     RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
 
     class AddPositionResult:
-        operation: 'OrderChangeManager.AddOperation'
-        original_order_change_manager: 'OrderChangeManager'
         _position: Optional[OrderPosition]
 
-        def __init__(self, order_change_manager: 'OrderChangeManager'):
-            self.original_order_change_manager = order_change_manager
-            self.operation = None
+        def __init__(self):
             self._position = None
 
         @property
         def position(self) -> OrderPosition:
             if self._position is None:
-                raise ValueError("OrderPosition has not been created yet. Call commit() first on the original OrderChangeManager")
+                raise RuntimeError("Order position has not been created yet. Call commit() first on OrderChangeManager.")
             return self._position
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True, allow_blocked_seats=False):
@@ -1950,10 +1946,9 @@ class OrderChangeManager:
         if seat:
             self._seatdiff.update([seat])
 
-        result = self.AddPositionResult(self)
-        op = self.AddOperation(item, variation, price, addon_to, subevent, seat, membership, valid_from, valid_until, is_bundled, result)
-        result.operation = op
-        self._operations.append(op)
+        result = self.AddPositionResult()
+        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership,
+                                                  valid_from, valid_until, is_bundled, result))
         return result
 
     def split(self, position: OrderPosition):

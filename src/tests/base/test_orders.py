@@ -2469,9 +2469,7 @@ class OrderChangeManagerTests(TestCase):
     def test_add_item_result_value(self):
         res_shirt = self.ocm.add_position(self.shirt, None, None, None)
         res_ticket2 = self.ocm.add_position(self.ticket2, None, None, None)
-        assert res_shirt.original_order_change_manager == self.ocm
-        assert res_shirt.operation.item == self.shirt
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             _ = res_ticket2.position
         self.ocm.commit()
         assert res_shirt.position.item == self.shirt
