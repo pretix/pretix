@@ -1061,6 +1061,7 @@ class BaseQuestionsForm(forms.Form):
             return (
                 ('True' in qvals and dval)
                 or ('False' in qvals and not dval)
+                or (parentq.type == Question.TYPE_COUNTRYCODE and str(dval) in qvals)
                 or (isinstance(dval, QuestionOption) and dval.identifier in qvals)
                 or (isinstance(dval, (list, QuerySet)) and any(qval in [o.identifier for o in dval] for qval in qvals))
             )
