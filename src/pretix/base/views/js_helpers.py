@@ -147,6 +147,8 @@ def address_form(request):
 
             if is_business and country in event.settings.invoice_address_vatid_required_countries and info["vat_id"]["visible"]:
                 info["vat_id"]["required"] = True
+            if info["vat_id"]["required"]:
+                # The help text explains that it is optional, so we want to hide that if it is required
                 info["vat_id"]["helptext_visible"] = False
 
     return JsonResponse(info)
