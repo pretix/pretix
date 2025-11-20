@@ -1832,8 +1832,10 @@ class StripePayByBank(StripeRedirectMethod):
     explanation = _(
         'Pay by bank allows customers of UK banks to authorize a secure Open Banking payment from their banking app.'
     )
+
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
         return super().is_allowed(request, total) and self.event.currency == 'GBP'
+
     def _payment_intent_kwargs(self, request, payment):
         return {
             "payment_method_data": {
@@ -1848,6 +1850,7 @@ class StripePayByBank(StripeRedirectMethod):
                 },
             },
         }
+
 
 class StripePayPal(StripeRedirectMethod):
     identifier = 'stripe_paypal'
