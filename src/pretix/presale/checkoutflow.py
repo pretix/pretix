@@ -56,6 +56,7 @@ from django.utils.translation import (
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
+from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.items import Question
 from pretix.base.models.orders import (
@@ -1544,6 +1545,18 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['cart_session'] = self.cart_session
         ctx['invoice_address_asked'] = self.address_asked
         ctx['customer'] = self.cart_customer
+
+        transmission_visible = False
+        for transmission_type in get_transmission_types():
+            if (
+                    transmission_type.identifier == self.invoice_address.transmission_type and
+                    transmission_type.invoice_address_form_fields_visible(
+                        country=self.invoice_address.country, is_business=self.invoice_address.is_business
+                    )
+            ):
+                transmission_visible = True
+                break
+        ctx['show_transmission_type'] = transmission_visible
 
         self.cart_session['shown_total'] = str(ctx['cart']['total'])
 
