@@ -412,6 +412,18 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'before they work properly.'),
                      required=False,
                  )),
+
+                ('method_pay_by_bank',
+                 forms.BooleanField(
+                     label=_('Pay by bank (UK)'),
+                     disabled=self.event.currency != 'GBP',
+                     help_text=' '.join([
+                         str(_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                               'before they work properly.')),
+                         str(_('Only available for charges in GBP and customers with UK bank accounts.'))
+                     ]),
+                     required=False,
+                 )),
                 ('method_wechatpay',
                  forms.BooleanField(
                      label=_('WeChat Pay'),
@@ -1809,6 +1821,33 @@ class StripeRevolutPay(StripeRedirectMethod):
             },
         }
 
+
+class StripePayByBank(StripeRedirectMethod):
+    identifier = 'stripe_pay_by_bank'
+    verbose_name = _('Pay by bank (UK) via Stripe')
+    public_name = _('Pay by bank (UK)')
+    method = 'pay_by_bank'
+    redirect_in_widget_allowed = False
+    confirmation_method = 'automatic'
+    explanation = _(
+        'Pay by bank allows customers of UK banks to authorize a secure Open Banking payment from their banking app.'
+    )
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return super().is_allowed(request, total) and self.event.currency == 'GBP'
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "pay_by_bank",
+                "billing_details": {
+                    "email": payment.order.email,
+                },
+            },
+            "payment_method_options": {
+                "pay_by_bank": {
+                    "country": "GB",
+                },
+            },
+        }
 
 class StripePayPal(StripeRedirectMethod):
     identifier = 'stripe_paypal'
