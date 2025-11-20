@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-20 10:37+0000\n"
-"PO-Revision-Date: 2025-11-11 21:00+0000\n"
+"PO-Revision-Date: 2025-11-21 01:00+0000\n"
 "Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -36263,7 +36263,7 @@ msgstr "NIF (Número de Contribuinte)"
 #: pretix/presale/templates/pretixpresale/event/order.html:354
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Alterar ou cancelar o seu pedido"
+msgstr "Alterar ou cancelar o teu pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:356
 #, fuzzy
@@ -36282,8 +36282,8 @@ msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
 msgstr ""
-"Se quiser fazer alterações nos produtos que comprou, pode clicar no botão "
-"para alterar o seu pedido."
+"Se quiseres fazer alterações nos produtos que compraste, podes clicar no "
+"botão para alterar o teu pedido."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:374
 msgid "Change order"
@@ -36556,16 +36556,12 @@ msgid "Change your ticket"
 msgstr "Alterar informações"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:68
-#, fuzzy
-#| msgid ""
-#| "If you want to make changes to the products you bought, you can click on "
-#| "the button to change your order."
 msgid ""
 "If you want to make changes to the components of your ticket, you can click "
 "on the following button."
 msgstr ""
-"Se quiser fazer alterações nos produtos que comprou, pode clicar no botão "
-"para alterar o seu pedido."
+"Se quiseres fazer alterações nos produtos que compraste, podes clicar no "
+"botão para alterares o teu pedido."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:73
 #, python-format
