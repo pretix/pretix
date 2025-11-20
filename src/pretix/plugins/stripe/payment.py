@@ -1844,11 +1844,6 @@ class StripePayByBank(StripeRedirectMethod):
                     "email": payment.order.email,
                 },
             },
-            "payment_method_options": {
-                "pay_by_bank": {
-                    "country": "GB",
-                },
-            },
         }
 
 
