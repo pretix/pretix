@@ -395,7 +395,11 @@
     {% for fee in cart.fees %}
         <div role="row" class="row cart-row">
             <div role="cell" class="col-md-4 col-xs-6">
-                <strong>{{ fee.get_fee_type_display }}</strong>
+                {% if fee.fee_type == "other" and fee.description %}
+                    <strong>{{ fee.description }}</strong>
+                {% else %}
+                    <strong>{{ fee.get_fee_type_display }}</strong>
+                {% endif %}
             </div>
             {% if download %}
                 <div role="cell"></div>
