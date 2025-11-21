@@ -53,7 +53,6 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_otp.models import Device
 from django_scopes import scopes_disabled
-from webauthn.helpers.structs import PublicKeyCredentialDescriptor
 
 from pretix.base.i18n import language
 from pretix.helpers.urls import build_absolute_uri
@@ -708,6 +707,8 @@ class U2FDevice(Device):
 
     @property
     def webauthndevice(self):
+        from webauthn.helpers.structs import PublicKeyCredentialDescriptor
+
         d = json.loads(self.json_data)
         return PublicKeyCredentialDescriptor(websafe_decode(d['keyHandle']))
 
@@ -737,6 +738,8 @@ class WebAuthnDevice(Device):
 
     @property
     def webauthndevice(self):
+        from webauthn.helpers.structs import PublicKeyCredentialDescriptor
+
         return PublicKeyCredentialDescriptor(websafe_decode(self.credential_id))
 
     @property

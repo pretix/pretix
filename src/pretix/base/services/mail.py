@@ -47,7 +47,6 @@ from urllib.parse import urljoin, urlparse
 from zoneinfo import ZoneInfo
 
 import requests
-from bs4 import BeautifulSoup
 from celery import chain
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
@@ -763,6 +762,8 @@ def render_mail(template, context):
 
 
 def replace_images_with_cid_paths(body_html):
+    from bs4 import BeautifulSoup
+
     if body_html:
         email = BeautifulSoup(body_html, "lxml")
         cid_images = []
