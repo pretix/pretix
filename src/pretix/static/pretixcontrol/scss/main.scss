@@ -36,10 +36,20 @@ nav.navbar {
     margin: 0;
     border: 0;
 }
+.navbar-brand {
+  position: relative;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.navbar-brand span {
+  padding: 4px 0 6px; // Optical alignment next to logo
+  display: inline-block;
+}
 .navbar-brand img {
-    height: 100%;
     width: auto;
-    display: inline;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
 }
 
 #side-menu img.fa-img {
