@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-20 10:37+0000\n"
-"PO-Revision-Date: 2025-11-16 18:00+0000\n"
+"PO-Revision-Date: 2025-11-22 23:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -305,11 +305,9 @@ msgid "The program end must not be before the program start."
 msgstr "El final del programa no debe ser anterior al inicio del programa."
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2315
-#, fuzzy
-#| msgid "You can not select a subevent if your event is not an event series."
 msgid "You cannot use program times on an event series."
 msgstr ""
-"No puede seleccionar un subevento si su evento no es una serie de eventos."
+"No se pueden utilizar los horarios de los programas en una serie de eventos."
 
 #: pretix/api/serializers/item.py:337
 msgid ""
@@ -5421,13 +5419,6 @@ msgstr ""
 "especial o si no tiene variaciones, se utilizará este precio."
 
 #: pretix/base/models/items.py:506
-#, fuzzy
-#| msgid ""
-#| "If this option is active, your users can choose the price themselves. The "
-#| "price configured above is then interpreted as the minimum price a user "
-#| "has to enter. You could use this e.g. to collect additional donations for "
-#| "your event. This is currently not supported for products that are bought "
-#| "as an add-on to other products."
 msgid ""
 "If this option is active, your users can choose the price themselves. The "
 "price configured above is then interpreted as the minimum price a user has "
@@ -5437,9 +5428,7 @@ msgstr ""
 "Si esta opción está activa, sus usuarios pueden elegir el precio ellos "
 "mismos. El precio configurado anteriormente se interpreta como el precio "
 "mínimo que un usuario debe introducir. Usted puede utilizar esto, por "
-"ejemplo, para recoger donaciones adicionales para su evento. Actualmente, "
-"esto no es compatible con los productos que se compran como complemento de "
-"otros productos."
+"ejemplo, para recoger donaciones adicionales para su evento."
 
 #: pretix/base/models/items.py:511 pretix/base/models/items.py:1175
 msgid "Suggested price"
@@ -14012,7 +14001,7 @@ msgstr "Valor por ({value})"
 
 #: pretix/control/forms/event.py:380
 msgid "The currency cannot be changed because orders already exist."
-msgstr ""
+msgstr "No se puede cambiar la moneda porque ya existen pedidos."
 
 #: pretix/control/forms/event.py:391 pretix/control/forms/event.py:404
 msgid "Domain"
@@ -17426,10 +17415,8 @@ msgid "The voucher has been deleted."
 msgstr "El vale de compra fue eliminado."
 
 #: pretix/control/logdisplay.py:585
-#, fuzzy
-#| msgid "The selected voucher has been deleted."
 msgid "Cart positions including the voucher have been deleted."
-msgstr "Se ha borrado el vale de compra seleccionado."
+msgstr "Las posiciones del carrito, incluido el vale, se han eliminado."
 
 #: pretix/control/logdisplay.py:586
 #, python-brace-format
@@ -25884,7 +25871,7 @@ msgstr "Añade un nuevo valor"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:95
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Ordenar alfabéticamente"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:14
 msgid "No media have been created yet."
@@ -33440,18 +33427,13 @@ msgstr "Número de cuenta"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:7
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_messaging_noform.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_noform.html:5
-#, fuzzy
-#| msgid ""
-#| "After you submitted your order, we will redirect you to the payment "
-#| "service provider to complete your payment. You will then be redirected "
-#| "back here to get your tickets."
 msgid ""
 "After you submitted your order, we will redirect you to the payment service "
 "provider to complete your payment. You will then be redirected back here."
 msgstr ""
 "Después de enviar su pedido, le redirigiremos al proveedor de servicios de "
-"pago para que complete el pago. A continuación, se le redirigirá de nuevo "
-"aquí para obtener sus entradas."
+"pago para que complete el pago. A continuación, se le redirigirá en este "
+"sitio web."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
