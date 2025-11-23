@@ -222,7 +222,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                     'invoice_company': ''
                 })
         renderer = ClassicMailRenderer(None, organizer)
-        content_plain = body_plain = render_mail(template, context)
+        body_plain = render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN)
         subject = str(subject).format_map(TolerantDict(context))
         sender = (
             sender or
@@ -316,6 +316,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
         with override(timezone):
             try:
+                content_plain = render_mail(template, context, placeholder_mode=None)
                 if plain_text_only:
                     body_html = None
                 elif 'context' in inspect.signature(renderer.render).parameters:
@@ -749,11 +750,11 @@ def mail_send(*args, **kwargs):
     mail_send_task.apply_async(args=args, kwargs=kwargs)
 
 
-def render_mail(template, context):
+def render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN):
     if isinstance(template, LazyI18nString):
         body = str(template)
-        if context:
-            body = format_map(body, context, mode=SafeFormatter.MODE_IGNORE_RICH)
+        if context and placeholder_mode:
+            body = format_map(body, context, mode=placeholder_mode)
     else:
         tpl = get_template(template)
         body = tpl.render(context)

@@ -40,6 +40,5 @@ def test_format_alternatives():
         )
     }
 
-    assert format_map("Foo {bar}", ctx, mode=SafeFormatter.MODE_IGNORE_RICH) == "Foo {bar}"
     assert format_map("Foo {bar}", ctx, mode=SafeFormatter.MODE_RICH_TO_PLAIN) == "Foo plain text"
     assert format_map("Foo {bar}", ctx, mode=SafeFormatter.MODE_RICH_TO_HTML) == "Foo <span>HTML version</span>"

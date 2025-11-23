@@ -1,4 +1,13 @@
 {% load i18n %}
 This is a test file for sending mails.
+Event name: {event}
 {% get_current_language as LANGUAGE_CODE %}
 The language code used for rendering this email is {{ LANGUAGE_CODE }}.
+
+Payment info:
+{payment_info}
+
+**Meta**: {meta_Test}
+
+Event website: [{event}](https://example.org/{event_slug})
+Other website: [{event}]({meta_Website})
