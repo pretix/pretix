@@ -22,6 +22,8 @@
 import logging
 from string import Formatter
 
+from django.utils.html import conditional_escape
+
 logger = logging.getLogger(__name__)
 
 
@@ -40,11 +42,10 @@ class SafeFormatter(Formatter):
     Customized version of ``str.format`` that (a) behaves just like ``str.format_map`` and
     (b) does not allow any unwanted shenanigans like attribute access or format specifiers.
     """
-    MODE_IGNORE_RICH = 0
     MODE_RICH_TO_PLAIN = 1
     MODE_RICH_TO_HTML = 2
 
-    def __init__(self, context, raise_on_missing=False, mode=MODE_IGNORE_RICH):
+    def __init__(self, context, raise_on_missing=False, mode=MODE_RICH_TO_PLAIN):
         self.context = context
         self.raise_on_missing = raise_on_missing
         self.mode = mode
@@ -55,22 +56,26 @@ class SafeFormatter(Formatter):
     def get_value(self, key, args, kwargs):
         if not self.raise_on_missing and key not in self.context:
             return '{' + str(key) + '}'
-        r = self.context[key]
-        if isinstance(r, PlainHtmlAlternativeString):
-            if self.mode == self.MODE_IGNORE_RICH:
-                return '{' + str(key) + '}'
-            elif self.mode == self.MODE_RICH_TO_PLAIN:
-                return r.plain
+        return self.context[key]
+
+    def _prepare_value(self, value):
+        if isinstance(value, PlainHtmlAlternativeString):
+            if self.mode == self.MODE_RICH_TO_PLAIN:
+                return value.plain
             elif self.mode == self.MODE_RICH_TO_HTML:
-                return r.html
-        return r
+                return value.html
+        else:
+            value = str(value)
+            if self.mode == self.MODE_RICH_TO_HTML:
+                value = conditional_escape(value)
+            return value
 
     def format_field(self, value, format_spec):
         # Ignore format_spec
-        return super().format_field(value, '')
+        return super().format_field(self._prepare_value(value), '')
 
 
-def format_map(template, context, raise_on_missing=False, mode=SafeFormatter.MODE_IGNORE_RICH):
+def format_map(template, context, raise_on_missing=False, mode=SafeFormatter.MODE_RICH_TO_PLAIN):
     if not isinstance(template, str):
         template = str(template)
     return SafeFormatter(context, raise_on_missing, mode=mode).format(template)

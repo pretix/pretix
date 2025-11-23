@@ -308,8 +308,8 @@ class VoucherBulkForm(VoucherForm):
     )
     Recipient = namedtuple('Recipient', 'email number name tag')
 
-    def _set_field_placeholders(self, fn, base_parameters):
-        placeholders = get_available_placeholders(self.instance.event, base_parameters)
+    def _set_field_placeholders(self, fn, base_parameters, rich=False):
+        placeholders = get_available_placeholders(self.instance.event, base_parameters, rich=rich)
         ht = format_placeholders_help_text(placeholders, self.instance.event)
 
         if self.fields[fn].help_text:
@@ -345,7 +345,7 @@ class VoucherBulkForm(VoucherForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._set_field_placeholders('send_subject', ['event', 'name'])
-        self._set_field_placeholders('send_message', ['event', 'voucher_list', 'name'])
+        self._set_field_placeholders('send_message', ['event', 'voucher_list', 'name'], rich=True)
 
         with language(self.instance.event.settings.locale, self.instance.event.settings.region):
             for f in ("send_subject", "send_message"):
