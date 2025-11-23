@@ -133,11 +133,11 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
     def template_name(self):
         raise NotImplementedError()
 
-    def compile_markdown(self, plaintext):
-        return markdown_compile_email(plaintext)
+    def compile_markdown(self, plaintext, context=None):
+        return markdown_compile_email(plaintext, context=context)
 
     def render(self, plain_body: str, plain_signature: str, subject: str, order, position, context) -> str:
-        body_md = self.compile_markdown(plain_body)
+        body_md = self.compile_markdown(plain_body, context)
         if context:
             body_md = format_map(body_md, context=context, mode=SafeFormatter.MODE_RICH_TO_HTML)
         htmlctx = {
