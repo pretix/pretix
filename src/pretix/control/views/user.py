@@ -292,16 +292,13 @@ class User2FAMainView(RecentAuthenticationRequiredMixin, TemplateView):
         ctx = super().get_context_data()
 
         try:
-            ctx['static_tokens'] = StaticDevice.objects.get(user=self.request.user, name='emergency').token_set.all()
+            ctx['static_tokens_device'] = StaticDevice.objects.get(user=self.request.user, name='emergency')
         except StaticDevice.MultipleObjectsReturned:
-            ctx['static_tokens'] = StaticDevice.objects.filter(
+            ctx['static_tokens_device'] = StaticDevice.objects.filter(
                 user=self.request.user, name='emergency'
-            ).first().token_set.all()
+            ).first()
         except StaticDevice.DoesNotExist:
-            d = StaticDevice.objects.create(user=self.request.user, name='emergency')
-            for i in range(10):
-                d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
-            ctx['static_tokens'] = d.token_set.all()
+            ctx['static_tokens_device'] = None
 
         ctx['devices'] = []
         for dt in REAL_DEVICE_TYPES:
@@ -634,7 +631,8 @@ class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, Template
         self.request.user.update_session_token()
         update_session_auth_hash(self.request, self.request.user)
         messages.success(request, _('Your emergency codes have been newly generated. Remember to store them in a safe '
-                                    'place in case you lose access to your devices.'))
+                                    'place in case you lose access to your devices. You will not be able to view them '
+                                    'again here.\n\nYour emergency codes:\n- ' + '\n- '.join(t.token for t in d.token_set.all())))
         return redirect(reverse('control:user.settings.2fa'))
 
 

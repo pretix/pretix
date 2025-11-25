@@ -144,14 +144,23 @@
         </div>
         <div class="panel-body">
             <p>
-                {% trans "If you lose access to your devices, you can use one of the following keys to log in. We recommend to store them in a safe place, e.g. printed out or in a password manager. Every token can be used at most once." %}
+                {% blocktrans trimmed with generation_date_time=static_tokens_device.created_at %}
+                    If you lose access to your devices, you can use one of your emergency tokens to log in.
+                    We recommend to store them in a safe place, e.g. printed out or in a password manager.
+                    Every token can be used at most once.
+                {% endblocktrans %}
             </p>
-            <p>{% trans "Unused tokens:" %}</p>
-            <ul>
-                {% for t in static_tokens %}
-                    <li><code>{{ t.token }}</code></li>
-                {% endfor %}
-            </ul>
+            {% if static_tokens_device %}
+                <p>
+                    {% blocktrans trimmed with generation_date_time=static_tokens_device.created_at %}
+                        You generated your emergency tokens on {{ generation_date_time }}.
+                    {% endblocktrans %}
+                </p>
+            {% else %}
+                <p>
+                    {% trans "You don't have any emergency tokens yet." %}
+                </p>
+            {% endif %}
             <a href="{% url "control:user.settings.2fa.regenemergency" %}" class="btn btn-default">
                 <span class="fa fa-refresh"></span>
                 {% trans "Generate new emergency tokens" %}
