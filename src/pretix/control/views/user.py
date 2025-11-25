@@ -85,7 +85,7 @@ logger = logging.getLogger(__name__)
 
 
 class RecentAuthenticationRequiredMixin:
-    max_time = 3600
+    max_time = 900
 
     def dispatch(self, request, *args, **kwargs):
         tdelta = time.time() - request.session.get('pretix_auth_login_time', 0)
