@@ -49,12 +49,14 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views import View
+from django.views.decorators.cache import never_cache
 from django.views.generic import FormView, ListView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
@@ -87,6 +89,7 @@ logger = logging.getLogger(__name__)
 class RecentAuthenticationRequiredMixin:
     max_time = 900
 
+    @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         tdelta = time.time() - request.session.get('pretix_auth_login_time', 0)
         if tdelta > self.max_time:
