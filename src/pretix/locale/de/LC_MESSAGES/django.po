@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-20 10:37+0000\n"
-"PO-Revision-Date: 2025-11-12 16:08+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2025-11-26 18:39+0000\n"
+"Last-Translator: Mira <weller@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -33431,18 +33431,13 @@ msgstr "Kontonummer"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:7
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_messaging_noform.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_noform.html:5
-#, fuzzy
-#| msgid ""
-#| "After you submitted your order, we will redirect you to the payment "
-#| "service provider to complete your payment. You will then be redirected "
-#| "back here to get your tickets."
 msgid ""
 "After you submitted your order, we will redirect you to the payment service "
 "provider to complete your payment. You will then be redirected back here."
 msgstr ""
-"Nach dem Klick auf „Fortfahren“ werden wir Sie zum Zahlungsdienstleister "
+"Nach dem Absenden der Bestellung werden wir Sie zum Zahlungsdienstleister "
 "weiterleiten, um Ihre Zahlungsdaten einzugeben. Sie werden danach wieder "
-"hierher zurückgeleitet, um Ihre Bestellung zu bestätigen."
+"hierher zurückgeleitet."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
