@@ -89,8 +89,6 @@ class User2FADeviceAddForm(forms.Form):
 
 class UserPasswordChangeForm(forms.Form):
     error_messages = {
-        'pw_current': _("Please enter your current password if you want to change your email address "
-                        "or password."),
         'pw_current_wrong': _("The current password you entered was not correct."),
         'pw_mismatch': _("Please enter the same password twice"),
         'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
@@ -103,19 +101,19 @@ class UserPasswordChangeForm(forms.Form):
                                  attrs={'autocomplete': 'username'},
                              ))
     old_pw = forms.CharField(max_length=255,
-                             required=False,
+                             required=True,
                              label=_("Your current password"),
                              widget=forms.PasswordInput(
                                  attrs={'autocomplete': 'current-password'},
                              ))
     new_pw = forms.CharField(max_length=255,
-                             required=False,
+                             required=True,
                              label=_("New password"),
                              widget=forms.PasswordInput(
                                  attrs={'autocomplete': 'new-password'},
                              ))
     new_pw_repeat = forms.CharField(max_length=255,
-                                    required=False,
+                                    required=True,
                                     label=_("Repeat new password"),
                                     widget=forms.PasswordInput(
                                         attrs={'autocomplete': 'new-password'},
@@ -130,7 +128,7 @@ class UserPasswordChangeForm(forms.Form):
     def clean_old_pw(self):
         old_pw = self.cleaned_data.get('old_pw')
 
-        if old_pw and settings.HAS_REDIS:
+        if settings.HAS_REDIS:
             from django_redis import get_redis_connection
             rc = get_redis_connection("redis")
             cnt = rc.incr('pretix_pwchange_%s' % self.user.pk)
@@ -141,7 +139,7 @@ class UserPasswordChangeForm(forms.Form):
                     code='rate_limit',
                 )
 
-        if old_pw and not check_password(old_pw, self.user.password):
+        if not check_password(old_pw, self.user.password):
             raise forms.ValidationError(
                 self.error_messages['pw_current_wrong'],
                 code='pw_current_wrong',
@@ -151,17 +149,22 @@ class UserPasswordChangeForm(forms.Form):
 
     def clean_new_pw(self):
         password1 = self.cleaned_data.get('new_pw', '')
-        if password1 and validate_password(password1, user=self.user) is not None:
+        if validate_password(password1, user=self.user) is not None:
             raise forms.ValidationError(
                 _(password_validators_help_texts()),
                 code='pw_invalid'
+            )
+        if self.user.check_password(password1):
+            raise forms.ValidationError(
+                self.error_messages['pw_equal'],
+                code='pw_equal',
             )
         return password1
 
     def clean_new_pw_repeat(self):
         password1 = self.cleaned_data.get('new_pw')
         password2 = self.cleaned_data.get('new_pw_repeat')
-        if password1 and password1 != password2:
+        if password1 != password2:
             raise forms.ValidationError(
                 self.error_messages['pw_mismatch'],
                 code='pw_mismatch'
