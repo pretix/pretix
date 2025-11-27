@@ -225,16 +225,20 @@ def test_placeholder_html_rendering_from_string(env):
     template = LazyI18nString({
         "en": "Event name: {event}\n\nPayment info:\n{payment_info}\n\n**Meta**: {meta_Test}\n\n"
               "Event website: [{event}](https://example.org/{event_slug})\n\n"
-              "Other website: [{event}]({meta_Website})"
+              "Other website: [{event}]({meta_Website})\n\n"
+              "URL: {url}\n\n"
+              "URL with text: <a href=\"{url}\">Test</a>"
     })
     djmail.outbox = []
     event, user, organizer = env
     event.name = "<strong>event & co. kg</strong>"
     event.save()
-    mail('dummy@dummy.dummy', '{event} Test subject', template, get_email_context(
+    ctx = get_email_context(
         event=event,
         payment_info="**IBAN**: 123  \n**BIC**: 456",
-    ), event)
+    )
+    ctx["url"] = "https://google.com"
+    mail('dummy@dummy.dummy', '{event} Test subject', template, ctx, event)
 
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [user.email]
@@ -243,6 +247,8 @@ def test_placeholder_html_rendering_from_string(env):
     assert 'Other website: [<strong>event & co. kg</strong>](https://example.com)' in djmail.outbox[0].body
     assert '**IBAN**: 123  \n**BIC**: 456' in djmail.outbox[0].body
     assert '**Meta**: *Beep*' in djmail.outbox[0].body
+    assert 'URL: https://google.com' in djmail.outbox[0].body
+    assert 'URL with text: <a href="https://google.com">Test</a>' in djmail.outbox[0].body
     assert '&lt;' not in djmail.outbox[0].body
     assert '&amp;' not in djmail.outbox[0].body
     html = _extract_html(djmail.outbox[0])
@@ -256,5 +262,13 @@ def test_placeholder_html_rendering_from_string(env):
     )
     assert re.search(
         r'Other website: <a href="https://example.com" rel="noopener" style="[^"]+" target="_blank">&lt;strong&gt;event &amp; co. kg&lt;/strong&gt;</a>',
+        html
+    )
+    assert re.search(
+        r'URL: <a href="https://google.com" rel="noopener" style="[^"]+" target="_blank">https://google.com</a>',
+        html
+    )
+    assert re.search(
+        r'URL with text: <a href="https://google.com" rel="noopener" style="[^"]+" target="_blank">Test</a>',
         html
     )
