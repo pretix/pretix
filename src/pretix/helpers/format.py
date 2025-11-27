@@ -45,10 +45,11 @@ class SafeFormatter(Formatter):
     MODE_RICH_TO_PLAIN = 1
     MODE_RICH_TO_HTML = 2
 
-    def __init__(self, context, raise_on_missing=False, mode=MODE_RICH_TO_PLAIN):
+    def __init__(self, context, raise_on_missing=False, mode=MODE_RICH_TO_PLAIN, linkifier=None):
         self.context = context
         self.raise_on_missing = raise_on_missing
         self.mode = mode
+        self.linkifier = linkifier
 
     def get_field(self, field_name, args, kwargs):
         return self.get_value(field_name, args, kwargs), field_name
@@ -68,6 +69,8 @@ class SafeFormatter(Formatter):
             value = str(value)
             if self.mode == self.MODE_RICH_TO_HTML:
                 value = conditional_escape(value)
+                if self.linkifier:
+                    value = self.linkifier.linkify(value)
             return value
 
     def format_field(self, value, format_spec):
@@ -75,7 +78,7 @@ class SafeFormatter(Formatter):
         return super().format_field(self._prepare_value(value), '')
 
 
-def format_map(template, context, raise_on_missing=False, mode=SafeFormatter.MODE_RICH_TO_PLAIN):
+def format_map(template, context, raise_on_missing=False, mode=SafeFormatter.MODE_RICH_TO_PLAIN, linkifier=None):
     if not isinstance(template, str):
         template = str(template)
-    return SafeFormatter(context, raise_on_missing, mode=mode).format(template)
+    return SafeFormatter(context, raise_on_missing, mode=mode, linkifier=linkifier).format(template)
