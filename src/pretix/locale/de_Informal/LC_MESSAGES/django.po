@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-11-26 18:39+0000\n"
-"Last-Translator: Mira <weller@rami.io>\n"
+"PO-Revision-Date: 2025-11-27 14:28+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -305,11 +305,8 @@ msgid "The program end must not be before the program start."
 msgstr "Das Programmende darf nicht vor dem Start liegen."
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2315
-#, fuzzy
-#| msgid "You can not select a subevent if your event is not an event series."
 msgid "You cannot use program times on an event series."
-msgstr ""
-"Du kannst keinen Termin auswählen, da dies keine Veranstaltungsreihe ist."
+msgstr "Du kannst Programmzeiten nicht in Veranstaltungsreihen verwenden."
 
 #: pretix/api/serializers/item.py:337
 msgid ""
@@ -5403,13 +5400,6 @@ msgstr ""
 "keinen einzeln gesetzten Preis hat, wird dieser Preis verwendet."
 
 #: pretix/base/models/items.py:506
-#, fuzzy
-#| msgid ""
-#| "If this option is active, your users can choose the price themselves. The "
-#| "price configured above is then interpreted as the minimum price a user "
-#| "has to enter. You could use this e.g. to collect additional donations for "
-#| "your event. This is currently not supported for products that are bought "
-#| "as an add-on to other products."
 msgid ""
 "If this option is active, your users can choose the price themselves. The "
 "price configured above is then interpreted as the minimum price a user has "
@@ -5419,8 +5409,7 @@ msgstr ""
 "Wenn diese Option aktiviert ist, kann der Kunde den Preis selbst bearbeiten. "
 "Der oben eingestellte Preis ist der minimale Preis, der eingegeben werden "
 "muss. Du kannst dies z.B. benutzen, um freiwillige Spenden für deine "
-"Veranstaltung zu sammeln. Dies wird aktuell für Produkte, die als Zusatz zu "
-"einem anderen Projekt verkauft werden, nicht unterstützt."
+"Veranstaltung zu sammeln."
 
 #: pretix/base/models/items.py:511 pretix/base/models/items.py:1175
 msgid "Suggested price"
@@ -13999,6 +13988,7 @@ msgstr "Standard ({value})"
 #: pretix/control/forms/event.py:380
 msgid "The currency cannot be changed because orders already exist."
 msgstr ""
+"Die Währung kann nicht geändert werden, da bereits Bestellungen existieren."
 
 #: pretix/control/forms/event.py:391 pretix/control/forms/event.py:404
 msgid "Domain"
@@ -17409,10 +17399,8 @@ msgid "The voucher has been deleted."
 msgstr "Der Gutschein wurde gelöscht."
 
 #: pretix/control/logdisplay.py:585
-#, fuzzy
-#| msgid "The selected voucher has been deleted."
 msgid "Cart positions including the voucher have been deleted."
-msgstr "Der ausgewählte Gutschein wurde gelöscht."
+msgstr "Warenkorb-Positionen mit dem Gutschein wurden gelöscht."
 
 #: pretix/control/logdisplay.py:586
 #, python-brace-format
@@ -25847,7 +25835,7 @@ msgstr "Neuen Wert hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:95
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Alphabetisch sortieren"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:14
 msgid "No media have been created yet."
