@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 10:37+0000\n"
+"POT-Creation-Date: 2025-11-27 13:57+0000\n"
 "PO-Revision-Date: 2025-11-18 17:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
@@ -1227,7 +1227,7 @@ msgstr "이름"
 msgid "Family name"
 msgstr "성"
 
-#: pretix/base/email.py:203 pretix/base/exporters/items.py:157
+#: pretix/base/email.py:218 pretix/base/exporters/items.py:157
 #: pretix/base/exporters/items.py:205 pretix/base/models/tax.py:381
 #: pretix/control/templates/pretixcontrol/event/tax.html:35
 #: pretix/control/templates/pretixcontrol/event/tax.html:54
@@ -1241,7 +1241,7 @@ msgstr "성"
 msgid "Default"
 msgstr "기본 설정"
 
-#: pretix/base/email.py:210
+#: pretix/base/email.py:225
 msgid "Simple with logo"
 msgstr "로고가 있는  깔끔한 디자인"
 
@@ -3294,7 +3294,7 @@ msgstr "로그인 유지"
 msgid "This combination of credentials is not known to our system."
 msgstr "이 자격 증명 조합은 우리 시스템에 알려져 있지 않습니다."
 
-#: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:96
+#: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:94
 #: pretix/presale/forms/customer.py:385 pretix/presale/forms/customer.py:457
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr "보안상의 이유로 다시 시도하기 전에 5분만 기다려 주세요."
@@ -3309,7 +3309,7 @@ msgid ""
 msgstr "이미 해당 이메일 주소로 등록하셨으니 로그인 양식을 사용해 주세요."
 
 #: pretix/base/forms/auth.py:157 pretix/base/forms/auth.py:215
-#: pretix/base/forms/user.py:95 pretix/control/forms/users.py:45
+#: pretix/base/forms/user.py:93 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:295 pretix/presale/forms/customer.py:384
 msgid "Please enter the same password twice"
 msgstr "동일한 비밀번호를 두 번 입력해 주세요"
@@ -3319,7 +3319,7 @@ msgstr "동일한 비밀번호를 두 번 입력해 주세요"
 msgid "Repeat password"
 msgstr "반복 비밀번호"
 
-#: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:101
+#: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:99
 #, fuzzy
 #| msgid "Email address"
 msgid "Your email address"
@@ -3487,49 +3487,43 @@ msgstr "Authenticator(인증부호) 애플리케이션이 탑재된 스마트폰
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgstr "WebAuthn 호환 하드웨어 토큰(예: Yubikey)"
 
-#: pretix/base/forms/user.py:92
-msgid ""
-"Please enter your current password if you want to change your email address "
-"or password."
-msgstr "이메일 주소나 비밀번호를 변경하려면 현재 비밀번호를 입력하세요."
-
-#: pretix/base/forms/user.py:94 pretix/presale/forms/customer.py:383
+#: pretix/base/forms/user.py:92 pretix/presale/forms/customer.py:383
 #: pretix/presale/forms/customer.py:456
 msgid "The current password you entered was not correct."
 msgstr "입력한 현재 비밀번호가 잘못되었습니다."
 
-#: pretix/base/forms/user.py:97
+#: pretix/base/forms/user.py:95
 msgid "Please choose a password different to your current one."
 msgstr "현재 비밀번호와 다른 비밀번호를 선택해 주세요."
 
-#: pretix/base/forms/user.py:107 pretix/presale/forms/customer.py:392
+#: pretix/base/forms/user.py:105 pretix/presale/forms/customer.py:392
 #: pretix/presale/forms/customer.py:461
 msgid "Your current password"
 msgstr "현재 비밀번호"
 
-#: pretix/base/forms/user.py:113 pretix/control/forms/users.py:50
+#: pretix/base/forms/user.py:111 pretix/control/forms/users.py:50
 #: pretix/presale/forms/customer.py:397
 msgid "New password"
 msgstr "새 비밀번호"
 
-#: pretix/base/forms/user.py:119 pretix/control/forms/users.py:54
+#: pretix/base/forms/user.py:117 pretix/control/forms/users.py:54
 msgid "Repeat new password"
 msgstr "새 비밀번호 반복"
 
-#: pretix/base/forms/user.py:173 pretix/control/forms/users.py:43
+#: pretix/base/forms/user.py:176 pretix/control/forms/users.py:43
 msgid ""
 "There already is an account associated with this email address. Please "
 "choose a different one."
 msgstr ""
 "이 이메일 주소와 관련된 계정이 이미 있습니다. 다른 계정을 선택해 주세요."
 
-#: pretix/base/forms/user.py:176
+#: pretix/base/forms/user.py:179
 #, fuzzy
 #| msgid "Email address"
 msgid "Old email address"
 msgstr "이메일 주소"
 
-#: pretix/base/forms/user.py:177
+#: pretix/base/forms/user.py:180
 #, fuzzy
 #| msgid "Email address"
 msgid "New email address"
@@ -3706,7 +3700,7 @@ msgstr ""
 "\n"
 "{to_date}까지"
 
-#: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:511
+#: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:512
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
@@ -4359,7 +4353,7 @@ msgstr "전원을 끄면 알림을 받을 수 없습니다."
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:15
 #: pretix/control/templates/pretixcontrol/users/form.html:4
 #: pretix/control/templates/pretixcontrol/users/form.html:6
-#: pretix/control/views/organizer.py:170 tests/base/test_mail.py:149
+#: pretix/control/views/organizer.py:170 tests/base/test_mail.py:157
 msgid "User"
 msgstr "사용자"
 
@@ -7348,7 +7342,7 @@ msgstr "날짜, 월일"
 #: pretix/base/notifications.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:755
 #: pretix/plugins/reports/accountingreport.py:318
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:442
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:446
 msgid "Net total"
 msgstr "총합"
 
@@ -7360,8 +7354,8 @@ msgstr "보류 중인 금액"
 msgid "Purchased products"
 msgstr "구매한 제품"
 
-#: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:384
-#: pretix/base/services/placeholders.py:393
+#: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:415
+#: pretix/base/services/placeholders.py:424
 #: pretix/base/templates/pretixbase/email/order_details.html:151
 msgid "View order details"
 msgstr "주문 세부 정보 보기"
@@ -7835,10 +7829,10 @@ msgstr "추가 기능을 포함한 가격"
 
 #: pretix/base/pdf.py:185 pretix/base/pdf.py:343
 #: pretix/base/services/invoices.py:582
-#: pretix/base/services/placeholders.py:571
-#: pretix/base/services/placeholders.py:653
-#: pretix/base/services/placeholders.py:669
-#: pretix/base/services/placeholders.py:678 pretix/control/views/event.py:909
+#: pretix/base/services/placeholders.py:602
+#: pretix/base/services/placeholders.py:687
+#: pretix/base/services/placeholders.py:703
+#: pretix/base/services/placeholders.py:712 pretix/control/views/event.py:909
 msgid "John Doe"
 msgstr "도 존"
 
@@ -8165,7 +8159,7 @@ msgid "Attendee name for salutation"
 msgstr "경례를 위한 참석자 이름"
 
 #: pretix/base/pdf.py:667 pretix/base/pdf.py:690
-#: pretix/base/services/placeholders.py:696
+#: pretix/base/services/placeholders.py:730
 #: pretix/control/forms/organizer.py:664
 msgid "Mr Doe"
 msgstr "미스터 도"
@@ -8940,7 +8934,7 @@ msgstr ""
 msgid "You are receiving this email because you placed an order for {event}."
 msgstr "{event}를 주문하셨기 때문에 이 이메일을 받게 되었습니다."
 
-#: pretix/base/services/mail.py:494
+#: pretix/base/services/mail.py:495
 msgctxt "attachment_filename"
 msgid "Calendar invite"
 msgstr "캘린더 초대"
@@ -9369,33 +9363,33 @@ msgstr ""
 "송금을 다시 시도하는 동안 오류가 발생했습니다. 자세한 내용은 이벤트 주최자에"
 "게 문의하세요."
 
-#: pretix/base/services/placeholders.py:469
-#: pretix/base/services/placeholders.py:478
+#: pretix/base/services/placeholders.py:500
+#: pretix/base/services/placeholders.py:509
 #: pretix/base/templates/pretixbase/email/order_details.html:49
 msgid "View registration details"
 msgstr "등록 세부 정보 보기"
 
-#: pretix/base/services/placeholders.py:575
+#: pretix/base/services/placeholders.py:606
 msgid "Sample Corporation"
 msgstr "샘플 코퍼레이션"
 
-#: pretix/base/services/placeholders.py:615
+#: pretix/base/services/placeholders.py:647
 msgid "Sample Admission Ticket"
 msgstr "샘플 입장권"
 
-#: pretix/base/services/placeholders.py:657
+#: pretix/base/services/placeholders.py:691
 msgid "An individual text with a reason can be inserted here."
 msgstr "여기에 이유가 있는 개별 텍스트를 삽입할 수 있습니다."
 
-#: pretix/base/services/placeholders.py:661
+#: pretix/base/services/placeholders.py:695
 msgid "The amount has been charged to your card."
 msgstr "금액이 카드로 청구되었습니다."
 
-#: pretix/base/services/placeholders.py:665
+#: pretix/base/services/placeholders.py:699
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "이 은행 계좌로 송금해 주세요: 9999-9999-9999-9999"
 
-#: pretix/base/services/placeholders.py:765
+#: pretix/base/services/placeholders.py:799
 #: pretix/control/views/organizer.py:348
 msgid "This value will be replaced based on dynamic parameters."
 msgstr "이 값은 동적 매개변수에 따라 대체됩니다."
@@ -17856,7 +17850,7 @@ msgstr "티켓"
 #: pretix/control/templates/pretixcontrol/event/tax.html:4
 #: pretix/control/templates/pretixcontrol/event/tax.html:6
 #: pretix/control/templates/pretixcontrol/order/index.html:764
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:453
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:457
 msgid "Taxes"
 msgstr ""
 
@@ -22017,7 +22011,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:673
 #: pretix/control/templates/pretixcontrol/order/index.html:723
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:360
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:415
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:419
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
 msgstr ""
@@ -22026,7 +22020,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:683
 #: pretix/control/templates/pretixcontrol/order/index.html:733
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:370
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:425
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:429
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
 msgstr ""
@@ -22997,7 +22991,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:446
 #: pretix/plugins/reports/exporters.py:638
 #: pretix/plugins/reports/exporters.py:969
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:469
 msgid "Total"
 msgstr "합계"
 
@@ -29598,7 +29592,7 @@ msgid "Upload time"
 msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:830
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:519
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:523
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:52
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:148
 msgid "OK"
@@ -32967,24 +32961,24 @@ msgstr ""
 msgid "Current value:"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:467
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:471
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
 msgstr[0] ""
 msgstr[1] ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:481
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:485
 #, python-format
 msgid "incl. %(tax_sum)s taxes"
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:501
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:505
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:505
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
@@ -32992,18 +32986,18 @@ msgstr ""
 "카트에 있는 상품은 더 이상 예약되지 않습니다. 주문이 가능한 한 주문을 완료할 "
 "수 있습니다."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:510
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
 msgid "Renew reservation"
 msgstr "예약 갱신"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:522
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:526
 #, fuzzy
 #| msgid "Reservation period"
 msgid "Reservation renewed"
 msgstr "예약 기간"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:528
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:532
 msgid "Overview of your ordered products."
 msgstr ""
 
@@ -34875,6 +34869,11 @@ msgstr ""
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr "코소보"
+
+#~ msgid ""
+#~ "Please enter your current password if you want to change your email "
+#~ "address or password."
+#~ msgstr "이메일 주소나 비밀번호를 변경하려면 현재 비밀번호를 입력하세요."
 
 #, python-brace-format
 #~ msgid ""

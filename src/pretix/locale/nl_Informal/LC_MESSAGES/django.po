@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 10:37+0000\n"
+"POT-Creation-Date: 2025-11-27 13:57+0000\n"
 "PO-Revision-Date: 2024-02-13 16:00+0000\n"
 "Last-Translator: Wessel Stam <info@wesselstam.nl>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -1233,7 +1233,7 @@ msgstr "Voornaam"
 msgid "Family name"
 msgstr "Achternaam"
 
-#: pretix/base/email.py:203 pretix/base/exporters/items.py:157
+#: pretix/base/email.py:218 pretix/base/exporters/items.py:157
 #: pretix/base/exporters/items.py:205 pretix/base/models/tax.py:381
 #: pretix/control/templates/pretixcontrol/event/tax.html:35
 #: pretix/control/templates/pretixcontrol/event/tax.html:54
@@ -1247,7 +1247,7 @@ msgstr "Achternaam"
 msgid "Default"
 msgstr "Standaard"
 
-#: pretix/base/email.py:210
+#: pretix/base/email.py:225
 msgid "Simple with logo"
 msgstr "Simpel met logo"
 
@@ -3351,7 +3351,7 @@ msgstr ""
 "Deze combinatie van gebruikersnaam en wachtwoord is niet bekend in onze "
 "database."
 
-#: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:96
+#: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:94
 #: pretix/presale/forms/customer.py:385 pretix/presale/forms/customer.py:457
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr ""
@@ -3368,7 +3368,7 @@ msgid ""
 msgstr "Er is al een account met dit e-mailadres, gebruik het inlogformulier."
 
 #: pretix/base/forms/auth.py:157 pretix/base/forms/auth.py:215
-#: pretix/base/forms/user.py:95 pretix/control/forms/users.py:45
+#: pretix/base/forms/user.py:93 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:295 pretix/presale/forms/customer.py:384
 msgid "Please enter the same password twice"
 msgstr "Voer twee keer hetzelfde wachtwoord in"
@@ -3378,7 +3378,7 @@ msgstr "Voer twee keer hetzelfde wachtwoord in"
 msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
-#: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:101
+#: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:99
 #, fuzzy
 #| msgid "Email address"
 msgid "Your email address"
@@ -3546,42 +3546,30 @@ msgstr "Smartphone met de Authenticator-applicatie"
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgstr "WebAuthn-compatibel hardware-token (bijvoorbeeld Yubikey)"
 
-#: pretix/base/forms/user.py:92
-#, fuzzy
-#| msgid ""
-#| "Please enter your current password if you want to change your email "
-#| "address or password."
-msgid ""
-"Please enter your current password if you want to change your email address "
-"or password."
-msgstr ""
-"Voer je huidige wachtwoord in als je je e-mailadres of wachtwoord wilt "
-"wijzigen."
-
-#: pretix/base/forms/user.py:94 pretix/presale/forms/customer.py:383
+#: pretix/base/forms/user.py:92 pretix/presale/forms/customer.py:383
 #: pretix/presale/forms/customer.py:456
 msgid "The current password you entered was not correct."
 msgstr "Het huidige wachtwoord dat je hebt ingevoerd is niet correct."
 
-#: pretix/base/forms/user.py:97
+#: pretix/base/forms/user.py:95
 msgid "Please choose a password different to your current one."
 msgstr "Gebruik een wachtwoord dat anders is dan je huidige wachtwoord."
 
-#: pretix/base/forms/user.py:107 pretix/presale/forms/customer.py:392
+#: pretix/base/forms/user.py:105 pretix/presale/forms/customer.py:392
 #: pretix/presale/forms/customer.py:461
 msgid "Your current password"
 msgstr "Je huidige wachtwoord"
 
-#: pretix/base/forms/user.py:113 pretix/control/forms/users.py:50
+#: pretix/base/forms/user.py:111 pretix/control/forms/users.py:50
 #: pretix/presale/forms/customer.py:397
 msgid "New password"
 msgstr "Nieuw wachtwoord"
 
-#: pretix/base/forms/user.py:119 pretix/control/forms/users.py:54
+#: pretix/base/forms/user.py:117 pretix/control/forms/users.py:54
 msgid "Repeat new password"
 msgstr "Herhaal nieuw wachtwoord"
 
-#: pretix/base/forms/user.py:173 pretix/control/forms/users.py:43
+#: pretix/base/forms/user.py:176 pretix/control/forms/users.py:43
 msgid ""
 "There already is an account associated with this email address. Please "
 "choose a different one."
@@ -3589,13 +3577,13 @@ msgstr ""
 "Er is al een account gekoppeld aan dit e-mailadres. Kies een ander e-"
 "mailadres."
 
-#: pretix/base/forms/user.py:176
+#: pretix/base/forms/user.py:179
 #, fuzzy
 #| msgid "Email address"
 msgid "Old email address"
 msgstr "E-mailadres"
 
-#: pretix/base/forms/user.py:177
+#: pretix/base/forms/user.py:180
 #, fuzzy
 #| msgid "Email address"
 msgid "New email address"
@@ -3774,7 +3762,7 @@ msgstr ""
 "{from_date}\n"
 "tot {to_date}"
 
-#: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:511
+#: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:512
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
@@ -4452,7 +4440,7 @@ msgstr "Als dit is uitgeschakeld ontvang je geen enkele melding."
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:15
 #: pretix/control/templates/pretixcontrol/users/form.html:4
 #: pretix/control/templates/pretixcontrol/users/form.html:6
-#: pretix/control/views/organizer.py:170 tests/base/test_mail.py:149
+#: pretix/control/views/organizer.py:170 tests/base/test_mail.py:157
 msgid "User"
 msgstr "Gebruiker"
 
@@ -7663,7 +7651,7 @@ msgstr "Datums"
 #: pretix/base/notifications.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:755
 #: pretix/plugins/reports/accountingreport.py:318
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:442
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:446
 msgid "Net total"
 msgstr "Netto totaal"
 
@@ -7675,8 +7663,8 @@ msgstr "Openstaand bedrag"
 msgid "Purchased products"
 msgstr "Gekochte producten"
 
-#: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:384
-#: pretix/base/services/placeholders.py:393
+#: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:415
+#: pretix/base/services/placeholders.py:424
 #: pretix/base/templates/pretixbase/email/order_details.html:151
 msgid "View order details"
 msgstr "Bekijk bestelgegevens"
@@ -8185,10 +8173,10 @@ msgstr "Prijs inclusief add-ons"
 
 #: pretix/base/pdf.py:185 pretix/base/pdf.py:343
 #: pretix/base/services/invoices.py:582
-#: pretix/base/services/placeholders.py:571
-#: pretix/base/services/placeholders.py:653
-#: pretix/base/services/placeholders.py:669
-#: pretix/base/services/placeholders.py:678 pretix/control/views/event.py:909
+#: pretix/base/services/placeholders.py:602
+#: pretix/base/services/placeholders.py:687
+#: pretix/base/services/placeholders.py:703
+#: pretix/base/services/placeholders.py:712 pretix/control/views/event.py:909
 msgid "John Doe"
 msgstr "John Doe"
 
@@ -8549,7 +8537,7 @@ msgid "Attendee name for salutation"
 msgstr "Namen van aanwezigen"
 
 #: pretix/base/pdf.py:667 pretix/base/pdf.py:690
-#: pretix/base/services/placeholders.py:696
+#: pretix/base/services/placeholders.py:730
 #: pretix/control/forms/organizer.py:664
 msgid "Mr Doe"
 msgstr "Meneer Janssen"
@@ -9405,7 +9393,7 @@ msgstr ""
 "Je ontvangt deze e-mail omdat je een bestelling geplaatst hebt voor het "
 "evenement {event}."
 
-#: pretix/base/services/mail.py:494
+#: pretix/base/services/mail.py:495
 #, fuzzy
 #| msgid "resend invite"
 msgctxt "attachment_filename"
@@ -9901,33 +9889,33 @@ msgstr ""
 "Er is iets misgegaan toen we het geld naar je over probeerden te maken. Neem "
 "contact op met de organisator van het evenement voor meer informatie."
 
-#: pretix/base/services/placeholders.py:469
-#: pretix/base/services/placeholders.py:478
+#: pretix/base/services/placeholders.py:500
+#: pretix/base/services/placeholders.py:509
 #: pretix/base/templates/pretixbase/email/order_details.html:49
 msgid "View registration details"
 msgstr "Bekijk aanmeldingsgegevens"
 
-#: pretix/base/services/placeholders.py:575
+#: pretix/base/services/placeholders.py:606
 msgid "Sample Corporation"
 msgstr "Voorbeeldbedrijf"
 
-#: pretix/base/services/placeholders.py:615
+#: pretix/base/services/placeholders.py:647
 msgid "Sample Admission Ticket"
 msgstr "Voorbeeldtoegangsbewijs"
 
-#: pretix/base/services/placeholders.py:657
+#: pretix/base/services/placeholders.py:691
 msgid "An individual text with a reason can be inserted here."
 msgstr "Een individuele tekst met een reden kan hier worden ingevoerd."
 
-#: pretix/base/services/placeholders.py:661
+#: pretix/base/services/placeholders.py:695
 msgid "The amount has been charged to your card."
 msgstr "Het bedrag is van uw kaart afgeschreven."
 
-#: pretix/base/services/placeholders.py:665
+#: pretix/base/services/placeholders.py:699
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "Maak het geld over naar deze bankrekening: NL13 TEST 0123 4567 89"
 
-#: pretix/base/services/placeholders.py:765
+#: pretix/base/services/placeholders.py:799
 #: pretix/control/views/organizer.py:348
 msgid "This value will be replaced based on dynamic parameters."
 msgstr ""
@@ -19020,7 +19008,7 @@ msgstr "Kaartjes"
 #: pretix/control/templates/pretixcontrol/event/tax.html:4
 #: pretix/control/templates/pretixcontrol/event/tax.html:6
 #: pretix/control/templates/pretixcontrol/order/index.html:764
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:453
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:457
 msgid "Taxes"
 msgstr "Belastingen"
 
@@ -23586,7 +23574,7 @@ msgstr "Kan alleen worden gekocht met een voucher"
 #: pretix/control/templates/pretixcontrol/order/index.html:673
 #: pretix/control/templates/pretixcontrol/order/index.html:723
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:360
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:415
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:419
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
 msgstr "<strong>plus</strong> %(rate)s%% %(taxname)s"
@@ -23595,7 +23583,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(taxname)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:683
 #: pretix/control/templates/pretixcontrol/order/index.html:733
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:370
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:425
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:429
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
 msgstr "incl. %(rate)s%% %(taxname)s"
@@ -24688,7 +24676,7 @@ msgstr "ONVEILIG"
 #: pretix/plugins/reports/exporters.py:446
 #: pretix/plugins/reports/exporters.py:638
 #: pretix/plugins/reports/exporters.py:969
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:469
 msgid "Total"
 msgstr "Totaal"
 
@@ -32314,7 +32302,7 @@ msgid "Upload time"
 msgstr "Downloadtijd"
 
 #: pretix/plugins/checkinlists/exporters.py:830
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:519
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:523
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:52
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:148
 msgid "OK"
@@ -36335,19 +36323,19 @@ msgstr ""
 msgid "Current value:"
 msgstr "Huidige waarde"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:467
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:471
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
 msgstr[0] "Een product"
 msgstr[1] "%(num)s producten"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:481
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:485
 #, python-format
 msgid "incl. %(tax_sum)s taxes"
 msgstr "incl. %(tax_sum)s belasting"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:501
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:505
 #, fuzzy, python-format
 #| msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
@@ -36355,7 +36343,7 @@ msgstr ""
 "De items in je winkelwagen zijn voor je gereserveerd voor %(minutes)s "
 "minuten."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:505
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 #, fuzzy
 #| msgid "The items in your cart are no longer reserved for you."
 msgid ""
@@ -36363,20 +36351,20 @@ msgid ""
 "complete your order as long as they’re available."
 msgstr "De items in je winkelwagen zijn niet meer voor je gereserveerd."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:510
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
 #, fuzzy
 #| msgid "Product description"
 msgid "Renew reservation"
 msgstr "Productomschrijving"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:522
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:526
 #, fuzzy
 #| msgid "Reservation period"
 msgid "Reservation renewed"
 msgstr "Reserveerperiode"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:528
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:532
 msgid "Overview of your ordered products."
 msgstr ""
 
@@ -38651,6 +38639,17 @@ msgstr "Schrijftoegang"
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid ""
+#~| "Please enter your current password if you want to change your email "
+#~| "address or password."
+#~ msgid ""
+#~ "Please enter your current password if you want to change your email "
+#~ "address or password."
+#~ msgstr ""
+#~ "Voer je huidige wachtwoord in als je je e-mailadres of wachtwoord wilt "
+#~ "wijzigen."
 
 #, python-brace-format
 #~ msgid ""

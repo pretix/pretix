@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 10:37+0000\n"
+"POT-Creation-Date: 2025-11-27 13:57+0000\n"
 "PO-Revision-Date: 2025-11-21 01:00+0000\n"
 "Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -1226,7 +1226,7 @@ msgstr "Nome próprio"
 msgid "Family name"
 msgstr "Apelido"
 
-#: pretix/base/email.py:203 pretix/base/exporters/items.py:157
+#: pretix/base/email.py:218 pretix/base/exporters/items.py:157
 #: pretix/base/exporters/items.py:205 pretix/base/models/tax.py:381
 #: pretix/control/templates/pretixcontrol/event/tax.html:35
 #: pretix/control/templates/pretixcontrol/event/tax.html:54
@@ -1240,7 +1240,7 @@ msgstr "Apelido"
 msgid "Default"
 msgstr "Padrão"
 
-#: pretix/base/email.py:210
+#: pretix/base/email.py:225
 msgid "Simple with logo"
 msgstr "Simples com logotipo"
 
@@ -3312,7 +3312,7 @@ msgstr "Mantenha-me conectado"
 msgid "This combination of credentials is not known to our system."
 msgstr "Esta combinação de credenciais não é conhecida pelo nosso sistema."
 
-#: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:96
+#: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:94
 #: pretix/presale/forms/customer.py:385 pretix/presale/forms/customer.py:457
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr "Por motivos de segurança, aguarde 5 minutos antes de tentar novamente."
@@ -3329,7 +3329,7 @@ msgstr ""
 "de login."
 
 #: pretix/base/forms/auth.py:157 pretix/base/forms/auth.py:215
-#: pretix/base/forms/user.py:95 pretix/control/forms/users.py:45
+#: pretix/base/forms/user.py:93 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:295 pretix/presale/forms/customer.py:384
 msgid "Please enter the same password twice"
 msgstr "Por favor insira a mesma palavra-passe duas vezes"
@@ -3339,7 +3339,7 @@ msgstr "Por favor insira a mesma palavra-passe duas vezes"
 msgid "Repeat password"
 msgstr "Repita a palavra-passe"
 
-#: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:101
+#: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:99
 #, fuzzy
 #| msgid "Email address"
 msgid "Your email address"
@@ -3513,38 +3513,30 @@ msgstr "Smartphone com a aplicação Authenticator"
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgstr "WebAuthn-compatível hardware token (por exemplo Yubikey)"
 
-#: pretix/base/forms/user.py:92
-msgid ""
-"Please enter your current password if you want to change your email address "
-"or password."
-msgstr ""
-"Insira a sua palavra-passe atual, se quiser mudar o endereço de e-mail ou a "
-"palavra-passe."
-
-#: pretix/base/forms/user.py:94 pretix/presale/forms/customer.py:383
+#: pretix/base/forms/user.py:92 pretix/presale/forms/customer.py:383
 #: pretix/presale/forms/customer.py:456
 msgid "The current password you entered was not correct."
 msgstr "A palavra-passe atual digitada não estava correta."
 
-#: pretix/base/forms/user.py:97
+#: pretix/base/forms/user.py:95
 msgid "Please choose a password different to your current one."
 msgstr "Por favor escolha uma senha diferente da atual."
 
-#: pretix/base/forms/user.py:107 pretix/presale/forms/customer.py:392
+#: pretix/base/forms/user.py:105 pretix/presale/forms/customer.py:392
 #: pretix/presale/forms/customer.py:461
 msgid "Your current password"
 msgstr "A sua palavra-passe atual"
 
-#: pretix/base/forms/user.py:113 pretix/control/forms/users.py:50
+#: pretix/base/forms/user.py:111 pretix/control/forms/users.py:50
 #: pretix/presale/forms/customer.py:397
 msgid "New password"
 msgstr "Nova palavra-passe"
 
-#: pretix/base/forms/user.py:119 pretix/control/forms/users.py:54
+#: pretix/base/forms/user.py:117 pretix/control/forms/users.py:54
 msgid "Repeat new password"
 msgstr "Repita a nova palavra-passe"
 
-#: pretix/base/forms/user.py:173 pretix/control/forms/users.py:43
+#: pretix/base/forms/user.py:176 pretix/control/forms/users.py:43
 msgid ""
 "There already is an account associated with this email address. Please "
 "choose a different one."
@@ -3552,13 +3544,13 @@ msgstr ""
 "Já existe uma conta associada a este endereço de e-mail. Por favor, escolha "
 "um diferente."
 
-#: pretix/base/forms/user.py:176
+#: pretix/base/forms/user.py:179
 #, fuzzy
 #| msgid "Email address"
 msgid "Old email address"
 msgstr "Endereço de e-mail"
 
-#: pretix/base/forms/user.py:177
+#: pretix/base/forms/user.py:180
 #, fuzzy
 #| msgid "Email address"
 msgid "New email address"
@@ -3736,7 +3728,7 @@ msgstr ""
 "{from_date}\n"
 "até {to_date}"
 
-#: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:511
+#: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:512
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
@@ -4397,7 +4389,7 @@ msgstr "Se desligado, não receberá nenhuma notificação."
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:15
 #: pretix/control/templates/pretixcontrol/users/form.html:4
 #: pretix/control/templates/pretixcontrol/users/form.html:6
-#: pretix/control/views/organizer.py:170 tests/base/test_mail.py:149
+#: pretix/control/views/organizer.py:170 tests/base/test_mail.py:157
 msgid "User"
 msgstr "Utilizador"
 
@@ -7577,7 +7569,7 @@ msgstr "Datas"
 #: pretix/base/notifications.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:755
 #: pretix/plugins/reports/accountingreport.py:318
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:442
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:446
 msgid "Net total"
 msgstr "Total líquido"
 
@@ -7589,8 +7581,8 @@ msgstr "Valor pendente"
 msgid "Purchased products"
 msgstr "Produtos adquiridos"
 
-#: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:384
-#: pretix/base/services/placeholders.py:393
+#: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:415
+#: pretix/base/services/placeholders.py:424
 #: pretix/base/templates/pretixbase/email/order_details.html:151
 msgid "View order details"
 msgstr "Ver detalhes do pedido"
@@ -8094,10 +8086,10 @@ msgstr "Preço incluindo add-ons"
 
 #: pretix/base/pdf.py:185 pretix/base/pdf.py:343
 #: pretix/base/services/invoices.py:582
-#: pretix/base/services/placeholders.py:571
-#: pretix/base/services/placeholders.py:653
-#: pretix/base/services/placeholders.py:669
-#: pretix/base/services/placeholders.py:678 pretix/control/views/event.py:909
+#: pretix/base/services/placeholders.py:602
+#: pretix/base/services/placeholders.py:687
+#: pretix/base/services/placeholders.py:703
+#: pretix/base/services/placeholders.py:712 pretix/control/views/event.py:909
 msgid "John Doe"
 msgstr "John Doe"
 
@@ -8446,7 +8438,7 @@ msgid "Attendee name for salutation"
 msgstr "Nome do participante para saudação"
 
 #: pretix/base/pdf.py:667 pretix/base/pdf.py:690
-#: pretix/base/services/placeholders.py:696
+#: pretix/base/services/placeholders.py:730
 #: pretix/control/forms/organizer.py:664
 msgid "Mr Doe"
 msgstr "Zé Ninguem"
@@ -9264,7 +9256,7 @@ msgstr ""
 msgid "You are receiving this email because you placed an order for {event}."
 msgstr "Estás a receber este email porque fizeste um pedido para o {event}."
 
-#: pretix/base/services/mail.py:494
+#: pretix/base/services/mail.py:495
 msgctxt "attachment_filename"
 msgid "Calendar invite"
 msgstr "Convite do calendário"
@@ -9721,34 +9713,34 @@ msgstr ""
 "Houve um erro ao tentar enviar o dinheiro de volta para ti. Entra em "
 "contacto com o organizador do evento para mais informações."
 
-#: pretix/base/services/placeholders.py:469
-#: pretix/base/services/placeholders.py:478
+#: pretix/base/services/placeholders.py:500
+#: pretix/base/services/placeholders.py:509
 #: pretix/base/templates/pretixbase/email/order_details.html:49
 msgid "View registration details"
 msgstr "Ver detalhes do registo"
 
-#: pretix/base/services/placeholders.py:575
+#: pretix/base/services/placeholders.py:606
 msgid "Sample Corporation"
 msgstr "Empresa Exemplo"
 
-#: pretix/base/services/placeholders.py:615
+#: pretix/base/services/placeholders.py:647
 msgid "Sample Admission Ticket"
 msgstr "Exemplo de Bilhete"
 
-#: pretix/base/services/placeholders.py:657
+#: pretix/base/services/placeholders.py:691
 msgid "An individual text with a reason can be inserted here."
 msgstr "Um texto individual com uma razão pode ser inserido aqui."
 
-#: pretix/base/services/placeholders.py:661
+#: pretix/base/services/placeholders.py:695
 msgid "The amount has been charged to your card."
 msgstr "O montante foi debitado no seu cartão."
 
-#: pretix/base/services/placeholders.py:665
+#: pretix/base/services/placeholders.py:699
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr ""
 "Por favor, transfira o montante para a conta bancária: 9999-9999-9999-9999"
 
-#: pretix/base/services/placeholders.py:765
+#: pretix/base/services/placeholders.py:799
 #: pretix/control/views/organizer.py:348
 msgid "This value will be replaced based on dynamic parameters."
 msgstr "Este valor será substituído com base em parâmetros dinâmicos."
@@ -18573,7 +18565,7 @@ msgstr "Bilhetes"
 #: pretix/control/templates/pretixcontrol/event/tax.html:4
 #: pretix/control/templates/pretixcontrol/event/tax.html:6
 #: pretix/control/templates/pretixcontrol/order/index.html:764
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:453
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:457
 msgid "Taxes"
 msgstr "Impostos"
 
@@ -23099,7 +23091,7 @@ msgstr "Só pode ser comprado usando um voucher"
 #: pretix/control/templates/pretixcontrol/order/index.html:673
 #: pretix/control/templates/pretixcontrol/order/index.html:723
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:360
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:415
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:419
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
 msgstr "<strong>mais</strong> %(rate)s%% %(taxname)s"
@@ -23108,7 +23100,7 @@ msgstr "<strong>mais</strong> %(rate)s%% %(taxname)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:683
 #: pretix/control/templates/pretixcontrol/order/index.html:733
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:370
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:425
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:429
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
 msgstr "incl. %(rate)s%% %(taxname)s"
@@ -24196,7 +24188,7 @@ msgstr "INSEGURO"
 #: pretix/plugins/reports/exporters.py:446
 #: pretix/plugins/reports/exporters.py:638
 #: pretix/plugins/reports/exporters.py:969
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:469
 msgid "Total"
 msgstr "Total"
 
@@ -31685,7 +31677,7 @@ msgid "Upload time"
 msgstr "Tempo de upload"
 
 #: pretix/plugins/checkinlists/exporters.py:830
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:519
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:523
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:52
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:148
 msgid "OK"
@@ -35505,25 +35497,25 @@ msgstr ""
 msgid "Current value:"
 msgstr "Valor atual:"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:467
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:471
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
 msgstr[0] "Um produto"
 msgstr[1] "%(num)s produtos"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:481
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:485
 #, python-format
 msgid "incl. %(tax_sum)s taxes"
 msgstr "incl. %(tax_sum)s impostos"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:501
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:505
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
 "Os artigos no teu carrinho estão reservados para ti por %(minutes)s minutos."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:505
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
@@ -35531,20 +35523,20 @@ msgstr ""
 "Os artigos no teu carrinho já não estão reservados para ti. Podes continuar "
 "a tua encomenda enquanto estiverem disponíveis."
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:510
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
 #, fuzzy
 #| msgid "Event description"
 msgid "Renew reservation"
 msgstr "Descrição do Evento"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:522
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:526
 #, fuzzy
 #| msgid "Reservation period"
 msgid "Reservation renewed"
 msgstr "Período de reserva"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:528
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:532
 msgid "Overview of your ordered products."
 msgstr "Visão global do seu pedido."
 
@@ -37682,6 +37674,13 @@ msgstr "Permissão de escrita"
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid ""
+#~ "Please enter your current password if you want to change your email "
+#~ "address or password."
+#~ msgstr ""
+#~ "Insira a sua palavra-passe atual, se quiser mudar o endereço de e-mail ou "
+#~ "a palavra-passe."
 
 #, python-brace-format
 #~ msgid ""
