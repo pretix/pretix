@@ -1665,10 +1665,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         answ.options.add(*options)
 
                 if use_reusable_medium:
-                    use_reusable_medium.linked_orderposition = pos
-                    use_reusable_medium.save(update_fields=['linked_orderposition'])
+                    use_reusable_medium.linked_orderpositions.add(pos)
                     use_reusable_medium.log_action(
-                        'pretix.reusable_medium.linked_orderposition.changed',
+                        'pretix.reusable_medium.linked_orderposition.added',
                         data={
                             'by_order': order.code,
                             'linked_orderposition': pos.pk,

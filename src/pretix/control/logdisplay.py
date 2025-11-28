@@ -741,6 +741,7 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.reusable_medium.created': _('The reusable medium has been created.'),
     'pretix.reusable_medium.created.auto': _('The reusable medium has been created automatically.'),
     'pretix.reusable_medium.changed': _('The reusable medium has been changed.'),
+    'pretix.reusable_medium.linked_orderposition.added': _('A new ticket has been added to the medium.'),
     'pretix.reusable_medium.linked_orderposition.changed': _('The medium has been connected to a new ticket.'),
     'pretix.reusable_medium.linked_giftcard.changed': _('The medium has been connected to a new gift card.'),
     'pretix.email.error': _('Sending of an email has failed.'),
