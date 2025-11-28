@@ -520,11 +520,11 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     #    with respecting the force option), or it's a reusable medium (-> proceed with that)
     if not op_candidates:
         try:
-            media = ReusableMedium.objects.select_related('linked_orderposition').active().get(
+            media = ReusableMedium.objects.prefetch_related('linked_orderpositions').active().get(
                 organizer_id=checkinlists[0].event.organizer_id,
                 type=source_type,
                 identifier=raw_barcode,
-                linked_orderposition__isnull=False,
+                linked_orderpositions__isnull=False,
             )
             raw_barcode_for_checkin = raw_barcode
         except ReusableMedium.DoesNotExist:
@@ -627,7 +627,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
                 }, status=400)
         else:
-            if media.linked_orderposition.order.event_id not in list_by_event:
+            if not any(event_id in list_by_event for event_id in media.linked_orderpositions.values_list("order__event_id", flat=True)):
                 # Medium exists but connected ticket is for the wrong event
                 if not simulate:
                     checkinlists[0].event.log_action('pretix.event.checkin.unknown', data={
@@ -653,9 +653,11 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'checkin_texts': [],
                     'list': MiniCheckinListSerializer(checkinlists[0]).data,
                 }, status=404)
-            op_candidates = [media.linked_orderposition]
-            if list_by_event[media.linked_orderposition.order.event_id].addon_match:
-                op_candidates += list(media.linked_orderposition.addons.all())
+            op_candidates = []
+            for op in media.linked_orderpositions.all().prefetch_related("order"):
+                op_candidates.append(op)
+                if list_by_event[op.order.event_id].addon_match:
+                    op_candidates += list(op.addons.all())
 
     # 3. Handle the "multiple options found" case: Except for the unlikely case of a secret being also a valid primary
     #    key on the same list, we're probably dealing with the ``addon_match`` case here and need to figure out
