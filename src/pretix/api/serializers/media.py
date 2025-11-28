@@ -108,6 +108,15 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
+        linked_orderposition = data.pop('linked_orderposition', None)
+        if linked_orderposition:
+            # backwards-compatibility
+            if 'linked_orderpositions' in data:
+                raise ValidationError({
+                    'linked_orderposition': _('You cannot use linked_orderposition and linked_orderpositions at the same time.')
+                })
+            if self.instance.linked_orderpositions.count() > 1:
+                raise ValidationError({
                     'linked_orderposition': _('There are more than one linked_orderposition. You need to use linked_orderpositions.')
                 })
             data['linked_orderpositions'] = [linked_orderposition]
