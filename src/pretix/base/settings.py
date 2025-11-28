@@ -655,7 +655,7 @@ DEFAULTS = {
             )(),
             help_text=format_lazy(
                 _("VAT ID is optional by default, because not all businesses are assigned a VAT ID in all countries. "
-                  "VAT ID will be required for all busines addresses in the selected countries."),
+                  "VAT ID will be required for all business addresses in the selected countries."),
             ),
             widget=forms.CheckboxSelectMultiple(attrs={
                 "class": "scrolling-multiple-choice",
