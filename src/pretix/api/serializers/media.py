@@ -76,10 +76,21 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                 queryset=self.context['organizer'].issued_gift_cards.all()
             )
 
-        if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
-            self.fields['linked_orderposition'] = NestedOrderPositionSerializer(read_only=True)
+        # keep linked_orderposition (singular) for backwards compatibility, will be overwritten in self.validate
+        self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
+            required=False,
+            allow_null=True,
+            queryset=OrderPosition.all.filter(order__event__organizer=self.context['organizer']),
+        )
+
+        if 'linked_orderposition' in self.context['request'].query_params.getlist('expand') or 'linked_orderpositions' in self.context['request'].query_params.getlist('expand'):
+            self.fields['linked_orderpositions'] = NestedOrderPositionSerializer(
+                many=True,
+                read_only=True
+            )
         else:
-            self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
+            self.fields['linked_orderpositions'] = serializers.PrimaryKeyRelatedField(
+                many=True,
                 required=False,
                 allow_null=True,
                 queryset=OrderPosition.all.filter(order__event__organizer=self.context['organizer']),
@@ -97,6 +108,10 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
+                    'linked_orderposition': _('There are more than one linked_orderposition. You need to use linked_orderpositions.')
+                })
+            data['linked_orderpositions'] = [linked_orderposition]
+
         if 'type' in data and 'identifier' in data:
             qs = self.context['organizer'].reusable_media.filter(
                 identifier=data['identifier'], type=data['type']
@@ -108,6 +123,14 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                     {'identifier': _('A medium with the same identifier and type already exists in your organizer account.')}
                 )
         return data
+
+    def to_representation(self, obj):
+        r = super(ReusableMediaSerializer, self).to_representation(obj)
+        ops = r.get('linked_orderpositions')
+        if len(ops) < 2:
+            # add linked_orderposition (singular) for backwards compatibility
+            r['linked_orderposition'] = ops[0] if ops else None
+        return r
 
     class Meta:
         model = ReusableMedium
@@ -121,7 +144,7 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             'active',
             'expires',
             'customer',
-            'linked_orderposition',
+            'linked_orderpositions',
             'linked_giftcard',
             'info',
             'notes',
