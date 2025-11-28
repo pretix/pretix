@@ -10,8 +10,6 @@ def reverse(apps, schema_editor):
     objs = []
     # get last added orderposition from linked_orderpositions
     for rm_id, op_id in qs.filter(id__in=qs.values("reusablemedium_id").annotate(max_id=models.Max('id')).values('max_id')).values_list("reusablemedium_id", "orderposition_id"):
-        #obj = ReusableMedium.objects.get(id=rm_id)
-        #obj.linked_orderposition_id = op_id
         obj = ReusableMedium(
             id=rm_id,
             linked_orderposition_id=op_id,
