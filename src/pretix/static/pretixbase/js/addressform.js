@@ -82,6 +82,9 @@ $(function () {
                 if ('label' in options) {
                     dependent.closest(".form-group").find(".control-label").text(options.label);
                 }
+                if ('helptext_visible' in options) {
+                    dependent.closest(".form-group").find(".help-block").toggle(options.helptext_visible);
+                }
 
                 const required = 'required' in options && visible && (
                     (options.required === 'if_any' && isAnyRequired) ||

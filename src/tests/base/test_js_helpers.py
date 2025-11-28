@@ -34,7 +34,7 @@ def test_no_invoice_address(client):
         'data': [],
         'state': {'label': 'State', 'required': False, 'visible': False},
         'street': {'required': 'if_any'},
-        'vat_id': {'required': False, 'visible': True},
+        'vat_id': {'helptext_visible': True, 'label': 'VAT ID', 'required': False, 'visible': True},
         'zipcode': {'required': 'if_any'}
     }
 
@@ -44,7 +44,7 @@ def test_no_invoice_address(client):
         'data': [],
         'state': {'label': 'State', 'required': False, 'visible': False},
         'street': {'required': 'if_any'},
-        'vat_id': {'required': False, 'visible': False},
+        'vat_id': {'helptext_visible': True, 'label': 'VAT ID', 'required': False, 'visible': False},
         'zipcode': {'required': False}
     }
 
@@ -98,7 +98,7 @@ def test_provider_only_email_available(client, event):
         'transmission_peppol_participant_id': {'required': False, 'visible': False},
         'transmission_type': {'visible': False},
         'transmission_types': [{'code': 'email', 'name': 'Email'}],
-        'vat_id': {'required': False, 'visible': True},
+        'vat_id': {'helptext_visible': True, 'label': 'VAT ID', 'required': False, 'visible': True},
         'zipcode': {'required': 'if_any'}
     }
 
@@ -123,7 +123,7 @@ def test_provider_italy_sdi_not_enforced_when_optional(client, event):
         'transmission_peppol_participant_id': {'required': False, 'visible': False},
         'transmission_type': {'visible': True},
         'transmission_types': [{'code': 'it_sdi', 'name': 'Exchange System (SdI)'}],
-        'vat_id': {'required': False, 'visible': True},
+        'vat_id': {'helptext_visible': True, 'label': 'VAT ID / P.IVA', 'required': False, 'visible': True},
         'zipcode': {'required': 'if_any'}
     }
 
@@ -148,7 +148,7 @@ def test_provider_italy_sdi_enforced_individual(client, event):
         'transmission_peppol_participant_id': {'required': False, 'visible': False},
         'transmission_type': {'visible': True},
         'transmission_types': [{'code': 'it_sdi', 'name': 'Exchange System (SdI)'}],
-        'vat_id': {'required': False, 'visible': True},
+        'vat_id': {'helptext_visible': True, 'label': 'VAT ID / P.IVA', 'required': False, 'visible': True},
         'zipcode': {'required': True}
     }
 
@@ -174,8 +174,34 @@ def test_provider_italy_sdi_enforced_business(client, event):
         'transmission_peppol_participant_id': {'required': False, 'visible': False},
         'transmission_type': {'visible': True},
         'transmission_types': [{'code': 'it_sdi', 'name': 'Exchange System (SdI)'}],
-        'vat_id': {'required': True, 'visible': True},
+        'vat_id': {'helptext_visible': False, 'label': 'VAT ID / P.IVA', 'required': True, 'visible': True},
         'zipcode': {'required': True}
+    }
+
+
+@pytest.mark.django_db
+def test_vat_id_enforced(client, event):
+    response = client.get(
+        '/js_helpers/address_form/?country=GR&invoice=true&organizer=org&event=ev'
+        '&is_business=business'
+    )
+    assert response.status_code == 200
+    d = response.json()
+    del d['data']
+    assert d == {
+        'city': {'required': 'if_any'},
+        'state': {'label': 'State', 'required': False, 'visible': False},
+        'street': {'required': 'if_any'},
+        'transmission_email_address': {'required': False, 'visible': False},
+        'transmission_email_other': {'required': False, 'visible': False},
+        'transmission_it_sdi_codice_fiscale': {'required': False, 'visible': False},
+        'transmission_it_sdi_pec': {'required': False, 'visible': False},
+        'transmission_it_sdi_recipient_code': {'required': False, 'visible': False},
+        'transmission_peppol_participant_id': {'required': False, 'visible': False},
+        'transmission_type': {'visible': True},
+        'transmission_types': [{'code': 'email', 'name': 'Email'}, {'code': 'peppol', 'name': 'Peppol'}],
+        'vat_id': {'helptext_visible': False, 'label': 'VAT ID / TIN', 'required': True, 'visible': True},
+        'zipcode': {'required': 'if_any'}
     }
 
 
@@ -203,7 +229,7 @@ def test_email_peppol_choice(client, event):
             {'code': 'email', 'name': 'Email'},
             {'code': 'peppol', 'name': 'Peppol'},
         ],
-        'vat_id': {'required': False, 'visible': True},
+        'vat_id': {'helptext_visible': True, 'label': 'VAT ID', 'required': False, 'visible': True},
         'zipcode': {'required': 'if_any'}
     }
 
@@ -229,6 +255,6 @@ def test_email_peppol_choice(client, event):
             {'code': 'email', 'name': 'Email'},
             {'code': 'peppol', 'name': 'Peppol'},
         ],
-        'vat_id': {'required': False, 'visible': True},
+        'vat_id': {'helptext_visible': True, 'label': 'VAT ID', 'required': False, 'visible': True},
         'zipcode': {'required': True}
     }
