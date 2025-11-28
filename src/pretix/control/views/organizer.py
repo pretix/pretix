@@ -3338,8 +3338,10 @@ class ReusableMediaListView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_queryset(self):
         qs = self.request.organizer.reusable_media.select_related(
-            'customer', 'linked_orderposition', 'linked_orderposition__order', 'linked_orderposition__order__event',
-            'linked_giftcard'
+            'customer',
+            'linked_giftcard',
+        ).prefetch_related(
+            Prefetch('linked_orderpositions', queryset=OrderPosition.objects.select_related("order", "order__event"))
         )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
