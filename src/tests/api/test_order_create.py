@@ -3086,7 +3086,7 @@ def test_order_create_use_medium(token_client, organizer, event, item, quota, qu
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
         medium.refresh_from_db()
-        assert o.positions.first() == medium.linked_orderposition
+        assert o.positions.first() == medium.linked_orderpositions.first()
         assert resp.data['positions'][0]['pdf_data']['medium_identifier'] == medium.identifier
 
 
@@ -3133,7 +3133,7 @@ def test_order_create_create_medium(token_client, organizer, event, item, quota,
         i = resp.data['positions'][0]['pdf_data']['medium_identifier']
         assert i
         m = organizer.reusable_media.get(identifier=i)
-        assert m.linked_orderposition == o.positions.first()
+        assert m.linked_orderpositions.first() == o.positions.first()
         assert m.type == "barcode"
 
 

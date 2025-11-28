@@ -157,7 +157,6 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
                         type=s.validated_data["type"],
                         identifier=s.validated_data["identifier"],
                     )
-                m.linked_orderpositions = None  # not relevant for cross-organizer
                 m.customer = None  # not relevant for cross-organizer
                 s = self.get_serializer(m)
                 return Response({"result": s.data})

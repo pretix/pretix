@@ -92,7 +92,7 @@ TEST_MEDIUM_RES = {
     "active": True,
     "expires": None,
     "customer": None,
-    "linked_orderposition": None,
+    "linked_orderpositions": None,
     "linked_giftcard": None,
     "notes": None,
     "info": {},
@@ -138,7 +138,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
         ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
                                     personalized=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
-        medium.linked_orderposition = op
+        medium.linked_orderpositions.add(op)
         medium.linked_giftcard = giftcard
         medium.customer = customer
         medium.save()
@@ -419,7 +419,7 @@ def test_medium_lookup_cross_organizer(token_client, organizer, organizer2, org2
         ticket = org2_event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
                                          personalized=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
-        medium2.linked_orderposition = op
+        medium2.linked_orderpositions.add(op)
         medium2.linked_giftcard = giftcard2
         medium2.save()
 
