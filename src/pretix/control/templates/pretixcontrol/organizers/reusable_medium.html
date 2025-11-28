@@ -49,13 +49,13 @@
                                     </a>
                                 </span>
                                 {% endif %}
-                                {% if medium.linked_orderposition %}
+                                {% for op in medium.linked_orderpositions.all %}
                                     <span class="helper-display-block">
                                     <span class="fa fa-ticket fa-fw"></span>
-                                    <a href="{% url "control:event.order" event=medium.linked_orderposition.order.event.slug organizer=request.organizer.slug code=medium.linked_orderposition.order.code %}">
-                                        {{ medium.linked_orderposition.order.code }}</a>-{{ medium.linked_orderposition.positionid }}
+                                    <a href="{% url "control:event.order" event=op.order.event.slug organizer=request.organizer.slug code=op.order.code %}">
+                                        {{ op.order.code }}</a>-{{ op.positionid }}
                                 </span>
-                                {% endif %}
+                                {% endfor %}
                                 {% if medium.linked_giftcard %}
                                     <span class="helper-display-block">
                                     <span class="fa fa-credit-card fa-fw"></span>
