@@ -117,7 +117,7 @@ class ReusableMedium(LoggedModel):
     @cached_property
     def linked_orderposition(self):
         # always return last added linked_orderposition to make it behave backwardscompatible
-        return self.linked_orderpositions.order_by('pk').last()
+        return self.linked_orderpositions.last()
 
     @cached_property
     def media_type(self):
