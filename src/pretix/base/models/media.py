@@ -72,6 +72,11 @@ class ReusableMedium(LoggedModel):
         max_length=200,
         verbose_name=pgettext_lazy('reusable_medium', 'Identifier'),
     )
+    secret = models.CharField(
+        max_length=200,
+        verbose_name=pgettext_lazy('reusable_medium', 'Secret'),
+        null=True, blank=True
+    )
 
     active = models.BooleanField(
         verbose_name=_('Active'),
@@ -89,12 +94,10 @@ class ReusableMedium(LoggedModel):
         on_delete=models.SET_NULL,
         verbose_name=_('Customer account'),
     )
-    linked_orderposition = models.ForeignKey(
+    linked_orderpositions = models.ManyToManyField(
         OrderPosition,
-        null=True, blank=True,
         related_name='linked_media',
-        on_delete=models.SET_NULL,
-        verbose_name=_('Linked ticket'),
+        verbose_name=_('Linked tickets'),
     )
     linked_giftcard = models.ForeignKey(
         GiftCard,
@@ -110,6 +113,11 @@ class ReusableMedium(LoggedModel):
     notes = models.TextField(verbose_name=_('Notes'), null=True, blank=True)
 
     objects = ReusableMediumQuerySetManager()
+
+    @cached_property
+    def linked_orderposition(self):
+        # always return last added linked_orderposition to make it behave backwardscompatible
+        return self.linked_orderpositions.order_by('pk').last()
 
     @cached_property
     def media_type(self):
