@@ -1738,3 +1738,92 @@ class OrdersTest(BaseOrdersTest):
                                                         self.order.secret, a.pk, match.group(1))
         )
         assert response.status_code == 404
+
+
+class PartialCancellationTest(BaseOrdersTest):
+
+    @scopes_disabled()
+    def setUp(self):
+        super().setUp()
+        self.event.settings.cancel_allow_user = True
+        self.order.status = Order.STATUS_PAID
+        self.order.total = Decimal('0.00')
+        self.order.save()
+        self.ticket_pos.price = Decimal('0.00')
+        self.ticket_pos.save()
+        self.second_pos = OrderPosition.objects.create(
+            order=self.order,
+            item=self.ticket,
+            variation=None,
+            price=Decimal('0.00'),
+            attendee_name_parts={'full_name': "Maria"},
+        )
+
+    def test_partial_cancel_flow(self):
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel/partial' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/partial' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {'positions': [str(self.ticket_pos.pk)]},
+            follow=True
+        )
+        self.assertRedirects(
+            response,
+            '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            target_status_code=200
+        )
+        self.ticket_pos.refresh_from_db()
+        self.second_pos.refresh_from_db()
+        assert self.ticket_pos.canceled
+        assert not self.second_pos.canceled
+
+    def test_partial_cancel_all_rejected(self):
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/partial' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {'positions': [str(self.ticket_pos.pk), str(self.second_pos.pk)]},
+            follow=True
+        )
+        assert response.status_code == 200
+        self.ticket_pos.refresh_from_db()
+        self.second_pos.refresh_from_db()
+        assert not self.ticket_pos.canceled
+        assert not self.second_pos.canceled
+
+    def test_partial_cancel_not_free_denied(self):
+        self.event.settings.cancel_allow_user_paid = True
+        self.order.total = Decimal('10.00')
+        self.order.save()
+        self.ticket_pos.price = Decimal('5.00')
+        self.ticket_pos.save()
+        self.second_pos.price = Decimal('5.00')
+        self.second_pos.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel/partial' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            follow=True
+        )
+        self.assertRedirects(
+            response,
+            '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            target_status_code=200
+        )
+
+    def test_partial_cancel_marks_free_order_paid(self):
+        self.order.status = Order.STATUS_PENDING
+        self.order.save()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/partial' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {'positions': [str(self.ticket_pos.pk)]},
+            follow=True
+        )
+        self.assertRedirects(
+            response,
+            '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            target_status_code=200
+        )
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PAID
+        with scopes_disabled():
+            assert self.order.payments.filter(provider='free', state=OrderPayment.PAYMENT_STATE_CONFIRMED).exists()

@@ -37041,6 +37041,50 @@ msgstr "Schreibzugriff"
 msgid "Kosovo"
 msgstr "Kosovo"
 
+#: pretix/presale/templates/pretixpresale/event/order.html:373
+msgid "If you only want to cancel some of your tickets, you can do so here without canceling the full order."
+msgstr "Wenn du nur einige deiner Tickets stornieren möchtest, kannst du das hier tun, ohne die gesamte Bestellung zu stornieren."
+
+#: pretix/presale/templates/pretixpresale/event/order.html:378
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:4
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:11
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:19
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:31
+msgid "Cancel selected tickets"
+msgstr "Ausgewählte Tickets stornieren"
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:18
+msgid "Select the tickets you want to cancel. The remaining tickets in your order will stay valid."
+msgstr "Wähle die Tickets aus, die du stornieren möchtest. Die übrigen Tickets deiner Bestellung bleiben gültig."
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:22
+msgid "Canceling a ticket that includes add-ons will also cancel those add-ons."
+msgstr "Beim Stornieren eines Tickets mit Add-ons werden diese Add-ons ebenfalls storniert."
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:42
+msgid "Add-ons to this ticket will be canceled as well."
+msgstr "Add-ons zu diesem Ticket werden ebenfalls storniert."
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:50
+msgid "Back to order"
+msgstr "Zurück zur Bestellung"
+
+#: pretix/presale/views/order.py:975
+msgid "You cannot partially cancel this order."
+msgstr "Du kannst diese Bestellung nicht teilweise stornieren."
+
+#: pretix/presale/views/order.py:1000
+msgid "Please select at least one ticket to cancel."
+msgstr "Bitte wähle mindestens ein Ticket zur Stornierung aus."
+
+#: pretix/presale/views/order.py:1028
+msgid "The tickets have been canceled, but the order could not be marked as paid automatically."
+msgstr "Die Tickets wurden storniert, aber die Bestellung konnte nicht automatisch als bezahlt markiert werden."
+
+#: pretix/presale/views/order.py:1034
+msgid "The selected tickets have been canceled."
+msgstr "Die ausgewählten Tickets wurden storniert."
+
 #~ msgid ""
 #~ "Please enter your current password if you want to change your email "
 #~ "address or password."

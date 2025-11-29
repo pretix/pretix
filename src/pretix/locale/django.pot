@@ -32788,3 +32788,54 @@ msgstr ""
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/order.html:373
+msgid "If you only want to cancel some of your tickets, you can do so here without canceling the full order."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/order.html:378
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:4
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:31
+msgid "Cancel selected tickets"
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:11
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:19
+msgid "Cancel selected tickets"
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:14
+msgid "Order %(code)s"
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:18
+msgid "Select the tickets you want to cancel. The remaining tickets in your order will stay valid."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:22
+msgid "Canceling a ticket that includes add-ons will also cancel those add-ons."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:42
+msgid "Add-ons to this ticket will be canceled as well."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/order_partial_cancel.html:50
+msgid "Back to order"
+msgstr ""
+
+#: pretix/presale/views/order.py:975
+msgid "You cannot partially cancel this order."
+msgstr ""
+
+#: pretix/presale/views/order.py:1000
+msgid "Please select at least one ticket to cancel."
+msgstr ""
+
+#: pretix/presale/views/order.py:1028
+msgid "The tickets have been canceled, but the order could not be marked as paid automatically."
+msgstr ""
+
+#: pretix/presale/views/order.py:1034
+msgid "The selected tickets have been canceled."
+msgstr ""
