@@ -92,7 +92,6 @@ dependencies = [
   "redis==6.4.*",
   "reportlab==4.4.*",
   "requests==2.32.*",
-  "legacy-cgi; python_version >= \"3.13\"",
   "sentry-sdk==2.46.*",
   "sepaxml==2.7.*",
   "stripe==7.9.*",
