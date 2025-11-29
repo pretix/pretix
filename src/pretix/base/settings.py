@@ -2125,6 +2125,16 @@ DEFAULTS = {
             label=_("Do not allow cancellations after"),
         )
     },
+    'cancel_allow_user_partial': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Customers can partially cancel their unpaid orders"),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_cancel_allow_user'}),
+        )
+    },
     'cancel_terms_paid': {
         'default': None,
         'type': LazyI18nString,

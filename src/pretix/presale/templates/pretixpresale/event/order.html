@@ -476,6 +476,20 @@
                                 {% endif %}
                             </p>
                         {% endif %}
+                        {% if user_partial_cancel_allowed %}
+                            <p class="help-block">
+                                {% blocktrans trimmed %}
+                                    If you only want to cancel some of your tickets, you can do so here without canceling the full order.
+                                {% endblocktrans %}
+                            </p>
+                            <p>
+                                <a href="{% eventurl event 'presale:event.order.cancel.partial' secret=order.secret order=order.code %}"
+                                        class="btn btn-default">
+                                    <span class="fa fa-minus-circle" aria-hidden="true"></span>
+                                    {% trans "Cancel selected tickets" %}
+                                </a>
+                            </p>
+                        {% endif %}
                         <p>
                             <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                                     class="btn btn-danger">
