@@ -10070,6 +10070,10 @@ msgid "Do not allow cancellations after"
 msgstr ""
 
 #: pretix/base/settings.py:1995
+msgid "Customers can partially cancel their unpaid orders"
+msgstr ""
+
+#: pretix/base/settings.py:1995
 msgid "Customers can cancel their paid orders"
 msgstr ""
 

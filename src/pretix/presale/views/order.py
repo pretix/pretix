@@ -319,10 +319,12 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         )
         ctx['user_change_allowed'] = self.order.user_change_allowed
         ctx['user_cancel_allowed'] = self.order.user_cancel_allowed
+        partial_setting = self.request.event.settings.cancel_allow_user_partial
         ctx['user_partial_cancel_allowed'] = (
-            ctx['user_cancel_allowed']
-            and self.order.total == Decimal('0.00')
+            partial_setting
+            and ctx['user_cancel_allowed']
             and self.order.count_positions > 1
+            and self.order.total == Decimal('0.00')
         )
         for r in ctx['refunds']:
             if r.provider == 'giftcard':
@@ -998,8 +1000,9 @@ class OrderPartialCancel(EventViewMixin, OrderDetailMixin, TemplateView):
         return (
             self.order
             and self.order.user_cancel_allowed
-            and self.order.total == Decimal('0.00')
             and self.order.count_positions > 1
+            and self.request.event.settings.cancel_allow_user_partial
+            and self.order.total == Decimal('0.00')
         )
 
     @cached_property
