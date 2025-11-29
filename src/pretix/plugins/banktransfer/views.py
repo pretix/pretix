@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -674,6 +674,7 @@ def _unite_transaction_rows(transaction_rows):
         united_transactions_rows.append({
             "iban": iban,
             "bic": bic,
+            "locale": rows[0].get('locale', 'en'),
             "id": ", ".join(sorted(set(r['id'] for r in rows))),
             "payer": ", ".join(sorted(set(r['payer'] for r in rows))),
             "amount": sum(r['amount'] for r in rows),
@@ -726,6 +727,7 @@ class RefundExportListView(ListView):
                     "amount": refund.amount,
                     "id": refund.full_id,
                     "comment": refund.comment,
+                    "locale": refund.order.locale,
                     **{key: data.get(key) for key in ("payer", "iban", "bic")}
                 })
                 refund.done(user=self.request.user)

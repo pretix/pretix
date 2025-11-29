@@ -19,6 +19,7 @@ at :ref:`plugin-docs`.
    item_bundles
    item_add-ons
    item_meta_properties
+   item_program_times
    questions
    question_options
    quotas

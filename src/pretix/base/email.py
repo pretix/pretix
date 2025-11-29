@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -24,6 +24,7 @@ from itertools import groupby
 from smtplib import SMTPResponseException
 from typing import TypeVar
 
+import bleach
 import css_inline
 from django.conf import settings
 from django.core.mail.backends.smtp import EmailBackend
@@ -34,7 +35,10 @@ from django.utils.translation import get_language, gettext_lazy as _
 
 from pretix.base.models import Event
 from pretix.base.signals import register_html_mail_renderers
-from pretix.base.templatetags.rich_text import markdown_compile_email
+from pretix.base.templatetags.rich_text import (
+    DEFAULT_CALLBACKS, EMAIL_RE, URL_RE, abslink_callback,
+    markdown_compile_email, truelink_callback,
+)
 from pretix.helpers.format import SafeFormatter, format_map
 
 from pretix.base.services.placeholders import (  # noqa
@@ -133,13 +137,24 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
     def template_name(self):
         raise NotImplementedError()
 
-    def compile_markdown(self, plaintext):
-        return markdown_compile_email(plaintext)
+    def compile_markdown(self, plaintext, context=None):
+        return markdown_compile_email(plaintext, context=context)
 
     def render(self, plain_body: str, plain_signature: str, subject: str, order, position, context) -> str:
-        body_md = self.compile_markdown(plain_body)
+        body_md = self.compile_markdown(plain_body, context)
         if context:
-            body_md = format_map(body_md, context=context, mode=SafeFormatter.MODE_RICH_TO_HTML)
+            linker = bleach.Linker(
+                url_re=URL_RE,
+                email_re=EMAIL_RE,
+                callbacks=DEFAULT_CALLBACKS + [truelink_callback, abslink_callback],
+                parse_email=True
+            )
+            body_md = format_map(
+                body_md,
+                context=context,
+                mode=SafeFormatter.MODE_RICH_TO_HTML,
+                linkifier=linker
+            )
         htmlctx = {
             'site': settings.PRETIX_INSTANCE_NAME,
             'site_url': settings.SITE_URL,

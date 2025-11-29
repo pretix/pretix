@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-05-06 16:20+0000\n"
-"Last-Translator: KC Tseng <tkc0204@gmail.com>\n"
+"POT-Creation-Date: 2025-11-20 10:37+0000\n"
+"PO-Revision-Date: 2025-11-18 17:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix-js/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -331,13 +331,13 @@ msgstr "目前在場內"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "Yes"
 msgstr "是"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "No"
 msgstr "否"
 
@@ -345,8 +345,8 @@ msgstr "否"
 msgid "close"
 msgstr "關閉"
 
-#: pretix/static/pretixbase/js/addressform.js:90
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "需要"
 
@@ -554,6 +554,14 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr "缺席"
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
+msgid "Error: Product not found!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
+msgid "Error: Variation not found!"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "報到 QR code"
@@ -619,60 +627,56 @@ msgstr "產生訊息…"
 msgid "Unknown error."
 msgstr "不知名錯誤。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:292
-#, fuzzy
-#| msgid "Your color has great contrast and is very easy to read!"
+#: pretix/static/pretixcontrol/js/ui/main.js:309
 msgid "Your color has great contrast and will provide excellent accessibility."
-msgstr "你的顏色對比度很高，非常易於閱讀！"
+msgstr "你的顏色對比度很高，非常易於閱讀。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:296
-#, fuzzy
-#| msgid "Your color has decent contrast and is probably good-enough to read!"
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
-msgstr "你的色彩有不錯的對比度，大慨好閱讀！"
+msgstr "你的顏色有不錯的對比度，足以滿足最低的可訪問性要求。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:300
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:443
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "搜索查詢"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:435
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "所有"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "無"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:440
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "只選定"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:812
+#: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
 msgstr "輸入於 1 和 %(max)s 之間的頁號。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:815
+#: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
 msgstr "頁號無效。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:973
+#: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
 msgstr "在內部使用其他名稱"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1013
+#: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
 msgstr "點擊關閉"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1094
+#: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
 msgstr "你有未儲存的變更！"
 
@@ -692,7 +696,7 @@ msgstr "其他人"
 msgid "Count"
 msgstr "計數"
 
-#: pretix/static/pretixcontrol/js/ui/subevent.js:111
+#: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
 msgstr[0] ""
@@ -720,10 +724,8 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "購物車中的商品將為你保留{num}分鐘。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Your cart has expired."
-msgstr "購物車過期"
+msgstr "您的購物車已過期。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
 #, fuzzy
@@ -755,7 +757,7 @@ msgstr "你拿回 %(currency)s %(amount)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "請輸入主辦方可以保留的金額。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:564
+#: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
 msgstr "你的當地時間："
 

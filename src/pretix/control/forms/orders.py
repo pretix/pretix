@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -1030,3 +1030,27 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
         if self.event.has_subevents and not d['subevent'] and not d['all_subevents'] and not d.get('subevents_from'):
             raise ValidationError(_('Please confirm that you want to cancel ALL dates in this event series.'))
         return d
+
+
+class EventCancelConfirmForm(forms.Form):
+    confirm = forms.BooleanField(
+        label=_("I understand that this is not reversible and want to continue"),
+        required=True,
+    )
+    confirmation_code = forms.CharField(
+        label=_("Confirmation code"),
+        help_text=_("We have just emailed you a confirmation code to enter to confirm this action"),
+        required=True,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.code = kwargs.pop("confirmation_code")
+        super().__init__(*args, **kwargs)
+        if not self.code:
+            del self.fields["confirmation_code"]
+
+    def clean_confirmation_code(self):
+        val = self.cleaned_data['confirmation_code']
+        if val != self.code:
+            raise ValidationError(_('The confirmation code is incorrect.'))
+        return val

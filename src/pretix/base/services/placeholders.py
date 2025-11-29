@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -26,7 +26,7 @@ from decimal import Decimal
 
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.html import escape
+from django.utils.html import escape, mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
@@ -124,6 +124,10 @@ class BaseRichTextPlaceholder(BaseTextPlaceholder):
         return self._identifier
 
     @property
+    def allowed_in_plain_content(self):
+        return False
+
+    @property
     def required_context(self):
         return self._args
 
@@ -192,6 +196,33 @@ class SimpleButtonPlaceholder(BaseRichTextPlaceholder):
         text = self._sample_text_func(event)
         url = self._sample_url_func(event)
         return f'{text}: {url}'
+
+
+class MarkdownTextPlaceholder(BaseRichTextPlaceholder):
+    def __init__(self, identifier, args, func, sample, inline):
+        super().__init__(identifier, args)
+        self._func = func
+        self._sample = sample
+        self._snippet = inline
+
+    @property
+    def allowed_in_plain_content(self):
+        return self._snippet
+
+    def render_plain(self, **context):
+        return self._func(**{k: context[k] for k in self._args})
+
+    def render_html(self, **context):
+        return mark_safe(markdown_compile_email(self.render_plain(**context), snippet=self._snippet))
+
+    def render_sample_plain(self, event):
+        if callable(self._sample):
+            return self._sample(event)
+        else:
+            return self._sample
+
+    def render_sample_html(self, event):
+        return mark_safe(markdown_compile_email(self.render_sample_plain(event), snippet=self._snippet))
 
 
 class PlaceholderContext(SafeFormatter):
@@ -574,7 +605,7 @@ def base_placeholders(sender, **kwargs):
             'invoice_company', ['invoice_address'], lambda invoice_address: invoice_address.company or '',
             _('Sample Corporation')
         ),
-        SimpleFunctionalTextPlaceholder(
+        MarkdownTextPlaceholder(
             'orders', ['event', 'orders'], lambda event, orders: '\n' + '\n\n'.join(
                 '* {} - {}'.format(
                     order.full_code,
@@ -604,6 +635,7 @@ def base_placeholders(sender, **kwargs):
                     {'code': 'OPKSB', 'secret': '09pjdksflosk3njd', 'hash': 'stuvwxy2z'}
                 ]
             ),
+            inline=False,
         ),
         SimpleFunctionalTextPlaceholder(
             'hours', ['event', 'waiting_list_entry'], lambda event, waiting_list_entry:
@@ -618,12 +650,13 @@ def base_placeholders(sender, **kwargs):
             'code', ['waiting_list_voucher'], lambda waiting_list_voucher: waiting_list_voucher.code,
             '68CYU2H6ZTP3WLK5'
         ),
-        SimpleFunctionalTextPlaceholder(
+        MarkdownTextPlaceholder(
             # join vouchers with two spaces at end of line so markdown-parser inserts a <br>
             'voucher_list', ['voucher_list'], lambda voucher_list: '  \n'.join(voucher_list),
-            '    68CYU2H6ZTP3WLK5\n    7MB94KKPVEPSMVF2'
+            '68CYU2H6ZTP3WLK5  \n7MB94KKPVEPSMVF2',
+            inline=False,
         ),
-        SimpleFunctionalTextPlaceholder(
+        MarkdownTextPlaceholder(
             # join vouchers with two spaces at end of line so markdown-parser inserts a <br>
             'voucher_url_list', ['event', 'voucher_list'],
             lambda event, voucher_list: '  \n'.join([
@@ -638,6 +671,7 @@ def base_placeholders(sender, **kwargs):
                 ) + '?voucher=' + c
                 for c in ['68CYU2H6ZTP3WLK5', '7MB94KKPVEPSMVF2']
             ]),
+            inline=False,
         ),
         SimpleFunctionalTextPlaceholder(
             'url', ['event', 'voucher_list'], lambda event, voucher_list: build_absolute_uri(event, 'presale:event.index', kwargs={
@@ -656,13 +690,13 @@ def base_placeholders(sender, **kwargs):
             'comment', ['comment'], lambda comment: comment,
             _('An individual text with a reason can be inserted here.'),
         ),
-        SimpleFunctionalTextPlaceholder(
+        MarkdownTextPlaceholder(
             'payment_info', ['order', 'payments'], _placeholder_payments,
-            _('The amount has been charged to your card.'),
+            _('The amount has been charged to your card.'), inline=False,
         ),
-        SimpleFunctionalTextPlaceholder(
+        MarkdownTextPlaceholder(
             'payment_info', ['payment_info'], lambda payment_info: payment_info,
-            _('Please transfer money to this bank account: 9999-9999-9999-9999'),
+            _('Please transfer money to this bank account: 9999-9999-9999-9999'), inline=False,
         ),
         SimpleFunctionalTextPlaceholder(
             'attendee_name', ['position'], lambda position: position.attendee_name,
@@ -719,13 +753,13 @@ def base_placeholders(sender, **kwargs):
         ))
 
     for k, v in sender.meta_data.items():
-        ph.append(SimpleFunctionalTextPlaceholder(
+        ph.append(MarkdownTextPlaceholder(
             'meta_%s' % k, ['event'], lambda event, k=k: event.meta_data[k],
-            v
+            v, inline=True,
         ))
-        ph.append(SimpleFunctionalTextPlaceholder(
+        ph.append(MarkdownTextPlaceholder(
             'meta_%s' % k, ['event_or_subevent'], lambda event_or_subevent, k=k: event_or_subevent.meta_data[k],
-            v
+            v, inline=True,
         ))
 
     return ph
@@ -753,7 +787,7 @@ def get_available_placeholders(event, base_parameters, rich=False):
         if not isinstance(val, (list, tuple)):
             val = [val]
         for v in val:
-            if isinstance(v, BaseRichTextPlaceholder) and not rich:
+            if isinstance(v, BaseRichTextPlaceholder) and not rich and not v.allowed_in_plain_content:
                 continue
             if all(rp in base_parameters for rp in v.required_context):
                 params[v.identifier] = v
@@ -775,13 +809,13 @@ def get_sample_context(event, context_parameters, rich=True):
                 )
             )
         elif str(sample).strip().startswith('* ') or str(sample).startswith('  '):
-            context_dict[k] = '<div class="placeholder" title="{}">{}</div>'.format(
+            context_dict[k] = mark_safe('<div class="placeholder" title="{}">{}</div>'.format(
                 lbl,
                 markdown_compile_email(str(sample))
-            )
+            ))
         else:
-            context_dict[k] = '<span class="placeholder" title="{}">{}</span>'.format(
+            context_dict[k] = mark_safe('<span class="placeholder" title="{}">{}</span>'.format(
                 lbl,
                 escape(sample)
-            )
+            ))
     return context_dict

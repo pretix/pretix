@@ -15,6 +15,19 @@
                 {% bootstrap_field form.invoice_email_attachment layout="control" %}
                 {% bootstrap_field form.invoice_email_organizer layout="control" %}
                 {% bootstrap_field form.invoice_language layout="control" %}
+                {% bootstrap_field form.invoice_period layout="control" %}
+
+                {% if not request.event.settings.show_dates_on_frontpage %}
+                    <div data-display-dependency="input[name=invoice_period][value=auto],input[name=invoice_period][value=event_date]">
+                        <div class="alert alert-warning dynamic">
+                            {% blocktrans trimmed %}
+                                You configured that your shop is not an event and the event date should not be shown.
+                                Therefore, we recommend that you set the date of service to a different option.
+                            {% endblocktrans %}
+                        </div>
+                    </div>
+                {% endif %}
+
                 {% bootstrap_field form.invoice_include_free layout="control" %}
                 {% bootstrap_field form.invoice_show_payments layout="control" %}
                 {% bootstrap_field form.invoice_reissue_after_modify layout="control" %}
@@ -36,13 +49,14 @@
                 {% bootstrap_field form.invoice_address_custom_field_helptext layout="control" %}
                 {% bootstrap_field form.invoice_address_explanation_text layout="control" %}
             </fieldset>
-            <fieldset>
+            <fieldset data-address-information-url="{% url "js_helpers.address_form" %}">
                 <legend>{% trans "Issuer details" %}</legend>
                 {% bootstrap_field form.invoice_address_from_name layout="control" %}
                 {% bootstrap_field form.invoice_address_from layout="control" %}
                 {% bootstrap_field form.invoice_address_from_zipcode layout="control" %}
                 {% bootstrap_field form.invoice_address_from_city layout="control" %}
                 {% bootstrap_field form.invoice_address_from_country layout="control" %}
+                {% bootstrap_field form.invoice_address_from_state layout="control" %}
                 {% bootstrap_field form.invoice_address_from_tax_id layout="control" %}
                 {% bootstrap_field form.invoice_address_from_vat_id layout="control" %}
             </fieldset>

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -197,6 +197,7 @@ TEST_INVOICE_RES = {
     "invoice_from": "",
     "invoice_from_zipcode": "",
     "invoice_from_city": "",
+    "invoice_from_state": "",
     "invoice_from_country": None,
     "invoice_from_tax_id": "",
     "invoice_from_vat_id": "",
@@ -231,7 +232,9 @@ TEST_INVOICE_RES = {
             "description": "Budget Ticket<br />Attendee: Peter",
             'subevent': None,
             'event_date_from': '2017-12-27T10:00:00Z',
-            'event_date_to': None,
+            'event_date_to': '2017-12-27T10:00:00Z',
+            'period_start': '2017-12-27T10:00:00Z',
+            'period_end': '2017-12-27T10:00:00Z',
             'event_location': None,
             'attendee_name': 'Peter',
             'item': None,
@@ -249,7 +252,9 @@ TEST_INVOICE_RES = {
             "description": "Payment fee",
             'subevent': None,
             'event_date_from': '2017-12-27T10:00:00Z',
-            'event_date_to': None,
+            'event_date_to': '2017-12-27T10:00:00Z',
+            'period_start': '2017-12-27T10:00:00Z',
+            'period_end': '2017-12-27T10:00:00Z',
             'event_location': None,
             'attendee_name': None,
             'fee_type': "payment",

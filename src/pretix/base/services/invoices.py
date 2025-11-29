@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -61,7 +61,9 @@ from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.tasks import (
     TransactionAwareProfiledEventTask, TransactionAwareTask,
 )
-from pretix.base.signals import invoice_line_text, periodic_task
+from pretix.base.signals import (
+    build_invoice_data, invoice_line_text, periodic_task,
+)
 from pretix.celery_app import app
 from pretix.helpers.database import OF_SELF, rolledback_transaction
 from pretix.helpers.models import modelcopy
@@ -82,11 +84,16 @@ def build_invoice(invoice: Invoice) -> Invoice:
 
     lp = invoice.order.payments.last()
 
+    min_period_start = None
+    max_period_end = None
+    now_dt = now()
+
     with (language(invoice.locale, invoice.event.settings.region)):
         invoice.invoice_from = invoice.event.settings.get('invoice_address_from')
         invoice.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
         invoice.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
         invoice.invoice_from_city = invoice.event.settings.get('invoice_address_from_city')
+        invoice.invoice_from_state = invoice.event.settings.get('invoice_address_from_state')
         invoice.invoice_from_country = invoice.event.settings.get('invoice_address_from_country')
         invoice.invoice_from_tax_id = invoice.event.settings.get('invoice_address_from_tax_id')
         invoice.invoice_from_vat_id = invoice.event.settings.get('invoice_address_from_vat_id')
@@ -208,7 +215,9 @@ def build_invoice(invoice: Invoice) -> Invoice:
         positions = list(
             invoice.order.positions.select_related('addon_to', 'item', 'tax_rule', 'subevent', 'variation').annotate(
                 addon_c=Count('addons')
-            ).prefetch_related('answers', 'answers__options', 'answers__question').order_by('positionid', 'id')
+            ).prefetch_related(
+                'answers', 'answers__options', 'answers__question', 'granted_memberships',
+            ).order_by('positionid', 'id')
         )
 
         reverse_charge = False
@@ -250,9 +259,15 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 if resp:
                     desc += "<br/>" + resp
 
-            for answ in p.answers.all():
-                if not answ.question.print_on_invoice:
-                    continue
+            answers_qs = p.answers.filter(
+                question__print_on_invoice=True
+            ).select_related(
+                'question'
+            ).order_by(
+                'question__position',
+                'question__id'
+            )
+            for answ in answers_qs:
                 desc += "<br />{}{} {}".format(
                     answ.question.question,
                     "" if str(answ.question.question).endswith("?") else ":",
@@ -267,6 +282,10 @@ def build_invoice(invoice: Invoice) -> Invoice:
                     location=_location_oneliner(location)
                 )
 
+            period_start, period_end = _service_period_for_position(invoice, p, now_dt)
+            min_period_start = min(min_period_start or period_start, period_start)
+            max_period_end = min(max_period_end or period_end, period_end)
+
             InvoiceLine.objects.create(
                 position=i,
                 invoice=invoice,
@@ -277,8 +296,8 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 item=p.item,
                 variation=p.variation,
                 attendee_name=p.attendee_name if invoice.event.settings.invoice_attendee_name else None,
-                event_date_from=p.subevent.date_from if invoice.event.has_subevents else invoice.event.date_from,
-                event_date_to=p.subevent.date_to if invoice.event.has_subevents else invoice.event.date_to,
+                period_start=period_start,
+                period_end=period_end,
                 event_location=location if invoice.event.settings.invoice_event_location else None,
                 tax_rate=p.tax_rate,
                 tax_code=p.tax_code,
@@ -301,13 +320,29 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 fee_title = _(fee.get_fee_type_display())
                 if fee.description:
                     fee_title += " - " + fee.description
+
+            if min_period_start and max_period_end:
+                # Consider fees to have the same service period as the products sold
+                period_start = min_period_start
+                period_end = max_period_end
+            else:
+                # Usually can only happen if everything except a cancellation fee is removed
+                if invoice.event.settings.invoice_period in ("auto", "auto_no_event", "event_date") and not invoice.event.has_subevents:
+                    # Non-series event, let's be backwards-compatible and tag everything with the event period
+                    period_start = invoice.event.date_from
+                    period_end = invoice.event.date_to
+                else:
+                    # We could try to work from the canceled positions, but it doesn't really make sense. A cancellation
+                    # fee is not "delivered" at the event date, it is rather effective right now.
+                    period_start = period_end = now()
+
             InvoiceLine.objects.create(
                 position=i + offset,
                 invoice=invoice,
                 description=fee_title,
                 gross_value=fee.value,
-                event_date_from=None if invoice.event.has_subevents else invoice.event.date_from,
-                event_date_to=None if invoice.event.has_subevents else invoice.event.date_to,
+                period_start=period_start,
+                period_end=period_end,
                 event_location=(
                     None if invoice.event.has_subevents
                     else (str(invoice.event.location)
@@ -336,6 +371,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         invoice.reverse_charge = reverse_charge
         invoice.save()
 
+        build_invoice_data.send(sender=invoice.event, invoice=invoice)
         return invoice
 
 
@@ -348,7 +384,58 @@ def build_cancellation(invoice: Invoice):
         line.gross_value *= -1
         line.tax_value *= -1
         line.save()
+
+    build_invoice_data.send(sender=invoice.event, invoice=invoice)
     return invoice
+
+
+def _service_period_for_position(invoice, position, invoice_dt):
+    if invoice.event.settings.invoice_period in ("auto", "auto_no_event"):
+        if position.valid_from and position.valid_until:
+            period_start = position.valid_from
+            period_end = position.valid_until
+        elif position.valid_from:
+            period_start = position.valid_from
+            period_end = position.valid_from  # weird, but we have nothing else to base this on
+        elif position.valid_until:
+            period_start = min(invoice.order.datetime, position.valid_until)
+            period_end = position.valid_until
+        elif memberships := list(position.granted_memberships.all()):
+            period_start = min(m.date_start for m in memberships)
+            period_end = max(m.date_end for m in memberships)
+        elif invoice.event.has_subevents:
+            if position.subevent:
+                period_start = position.subevent.date_from
+                period_end = position.subevent.date_to
+            else:
+                # Currently impossible case, but might not be in the future and never makes
+                # sense to use the event date here
+                period_start = invoice_dt
+                period_end = invoice_dt
+        elif invoice.event.settings.invoice_period == "auto_no_event":
+            period_start = invoice_dt
+            period_end = invoice_dt
+        else:
+            period_start = invoice.event.date_from
+            period_end = invoice.event.date_to
+    elif invoice.event.settings.invoice_period == "order_date":
+        period_start = invoice.order.datetime
+        period_end = invoice.order.datetime
+    elif invoice.event.settings.invoice_period == "event_date":
+        if position.subevent:
+            period_start = position.subevent.date_from
+            period_end = position.subevent.date_to
+        else:
+            period_start = invoice.event.date_from
+            period_end = invoice.event.date_to
+    elif invoice.event.settings.invoice_period == "invoice_date":
+        period_start = period_end = invoice_dt
+    else:
+        raise ValueError(f"Invalid invoice period setting '{invoice.event.settings.invoice_period}'")
+
+    if not period_end:
+        period_end = period_start
+    return period_start, period_end
 
 
 def generate_cancellation(invoice: Invoice, trigger_pdf=True):
@@ -373,6 +460,7 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
         cancellation.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
         cancellation.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
         cancellation.invoice_from_city = invoice.event.settings.get('invoice_address_from_city')
+        cancellation.invoice_from_state = invoice.event.settings.get('invoice_address_from_state')
         cancellation.invoice_from_country = invoice.event.settings.get('invoice_address_from_country')
         cancellation.invoice_from_tax_id = invoice.event.settings.get('invoice_address_from_tax_id')
         cancellation.invoice_from_vat_id = invoice.event.settings.get('invoice_address_from_vat_id')
@@ -456,6 +544,12 @@ def build_preview_invoice_pdf(event):
     if not locale or locale == '__user__':
         locale = event.settings.locale
 
+    if event.settings.invoice_period in ("auto", "auto_no_event", "event_date"):
+        period_start = event.date_from
+        period_end = event.date_to or event.date_from
+    else:
+        period_start = period_end = timezone.now()
+
     with rolledback_transaction(), language(locale, event.settings.region):
         order = event.orders.create(
             status=Order.STATUS_PENDING, datetime=timezone.now(),
@@ -470,6 +564,7 @@ def build_preview_invoice_pdf(event):
         invoice.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
         invoice.invoice_from_zipcode = invoice.event.settings.get('invoice_address_from_zipcode')
         invoice.invoice_from_city = invoice.event.settings.get('invoice_address_from_city')
+        invoice.invoice_from_state = invoice.event.settings.get('invoice_address_from_state')
         invoice.invoice_from_country = invoice.event.settings.get('invoice_address_from_country')
         invoice.invoice_from_tax_id = invoice.event.settings.get('invoice_address_from_tax_id')
         invoice.invoice_from_vat_id = invoice.event.settings.get('invoice_address_from_vat_id')
@@ -506,8 +601,8 @@ def build_preview_invoice_pdf(event):
                         invoice=invoice, description=_("Sample product {}").format(i + 1),
                         gross_value=tax.gross, tax_value=tax.tax,
                         tax_rate=tax.rate, tax_name=tax.name, tax_code=tax.code,
-                        event_date_from=event.date_from,
-                        event_date_to=event.date_to,
+                        period_start=period_start,
+                        period_end=period_end,
                         event_location=event.settings.invoice_event_location,
                     )
         else:
@@ -515,8 +610,8 @@ def build_preview_invoice_pdf(event):
                 InvoiceLine.objects.create(
                     invoice=invoice, description=_("Sample product A"),
                     gross_value=100, tax_value=0, tax_rate=0, tax_code=None,
-                    event_date_from=event.date_from,
-                    event_date_to=event.date_to,
+                    period_start=period_start,
+                    period_end=period_end,
                     event_location=event.settings.invoice_event_location,
                 )
 
@@ -587,6 +682,7 @@ def send_invoices_to_organizer(sender, **kwargs):
                             event=i.event,
                             invoices=[i],
                             auto_email=True,
+                            plain_text_only=True,
                         )
                     i.sent_to_organizer = True
                 else:
@@ -600,7 +696,7 @@ def retry_stuck_invoices(sender, **kwargs):
     with transaction.atomic():
         qs = Invoice.objects.filter(
             transmission_status=Invoice.TRANSMISSION_STATUS_INFLIGHT,
-            transmission_date__lte=now() - timedelta(hours=24),
+            transmission_date__lte=now() - timedelta(hours=48),
         ).select_for_update(
             of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked
         )

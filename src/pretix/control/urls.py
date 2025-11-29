@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -110,6 +110,10 @@ urlpatterns = [
             name='user.settings.2fa.confirm.webauthn'),
     re_path(r'^settings/2fa/(?P<devicetype>[^/]+)/(?P<device>[0-9]+)/delete', user.User2FADeviceDeleteView.as_view(),
             name='user.settings.2fa.delete'),
+    re_path(r'^settings/email/confirm$', user.UserEmailConfirmView.as_view(), name='user.settings.email.confirm'),
+    re_path(r'^settings/email/change$', user.UserEmailChangeView.as_view(), name='user.settings.email.change'),
+    re_path(r'^settings/email/verify', user.UserEmailVerifyView.as_view(), name='user.settings.email.send_verification_code'),
+    re_path(r'^settings/password/change$', user.UserPasswordChangeView.as_view(), name='user.settings.password.change'),
     re_path(r'^organizers/$', organizer.OrganizerList.as_view(), name='organizers'),
     re_path(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
     re_path(r'^organizers/select2$', typeahead.organizer_select2, name='organizers.select2'),
@@ -290,7 +294,7 @@ urlpatterns = [
         re_path(r'^settings/invoice$', event.InvoiceSettings.as_view(), name='event.settings.invoice'),
         re_path(r'^settings/invoice/preview$', event.InvoicePreview.as_view(), name='event.settings.invoice.preview'),
         re_path(r'^settings/display', event.DisplaySettings.as_view(), name='event.settings.display'),
-        re_path(r'^settings/tax/$', event.TaxList.as_view(), name='event.settings.tax'),
+        re_path(r'^settings/tax/$', event.TaxSettings.as_view(), name='event.settings.tax'),
         re_path(r'^settings/tax/(?P<rule>\d+)/$', event.TaxUpdate.as_view(), name='event.settings.tax.edit'),
         re_path(r'^settings/tax/add$', event.TaxCreate.as_view(), name='event.settings.tax.add'),
         re_path(r'^settings/tax/(?P<rule>\d+)/delete$', event.TaxDelete.as_view(), name='event.settings.tax.delete'),
@@ -387,6 +391,8 @@ urlpatterns = [
                 name='event.order.retransmitinvoice'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/reissue$', orders.OrderInvoiceReissue.as_view(),
                 name='event.order.reissueinvoice'),
+        re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/inspect$', orders.OrderInvoiceInspect.as_view(),
+                name='event.order.inspect'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/download/(?P<position>\d+)/(?P<output>[^/]+)/$',
                 orders.OrderDownload.as_view(),
                 name='event.order.download.ticket'),
@@ -460,6 +466,7 @@ urlpatterns = [
         re_path(r'^orders/search$', orders.OrderSearch.as_view(), name='event.orders.search'),
         re_path(r'^dangerzone/$', event.DangerZone.as_view(), name='event.dangerzone'),
         re_path(r'^cancel/$', orders.EventCancel.as_view(), name='event.cancel'),
+        re_path(r'^cancel/(?P<task>[^/]+)/$', orders.EventCancelConfirm.as_view(), name='event.cancel.confirm'),
         re_path(r'^shredder/$', shredder.StartShredView.as_view(), name='event.shredder.start'),
         re_path(r'^shredder/export$', shredder.ShredExportView.as_view(), name='event.shredder.export'),
         re_path(r'^shredder/download/(?P<file>[^/]+)/$', shredder.ShredDownloadView.as_view(), name='event.shredder.download'),

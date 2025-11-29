@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -39,7 +39,9 @@ import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Event, Organizer, Question, SeatingPlan
+from pretix.base.models import (
+    Event, ItemProgramTime, Organizer, Question, SeatingPlan,
+)
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 
 
@@ -78,6 +80,10 @@ def test_full_clone_same_organizer():
     # todo: test that item pictures are copied, not linked
     ItemMetaValue.objects.create(item=item1, property=item_meta, value="Foo")
     assert item1.meta_data
+    ItemProgramTime.objects.create(item=item1,
+                                   start=datetime.datetime(2017, 12, 27, 0, 0, 0, tzinfo=datetime.timezone.utc),
+                                   end=datetime.datetime(2017, 12, 28, 0, 0, 0, tzinfo=datetime.timezone.utc))
+    assert item1.program_times
     item2 = event.items.create(category=category, tax_rule=tax_rule, name="T-shirt", default_price=15,
                                hidden_if_item_available=item1)
     item2v = item2.variations.create(value="red", default_price=15, all_sales_channels=False)
@@ -161,6 +167,8 @@ def test_full_clone_same_organizer():
     assert copied_item1.category == copied_event.categories.get(name='Tickets')
     assert copied_item1.limit_sales_channels.get() == sc
     assert copied_item1.meta_data == item1.meta_data
+    assert copied_item1.program_times.first().start == item1.program_times.first().start
+    assert copied_item1.program_times.first().end == item1.program_times.first().end
     assert copied_item2.variations.get().meta_data == item2v.meta_data
     assert copied_item1.hidden_if_available == copied_q2
     assert copied_item1.grant_membership_type == membership_type

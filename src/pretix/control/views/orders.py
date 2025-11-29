@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -42,6 +42,7 @@ from datetime import datetime, time, timedelta
 from decimal import Decimal, DecimalException
 from urllib.parse import quote, urlencode
 
+from celery.result import AsyncResult
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -122,21 +123,24 @@ from pretix.control.forms.filter import (
     RefundFilterForm,
 )
 from pretix.control.forms.orders import (
-    CancelForm, CommentForm, DenyForm, EventCancelForm, ExporterForm,
-    ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeAddForm,
+    CancelForm, CommentForm, DenyForm, EventCancelConfirmForm, EventCancelForm,
+    ExporterForm, ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeAddForm,
     OrderFeeAddFormset, OrderFeeChangeForm, OrderLocaleForm, OrderMailForm,
     OrderPositionAddForm, OrderPositionAddFormset, OrderPositionChangeForm,
     OrderPositionMailForm, OrderRefundForm, OtherOperationsForm,
     ReactivateOrderForm,
 )
 from pretix.control.forms.rrule import RRuleForm
-from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.permissions import (
+    AdministratorPermissionRequiredMixin, EventPermissionRequiredMixin,
+)
 from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
 from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
+from pretix.helpers.json import CustomJSONEncoder
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
 
@@ -632,7 +636,9 @@ class OrderTransactions(OrderView):
         ctx['sums'] = self.order.transactions.aggregate(
             sum_count=Sum('count'),
             full_price=Sum(F('count') * F('price')),
+            full_price_includes_rounding_correction=Sum(F('count') * F('price_includes_rounding_correction')),
             full_tax_value=Sum(F('count') * F('tax_value')),
+            full_tax_value_includes_rounding_correction=Sum(F('count') * F('tax_value_includes_rounding_correction')),
         )
         return ctx
 
@@ -1221,6 +1227,7 @@ class OrderRefundView(OrderView):
                 giftcard = self.request.organizer.issued_gift_cards.create(
                     expires=expires,
                     currency=self.request.event.currency,
+                    customer=order.customer,
                     testmode=order.testmode
                 )
                 giftcard.log_action('pretix.giftcards.created', user=self.request.user, data={})
@@ -1748,6 +1755,25 @@ class OrderInvoiceReissue(OrderView):
         return HttpResponseNotAllowed(['POST'])
 
 
+class OrderInvoiceInspect(AdministratorPermissionRequiredMixin, OrderView):
+
+    def get(self, *args, **kwargs):  # NOQA
+        inv = get_object_or_404(self.order.invoices, pk=kwargs.get('id'))
+        d = {"lines": []}
+        for f in inv._meta.fields:
+            v = getattr(inv, f.name)
+            d[f.name] = v
+
+        for il in inv.lines.all():
+            line = {}
+            for f in il._meta.fields:
+                v = getattr(il, f.name)
+                line[f.name] = v
+            d["lines"].append(line)
+
+        return JsonResponse(d, encoder=CustomJSONEncoder)
+
+
 class OrderResendLink(OrderView):
     permission = 'can_change_orders'
 
@@ -2142,7 +2168,8 @@ class OrderChange(OrderView):
             self.order,
             user=self.request.user,
             notify=notify,
-            reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True
+            reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True,
+            allow_blocked_seats=True,
         )
         form_valid = (self._process_add_fees(ocm) and
                       self._process_add_positions(ocm) and
@@ -2974,10 +3001,99 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
             send_waitinglist_subject=form.cleaned_data.get('send_waitinglist_subject').data,
             send_waitinglist_message=form.cleaned_data.get('send_waitinglist_message').data,
             user=self.request.user.pk,
+            dry_run=settings.HAS_CELERY,
+        )
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            dry_run_supported=settings.HAS_CELERY,
         )
 
     def get_success_message(self, value):
-        if value == 0:
+        if value["dry_run"]:
+            return None
+        elif value["failed"] == 0:
+            return _('All orders have been canceled.')
+        else:
+            return _('The orders have been canceled. An error occurred with {count} orders, please '
+                     'check all uncanceled orders.').format(count=value)
+
+    def get_success_url(self, value):
+        if settings.HAS_CELERY:
+            return reverse('control:event.cancel.confirm', kwargs={
+                'organizer': self.request.organizer.slug,
+                'event': self.request.event.slug,
+                'task': value["id"],
+            })
+        else:
+            return reverse('control:event.cancel', kwargs={
+                'organizer': self.request.organizer.slug,
+                'event': self.request.event.slug,
+            })
+
+    def get_error_url(self):
+        return reverse('control:event.cancel', kwargs={
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_error_message(self, exception):
+        if isinstance(exception, str):
+            return exception
+        return super().get_error_message(exception)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your input was not valid.'))
+        return super().form_invalid(form)
+
+
+class EventCancelConfirm(EventPermissionRequiredMixin, AsyncAction, FormView):
+    template_name = 'pretixcontrol/orders/cancel_confirm.html'
+    permission = 'can_change_orders'
+    form_class = EventCancelConfirmForm
+    task = cancel_event
+    known_errortypes = ['OrderError']
+
+    @cached_property
+    def dryrun_result(self):
+        res = AsyncResult(self.kwargs.get("task"))
+        if not res.ready():
+            raise Http404()
+        if not res.successful():
+            raise Http404()
+        data = res.info
+        if not data.get("dry_run"):
+            raise Http404()
+        if data.get("args")[0] != self.request.event.pk:
+            raise Http404()
+        return data
+
+    def get(self, request, *args, **kwargs):
+        if 'async_id' in request.GET and settings.HAS_CELERY:
+            return self.get_result(request)
+        return FormView.get(self, request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        k = super().get_form_kwargs()
+        k['confirmation_code'] = self.dryrun_result["confirmation_code"]
+        return k
+
+    def form_valid(self, form):
+        return self.do(
+            *self.dryrun_result["args"],
+            **{
+                **self.dryrun_result["kwargs"],
+                "dry_run": False,
+            },
+        )
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            dryrun_result=self.dryrun_result,
+        )
+
+    def get_success_message(self, value):
+        if value["failed"] == 0:
             return _('All orders have been canceled.')
         else:
             return _('The orders have been canceled. An error occurred with {count} orders, please '

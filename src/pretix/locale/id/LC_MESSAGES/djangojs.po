@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-26 11:16+0000\n"
+"POT-Creation-Date: 2025-11-20 10:37+0000\n"
 "PO-Revision-Date: 2023-09-20 14:01+0000\n"
 "Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
@@ -335,13 +335,13 @@ msgstr "Saat ini di dalam"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "Yes"
 msgstr "Iya"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "No"
 msgstr "Tidak"
 
@@ -349,8 +349,8 @@ msgstr "Tidak"
 msgid "close"
 msgstr "menutup"
 
-#: pretix/static/pretixbase/js/addressform.js:90
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "diperlukan"
 
@@ -576,6 +576,14 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr ""
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
+msgid "Error: Product not found!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
+msgid "Error: Variation not found!"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "QR masuk"
@@ -646,13 +654,13 @@ msgstr "Menghasilkan pesan…"
 msgid "Unknown error."
 msgstr "Kesalahan yang tidak diketahui."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:292
+#: pretix/static/pretixcontrol/js/ui/main.js:309
 #, fuzzy
 #| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Warna Anda sangat kontras dan sangat mudah dibaca!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:296
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 #, fuzzy
 #| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
@@ -661,46 +669,46 @@ msgid ""
 msgstr ""
 "Warna Anda memiliki kontras yang layak dan mungkin cukup bagus untuk dibaca!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:300
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:443
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "Permintaan pencarian"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:435
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "Semua"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Tidak ada"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:440
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "Hanya dipilih"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:812
+#: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:815
+#: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:973
+#: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
 msgstr "Gunakan nama yang berbeda secara internal"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1013
+#: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
 msgstr "Klik untuk menutup"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1094
+#: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
 msgstr "Anda memiliki perubahan yang belum disimpan!"
 
@@ -722,7 +730,7 @@ msgstr "Yang lain"
 msgid "Count"
 msgstr "Menghitung"
 
-#: pretix/static/pretixcontrol/js/ui/subevent.js:111
+#: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
 msgstr[0] "(satu kencan lagi)"
@@ -787,7 +795,7 @@ msgstr "Anda mendapatkan %(currency)s %(amount)s kembali"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Silakan masukkan jumlah yang dapat disimpan oleh penyelenggara."
 
-#: pretix/static/pretixpresale/js/ui/main.js:564
+#: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
 msgstr "Waktu setempat Anda:"
 

@@ -7,6 +7,7 @@
         <h3>{% trans "Set new password" %}</h3>
         {% csrf_token %}
         {% bootstrap_form_errors form type='all' layout='inline' %}
+        {% bootstrap_field form.email %}
         {% bootstrap_field form.password %}
         {% bootstrap_field form.password_repeat %}
 		<div class="form-group buttons">

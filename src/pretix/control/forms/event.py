@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -42,7 +42,6 @@ import pycountry
 from django import forms
 from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
-from django.core.validators import MaxValueValidator
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import formset_factory, inlineformset_factory
 from django.urls import reverse
@@ -67,8 +66,9 @@ from pretix.base.models.tax import TAX_CODE_LISTS
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.settings import (
-    COUNTRIES_WITH_STATE_IN_ADDRESS, DEFAULTS, PERSON_NAME_SCHEMES,
-    PERSON_NAME_TITLE_GROUPS, validate_event_settings,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, COUNTRY_STATE_LABEL, DEFAULTS,
+    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, ROUNDING_MODES,
+    validate_event_settings,
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
@@ -373,6 +373,13 @@ class EventUpdateForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         if not self.change_slug:
             self.fields['slug'].widget.attrs['readonly'] = 'readonly'
+
+        if self.instance.orders.exists():
+            self.fields['currency'].disabled = True
+            self.fields['currency'].help_text = _(
+                'The currency cannot be changed because orders already exist.'
+            )
+
         self.fields['location'].widget.attrs['rows'] = '3'
         self.fields['location'].widget.attrs['placeholder'] = _(
             'Sample Conference Center\nHeidelberg, Germany'
@@ -541,7 +548,6 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'show_date_to',
         'show_times',
         'show_items_outside_presale_period',
-        'display_net_prices',
         'hide_prices_from_attendees',
         'presale_start_show_date',
         'locales',
@@ -799,6 +805,80 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         return value
 
 
+class DisplayNetPricesBooleanSelect(forms.RadioSelect):
+    def __init__(self, attrs=None):
+        choices = (
+            ("false", format_html(
+                '{} <br><span class="text-muted">{}</span>',
+                _("Prices including tax"),
+                _("Recommended if you sell tickets at least partly to consumers.")
+            )),
+            ("true", format_html(
+                '{} <br><span class="text-muted">{}</span>',
+                _("Prices excluding tax"),
+                _("Recommended only if you sell tickets primarily to business customers.")
+            )),
+        )
+        super().__init__(attrs, choices)
+
+    def format_value(self, value):
+        try:
+            return {
+                True: "true",
+                False: "false",
+                "true": "true",
+                "false": "false",
+            }[value]
+        except KeyError:
+            return "unknown"
+
+    def value_from_datadict(self, data, files, name):
+        value = data.get(name)
+        return {
+            True: True,
+            "True": True,
+            "False": False,
+            False: False,
+            "true": True,
+            "false": False,
+        }.get(value)
+
+
+class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
+    auto_fields = [
+        'display_net_prices',
+        'tax_rounding',
+    ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["display_net_prices"].label = _("Prices shown to customer")
+        self.fields["display_net_prices"].widget = DisplayNetPricesBooleanSelect()
+        help_text = {
+            "line": _(
+                "Recommended when e-invoicing is not required. Each product will be sold with the advertised "
+                "net and gross price. However, in orders of more than one product, the total tax amount "
+                "can differ from when it would be computed from the order total."
+            ),
+            "sum_by_net": _(
+                "Recommended for e-invoicing when you primarily sell to business customers and "
+                "show prices to customers excluding tax. "
+                "The gross price of some products may be changed to ensure correct rounding, while the net "
+                "prices will be kept as configured. This may cause the actual payment amount to differ."
+            ),
+            "sum_by_net_keep_gross": _(
+                "Recommended for e-invoicing when you primarily sell to consumers. "
+                "The gross or net price of some products may be changed automatically to ensure correct "
+                "rounding of the order total. The system attempts to keep gross prices as configured whenever "
+                "possible. Gross prices may still change if they are impossible to derive from a rounded net price."
+            ),
+        }
+        self.fields["tax_rounding"].choices = (
+            (k, format_html('{}<br><span class="text-muted">{}</span>', v, help_text.get(k, "")))
+            for k, v in ROUNDING_MODES
+        )
+
+
 class ProviderForm(SettingsForm):
     """
     This is a SettingsForm, but if fields are set to required=True, validation
@@ -857,6 +937,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_show_payments',
         'invoice_reissue_after_modify',
         'invoice_generate',
+        'invoice_period',
         'invoice_attendee_name',
         'invoice_event_location',
         'invoice_include_expire_date',
@@ -871,6 +952,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_address_from',
         'invoice_address_from_zipcode',
         'invoice_address_from_city',
+        'invoice_address_from_state',
         'invoice_address_from_country',
         'invoice_address_from_tax_id',
         'invoice_address_from_vat_id',
@@ -917,8 +999,6 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         self.fields['invoice_generate_sales_channels'].choices = (
             (c.identifier, c.label) for c in event.organizer.sales_channels.all()
         )
-        self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
-
         pps = [str(pp.verbose_name) for pp in event.get_payment_providers().values() if pp.requires_invoice_immediately]
         if pps:
             generate_paid_help_text = _('An invoice will be issued before payment if the customer selects one of the following payment methods: {list}').format(
@@ -942,6 +1022,26 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         self.fields['invoice_renderer_font'].choices += [
             (a, a) for a in get_fonts(event, pdf_support_required=True).keys()
         ]
+
+        if 'invoice_address_from_country' in self.data:
+            cc = str(self.data['invoice_address_from_country'])
+        elif 'invoice_address_from_country' in self.initial:
+            cc = str(self.initial['invoice_address_from_country'])
+        else:
+            cc = self.obj.settings.invoice_address_from_country
+        c = [('', '---')]
+        state_label = pgettext_lazy('address', 'State')
+        if cc and cc in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
+            statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
+            c += sorted([(s.code[3:], s.name) for s in statelist], key=lambda s: s[1])
+            if cc in COUNTRY_STATE_LABEL:
+                state_label = COUNTRY_STATE_LABEL[cc]
+        elif 'invoice_address_from_state' in self.data:
+            self.data = self.data.copy()
+            del self.data['invoice_address_from_state']
+        self.fields['invoice_address_from_state'].choices = c
+        self.fields['invoice_address_from_state'].label = state_label
 
 
 def contains_web_channel_validate(val):
@@ -1526,7 +1626,10 @@ class TaxRuleLineForm(I18nForm):
     rate = forms.DecimalField(
         label=_('Deviating tax rate'),
         max_digits=10, decimal_places=2,
-        required=False
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'placeholder': _('Deviating tax rate'),
+        })
     )
     invoice_text = I18nFormField(
         label=_('Text on invoice'),
@@ -1761,7 +1864,11 @@ class QuickSetupForm(I18nForm):
         self.fields['payment_banktransfer_bank_details'].required = False
         for f in self.fields.values():
             if 'data-required-if' in f.widget.attrs:
-                del f.widget.attrs['data-required-if']
+                f.widget.attrs['data-required-if'] += ",#id_payment_banktransfer__enabled"
+
+        self.fields['payment_banktransfer_bank_details'].widget.attrs["data-required-if"] = (
+            "#id_payment_banktransfer_bank_details_type_1,#id_payment_banktransfer__enabled"
+        )
 
     def clean(self):
         cleaned_data = super().clean()

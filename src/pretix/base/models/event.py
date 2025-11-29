@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -847,7 +847,7 @@ class Event(EventMixin, LoggedModel):
         from ..signals import event_copy_data
         from . import (
             Discount, Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue,
-            ItemVariationMetaValue, Question, Quota,
+            ItemProgramTime, ItemVariationMetaValue, Question, Quota,
         )
 
         #  Note: avoid self.set_active_plugins(), it causes trouble e.g. for the badges plugin.
@@ -989,6 +989,12 @@ class Event(EventMixin, LoggedModel):
             if ia.bundled_variation:
                 ia.bundled_variation = variation_map[ia.bundled_variation.pk]
             ia.save(force_insert=True)
+
+        if not self.has_subevents and not other.has_subevents:
+            for ipt in ItemProgramTime.objects.filter(item__event=other).prefetch_related('item'):
+                ipt.pk = None
+                ipt.item = item_map[ipt.item.pk]
+                ipt.save(force_insert=True)
 
         quota_map = {}
         for q in Quota.objects.filter(event=other, subevent__isnull=True).prefetch_related('items', 'variations'):
@@ -1639,20 +1645,16 @@ class SubEvent(EventMixin, LoggedModel):
 
     @cached_property
     def item_overrides(self):
-        from .items import SubEventItem
-
         return {
             si.item_id: si
-            for si in SubEventItem.objects.filter(subevent=self)
+            for si in self.subeventitem_set.all()
         }
 
     @cached_property
     def var_overrides(self):
-        from .items import SubEventItemVariation
-
         return {
             si.variation_id: si
-            for si in SubEventItemVariation.objects.filter(subevent=self)
+            for si in self.subeventitemvariation_set.all()
         }
 
     @property

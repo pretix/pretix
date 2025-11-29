@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -26,7 +26,7 @@ from itertools import zip_longest
 
 import django_redis
 from django.conf import settings
-from django.db import models
+from django.db import connection, models
 from django.db.models import (
     Case, Count, F, Func, Max, OuterRef, Q, Subquery, Sum, Value, When,
     prefetch_related_objects,
@@ -64,7 +64,8 @@ class QuotaAvailability:
     * count_cart (dict mapping quotas to ints)
     """
 
-    def __init__(self, count_waitinglist=True, ignore_closed=False, full_results=False, early_out=True):
+    def __init__(self, count_waitinglist=True, ignore_closed=False, full_results=False, early_out=True,
+                 allow_repeatable_read=False):
         """
         Initialize a new quota availability calculator
 
@@ -86,6 +87,8 @@ class QuotaAvailability:
                           keep the database-level quota cache up to date so backend overviews render quickly. If you
                           do not care about keeping the cache up to date, you can set this to ``False`` for further
                           performance improvements.
+
+        :param allow_repeatable_read: Allow to run this even in REPEATABLE READ mode, generally not advised.
         """
         self._queue = []
         self._count_waitinglist = count_waitinglist
@@ -95,6 +98,7 @@ class QuotaAvailability:
         self._var_to_quotas = defaultdict(set)
         self._early_out = early_out
         self._quota_objects = {}
+        self._allow_repeatable_read = allow_repeatable_read
         self.results = {}
         self.count_paid_orders = defaultdict(int)
         self.count_pending_orders = defaultdict(int)
@@ -119,6 +123,10 @@ class QuotaAvailability:
         Compute the queued quotas. If ``allow_cache`` is set, results may also be taken from a cache that might
         be a few minutes outdated. In this case, you may not rely on the results in the ``count_*`` properties.
         """
+        if not self._allow_repeatable_read and getattr(connection, "tx_in_repeatable_read", False):
+            raise ValueError("You cannot compute quotas in REPEATABLE READ mode unless you explicitly opted in to "
+                             "do so.")
+
         now_dt = now_dt or now()
         quota_ids_set = {q.id for q in self._queue}
         if not quota_ids_set:

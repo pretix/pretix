@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -46,7 +46,8 @@ from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
     CartPosition, InvoiceAddress, Item, ItemAddOn, ItemBundle, ItemCategory,
-    ItemVariation, Order, OrderPosition, Question, QuestionOption, Quota,
+    ItemProgramTime, ItemVariation, Order, OrderPosition, Question,
+    QuestionOption, Quota,
 )
 from pretix.base.models.orders import OrderFee
 
@@ -331,6 +332,7 @@ TEST_ITEM_RES = {
     "variations": [],
     "addons": [],
     "bundles": [],
+    "program_times": [],
     "show_quota_left": None,
     "original_price": None,
     "free_price_suggestion": None,
@@ -502,6 +504,24 @@ def test_item_detail_bundles(token_client, organizer, event, team, item, categor
         "bundled_variation": None,
         "count": 1,
         "designated_price": '2.00',
+    }]
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
+                                                                               item.pk))
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_item_detail_program_times(token_client, organizer, event, team, item, category):
+    with scopes_disabled():
+        item.program_times.create(item=item, start=datetime(2017, 12, 27, 0, 0, 0, tzinfo=timezone.utc),
+                                  end=datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc))
+    res = dict(TEST_ITEM_RES)
+
+    res["id"] = item.pk
+    res["program_times"] = [{
+        "start": "2017-12-27T00:00:00Z",
+        "end": "2017-12-28T00:00:00Z",
     }]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
                                                                                item.pk))
@@ -1072,6 +1092,57 @@ def test_item_create_with_bundle(token_client, organizer, event, item, category,
     assert resp.content.decode() == '{"bundles":["The chosen variation does not belong to this item."]}'
 
 
+@pytest.mark.django_db
+def test_item_create_with_product_time(token_client, organizer, event, item, category, taxrule):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "tax_rate": "19.00",
+            "tax_rule": taxrule.pk,
+            "admission": True,
+            "issue_giftcard": False,
+            "position": 0,
+            "picture": None,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "checkin_text": None,
+            "has_variations": False,
+            "program_times": [
+                {
+                    "start": "2017-12-27T00:00:00Z",
+                    "end": "2017-12-28T00:00:00Z",
+                },
+                {
+                    "start": "2017-12-29T00:00:00Z",
+                    "end": "2017-12-30T00:00:00Z",
+                }
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        new_item = Item.objects.get(pk=resp.data['id'])
+        assert new_item.program_times.first().start == datetime(2017, 12, 27, 0, 0, 0, tzinfo=timezone.utc)
+        assert new_item.program_times.first().end == datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc)
+        assert new_item.program_times.last().start == datetime(2017, 12, 29, 0, 0, 0, tzinfo=timezone.utc)
+        assert new_item.program_times.last().end == datetime(2017, 12, 30, 0, 0, 0, tzinfo=timezone.utc)
+
+
 @pytest.mark.django_db(transaction=True)
 def test_item_update(token_client, organizer, event, item, category, item2, category2, taxrule2):
     resp = token_client.patch(
@@ -1147,8 +1218,8 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
-                                    'the dedicated nested endpoint."]}'
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, program times or variations via ' \
+                                    'PATCH/PUT is not supported. Please use the dedicated nested endpoint."]}'
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -1165,8 +1236,8 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
-                                    'the dedicated nested endpoint."]}'
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, program times or variations via ' \
+                                    'PATCH/PUT is not supported. Please use the dedicated nested endpoint."]}'
 
     item.personalized = True
     item.admission = True
@@ -1322,8 +1393,8 @@ def test_item_update_with_variation(token_client, organizer, event, item):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
-                                    'the dedicated nested endpoint."]}'
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, program times or variations via ' \
+                                    'PATCH/PUT is not supported. Please use the dedicated nested endpoint."]}'
 
 
 @pytest.mark.django_db
@@ -1345,8 +1416,8 @@ def test_item_update_with_addon(token_client, organizer, event, item, category):
         format='json'
     )
     assert resp.status_code == 400
-    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
-                                    'the dedicated nested endpoint."]}'
+    assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, program times or variations via ' \
+                                    'PATCH/PUT is not supported. Please use the dedicated nested endpoint."]}'
 
 
 @pytest.mark.django_db
@@ -1879,6 +1950,123 @@ def test_addons_delete(token_client, organizer, event, item, addon):
     assert resp.status_code == 204
     with scopes_disabled():
         assert not item.addons.filter(pk=addon.id).exists()
+
+
+@pytest.fixture
+def program_time(item, category):
+    return item.program_times.create(start=datetime(2017, 12, 27, 0, 0, 0, tzinfo=timezone.utc),
+                                     end=datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc))
+
+
+@pytest.fixture
+def program_time2(item, category):
+    return item.program_times.create(start=datetime(2017, 12, 29, 0, 0, 0, tzinfo=timezone.utc),
+                                     end=datetime(2017, 12, 30, 0, 0, 0, tzinfo=timezone.utc))
+
+
+TEST_PROGRAM_TIMES_RES = {
+    0: {
+        "start": "2017-12-27T00:00:00Z",
+        "end": "2017-12-28T00:00:00Z",
+    },
+    1: {
+        "start": "2017-12-29T00:00:00Z",
+        "end": "2017-12-30T00:00:00Z",
+    }
+}
+
+
+@pytest.mark.django_db
+def test_program_times_list(token_client, organizer, event, item, program_time, program_time2):
+    res = dict(TEST_PROGRAM_TIMES_RES)
+    res[0]["id"] = program_time.pk
+    res[1]["id"] = program_time2.pk
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/program_times/'.format(organizer.slug, event.slug,
+                                                                                             item.pk))
+    assert resp.status_code == 200
+    assert res[0]['start'] == resp.data['results'][0]['start']
+    assert res[0]['end'] == resp.data['results'][0]['end']
+    assert res[0]['id'] == resp.data['results'][0]['id']
+    assert res[1]['start'] == resp.data['results'][1]['start']
+    assert res[1]['end'] == resp.data['results'][1]['end']
+    assert res[1]['id'] == resp.data['results'][1]['id']
+
+
+@pytest.mark.django_db
+def test_program_times_detail(token_client, organizer, event, item, program_time):
+    res = dict(TEST_PROGRAM_TIMES_RES)
+    res[0]["id"] = program_time.pk
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/items/{}/program_times/{}/'.format(organizer.slug, event.slug,
+                                                                            item.pk, program_time.pk))
+    assert resp.status_code == 200
+    assert res[0] == resp.data
+
+
+@pytest.mark.django_db
+def test_program_times_create(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/program_times/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "start": "2017-12-27T00:00:00Z",
+            "end": "2017-12-28T00:00:00Z"
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        program_time = ItemProgramTime.objects.get(pk=resp.data['id'])
+    assert datetime(2017, 12, 27, 0, 0, 0, tzinfo=timezone.utc) == program_time.start
+    assert datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc) == program_time.end
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/program_times/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "start": "2017-12-28T00:00:00Z",
+            "end": "2017-12-27T00:00:00Z"
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The program end must not be before the program start."]}'
+
+
+@pytest.mark.django_db
+def test_program_times_update(token_client, organizer, event, item, program_time):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/program_times/{}/'.format(organizer.slug, event.slug, item.pk,
+                                                                            program_time.pk),
+        {
+            "start": "2017-12-26T00:00:00Z"
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        program_time = ItemProgramTime.objects.get(pk=resp.data['id'])
+    assert datetime(2017, 12, 26, 0, 0, 0, tzinfo=timezone.utc) == program_time.start
+    assert datetime(2017, 12, 28, 0, 0, 0, tzinfo=timezone.utc) == program_time.end
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/program_times/{}/'.format(organizer.slug, event.slug, item.pk,
+                                                                            program_time.pk),
+        {
+            "start": "2017-12-30T00:00:00Z"
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["The program end must not be before the program start."]}'
+
+
+@pytest.mark.django_db
+def test_program_times_delete(token_client, organizer, event, item, program_time):
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/items/{}/program_times/{}/'.format(organizer.slug, event.slug,
+                                                                            item.pk, program_time.pk))
+    assert resp.status_code == 204
+    with scopes_disabled():
+        assert not item.program_times.filter(pk=program_time.id).exists()
 
 
 @pytest.fixture

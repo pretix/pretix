@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -222,7 +222,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                     'invoice_company': ''
                 })
         renderer = ClassicMailRenderer(None, organizer)
-        content_plain = body_plain = render_mail(template, context)
+        body_plain = render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN)
         subject = str(subject).format_map(TolerantDict(context))
         sender = (
             sender or
@@ -316,6 +316,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
         with override(timezone):
             try:
+                content_plain = render_mail(template, context, placeholder_mode=None)
                 if plain_text_only:
                     body_html = None
                 elif 'context' in inspect.signature(renderer.render).parameters:
@@ -470,9 +471,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                         logger.exception('Could not attach invoice to email')
                                         pass
 
-                            if attach_size < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1:
+                            if attach_size * 1.37 < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1024 * 1024:
                                 # Do not attach more than (limit - 1 MB) in tickets (1MB space for invoice, email itself, …),
                                 # it will bounce way to often.
+                                # 1 MB is the buffer for the rest of the email (text, invoice, calendar, pictures)
+                                # 1.37 is the factor for base64 encoding https://en.wikipedia.org/wiki/Base64
                                 for a in args:
                                     try:
                                         email.attach(*a)
@@ -749,11 +752,11 @@ def mail_send(*args, **kwargs):
     mail_send_task.apply_async(args=args, kwargs=kwargs)
 
 
-def render_mail(template, context):
+def render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN):
     if isinstance(template, LazyI18nString):
         body = str(template)
-        if context:
-            body = format_map(body, context, mode=SafeFormatter.MODE_IGNORE_RICH)
+        if context and placeholder_mode:
+            body = format_map(body, context, mode=placeholder_mode)
     else:
         tpl = get_template(template)
         body = tpl.render(context)

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -280,13 +280,13 @@ class Seat(models.Model):
 
     def is_available(self, ignore_cart=None, ignore_orderpos=None, ignore_voucher_id=None,
                      sales_channel='web',
-                     ignore_distancing=False, distance_ignore_cart_id=None):
+                     ignore_distancing=False, distance_ignore_cart_id=None, always_allow_blocked=False):
         from .orders import Order
         from .organizer import SalesChannel
 
         if isinstance(sales_channel, SalesChannel):
             sales_channel = sales_channel.identifier
-        if self.blocked and sales_channel not in self.event.settings.seating_allow_blocked_seats_for_channel:
+        if not always_allow_blocked and self.blocked and sales_channel not in self.event.settings.seating_allow_blocked_seats_for_channel:
             return False
         opqs = self.orderposition_set.filter(
             order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID],

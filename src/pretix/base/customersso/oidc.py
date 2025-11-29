@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -111,23 +111,6 @@ def oidc_validate_and_complete_config(config):
             _('You are not requesting "{scope}".').format(
                 scope="openid",
             ))
-
-    for scope in config["scope"].split(" "):
-        if scope not in provider_config.get("scopes_supported", []):
-            raise ValidationError(_('You are requesting scope "{scope}" but provider only supports these: {scopes}.').format(
-                scope=scope,
-                scopes=", ".join(provider_config.get("scopes_supported", []))
-            ))
-
-    if "claims_supported" in provider_config:
-        claims_supported = provider_config.get("claims_supported", [])
-        for k, v in config.items():
-            if k.endswith('_field') and v:
-                if v not in claims_supported:  # https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
-                    raise ValidationError(_('You are requesting field "{field}" but provider only supports these: {fields}.').format(
-                        field=v,
-                        fields=", ".join(provider_config.get("claims_supported", []))
-                    ))
 
     if "token_endpoint_auth_methods_supported" in provider_config:
         token_endpoint_auth_methods_supported = provider_config.get("token_endpoint_auth_methods_supported",

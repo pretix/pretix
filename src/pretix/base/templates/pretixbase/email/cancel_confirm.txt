@@ -1,0 +1,10 @@
+{% load i18n %}
+{% trans "You have requested us to cancel an event which includes a larger bulk-refund:" %}
+
+{% trans "Event" %}: {{ event }}
+
+{% trans "Estimated refund amount" %}: **{{ amount }}**
+
+{% trans "Please confirm that you want to proceed by coping the following confirmation code into the cancellation form:" %}
+
+**{{ confirmation_code }}**

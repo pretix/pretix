@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -858,50 +858,58 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
 
             for c in currencies:
                 c_head = f" [{c}]" if len(currencies) > 1 else ""
-                story += [
-                    Spacer(0, 3 * mm),
-                    FontFallbackParagraph(_("Orders") + c_head, style_h2),
-                    Spacer(0, 3 * mm),
-                    *self._table_transactions(form_data, c),
-                ]
+                s = self._table_transactions(form_data, c)
+                if s:
+                    story += [
+                        Spacer(0, 3 * mm),
+                        FontFallbackParagraph(_("Orders") + c_head, style_h2),
+                        Spacer(0, 3 * mm),
+                        *s
+                    ]
 
             for c in currencies:
                 c_head = f" [{c}]" if len(currencies) > 1 else ""
-                story += [
-                    Spacer(0, 8 * mm),
-                    FontFallbackParagraph(_("Payments") + c_head, style_h2),
-                    Spacer(0, 3 * mm),
-                    *self._table_payments(form_data, c),
-                ]
+                s = self._table_payments(form_data, c)
+                if s:
+                    story += [
+                        Spacer(0, 8 * mm),
+                        FontFallbackParagraph(_("Payments") + c_head, style_h2),
+                        Spacer(0, 3 * mm),
+                        *s
+                    ]
 
             for c in currencies:
                 c_head = f" [{c}]" if len(currencies) > 1 else ""
-                story += [
-                    Spacer(0, 8 * mm),
-                    KeepTogether(
-                        [
-                            FontFallbackParagraph(_("Open items") + c_head, style_h2),
-                            Spacer(0, 3 * mm),
-                            *self._table_open_items(form_data, c),
-                        ]
-                    ),
-                ]
+                s = self._table_open_items(form_data, c)
+                if s:
+                    story += [
+                        Spacer(0, 8 * mm),
+                        KeepTogether(
+                            [
+                                FontFallbackParagraph(_("Open items") + c_head, style_h2),
+                                Spacer(0, 3 * mm),
+                                *s
+                            ]
+                        ),
+                    ]
             if (
                 self.is_multievent
                 and self.events.count() == self.organizer.events.count()
             ):
                 for c in currencies:
                     c_head = f" [{c}]" if len(currencies) > 1 else ""
-                    story += [
-                        Spacer(0, 8 * mm),
-                        KeepTogether(
-                            [
-                                FontFallbackParagraph(_("Gift cards") + c_head, style_h2),
-                                Spacer(0, 3 * mm),
-                                *self._table_gift_cards(form_data, c),
-                            ]
-                        ),
-                    ]
+                    s = self._table_gift_cards(form_data, c)
+                    if s:
+                        story += [
+                            Spacer(0, 8 * mm),
+                            KeepTogether(
+                                [
+                                    FontFallbackParagraph(_("Gift cards") + c_head, style_h2),
+                                    Spacer(0, 3 * mm),
+                                    *s,
+                                ]
+                            ),
+                        ]
 
             doc.build(story, canvasmaker=self.canvas_class(doc))
             f.seek(0)

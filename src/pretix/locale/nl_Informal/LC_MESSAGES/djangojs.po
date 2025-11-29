@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-26 11:16+0000\n"
+"POT-Creation-Date: 2025-11-20 10:37+0000\n"
 "PO-Revision-Date: 2021-08-05 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -337,13 +337,13 @@ msgstr "Op dit moment binnen"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "Yes"
 msgstr "Ja"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "No"
 msgstr "Nee"
 
@@ -354,8 +354,8 @@ msgstr "Nee"
 msgid "close"
 msgstr "Sluiten"
 
-#: pretix/static/pretixbase/js/addressform.js:90
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "verplicht"
 
@@ -578,6 +578,14 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr ""
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
+msgid "Error: Product not found!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
+msgid "Error: Variation not found!"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "QR-code voor check-in"
@@ -648,13 +656,13 @@ msgstr "Bezig met het genereren van berichten …"
 msgid "Unknown error."
 msgstr "Onbekende fout."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:292
+#: pretix/static/pretixcontrol/js/ui/main.js:309
 #, fuzzy
 #| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Je kleur heeft een goed contrast, en is gemakkelijk te lezen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:296
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 #, fuzzy
 #| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
@@ -663,46 +671,46 @@ msgid ""
 msgstr ""
 "Je kleur heeft een redelijk contrast, en is waarschijnlijk goed te lezen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:300
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:443
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "Zoekopdracht"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:435
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Geen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:440
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "Alleen geselecteerde"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:812
+#: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:815
+#: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:973
+#: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1013
+#: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1094
+#: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
 msgstr "Je hebt nog niet opgeslagen wijzigingen!"
 
@@ -724,7 +732,7 @@ msgstr "Andere"
 msgid "Count"
 msgstr "Aantal"
 
-#: pretix/static/pretixcontrol/js/ui/subevent.js:111
+#: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
 msgstr[0] "(één andere datum)"
@@ -793,7 +801,7 @@ msgstr "Jij krijgt %(currency)s %(amount)s terug"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Voer het bedrag in dat de organisator mag houden."
 
-#: pretix/static/pretixpresale/js/ui/main.js:564
+#: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
 msgstr "Je lokale tijd:"
 

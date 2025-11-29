@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-26 11:16+0000\n"
-"PO-Revision-Date: 2025-09-25 03:00+0000\n"
+"POT-Creation-Date: 2025-11-20 10:37+0000\n"
+"PO-Revision-Date: 2025-11-18 17:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -134,7 +134,7 @@ msgstr "Mercado Pago"
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
-msgstr "次へ"
+msgstr "続ける"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:244
@@ -299,7 +299,7 @@ msgstr "チケットコードのブロック/変更"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Ticket blocked"
-msgstr "チケットブロック中"
+msgstr "チケットがブロックされました"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket not valid at this time"
@@ -331,13 +331,13 @@ msgstr "現在入場中"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "Yes"
 msgstr "はい"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "No"
 msgstr "いいえ"
 
@@ -345,8 +345,8 @@ msgstr "いいえ"
 msgid "close"
 msgstr "閉じる"
 
-#: pretix/static/pretixbase/js/addressform.js:90
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "必要"
 
@@ -449,7 +449,7 @@ msgstr "="
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
-msgstr "商品"
+msgstr "製品"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
@@ -561,6 +561,14 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr "欠席"
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
+msgid "Error: Product not found!"
+msgstr "エラー:製品が見つかりません!"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
+msgid "Error: Variation not found!"
+msgstr "エラー:バリエーションが見つかりません!"
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "チェックイン用QRコード"
@@ -626,13 +634,13 @@ msgstr "メッセージを作成中…"
 msgid "Unknown error."
 msgstr "不明なエラー。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:292
+#: pretix/static/pretixcontrol/js/ui/main.js:309
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr ""
 "あなたの色は素晴らしいコントラストを持ち、優れたアクセシビリティを提供しま"
 "す。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:296
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
@@ -640,7 +648,7 @@ msgstr ""
 "あなたの色は適切なコントラストを持ち、最小限のアクセシビリティ要件に十分で"
 "す。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:300
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
@@ -648,40 +656,40 @@ msgstr ""
 "あなたの色は白に対して十分なコントラストがありません。サイトのアクセシビリ"
 "ティに影響します。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:443
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "検索クエリ"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:435
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "全て"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "ない"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:440
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "選択したもののみ"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:812
+#: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
 msgstr "1以上%(max)s以下のページ番号を入力。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:815
+#: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
 msgstr "無効なページ番号。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:973
+#: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
 msgstr "内部で別の名前を使用してください"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1013
+#: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
 msgstr "クリックして閉じる"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1094
+#: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
 msgstr "保存されていない変更があります！"
 
@@ -701,7 +709,7 @@ msgstr "その他"
 msgid "Count"
 msgstr "カウント"
 
-#: pretix/static/pretixcontrol/js/ui/subevent.js:111
+#: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
 msgstr[0] "({num} 他の日程)"
@@ -760,7 +768,7 @@ msgstr "%(currency)s %(amount)s が払い戻されます"
 msgid "Please enter the amount the organizer can keep."
 msgstr "主催者が留保する料金を入力してください。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:564
+#: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
 msgstr "現地時間："
 

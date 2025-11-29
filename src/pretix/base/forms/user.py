@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -39,37 +39,16 @@ from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
 )
 from django.db.models import Q
+from django.urls.base import reverse
 from django.utils.translation import gettext_lazy as _
 from pytz import common_timezones
 
 from pretix.base.models import User
 from pretix.control.forms import SingleLanguageWidget
+from pretix.helpers.format import format_map
 
 
 class UserSettingsForm(forms.ModelForm):
-    error_messages = {
-        'duplicate_identifier': _("There already is an account associated with this email address. "
-                                  "Please choose a different one."),
-        'pw_current': _("Please enter your current password if you want to change your email address "
-                        "or password."),
-        'pw_current_wrong': _("The current password you entered was not correct."),
-        'pw_mismatch': _("Please enter the same password twice"),
-        'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
-        'pw_equal': _("Please choose a password different to your current one.")
-    }
-
-    old_pw = forms.CharField(max_length=255,
-                             required=False,
-                             label=_("Your current password"),
-                             widget=forms.PasswordInput())
-    new_pw = forms.CharField(max_length=255,
-                             required=False,
-                             label=_("New password"),
-                             widget=forms.PasswordInput())
-    new_pw_repeat = forms.CharField(max_length=255,
-                                    required=False,
-                                    label=_("Repeat new password"),
-                                    widget=forms.PasswordInput())
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
         label=_("Default timezone"),
@@ -93,16 +72,63 @@ class UserSettingsForm(forms.ModelForm):
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.fields['email'].required = True
-        if self.user.auth_backend != 'native':
-            del self.fields['old_pw']
-            del self.fields['new_pw']
-            del self.fields['new_pw_repeat']
-            self.fields['email'].disabled = True
+        self.fields['email'].disabled = True
+        self.fields['email'].help_text = format_map('<a href="{link}"><span class="fa fa-edit"></span> {text}</a>', {
+            'text': _("Change email address"),
+            'link': reverse('control:user.settings.email.change')
+        })
+
+
+class User2FADeviceAddForm(forms.Form):
+    name = forms.CharField(label=_('Device name'), max_length=64)
+    devicetype = forms.ChoiceField(label=_('Device type'), widget=forms.RadioSelect, choices=(
+        ('totp', _('Smartphone with the Authenticator application')),
+        ('webauthn', _('WebAuthn-compatible hardware token (e.g. Yubikey)')),
+    ))
+
+
+class UserPasswordChangeForm(forms.Form):
+    error_messages = {
+        'pw_current_wrong': _("The current password you entered was not correct."),
+        'pw_mismatch': _("Please enter the same password twice"),
+        'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
+        'pw_equal': _("Please choose a password different to your current one.")
+    }
+    email = forms.EmailField(max_length=255,
+                             disabled=True,
+                             label=_("Your email address"),
+                             widget=forms.EmailInput(
+                                 attrs={'autocomplete': 'username'},
+                             ))
+    old_pw = forms.CharField(max_length=255,
+                             required=True,
+                             label=_("Your current password"),
+                             widget=forms.PasswordInput(
+                                 attrs={'autocomplete': 'current-password'},
+                             ))
+    new_pw = forms.CharField(max_length=255,
+                             required=True,
+                             label=_("New password"),
+                             widget=forms.PasswordInput(
+                                 attrs={'autocomplete': 'new-password'},
+                             ))
+    new_pw_repeat = forms.CharField(max_length=255,
+                                    required=True,
+                                    label=_("Repeat new password"),
+                                    widget=forms.PasswordInput(
+                                        attrs={'autocomplete': 'new-password'},
+                                    ))
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        initial = kwargs.pop('initial', {})
+        initial['email'] = self.user.email
+        super().__init__(*args, initial=initial, **kwargs)
 
     def clean_old_pw(self):
         old_pw = self.cleaned_data.get('old_pw')
 
-        if old_pw and settings.HAS_REDIS:
+        if settings.HAS_REDIS:
             from django_redis import get_redis_connection
             rc = get_redis_connection("redis")
             cnt = rc.incr('pretix_pwchange_%s' % self.user.pk)
@@ -113,7 +139,7 @@ class UserSettingsForm(forms.ModelForm):
                     code='rate_limit',
                 )
 
-        if old_pw and not check_password(old_pw, self.user.password):
+        if not check_password(old_pw, self.user.password):
             raise forms.ValidationError(
                 self.error_messages['pw_current_wrong'],
                 code='pw_current_wrong',
@@ -121,59 +147,47 @@ class UserSettingsForm(forms.ModelForm):
 
         return old_pw
 
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        if User.objects.filter(Q(email__iexact=email) & ~Q(pk=self.instance.pk)).exists():
-            raise forms.ValidationError(
-                self.error_messages['duplicate_identifier'],
-                code='duplicate_identifier',
-            )
-        return email
-
     def clean_new_pw(self):
         password1 = self.cleaned_data.get('new_pw', '')
-        if password1 and validate_password(password1, user=self.user) is not None:
+        if validate_password(password1, user=self.user) is not None:
             raise forms.ValidationError(
                 _(password_validators_help_texts()),
                 code='pw_invalid'
+            )
+        if self.user.check_password(password1):
+            raise forms.ValidationError(
+                self.error_messages['pw_equal'],
+                code='pw_equal',
             )
         return password1
 
     def clean_new_pw_repeat(self):
         password1 = self.cleaned_data.get('new_pw')
         password2 = self.cleaned_data.get('new_pw_repeat')
-        if password1 and password1 != password2:
+        if password1 != password2:
             raise forms.ValidationError(
                 self.error_messages['pw_mismatch'],
                 code='pw_mismatch'
             )
 
-    def clean(self):
-        password1 = self.cleaned_data.get('new_pw')
-        email = self.cleaned_data.get('email')
-        old_pw = self.cleaned_data.get('old_pw')
 
-        if (password1 or email != self.user.email) and not old_pw:
+class UserEmailChangeForm(forms.Form):
+    error_messages = {
+        'duplicate_identifier': _("There already is an account associated with this email address. "
+                                  "Please choose a different one."),
+    }
+    old_email = forms.EmailField(label=_('Old email address'), disabled=True)
+    new_email = forms.EmailField(label=_('New email address'))
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super().__init__(*args, **kwargs)
+
+    def clean_new_email(self):
+        email = self.cleaned_data['new_email']
+        if User.objects.filter(Q(email__iexact=email) & ~Q(pk=self.user.pk)).exists():
             raise forms.ValidationError(
-                self.error_messages['pw_current'],
-                code='pw_current'
+                self.error_messages['duplicate_identifier'],
+                code='duplicate_identifier',
             )
-
-        if password1 and password1 == old_pw:
-            raise forms.ValidationError(
-                self.error_messages['pw_equal'],
-                code='pw_equal'
-            )
-
-        if password1:
-            self.instance.set_password(password1)
-
-        return self.cleaned_data
-
-
-class User2FADeviceAddForm(forms.Form):
-    name = forms.CharField(label=_('Device name'), max_length=64)
-    devicetype = forms.ChoiceField(label=_('Device type'), widget=forms.RadioSelect, choices=(
-        ('totp', _('Smartphone with the Authenticator application')),
-        ('webauthn', _('WebAuthn-compatible hardware token (e.g. Yubikey)')),
-    ))
+        return email

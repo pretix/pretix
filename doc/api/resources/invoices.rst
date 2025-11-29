@@ -22,6 +22,7 @@ invoice_from_name                     string                     Sender address:
 invoice_from                          string                     Sender address: Address lines
 invoice_from_zipcode                  string                     Sender address: ZIP code
 invoice_from_city                     string                     Sender address: City
+invoice_from_state                    string                     Sender address: State (only used in some countries)
 invoice_from_country                  string                     Sender address: Country code
 invoice_from_tax_id                   string                     Sender address: Local Tax ID
 invoice_from_vat_id                   string                     Sender address: EU VAT ID
@@ -80,17 +81,12 @@ lines                                 list of objects            The actual invo
                                                                  for all invoice lines
                                                                  created before this field was introduced as well as for
                                                                  all lines not created by a fee (e.g. a product).
-├ event_date_from                     datetime                   Start date of the (sub)event this line was created for as it
-                                                                 was set during invoice creation. Can be ``null`` for all invoice
-                                                                 lines created before this was introduced as well as for lines in
-                                                                 an event series not created by a product (e.g. shipping or
-                                                                 cancellation fees).
-├ event_date_to                       datetime                   End date of the (sub)event this line was created for as it
-                                                                 was set during invoice creation. Can be ``null`` for all invoice
-                                                                 lines created before this was introduced as well as for lines in
-                                                                 an event series not created by a product (e.g. shipping or
-                                                                 cancellation fees) as well as whenever the respective (sub)event
-                                                                 has no end date set.
+├ period_start                        datetime                   Start date of the service or delivery period of the invoice line.
+                                                                 Can be ``null`` if not known.
+├ period_end                          datetime                   End date of the service or delivery period of the invoice line.
+                                                                 Can be ``null`` if not known.
+├ event_date_from                     datetime                   Deprecated alias of ``period_start``.
+├ event_date_to                       datetime                   Deprecated alias of ``period_end``.
 ├ event_location                      string                     Location of the (sub)event this line was created for as it
                                                                  was set during invoice creation. Can be ``null`` for all invoice
                                                                  lines created before this was introduced as well as for lines in
@@ -238,6 +234,7 @@ List of all invoices
             "invoice_from": "Demo street 12",
             "invoice_from_zipcode":"",
             "invoice_from_city":"Demo town",
+            "invoice_from_state":"CA",
             "invoice_from_country":"US",
             "invoice_from_tax_id":"",
             "invoice_from_vat_id":"",
@@ -274,6 +271,8 @@ List of all invoices
                 "fee_internal_type": null,
                 "event_date_from": "2017-12-27T10:00:00Z",
                 "event_date_to": null,
+                "period_start": "2017-12-27T10:00:00Z",
+                "period_end": "2017-12-27T10:00:00Z",
                 "event_location": "Heidelberg",
                 "attendee_name": null,
                 "gross_value": "23.00",
@@ -384,6 +383,7 @@ Fetching individual invoices
         "invoice_from": "Demo street 12",
         "invoice_from_zipcode":"",
         "invoice_from_city":"Demo town",
+        "invoice_from_state":"CA",
         "invoice_from_country":"US",
         "invoice_from_tax_id":"",
         "invoice_from_vat_id":"",
@@ -420,6 +420,8 @@ Fetching individual invoices
             "fee_internal_type": null,
             "event_date_from": "2017-12-27T10:00:00Z",
             "event_date_to": null,
+            "period_start": "2017-12-27T10:00:00Z",
+            "period_end": "2017-12-27T10:00:00Z",
             "event_location": "Heidelberg",
             "attendee_name": null,
             "gross_value": "23.00",

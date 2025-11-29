@@ -18,26 +18,19 @@
 
 <div class="row">
     <div class="{% if settings.bank_details_type == "sepa" %}col-md-6{% else %}col-md-12{% endif %} col-xs-12">
-            {% if settings.bank_details_type == "sepa" %}
-                <dl class="dl-horizontal">
-                    <dt>{% trans "Account holder" %}:</dt><dd>{{ settings.bank_details_sepa_name }}</dt>
-                    <dt>{% trans "IBAN" %}:</dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dt>
-                    <dt>{% trans "BIC" %}:</dt><dd>{{ settings.bank_details_sepa_bic }}</dt>
-                    <dt>{% trans "Bank" %}:</dt><dd>{{ settings.bank_details_sepa_bank }}</dt>
-                {% if details %}
-                </dl>
-                {% endif %}
-            {% endif %}
-            {% if details %}
-                {{ details|linebreaks }}
-                <dl class="dl-horizontal">
-            {% endif %}
-            {% if not settings.bank_details_type == "sepa" and not details %}
-                <dl class="dl-horizontal">
-            {% endif %}
-            <dt>{% trans "Amount:" %}</dt><dd>{{ amount|money:event.currency }}</dd>
+        <dl class="dl-horizontal">
             <dt>{% trans "Reference code (important):" %}</dt><dd><b>{{ code }}</b></dd>
+            <dt>{% trans "Amount:" %}</dt><dd>{{ amount|money:event.currency }}</dd>
+            {% if settings.bank_details_type == "sepa" %}
+                <dt>{% trans "Account holder" %}:</dt><dd>{{ settings.bank_details_sepa_name }}</dt>
+                <dt>{% trans "IBAN" %}:</dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dt>
+                <dt>{% trans "BIC" %}:</dt><dd>{{ settings.bank_details_sepa_bic }}</dt>
+                <dt>{% trans "Bank" %}:</dt><dd>{{ settings.bank_details_sepa_bank }}</dt>
+            {% endif %}
         </dl>
+        {% if details %}
+            {{ details | rich_text }}
+        {% endif %}
         <p class="text-muted">
             {% trans "There is no further action required on this website." %}
             {% trans "We will send you an email as soon as we received your payment." %}

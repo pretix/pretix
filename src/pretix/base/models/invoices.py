@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import string
+import warnings
 from decimal import Decimal
 
 import pycountry
@@ -141,6 +142,7 @@ class Invoice(models.Model):
     invoice_from_name = models.CharField(max_length=190, null=True)
     invoice_from_zipcode = models.CharField(max_length=190, null=True)
     invoice_from_city = models.CharField(max_length=190, null=True)
+    invoice_from_state = models.CharField(max_length=190, null=True)
     invoice_from_country = FastCountryField(null=True)
     invoice_from_tax_id = models.CharField(max_length=190, null=True)
     invoice_from_vat_id = models.CharField(max_length=190, null=True)
@@ -201,6 +203,7 @@ class Invoice(models.Model):
     transmission_info = models.JSONField(null=True, blank=True)
 
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename, max_length=255)
+    plugin_data = models.JSONField(default=dict)
 
     objects = ScopedManager(organizer='event__organizer')
 
@@ -216,10 +219,23 @@ class Invoice(models.Model):
                 taxidrow = "ABN: %s" % self.invoice_from_tax_id
             else:
                 taxidrow = pgettext("invoice", "Tax ID: %s") % self.invoice_from_tax_id
+
+        state_name = ""
+        if self.invoice_from_state:
+            state_name = self.invoice_from_state
+            if str(self.invoice_from_country) in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.invoice_from_country)][1] == 'long':
+                    try:
+                        state_name = pycountry.subdivisions.get(
+                            code='{}-{}'.format(self.invoice_from_country, self.invoice_from_state)
+                        ).name
+                    except:
+                        pass
+
         parts = [
             self.invoice_from_name,
             self.invoice_from,
-            (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
+            ((self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or "") + " " + (state_name or "")).strip(),
             self.invoice_from_country.name if self.invoice_from_country else "",
             pgettext("invoice", "VAT-ID: %s") % self.invoice_from_vat_id if self.invoice_from_vat_id else "",
             taxidrow,
@@ -228,10 +244,22 @@ class Invoice(models.Model):
 
     @property
     def address_invoice_from(self):
+        state_name = ""
+        if self.invoice_from_state:
+            state_name = self.invoice_from_state
+            if str(self.invoice_from_country) in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.invoice_from_country)][1] == 'long':
+                    try:
+                        state_name = pycountry.subdivisions.get(
+                            code='{}-{}'.format(self.invoice_from_country, self.invoice_from_state)
+                        ).name
+                    except:
+                        pass
+
         parts = [
             self.invoice_from_name,
             self.invoice_from,
-            (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
+            " ".join(s for s in [self.invoice_from_zipcode, self.invoice_from_city, state_name] if s),
             self.invoice_from_country.name if self.invoice_from_country else "",
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])
@@ -404,10 +432,10 @@ class InvoiceLine(models.Model):
     :type tax_name: str
     :param subevent: The subevent this line refers to
     :type subevent: SubEvent
-    :param event_date_from: Event date of the (sub)event at the time the invoice was created
-    :type event_date_from: datetime
-    :param event_date_to: Event end date of the (sub)event at the time the invoice was created
-    :type event_date_to: datetime
+    :param period_start: Start if service period invoiced
+    :type period_start: datetime
+    :param period_end: End of service period invoiced
+    :type period_end: datetime
     :param event_location: Event location of the (sub)event at the time the invoice was created
     :type event_location: str
     :param item: The item this line refers to
@@ -426,8 +454,8 @@ class InvoiceLine(models.Model):
     tax_name = models.CharField(max_length=190)
     tax_code = models.CharField(max_length=190, null=True, blank=True)
     subevent = models.ForeignKey('SubEvent', null=True, blank=True, on_delete=models.PROTECT)
-    event_date_from = models.DateTimeField(null=True)
-    event_date_to = models.DateTimeField(null=True)
+    period_start = models.DateTimeField(null=True)
+    period_end = models.DateTimeField(null=True)
     event_location = models.TextField(null=True, blank=True)
     item = models.ForeignKey('Item', null=True, blank=True, on_delete=models.PROTECT)
     variation = models.ForeignKey('ItemVariation', null=True, blank=True, on_delete=models.PROTECT)
@@ -444,3 +472,35 @@ class InvoiceLine(models.Model):
 
     def __str__(self):
         return 'Line {} of invoice {}'.format(self.position, self.invoice)
+
+    @property
+    def event_date_from(self):
+        warnings.warn(
+            'InvoiceLine.event_date_from is deprecated, use period_start instead,',
+            category=DeprecationWarning,
+        )
+        return self.period_start
+
+    @event_date_from.setter
+    def event_date_from(self, value):
+        warnings.warn(
+            'InvoiceLine.event_date_from is deprecated, use period_start instead,',
+            category=DeprecationWarning,
+        )
+        self.period_start = value
+
+    @property
+    def event_date_to(self):
+        warnings.warn(
+            'InvoiceLine.event_date_to is deprecated, use period_end instead,',
+            category=DeprecationWarning,
+        )
+        return self.period_end
+
+    @event_date_to.setter
+    def event_date_to(self, value):
+        warnings.warn(
+            'InvoiceLine.event_date_to is deprecated, use period_end instead,',
+            category=DeprecationWarning,
+        )
+        self.period_to = value

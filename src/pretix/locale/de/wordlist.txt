@@ -1,5 +1,6 @@
 ABGEKÜNDIGT
 ABN
+Absageformular
 Absenderadresse
 Absenderinformation
 Absendername
@@ -139,6 +140,7 @@ Enterprise-Plugins
 eps
 EPS
 Erstattungsbetrag
+Erstattungsbetrags
 Erstattungsliste
 Erstattungsmethode
 Erstattungsoptionen
@@ -300,8 +302,10 @@ PPRO
 prefix
 Prefix
 pretix
+pretix-Account
 pretix-Apps
 pretix-Benutzerkennung
+pretix-Bestätigungscode
 pretixdesk-Apps
 pretixdroid
 pretix-Enterprise-Lizenz
@@ -342,6 +346,7 @@ Rabattiert
 Rabattierung
 Rechnungs-E-Mail
 Rechungsdatei
+Rechungsperiode
 Reddit
 Referer
 Registrierungsdatum
@@ -359,6 +364,9 @@ Reverse-Proxy
 Revisionssicherheit
 Revolut
 Revolut-App
+Rundungsabweichungen
+Rundungskorrektur
+Rundungsverhalten
 rückabgewickelt
 Sa
 Sammlungsstücken

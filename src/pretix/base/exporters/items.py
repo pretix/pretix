@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -149,7 +149,7 @@ class ItemDataExporter(ListExporter):
                     row += [
                         _("Yes") if i.active and v.active else "",
                         ", ".join([str(sn.label) for sn in sales_channels]),
-                        v.default_price or i.default_price,
+                        v.default_price if v.default_price is not None else i.default_price,
                         _("Yes") if i.free_price else "",
                         str(i.tax_rule) if i.tax_rule else "",
                         _("Yes") if i.admission else "",

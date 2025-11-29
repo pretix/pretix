@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -92,6 +92,7 @@ event_router.register(r'taxrules', event.TaxRuleViewSet)
 event_router.register(r'seats', event.SeatViewSet)
 event_router.register(r'waitinglistentries', waitinglist.WaitingListViewSet)
 event_router.register(r'checkinlists', checkin.CheckinListViewSet)
+event_router.register(r'checkins', checkin.CheckinViewSet)
 event_router.register(r'cartpositions', cart.CartPositionViewSet)
 event_router.register(r'scheduled_exports', exporters.ScheduledEventExportViewSet)
 event_router.register(r'exporters', exporters.EventExportersViewSet, basename='exporters')
@@ -111,6 +112,7 @@ item_router = routers.DefaultRouter()
 item_router.register(r'variations', item.ItemVariationViewSet)
 item_router.register(r'addons', item.ItemAddOnViewSet)
 item_router.register(r'bundles', item.ItemBundleViewSet)
+item_router.register(r'program_times', item.ItemProgramTimeViewSet)
 
 order_router = routers.DefaultRouter()
 order_router.register(r'payments', order.PaymentViewSet)

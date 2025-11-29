@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -30,6 +30,7 @@ from django.templatetags.l10n import localize
 from django.utils.translation import gettext_lazy as _
 from localflavor.generic.validators import BICValidator
 
+from pretix.base.i18n import language
 from pretix.plugins.banktransfer.models import RefundExport
 
 
@@ -85,12 +86,14 @@ def build_sepa_xml(refund_export: RefundExport, account_holder, iban, bic):
     sepa = SepaTransfer(config, clean=True)
 
     for row in refund_export.rows_data:
+        with language(row.get("locale", (refund_export.event or refund_export.organizer).settings.locale)):
+            ref = f"{row['id']} {_('Refund')} {row.get('comment') or ''}".strip()[:140]
         payment = {
             "name": row['payer'],
             "IBAN": row["iban"],
             "amount": int(Decimal(row['amount']) * 100),  # in euro-cents
             "execution_date": datetime.date.today(),
-            "description": f"{row['id']} {refund_export.entity_slug} {_('Refund')} {row.get('comment') or ''}".strip()[:140],
+            "description": ref,
         }
         if row.get('bic'):
             try:

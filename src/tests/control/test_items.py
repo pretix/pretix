@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -681,6 +681,10 @@ class ItemsTest(ItemFormTest):
             self.var2.save()
         prop = self.event1.item_meta_properties.create(name="Foo")
         self.item2.meta_values.create(property=prop, value="Bar")
+        self.item2.program_times.create(start=datetime.datetime(2017, 12, 27, 0, 0, 0,
+                                                                tzinfo=datetime.timezone.utc),
+                                        end=datetime.datetime(2017, 12, 28, 0, 0, 0,
+                                                              tzinfo=datetime.timezone.utc))
 
         doc = self.get_doc('/control/event/%s/%s/items/add?copy_from=%d' % (self.orga1.slug, self.event1.slug, self.item2.pk))
         data = extract_form_fields(doc.select("form")[0])
@@ -709,6 +713,8 @@ class ItemsTest(ItemFormTest):
             assert i_new.meta_data == i_old.meta_data == {"Foo": "Bar"}
             assert set(i_new.questions.all()) == set(i_old.questions.all())
             assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])
+            assert i_old.program_times.first().start == i_new.program_times.first().start
+            assert i_old.program_times.first().end == i_new.program_times.first().end
 
     def test_add_to_existing_quota(self):
         with scopes_disabled():

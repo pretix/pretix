@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -44,11 +44,13 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import BadRequest, PermissionDenied
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
+from django.utils.html import format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -60,8 +62,11 @@ from django_scopes import scopes_disabled
 from webauthn.helpers import generate_challenge, generate_user_handle
 
 from pretix.base.auth import get_auth_backends
-from pretix.base.forms.auth import ReauthForm
-from pretix.base.forms.user import User2FADeviceAddForm, UserSettingsForm
+from pretix.base.forms.auth import ConfirmationCodeForm, ReauthForm
+from pretix.base.forms.user import (
+    User2FADeviceAddForm, UserEmailChangeForm, UserPasswordChangeForm,
+    UserSettingsForm,
+)
 from pretix.base.models import (
     Event, LogEntry, NotificationSetting, U2FDevice, User, WebAuthnDevice,
 )
@@ -237,25 +242,7 @@ class UserSettings(UpdateView):
 
         data = {}
         for k in form.changed_data:
-            if k not in ('old_pw', 'new_pw_repeat'):
-                if 'new_pw' == k:
-                    data['new_pw'] = True
-                else:
-                    data[k] = form.cleaned_data[k]
-
-        msgs = []
-
-        if 'new_pw' in form.changed_data:
-            self.request.user.needs_password_change = False
-            msgs.append(_('Your password has been changed.'))
-
-        if 'email' in form.changed_data:
-            msgs.append(_('Your email address has been changed to {email}.').format(email=form.cleaned_data['email']))
-
-        if msgs:
-            self.request.user.send_security_notice(msgs, email=form.cleaned_data['email'])
-            if self._old_email != form.cleaned_data['email']:
-                self.request.user.send_security_notice(msgs, email=self._old_email)
+            data[k] = form.cleaned_data[k]
 
         sup = super().form_valid(form)
         self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data=data)
@@ -834,3 +821,159 @@ class EditStaffSession(StaffMemberRequiredMixin, UpdateView):
             return get_object_or_404(StaffSession, pk=self.kwargs['id'])
         else:
             return get_object_or_404(StaffSession, pk=self.kwargs['id'], user=self.request.user)
+
+
+class UserPasswordChangeView(FormView):
+    max_time = 300
+
+    form_class = UserPasswordChangeForm
+    template_name = 'pretixcontrol/user/change_password.html'
+
+    def get_form_kwargs(self):
+        if self.request.user.auth_backend != 'native':
+            raise PermissionDenied
+
+        return {
+            **super().get_form_kwargs(),
+            "user": self.request.user,
+        }
+
+    def form_valid(self, form):
+        with transaction.atomic():
+            self.request.user.set_password(form.cleaned_data['new_pw'])
+            self.request.user.needs_password_change = False
+            self.request.user.save()
+            msgs = []
+            msgs.append(_('Your password has been changed.'))
+            self.request.user.send_security_notice(msgs)
+
+            self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data={'new_pw': True})
+
+            update_session_auth_hash(self.request, self.request.user)
+
+        messages.success(self.request, _('Your changes have been saved.'))
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+    def get_success_url(self):
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
+            return self.request.GET.get("next")
+        return reverse('control:user.settings')
+
+
+class UserEmailChangeView(RecentAuthenticationRequiredMixin, FormView):
+    max_time = 300
+
+    form_class = UserEmailChangeForm
+    template_name = 'pretixcontrol/user/change_email.html'
+
+    def get_form_kwargs(self):
+        if self.request.user.auth_backend != 'native':
+            raise PermissionDenied
+
+        return {
+            **super().get_form_kwargs(),
+            "user": self.request.user,
+        }
+
+    def get_initial(self):
+        return {
+            "old_email": self.request.user.email
+        }
+
+    def form_valid(self, form):
+        self.request.user.send_confirmation_code(
+            session=self.request.session,
+            reason='email_change',
+            email=form.cleaned_data['new_email'],
+            state=form.cleaned_data['new_email'],
+        )
+        self.request.session['email_confirmation_destination'] = form.cleaned_data['new_email']
+        return redirect(reverse('control:user.settings.email.confirm', kwargs={}) + '?reason=email_change')
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
+
+class UserEmailVerifyView(View):
+    def post(self, request, *args, **kwargs):
+        if self.request.user.is_verified:
+            messages.success(self.request, _('Your email address was already verified.'))
+            return redirect(reverse('control:user.settings', kwargs={}))
+
+        self.request.user.send_confirmation_code(
+            session=self.request.session,
+            reason='email_verify',
+            email=self.request.user.email,
+            state=self.request.user.email,
+        )
+        self.request.session['email_confirmation_destination'] = self.request.user.email
+        return redirect(reverse('control:user.settings.email.confirm', kwargs={}) + '?reason=email_verify')
+
+
+class UserEmailConfirmView(FormView):
+    form_class = ConfirmationCodeForm
+    template_name = 'pretixcontrol/user/confirmation_code_dialog.html'
+
+    def get_context_data(self, **kwargs):
+        return {
+            **super().get_context_data(**kwargs),
+            "cancel_url": reverse('control:user.settings', kwargs={}),
+            "message": format_html(
+                _("Please enter the confirmation code we sent to your email address <strong>{email}</strong>."),
+                email=self.request.session.get('email_confirmation_destination', ''),
+            ),
+        }
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        reason = self.request.GET['reason']
+        if reason not in ('email_change', 'email_verify'):
+            raise PermissionDenied
+        try:
+            new_email = self.request.user.check_confirmation_code(
+                session=self.request.session,
+                reason=reason,
+                code=form.cleaned_data['code'],
+            )
+        except PermissionDenied:
+            return self.form_invalid(form)
+        except BadRequest:
+            messages.error(self.request, _(
+                'We were unable to verify your confirmation code. Please try again.'
+            ))
+            return redirect(reverse('control:user.settings', kwargs={}))
+
+        log_data = {
+            'email': new_email,
+            'email_verified': True,
+        }
+        if reason == 'email_change':
+            msgs = []
+            msgs.append(_('Your email address has been changed to {email}.').format(email=new_email))
+            log_data['old_email'] = old_email = self.request.user.email
+            self.request.user.send_security_notice(msgs, email=old_email)
+            self.request.user.send_security_notice(msgs, email=new_email)
+            log_action = 'pretix.user.email.changed'
+        else:
+            log_action = 'pretix.user.email.confirmed'
+
+        self.request.user.email = new_email
+        self.request.user.is_verified = True
+        self.request.user.save()
+        self.request.user.log_action(log_action, user=self.request.user, data=log_data)
+        update_session_auth_hash(self.request, self.request.user)
+
+        if reason == 'email_change':
+            messages.success(self.request, _('Your email address has been changed successfully.'))
+        else:
+            messages.success(self.request, _('Your email address has been confirmed successfully.'))
+        return redirect(reverse('control:user.settings', kwargs={}))
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('The entered confirmation code is not correct. Please try again.'))
+        return super().form_invalid(form)

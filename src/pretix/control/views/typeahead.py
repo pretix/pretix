@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -820,12 +820,13 @@ def organizer_select2(request):
     total = qs.count()
     pagesize = 20
     offset = (page - 1) * pagesize
+    display_slug = 'display_slug' in request.GET
 
     doc = {
         "results": [
             {
                 'id': o.pk,
-                'text': str(o.name)
+                'text': '{} — {}'.format(o.slug, o.name) if display_slug else str(o.name)
             } for o in qs[offset:offset + pagesize]
         ],
         "pagination": {

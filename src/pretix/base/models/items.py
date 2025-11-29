@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -505,8 +505,7 @@ class Item(LoggedModel):
         verbose_name=_("Free price input"),
         help_text=_("If this option is active, your users can choose the price themselves. The price configured above "
                     "is then interpreted as the minimum price a user has to enter. You could use this e.g. to collect "
-                    "additional donations for your event. This is currently not supported for products that are "
-                    "bought as an add-on to other products.")
+                    "additional donations for your event.")
     )
     free_price_suggestion = models.DecimalField(
         verbose_name=_("Suggested price"),
@@ -2294,3 +2293,29 @@ class ItemVariationMetaValue(LoggedModel):
 
     class Meta:
         unique_together = ('variation', 'property')
+
+
+class ItemProgramTime(models.Model):
+    """
+    This model can be used to add a program time to an item.
+
+    :param item: The item the program time applies to
+    :type item: Item
+    :param start: The date and time this program time starts
+    :type start: datetime
+    :param end: The date and time this program time ends
+    :type end: datetime
+    """
+    item = models.ForeignKey('Item', related_name='program_times', on_delete=models.CASCADE)
+    start = models.DateTimeField(verbose_name=_("Start"))
+    end = models.DateTimeField(verbose_name=_("End"))
+
+    def clean(self):
+        if hasattr(self, 'item') and self.item and self.item.event.has_subevents:
+            raise ValidationError(_("You cannot use program times on an event series."))
+        self.clean_start_end(start=self.start, end=self.end)
+        super().clean()
+
+    def clean_start_end(self, start: datetime = None, end: datetime = None):
+        if start and end and start > end:
+            raise ValidationError(_("The program end must not be before the program start."))

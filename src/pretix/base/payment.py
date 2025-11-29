@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -38,6 +38,7 @@ import json
 import logging
 from collections import OrderedDict
 from decimal import ROUND_HALF_UP, Decimal
+from functools import cached_property
 from typing import Any, Dict, Union
 from zoneinfo import ZoneInfo
 
@@ -57,8 +58,8 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.forms import I18nMarkdownTextarea, PlaceholderValidator
 from pretix.base.models import (
-    CartPosition, Event, GiftCard, InvoiceAddress, Order, OrderPayment,
-    OrderRefund, Quota, TaxRule,
+    CartPosition, Customer, Event, GiftCard, InvoiceAddress, Order,
+    OrderPayment, OrderRefund, Quota, TaxRule,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
@@ -71,7 +72,7 @@ from pretix.helpers.countries import CachedCountries
 from pretix.helpers.format import format_map
 from pretix.helpers.money import DecimalTextInput
 from pretix.multidomain.urlreverse import build_absolute_uri
-from pretix.presale.views import get_cart, get_cart_total
+from pretix.presale.views import get_cart
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
@@ -99,6 +100,7 @@ class PaymentProviderForm(Form):
 
 class GiftCardPaymentForm(PaymentProviderForm):
     def __init__(self, *args, **kwargs):
+        self.customer_gift_cards = kwargs.pop('customer_gift_cards') if 'customer_gift_cards' in kwargs else None
         self.event = kwargs.pop('event')
         self.testmode = kwargs.pop('testmode')
         self.positions = kwargs.pop('positions')
@@ -1147,12 +1149,16 @@ class FreeOrderProvider(BasePaymentProvider):
         from .services.cart import get_fees
 
         cart = get_cart(request)
-        total = get_cart_total(request)
+
         try:
-            total += sum([f.value for f in get_fees(self.event, request, total, None, None, cart)])
+            fees = get_fees(event=request.event, request=request,
+                            invoice_address=None,
+                            payments=None, positions=cart)
         except TaxRule.SaleNotAllowed:
             # ignore for now, will fail on order creation
-            pass
+            fees = []
+        total = sum([c.price for c in cart]) + sum([f.value for f in fees])
+
         return total == 0
 
     def order_change_allowed(self, order: Order) -> bool:
@@ -1371,7 +1377,32 @@ class GiftCardPayment(BasePaymentProvider):
     execute_payment_needs_user = False
     verbose_name = _("Gift card")
     payment_form_class = GiftCardPaymentForm
-    payment_form_template_name = 'pretixcontrol/giftcards/checkout.html'
+    payment_form_template_name = 'pretixpresale/giftcard/checkout.html'
+
+    @cached_property
+    def customer_gift_cards(self):
+        if not self.request:
+            return None
+        if not self.used_cards:
+            self.used_cards = []
+        cs = None
+        if 'checkout' in self.request.resolver_match.url_name:
+            cs = cart_session(self.request)
+        customer = getattr(self.request, "customer", None)
+        if customer:
+            return customer.usable_gift_cards(self.used_cards)
+        elif cs and cs.get('customer_mode', 'guest') == 'login':
+            try:
+                customer = self.request.organizer.customers.get(pk=cs["customer"])
+                return customer.usable_gift_cards(self.used_cards)
+            except Customer.DoesNotExist:
+                return None
+
+    def payment_form_render(self, request: HttpRequest, total: Decimal, order: Order = None) -> str:
+        form = self.payment_form(request)
+        template = get_template(self.payment_form_template_name)
+        ctx = {'request': request, 'form': form, 'customer_gift_cards': form.customer_gift_cards, }
+        return template.render(ctx)
 
     def payment_form(self, request: HttpRequest) -> Form:
         # Unfortunately, in payment_form we do not know if we're in checkout
@@ -1392,8 +1423,12 @@ class GiftCardPayment(BasePaymentProvider):
             positions = order.positions.all()
             testmode = order.testmode
 
+        self.request = request
+        self.used_cards = used_cards
+
         form = self.payment_form_class(
             event=self.event,
+            customer_gift_cards=self.customer_gift_cards,
             used_cards=used_cards,
             positions=positions,
             testmode=testmode,
@@ -1469,7 +1504,7 @@ class GiftCardPayment(BasePaymentProvider):
         return super().order_change_allowed(order) and self.event.organizer.has_gift_cards
 
     def checkout_confirm_render(self, request, order=None, info_data=None) -> str:
-        return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({
+        return get_template('pretixpresale/giftcard/checkout_confirm.html').render({
             'info_data': info_data,
         })
 
@@ -1627,6 +1662,7 @@ class GiftCardPayment(BasePaymentProvider):
             order=refund.order,
             refund=refund,
             acceptor=self.event.organizer,
+            text=refund.comment,
         )
         refund.info_data = {
             'gift_card': gc.pk,

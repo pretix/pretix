@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -689,7 +689,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             self._set_month_year()
             tz = self.request.event.timezone
             _, ndays = calendar.monthrange(self.year, self.month)
-            before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
+            before = datetime(self.year, self.month, 1, 23, 59, 59, tzinfo=tz) - timedelta(days=1)
             after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
 
             if self.request.event.settings.event_calendar_future_only:
@@ -750,7 +750,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             tz = self.request.event.timezone
             week = isoweek.Week(self.year, self.week)
             before = datetime(
-                week.monday().year, week.monday().month, week.monday().day, 0, 0, 0, tzinfo=tz
+                week.monday().year, week.monday().month, week.monday().day, 23, 59, 59, tzinfo=tz
             ) - timedelta(days=1)
             after = datetime(
                 week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz

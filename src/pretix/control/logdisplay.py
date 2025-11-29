@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -455,7 +455,7 @@ class OrderDataSyncSuccessLogEntryType(OrderDataSyncLogEntryType):
                     links.append(", ".join(
                         prov.get_external_link_html(logentry.event, obj['external_link_href'], obj['external_link_display_name'])
                         for obj in objs
-                        if obj and 'external_link_href' in obj and 'external_link_display_name' in obj
+                        if obj and obj.get('external_link_href') and obj.get('external_link_display_name')
                     ))
 
         return mark_safe(escape(super().display(logentry, data)) + "".join("<p>" + link + "</p>" for link in links))
@@ -522,6 +522,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.customer.changed': _('The customer account has been changed.'),
     'pretix.event.order.locale.changed': _('The order locale has been changed.'),
     'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
+    'pretix.event.order.invoice.failed': _('The invoice could not be generated.'),
     'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),
     'pretix.event.order.invoice.reissued': _('The invoice has been reissued.'),
     'pretix.event.order.invoice.sent': _('The invoice {full_invoice_no} has been sent.'),
@@ -581,6 +582,7 @@ class CoreOrderLogEntryType(OrderLogEntryType):
         'The voucher has been set to expire because the recipient removed themselves from the waiting list.'),
     'pretix.voucher.changed': _('The voucher has been changed.'),
     'pretix.voucher.deleted': _('The voucher has been deleted.'),
+    'pretix.voucher.carts.deleted': _('Cart positions including the voucher have been deleted.'),
     'pretix.voucher.added.waitinglist': _('The voucher has been assigned to {email} through the waiting list.'),
 })
 class CoreVoucherLogEntryType(VoucherLogEntryType):
@@ -664,6 +666,14 @@ class UserSettingsChangedLogEntryType(LogEntryType):
         elif data.get('is_active') is False:
             text = text + ' ' + str(_('Your account has been disabled.'))
         return text
+
+
+@log_entry_types.new_from_dict({
+    'pretix.user.email.changed': _('Your email address has been changed from {old_email} to {email}.'),
+    'pretix.user.email.confirmed': _('Your email address {email} has been confirmed.'),
+})
+class UserEmailChangedLogEntryType(LogEntryType):
+    pass
 
 
 class UserImpersonatedLogEntryType(LogEntryType):
@@ -881,6 +891,9 @@ class EventPluginStateLogEntryType(EventLogEntryType):
     'pretix.event.item.bundles.added': _('A bundled item has been added to this product.'),
     'pretix.event.item.bundles.removed': _('A bundled item has been removed from this product.'),
     'pretix.event.item.bundles.changed': _('A bundled item has been changed on this product.'),
+    'pretix.event.item.program_times.added': _('A program time has been added to this product.'),
+    'pretix.event.item.program_times.changed': _('A program time has been changed on this product.'),
+    'pretix.event.item.program_times.removed': _('A program time has been removed from this product.'),
 })
 class CoreItemLogEntryType(ItemLogEntryType):
     pass

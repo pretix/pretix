@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -1821,6 +1821,63 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == self.op1.price + self.op2.price
 
     @classscope(attr='o')
+    def test_change_price_with_rounding_change_impossible(self):
+        # Order starts with 2*100€ tickets, but rounding corrects it to 199€. Then, the user tries to force both prices
+        # to 100€. No luck.
+        self.order.status = Order.STATUS_PAID
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.op1.price = Decimal("100.00")
+        self.op1._calculate_tax(tax_rule=self.tr19)
+        self.op1.save()
+        self.op2.price = Decimal("100.00")
+        self.op2._calculate_tax(tax_rule=self.tr19)
+        self.op2.save()
+        self.order.refresh_from_db()
+        self.ocm.regenerate_secret(self.op1)
+        self.ocm.commit()  # Force re-rounding
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+        assert self.order.total == Decimal("199.99")
+
+        self.ocm.change_price(self.op1, Decimal('100.00'))
+        self.ocm.change_price(self.op2, Decimal('100.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.op2.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal("199.99")
+        assert self.op1.price == Decimal('99.99')
+        assert self.op2.price == Decimal('100.00')
+
+    @classscope(attr='o')
+    def test_change_price_with_rounding_change_autocorrected(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.op1.price = Decimal("0.00")
+        self.op1._calculate_tax(tax_rule=self.tr19)
+        self.op1.save()
+        self.op2.price = Decimal("100.00")
+        self.op2._calculate_tax(tax_rule=self.tr19)
+        self.op2.save()
+        self.order.refresh_from_db()
+        self.ocm.regenerate_secret(self.op1)
+        self.ocm.commit()  # Force re-rounding
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+        assert self.order.total == Decimal("100.00")
+
+        self.ocm.change_price(self.op1, Decimal('100.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.op2.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal("199.99")
+        assert self.op1.price == Decimal('99.99')
+        assert self.op2.price == Decimal('100.00')
+
+    @classscope(attr='o')
     def test_change_price_net_success(self):
         self.tr7.price_includes_tax = False
         self.tr7.save()
@@ -2409,6 +2466,24 @@ class OrderChangeManagerTests(TestCase):
         assert nop.subevent == se1
 
     @classscope(attr='o')
+    def test_add_item_with_rounding(self):
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.ocm.add_position(self.ticket, None, None, None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        op1, op2, op3 = self.order.positions.all()
+        assert op1.price == Decimal("23.01")
+        assert op1.price_includes_rounding_correction == Decimal("0.01")
+        assert op2.price == Decimal("23.01")
+        assert op2.price_includes_rounding_correction == Decimal("0.01")
+        assert op3.price == Decimal("23.00")
+        assert op3.price_includes_rounding_correction == Decimal("0.00")
+        assert self.order.total == Decimal("69.02")
+        assert self.order.transactions.count() == 7
+
+    @classscope(attr='o')
     def test_reissue_invoice(self):
         generate_invoice(self.order)
         assert self.order.invoices.count() == 1
@@ -2522,7 +2597,7 @@ class OrderChangeManagerTests(TestCase):
     def test_recalculate_country_rate(self):
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
-        self.ocm._recalculate_total_and_payment_fee()
+        self.ocm._recalculate_rounding_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -2554,7 +2629,7 @@ class OrderChangeManagerTests(TestCase):
     def test_recalculate_country_rate_keep_gross(self):
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
-        self.ocm._recalculate_total_and_payment_fee()
+        self.ocm._recalculate_rounding_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -2584,7 +2659,7 @@ class OrderChangeManagerTests(TestCase):
     def test_recalculate_reverse_charge(self):
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
-        self.ocm._recalculate_total_and_payment_fee()
+        self.ocm._recalculate_rounding_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -2813,6 +2888,61 @@ class OrderChangeManagerTests(TestCase):
         p = o2.payments.last()
         assert p.provider == 'offsetting'
         assert p.amount == Decimal('23.00')
+        assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+    @classscope(attr='o')
+    def test_split_with_rounding_change(self):
+        # Order starts with 2*100€ tickets, but rounding corrects it to 199€. Then, it gets split, so its now 100 + 100
+        # and 1€ is pending. Nasty, but we didn't choose the EN16931 rounding method…
+        self.order.status = Order.STATUS_PAID
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.op1.price = Decimal("100.00")
+        self.op1._calculate_tax(tax_rule=self.tr19)
+        self.op1.save()
+        self.op2.price = Decimal("100.00")
+        self.op2._calculate_tax(tax_rule=self.tr19)
+        self.op2.save()
+        self.order.refresh_from_db()
+        self.ocm.regenerate_secret(self.op1)
+        self.ocm.commit()  # Force re-rounding
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+
+        assert self.order.total == Decimal("199.99")
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=self.order.total,
+        )
+
+        # Split
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.op2.refresh_from_db()
+
+        # First order
+        assert self.order.total == Decimal('100.00')
+        assert not self.order.fees.exists()
+        assert self.order.pending_sum == Decimal('0.01')
+        assert self.order.status == Order.STATUS_PENDING
+        r = self.order.refunds.last()
+        assert r.provider == 'offsetting'
+        assert r.amount == Decimal('100.00')
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+
+        # New order
+        assert self.op2.order != self.order
+        o2 = self.op2.order
+        assert o2.total == Decimal('100.00')
+        assert o2.status == Order.STATUS_PAID
+        assert o2.positions.count() == 1
+        assert o2.fees.count() == 0
+        assert o2.pending_sum == Decimal('0.00')
+        p = o2.payments.last()
+        assert p.provider == 'offsetting'
+        assert p.amount == Decimal('100.00')
         assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
 
     @classscope(attr='o')

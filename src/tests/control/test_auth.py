@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -1134,7 +1134,7 @@ class PasswordChangeRequiredTest(TestCase):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
 
-    def test_redirect_to_settings(self):
+    def test_redirect_to_password_change(self):
         self.user.needs_password_change = True
         self.user.save()
         self.client.login(email='dummy@dummy.dummy', password='dummy')
@@ -1143,9 +1143,9 @@ class PasswordChangeRequiredTest(TestCase):
 
         self.assertEqual(response.status_code, 302)
         assert self.user.needs_password_change is True
-        self.assertIn('/control/settings?next=/control/events/', response['Location'])
+        self.assertIn('/control/settings/password/change?next=/control/events/', response['Location'])
 
-    def test_redirect_to_2fa_to_settings(self):
+    def test_redirect_to_2fa_to_password_change(self):
         self.user.require_2fa = True
         self.user.needs_password_change = True
         self.user.save()
@@ -1168,4 +1168,4 @@ class PasswordChangeRequiredTest(TestCase):
         response = self.client.get('/control/events/')
 
         self.assertEqual(response.status_code, 302)
-        self.assertIn('/control/settings?next=/control/events/', response['Location'])
+        self.assertIn('/control/settings/password/change?next=/control/events/', response['Location'])

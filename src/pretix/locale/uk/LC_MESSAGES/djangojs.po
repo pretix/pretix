@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-26 11:16+0000\n"
+"POT-Creation-Date: 2025-11-20 10:37+0000\n"
 "PO-Revision-Date: 2024-05-22 16:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -334,13 +334,13 @@ msgstr "На даний момент всередині"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
 #: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "Yes"
 msgstr "Так"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
 #: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:270
+#: pretix/static/pretixpresale/js/ui/questions.js:271
 msgid "No"
 msgstr "Ні"
 
@@ -348,8 +348,8 @@ msgstr "Ні"
 msgid "close"
 msgstr "Закрити"
 
-#: pretix/static/pretixbase/js/addressform.js:90
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "обов'язкове"
 
@@ -567,6 +567,14 @@ msgctxt "entry_status"
 msgid "absent"
 msgstr "відсутній"
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
+msgid "Error: Product not found!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
+msgid "Error: Variation not found!"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
 msgstr "Реєстрація з QR"
@@ -636,13 +644,13 @@ msgstr "Створюються повідомлення…"
 msgid "Unknown error."
 msgstr "Невідома помилка."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:292
+#: pretix/static/pretixcontrol/js/ui/main.js:309
 #, fuzzy
 #| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Ваш колір має великий контраст і його дуже легко читати!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:296
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 #, fuzzy
 #| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
@@ -652,46 +660,46 @@ msgstr ""
 "Ваш колір має достатню контрастність і, ймовірно, цілком підходить для "
 "читання!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:300
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:443
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "Пошуковий запит"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:435
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "Все"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Жодного"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:440
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "Тільки вибрані"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:812
+#: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Вкажіть номер сторінки між 1 та %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:815
+#: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
 msgstr "Недійсний номер сторінки."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:973
+#: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
 msgstr "Використайте іншу внутрішню назву"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1013
+#: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
 msgstr "Натисніть, щоб закрити"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1094
+#: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
 msgstr "У вас є незбережені зміни!"
 
@@ -713,7 +721,7 @@ msgstr "Інше"
 msgid "Count"
 msgstr "Кількість"
 
-#: pretix/static/pretixcontrol/js/ui/subevent.js:111
+#: pretix/static/pretixcontrol/js/ui/subevent.js:112
 #, fuzzy
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
@@ -786,7 +794,7 @@ msgstr "Ви отримаєте в поверненні %(amount)s %(currency)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Введіть суму, яку може залишити організатор."
 
-#: pretix/static/pretixpresale/js/ui/main.js:564
+#: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
 msgstr "Ваш місцевий час:"
 
