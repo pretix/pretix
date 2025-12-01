@@ -15,6 +15,11 @@ class Migration(migrations.Migration):
             name="secret",
             field=models.CharField(max_length=200, null=True),
         ),
+        migrations.AddField(
+            model_name="reusablemedium",
+            name="label",
+            field=models.CharField(max_length=200, null=True),
+        ),
         # use temporary related_name "linked_mediums" for ManyToManyField, so we can migrate existing data
         migrations.AddField(
             model_name="reusablemedium",
