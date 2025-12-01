@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-02-21 19:00+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2025-12-02 02:00+0000\n"
+"Last-Translator: David Ibáñez Cerdeira <dibanez@gmail.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
 "Language: gl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/_base_settings.py:87
 #, fuzzy
@@ -90,7 +90,7 @@ msgstr "Danés"
 
 #: pretix/_base_settings.py:102
 msgid "Galician"
-msgstr ""
+msgstr "Galego"
 
 #: pretix/_base_settings.py:103
 #, fuzzy
@@ -347,7 +347,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:345
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Produtos de admisión única actualmente poden ser personalizados."
 
 #: pretix/api/serializers/item.py:356
 msgid ""
@@ -464,7 +464,7 @@ msgstr ""
 
 #: pretix/api/views/checkin.py:627 pretix/api/views/checkin.py:634
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "O medio conectou a outro acontecemento"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:764
 #, python-brace-format
@@ -637,6 +637,8 @@ msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
+"Isto inclúe produtos engadidos ou eliminados e cambios en obxectos aniñados "
+"como variacións ou paquetes."
 
 #: pretix/api/webhooks.py:380
 #, fuzzy
@@ -698,6 +700,8 @@ msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
 msgstr ""
+"Só inclúe cambios explícitos no cupón, non, por exemplo, un aumento do "
+"número de canxeos."
 
 #: pretix/api/webhooks.py:421
 #, fuzzy
@@ -736,11 +740,11 @@ msgstr "Este campo es obligatorio."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Introduza un código postal co formato XXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Introduza un código postal co formato XXXX."
 
 #: pretix/base/auth.py:146
 #, fuzzy, python-brace-format
@@ -782,16 +786,19 @@ msgstr "Contrasinal"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "O teu contrasinal debe conter caracteres numéricos e alfabéticos."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
-#, python-format
+#, fuzzy, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
 msgstr[0] ""
+"Pode que o teu contrasinal non sexa o mesmo que o teu contrasinal anterior."
 msgstr[1] ""
+"Pode que o teu contrasinal non sexa o mesmo que un dos teus contrasinais "
+"anteriores de %(history_length)."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -799,18 +806,22 @@ msgstr "Tenda en liña"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
 msgstr ""
+"As canles de vendas da API non inclúen funcionalidades integradas, pero "
+"pódense usar para integracións personalizadas."
 
 #: pretix/base/context.py:38
 #, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
 msgstr ""
+"<a {a_name_attr}>con tecnoloxía de {name}</a> <a {a_attr}>baseado en "
+"pretix</a>"
 
 #: pretix/base/context.py:48
 #, fuzzy, python-brace-format
@@ -829,7 +840,7 @@ msgstr "Código fonte"
 #: pretix/base/customersso/oidc.py:61
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "Falta a opción de configuración \"{name}\"."
 
 #: pretix/base/customersso/oidc.py:69 pretix/base/customersso/oidc.py:74
 #, python-brace-format
@@ -3425,7 +3436,7 @@ msgstr "Manterme rexistrado"
 
 #: pretix/base/forms/auth.py:65 pretix/base/forms/auth.py:285
 msgid "This combination of credentials is not known to our system."
-msgstr "Esta combinación de credenciais é descoñecida para o noso sistema"
+msgstr "Esta combinación de credenciais é descoñecida para o noso sistema."
 
 #: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:94
 #: pretix/presale/forms/customer.py:385 pretix/presale/forms/customer.py:457
