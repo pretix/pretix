@@ -322,7 +322,6 @@ def test_by_medium_wrong_event(token_client, organizer, clist, event, order2):
             type="barcode",
             identifier="abcdef",
             organizer=organizer,
-            linked_orderposition=order2.positions.first(),
         )
         rm.linked_orderpositions.add(order2.positions.first())
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
