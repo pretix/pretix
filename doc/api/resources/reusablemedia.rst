@@ -21,12 +21,15 @@ id                                    integer                    Internal ID of 
 type                                  string                     Type of medium, e.g. ``"barcode"``, ``"nfc_uid"`` or ``"nfc_mf0aes"``.
 organizer                             string                     Organizer slug of the organizer who "owns" this medium.
 identifier                            string                     Unique identifier of the medium. The format depends on the ``type``.
+secret                                string                     Secret to identify the medium (or ``null``)
+label                                 string                     Label to identify the medium, usually something human readable (or ``null``)
 active                                boolean                    Whether this medium may be used.
 created                               datetime                   Date of creation
 updated                               datetime                   Date of last modification
 expires                               datetime                   Expiry date (or ``null``)
 customer                              string                     Identifier of a customer account this medium belongs to.
-linked_orderposition                  integer                    Internal ID of a ticket this medium is linked to.
+linked_orderpositions                 integer                    Internal ID of a ticket this medium is linked to.
+linked_orderposition                  integer                    Internal ID of a ticket this medium is linked to. (**deprecated**, do not use, will be removed)
 linked_giftcard                       integer                    Internal ID of a gift card this medium is linked to.
 info                                  object                     Additional data, content depends on the ``type``. Consider
                                                                  this internal to the system and don't use it for your own data.
@@ -38,6 +41,14 @@ Existing media types are:
 - ``barcode``
 - ``nfc_uid``
 - ``nfc_mf0aes``
+
+
+.. versionchanged:: 2025.11
+
+   The ``secret``, ``label``, ``linked_orderpositions`` attributes have been added, the ``linked_orderposition`` attribute has been
+   deprecated. Note: If a medium has exactly one order position in ``linked_orderpositions`` then ``linked_orderposition`` is filled 
+   with that order position for backwards compatibility.
+
 
 Endpoints
 ---------
@@ -77,6 +88,7 @@ Endpoints
             "active": True,
             "expires": None,
             "customer": None,
+            "linked_orderpositions": [],
             "linked_orderposition": None,
             "linked_giftcard": None,
             "notes": None,
@@ -92,10 +104,13 @@ Endpoints
    :query string customer: Only show media linked to the given customer.
    :query string created_since: Only show media created since a given date.
    :query string updated_since: Only show media updated since a given date.
+   :query integer linked_orderpositions: Only show media linked to the given tickets. Note: you can pass multiple ticket IDs by passing
+                         ``linked_orderpositions`` multiple times. A medium matching any linked orderposition will be returned.
    :query integer linked_orderposition: Only show media linked to the given ticket.
    :query integer linked_giftcard: Only show media linked to the given gift card.
-   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderposition"``,
-                         or ``"customer"``, the respective field will be shown as a nested value instead of just an ID.
+   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderpositions"``,
+                         ``"linked_orderposition"`` (**deprecated**), or ``"customer"``, the respective field will be shown 
+                         as a nested value instead of just an ID.
                          The nested objects are identical to the respective resources, except that order positions
                          will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
                          matching easier. The parameter can be given multiple times.
@@ -134,6 +149,7 @@ Endpoints
         "active": True,
         "expires": None,
         "customer": None,
+        "linked_orderpositions": [],
         "linked_orderposition": None,
         "linked_giftcard": None,
         "notes": None,
@@ -191,6 +207,7 @@ Endpoints
         "active": True,
         "expires": None,
         "customer": None,
+        "linked_orderpositions": [],
         "linked_orderposition": None,
         "linked_giftcard": None,
         "notes": None,
@@ -198,9 +215,9 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of the organizer to look up a medium for
-   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderposition"``, oder ``"customer"``, the respective
+   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderpositions"``, or ``"customer"``, the respective
                          field will be shown as a nested value instead of just an ID. The nested objects are identical to
-                         the respective resources, except that the ``linked_orderposition`` will have an attribute of the
+                         the respective resources, except that the ``linked_orderpositions`` will have an attribute of the
                          format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make matching easier. The parameter
                          can be given multiple times.
    :statuscode 201: no error
@@ -227,6 +244,7 @@ Endpoints
         "active": True,
         "expires": None,
         "customer": None,
+        "linked_orderpositions": [],
         "linked_orderposition": None,
         "linked_giftcard": None,
         "notes": None,
@@ -251,6 +269,7 @@ Endpoints
         "active": True,
         "expires": None,
         "customer": None,
+        "linked_orderpositions": [],
         "linked_orderposition": None,
         "linked_giftcard": None,
         "notes": None,
@@ -258,7 +277,7 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of the organizer to create a medium for
-   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderposition"``, oder ``"customer"``, the respective
+   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderpositions"``, or ``"customer"``, the respective
                          field will be shown as a nested value instead of just an ID. The nested objects are identical to
                          the respective resources, except that the ``linked_orderposition`` will have an attribute of the
                          format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make matching easier. The parameter
@@ -287,7 +306,7 @@ Endpoints
       Content-Length: 94
 
       {
-        "linked_orderposition": 13
+        "linked_orderpositions": [13]
       }
 
    **Example response**:
@@ -308,6 +327,7 @@ Endpoints
         "active": True,
         "expires": None,
         "customer": None,
+        "linked_orderpositions": [13],
         "linked_orderposition": 13,
         "linked_giftcard": None,
         "notes": None,
@@ -316,7 +336,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param id: The ``id`` field of the medium to modify
-   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderposition"``, oder ``"customer"``, the respective
+   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderpositions"``, or ``"customer"``, the respective
                          field will be shown as a nested value instead of just an ID. The nested objects are identical to
                          the respective resources, except that the ``linked_orderposition`` will have an attribute of the
                          format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make matching easier. The parameter
