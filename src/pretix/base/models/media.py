@@ -77,6 +77,11 @@ class ReusableMedium(LoggedModel):
         verbose_name=pgettext_lazy('reusable_medium', 'Secret'),
         null=True, blank=True
     )
+    label = models.CharField(
+        max_length=200,
+        verbose_name=pgettext_lazy('reusable_medium', 'Label'),
+        null=True, blank=True
+    )
 
     active = models.BooleanField(
         verbose_name=_('Active'),
