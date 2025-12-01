@@ -30,7 +30,7 @@ dependencies = [
   "babel",
   "BeautifulSoup4==4.14.*",
   "bleach==6.2.*",
-  "celery==5.5.*",
+  "celery==5.6.*",
   "chardet==5.2.*",
   "cryptography>=44.0.0",
   "css-inline==0.18.*",
