@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-11-30 20:00+0000\n"
+"PO-Revision-Date: 2025-12-01 12:48+0000\n"
 "Last-Translator: José Manuel Silva <prof.jmas@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -3830,7 +3830,7 @@ msgstr ""
 "pontos (:)."
 
 #: pretix/base/invoicing/peppol.py:132
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
@@ -7009,7 +7009,7 @@ msgstr ""
 "Diretiva 2006/112/CE do Conselho"
 
 #: pretix/base/models/tax.py:231
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgctxt "tax_code"
 msgid ""
 "Exempt based on article {article}, section ({letter}) of Council Directive "
@@ -8511,7 +8511,7 @@ msgstr[1] ""
 "Precisas selecionar pelo menos %(min)s itens do produto %(product)s."
 
 #: pretix/base/services/cart.py:141
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "item of it."
