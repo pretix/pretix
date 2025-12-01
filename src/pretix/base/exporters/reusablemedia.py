@@ -20,12 +20,13 @@
 # <https://www.gnu.org/licenses/>.
 #
 
+from django.db.models import Prefetch
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.translation import gettext_lazy as _, pgettext, pgettext_lazy
 
 from ..exporter import ListExporter, OrganizerLevelExportMixin
-from ..models import ReusableMedium
+from ..models import OrderPosition, ReusableMedium
 from ..signals import register_multievent_data_exporters
 
 
