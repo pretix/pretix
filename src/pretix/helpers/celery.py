@@ -48,12 +48,11 @@ def get_task_priority(shard, organizer_id):
 
     cache_key = f"pretix:task_priority:{shard}:{organizer_id}"
 
-    new_counter = rc.incr(cache_key)
-    print("counter", new_counter)
-    if new_counter == 1:
-        # Make sure counters expire after a while, but only do so when they are newly set, to avoid additional EXPIRE
-        # calls to cache.
-        rc.expire(cache_key, 60)
+    # Make sure counters expire after a while when not used
+    p = rc.pipeline()
+    p.incr(cache_key)
+    p.expire(cache_key, 60)
+    new_counter = p.execute()[0]
 
     if new_counter >= THRESHOLD_DOWNGRADE_TO_LOW:
         return settings.PRIORITY_CELERY_LOW
