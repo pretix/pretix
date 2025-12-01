@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.RunSQL(
-            sql="INSERT INTO pretixbase_reusablemedium_linked_orderpositions (reusablemedium_id, orderposition_id) SELECT id, linked_orderposition_id FROM pretixbase_reusablemedium;",
+            sql="INSERT INTO pretixbase_reusablemedium_linked_orderpositions (reusablemedium_id, orderposition_id) SELECT id, linked_orderposition_id FROM pretixbase_reusablemedium WHERE linked_orderposition_id IS NOT NULL;",
             reverse_sql="DELETE FROM pretixbase_reusablemedium_linked_orderpositions;",
         ),
     ]
