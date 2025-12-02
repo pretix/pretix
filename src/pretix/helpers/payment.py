@@ -1,5 +1,5 @@
 import text_unidecode
-from django.utils.http import urlencode
+from urllib.parse import urlencode, quote
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
@@ -85,13 +85,13 @@ def euro_bezahlcode(
         return
 
     qr_data = f"bank://singlepaymentsepa?" + urlencode({
-        "name": bank_details_sepa_name,
-        "iban":bank_details_sepa_iban,
-        "bic": bank_details_sepa_bic,
+        "name": str(bank_details_sepa_name),
+        "iban": str(bank_details_sepa_iban),
+        "bic": str(bank_details_sepa_bic),
         "amount": commadecimal(amount),
-        "reason": code,
-        "currency": event.currency,
-    })
+        "reason": str(code),
+        "currency": str(event.currency),
+    }, quote_via=quote)
     return {
         "id": "bezahlcode",
         "label": "BezahlCode",
