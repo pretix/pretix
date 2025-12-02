@@ -711,7 +711,7 @@ class PaypalMethod(BasePaymentProvider):
                         description = '{prefix}{orderstring}{postfix}'.format(
                             prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
                             orderstring=__('Order {order} for {event}').format(
-                                event=request.event.name,
+                                event=self.event.name,
                                 order=payment.order.code
                             ),
                             postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
