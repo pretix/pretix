@@ -1,5 +1,27 @@
+#
+# This file is part of pretix (Community Edition).
+#
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
+#
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+# Public License as published by the Free Software Foundation in version 3 of the License.
+#
+# ADDITIONAL TERMS APPLY: Pursuant to Section 7 of the GNU Affero General Public License, additional terms are
+# applicable granting you additional permissions and placing additional restrictions on your usage of this software.
+# Please refer to the pretix LICENSE file to obtain the full terms applicable to this work. If you did not receive
+# this file, see <https://pretix.eu/about/en/license>.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
+# <https://www.gnu.org/licenses/>.
+#
+from urllib.parse import quote, urlencode
+
 import text_unidecode
-from urllib.parse import urlencode, quote
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
@@ -84,7 +106,7 @@ def euro_bezahlcode(
     if event.currency != 'EUR' or not bank_details_sepa_iban:
         return
 
-    qr_data = f"bank://singlepaymentsepa?" + urlencode({
+    qr_data = "bank://singlepaymentsepa?" + urlencode({
         "name": str(bank_details_sepa_name),
         "iban": str(bank_details_sepa_iban),
         "bic": str(bank_details_sepa_bic),
@@ -155,7 +177,11 @@ def swiss_qrbill(
     return {
         "id": "qrbill",
         "label": "QR-bill",
-        "html_prefix": mark_safe('<svg class="banktransfer-swiss-cross" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.8 19.8"><path stroke="#fff" stroke-width="1.436" d="M.7.7h18.4v18.4H.7z"/><path fill="#fff" d="M8.3 4h3.3v11H8.3z"/><path fill="#fff" d="M4.4 7.9h11v3.3h-11z"/></svg>'),
+        "html_prefix": mark_safe(
+            '<svg class="banktransfer-swiss-cross" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.8 19.8">'
+            '<path stroke="#fff" stroke-width="1.436" d="M.7.7h18.4v18.4H.7z"/><path fill="#fff" d="M8.3 4h3.3v11H8.3z"/>'
+            '<path fill="#fff" d="M4.4 7.9h11v3.3h-11z"/></svg>'
+        ),
         "qr_data": qr_data,
         "css_class": "banktransfer-swiss-cross-overlay",
     }
