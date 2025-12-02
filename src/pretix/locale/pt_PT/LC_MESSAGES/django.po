@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-01 12:48+0000\n"
-"Last-Translator: José Manuel Silva <prof.jmas@gmail.com>\n"
+"PO-Revision-Date: 2025-12-02 16:47+0000\n"
+"Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -13318,13 +13318,13 @@ msgid "Contact:"
 msgstr "Contacto:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-format
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
-msgstr "Estás a receber este email porque fizeste um pedido para o {event}."
+msgstr ""
+"Estás a receber este email porque fizeste um pedido para o <strong>%(event)"
+"s</strong>."
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
