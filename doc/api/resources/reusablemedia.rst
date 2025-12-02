@@ -306,7 +306,7 @@ Endpoints
       Content-Length: 94
 
       {
-        "linked_orderpositions": [13]
+        "linked_orderpositions": [13, 29]
       }
 
    **Example response**:
@@ -327,8 +327,8 @@ Endpoints
         "active": True,
         "expires": None,
         "customer": None,
-        "linked_orderpositions": [13],
-        "linked_orderposition": 13,
+        "linked_orderpositions": [13, 29],
+        "linked_orderposition": None,
         "linked_giftcard": None,
         "notes": None,
         "info": {}
