@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-02 02:00+0000\n"
+"PO-Revision-Date: 2025-12-02 12:14+0000\n"
 "Last-Translator: David Ibáñez Cerdeira <dibanez@gmail.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -856,9 +856,9 @@ msgid "Incompatible SSO provider: \"{error}\"."
 msgstr ""
 
 #: pretix/base/customersso/oidc.py:111
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Su pedido: {code}"
+msgstr "Non estás solicitando \"{scope}\"."
 
 #: pretix/base/customersso/oidc.py:206 pretix/base/customersso/oidc.py:214
 #: pretix/base/customersso/oidc.py:237 pretix/base/customersso/oidc.py:254
@@ -874,6 +874,8 @@ msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
+"O enderezo de correo electrónico desta conta aínda non está verificado. "
+"Primeiro, confirma o enderezo de correo electrónico na túa conta de cliente."
 
 #: pretix/base/datasync/datasync.py:263
 #, python-brace-format
