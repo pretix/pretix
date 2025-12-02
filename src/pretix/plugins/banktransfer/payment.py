@@ -46,12 +46,12 @@ from i18nfield.forms import I18nTextInput
 from i18nfield.strings import LazyI18nString
 from localflavor.generic.forms import BICFormField, IBANFormField
 from localflavor.generic.validators import IBANValidator
-from text_unidecode import unidecode
 
 from pretix.base.forms import I18nMarkdownTextarea
 from pretix.base.models import InvoiceAddress, Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.templatetags.money import money_filter
+from pretix.helpers.payment import generate_payment_qr_codes
 from pretix.plugins.banktransfer.templatetags.ibanformat import ibanformat
 from pretix.presale.views.cart import cart_session
 
@@ -313,51 +313,6 @@ class BankTransfer(BasePaymentProvider):
         t += str(self.settings.get('bank_details', as_type=LazyI18nString))
         return t
 
-    def swiss_qrbill(self, payment):
-        if not self.settings.get('bank_details_sepa_iban') or not self.settings.get('bank_details_sepa_iban')[:2] in ('CH', 'LI'):
-            return
-        if self.event.currency not in ('EUR', 'CHF'):
-            return
-        if not self.event.settings.invoice_address_from or not self.event.settings.invoice_address_from_country:
-            return
-
-        data_fields = [
-            'SPC',
-            '0200',
-            '1',
-            self.settings.get('bank_details_sepa_iban'),
-            'K',
-            self.settings.get('bank_details_sepa_name')[:70],
-            self.event.settings.invoice_address_from.replace('\n', ', ')[:70],
-            (self.event.settings.invoice_address_from_zipcode + ' ' + self.event.settings.invoice_address_from_city)[:70],
-            '',
-            '',
-            str(self.event.settings.invoice_address_from_country),
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            str(payment.amount),
-            self.event.currency,
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            'NON',
-            '',  # structured reference
-            self._code(payment.order),
-            'EPD',
-        ]
-
-        data_fields = [unidecode(d or '') for d in data_fields]
-        return '\r\n'.join(data_fields)
-
     def payment_pending_render(self, request: HttpRequest, payment: OrderPayment):
         template = get_template('pretixplugins/banktransfer/pending.html')
         ctx = {
@@ -367,13 +322,18 @@ class BankTransfer(BasePaymentProvider):
             'amount': payment.amount,
             'payment_info': payment.info_data,
             'settings': self.settings,
-            'swiss_qrbill': self.swiss_qrbill(payment),
-            'eu_barcodes': self.event.currency == 'EUR',
+            'payment_qr_codes': generate_payment_qr_codes(
+                event=self.event,
+                code=self._code(payment.order),
+                amount=payment.amount,
+                bank_details_sepa_bic=self.settings.get('bank_details_sepa_bic'),
+                bank_details_sepa_name=self.settings.get('bank_details_sepa_name'),
+                bank_details_sepa_iban=self.settings.get('bank_details_sepa_iban'),
+            ) if self.settings.bank_details_type == "sepa" else None,
             'pending_description': self.settings.get('pending_description', as_type=LazyI18nString),
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
             'has_invoices': payment.order.invoices.exists(),
         }
-        ctx['any_barcodes'] = ctx['swiss_qrbill'] or ctx['eu_barcodes']
         return template.render(ctx, request=request)
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
