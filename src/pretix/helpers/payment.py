@@ -38,6 +38,21 @@ def generate_payment_qr_codes(
             "css_class": "banktransfer-swiss-cross-overlay",
         })
 
+    qr_data = czech_spayd(
+        event,
+        code,
+        amount,
+        bank_details_sepa_bic,
+        bank_details_sepa_name,
+        bank_details_sepa_iban
+    )
+    if qr_data:
+        out.append({
+            "id": "spayd",
+            "label": "SPAYD",
+            "qr_data": qr_data,
+        })
+
     if event.currency == 'EUR' and bank_details_sepa_iban:
         out.append({
             "id": "girocode",
@@ -127,3 +142,19 @@ def swiss_qrbill(
 
     data_fields = [text_unidecode.unidecode(d or '') for d in data_fields]
     return '\r\n'.join(data_fields)
+
+
+def czech_spayd(
+        event,
+        code,
+        amount,
+        bank_details_sepa_bic,
+        bank_details_sepa_name,
+        bank_details_sepa_iban
+):
+    if not bank_details_sepa_iban or not bank_details_sepa_iban[:2] in ('CZ', 'SK'):
+        return
+    if event.currency not in ('EUR', 'CZK'):
+        return
+
+    return f"SPD*1.0*ACC:{bank_details_sepa_iban}*AM:{dotdecimal(amount)}*CC:{event.currency}*MSG:{code}"
