@@ -62,7 +62,7 @@ dependencies = [
   "importlib_metadata==8.*",  # Polyfill, we can probably drop this once we require Python 3.10+
   "isoweek",
   "jsonschema",
-  "kombu==5.5.*",
+  "kombu==5.6.*",
   "libsass==0.23.*",
   "lxml",
   "markdown==3.9",  # 3.3.5 requires importlib-metadata>=4.4, but django-bootstrap3 requires importlib-metadata<3.
