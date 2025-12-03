@@ -490,7 +490,7 @@ def test_valid_plus_invalid_match(env, orga_job):
         'payer': 'Karla Kundin',
         'reference': 'Bestellungen DUMMY-1Z3AS DUMMY-99999',
         'date': '2016-01-26',
-        'amount': '.00'
+        'amount': '2.00'
     }])
     with scopes_disabled():
         job = BankImportJob.objects.last()
