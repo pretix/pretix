@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-11-18 17:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2025-12-03 13:00+0000\n"
+"Last-Translator: SJang1 <git@sjang.dev>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -290,33 +290,27 @@ msgstr "묶음 상품은 그 자체로 또 다른 묶음을 포함 할 수 없�
 
 #: pretix/api/serializers/item.py:235
 msgid "The program start must not be empty."
-msgstr ""
+msgstr "프로그램 시작일정은 비어 있어서는 안 됩니다."
 
 #: pretix/api/serializers/item.py:239
 msgid "The program end must not be empty."
-msgstr ""
+msgstr "프로그램 종료일정은 비어 있어서는 안 됩니다."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2321
-#, fuzzy
-#| msgid "The maximum date must not be before the minimum value."
 msgid "The program end must not be before the program start."
-msgstr "종료일(최대 날짜)은 시작일(최소값)보다 앞서면 안됩니다."
+msgstr "종료일은 시작일보다 앞서면 안됩니다."
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2315
-#, fuzzy
-#| msgid "You can not select a subevent if your event is not an event series."
 msgid "You cannot use program times on an event series."
-msgstr ""
-"당신의이벤트가 이벤트 시리즈가 아닌 경우 하위 이벤트를 선택할 수 없습니다."
+msgstr "이벤트 시리즈에 있는 시간은 사용하실 수 없습니다."
 
 #: pretix/api/serializers/item.py:337
-#, fuzzy
 msgid ""
 "Updating add-ons, bundles, program times or variations via PATCH/PUT is not "
 "supported. Please use the dedicated nested endpoint."
 msgstr ""
-"추가 기능, 묶음 상품들, 또는 변형은 PATCH/PUT를 통해 업데이트 할 수 없습니"
-"다. 전용 중첩은 마지막 지점에서 사용하세요"
+"추가 기능, 묶음 상품들, 또는 변형은 PATCH/PUT를 통해 업데이트 할 수 없습니다."
+" 전용 중첩은 마지막 지점에서 사용하세요."
 
 #: pretix/api/serializers/item.py:345
 msgid "Only admission products can currently be personalized."
@@ -573,22 +567,15 @@ msgid "Event series date deleted"
 msgstr "이벤트 시리즈 날짜 삭제"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "제품명"
+msgstr "제품 변경됨"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
-msgstr ""
-"제품 변경(제품 추가 또는 삭제, 변형 또는 번들과 같은 중첩된 객체에 대한 변경 "
-"포함)"
+msgstr "여기에는 추가되거나 삭제되거나 변경된 중첩오브젝트나 번들과 같은 사항이 포함"
+"됩니다."
 
 #: pretix/api/webhooks.py:380
 msgid "Shop taken live"
@@ -623,16 +610,12 @@ msgid "Waiting list entry received voucher"
 msgstr "대기자 명단 항목이 바우처를 받았습니다"
 
 #: pretix/api/webhooks.py:412
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "바우처 코드"
+msgstr "바우처 추가됨"
 
 #: pretix/api/webhooks.py:416
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "바우처 할당"
+msgstr "바우처 변경됨"
 
 #: pretix/api/webhooks.py:417
 msgid ""
@@ -643,10 +626,8 @@ msgstr ""
 "하지 않습니다."
 
 #: pretix/api/webhooks.py:421
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "바우처 상환"
+msgstr "바우처 제거됨"
 
 #: pretix/api/webhooks.py:425
 msgid "Customer account created"
@@ -671,7 +652,7 @@ msgstr "고객 계정 익명화되었습니다"
 #: pretix/plugins/banktransfer/payment.py:513
 #: pretix/presale/forms/customer.py:152
 msgid "This field is required."
-msgstr "이 필드는 필수입니다"
+msgstr "이 필드는 필수입니다."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
@@ -721,7 +702,7 @@ msgstr "비밀번호"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr "비밀번호는 숫자와 알파벳 문자가 모두 포함되어야 합니다"
+msgstr "비밀번호는 숫자와 알파벳 문자가 모두 포함되어야 합니다."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
 #, python-format
@@ -815,28 +796,21 @@ msgstr ""
 "소를 확인해 주십시요."
 
 #: pretix/base/datasync/datasync.py:263
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
-#| "your {provider_name} settings."
+#, python-brace-format
 msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
-msgstr ""
-"필드 \"{field_name}\"은 {available_inputs}에 유효하지 않습니다. "
-"{provider_name} 설정을 확인해 주세요."
+msgstr "필드 \"{field_name}\"은 존재하지 않습니다. 당신의 {provider_name} 설정을 확인"
+"해 주세요."
 
 #: pretix/base/datasync/datasync.py:270
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
-#| "your {provider_name} settings."
+#, python-brace-format
 msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
-"필드 \"{field_name}\"은 {available_inputs}에 유효하지 않습니다. "
-"{provider_name} 설정을 확인해 주세요."
+"필드 \"{field_name}\"는 {required_input}을 필요로 하지만, {available_inputs}"
+"만 받았습니다. 당신의 {provider_name} 설정을 확인해 주세요."
 
 #: pretix/base/datasync/datasync.py:281
 #, python-brace-format
@@ -848,16 +822,12 @@ msgstr ""
 "지 않았습니다"
 
 #: pretix/base/datasync/sourcefields.py:128
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "주문 위치"
+msgstr "주문 위치 세부 정보"
 
 #: pretix/base/datasync/sourcefields.py:129
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "참석자 이메일"
+msgstr "참석자 정보들"
 
 #: pretix/base/datasync/sourcefields.py:130 pretix/base/exporters/answers.py:66
 #: pretix/base/models/items.py:1766 pretix/control/navigation.py:172
@@ -867,10 +837,8 @@ msgid "Questions"
 msgstr "질문들"
 
 #: pretix/base/datasync/sourcefields.py:131
-#, fuzzy
-#| msgid "Product data"
 msgid "Product details"
-msgstr "상품 데이터"
+msgstr "상품 정보"
 
 #: pretix/base/datasync/sourcefields.py:132
 #: pretix/control/templates/pretixcontrol/event/settings.html:279
@@ -895,17 +863,13 @@ msgid "Invoice address"
 msgstr "송장 주소"
 
 #: pretix/base/datasync/sourcefields.py:134
-#, fuzzy
-#| msgid "Meta information"
 msgid "Event information"
-msgstr "메타 정보(데이타에 대한 정보)"
+msgstr "이벤트 정보"
 
 #: pretix/base/datasync/sourcefields.py:135
-#, fuzzy
-#| msgid "Send recovery information"
 msgctxt "subevent"
 msgid "Event or date information"
-msgstr "복구 정보를 전송하다"
+msgstr "이벤트 또는 날짜 정보"
 
 #: pretix/base/datasync/sourcefields.py:175
 #: pretix/base/exporters/orderlist.py:605
@@ -930,10 +894,8 @@ msgstr "참석자 이름"
 #: pretix/base/datasync/sourcefields.py:187
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:628
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee"
-msgstr "참석자 이름"
+msgstr "참석자"
 
 #: pretix/base/datasync/sourcefields.py:207
 #: pretix/base/exporters/orderlist.py:612 pretix/base/forms/questions.py:687
@@ -947,10 +909,8 @@ msgid "Attendee email"
 msgstr "참석자 이메일"
 
 #: pretix/base/datasync/sourcefields.py:219
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee or order email"
-msgstr "참석자 이메일"
+msgstr "참석자 또는 구매 이메일"
 
 #: pretix/base/datasync/sourcefields.py:232
 #: pretix/base/exporters/orderlist.py:613 pretix/base/pdf.py:189
@@ -963,28 +923,20 @@ msgid "Attendee company"
 msgstr "참석자 회사"
 
 #: pretix/base/datasync/sourcefields.py:241
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address street"
-msgstr "참석자 주소"
+msgstr "참석자 주소 도로명"
 
 #: pretix/base/datasync/sourcefields.py:250
-#, fuzzy
-#| msgid "Attendee ZIP code"
 msgid "Attendee address ZIP code"
-msgstr "참석자 우편번호"
+msgstr "참석자 주소 우편번호"
 
 #: pretix/base/datasync/sourcefields.py:259
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address city"
-msgstr "참석자 주소"
+msgstr "참석자 주소 도시"
 
 #: pretix/base/datasync/sourcefields.py:268
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address country"
-msgstr "참석자 주소"
+msgstr "참석자 주소 국가"
 
 #: pretix/base/datasync/sourcefields.py:279
 #: pretix/base/exporters/orderlist.py:653 pretix/base/pdf.py:347
@@ -1020,16 +972,12 @@ msgid "Invoice address country"
 msgstr "송장 주소 국가"
 
 #: pretix/base/datasync/sourcefields.py:353
-#, fuzzy
-#| msgid "Order total"
 msgid "Order email"
-msgstr "주문 합계"
+msgstr "주문 이메일"
 
 #: pretix/base/datasync/sourcefields.py:362
-#, fuzzy
-#| msgid "Order time"
 msgid "Order email domain"
-msgstr "주문 시간"
+msgstr "주문 이메일 도메인"
 
 #: pretix/base/datasync/sourcefields.py:371
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:332
@@ -1061,10 +1009,8 @@ msgid "Order code"
 msgstr "주문 코드"
 
 #: pretix/base/datasync/sourcefields.py:380
-#, fuzzy
-#| msgid "Event end date and time"
 msgid "Event and order code"
-msgstr "이벤트 종료 날짜 및 시간"
+msgstr "이벤트와 주문 번호"
 
 #: pretix/base/datasync/sourcefields.py:389
 #: pretix/base/exporters/orderlist.py:263 pretix/base/notifications.py:201
@@ -1076,10 +1022,8 @@ msgid "Order total"
 msgstr "주문 합계"
 
 #: pretix/base/datasync/sourcefields.py:398
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Product and variation name"
-msgstr "제품명 및 변형"
+msgstr "제품명 및 변형 이름"
 
 #: pretix/base/datasync/sourcefields.py:410 pretix/base/exporters/items.py:57
 #: pretix/base/exporters/orderlist.py:598
@@ -1089,16 +1033,12 @@ msgid "Product ID"
 msgstr "상품 식별 아이디"
 
 #: pretix/base/datasync/sourcefields.py:419
-#, fuzzy
-#| msgid "Count add-on products"
 msgid "Product is admission product"
-msgstr "추가된 제품을 포함합니다"
+msgstr "상품은 입장 상품입니다"
 
 #: pretix/base/datasync/sourcefields.py:428
-#, fuzzy
-#| msgid "Short form"
 msgid "Event short form"
-msgstr "짧은 형식"
+msgstr "이벤트 짧은 형식"
 
 #: pretix/base/datasync/sourcefields.py:437 pretix/base/exporters/events.py:57
 #: pretix/base/exporters/orderlist.py:263
@@ -1141,10 +1081,8 @@ msgid "Order code and position number"
 msgstr "주문 코드 및 위치 번호"
 
 #: pretix/base/datasync/sourcefields.py:482
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket price"
-msgstr "티켓 코드"
+msgstr "티켓 가격"
 
 #: pretix/base/datasync/sourcefields.py:491 pretix/base/notifications.py:204
 #: pretix/control/forms/filter.py:216 pretix/control/forms/modelimport.py:90
@@ -1152,22 +1090,16 @@ msgid "Order status"
 msgstr "주문 상태"
 
 #: pretix/base/datasync/sourcefields.py:500
-#, fuzzy
-#| msgid "Device status"
 msgid "Ticket status"
-msgstr "기기 상태"
+msgstr "티켓 상태"
 
 #: pretix/base/datasync/sourcefields.py:509
-#, fuzzy
-#| msgid "Purchase date and time"
 msgid "Order date and time"
 msgstr "구매 날짜 및 시간"
 
 #: pretix/base/datasync/sourcefields.py:518
-#, fuzzy
-#| msgid "Printing date and time"
 msgid "Payment date and time"
-msgstr "인쇄 날짜 및 시간"
+msgstr "결제 날짜 및 시간"
 
 #: pretix/base/datasync/sourcefields.py:527
 #: pretix/base/exporters/orderlist.py:272
@@ -1178,35 +1110,27 @@ msgid "Order locale"
 msgstr "주문 지역 설정"
 
 #: pretix/base/datasync/sourcefields.py:536
-#, fuzzy
-#| msgid "Order position"
 msgid "Order position ID"
-msgstr "주문 위치"
+msgstr "주문 위치 ID"
 
 #: pretix/base/datasync/sourcefields.py:545
 #: pretix/base/exporters/orderlist.py:292
-#, fuzzy
-#| msgid "Order time"
 msgid "Order link"
-msgstr "주문 시간"
+msgstr "주문 링크"
 
 #: pretix/base/datasync/sourcefields.py:560
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket link"
-msgstr "티켓 디자인"
+msgstr "티켓 링크"
 
 #: pretix/base/datasync/sourcefields.py:578
-#, fuzzy, python-brace-format
-#| msgid "Check-in list {val}"
+#, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "체크인 목록 {val}"
+msgstr "{} 리스트에 있는 체크인 날짜와 시간"
 
 #: pretix/base/datasync/sourcefields.py:590
-#, fuzzy, python-brace-format
-#| msgid "Question {val}"
+#, python-brace-format
 msgid "Question: {name}"
-msgstr "질문 {val}"
+msgstr "질문: {name}"
 
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:614 pretix/base/settings.py:3642
@@ -2422,9 +2346,9 @@ msgid "Fees"
 msgstr "수수료"
 
 #: pretix/base/exporters/orderlist.py:277
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr "세율{%}의 세금으로 총합"
+msgstr "세율 {rate}%의 세금으로 총합"
 
 #: pretix/base/exporters/orderlist.py:278
 #, python-brace-format
@@ -2472,9 +2396,9 @@ msgid "External customer ID"
 msgstr "외부고객  아이디"
 
 #: pretix/base/exporters/orderlist.py:296
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Paid by {method}"
-msgstr "{방법}에 의해 결제됨"
+msgstr "{method}에 의해 결제됨"
 
 #: pretix/base/exporters/orderlist.py:458
 #: pretix/base/exporters/orderlist.py:914
@@ -2677,10 +2601,8 @@ msgid "Check-in lists"
 msgstr "체크인 목록"
 
 #: pretix/base/exporters/orderlist.py:672
-#, fuzzy
-#| msgid "Additional footer link"
 msgid "Position order link"
-msgstr "추가 하단 링크"
+msgstr "주문 링크 위치"
 
 #: pretix/base/exporters/orderlist.py:841
 msgid "Order transaction data"
@@ -3320,15 +3242,13 @@ msgid "Repeat password"
 msgstr "반복 비밀번호"
 
 #: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:99
-#, fuzzy
-#| msgid "Email address"
 msgid "Your email address"
-msgstr "이메일 주소"
+msgstr "당신의 이메일 주소"
 
 #: pretix/base/forms/auth.py:327 pretix/control/forms/orders.py:1041
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
 msgid "Confirmation code"
-msgstr ""
+msgstr "확인 코드"
 
 #: pretix/base/forms/questions.py:137 pretix/base/forms/questions.py:264
 msgctxt "name_salutation"
@@ -3411,14 +3331,12 @@ msgstr ""
 "야 할 수도 있습니다."
 
 #: pretix/base/forms/questions.py:1181
-#, fuzzy
-#| msgid "Cancellation requested"
 msgid "No invoice requested"
-msgstr "취소 요청"
+msgstr "청구서 요청되지 않음"
 
 #: pretix/base/forms/questions.py:1183
 msgid "Invoice transmission method"
-msgstr ""
+msgstr "청구서 전송 방식"
 
 #: pretix/base/forms/questions.py:1329
 msgid "You need to provide a company name."
@@ -3432,21 +3350,20 @@ msgstr "이름을 입력해야 합니다."
 msgid ""
 "If you enter an invoice address, you also need to select an invoice "
 "transmission method."
-msgstr ""
+msgstr "당신이 청구서 주소를 입력하신다면, 청구서 수신 방법도 선택하셔야 합니다."
 
 #: pretix/base/forms/questions.py:1385
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid ""
 "The selected transmission type is not available in your country or for your "
 "type of address."
-msgstr "선택한 미디어 유형이 정리함 설정에서 활성화되지 않았습니다."
+msgstr "선택한 전송 유형은 당신의 국가 또는 지역에서 이용하실 수 없습니다."
 
 #: pretix/base/forms/questions.py:1394
 msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
-msgstr ""
+msgstr "선택하신 청구서 전송 유형은 현재 사용할 수 없는 필드의 입력을 필요로 하니, 주"
+"최자에게 문의 해 주세요."
 
 #: pretix/base/forms/questions.py:1398
 msgid "This field is required for the selected type of invoice transmission."
@@ -3466,10 +3383,8 @@ msgstr ""
 "대가 대신 사용됩니다."
 
 #: pretix/base/forms/user.py:77
-#, fuzzy
-#| msgid "Attendee email address"
 msgid "Change email address"
-msgstr "참석자 이메일 주소"
+msgstr "이메일 주소 변경"
 
 #: pretix/base/forms/user.py:83
 msgid "Device name"
@@ -3518,16 +3433,12 @@ msgstr ""
 "이 이메일 주소와 관련된 계정이 이미 있습니다. 다른 계정을 선택해 주세요."
 
 #: pretix/base/forms/user.py:179
-#, fuzzy
-#| msgid "Email address"
 msgid "Old email address"
-msgstr "이메일 주소"
+msgstr "이전 이메일 주소"
 
 #: pretix/base/forms/user.py:180
-#, fuzzy
-#| msgid "Email address"
 msgid "New email address"
-msgstr "이메일 주소"
+msgstr "새 이메일 주소"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -3572,23 +3483,22 @@ msgstr "개별 고객"
 
 #: pretix/base/invoicing/email.py:50
 msgid "Email invoice directly to accounting department"
-msgstr ""
+msgstr "청구서를 회계 부서로 이메일로 바로 보내기"
 
 #: pretix/base/invoicing/email.py:51
 msgid ""
 "If not selected, the invoice will be sent to you using the email address "
 "listed above."
-msgstr ""
+msgstr "선택되지 않은 경우, 청구서는 위의 이메일 주소를 통해 당신에게 보내질 것 입니"
+"다."
 
 #: pretix/base/invoicing/email.py:55
-#, fuzzy
-#| msgid "Email address verified"
 msgid "Email address for invoice"
-msgstr "이메일 주소 확인"
+msgstr "청구서용 이메일 주소"
 
 #: pretix/base/invoicing/email.py:91
 msgid "PDF via email"
-msgstr ""
+msgstr "이메일로 PDF"
 
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
@@ -3613,11 +3523,9 @@ msgid "Address for certified electronic mail"
 msgstr ""
 
 #: pretix/base/invoicing/national.py:57
-#, fuzzy
-#| msgid "Recipient"
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr "영수증"
+msgstr "영수증 코드"
 
 #: pretix/base/invoicing/national.py:81
 msgctxt "italian_invoice"
@@ -3697,7 +3605,6 @@ msgid ""
 "until {to_date}"
 msgstr ""
 "{from_date}\n"
-"\n"
 "{to_date}까지"
 
 #: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:512
@@ -3777,10 +3684,10 @@ msgid "Single price: {net_price} net / {gross_price} gross"
 msgstr "단일 가격: {net_price} 순 / {gross_price} 총합"
 
 #: pretix/base/invoicing/pdf.py:901
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "단일 가격: {가격}"
+msgstr "단일 가격: {price}"
 
 #: pretix/base/invoicing/pdf.py:944 pretix/base/invoicing/pdf.py:949
 msgctxt "invoice"
@@ -3808,12 +3715,10 @@ msgid "Remaining amount"
 msgstr "잔액"
 
 #: pretix/base/invoicing/pdf.py:1009
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Event date: {date_range}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "이벤트 날짜: {date_range}"
+msgstr "청구서 기간: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:1040
 msgctxt "invoice"
@@ -3836,23 +3741,21 @@ msgid "Included taxes"
 msgstr "세금 포함"
 
 #: pretix/base/invoicing/pdf.py:1100
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
-msgstr ""
-"{날짜}에 {당국}에서 발표한 1:{세율}의 변환율을 사용하면 다음과 같습니다:"
+msgstr "{date}에 {authority}에서 발표한 1:{rate}의 변환율을 사용하면 다음과 같습니다:"
 
 #: pretix/base/invoicing/pdf.py:1115
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
-msgstr ""
-"{날짜}에 {당국}에서 게시한 1:{세율}의 변환율을 사용하면 송장 총액이 {총합}에 "
-"해당합니다."
+msgstr "{date}에 {authority}에서 게시한 1:{rate}의 변환율을 사용하면 송장 총액이 "
+"{total}에 해당합니다."
 
 #: pretix/base/invoicing/pdf.py:1129
 msgid "Default invoice renderer (European-style letter)"
