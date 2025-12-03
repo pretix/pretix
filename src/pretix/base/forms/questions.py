@@ -1357,6 +1357,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 )
 
         vat_id_applicable = (
+            'vat_id' in self.fields and
             data.get('is_business') and
             ask_for_vat_id(data.get('country'))
         )

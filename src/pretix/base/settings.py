@@ -659,7 +659,7 @@ DEFAULTS = {
             ),
             widget=forms.CheckboxSelectMultiple(attrs={
                 "class": "scrolling-multiple-choice",
-                'data-display-dependency': '#invoice_address_vatid,#id_invoice_address_asked'
+                'data-display-dependency': '#id_invoice_address_vatid'
             }),
         )
     },
