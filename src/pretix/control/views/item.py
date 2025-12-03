@@ -87,6 +87,7 @@ from pretix.control.signals import item_forms, item_formsets
 from pretix.helpers.models import modelcopy
 
 from ...helpers.compat import CompatDeleteView
+from ...helpers.countries import CachedCountries
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
@@ -657,6 +658,7 @@ class QuestionMixin:
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['formset'] = self.formset
+        ctx['countries'] = [{"id": k, "name": str(c)} for k, c in dict(CachedCountries().countries).items()]
         return ctx
 
 
