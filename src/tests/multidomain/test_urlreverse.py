@@ -45,6 +45,8 @@ def env():
 def test_event_main_domain_front_page(env):
     assert eventreverse(env[1], 'presale:event.index') == '/mrmcd/2015/'
     assert eventreverse(env[0], 'presale:organizer.index') == '/mrmcd/'
+    assert eventreverse(env[1], 'plugins:testdummy:view') == '/mrmcd/2015/testdummy'
+    assert eventreverse(env[0], 'plugins:testdummy:view') == '/mrmcd/testdummy'
 
 
 @pytest.mark.django_db
@@ -52,12 +54,16 @@ def test_event_custom_domain_kwargs(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1])
     assert eventreverse(env[1], 'presale:event.checkout', {'step': 'payment'}) == 'http://barfoo/checkout/payment/'
+    assert eventreverse(env[0], 'plugins:testdummy:view') == 'http://foobar/testdummy'
+    assert eventreverse(env[1], 'plugins:testdummy:view') == 'http://barfoo/testdummy'
 
 
 @pytest.mark.django_db
 def test_event_org_domain_kwargs(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     assert eventreverse(env[1], 'presale:event.checkout', {'step': 'payment'}) == 'http://foobar/2015/checkout/payment/'
+    assert eventreverse(env[0], 'plugins:testdummy:view') == 'http://foobar/testdummy'
+    assert eventreverse(env[1], 'plugins:testdummy:view') == 'http://foobar/2015/testdummy'
 
 
 @pytest.mark.django_db
@@ -65,9 +71,13 @@ def test_event_org_alt_domain_kwargs(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     d = KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
     assert eventreverse(env[1], 'presale:event.checkout', {'step': 'payment'}) == 'http://foobar/2015/checkout/payment/'
+    assert eventreverse(env[1], 'plugins:testdummy:view') == 'http://foobar/2015/testdummy'
     d.event_assignments.create(event=env[1])
     with scopes_disabled():
-        assert eventreverse(Event.objects.get(pk=env[1].pk), 'presale:event.checkout', {'step': 'payment'}) == 'http://altfoo/2015/checkout/payment/'
+        event = Event.objects.get(pk=env[1].pk)
+    assert eventreverse(event, 'presale:event.checkout', {'step': 'payment'}) == 'http://altfoo/2015/checkout/payment/'
+    assert eventreverse(env[0], 'plugins:testdummy:view') == 'http://foobar/testdummy'
+    assert eventreverse(event, 'plugins:testdummy:view') == 'http://altfoo/2015/testdummy'
 
 
 @pytest.mark.django_db
