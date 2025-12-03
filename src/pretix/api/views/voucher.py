@@ -19,8 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.db import transaction
-from django.db.models import F, Q
+
+from decimal import Decimal
+
+from django.db import models, transaction
+from django.db.models import F, OuterRef, Q, Subquery, Sum
+from django.db.models.functions import Coalesce
 from django.utils.timezone import now
 from django_filters.rest_framework import (
     BooleanFilter, CharFilter, DjangoFilterBackend, FilterSet,
@@ -33,7 +37,7 @@ from rest_framework.response import Response
 
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.voucher import VoucherSerializer
-from pretix.base.models import Voucher
+from pretix.base.models import Order, OrderPosition, Voucher
 
 with scopes_disabled():
     class VoucherFilter(FilterSet):
@@ -64,8 +68,22 @@ class VoucherViewSet(viewsets.ModelViewSet):
     permission = 'can_view_vouchers'
     write_permission = 'can_change_vouchers'
 
+    @scopes_disabled()  # we have an event check here, and we can save some performance on subqueries
     def get_queryset(self):
-        return self.request.event.vouchers.select_related('seat').all()
+        opq = OrderPosition.objects.filter(
+            voucher_id=OuterRef('pk'),
+            voucher_budget_use__isnull=False,
+            order__status__in=[
+                Order.STATUS_PAID,
+                Order.STATUS_PENDING
+            ]
+        ).order_by().values('voucher_id').annotate(s=Sum('voucher_budget_use')).values('s')
+
+        return self.request.event.vouchers.annotate(
+            budget_used=Coalesce(Subquery(opq, output_field=models.DecimalField(max_digits=13, decimal_places=2)), Decimal('0.00'))
+        ).select_related(
+            'item', 'quota', 'seat', 'variation'
+        )
 
     @transaction.atomic()
     def create(self, request, *args, **kwargs):
