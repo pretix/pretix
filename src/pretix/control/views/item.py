@@ -614,6 +614,58 @@ class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
             'event': self.request.event.slug,
         })
 
+class QuestionMixin:
+    @cached_property
+    def formset(self):
+        formsetclass = inlineformset_factory(
+            Question, QuestionOption,
+            form=QuestionOptionForm, formset=I18nFormSet,
+            can_order=True, can_delete=True, extra=0
+        )
+        return formsetclass(self.request.POST if self.request.method == "POST" else None,
+                            queryset=(QuestionOption.objects.filter(question=self.object)
+                                      if self.object else QuestionOption.objects.none()),
+                            event=self.request.event)
+
+    def save_formset(self, obj):
+        if self.formset.is_valid():
+            for form in self.formset.initial_forms:
+                if form in self.formset.deleted_forms:
+                    if not form.instance.pk:
+                        continue
+                    obj.log_action(
+                        'pretix.event.question.option.deleted', user=self.request.user, data={
+                            'id': form.instance.pk
+                        }
+                    )
+                    form.instance.delete()
+                    form.instance.pk = None
+
+            forms = self.formset.ordered_forms + [
+                ef for ef in self.formset.extra_forms
+                if ef not in self.formset.ordered_forms and ef not in self.formset.deleted_forms
+            ]
+            for i, form in enumerate(forms):
+                form.instance.position = i
+                form.instance.question = obj
+                created = not form.instance.pk
+                form.save()
+                if form.has_changed():
+                    change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
+                    change_data['id'] = form.instance.pk
+                    obj.log_action(
+                        'pretix.event.question.option.added' if created else
+                        'pretix.event.question.option.changed',
+                        user=self.request.user, data=change_data
+                    )
+
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        return ctx
 
 class QuestionFilterForm(forms.Form):
         STATUS_VARIANTS = [
@@ -711,58 +763,6 @@ class QuestionFilterForm(forms.Form):
 
             return opqs
 
-class QuestionMixin:
-    @cached_property
-    def formset(self):
-        formsetclass = inlineformset_factory(
-            Question, QuestionOption,
-            form=QuestionOptionForm, formset=I18nFormSet,
-            can_order=True, can_delete=True, extra=0
-        )
-        return formsetclass(self.request.POST if self.request.method == "POST" else None,
-                            queryset=(QuestionOption.objects.filter(question=self.object)
-                                      if self.object else QuestionOption.objects.none()),
-                            event=self.request.event)
-
-    def save_formset(self, obj):
-        if self.formset.is_valid():
-            for form in self.formset.initial_forms:
-                if form in self.formset.deleted_forms:
-                    if not form.instance.pk:
-                        continue
-                    obj.log_action(
-                        'pretix.event.question.option.deleted', user=self.request.user, data={
-                            'id': form.instance.pk
-                        }
-                    )
-                    form.instance.delete()
-                    form.instance.pk = None
-
-            forms = self.formset.ordered_forms + [
-                ef for ef in self.formset.extra_forms
-                if ef not in self.formset.ordered_forms and ef not in self.formset.deleted_forms
-            ]
-            for i, form in enumerate(forms):
-                form.instance.position = i
-                form.instance.question = obj
-                created = not form.instance.pk
-                form.save()
-                if form.has_changed():
-                    change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
-                    change_data['id'] = form.instance.pk
-                    obj.log_action(
-                        'pretix.event.question.option.added' if created else
-                        'pretix.event.question.option.changed',
-                        user=self.request.user, data=change_data
-                    )
-
-            return True
-        return False
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx['formset'] = self.formset
-        return ctx
 
 class QuestionExporter(BaseExporter):
     identifier = 'questions_exporter'
