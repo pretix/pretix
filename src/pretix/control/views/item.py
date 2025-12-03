@@ -38,6 +38,7 @@ from collections import OrderedDict, namedtuple
 from itertools import groupby
 from json.decoder import JSONDecodeError
 
+from django import forms
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
@@ -45,7 +46,9 @@ from django.db import transaction
 from django.db.models import (
     Count, Exists, F, OuterRef, Prefetch, ProtectedError, Q,
 )
-from django.forms.models import inlineformset_factory
+from django.forms import Select
+from django.forms.fields import MultipleChoiceField
+from django.forms.models import inlineformset_factory, ModelMultipleChoiceField, ModelChoiceField
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
 )
@@ -53,7 +56,7 @@ from django.shortcuts import redirect
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView, SingleObjectMixin
@@ -69,6 +72,7 @@ from pretix.base.models import (
     OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
     SeatCategoryMapping, Voucher,
 )
+from pretix.base.models.event import Event
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.services.quotas import QuotaAvailability
@@ -85,6 +89,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.signals import item_forms, item_formsets
 from pretix.helpers.models import modelcopy
+from ..forms.widgets import Select2, Select2Multiple
 
 from ...helpers.compat import CompatDeleteView
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
@@ -606,6 +611,65 @@ class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
         })
 
 
+class QuestionFilterForm(forms.Form):
+        STATUS_VARIANTS = [
+            ("", _("All orders")),
+            ("p", _("Paid")),
+            ("pv", _("Paid or confirmed")),
+            ("n", _("Pending")),
+            ("np", _("Pending or paid")),
+            ("o", _("Pending (overdue)")),
+            ("e", _("Expired")),
+            ("ne", _("Pending or expired")),
+            ("c", _("Canceled"))
+        ]
+
+        status = forms.ChoiceField(
+            choices=STATUS_VARIANTS,
+            widget=forms.Select(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            required=False,
+        )
+        item = forms.ChoiceField(
+            choices=[],
+            widget=forms.Select(
+                attrs={'class': 'form-control'}
+            ),
+            required=False
+        )
+        subevent = forms.ModelChoiceField(
+            queryset=SubEvent.objects.none(),
+            required=False,
+            empty_label=pgettext_lazy('subevent', 'All dates')
+        )
+
+        def __init__(self, *args, **kwargs):
+            self.event = kwargs.pop('event')
+            super().__init__(*args, **kwargs)
+            self.initial['status']="np"
+            self.fields['item'].choices = [('', _('All products'))] + [(item.id, item.name) for item in Item.objects.filter(event=self.event)]
+
+            if self.event.has_subevents:
+                self.fields["subevent"].queryset = self.event.subevents.all()
+                self.fields['subevent'].widget = Select2(
+                    attrs={
+                        'class': 'form-control simple-subevent-choice',
+                        'data-model-select2': 'event',
+                        'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                            'event': self.event.slug,
+                            'organizer': self.event.organizer.slug,
+                        }),
+                        'data-placeholder': pgettext_lazy('subevent', 'All dates')
+                    }
+                )
+                self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+            else:
+                del self.fields['subevent']
+
+
 class QuestionMixin:
     @cached_property
     def formset(self):
@@ -660,7 +724,7 @@ class QuestionMixin:
         return ctx
 
 
-class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingView, DetailView):
+class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView):
     model = Question
     template_name = 'pretixcontrol/items/question.html'
     permission = 'can_change_items'
@@ -749,6 +813,7 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
         ctx['items'] = self.object.items.all()
         stats = self.get_answer_statistics()
         ctx['stats'], ctx['total'] = stats
+        ctx['form'] = QuestionFilterForm(data=self.request.GET, event=self.request.event)
         return ctx
 
     def get_object(self, queryset=None) -> Question:
