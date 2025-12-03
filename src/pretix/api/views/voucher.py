@@ -70,17 +70,8 @@ class VoucherViewSet(viewsets.ModelViewSet):
 
     @scopes_disabled()  # we have an event check here, and we can save some performance on subqueries
     def get_queryset(self):
-        opq = OrderPosition.objects.filter(
-            voucher_id=OuterRef('pk'),
-            voucher_budget_use__isnull=False,
-            order__status__in=[
-                Order.STATUS_PAID,
-                Order.STATUS_PENDING
-            ]
-        ).order_by().values('voucher_id').annotate(s=Sum('voucher_budget_use')).values('s')
-
-        return self.request.event.vouchers.annotate(
-            budget_used=Coalesce(Subquery(opq, output_field=models.DecimalField(max_digits=13, decimal_places=2)), Decimal('0.00'))
+        return Voucher.annotate_budget_used(
+            self.request.event.vouchers
         ).select_related(
             'item', 'quota', 'seat', 'variation'
         )
