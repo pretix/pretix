@@ -676,6 +676,41 @@ class QuestionFilterForm(forms.Form):
         def is_valid(self) -> bool:
             return True
 
+        def orderPositionQuerySet(self):
+            fdata = self.data
+
+            opqs = OrderPosition.objects.filter(
+                order__event=self.event,
+            )
+
+            if fdata.get('subevent', "") != "":
+                opqs = opqs.filter(subevent=fdata["subevent"])
+
+            s = fdata.get("status", "np")
+            if s != "":
+                if s == 'o':
+                    opqs = opqs.filter(order__status=Order.STATUS_PENDING,
+                                       order__expires__lt=now().replace(hour=0, minute=0, second=0))
+                elif s == 'np':
+                    opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
+                elif s == 'pv':
+                    opqs = opqs.filter(
+                        Q(order__status=Order.STATUS_PAID) |
+                        Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
+                    )
+                elif s == 'ne':
+                    opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
+                else:
+                    opqs = opqs.filter(order__status=s)
+
+            if s not in (Order.STATUS_CANCELED, ""):
+                opqs = opqs.filter(canceled=False)
+            if fdata.get("item", "") != "":
+                i = fdata.get("item", "")
+                opqs = opqs.filter(item_id__in=(i,))
+
+            return opqs
+
 class QuestionMixin:
     @cached_property
     def formset(self):
@@ -759,10 +794,8 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
     template_name_field = 'question'
 
     def get_answer_statistics(self):
-        form = QuestionFilterForm(data=self.request.GET, event=self.request.event)
-        opqs = OrderPosition.objects.filter(
-            order__event=self.request.event,
-        )
+        opqs = QuestionFilterForm(self.request.GET, event=self.request.event).orderPositionQuerySet()
+
         qs = QuestionAnswer.objects.filter(
             question=self.object, orderposition__isnull=False,
         )
