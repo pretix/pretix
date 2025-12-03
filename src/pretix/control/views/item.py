@@ -37,6 +37,7 @@ import json
 from collections import OrderedDict, namedtuple
 from itertools import groupby
 from json.decoder import JSONDecodeError
+import pprint
 
 from django import forms
 from django.contrib import messages
@@ -47,7 +48,7 @@ from django.db.models import (
     Count, Exists, F, OuterRef, Prefetch, ProtectedError, Q,
 )
 
-from pretix.base.exporter import BaseExporter
+from pretix.base.exporter import ListExporter
 from django.dispatch import receiver
 from pretix.base.signals import register_data_exporters
 from django.forms import Select
@@ -735,7 +736,7 @@ class QuestionFilterForm(forms.Form):
                 order__event=self.event,
             )
 
-            if fdata.get('subevent', "") != "":
+            if (fdata.get('subevent', "") != "") & (fdata.get('subevent', "") != None):
                 opqs = opqs.filter(subevent=fdata["subevent"])
 
             s = fdata.get("status", "np")
@@ -764,28 +765,60 @@ class QuestionFilterForm(forms.Form):
             return opqs
 
 
-class QuestionExporter(BaseExporter):
-    identifier = 'questions_exporter'
-    verbose_name = _('Questions exporter')
-    description = _('Export for questions')
-    category = _('Orders')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
+class QuestionAnswerExporter(ListExporter):
+    identifier = 'question_answer_exporter'
+    verbose_name = _('Question answers exporter')
+    description = _('Download a spreadsheet containing question answers')
+    category = _('Order data')
 
     @property
-    def export_form_fields(self):
-        form = QuestionFilterForm(event=self.event)
-        return form.fields
+    def additional_form_fields(self):
+        form = {
+            'question':
+                forms.ModelChoiceField(
+                    label=_('Question'),
+                    queryset=Question.objects.filter(event=self.event),
+            ),
+            **QuestionFilterForm(event=self.event).fields
+        }
 
-    def render(self, form_data):
-        return ("dateiname", "csv", "dateininhalt")
+        return form
+
+    def iterate_list(self, form_data):
+        question = Question.objects.filter(event=self.event).get(pk=form_data['question'])
+
+        opqs = QuestionFilterForm(event=self.event, data=form_data).orderPositionQuerySet()
+
+        qs = QuestionAnswer.objects.filter(
+            question=question, orderposition__isnull=False,
+        )
+        qs = qs.filter(orderposition__in=opqs)
+
+        headers = [
+            _("Subevent"),
+            _("Event start time"),
+            _("Order"),
+            _("Order position"),
+            question.question
+        ]
+
+        yield headers
+        yield self.ProgressSetTotal(total=qs.count())
+
+        for questionAnswer in qs.iterator(chunk_size=1000):
+            row = [
+                questionAnswer.orderposition.subevent.name,
+                questionAnswer.orderposition.subevent.date_from.replace(tzinfo=None),
+                questionAnswer.orderposition.order.code,
+                questionAnswer.orderposition.positionid,
+                questionAnswer.answer
+            ]
+
+            yield row
 
 @receiver(register_data_exporters, dispatch_uid="exporter_questions_exporter")
 def register_data_exporter(sender, **kwargs):
-
-    return QuestionExporter
+    return QuestionAnswerExporter
 
 class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView):
     model = Question
@@ -799,33 +832,6 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
         qs = QuestionAnswer.objects.filter(
             question=self.object, orderposition__isnull=False,
         )
-
-        if self.request.GET.get("subevent", "") != "":
-            opqs = opqs.filter(subevent=self.request.GET["subevent"])
-
-        s = self.request.GET.get("status", "np")
-        if s != "":
-            if s == 'o':
-                opqs = opqs.filter(order__status=Order.STATUS_PENDING,
-                                   order__expires__lt=now().replace(hour=0, minute=0, second=0))
-            elif s == 'np':
-                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
-            elif s == 'pv':
-                opqs = opqs.filter(
-                    Q(order__status=Order.STATUS_PAID) |
-                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
-                )
-            elif s == 'ne':
-                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
-            else:
-                opqs = opqs.filter(order__status=s)
-
-        if s not in (Order.STATUS_CANCELED, ""):
-            opqs = opqs.filter(canceled=False)
-        if self.request.GET.get("item", "") != "":
-            i = self.request.GET.get("item", "")
-            opqs = opqs.filter(item_id__in=(i,))
-
         qs = qs.filter(orderposition__in=opqs)
         op_cnt = opqs.filter(item__in=self.object.items.all()).count()
 
