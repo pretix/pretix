@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-03 13:00+0000\n"
+"PO-Revision-Date: 2025-12-03 23:00+0000\n"
 "Last-Translator: SJang1 <git@sjang.dev>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -3749,7 +3749,7 @@ msgid ""
 msgstr "{date}에 {authority}에서 발표한 1:{rate}의 변환율을 사용하면 다음과 같습니다:"
 
 #: pretix/base/invoicing/pdf.py:1115
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
