@@ -113,6 +113,11 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 
         lock_objects(quotas, shared_lock_objects=[event])
         for wle in qs:
+            # add this event to wle.item as it is not yet cached and is needed in check_quotas
+            wle.item.event = event
+            if wle.variation:
+                wle.variation.item = wle.item
+
             if (wle.item_id, wle.variation_id, wle.subevent_id) in gone:
                 continue
             ev = (wle.subevent or event)
