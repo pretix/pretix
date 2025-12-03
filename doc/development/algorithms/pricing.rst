@@ -211,7 +211,7 @@ The line-based computation has a few significant advantages:
 
 The main disadvantage is that the tax looks "wrong" when computed from the sum. Taking the sum of net prices (420.15)
 and multiplying it with the tax rate (19%) yields a tax amount of 79.83 (instead of 79.85) and a gross sum of 499.98
-(instead of 499.98). This becomes a problem when juristictions, data formats, or external systems expect this calculation
+(instead of 500.00). This becomes a problem when juristictions, data formats, or external systems expect this calculation
 to work on the level of the entire order. A prominent example is the EN 16931 standard for e-invoicing that
 does not allow the computation as created by pretix.
 
