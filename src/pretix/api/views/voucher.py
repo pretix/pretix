@@ -20,11 +20,8 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-from decimal import Decimal
-
-from django.db import models, transaction
-from django.db.models import F, OuterRef, Q, Subquery, Sum
-from django.db.models.functions import Coalesce
+from django.db import transaction
+from django.db.models import F, Q
 from django.utils.timezone import now
 from django_filters.rest_framework import (
     BooleanFilter, CharFilter, DjangoFilterBackend, FilterSet,
@@ -37,7 +34,7 @@ from rest_framework.response import Response
 
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.voucher import VoucherSerializer
-from pretix.base.models import Order, OrderPosition, Voucher
+from pretix.base.models import Voucher
 
 with scopes_disabled():
     class VoucherFilter(FilterSet):
