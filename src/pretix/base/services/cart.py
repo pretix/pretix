@@ -1361,6 +1361,11 @@ class CartManager:
                         deleted_positions.add(op.position.pk)
                         addons.delete()
                         op.position.delete()
+                        if op.position.is_bundled:
+                            deleted_positions |= {a.pk for a in op.position.addon_to.addons.all()}
+                            deleted_positions.add(op.position.addon_to.pk)
+                            op.position.addon_to.addons.all().delete()
+                            op.position.addon_to.delete()
                     else:
                         raise AssertionError("ExtendOperation cannot affect more than one item")
             elif isinstance(op, self.VoucherOperation):

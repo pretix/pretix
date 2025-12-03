@@ -1428,6 +1428,29 @@ class CartTest(CartTestMixin, TestCase):
                 self.assertEqual(cp2.expires, now() + self.cart_reservation_time)
                 self.assertEqual(cp2.max_extend, now() + 11 * self.cart_reservation_time)
 
+    def test_expired_cart_extend_fails_partially_on_bundled(self):
+        start_time = datetime.datetime(2024, 1, 1, 10, 00, 00, tzinfo=datetime.timezone.utc)
+        max_extend = start_time + 11 * self.cart_reservation_time
+        self.quota_shirts.size = 0
+        self.quota_shirts.save()
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=max_extend, max_extend=max_extend
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=23, expires=max_extend, max_extend=max_extend, addon_to=cp1, is_bundled=True,
+            )
+        with freezegun.freeze_time(max_extend + timedelta(hours=1)):
+            response = self.client.post('/%s/%s/cart/extend' % (self.orga.slug, self.event.slug), {
+            }, follow=True)
+            doc = BeautifulSoup(response.rendered_content, "lxml")
+            self.assertIn('no longer available', doc.select('.alert-danger')[0].text)
+            with scopes_disabled():
+                self.assertFalse(CartPosition.objects.filter(id=cp1.id).exists())
+                self.assertFalse(CartPosition.objects.filter(id=cp2.id).exists())
+
     def test_subevent_renew_expired_successfully(self):
         self.event.has_subevents = True
         self.event.save()
