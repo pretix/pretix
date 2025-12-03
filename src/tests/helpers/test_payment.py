@@ -122,3 +122,20 @@ def test_payment_qr_codes_swiss(env):
         "TESTVERANST-12345",
         "EPD",
     ])
+
+
+@pytest.mark.django_db
+def test_payment_qr_codes_spayd(env):
+    o, event = env
+    codes = generate_payment_qr_codes(
+        event=event,
+        code='TESTVERANST-12345',
+        amount=Decimal('123.00'),
+        bank_details_sepa_bic='TESTCZXXXXX',
+        bank_details_sepa_iban='CZ7450513769129174398769',
+        bank_details_sepa_name='Verein für Testzwecke e.V.',
+    )
+    assert len(codes) == 2
+    assert codes[0]['label'] == 'SPAYD'
+    assert codes[0]['qr_data'] == 'SPD*1.0*ACC:CZ7450513769129174398769*AM:123.00*CC:EUR*MSG:TESTVERANST-12345'
+    assert codes[1]['label'] == 'EPC-QR'
