@@ -103,7 +103,9 @@ def euro_bezahlcode(
         bank_details_sepa_name,
         bank_details_sepa_iban,
 ):
-    if event.currency != 'EUR' or not bank_details_sepa_iban:
+    if not bank_details_sepa_iban or bank_details_sepa_iban[:2] != 'DE':
+        return
+    if event.currency != 'EUR':
         return
 
     qr_data = "bank://singlepaymentsepa?" + urlencode({
