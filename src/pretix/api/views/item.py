@@ -567,7 +567,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'can_change_items'
 
     def get_queryset(self):
-        return self.request.event.quotas.all()
+        return self.request.event.quotas.select_related('subevent').prefetch_related('items', 'variations').all()
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset()).distinct()
