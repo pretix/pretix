@@ -28,7 +28,7 @@ created                               datetime                   Date of creatio
 updated                               datetime                   Date of last modification
 expires                               datetime                   Expiry date (or ``null``)
 customer                              string                     Identifier of a customer account this medium belongs to.
-linked_orderpositions                 integer                    Internal ID of a ticket this medium is linked to.
+linked_orderpositions                 list of integer            Internal IDs of tickets this medium is linked to.
 linked_orderposition                  integer                    Internal ID of a ticket this medium is linked to. (**deprecated**, do not use, will be removed)
 linked_giftcard                       integer                    Internal ID of a gift card this medium is linked to.
 info                                  object                     Additional data, content depends on the ``type``. Consider
@@ -46,8 +46,8 @@ Existing media types are:
 .. versionchanged:: 2025.11
 
    The ``secret``, ``label``, ``linked_orderpositions`` attributes have been added, the ``linked_orderposition`` attribute has been
-   deprecated. Note: If a medium has exactly one order position in ``linked_orderpositions`` then ``linked_orderposition`` is filled 
-   with that order position for backwards compatibility.
+   deprecated. Note: To maintain backwards compatibility ``linked_orderposition`` contains the internal ID of the linked order position
+   if the medium has exactly one order position in ``linked_orderpositions``.
 
 
 Endpoints
