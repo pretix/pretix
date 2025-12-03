@@ -40,12 +40,16 @@ from json.decoder import JSONDecodeError
 
 from django import forms
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
     Count, Exists, F, OuterRef, Prefetch, ProtectedError, Q,
 )
+
+from pretix.base.exporter import BaseExporter
+from django.dispatch import receiver
+from pretix.base.signals import register_data_exporters
 from django.forms import Select
 from django.forms.fields import MultipleChoiceField
 from django.forms.models import inlineformset_factory, ModelMultipleChoiceField, ModelChoiceField
@@ -669,6 +673,8 @@ class QuestionFilterForm(forms.Form):
             else:
                 del self.fields['subevent']
 
+        def is_valid(self) -> bool:
+            return True
 
 class QuestionMixin:
     @cached_property
@@ -723,6 +729,28 @@ class QuestionMixin:
         ctx['formset'] = self.formset
         return ctx
 
+class QuestionExporter(BaseExporter):
+    identifier = 'questions_exporter'
+    verbose_name = _('Questions exporter')
+    description = _('Export for questions')
+    category = _('Orders')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+    @property
+    def export_form_fields(self):
+        form = QuestionFilterForm(event=self.event)
+        return form.fields
+
+    def render(self, form_data):
+        return ("dateiname", "csv", "dateininhalt")
+
+@receiver(register_data_exporters, dispatch_uid="exporter_questions_exporter")
+def register_data_exporter(sender, **kwargs):
+
+    return QuestionExporter
 
 class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView):
     model = Question
@@ -731,6 +759,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
     template_name_field = 'question'
 
     def get_answer_statistics(self):
+        form = QuestionFilterForm(data=self.request.GET, event=self.request.event)
         opqs = OrderPosition.objects.filter(
             order__event=self.request.event,
         )
