@@ -333,9 +333,6 @@ class QuestionFilterForm(forms.Form):
         else:
             del self.fields['subevent']
 
-    def is_valid(self) -> bool:
-        return True
-
     def order_position_queryset(self):
         fdata = self.data
 

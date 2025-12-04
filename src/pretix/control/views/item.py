@@ -69,7 +69,7 @@ from pretix.base.exporter import ListExporter
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
-    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher,
+    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher, OrderPosition,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
@@ -726,9 +726,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
     permission = 'can_change_items'
     template_name_field = 'question'
 
-    def get_answer_statistics(self):
-        opqs = QuestionFilterForm(self.request.GET, event=self.request.event).orderPositionQuerySet()
-
+    def get_answer_statistics(self, opqs: OrderPosition):
         qs = QuestionAnswer.objects.filter(
             question=self.object, orderposition__isnull=False,
         )
@@ -779,9 +777,11 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['items'] = self.object.items.all()
-        stats = self.get_answer_statistics()
-        ctx['stats'], ctx['total'] = stats
         ctx['form'] = QuestionFilterForm(data=self.request.GET, event=self.request.event)
+        if ctx['form'].is_valid():
+            opqs = ctx['form'].order_position_queryset()
+            stats = self.get_answer_statistics(opqs)
+            ctx['stats'], ctx['total'] = stats
         return ctx
 
     def get_object(self, queryset=None) -> Question:
