@@ -530,6 +530,7 @@ X_FRAME_OPTIONS = 'DENY'
 
 # URL settings
 ROOT_URLCONF = 'pretix.multidomain.maindomain_urlconf'
+FORMS_URLFIELD_ASSUME_HTTPS = True  # transitional for django 6.0
 
 WSGI_APPLICATION = 'pretix.wsgi.application'
 
