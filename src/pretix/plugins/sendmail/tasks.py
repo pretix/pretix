@@ -47,6 +47,14 @@ from pretix.celery_app import app
 from pretix.helpers.format import format_map
 
 
+def _chunks(lst, n):
+    """
+    Yield successive n-sized chunks from lst.
+    """
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
 @app.task(base=ProfiledEventTask, acks_late=True)
 def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, objects: list, items: list,
                          subevent: int, subevents_from: datetime, subevents_to: datetime,
@@ -55,12 +63,11 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                          attach_ical: bool = False) -> None:
     failures = []
     user = User.objects.get(pk=user) if user else None
-    orders = Order.objects.filter(pk__in=objects, event=event)
     subject = LazyI18nString(subject)
     message = LazyI18nString(message)
     attachments_for_log = [cf.filename for cf in CachedFile.objects.filter(pk__in=attachments)] if attachments else []
 
-    for o in orders:
+    def _send_to_order(o):
         send_to_order = recipients in ('both', 'orders')
 
         try:
@@ -178,6 +185,11 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     )
             except SendMailException:
                 failures.append(o.email)
+
+    for chunk in _chunks(objects, 1000):
+        orders = Order.objects.filter(pk__in=chunk, event=event)
+        for o in orders:
+            _send_to_order(o)
 
 
 @app.task(base=ProfiledEventTask, acks_late=True)
