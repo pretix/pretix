@@ -37,23 +37,17 @@ import json
 from collections import OrderedDict, namedtuple
 from itertools import groupby
 from json.decoder import JSONDecodeError
-import pprint
 
 from django import forms
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
     Count, Exists, F, OuterRef, Prefetch, ProtectedError, Q,
 )
-
-from pretix.base.exporter import ListExporter
 from django.dispatch import receiver
-from pretix.base.signals import register_data_exporters
-from django.forms import Select
-from django.forms.fields import MultipleChoiceField
-from django.forms.models import inlineformset_factory, ModelMultipleChoiceField, ModelChoiceField
+from django.forms.models import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
 )
@@ -71,18 +65,18 @@ from pretix.api.serializers.item import (
     ItemAddOnSerializer, ItemBundleSerializer, ItemProgramTimeSerializer,
     ItemVariationSerializer,
 )
+from pretix.base.exporter import ListExporter
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Order,
     OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
     SeatCategoryMapping, Voucher,
 )
-from pretix.base.models.event import Event
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
-from pretix.base.signals import quota_availability
+from pretix.base.signals import quota_availability, register_data_exporters
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
     ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
@@ -94,9 +88,9 @@ from pretix.control.permissions import (
 )
 from pretix.control.signals import item_forms, item_formsets
 from pretix.helpers.models import modelcopy
-from ..forms.widgets import Select2, Select2Multiple
 
 from ...helpers.compat import CompatDeleteView
+from ..forms.widgets import Select2
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
@@ -615,6 +609,7 @@ class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
             'event': self.request.event.slug,
         })
 
+
 class QuestionMixin:
     @cached_property
     def formset(self):
@@ -668,101 +663,102 @@ class QuestionMixin:
         ctx['formset'] = self.formset
         return ctx
 
+
 class QuestionFilterForm(forms.Form):
-        STATUS_VARIANTS = [
-            ("", _("All orders")),
-            ("p", _("Paid")),
-            ("pv", _("Paid or confirmed")),
-            ("n", _("Pending")),
-            ("np", _("Pending or paid")),
-            ("o", _("Pending (overdue)")),
-            ("e", _("Expired")),
-            ("ne", _("Pending or expired")),
-            ("c", _("Canceled"))
-        ]
+    STATUS_VARIANTS = [
+        ("", _("All orders")),
+        ("p", _("Paid")),
+        ("pv", _("Paid or confirmed")),
+        ("n", _("Pending")),
+        ("np", _("Pending or paid")),
+        ("o", _("Pending (overdue)")),
+        ("e", _("Expired")),
+        ("ne", _("Pending or expired")),
+        ("c", _("Canceled"))
+    ]
 
-        status = forms.ChoiceField(
-            choices=STATUS_VARIANTS,
-            widget=forms.Select(
+    status = forms.ChoiceField(
+        choices=STATUS_VARIANTS,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+            }
+        ),
+        required=False,
+    )
+    item = forms.ChoiceField(
+        choices=[],
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        ),
+        required=False
+    )
+    subevent = forms.ModelChoiceField(
+        queryset=SubEvent.objects.none(),
+        required=False,
+        empty_label=pgettext_lazy('subevent', 'All dates')
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+        self.initial['status'] = "np"
+        self.fields['item'].choices = [('', _('All products'))] + [(item.id, item.name) for item in Item.objects.filter(event=self.event)]
+
+        if self.event.has_subevents:
+            self.fields["subevent"].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
                 attrs={
-                    'class': 'form-control',
+                    'class': 'form-control simple-subevent-choice',
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
                 }
-            ),
-            required=False,
-        )
-        item = forms.ChoiceField(
-            choices=[],
-            widget=forms.Select(
-                attrs={'class': 'form-control'}
-            ),
-            required=False
-        )
-        subevent = forms.ModelChoiceField(
-            queryset=SubEvent.objects.none(),
-            required=False,
-            empty_label=pgettext_lazy('subevent', 'All dates')
-        )
-
-        def __init__(self, *args, **kwargs):
-            self.event = kwargs.pop('event')
-            super().__init__(*args, **kwargs)
-            self.initial['status']="np"
-            self.fields['item'].choices = [('', _('All products'))] + [(item.id, item.name) for item in Item.objects.filter(event=self.event)]
-
-            if self.event.has_subevents:
-                self.fields["subevent"].queryset = self.event.subevents.all()
-                self.fields['subevent'].widget = Select2(
-                    attrs={
-                        'class': 'form-control simple-subevent-choice',
-                        'data-model-select2': 'event',
-                        'data-select2-url': reverse('control:event.subevents.select2', kwargs={
-                            'event': self.event.slug,
-                            'organizer': self.event.organizer.slug,
-                        }),
-                        'data-placeholder': pgettext_lazy('subevent', 'All dates')
-                    }
-                )
-                self.fields['subevent'].widget.choices = self.fields['subevent'].choices
-            else:
-                del self.fields['subevent']
-
-        def is_valid(self) -> bool:
-            return True
-
-        def orderPositionQuerySet(self):
-            fdata = self.data
-
-            opqs = OrderPosition.objects.filter(
-                order__event=self.event,
             )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        else:
+            del self.fields['subevent']
 
-            if (fdata.get('subevent', "") != "") & (fdata.get('subevent', "") != None):
-                opqs = opqs.filter(subevent=fdata["subevent"])
+    def is_valid(self) -> bool:
+        return True
 
-            s = fdata.get("status", "np")
-            if s != "":
-                if s == 'o':
-                    opqs = opqs.filter(order__status=Order.STATUS_PENDING,
-                                       order__expires__lt=now().replace(hour=0, minute=0, second=0))
-                elif s == 'np':
-                    opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
-                elif s == 'pv':
-                    opqs = opqs.filter(
-                        Q(order__status=Order.STATUS_PAID) |
-                        Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
-                    )
-                elif s == 'ne':
-                    opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
-                else:
-                    opqs = opqs.filter(order__status=s)
+    def orderPositionQuerySet(self):
+        fdata = self.data
 
-            if s not in (Order.STATUS_CANCELED, ""):
-                opqs = opqs.filter(canceled=False)
-            if fdata.get("item", "") != "":
-                i = fdata.get("item", "")
-                opqs = opqs.filter(item_id__in=(i,))
+        opqs = OrderPosition.objects.filter(
+            order__event=self.event,
+        )
 
-            return opqs
+        if (fdata.get('subevent', "") != "") & (fdata.get('subevent', "") is not None):
+            opqs = opqs.filter(subevent=fdata["subevent"])
+
+        s = fdata.get("status", "np")
+        if s != "":
+            if s == 'o':
+                opqs = opqs.filter(order__status=Order.STATUS_PENDING,
+                                   order__expires__lt=now().replace(hour=0, minute=0, second=0))
+            elif s == 'np':
+                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
+            elif s == 'pv':
+                opqs = opqs.filter(
+                    Q(order__status=Order.STATUS_PAID) |
+                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
+                )
+            elif s == 'ne':
+                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
+            else:
+                opqs = opqs.filter(order__status=s)
+
+        if s not in (Order.STATUS_CANCELED, ""):
+            opqs = opqs.filter(canceled=False)
+        if fdata.get("item", "") != "":
+            i = fdata.get("item", "")
+            opqs = opqs.filter(item_id__in=(i,))
+
+        return opqs
 
 
 class QuestionAnswerExporter(ListExporter):
@@ -778,7 +774,7 @@ class QuestionAnswerExporter(ListExporter):
                 forms.ModelChoiceField(
                     label=_('Question'),
                     queryset=Question.objects.filter(event=self.event),
-            ),
+                ),
             **QuestionFilterForm(event=self.event).fields
         }
 
@@ -816,9 +812,11 @@ class QuestionAnswerExporter(ListExporter):
 
             yield row
 
+
 @receiver(register_data_exporters, dispatch_uid="exporter_questions_exporter")
 def register_data_exporter(sender, **kwargs):
     return QuestionAnswerExporter
+
 
 class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView):
     model = Question
