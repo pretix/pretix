@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-03 23:00+0000\n"
+"PO-Revision-Date: 2025-12-04 18:00+0000\n"
 "Last-Translator: sandra r <sandrarial@gestiontickets.online>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -713,7 +713,7 @@ msgid "Your password must contain both numeric and alphabetic characters."
 msgstr "O teu contrasinal debe conter caracteres numéricos e alfabéticos."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
-#, fuzzy, python-format
+#, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
@@ -721,7 +721,7 @@ msgid_plural ""
 msgstr[0] "O teu contrasinal non sexa o mesmo que o teu contrasinal anterior."
 msgstr[1] ""
 "O teu contrasinal non sexa o mesmo que un dos teus contrasinais anteriores "
-"de %(history_length)."
+"de %(history_length)s."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -3329,42 +3329,48 @@ msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Carga unha imaxe válida. O ficheiro que cargaches ou non era unha imaxe ou "
+"estaba danado."
 
 #: pretix/base/forms/questions.py:653 pretix/base/forms/questions.py:662
 msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
 msgstr ""
+"Se o deixas baleiro, o billete será válido a partir do momento da compra."
 
 #: pretix/base/forms/questions.py:709 pretix/base/forms/questions.py:1102
-#, fuzzy
 msgid "Street and Number"
-msgstr "Calle y número"
+msgstr "Rúa e Número"
 
 #: pretix/base/forms/questions.py:1166
 msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Opcional, pero dependendo do país no que residas, pode que teñamos que "
+"cobrarche impostos adicionais se non o introduces."
 
 #: pretix/base/forms/questions.py:1168 pretix/base/forms/questions.py:1174
 msgid "If you are registered in Switzerland, you can enter your UID instead."
 msgstr ""
+"Se estás rexistrado/a en Suíza, podes introducir o teu UID no seu lugar."
 
 #: pretix/base/forms/questions.py:1172
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Opcional, pero pode ser necesario para que solicites beneficios fiscais na "
+"túa factura dependendo do teu país de residencia e do vendedor."
 
 #: pretix/base/forms/questions.py:1181
-#, fuzzy
 msgid "No invoice requested"
-msgstr "Tarifa de cancelación"
+msgstr "Non se solicitou factura"
 
 #: pretix/base/forms/questions.py:1183
 msgid "Invoice transmission method"
-msgstr ""
+msgstr "Método de transmisión de facturas"
 
 #: pretix/base/forms/questions.py:1329
 msgid "You need to provide a company name."
@@ -3379,111 +3385,101 @@ msgid ""
 "If you enter an invoice address, you also need to select an invoice "
 "transmission method."
 msgstr ""
+"Se introduces un enderezo de facturación, tamén debes seleccionar un método "
+"de transmisión da factura."
 
 #: pretix/base/forms/questions.py:1385
-#, fuzzy
 msgid ""
 "The selected transmission type is not available in your country or for your "
 "type of address."
-msgstr "El producto seleccionado no está activo o no tiene precio fijo."
+msgstr ""
+"O tipo de transmisión seleccionado non está dispoñible no seu país nin para "
+"o seu tipo de enderezo."
 
 #: pretix/base/forms/questions.py:1394
 msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
 msgstr ""
+"O tipo de transmisión de factura seleccionado require un campo que non está "
+"dispoñible actualmente. Ponte en contacto co organizador."
 
 #: pretix/base/forms/questions.py:1398
 msgid "This field is required for the selected type of invoice transmission."
 msgstr ""
+"Este campo é obrigatorio para o tipo de transmisión de factura seleccionado."
 
 #: pretix/base/forms/user.py:54 pretix/control/forms/organizer.py:458
 #: pretix/control/forms/users.py:58
-#, fuzzy
 msgid "Default timezone"
-msgstr "Zona horaria predefinida"
+msgstr "Fuso horario predeterminado"
 
 #: pretix/base/forms/user.py:55 pretix/control/forms/users.py:59
-#, fuzzy
 msgid ""
 "Only used for views that are not bound to an event. For all event views, the "
 "event timezone is used instead."
 msgstr ""
-"Sólo se utiliza para vistas que no están vinculadas a un evento. Para todas "
-"las vistas de eventos, se utiliza la zona horaria de eventos."
+"Só se usa para vistas que non están vinculadas a un evento. Para todas as "
+"vistas de eventos, úsase o fuso horario do evento."
 
 #: pretix/base/forms/user.py:77
-#, fuzzy
-#| msgid "Attendee email address"
 msgid "Change email address"
-msgstr "Correo electrónico do participante"
+msgstr "Cambiar enderezo de correo electrónico"
 
 #: pretix/base/forms/user.py:83
 msgid "Device name"
 msgstr "Nombre do dispositivo"
 
 #: pretix/base/forms/user.py:84
-#, fuzzy
 msgid "Device type"
 msgstr "Tipo de dispositivo"
 
 #: pretix/base/forms/user.py:85
-#, fuzzy
 msgid "Smartphone with the Authenticator application"
-msgstr "Celular con aplicación de autenticación"
+msgstr "Teléfono intelixente coa aplicación Authenticator"
 
 #: pretix/base/forms/user.py:86
-#, fuzzy
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "Hardware compatible con token WebAuthn (p. ej. Yubikey)"
+msgstr "Token de hardware compatible con WebAuthn (por exemplo, Yubikey)"
 
 #: pretix/base/forms/user.py:92 pretix/presale/forms/customer.py:383
 #: pretix/presale/forms/customer.py:456
-#, fuzzy
 msgid "The current password you entered was not correct."
-msgstr "La contraseña actual que ingresó no es correcta."
+msgstr "O contrasinal actual que introduciches non era correcto."
 
 #: pretix/base/forms/user.py:95
 msgid "Please choose a password different to your current one."
-msgstr ""
+msgstr "Escolle un contrasinal diferente ao teu actual."
 
 #: pretix/base/forms/user.py:105 pretix/presale/forms/customer.py:392
 #: pretix/presale/forms/customer.py:461
-#, fuzzy
 msgid "Your current password"
-msgstr "Su contraseña actual"
+msgstr "O teu contrasinal actual"
 
 #: pretix/base/forms/user.py:111 pretix/control/forms/users.py:50
 #: pretix/presale/forms/customer.py:397
-#, fuzzy
 msgid "New password"
-msgstr "Nueva contraseña"
+msgstr "New password"
 
 #: pretix/base/forms/user.py:117 pretix/control/forms/users.py:54
-#, fuzzy
 msgid "Repeat new password"
-msgstr "Repetir la nueva contraseña"
+msgstr "Repita o novo contrasinal"
 
 #: pretix/base/forms/user.py:176 pretix/control/forms/users.py:43
-#, fuzzy
 msgid ""
 "There already is an account associated with this email address. Please "
 "choose a different one."
 msgstr ""
-"Ya existe una cuenta asociada a este correo electrónico. Por favor, escoja "
-"otro."
+"Xa existe unha conta asociada a este enderezo de correo electrónico. Escolle "
+"unha diferente."
 
 #: pretix/base/forms/user.py:179
-#, fuzzy
-#| msgid "Email address"
 msgid "Old email address"
-msgstr "Correo electrónico"
+msgstr "Enderezo de correo electrónico antigo"
 
 #: pretix/base/forms/user.py:180
-#, fuzzy
-#| msgid "Email address"
 msgid "New email address"
-msgstr "Correo electrónico"
+msgstr "Novo enderezo de correo electrónico"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -3492,29 +3488,32 @@ msgid ""
 "up. Please note: to use literal \"{\" or \"}\", you need to double them as "
 "\"{{\" and \"}}\"."
 msgstr ""
+"Hai un erro coa sintaxe dos marcadores de posición. Comproba que as "
+"corchetes de apertura \"{\" e de peche \"}\" dos marcadores de posición "
+"coincidan. Ten en conta que para usar \"{\" ou \"}\" literal, debes "
+"duplicalos como \"{{\" e \"}}\"."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:870
-#, fuzzy, python-format
+#, python-format
 msgid "Invalid placeholder: {%(value)s}"
-msgstr "Persona(s) interesada(s) inválida(s): %(value)s"
+msgstr "Marcador de posición non válido: {%(value)s}"
 
 #: pretix/base/forms/widgets.py:68
-#, fuzzy, python-format
+#, python-format
 msgid "Sample: %s"
-msgstr "Ciudad de ejemplo"
+msgstr "Mostra: %s"
 
 #: pretix/base/forms/widgets.py:71
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr ""
+msgstr "Marcadores de posición dispoñibles: {list}"
 
 #: pretix/base/forms/widgets.py:214 pretix/base/models/items.py:1655
 #: pretix/plugins/checkinlists/exporters.py:757
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:54
-#, fuzzy
 msgid "Time"
-msgstr "Hora"
+msgstr "Tempo"
 
 #: pretix/base/forms/widgets.py:234 pretix/base/forms/widgets.py:239
 msgid "Business or institutional customer"
@@ -3527,53 +3526,49 @@ msgstr "Cliente individual"
 #: pretix/base/invoicing/email.py:50
 msgid "Email invoice directly to accounting department"
 msgstr ""
+"Enviar factura por correo electrónico directamente ao departamento de "
+"contabilidade"
 
 #: pretix/base/invoicing/email.py:51
-#, fuzzy
-#| msgid "Please enter the same email address twice."
 msgid ""
 "If not selected, the invoice will be sent to you using the email address "
 "listed above."
-msgstr "Introduce o mesmo enderezo de correo electrónico dúas veces."
+msgstr ""
+"Se non se selecciona, a factura enviaraseche usando o enderezo de correo "
+"electrónico indicado anteriormente."
 
 #: pretix/base/invoicing/email.py:55
-#, fuzzy
-#| msgid "Email address verified"
 msgid "Email address for invoice"
-msgstr "Correo electrónico verificado"
+msgstr "Enderezo de correo electrónico para factura"
 
 #: pretix/base/invoicing/email.py:91
-#, fuzzy
 msgid "PDF via email"
-msgstr "Vista previa del correo electrónico"
+msgstr "PDF por correo electrónico"
 
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr ""
+msgstr "Sistema de intercambio italiano (SdI)"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
 msgid "Exchange System (SdI)"
-msgstr ""
+msgstr "Sistema de intercambio (SdI)"
 
 #: pretix/base/invoicing/national.py:49
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "italian_invoice"
 msgid "Fiscal code"
-msgstr "Código da tarxeta de regalo"
+msgstr "Código fiscal"
 
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
-msgstr ""
+msgstr "Enderezo para correo electrónico certificado"
 
 #: pretix/base/invoicing/national.py:57
-#, fuzzy
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr "Destinatario"
+msgstr "Código do destinatario"
 
 #: pretix/base/invoicing/national.py:81
 msgctxt "italian_invoice"
@@ -3583,75 +3578,68 @@ msgid ""
 "in accordance with the procedures and terms set forth in No. 89757/2018 of "
 "April 30, 2018, issued by the Director of the Revenue Agency."
 msgstr ""
+"Este documento PDF é unha copia visual da factura e non constitúe unha "
+"factura para efectos do IVE. A factura emítese en formato XML, transmitida "
+"de acordo cos procedementos e termos establecidos no Regulamento n.º 89757/"
+"2018, do 30 de abril de 2018, emitido polo Director da Axencia Tributaria."
 
 #: pretix/base/invoicing/pdf.py:143
-#, fuzzy, python-format
+#, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr "Página %d de %d"
+msgstr "Páxina %d de %d"
 
 #: pretix/base/invoicing/pdf.py:384
-#, fuzzy
 msgctxt "invoice"
 msgid "Classic renderer (pretix 1.0)"
-msgstr "Versión clásica (pretix 1.0)"
+msgstr "Renderizador clásico (pretix 1.0)"
 
 #: pretix/base/invoicing/pdf.py:428
-#, fuzzy
 msgctxt "invoice"
 msgid "Invoice from"
-msgstr "Factura de"
+msgstr "Factura dende"
 
 #: pretix/base/invoicing/pdf.py:434
-#, fuzzy
 msgctxt "invoice"
 msgid "Invoice to"
-msgstr "Factura para"
+msgstr "Factura ata"
 
 #: pretix/base/invoicing/pdf.py:471 pretix/base/invoicing/pdf.py:1222
-#, fuzzy
 msgctxt "invoice"
 msgid "Order code"
-msgstr "Código de la orden"
+msgstr "Código de pedido"
 
 #: pretix/base/invoicing/pdf.py:480 pretix/base/invoicing/pdf.py:1235
-#, fuzzy
 msgctxt "invoice"
 msgid "Cancellation number"
 msgstr "Número de cancelación"
 
 #: pretix/base/invoicing/pdf.py:486 pretix/base/invoicing/pdf.py:1237
-#, fuzzy
 msgctxt "invoice"
 msgid "Original invoice"
-msgstr "Factura original"
+msgstr "Factura orixinal"
 
 #: pretix/base/invoicing/pdf.py:491 pretix/base/invoicing/pdf.py:1242
-#, fuzzy
 msgctxt "invoice"
 msgid "Invoice number"
 msgstr "Número de factura"
 
 #: pretix/base/invoicing/pdf.py:499 pretix/base/invoicing/pdf.py:1257
-#, fuzzy
 msgctxt "invoice"
 msgid "Cancellation date"
-msgstr "Fecha de cancelación"
+msgstr "Data de cancelación"
 
 #: pretix/base/invoicing/pdf.py:505
-#, fuzzy
 msgctxt "invoice"
 msgid "Original invoice date"
-msgstr "Fecha original de la factura"
+msgstr "Data orixinal da factura"
 
 #: pretix/base/invoicing/pdf.py:512 pretix/base/invoicing/pdf.py:1259
-#, fuzzy
 msgctxt "invoice"
 msgid "Invoice date"
-msgstr "Fecha de la factura"
+msgstr "Data da factura"
 
 #: pretix/base/invoicing/pdf.py:528
-#, fuzzy
 msgctxt "invoice"
 msgid "Event"
 msgstr "Evento"
@@ -3667,7 +3655,7 @@ msgstr ""
 " ata {to_date}"
 
 #: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:512
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
 msgstr "Factura {num}"
@@ -3679,25 +3667,21 @@ msgid "Customer reference: {reference}"
 msgstr "Referencia do cliente: {reference}"
 
 #: pretix/base/invoicing/pdf.py:669
-#, fuzzy
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "Cliente VAT ID"
+msgstr "CIF do cliente"
 
 #: pretix/base/invoicing/pdf.py:676
-#, fuzzy
 msgctxt "invoice"
 msgid "Beneficiary"
 msgstr "Beneficiario"
 
 #: pretix/base/invoicing/pdf.py:709
-#, fuzzy
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr "Impuesto de la factura"
+msgstr "Factura fiscal"
 
 #: pretix/base/invoicing/pdf.py:710
-#, fuzzy
 msgctxt "invoice"
 msgid "Invoice"
 msgstr "Factura"
@@ -3706,7 +3690,6 @@ msgstr "Factura"
 #: pretix/control/templates/pretixcontrol/order/index.html:272
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:70
 #: pretix/presale/templates/pretixpresale/event/order.html:244
-#, fuzzy
 msgctxt "invoice"
 msgid "Cancellation"
 msgstr "Cancelación"
@@ -3724,145 +3707,133 @@ msgid "Qty"
 msgstr "Cant."
 
 #: pretix/base/invoicing/pdf.py:735 pretix/base/invoicing/pdf.py:1039
-#, fuzzy
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr "Tasa de impuestos"
+msgstr "Tipo impositivo"
 
 #: pretix/base/invoicing/pdf.py:736
-#, fuzzy
 msgctxt "invoice"
 msgid "Net"
 msgstr "Neto"
 
 #: pretix/base/invoicing/pdf.py:737
-#, fuzzy
 msgctxt "invoice"
 msgid "Gross"
 msgstr "Bruto"
 
 #: pretix/base/invoicing/pdf.py:743
-#, fuzzy
 msgctxt "invoice"
 msgid "Amount"
-msgstr "Monto"
+msgstr "Cantidade"
 
 #: pretix/base/invoicing/pdf.py:870
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Prezo único: {net_price} neto / {gross_price} bruto"
 
 #: pretix/base/invoicing/pdf.py:901
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Precio original"
+msgstr "Prezo único: {price}"
 
 #: pretix/base/invoicing/pdf.py:944 pretix/base/invoicing/pdf.py:949
-#, fuzzy
 msgctxt "invoice"
 msgid "Invoice total"
-msgstr "Total de la factura"
+msgstr "Total da factura"
 
 #: pretix/base/invoicing/pdf.py:958
-#, fuzzy
 msgctxt "invoice"
 msgid "Received payments"
 msgstr "Pagos recibidos"
 
 #: pretix/base/invoicing/pdf.py:963
-#, fuzzy
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr "Pagos no válidos"
+msgstr "Pagos pendentes"
 
 #: pretix/base/invoicing/pdf.py:980
-#, fuzzy
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr "Tarjeta de crédito"
+msgstr "Pago con tarxeta regalo"
 
 #: pretix/base/invoicing/pdf.py:985
-#, fuzzy
 msgctxt "invoice"
 msgid "Remaining amount"
-msgstr "Monto pendiente"
+msgstr "Cantidade restante"
 
 #: pretix/base/invoicing/pdf.py:1009
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "Rango de fechas de evento"
+msgstr "Período de facturación: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:1040
-#, fuzzy
 msgctxt "invoice"
 msgid "Net value"
 msgstr "Valor neto"
 
 #: pretix/base/invoicing/pdf.py:1041
-#, fuzzy
 msgctxt "invoice"
 msgid "Gross value"
 msgstr "Valor bruto"
 
 #: pretix/base/invoicing/pdf.py:1042
-#, fuzzy
 msgctxt "invoice"
 msgid "Tax"
-msgstr "Impuesto"
+msgstr "Imposto"
 
 #: pretix/base/invoicing/pdf.py:1072
-#, fuzzy
 msgctxt "invoice"
 msgid "Included taxes"
-msgstr "Impuestos incluidos"
+msgstr "Impostos incluídos"
 
 #: pretix/base/invoicing/pdf.py:1100
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"Utilizando el tipo de conversión de 1:{rate} publicado por el Banco Central "
-"Europeo el {date}, esto corresponde a:"
+"Usando a taxa de conversión de 1:{rate} tal e como a publicou {authority} o "
+"{date}, isto corresponde a:"
 
 #: pretix/base/invoicing/pdf.py:1115
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"Utilizando el tipo de conversión de 1:{rate} publicado por el Banco Central "
-"Europeo el {date}, el total de la factura corresponde a {total}."
+"Usando a taxa de conversión de 1:{rate} publicada pola {authority} o {date}, "
+"o total da factura corresponde a {total}."
 
 #: pretix/base/invoicing/pdf.py:1129
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "Renderizador de facturas predeterminado (carta de estilo europeo)"
 
 #: pretix/base/invoicing/pdf.py:1218
-#, fuzzy
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
-msgstr "Por favor, seleccione una cuota."
+msgstr "(Por favor, cite en todo momento.)"
 
 #: pretix/base/invoicing/pdf.py:1265
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Renderizador de facturas simplificado"
 
 #: pretix/base/invoicing/pdf.py:1284
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event date: {date_range}"
-msgstr "Rango de fechas de evento"
+msgstr "Data do evento: {date_range}"
 
 #: pretix/base/invoicing/peppol.py:128
 msgid ""
 "A Peppol participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
+"Un ID de participante de Peppol sempre comeza cun prefixo, seguido de dous "
+"puntos (:)."
 
 #: pretix/base/invoicing/peppol.py:132
 #, python-format
@@ -3870,6 +3841,8 @@ msgid ""
 "The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"O noso sistema descoñece o prefixo do ID de participante de Peppol %(number)"
+"s. Ponte en contacto connosco se estás seguro de que este ID é correcto."
 
 #: pretix/base/invoicing/peppol.py:136
 #, python-format
@@ -3877,17 +3850,18 @@ msgid ""
 "The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"O ID de participante de Peppol non coincide coas regras de validación para o "
+"prefixo %(number)s. Ponte en contacto connosco se estás seguro de que este "
+"ID é correcto."
 
 #: pretix/base/invoicing/peppol.py:156
 msgid "Peppol participant ID"
-msgstr ""
+msgstr "Identificación de participante de Peppol"
 
 #: pretix/base/invoicing/peppol.py:170
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "peppol_invoice"
 msgid "Visual copy"
-msgstr "Código da tarxeta de regalo"
+msgstr "Copia visual"
 
 #: pretix/base/invoicing/peppol.py:175
 msgctxt "peppol_invoice"
@@ -3896,27 +3870,30 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
+"Este documento PDF é unha copia visual da factura e non constitúe unha "
+"factura para efectos do IVE. A factura orixinal emítese en formato XML e "
+"transmítese a través da rede Peppol."
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"O plugin relevante non está activo actualmente. Para activalo, fai clic aquí "
+"para ir á configuración do plugin."
 
 #: pretix/base/logentrytype_registry.py:53
-#, fuzzy
 msgid "The relevant plugin is currently not active."
-msgstr "La taquilla seleccionada no está disponible en este momento."
+msgstr "O plugin relevante non está activo actualmente."
 
 #: pretix/base/logentrytypes.py:49
-#, fuzzy
 msgid "(deleted)"
-msgstr "Eliminar"
+msgstr "(eliminado)"
 
 #: pretix/base/logentrytypes.py:78
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Order {val}"
-msgstr "Orden {val}"
+msgstr "Orde {val}"
 
 #: pretix/base/logentrytypes.py:90
 #, fuzzy, python-brace-format
