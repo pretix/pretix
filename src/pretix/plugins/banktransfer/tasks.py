@@ -139,7 +139,6 @@ def _find_order_for_invoice_id(base_qs, prefixes, number):
 
 @transaction.atomic
 def _handle_transaction(trans: BankTransaction, matches: tuple, regex_match_to_slug, event: Event = None, organizer: Organizer = None):
-    print(matches)
     orders = []
     if event:
         for slug, code in matches:
