@@ -98,7 +98,6 @@ from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
 from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
-from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.views.widget import (
     version_default as widget_version_default,
 )
@@ -1666,6 +1665,8 @@ class QuickSetupView(FormView):
                                          'or take your event live to start selling!'))
 
         if form.cleaned_data.get('payment_stripe__enabled', False):
+            from pretix.plugins.stripe.payment import StripeSettingsHolder
+
             self.request.session['payment_stripe_oauth_enable'] = True
             return redirect(StripeSettingsHolder(self.request.event).get_connect_url(self.request))
 
