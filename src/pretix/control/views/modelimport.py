@@ -156,7 +156,7 @@ class BaseProcessView(AsyncAction, FormView):
                 )
             )
             reader = parse_csv(self.file.file, 1024 * 1024, "replace", charset=charset)
-        if reader._had_duplicates:
+        if reader and reader._had_duplicates:
             messages.warning(
                 self.request,
                 _(
