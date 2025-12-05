@@ -396,14 +396,16 @@ def process_banktransfers(self, job: int, data: list) -> None:
                     clen=Length('invoice_no')
                 ).aggregate(min=Min('clen'), max=Max('clen'))
                 if job.event:
-                    invoice_prefixes = Invoice.objects.filter(event=job.event).distinct().values_list('prefix', flat=True)
+                    invoice_prefixes = Invoice.objects.filter(event=job.event)
                 else:
-                    invoice_prefixes = Invoice.objects.filter(event__organizer=job.organizer).distinct().values_list('prefix', flat=True)
-                for p in invoice_prefixes:
-                    prefixes.add(p.rstrip(" -"))
-                    if "-" in p.rstrip(" -"):
-                        prefixes.add(p.rstrip(" -").replace("-", ""))
-                        regex_match_to_slug[p.rstrip(" -").replace("-", "")] = p.rstrip(" -")
+                    invoice_prefixes = Invoice.objects.filter(event__organizer=job.organizer)
+                for p in invoice_prefixes.order_by().distinct().values_list('prefix', flat=True):
+                    prefix = p.rstrip(" -")
+                    prefixes.add(prefix)
+                    if "-" in prefix:
+                        prefix_nodash = prefix.replace("-", "")
+                        prefixes.add(prefix_nodash)
+                        regex_match_to_slug[prefix_nodash] = prefix
 
                 pattern = re.compile(
                     "(%s)[ \\-_]*([A-Z0-9]{%s,%s})" % (
