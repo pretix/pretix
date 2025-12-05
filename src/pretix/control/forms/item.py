@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import copy
 import os
+from collections import namedtuple
 from decimal import Decimal
 from urllib.parse import urlencode
 
@@ -60,7 +61,7 @@ from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
     Item, ItemCategory, ItemProgramTime, ItemVariation, Order, OrderPosition,
-    Question, QuestionOption, Quota, SubEvent,
+    Question, QuestionOption, Quota, SubEvent, Event
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
@@ -274,6 +275,85 @@ class QuestionOptionForm(I18nModelForm):
             'answer',
         ]
 
+subeventSelectionParts = namedtuple('subeventWidgetParts', ['selection', 'startDateTime', 'endDateTime', 'subevents'])
+
+class SubeventSelectionWidget(forms.MultiWidget):
+    template_name = 'pretixcontrol/forms/widgets/subeventselection.html'
+    parts = subeventSelectionParts
+
+    def __init__(self, event: Event, status_choices, subevent_choices, *args, **kwargs):
+        widgets = subeventSelectionParts(
+            selection=forms.RadioSelect(
+                choices=status_choices,
+            ),
+            startDateTime=SplitDateTimePickerWidget(),
+            endDateTime=SplitDateTimePickerWidget(),
+            subevents=Select2(
+                attrs={
+                    'class': 'simple-subevent-choice',
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
+                },
+            )
+        )
+
+        widgets.subevents.choices = subevent_choices
+        super().__init__(widgets=widgets, *args, **kwargs)
+
+    def decompress(self, value):
+        if value:
+            return value
+        return ['subevent', "", ""]
+
+
+
+class SubeventSelectionField(forms.MultiValueField):
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+
+        choices = [
+            ("subevent", _("Subevent")),
+            ("timerange", _("Timerange"))
+        ]
+
+        fields = subeventSelectionParts(
+            selection=forms.ChoiceField(
+                choices=choices,
+                required=True,
+                initial="subevent",
+            ),
+            startDateTime=SplitDateTimeField(
+                required=False,
+            ),
+            endDateTime=SplitDateTimeField(
+                required=False,
+            ),
+            subevents=forms.ModelChoiceField(
+                required=False,
+                queryset=self.event.subevents,
+                empty_label = pgettext_lazy('subevent', 'All dates')
+            )
+        )
+
+        kwargs['widget'] = SubeventSelectionWidget(
+            event=self.event,
+            status_choices=choices,
+            subevent_choices=fields.subevents.widget.choices,
+        )
+
+        super().__init__(
+            fields=fields, require_all_fields=False, *args, **kwargs
+        )
+
+    def compress(self, data_list):
+        if not data_list:
+            return None
+        return subeventSelectionParts(*data_list)
+
 
 class QuestionFilterForm(forms.Form):
     STATUS_VARIANTS = [
@@ -296,42 +376,36 @@ class QuestionFilterForm(forms.Form):
             }
         ),
         required=False,
+        label=_("Status"),
     )
     item = forms.ChoiceField(
         choices=[],
         widget=forms.Select(
             attrs={'class': 'form-control'}
         ),
-        required=False
-    )
-    subevent = forms.ModelChoiceField(
-        queryset=SubEvent.objects.none(),
         required=False,
-        empty_label=pgettext_lazy('subevent', 'All dates')
+        label=_("Items")
     )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
-        self.initial['status'] = "np"
-        self.fields['item'].choices = [('', _('All products'))] + [(item.id, item.name) for item in Item.objects.filter(event=self.event)]
 
         if self.event.has_subevents:
-            self.fields["subevent"].queryset = self.event.subevents.all()
-            self.fields['subevent'].widget = Select2(
-                attrs={
-                    'class': 'form-control simple-subevent-choice',
-                    'data-model-select2': 'event',
-                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
-                        'event': self.event.slug,
-                        'organizer': self.event.organizer.slug,
-                    }),
-                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
-                }
+            self.fields['subevent_selection'] = SubeventSelectionField(
+                event=self.event,
+                label=_("Subevents"),
+                help_text=_(" Select the subevents that should be included in the statistics either by subevent or by the timerange in which they occur.")
             )
-            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
-        else:
-            del self.fields['subevent']
+
+        self.initial['status'] = "np"
+        self.fields['item'].choices = [('', _('All products'))] + [(item.id, item.name) for item in
+                                                                   Item.objects.filter(event=self.event)]
+
+    def clean(self):
+        super().clean()
+        import pprint
+        pprint.pprint(self.cleaned_data)
 
     def order_position_queryset(self):
         fdata = self.data

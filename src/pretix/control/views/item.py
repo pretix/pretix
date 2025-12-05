@@ -777,7 +777,10 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['items'] = self.object.items.all()
-        ctx['form'] = QuestionFilterForm(data=self.request.GET, event=self.request.event)
+        ctx['form'] = QuestionFilterForm(
+            data=self.request.GET,
+            event=self.request.event
+        )
         if ctx['form'].is_valid():
             opqs = ctx['form'].order_position_queryset()
             stats = self.get_answer_statistics(opqs)

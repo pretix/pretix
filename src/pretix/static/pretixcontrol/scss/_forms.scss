@@ -216,6 +216,20 @@ td > .form-group > .checkbox {
 .input-group-btn .btn {
   padding-bottom: 8px;
 }
+.subevent-selection{
+  .splitdatetimerow{
+    max-width: 500px;
+    display: inline-block;
+  }
+  .spacer{
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .select2{
+    max-width:500px;
+    display: inline-block;
+  }
+}
 .reldatetime {
   input[type=text], select {
     display: inline-block;
