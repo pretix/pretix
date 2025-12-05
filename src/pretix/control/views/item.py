@@ -38,6 +38,7 @@ from collections import OrderedDict, namedtuple
 from itertools import groupby
 from json.decoder import JSONDecodeError
 
+from django import forms
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
@@ -45,6 +46,7 @@ from django.db import transaction
 from django.db.models import (
     Count, Exists, F, OuterRef, Prefetch, ProtectedError, Q,
 )
+from django.dispatch import receiver
 from django.forms.models import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
@@ -63,22 +65,23 @@ from pretix.api.serializers.item import (
     ItemAddOnSerializer, ItemBundleSerializer, ItemProgramTimeSerializer,
     ItemVariationSerializer,
 )
+from pretix.base.exporter import ListExporter
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Order,
-    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
-    SeatCategoryMapping, Voucher,
+    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
+    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher, OrderPosition,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
-from pretix.base.signals import quota_availability
+from pretix.base.signals import quota_availability, register_data_exporters
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
     ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
     ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
-    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
+    ItemVariationsFormSet, QuestionFilterForm, QuestionForm,
+    QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -660,46 +663,73 @@ class QuestionMixin:
         return ctx
 
 
-class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingView, DetailView):
+class QuestionAnswerExporter(ListExporter):
+    identifier = 'question_answer_exporter'
+    verbose_name = _('Question answers exporter')
+    description = _('Download a spreadsheet containing question answers')
+    category = _('Order data')
+
+    @property
+    def additional_form_fields(self):
+        form = {
+            'question':
+                forms.ModelChoiceField(
+                    label=_('Question'),
+                    queryset=Question.objects.filter(event=self.event),
+                ),
+            **QuestionFilterForm(event=self.event).fields
+        }
+
+        return form
+
+    def iterate_list(self, form_data):
+        question = Question.objects.filter(event=self.event).get(pk=form_data['question'])
+
+        opqs = QuestionFilterForm(event=self.event, data=form_data).order_position_queryset()
+
+        qs = QuestionAnswer.objects.filter(
+            question=question, orderposition__isnull=False,
+        )
+        qs = qs.filter(orderposition__in=opqs)
+
+        headers = [
+            _("Subevent"),
+            _("Event start time"),
+            _("Order"),
+            _("Order position"),
+            question.question
+        ]
+
+        yield headers
+        yield self.ProgressSetTotal(total=qs.count())
+
+        for questionAnswer in qs.iterator(chunk_size=1000):
+            row = [
+                questionAnswer.orderposition.subevent.name,
+                questionAnswer.orderposition.subevent.date_from.replace(tzinfo=None),
+                questionAnswer.orderposition.order.code,
+                questionAnswer.orderposition.positionid,
+                questionAnswer.answer
+            ]
+
+            yield row
+
+
+@receiver(register_data_exporters, dispatch_uid="exporter_questions_exporter")
+def register_data_exporter(sender, **kwargs):
+    return QuestionAnswerExporter
+
+
+class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView):
     model = Question
     template_name = 'pretixcontrol/items/question.html'
     permission = 'can_change_items'
     template_name_field = 'question'
 
-    def get_answer_statistics(self):
-        opqs = OrderPosition.objects.filter(
-            order__event=self.request.event,
-        )
+    def get_answer_statistics(self, opqs: OrderPosition):
         qs = QuestionAnswer.objects.filter(
             question=self.object, orderposition__isnull=False,
         )
-
-        if self.request.GET.get("subevent", "") != "":
-            opqs = opqs.filter(subevent=self.request.GET["subevent"])
-
-        s = self.request.GET.get("status", "np")
-        if s != "":
-            if s == 'o':
-                opqs = opqs.filter(order__status=Order.STATUS_PENDING,
-                                   order__expires__lt=now().replace(hour=0, minute=0, second=0))
-            elif s == 'np':
-                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
-            elif s == 'pv':
-                opqs = opqs.filter(
-                    Q(order__status=Order.STATUS_PAID) |
-                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
-                )
-            elif s == 'ne':
-                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
-            else:
-                opqs = opqs.filter(order__status=s)
-
-        if s not in (Order.STATUS_CANCELED, ""):
-            opqs = opqs.filter(canceled=False)
-        if self.request.GET.get("item", "") != "":
-            i = self.request.GET.get("item", "")
-            opqs = opqs.filter(item_id__in=(i,))
-
         qs = qs.filter(orderposition__in=opqs)
         op_cnt = opqs.filter(item__in=self.object.items.all()).count()
 
@@ -747,8 +777,14 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['items'] = self.object.items.all()
-        stats = self.get_answer_statistics()
-        ctx['stats'], ctx['total'] = stats
+        ctx['form'] = QuestionFilterForm(
+            data=self.request.GET,
+            event=self.request.event
+        )
+        if ctx['form'].is_valid():
+            opqs = ctx['form'].order_position_queryset()
+            stats = self.get_answer_statistics(opqs)
+            ctx['stats'], ctx['total'] = stats
         return ctx
 
     def get_object(self, queryset=None) -> Question:

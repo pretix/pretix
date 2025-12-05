@@ -1,0 +1,38 @@
+{% load i18n %}
+<div class="subevent-selection col-lg-12">
+    {% for group_name, group_choices, group-index in widget.subwidgets.0.optgroups %}
+            {% for selopt in group_choices %}
+                <div class="radio">
+                    <label class="col-lg-2">
+                        <input type="radio" name="{{ widget.subwidgets.0.name }}" value="{{ selopt.value }}"
+                                {% include "django/forms/widgets/attrs.html" with widget=selopt %} />
+                        {{ selopt.label }}
+                    </label>
+
+                    {% if selopt.value == "subevent" %}
+
+                         {% with widget.subwidgets.3 as widget %}
+                            {% include widget.template_name %}
+                        {% endwith %}
+
+                    {% elif selopt.value == "timerange" %}
+
+                            {% with widget.subwidgets.1 as widget %}
+                                {% include widget.template_name %}
+                            {% endwith %}
+
+                        <span class="spacer">{% trans "until" %}</span>
+
+                            {% with widget.subwidgets.2 as widget %}
+                               {% include widget.template_name %}
+                            {% endwith %}
+
+
+                    {% endif %}
+
+
+
+                </div>
+        {% endfor %}
+    {% endfor %}
+</div>
