@@ -159,7 +159,7 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, regex_match_to_s
                 if order.code not in {o.code for o in orders}:
                     orders.append(order)
             else:
-                order = _find_order_for_invoice_id(Invoice.objects.filter(event__organizer=organizer), (slug, regex_match_to_slug.get(slug, slug)), code)
+                order = _find_order_for_invoice_id(Invoice.objects.filter(event__organizer=organizer), (slug, original_slug), code)
                 if order and order.code not in {o.code for o in orders}:
                     orders.append(order)
 
