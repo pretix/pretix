@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-11-26 17:00+0000\n"
+"PO-Revision-Date: 2025-12-05 18:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -2149,7 +2149,7 @@ msgstr "クライアントID"
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:667
 #: pretix/base/models/items.py:1168
 msgid "Original price"
-msgstr "元の価格"
+msgstr "通常価格"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:684
 msgid "This product is a gift card"
@@ -22741,9 +22741,8 @@ msgid ""
 "This position has been created with a voucher with a limited budget. If you "
 "change the price or item, the discount will still be calculated from the "
 "original price at the time of purchase."
-msgstr ""
-"このポジションは限られた予算のバウチャーで作成されました。価格やアイテムを変"
-"更しても、割引は購入時の元の価格から計算されます。"
+msgstr "このポジションは限られた予算のバウチャーで作成されました。価格やアイテムを変"
+"更しても、割引は購入時の通常価格から計算されます。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:101
 #: pretix/control/templates/pretixcontrol/order/change.html:413
@@ -33770,7 +33769,7 @@ msgstr "バリエーションを表示する"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:147
 #: pretix/presale/templates/pretixpresale/event/voucher.html:304
 msgid "Original price:"
-msgstr "元の価格:"
+msgstr "通常価格:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:136
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:278
