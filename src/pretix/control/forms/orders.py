@@ -974,7 +974,7 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
         self._set_field_placeholders('send_subject', ['event_or_subevent', 'refund_amount', 'position_or_address',
                                                       'order', 'event'])
         self._set_field_placeholders('send_message', ['event_or_subevent', 'refund_amount', 'position_or_address',
-                                                      'order', 'event'])
+                                                      'order', 'event'], rich=True)
         self.fields['send_waitinglist_subject'] = I18nFormField(
             label=_("Subject"),
             required=True,
@@ -998,7 +998,7 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
             ))
         )
         self._set_field_placeholders('send_waitinglist_subject', ['event_or_subevent', 'event'])
-        self._set_field_placeholders('send_waitinglist_message', ['event_or_subevent', 'event'])
+        self._set_field_placeholders('send_waitinglist_message', ['event_or_subevent', 'event'], rich=True)
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
