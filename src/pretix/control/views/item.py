@@ -68,8 +68,9 @@ from pretix.api.serializers.item import (
 from pretix.base.exporter import ListExporter
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
-    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher, OrderPosition,
+    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation,
+    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
+    SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
@@ -81,7 +82,7 @@ from pretix.control.forms.item import (
     ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
     ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
     ItemVariationsFormSet, QuestionFilterForm, QuestionForm,
-    QuestionOptionForm, QuotaForm,
+    QuestionOptionForm, QuotaForm
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -777,12 +778,18 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['items'] = self.object.items.all()
-        ctx['form'] = QuestionFilterForm(
-            data=self.request.GET,
-            event=self.request.event
-        )
+        if self.request.GET:
+            ctx['form'] = QuestionFilterForm(
+                data=self.request.GET,
+                event=self.request.event,
+            )
+        else:
+            ctx['form'] = QuestionFilterForm(
+                event=self.request.event,
+
+            )
         if ctx['form'].is_valid():
-            opqs = ctx['form'].order_position_queryset()
+            opqs = ctx['form'].filter_qs()
             stats = self.get_answer_statistics(opqs)
             ctx['stats'], ctx['total'] = stats
         return ctx

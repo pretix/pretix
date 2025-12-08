@@ -5,7 +5,7 @@
 {% load formset_tags %}
 {% block title %}{% blocktrans with name=question.question %}Question: {{ name }}{% endblocktrans %}{% endblock %}
 {% block inside %}
-    {% for e in form.errors %}
+    {% for e in form.errors.values %}
         <div class="alert alert-danger has-error">
             {{ e }}
         </div>

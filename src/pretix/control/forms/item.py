@@ -33,9 +33,12 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 import copy
+import datetime
 import os
+from ast import literal_eval
 from collections import namedtuple
 from decimal import Decimal
+from typing import Union
 from urllib.parse import urlencode
 
 from django import forms
@@ -60,8 +63,8 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
-    Item, ItemCategory, ItemProgramTime, ItemVariation, Order, OrderPosition,
-    Question, QuestionOption, Quota, SubEvent, Event
+    Event, Item, ItemCategory, ItemProgramTime, ItemVariation, Order,
+    OrderPosition, Question, QuestionOption, Quota
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
@@ -275,19 +278,97 @@ class QuestionOptionForm(I18nModelForm):
             'answer',
         ]
 
-subeventSelectionParts = namedtuple('subeventWidgetParts', ['selection', 'startDateTime', 'endDateTime', 'subevents'])
+
+SubEventSelection = namedtuple(
+    typename='SubEventSelection',
+    field_names=['selection', 'subevents', 'start', 'end', ],
+    defaults=['subevent', None, None, None],
+)
+
+
+subeventselectionparts = namedtuple(
+    typename='subeventselectionparts',
+    field_names=['selection', 'subevents', 'start', 'end']
+)
+
+
+class SubEventSelectionWrapper:
+    def __init__(self, data: Union[None, SubEventSelection]):
+        self.data = data
+
+    def get_queryset(self, event: Event):
+        if self.data.selection == 'subevent':
+            if self.data.subevents is None:
+                return event.subevents.all()
+            else:
+                return event.subevents.filter(pk=self.data.subevents)
+        elif self.data.selection == 'timerange':
+            if self.data.start and self.data.end:
+                return event.subevents.filter(date_from__lte=self.data.start,
+                                              date_from__gte=self.data.end)
+            elif self.data.start:
+                return event.subevents.filter(date_from__gte=self.data.start)
+            elif self.data.end:
+                return event.subevents.filter(date_from__lte=self.data.end)
+        return event.subevents.all()
+
+    def to_string(self) -> str:
+        if self.data:
+            if self.data.selection == 'subevent':
+                return 'SUBEVENT/pk/{}'.format(self.data.subevents.pk)
+            elif self.data.selection == 'timerange':
+                if self.data.start and self.data.end:
+                    return 'SUBEVENT/range/{}/{}'.format(self.data.start.isoformat(), self.data.end.isoformat())
+                elif self.data.start:
+                    return 'SUBEVENT/from/{}'.format(self.data.start)
+                elif self.data.end:
+                    return 'SUBEVENT/to/{}'.format(self.data.end)
+        return 'SUBEVENT'
+
+    @classmethod
+    def from_string(cls, input: str):
+        data = SubEventSelection(selection='subevent')
+
+        if input.startswith('SUBEVENT'):
+            parts = input.split('/')
+            if len(parts) == 1:
+                data = SubEventSelection(selection='subevent')
+            elif parts[1] == 'pk':
+                data = SubEventSelection(
+                    selection='subevent',
+                    subevents=literal_eval(parts[2])
+                )
+            elif parts[1] == 'range':
+                data = SubEventSelection(
+                    selection="timerange",
+                    start=datetime.datetime.fromisoformat(parts[2]),
+                    end=datetime.datetime.fromisoformat(parts[3]),
+                )
+            elif parts[1] == 'from':
+                data = SubEventSelection(
+                    selection="timerange",
+                    start=datetime.datetime.fromisoformat(parts[2]),
+                )
+            elif parts[1] == 'to':
+                data = SubEventSelection(
+                    selection="timerange",
+                    end=datetime.datetime.fromisoformat(parts[3]),
+                )
+        return SubEventSelectionWrapper(
+            data=data
+        )
+
 
 class SubeventSelectionWidget(forms.MultiWidget):
     template_name = 'pretixcontrol/forms/widgets/subeventselection.html'
-    parts = subeventSelectionParts
+    parts = SubEventSelection
 
     def __init__(self, event: Event, status_choices, subevent_choices, *args, **kwargs):
-        widgets = subeventSelectionParts(
+        widgets = subeventselectionparts(
             selection=forms.RadioSelect(
                 choices=status_choices,
+
             ),
-            startDateTime=SplitDateTimePickerWidget(),
-            endDateTime=SplitDateTimePickerWidget(),
             subevents=Select2(
                 attrs={
                     'class': 'simple-subevent-choice',
@@ -298,20 +379,27 @@ class SubeventSelectionWidget(forms.MultiWidget):
                     }),
                     'data-placeholder': pgettext_lazy('subevent', 'All dates')
                 },
-            )
-        )
+            ),
+            start=SplitDateTimePickerWidget(),
+            end=SplitDateTimePickerWidget(),
 
+        )
         widgets.subevents.choices = subevent_choices
         super().__init__(widgets=widgets, *args, **kwargs)
 
     def decompress(self, value):
-        if value:
-            return value
-        return ['subevent', "", ""]
 
+        if isinstance(value, str):
+            value = SubEventSelectionWrapper.from_string(value)
+            if isinstance(value, subeventselectionparts):
+                return value
+
+        return subeventselectionparts(selection='subevent', start=None, end=None, subevents=None)
 
 
 class SubeventSelectionField(forms.MultiValueField):
+    widget = SubeventSelectionWidget
+
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
 
@@ -320,23 +408,22 @@ class SubeventSelectionField(forms.MultiValueField):
             ("timerange", _("Timerange"))
         ]
 
-        fields = subeventSelectionParts(
+        fields = SubEventSelection(
             selection=forms.ChoiceField(
                 choices=choices,
                 required=True,
-                initial="subevent",
-            ),
-            startDateTime=SplitDateTimeField(
-                required=False,
-            ),
-            endDateTime=SplitDateTimeField(
-                required=False,
             ),
             subevents=forms.ModelChoiceField(
                 required=False,
                 queryset=self.event.subevents,
-                empty_label = pgettext_lazy('subevent', 'All dates')
-            )
+                empty_label=pgettext_lazy('subevent', 'All dates')
+            ),
+            start=SplitDateTimeField(
+                required=False,
+            ),
+            end=SplitDateTimeField(
+                required=False,
+            ),
         )
 
         kwargs['widget'] = SubeventSelectionWidget(
@@ -352,7 +439,19 @@ class SubeventSelectionField(forms.MultiValueField):
     def compress(self, data_list):
         if not data_list:
             return None
-        return subeventSelectionParts(*data_list)
+        return SubEventSelectionWrapper(data=SubEventSelection(*data_list)).to_string()
+
+    def clean(self, value):
+        data = subeventselectionparts(*value)
+
+        if data.selection == "timerange":
+            if (data.start != ["", ""] and data.end != ["", ""]) and data.end < data.start:
+                raise ValidationError(_("The end date must be after the start date."))
+
+            if (data.start == ["", ""]) and (data.end == ["", ""]):
+                raise ValidationError(_('At least one of start and end must be specified.'))
+
+        return super().clean(value)
 
 
 class QuestionFilterForm(forms.Form):
@@ -377,6 +476,7 @@ class QuestionFilterForm(forms.Form):
         ),
         required=False,
         label=_("Status"),
+        initial="np",
     )
     item = forms.ChoiceField(
         choices=[],
@@ -395,27 +495,19 @@ class QuestionFilterForm(forms.Form):
             self.fields['subevent_selection'] = SubeventSelectionField(
                 event=self.event,
                 label=_("Subevents"),
-                help_text=_(" Select the subevents that should be included in the statistics either by subevent or by the timerange in which they occur.")
+                help_text=_("Select the subevents that should be included in the statistics either by subevent or by the timerange in which they occur."),
             )
-
-        self.initial['status'] = "np"
         self.fields['item'].choices = [('', _('All products'))] + [(item.id, item.name) for item in
                                                                    Item.objects.filter(event=self.event)]
 
-    def clean(self):
-        super().clean()
-        import pprint
-        pprint.pprint(self.cleaned_data)
-
-    def order_position_queryset(self):
-        fdata = self.data
+    def filter_qs(self):
+        fdata = self.cleaned_data
 
         opqs = OrderPosition.objects.filter(
             order__event=self.event,
         )
-
-        if (fdata.get('subevent', "") != "") & (fdata.get('subevent', "") is not None):
-            opqs = opqs.filter(subevent=fdata["subevent"])
+        sub_event_qs = SubEventSelectionWrapper.from_string(fdata['subevent_selection']).get_queryset(self.event)
+        opqs = opqs.filter(subevent__in=sub_event_qs)
 
         s = fdata.get("status", "np")
         if s != "":

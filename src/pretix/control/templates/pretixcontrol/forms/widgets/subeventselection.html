@@ -11,19 +11,19 @@
 
                     {% if selopt.value == "subevent" %}
 
-                         {% with widget.subwidgets.3 as widget %}
+                         {% with widget.subwidgets.1 as widget %}
                             {% include widget.template_name %}
                         {% endwith %}
 
                     {% elif selopt.value == "timerange" %}
 
-                            {% with widget.subwidgets.1 as widget %}
+                            {% with widget.subwidgets.2 as widget %}
                                 {% include widget.template_name %}
                             {% endwith %}
 
                         <span class="spacer">{% trans "until" %}</span>
 
-                            {% with widget.subwidgets.2 as widget %}
+                            {% with widget.subwidgets.3 as widget %}
                                {% include widget.template_name %}
                             {% endwith %}
 
