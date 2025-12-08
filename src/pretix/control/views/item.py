@@ -82,7 +82,7 @@ from pretix.control.forms.item import (
     ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
     ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
     ItemVariationsFormSet, QuestionFilterForm, QuestionForm,
-    QuestionOptionForm, QuotaForm
+    QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
