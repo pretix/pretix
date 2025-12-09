@@ -45,9 +45,7 @@ from django.db import transaction
 from django.db.models import (
     Count, Exists, F, OuterRef, Prefetch, ProtectedError, Q,
 )
-
 from django.forms.models import inlineformset_factory
-
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
 )
@@ -67,9 +65,8 @@ from pretix.api.serializers.item import (
 )
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Order,
-    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
-    SeatCategoryMapping, Voucher,
+    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
+    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
@@ -669,40 +666,19 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
     permission = 'can_change_items'
     template_name_field = 'question'
 
+    @cached_property
+    def filter_form(self):
+        return QuestionFilterForm(event=self.request.event, data=self.request.GET)
+
     def get_answer_statistics(self):
-        opqs = OrderPosition.objects.filter(
-            order__event=self.request.event,
-        )
+        if not self.filter_form.is_valid():
+            return
+
+        opqs = self.filter_form.filter_qs()
+
         qs = QuestionAnswer.objects.filter(
             question=self.object, orderposition__isnull=False,
         )
-
-        if self.request.GET.get("subevent", "") != "":
-            opqs = opqs.filter(subevent=self.request.GET["subevent"])
-
-        s = self.request.GET.get("status", "np")
-        if s != "":
-            if s == 'o':
-                opqs = opqs.filter(order__status=Order.STATUS_PENDING,
-                                   order__expires__lt=now().replace(hour=0, minute=0, second=0))
-            elif s == 'np':
-                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
-            elif s == 'pv':
-                opqs = opqs.filter(
-                    Q(order__status=Order.STATUS_PAID) |
-                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
-                )
-            elif s == 'ne':
-                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
-            else:
-                opqs = opqs.filter(order__status=s)
-
-        if s not in (Order.STATUS_CANCELED, ""):
-            opqs = opqs.filter(canceled=False)
-        if self.request.GET.get("item", "") != "":
-            i = self.request.GET.get("item", "")
-            opqs = opqs.filter(item_id__in=(i,))
-
         qs = qs.filter(orderposition__in=opqs)
         op_cnt = opqs.filter(item__in=self.object.items.all()).count()
 
@@ -749,10 +725,12 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['items'] = self.object.items.all()
+        ctx['items'] = self.object.items.exists()
+        ctx['has_subevents'] = self.request.event.has_subevents
         stats = self.get_answer_statistics()
-        ctx['stats'], ctx['total'] = stats
-        ctx['form'] = QuestionFilterForm(data=self.request.GET, event=self.request.event)
+        if stats:
+            ctx['stats'], ctx['total'] = stats
+        ctx['form'] = self.filter_form
         return ctx
 
     def get_object(self, queryset=None) -> Question:

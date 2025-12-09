@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import copy
 import os
+from datetime import timezone
 from decimal import Decimal
 from urllib.parse import urlencode
 
@@ -47,6 +48,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
+from django.utils.timezone import now
 from django.utils.translation import (
     gettext as __, gettext_lazy as _, pgettext_lazy,
 )
@@ -58,11 +60,14 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
-    Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
-    QuestionOption, Quota, SubEvent,
+    Item, ItemCategory, ItemProgramTime, ItemVariation, Order, OrderPosition,
+    Question, QuestionOption, Quota, SubEvent,
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
+from pretix.base.timeframes import (
+    DateFrameField, resolve_timeframe_to_dates_inclusive,
+)
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
     SalesChannelCheckboxSelectMultiple, SplitDateTimeField,
@@ -308,6 +313,10 @@ class QuestionFilterForm(forms.Form):
         required=False,
         empty_label=pgettext_lazy('subevent', 'All dates')
     )
+    date_range = DateFrameField(
+        required=False,
+        include_future_frames=True
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
@@ -332,6 +341,62 @@ class QuestionFilterForm(forms.Form):
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
         else:
             del self.fields['subevent']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        subevent = cleaned_data.get('subevent')
+        date_range = cleaned_data.get('date_range')
+
+        if subevent is not None and cleaned_data is not None:
+            start_d, end_d = resolve_timeframe_to_dates_inclusive(now(), date_range, timezone.utc)
+            if not (start_d <= subevent.date_from.date() <= end_d):
+                raise forms.ValidationError(_("Selected subevent isn't part of the date range."))
+        return cleaned_data
+
+    def filter_qs(self):
+        fdata = self.cleaned_data
+
+        opqs = OrderPosition.objects.filter(
+            order__event=self.event,
+        )
+
+        subevent = fdata.get('subevent', None)
+        date_range = fdata.get('date_range', None)
+
+        if subevent is not None:
+            opqs = opqs.filter(order__event__subevents=subevent)
+
+        if date_range is not None:
+            d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), date_range, timezone.utc)
+            opqs = opqs.filter(
+                order__event__subevents__date_from__gte=d_start,
+                order__event__subevents__date_from__lte=d_end
+            )
+
+        s = fdata.get("status", "np")
+        if s != "":
+            if s == 'o':
+                opqs = opqs.filter(order__status=Order.STATUS_PENDING,
+                                   order__expires__lt=now().replace(hour=0, minute=0, second=0))
+            elif s == 'np':
+                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
+            elif s == 'pv':
+                opqs = opqs.filter(
+                    Q(order__status=Order.STATUS_PAID) |
+                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
+                )
+            elif s == 'ne':
+                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
+            else:
+                opqs = opqs.filter(order__status=s)
+
+        if s not in (Order.STATUS_CANCELED, ""):
+            opqs = opqs.filter(canceled=False)
+        if fdata.get("item", "") != "":
+            i = fdata.get("item", "")
+            opqs = opqs.filter(item_id__in=(i,))
+
+        return opqs
 
 
 class QuotaForm(I18nModelForm):
