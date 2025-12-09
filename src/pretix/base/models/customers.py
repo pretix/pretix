@@ -40,6 +40,7 @@ from i18nfield.fields import I18nCharField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from pretix.base.banlist import banned
+from pretix.base.i18n import language
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.models.giftcards import GiftCardTransaction
@@ -163,6 +164,28 @@ class Customer(LoggedModel):
         self.memberships.all().update(attendee_name_parts=None)
         self.attendee_profiles.all().delete()
         self.invoice_addresses.all().delete()
+
+    def send_security_notice(self, message, email=None):
+        from pretix.base.services.mail import SendMailException, mail
+        from pretix.multidomain.urlreverse import build_absolute_uri
+
+        try:
+            with language(self.locale):
+                mail(
+                    email or self.email,
+                    self.organizer.settings.mail_subject_customer_security_notice,
+                    self.organizer.settings.mail_text_customer_security_notice,
+                    {
+                        **self.get_email_context(),
+                        'message': str(message),
+                        'url': build_absolute_uri(self.organizer, 'presale:organizer.customer.index')
+                    },
+                    customer=self,
+                    organizer=self.organizer,
+                    locale=self.locale
+                )
+        except SendMailException:
+            pass  # Already logged
 
     @scopes_disabled()
     def assign_identifier(self):

@@ -164,6 +164,7 @@ def test_org_resetpw(env, client):
     customer.refresh_from_db()
     assert customer.check_password('PANioMR62')
     assert customer.is_verified
+    assert len(djmail.outbox) == 2
 
 
 @pytest.mark.django_db
@@ -623,6 +624,7 @@ def test_change_email(env, client):
     customer.refresh_from_db()
     assert customer.email == 'john@example.org'
     assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == ['john@example.com']
 
     token = dumps({
         'customer': customer.pk,
@@ -632,6 +634,9 @@ def test_change_email(env, client):
     assert r.status_code == 302
     customer.refresh_from_db()
     assert customer.email == 'john@example.com'
+    assert len(djmail.outbox) == 3
+    assert djmail.outbox[1].to == ['john@example.org']
+    assert djmail.outbox[2].to == ['john@example.com']
 
 
 @pytest.mark.django_db
@@ -673,6 +678,7 @@ def test_change_pw(env, client, client2):
 
     r = client.get('/bigevents/account/password')
     assert r.status_code == 200
+    assert len(djmail.outbox) == 1
 
     # Client 2 got logged out
     r = client2.post('/bigevents/account/password')
