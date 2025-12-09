@@ -22,7 +22,6 @@
 import json
 from collections import namedtuple
 
-import jsonschema
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -38,6 +37,8 @@ from pretix.base.models import Event, Item, LoggedModel, Organizer, SubEvent
 @deconstructible
 class SeatingPlanLayoutValidator:
     def __call__(self, value):
+        import jsonschema
+
         if not isinstance(value, dict):
             try:
                 val = json.loads(value)
