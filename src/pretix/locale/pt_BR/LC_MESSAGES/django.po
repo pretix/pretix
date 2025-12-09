@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-09 00:47+0000\n"
+"PO-Revision-Date: 2025-12-09 07:09+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -4842,11 +4842,11 @@ msgid ""
 "you can also choose to use a random value. This will be used in URLs, order "
 "codes, invoice numbers, and bank transfer references."
 msgstr ""
-"Deve ser curts, conter apenas letras minúsculas, números, pontos e traços, e "
-"ser exclusiva entre seus eventos. Recomendamos algum tipo de abreviação ou "
-"uma data com menos de 10 caracteres que sejam facilmente lembradas, mas você "
-"também pode usar um valor aleatório. Esta informação será usada em URLs, "
-"códigos de pedido, números de fatura e referências de transferência bancária."
+"Deve conter apenas letras minúsculas, números, pontos e traços, sendo "
+"exclusiva para suas eventos. Recomendamos uma abreviação ou data com menos "
+"de 10 caracteres e que seja facilmente lembrada, mas você também pode usar "
+"um valor aleatório. Esta informação será usada em URLs, códigos de pedido, "
+"número de faturas e referências de transações bancárias."
 
 #: pretix/base/models/event.py:607 pretix/base/models/organizer.py:89
 msgid "The slug may only contain letters, numbers, dots and dashes."
@@ -5374,24 +5374,16 @@ msgstr ""
 "não tiver variações, este preço será usado."
 
 #: pretix/base/models/items.py:506
-#, fuzzy
-#| msgid ""
-#| "If this option is active, your users can choose the price themselves. The "
-#| "price configured above is then interpreted as the minimum price a user "
-#| "has to enter. You could use this e.g. to collect additional donations for "
-#| "your event. This is currently not supported for products that are bought "
-#| "as an add-on to other products."
 msgid ""
 "If this option is active, your users can choose the price themselves. The "
 "price configured above is then interpreted as the minimum price a user has "
 "to enter. You could use this e.g. to collect additional donations for your "
 "event."
 msgstr ""
-"Se esta opção estiver ativa, seus usuários podem escolher o próprio preço. O "
-"preço configurado acima é então interpretado como o preço mínimo que um "
-"usuário deve inserir. Você pode usar isso, por exemplo, para coletar doações "
-"adicionais para o seu evento. No momento, isto não é suportado por produtos "
-"comprados como um complemento de outros produtos."
+"Se esta opção está selecionada, os usuários poderão pagar o preço que "
+"desejarem. O preço padrão acima será interpretado como o preço mínimo que o "
+"usuário deverá pagar. Você pode usar esta opção, por exemplo, para coletar "
+"doações adicionais para o seu evento."
 
 #: pretix/base/models/items.py:511 pretix/base/models/items.py:1175
 msgid "Suggested price"
@@ -11266,8 +11258,8 @@ msgstr "Endereço de contato"
 #: pretix/base/settings.py:2161 pretix/control/forms/event.py:1824
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr ""
-"Mostraremos isso publicamente para permitir que os participantes entrem em "
-"contato com você."
+"Será exibido publicamente para que participantes possam entrar em contato "
+"com você."
 
 #: pretix/base/settings.py:2169 pretix/control/forms/event.py:1816
 msgid "Imprint URL"
@@ -13894,7 +13886,7 @@ msgstr "Padrão ({value})"
 
 #: pretix/control/forms/event.py:380
 msgid "The currency cannot be changed because orders already exist."
-msgstr ""
+msgstr "A moeda não pode ser alterada pois já foram realizados pedidos."
 
 #: pretix/control/forms/event.py:391 pretix/control/forms/event.py:404
 msgid "Domain"
@@ -21943,6 +21935,9 @@ msgid ""
 "your event. By default, we will only offer ticket downloads for these "
 "products."
 msgstr ""
+"Cada compra deste produto representa uma pessoa que terá permissão de entrar "
+"no seu evento. Por padrão, só oferecemos o download de ingressos para estes "
+"produtos."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:33
 #: pretix/control/templates/pretixcontrol/item/index.html:41
