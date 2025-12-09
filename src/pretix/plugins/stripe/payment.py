@@ -412,15 +412,15 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'before they work properly.'),
                      required=False,
                  )),
-
                 ('method_pay_by_bank',
                  forms.BooleanField(
-                     label=_('Pay by bank (UK)'),
-                     disabled=self.event.currency != 'GBP',
+                     label=_('Pay by bank'),
+                     disabled=self.event.currency not in ['EUR', 'GBP'],
                      help_text=' '.join([
                          str(_('Some payment methods might need to be enabled in the settings of your Stripe account '
                                'before they work properly.')),
-                         str(_('Only available for charges in GBP and customers with UK bank accounts.'))
+                         str(_('Currently only available for charges in GBP and customers with UK bank accounts, and '
+                               'in private preview for France and Germany.'))
                      ]),
                      required=False,
                  )),
@@ -1824,13 +1824,14 @@ class StripeRevolutPay(StripeRedirectMethod):
 
 class StripePayByBank(StripeRedirectMethod):
     identifier = 'stripe_pay_by_bank'
-    verbose_name = _('Pay by bank (UK) via Stripe')
-    public_name = _('Pay by bank (UK)')
+    verbose_name = _('Pay by bank via Stripe')
+    public_name = _('Pay by bank')
     method = 'pay_by_bank'
     redirect_in_widget_allowed = False
     confirmation_method = 'automatic'
     explanation = _(
-        'Pay by bank allows customers of UK banks to authorize a secure Open Banking payment from their banking app.'
+        'Pay by bank allows you to authorize a secure Open Banking payment from your banking app. Currently available '
+        'only with a UK bank account.'
     )
 
     def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
