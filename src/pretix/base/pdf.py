@@ -47,7 +47,6 @@ from collections import OrderedDict, defaultdict
 from functools import partial
 from io import BytesIO
 
-import jsonschema
 import pypdf
 import pypdf.generic
 import reportlab.rl_config
@@ -1311,6 +1310,8 @@ def _correct_page_media_box(page: pypdf.PageObject):
 @deconstructible
 class PdfLayoutValidator:
     def __call__(self, value):
+        import jsonschema
+
         if not isinstance(value, dict):
             try:
                 val = json.loads(value)

@@ -23,7 +23,6 @@ import json
 from decimal import Decimal
 from typing import Optional
 
-import jsonschema
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -298,6 +297,8 @@ def cc_to_vat_prefix(country_code):
 @deconstructible
 class CustomRulesValidator:
     def __call__(self, value):
+        import jsonschema
+
         if not isinstance(value, dict):
             try:
                 val = json.loads(value)
