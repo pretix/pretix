@@ -47,7 +47,9 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext as __, gettext_lazy as _
+from django.utils.translation import (
+    gettext as __, gettext_lazy as _, pgettext_lazy,
+)
 from django_scopes.forms import (
     SafeModelChoiceField, SafeModelMultipleChoiceField,
 )
@@ -57,7 +59,7 @@ from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
     Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
-    QuestionOption, Quota,
+    QuestionOption, Quota, SubEvent,
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
@@ -270,6 +272,66 @@ class QuestionOptionForm(I18nModelForm):
         fields = [
             'answer',
         ]
+
+
+class QuestionFilterForm(forms.Form):
+    STATUS_VARIANTS = [
+        ("", _("All orders")),
+        ("p", _("Paid")),
+        ("pv", _("Paid or confirmed")),
+        ("n", _("Pending")),
+        ("np", _("Pending or paid")),
+        ("o", _("Pending (overdue)")),
+        ("e", _("Expired")),
+        ("ne", _("Pending or expired")),
+        ("c", _("Canceled"))
+    ]
+
+    status = forms.ChoiceField(
+        choices=STATUS_VARIANTS,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+            }
+        ),
+        required=False,
+    )
+    item = forms.ChoiceField(
+        choices=[],
+        widget=forms.Select(
+            attrs={'class': 'form-control'}
+        ),
+        required=False
+    )
+    subevent = forms.ModelChoiceField(
+        queryset=SubEvent.objects.none(),
+        required=False,
+        empty_label=pgettext_lazy('subevent', 'All dates')
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+        self.initial['status'] = "np"
+        self.fields['item'].choices = [('', _('All products'))] + [(item.id, item.name) for item in
+                                                                   Item.objects.filter(event=self.event)]
+
+        if self.event.has_subevents:
+            self.fields["subevent"].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'class': 'form-control simple-subevent-choice',
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        else:
+            del self.fields['subevent']
 
 
 class QuotaForm(I18nModelForm):
