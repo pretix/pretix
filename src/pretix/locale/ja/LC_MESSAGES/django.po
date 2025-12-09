@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 10:37+0000\n"
-"PO-Revision-Date: 2025-11-18 17:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"POT-Creation-Date: 2025-11-27 13:57+0000\n"
+"PO-Revision-Date: 2025-12-05 18:00+0000\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -1156,7 +1156,7 @@ msgstr "名（Given Name）"
 msgid "Family name"
 msgstr "氏（Surname/Family Name）"
 
-#: pretix/base/email.py:203 pretix/base/exporters/items.py:157
+#: pretix/base/email.py:218 pretix/base/exporters/items.py:157
 #: pretix/base/exporters/items.py:205 pretix/base/models/tax.py:381
 #: pretix/control/templates/pretixcontrol/event/tax.html:35
 #: pretix/control/templates/pretixcontrol/event/tax.html:54
@@ -1170,7 +1170,7 @@ msgstr "氏（Surname/Family Name）"
 msgid "Default"
 msgstr "デフォルト"
 
-#: pretix/base/email.py:210
+#: pretix/base/email.py:225
 msgid "Simple with logo"
 msgstr "ロゴ入りのシンプルなもの"
 
@@ -2149,7 +2149,7 @@ msgstr "クライアントID"
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:667
 #: pretix/base/models/items.py:1168
 msgid "Original price"
-msgstr "元の価格"
+msgstr "通常価格"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:684
 msgid "This product is a gift card"
@@ -3236,7 +3236,7 @@ msgstr "ログインしたままにする"
 msgid "This combination of credentials is not known to our system."
 msgstr "この組み合わせの資格情報は、当社のシステムには登録されていません。"
 
-#: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:96
+#: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:94
 #: pretix/presale/forms/customer.py:385 pretix/presale/forms/customer.py:457
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr ""
@@ -3254,7 +3254,7 @@ msgstr ""
 "い。"
 
 #: pretix/base/forms/auth.py:157 pretix/base/forms/auth.py:215
-#: pretix/base/forms/user.py:95 pretix/control/forms/users.py:45
+#: pretix/base/forms/user.py:93 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:295 pretix/presale/forms/customer.py:384
 msgid "Please enter the same password twice"
 msgstr "同じパスワードを２回入力してください"
@@ -3264,7 +3264,7 @@ msgstr "同じパスワードを２回入力してください"
 msgid "Repeat password"
 msgstr "パスワードを再入力してください"
 
-#: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:101
+#: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:99
 msgid "Your email address"
 msgstr "メールアドレス"
 
@@ -3429,38 +3429,30 @@ msgstr "Authenticatorアプリを搭載したスマートフォン"
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgstr "WebAuthn対応のハードウェアトークン（例：Yubikey）"
 
-#: pretix/base/forms/user.py:92
-msgid ""
-"Please enter your current password if you want to change your email address "
-"or password."
-msgstr ""
-"メールアドレスまたはパスワードを変更する場合は、現在のパスワードを入力してく"
-"ださい。"
-
-#: pretix/base/forms/user.py:94 pretix/presale/forms/customer.py:383
+#: pretix/base/forms/user.py:92 pretix/presale/forms/customer.py:383
 #: pretix/presale/forms/customer.py:456
 msgid "The current password you entered was not correct."
 msgstr "現在のパスワードが正しくありません。"
 
-#: pretix/base/forms/user.py:97
+#: pretix/base/forms/user.py:95
 msgid "Please choose a password different to your current one."
 msgstr "現在のパスワードとは異なるパスワードを選んでください。"
 
-#: pretix/base/forms/user.py:107 pretix/presale/forms/customer.py:392
+#: pretix/base/forms/user.py:105 pretix/presale/forms/customer.py:392
 #: pretix/presale/forms/customer.py:461
 msgid "Your current password"
 msgstr "あなたの現在のパスワード"
 
-#: pretix/base/forms/user.py:113 pretix/control/forms/users.py:50
+#: pretix/base/forms/user.py:111 pretix/control/forms/users.py:50
 #: pretix/presale/forms/customer.py:397
 msgid "New password"
 msgstr "新しいパスワード"
 
-#: pretix/base/forms/user.py:119 pretix/control/forms/users.py:54
+#: pretix/base/forms/user.py:117 pretix/control/forms/users.py:54
 msgid "Repeat new password"
 msgstr "新しいパスワードをもう一度入力してください"
 
-#: pretix/base/forms/user.py:173 pretix/control/forms/users.py:43
+#: pretix/base/forms/user.py:176 pretix/control/forms/users.py:43
 msgid ""
 "There already is an account associated with this email address. Please "
 "choose a different one."
@@ -3468,11 +3460,11 @@ msgstr ""
 "このメールアドレスにはすでにアカウントが関連付けられています。別のメールアド"
 "レスを選択してください。"
 
-#: pretix/base/forms/user.py:176
+#: pretix/base/forms/user.py:179
 msgid "Old email address"
 msgstr "現在のメールアドレス"
 
-#: pretix/base/forms/user.py:177
+#: pretix/base/forms/user.py:180
 msgid "New email address"
 msgstr "新しいメールアドレス"
 
@@ -3644,7 +3636,7 @@ msgstr ""
 "{from_date}から\n"
 "{to_date}まで"
 
-#: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:511
+#: pretix/base/invoicing/pdf.py:609 pretix/base/services/mail.py:512
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
@@ -4304,7 +4296,7 @@ msgstr "電源を切ると、通知を受け取れません。"
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:15
 #: pretix/control/templates/pretixcontrol/users/form.html:4
 #: pretix/control/templates/pretixcontrol/users/form.html:6
-#: pretix/control/views/organizer.py:170 tests/base/test_mail.py:149
+#: pretix/control/views/organizer.py:170 tests/base/test_mail.py:157
 msgid "User"
 msgstr "ユーザー"
 
@@ -7333,7 +7325,7 @@ msgstr "日付"
 #: pretix/base/notifications.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:755
 #: pretix/plugins/reports/accountingreport.py:318
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:442
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:446
 msgid "Net total"
 msgstr "正味合計"
 
@@ -7345,8 +7337,8 @@ msgstr "保留中の金額"
 msgid "Purchased products"
 msgstr "購入した製品"
 
-#: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:384
-#: pretix/base/services/placeholders.py:393
+#: pretix/base/notifications.py:223 pretix/base/services/placeholders.py:415
+#: pretix/base/services/placeholders.py:424
 #: pretix/base/templates/pretixbase/email/order_details.html:151
 msgid "View order details"
 msgstr "注文の詳細を表示する"
@@ -7822,10 +7814,10 @@ msgstr "アドオンおよびバンドル製品を含む価格"
 
 #: pretix/base/pdf.py:185 pretix/base/pdf.py:343
 #: pretix/base/services/invoices.py:582
-#: pretix/base/services/placeholders.py:571
-#: pretix/base/services/placeholders.py:653
-#: pretix/base/services/placeholders.py:669
-#: pretix/base/services/placeholders.py:678 pretix/control/views/event.py:909
+#: pretix/base/services/placeholders.py:602
+#: pretix/base/services/placeholders.py:687
+#: pretix/base/services/placeholders.py:703
+#: pretix/base/services/placeholders.py:712 pretix/control/views/event.py:909
 msgid "John Doe"
 msgstr "山田 太郎"
 
@@ -8153,7 +8145,7 @@ msgid "Attendee name for salutation"
 msgstr "参加者の呼びかけに使う名前"
 
 #: pretix/base/pdf.py:667 pretix/base/pdf.py:690
-#: pretix/base/services/placeholders.py:696
+#: pretix/base/services/placeholders.py:730
 #: pretix/control/forms/organizer.py:664
 msgid "Mr Doe"
 msgstr "山田様"
@@ -8901,7 +8893,7 @@ msgstr ""
 msgid "You are receiving this email because you placed an order for {event}."
 msgstr "「{event}」の注文をいただいたため、このメールをお送りしています。"
 
-#: pretix/base/services/mail.py:494
+#: pretix/base/services/mail.py:495
 msgctxt "attachment_filename"
 msgid "Calendar invite"
 msgstr "カレンダーの招待"
@@ -9341,33 +9333,33 @@ msgstr ""
 "お金を返金しようとした際にエラーが発生しました。詳細情報については、イベント"
 "主催者にお問い合わせください。"
 
-#: pretix/base/services/placeholders.py:469
-#: pretix/base/services/placeholders.py:478
+#: pretix/base/services/placeholders.py:500
+#: pretix/base/services/placeholders.py:509
 #: pretix/base/templates/pretixbase/email/order_details.html:49
 msgid "View registration details"
 msgstr "登録詳細を表示します"
 
-#: pretix/base/services/placeholders.py:575
+#: pretix/base/services/placeholders.py:606
 msgid "Sample Corporation"
 msgstr "サンプル株式会社"
 
-#: pretix/base/services/placeholders.py:615
+#: pretix/base/services/placeholders.py:647
 msgid "Sample Admission Ticket"
 msgstr "サンプル用チケット"
 
-#: pretix/base/services/placeholders.py:657
+#: pretix/base/services/placeholders.py:691
 msgid "An individual text with a reason can be inserted here."
 msgstr "ここでユーザーの理由を述べることができる。"
 
-#: pretix/base/services/placeholders.py:661
+#: pretix/base/services/placeholders.py:695
 msgid "The amount has been charged to your card."
 msgstr "金額はカードに請求されました。"
 
-#: pretix/base/services/placeholders.py:665
+#: pretix/base/services/placeholders.py:699
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "金額を次の口座へお振込ください： 9999-9999-9999-9999"
 
-#: pretix/base/services/placeholders.py:765
+#: pretix/base/services/placeholders.py:799
 #: pretix/control/views/organizer.py:348
 msgid "This value will be replaced based on dynamic parameters."
 msgstr "この値は動的パラメータに基づいて置換されます。"
@@ -17802,7 +17794,7 @@ msgstr "チケット"
 #: pretix/control/templates/pretixcontrol/event/tax.html:4
 #: pretix/control/templates/pretixcontrol/event/tax.html:6
 #: pretix/control/templates/pretixcontrol/order/index.html:764
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:453
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:457
 msgid "Taxes"
 msgstr "税金"
 
@@ -22169,7 +22161,7 @@ msgstr "バウチャー利用時のみ購入可能"
 #: pretix/control/templates/pretixcontrol/order/index.html:673
 #: pretix/control/templates/pretixcontrol/order/index.html:723
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:360
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:415
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:419
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
 msgstr "<strong>plus</strong> %(rate)s%% %(taxname)s"
@@ -22178,7 +22170,7 @@ msgstr "<strong>plus</strong> %(rate)s%% %(taxname)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:683
 #: pretix/control/templates/pretixcontrol/order/index.html:733
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:370
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:425
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:429
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
 msgstr "%(taxname)s%(rate)s パーセントを含む"
@@ -22749,9 +22741,8 @@ msgid ""
 "This position has been created with a voucher with a limited budget. If you "
 "change the price or item, the discount will still be calculated from the "
 "original price at the time of purchase."
-msgstr ""
-"このポジションは限られた予算のバウチャーで作成されました。価格やアイテムを変"
-"更しても、割引は購入時の元の価格から計算されます。"
+msgstr "このポジションは限られた予算のバウチャーで作成されました。価格やアイテムを変"
+"更しても、割引は購入時の通常価格から計算されます。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:101
 #: pretix/control/templates/pretixcontrol/order/change.html:413
@@ -22919,11 +22910,11 @@ msgstr "はい、注文を削除します"
 #: pretix/control/templates/pretixcontrol/order/deny.html:5
 #: pretix/control/templates/pretixcontrol/order/deny.html:9
 msgid "Deny order"
-msgstr "注文を拒絶"
+msgstr "注文を不承認"
 
 #: pretix/control/templates/pretixcontrol/order/deny.html:27
 msgid "Yes, deny order"
-msgstr "はい、注文を断ります"
+msgstr "はい、注文を承認しません"
 
 #: pretix/control/templates/pretixcontrol/order/extend.html:5
 #: pretix/control/templates/pretixcontrol/order/extend.html:9
@@ -22947,7 +22938,7 @@ msgstr "承認"
 #: pretix/control/templates/pretixcontrol/orders/index.html:304
 #: pretix/control/views/orders.py:329
 msgid "Deny"
-msgstr "拒絶"
+msgstr "不承認"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:58
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:37
@@ -23227,7 +23218,7 @@ msgstr "危険"
 #: pretix/plugins/reports/exporters.py:446
 #: pretix/plugins/reports/exporters.py:638
 #: pretix/plugins/reports/exporters.py:969
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:469
 msgid "Total"
 msgstr "合計"
 
@@ -30396,7 +30387,7 @@ msgid "Upload time"
 msgstr "アップロード時間"
 
 #: pretix/plugins/checkinlists/exporters.py:830
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:519
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:523
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:52
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:148
 msgid "OK"
@@ -33778,7 +33769,7 @@ msgstr "バリエーションを表示する"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:147
 #: pretix/presale/templates/pretixpresale/event/voucher.html:304
 msgid "Original price:"
-msgstr "元の価格:"
+msgstr "通常価格:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:136
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:278
@@ -34043,23 +34034,23 @@ msgstr ""
 msgid "Current value:"
 msgstr "現在の価格:"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:467
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:471
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
 msgstr[0] "%(num)s 個の製品"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:481
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:485
 #, python-format
 msgid "incl. %(tax_sum)s taxes"
 msgstr "税%(tax_sum)sを含む"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:501
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:505
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr "カート内のアイテムは%(minutes)s分間、あなたのために予約されています。"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:505
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:509
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
@@ -34067,16 +34058,16 @@ msgstr ""
 "カート内の商品はもはやあなたのために予約されていません。利用可能な限り、注文"
 "を完了することができます。"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:510
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
 msgid "Renew reservation"
 msgstr "予約を更新"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:522
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:526
 msgid "Reservation renewed"
 msgstr "予約が更新されました"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:528
+#: pretix/presale/templates/pretixpresale/event/fragment_cart.html:532
 msgid "Overview of your ordered products."
 msgstr "あなたの注文された製品の概要について教えてください。"
 
@@ -36069,6 +36060,13 @@ msgstr "書き込みアクセス"
 #: pretix/settings.py:805
 msgid "Kosovo"
 msgstr "コソボ"
+
+#~ msgid ""
+#~ "Please enter your current password if you want to change your email "
+#~ "address or password."
+#~ msgstr ""
+#~ "メールアドレスまたはパスワードを変更する場合は、現在のパスワードを入力して"
+#~ "ください。"
 
 #, python-brace-format
 #~ msgid ""

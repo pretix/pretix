@@ -1,7 +1,6 @@
 {% load i18n %}
 {% load l10n %}
 {% load commadecimal %}
-{% load static %}
 {% load dotdecimal %}
 {% load ibanformat %}
 {% load money %}
@@ -17,7 +16,7 @@
 {% endblocktrans %}</p>
 
 <div class="row">
-    <div class="{% if settings.bank_details_type == "sepa" %}col-md-6{% else %}col-md-12{% endif %} col-xs-12">
+    <div class="{% if payment_qr_codes %}col-md-6{% else %}col-md-12{% endif %} col-xs-12">
         <dl class="dl-horizontal">
             <dt>{% trans "Reference code (important):" %}</dt><dd><b>{{ code }}</b></dd>
             <dt>{% trans "Amount:" %}</dt><dd>{{ amount|money:event.currency }}</dd>
@@ -36,94 +35,7 @@
             {% trans "We will send you an email as soon as we received your payment." %}
         </p>
     </div>
-    {% if settings.bank_details_type == "sepa" and any_barcodes %}
-        <div class="tabcontainer col-md-6 col-sm-6 hidden-xs text-center js-only blank-after">
-            <div id="banktransfer_qrcodes_tabs_content" class="tabpanels blank-after">
-                {% if swiss_qrbill %}
-                    <div id="banktransfer_qrcodes_qrbill"
-                        role="tabpanel"
-                        tabindex="0"
-                        aria-labelledby="banktransfer_qrcodes_qrbill_tab"
-                    >
-                        <div class="banktransfer-swiss-cross-overlay" role="figure" aria-labelledby="banktransfer_qrcodes_qrbill_tab banktransfer_qrcodes_label">
-                            <svg class="banktransfer-swiss-cross" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.8 19.8"><path stroke="#fff" stroke-width="1.436" d="M.7.7h18.4v18.4H.7z"/><path fill="#fff" d="M8.3 4h3.3v11H8.3z"/><path fill="#fff" d="M4.4 7.9h11v3.3h-11z"/></svg>
-                            <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">{{swiss_qrbill}}</script>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if eu_barcodes %}
-                    <div id="banktransfer_qrcodes_girocode"
-                        role="tabpanel"
-                        tabindex="0"
-                        {{ swiss_qrbill|yesno:'hidden,' }}
-                        aria-labelledby="banktransfer_qrcodes_girocode_tab"
-                    >
-                        <div role="figure" aria-labelledby="banktransfer_qrcodes_girocode_tab banktransfer_qrcodes_label">
-                            <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">BCD
-002
-2
-SCT
-{{ settings.bank_details_sepa_bic }}
-{{ settings.bank_details_sepa_name|unidecode }}
-{{ settings.bank_details_sepa_iban }}
-{{ event.currency }}{{ amount|dotdecimal }}
-
-
-{{ code }}
-
-</script>
-                        </div>
-                    </div>
-                    <div id="banktransfer_qrcodes_bezahlcode"
-                        role="tabpanel"
-                        tabindex="0"
-                        hidden
-                        aria-labelledby="banktransfer_qrcodes_bezahlcode_tab"
-                    >
-                        <a aria-label="{% trans "Open BezahlCode in your banking app to start the payment process." %}" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
-                            <div role="figure" aria-labelledby="banktransfer_qrcodes_bezahlcode_tab banktransfer_qrcodes_label">
-                                <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
-                            </div>
-                        </a>
-                    </div>
-                {% endif %}
-            </div>
-            <div id="banktransfer_qrcodes_tabs" role="tablist" aria-labelledby="banktransfer_qrcodes_label" class="blank-after btn-group">
-            {% if swiss_qrbill %}
-                <button
-                    class="btn btn-default"
-                    id="banktransfer_qrcodes_qrbill_tab"
-                    type="button"
-                    role="tab"
-                    aria-controls="banktransfer_qrcodes_qrbill"
-                    aria-selected="true"
-                    tabindex="-1">QR-bill</button>
-            {% endif %}
-            {% if eu_barcodes %}
-                <button
-                    class="btn btn-default"
-                    id="banktransfer_qrcodes_girocode_tab"
-                    type="button"
-                    role="tab"
-                    aria-controls="banktransfer_qrcodes_girocode"
-                    aria-selected="{{ swiss_qrbill|yesno:"false,true" }}"
-                    tabindex="-1">EPC-QR</button>
-                <button
-                    class="btn btn-default"
-                    id="banktransfer_qrcodes_bezahlcode_tab"
-                    type="button"
-                    role="tab"
-                    aria-controls="banktransfer_qrcodes_bezahlcode"
-                    aria-selected="false"
-                    tabindex="-1">BezahlCode</button>
-            {% endif %}
-            </div>
-            <p class="text-muted" id="banktransfer_qrcodes_label">
-                {% trans "Scan the QR code with your banking app" %}
-            </p>
-        </div>
+    {% if payment_qr_codes %}
+        {% include "pretixpresale/event/payment_qr_codes.html" %}
     {% endif %}
 </div>
-{% if swiss_qrbill %}
-<link rel="stylesheet" href="{% static "pretixplugins/banktransfer/swisscross.css" %}">
-{% endif %}

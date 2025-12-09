@@ -146,7 +146,7 @@ class BaseProcessView(AsyncAction, FormView):
         else:
             charset = None
         try:
-            return parse_csv(self.file.file, 1024 * 1024, charset=charset)
+            reader = parse_csv(self.file.file, 1024 * 1024, charset=charset)
         except UnicodeDecodeError:
             messages.warning(
                 self.request,
@@ -155,7 +155,16 @@ class BaseProcessView(AsyncAction, FormView):
                     "Some characters were replaced with a placeholder."
                 )
             )
-            return parse_csv(self.file.file, 1024 * 1024, "replace", charset=charset)
+            reader = parse_csv(self.file.file, 1024 * 1024, "replace", charset=charset)
+        if reader and reader._had_duplicates:
+            messages.warning(
+                self.request,
+                _(
+                    "Multiple columns of the CSV file have the same name and were renamed automatically. We "
+                    "recommend that you rename these in your source file to avoid problems during import."
+                )
+            )
+        return reader
 
     @cached_property
     def parsed_list(self):

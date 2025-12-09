@@ -721,7 +721,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Membership.objects.filter(
             customer__organizer=self.request.organizer
-        )
+        ).select_related('customer')
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()

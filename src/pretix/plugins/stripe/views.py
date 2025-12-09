@@ -37,7 +37,6 @@ import logging
 import urllib.parse
 
 import requests
-import stripe
 from django.contrib import messages
 from django.core import signing
 from django.db import transaction
@@ -68,7 +67,6 @@ from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
 from pretix.plugins.stripe.models import ReferencedStripeObject
-from pretix.plugins.stripe.payment import StripeCC, StripeSettingsHolder
 from pretix.plugins.stripe.tasks import (
     get_domain_for_event, stripe_verify_domain,
 )
@@ -100,6 +98,8 @@ def redirect_view(request, *args, **kwargs):
 
 @scopes_disabled()
 def oauth_return(request, *args, **kwargs):
+    import stripe
+
     if 'payment_stripe_oauth_event' not in request.session:
         messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
         return redirect('control:index')
@@ -268,6 +268,10 @@ SOURCE_TYPES = {
 
 
 def charge_webhook(event, event_json, charge_id, rso):
+    import stripe
+
+    from pretix.plugins.stripe.payment import StripeCC
+
     prov = StripeCC(event)
     prov._init_api()
 
@@ -371,6 +375,10 @@ def charge_webhook(event, event_json, charge_id, rso):
 
 
 def source_webhook(event, event_json, source_id, rso):
+    import stripe
+
+    from pretix.plugins.stripe.payment import StripeCC
+
     prov = StripeCC(event)
     prov._init_api()
     try:
@@ -440,6 +448,10 @@ def source_webhook(event, event_json, source_id, rso):
 
 
 def paymentintent_webhook(event, event_json, paymentintent_id, rso):
+    import stripe
+
+    from pretix.plugins.stripe.payment import StripeCC
+
     prov = StripeCC(event)
     prov._init_api()
 
@@ -516,6 +528,8 @@ class StripeOrderView:
 @method_decorator(xframe_options_exempt, 'dispatch')
 class ReturnView(StripeOrderView, View):
     def get(self, request, *args, **kwargs):
+        import stripe
+
         prov = self.pprov
         prov._init_api()
         try:
@@ -568,6 +582,10 @@ class ReturnView(StripeOrderView, View):
 class ScaView(StripeOrderView, View):
 
     def get(self, request, *args, **kwargs):
+        import stripe
+
+        from pretix.plugins.stripe.payment import StripeSettingsHolder
+
         prov = self.pprov
         prov._init_api()
 

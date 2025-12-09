@@ -644,7 +644,9 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     FontFallbackParagraph(
                         _("Pending payments at {datetime}").format(
                             datetime=date_format(
-                                df_start - datetime.timedelta.resolution,
+                                (df_start - datetime.timedelta.resolution).astimezone(
+                                    self.timezone
+                                ),
                                 "SHORT_DATETIME_FORMAT",
                             )
                         ),
@@ -694,7 +696,9 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 Paragraph(
                     _("Pending payments at {datetime}").format(
                         datetime=date_format(
-                            (df_end or now()) - datetime.timedelta.resolution,
+                            ((df_end or now()) - datetime.timedelta.resolution).astimezone(
+                                self.timezone
+                            ),
                             "SHORT_DATETIME_FORMAT",
                         )
                     ),
@@ -751,7 +755,9 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     Paragraph(
                         _("Total gift card value at {datetime}").format(
                             datetime=date_format(
-                                df_start - datetime.timedelta.resolution,
+                                (df_start - datetime.timedelta.resolution).astimezone(
+                                    self.timezone
+                                ),
                                 "SHORT_DATETIME_FORMAT",
                             )
                         ),
@@ -789,7 +795,9 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 Paragraph(
                     _("Total gift card value at {datetime}").format(
                         datetime=date_format(
-                            (df_end or now()) - datetime.timedelta.resolution,
+                            ((df_end or now()) - datetime.timedelta.resolution).astimezone(
+                                self.timezone
+                            ),
                             "SHORT_DATETIME_FORMAT",
                         )
                     ),

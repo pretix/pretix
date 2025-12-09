@@ -47,6 +47,19 @@ class DataImportError(LazyLocaleException):
         super().__init__(msg)
 
 
+def rename_duplicates(values):
+    used = set()
+    had_duplicates = False
+    for i, value in enumerate(values):
+        c = 0
+        while values[i] in used:
+            c += 1
+            values[i] = f'{value}__{c}'
+            had_duplicates = True
+        used.add(values[i])
+    return had_duplicates
+
+
 def parse_csv(file, length=None, mode="strict", charset=None):
     file.seek(0)
     data = file.read(length)
@@ -70,6 +83,7 @@ def parse_csv(file, length=None, mode="strict", charset=None):
         return None
 
     reader = csv.DictReader(io.StringIO(data), dialect=dialect)
+    reader._had_duplicates = rename_duplicates(reader.fieldnames)
     return reader
 
 

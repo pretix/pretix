@@ -41,15 +41,20 @@ for app in apps.get_app_configs():
     if hasattr(app, 'PretixPluginMeta'):
         if importlib.util.find_spec(app.name + '.urls'):
             urlmod = importlib.import_module(app.name + '.urls')
+            single_plugin_patterns = []
+
             if hasattr(urlmod, 'event_patterns'):
                 patterns = plugin_event_urls(urlmod.event_patterns, plugin=app.name)
-                raw_plugin_patterns.append(
-                    re_path(r'^(?P<event>[^/]+)/', include((patterns, app.label)))
+                single_plugin_patterns.append(
+                    re_path(r'^(?P<event>[^/]+)/', include(patterns))
                 )
+
             if hasattr(urlmod, 'organizer_patterns'):
-                patterns = plugin_event_urls(urlmod.organizer_patterns, plugin=app.name)
+                single_plugin_patterns += plugin_event_urls(urlmod.organizer_patterns, plugin=app.name)
+
+            if single_plugin_patterns:
                 raw_plugin_patterns.append(
-                    re_path(r'', include((patterns, app.label)))
+                    re_path(r'', include((single_plugin_patterns, app.label)))
                 )
 
 plugin_patterns = [

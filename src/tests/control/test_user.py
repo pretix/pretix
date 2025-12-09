@@ -42,8 +42,8 @@ from pretix.testutils.mock import mocker_context
 class UserSettingsTest(SoupTest):
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'barfoofoo')
-        self.client.login(email='dummy@dummy.dummy', password='barfoofoo')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9')
+        self.client.login(email='dummy@dummy.dummy', password='old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9')
         doc = self.get_doc('/control/settings')
         self.form_data = extract_form_fields(doc.select('form[data-testid="usersettingsform"]')[0])
 
@@ -74,8 +74,8 @@ class UserSettingsTest(SoupTest):
 class UserEmailChangeTest(SoupTest):
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'barfoofoo')
-        self.client.login(email='dummy@dummy.dummy', password='barfoofoo')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9')
+        self.client.login(email='dummy@dummy.dummy', password='old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9')
         session = self.client.session
         session['pretix_auth_login_time'] = int(time.time())
         session.save()
@@ -92,7 +92,7 @@ class UserEmailChangeTest(SoupTest):
         self.assertEqual(response.status_code, 302)
 
         response = self.client.post('/control/reauth/?next=/control/settings/email/change', {
-            'password': 'barfoofoo'
+            'password': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9'
         })
         self.assertIn('/control/settings/email/change', response['Location'])
         self.assertEqual(response.status_code, 302)
@@ -151,8 +151,8 @@ class UserEmailChangeTest(SoupTest):
 class UserPasswordChangeTest(SoupTest):
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'barfoofoo')
-        self.client.login(email='dummy@dummy.dummy', password='barfoofoo')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9')
+        self.client.login(email='dummy@dummy.dummy', password='old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9')
         doc = self.get_doc('/control/settings/password/change')
         self.form_data = extract_form_fields(doc.select('.container-fluid form')[0])
 
@@ -163,10 +163,23 @@ class UserPasswordChangeTest(SoupTest):
 
     def test_change_password_require_password(self):
         doc = self.save({
-            'new_pw': 'foo',
-            'new_pw_repeat': 'foo',
+            'new_pw': 'f00barbarbar',
+            'new_pw_repeat': 'f00barbarbar',
         })
         assert doc.select(".alert-danger")
+        assert "This field is required." in doc.select(".has-error")[0].text
+        pw = self.user.password
+        self.user = User.objects.get(pk=self.user.pk)
+        assert self.user.password == pw
+
+    def test_change_password_old_password_wrong(self):
+        doc = self.save({
+            'new_pw': 'f00barbarbar',
+            'new_pw_repeat': 'f00barbarbar',
+            'old_pw': 'lolwrong',
+        })
+        assert doc.select(".alert-danger")
+        assert "The current password you entered was not correct." in doc.select(".has-error")[0].text
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw
@@ -177,7 +190,7 @@ class UserPasswordChangeTest(SoupTest):
         self.save({
             'new_pw': 'f00barbarbar',
             'new_pw_repeat': 'f00barbarbar',
-            'old_pw': 'barfoofoo',
+            'old_pw': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
         })
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
@@ -187,7 +200,7 @@ class UserPasswordChangeTest(SoupTest):
         doc = self.save({
             'new_pw': 'f00barbarbar',
             'new_pw_repeat': 'f00barbarbar',
-            'old_pw': 'barfoofoo',
+            'old_pw': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
         })
         assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
@@ -197,9 +210,10 @@ class UserPasswordChangeTest(SoupTest):
         doc = self.save({
             'new_pw': 'foo',
             'new_pw_repeat': 'foo',
-            'old_pw': 'barfoofoo',
+            'old_pw': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
         })
         assert doc.select(".alert-danger")
+        assert "This password is too short." in doc.select(".has-error")[0].text
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw
@@ -208,37 +222,40 @@ class UserPasswordChangeTest(SoupTest):
         doc = self.save({
             'new_pw': 'dummy123',
             'new_pw_repeat': 'dummy123',
-            'old_pw': 'barfoofoo',
+            'old_pw': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
         })
         assert doc.select(".alert-danger")
+        assert "The password is too similar to the Email." in doc.select(".has-error")[0].text
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw
 
     def test_change_password_require_repeat(self):
         doc = self.save({
-            'new_pw': 'foooooooooooooo',
-            'new_pw_repeat': 'baaaaaaaaaaaar',
-            'old_pw': 'barfoofoo',
+            'new_pw': 'foooooooooooooo1234',
+            'new_pw_repeat': 'baaaaaaaaaaaar1234',
+            'old_pw': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
         })
         assert doc.select(".alert-danger")
+        assert "Please enter the same password twice" in doc.select(".has-error")[0].text
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw
 
     def test_change_password_require_new(self):
         doc = self.save({
-            'new_pw': 'barfoofoo',
-            'new_pw_repeat': 'barfoofoo',
-            'old_pw': 'barfoofoo',
+            'new_pw': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
+            'new_pw_repeat': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
+            'old_pw': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
         })
-        assert doc.select(".alert-danger")
+        assert doc.select(".has-error")
+        assert "Your password may not be the same as" in doc.select(".has-error")[0].text
 
     def test_change_password_history(self):
         doc = self.save({
             'new_pw': 'qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
             'new_pw_repeat': 'qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
-            'old_pw': 'barfoofoo',
+            'old_pw': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9',
         })
         assert doc.select(".alert-success")
 
@@ -255,6 +272,7 @@ class UserPasswordChangeTest(SoupTest):
             'old_pw': '9UQl4lSwHLMVUIMgw0L1X8XEFmyvdn',
         })
         assert doc.select(".alert-danger")
+        assert "Your password may not be the same as one of your 4 previous passwords." in doc.select(".has-error")[0].text
 
     def test_needs_password_change_changed(self):
         self.user.needs_password_change = True
@@ -262,7 +280,7 @@ class UserPasswordChangeTest(SoupTest):
         self.save({
             'new_pw': 'f00barbarbar',
             'new_pw_repeat': 'f00barbarbar',
-            'old_pw': 'barfoofoo'
+            'old_pw': 'old_qvuSpukdKWUV7m7PoRrWwpCd2Taij9'
         })
         self.user.refresh_from_db()
         assert self.user.needs_password_change is False

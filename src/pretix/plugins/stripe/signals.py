@@ -38,7 +38,6 @@ from pretix.base.signals import (
 )
 from pretix.control.signals import nav_organizer
 from pretix.plugins.stripe.forms import StripeKeyValidator
-from pretix.plugins.stripe.payment import StripeMethod
 from pretix.presale.signals import html_head, process_response
 
 
@@ -189,6 +188,8 @@ def nav_o(sender, request, organizer, **kwargs):
 
 @receiver(signal=process_response, dispatch_uid="stripe_middleware_resp")
 def signal_process_response(sender, request: HttpRequest, response: HttpResponse, **kwargs):
+    from pretix.plugins.stripe.payment import StripeMethod
+
     provider = StripeMethod(sender)
     url = resolve(request.path_info)
 
