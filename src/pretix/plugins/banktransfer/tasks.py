@@ -419,6 +419,11 @@ def process_banktransfers(self, job: int, data: list) -> None:
                 )
 
                 for trans in transactions:
+                    if trans.amount == Decimal("0.00"):
+                        # Ignore all zero-valued transactions
+                        trans.state = BankTransaction.STATE_DISCARDED
+                        trans.save()
+                        continue
                     # Whitespace in references is unreliable since linebreaks and spaces can occur almost anywhere, e.g.
                     # DEMOCON-123\n45 should be matched to DEMOCON-12345. However, sometimes whitespace is important,
                     # e.g. when there are two references. "DEMOCON-12345 DEMOCON-45678" would otherwise be parsed as
