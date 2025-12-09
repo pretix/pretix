@@ -8,18 +8,20 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-12-09 22:00+0000\n"
+"Last-Translator: Lachlan Struthers <lachlan.struthers@om.org>\n"
+"Language-Team: Albanian <https://translate.pretix.eu/projects/pretix/pretix/"
+"sq/>\n"
 "Language: sq\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
-msgstr ""
+msgstr "Anglisht"
 
 #: pretix/_base_settings.py:88
 msgid "German"
@@ -450,7 +452,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1569
 msgid "Order canceled"
-msgstr ""
+msgstr "Porositja ësthë anuluar"
 
 #: pretix/api/webhooks.py:278 pretix/base/notifications.py:257
 msgid "Order reactivated"
@@ -1407,7 +1409,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:827
 #: pretix/plugins/checkinlists/exporters.py:828
 msgid "Yes"
-msgstr ""
+msgstr "Po"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -1431,7 +1433,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:827
 #: pretix/plugins/checkinlists/exporters.py:828
 msgid "No"
-msgstr ""
+msgstr "Jo"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
 msgctxt "export_category"
@@ -2445,7 +2447,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:12
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:91
 msgid "Product"
-msgstr ""
+msgstr "Produkti"
 
 #: pretix/base/exporters/orderlist.py:619 pretix/base/models/vouchers.py:315
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -2783,7 +2785,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:20
 #: pretix/control/views/item.py:971
 msgid "Paid orders"
-msgstr ""
+msgstr "Porositje të paguara"
 
 #: pretix/base/exporters/orderlist.py:1155 pretix/control/views/item.py:976
 msgid "Pending orders"
@@ -3879,7 +3881,7 @@ msgstr ""
 #: pretix/base/modelimport_vouchers.py:205 pretix/base/models/items.py:1256
 #: pretix/base/models/vouchers.py:266 pretix/base/models/waitinglist.py:99
 msgid "Product variation"
-msgstr ""
+msgstr "Varianti i produktit"
 
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
@@ -4278,19 +4280,19 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:336
 msgid "Entry"
-msgstr ""
+msgstr "Hyrje"
 
 #: pretix/base/models/checkin.py:337
 msgid "Exit"
-msgstr ""
+msgstr "Dalje"
 
 #: pretix/base/models/checkin.py:356
 msgid "Unknown ticket"
-msgstr ""
+msgstr "Biletë e panjohur"
 
 #: pretix/base/models/checkin.py:357
 msgid "Ticket not paid"
-msgstr ""
+msgstr "Bileta nuk është paguar"
 
 #: pretix/base/models/checkin.py:358
 msgid "Forbidden by custom rule"
@@ -4298,23 +4300,23 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:359
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Kodi i biletës është anuluar/ndryshuar"
 
 #: pretix/base/models/checkin.py:360
 msgid "Information required"
-msgstr ""
+msgstr "Informacion i domosdoshëm"
 
 #: pretix/base/models/checkin.py:361
 msgid "Ticket already used"
-msgstr ""
+msgstr "Bileta tashmë është përdorur"
 
 #: pretix/base/models/checkin.py:362
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "Ky lloj bilete nuk lejohet këtu"
 
 #: pretix/base/models/checkin.py:363
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Kodi i biletës është e paqartë në listë"
 
 #: pretix/base/models/checkin.py:364
 msgid "Server error"
@@ -4322,15 +4324,15 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:365
 msgid "Ticket blocked"
-msgstr ""
+msgstr "Bileta u bllokua"
 
 #: pretix/base/models/checkin.py:366
 msgid "Order not approved"
-msgstr ""
+msgstr "Porositje nuk është aprovuar"
 
 #: pretix/base/models/checkin.py:367
 msgid "Ticket not valid at this time"
-msgstr ""
+msgstr "Bileta nuk është e vlefshme për momentin"
 
 #: pretix/base/models/checkin.py:368
 msgid "Check-in annulled"
@@ -4460,7 +4462,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:769
 msgid "Gate"
-msgstr ""
+msgstr "Porta"
 
 #: pretix/base/models/devices.py:131
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:83
@@ -5928,7 +5930,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:34
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:44
 msgid "Canceled"
-msgstr ""
+msgstr "e anuluar"
 
 #: pretix/base/models/memberships.py:134
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:117
@@ -6671,7 +6673,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:204 pretix/control/views/vouchers.py:120
 msgid "Redeemed"
-msgstr ""
+msgstr "e përdorur"
 
 #: pretix/base/models/vouchers.py:209
 msgid ""
@@ -7704,15 +7706,15 @@ msgstr ""
 
 #: pretix/base/reldate.py:38
 msgid "Event start"
-msgstr ""
+msgstr "Fillimi i eventit"
 
 #: pretix/base/reldate.py:39
 msgid "Event end"
-msgstr ""
+msgstr "Mbarimi i eventit"
 
 #: pretix/base/reldate.py:40
 msgid "Event admission"
-msgstr ""
+msgstr "Hyrja në event"
 
 #: pretix/base/reldate.py:41
 msgid "Presale start"
@@ -12889,7 +12891,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:391
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Approval pending"
-msgstr ""
+msgstr "Duke pritur aprovimin"
 
 #: pretix/control/forms/filter.py:247
 msgid "Follow-up configured"
@@ -13157,7 +13159,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:2117
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:51
 msgid "Valid"
-msgstr ""
+msgstr "e vlefshme"
 
 #: pretix/control/forms/filter.py:2118
 msgid "Unredeemed"
@@ -16427,7 +16429,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:75
 #: pretix/presale/templates/pretixpresale/event/position_change.html:29
 msgid "Continue"
-msgstr ""
+msgstr "Vazhdoni"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -16675,7 +16677,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "Nëse kalon më shumë se disa minuta, ju lutemi t'na kontaktoni."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
@@ -16905,7 +16907,7 @@ msgstr[1] ""
 #: pretix/presale/templates/pretixpresale/event/position_change.html:24
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:44
 msgid "Cancel"
-msgstr ""
+msgstr "Anuloni"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:27
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:24
@@ -17019,7 +17021,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 #: pretix/plugins/checkinlists/exporters.py:770
 msgid "Result"
-msgstr ""
+msgstr "Rezultati"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:78
 #: pretix/control/templates/pretixcontrol/order/index.html:437
@@ -17363,7 +17365,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:68
 msgid "Additional information required"
-msgstr ""
+msgstr "Më shumë informacione kërkohen"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:70
 msgid ""
@@ -18477,7 +18479,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/plugins.html:34
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:34
 msgid "Search results"
-msgstr ""
+msgstr "Rezultatet e kërkimit"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:56
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:56
@@ -19743,7 +19745,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
-msgstr ""
+msgstr "minuta"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:229
 msgid "hours"
@@ -21014,7 +21016,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:969
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:469
 msgid "Total"
-msgstr ""
+msgstr "Shuma totale"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:789
 #: pretix/presale/templates/pretixpresale/event/order.html:210
@@ -23135,7 +23137,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:107
 msgid "Duplicate"
-msgstr ""
+msgstr "Kopjoni"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:117
 msgid "Undo"
@@ -27329,7 +27331,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
-msgstr ""
+msgstr "Komente:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
@@ -27572,7 +27574,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:1097
 #: pretix/plugins/paypal2/payment.py:1098 pretix/plugins/stripe/payment.py:1816
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/apps.py:53
 msgid ""
@@ -29012,8 +29014,9 @@ msgid "Credit card payments"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1527
+#, fuzzy
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:344 pretix/plugins/stripe/payment.py:352
 #: pretix/plugins/stripe/payment.py:360 pretix/plugins/stripe/payment.py:395
@@ -29032,12 +29035,14 @@ msgid "Alipay"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:1564
+#, fuzzy
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:366
+#, fuzzy
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "Debit direkt me SEPA"
 
 #: pretix/plugins/stripe/payment.py:369
 msgid ""
@@ -29072,12 +29077,14 @@ msgid "Multibanco"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py:409 pretix/plugins/stripe/payment.py:1730
+#, fuzzy
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:417 pretix/plugins/stripe/payment.py:1769
+#, fuzzy
 msgid "WeChat Pay"
-msgstr ""
+msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:433 pretix/plugins/stripe/payment.py:1824
 msgid "Swish"
@@ -29221,8 +29228,9 @@ msgid "giropay via Stripe"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1480
+#, fuzzy
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:1483
 msgid ""
@@ -32444,7 +32452,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/postmessage.html:21
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Ne po e proçesojmë kërkesën tuaj …"
 
 #: pretix/presale/utils.py:271 pretix/presale/utils.py:417
 #: pretix/presale/utils.py:418
