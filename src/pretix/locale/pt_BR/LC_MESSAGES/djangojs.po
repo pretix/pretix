@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-20 10:37+0000\n"
-"PO-Revision-Date: 2025-08-28 13:43+0000\n"
+"PO-Revision-Date: 2025-12-09 00:47+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -566,11 +566,11 @@ msgstr "ausente"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
 msgid "Error: Product not found!"
-msgstr ""
+msgstr "Erro: Produto não encontrado!"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
 msgid "Error: Variation not found!"
-msgstr ""
+msgstr "Erro: Variação não encontrada!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
