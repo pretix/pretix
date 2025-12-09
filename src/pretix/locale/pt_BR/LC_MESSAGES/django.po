@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-04 18:00+0000\n"
+"PO-Revision-Date: 2025-12-09 00:47+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -253,9 +253,8 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
-"Os eventos não podem ser criados como 'ativo'. As cotas e métodos de "
-"pagamento devem ser adicionados ao evento antes que as vendas possam ser "
-"iniciadas."
+"Eventos não podem ser criados como 'ativo'. Cotas e métodos de pagamento "
+"devem ser adicionados ao evento antes que as vendas se iniciem."
 
 #: pretix/api/serializers/event.py:234 pretix/api/serializers/event.py:554
 #, python-brace-format
@@ -358,7 +357,8 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:587 pretix/control/forms/item.py:177
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "A pergunta não pode depender de uma pergunta feita durante o check-in."
+msgstr ""
+"A pergunta não pode depender de outra pergunta feita durante o check-in."
 
 #: pretix/api/serializers/item.py:592 pretix/control/forms/item.py:182
 msgid "Circular dependency between questions detected."
