@@ -96,7 +96,27 @@ def get_minsize(size):
     return (min_width, min_height)
 
 
+def get_srcset_sizes(size):
+    w, h = size.split("x")
+    for m in (2, 3):
+        if w.endswith("_"):
+            new_w = f"{int(w.rstrip('_')) * m}_"
+        else:
+            new_w = f"{int(w) * m}"
+        if h.endswith("_"):
+            new_h = f"{int(h.rstrip('_')) * m}_"
+        elif h.endswith("^"):
+            new_h = f"{int(h.rstrip('^')) * m}^"
+        else:
+            new_h = f"{int(h) * m}"
+
+        yield f"{new_w}x{new_h}", f"{m}x"
+
+
 def get_sizes(size, imgsize):
+    """
+    :return: Tuple of (new_size, crop_box, size_limited_by_input)
+    """
     crop = False
     if size.endswith('^'):
         crop = True
@@ -112,37 +132,48 @@ def get_sizes(size, imgsize):
     else:
         size = [int(size), int(size)]
 
+    wfactor = min(1, size[0] / imgsize[0])
+    hfactor = min(1, size[1] / imgsize[1])
+    limited_by_input = size[1] > imgsize[1] and size[0] > imgsize[0]
+
     if crop:
         # currently crop and min-size cannot be combined
-        wfactor = min(1, size[0] / imgsize[0])
-        hfactor = min(1, size[1] / imgsize[1])
         if wfactor == hfactor:
-            return (int(imgsize[0] * wfactor), int(imgsize[1] * hfactor)), \
-                   (0, int((imgsize[1] * wfactor - imgsize[1] * hfactor) / 2),
-                    imgsize[0] * hfactor, int((imgsize[1] * wfactor + imgsize[1] * wfactor) / 2))
+            return (
+                (int(imgsize[0] * wfactor), int(imgsize[1] * hfactor)),
+                (0, int((imgsize[1] * wfactor - imgsize[1] * hfactor) / 2),
+                 imgsize[0] * hfactor, int((imgsize[1] * wfactor + imgsize[1] * wfactor) / 2)),
+                limited_by_input
+            )
         elif wfactor > hfactor:
-            return (int(size[0]), int(imgsize[1] * wfactor)), \
-                   (0, int((imgsize[1] * wfactor - size[1]) / 2), size[0], int((imgsize[1] * wfactor + size[1]) / 2))
+            return (
+                (int(size[0]), int(imgsize[1] * wfactor)),
+                (0, int((imgsize[1] * wfactor - size[1]) / 2), size[0], int((imgsize[1] * wfactor + size[1]) / 2)),
+                limited_by_input
+            )
         else:
-            return (int(imgsize[0] * hfactor), int(size[1])), \
-                   (int((imgsize[0] * hfactor - size[0]) / 2), 0, int((imgsize[0] * hfactor + size[0]) / 2), size[1])
+            return (
+                (int(imgsize[0] * hfactor), int(size[1])),
+                (int((imgsize[0] * hfactor - size[0]) / 2), 0, int((imgsize[0] * hfactor + size[0]) / 2), size[1]),
+                limited_by_input
+            )
     else:
-        wfactor = min(1, size[0] / imgsize[0])
-        hfactor = min(1, size[1] / imgsize[1])
-
         if wfactor == hfactor:
-            return (int(imgsize[0] * hfactor), int(imgsize[1] * wfactor)), None
+            return (int(imgsize[0] * hfactor), int(imgsize[1] * wfactor)), None, limited_by_input
         elif wfactor < hfactor:
-            return (size[0], int(imgsize[1] * wfactor)), None
+            return (size[0], int(imgsize[1] * wfactor)), None, limited_by_input
         else:
-            return (int(imgsize[0] * hfactor), size[1]), None
+            return (int(imgsize[0] * hfactor), size[1]), None, limited_by_input
 
 
 def resize_image(image, size):
+    """
+    :return: Tuple of (new_image, size_limited_by_input)
+    """
     # before we calc thumbnail, we need to check and apply EXIF-orientation
     image = ImageOps.exif_transpose(image)
 
-    new_size, crop = get_sizes(size, image.size)
+    new_size, crop, limited_by_input = get_sizes(size, image.size)
     image = image.resize(new_size, resample=Resampling.LANCZOS)
     if crop:
         image = image.crop(crop)
@@ -162,10 +193,10 @@ def resize_image(image, size):
 
         image = image.crop((new_x, new_y, new_x + new_width, new_y + new_height))
 
-    return image
+    return image, limited_by_input
 
 
-def create_thumbnail(source, size, formats=None):
+def create_thumbnail(source, size, formats=None, skip_if_limited_by_input=False):
     source_name = str(source)
 
     # HACK: this ensures that the file is opened in binary mode, which is not guaranteed otherwise, esp. for
@@ -181,10 +212,17 @@ def create_thumbnail(source, size, formats=None):
         raise ThumbnailError('Could not load image')
 
     frames = []
+    any_limited_by_input = False
     durations = []
     for f in ImageSequence.Iterator(image):
         durations.append(f.info.get("duration", 1000))
-        frames.append(resize_image(f, size))
+        img, limited_by_input = resize_image(f, size)
+        any_limited_by_input = any_limited_by_input or limited_by_input
+        frames.append(img)
+
+    if any_limited_by_input and skip_if_limited_by_input:
+        return
+
     image_out = frames[0]
     save_kwargs = {}
     source_ext = os.path.splitext(source_name)[1].lower()
@@ -223,10 +261,10 @@ def create_thumbnail(source, size, formats=None):
     return t
 
 
-def get_thumbnail(source, size, formats=None):
+def get_thumbnail(source, size, formats=None, skip_if_limited_by_input=False):
     # Assumes files are immutable
     try:
         source_name = str(source)
         return Thumbnail.objects.get(source=source_name, size=size)
     except Thumbnail.DoesNotExist:
-        return create_thumbnail(source, size, formats=formats)
+        return create_thumbnail(source, size, formats=formats, skip_if_limited_by_input=skip_if_limited_by_input)
