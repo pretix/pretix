@@ -1,3 +1,4 @@
+{% load html_datetime %}
 {% load i18n %}
 {% load date_fast %}
 {% load calendarhead %}
@@ -110,11 +111,9 @@
                                                     {% trans "Sale over" %}
                                                 {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
                                                     <span class="fa fa-ticket" aria-hidden="true"></span>
-                                                    {% with date_human=event.event.effective_presale_start|date_fast:"SHORT_DATE_FORMAT" date_iso=event.event.effective_presale_start|date_fast:"c"  %}
-                                                    {% blocktrans with start_date="<time datetime='"|add:date_iso|add:"'>"|add:date_human|add:"</time>"|safe %}
+                                                    {% blocktrans with start_date=event.event.effective_presale_start|html_datetime:"SHORT_DATE_FORMAT"|safe %}
                                                         from {{ start_date }}
                                                     {% endblocktrans %}
-                                                    {% endwith %}
                                                 {% else %}
                                                     <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Soon" %}
                                                 {% endif %}

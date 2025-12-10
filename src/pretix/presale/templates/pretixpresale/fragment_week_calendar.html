@@ -1,3 +1,4 @@
+{% load html_datetime %}
 {% load i18n %}
 {% load date_fast %}
 <div class="week-calendar">
@@ -79,7 +80,7 @@
                                     {% trans "Sale over" %}
                                 {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
                                     <span class="fa fa-ticket" aria-hidden="true"></span>
-                                    {% blocktrans with start_date=event.event.effective_presale_start|date_fast:"SHORT_DATE_FORMAT" %}
+                                    {% blocktrans with start_date=event.event.effective_presale_start|html_datetime:"SHORT_DATE_FORMAT"|safe %}
                                         from {{ start_date }}
                                     {% endblocktrans %}
                                 {% else %}

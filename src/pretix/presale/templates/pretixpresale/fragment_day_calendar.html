@@ -1,3 +1,4 @@
+{% load html_datetime %}
 {% load i18n %}
 {% load eventurl %}
 <div class="day-calendar cal-size-{{ raster_to_shortest_ratio }}{% if no_headlines %} no-headlines{% endif %}"
@@ -116,7 +117,7 @@
                                 <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Sale over" %}
                             {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
                                 <span class="fa fa-ticket" aria-hidden="true"></span>
-                                {% blocktrans with start_date=event.event.effective_presale_start|date:"SHORT_DATE_FORMAT" %}
+                                {% blocktrans with start_date=event.event.effective_presale_start|html_datetime:"SHORT_DATE_FORMAT"|safe %}
                                     from {{ start_date }}
                                 {% endblocktrans %}
                             {% else %}
