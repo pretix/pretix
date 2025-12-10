@@ -65,8 +65,9 @@ from pretix.api.serializers.item import (
 )
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
-    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher, OrderPosition
+    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation,
+    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
+    SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
