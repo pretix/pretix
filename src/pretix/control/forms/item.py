@@ -300,22 +300,26 @@ class QuestionAnswerFilterForm(forms.Form):
             }
         ),
         required=False,
+        label=_("Order status"),
     )
     item = forms.ChoiceField(
         choices=[],
         widget=forms.Select(
             attrs={'class': 'form-control'}
         ),
-        required=False
+        required=False,
+        label=_("Order item"),
     )
     subevent = forms.ModelChoiceField(
         queryset=SubEvent.objects.none(),
         required=False,
-        empty_label=pgettext_lazy('subevent', 'All dates')
+        empty_label=pgettext_lazy('subevent', 'All dates'),
+        label=_("Subevent"),
     )
     date_range = DateFrameField(
         required=False,
-        include_future_frames=True
+        include_future_frames=True,
+        label=_('Subevent start date'),
     )
 
     def __init__(self, *args, **kwargs):

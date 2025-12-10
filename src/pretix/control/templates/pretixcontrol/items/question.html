@@ -27,20 +27,22 @@
         <form class="panel-body filter-form" action="" method="get">
             <div class="row">
                  <div class="col-lg-2 col-sm-6 col-xs-6">
-                     {% bootstrap_field form.status layout='inline' %}
+                     {% bootstrap_field form.status %}
                  </div>
                  <div class="col-lg-5 col-sm-6 col-xs-6">
-                     {% bootstrap_field form.item layout='inline' %}
+                     {% bootstrap_field form.item %}
                  </div>
-                {% if has_subevents %}
-                <div class="col-lg-5 col-sm-6 col-xs-6">
-                    {% bootstrap_field form.subevent layout='inline' %}
-                </div>
-                <div class="col-lg-5 col-sm-6 col-xs-6">
-                    {% bootstrap_field form.date_range layout='inline' %}
-                </div>
-                {% endif %}
             </div>
+            {% if has_subevents %}
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6 col-xs-6">
+                        {% bootstrap_field form.subevent %}
+                    </div>
+                    <div class="col-lg-4 col-sm-6 col-xs-6">
+                        {% bootstrap_field form.date_range %}
+                    </div>
+                </div>
+            {% endif %}
             <div class="text-right">
                 <button class="btn btn-primary btn-lg" type="submit">
                     <span class="fa fa-filter"></span>
