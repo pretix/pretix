@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-10 15:49+0000\n"
+"PO-Revision-Date: 2025-12-11 01:00+0000\n"
 "Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -3522,8 +3522,7 @@ msgstr "Participante individual"
 
 #: pretix/base/invoicing/email.py:50
 msgid "Email invoice directly to accounting department"
-msgstr ""
-"Envie a fatura diretamente por e-mail para o departamento de contabilidade"
+msgstr "Envia a fatura diretamente por e-mail para o departamento financeiro"
 
 #: pretix/base/invoicing/email.py:51
 msgid ""
@@ -6702,10 +6701,8 @@ msgstr ""
 "tua fatura, caso assim o desejes."
 
 #: pretix/base/models/orders.py:3534
-#, fuzzy
-#| msgid "Transaction time"
 msgid "Transmission type"
-msgstr "Hora de transação"
+msgstr "Modo de comunicação"
 
 #: pretix/base/models/orders.py:3632
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
@@ -20186,8 +20183,8 @@ msgid ""
 "email address is owned by you. Please enter the verification code below:"
 msgstr ""
 "Enviamos um e-mail para %(recp)s com um código de confirmação para verificar "
-"se este endereço de e-mail é da sua propriedade. Por favor, insira o código "
-"de verificação abaixo:"
+"se este endereço de e-mail te pertence. Por favor, indica o código de "
+"verificação abaixo:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:63
 msgid "Verification code"
@@ -27454,6 +27451,9 @@ msgid ""
 "We will send a confirmation code to your new email address, which you need "
 "to enter in the next step to confirm the email address is correct."
 msgstr ""
+"Enviaremos um código de confirmação para o teu novo endereço de e-mail, que "
+"precisas de inserir na próxima etapa para confirmar que o endereço de e-mail "
+"está correto."
 
 #: pretix/control/templates/pretixcontrol/user/change_password.html:4
 #: pretix/control/templates/pretixcontrol/user/change_password.html:8
@@ -27567,6 +27567,9 @@ msgid ""
 "confirm your email address using a confirmation code we will send to your "
 "email address."
 msgstr ""
+"O teu endereço de e-mail ainda não foi confirmado. Para proteger a tua "
+"conta, confirma o teu endereço de e-mail usando um código de confirmação que "
+"te enviaremos."
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:18
 #, fuzzy
@@ -28878,7 +28881,7 @@ msgstr ""
 
 #: pretix/control/views/mailsetup.py:216
 msgid "The verification code was incorrect, please try again."
-msgstr "O código de verificação estava incorreto, tente novamente."
+msgstr "O código de verificação estava incorreto, tenta novamente."
 
 #: pretix/control/views/mailsetup.py:221
 msgid "Sender address verification"
@@ -29937,6 +29940,8 @@ msgid ""
 "Please enter the confirmation code we sent to your email address "
 "<strong>{email}</strong>."
 msgstr ""
+"Indica o código de confirmação que enviámos para o teu endereço de e-mail "
+"<strong>{email}</strong>."
 
 #: pretix/control/views/user.py:947
 #, fuzzy
@@ -34939,7 +34944,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:9
 msgid "Before we continue, we need you to answer some questions."
-msgstr "Antes de continuarmos, precisamos que respondas a algumas perguntas."
+msgstr "Antes de continuares, precisamos que respondas a algumas perguntas."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:49
 msgid "Auto-fill with address"
@@ -35960,8 +35965,8 @@ msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
 msgstr ""
-"Por favor, note que a aprovação ainda aguardam pelo organizador do evento "
-"antes que pode pagar e concluir este pedido."
+"Por favor, nota que ainda estamos à espera da aprovação do organizador do "
+"evento antes de poderes pagar e concluir esta encomenda."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
@@ -35970,19 +35975,14 @@ msgstr ""
 "processo."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to access "
-#| "your order later. We also sent you an email containing the link to the "
-#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email to the address you specified "
 "containing the link to this page."
 msgstr ""
-"Por favor, guarda o link para esta página, caso queiras aceder ao teu pedido "
-"mais tarde. Também iremos enviar-te um email com o link para o endereço que "
-"indicaste."
+"Por favor, guarda o link desta página, se quiseres aceder à tua encomenda "
+"mais tarde. Também enviámos um e-mail para o endereço que indicaste com o "
+"link para esta página."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:59
 #, fuzzy
