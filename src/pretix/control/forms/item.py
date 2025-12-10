@@ -279,7 +279,7 @@ class QuestionOptionForm(I18nModelForm):
         ]
 
 
-class QuestionFilterForm(forms.Form):
+class QuestionAnswerFilterForm(forms.Form):
     STATUS_VARIANTS = [
         ("", _("All orders")),
         ("p", _("Paid")),

@@ -668,7 +668,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
 
     @cached_property
     def filter_form(self):
-        return QuestionFilterForm(event=self.request.event, data=self.request.GET)
+        return QuestionAnswerFilterForm(event=self.request.event, data=self.request.GET)
 
     def get_answer_statistics(self):
         if not self.filter_form.is_valid():
