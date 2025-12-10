@@ -353,12 +353,8 @@ class QuestionAnswerFilterForm(forms.Form):
                 raise forms.ValidationError(_("Selected subevent isn't part of the date range."))
         return cleaned_data
 
-    def filter_qs(self):
+    def filter_qs(self, opqs):
         fdata = self.cleaned_data
-
-        opqs = OrderPosition.objects.filter(
-            order__event=self.event,
-        )
 
         subevent = fdata.get('subevent', None)
         date_range = fdata.get('date_range', None)

@@ -671,10 +671,11 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
         return QuestionAnswerFilterForm(event=self.request.event, data=self.request.GET)
 
     def get_answer_statistics(self):
-        if not self.filter_form.is_valid():
-            return
-
-        opqs = self.filter_form.filter_qs()
+        opqs = OrderPosition.objects.filter(
+            order__event=self.event,
+        )
+        if self.filter_form.is_valid():
+            opqs = self.filter_form.filter_qs(opqs)
 
         qs = QuestionAnswer.objects.filter(
             question=self.object, orderposition__isnull=False,
