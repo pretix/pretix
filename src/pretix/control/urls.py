@@ -474,6 +474,8 @@ urlpatterns = [
         re_path(r'^waitinglist/$', waitinglist.WaitingListView.as_view(), name='event.orders.waitinglist'),
         re_path(r'^waitinglist/action$', waitinglist.WaitingListActionView.as_view(), name='event.orders.waitinglist.action'),
         re_path(r'^waitinglist/auto_assign$', waitinglist.AutoAssign.as_view(), name='event.orders.waitinglist.auto'),
+        re_path(r'^waitinglist/(?P<entry>\d+)/edit$', waitinglist.EntryEdit.as_view(),
+                name='event.orders.waitinglist.edit'),
         re_path(r'^waitinglist/(?P<entry>\d+)/delete$', waitinglist.EntryDelete.as_view(),
                 name='event.orders.waitinglist.delete'),
         re_path(r'^waitinglist/(?P<entry>\d+)/transfer$', waitinglist.EntryTransfer.as_view(),

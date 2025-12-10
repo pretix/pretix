@@ -53,7 +53,9 @@ from pretix.base.models import Item, LogEntry, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
-from pretix.control.forms.waitinglist import WaitingListEntryTransferForm
+from pretix.control.forms.waitinglist import (
+    WaitingListEntryEditForm, WaitingListEntryTransferForm,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 
@@ -382,6 +384,44 @@ class EntryDelete(EventPermissionRequiredMixin, CompatDeleteView):
         if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return HttpResponseRedirect(success_url)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.orders.waitinglist', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        })
+
+
+class EntryEdit(EventPermissionRequiredMixin, UpdateView):
+    model = WaitingListEntry
+    template_name = 'pretixcontrol/waitinglist/edit.html'
+    permission = 'can_change_orders'
+    form_class = WaitingListEntryEditForm
+    context_object_name = 'entry'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(WaitingListEntry, pk=self.kwargs['entry'], event=self.request.event)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['names_asked'] = self.request.event.settings.waiting_list_names_asked
+        ctx['phones_asked'] = self.request.event.settings.waiting_list_phones_asked
+        return ctx
+
+    @transaction.atomic
+    def form_valid(self, form):
+        messages.success(self.request, _('The waitinglist entry has been updated.'))
+        if form.has_changed():
+            self.object.log_action(
+                'pretix.event.orders.waitinglist.changed', user=self.request.user, data={
+                    k: form.cleaned_data.get(k) for k in form.changed_data
+                }
+            )
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
 
     def get_success_url(self) -> str:
         return reverse('control:event.orders.waitinglist', kwargs={

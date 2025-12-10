@@ -19,12 +19,18 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.forms import ChoiceField, EmailField
 from django.urls import reverse
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelChoiceField
+from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models import WaitingListEntry
-from pretix.control.forms.widgets import Select2
+from pretix.base.forms.questions import NamePartsFormField
+from pretix.base.models import Item, ItemVariation, WaitingListEntry
+from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 
 
 class WaitingListEntryTransferForm(I18nModelForm):
@@ -54,3 +60,93 @@ class WaitingListEntryTransferForm(I18nModelForm):
         field_classes = {
             'subevent': SafeModelChoiceField,
         }
+
+
+class WaitingListEntryEditForm(I18nModelForm):
+    itemvar = ChoiceField()
+
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.get('instance', None)
+        initial = kwargs.get('initial', {})
+        if self.instance and self.instance.pk and 'itemvar' not in initial:
+            if self.instance.variation is not None:
+                initial['itemvar'] = f'{self.instance.item.pk}-{self.instance.variation.pk}'
+            else:
+                initial['itemvar'] = self.instance.item.pk
+        kwargs['initial'] = initial
+
+        super().__init__(*args, **kwargs)
+
+        # Prevent the item field cleaning from complaining that it isn't populated
+        # the value for item is derived and populated during form.clean()
+        self.fields['item'].required = False
+
+        self.fields['name_parts'] = NamePartsFormField(
+            max_length=255,
+            required=True,
+            scheme=self.event.organizer.settings.name_scheme,
+            titles=self.event.organizer.settings.name_scheme_titles,
+            label=_('Name'),
+        )
+
+        self.fields['name_parts'].required = self.event.settings.waiting_list_names_required
+        self.fields['phone'].required = self.event.settings.waiting_list_phones_required
+
+        choices = []
+
+        items = self.event.items.prefetch_related('variations')
+        for item in items:
+            if len(item.variations.all()) > 0:
+                for v in item.variations.all():
+                    choices.append((
+                        '{}-{}'.format(item.pk, v.pk),
+                        '{} – {}'.format(item, v.value) if item.active else mark_safe(
+                            f'<strike class="text-muted">{escape(item)} – {escape(v.value)}</strike>')
+                    ))
+            else:
+                choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(
+                    f'<strike class="text-muted">{escape(item)}</strike>')))
+
+        self.fields['itemvar'].label = _("Item and Variation")
+        self.fields['itemvar'].required = True
+        self.fields['itemvar'].widget = Select2ItemVarQuota(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.items.itemvars.select2', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }),
+            },
+            choices=choices
+        )
+        self.fields['itemvar'].choices = choices
+
+    def clean(self):
+        cleaned_data = super().clean()
+        itemvar = cleaned_data.get('itemvar')
+
+        cleaned_data['item'] = Item.objects.get(pk=itemvar.split('-')[0])
+        if '-' in itemvar:
+            cleaned_data['variation'] = ItemVariation.objects.get(pk=itemvar.split('-')[1])
+        return cleaned_data
+
+    class Meta:
+        model = WaitingListEntry
+        fields = [
+            'email',
+            'name_parts',
+            'phone',
+            'item',
+            'variation',
+        ]
+        field_classes = {
+            'email': EmailField,
+            'phone': PhoneNumberField,
+            'item': SafeModelChoiceField,
+            'variation': SafeModelChoiceField,
+        }
+        exclude = [
+            'subevent',  # handled by EntryTransfer view
+            'voucher',  # handled by the assign operation in the WaitingListActionView
+            'priority'  # handled via thumbs up/down
+        ]
