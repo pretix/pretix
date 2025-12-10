@@ -66,7 +66,7 @@ from pretix.api.serializers.item import (
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
     CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
-    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher,
+    QuestionAnswer, QuestionOption, Quota, SeatCategoryMapping, Voucher, OrderPosition
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
@@ -77,7 +77,7 @@ from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
     ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
     ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
-    ItemVariationsFormSet, QuestionFilterForm, QuestionForm,
+    ItemVariationsFormSet, QuestionAnswerFilterForm, QuestionForm,
     QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
@@ -672,7 +672,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
 
     def get_answer_statistics(self):
         opqs = OrderPosition.objects.filter(
-            order__event=self.event,
+            order__event=self.request.event,
         )
         if self.filter_form.is_valid():
             opqs = self.filter_form.filter_qs(opqs)
