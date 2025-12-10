@@ -222,7 +222,6 @@ def test_edit_itemvariation(client, env):
 
     itemvar = f"{env[4].item.pk}-{env[4].pk}"
 
-
     response = client.post(
         '/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id),
         data={
