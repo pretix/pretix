@@ -855,7 +855,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                                 placeholders = self.placeholders(preview_item)
                                 msgs[self.supported_locale[idx]] = format_map(
                                     markdown_compile_email(
-                                        format_map(v, placeholders, raise_on_missing=True)
+                                        format_map(bleach.clean(v, tags=set()), placeholders, raise_on_missing=True),
                                     ),
                                     placeholders,
                                     mode=SafeFormatter.MODE_RICH_TO_HTML,
