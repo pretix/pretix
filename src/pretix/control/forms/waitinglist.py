@@ -90,6 +90,7 @@ class WaitingListEntryEditForm(I18nModelForm):
         )
 
         self.fields['name_parts'].required = self.event.settings.waiting_list_names_required
+        self.fields['name_parts'].one_required = self.event.settings.waiting_list_names_required
         self.fields['phone'].required = self.event.settings.waiting_list_phones_required
 
         choices = []

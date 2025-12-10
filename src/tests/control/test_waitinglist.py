@@ -52,6 +52,8 @@ def env():
         date_from=now(), plugins='pretix.plugins.banktransfer,tests.testdummy'
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
+    event.settings.set('waiting_list_names_asked', False)
+    event.settings.set('waiting_list_names_required', False)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23,
                                 admission=True)
@@ -190,6 +192,20 @@ def test_delete_bulk(client, env):
         with scopes_disabled():
             WaitingListEntry.objects.get(id=wle.id)
 
+@pytest.mark.django_db
+def test_edit(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.first()
+        assert not wle.email.startswith("1_")
+
+    client.post('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id), data={
+        "email": f"1_{wle.email}", "itemvar": wle.item.pk
+    })
+    wle.refresh_from_db()
+
+    assert wle.email.startswith('1_')
+
 
 @pytest.mark.django_db
 def test_dashboard(client, env):
@@ -197,5 +213,7 @@ def test_dashboard(client, env):
         quota = Quota.objects.create(name="Test", size=2, event=env[0])
         quota.items.add(env[3])
         w = waitinglist_widgets(env[0])
+
     assert '1' in w[0]['content']
     assert '5' in w[1]['content']
+
