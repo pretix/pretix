@@ -192,13 +192,14 @@ def test_delete_bulk(client, env):
         with scopes_disabled():
             WaitingListEntry.objects.get(id=wle.id)
 
+
 @pytest.mark.django_db
 def test_edit(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     with scopes_disabled():
         wle = WaitingListEntry.objects.first()
         assert not wle.email.startswith("1_")
-
+    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id))
     client.post('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id), data={
         "email": f"1_{wle.email}", "itemvar": wle.item.pk
     })
@@ -216,4 +217,3 @@ def test_dashboard(client, env):
 
     assert '1' in w[0]['content']
     assert '5' in w[1]['content']
-
