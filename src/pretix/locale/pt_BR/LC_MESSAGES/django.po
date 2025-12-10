@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-09 07:09+0000\n"
+"PO-Revision-Date: 2025-12-11 01:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -816,28 +816,22 @@ msgstr ""
 "confirme primeiro o endereço de email na sua conta."
 
 #: pretix/base/datasync/datasync.py:263
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
-#| "your {provider_name} settings."
+#, python-brace-format
 msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
 msgstr ""
-"O campo \"{field_name}\" não é válido para {available_inputs}. Verifique as "
-"configurações de {provider_name}."
+"O campo \"{field_name}\" não existe. Por favor, verifique as configurações "
+"de {provider_name}."
 
 #: pretix/base/datasync/datasync.py:270
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Field \"{field_name}\" is not valid for {available_inputs}. Please check "
-#| "your {provider_name} settings."
+#, python-brace-format
 msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
-"O campo \"{field_name}\" não é válido para {available_inputs}. Verifique as "
-"configurações de {provider_name}."
+"Campo \"{field_name}\" exige {required_input}, mas apenas {available_inputs} "
+"foram fornecidas. Por favor, verifique as configurações de {provider_name}."
 
 #: pretix/base/datasync/datasync.py:281
 #, python-brace-format
@@ -2137,7 +2131,7 @@ msgstr "Comprar este produto requer aprovação"
 
 #: pretix/base/exporters/items.py:85 pretix/base/models/items.py:627
 msgid "Only sell this product as part of a bundle"
-msgstr "Disponível apenas como parte de um pacote"
+msgstr "Venda este produto apenas como parte de um pacote"
 
 #: pretix/base/exporters/items.py:86 pretix/base/models/items.py:634
 msgid "Allow product to be canceled or changed"
@@ -2839,7 +2833,7 @@ msgstr "Código de Status"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
 msgid "Amount"
-msgstr "Valor"
+msgstr "Quantidade"
 
 #: pretix/base/exporters/orderlist.py:1098
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:102
@@ -3398,6 +3392,8 @@ msgid ""
 "If you enter an invoice address, you also need to select an invoice "
 "transmission method."
 msgstr ""
+"Se você informar um endereço para a fatura, você também deverá selecionar um "
+"método para transmissão da fatura."
 
 #: pretix/base/forms/questions.py:1385
 msgid ""
@@ -3412,6 +3408,8 @@ msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
 msgstr ""
+"O tipo de transmissão de fatura selecionado exige um campo que não está "
+"disponível atualmente. Por favor, entre em contato com a organização."
 
 #: pretix/base/forms/questions.py:1398
 msgid "This field is required for the selected type of invoice transmission."
@@ -13205,13 +13203,13 @@ msgid "Contact:"
 msgstr "Contato:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-format
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
-msgstr "Você está recebendo este email porque fez um pedido para {event}."
+msgstr ""
+"Você está recebendo este email por ter realizado um pedido para <strong>%"
+"(event)s</strong>."
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
@@ -17345,13 +17343,9 @@ msgid "Your account has been disabled."
 msgstr "Sua conta foi desativada."
 
 #: pretix/control/logdisplay.py:672
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The email address has been changed from \"{old_email}\" to \"{new_email}"
-#| "\"."
+#, python-brace-format
 msgid "Your email address has been changed from {old_email} to {email}."
-msgstr ""
-"O endereço de e-mail foi alterado de \"{old_email}\" para \"{new_email}\"."
+msgstr "Seu endereço de email foi modificado de {old_email} para {email}."
 
 #: pretix/control/logdisplay.py:673
 #, python-brace-format
@@ -33732,12 +33726,11 @@ msgstr "Selecione como deseja pagar o saldo restante:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:82
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:45
-#, fuzzy, python-format
-#| msgid "%(num)s available"
+#, python-format
 msgid "(%(count)s available)"
 msgid_plural "(%(count)s available)"
-msgstr[0] "%(num)s disponíveis"
-msgstr[1] "%(num)s disponíveis"
+msgstr[0] "(%(count)s disponível)"
+msgstr[1] "(%(count)s disponíveis)"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:101
 msgid "This sales channel does not provide support for test mode."
@@ -34516,13 +34509,11 @@ msgstr "Mostrar imagem em tamanho real de %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:131
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:288
-#, fuzzy, python-format
-#| msgid "%(count)s event"
-#| msgid_plural "%(count)s events"
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "%(count)s evento"
-msgstr[1] "%(count)s events"
+msgstr[0] "%(amount)s× no seu carrinho"
+msgstr[1] "%(amount)s× no seu carrinho"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:209
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:374
@@ -35608,7 +35599,7 @@ msgid ""
 "This is a self-hosted installation of <a %(a_attr)s>pretix, your free and "
 "open source ticket sales software</a>."
 msgstr ""
-"Está é uma instalação self-hosted do <a %(a_attr)s>pretix, seu aplicativo "
+"Esta é uma instalação auto-hospedada do <a %(a_attr)s>pretix, seu aplicativo "
 "livre e de código aberto para venda de ingressos.</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:15
@@ -35704,10 +35695,9 @@ msgid "Issued on %(date)s"
 msgstr "Leitura negada: %(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:38
-#, fuzzy, python-format
-#| msgid "Expired since"
+#, python-format
 msgid "Expired since %(date)s"
-msgstr "Expirado desde"
+msgstr "Expirado desde %(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:46
 #, python-format
@@ -35715,10 +35705,8 @@ msgid "Valid until %(date)s"
 msgstr "Válido até %(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:66
-#, fuzzy
-#| msgid "Remaining balance"
 msgid "Remaining value:"
-msgstr "Saldo restante"
+msgstr "Valor restante:"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:76
 #, fuzzy
