@@ -347,9 +347,9 @@ class QuestionAnswerFilterForm(forms.Form):
         subevent = cleaned_data.get('subevent')
         date_range = cleaned_data.get('date_range')
 
-        if subevent is not None and cleaned_data is not None:
+        if subevent is not None and date_range is not None:
             start_d, end_d = resolve_timeframe_to_dates_inclusive(now(), date_range, timezone.utc)
-            if not (start_d <= subevent.date_from.date() <= end_d):
+            if not (start_d >= subevent.date_from.date() >= end_d):
                 raise forms.ValidationError(_("Selected subevent isn't part of the date range."))
         return cleaned_data
 
@@ -360,13 +360,13 @@ class QuestionAnswerFilterForm(forms.Form):
         date_range = fdata.get('date_range', None)
 
         if subevent is not None:
-            opqs = opqs.filter(order__event__subevents=subevent)
+            opqs = opqs.filter(subevent=subevent)
 
         if date_range is not None:
             d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), date_range, timezone.utc)
             opqs = opqs.filter(
-                order__event__subevents__date_from__gte=d_start,
-                order__event__subevents__date_from__lte=d_end
+                subevent__date_from__gte=d_start,
+                subevent__date_from__lte=d_end
             )
 
         s = fdata.get("status", "np")
