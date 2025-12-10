@@ -14,12 +14,6 @@
         </a>
     </h1>
 
-    {% for e in form.errors.values %}
-        <div class="alert alert-danger has-error">
-            {{ e }}
-        </div>
-    {% endfor %}
-
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">{% trans "Filter" %}</h3>
