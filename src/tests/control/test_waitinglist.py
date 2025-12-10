@@ -219,17 +219,22 @@ def test_edit_itemvariation(client, env):
         wle = WaitingListEntry.objects.first()
         assert not wle.email.startswith("1_")
     client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id))
+
+    itemvar = f"{env[4].item.pk}-{env[4].pk}"
+
+
     response = client.post(
         '/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id),
         data={
-            "email": f"1_{wle.email}", "itemvar": f"{env[4].item.pk}-{env[4].pk}"
+            "email": f"1_{wle.email}",
+            "itemvar": itemvar
         },
         follow=True
     )
     assert response.wsgi_request.path == '/control/event/dummy/dummy/waitinglist/'
 
     response = client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id))
-    assert response.context['form'].initial['itemvar'] == "3-1"
+    assert response.context['form'].initial['itemvar'] == itemvar
 
 
 @pytest.mark.django_db
