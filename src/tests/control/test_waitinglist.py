@@ -39,7 +39,8 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, Item, Organizer, Quota, Team, User, Voucher, WaitingListEntry,
+    Event, Item, ItemVariation, Organizer, Quota, Team, User, Voucher,
+    WaitingListEntry,
 )
 from pretix.control.views.dashboards import waitinglist_widgets
 
@@ -59,6 +60,9 @@ def env():
                                 admission=True)
     item2 = Item.objects.create(event=event, name="Ticket", default_price=23,
                                 admission=True)
+    item3 = Item.objects.create(event=event, name="Ticket", default_price=23,
+                                admission=True)
+    variation = ItemVariation.objects.create(item=item3)
 
     for i in range(5):
         WaitingListEntry.objects.create(
@@ -80,7 +84,7 @@ def env():
     t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
     t.members.add(user)
     t.limit_events.add(event)
-    return event, user, o, item1
+    return event, user, o, item1, variation
 
 
 @pytest.mark.django_db
@@ -206,6 +210,36 @@ def test_edit(client, env):
     wle.refresh_from_db()
 
     assert wle.email.startswith('1_')
+
+
+@pytest.mark.django_db
+def test_edit_itemvariation(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.first()
+        assert not wle.email.startswith("1_")
+    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id))
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id),
+        data={
+            "email": f"1_{wle.email}", "itemvar": f"{env[4].item.pk}-{env[4].pk}"
+        },
+        follow=True
+    )
+    assert response.wsgi_request.path == '/control/event/dummy/dummy/waitinglist/'
+
+    response = client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id))
+    assert response.context['form'].initial['itemvar'] == "3-1"
+
+
+@pytest.mark.django_db
+def test_invalid_edit(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.first()
+        assert not wle.email.startswith("1_")
+    response = client.post('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id), data={})
+    assert response.context['form'].errors is not None
 
 
 @pytest.mark.django_db

@@ -125,6 +125,9 @@ class WaitingListEntryEditForm(I18nModelForm):
     def clean(self):
         cleaned_data = super().clean()
         itemvar = cleaned_data.get('itemvar')
+        if itemvar is None:
+            self.add_error('itemvar', _('Item and Variation are required'))
+            return cleaned_data
 
         cleaned_data['item'] = Item.objects.get(pk=itemvar.split('-')[0])
         if '-' in itemvar:
