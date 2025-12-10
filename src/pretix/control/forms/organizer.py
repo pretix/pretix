@@ -1024,6 +1024,13 @@ class OrganizerFooterLinkForm(I18nModelForm):
     class Meta:
         model = OrganizerFooterLink
         fields = ('label', 'url')
+        widgets = {
+            "url": forms.URLInput(
+                attrs={
+                    "placeholder": "https://..."
+                }
+            )
+        }
 
 
 class BaseOrganizerFooterLinkFormSet(I18nFormSetMixin, forms.BaseInlineFormSet):

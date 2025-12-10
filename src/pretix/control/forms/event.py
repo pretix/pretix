@@ -1958,6 +1958,13 @@ class EventFooterLinkForm(I18nModelForm):
     class Meta:
         model = EventFooterLink
         fields = ('label', 'url')
+        widgets = {
+            "url": forms.URLInput(
+                attrs={
+                    "placeholder": "https://..."
+                }
+            )
+        }
 
 
 class BaseEventFooterLinkFormSet(I18nFormSetMixin, forms.BaseInlineFormSet):
