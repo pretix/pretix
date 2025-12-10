@@ -24,7 +24,7 @@
         running
     {% elif event.event.presale_has_ended %}
         over
-    {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
+    {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
         soon
     {% else %}
         soon
@@ -77,9 +77,9 @@
                                     <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
                                 {% elif event.event.presale_has_ended %}
                                     {% trans "Sale over" %}
-                                {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
+                                {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
                                     <span class="fa fa-ticket" aria-hidden="true"></span>
-                                    {% blocktrans with start_date=event.event.presale_start|date_fast:"SHORT_DATE_FORMAT" %}
+                                    {% blocktrans with start_date=event.event.effective_presale_start|date_fast:"SHORT_DATE_FORMAT" %}
                                         from {{ start_date }}
                                     {% endblocktrans %}
                                 {% else %}
