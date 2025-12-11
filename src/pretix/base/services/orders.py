@@ -81,7 +81,7 @@ from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 from pretix.base.payment import GiftCardPayment, PaymentException
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.secrets import assign_ticket_secret
-from pretix.base.services import tickets
+from pretix.base.services import cart, tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
     invoice_transmission_separately, order_invoice_transmission_separately,
@@ -130,6 +130,9 @@ class OrderError(Exception):
 
 
 error_messages = {
+    'positions_removed': gettext_lazy(
+        'Some products have can no longer be purchased and have been removed from your cart for the following reason: %s'
+    ),
     'unavailable': gettext_lazy(
         'Some of the products you selected were no longer available. '
         'Please see below for details.'
@@ -182,14 +185,6 @@ error_messages = {
         'The voucher code used for one of the items in your cart is not valid for this item. We removed this item from your cart.'
     ),
     'voucher_required': gettext_lazy('You need a valid voucher code to order one of the products.'),
-    'some_subevent_not_started': gettext_lazy(
-        'The booking period for one of the events in your cart has not yet started. The '
-        'affected positions have been removed from your cart.'
-    ),
-    'some_subevent_ended': gettext_lazy(
-        'The booking period for one of the events in your cart has ended. The affected '
-        'positions have been removed from your cart.'
-    ),
     'seat_invalid': gettext_lazy('One of the seats in your order was invalid, we removed the position from your cart.'),
     'seat_unavailable': gettext_lazy('One of the seats in your order has been taken in the meantime, we removed the position from your cart.'),
     'country_blocked': gettext_lazy('One of the selected products is not available in the selected country.'),
@@ -744,13 +739,37 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
             deleted_positions.add(cp.pk)
             cp.delete()
 
-    sorted_positions = sorted(positions, key=lambda c: (-int(c.is_bundled), c.pk))
+    sorted_positions = list(sorted(positions, key=lambda c: (-int(c.is_bundled), c.pk)))
 
     for cp in sorted_positions:
         cp._cached_quotas = list(cp.quotas)
 
+    for cp in sorted_positions:
+        try:
+            cart._check_position_constraints(
+                event=event,
+                item=cp.item,
+                variation=cp.variation,
+                voucher=cp.voucher,
+                subevent=cp.subevent,
+                seat=cp.seat,
+                sales_channel=sales_channel,
+                already_in_cart=True,
+                cart_is_expired=cp.expires < now_dt,
+                real_now_dt=now_dt,
+                item_requires_seat=cp.requires_seat,
+                is_addon=bool(cp.addon_to_id),
+                is_bundled=bool(cp.addon_to_id) and cp.is_bundled,
+            )
+            # Quota, seat, and voucher availability is checked for below
+            # Prices are checked for below
+            # Memberships are checked in _create_order
+        except cart.CartPositionError as e:
+            err = error_messages['positions_removed'] % str(e)
+            delete(cp)
+
     # Create locks
-    if any(cp.expires < now() + timedelta(seconds=LOCK_TRUST_WINDOW) for cp in sorted_positions):
+    if any(cp.expires < now() + timedelta(seconds=LOCK_TRUST_WINDOW) and cp.pk not in deleted_positions for cp in sorted_positions):
         # No need to perform any locking if the cart positions still guarantee everything long enough.
         full_lock_required = any(
             getattr(o, 'seat', False) for o in sorted_positions
@@ -769,20 +788,17 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
 
     # Check maximum order size
     limit = min(int(event.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)
-    if sum(1 for cp in sorted_positions if not cp.addon_to) > limit:
+    if sum(1 for cp in sorted_positions if not cp.addon_to and cp.pk not in deleted_positions) > limit:
         err = err or (error_messages['max_items'] % limit)
 
     # Check availability
     for i, cp in enumerate(sorted_positions):
-        if cp.pk in deleted_positions:
+        if cp.pk in deleted_positions or not cp.pk:
             continue
 
-        if not cp.item.is_available() or (cp.variation and not cp.variation.is_available()):
-            err = err or error_messages['unavailable']
-            delete(cp)
-            continue
         quotas = cp._cached_quotas
 
+        # Product per order limits
         products_seen[cp.item] += 1
         if cp.item.max_per_order and products_seen[cp.item] > cp.item.max_per_order:
             err = error_messages['max_items_per_product'] % {
@@ -792,6 +808,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
             delete(cp)
             break
 
+        # Voucher availability
         if cp.voucher:
             v_usages[cp.voucher] += 1
             if cp.voucher not in v_avail:
@@ -806,48 +823,14 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
                 delete(cp)
                 continue
 
-        if cp.subevent and cp.subevent.presale_start and time_machine_now_dt < cp.subevent.presale_start:
-            err = err or error_messages['some_subevent_not_started']
-            delete(cp)
-            break
-
-        if cp.subevent:
-            tlv = event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
-            if tlv:
-                term_last = make_aware(datetime.combine(
-                    tlv.datetime(cp.subevent).date(),
-                    time(hour=23, minute=59, second=59)
-                ), event.timezone)
-                if term_last < time_machine_now_dt:
-                    err = err or error_messages['some_subevent_ended']
-                    delete(cp)
-                    break
-
-        if cp.subevent and cp.subevent.presale_has_ended:
-            err = err or error_messages['some_subevent_ended']
-            delete(cp)
-            break
-
-        if (cp.requires_seat and not cp.seat) or (cp.seat and not cp.requires_seat) or (cp.seat and cp.seat.product != cp.item) or cp.seat in seats_seen:
+        # Check duplicate seats in order
+        if cp.seat in seats_seen:
             err = err or error_messages['seat_invalid']
             delete(cp)
             break
+
         if cp.seat:
             seats_seen.add(cp.seat)
-
-        if cp.item.require_voucher and cp.voucher is None and not cp.is_bundled:
-            delete(cp)
-            err = err or error_messages['voucher_required']
-            break
-
-        if (cp.item.hide_without_voucher or (cp.variation and cp.variation.hide_without_voucher)) and (
-                cp.voucher is None or not cp.voucher.show_hidden_items or not cp.voucher.applies_to(cp.item, cp.variation)
-        ) and not cp.is_bundled:
-            delete(cp)
-            err = error_messages['voucher_required']
-            break
-
-        if cp.seat:
             # Unlike quotas (which we blindly trust as long as the position is not expired), we check seats every
             # time, since we absolutely can not overbook a seat.
             if not cp.seat.is_available(ignore_cart=cp, ignore_voucher_id=cp.voucher_id, sales_channel=sales_channel.identifier):
@@ -855,34 +838,13 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
                 delete(cp)
                 continue
 
-        if cp.expires >= now_dt and not cp.voucher:
-            # Other checks are not necessary
-            continue
-
+        # Check useful quota configuration
         if len(quotas) == 0:
             err = err or error_messages['unavailable']
             delete(cp)
             continue
 
-        if cp.subevent and cp.item.pk in cp.subevent.item_overrides and not cp.subevent.item_overrides[cp.item.pk].is_available(time_machine_now_dt):
-            err = err or error_messages['unavailable']
-            delete(cp)
-            continue
-
-        if cp.subevent and cp.variation and cp.variation.pk in cp.subevent.var_overrides and \
-                not cp.subevent.var_overrides[cp.variation.pk].is_available(time_machine_now_dt):
-            err = err or error_messages['unavailable']
-            delete(cp)
-            continue
-
-        if cp.voucher:
-            if cp.voucher.valid_until and cp.voucher.valid_until < time_machine_now_dt:
-                err = err or error_messages['voucher_expired']
-                delete(cp)
-                continue
-
         quota_ok = True
-
         ignore_all_quotas = cp.expires >= now_dt or (
             cp.voucher and (
                 cp.voucher.allow_ignore_quota or (cp.voucher.block_quota and cp.voucher.quota is None)
