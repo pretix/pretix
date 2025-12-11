@@ -607,7 +607,7 @@ class CartManager:
             self._check_item_constraints(op)
 
             if cp.voucher:
-                self._voucher_use_diff[cp.voucher] += 2
+                self._voucher_use_diff[cp.voucher] += 1
 
             self._operations.append(op)
         return err
