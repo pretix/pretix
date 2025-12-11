@@ -20,24 +20,38 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django import template
-from django.utils import dateformat
-from django.utils.formats import get_format
-from django.utils.translation import get_language
+
+from pretix.helpers.templatetags.date_fast import date_fast
 
 register = template.Library()
 
 
 @register.filter(expects_localtime=True, is_safe=False)
-def html_datetime(value, arg=None):
-    if value in (None, ''):
-        return ''
+def html_datetime(value, args=None):
+    """
+    Building a <time datetime='{html-datetime}'>{human-readable datetime}</time> html string,
+    where the html-datetime as well as the human-readable datetime can be set
+    to a value from django's formats.py/FORMAT_SETTINGS via comma-separated arguments.
 
-    lang = get_language()
-    datetime_format = get_format(arg, lang)
+    If only one argument is given, it will be used as the human-readable datetime attribute,
+    and the html datetime attribute will be set to the datetime in iso-format.
+
+    Usage example: input_date|html_datetime:"SHORT_DATE_FORMAT,SHORT_DATE_FORMAT"|safe
+    """
+
+    if value in (None, '') or args is None:
+        return ''
+    arg_list = [arg.strip() for arg in args.split(',')]
 
     try:
-        date_iso = value.isoformat()
-        date_human = dateformat.format(value, datetime_format)
-        return f"<time datetime='{date_iso}'>{date_human}</time>"
+        if len(arg_list) == 1:
+            date_html = value.isoformat()
+            date_human = date_fast(value, arg_list[0])
+        elif len(arg_list) == 2:
+            date_html = date_fast(value, arg_list[0])
+            date_human = date_fast(value, arg_list[1])
+        else:
+            raise AttributeError
+        return f"<time datetime='{date_html}'>{date_human}</time>"
     except AttributeError:
         return ''
