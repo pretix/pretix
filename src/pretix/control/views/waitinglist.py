@@ -145,7 +145,7 @@ class WaitingListQuerySetMixin:
 
             if self.request.event.settings.waiting_list_names_asked:
                 search_q = search_q | Q(name_cached__icontains=self.request_data.get("search", ""))
-            if self.request.event.settings.waiting_list_names_asked:
+            if self.request.event.settings.waiting_list_phones_asked:
                 search_q = search_q | Q(phone__icontains=self.request_data.get("search", ""))
 
             qs = qs.filter(search_q)
