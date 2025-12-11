@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from datetime import datetime
+
 from django import template
 
 from pretix.helpers.templatetags.date_fast import date_fast
@@ -26,8 +28,8 @@ from pretix.helpers.templatetags.date_fast import date_fast
 register = template.Library()
 
 
-@register.filter(expects_localtime=True, is_safe=False)
-def html_datetime(value, args=None):
+@register.simple_tag
+def html_datetime(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwargs):
     """
     Building a <time datetime='{html-datetime}'>{human-readable datetime}</time> html string,
     where the html-datetime as well as the human-readable datetime can be set
@@ -36,22 +38,21 @@ def html_datetime(value, args=None):
     If only one argument is given, it will be used as the human-readable datetime attribute,
     and the html datetime attribute will be set to the datetime in iso-format.
 
-    Usage example: input_date|html_datetime:"SHORT_DATE_FORMAT,SHORT_DATE_FORMAT"|safe
+    Usage example:
+    {% html_datetime event_start|localtime "SHORT_DATE_FORMAT" attr_fmt="SHORT_DATE_FORMAT" as start_date %}
+    {{start_date}}
     """
-
-    if value in (None, '') or args is None:
+    if value in (None, ''):
         return ''
-    arg_list = [arg.strip() for arg in args.split(',')]
+    attr_fmt = kwargs["attr_fmt"] if kwargs else None
 
     try:
-        if len(arg_list) == 1:
+        if not attr_fmt:
             date_html = value.isoformat()
-            date_human = date_fast(value, arg_list[0])
-        elif len(arg_list) == 2:
-            date_html = date_fast(value, arg_list[0])
-            date_human = date_fast(value, arg_list[1])
         else:
-            raise AttributeError
+            date_html = date_fast(value, attr_fmt)
+
+        date_human = date_fast(value, dt_format)
         return f"<time datetime='{date_html}'>{date_human}</time>"
     except AttributeError:
         return ''
