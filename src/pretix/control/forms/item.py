@@ -369,8 +369,8 @@ class QuestionAnswerFilterForm(forms.Form):
         if date_range is not None:
             d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), date_range, timezone.utc)
             opqs = opqs.filter(
-                subevent__date_from__gte=d_start,
-                subevent__date_from__lte=d_end
+                subevent__date_from__gt=d_start,
+                subevent__date_from__lt=d_end
             )
 
         s = fdata.get("status", "np")
