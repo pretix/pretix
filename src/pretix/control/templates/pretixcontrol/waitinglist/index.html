@@ -124,6 +124,7 @@
                 </option>
             {% endfor %}
         </select>
+        <input name="search" type="text" placeholder={% trans "Search" %} class="form-control" value="{{ request.GET.search }}">
         {% if request.event.has_subevents %}
             <select name="subevent" class="form-control">
                 <option value="">{% trans "All dates" context "subevent" %}</option>

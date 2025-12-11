@@ -140,6 +140,16 @@ class WaitingListQuerySetMixin:
         elif force_filtered and '__ALL' not in self.request_data:
             qs = qs.none()
 
+        if self.request_data.get("search", "") != "":
+            search_q = Q(email__icontains=self.request_data.get("search", ""))
+
+            if self.request.event.settings.waiting_list_names_asked:
+                search_q = search_q | Q(name_cached__icontains=self.request_data.get("search", ""))
+            if self.request.event.settings.waiting_list_names_asked:
+                search_q = search_q | Q(phone__icontains=self.request_data.get("search", ""))
+
+            qs = qs.filter(search_q)
+
         return qs
 
 
@@ -240,7 +250,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = Item.objects.filter(event=self.request.event)
-        ctx['filtered'] = ("status" in self.request.GET or "item" in self.request.GET)
+        ctx['filtered'] = ("status" in self.request.GET or "item" in self.request.GET or "search" in self.request.GET)
 
         itemvar_cache = {}
         quota_cache = {}
