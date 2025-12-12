@@ -207,6 +207,7 @@ class EventWizardBasicsForm(I18nModelForm):
             'Sample Conference Center\nHeidelberg, Germany'
         )
         self.fields['slug'].widget.prefix = build_absolute_uri(self.organizer, 'presale:organizer.index')
+        self.fields['tax_rate']._required = True  # Do not render as optional because it is conditionally required
         if self.has_subevents:
             del self.fields['presale_start']
             del self.fields['presale_end']
