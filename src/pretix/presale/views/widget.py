@@ -471,10 +471,11 @@ class WidgetAPIProductList(EventListMixin, View):
             availability['color'] = 'red'
             availability['text'] = gettext('Sale over')
             availability['reason'] = 'over'
-        elif event.settings.presale_start_show_date and ev.presale_start:
+        elif event.settings.presale_start_show_date and ev.effective_presale_start:
             availability['color'] = 'orange'
             availability['text'] = gettext('from %(start_date)s') % {
-                'start_date': date_format(ev.presale_start.astimezone(tz or event.timezone), "SHORT_DATE_FORMAT")
+                'start_date': date_format(ev.effective_presale_start.astimezone(tz or event.timezone),
+                                          "SHORT_DATE_FORMAT")
             }
             availability['reason'] = 'soon'
         else:
