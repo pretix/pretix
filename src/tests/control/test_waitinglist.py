@@ -39,7 +39,8 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, Item, Organizer, Quota, Team, User, Voucher, WaitingListEntry,
+    Event, Item, ItemVariation, Organizer, Quota, Team, User, Voucher,
+    WaitingListEntry,
 )
 from pretix.control.views.dashboards import waitinglist_widgets
 
@@ -52,11 +53,16 @@ def env():
         date_from=now(), plugins='pretix.plugins.banktransfer,tests.testdummy'
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
+    event.settings.set('waiting_list_names_asked', False)
+    event.settings.set('waiting_list_names_required', False)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23,
                                 admission=True)
     item2 = Item.objects.create(event=event, name="Ticket", default_price=23,
                                 admission=True)
+    item3 = Item.objects.create(event=event, name="Ticket", default_price=23,
+                                admission=True)
+    variation = ItemVariation.objects.create(item=item3)
 
     for i in range(5):
         WaitingListEntry.objects.create(
@@ -78,7 +84,7 @@ def env():
     t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
     t.members.add(user)
     t.limit_events.add(event)
-    return event, user, o, item1
+    return event, user, o, item1, variation
 
 
 @pytest.mark.django_db
@@ -192,10 +198,60 @@ def test_delete_bulk(client, env):
 
 
 @pytest.mark.django_db
+def test_edit(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.first()
+        assert not wle.email.startswith("1_")
+    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id))
+    client.post('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id), data={
+        "email": f"1_{wle.email}", "itemvar": wle.item.pk
+    })
+    wle.refresh_from_db()
+
+    assert wle.email.startswith('1_')
+
+
+@pytest.mark.django_db
+def test_edit_itemvariation(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.first()
+        assert not wle.email.startswith("1_")
+    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id))
+
+    itemvar = f"{env[4].item.pk}-{env[4].pk}"
+
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id),
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": itemvar
+        },
+        follow=True
+    )
+    assert response.wsgi_request.path == '/control/event/dummy/dummy/waitinglist/'
+
+    response = client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id))
+    assert response.context['form'].initial['itemvar'] == itemvar
+
+
+@pytest.mark.django_db
+def test_invalid_edit(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.first()
+        assert not wle.email.startswith("1_")
+    response = client.post('/control/event/dummy/dummy/waitinglist/%s/edit' % (wle.id), data={})
+    assert response.context['form'].errors is not None
+
+
+@pytest.mark.django_db
 def test_dashboard(client, env):
     with scopes_disabled():
         quota = Quota.objects.create(name="Test", size=2, event=env[0])
         quota.items.add(env[3])
         w = waitinglist_widgets(env[0])
+
     assert '1' in w[0]['content']
     assert '5' in w[1]['content']

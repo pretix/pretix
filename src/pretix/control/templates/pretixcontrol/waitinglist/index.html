@@ -124,6 +124,7 @@
                 </option>
             {% endfor %}
         </select>
+        <input name="search" type="text" placeholder={% trans "Search" %} class="form-control" value="{{ request.GET.search }}">
         {% if request.event.has_subevents %}
             <select name="subevent" class="form-control">
                 <option value="">{% trans "All dates" context "subevent" %}</option>
@@ -274,6 +275,7 @@
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                     </a>
                                 {% endif %}
+                                <a href="{% url "control:event.orders.waitinglist.edit" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}" class="btn btn-default btn-sm"><i class="fa fa-pencil"></i></a>
                                 <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             {% else %}
                                 <button class="btn btn-default btn-sm disabled">
