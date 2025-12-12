@@ -27,9 +27,21 @@
         <div class="stripe-errors sr-only panel-body">
 
         </div>
-        <div class="panel-body embed-responsive embed-responsive-sca" id="scacontainer">
-
-        </div>
+        {% if payment_intent_promptpay_image_url %}
+            <div class="panel-body">
+                <p>{% blocktrans trimmed %}
+                    Please scan the QR code below to complete your PromptPay payment.
+                    Once you have completed your payment, you can refresh this page.
+                {% endblocktrans %}</p>
+                <div class="text-center">
+                    <img src="{{ payment_intent_promptpay_image_url }}" alt="{% trans 'PromptPay QR code' %}"
+                         class="stripe-qr-code" />
+                </div>
+            </div>
+        {% else %}
+            <div class="panel-body embed-responsive embed-responsive-sca" id="scacontainer">
+            </div>
+        {% endif %}
     </div>
     <div class="row checkout-button-row">
         <div class="col-md-4">
