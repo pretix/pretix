@@ -326,8 +326,17 @@ class QuestionAnswerFilterForm(forms.Form):
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.initial['status'] = Order.STATUS_PENDING + Order.STATUS_PAID
-        self.fields['item'].choices = [('', _('All products'))] + [(item.id, item.name) for item in
-                                                                   Item.objects.filter(event=self.event)]
+
+        choices = [('', _('All products'))]
+        for i in self.event.items.prefetch_related('variations').all():
+            variations = list(i.variations.all())
+            if variations:
+                choices.append((str(i.pk), _('{product} – Any variation').format(product=str(i))))
+                for v in variations:
+                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (str(i), v.value)))
+            else:
+                choices.append((str(i.pk), str(i)))
+        self.fields['item'].choices = choices
 
         if self.event.has_subevents:
             self.fields["subevent"].queryset = self.event.subevents.all()
