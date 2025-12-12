@@ -373,19 +373,19 @@ class QuestionAnswerFilterForm(forms.Form):
                 subevent__date_from__lt=d_end
             )
 
-        s = fdata.get("status", "np")
+        s = fdata.get("status", Order.STATUS_PENDING+Order.STATUS_PAID)
         if s != "":
-            if s == 'o':
+            if s == Order.STATUS_PENDING:
                 opqs = opqs.filter(order__status=Order.STATUS_PENDING,
                                    order__expires__lt=now().replace(hour=0, minute=0, second=0))
-            elif s == 'np':
+            elif s == Order.STATUS_PENDING+Order.STATUS_PAID:
                 opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
-            elif s == 'pv':
+            elif s == Order.STATUS_PAID+'v':
                 opqs = opqs.filter(
                     Q(order__status=Order.STATUS_PAID) |
                     Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
                 )
-            elif s == 'ne':
+            elif s == Order.STATUS_PENDING+Order.STATUS_EXPIRED:
                 opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:
                 opqs = opqs.filter(order__status=s)
