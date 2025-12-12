@@ -354,7 +354,7 @@ class QuestionAnswerFilterForm(forms.Form):
         if subevent is not None and date_range is not None:
             start_d, end_d = resolve_timeframe_to_dates_inclusive(now(), date_range, timezone.utc)
             if not (start_d >= subevent.date_from.date() >= end_d):
-                self.add_error('subevent', _("Subevent doesn't start in selected date range"))
+                self.add_error('subevent', pgettext_lazy('subevent', 'Date doesn't start in selected date range'))
         return cleaned_data
 
     def filter_qs(self, opqs):
