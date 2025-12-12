@@ -42,8 +42,10 @@ from django.contrib.auth.tokens import (
 )
 from django.core import mail as djmail
 from django.test import RequestFactory, TestCase, override_settings
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django_otp.oath import TOTP
+from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from webauthn.authentication.verify_authentication_response import (
     VerifiedAuthentication,
@@ -491,6 +493,20 @@ class Login2FAFormTest(TestCase):
         self.assertIn('/control/', response['Location'])
 
         m.undo()
+
+    def test_recovery_code_valid(self):
+        djmail.outbox = []
+        d, __ = StaticDevice.objects.get_or_create(user=self.user, name='emergency')
+        token = d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
+
+        response = self.client.get('/control/login/2fa')
+        assert 'token' in response.content.decode()
+        response = self.client.post('/control/login/2fa', {
+            'token': token.token,
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/', response['Location'])
+        assert "recovery code" in djmail.outbox[0].body
 
 
 class FakeRedis(object):

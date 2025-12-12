@@ -57,6 +57,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django_otp import match_token
+from django_otp.plugins.otp_static.models import StaticDevice
 from webauthn.helpers import generate_challenge
 
 from pretix.base.auth import get_auth_backends
@@ -538,6 +539,10 @@ class Login2FAView(TemplateView):
                     break
         else:
             valid = match_token(self.user, token)
+            if isinstance(valid, StaticDevice):
+                self.user.send_security_notice([
+                    _("A recovery code for two-factor authentification was used to log in.")
+                ])
 
         if valid:
             logger.info(f"Backend login successful for user {self.user.pk} with 2FA.")
