@@ -435,7 +435,7 @@ def cart_session(request):
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = apply_voucher
-    known_errortypes = ['CartError']
+    known_errortypes = ['CartError', 'CartPositionError']
 
     def get_success_message(self, value):
         return _('We applied the voucher to as many products in your cart as we could.')
@@ -513,7 +513,7 @@ class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = remove_cart_position
-    known_errortypes = ['CartError']
+    known_errortypes = ['CartError', 'CartPositionError']
 
     def get_success_message(self, value):
         if CartPosition.objects.filter(cart_id=get_or_create_cart_id(self.request)).exists():
@@ -542,7 +542,7 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = clear_cart
-    known_errortypes = ['CartError']
+    known_errortypes = ['CartError', 'CartPositionError']
 
     def get_success_message(self, value):
         create_empty_cart_id(self.request)
@@ -556,7 +556,7 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 class CartExtendReservation(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = extend_cart_reservation
-    known_errortypes = ['CartError']
+    known_errortypes = ['CartError', 'CartPositionError']
 
     def _ajax_response_data(self, value):
         if isinstance(value, dict):
@@ -566,7 +566,11 @@ class CartExtendReservation(EventViewMixin, CartActionMixin, AsyncAction, View):
 
     def get_success_message(self, value):
         if value['success'] > 0:
-            return _('Your cart timeout was extended.')
+            if value.get('price_changed'):
+                return _('Your cart timeout was extended. Please note that some of the prices in your cart '
+                         'changed.')
+            else:
+                return _('Your cart timeout was extended.')
 
     def post(self, request, *args, **kwargs):
         return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language(),
@@ -578,7 +582,7 @@ class CartExtendReservation(EventViewMixin, CartActionMixin, AsyncAction, View):
 @method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = add_items_to_cart
-    known_errortypes = ['CartError']
+    known_errortypes = ['CartError', 'CartPositionError']
 
     def get_success_message(self, value):
         return _('The products have been successfully added to your cart.')

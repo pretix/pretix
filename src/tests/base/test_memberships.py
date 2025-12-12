@@ -745,6 +745,8 @@ def test_use_membership(event, customer, membership, requiring_ticket):
         item=requiring_ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123",
         used_membership=membership
     )
+    q = event.quotas.create(size=None, name="foo")
+    q.items.add(requiring_ticket)
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=now(),
                           sales_channel=event.organizer.sales_channels.get(identifier="web"),
@@ -767,6 +769,8 @@ def test_use_membership_invalid(event, customer, membership, requiring_ticket):
     membership.date_start -= timedelta(days=100)
     membership.date_end -= timedelta(days=100)
     membership.save()
+    q = event.quotas.create(size=None, name="foo")
+    q.items.add(requiring_ticket)
     cp1 = CartPosition.objects.create(
         item=requiring_ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123",
         used_membership=membership

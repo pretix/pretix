@@ -2669,7 +2669,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.has_subevents = True
         self.event.save()
         with scopes_disabled():
-            se = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             q = se.quotas.create(name="foo", size=None, event=self.event)
             q.items.add(self.ticket)
             cr1 = CartPosition.objects.create(
@@ -2839,8 +2839,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         with scopes_disabled():
             self.event.has_subevents = True
             self.event.save()
-            se = self.event.subevents.create(name='Foo', date_from=now())
-            se2 = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             self.quota_tickets.size = 0
             self.quota_tickets.subevent = se2
             self.quota_tickets.save()
@@ -2880,7 +2880,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.has_subevents = True
         self.event.save()
         with scopes_disabled():
-            se = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             q = se.quotas.create(name="foo", size=None, event=self.event)
             q.items.add(self.ticket)
             SubEventItem.objects.create(subevent=se, item=self.ticket, price=24)
@@ -2901,7 +2901,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.has_subevents = True
         self.event.save()
         with scopes_disabled():
-            se = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             q = se.quotas.create(name="foo", size=None, event=self.event)
             q.items.add(self.ticket)
             SubEventItem.objects.create(subevent=se, item=self.ticket, price=24, disabled=True)
@@ -2919,7 +2919,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.has_subevents = True
         self.event.save()
         with scopes_disabled():
-            se = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             q = se.quotas.create(name="foo", size=None, event=self.event)
             q.items.add(self.workshop2)
             q.variations.add(self.workshop2b)
@@ -2938,7 +2938,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.has_subevents = True
         self.event.save()
         with scopes_disabled():
-            se = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             q = se.quotas.create(name="foo", size=None, event=self.event)
             q.items.add(self.ticket)
             SubEventItem.objects.create(subevent=se, item=self.ticket, price=24, available_until=now() - timedelta(days=1))
@@ -2956,7 +2956,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.has_subevents = True
         self.event.save()
         with scopes_disabled():
-            se = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             q = se.quotas.create(name="foo", size=None, event=self.event)
             q.items.add(self.workshop2)
             q.variations.add(self.workshop2b)
@@ -3735,8 +3735,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.has_subevents = True
         self.event.save()
         with scopes_disabled():
-            se = self.event.subevents.create(name='Foo', date_from=now())
-            se2 = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            se2 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             self.quota_tickets.size = 10
             self.quota_tickets.subevent = se2
             self.quota_tickets.save()
@@ -4165,7 +4165,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         with scopes_disabled():
             self.event.has_subevents = True
             self.event.save()
-            se = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
             self.workshopquota.size = 1
             self.workshopquota.subevent = se
             self.workshopquota.save()
@@ -4214,7 +4214,10 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             self.event.has_subevents = True
             self.event.settings.display_net_prices = True
             self.event.save()
-            se = self.event.subevents.create(name='Foo', date_from=now(), presale_start=now() + datetime.timedelta(days=1))
+            se = self.event.subevents.create(name='Foo', date_from=now(), presale_start=now() + datetime.timedelta(days=1),
+                                             active=True)
+            q = se.quotas.create(name="foo", size=None, event=self.event)
+            q.items.add(self.ticket)
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
@@ -4224,7 +4227,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
-        assert 'booking period for one of the events in your cart has not yet started.' in response.content.decode()
+        assert 'booking period for this event has not yet started.' in response.content.decode()
         with scopes_disabled():
             assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
 
@@ -4233,7 +4236,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             self.event.has_subevents = True
             self.event.settings.display_net_prices = True
             self.event.save()
-            se = self.event.subevents.create(name='Foo', date_from=now(), presale_end=now() - datetime.timedelta(days=1))
+            se = self.event.subevents.create(name='Foo', date_from=now(), presale_end=now() - datetime.timedelta(days=1), active=True)
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
@@ -4243,7 +4246,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
-        assert 'booking period for one of the events in your cart has ended.' in response.content.decode()
+        assert 'The booking period for this event has ended.' in response.content.decode()
         with scopes_disabled():
             assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
 
@@ -4253,7 +4256,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             self.event.settings.display_net_prices = True
             self.event.save()
             self.event.settings.payment_term_last = 'RELDATE/1/23:59:59/date_from/'
-            se = self.event.subevents.create(name='Foo', date_from=now())
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            q = se.quotas.create(name="foo", size=None, event=self.event)
+            q.items.add(self.ticket)
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
@@ -4263,7 +4268,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
-        assert 'booking period for one of the events in your cart has ended.' in response.content.decode()
+        assert 'All payments for this event need to be confirmed already, so no new orders can be created.' in response.content.decode()
         with scopes_disabled():
             assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
 
@@ -4272,7 +4277,10 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         self.event.date_to = now() - datetime.timedelta(days=1)
         self.event.save()
         with scopes_disabled():
-            se = self.event.subevents.create(name='Foo', date_from=now(), presale_end=now() + datetime.timedelta(days=1))
+            se = self.event.subevents.create(name='Foo', date_from=now(), presale_end=now() + datetime.timedelta(days=1),
+                                             active=True)
+            q = se.quotas.create(name="foo", size=None, event=self.event)
+            q.items.add(self.ticket)
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
@@ -4282,6 +4290,25 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
+
+    def test_confirm_subevent_disabled(self):
+        with scopes_disabled():
+            self.event.has_subevents = True
+            self.event.settings.display_net_prices = True
+            self.event.save()
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=False)
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10), subevent=se
+            )
+
+        self._set_payment()
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
+        assert 'selected event date is not active.' in response.content.decode()
+        with scopes_disabled():
+            assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
 
     def test_before_presale_timemachine(self):
         self._login_with_permission(self.orga)
@@ -4497,6 +4524,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             self.assertEqual(Order.objects.first().locale, 'de')
 
     def test_variation_require_approval(self):
+        self.workshop2.category = None
+        self.workshop2.save()
         self.workshop2a.require_approval = True
         self.workshop2a.save()
         with scopes_disabled():
@@ -4518,6 +4547,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
 
     def test_item_with_variations_require_approval(self):
         self.workshop2.require_approval = True
+        self.workshop2.category = None
         self.workshop2.save()
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
