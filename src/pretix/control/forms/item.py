@@ -282,14 +282,14 @@ class QuestionOptionForm(I18nModelForm):
 class QuestionAnswerFilterForm(forms.Form):
     STATUS_VARIANTS = [
         ("", _("All orders")),
-        ("p", _("Paid")),
-        ("pv", _("Paid or confirmed")),
-        ("n", _("Pending")),
-        ("np", _("Pending or paid")),
+        (Order.STATUS_PAID, _("Paid")),
+        (Order.STATUS_PAID + 'v', _("Paid or confirmed")),
+        (Order.STATUS_PENDING, _("Pending")),
+        (Order.STATUS_PENDING + Order.STATUS_PAID, _("Pending or paid")),
         ("o", _("Pending (overdue)")),
-        ("e", _("Expired")),
-        ("ne", _("Pending or expired")),
-        ("c", _("Canceled"))
+        (Order.STATUS_EXPIRED, _("Expired")),
+        (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _("Pending or expired")),
+        (Order.STATUS_CANCELED, _("Canceled"))
     ]
 
     status = forms.ChoiceField(
@@ -325,7 +325,7 @@ class QuestionAnswerFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
-        self.initial['status'] = "np"
+        self.initial['status'] = Order.STATUS_PENDING + Order.STATUS_PAID
         self.fields['item'].choices = [('', _('All products'))] + [(item.id, item.name) for item in
                                                                    Item.objects.filter(event=self.event)]
 
