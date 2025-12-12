@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-09 22:00+0000\n"
+"PO-Revision-Date: 2025-12-12 23:00+0000\n"
 "Last-Translator: Lachlan Struthers <lachlan.struthers@om.org>\n"
 "Language-Team: Albanian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sq/>\n"
@@ -25,19 +25,19 @@ msgstr "Anglisht"
 
 #: pretix/_base_settings.py:88
 msgid "German"
-msgstr ""
+msgstr "Gjermanisht"
 
 #: pretix/_base_settings.py:89
 msgid "German (informal)"
-msgstr ""
+msgstr "Gjermanisht (joformale)"
 
 #: pretix/_base_settings.py:90
 msgid "Arabic"
-msgstr ""
+msgstr "Arabisht"
 
 #: pretix/_base_settings.py:91
 msgid "Basque"
-msgstr ""
+msgstr "Baskisht"
 
 #: pretix/_base_settings.py:92
 msgid "Catalan"
@@ -2954,7 +2954,7 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:105
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
 msgid "All"
-msgstr ""
+msgstr "Të gjitha"
 
 #: pretix/base/exporters/orderlist.py:1329 pretix/control/forms/filter.py:1450
 msgid "Live"
@@ -13044,7 +13044,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:2052 pretix/control/forms/filter.py:2054
 #: pretix/control/forms/filter.py:2620 pretix/control/forms/filter.py:2622
 msgid "Search query"
-msgstr ""
+msgstr "Kërkim"
 
 #: pretix/control/forms/filter.py:1528 pretix/control/forms/filter.py:1600
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:47
@@ -18274,7 +18274,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:50
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:80
 msgid "No results"
-msgstr ""
+msgstr "S'ka rezultate"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:7
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:11
@@ -20098,7 +20098,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:91
 msgid "Count"
-msgstr ""
+msgstr "Sasia"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:92
 #, python-format
@@ -23098,7 +23098,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:52
 msgid "Text box"
-msgstr ""
+msgstr "Kutia teksti"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:59
 msgid "QR Code"
@@ -29765,7 +29765,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 msgid "Ticket design"
-msgstr ""
+msgstr "Dizajni i biletës"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:27
 msgid "You can modify the design after you saved this page."
@@ -30328,7 +30328,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
-msgstr ""
+msgstr "Shporta juaj u skadua"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
 msgid "Show full cart"
@@ -30936,11 +30936,13 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
+"Sendet në shportën tuaj nuk janë të rezervuar më për ju. Ju mund t'a "
+"përmbushni porosinë tuaj derisa janë ende të disponueshëm."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
 msgid "Renew reservation"
-msgstr ""
+msgstr "Rivendosni rezervimin"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:526
 msgid "Reservation renewed"
