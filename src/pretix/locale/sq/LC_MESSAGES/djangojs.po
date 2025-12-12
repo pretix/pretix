@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-20 10:37+0000\n"
-"PO-Revision-Date: 2025-12-09 22:00+0000\n"
+"PO-Revision-Date: 2025-12-12 23:00+0000\n"
 "Last-Translator: Lachlan Struthers <lachlan.struthers@om.org>\n"
 "Language-Team: Albanian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/sq/>\n"
@@ -597,346 +597,357 @@ msgstr "Kodi QR për check-in"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:549
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
+msgstr "Faili bazë PDF nuk mund të shkarkohej për këto arsye:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:904
 msgid "Group of objects"
-msgstr ""
+msgstr "Grupi i sendeve"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:909
 msgid "Text object (deprecated)"
-msgstr ""
+msgstr "Objekt teksti (i dalë nga përdorimi)"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:911
 msgid "Text box"
-msgstr ""
+msgstr "Kutia teksti"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Barcode area"
-msgstr ""
+msgstr "Zona e barkodit"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:915
 msgid "Image area"
-msgstr ""
+msgstr "Zona për imazhe"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:917
 msgid "Powered by pretix"
-msgstr ""
+msgstr "Mundësuar nga pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:919
 msgid "Object"
-msgstr ""
+msgstr "Objekt"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:923
 msgid "Ticket design"
-msgstr ""
+msgstr "Dizajni i biletës"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1292
 msgid "Saving failed."
-msgstr ""
+msgstr "Ruajtja nuk u krye."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1361
 #: pretix/static/pretixcontrol/js/ui/editor.js:1412
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Pati gabim në ngarkimin e failit tuaj PDF, ju lutemi, provoni përsëri."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1395
 msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
+msgstr "A vërtetë dëshironi të dilni nga redaktori pa ruajtur ndryshimet tuaja?"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
-msgstr ""
+msgstr "Një gabim ka ndodhur."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr ""
+msgstr "Duke prodhuar mesazhe …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:69
 msgid "Unknown error."
-msgstr ""
+msgstr "Gabim i panjohur."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:309
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr ""
+"Ngjyra juaj ka kontrast shumë të mirë dhe do të ofrojë aksesueshmëri të "
+"shkëlqyer."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr ""
+"Ngjyra juaj ka kontrast të mirë dhe përmbush kërkesat minimale të "
+"aksesueshmërisë."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
+"Ngjyra juaj nuk ka kontrast të mjaftueshëm me të bardhën. Kjo mund të "
+"ndikojë në aksesueshmërinë e faqes suaj."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:443
 #: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
-msgstr ""
+msgstr "Kërkim"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
-msgstr ""
+msgstr "Të gjitha"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
-msgstr ""
+msgstr "Asnjë"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
-msgstr ""
+msgstr "Vetëm të zghedhura"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
-msgstr ""
+msgstr "Shkruani numrin e faqes midis 1 dhe %(max)s."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
-msgstr ""
+msgstr "Numër faqe i pavlefshëm."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Përdorni një emër tjetër brenda sistemit"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
-msgstr ""
+msgstr "Shtypni për të mbyllur"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
-msgstr ""
+msgstr "Ju keni ndryshime të paruajtur!"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 msgid "Calculating default price…"
-msgstr ""
+msgstr "Duke e llogaritur çmimin e parazgjedhur…"
 
 #: pretix/static/pretixcontrol/js/ui/plugins.js:69
 msgid "No results"
-msgstr ""
+msgstr "S'ka rezultate"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
-msgstr ""
+msgstr "Të tjera"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
-msgstr ""
+msgstr "Sasia"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(edhe një datë)"
+msgstr[1] "(edhe {num} më shumë data)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:47
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
+"Sendet në shportën tuaj nuk janë të rezervuar më për ju. Ju mund t'a "
+"përmbushni porosinë tuaj derisa janë ende të disponueshëm."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:49
 msgid "Cart expired"
-msgstr ""
+msgstr "Shporta juaj u skadua"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:58
 #: pretix/static/pretixpresale/js/ui/cart.js:84
 msgid "Your cart is about to expire."
-msgstr ""
+msgstr "Shporta juaj do të skadohet së shpejti."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:62
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sendet në shportën tuaj janë të rezervuar për ju për një minutë."
+msgstr[1] "Sendet në shportën tuaj janë të rezervuar për ju për {num} minuta."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
 msgid "Your cart has expired."
-msgstr ""
+msgstr "Shporta juaj është skaduar."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
 msgstr ""
+"Sendet në shportën tuaj nuk janë të rezervuar më për ju. Ju mund t'a "
+"përmbushni porosinë derisa janë ende të disponueshëm."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
-msgstr ""
+msgstr "A dëshironi t'a rivendosni periudhën e rezervimit?"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Renew reservation"
-msgstr ""
+msgstr "Rivendosni rezervimin"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr ""
+msgstr "Organizatori mban %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:202
 msgid "You get %(currency)s %(amount)s back"
-msgstr ""
+msgstr "Ju merrni %(currency)s %(amount)s kusur"
 
 #: pretix/static/pretixpresale/js/ui/main.js:218
 msgid "Please enter the amount the organizer can keep."
-msgstr ""
+msgstr "Ju lutemi të shkruani shumën që mund të mbajë organizatori."
 
 #: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
-msgstr ""
+msgstr "Koha juaj vendase:"
 
 #: pretix/static/pretixpresale/js/walletdetection.js:39
+#, fuzzy
 msgid "Google Pay"
-msgstr ""
+msgstr "Google Pay"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Quantity"
-msgstr ""
+msgstr "Sasi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Ulni sasinë"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr ""
+msgstr "Rrisni sasinë"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Filter events by"
-msgstr ""
+msgstr "Filtroni ngjarjet nga"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Filter"
-msgstr ""
+msgstr "Filtri"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "Çmimi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
-msgstr ""
+msgstr "Çmimi origjinal:%s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
-msgstr ""
+msgstr "Çmimi i ri:%s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "Select"
-msgstr ""
+msgstr "Zgjidhni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr ""
+msgstr "Zgjidhni%s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr ""
+msgstr "Zgjidhni variant %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Shitur të gjitha"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Blini"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Regjistrohuni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Të rezervuar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "FALAS"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "nga %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
-msgstr ""
+msgstr "Imazh i %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "përfsh. %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "shtesë %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "përfsh. taksat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "duke shtuar taksat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "aktualisht të disponueshëm: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Të disponueshëm vetëm me një kupon"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Not yet available"
-msgstr ""
+msgstr "Të padisponushëm ende"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "Nuk është të disponueshëm më"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "Currently not available"
-msgstr ""
+msgstr "Të padisponueshëm për momentin"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "sasia minimale për porosi: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
