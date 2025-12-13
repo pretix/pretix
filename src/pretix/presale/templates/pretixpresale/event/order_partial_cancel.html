@@ -1,0 +1,63 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load eventurl %}
+{% block title %}{% trans "Cancel selected tickets" %}{% endblock %}
+{% block content %}
+    <h2 class="h1">
+        {% trans "Cancel selected tickets" %}
+    </h2>
+    <p class="lead">
+        {% blocktrans trimmed with code=order.code %}
+            Order {{ code }}
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            Select the tickets you want to cancel. The remaining tickets in your order will stay valid.
+        {% endblocktrans %}
+    </p>
+    <p class="help-block">
+        {% blocktrans trimmed %}
+            Canceling a ticket that includes add-ons will also cancel those add-ons.
+        {% endblocktrans %}
+    </p>
+    <form method="post" class="panel panel-default">
+        {% csrf_token %}
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Tickets" %}</h3>
+        </div>
+        <ul class="list-group">
+            {% for p in positions %}
+                <li class="list-group-item">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="positions" value="{{ p.pk }}" {% if p.pk in selected_ids %}checked{% endif %}>
+                        <strong>{{ p.item.name }}</strong>{% if p.variation %} – {{ p.variation }}{% endif %}
+                        {% if p.addon_to_id %}
+                            <span class="label label-default">{% trans "Add-on" %}</span>
+                        {% endif %}
+                    </label>
+                    {% if p.attendee_name %}
+                        <div class="help-block">{{ p.attendee_name }}</div>
+                    {% endif %}
+                    {% if p.has_addons %}
+                        <div class="text-muted small">
+                            <span class="fa fa-info-circle" aria-hidden="true"></span>
+                            {% trans "Add-ons to this ticket will be canceled as well." %}
+                        </div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="panel-body">
+            <button type="submit" class="btn btn-danger">
+                <span class="fa fa-minus-circle" aria-hidden="true"></span>
+                {% trans "Cancel selected tickets" %}
+            </button>
+            <a href="{% eventurl event 'presale:event.order' secret=order.secret order=order.code %}"
+               class="btn btn-link">
+                {% trans "Back to order" %}
+            </a>
+        </div>
+    </form>
+{% endblock %}
