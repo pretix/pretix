@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-12 23:00+0000\n"
+"PO-Revision-Date: 2025-12-14 00:00+0000\n"
 "Last-Translator: Lachlan Struthers <lachlan.struthers@om.org>\n"
 "Language-Team: Albanian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sq/>\n"
@@ -7434,7 +7434,7 @@ msgstr ""
 #: pretix/base/pdf.py:278 pretix/base/pdf.py:307
 #: pretix/base/services/checkin.py:362 pretix/control/forms/filter.py:1271
 msgid "Friday"
-msgstr ""
+msgstr "E Premte"
 
 #: pretix/base/pdf.py:282
 msgid "Event end date and time"
@@ -8132,27 +8132,27 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:358 pretix/control/forms/filter.py:1267
 msgid "Monday"
-msgstr ""
+msgstr "E Hënë"
 
 #: pretix/base/services/checkin.py:359 pretix/control/forms/filter.py:1268
 msgid "Tuesday"
-msgstr ""
+msgstr "E Martë"
 
 #: pretix/base/services/checkin.py:360 pretix/control/forms/filter.py:1269
 msgid "Wednesday"
-msgstr ""
+msgstr "E Mërkurë"
 
 #: pretix/base/services/checkin.py:361 pretix/control/forms/filter.py:1270
 msgid "Thursday"
-msgstr ""
+msgstr "E Enjte"
 
 #: pretix/base/services/checkin.py:363 pretix/control/forms/filter.py:1272
 msgid "Saturday"
-msgstr ""
+msgstr "E Shtunë"
 
 #: pretix/base/services/checkin.py:364 pretix/control/forms/filter.py:1273
 msgid "Sunday"
-msgstr ""
+msgstr "E Diel"
 
 #: pretix/base/services/checkin.py:368
 #, python-brace-format
@@ -19326,51 +19326,51 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:16
 msgid "January"
-msgstr ""
+msgstr "Janar"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:17
 msgid "February"
-msgstr ""
+msgstr "Shkurt"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:18
 msgid "March"
-msgstr ""
+msgstr "Mars"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:19
 msgid "April"
-msgstr ""
+msgstr "Prill"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:20
 msgid "May"
-msgstr ""
+msgstr "Maj"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:21
 msgid "June"
-msgstr ""
+msgstr "Qershor"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:22
 msgid "July"
-msgstr ""
+msgstr "Korrik"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:23
 msgid "August"
-msgstr ""
+msgstr "Gusht"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:24
 msgid "September"
-msgstr ""
+msgstr "Shtator"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:25
 msgid "October"
-msgstr ""
+msgstr "Tetor"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:26
 msgid "November"
-msgstr ""
+msgstr "Nëntor"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:27
 msgid "December"
-msgstr ""
+msgstr "Dhjetor"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:32
 msgid "Generate report"
