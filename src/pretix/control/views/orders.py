@@ -3016,7 +3016,7 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
             return _('All orders have been canceled.')
         else:
             return _('The orders have been canceled. An error occurred with {count} orders, please '
-                     'check all uncanceled orders.').format(count=value)
+                     'check all uncanceled orders.').format(count=value["failed"])
 
     def get_success_url(self, value):
         if settings.HAS_CELERY:
@@ -3097,7 +3097,7 @@ class EventCancelConfirm(EventPermissionRequiredMixin, AsyncAction, FormView):
             return _('All orders have been canceled.')
         else:
             return _('The orders have been canceled. An error occurred with {count} orders, please '
-                     'check all uncanceled orders.').format(count=value)
+                     'check all uncanceled orders.').format(count=value["failed"])
 
     def get_success_url(self, value):
         return reverse('control:event.cancel', kwargs={
