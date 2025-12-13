@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-20 10:37+0000\n"
-"PO-Revision-Date: 2025-12-12 23:00+0000\n"
+"PO-Revision-Date: 2025-12-14 00:00+0000\n"
 "Last-Translator: Lachlan Struthers <lachlan.struthers@om.org>\n"
 "Language-Team: Albanian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/sq/>\n"
@@ -952,12 +952,12 @@ msgstr "sasia minimale për porosi: %s"
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Mbyllni dyqanin e biletave"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "Dyqani i biletave nuk mund të hapej."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
@@ -965,21 +965,23 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
+"Ka shumë përdorës në dyqanin e biletave tani. Ju lutemi, hapni dyqanin në "
+"një skedë të re për të vazhduar."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr ""
+msgstr "Hapni dyqanin e biletave"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
 msgid "Checkout"
-msgstr ""
+msgstr "Pagesa"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "Shporta juaj nuk mund të krijohej. Ju lutemi, provoni përsëri më vonë"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"
@@ -987,11 +989,14 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
+"Nuk mund të krijonim shportën tuaj sepse ka më tepër përdorës në këtë dyqan "
+"të biletave. Ju lutemi, shtypni \"Vazhdoni\" të provoni përsëri në një skedë "
+"të re."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Lista e pritjes"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgctxt "widget"
@@ -999,96 +1004,98 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
+"Ju keni tashmë një shportë aktive për këtë ngjarje. Nëse zgjidhni më shumë "
+"produkte, do të shtohen në shportën tuaj aktuale."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Vazhdoni pagesën"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Përdorni një kupon"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "Përdorni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Kodi i kuponit"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "Mbyllni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
 msgid "Close checkout"
-msgstr ""
+msgstr "Kthehuni nga pagesa"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
-msgstr ""
+msgstr "Ju nuk mund t'a anuloni këtë veprim. Ju lutemi, prisni për ngarkimin."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "Vazhdoni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgctxt "widget"
 msgid "Show variants"
-msgstr ""
+msgstr "Tregoni variantet"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
 msgctxt "widget"
 msgid "Hide variants"
-msgstr ""
+msgstr "Fshehni variantet"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr ""
+msgstr "Zgjidhni një ngjarje tjetër"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr ""
+msgstr "Zgjidhni një datë tjetër"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "Kthehuni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "Muaji tjetër"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:71
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "Muaji i fundit"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgctxt "widget"
 msgid "Next week"
-msgstr ""
+msgstr "Java tjetër"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:73
 msgctxt "widget"
 msgid "Previous week"
-msgstr ""
+msgstr "Java e fundit"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:74
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Hapni zgjedhjen e sendileve"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:75
 msgctxt "widget"
@@ -1097,112 +1104,115 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
+"Disa ose të gjitha kategoritë e biletave janë të shitura. Nëse dëshironi, "
+"mund të shtoheni në listën e pritjes. Ne do t'ju njoftojmë nëse sendile "
+"bëhen të disponueshme përsëri."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:76
 msgctxt "widget"
 msgid "Load more"
-msgstr ""
+msgstr "Ngarkoni më shumë"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "Mo"
-msgstr ""
+msgstr "Hë"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:79
 msgid "Tu"
-msgstr ""
+msgstr "Ma"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:80
 msgid "We"
-msgstr ""
+msgstr "Më"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
 msgid "Th"
-msgstr ""
+msgstr "En"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
 msgid "Fr"
-msgstr ""
+msgstr "Pr"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
 msgid "Sa"
-msgstr ""
+msgstr "Sh"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:84
 msgid "Su"
-msgstr ""
+msgstr "Di"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
 msgid "Monday"
-msgstr ""
+msgstr "E Hënë"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
 msgid "Tuesday"
-msgstr ""
+msgstr "E Martë"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
 msgid "Wednesday"
-msgstr ""
+msgstr "E Mërkurë"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:88
 msgid "Thursday"
-msgstr ""
+msgstr "E Enjte"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:89
 msgid "Friday"
-msgstr ""
+msgstr "E Premte"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:90
 msgid "Saturday"
-msgstr ""
+msgstr "E Shtunë"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:91
 msgid "Sunday"
-msgstr ""
+msgstr "E Diel"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:94
 msgid "January"
-msgstr ""
+msgstr "Janar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:95
 msgid "February"
-msgstr ""
+msgstr "Shkurt"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:96
 msgid "March"
-msgstr ""
+msgstr "Mars"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:97
 msgid "April"
-msgstr ""
+msgstr "Prill"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:98
 msgid "May"
-msgstr ""
+msgstr "Maj"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:99
 msgid "June"
-msgstr ""
+msgstr "Qershor"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:100
 msgid "July"
-msgstr ""
+msgstr "Korrik"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:101
 msgid "August"
-msgstr ""
+msgstr "Gusht"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:102
 msgid "September"
-msgstr ""
+msgstr "Shtator"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:103
 msgid "October"
-msgstr ""
+msgstr "Tetor"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:104
 msgid "November"
-msgstr ""
+msgstr "Nëntor"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
-msgstr ""
+msgstr "Dhjetor"
