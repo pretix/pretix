@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-05 18:00+0000\n"
+"PO-Revision-Date: 2025-12-15 11:46+0000\n"
 "Last-Translator: sandra r <sandrarial@gestiontickets.online>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -6506,7 +6506,6 @@ msgstr "pendiente"
 
 #: pretix/base/models/orders.py:203 pretix/base/payment.py:570
 #: pretix/base/services/invoices.py:581
-#, fuzzy
 msgid "paid"
 msgstr "pagado"
 
@@ -6840,9 +6839,8 @@ msgid "This reference will be printed on your invoice for your convenience."
 msgstr "Esta referencia imprimirase na súa factura para a súa conveniencia."
 
 #: pretix/base/models/orders.py:3534
-#, fuzzy
 msgid "Transmission type"
-msgstr "Código de transacción"
+msgstr "Medio de contacto"
 
 #: pretix/base/models/orders.py:3632
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
@@ -9295,10 +9293,10 @@ msgid "Your exported data exceeded the size limit for scheduled exports."
 msgstr ""
 
 #: pretix/base/services/invoices.py:116
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "Por favor complete su pago antes de {expire_date}."
+msgstr "Complete o seu pago antes de {expire_date}."
 
 #: pretix/base/services/invoices.py:128
 #, python-brace-format
@@ -21609,9 +21607,8 @@ msgid "Placed order"
 msgstr "Pedido realizado"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:93
-#, fuzzy
 msgid "Paid order"
-msgstr "Orden de pago"
+msgstr "Pedido pagado"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:96
 msgid "Free order"
@@ -24216,9 +24213,8 @@ msgstr "Sí, aprobar la orden"
 #: pretix/control/templates/pretixcontrol/order/index.html:166
 #: pretix/presale/templates/pretixpresale/event/order.html:483
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
-#, fuzzy
 msgid "Cancel order"
-msgstr "Cancelar orden"
+msgstr "Cancelar a orde"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:12
 #: pretix/control/templates/pretixcontrol/order/deny.html:11
@@ -24978,9 +24974,8 @@ msgstr "Cambiar"
 #: pretix/control/templates/pretixcontrol/order/index.html:1034
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:90
 #: pretix/presale/templates/pretixpresale/event/order.html:318
-#, fuzzy
 msgid "ZIP code and city"
-msgstr "Código postal y ciudad"
+msgstr "Código postal e cidade"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:1047
 #, fuzzy
@@ -25437,9 +25432,8 @@ msgid "Preview refund amount"
 msgstr "Reembolso"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:88
-#, fuzzy
 msgid "Cancel all orders"
-msgstr "Cancelar orden"
+msgstr "Cancelar todos os pedidos"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:13
 #, fuzzy
@@ -33254,9 +33248,8 @@ msgid "Payment reversed."
 msgstr "Pago anulado."
 
 #: pretix/plugins/paypal2/signals.py:62
-#, fuzzy
 msgid "Payment pending."
-msgstr "Pago pendiente."
+msgstr "Pago pendente."
 
 #: pretix/plugins/paypal2/signals.py:63
 #, fuzzy
@@ -33398,9 +33391,8 @@ msgstr "Por favor, inténtalo de nuevo."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:29
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:57
-#, fuzzy
 msgid "Please select how you want to pay."
-msgstr "Por favor, seleccione cómo desea pagar."
+msgstr "Por favor, seleccione cómo desexa pagar."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:10
 #, fuzzy
@@ -34550,7 +34542,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:337
 msgid "Credit card payments"
-msgstr "Pagos con cartón de crédito"
+msgstr "Pagos con tarxeta de crédito"
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:1527
 msgid "iDEAL"
@@ -35103,18 +35095,12 @@ msgstr "Titular de la cuenta"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:7
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_messaging_noform.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_noform.html:5
-#, fuzzy
-#| msgid ""
-#| "After you submitted your order, we will redirect you to the payment "
-#| "service provider to complete your payment. You will then be redirected "
-#| "back here to get your tickets."
 msgid ""
 "After you submitted your order, we will redirect you to the payment service "
 "provider to complete your payment. You will then be redirected back here."
 msgstr ""
-"Despois de que enviase o seu pedido, redirixirémoslle ao provedor de "
-"servizos de pago para completar o seu pago. A continuación, redirixiráselle "
-"de novo aquí para obter as súas entradas."
+"Despois de enviar o teu pedido, redirixirémoste ao provedor de servizos de "
+"pagamento para completar o pago. Despois, serás redirixido de novo aquí."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
@@ -35490,9 +35476,8 @@ msgid "Download tickets (PDF)"
 msgstr "Descargar tickets (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:66
-#, fuzzy
 msgid "Download ticket (PDF)"
-msgstr "Descargar ticket"
+msgstr "Descargar ticket (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:62
 #, fuzzy
@@ -35631,7 +35616,6 @@ msgstr ""
 "selecciona un método de pago."
 
 #: pretix/presale/checkoutflow.py:1393 pretix/presale/views/order.py:679
-#, fuzzy
 msgid "Please select a payment method."
 msgstr "Por favor seleccione un método de pago."
 
@@ -36092,9 +36076,8 @@ msgid "Cart expired"
 msgstr "O carro da compra caducou"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
-#, fuzzy
 msgid "Show full cart"
-msgstr "Mostrar información"
+msgstr "Mostrar o carro completo"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:52
 #: pretix/presale/templates/pretixpresale/event/index.html:86
@@ -36186,9 +36169,8 @@ msgstr ""
 "un enlace que puede utilizar para pagar."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:215
-#, fuzzy
 msgid "Place binding order"
-msgstr "Colocar orden de compra"
+msgstr "Realizar orde"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:217
 msgid "Submit registration"
@@ -36787,9 +36769,9 @@ msgstr[0] "Unha entrada"
 msgstr[1] "%(num)s entradas"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:485
-#, fuzzy, python-format
+#, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr "incl. %(tax_sum)s impuestos"
+msgstr "incl. %(tax_sum)s IVE"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:505
 #, python-format
@@ -37112,9 +37094,8 @@ msgid "Confirmed"
 msgstr "Confirmado"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:15
-#, fuzzy
 msgid "Payment pending"
-msgstr "Pago pendiente"
+msgstr "Pago pendente"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:21
 #, fuzzy
@@ -37138,11 +37119,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:131
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:288
-#, fuzzy, python-format
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "%(count)s elementos"
-msgstr[1] "%(count)s elementos"
+msgstr[0] "%(amount)s× no teu carro"
+msgstr[1] "%(amount)s× no teu carro"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:209
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:374
@@ -37373,9 +37354,9 @@ msgstr "O seu pedido foi procesado con éxito! Ver abaixo para máis detalles."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:19
 #: pretix/presale/templates/pretixpresale/event/order.html:50
-#, fuzzy
 msgid "We successfully received your payment. See below for details."
-msgstr "Hemos recibido con éxito su pago. Ver abajo para más detalles."
+msgstr ""
+"Recibimos o teu pagamento correctamente. Consulta os detalles a continuación."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 #, fuzzy
@@ -37396,24 +37377,18 @@ msgstr ""
 "organizador del evento antes de que pueda pagar y completar este pedido."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
-#, fuzzy
 msgid "Please note that we still await your payment to complete the process."
-msgstr "Tenga en cuenta que aún esperamos su pago para completar el proceso."
+msgstr "Ten en conta que aínda agardamos o teu pago para completar o proceso."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to access "
-#| "your order later. We also sent you an email containing the link to the "
-#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email to the address you specified "
 "containing the link to this page."
 msgstr ""
-"Por favor, marque ou garde a ligazón a esta páxina exacta se desexa acceder "
-"ao seu pedido máis tarde. Tamén lle enviamos un correo electrónico coa "
-"ligazón ao enderezo que vostede especificou."
+"Por favor, garda a ligazón a esta páxina exacta se queres acceder ao teu "
+"pedido máis tarde. Tamén che enviamos un correo electrónico ao enderezo que "
+"especificaches coa ligazón a esta páxina."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:59
 #, fuzzy
@@ -37435,9 +37410,9 @@ msgid "View in backend"
 msgstr "Ver en el backend"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:91
-#, fuzzy, python-format
+#, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr "Un pago de %(total)s todavía está pendiente para esta orden."
+msgstr "Un pago de %(total)s aínda está pendente para esta orde."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:96
 #, fuzzy, python-format
@@ -37546,10 +37521,9 @@ msgid "Change your order"
 msgstr "Cancelar orden"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:358
-#, fuzzy
 msgctxt "action"
 msgid "Cancel your order"
-msgstr "Cancelar orden"
+msgstr "Cancela o teu pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:366
 msgid ""
@@ -37665,9 +37639,9 @@ msgid "Request cancellation: %(code)s"
 msgstr "Pedido cancelado: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
-#, fuzzy, python-format
+#, python-format
 msgid "Cancel order: %(code)s"
-msgstr "Cancelar orden: %(code)s"
+msgstr "Cancelar orde: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:38
 msgid ""
@@ -37753,14 +37727,12 @@ msgid "Modify order: %(code)s"
 msgstr "Modificar pedido: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:18
-#, fuzzy
 msgid ""
 "Modifying your invoice address will not automatically generate a new "
 "invoice. Please contact us if you need a new invoice."
 msgstr ""
-"La modificación de la dirección de facturación no generará automáticamente "
-"una nueva factura. Póngase en contacto con nosotros si necesita una nueva "
-"factura."
+"A modificación do enderezo de facturación non xerará automaticamente unha "
+"nova factura. Póñase en contacto connosco se precisa unha nova factura."
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:88
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:49
