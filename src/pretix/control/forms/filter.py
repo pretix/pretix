@@ -1305,7 +1305,7 @@ class QuestionAnswerFilterForm(forms.Form):
                     (start_d and not (start_d <= subevent.date_from)) or
                     (end_d and not (subevent.date_from < end_d))
             ):
-                self.add_error('subevent', pgettext_lazy('subevent', "Date doesn't start in selected date range"))
+                self.add_error('subevent', pgettext_lazy('subevent', "Date doesn't start in selected date range."))
         return cleaned_data
 
     def filter_qs(self, opqs):
