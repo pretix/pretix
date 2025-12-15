@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-15 11:46+0000\n"
+"PO-Revision-Date: 2025-12-15 20:00+0000\n"
 "Last-Translator: sandra r <sandrarial@gestiontickets.online>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -38581,10 +38581,8 @@ msgid "Your cart is now empty."
 msgstr "Baleirouse o seu pedido."
 
 #: pretix/presale/views/cart.py:569
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "Your cart timeout was extended."
-msgstr "O seu pedido actualizouse."
+msgstr "Ampliouse o tempo de espera do teu carro."
 
 #: pretix/presale/views/cart.py:584
 msgid "The products have been successfully added to your cart."
