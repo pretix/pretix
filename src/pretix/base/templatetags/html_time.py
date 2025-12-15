@@ -41,8 +41,9 @@ def html_time(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwargs):
     and the html datetime attribute will be set to the datetime in iso-format.
 
     Usage example:
-    {% html_datetime event_start|localtime "SHORT_DATE_FORMAT" attr_fmt="SHORT_DATE_FORMAT" as start_date %}
-    {{start_date}}
+    {% html_datetime event_start "SHORT_DATETIME_FORMAT" %}
+    or
+    {% html_datetime event_start "TIME_FORMAT" attr_fmt="H:i" %}
     """
     if value in (None, ''):
         return ''
