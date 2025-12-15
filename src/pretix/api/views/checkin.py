@@ -627,7 +627,8 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
                 }, status=400)
         else:
-            if not any(event_id in list_by_event for event_id in media.linked_orderpositions.values_list("order__event_id", flat=True)):
+            linked_event_ids = media.linked_orderpositions.values_list("order__event_id", flat=True).order_by().distinct()
+            if not any(event_id in list_by_event for event_id in linked_event_ids):
                 # Medium exists but connected ticket is for the wrong event
                 if not simulate:
                     checkinlists[0].event.log_action('pretix.event.checkin.unknown', data={
