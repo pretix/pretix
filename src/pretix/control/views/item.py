@@ -730,8 +730,7 @@ class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView
         ctx['items'] = self.object.items.exists()
         ctx['has_subevents'] = self.request.event.has_subevents
         stats = self.get_answer_statistics()
-        if stats:
-            ctx['stats'], ctx['total'] = stats
+        ctx['stats'], ctx['total'] = stats
         ctx['form'] = self.filter_form
         return ctx
 
