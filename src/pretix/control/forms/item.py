@@ -66,7 +66,8 @@ from pretix.base.models import (
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.base.timeframes import (
-    DateFrameField, resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
+    DateFrameField,
+    resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
 )
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
@@ -386,19 +387,19 @@ class QuestionAnswerFilterForm(forms.Form):
                 subevent__date_from__lt=d_end
             )
 
-        s = fdata.get("status", Order.STATUS_PENDING+Order.STATUS_PAID)
+        s = fdata.get("status", Order.STATUS_PENDING + Order.STATUS_PAID)
         if s != "":
             if s == Order.STATUS_PENDING:
                 opqs = opqs.filter(order__status=Order.STATUS_PENDING,
                                    order__expires__lt=now().replace(hour=0, minute=0, second=0))
-            elif s == Order.STATUS_PENDING+Order.STATUS_PAID:
+            elif s == Order.STATUS_PENDING + Order.STATUS_PAID:
                 opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
-            elif s == Order.STATUS_PAID+'v':
+            elif s == Order.STATUS_PAID + 'v':
                 opqs = opqs.filter(
                     Q(order__status=Order.STATUS_PAID) |
                     Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
                 )
-            elif s == Order.STATUS_PENDING+Order.STATUS_EXPIRED:
+            elif s == Order.STATUS_PENDING + Order.STATUS_EXPIRED:
                 opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:
                 opqs = opqs.filter(order__status=s)
