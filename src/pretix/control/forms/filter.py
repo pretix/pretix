@@ -1296,14 +1296,10 @@ class QuestionAnswerFilterForm(forms.Form):
         date_range = cleaned_data.get('date_range')
 
         if subevent is not None and date_range is not None:
-            start_d, end_d = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(
-                now(),
-                date_range,
-                self.event.timezone
-            )
+            d_start, d_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), date_range, self.event.timezone)
             if (
-                    (start_d and not (start_d <= subevent.date_from)) or
-                    (end_d and not (subevent.date_from < end_d))
+                (d_start and not (d_start <= subevent.date_from)) or
+                (d_end and not (subevent.date_from < d_end))
             ):
                 self.add_error('subevent', pgettext_lazy('subevent', "Date doesn't start in selected date range."))
         return cleaned_data
