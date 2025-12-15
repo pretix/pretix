@@ -672,6 +672,17 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             )
         ]
 
+        if len(op_candidates_matching_product) > 1 :
+            # if none of the above filters the results to 1, filter based on op.valid_from/until
+            # keep ops without valid_from/until
+            op_candidates_matching_product = [
+                op for op in op_candidates_matching_product
+                if (
+                    (not op.valid_from or op.valid_from < now()) and
+                    (not op.valid_until or op.valid_until > now())
+                )
+            ]
+
         if len(op_candidates_matching_product) == 0:
             # None of the found add-ons has the correct product, too bad! We could just error out here, but
             # instead we just continue with *any* product and have it rejected by the check in perform_checkin.
