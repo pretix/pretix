@@ -1238,19 +1238,11 @@ class QuestionAnswerFilterForm(forms.Form):
 
     status = forms.ChoiceField(
         choices=STATUS_VARIANTS,
-        widget=forms.Select(
-            attrs={
-                'class': 'form-control',
-            }
-        ),
         required=False,
         label=_("Order status"),
     )
     item = forms.ChoiceField(
         choices=[],
-        widget=forms.Select(
-            attrs={'class': 'form-control'}
-        ),
         required=False,
         label=_("Products"),
     )
@@ -1286,7 +1278,6 @@ class QuestionAnswerFilterForm(forms.Form):
             self.fields["subevent"].queryset = self.event.subevents.all()
             self.fields['subevent'].widget = Select2(
                 attrs={
-                    'class': 'form-control simple-subevent-choice',
                     'data-model-select2': 'event',
                     'data-select2-url': reverse('control:event.subevents.select2', kwargs={
                         'event': self.event.slug,
