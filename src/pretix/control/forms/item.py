@@ -66,7 +66,7 @@ from pretix.base.models import (
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.base.timeframes import (
-    DateFrameField, resolve_timeframe_to_dates_inclusive,
+    DateFrameField, resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
 )
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
@@ -361,9 +361,13 @@ class QuestionAnswerFilterForm(forms.Form):
         date_range = cleaned_data.get('date_range')
 
         if subevent is not None and date_range is not None:
-            start_d, end_d = resolve_timeframe_to_dates_inclusive(now(), date_range, timezone.utc)
-            if not (start_d >= subevent.date_from.date() >= end_d):
-                self.add_error('subevent', pgettext_lazy('subevent', 'Date doesn't start in selected date range'))
+            start_d, end_d = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(
+                now(),
+                date_range,
+                self.event.timezone
+            )
+            if not (start_d < subevent.date_from.date() < end_d):
+                self.add_error('subevent', pgettext_lazy('subevent', "Date doesn't start in selected date range"))
         return cleaned_data
 
     def filter_qs(self, opqs):
@@ -376,9 +380,9 @@ class QuestionAnswerFilterForm(forms.Form):
             opqs = opqs.filter(subevent=subevent)
 
         if date_range is not None:
-            d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), date_range, timezone.utc)
+            d_start, d_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), date_range, timezone.utc)
             opqs = opqs.filter(
-                subevent__date_from__gt=d_start,
+                subevent__date_from__gte=d_start,
                 subevent__date_from__lt=d_end
             )
 
