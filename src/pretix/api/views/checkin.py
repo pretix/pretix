@@ -520,7 +520,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     #    with respecting the force option), or it's a reusable medium (-> proceed with that)
     if not op_candidates:
         try:
-            media = ReusableMedium.objects.prefetch_related('linked_orderpositions').active().get(
+            media = ReusableMedium.objects.active().get(
                 organizer_id=checkinlists[0].event.organizer_id,
                 type=source_type,
                 identifier=raw_barcode,
