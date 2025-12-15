@@ -32,7 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from datetime import datetime, time, timedelta, timezone
+from datetime import datetime, time, timedelta
 from decimal import Decimal
 from urllib.parse import urlencode
 
@@ -1324,7 +1324,7 @@ class QuestionAnswerFilterForm(forms.Form):
             opqs = opqs.filter(subevent=subevent)
 
         if date_range is not None:
-            d_start, d_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), date_range, timezone.utc)
+            d_start, d_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), date_range,                 self.event.timezone)
             opqs = opqs.filter(
                 subevent__date_from__gte=d_start,
                 subevent__date_from__lt=d_end
