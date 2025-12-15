@@ -655,7 +655,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(checkinlists[0]).data,
                 }, status=404)
             op_candidates = []
-            for op in media.linked_orderpositions.all().prefetch_related("order"):
+            for op in media.linked_orderpositions.all().select_related("order"):
                 op_candidates.append(op)
                 if list_by_event[op.order.event_id].addon_match:
                     op_candidates += list(op.addons.all())
