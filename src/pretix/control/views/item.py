@@ -74,12 +74,12 @@ from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
+from pretix.control.forms.filter import QuestionAnswerFilterForm
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
     ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
     ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
-    ItemVariationsFormSet, QuestionAnswerFilterForm, QuestionForm,
-    QuestionOptionForm, QuotaForm,
+    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,

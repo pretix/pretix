@@ -34,7 +34,6 @@
 # License for the specific language governing permissions and limitations under the License.
 import copy
 import os
-from datetime import timezone
 from decimal import Decimal
 from urllib.parse import urlencode
 
@@ -48,10 +47,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
-from django.utils.timezone import now
-from django.utils.translation import (
-    gettext as __, gettext_lazy as _, pgettext_lazy,
-)
+from django.utils.translation import gettext as __, gettext_lazy as _
 from django_scopes.forms import (
     SafeModelChoiceField, SafeModelMultipleChoiceField,
 )
@@ -60,15 +56,11 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
-    Item, ItemCategory, ItemProgramTime, ItemVariation, Order, Question,
-    QuestionOption, Quota, SubEvent,
+    Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
+    QuestionOption, Quota,
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
-from pretix.base.timeframes import (
-    DateFrameField,
-    resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
-)
 from pretix.control.forms import (
     ButtonGroupRadioSelect, ExtFileField, ItemMultipleChoiceField,
     SalesChannelCheckboxSelectMultiple, SplitDateTimeField,
@@ -278,139 +270,6 @@ class QuestionOptionForm(I18nModelForm):
         fields = [
             'answer',
         ]
-
-
-class QuestionAnswerFilterForm(forms.Form):
-    STATUS_VARIANTS = [
-        ("", _("All orders")),
-        (Order.STATUS_PAID, _("Paid")),
-        (Order.STATUS_PAID + 'v', _("Paid or confirmed")),
-        (Order.STATUS_PENDING, _("Pending")),
-        (Order.STATUS_PENDING + Order.STATUS_PAID, _("Pending or paid")),
-        ("o", _("Pending (overdue)")),
-        (Order.STATUS_EXPIRED, _("Expired")),
-        (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _("Pending or expired")),
-        (Order.STATUS_CANCELED, _("Canceled"))
-    ]
-
-    status = forms.ChoiceField(
-        choices=STATUS_VARIANTS,
-        widget=forms.Select(
-            attrs={
-                'class': 'form-control',
-            }
-        ),
-        required=False,
-        label=_("Order status"),
-    )
-    item = forms.ChoiceField(
-        choices=[],
-        widget=forms.Select(
-            attrs={'class': 'form-control'}
-        ),
-        required=False,
-        label=_("Products"),
-    )
-    subevent = forms.ModelChoiceField(
-        queryset=SubEvent.objects.none(),
-        required=False,
-        empty_label=pgettext_lazy('subevent', 'All dates'),
-        label=pgettext_lazy("subevent", "Date"),
-    )
-    date_range = DateFrameField(
-        required=False,
-        include_future_frames=True,
-        label=_('Event date'),
-    )
-
-    def __init__(self, *args, **kwargs):
-        self.event = kwargs.pop('event')
-        super().__init__(*args, **kwargs)
-        self.initial['status'] = Order.STATUS_PENDING + Order.STATUS_PAID
-
-        choices = [('', _('All products'))]
-        for i in self.event.items.prefetch_related('variations').all():
-            variations = list(i.variations.all())
-            if variations:
-                choices.append((str(i.pk), _('{product} – Any variation').format(product=str(i))))
-                for v in variations:
-                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (str(i), v.value)))
-            else:
-                choices.append((str(i.pk), str(i)))
-        self.fields['item'].choices = choices
-
-        if self.event.has_subevents:
-            self.fields["subevent"].queryset = self.event.subevents.all()
-            self.fields['subevent'].widget = Select2(
-                attrs={
-                    'class': 'form-control simple-subevent-choice',
-                    'data-model-select2': 'event',
-                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
-                        'event': self.event.slug,
-                        'organizer': self.event.organizer.slug,
-                    }),
-                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
-                }
-            )
-            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
-        else:
-            del self.fields['subevent']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        subevent = cleaned_data.get('subevent')
-        date_range = cleaned_data.get('date_range')
-
-        if subevent is not None and date_range is not None:
-            start_d, end_d = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(
-                now(),
-                date_range,
-                self.event.timezone
-            )
-            if not (start_d < subevent.date_from.date() < end_d):
-                self.add_error('subevent', pgettext_lazy('subevent', "Date doesn't start in selected date range"))
-        return cleaned_data
-
-    def filter_qs(self, opqs):
-        fdata = self.cleaned_data
-
-        subevent = fdata.get('subevent', None)
-        date_range = fdata.get('date_range', None)
-
-        if subevent is not None:
-            opqs = opqs.filter(subevent=subevent)
-
-        if date_range is not None:
-            d_start, d_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), date_range, timezone.utc)
-            opqs = opqs.filter(
-                subevent__date_from__gte=d_start,
-                subevent__date_from__lt=d_end
-            )
-
-        s = fdata.get("status", Order.STATUS_PENDING + Order.STATUS_PAID)
-        if s != "":
-            if s == Order.STATUS_PENDING:
-                opqs = opqs.filter(order__status=Order.STATUS_PENDING,
-                                   order__expires__lt=now().replace(hour=0, minute=0, second=0))
-            elif s == Order.STATUS_PENDING + Order.STATUS_PAID:
-                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
-            elif s == Order.STATUS_PAID + 'v':
-                opqs = opqs.filter(
-                    Q(order__status=Order.STATUS_PAID) |
-                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
-                )
-            elif s == Order.STATUS_PENDING + Order.STATUS_EXPIRED:
-                opqs = opqs.filter(order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
-            else:
-                opqs = opqs.filter(order__status=s)
-
-        if s not in (Order.STATUS_CANCELED, ""):
-            opqs = opqs.filter(canceled=False)
-        if fdata.get("item", "") != "":
-            i = fdata.get("item", "")
-            opqs = opqs.filter(item_id__in=(i,))
-
-        return opqs
 
 
 class QuotaForm(I18nModelForm):
