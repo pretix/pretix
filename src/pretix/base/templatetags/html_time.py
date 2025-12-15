@@ -22,6 +22,8 @@
 from datetime import datetime
 
 from django import template
+from django.utils.html import format_html
+from django.utils.timezone import get_current_timezone
 
 from pretix.helpers.templatetags.date_fast import date_fast
 
@@ -29,7 +31,7 @@ register = template.Library()
 
 
 @register.simple_tag
-def html_datetime(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwargs):
+def html_time(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwargs):
     """
     Building a <time datetime='{html-datetime}'>{human-readable datetime}</time> html string,
     where the html-datetime as well as the human-readable datetime can be set
@@ -44,6 +46,7 @@ def html_datetime(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwarg
     """
     if value in (None, ''):
         return ''
+    value = value.astimezone(get_current_timezone())
     attr_fmt = kwargs["attr_fmt"] if kwargs else None
 
     try:
@@ -53,6 +56,6 @@ def html_datetime(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwarg
             date_html = date_fast(value, attr_fmt)
 
         date_human = date_fast(value, dt_format)
-        return f"<time datetime='{date_html}'>{date_human}</time>"
+        return format_html("<time datetime='{}'>{}</time>", date_html, date_human)
     except AttributeError:
         return ''
