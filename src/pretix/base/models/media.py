@@ -103,6 +103,7 @@ class ReusableMedium(LoggedModel):
         OrderPosition,
         related_name='linked_media',
         verbose_name=_('Linked tickets'),
+        help_text=_("If you link to more than one ticket, make sure there is no overlap in validity. If multiple tickets are valid at once, this will lead to failed check-ins.")
     )
     linked_giftcard = models.ForeignKey(
         GiftCard,
