@@ -635,7 +635,7 @@ def user_index(request):
 
     ctx = {
         'widgets': rearrange(widgets),
-        'can_create_event': request.user.teams.filter(can_create_events=True).exists(),
+        'can_create_event': request.user.teams.with_organizer_permission("organizer:events.create").exists(),
         'upcoming': widgets_for_event_qs(
             request,
             annotated_event_query(request, lazy=True).filter(

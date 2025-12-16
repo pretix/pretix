@@ -561,6 +561,18 @@ however for this signal, the ``sender`` **may also be None** to allow creating t
 notification settings!
 """
 
+register_event_permissions = GlobalSignal()
+"""
+This signal is sent out to get all known permissions. Receivers should return an
+instance of pretix.base.permissions.Permission or a list of such instances.
+"""
+
+register_organizer_permissions = GlobalSignal()
+"""
+This signal is sent out to get all known permissions. Receivers should return an
+instance of pretix.base.permissions.Permission or a list of such instances.
+"""
+
 notification = EventPluginSignal()
 """
 Arguments: ``logentry_id``, ``notification_type``
