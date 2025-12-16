@@ -106,7 +106,7 @@ Endpoints
    :query string created_since: Only show media created since a given date.
    :query string updated_since: Only show media updated since a given date.
    :query integer linked_orderpositions: Only show media linked to the given tickets. Note: you can pass multiple ticket IDs by passing
-                         ``linked_orderpositions`` multiple times. A medium matching any linked orderposition will be returned.
+                         ``linked_orderpositions`` multiple times. Any medium matching any linked orderposition will be returned.
    :query integer linked_orderposition: Only show media linked to the given ticket.
    :query integer linked_giftcard: Only show media linked to the given gift card.
    :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderpositions"``,
