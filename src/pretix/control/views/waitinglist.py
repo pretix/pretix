@@ -414,8 +414,6 @@ class EntryEdit(EventPermissionRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['names_asked'] = self.request.event.settings.waiting_list_names_asked
-        ctx['phones_asked'] = self.request.event.settings.waiting_list_phones_asked
         return ctx
 
     @transaction.atomic

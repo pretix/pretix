@@ -81,17 +81,19 @@ class WaitingListEntryEditForm(I18nModelForm):
         # the value for item is derived and populated during form.clean()
         self.fields['item'].required = False
 
-        self.fields['name_parts'] = NamePartsFormField(
-            max_length=255,
-            required=True,
-            scheme=self.event.organizer.settings.name_scheme,
-            titles=self.event.organizer.settings.name_scheme_titles,
-            label=_('Name'),
-        )
+        if self.event.settings.waiting_list_names_asked:
+            self.fields['name_parts'] = NamePartsFormField(
+                max_length=255,
+                required=self.event.settings.waiting_list_names_required,
+                scheme=self.event.organizer.settings.name_scheme,
+                titles=self.event.organizer.settings.name_scheme_titles,
+                label=_('Name'),
+            )
+        else:
+            del self.fields['name_parts']
 
-        self.fields['name_parts'].required = self.event.settings.waiting_list_names_required
-        self.fields['name_parts'].one_required = self.event.settings.waiting_list_names_required
-        self.fields['phone'].required = self.event.settings.waiting_list_phones_required
+        if not self.event.settings.waiting_list_names_asked:
+            del self.fields['phone']
 
         choices = []
 

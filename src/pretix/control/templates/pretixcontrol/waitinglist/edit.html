@@ -8,10 +8,12 @@
         {% csrf_token %}
 
         {% bootstrap_field form.email layout="control" %}
-        {% if names_asked %}
+
+        {% if form.phone %}
             {% bootstrap_field form.name_parts layout="control" %}
         {% endif %}
-        {% if phones_asked %}
+
+        {% if form.phone %}
             {% bootstrap_field form.phone layout="control" %}
         {% endif %}
         {% bootstrap_field form.itemvar layout="control" %}
