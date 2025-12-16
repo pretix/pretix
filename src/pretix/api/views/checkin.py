@@ -520,11 +520,13 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     #    with respecting the force option), or it's a reusable medium (-> proceed with that)
     if not op_candidates:
         try:
-            media = ReusableMedium.objects.active().get(
+            media = ReusableMedium.objects.active().annotate(
+                has_linked_orderpositions=Exists(ReusableMedium.linked_orderpositions.through.objects.filter(reusablemedium_id=OuterRef('pk')))
+            ).get(
                 organizer_id=checkinlists[0].event.organizer_id,
                 type=source_type,
                 identifier=raw_barcode,
-                linked_orderpositions__isnull=False,
+                has_linked_orderpositions=True,
             )
             raw_barcode_for_checkin = raw_barcode
         except ReusableMedium.DoesNotExist:
