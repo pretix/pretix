@@ -1066,6 +1066,7 @@ Creating orders
       * ``valid_until`` (optional, if both ``valid_from`` and ``valid_until`` are **missing** (not ``null``) the availability will be computed from the given product)
       * ``requested_valid_from`` (optional, can be set **instead** of ``valid_from`` and ``valid_until`` to signal a user choice for the start time that may or may not be respected)
       * ``use_reusable_medium`` (optional, causes the new ticket to take over the given reusable medium, identified by its ID)
+      * ``add_to_reusable_medium`` (optional, causes the new ticket to be added to the given reusable medium, identified by its ID)
       * ``discount`` (optional, only possible if ``price`` is set; attention: if this is set to not-``null`` on any position, automatic calculation of discounts will not run)
       * ``answers``
 
