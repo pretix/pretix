@@ -153,7 +153,7 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             'updated',
             'type',
             'identifier',
-            'secret',
+            'claim_token',
             'label',
             'active',
             'expires',
