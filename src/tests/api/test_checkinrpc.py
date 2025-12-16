@@ -302,6 +302,41 @@ def test_by_medium(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="barcode",
+            identifier="abcdef",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.first())
+        rm.linked_orderpositions.add(order.positions.all()[1])
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    # TODO: AMBIGIOUS
+    assert resp.status_code == 201
+
+    with scopes_disabled():
+        op = order.positions.first()
+        op.valid_from = datetime.datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
+        op.save()
+
+    with freeze_time("2020-01-01 13:45:00"):
+        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        # TODO: AMBIGIOUS
+        assert resp.status_code == 201 
+
+    with freeze_time("2020-01-01 10:45:00"):
+        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 201
+        assert resp.data['status'] == 'ok'
+
+    with scopes_disabled():
+        ci = clist.checkins.get(position=order.positions.first())
+    assert ci.raw_barcode == "abcdef"
+    assert ci.raw_source_type == "barcode"
+
+
+@pytest.mark.django_db
 def test_by_medium_not_connected(token_client, organizer, clist, event, order):
     with scopes_disabled():
         ReusableMedium.objects.create(
