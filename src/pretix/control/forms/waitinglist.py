@@ -109,7 +109,7 @@ class WaitingListEntryEditForm(I18nModelForm):
                 choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(
                     f'<strike class="text-muted">{escape(item)}</strike>')))
 
-        self.fields['itemvar'].label = _("Item and Variation")
+        self.fields['itemvar'].label = _("Product")
         self.fields['itemvar'].required = True
         self.fields['itemvar'].widget = Select2ItemVarQuota(
             attrs={
