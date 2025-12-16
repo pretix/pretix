@@ -21,7 +21,7 @@ id                                    integer                    Internal ID of 
 type                                  string                     Type of medium, e.g. ``"barcode"``, ``"nfc_uid"`` or ``"nfc_mf0aes"``.
 organizer                             string                     Organizer slug of the organizer who "owns" this medium.
 identifier                            string                     Unique identifier of the medium. The format depends on the ``type``.
-secret                                string                     Secret to identify the medium (or ``null``)
+claim_token                           string                     Secret token to claim ownership of the medium (or ``null``)
 label                                 string                     Label to identify the medium, usually something human readable (or ``null``)
 active                                boolean                    Whether this medium may be used.
 created                               datetime                   Date of creation
@@ -45,7 +45,7 @@ Existing media types are:
 
 .. versionchanged:: 2025.11
 
-   The ``secret``, ``label``, ``linked_orderpositions`` attributes have been added, the ``linked_orderposition`` attribute has been
+   The ``claim_token``, ``label``, ``linked_orderpositions`` attributes have been added, the ``linked_orderposition`` attribute has been
    deprecated. Note: To maintain backwards compatibility ``linked_orderposition`` contains the internal ID of the linked order position
    if the medium has exactly one order position in ``linked_orderpositions``.
 
