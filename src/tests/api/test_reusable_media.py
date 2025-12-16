@@ -89,7 +89,7 @@ TEST_MEDIUM_RES = {
     "organizer": "dummy",
     "identifier": "ABCDEFGH",
     "type": "barcode",
-    "secret": None,
+    "claim_token": None,
     "label": None,
     "active": True,
     "expires": None,
