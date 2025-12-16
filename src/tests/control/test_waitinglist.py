@@ -61,7 +61,7 @@ def env():
     item2 = Item.objects.create(event=event, name="Ticket", default_price=23,
                                 admission=True)
     item3 = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True)
+                                admission=True, allow_waitinglist=True)
     variation = ItemVariation.objects.create(item=item3)
 
     for i in range(5):

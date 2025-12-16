@@ -97,7 +97,10 @@ class WaitingListEntryEditForm(I18nModelForm):
         choices = []
 
         items = self.event.items.prefetch_related('variations')
+
         for item in items:
+            if not item.allow_waitinglist:
+                continue
             if len(item.variations.all()) > 0:
                 for v in item.variations.all():
                     choices.append((
@@ -110,6 +113,7 @@ class WaitingListEntryEditForm(I18nModelForm):
                     f'<strike class="text-muted">{escape(item)}</strike>')))
 
         self.fields['itemvar'].label = _("Product")
+        self.fields['itemvar'].help_text = _("Only includes Products with an enabled waiting list.")
         self.fields['itemvar'].required = True
         self.fields['itemvar'].widget = Select2ItemVarQuota(
             attrs={
