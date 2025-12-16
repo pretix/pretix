@@ -672,7 +672,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             )
         ]
 
-        if len(op_candidates_matching_product) > 1 :
+        if len(op_candidates_matching_product) > 1:
             # if none of the above filters the results to 1, filter based on op.valid_from/until
             # keep ops without valid_from/until
             op_candidates_matching_product = [
