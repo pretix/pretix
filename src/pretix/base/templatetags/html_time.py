@@ -25,6 +25,7 @@ from django import template
 from django.utils.html import format_html
 from django.utils.timezone import get_current_timezone
 
+from pretix.base.i18n import LazyExpiresDate
 from pretix.helpers.templatetags.date_fast import date_fast
 
 register = template.Library()
@@ -41,13 +42,14 @@ def html_time(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwargs):
     and the html datetime attribute will be set to the datetime in iso-format.
 
     Usage example:
-    {% html_datetime event_start "SHORT_DATETIME_FORMAT" %}
+    {% html_time event_start "SHORT_DATETIME_FORMAT" %}
     or
-    {% html_datetime event_start "TIME_FORMAT" attr_fmt="H:i" %}
+    {% html_time event_start "TIME_FORMAT" attr_fmt="H:i" %}
     """
     if value in (None, ''):
         return ''
     value = value.astimezone(get_current_timezone())
+    h_fmt = kwargs["h_fmt"] if kwargs else None
     attr_fmt = kwargs["attr_fmt"] if kwargs else None
 
     try:
@@ -56,7 +58,10 @@ def html_time(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwargs):
         else:
             date_html = date_fast(value, attr_fmt)
 
-        date_human = date_fast(value, dt_format)
+        if h_fmt and h_fmt == "format_expires":
+            date_human = LazyExpiresDate(value)
+        else:
+            date_human = date_fast(value, dt_format)
         return format_html("<time datetime='{}'>{}</time>", date_html, date_human)
     except AttributeError:
         return ''

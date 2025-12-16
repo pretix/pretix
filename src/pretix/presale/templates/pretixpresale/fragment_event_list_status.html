@@ -1,3 +1,4 @@
+{% load html_time %}
 {% load i18n %}
 {% load icon %}
 {% load textbubble %}
@@ -52,11 +53,10 @@
     {% endtextbubble %}
     {% if event.settings.presale_start_show_date %}
         <br><span class="text-muted">
-        {% with date_iso=event.effective_presale_start.isoformat date_human=event.effective_presale_start|date:"SHORT_DATE_FORMAT" %}
-            {% blocktrans trimmed with date='<time datetime="'|add:date_iso|add:'">'|add:date_human|add:"</time>"|safe %}
+        {% html_time event.event.effective_presale_start "SHORT_DATE_FORMAT" as date %}
+            {% blocktrans with date=date %}
                 Sale starts {{ date }}
             {% endblocktrans %}
-        {% endwith %}
         </span>
     {% endif %}
 {% endif %}
