@@ -93,7 +93,7 @@
                     A payment of {{ total }} is still pending for this order.
                 {% endblocktrans %}</strong>
                 <strong>
-                {% html_time order.expires h_fmt="format_expires" as date %}
+                {% html_time order.expires "format_expires" as date %}
                     {% blocktrans trimmed with date=date %}
                         Please complete your payment before {{ date }}
                     {% endblocktrans %}

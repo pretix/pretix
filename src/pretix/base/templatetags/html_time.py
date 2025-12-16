@@ -49,7 +49,6 @@ def html_time(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwargs):
     if value in (None, ''):
         return ''
     value = value.astimezone(get_current_timezone())
-    h_fmt = kwargs["h_fmt"] if kwargs else None
     attr_fmt = kwargs["attr_fmt"] if kwargs else None
 
     try:
@@ -58,7 +57,7 @@ def html_time(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwargs):
         else:
             date_html = date_fast(value, attr_fmt)
 
-        if h_fmt and h_fmt == "format_expires":
+        if dt_format == "format_expires":
             date_human = LazyExpiresDate(value)
         else:
             date_human = date_fast(value, dt_format)
