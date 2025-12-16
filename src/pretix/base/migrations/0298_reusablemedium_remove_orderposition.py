@@ -22,7 +22,7 @@ def reverse(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0297_add_reusablemedium_secret"),
+        ("pretixbase", "0297_add_reusablemedium_label"),
     ]
 
     operations = [

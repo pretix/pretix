@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name="reusablemedium",
-            name="secret",
+            name="claim_token",
             field=models.CharField(max_length=200, null=True),
         ),
         migrations.AddField(
