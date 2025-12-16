@@ -1030,7 +1030,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     use_reusable_medium = serializers.PrimaryKeyRelatedField(queryset=ReusableMedium.objects.none(),
                                                              required=False, allow_null=True)
     add_to_reusable_medium = serializers.PrimaryKeyRelatedField(queryset=ReusableMedium.objects.none(),
-                                                             required=False, allow_null=True)
+                                                                required=False, allow_null=True)
 
     class Meta:
         model = OrderPosition
