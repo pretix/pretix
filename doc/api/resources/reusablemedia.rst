@@ -110,7 +110,7 @@ Endpoints
    :query integer linked_orderposition: Only show media linked to the given ticket.
    :query integer linked_giftcard: Only show media linked to the given gift card.
    :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderpositions"``,
-                         ``"linked_orderposition"`` (**deprecated**), or ``"customer"``, the respective field will be shown 
+                         ``"linked_orderposition"`` (**DEPRECATED**), or ``"customer"``, the respective field will be shown 
                          as a nested value instead of just an ID.
                          The nested objects are identical to the respective resources, except that order positions
                          will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
