@@ -3089,6 +3089,75 @@ def test_order_create_use_medium(token_client, organizer, event, item, quota, qu
         assert o.positions.first() == medium.linked_orderpositions.first()
         assert resp.data['positions'][0]['pdf_data']['medium_identifier'] == medium.identifier
 
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        medium.refresh_from_db()
+        assert medium.linked_orderpositions.count() == 1
+        assert o.positions.first() == medium.linked_orderpositions.first()
+        assert resp.data['positions'][0]['pdf_data']['medium_identifier'] == medium.identifier
+
+
+@pytest.mark.django_db
+def test_order_create_add_to_medium(token_client, organizer, event, item, quota, question, medium):
+    item.media_type = medium.type
+    item.media_policy = Item.MEDIA_POLICY_REUSE_OR_NEW
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['use_reusable_medium'] = medium.pk
+    res['positions'][0]['add_to_reusable_medium'] = medium.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+
+    # do not use use_reusable_medium and add_to_reusable_medium
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+
+    del res['positions'][0]['use_reusable_medium']
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        medium.refresh_from_db()
+        assert medium.linked_orderpositions.count() == 1
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        medium.refresh_from_db()
+        assert medium.linked_orderpositions.count() == 2
+
+    res['positions'][0]['use_reusable_medium'] = medium.pk
+    del res['positions'][0]['add_to_reusable_medium']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        medium.refresh_from_db()
+        assert medium.linked_orderpositions.count() == 1
+        assert o.positions.first() == medium.linked_orderpositions.first()
+
 
 @pytest.mark.django_db
 def test_order_create_use_medium_other_organizer(token_client, organizer, event, item, quota, question, medium2):
