@@ -218,7 +218,7 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer to look up a medium for
    :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderpositions"``, or ``"customer"``, the respective
                          field will be shown as a nested value instead of just an ID. The nested objects are identical to
-                         the respective resources, except that the ``linked_orderpositions`` will have an attribute of the
+                         the respective resources, except that the ``linked_orderpositions`` each will have an attribute of the
                          format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make matching easier. The parameter
                          can be given multiple times.
    :statuscode 201: no error
