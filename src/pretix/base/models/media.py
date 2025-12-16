@@ -72,9 +72,9 @@ class ReusableMedium(LoggedModel):
         max_length=200,
         verbose_name=pgettext_lazy('reusable_medium', 'Identifier'),
     )
-    secret = models.CharField(
+    claim_token = models.CharField(
         max_length=200,
-        verbose_name=pgettext_lazy('reusable_medium', 'Secret'),
+        verbose_name=pgettext_lazy('reusable_medium', 'Claim token'),
         null=True, blank=True
     )
     label = models.CharField(
