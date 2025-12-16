@@ -51,10 +51,10 @@
                                 {% endif %}
                                 {% for op in medium.linked_orderpositions.all %}
                                     <span class="helper-display-block">
-                                    <span class="fa fa-ticket fa-fw"></span>
-                                    <a href="{% url "control:event.order" event=op.order.event.slug organizer=request.organizer.slug code=op.order.code %}">
-                                        {{ op.order.code }}</a>-{{ op.positionid }}
-                                </span>
+                                        <span class="fa fa-ticket fa-fw"></span>
+                                        <a href="{% url "control:event.order" event=op.order.event.slug organizer=request.organizer.slug code=op.order.code %}">
+                                            {{ op.order.code }}</a>-{{ op.positionid }}
+                                    </span>
                                 {% endfor %}
                                 {% if medium.linked_giftcard %}
                                     <span class="helper-display-block">
