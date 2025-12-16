@@ -79,7 +79,6 @@ class WaitingListEntryEditForm(I18nModelForm):
 
         # Prevent the item field cleaning from complaining that it isn't populated
         # the value for item is derived and populated during form.clean()
-        self.fields['item'].required = False
 
         if self.event.settings.waiting_list_names_asked:
             self.fields['name_parts'] = NamePartsFormField(
@@ -125,16 +124,17 @@ class WaitingListEntryEditForm(I18nModelForm):
         self.fields['itemvar'].choices = choices
 
     def clean(self):
-        cleaned_data = super().clean()
-        itemvar = cleaned_data.get('itemvar')
+        itemvar = self.data.get('itemvar')
+
         if itemvar is None:
             self.add_error('itemvar', _('Item and Variation are required'))
-            return cleaned_data
+        else:
+            self.instance.item = Item.objects.get(pk=itemvar.split('-')[0])
+            if '-' in itemvar:
+                self.instance.variation = ItemVariation.objects.get(pk=itemvar.split('-')[1])
 
-        cleaned_data['item'] = Item.objects.get(pk=itemvar.split('-')[0])
-        if '-' in itemvar:
-            cleaned_data['variation'] = ItemVariation.objects.get(pk=itemvar.split('-')[1])
-        return cleaned_data
+        data = super().clean()
+        return data
 
     class Meta:
         model = WaitingListEntry
@@ -142,14 +142,10 @@ class WaitingListEntryEditForm(I18nModelForm):
             'email',
             'name_parts',
             'phone',
-            'item',
-            'variation',
         ]
         field_classes = {
             'email': EmailField,
             'phone': PhoneNumberField,
-            'item': SafeModelChoiceField,
-            'variation': SafeModelChoiceField,
         }
         exclude = [
             'subevent',  # handled by EntryTransfer view
