@@ -31,9 +31,10 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import operator
 import string
 from datetime import date, datetime, time
+from functools import reduce
 
 import pytz_deprecation_shim
 from django.conf import settings
@@ -53,6 +54,10 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.models.base import LoggedModel
 from pretix.base.validators import OrganizerSlugBanlistValidator
 
+from ...helpers.permission_migration import (
+    OLD_TO_NEW_EVENT_COMPAT, OLD_TO_NEW_ORGANIZER_COMPAT,
+    LegacyPermissionProperty,
+)
 from ..settings import settings_hierarkey
 from .auth import User
 
@@ -309,6 +314,32 @@ def generate_api_token():
     return get_random_string(length=64, allowed_chars=string.ascii_lowercase + string.digits)
 
 
+class TeamQuerySet(models.QuerySet):
+    @classmethod
+    def event_permission_q(cls, perm_name):
+        if perm_name.startswith('can_') and perm_name in OLD_TO_NEW_EVENT_COMPAT:  # legacy
+            return reduce(operator.and_, [cls.event_permission_q(p) for p in OLD_TO_NEW_EVENT_COMPAT[perm_name]])
+        return (
+            Q(all_event_permissions=True) |
+            Q(**{f'limit_event_permissions__{perm_name}': True})
+        )
+
+    @classmethod
+    def organizer_permission_q(cls, perm_name):
+        if perm_name.startswith('can_') and perm_name in OLD_TO_NEW_ORGANIZER_COMPAT:  # legacy
+            return reduce(operator.and_, [cls.organizer_permission_q(p) for p in OLD_TO_NEW_ORGANIZER_COMPAT[perm_name]])
+        return (
+            Q(all_organizer_permissions=True) |
+            Q(**{f'limit_organizer_permissions__{perm_name}': True})
+        )
+
+    def with_event_permission(self, perm_name):
+        return self.filter(self.event_permission_q(perm_name))
+
+    def with_organizer_permission(self, perm_name):
+        return self.filter(self.organizer_permission_q(perm_name))
+
+
 class Team(LoggedModel):
     """
     A team is a collection of people given certain access rights to one or more events of an organizer.
@@ -321,36 +352,10 @@ class Team(LoggedModel):
     :param all_events: Whether this team has access to all events of this organizer
     :type all_events: bool
     :param limit_events: A set of events this team has access to. Irrelevant if ``all_events`` is ``True``.
-    :param can_create_events: Whether or not the members can create new events with this organizer account.
-    :type can_create_events: bool
-    :param can_change_teams: If ``True``, the members can change the teams of this organizer account.
-    :type can_change_teams: bool
-    :param can_manage_customers: If ``True``, the members can view and change organizer-level customer accounts.
-    :type can_manage_customers: bool
-    :param can_manage_reusable_media: If ``True``, the members can view and change organizer-level reusable media.
-    :type can_manage_reusable_media: bool
-    :param can_change_organizer_settings: If ``True``, the members can change the settings of this organizer account.
-    :type can_change_organizer_settings: bool
-    :param can_change_event_settings: If ``True``, the members can change the settings of the associated events.
-    :type can_change_event_settings: bool
-    :param can_change_items: If ``True``, the members can change and add items and related objects for the associated events.
-    :type can_change_items: bool
-    :param can_view_orders: If ``True``, the members can inspect details of all orders of the associated events.
-    :type can_view_orders: bool
-    :param can_change_orders: If ``True``, the members can change details of orders of the associated events.
-    :type can_change_orders: bool
-    :param can_checkin_orders: If ``True``, the members can perform check-in related actions.
-    :type can_checkin_orders: bool
-    :param can_view_vouchers: If ``True``, the members can inspect details of all vouchers of the associated events.
-    :type can_view_vouchers: bool
-    :param can_change_vouchers: If ``True``, the members can change and create vouchers for the associated events.
-    :type can_change_vouchers: bool
     """
     organizer = models.ForeignKey(Organizer, related_name="teams", on_delete=models.CASCADE)
     name = models.CharField(max_length=190, verbose_name=_("Team name"))
     members = models.ManyToManyField(User, related_name="teams", verbose_name=_("Team members"))
-    all_events = models.BooleanField(default=False, verbose_name=_("All events (including newly created ones)"))
-    limit_events = models.ManyToManyField('Event', verbose_name=_("Limit to events"), blank=True)
     require_2fa = models.BooleanField(
         default=False, verbose_name=_("Require all members of this team to use two-factor authentication"),
         help_text=_("If you turn this on, all members of the team will be required to either set up two-factor "
@@ -358,62 +363,33 @@ class Team(LoggedModel):
                     "all users.")
     )
 
-    can_create_events = models.BooleanField(
-        default=False,
-        verbose_name=_("Can create events"),
-    )
-    can_change_teams = models.BooleanField(
-        default=False,
-        verbose_name=_("Can change teams and permissions"),
-    )
-    can_change_organizer_settings = models.BooleanField(
-        default=False,
-        verbose_name=_("Can change organizer settings"),
-        help_text=_('Someone with this setting can get access to most data of all of your events, i.e. via privacy '
-                    'reports, so be careful who you add to this team!')
-    )
-    can_manage_customers = models.BooleanField(
-        default=False,
-        verbose_name=_("Can manage customer accounts")
-    )
-    can_manage_reusable_media = models.BooleanField(
-        default=False,
-        verbose_name=_("Can manage reusable media")
-    )
-    can_manage_gift_cards = models.BooleanField(
-        default=False,
-        verbose_name=_("Can manage gift cards")
-    )
-    can_change_event_settings = models.BooleanField(
-        default=False,
-        verbose_name=_("Can change event settings")
-    )
-    can_change_items = models.BooleanField(
-        default=False,
-        verbose_name=_("Can change product settings")
-    )
-    can_view_orders = models.BooleanField(
-        default=False,
-        verbose_name=_("Can view orders")
-    )
-    can_change_orders = models.BooleanField(
-        default=False,
-        verbose_name=_("Can change orders")
-    )
-    can_checkin_orders = models.BooleanField(
-        default=False,
-        verbose_name=_("Can perform check-ins"),
-        help_text=_('This includes searching for attendees, which can be used to obtain personal information about '
-                    'attendees. Users with "can change orders" can also perform check-ins.')
-    )
-    can_view_vouchers = models.BooleanField(
-        default=False,
-        verbose_name=_("Can view vouchers")
-    )
-    can_change_vouchers = models.BooleanField(
-        default=False,
-        verbose_name=_("Can change vouchers")
-    )
+    # Scope
+    all_events = models.BooleanField(default=False, verbose_name=_("All events (including newly created ones)"))
+    limit_events = models.ManyToManyField('Event', verbose_name=_("Limit to events"), blank=True)
+
+    # Permissions
+    # We store them as {key: True} instead of [key] because otherwise not all lookups we need are supported on SQLite
+    all_event_permissions = models.BooleanField(default=False, verbose_name=_("All event permissions"))
+    limit_event_permissions = models.JSONField(default=dict, verbose_name=_("Event permissions"))
+    all_organizer_permissions = models.BooleanField(default=False, verbose_name=_("All organizer permissions"))
+    limit_organizer_permissions = models.JSONField(default=dict, verbose_name=_("Organizer permissions"))
+
+    # Legacy lookups for plugin compatibility
+    can_change_event_settings = LegacyPermissionProperty()
+    can_change_items = LegacyPermissionProperty()
+    can_view_orders = LegacyPermissionProperty()
+    can_change_orders = LegacyPermissionProperty()
+    can_checkin_orders = LegacyPermissionProperty()
+    can_view_vouchers = LegacyPermissionProperty()
+    can_change_vuchers = LegacyPermissionProperty()
+    can_create_events = LegacyPermissionProperty()
+    can_change_organizer_settings = LegacyPermissionProperty()
+    can_change_teams = LegacyPermissionProperty()
+    can_manage_gift_cards = LegacyPermissionProperty()
+    can_manage_customers = LegacyPermissionProperty()
+    can_manage_reusable_media = LegacyPermissionProperty()
+
+    objects = TeamQuerySet.as_manager()
 
     def __str__(self) -> str:
         return _("%(name)s on %(object)s") % {
@@ -421,21 +397,45 @@ class Team(LoggedModel):
             'object': str(self.organizer),
         }
 
-    def permission_set(self) -> set:
-        attribs = dir(self)
-        return {
-            a for a in attribs if a.startswith('can_') and self.has_permission(a)
-        }
+    def permission_set(self, include_legacy=True) -> set:
+        from ..permissions import (
+            get_all_event_permissions, get_all_organizer_permissions,
+        )
+
+        result = set()
+        for permission in get_all_event_permissions():
+            if self.all_event_permissions or self.limit_event_permissions.get(permission.name):
+                result.add(permission.name)
+
+        for permission in get_all_organizer_permissions():
+            if self.all_organizer_permissions or self.limit_organizer_permissions.get(permission.name):
+                result.add(permission.name)
+
+        if include_legacy:
+            # Add legacy permissions as well for plugin compatibility
+            for k, v in OLD_TO_NEW_EVENT_COMPAT.items():
+                if self.all_event_permissions or all(self.limit_event_permissions.get(kk) for kk in v):
+                    result.add(k)
+
+            for k, v in OLD_TO_NEW_ORGANIZER_COMPAT.items():
+                if self.all_organizer_permissions or all(self.limit_organizer_permissions.get(kk) for kk in v):
+                    result.add(k)
+
+        return result
 
     @property
-    def can_change_settings(self):  # Legacy compatiblilty
+    def can_change_settings(self):  # Legacy compatibility
         return self.can_change_event_settings
 
-    def has_permission(self, perm_name):
-        try:
+    def has_event_permission(self, perm_name):
+        if perm_name.startswith('can_') and hasattr(self, perm_name):  # legacy
             return getattr(self, perm_name)
-        except AttributeError:
-            raise ValueError('Invalid required permission: %s' % perm_name)
+        return self.all_event_permissions or self.limit_event_permissions.get(perm_name, False)
+
+    def has_organizer_permission(self, perm_name):
+        if perm_name.startswith('can_') and hasattr(self, perm_name):  # legacy
+            return getattr(self, perm_name)
+        return self.all_organizer_permissions or self.limit_organizer_permissions.get(perm_name, False)
 
     def permission_for_event(self, event):
         if self.all_events:
@@ -529,8 +529,8 @@ class TeamAPIToken(models.Model):
             event in self.team.limit_events.all()
         )
         if isinstance(perm_name, (tuple, list)):
-            return has_event_access and any(self.team.has_permission(p) for p in perm_name)
-        return has_event_access and (not perm_name or self.team.has_permission(perm_name))
+            return has_event_access and any(self.team.has_event_permission(p) for p in perm_name)
+        return has_event_access and (not perm_name or self.team.has_event_permission(perm_name))
 
     def has_organizer_permission(self, organizer, perm_name=None, request=None):
         """
@@ -543,8 +543,8 @@ class TeamAPIToken(models.Model):
         :return: bool
         """
         if isinstance(perm_name, (tuple, list)):
-            return organizer == self.team.organizer and any(self.team.has_permission(p) for p in perm_name)
-        return organizer == self.team.organizer and (not perm_name or self.team.has_permission(perm_name))
+            return organizer == self.team.organizer and any(self.team.has_organizer_permission(p) for p in perm_name)
+        return organizer == self.team.organizer and (not perm_name or self.team.has_organizer_permission(perm_name))
 
     def get_events_with_any_permission(self):
         """
