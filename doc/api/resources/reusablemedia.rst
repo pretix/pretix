@@ -29,7 +29,8 @@ updated                               datetime                   Date of last mo
 expires                               datetime                   Expiry date (or ``null``)
 customer                              string                     Identifier of a customer account this medium belongs to.
 linked_orderpositions                 list of integer            Internal IDs of tickets this medium is linked to.
-linked_orderposition                  integer                    Internal ID of a ticket this medium is linked to. (**deprecated**, do not use, will be removed)
+linked_orderposition                  integer                    **DEPRECATED.** ID of the ticket the medium is linked to, if it is linked to 
+                                                                 only one ticket. ``null``, if the medium is linked to none or multiple tickets.
 linked_giftcard                       integer                    Internal ID of a gift card this medium is linked to.
 info                                  object                     Additional data, content depends on the ``type``. Consider
                                                                  this internal to the system and don't use it for your own data.
