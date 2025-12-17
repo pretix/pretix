@@ -90,6 +90,7 @@ StaticMapping = namedtuple('StaticMapping', ('id', 'pretix_model', 'external_obj
 
 class OutboundSyncProvider:
     max_attempts = 5
+    list_field_joiner = ","  # set to None to keep native lists in properties
 
     def __init__(self, event):
         self.event = event
@@ -281,7 +282,8 @@ class OutboundSyncProvider:
                             'Please update value mapping for field "{field_name}" - option "{val}" not assigned'
                         ).format(field_name=key, val=val)])
 
-            val = ",".join(val)
+            if self.list_field_joiner:
+                val = self.list_field_joiner.join(val)
         return val
 
     def get_properties(self, inputs: dict, property_mappings: List[dict]):
