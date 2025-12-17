@@ -1143,7 +1143,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 {'discount': ['You can only specify a discount if you do the price computation, but price is not set.']}
             )
 
-        if data.get('use_reusable_medium') and data.get('add_to_reusable_medium'):
+        if 'use_reusable_medium' in data and 'add_to_reusable_medium' in data:
             raise ValidationError({
                 'use_reusable_medium': ['You can only specify either use_reusable_medium or add_to_reusable_medium.'],
                 'add_to_reusable_medium': ['You can only specify either use_reusable_medium or add_to_reusable_medium.'],
