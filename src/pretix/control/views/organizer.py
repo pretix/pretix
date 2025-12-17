@@ -245,13 +245,13 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
 class OrganizerTeamView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     model = Organizer
     template_name = 'pretixcontrol/organizers/teams.html'
-    permission = 'can_change_permissions'
+    permission = 'organizer.teams:read'
     context_object_name = 'organizer'
 
 
 class OrganizerSettingsFormView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
     model = Organizer
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -282,7 +282,7 @@ class OrganizerSettingsFormView(OrganizerDetailViewMixin, OrganizerPermissionReq
 class OrganizerMailSettings(OrganizerSettingsFormView):
     form_class = MailSettingsForm
     template_name = 'pretixcontrol/organizers/mail.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
 
     def get_success_url(self):
         return reverse('control:organizer.settings.mail', kwargs={
@@ -308,7 +308,7 @@ class OrganizerMailSettings(OrganizerSettingsFormView):
 
 
 class MailSettingsSetup(OrganizerPermissionRequiredMixin, MailSettingsSetupView):
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     basetpl = 'pretixcontrol/base.html'
 
     def get_success_url(self):
@@ -323,7 +323,7 @@ class MailSettingsSetup(OrganizerPermissionRequiredMixin, MailSettingsSetupView)
 
 
 class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
 
     # return the origin text if key is missing in dict
     class SafeDict(dict):
@@ -455,7 +455,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
     model = Organizer
     form_class = OrganizerUpdateForm
     template_name = 'pretixcontrol/organizers/edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'organizer'
 
     @cached_property
@@ -597,7 +597,7 @@ class OrganizerCreate(CreateView):
 class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Organizer
     context_object_name = 'organizer'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     template_name = 'pretixcontrol/organizers/plugins.html'
 
     def get_object(self, queryset=None) -> Organizer:
@@ -769,14 +769,14 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
     model = Organizer
     context_object_name = 'organizer'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     template_name = 'pretixcontrol/organizers/plugin_events.html'
     form_class = OrganizerPluginEventsForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["events"] = self.request.user.get_events_with_permission(
-            "can_change_event_settings", request=self.request
+            "event.settings.general:write", request=self.request
         ).filter(organizer=self.request.organizer)
         kwargs["initial"] = {
             "events": self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)')
@@ -854,7 +854,7 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
 class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     model = Team
     template_name = 'pretixcontrol/organizers/teams.html'
-    permission = 'can_change_teams'
+    permission = 'organizer.teams:write'
     context_object_name = 'teams'
 
     def get_queryset(self):
@@ -880,7 +880,7 @@ class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, P
 class TeamCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     model = Team
     template_name = 'pretixcontrol/organizers/team_edit.html'
-    permission = 'can_change_teams'
+    permission = 'organizer.teams:write'
     form_class = TeamForm
 
     def get_form_kwargs(self):
@@ -917,7 +917,7 @@ class TeamCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 class TeamUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     model = Team
     template_name = 'pretixcontrol/organizers/team_edit.html'
-    permission = 'can_change_teams'
+    permission = 'organizer.teams:write'
     context_object_name = 'team'
     form_class = TeamForm
 
@@ -953,7 +953,7 @@ class TeamUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = Team
     template_name = 'pretixcontrol/organizers/team_delete.html'
-    permission = 'can_change_teams'
+    permission = 'organizer.teams:write'
     context_object_name = 'team'
 
     def get_object(self, queryset=None):
@@ -1013,7 +1013,7 @@ class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     template_name = 'pretixcontrol/organizers/team_members.html'
     context_object_name = 'team'
-    permission = 'can_change_teams'
+    permission = 'organizer.teams:write'
     model = Team
 
     def get_object(self, queryset=None):
@@ -1232,7 +1232,7 @@ class DeviceQueryMixin:
 class DeviceListView(DeviceQueryMixin, OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = Device
     template_name = 'pretixcontrol/organizers/devices.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'devices'
     paginate_by = 100
 
@@ -1245,7 +1245,7 @@ class DeviceListView(DeviceQueryMixin, OrganizerDetailViewMixin, OrganizerPermis
 class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     model = Device
     template_name = 'pretixcontrol/organizers/device_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     form_class = DeviceForm
 
     def get_form_kwargs(self):
@@ -1276,7 +1276,7 @@ class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
 class DeviceLogView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     template_name = 'pretixcontrol/organizers/device_logs.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     model = LogEntry
     context_object_name = 'logs'
     paginate_by = 20
@@ -1304,7 +1304,7 @@ class DeviceLogView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, 
 class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     model = Device
     template_name = 'pretixcontrol/organizers/device_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'device'
     form_class = DeviceForm
 
@@ -1347,7 +1347,7 @@ class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
 class DeviceBulkUpdateView(DeviceQueryMixin, OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
     template_name = 'pretixcontrol/organizers/device_bulk_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'device'
     form_class = DeviceBulkEditForm
 
@@ -1461,7 +1461,7 @@ class DeviceBulkUpdateView(DeviceQueryMixin, OrganizerDetailViewMixin, Organizer
 class DeviceConnectView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     model = Device
     template_name = 'pretixcontrol/organizers/device_connect.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'device'
 
     def get_object(self, queryset=None):
@@ -1493,7 +1493,7 @@ class DeviceConnectView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
 class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     model = Device
     template_name = 'pretixcontrol/organizers/device_revoke.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'device'
 
     def get_object(self, queryset=None):
@@ -1523,7 +1523,7 @@ class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 class WebHookListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = WebHook
     template_name = 'pretixcontrol/organizers/webhooks.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'webhooks'
 
     def get_queryset(self):
@@ -1533,7 +1533,7 @@ class WebHookListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
 class WebHookCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     model = WebHook
     template_name = 'pretixcontrol/organizers/webhook_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     form_class = WebHookForm
 
     def get_form_kwargs(self):
@@ -1567,7 +1567,7 @@ class WebHookCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
 class WebHookUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     model = WebHook
     template_name = 'pretixcontrol/organizers/webhook_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'webhook'
     form_class = WebHookForm
 
@@ -1610,7 +1610,7 @@ class WebHookUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
 class WebHookLogsView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = WebHook
     template_name = 'pretixcontrol/organizers/webhook_logs.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'calls'
     paginate_by = 50
 
@@ -1652,7 +1652,7 @@ class WebHookLogsView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
 class GiftCardAcceptanceInviteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
     model = GiftCardAcceptance
     template_name = 'pretixcontrol/organizers/giftcard_acceptance_invite.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     form_class = GiftCardAcceptanceInviteForm
 
     def get_form_kwargs(self):
@@ -1685,7 +1685,7 @@ class GiftCardAcceptanceInviteView(OrganizerDetailViewMixin, OrganizerPermission
 class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = GiftCardAcceptance
     template_name = 'pretixcontrol/organizers/giftcard_acceptance_list.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'acceptor_acceptance'
     paginate_by = 50
 
@@ -1754,7 +1754,7 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
 class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = GiftCard
     template_name = 'pretixcontrol/organizers/giftcards.html'
-    permission = 'can_manage_gift_cards'
+    permission = 'organizer.giftcards:write'
     context_object_name = 'giftcards'
     paginate_by = 50
 
@@ -1777,7 +1777,7 @@ class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
         ctx['other_organizers'] = self.request.user.get_organizers_with_permission(
-            'can_manage_gift_cards', self.request
+            'organizer.giftcards:write', self.request
         ).exclude(pk=self.request.organizer.pk)
         return ctx
 
@@ -1788,7 +1788,7 @@ class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
 class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     template_name = 'pretixcontrol/organizers/giftcard.html'
-    permission = 'can_manage_gift_cards'
+    permission = 'organizer.giftcards:write'
     context_object_name = 'card'
 
     def get_object(self, queryset=None) -> Organizer:
@@ -1880,7 +1880,7 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
 class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     template_name = 'pretixcontrol/organizers/giftcard_create.html'
-    permission = 'can_manage_gift_cards'
+    permission = 'organizer.giftcards:write'
     form_class = GiftCardCreateForm
     success_url = 'invalid'
 
@@ -1931,7 +1931,7 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
 class GiftCardUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     template_name = 'pretixcontrol/organizers/giftcard_edit.html'
-    permission = 'can_manage_gift_cards'
+    permission = 'organizer.giftcards:write'
     form_class = GiftCardUpdateForm
     success_url = 'invalid'
     context_object_name = 'card'
@@ -2026,7 +2026,7 @@ class ExportMixin:
 
     @cached_property
     def events(self):
-        return self.request.user.get_events_with_permission('can_view_orders', request=self.request).filter(
+        return self.request.user.get_events_with_permission('event.orders:read', request=self.request).filter(
             organizer=self.request.organizer
         )
 
@@ -2060,7 +2060,7 @@ class ExportMixin:
         return ctx
 
     def get_scheduled_queryset(self):
-        if not self.request.user.has_organizer_permission(self.request.organizer, 'can_change_organizer_settings',
+        if not self.request.user.has_organizer_permission(self.request.organizer, 'organizer.settings.general:write',
                                                           request=self.request):
             qs = self.request.organizer.scheduled_exports.filter(owner=self.request.user)
         else:
@@ -2306,7 +2306,7 @@ class RunScheduledExportView(OrganizerPermissionRequiredMixin, ExportMixin, View
 class GateListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = Gate
     template_name = 'pretixcontrol/organizers/gates.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'gates'
 
     def get_queryset(self):
@@ -2316,7 +2316,7 @@ class GateListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, L
 class GateCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     model = Gate
     template_name = 'pretixcontrol/organizers/gate_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     form_class = GateForm
 
     def get_form_kwargs(self):
@@ -2350,7 +2350,7 @@ class GateCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 class GateUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     model = Gate
     template_name = 'pretixcontrol/organizers/gate_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'gate'
     form_class = GateForm
 
@@ -2385,7 +2385,7 @@ class GateUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 class GateDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = Gate
     template_name = 'pretixcontrol/organizers/gate_delete.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'gate'
 
     def get_object(self, queryset=None):
@@ -2409,7 +2409,7 @@ class GateDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 class EventMetaPropertyListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = EventMetaProperty
     template_name = 'pretixcontrol/organizers/properties.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'properties'
 
     def get_queryset(self):
@@ -2460,7 +2460,7 @@ class EventMetaPropertyEditorMixin:
 
 class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, EventMetaPropertyEditorMixin, CreateView):
     model = EventMetaProperty
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
 
     def get_object(self, queryset=None):
         return EventMetaProperty()
@@ -2490,7 +2490,7 @@ class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionR
 
 class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, EventMetaPropertyEditorMixin, UpdateView):
     model = EventMetaProperty
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'property'
 
     def get_object(self, queryset=None):
@@ -2522,7 +2522,7 @@ class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionR
 class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = EventMetaProperty
     template_name = 'pretixcontrol/organizers/property_delete.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'property'
 
     def get_object(self, queryset=None):
@@ -2566,7 +2566,7 @@ def meta_property_move(request, property, up=True):
     messages.success(request, _('The order of properties has been updated.'))
 
 
-@organizer_permission_required("can_change_organizer_settings")
+@organizer_permission_required("organizer.settings.general:write")
 @require_http_methods(["POST"])
 def meta_property_move_up(request, organizer, property):
     meta_property_move(request, property, up=True)
@@ -2574,7 +2574,7 @@ def meta_property_move_up(request, organizer, property):
                     organizer=request.organizer.slug)
 
 
-@organizer_permission_required("can_change_organizer_settings")
+@organizer_permission_required("organizer.settings.general:write")
 @require_http_methods(["POST"])
 def meta_property_move_down(request, organizer, property):
     meta_property_move(request, property, up=False)
@@ -2583,7 +2583,7 @@ def meta_property_move_down(request, organizer, property):
 
 
 @transaction.atomic
-@organizer_permission_required("can_change_organizer_settings")
+@organizer_permission_required("organizer.settings.general:write")
 @require_http_methods(["POST"])
 def reorder_meta_properties(request, organizer):
     try:
@@ -2615,7 +2615,7 @@ def reorder_meta_properties(request, organizer):
 
 class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     template_name = 'pretixcontrol/organizers/logs.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     model = LogEntry
     context_object_name = 'logs'
 
@@ -2640,7 +2640,7 @@ class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
 class MembershipTypeListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = MembershipType
     template_name = 'pretixcontrol/organizers/membershiptypes.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'types'
 
     def get_queryset(self):
@@ -2650,7 +2650,7 @@ class MembershipTypeListView(OrganizerDetailViewMixin, OrganizerPermissionRequir
 class MembershipTypeCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     model = MembershipType
     template_name = 'pretixcontrol/organizers/membershiptype_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     form_class = MembershipTypeForm
 
     def get_object(self, queryset=None):
@@ -2684,7 +2684,7 @@ class MembershipTypeCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 class MembershipTypeUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     model = MembershipType
     template_name = 'pretixcontrol/organizers/membershiptype_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'type'
     form_class = MembershipTypeForm
 
@@ -2719,7 +2719,7 @@ class MembershipTypeUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 class MembershipTypeDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = MembershipType
     template_name = 'pretixcontrol/organizers/membershiptype_delete.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'type'
 
     def get_object(self, queryset=None):
@@ -2749,7 +2749,7 @@ class MembershipTypeDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 class SSOProviderListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = CustomerSSOProvider
     template_name = 'pretixcontrol/organizers/ssoproviders.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'providers'
 
     def get_queryset(self):
@@ -2759,7 +2759,7 @@ class SSOProviderListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
 class SSOProviderCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     model = CustomerSSOProvider
     template_name = 'pretixcontrol/organizers/ssoprovider_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     form_class = SSOProviderForm
 
     def get_object(self, queryset=None):
@@ -2793,7 +2793,7 @@ class SSOProviderCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     model = CustomerSSOProvider
     template_name = 'pretixcontrol/organizers/ssoprovider_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'provider'
     form_class = SSOProviderForm
 
@@ -2835,7 +2835,7 @@ class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 class SSOProviderDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = CustomerSSOProvider
     template_name = 'pretixcontrol/organizers/ssoprovider_delete.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'provider'
 
     def get_object(self, queryset=None):
@@ -2865,7 +2865,7 @@ class SSOProviderDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 class SSOClientListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = CustomerSSOClient
     template_name = 'pretixcontrol/organizers/ssoclients.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'clients'
 
     def get_queryset(self):
@@ -2875,7 +2875,7 @@ class SSOClientListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
 class SSOClientCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     model = CustomerSSOClient
     template_name = 'pretixcontrol/organizers/ssoclient_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     form_class = SSOClientForm
 
     def get_object(self, queryset=None):
@@ -2915,7 +2915,7 @@ class SSOClientCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
 class SSOClientUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     model = CustomerSSOClient
     template_name = 'pretixcontrol/organizers/ssoclient_edit.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'client'
     form_class = SSOClientForm
 
@@ -2965,7 +2965,7 @@ class SSOClientUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
 class SSOClientDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = CustomerSSOClient
     template_name = 'pretixcontrol/organizers/ssoclient_delete.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'client'
 
     def get_object(self, queryset=None):
@@ -2995,7 +2995,7 @@ class SSOClientDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
 class CustomerListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     model = Customer
     template_name = 'pretixcontrol/organizers/customers.html'
-    permission = 'can_manage_customers'
+    permission = 'organizer.customers:write'
     context_object_name = 'customers'
 
     def get_queryset(self):
@@ -3016,7 +3016,7 @@ class CustomerListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
 class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     template_name = 'pretixcontrol/organizers/customer.html'
-    permission = 'can_manage_customers'
+    permission = 'organizer.customers:write'
     context_object_name = 'orders'
 
     def get_queryset(self):
@@ -3132,7 +3132,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
 class CustomerCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     template_name = 'pretixcontrol/organizers/customer_edit.html'
-    permission = 'can_manage_customers'
+    permission = 'organizer.customers:write'
     context_object_name = 'customer'
     form_class = CustomerCreateForm
 
@@ -3162,7 +3162,7 @@ class CustomerCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
 class CustomerUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     template_name = 'pretixcontrol/organizers/customer_edit.html'
-    permission = 'can_manage_customers'
+    permission = 'organizer.customers:write'
     context_object_name = 'customer'
     form_class = CustomerUpdateForm
 
@@ -3191,7 +3191,7 @@ class CustomerUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
 class MembershipUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     template_name = 'pretixcontrol/organizers/customer_membership.html'
-    permission = 'can_manage_customers'
+    permission = 'organizer.customers:write'
     context_object_name = 'membership'
     form_class = MembershipUpdateForm
 
@@ -3231,7 +3231,7 @@ class MembershipUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequired
 
 class MembershipDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     template_name = 'pretixcontrol/organizers/customer_membership_delete.html'
-    permission = 'can_manage_customers'
+    permission = 'organizer.customers:write'
     context_object_name = 'membership'
 
     def get_object(self, queryset=None):
@@ -3269,7 +3269,7 @@ class MembershipDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequired
 
 class MembershipCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     template_name = 'pretixcontrol/organizers/customer_membership.html'
-    permission = 'can_manage_customers'
+    permission = 'organizer.customers:write'
     context_object_name = 'membership'
     form_class = MembershipUpdateForm
 
@@ -3308,7 +3308,7 @@ class MembershipCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequired
 
 class CustomerAnonymizeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     template_name = 'pretixcontrol/organizers/customer_anonymize.html'
-    permission = 'can_manage_customers'
+    permission = 'organizer.customers:write'
     context_object_name = 'customer'
 
     def get_object(self, queryset=None):
@@ -3335,7 +3335,7 @@ class CustomerAnonymizeView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 class ReusableMediaListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     model = ReusableMedium
     template_name = 'pretixcontrol/organizers/reusable_media.html'
-    permission = 'can_manage_reusable_media'
+    permission = 'organizer.reusablemedia:read'
     context_object_name = 'media'
 
     def get_queryset(self):
@@ -3359,7 +3359,7 @@ class ReusableMediaListView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
 class ReusableMediumDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/organizers/reusable_medium.html'
-    permission = 'can_manage_reusable_media'
+    permission = 'organizer.reusablemedia:read'
 
     @cached_property
     def medium(self):
@@ -3376,7 +3376,7 @@ class ReusableMediumDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 
 class ReusableMediumCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     template_name = 'pretixcontrol/organizers/reusable_medium_edit.html'
-    permission = 'can_manage_reusable_media'
+    permission = 'organizer.reusablemedia:write'
     context_object_name = 'medium'
     form_class = ReusableMediumCreateForm
 
@@ -3405,7 +3405,7 @@ class ReusableMediumCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 
 class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     template_name = 'pretixcontrol/organizers/reusable_medium_edit.html'
-    permission = 'can_manage_reusable_media'
+    permission = 'organizer.reusablemedia:write'
     context_object_name = 'medium'
     form_class = ReusableMediumUpdateForm
 
@@ -3435,7 +3435,7 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 class ChannelListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = SalesChannel
     template_name = 'pretixcontrol/organizers/channels.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'channels'
 
     def get_queryset(self):
@@ -3454,7 +3454,7 @@ class ChannelEditorMixin:
 
 class ChannelCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ChannelEditorMixin, CreateView):
     model = SalesChannel
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     template_name = 'pretixcontrol/organizers/channel_add.html'
 
     def get_object(self, queryset=None):
@@ -3526,7 +3526,7 @@ class ChannelCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
 
 class ChannelUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ChannelEditorMixin, UpdateView):
     model = SalesChannel
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'channel'
     template_name = 'pretixcontrol/organizers/channel_edit.html'
 
@@ -3571,7 +3571,7 @@ class ChannelUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
 class ChannelDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = SalesChannel
     template_name = 'pretixcontrol/organizers/channel_delete.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     context_object_name = 'channel'
 
     def get_object(self, queryset=None):
@@ -3627,7 +3627,7 @@ def channel_move(request, channel, up=True):
     messages.success(request, _('The order of sales channels has been updated.'))
 
 
-@organizer_permission_required("can_change_organizer_settings")
+@organizer_permission_required("organizer.settings.general:write")
 @require_http_methods(["POST"])
 def channel_move_up(request, organizer, channel):
     channel_move(request, channel, up=True)
@@ -3635,7 +3635,7 @@ def channel_move_up(request, organizer, channel):
                     organizer=request.organizer.slug)
 
 
-@organizer_permission_required("can_change_organizer_settings")
+@organizer_permission_required("organizer.settings.general:write")
 @require_http_methods(["POST"])
 def channel_move_down(request, organizer, channel):
     channel_move(request, channel, up=False)
@@ -3644,7 +3644,7 @@ def channel_move_down(request, organizer, channel):
 
 
 @transaction.atomic
-@organizer_permission_required("can_change_organizer_settings")
+@organizer_permission_required("organizer.settings.general:write")
 @require_http_methods(["POST"])
 def reorder_channels(request, organizer):
     try:

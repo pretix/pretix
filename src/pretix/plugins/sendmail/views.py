@@ -72,7 +72,7 @@ logger = logging.getLogger('pretix.plugins.sendmail')
 
 class IndexView(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixplugins/sendmail/index.html'
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def get_context_data(self, **kwargs):
         from .signals import sendmail_view_classes
@@ -94,7 +94,7 @@ class IndexView(EventPermissionRequiredMixin, TemplateView):
 class BaseSenderView(EventPermissionRequiredMixin, FormView):
     # These parameters usually SHOULD NOT be overridden
     template_name = 'pretixplugins/sendmail/send_form.html'
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     # These parameters MUST be overridden by subclasses
     form_fragment_name = None
@@ -523,7 +523,7 @@ class WaitinglistSendView(BaseSenderView):
 
 class EmailHistoryView(EventPermissionRequiredMixin, ListView):
     template_name = 'pretixplugins/sendmail/history.html'
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     model = LogEntry
     context_object_name = 'logs'
     paginate_by = 5
@@ -571,7 +571,7 @@ class EmailHistoryView(EventPermissionRequiredMixin, ListView):
 
 class CreateRule(EventPermissionRequiredMixin, CreateView):
     template_name = 'pretixplugins/sendmail/rule_create.html'
-    permission = 'can_change_event_settings'
+    permission = 'event.settings.general:write'
     form_class = forms.RuleForm
 
     model = Rule
@@ -621,7 +621,7 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
     model = Rule
     form_class = forms.RuleForm
     template_name = 'pretixplugins/sendmail/rule_update.html'
-    permission = 'can_change_event_settings'
+    permission = 'event.settings.general:write'
 
     def get_object(self, queryset=None) -> Rule:
         return get_object_or_404(
@@ -701,7 +701,7 @@ class ListRules(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
 class DeleteRule(EventPermissionRequiredMixin, DeleteView):
     model = Rule
-    permission = 'can_change_event_settings'
+    permission = 'event.settings.general:write'
     template_name = 'pretixplugins/sendmail/rule_delete.html'
     context_object_name = 'rule'
 

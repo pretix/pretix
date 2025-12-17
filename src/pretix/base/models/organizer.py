@@ -578,8 +578,8 @@ class TeamAPIToken(models.Model):
         :return: Iterable of Events
         """
         if (
-                isinstance(permission, (list, tuple)) and any(getattr(self.team, p, False) for p in permission)
-        ) or (isinstance(permission, str) and getattr(self.team, permission, False)):
+            isinstance(permission, (list, tuple)) and any(self.team.has_event_permission(p) for p in permission)
+        ) or (isinstance(permission, str) and self.team.has_event_permission(permission)):
             return self.get_events_with_any_permission()
         else:
             return self.team.organizer.events.none()

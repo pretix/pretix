@@ -255,7 +255,7 @@ class TicketPageMixin:
 
         ctx['download_buttons'] = self.download_buttons
 
-        ctx['backend_user'] = has_event_access_permission(self.request, 'can_view_orders')
+        ctx['backend_user'] = has_event_access_permission(self.request, 'event.orders:read')
 
         return ctx
 
