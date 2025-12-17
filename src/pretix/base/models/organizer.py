@@ -403,13 +403,13 @@ class Team(LoggedModel):
         )
 
         result = set()
-        for permission in get_all_event_permissions():
-            if self.all_event_permissions or self.limit_event_permissions.get(permission.name):
-                result.add(permission.name)
+        for permission in get_all_event_permissions().keys():
+            if self.all_event_permissions or self.limit_event_permissions.get(permission):
+                result.add(permission)
 
-        for permission in get_all_organizer_permissions():
-            if self.all_organizer_permissions or self.limit_organizer_permissions.get(permission.name):
-                result.add(permission.name)
+        for permission in get_all_organizer_permissions().keys():
+            if self.all_organizer_permissions or self.limit_organizer_permissions.get(permission):
+                result.add(permission)
 
         if include_legacy:
             # Add legacy permissions as well for plugin compatibility
@@ -446,6 +446,19 @@ class Team(LoggedModel):
     @property
     def active_tokens(self):
         return self.tokens.filter(active=True)
+
+    def save(self, **kwargs):
+        if not isinstance(self.limit_event_permissions, dict):
+            raise TypeError("Permissions must be a dictionary")
+        if not isinstance(self.limit_organizer_permissions, dict):
+            raise TypeError("Permissions must be a dictionary")
+        for k in self.limit_event_permissions.values():
+            if k is not True:
+                raise TypeError("Permissions must only contain True values")
+        for k in self.limit_organizer_permissions.values():
+            if k is not True:
+                raise TypeError("Permissions must only contain True values")
+        return super().save(**kwargs)
 
     class Meta:
         verbose_name = _("Team")

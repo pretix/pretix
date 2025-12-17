@@ -76,6 +76,9 @@ from pretix.base.models import (
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink, TeamQuerySet
+from pretix.base.permissions import (
+    get_all_event_permissions, get_all_organizer_permissions,
+)
 from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_organizer_settings,
 )
@@ -297,6 +300,18 @@ class MembershipTypeForm(I18nModelForm):
         fields = ['name', 'transferable', 'allow_parallel_usage', 'max_usages']
 
 
+class PermissionMultipleChoiceField(forms.MultipleChoiceField):
+    def to_python(self, value):
+        return {
+            k: True for k in super().to_python(value) if k
+        }
+
+    def prepare_value(self, value):
+        if isinstance(value, dict):
+            return [k for k, v in value.items() if v is True]
+        return super().prepare_value(value)
+
+
 class TeamForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -304,6 +319,44 @@ class TeamForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['limit_events'].queryset = organizer.events.all().order_by(
             '-has_subevents', '-date_from'
+        )
+        self.fields['limit_event_permissions'] = PermissionMultipleChoiceField(
+            label=self.fields['limit_event_permissions'].label,
+            choices=[
+                (
+                    p.name,
+                    format_html(
+                        '{} <span class="fa fa-info-circle text-muted" data-toggle="tooltip" title="{}"></span> (<code>{}</code>)',
+                        p.label, p.help_text, p.name
+                    ) if p.help_text
+                    else format_html('{} (<code>{}</code>)', p.label, p.name)
+                )
+                for p in get_all_event_permissions().values()
+            ],
+            widget=forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '#id_all_event_permissions',
+                'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
+            }),
+            required=False,
+        )
+        self.fields['limit_organizer_permissions'] = PermissionMultipleChoiceField(
+            label=self.fields['limit_organizer_permissions'].label,
+            choices=[
+                (
+                    p.name,
+                    format_html(
+                        '{} <span class="fa fa-info-circle text-muted" data-toggle="tooltip" title="{}"></span> (<code>{}</code>)',
+                        p.label, p.help_text, p.name
+                    ) if p.help_text
+                    else format_html('{} (<code>{}</code>)', p.label, p.name)
+                )
+                for p in get_all_organizer_permissions().values()
+            ],
+            widget=forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '#id_all_organizer_permissions',
+                'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
+            }),
+            required=False,
         )
 
     class Meta:
@@ -323,7 +376,7 @@ class TeamForm(forms.ModelForm):
 
     def clean(self):
         data = super().clean()
-        if self.instance.pk and not data['can_change_teams']:
+        if self.instance.pk and not data['all_organizer_permissions'] and not data.get('limit_organizer_permissions', {}).get('organizer.teams:write'):
             if not self.instance.organizer.teams.exclude(pk=self.instance.pk).filter(
                 TeamQuerySet.organizer_permission_q("organizer.teams:write"),
                 members__isnull=False
