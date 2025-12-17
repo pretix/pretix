@@ -310,30 +310,37 @@ def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event
             organizer=organizer,
         )
         rm.linked_orderpositions.add(order.positions.first())
-        rm.linked_orderpositions.add(order.positions.all()[1])
+        op_item_other = order.positions.all()[1]
+        rm.linked_orderpositions.add(op_item_other)
+
+    # multiple tickets are valid => no check-in
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
-    # TODO: AMBIGIOUS
-    assert resp.status_code == 201
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'ambiguous'
 
     with scopes_disabled():
-        op = order.positions.first()
-        op.valid_from = datetime.datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
-        op.save()
+        op_item_other.valid_from = datetime.datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
+        op_item_other.valid_until = datetime.datetime(2020, 1, 1, 15, 0, 0, tzinfo=event.timezone)
+        op_item_other.save()
 
     with freeze_time("2020-01-01 13:45:00"):
+        # multiple tickets are valid => no check-in
         resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
-        # TODO: AMBIGIOUS
-        assert resp.status_code == 201 
+        assert resp.status_code == 400
+        assert resp.data['status'] == 'error'
+        assert resp.data['reason'] == 'ambiguous'
 
     with freeze_time("2020-01-01 10:45:00"):
         resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
         assert resp.status_code == 201
         assert resp.data['status'] == 'ok'
 
-    with scopes_disabled():
-        ci = clist.checkins.get(position=order.positions.first())
-    assert ci.raw_barcode == "abcdef"
-    assert ci.raw_source_type == "barcode"
+    with freeze_time("2020-01-01 15:45:00"):
+        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 400
+        assert resp.data['status'] == 'error'
+        assert resp.data['reason'] == 'already_redeemed'
 
 
 @pytest.mark.django_db
