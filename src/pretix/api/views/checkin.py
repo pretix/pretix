@@ -666,19 +666,19 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     #    key on the same list, we're probably dealing with the ``addon_match`` case here and need to figure out
     #    which add-on has the right product.
     if len(op_candidates) > 1:
-        op_candidates_matching_product = [
-            op for op in op_candidates
-            if (
-                (list_by_event[op.order.event_id].addon_match or op.secret == raw_barcode or legacy_url_support) and
-                (list_by_event[op.order.event_id].all_products or op.item_id in {i.pk for i in list_by_event[op.order.event_id].limit_products.all()})
-            )
-        ]
-
-        if len(op_candidates_matching_product) > 1:
-            # if none of the above filters the results to 1, filter based on op.valid_from/until
-            # keep ops without valid_from/until
+        # only check addons if at most one non-addon-op is in op_candidates
+        # otherwise it is likely a medium linked to multiple orderpositions, which we need to filter based on validity
+        if len([op for op in op_candidates if not op.addon_to]) <= 1:
             op_candidates_matching_product = [
-                op for op in op_candidates_matching_product
+                op for op in op_candidates
+                if (
+                    (list_by_event[op.order.event_id].addon_match or op.secret == raw_barcode or legacy_url_support) and
+                    (list_by_event[op.order.event_id].all_products or op.item_id in {i.pk for i in list_by_event[op.order.event_id].limit_products.all()})
+                )
+            ]
+        else:
+            op_candidates_matching_product = [
+                op for op in op_candidates
                 if (
                     (not op.valid_from or op.valid_from < now()) and
                     (not op.valid_until or op.valid_until > now())
