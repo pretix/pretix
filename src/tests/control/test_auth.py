@@ -1123,7 +1123,7 @@ class Obligatory2FATest(TestCase):
         session.save()
 
         organizer = Organizer.objects.create(name='Dummy', slug='dummy')
-        team = Team.objects.create(organizer=organizer, can_change_teams=True, name='Admin team')
+        team = Team.objects.create(organizer=organizer, all_event_permissions=True, name='Admin team')
         team.members.add(self.user)
         self.user.require_2fa = False
         self.user.save()

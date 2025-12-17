@@ -85,7 +85,7 @@ def order(event, customer):
 def admin_user(organizer):
     u = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     admin_team = Team.objects.create(
-        organizer=organizer, can_manage_customers=True, can_change_organizer_settings=True,
+        organizer=organizer, all_organizer_permissions=True,
         name='Admin team'
     )
     admin_team.members.add(u)

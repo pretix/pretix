@@ -51,6 +51,7 @@ from pretix.base.models import (
     ItemVariation, ItemVariationMetaValue, Order, OrderPosition, Organizer,
     SubEventMetaValue, User, Voucher,
 )
+from pretix.base.models.organizer import TeamQuerySet
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import (
     event_permission_required, organizer_permission_required,
@@ -240,8 +241,13 @@ def ticket_select2(request, **kwargs):
         qs_orders = qs_orders.filter(
             exact_match | (
                 soft_match & (
-                    Q(order__event__organizer_id__in=request.user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
-                    | Q(order__event_id__in=request.user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
+                    Q(order__event__organizer_id__in=request.user.teams.filter(
+                        TeamQuerySet.event_permission_q("event.orders:read"),
+                        all_events=True,
+                    ).values_list('organizer', flat=True))
+                    | Q(order__event_id__in=request.user.teams.filter(
+                        TeamQuerySet.event_permission_q("event.orders:read")
+                    ).values_list('limit_events__id', flat=True))
                 )
             )
         )
@@ -337,9 +343,9 @@ def nav_context_list(request):
         if not request.user.has_active_staff_session(request.session.session_key):
             qs_orders = qs_orders.filter(
                 Q(event__organizer_id__in=request.user.teams.filter(
-                    all_events=True, can_view_orders=True).values_list('organizer', flat=True))
+                    TeamQuerySet.event_permission_q("event.orders:read"), all_events=True).values_list('organizer', flat=True))
                 | Q(event_id__in=request.user.teams.filter(
-                    can_view_orders=True).values_list('limit_events__id', flat=True))
+                    TeamQuerySet.event_permission_q("event.orders:read")).values_list('limit_events__id', flat=True))
             )
 
         qs_vouchers = Voucher.objects.filter(
@@ -348,9 +354,9 @@ def nav_context_list(request):
         if not request.user.has_active_staff_session(request.session.session_key):
             qs_vouchers = qs_vouchers.filter(
                 Q(event__organizer_id__in=request.user.teams.filter(
-                    all_events=True, can_view_vouchers=True).values_list('organizer', flat=True))
+                    TeamQuerySet.event_permission_q("event.vouchers:read"), all_events=True).values_list('organizer', flat=True))
                 | Q(event_id__in=request.user.teams.filter(
-                    can_view_vouchers=True).values_list('limit_events__id', flat=True))
+                    TeamQuerySet.event_permission_q("event.vouchers:read")).values_list('limit_events__id', flat=True))
             )
     else:
         qs_vouchers = Voucher.objects.none()
@@ -813,7 +819,7 @@ def organizer_select2(request):
         qs = qs.filter(Q(name__icontains=term) | Q(slug__icontains=term))
     if not request.user.has_active_staff_session(request.session.session_key):
         if 'can_create' in request.GET:
-            qs = qs.filter(pk__in=request.user.teams.filter(can_create_events=True).values_list('organizer', flat=True))
+            qs = qs.filter(pk__in=request.user.teams.filter(TeamQuerySet.organizer_permission_q("organizer.events:create")).values_list('organizer', flat=True))
         else:
             qs = qs.filter(pk__in=request.user.teams.values_list('organizer', flat=True))
 
@@ -976,21 +982,21 @@ def item_meta_values(request, organizer, event):
     var_matches = var_matches.filter(variation__item__event__organizer_id=organizer.pk)
     all_access = (
         request.user.has_active_staff_session(request.session.session_key)
-        or request.user.teams.filter(all_events=True, organizer=organizer, can_change_items=True).exists()
+        or request.user.teams.filter(TeamQuerySet.event_permission_q("event.items:write"), all_events=True, organizer=organizer).exists()
     )
     if not all_access:
         defaults = defaults.filter(
-            event__id__in=request.user.teams.filter(can_change_items=True).values_list(
+            event__id__in=request.user.teams.filter(TeamQuerySet.event_permission_q("event.items:write")).values_list(
                 'limit_events__id', flat=True
             )
         )
         matches = matches.filter(
-            item__event__id__in=request.user.teams.filter(can_change_items=True).values_list(
+            item__event__id__in=request.user.teams.filter(TeamQuerySet.event_permission_q("event.items:write")).values_list(
                 'limit_events__id', flat=True
             )
         )
         var_matches = var_matches.filter(
-            variation__item__event__id__in=request.user.teams.filter(can_change_items=True).values_list(
+            variation__item__event__id__in=request.user.teams.filter(TeamQuerySet.event_permission_q("event.items:write")).values_list(
                 'limit_events__id', flat=True
             )
         )

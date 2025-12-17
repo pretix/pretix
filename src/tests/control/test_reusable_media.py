@@ -122,7 +122,7 @@ def test_typeahead(organizer, admin_user, client, gift_card):
 
     # Privileged user can search
     team.all_events = True
-    team.can_view_orders = True
+    team.limit_event_permissions["event.orders:read"] = True
     team.save()
 
     r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret[0:3])
@@ -140,7 +140,7 @@ def test_typeahead(organizer, admin_user, client, gift_card):
 
     # Unprivileged user can only do exact match
     team.all_events = True
-    team.can_view_orders = False
+    team.limit_event_permissions["event.orders:read"] = False
     team.save()
 
     r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret[0:3])
@@ -154,7 +154,7 @@ def test_typeahead(organizer, admin_user, client, gift_card):
     assert d == {"results": [{'event': 'Dummy', 'id': op.pk, 'text': 'FOO-1 (Early-bird ticket)'}], "pagination": {"more": False}}
 
     team.all_events = False
-    team.can_view_orders = True
+    team.limit_event_permissions["event.orders:read"] = True
     team.save()
 
     r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret[0:3])

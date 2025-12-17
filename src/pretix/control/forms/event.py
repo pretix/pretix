@@ -62,6 +62,7 @@ from pretix.base.forms import (
 )
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
+from pretix.base.models.organizer import TeamQuerySet
 from pretix.base.models.tax import TAX_CODE_LISTS
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.services.placeholders import FormPlaceholderMixin
@@ -104,7 +105,7 @@ class EventWizardFoundationForm(forms.Form):
         qs = Organizer.objects.all()
         if not self.user.has_active_staff_session(self.session.session_key):
             qs = qs.filter(
-                id__in=self.user.teams.filter(can_create_events=True).values_list('organizer', flat=True)
+                id__in=self.user.teams.filter(TeamQuerySet.organizer_permission_q("organizer.events:create")).values_list('organizer', flat=True)
             )
         self.fields['organizer'] = forms.ModelChoiceField(
             label=_("Organizer"),
@@ -262,8 +263,12 @@ class EventWizardBasicsForm(I18nModelForm):
     @staticmethod
     def has_control_rights(user, organizer, session):
         return user.teams.filter(
-            organizer=organizer, all_events=True, can_change_event_settings=True, can_change_items=True,
-            can_change_orders=True, can_change_vouchers=True
+            TeamQuerySet.event_permission_q("event.items:write"),
+            TeamQuerySet.event_permission_q("event.orders:write"),
+            TeamQuerySet.event_permission_q("event.vouchers:write"),
+            TeamQuerySet.event_permission_q("event.settings.general:write"),
+            organizer=organizer,
+            all_events=True,
         ).exists() or user.has_active_staff_session(session.session_key)
 
 
@@ -294,9 +299,14 @@ class EventWizardCopyForm(forms.Form):
             return Event.objects.all()
         return Event.objects.filter(
             Q(organizer_id__in=user.teams.filter(
-                all_events=True, can_change_event_settings=True, can_change_items=True
+                # TODO: review these!
+                # Restrict cross-organizer copying further than same-organizer copying?
+                TeamQuerySet.event_permission_q("event.settings.general:write"),
+                TeamQuerySet.event_permission_q("event.items:write"),
+                all_events=True,
             ).values_list('organizer', flat=True)) | Q(id__in=user.teams.filter(
-                can_change_event_settings=True, can_change_items=True
+                TeamQuerySet.event_permission_q("event.settings.general:write"),
+                TeamQuerySet.event_permission_q("event.items:write"),
             ).values_list('limit_events__id', flat=True))
         )
 
