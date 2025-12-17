@@ -99,7 +99,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
     ordering = ('position', 'id')
     filterset_class = ItemFilter
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     def get_queryset(self):
         return self.request.event.items.select_related('tax_rule').prefetch_related(
@@ -163,7 +163,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'position')
     ordering = ('id',)
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     @cached_property
     def item(self):
@@ -234,7 +234,7 @@ class ItemBundleViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id',)
     ordering = ('id',)
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     @cached_property
     def item(self):
@@ -286,7 +286,7 @@ class ItemProgramTimeViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id',)
     ordering = ('id',)
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     @cached_property
     def item(self):
@@ -339,7 +339,7 @@ class ItemAddOnViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'position')
     ordering = ('id',)
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     @cached_property
     def item(self):
@@ -398,7 +398,7 @@ class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     def get_queryset(self):
         return self.request.event.categories.all()
@@ -453,7 +453,7 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     def get_queryset(self):
         return self.request.event.questions.prefetch_related('options').all()
@@ -497,7 +497,7 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'position')
     ordering = ('position',)
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     def get_queryset(self):
         q = get_object_or_404(Question, pk=self.kwargs['question'], event=self.request.event)
@@ -564,7 +564,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     ordering_fields = ('id', 'size')
     ordering = ('id',)
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     def get_queryset(self):
         return self.request.event.quotas.select_related('subevent').prefetch_related('items', 'variations').all()

@@ -216,7 +216,7 @@ class PayView(PaypalOrderView, TemplateView):
 
 
 @scopes_disabled()
-@event_permission_required('can_change_event_settings')
+@event_permission_required('event.settings.general:write')
 def isu_return(request, *args, **kwargs):
     getparams = ['merchantId', 'merchantIdInPayPal', 'permissionsGranted', 'accountStatus', 'consentStatus', 'productIntentID', 'isEmailConfirmed']
     sessionparams = ['payment_paypal_isu_event', 'payment_paypal_isu_tracking_id']
@@ -526,7 +526,7 @@ def webhook(request, *args, **kwargs):
     return HttpResponse(status=200)
 
 
-@event_permission_required('can_change_event_settings')
+@event_permission_required('event.settings.general:write')
 @require_POST
 def isu_disconnect(request, **kwargs):
     del request.event.settings.payment_paypal_connect_refresh_token

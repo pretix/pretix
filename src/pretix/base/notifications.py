@@ -151,7 +151,7 @@ def get_all_notification_types(event=None):
 
 
 class ParametrizedOrderNotificationType(NotificationType):
-    required_permission = "can_view_orders"
+    required_permission = "event.orders:read"
 
     def __init__(self, event, action_type, verbose_name, title):
         self._action_type = action_type

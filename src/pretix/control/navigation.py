@@ -43,7 +43,7 @@ def get_event_navigation(request: HttpRequest):
             'icon': 'dashboard',
         }
     ]
-    if 'can_change_event_settings' in request.eventpermset:
+    if 'event.settings.general:write' in request.eventpermset:
         event_settings = [
             {
                 'label': _('General'),
@@ -133,7 +133,7 @@ def get_event_navigation(request: HttpRequest):
             'children': event_settings
         })
 
-    if 'can_change_items' in request.eventpermset:
+    if 'event.items:write' in request.eventpermset:
         nav.append({
             'label': _('Products'),
             'url': reverse('control:event.items', kwargs={
@@ -187,7 +187,7 @@ def get_event_navigation(request: HttpRequest):
             ]
         })
 
-    if 'can_change_event_settings' in request.eventpermset:
+    if 'event.settings.general:write' in request.eventpermset:
         if request.event.has_subevents:
             nav.append({
                 'label': pgettext_lazy('subevent', 'Dates'),
@@ -199,7 +199,7 @@ def get_event_navigation(request: HttpRequest):
                 'icon': 'calendar',
             })
 
-    if 'can_view_orders' in request.eventpermset:
+    if 'event.orders:read' in request.eventpermset:
         children = [
             {
                 'label': _('All orders'),
@@ -242,7 +242,7 @@ def get_event_navigation(request: HttpRequest):
                 'active': 'event.orders.waitinglist' in url.url_name,
             },
         ]
-        if 'can_change_orders' in request.eventpermset:
+        if 'event.orders:write' in request.eventpermset:
             children.append({
                 'label': _('Import'),
                 'url': reverse('control:event.orders.import', kwargs={
@@ -262,7 +262,7 @@ def get_event_navigation(request: HttpRequest):
             'children': children
         })
 
-    if 'can_view_vouchers' in request.eventpermset:
+    if 'event.vouchers:read' in request.eventpermset:
         nav.append({
             'label': _('Vouchers'),
             'url': reverse('control:event.vouchers', kwargs={
@@ -291,7 +291,7 @@ def get_event_navigation(request: HttpRequest):
             ]
         })
 
-    if 'can_view_orders' in request.eventpermset:
+    if 'event.orders:read' in request.eventpermset:
         nav.append({
             'label': pgettext_lazy('navigation', 'Check-in'),
             'url': reverse('control:event.orders.checkinlists', kwargs={
@@ -480,7 +480,7 @@ def get_organizer_navigation(request):
             'icon': 'calendar',
         },
     ]
-    if 'can_change_organizer_settings' in request.orgapermset:
+    if 'organizer.settings.general:write' in request.orgapermset:
         nav.append({
             'label': _('Settings'),
             'url': reverse('control:organizer.edit', kwargs={
@@ -534,7 +534,7 @@ def get_organizer_navigation(request):
             ]
         })
 
-    if 'can_change_teams' in request.orgapermset:
+    if 'organizer.teams:write' in request.orgapermset:
         nav.append({
             'label': _('Teams'),
             'url': reverse('control:organizer.teams', kwargs={
@@ -544,7 +544,7 @@ def get_organizer_navigation(request):
             'icon': 'group',
         })
 
-    if 'can_manage_gift_cards' in request.orgapermset:
+    if 'organizer.giftcards:write' in request.orgapermset:
         children = []
         children.append({
             'label': _('Gift cards'),
@@ -554,7 +554,7 @@ def get_organizer_navigation(request):
             'active': 'organizer.giftcard' in url.url_name and 'acceptance' not in url.url_name,
             'children': children,
         })
-        if 'can_change_organizer_settings' in request.orgapermset:
+        if 'organizer.settings.general:write' in request.orgapermset:
             children.append(
                 {
                     'label': _('Acceptance'),
@@ -575,7 +575,7 @@ def get_organizer_navigation(request):
 
     if request.organizer.settings.customer_accounts:
         children = []
-        if 'can_manage_customers' in request.orgapermset:
+        if 'organizer.customers:write' in request.orgapermset:
             children.append(
                 {
                     'label': _('Customers'),
@@ -585,7 +585,7 @@ def get_organizer_navigation(request):
                     'active': 'organizer.customer' in url.url_name,
                 }
             )
-        if 'can_change_organizer_settings' in request.orgapermset:
+        if 'organizer.settings.general:write' in request.orgapermset:
             children.append(
                 {
                     'label': _('Membership types'),
@@ -633,7 +633,7 @@ def get_organizer_navigation(request):
             'active': 'organizer.reusable_medi' in url.url_name,
         })
 
-    if 'can_change_organizer_settings' in request.orgapermset:
+    if 'organizer.settings.general:write' in request.orgapermset:
         nav.append({
             'label': _('Devices'),
             'url': reverse('control:organizer.devices', kwargs={
@@ -667,7 +667,7 @@ def get_organizer_navigation(request):
         'icon': 'download',
     })
 
-    if 'can_change_organizer_settings' in request.orgapermset:
+    if 'organizer.settings.general:write' in request.orgapermset:
         merge_in(nav, [{
             'parent': reverse('control:organizer.export', kwargs={
                 'organizer': request.organizer.slug,

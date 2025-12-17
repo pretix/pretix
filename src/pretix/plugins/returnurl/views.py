@@ -48,7 +48,7 @@ class ReturnSettings(EventSettingsViewMixin, EventSettingsFormView):
     model = Event
     form_class = ReturnSettingsForm
     template_name = 'returnurl/settings.html'
-    permission = 'can_change_settings'
+    permission = 'event.settings.general:write'
 
     def get_success_url(self) -> str:
         return reverse('plugins:returnurl:settings', kwargs={

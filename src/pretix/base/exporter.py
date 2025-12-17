@@ -184,7 +184,7 @@ class OrganizerLevelExportMixin:
         The permission level required to use this exporter. Only useful for organizer-level exports,
         not for event-level exports.
         """
-        return 'can_view_orders'
+        return 'event.orders:read'
 
 
 class ListExporter(BaseExporter):

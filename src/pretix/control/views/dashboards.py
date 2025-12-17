@@ -351,10 +351,10 @@ def event_index(request, organizer, event):
         except SubEvent.DoesNotExist:
             pass
 
-    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'can_view_orders',
+    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'event.orders:read',
                                                         request=request)
     can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
-                                                                  'can_change_event_settings', request=request)
+                                                                  'event.settings.general:write', request=request)
 
     widgets = []
     if can_view_orders:
@@ -426,11 +426,11 @@ def event_index_log_lazy(request, organizer, event):
                                                          'device').order_by('-datetime')
     qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
 
-    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'can_view_orders',
+    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'event.orders:read',
                                                         request=request)
     can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
-                                                                  'can_change_event_settings', request=request)
-    can_view_vouchers = request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers',
+                                                                  'event.settings.general:write', request=request)
+    can_view_vouchers = request.user.has_event_permission(request.organizer, request.event, 'event.vouchers:read',
                                                           request=request)
 
     if not can_view_orders:
@@ -442,7 +442,7 @@ def event_index_log_lazy(request, organizer, event):
             ContentType.objects.get_for_model(Voucher),
             ContentType.objects.get_for_model(Order)
         ]
-        if request.user.has_event_permission(request.organizer, request.event, 'can_change_items', request=request):
+        if request.user.has_event_permission(request.organizer, request.event, 'event.items:write', request=request):
             allowed_types += [
                 ContentType.objects.get_for_model(Item),
                 ContentType.objects.get_for_model(ItemCategory),

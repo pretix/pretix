@@ -117,7 +117,7 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
     model = SubEvent
     context_object_name = 'subevents'
     template_name = 'pretixcontrol/subevents/index.html'
-    permission = 'can_change_settings'
+    permission = 'event.settings.general:write'
 
     def get_queryset(self):
         return super().get_queryset(True).prefetch_related(
@@ -156,7 +156,7 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
 class SubEventDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = SubEvent
     template_name = 'pretixcontrol/subevents/delete.html'
-    permission = 'can_change_settings'
+    permission = 'event.settings.general:write'
     context_object_name = 'subevents'
 
     def get_object(self, queryset=None) -> SubEvent:
@@ -241,7 +241,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
             property=p,
             disabled=(
                 p.protected and
-                not self.request.user.has_organizer_permission(self.request.organizer, 'can_change_organizer_settings', request=self.request)
+                not self.request.user.has_organizer_permission(self.request.organizer, 'organizer.settings.general:write', request=self.request)
             ),
             default=self._default_meta.get(p.name, ''),
             instance=val_instances.get(p.pk, self.meta_model(property=p, subevent=self.object)),
@@ -508,7 +508,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
 class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateView):
     model = SubEvent
     template_name = 'pretixcontrol/subevents/detail.html'
-    permission = 'can_change_settings'
+    permission = 'event.settings.general:write'
     context_object_name = 'subevent'
     form_class = SubEventForm
 
@@ -575,7 +575,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
 class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateView):
     model = SubEvent
     template_name = 'pretixcontrol/subevents/detail.html'
-    permission = 'can_change_settings'
+    permission = 'event.settings.general:write'
     context_object_name = 'subevent'
     form_class = SubEventForm
 
@@ -669,7 +669,7 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
 
 
 class SubEventBulkAction(SubEventQueryMixin, EventPermissionRequiredMixin, View):
-    permission = 'can_change_settings'
+    permission = 'event.settings.general:write'
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -740,7 +740,7 @@ class SubEventBulkAction(SubEventQueryMixin, EventPermissionRequiredMixin, View)
 class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, AsyncFormView):
     model = SubEvent
     template_name = 'pretixcontrol/subevents/bulk.html'
-    permission = 'can_change_settings'
+    permission = 'event.settings.general:write'
     context_object_name = 'subevent'
     form_class = SubEventBulkForm
     itemformclass = BulkSubEventItemForm
@@ -1065,7 +1065,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
 
 
 class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormView):
-    permission = 'can_change_settings'
+    permission = 'event.settings.general:write'
     form_class = SubEventBulkEditForm
     template_name = 'pretixcontrol/subevents/bulk_edit.html'
     context_object_name = 'subevent'

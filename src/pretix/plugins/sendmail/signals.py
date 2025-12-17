@@ -79,7 +79,7 @@ def scheduled_mail_create(sender, **kwargs):
 @receiver(nav_event, dispatch_uid="sendmail_nav")
 def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
-    if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders', request=request):
+    if not request.user.has_event_permission(request.organizer, request.event, 'event.orders:write', request=request):
         return []
     return [
         {

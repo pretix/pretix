@@ -58,7 +58,7 @@ logger = logging.getLogger(__name__)
 
 class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/pdf/index.html'
-    permission = 'can_change_settings'
+    permission = 'event.settings.general:write'
     accepted_formats = (
         'application/pdf',
     )

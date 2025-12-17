@@ -150,7 +150,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInList
     model = Checkin
     context_object_name = 'entries'
     template_name = 'pretixcontrol/checkin/index.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def dispatch(self, request, *args, **kwargs):
         self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))
@@ -211,7 +211,7 @@ class CheckInListBulkRevertConfirmView(CheckInListQueryMixin, EventPermissionReq
 
 
 class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMixin, AsyncPostView):
-    permission = ('can_change_orders', 'can_checkin_orders')
+    permission = ('event.orders:write', 'event.orders:checkin')
 
     def dispatch(self, request, *args, **kwargs):
         self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))
@@ -228,7 +228,7 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
         self.list = get_object_or_404(request.event.checkin_lists.all(), pk=kwargs.get("list"))
         positions = self.get_queryset()
         if request.POST.get('revert') == 'true':
-            if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders', request=request):
+            if not request.user.has_event_permission(request.organizer, request.event, 'event.orders:write', request=request):
                 raise PermissionDenied()
             for op in positions:
                 if op.order.status == Order.STATUS_PAID or (
@@ -295,7 +295,7 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
 class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = CheckinList
     context_object_name = 'checkinlists'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
     template_name = 'pretixcontrol/checkin/lists.html'
     ordering = ('subevent__date_from', 'name', 'pk')
 
@@ -317,9 +317,9 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
         ctx['checkinlists'] = clists
 
-        ctx['can_change_organizer_settings'] = self.request.user.has_organizer_permission(
+        ctx['organizer.settings.general:write'] = self.request.user.has_organizer_permission(
             self.request.organizer,
-            'can_change_organizer_settings',
+            'organizer.settings.general:write',
             self.request
         )
         ctx['filter_form'] = self.filter_form
@@ -335,7 +335,7 @@ class CheckinListCreate(EventPermissionRequiredMixin, CreateView):
     model = CheckinList
     form_class = CheckinListForm
     template_name = 'pretixcontrol/checkin/list_edit.html'
-    permission = 'can_change_event_settings'
+    permission = 'event.settings.general:write'
     context_object_name = 'checkinlist'
 
     def dispatch(self, request, *args, **kwargs):
@@ -386,7 +386,7 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
     model = CheckinList
     form_class = CheckinListForm
     template_name = 'pretixcontrol/checkin/list_edit.html'
-    permission = 'can_change_event_settings'
+    permission = 'event.settings.general:write'
     context_object_name = 'checkinlist'
 
     def dispatch(self, request, *args, **kwargs):
@@ -445,7 +445,7 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
 class CheckinListDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = CheckinList
     template_name = 'pretixcontrol/checkin/list_delete.html'
-    permission = 'can_change_event_settings'
+    permission = 'event.settings.general:write'
     context_object_name = 'checkinlist'
 
     def get_object(self, queryset=None) -> CheckinList:
@@ -476,7 +476,7 @@ class CheckinListDelete(EventPermissionRequiredMixin, CompatDeleteView):
 class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = Checkin
     context_object_name = 'checkins'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
     template_name = 'pretixcontrol/checkin/checkins.html'
     ordering = ('-datetime', '-pk')
 
@@ -505,7 +505,7 @@ class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
 class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
     template_name = 'pretixcontrol/checkin/simulator.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
     form_class = CheckinListSimulatorForm
 
     def dispatch(self, request, *args, **kwargs):
@@ -575,7 +575,7 @@ class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
 
 class CheckInResetView(CheckInListQueryMixin, EventPermissionRequiredMixin, AsyncFormView):
     form_class = CheckinResetForm
-    permission = "can_change_orders"
+    permission = "event.orders:write"
     template_name = "pretixcontrol/checkin/reset.html"
 
     def get_error_url(self, *args):

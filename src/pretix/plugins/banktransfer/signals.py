@@ -41,7 +41,7 @@ def register_payment_provider(sender, **kwargs):
 @receiver(nav_event, dispatch_uid="payment_banktransfer_nav")
 def control_nav_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
-    if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders', request=request):
+    if not request.user.has_event_permission(request.organizer, request.event, 'event.orders:write', request=request):
         return []
     return [
         {
@@ -76,7 +76,7 @@ def control_nav_import(sender, request=None, **kwargs):
 @receiver(nav_organizer, dispatch_uid="payment_banktransfer_organav")
 def control_nav_orga_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
-    if not request.user.has_organizer_permission(request.organizer, 'can_change_orders', request=request):
+    if not request.user.has_organizer_permission(request.organizer, 'event.orders:write', request=request):
         return []
     return [
         {

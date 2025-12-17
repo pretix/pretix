@@ -50,7 +50,7 @@ from . import CreateView, PaginationMixin, UpdateView
 class DiscountDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = Discount
     template_name = 'pretixcontrol/items/discount_delete.html'
-    permission = 'can_change_items'
+    permission = 'event.items:write'
     context_object_name = 'discount'
 
     def get_context_data(self, *args, **kwargs) -> dict:
@@ -96,7 +96,7 @@ class DiscountUpdate(EventPermissionRequiredMixin, UpdateView):
     model = Discount
     form_class = DiscountForm
     template_name = 'pretixcontrol/items/discount.html'
-    permission = 'can_change_items'
+    permission = 'event.items:write'
     context_object_name = 'discount'
 
     def get_object(self, queryset=None) -> Discount:
@@ -139,7 +139,7 @@ class DiscountCreate(EventPermissionRequiredMixin, CreateView):
     model = Discount
     form_class = DiscountForm
     template_name = 'pretixcontrol/items/discount.html'
-    permission = 'can_change_items'
+    permission = 'event.items:write'
     context_object_name = 'discount'
 
     def get_success_url(self) -> str:
@@ -227,7 +227,7 @@ def discount_move(request, discount, up=True):
     messages.success(request, _('The order of discounts has been updated.'))
 
 
-@event_permission_required("can_change_items")
+@event_permission_required("event.items:write")
 @require_http_methods(["POST"])
 def discount_move_up(request, organizer, event, discount):
     discount_move(request, discount, up=True)
@@ -236,7 +236,7 @@ def discount_move_up(request, organizer, event, discount):
                     event=request.event.slug)
 
 
-@event_permission_required("can_change_items")
+@event_permission_required("event.items:write")
 @require_http_methods(["POST"])
 def discount_move_down(request, organizer, event, discount):
     discount_move(request, discount, up=False)
@@ -246,7 +246,7 @@ def discount_move_down(request, organizer, event, discount):
 
 
 @transaction.atomic
-@event_permission_required("can_change_items")
+@event_permission_required("event.items:write")
 @require_http_methods(["POST"])
 def reorder_discounts(request, organizer, event):
     try:

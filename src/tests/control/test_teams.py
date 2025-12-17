@@ -231,9 +231,9 @@ def test_create_team(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/organizer/dummy/team/add', {
         'name': 'Foo',
-        'can_create_events': 'on',
+        'organizer.events:create': 'on',
         'limit_events': str(event.pk),
-        'can_change_event_settings': 'on'
+        'event.settings.general:write': 'on'
     }, follow=True)
     with scopes_disabled():
         t = Team.objects.last()
@@ -249,9 +249,9 @@ def test_update_team(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/organizer/dummy/team/{}/edit'.format(admin_team.pk), {
         'name': 'Admin',
-        'can_change_teams': 'on',
+        'organizer.teams:write': 'on',
         'limit_events': str(event.pk),
-        'can_change_event_settings': 'on'
+        'event.settings.general:write': 'on'
     }, follow=True)
     admin_team.refresh_from_db()
     assert admin_team.can_change_event_settings
@@ -265,7 +265,7 @@ def test_update_last_team_to_be_no_admin(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.post('/control/organizer/dummy/team/{}/edit'.format(admin_team.pk), {
         'name': 'Admin',
-        'can_change_event_settings': 'on'
+        'event.settings.general:write': 'on'
     }, follow=True)
     assert 'alert-danger' in resp.content.decode()
 
