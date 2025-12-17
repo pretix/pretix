@@ -272,7 +272,8 @@ def test_org_level_export(token_client, organizer, team, event):
     }, format='json')
     assert resp.status_code == 202
 
-    team.can_manage_gift_cards = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
 
     resp = token_client.post('/api/v1/organizers/{}/exporters/giftcardlist/run/'.format(organizer.slug), data={
@@ -331,7 +332,8 @@ def test_event_scheduled_export_list_token(token_client, organizer, event, user,
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
-    team.can_change_event_settings = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
 
     # Token can no longer sees it an gets error message
@@ -353,7 +355,7 @@ def test_event_scheduled_export_list_user(user_client, organizer, event, user, t
     resp = user_client.get('/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
 
-    team.can_change_event_settings = False
+    team.limit_event_permissions["event.settings.general:write"] = False
     team.save()
 
     # Owner still can
@@ -490,7 +492,8 @@ def test_org_scheduled_export_list_token(token_client, organizer, user, team, or
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
-    team.can_change_organizer_settings = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
 
     # Token can no longer sees it an gets error message
@@ -513,7 +516,8 @@ def test_org_scheduled_export_list_user(user_client, organizer, user, team, org_
     resp = user_client.get('/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug))
     assert [res] == resp.data['results']
 
-    team.can_change_organizer_settings = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
 
     # Owner still can

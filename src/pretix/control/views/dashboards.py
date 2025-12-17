@@ -66,6 +66,7 @@ from pretix.control.signals import (
 from pretix.helpers.daterange import daterange
 
 from ...base.models.orders import CancellationRequest
+from ...base.models.organizer import TeamQuerySet
 from ...base.templatetags.money import money_filter
 from ..logdisplay import OVERVIEW_BANLIST
 
@@ -491,8 +492,13 @@ def widgets_for_event_qs(request, qs, user, nmax, lazy=False):
     # Get set of events where we have the permission to show the # of orders
     if not lazy:
         events_with_orders = set(qs.filter(
-            Q(organizer_id__in=user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
-            | Q(id__in=user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
+            Q(organizer_id__in=user.teams.filter(
+                TeamQuerySet.event_permission_q("event.orders:read"),
+                all_events=True,
+            ).values_list('organizer', flat=True))
+            | Q(id__in=user.teams.filter(
+                TeamQuerySet.event_permission_q("event.orders:read"),
+            ).values_list('limit_events__id', flat=True))
         ).values_list('id', flat=True))
 
     tpl = """

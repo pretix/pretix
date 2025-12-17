@@ -75,7 +75,7 @@ from pretix.base.models import (
     ReusableMedium, SalesChannel, Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
-from pretix.base.models.organizer import OrganizerFooterLink
+from pretix.base.models.organizer import OrganizerFooterLink, TeamQuerySet
 from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_organizer_settings,
 )
@@ -325,7 +325,8 @@ class TeamForm(forms.ModelForm):
         data = super().clean()
         if self.instance.pk and not data['can_change_teams']:
             if not self.instance.organizer.teams.exclude(pk=self.instance.pk).filter(
-                    can_change_teams=True, members__isnull=False
+                TeamQuerySet.organizer_permission_q("organizer.teams:write"),
+                members__isnull=False
             ).exists():
                 raise ValidationError(_('The changes could not be saved because there would be no remaining team with '
                                         'the permission to change teams and permissions.'))

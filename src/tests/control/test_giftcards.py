@@ -213,8 +213,8 @@ def test_typeahead(organizer, admin_user, client, gift_card):
     assert d == {"results": [{"id": gift_card.pk, "text": gift_card.secret}], "pagination": {"more": False}}
 
     # Unprivileged user can only do exact match
-    team.can_manage_gift_cards = False
-    team.can_manage_reusable_media = True
+    team.all_organizer_permissions = False
+    team.limit_organizer_permissions = {"organizer.reusablemedia:write": True, "organizer.reusablemedia:read": True}
     team.save()
 
     r = client.get('/control/organizer/dummy/giftcards/select2?query=' + gift_card.secret[0:3])
