@@ -45,12 +45,19 @@ from pretix.base.models import (
     SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
+from pretix.base.permissions import (
+    get_all_event_permissions, get_all_organizer_permissions,
+)
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
     PLUGIN_LEVEL_ORGANIZER,
 )
 from pretix.base.services.mail import mail
 from pretix.base.settings import validate_organizer_settings
+from pretix.helpers.permission_migration import (
+    OLD_TO_NEW_EVENT_COMPAT, OLD_TO_NEW_EVENT_MIGRATION,
+    OLD_TO_NEW_ORGANIZER_COMPAT, OLD_TO_NEW_ORGANIZER_MIGRATION,
+)
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -306,19 +313,76 @@ class EventSlugField(serializers.SlugRelatedField):
         return self.context['organizer'].events.all()
 
 
+class PermissionMultipleChoiceField(serializers.MultipleChoiceField):
+    def to_internal_value(self, data):
+        return {
+            p: True for p in data
+        }
+
+    def to_representation(self, value):
+        return [p for p, v in value.items() if v]
+
+
 class TeamSerializer(serializers.ModelSerializer):
     limit_events = EventSlugField(slug_field='slug', many=True)
+    limit_event_permissions = PermissionMultipleChoiceField(choices=[], required=False, allow_null=False, allow_empty=True)
+    limit_organizer_permissions = PermissionMultipleChoiceField(choices=[], required=False, allow_null=False, allow_empty=True)
 
     class Meta:
         model = Team
         fields = (
-            'id', 'name', 'require_2fa', 'all_events', 'limit_events', 'can_create_events', 'can_change_teams',
-            'can_change_organizer_settings', 'can_manage_gift_cards', 'can_change_event_settings',
-            'can_change_items', 'can_view_orders', 'can_change_orders', 'can_view_vouchers',
-            'can_change_vouchers', 'can_checkin_orders', 'can_manage_customers', 'can_manage_reusable_media'
+            'id', 'name', 'require_2fa', 'all_events', 'limit_events', 'all_event_permissions', 'limit_event_permissions',
+            'all_organizer_permissions', 'limit_organizer_permissions',
         )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['limit_event_permissions'].choices = [(p.name, p.name) for p in get_all_event_permissions().values()]
+        self.fields['limit_organizer_permissions'].choices = [(p.name, p.name) for p in get_all_organizer_permissions().values()]
+
+    def to_representation(self, instance):
+        r = super().to_representation(instance)
+        for old, new in OLD_TO_NEW_EVENT_COMPAT.items():
+            r[old] = instance.all_event_permissions or all(instance.limit_event_permissions.get(n) for n in new)
+        for old, new in OLD_TO_NEW_ORGANIZER_COMPAT.items():
+            r[old] = instance.all_organizer_permissions or all(instance.limit_organizer_permissions.get(n) for n in new)
+        return r
+
     def validate(self, data):
+        old_data_set = any(k.startswith("can_") for k in data)
+        new_data_set = any(k in data for k in [
+            "all_event_permissions", "limit_event_permissions", "all_organizer_permissions", "limit_organizer_permissions"
+        ])
+        if old_data_set and new_data_set:
+            raise ValidationError("You cannot set deprecated and current permission attributes at the same time.")
+
+        if new_data_set:
+            if data.get('limit_event_permissions') and data.get('all_event_permissions'):
+                raise ValidationError('Do not set both limit_event_permissions and all_event_permissions.')
+            if data.get('limit_organizer_permissions') and data.get('all_organizer_permissions'):
+                raise ValidationError('Do not set both limit_organizer_permissions and all_organizer_permissions.')
+
+        if old_data_set:
+            # Migrate with same logic as in migration 0297_plugable_permissions
+            if all(data.get("k") is True for k in OLD_TO_NEW_EVENT_MIGRATION.keys() if k != "can_checkin_orders"):
+                data["all_event_permissions"] = True
+                data["limit_event_permissions"] = []
+            else:
+                data["all_event_permissions"] = False
+                data["limit_event_permissions"] = []
+                for k, v in OLD_TO_NEW_EVENT_MIGRATION.items():
+                    if data.get(k) is True:
+                        data["limit_event_permissions"].extend(v)
+            if all(data.get("k") is True for k in OLD_TO_NEW_ORGANIZER_MIGRATION.keys() if k != "can_checkin_orders"):
+                data["all_organizer_permissions"] = True
+                data["limit_organizer_permissions"] = []
+            else:
+                data["all_organizer_permissions"] = False
+                data["limit_organizer_permissions"] = []
+                for k, v in OLD_TO_NEW_EVENT_MIGRATION.items():
+                    if data.get(k) is True:
+                        data["limit_organizer_permissions"].extend(v)
+
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
         if full_data.get('limit_events') and full_data.get('all_events'):
