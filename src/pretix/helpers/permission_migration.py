@@ -21,6 +21,9 @@
 #
 import warnings
 
+# The first two mapping tables are used to migrate *configuration*, i.e. existing Team objects or Team objects
+# created through old-style API calls. These need to be "complete on both sides", i.e. all new permissions are assigned
+# to existing users in some scenario.
 OLD_TO_NEW_EVENT_MIGRATION = {
     "can_change_event_settings": [
         "event.settings.general:write",
@@ -47,8 +50,12 @@ OLD_TO_NEW_ORGANIZER_MIGRATION = {
     "can_manage_customers": ["organizer.customers:read", "organizer.customers:write"],
     "can_manage_reusable_media": ["organizer.reusablemedia:read", "organizer.reusablemedia:write"],
 }
+
+# The second two mapping tables are used to migrate permission *checks*, i.e. they define which permissions a user needs
+# to have to fulfill the "old-style condition". These are shorter than the migration mappings, since it does not
+# make sense to check e.g. for event.settings.tax:write on every plugin that checks for can_change_event_settings
 OLD_TO_NEW_EVENT_COMPAT = {
-    "can_change_event_settings": ["event.settings.general:write",],
+    "can_change_event_settings": ["event.settings.general:write"],
     "can_change_items": ["event.items:write"],
     "can_view_orders": ["event.orders:read"],
     "can_change_orders": ["event.orders:write"],
