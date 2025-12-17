@@ -149,6 +149,71 @@ class WaitingListEntry(LoggedModel):
     def name_all_components(self):
         return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=lambda: self.event.settings.name_scheme)
 
+    def get_rank(self):
+        """
+        Calculate the rank/position of this waiting list entry.
+        
+        Returns:
+            - 0 if this entry has a valid, unredeemed voucher (waiting for redemption)
+            - None if this entry has an expired or fully redeemed voucher
+            - int (1-based rank) if this entry has no voucher - position in waiting list
+        """
+        # Check if entry has a voucher
+        if self.voucher:
+            # Check if voucher is expired
+            if self.voucher.valid_until is not None and self.voucher.valid_until < now():
+                return None
+            # Check if voucher is fully redeemed
+            if self.voucher.redeemed >= self.voucher.max_usages:
+                return None
+            # Voucher is valid and not fully redeemed - waiting for redemption
+            return 0
+        
+        # No voucher - calculate rank in waiting list
+        # Filter by same event, item, variation, and subevent
+        qs = WaitingListEntry.objects.filter(
+            event=self.event,
+            item=self.item,
+            variation=self.variation,
+            subevent=self.subevent
+        )
+        
+        # Include entries that are active:
+        # - No voucher (voucher__isnull=True), OR
+        # - Valid voucher (not expired and not fully redeemed)
+        valid_voucher_q = Q(
+            voucher__valid_until__isnull=True
+        ) | Q(
+            voucher__valid_until__gte=now()
+        )
+        unredeemed_q = Q(
+            voucher__redeemed__lt=F('voucher__max_usages')
+        )
+        
+        qs = qs.filter(
+            Q(voucher__isnull=True) | (Q(voucher__isnull=False) & valid_voucher_q & unredeemed_q)
+        )
+        
+        # Count entries that come before this entry in the ordered queryset
+        # Ordering is: -priority (desc), created (asc), pk (asc)
+        # So entries before this one have:
+        # - Higher priority (priority > self.priority), OR
+        # - Same priority and earlier created (priority == self.priority AND created < self.created), OR
+        # - Same priority, same created, lower pk (priority == self.priority AND created == self.created AND pk < self.pk)
+        before_q = Q(
+            priority__gt=self.priority
+        ) | Q(
+            priority=self.priority,
+            created__lt=self.created
+        ) | Q(
+            priority=self.priority,
+            created=self.created,
+            pk__lt=self.pk
+        )
+        
+        rank = qs.filter(before_q).count() + 1
+        return rank
+
     def send_voucher(self, quota_cache=None, user=None, auth=None):
         availability = (
             self.variation.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
