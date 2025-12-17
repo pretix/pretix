@@ -381,7 +381,7 @@ class Team(LoggedModel):
     can_change_orders = LegacyPermissionProperty()
     can_checkin_orders = LegacyPermissionProperty()
     can_view_vouchers = LegacyPermissionProperty()
-    can_change_vuchers = LegacyPermissionProperty()
+    can_change_vouchers = LegacyPermissionProperty()
     can_create_events = LegacyPermissionProperty()
     can_change_organizer_settings = LegacyPermissionProperty()
     can_change_teams = LegacyPermissionProperty()

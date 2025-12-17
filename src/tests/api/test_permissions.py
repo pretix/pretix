@@ -281,9 +281,9 @@ event_permission_root_urls = [
 
 @pytest.fixture
 def token_client(client, team):
-    team.can_view_orders = True
-    team.can_view_vouchers = True
-    team.can_change_items = True
+    team.limit_event_permissions["event.orders:read"] = True
+    team.limit_event_permissions["event.vouchers:read"] = True
+    team.limit_event_permissions["event.items:write"] = True
     team.save()
     t = team.tokens.create(name='Foo')
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)

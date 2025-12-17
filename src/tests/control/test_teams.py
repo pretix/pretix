@@ -56,7 +56,7 @@ def event(organizer):
 
 @pytest.fixture
 def admin_team(organizer):
-    return Team.objects.create(organizer=organizer, can_change_teams=True, name='Admin team')
+    return Team.objects.create(organizer=organizer, all_organizer_permissions=True, all_event_permissions=True, name='Admin team')
 
 
 @pytest.fixture
@@ -216,7 +216,7 @@ def test_team_remove_last_admin(event, admin_user, admin_team, client):
     with scopes_disabled():
         assert admin_user in admin_team.members.all()
 
-    t2.can_change_teams = True
+    t2.limit_organizer_permissions = {"organizer.teams:write": True}
     t2.save()
     resp = client.post('/control/organizer/dummy/team/{}/'.format(admin_team.pk), {
         'remove-member': admin_user.pk

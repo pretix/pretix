@@ -260,7 +260,8 @@ def test_all_subevents_list_filter(token_client, organizer, event, subevent):
 def test_subevent_create(team, token_client, organizer, event, subevent, meta_prop, item):
     meta_prop.choices = [{"key": "Conference", "label": {"en": "Conference"}}, {"key": "Workshop", "label": {"en": "Workshop"}}]
     meta_prop.save()
-    team.can_change_organizer_settings = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
     organizer.meta_properties.create(
         name="protected", protected=True

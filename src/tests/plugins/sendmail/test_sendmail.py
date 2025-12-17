@@ -47,7 +47,7 @@ from pretix.base.models import Checkin, Item, Order, OrderPosition, Team, User
 def logged_in_client(client, event):
     """Returns a logged client"""
     user = User.objects.create_superuser('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)
+    t = Team.objects.create(organizer=event.organizer, all_event_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
     client.force_login(user)

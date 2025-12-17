@@ -42,7 +42,7 @@ def env():
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)
+    t = Team.objects.create(organizer=event.organizer, all_event_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
     o1 = Order.objects.create(

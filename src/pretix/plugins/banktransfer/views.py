@@ -58,6 +58,7 @@ from localflavor.generic.forms import BICFormField, IBANFormField
 
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
+from pretix.base.models.organizer import TeamQuerySet
 from pretix.base.settings import SettingsSandbox
 from pretix.base.templatetags.money import money_filter
 from pretix.control.permissions import (
@@ -655,14 +656,20 @@ class OrganizerActionView(OrganizerBanktransferView, OrganizerPermissionRequired
     permission = 'can_change_orders'
 
     def order_qs(self):
-        all = self.request.user.teams.filter(organizer=self.request.organizer, can_change_orders=True,
-                                             can_view_orders=True, all_events=True).exists()
+        all = self.request.user.teams.filter(
+            TeamQuerySet.event_permission_q("event.orders:read"),
+            TeamQuerySet.event_permission_q("event.orders:write"),
+            all_events=True,
+            organizer=self.request.organizer,
+        ).exists()
         if self.request.user.has_active_staff_session(self.request.session.session_key) or all:
             return Order.objects.filter(event__organizer=self.request.organizer)
         else:
             return Order.objects.filter(
                 event_id__in=self.request.user.teams.filter(
-                    organizer=self.request.organizer, can_change_orders=True, can_view_orders=True
+                    TeamQuerySet.event_permission_q("event.orders:read"),
+                    TeamQuerySet.event_permission_q("event.orders:write"),
+                    organizer=self.request.organizer,
                 ).values_list('limit_events__id', flat=True)
             )
 

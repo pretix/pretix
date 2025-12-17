@@ -51,6 +51,7 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.forms import SafeSessionWizardView
 from pretix.base.i18n import language
 from pretix.base.models import Event, EventMetaValue, Organizer, Quota, Team
+from pretix.base.models.organizer import TeamQuerySet
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.control.forms.event import (
     EventWizardBasicsForm, EventWizardCopyForm, EventWizardFoundationForm,
@@ -190,7 +191,9 @@ class EventWizard(SafeSessionWizardView):
                     qs = Organizer.objects.all()
                     if not self.request.user.has_active_staff_session(self.request.session.session_key):
                         qs = qs.filter(
-                            id__in=self.request.user.teams.filter(can_create_events=True).values_list('organizer', flat=True)
+                            id__in=self.request.user.teams.filter(
+                                TeamQuerySet.organizer_permission_q("organizer.events:create"),
+                            ).values_list('organizer', flat=True)
                         )
                     organizer = qs.get(slug=self.request.GET.get('organizer'))
                     initial['organizer'] = organizer
@@ -222,7 +225,7 @@ class EventWizard(SafeSessionWizardView):
 
     def get_context_data(self, form, **kwargs):
         ctx = super().get_context_data(form, **kwargs)
-        ctx['has_organizer'] = self.request.user.teams.filter(can_create_events=True).exists()
+        ctx['has_organizer'] = self.request.user.teams.filter(TeamQuerySet.organizer_permission_q("organizer.events:create")).exists()
         if self.steps.current == 'basics':
             ctx['organizer'] = self.get_cleaned_data_for_step('foundation').get('organizer')
         return ctx
@@ -284,21 +287,16 @@ class EventWizard(SafeSessionWizardView):
                         name=_('Team {event}').format(
                             event=str(event.name)[:100] + "…" if len(str(event.name)) > 100 else str(event.name)
                         ),
-                        can_change_event_settings=True, can_change_items=True,
-                        can_view_orders=True, can_change_orders=True, can_view_vouchers=True,
-                        can_change_vouchers=True
+                        all_organizer_permissions=False,
+                        all_event_permissions=True,
                     )
                     t.members.add(self.request.user)
                     t.limit_events.add(event)
                     t.log_action('pretix.team.created', user=self.request.user, data={
                         '_created_by_event_wizard': True,
                         'name': t.name,
-                        'can_change_event_settings': True,
-                        'can_change_items': True,
-                        'can_view_orders': True,
-                        'can_change_orders': True,
-                        'can_view_vouchers': True,
-                        'can_change_vouchers': True,
+                        'all_organizer_permissions': False,
+                        'all_event_permissions': True,
                         'limit_events': [event.pk],
                     })
 

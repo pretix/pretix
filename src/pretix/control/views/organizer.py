@@ -96,7 +96,9 @@ from pretix.base.models.giftcards import (
     GiftCardAcceptance, GiftCardTransaction, gen_giftcard_secret,
 )
 from pretix.base.models.orders import CancellationRequest
-from pretix.base.models.organizer import SalesChannel, TeamAPIToken
+from pretix.base.models.organizer import (
+    SalesChannel, TeamAPIToken, TeamQuerySet,
+)
 from pretix.base.payment import PaymentException
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
@@ -581,10 +583,7 @@ class OrganizerCreate(CreateView):
         ret = super().form_valid(form)
         t = Team.objects.create(
             organizer=form.instance, name=_('Administrators'),
-            all_events=True, can_create_events=True, can_change_teams=True, can_manage_gift_cards=True,
-            can_change_organizer_settings=True, can_change_event_settings=True, can_change_items=True,
-            can_manage_customers=True, can_manage_reusable_media=True,
-            can_view_orders=True, can_change_orders=True, can_view_vouchers=True, can_change_vouchers=True
+            all_events=True, all_event_permissions=True, all_organizer_permissions=True,
         )
         t.members.add(self.request.user)
         return ret
@@ -972,7 +971,8 @@ class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 
     def is_allowed(self) -> bool:
         return self.request.organizer.teams.exclude(pk=self.kwargs.get('team')).filter(
-            can_change_teams=True, members__isnull=False
+            TeamQuerySet.organizer_permission_q("organizer.teams:write"),
+            members__isnull=False
         ).exists() or self.request.user.has_active_staff_session(self.request.session.session_key)
 
     @transaction.atomic
@@ -1064,9 +1064,10 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                 pass
             else:
                 other_admin_teams = self.request.organizer.teams.exclude(pk=self.object.pk).filter(
-                    can_change_teams=True, members__isnull=False
+                    TeamQuerySet.organizer_permission_q("organizer.teams:write"),
+                    members__isnull=False
                 ).exists() or self.request.user.has_active_staff_session(self.request.session.session_key)
-                if not other_admin_teams and self.object.can_change_teams and self.object.members.count() == 1:
+                if not other_admin_teams and self.object.has_permission() and self.object.members.count() == 1:
                     messages.error(self.request, _('You cannot remove the last member from this team as no one would '
                                                    'be left with the permission to change teams.'))
                     return redirect(self.get_success_url())

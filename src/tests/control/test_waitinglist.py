@@ -64,7 +64,7 @@ def env():
         event=event, item=item2, email='valid@example.org', voucher=v
     )
 
-    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
+    t = Team.objects.create(organizer=o, all_event_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
 

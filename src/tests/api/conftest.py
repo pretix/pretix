@@ -106,17 +106,8 @@ def team(organizer):
     return Team.objects.create(
         organizer=organizer,
         name="Test-Team",
-        can_change_teams=True,
-        can_manage_gift_cards=True,
-        can_change_items=True,
-        can_create_events=True,
-        can_change_event_settings=True,
-        can_change_vouchers=True,
-        can_view_vouchers=True,
-        can_change_orders=True,
-        can_manage_customers=True,
-        can_manage_reusable_media=True,
-        can_change_organizer_settings=True
+        all_event_permissions=True,
+        all_organizer_permissions=True,
     )
 
 
@@ -140,8 +131,8 @@ def user():
 @pytest.fixture
 @scopes_disabled()
 def user_client(client, team, user):
-    team.can_view_orders = True
-    team.can_view_vouchers = True
+    team.limit_event_permissions["event.orders:read"] = True
+    team.limit_event_permissions["event.vouchers:read"] = True
     team.all_events = True
     team.save()
     team.members.add(user)
@@ -152,8 +143,8 @@ def user_client(client, team, user):
 @pytest.fixture
 @scopes_disabled()
 def token_client(client, team):
-    team.can_view_orders = True
-    team.can_view_vouchers = True
+    team.limit_event_permissions["event.orders:read"] = True
+    team.limit_event_permissions["event.vouchers:read"] = True
     team.all_events = True
     team.save()
     t = team.tokens.create(name='Foo')

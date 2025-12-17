@@ -76,13 +76,11 @@ class EventsTest(SoupTest):
             date_from=datetime.datetime(2014, 9, 5, tzinfo=datetime.timezone.utc),
         )
 
-        self.team1 = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
-                                         can_change_items=True)
+        self.team1 = Team.objects.create(organizer=self.orga1, all_organizer_permissions=True, all_event_permissions=True)
         self.team1.members.add(self.user)
         self.team1.limit_events.add(self.event1)
 
-        self.team2 = Team.objects.create(organizer=self.orga1, can_change_event_settings=True, can_change_items=True,
-                                         can_change_orders=True, can_change_vouchers=True)
+        self.team2 = Team.objects.create(organizer=self.orga1, all_event_permissions=True)
         self.team2.members.add(self.user)
 
         self.client.login(email='dummy@dummy.dummy', password='dummy')
@@ -1276,8 +1274,7 @@ class EventDeletionTest(SoupTest):
             has_subevents=False
         )
 
-        t = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
-                                can_change_items=True)
+        t = Team.objects.create(organizer=self.orga1, all_organizer_permissions=True, all_event_permissions=True)
         t.members.add(self.user)
         t.limit_events.add(self.event1)
         self.ticket = self.event1.items.create(name='Early-bird ticket',

@@ -243,7 +243,8 @@ def test_event_create(team, token_client, organizer, event, meta_prop):
         {"key": "Workshop", "label": {"en": "Workshop"}},
     ]
     meta_prop.save()
-    team.can_change_organizer_settings = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
     organizer.meta_properties.create(
         name="protected", protected=True
@@ -581,16 +582,8 @@ def test_event_create_with_clone_across_organizers(user, user_client, organizer,
         target_org = Organizer.objects.create(name='Dummy', slug='dummy2')
         team = target_org.teams.create(
             name="Test-Team",
-            can_change_teams=True,
-            can_manage_gift_cards=True,
-            can_change_items=True,
-            can_create_events=True,
-            can_change_event_settings=True,
-            can_change_vouchers=True,
-            can_view_vouchers=True,
-            can_change_orders=True,
-            can_manage_customers=True,
-            can_change_organizer_settings=True
+            all_event_permissions=True,
+            all_organizer_permissions=True,
         )
         team.members.add(user)
 

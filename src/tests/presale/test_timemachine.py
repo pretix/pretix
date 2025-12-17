@@ -28,8 +28,7 @@ class TimemachineTestMixin:
     @scopes_disabled()
     def _login_with_permission(self, orga):
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-        self.team1 = Team.objects.create(organizer=orga, can_create_events=True, can_change_event_settings=True,
-                                         can_change_items=True, all_events=True)
+        self.team1 = Team.objects.create(organizer=orga, all_event_permissions=True, all_events=True)
         self.team1.members.add(self.user)
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
