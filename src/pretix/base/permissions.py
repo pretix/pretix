@@ -75,7 +75,8 @@ def get_all_organizer_permissions():
 @receiver(register_event_permissions, dispatch_uid="base_register_default_event_permissions")
 def register_default_event_permissions(sender, **kwargs):
     return [
-        Permission("event.settings.general:write", _("Change general settings"), None, None),
+        Permission("event.settings.general:write", _("Change general settings"), None,
+                   _("This includes access to all settings not listed explicitly below, including plugin settings.")),
         Permission("event.settings.payment:write", _("Change payment settings"), None, None),
         Permission("event.settings.plugins:write", _("Change plugin settings"), None, None),
         Permission("event.settings.email.sender:write", _("Change email sending settings"), None, None),
@@ -86,9 +87,9 @@ def register_default_event_permissions(sender, **kwargs):
         Permission("event.orders:read", _("View orders"), None, None),
         Permission("event.orders:write", _("Change orders"), None, _("This includes the ability to cancel and refund individual orders.")),
         Permission("event.orders:checkin", _("Check-in orders"), None, None),
-        Permission("event:cancel", pgettext_lazy("subevent", "Cancel the entire event or date"), None, None),
         Permission("event.vouchers:read", _("View vouchers"), None, None),
         Permission("event.vouchers:write", _("Change vouchers"), None, None),
+        Permission("event:cancel", pgettext_lazy("subevent", " entire event or date"), None, None),
     ]
 
 
@@ -96,7 +97,8 @@ def register_default_event_permissions(sender, **kwargs):
 def register_default_organizer_permissions(sender, **kwargs):
     return [
         Permission("organizer.events:create", _("Create events"), None, None),
-        Permission("organizer.settings.general:write", _("Change settings"), None, None),
+        Permission("organizer.settings.general:write", _("Change settings"), None,
+                   _("This includes access to all organizer-level functionality not listed explicitly below, including plugin settings.")),
         Permission("organizer.teams:write", _("Change teams"), None,
                    _("This includes the ability to give someone (including oneself) additional permissions.")),
         Permission("organizer.giftcards:read", _("View gift cards"), None, None),
@@ -107,5 +109,5 @@ def register_default_organizer_permissions(sender, **kwargs):
         Permission("organizer.reusablemedia:write", _("Change reusable media"), None, None),
         Permission("organizer.devices:read", _("View devices"), None, None),
         Permission("organizer.devices:write", _("Change devices"), None,
-                   _("This inclues the ability to give access to events and date oneself does not have access to.")),
+                   _("This includes the ability to give access to events and data oneself does not have access to.")),
     ]
