@@ -111,7 +111,7 @@ error_messages = {
     'subevent_required': pgettext_lazy('subevent', 'No date was specified.'),
     'not_for_sale': gettext_lazy('You selected a product which is not available for sale.'),
     'positions_removed': gettext_lazy(
-        'Some products have can no longer be purchased and have been removed from your cart for the following reason: %s'
+        'Some products can no longer be purchased and have been removed from your cart for the following reason: %s'
     ),
     'unavailable': gettext_lazy(
         'Some of the products you selected are no longer available. '
@@ -1549,7 +1549,7 @@ class CartManager:
             if isinstance(op, self.RemoveOperation):
                 if op.position.is_bundled and op.position.addon_to_id not in removed_positions:
                     self._operations.append(self.RemoveOperation(position=op.position.addon_to))
-                    removed_positions.add(op.position.addon_to)
+                    removed_positions.add(op.position.addon_to_id)
 
     def commit(self):
         self._check_presale_dates()

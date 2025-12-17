@@ -131,7 +131,7 @@ class OrderError(Exception):
 
 error_messages = {
     'positions_removed': gettext_lazy(
-        'Some products have can no longer be purchased and have been removed from your cart for the following reason: %s'
+        'Some products can no longer be purchased and have been removed from your cart for the following reason: %s'
     ),
     'unavailable': gettext_lazy(
         'Some of the products you selected were no longer available. '
