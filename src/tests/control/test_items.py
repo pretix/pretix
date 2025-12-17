@@ -57,7 +57,7 @@ class ItemFormTest(SoupTest):
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
         )
         self.item1 = Item.objects.create(event=self.event1, name="Standard", default_price=0, position=1)
-        t = Team.objects.create(organizer=self.orga1, can_change_event_settings=True, can_change_items=True)
+        t = Team.objects.create(organizer=self.orga1, all_event_permissions=True)
         t.members.add(self.user)
         t.limit_events.add(self.event1)
         self.client.login(email='dummy@dummy.dummy', password='dummy')

@@ -119,7 +119,7 @@ def test_specific_event_permission_limited(event, user):
     user._teamcache = {}
     assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
-    team = Team.objects.create(organizer=event.organizer, can_change_orders=True)
+    team = Team.objects.create(organizer=event.organizer, limit_event_permissions={"event.orders:write": True})
     user._teamcache = {}
     assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
@@ -135,7 +135,7 @@ def test_specific_event_permission_limited(event, user):
     assert user.has_event_permission(event.organizer, event, ('can_change_orders', 'can_change_event_settings'))
     assert not user.has_event_permission(event.organizer, event, ('can_change_teams', 'can_change_event_settings'))
 
-    team.can_change_orders = False
+    team.limit_event_permissions = {}
     team.save()
     user._teamcache = {}
     assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
@@ -146,7 +146,7 @@ def test_specific_event_permission_all(event, user):
     user._teamcache = {}
     assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
-    team = Team.objects.create(organizer=event.organizer, can_change_orders=True)
+    team = Team.objects.create(organizer=event.organizer, limit_event_permissions={"event.orders:write": True})
     user._teamcache = {}
     assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
 
@@ -159,7 +159,7 @@ def test_specific_event_permission_all(event, user):
     user._teamcache = {}
     assert user.has_event_permission(event.organizer, event, 'can_change_orders')
 
-    team.can_change_orders = False
+    team.limit_event_permissions = {}
     team.save()
     user._teamcache = {}
     assert not user.has_event_permission(event.organizer, event, 'can_change_orders')
@@ -167,9 +167,9 @@ def test_specific_event_permission_all(event, user):
 
 @pytest.mark.django_db
 def test_event_permissions_multiple_teams(event, user):
-    team1 = Team.objects.create(organizer=event.organizer, can_change_orders=True, all_events=True)
-    team2 = Team.objects.create(organizer=event.organizer, can_change_vouchers=True)
-    team3 = Team.objects.create(organizer=event.organizer, can_change_event_settings=True)
+    team1 = Team.objects.create(organizer=event.organizer, limit_event_permissions={"event.orders:write": True}, all_events=True)
+    team2 = Team.objects.create(organizer=event.organizer, limit_event_permissions={"event.vouchers:write": True})
+    team3 = Team.objects.create(organizer=event.organizer, limit_event_permissions={"event.settings.general:write": True})
     event2 = Event.objects.create(
         organizer=event.organizer, name='Dummy', slug='dummy2',
         date_from=now()
@@ -207,7 +207,7 @@ def test_specific_organizer_permission(event, user):
     user._teamcache = {}
     assert not user.has_organizer_permission(event.organizer, 'can_create_events')
 
-    team = Team.objects.create(organizer=event.organizer, can_create_events=True)
+    team = Team.objects.create(organizer=event.organizer, limit_organizer_permissions={"organizer.events:create": True})
     user._teamcache = {}
     assert not user.has_organizer_permission(event.organizer, 'can_create_events')
 
@@ -219,12 +219,12 @@ def test_specific_organizer_permission(event, user):
 
 @pytest.mark.django_db
 def test_organizer_permissions_multiple_teams(event, user):
-    team1 = Team.objects.create(organizer=event.organizer, can_change_organizer_settings=True)
-    team2 = Team.objects.create(organizer=event.organizer, can_create_events=True)
+    team1 = Team.objects.create(organizer=event.organizer, limit_organizer_permissions={"organizer.settings.general:write": True})
+    team2 = Team.objects.create(organizer=event.organizer, limit_organizer_permissions={"organizer.events:create": True})
     team1.members.add(user)
     team2.members.add(user)
     orga2 = Organizer.objects.create(slug='d2', name='d2')
-    team3 = Team.objects.create(organizer=orga2, can_change_teams=True)
+    team3 = Team.objects.create(organizer=orga2, limit_organizer_permissions={"organizer.teams:write": True})
     team3.members.add(user)
 
     assert user.has_organizer_permission(event.organizer, 'can_create_events')
@@ -266,9 +266,9 @@ def test_list_of_events(event, user, admin, admin_request):
 
     assert not user.get_events_with_any_permission()
 
-    team1 = Team.objects.create(organizer=event.organizer, can_change_orders=True, all_events=True)
-    team2 = Team.objects.create(organizer=event.organizer, can_change_vouchers=True)
-    team3 = Team.objects.create(organizer=orga2, can_change_event_settings=True)
+    team1 = Team.objects.create(organizer=event.organizer, limit_event_permissions={"event.orders:write": True}, all_events=True)
+    team2 = Team.objects.create(organizer=event.organizer, limit_event_permissions={"event.vouchers:write": True})
+    team3 = Team.objects.create(organizer=orga2, limit_event_permissions={"event.settings.general:write": True})
     team1.members.add(user)
     team2.members.add(user)
     team3.members.add(user)

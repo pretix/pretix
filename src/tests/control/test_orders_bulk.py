@@ -56,7 +56,7 @@ def env():
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True, can_manage_customers=True)
+    t = Team.objects.create(organizer=o, all_event_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
