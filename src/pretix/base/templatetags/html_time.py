@@ -36,10 +36,9 @@ def html_time(value: datetime, dt_format: str = "SHORT_DATE_FORMAT", **kwargs):
     """
     Building a <time datetime='{html-datetime}'>{human-readable datetime}</time> html string,
     where the html-datetime as well as the human-readable datetime can be set
-    to a value from django's formats.py/FORMAT_SETTINGS via comma-separated arguments.
+    to a value from django's FORMAT_SETTINGS or "format_expires".
 
-    If only one argument is given, it will be used as the human-readable datetime attribute,
-    and the html datetime attribute will be set to the datetime in iso-format.
+    If attr_fmt isn’t provided, it will be set to isoformat.
 
     Usage example:
     {% html_time event_start "SHORT_DATETIME_FORMAT" %}
