@@ -34,8 +34,18 @@ from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 
 
 class WaitingListEntryTransferForm(I18nModelForm):
+    itemvar = ChoiceField()
 
     def __init__(self, *args, **kwargs):
+        self.instance = kwargs.get('instance', None)
+        initial = kwargs.get('initial', {})
+        if self.instance and self.instance.pk and 'itemvar' not in initial:
+            if self.instance.variation is not None:
+                initial['itemvar'] = f'{self.instance.item.pk}-{self.instance.variation.pk}'
+            else:
+                initial['itemvar'] = self.instance.item.pk
+        kwargs['initial'] = initial
+
         super().__init__(*args, **kwargs)
 
         if self.event.has_subevents:
@@ -51,34 +61,8 @@ class WaitingListEntryTransferForm(I18nModelForm):
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
-
-    class Meta:
-        model = WaitingListEntry
-        fields = [
-            'subevent',
-        ]
-        field_classes = {
-            'subevent': SafeModelChoiceField,
-        }
-
-
-class WaitingListEntryEditForm(I18nModelForm):
-    itemvar = ChoiceField()
-
-    def __init__(self, *args, **kwargs):
-        self.instance = kwargs.get('instance', None)
-        initial = kwargs.get('initial', {})
-        if self.instance and self.instance.pk and 'itemvar' not in initial:
-            if self.instance.variation is not None:
-                initial['itemvar'] = f'{self.instance.item.pk}-{self.instance.variation.pk}'
-            else:
-                initial['itemvar'] = self.instance.item.pk
-        kwargs['initial'] = initial
-
-        super().__init__(*args, **kwargs)
-
-        # Prevent the item field cleaning from complaining that it isn't populated
-        # the value for item is derived and populated during form.clean()
+        else:
+            del self.fields['subevent']
 
         if self.event.settings.waiting_list_names_asked:
             self.fields['name_parts'] = NamePartsFormField(
@@ -96,11 +80,11 @@ class WaitingListEntryEditForm(I18nModelForm):
 
         choices = []
 
-        items = self.event.items.prefetch_related('variations')
-
+        items = self.event.items.prefetch_related('variations').prefetch_related('quotas')
         for item in items:
-            if not item.allow_waitinglist:
+            if not item.allow_waitinglist | item.quotas.exists():
                 continue
+
             if len(item.variations.all()) > 0:
                 for v in item.variations.all():
                     choices.append((
@@ -128,14 +112,24 @@ class WaitingListEntryEditForm(I18nModelForm):
         self.fields['itemvar'].choices = choices
 
     def clean(self):
-        itemvar = self.data.get('itemvar')
+        if self.instance.voucher is not None:
+            self.add_error(None, _('A voucher for this waiting list entry was sent out already.'))
 
+        itemvar = self.data.get('itemvar')
         if itemvar is None:
             self.add_error('itemvar', _('Item and Variation are required'))
         else:
             self.instance.item = Item.objects.get(pk=itemvar.split('-')[0])
             if '-' in itemvar:
                 self.instance.variation = ItemVariation.objects.get(pk=itemvar.split('-')[1])
+
+        if not self.instance.item.allow_waitinglist:
+            self.add_error('itemvar', _('The selected product does not allow waiting list entries.'))
+
+        if self.instance.item and not self.instance.item.quotas.filter(subevent=self.data.get('subevent')).exists():
+            self.add_error('itemvar', _('The selected product is not on sale because there is no quota configured for it.'))
+        if self.instance.variation and not self.instance.variation.quotas.filter(subevent=self.data.get('subevent')).exists():
+            self.add_error('itemvar', _('The selected product is not on sale because there is no quota configured for it.'))
 
         data = super().clean()
         return data
@@ -146,13 +140,14 @@ class WaitingListEntryEditForm(I18nModelForm):
             'email',
             'name_parts',
             'phone',
+            'subevent',
         ]
         field_classes = {
+            'subevent': SafeModelChoiceField,
             'email': EmailField,
             'phone': PhoneNumberField,
         }
         exclude = [
-            'subevent',  # handled by EntryTransfer view
             'voucher',  # handled by the assign operation in the WaitingListActionView
             'priority'  # handled via thumbs up/down
         ]

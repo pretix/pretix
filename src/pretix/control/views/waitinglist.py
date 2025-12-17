@@ -54,7 +54,7 @@ from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.waitinglist import (
-    WaitingListEntryEditForm, WaitingListEntryTransferForm,
+    WaitingListEntryTransferForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
@@ -401,43 +401,6 @@ class EntryDelete(EventPermissionRequiredMixin, CompatDeleteView):
             'organizer': self.request.event.organizer.slug
         })
 
-
-class EntryEdit(EventPermissionRequiredMixin, UpdateView):
-    model = WaitingListEntry
-    template_name = 'pretixcontrol/waitinglist/edit.html'
-    permission = 'can_change_orders'
-    form_class = WaitingListEntryEditForm
-    context_object_name = 'entry'
-
-    def get_object(self, queryset=None):
-        return get_object_or_404(WaitingListEntry, pk=self.kwargs['entry'], event=self.request.event)
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        return ctx
-
-    @transaction.atomic
-    def form_valid(self, form):
-        messages.success(self.request, _('The waitinglist entry has been updated.'))
-        if form.has_changed():
-            self.object.log_action(
-                'pretix.event.orders.waitinglist.changed', user=self.request.user, data={
-                    k: form.cleaned_data.get(k) for k in form.changed_data
-                }
-            )
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(self.request, _('We could not save your changes. See below for details.'))
-        return super().form_invalid(form)
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.orders.waitinglist', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug
-        })
-
-
 class EntryTransfer(EventPermissionRequiredMixin, UpdateView):
     model = WaitingListEntry
     template_name = 'pretixcontrol/waitinglist/transfer.html'
@@ -445,18 +408,16 @@ class EntryTransfer(EventPermissionRequiredMixin, UpdateView):
     form_class = WaitingListEntryTransferForm
     context_object_name = 'entry'
 
-    def dispatch(self, request, *args, **kwargs):
-        if not self.request.event.has_subevents:
-            raise Http404(_("This is not an event series."))
-        return super().dispatch(request, *args, **kwargs)
-
     def get_object(self, queryset=None) -> WaitingListEntry:
         return get_object_or_404(WaitingListEntry, pk=self.kwargs['entry'], event=self.request.event, voucher__isnull=True)
 
     @transaction.atomic
     def form_valid(self, form):
-        messages.success(self.request, _('The waitinglist entry has been transferred.'))
         if form.has_changed():
+            if 'subevent' in form.changed_data:
+                messages.success(self.request, _('The waitinglist entry has been transferred.'))
+            else:
+                messages.success(self.request, _('The waitinglist entry has been modified.'))
             self.object.log_action(
                 'pretix.event.orders.waitinglist.changed', user=self.request.user, data={
                     k: form.cleaned_data.get(k) for k in form.changed_data
