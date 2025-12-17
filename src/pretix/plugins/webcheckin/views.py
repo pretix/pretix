@@ -26,7 +26,7 @@ from pretix.helpers.countries import CachedCountries
 
 
 class IndexView(EventPermissionRequiredMixin, TemplateView):
-    permission = ('can_change_orders', 'can_checkin_orders')
+    permission = ('event.orders:write', 'event.orders:checkin')
     template_name = 'pretixplugins/webcheckin/index.html'
 
     def get_context_data(self, **kwargs):

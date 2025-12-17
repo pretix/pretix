@@ -75,7 +75,7 @@ class ShredderMixin:
 
 
 class StartShredView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, TemplateView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     template_name = 'pretixcontrol/shredder/index.html'
 
     def get_context_data(self, **kwargs):
@@ -86,7 +86,7 @@ class StartShredView(RecentAuthenticationRequiredMixin, EventPermissionRequiredM
 
 
 class ShredDownloadView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, TemplateView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     template_name = 'pretixcontrol/shredder/download.html'
 
     def get_context_data(self, **kwargs):
@@ -116,7 +116,7 @@ class ShredDownloadView(RecentAuthenticationRequiredMixin, EventPermissionRequir
 
 
 class ShredExportView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, AsyncAction, View):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     task = export
     known_errortypes = ['ShredError']
 
@@ -145,7 +145,7 @@ class ShredExportView(RecentAuthenticationRequiredMixin, EventPermissionRequired
 
 
 class ShredDoView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, AsyncAction, View):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     task = shred
     known_errortypes = ['ShredError']
 

@@ -85,7 +85,7 @@ class OrderSearch(PaginationMixin, ListView):
 
         if not self.request.user.has_active_staff_session(self.request.session.session_key):
             qs = qs.filter(
-                Q(event_id__in=self.request.user.get_events_with_permission('can_view_orders').values_list('id', flat=True))
+                Q(event_id__in=self.request.user.get_events_with_permission('event.orders:read').values_list('id', flat=True))
             )
 
         if self.filter_form.is_valid():
@@ -159,7 +159,7 @@ class PaymentSearch(PaginationMixin, ListView):
 
         if not self.request.user.has_active_staff_session(self.request.session.session_key):
             qs = qs.filter(
-                Q(order__event_id__in=self.request.user.get_events_with_permission('can_view_orders').values_list('id', flat=True))
+                Q(order__event_id__in=self.request.user.get_events_with_permission('event.orders:read').values_list('id', flat=True))
             )
 
         if self.filter_form.is_valid():

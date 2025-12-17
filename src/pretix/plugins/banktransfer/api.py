@@ -97,7 +97,7 @@ class BankImportJobViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     queryset = BankImportJob.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = JobFilter
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_queryset(self):
         return BankImportJob.objects.filter(organizer=self.request.organizer)
@@ -107,7 +107,7 @@ class BankImportJobViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
 
     def create(self, request, *args, **kwargs):
         perm_holder = (request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user)
-        if not perm_holder.has_organizer_permission(request.organizer, 'can_change_orders'):
+        if not perm_holder.has_organizer_permission(request.organizer, 'event.orders:write'):
             raise PermissionDenied('Invalid set of permissions')
 
         if BankImportJob.objects.filter(Q(organizer=request.organizer)).filter(

@@ -59,7 +59,7 @@ from .templates import TEMPLATES
 
 class LayoutListView(EventPermissionRequiredMixin, ListView):
     model = BadgeLayout
-    permission = ('can_change_event_settings', 'can_view_orders')
+    permission = ('event.settings.general:write', 'event.orders:read')
     template_name = 'pretixplugins/badges/index.html'
     context_object_name = 'layouts'
 
@@ -71,7 +71,7 @@ class LayoutCreate(EventPermissionRequiredMixin, CreateView):
     model = BadgeLayout
     form_class = BadgeLayoutForm
     template_name = 'pretixplugins/badges/edit.html'
-    permission = 'can_change_event_settings'
+    permission = 'event.settings.general:write'
     context_object_name = 'layout'
     success_url = '/ignored'
 
@@ -139,7 +139,7 @@ class LayoutCreate(EventPermissionRequiredMixin, CreateView):
 
 class LayoutSetDefault(EventPermissionRequiredMixin, DetailView):
     model = BadgeLayout
-    permission = 'can_change_event_settings'
+    permission = 'event.settings.general:write'
 
     def get_object(self, queryset=None) -> BadgeLayout:
         try:
@@ -171,7 +171,7 @@ class LayoutSetDefault(EventPermissionRequiredMixin, DetailView):
 class LayoutDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = BadgeLayout
     template_name = 'pretixplugins/badges/delete.html'
-    permission = 'can_change_event_settings'
+    permission = 'event.settings.general:write'
     context_object_name = 'layout'
 
     def get_object(self, queryset=None) -> BadgeLayout:
@@ -269,7 +269,7 @@ class LayoutEditorView(BaseEditorView):
 
 class OrderPrintDo(EventPermissionRequiredMixin, AsyncAction, View):
     task = badges_create_pdf
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
     known_errortypes = ['OrderError', 'ExportError']
 
     def get_success_message(self, value):

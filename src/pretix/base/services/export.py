@@ -106,7 +106,7 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
         device = Device.objects.get(pk=device)
     if token:
         device = TeamAPIToken.objects.get(pk=token)
-    allowed_events = (device or token or user).get_events_with_permission('can_view_orders')
+    allowed_events = (device or token or user).get_events_with_permission('event.orders:read')
     if user and staff_session:
         allowed_events = organizer.events.all()
 
@@ -291,7 +291,7 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
 def scheduled_organizer_export(self, organizer: Organizer, schedule: int) -> None:
     schedule = organizer.scheduled_exports.get(pk=schedule)
 
-    allowed_events = schedule.owner.get_events_with_permission('can_view_orders')
+    allowed_events = schedule.owner.get_events_with_permission('event.orders:read')
     if schedule.export_form_data.get('events') is not None and not schedule.export_form_data.get('all_events'):
         if isinstance(schedule.export_form_data['events'][0], str):
             events = allowed_events.filter(slug__in=schedule.export_form_data.get('events'), organizer=organizer)
@@ -346,7 +346,7 @@ def scheduled_event_export(self, event: Event, schedule: int) -> None:
             exporter = ex
             break
 
-    has_permission = schedule.owner.is_active and schedule.owner.has_event_permission(event.organizer, event, 'can_view_orders')
+    has_permission = schedule.owner.is_active and schedule.owner.has_event_permission(event.organizer, event, 'event.orders:read')
 
     _run_scheduled_export(
         schedule,

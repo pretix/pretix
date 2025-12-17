@@ -62,8 +62,8 @@ class VoucherViewSet(viewsets.ModelViewSet):
     ordering = ('id',)
     ordering_fields = ('id', 'code', 'max_usages', 'valid_until', 'value')
     filterset_class = VoucherFilter
-    permission = 'can_view_vouchers'
-    write_permission = 'can_change_vouchers'
+    permission = 'event.vouchers:read'
+    write_permission = 'event.vouchers:write'
 
     @scopes_disabled()  # we have an event check here, and we can save some performance on subqueries
     def get_queryset(self):

@@ -52,7 +52,7 @@ from pretix.plugins.statistics.signals import clear_cache
 
 class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView):
     template_name = 'pretixplugins/statistics/index.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
