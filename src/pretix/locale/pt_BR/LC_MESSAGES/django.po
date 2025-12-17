@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-11 01:00+0000\n"
+"PO-Revision-Date: 2025-12-18 01:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -9157,6 +9157,8 @@ msgid ""
 "Inconsistent data in row {row}: Column {col} contains value \"{val_line}\", "
 "but for this order, the value has already been set to \"{val_order}\"."
 msgstr ""
+"Dado inconsistente na linha {row}: Coluna {col} contém o valor \"{val_line}"
+"\", mas para este pedido, o valor está definido como \"{val_order}\"."
 
 #: pretix/base/services/modelimport.py:168
 #: pretix/base/services/modelimport.py:289
@@ -9622,7 +9624,7 @@ msgstr "O cupom foi enviado para {recipient}."
 
 #: pretix/base/settings.py:82
 msgid "Compute taxes for every line individually"
-msgstr ""
+msgstr "Computar impostos de cada linha individualmente"
 
 #: pretix/base/settings.py:83
 msgid "Compute taxes based on net total"
@@ -10384,7 +10386,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1139 pretix/base/settings.py:1150
 msgid "Automatic, but prefer invoice date over event date"
-msgstr ""
+msgstr "Automático, mas preferir data da fatura ao invés da data do evento"
 
 #: pretix/base/settings.py:1142 pretix/base/settings.py:1153
 msgid "Invoice date"
@@ -10399,6 +10401,8 @@ msgid ""
 "This controls what dates are shown on the invoice, but is especially "
 "important for electronic invoicing."
 msgstr ""
+"Controla quais datas são exibidas na fatura, mas é especialmente importante "
+"para faturamento eletrônico."
 
 #: pretix/base/settings.py:1166
 msgid "Automatically cancel and reissue invoice on address changes"
@@ -13984,6 +13988,8 @@ msgstr "Preços excluindo impostos"
 #: pretix/control/forms/event.py:819
 msgid "Recommended only if you sell tickets primarily to business customers."
 msgstr ""
+"Recomendado apenas se você vende ingressos majoritariamente para clientes "
+"corporativos."
 
 #: pretix/control/forms/event.py:855
 #, fuzzy
