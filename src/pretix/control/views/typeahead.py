@@ -173,7 +173,7 @@ def event_list(request):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_manage_gift_cards", "can_manage_reusable_media"))
+@organizer_permission_required(("organizer.giftcards:read", "organizer.reusablemedia:write"))
 def giftcard_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:
@@ -181,7 +181,7 @@ def giftcard_select2(request, **kwargs):
     except ValueError:
         page = 1
 
-    if request.user.has_organizer_permission(request.organizer, 'can_manage_gift_cards', request):
+    if request.user.has_organizer_permission(request.organizer, 'organizer.giftcards:write', request):
         qs = request.organizer.issued_gift_cards.filter(
             Q(secret__icontains=query)
         ).order_by('secret')
@@ -211,7 +211,7 @@ def giftcard_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_manage_reusable_media", "can_manage_gift_cards"))
+@organizer_permission_required(("organizer.reusablemedia:write", "organizer.giftcards:write"))
 def ticket_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:
@@ -276,7 +276,7 @@ def ticket_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required("can_manage_customers")
+@organizer_permission_required("organizer.customers:write")
 def customer_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:
@@ -1013,7 +1013,7 @@ def item_meta_values(request, organizer, event):
     })
 
 
-@organizer_permission_required(("can_view_orders", "can_change_organizer_settings"))
+@organizer_permission_required(("event.orders:read", "organizer.settings.general:write"))
 # This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
 # anyone who can see orders for any event can see the check-in log view where this is used as a filter
 def devices_select2(request, **kwargs):
@@ -1051,7 +1051,7 @@ def devices_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_view_orders", "can_change_event_settings", "can_change_organizer_settings"))
+@organizer_permission_required(("event.orders:read", "event.settings.general:write", "organizer.settings.general:write"))
 # This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
 # anyone who can see orders for any event can see the check-in log view where this is used as a filter
 def gate_select2(request, **kwargs):

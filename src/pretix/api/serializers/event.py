@@ -300,7 +300,7 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     def ignored_meta_properties(self):
         perm_holder = (self.context['request'].auth if isinstance(self.context['request'].auth, (Device, TeamAPIToken))
                        else self.context['request'].user)
-        if perm_holder.has_organizer_permission(self.context['request'].organizer, 'can_change_organizer_settings', request=self.context['request']):
+        if perm_holder.has_organizer_permission(self.context['request'].organizer, 'organizer.settings.general:write', request=self.context['request']):
             return []
         return [k for k, p in self.meta_properties.items() if p.protected]
 
@@ -561,7 +561,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
     def ignored_meta_properties(self):
         perm_holder = (self.context['request'].auth if isinstance(self.context['request'].auth, (Device, TeamAPIToken))
                        else self.context['request'].user)
-        if perm_holder.has_organizer_permission(self.context['request'].organizer, 'can_change_organizer_settings', request=self.context['request']):
+        if perm_holder.has_organizer_permission(self.context['request'].organizer, 'organizer.settings.general:write', request=self.context['request']):
             return []
         return [k for k, p in self.meta_properties.items() if p.protected]
 
@@ -1080,16 +1080,16 @@ class SeatSerializer(I18nAwareModelSerializer):
 
     def prefetch_expanded_data(self, items, request, expand_fields):
         if 'orderposition' in expand_fields:
-            if 'can_view_orders' not in request.eventpermset:
-                raise PermissionDenied('can_view_orders permission required for expand=orderposition')
+            if 'event.orders:read' not in request.eventpermset:
+                raise PermissionDenied('event.orders:read permission required for expand=orderposition')
             prefetch_by_id(items, OrderPosition.objects.prefetch_related('order'), 'orderposition_id', 'orderposition')
         if 'cartposition' in expand_fields:
-            if 'can_view_orders' not in request.eventpermset:
-                raise PermissionDenied('can_view_orders permission required for expand=cartposition')
+            if 'event.orders:read' not in request.eventpermset:
+                raise PermissionDenied('event.orders:read permission required for expand=cartposition')
             prefetch_by_id(items, CartPosition.objects, 'cartposition_id', 'cartposition')
         if 'voucher' in expand_fields:
-            if 'can_view_vouchers' not in request.eventpermset:
-                raise PermissionDenied('can_view_vouchers permission required for expand=voucher')
+            if 'event.vouchers:read' not in request.eventpermset:
+                raise PermissionDenied('event.vouchers:read permission required for expand=voucher')
             prefetch_by_id(items, Voucher.objects, 'voucher_id', 'voucher')
 
     def __init__(self, instance, *args, **kwargs):

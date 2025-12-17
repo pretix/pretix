@@ -213,9 +213,9 @@ class EventWizard(SafeSessionWizardView):
             else:
                 allow = (
                     request.user.has_event_permission(clone_from.organizer, clone_from,
-                                                      'can_change_event_settings', request)
+                                                      'event.settings.general:write', request)
                     and request.user.has_event_permission(clone_from.organizer, clone_from,
-                                                          'can_change_items', request)
+                                                          'event.items:write', request)
                 )
             if not allow:
                 messages.error(self.request, _('You do not have permission to clone this event.'))

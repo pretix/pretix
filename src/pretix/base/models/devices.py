@@ -191,11 +191,13 @@ class Device(LoggedModel):
 
     def permission_set(self) -> set:
         return {
-            'can_view_orders',
-            'can_change_orders',
-            'can_view_vouchers',
-            'can_manage_gift_cards',
-            'can_manage_reusable_media',
+            'event.orders:read',
+            'event.orders:write',
+            'event.vouchers:read',
+            'organizer.giftcards:read',
+            'organizer.giftcards:write',
+            'organizer.reusablemedia:read',
+            'organizer.reusablemedia:write',
         }
 
     def get_event_permission_set(self, organizer, event) -> set:
@@ -271,7 +273,7 @@ class Device(LoggedModel):
         :return: Iterable of Events
         """
         if (
-                isinstance(permission, (list, tuple)) and any(p in self.permission_set() for p in permission)
+            isinstance(permission, (list, tuple)) and any(p in self.permission_set() for p in permission)
         ) or (isinstance(permission, str) and permission in self.permission_set()):
             return self.get_events_with_any_permission()
         else:

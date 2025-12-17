@@ -108,7 +108,7 @@ class RuleViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ("id",)
     ordering_fields = ("id",)
-    permission = "can_change_event_settings"
+    permission = "event.settings.general:write"
 
     def get_queryset(self):
         return AutoCheckinRule.objects.filter(event=self.request.event)

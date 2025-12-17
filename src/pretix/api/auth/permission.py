@@ -124,12 +124,12 @@ class EventCRUDPermission(EventPermission):
     def has_permission(self, request, view):
         if not super(EventCRUDPermission, self).has_permission(request, view):
             return False
-        elif view.action == 'create' and 'can_create_events' not in request.orgapermset:
+        elif view.action == 'create' and 'organizer.events:create' not in request.orgapermset:
             return False
-        elif view.action == 'destroy' and 'can_change_event_settings' not in request.eventpermset:
+        elif view.action == 'destroy' and 'event.settings.general:write' not in request.eventpermset:
             return False
         elif view.action in ['update', 'partial_update'] \
-                and 'can_change_event_settings' not in request.eventpermset:
+                and 'event.settings.general:write' not in request.eventpermset:
             return False
 
         return True

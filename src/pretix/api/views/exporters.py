@@ -136,7 +136,7 @@ class ExportersMixin:
 
 
 class EventExportersViewSet(ExportersMixin, viewsets.ViewSet):
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_serializer_kwargs(self):
         return {}
@@ -169,7 +169,7 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
             perm_holder = self.request.auth
         else:
             perm_holder = self.request.user
-        events = perm_holder.get_events_with_permission('can_view_orders', request=self.request).filter(
+        events = perm_holder.get_events_with_permission('event.orders:read', request=self.request).filter(
             organizer=self.request.organizer
         )
         responses = register_multievent_data_exporters.send(self.request.organizer)
@@ -196,7 +196,7 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
         else:
             perm_holder = self.request.user
         return {
-            'events': perm_holder.get_events_with_permission('can_view_orders', request=self.request).filter(
+            'events': perm_holder.get_events_with_permission('event.orders:read', request=self.request).filter(
                 organizer=self.request.organizer
             )
         }
@@ -222,11 +222,11 @@ class ScheduledExportersViewSet(viewsets.ModelViewSet):
 class ScheduledEventExportViewSet(ScheduledExportersViewSet):
     serializer_class = ScheduledEventExportSerializer
     queryset = ScheduledEventExport.objects.none()
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_queryset(self):
         perm_holder = self.request.auth if isinstance(self.request.auth, (TeamAPIToken, Device)) else self.request.user
-        if not perm_holder.has_event_permission(self.request.organizer, self.request.event, 'can_change_event_settings',
+        if not perm_holder.has_event_permission(self.request.organizer, self.request.event, 'event.settings.general:write',
                                                 request=self.request):
             if self.request.user.is_authenticated:
                 qs = self.request.event.scheduled_exports.filter(owner=self.request.user)
@@ -291,7 +291,7 @@ class ScheduledOrganizerExportViewSet(ScheduledExportersViewSet):
 
     def get_queryset(self):
         perm_holder = self.request.auth if isinstance(self.request.auth, (TeamAPIToken, Device)) else self.request.user
-        if not perm_holder.has_organizer_permission(self.request.organizer, 'can_change_organizer_settings',
+        if not perm_holder.has_organizer_permission(self.request.organizer, 'organizer.settings.general:write',
                                                     request=self.request):
             if self.request.user.is_authenticated:
                 qs = self.request.organizer.scheduled_exports.filter(owner=self.request.user)
@@ -324,9 +324,9 @@ class ScheduledOrganizerExportViewSet(ScheduledExportersViewSet):
     @cached_property
     def events(self):
         if isinstance(self.request.auth, (TeamAPIToken, Device)):
-            return self.request.auth.get_events_with_permission('can_view_orders')
+            return self.request.auth.get_events_with_permission('event.orders:read')
         elif self.request.user.is_authenticated:
-            return self.request.user.get_events_with_permission('can_view_orders', self.request).filter(
+            return self.request.user.get_events_with_permission('event.orders:read', self.request).filter(
                 organizer=self.request.organizer
             )
 
