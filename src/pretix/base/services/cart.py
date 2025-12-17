@@ -342,7 +342,7 @@ def _check_position_constraints(
         raise CartPositionError(error_messages['inactive_subevent'])
 
     # Subevent sale not started
-    if subevent and subevent.presale_start and time_machine_now_dt < subevent.presale_start:
+    if subevent and subevent.effective_presale_start and time_machine_now_dt < subevent.effective_presale_start:
         raise CartPositionError(error_messages['not_started'])
 
     # Subevent sale has ended

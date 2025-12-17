@@ -769,7 +769,8 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
             delete(cp)
 
     # Create locks
-    if any(cp.expires < now() + timedelta(seconds=LOCK_TRUST_WINDOW) and cp.pk not in deleted_positions for cp in sorted_positions):
+    sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]  # eliminate deleted
+    if any(cp.expires < now() + timedelta(seconds=LOCK_TRUST_WINDOW) for cp in sorted_positions):
         # No need to perform any locking if the cart positions still guarantee everything long enough.
         full_lock_required = any(
             getattr(o, 'seat', False) for o in sorted_positions
@@ -788,7 +789,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
 
     # Check maximum order size
     limit = min(int(event.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)
-    if sum(1 for cp in sorted_positions if not cp.addon_to and cp.pk not in deleted_positions) > limit:
+    if sum(1 for cp in sorted_positions if not cp.addon_to) > limit:
         err = err or (error_messages['max_items'] % limit)
 
     # Check availability
@@ -876,7 +877,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
             })
 
     # Check prices
-    sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]
+    sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]  # eliminate deleted
     old_total = sum(cp.price for cp in sorted_positions)
     for i, cp in enumerate(sorted_positions):
         if cp.listed_price is None:
@@ -907,7 +908,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
             delete(cp)
             continue
 
-    sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]
+    sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]  # eliminate deleted
     discount_results = apply_discounts(
         event,
         sales_channel.identifier,
