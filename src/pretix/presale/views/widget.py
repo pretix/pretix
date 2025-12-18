@@ -108,8 +108,7 @@ def indent(s):
 
 
 def widget_css_etag(request, version, **kwargs):
-    if version < version_min:
-        version = version_min
+    version = max(min(version, version_max), version_min)
     # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
     if hasattr(request, 'event'):
         return (f'{_get_source_cache_key(version)}-'
