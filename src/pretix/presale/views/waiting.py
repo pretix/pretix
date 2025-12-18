@@ -24,11 +24,12 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, View
 
 from pretix.base.models import Quota, SubEvent
 from pretix.base.templatetags.urlreplace import url_replace
@@ -178,3 +179,43 @@ class WaitingRemoveView(EventViewMixin, CustomerRequiredMixin, TemplateView):
 
     def get_success_url(self):
         return self.get_index_url()
+
+
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
+class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
+    """
+    View to check a customer's rank in the waiting list.
+    Returns JSON with the rank or error message.
+    """
+
+    def get(self, request, *args, **kwargs):
+        customer_email = request.customer.email
+        
+        # Find the most recent waiting list entry for this customer/event
+        # For now, we assume one item per event, so we just get the most recent one
+        try:
+            entry = WaitingListEntry.objects.filter(
+                event=request.event,
+                email__iexact=customer_email
+            ).order_by('-created', '-pk').first()
+            
+            if not entry:
+                return JsonResponse({
+                    'error': _('You are not on the waiting list for this event.')
+                }, status=404)
+            
+            rank = entry.get_rank()
+            
+            if rank is None:
+                return JsonResponse({
+                    'error': _('Your waiting list entry is no longer active.')
+                }, status=200)
+            
+            return JsonResponse({
+                'rank': rank
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'error': _('An error occurred while checking your rank.')
+            }, status=500)

@@ -230,6 +230,12 @@
         {% endif %}
     {% endif %}
     </main>
+    {% if allow_waitinglist %}
+        <aside class="front-page" aria-labelledby="check-waiting-list-rank">
+            <h3 id="check-waiting-list-rank">{% trans "Check my spot in line" %}</h3>
+            {% include "pretixpresale/event/fragment_waitinglist_rank.html" %}
+        </aside>
+    {% endif %}
     {% if show_vouchers %}
         <aside class="front-page" aria-labelledby="redeem-a-voucher">
             <h3 id="redeem-a-voucher">{% trans "Redeem a voucher" %}</h3>
