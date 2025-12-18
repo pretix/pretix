@@ -3435,7 +3435,6 @@ class CartAddonTest(CartTestMixin, TestCase):
         )
         self.ticket.default_price = Decimal("25.00")
         self.ticket.save()
-        self.cm.extend_expired_positions()
         self.cm.commit()
         cp1.refresh_from_db()
         assert cp1.expires > now()
