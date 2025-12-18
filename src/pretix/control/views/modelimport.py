@@ -38,6 +38,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib import messages
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -85,6 +86,7 @@ class BaseImportView(TemplateView):
             filename='import.csv',
             type='text/csv',
         )
+        cf.bind_to_session(request, "modelimport")
         cf.file.save('import.csv', request.FILES['file'])
 
         if self.request.POST.get("charset") in ENCODINGS:
@@ -137,7 +139,10 @@ class BaseProcessView(AsyncAction, FormView):
 
     @cached_property
     def file(self):
-        return get_object_or_404(CachedFile, pk=self.kwargs.get("file"), filename="import.csv")
+        cf = get_object_or_404(CachedFile, pk=self.kwargs.get("file"), filename="import.csv")
+        if not cf.allowed_for_session(self.request, "modelimport"):
+            raise Http404()
+        return cf
 
     @cached_property
     def parsed(self):
