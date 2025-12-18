@@ -2,8 +2,39 @@
 (function() {
     'use strict';
     
+    function initFillVoucherButton() {
+        var fillBtn = document.getElementById('fill-voucher-btn');
+        if (!fillBtn) {
+            return;
+        }
+        
+        fillBtn.addEventListener('click', function() {
+            var voucherInput = document.getElementById('voucher');
+            if (voucherInput) {
+                voucherInput.value = this.getAttribute('data-voucher-code');
+                voucherInput.focus();
+                // Scroll to voucher form if needed
+                var voucherForm = voucherInput.closest('form');
+                if (voucherForm) {
+                    voucherForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            } else {
+                // Voucher form not found - show error message
+                var rankResult = document.getElementById('rank-result');
+                if (rankResult) {
+                    rankResult.textContent = rankResult.getAttribute('data-error-text') || 'Voucher form not found.';
+                    fillBtn.classList.add('hidden');
+                }
+            }
+        });
+    }
+    
     function loadWaitingListRank() {
         var rankResult = document.getElementById('rank-result');
+        var fillBtn = document.getElementById('fill-voucher-btn');
+        if (fillBtn) {
+            fillBtn.classList.add('hidden');
+        }
         
         if (!rankResult) {
             return;
@@ -25,13 +56,20 @@
         .then(function(response) {
             return response.json();
         })
-        .then(function(data) {
+        .then(function(data) {  
             if (data.rank !== undefined) {
-                if (data.rank === 0) {
+                if (data.rank === 0 && data.voucher_code && fillBtn) {
+                    // User has a voucher - show button alongside rank result
                     rankResult.textContent = rankResult.getAttribute('data-voucher-text') || 'You have a voucher waiting for redemption!';
-                } else {
-                    var rankLabel = rankResult.getAttribute('data-rank-label') || 'Your rank:';
-                    rankResult.textContent = rankLabel + ' ' + data.rank;
+                    fillBtn.setAttribute('data-voucher-code', data.voucher_code);
+                    fillBtn.classList.remove('hidden');
+                } else {                                      
+                    if (data.rank === 0) {
+                        rankResult.textContent = rankResult.getAttribute('data-voucher-text') || 'You have a voucher waiting for redemption!';
+                    } else {
+                        var rankLabel = rankResult.getAttribute('data-rank-label') || 'Your rank:';
+                        rankResult.textContent = rankLabel + ' ' + data.rank;
+                    }
                 }
             } else if (data.error) {
                 rankResult.textContent = data.error;
@@ -44,10 +82,15 @@
         });
     }
     
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', loadWaitingListRank);
-    } else {
+    function init() {
+        initFillVoucherButton();
         loadWaitingListRank();
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
     }
 })();
 

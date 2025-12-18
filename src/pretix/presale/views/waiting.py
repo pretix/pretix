@@ -211,9 +211,15 @@ class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
                     'error': _('Your waiting list entry is no longer active.')
                 }, status=200)
             
-            return JsonResponse({
+            response_data = {
                 'rank': rank
-            })
+            }
+            
+            # Include voucher code if rank is 0 (user has an unredeemed voucher)
+            if rank == 0 and entry.voucher:
+                response_data['voucher_code'] = entry.voucher.code
+            
+            return JsonResponse(response_data)
             
         except Exception as e:
             return JsonResponse({
