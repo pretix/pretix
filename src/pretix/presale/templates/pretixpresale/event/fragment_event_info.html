@@ -23,7 +23,7 @@
                 <br>
                 <span data-time="{{ ev.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}">
                     {% html_time ev.date_from "TIME_FORMAT" attr_fmt="H:i" as time%}
-                    {% blocktrans with time=time %}
+                    {% blocktrans trimmed with time=time %}
                         Begin: {{ time }}
                     {% endblocktrans %}
                 </span>
@@ -31,7 +31,7 @@
                     <br>
                     <span data-time="{{ ev.date_to.isoformat }}" data-timezone="{{ request.event.timezone }}">
                         {% html_time ev.date_to "TIME_FORMAT" attr_fmt="H:i" as time%}
-                        {% blocktrans with time=time %}
+                        {% blocktrans trimmed with time=time %}
                             End: {{ time }}
                         {% endblocktrans %}
                     </span>
