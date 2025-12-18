@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-18 01:00+0000\n"
+"PO-Revision-Date: 2025-12-19 00:00+0000\n"
 "Last-Translator: Daniel Branda <daniel.branda.ad@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -939,10 +939,8 @@ msgid "Attendee company"
 msgstr "Azienda partecipante"
 
 #: pretix/base/datasync/sourcefields.py:241
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address street"
-msgstr "Indirizzo partecipante"
+msgstr "Indirizzo del partecipante"
 
 #: pretix/base/datasync/sourcefields.py:250
 msgid "Attendee address ZIP code"
@@ -1040,10 +1038,8 @@ msgid "Order total"
 msgstr "Totale ordine"
 
 #: pretix/base/datasync/sourcefields.py:398
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Product and variation name"
-msgstr "Nome prodotto e variante"
+msgstr "Nome del prodotto e della variante"
 
 #: pretix/base/datasync/sourcefields.py:410 pretix/base/exporters/items.py:57
 #: pretix/base/exporters/orderlist.py:598
@@ -1464,7 +1460,7 @@ msgstr "Note"
 #: pretix/plugins/checkinlists/exporters.py:827
 #: pretix/plugins/checkinlists/exporters.py:828
 msgid "Yes"
-msgstr "Si"
+msgstr "Sì"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -10683,6 +10679,11 @@ msgid ""
 "less priority than the language and is therefore mostly relevant for "
 "languages used in different regions globally (like English)."
 msgstr ""
+"Verrà utilizzato per determinare il formato della data e dell'ora, nonché il "
+"Paese predefinito per gli indirizzi e i numeri di telefono dei clienti. Per "
+"quanto riguarda la formattazione, questo ha una priorità inferiore rispetto "
+"alla lingua ed è quindi rilevante soprattutto per le lingue utilizzate in "
+"diverse regioni del mondo (come l'inglese)."
 
 #: pretix/base/settings.py:1437
 msgid "This shop represents an event"
@@ -10696,24 +10697,34 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"Deseleziona questa casella se vendi solo prodotti che non hanno una data "
+"specifica, come buoni regalo o biglietti che possono essere utilizzati in "
+"qualsiasi momento. Il sistema smetterà quindi di mostrare la data "
+"dell'evento in alcuni punti, come la pagina iniziale dell'evento. Tieni "
+"presente che pretix è comunque un sistema basato sugli eventi e che la data "
+"potrebbe comunque essere visualizzata in altri punti."
 
 #: pretix/base/settings.py:1452
 msgid "Show event end date"
-msgstr ""
+msgstr "Mostra la data di fine dell'evento"
 
 #: pretix/base/settings.py:1453
 msgid "If disabled, only event's start date will be displayed to the public."
 msgstr ""
+"Se disabilitato, al pubblico verrà mostrata solo la data di inizio "
+"dell'evento."
 
 #: pretix/base/settings.py:1462
 msgid "Show dates with time"
-msgstr ""
+msgstr "Mostra le date con l'ora"
 
 #: pretix/base/settings.py:1463
 msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
 msgstr ""
+"Se disattivata, la data di inizio e di fine dell'evento verrà visualizzata "
+"senza l'ora del giorno."
 
 #: pretix/base/settings.py:1472
 msgid "Hide all products that are sold out"
@@ -10722,6 +10733,8 @@ msgstr "Nascondi tutti i prodotti che sono stati venduti"
 #: pretix/base/settings.py:1482 pretix/control/forms/event.py:1794
 msgid "Publicly show how many tickets of a certain type are still available."
 msgstr ""
+"Mostra pubblicamente quanti biglietti di un determinato tipo sono ancora "
+"disponibili."
 
 #: pretix/base/settings.py:1491
 msgid "Ask search engines not to index the ticket shop"
@@ -10729,7 +10742,7 @@ msgstr "Imposta il negozio per non essere indicizzato dai motori di ricerca"
 
 #: pretix/base/settings.py:1500
 msgid "Show variations of a product expanded by default"
-msgstr ""
+msgstr "Mostra le varianti di un prodotto espanse per impostazione predefinita"
 
 #: pretix/base/settings.py:1509
 msgid "Enable waiting list"
@@ -10742,10 +10755,14 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
+"Una volta esauriti i biglietti, è possibile iscriversi a una lista d'attesa. "
+"Non appena un biglietto torna disponibile, verrà riservato alla prima "
+"persona in lista d'attesa, che riceverà una notifica via e-mail con un "
+"voucher utilizzabile per acquistare il biglietto."
 
 #: pretix/base/settings.py:1521
 msgid "Automatic waiting list assignments"
-msgstr ""
+msgstr "Assegnazioni automatiche alla lista d'attesa"
 
 #: pretix/base/settings.py:1522
 msgid ""
@@ -10755,10 +10772,16 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
+"Se si liberano posti disponibili, crea automaticamente un voucher e invialo "
+"alla prima persona in lista d'attesa per quel prodotto. Se questa opzione "
+"non è attiva, le e-mail non verranno inviate automaticamente, ma potrai "
+"inviarle manualmente tramite il pannello di controllo. Se disattivi la lista "
+"d'attesa ma mantieni attiva questa opzione, i biglietti verranno comunque "
+"inviati."
 
 #: pretix/base/settings.py:1538
 msgid "Waiting list response time"
-msgstr ""
+msgstr "Tempo di risposta della lista d'attesa"
 
 #: pretix/base/settings.py:1541
 msgid ""
@@ -10766,12 +10789,13 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
+"Se un voucher per un biglietto viene inviato a una persona in lista "
+"d'attesa, deve essere riscattato entro questo numero di ore prima che scada "
+"e possa essere riassegnato alla persona successiva nella lista."
 
 #: pretix/base/settings.py:1552
-#, fuzzy
-#| msgid "Enable waiting list"
 msgid "Disable waiting list"
-msgstr "Abilita lista d'attesa"
+msgstr "Disattiva lista d'attesa"
 
 #: pretix/base/settings.py:1553
 msgid ""
@@ -10781,56 +10805,61 @@ msgid ""
 "still people on the waiting list. Vouchers that have already been sent "
 "remain active."
 msgstr ""
+"Dopo tale data, la lista d'attesa sarà completamente disattivata. Ciò "
+"significa che nessuno potrà più aggiungersi alla lista d'attesa, ma anche "
+"che i biglietti saranno nuovamente disponibili per la vendita, se la quota "
+"lo consentirà, anche se ci sono ancora persone in lista d'attesa. I voucher "
+"già inviati rimangono attivi."
 
 #: pretix/base/settings.py:1565
 msgid "Ask for a name"
-msgstr ""
+msgstr "Chiedi un nome"
 
 #: pretix/base/settings.py:1566
 msgid "Ask for a name when signing up to the waiting list."
-msgstr ""
+msgstr "Chiedi un nome quando ti iscrivi alla lista d'attesa."
 
 #: pretix/base/settings.py:1575
-#, fuzzy
 msgid "Require name"
-msgstr "Nome del dispositivo"
+msgstr "Richiedi nome"
 
 #: pretix/base/settings.py:1576
 msgid "Require a name when signing up to the waiting list.."
-msgstr ""
+msgstr "Richiedere un nome al momento dell'iscrizione alla lista d'attesa."
 
 #: pretix/base/settings.py:1586
-#, fuzzy
 msgid "Ask for a phone number"
-msgstr "Numero di telefono"
+msgstr "Chiedere un numero di telefono"
 
 #: pretix/base/settings.py:1587
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr ""
+msgstr "Chiedi un numero di telefono quando ti iscrivi alla lista d'attesa."
 
 #: pretix/base/settings.py:1596
-#, fuzzy
 msgid "Require phone number"
-msgstr "Numero di telefono"
+msgstr "Richiedi numero di telefono"
 
 #: pretix/base/settings.py:1597
 msgid "Require a phone number when signing up to the waiting list.."
 msgstr ""
+"Richiedere un numero di telefono al momento dell'iscrizione alla lista "
+"d'attesa."
 
 #: pretix/base/settings.py:1607
-#, fuzzy
 msgid "Phone number explanation"
-msgstr "Numero di telefono"
+msgstr "Spiegazione del numero di telefono"
 
 #: pretix/base/settings.py:1610
 msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
+"Se chiedi un numero di telefono, spiega perché lo fai e per cosa lo userai."
 
 #: pretix/base/settings.py:1622
 msgid "Maximum number of entries per email address for the same product"
 msgstr ""
+"Numero massimo di inserimenti per indirizzo e-mail per lo stesso prodotto"
 
 #: pretix/base/settings.py:1626
 msgid ""
@@ -10840,10 +10869,15 @@ msgid ""
 "if they want more than one ticket, as every entry only grants one single "
 "ticket at a time."
 msgstr ""
+"Con un limite aumentato, un cliente può richiedere più di un biglietto per "
+"un prodotto specifico utilizzando lo stesso indirizzo e-mail unico. "
+"Tuttavia, indipendentemente da questa impostazione, dovrà compilare il "
+"modulo della lista d'attesa più volte se desidera più di un biglietto, "
+"poiché ogni inserimento garantisce un solo biglietto alla volta."
 
 #: pretix/base/settings.py:1638
 msgid "Show number of check-ins to customer"
-msgstr ""
+msgstr "Mostra il numero di check-in al cliente"
 
 #: pretix/base/settings.py:1639
 msgid ""
@@ -10854,18 +10888,24 @@ msgid ""
 "failed scans will not be counted, and the user will not see the different "
 "check-in lists."
 msgstr ""
+"Con questa opzione abilitata, i tuoi clienti potranno vedere quante volte "
+"hanno partecipato all'evento. Di solito non è necessario, ma potrebbe essere "
+"utile in combinazione con biglietti utilizzabili un numero specifico di "
+"volte, in modo che i clienti possano vedere quante volte sono già stati "
+"utilizzati. Le uscite o le scansioni non riuscite non verranno conteggiate e "
+"l'utente non vedrà le diverse liste di check-in."
 
 #: pretix/base/settings.py:1652
 msgid "Allow users to download tickets"
-msgstr ""
+msgstr "Consenti agli utenti di scaricare i biglietti"
 
 #: pretix/base/settings.py:1653
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "Se questa opzione è disattivata, nessuno può scaricare un biglietto."
 
 #: pretix/base/settings.py:1662
 msgid "Download date"
-msgstr ""
+msgstr "Data di download"
 
 #: pretix/base/settings.py:1663
 msgid ""
@@ -10873,10 +10913,14 @@ msgid ""
 "feature and an order contains tickets for multiple event dates, download of "
 "all tickets will be available if at least one of the event dates allows it."
 msgstr ""
+"Il download dei biglietti sarà disponibile dopo tale data. Se utilizzi la "
+"funzione serie di eventi e un ordine contiene biglietti per più date di "
+"eventi, il download di tutti i biglietti sarà disponibile se almeno una "
+"delle date dell'evento lo consente."
 
 #: pretix/base/settings.py:1674
 msgid "Generate tickets for add-on products and bundled products"
-msgstr ""
+msgstr "Genera biglietti per prodotti aggiuntivi e prodotti in pacchetto"
 
 #: pretix/base/settings.py:1675
 msgid ""
@@ -10884,10 +10928,14 @@ msgid ""
 "for add-on products or bundled products. With this option, a separate ticket "
 "is issued for every add-on product or bundled product as well."
 msgstr ""
+"Per impostazione predefinita, i ticket vengono emessi solo per i prodotti "
+"selezionati singolarmente, non per i prodotti aggiuntivi o i prodotti in "
+"bundle. Con questa opzione, viene emesso un ticket separato anche per ogni "
+"prodotto aggiuntivo o prodotto in pacchetto."
 
 #: pretix/base/settings.py:1688
 msgid "Generate tickets for all products"
-msgstr ""
+msgstr "Genera biglietti per tutti i prodotti"
 
 #: pretix/base/settings.py:1689
 msgid ""
@@ -10895,20 +10943,27 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
+"Se disattivata, i biglietti vengono emessi solo per i prodotti "
+"contrassegnati come “biglietto d'ingresso” nelle impostazioni del prodotto. "
+"È anche possibile disattivare l'emissione dei biglietti separatamente per "
+"ogni prodotto."
 
 #: pretix/base/settings.py:1701
 msgid "Generate tickets for pending orders"
-msgstr ""
+msgstr "Genera ticket per gli ordini in sospeso"
 
 #: pretix/base/settings.py:1702
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
+"Se disattivata, il download dei biglietti è possibile solo dopo che un "
+"ordine è stato contrassegnato come pagato."
 
 #: pretix/base/settings.py:1713
 msgid "Do not issue ticket before email address is validated"
 msgstr ""
+"Non emettere il biglietto prima che l'indirizzo e-mail sia stato convalidato"
 
 #: pretix/base/settings.py:1714
 msgid ""
@@ -10918,11 +10973,15 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
+"Se attivata, i biglietti non saranno disponibili per il download subito dopo "
+"l'acquisto. Saranno allegati all'e-mail di conferma del pagamento (se la "
+"dimensione del file non è eccessiva) e il cliente potrà scaricarli dalla "
+"pagina non appena avrà cliccato sul link contenuto nell'e-mail. Non "
+"influisce sugli ordini effettuati tramite altri canali di vendita."
 
 #: pretix/base/settings.py:1730
-#, fuzzy
 msgid "Low availability threshold"
-msgstr "Disponibilità totale"
+msgstr "Soglia di disponibilità bassa"
 
 #: pretix/base/settings.py:1731
 msgid ""
@@ -10931,10 +10990,15 @@ msgid ""
 "in the event list or calendar. If you keep this option empty, low "
 "availability will not be shown publicly."
 msgstr ""
+"Se la disponibilità dei biglietti scende al di sotto di questa percentuale, "
+"l'evento (o una data, se si tratta di una serie di eventi) verrà evidenziato "
+"come a bassa disponibilità nell'elenco degli eventi o nel calendario. Se "
+"lasci questa opzione vuota, la bassa disponibilità non verrà mostrata "
+"pubblicamente."
 
 #: pretix/base/settings.py:1745
 msgid "Show availability in event overviews"
-msgstr ""
+msgstr "Mostra disponibilità nelle panoramiche degli eventi"
 
 #: pretix/base/settings.py:1746
 msgid ""
@@ -10942,11 +11006,15 @@ msgid ""
 "make for longer page loading times if you have lots of events and the shown "
 "status might be out of date for up to two minutes."
 msgstr ""
+"Se selezionata, l'elenco degli eventi mostrerà se gli eventi sono esauriti. "
+"Ciò potrebbe rallentare i tempi di caricamento della pagina se sono presenti "
+"molti eventi e lo stato mostrato potrebbe non essere aggiornato fino a due "
+"minuti."
 
 #: pretix/base/settings.py:1759 pretix/base/settings.py:1767
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:8
 msgid "List"
-msgstr ""
+msgstr "Elenco"
 
 #: pretix/base/settings.py:1760 pretix/base/settings.py:1768
 msgid "Week calendar"
@@ -10958,7 +11026,7 @@ msgstr "Calendario mensile"
 
 #: pretix/base/settings.py:1765
 msgid "Default overview style"
-msgstr ""
+msgstr "Stile di visualizzazione predefinito"
 
 #: pretix/base/settings.py:1771
 msgid ""
@@ -10970,59 +11038,69 @@ msgstr ""
 
 #: pretix/base/settings.py:1780
 msgid "Show filter options for calendar or list view"
-msgstr ""
+msgstr "Mostra opzioni di filtro per la visualizzazione calendario o elenco"
 
 #: pretix/base/settings.py:1781
-#, fuzzy
 msgid ""
 "You can set up possible filters as meta properties in your organizer "
 "settings."
-msgstr "La data selezionata non esiste in questa serie di eventi."
+msgstr ""
+"È possibile impostare eventuali filtri come meta proprietà nelle "
+"impostazioni dell'organizer."
 
 #: pretix/base/settings.py:1790
 msgid "Hide all unavailable dates from calendar or list views"
 msgstr ""
+"Nascondi tutte le date non disponibili dalla visualizzazione calendario o "
+"elenco"
 
 #: pretix/base/settings.py:1791 pretix/base/settings.py:1802
 msgid ""
 "This option currently only affects the calendar of this event series, not "
 "the organizer-wide calendar."
 msgstr ""
+"Questa opzione attualmente influisce solo sul calendario di questa serie di "
+"eventi, non sul calendario dell'organizzatore."
 
 #: pretix/base/settings.py:1801
 msgid "Hide all past dates from calendar"
-msgstr ""
+msgstr "Nascondi tutte le date passate dal calendario"
 
 #: pretix/base/settings.py:1813 pretix/base/settings.py:1822
 msgid "No modifications after order was submitted"
-msgstr ""
+msgstr "Nessuna modifica dopo l'invio dell'ordine"
 
 #: pretix/base/settings.py:1814 pretix/base/settings.py:1823
 msgid "Only the person who ordered can make changes"
-msgstr ""
+msgstr "Solo la persona che ha effettuato l'ordine può apportare modifiche"
 
 #: pretix/base/settings.py:1815 pretix/base/settings.py:1824
 msgid "Both the attendee and the person who ordered can make changes"
 msgstr ""
+"Sia il partecipante che la persona che ha effettuato l'ordine possono "
+"apportare modifiche"
 
 #: pretix/base/settings.py:1819
-#, fuzzy
 msgid "Allow customers to modify their information"
-msgstr "Check-in del biglietto effettuato"
+msgstr "Consenti ai clienti di modificare le loro informazioni"
 
 #: pretix/base/settings.py:1834
 msgid "Allow customers to modify their information after they checked in."
 msgstr ""
+"Consenti ai clienti di modificare le loro informazioni dopo aver effettuato "
+"il check-in."
 
 #: pretix/base/settings.py:1835
 msgid ""
 "By default, no more modifications are possible for an order as soon as one "
 "of the tickets in the order has been checked in."
 msgstr ""
+"Per impostazione predefinita, non è più possibile apportare modifiche a un "
+"ordine non appena uno dei biglietti dell'ordine è stato registrato."
 
 #: pretix/base/settings.py:1845
 msgid "Last date of modifications"
-msgstr ""
+msgstr "Ultima data delle modifiche"
 
 #: pretix/base/settings.py:1846
 msgid ""
@@ -11031,6 +11109,10 @@ msgid ""
 "order contains tickets for multiple event dates, the earliest date will be "
 "used."
 msgstr ""
+"L'ultima data in cui gli utenti possono modificare i dettagli dei propri "
+"ordini, come i nomi dei partecipanti o le risposte alle domande. Se utilizzi "
+"la funzione serie di eventi e un ordine contiene biglietti per più date di "
+"eventi, verrà utilizzata la data più vicina."
 
 #: pretix/base/settings.py:1857
 msgid "Customers can change the variation of the products they purchased"
@@ -11762,9 +11844,9 @@ msgstr ""
 "{event}"
 
 #: pretix/base/settings.py:2590
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Incomplete payment received: {code}"
-msgstr "Pagamento ricevuto per il tuo ordine: {code}"
+msgstr "Pagamento incompleto ricevuto: {code}"
 
 #: pretix/base/settings.py:2594
 #, python-brace-format
@@ -11800,25 +11882,12 @@ msgstr ""
 "Il team di {event}"
 
 #: pretix/base/settings.py:2610
-#, fuzzy, python-brace-format
-#| msgid "Payment received for your order: {code}"
+#, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr "Pagamento ricevuto per il tuo ordine: {code}"
+msgstr "Pagamento non riuscito per il tuo ordine: {code}"
 
 #: pretix/base/settings.py:2614
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a full payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11836,16 +11905,18 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"non abbiamo ancora ricevuto il pagamento del tuo ordine per {event}.\n"
-"Considera che possiamo garantire il tuo ordine se riceviamo il pagamento "
-"entro il \n"
+"il pagamento del tuo ordine per {event} non è andato a buon fine.\n"
+"\n"
+"Il tuo ordine è ancora valido e puoi provare a pagare di nuovo usando lo "
+"stesso metodo di pagamento o uno diverso. Completa il pagamento entro "
 "{expire_date}.\n"
 "\n"
-"Puoi vedere le informazioni sul pagamento e lo stato del tuo ordine qui:\n"
+"Puoi riprovare a pagare e vedere lo stato del tuo ordine su\n"
 "{url}\n"
 "\n"
-"Un saluto,  \n"
-"Il team di {event}"
+"Cordiali saluti,  \n"
+"\n"
+"{event}team"
 
 #: pretix/base/settings.py:2628
 #, python-brace-format
@@ -14451,13 +14522,13 @@ msgstr "Prevendita conclusa"
 #: pretix/control/forms/filter.py:2362
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:84
 msgid "Date from"
-msgstr "Data da"
+msgstr "Data dal"
 
 #: pretix/control/forms/filter.py:1248 pretix/control/forms/filter.py:1251
 #: pretix/control/forms/filter.py:1736 pretix/control/forms/filter.py:1739
 #: pretix/control/forms/filter.py:2367
 msgid "Date until"
-msgstr "Data fino a"
+msgstr "Data fino al"
 
 #: pretix/control/forms/filter.py:1255
 #, fuzzy
@@ -14736,7 +14807,7 @@ msgstr "Filtra per stato"
 #: pretix/plugins/checkinlists/exporters.py:758
 #: pretix/plugins/checkinlists/exporters.py:846
 msgid "Check-in list"
-msgstr ""
+msgstr "Lista di check-in"
 
 #: pretix/control/forms/filter.py:2633
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:82
@@ -15055,7 +15126,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:455
 msgid "Size"
-msgstr ""
+msgstr "Dimensioni"
 
 #: pretix/control/forms/item.py:456
 msgid "Number of tickets"
@@ -18645,7 +18716,7 @@ msgstr "Elimina"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:91
 #: pretix/presale/templates/pretixpresale/fragment_event_list_filter.html:22
 msgid "Filter"
-msgstr ""
+msgstr "Filtro"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:50
 msgid "Your search did not match any check-ins."
@@ -20033,7 +20104,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:97
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:120
 msgid "Preview"
-msgstr ""
+msgstr "Anteprima"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:87
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:58
@@ -23845,6 +23916,8 @@ msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
+"Se selezioni una sola data, le commissioni non saranno elencate qui poiché "
+"potrebbe non essere chiaro a quale data appartengano."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:80
 #: pretix/plugins/reports/exporters.py:393
@@ -26305,7 +26378,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:54
 msgid "Copy"
-msgstr ""
+msgstr "Copia"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:116
 msgid "Voucher history"
@@ -29631,10 +29704,9 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:476
 #: pretix/plugins/checkinlists/exporters.py:674
 #: pretix/plugins/checkinlists/exporters.py:745
-#, fuzzy
 msgctxt "export_category"
 msgid "Check-in"
-msgstr "Registrazione"
+msgstr "Check-in"
 
 #: pretix/plugins/checkinlists/exporters.py:306
 msgid ""
@@ -30446,7 +30518,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:858
 #: pretix/plugins/reports/exporters.py:899
 msgid "Gross"
-msgstr ""
+msgstr "In Totale"
 
 #: pretix/plugins/reports/exporters.py:576
 #: pretix/plugins/reports/exporters.py:807
@@ -31886,9 +31958,8 @@ msgid "Do you really want to disconnect your Stripe account?"
 msgstr "Vuoi veramente disconnettere il tuo account Stripe?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
-#, fuzzy
 msgid "Disconnect"
-msgstr "Totale"
+msgstr "Disconnetti"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:6
 #, fuzzy
