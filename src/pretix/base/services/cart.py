@@ -632,7 +632,7 @@ class CartManager:
             else:
                 raise e
 
-    def extend_expired_positions(self):
+    def _extend_expired_positions(self):
         requires_seat = Exists(
             SeatCategoryMapping.objects.filter(
                 Q(product=OuterRef('item'))
@@ -702,7 +702,7 @@ class CartManager:
                 err = error_messages['positions_removed'] % str(e)
 
             if cp.voucher:
-                self._voucher_use_diff[cp.voucher] += 2
+                self._voucher_use_diff[cp.voucher] += 1
 
             self._operations.append(op)
         return err
@@ -1556,7 +1556,7 @@ class CartManager:
         self._check_max_cart_size()
 
         err = self._delete_out_of_timeframe()
-        err = self.extend_expired_positions() or err
+        err = self._extend_expired_positions() or err
         err = err or self._check_min_per_voucher()
 
         self._extend_expiry_of_valid_existing_positions()
