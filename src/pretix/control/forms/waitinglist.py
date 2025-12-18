@@ -82,8 +82,9 @@ class WaitingListEntryEditForm(I18nModelForm):
 
         items = self.event.items.prefetch_related('variations').prefetch_related('quotas')
         for item in items:
-            if not item.allow_waitinglist | item.quotas.exists():
-                continue
+            if not item.allow_waitinglist | item.quotas.exists(): # don't offer items in the selection if they don't allow waitinglists or aren't on sale at all
+                if not self.instance.item.pk == item.pk: # except if they are currently set in the waitinglist, this will be then caught on submit in the clean step
+                    continue
 
             if len(item.variations.all()) > 0:
                 for v in item.variations.all():
