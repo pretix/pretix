@@ -54,7 +54,7 @@
     {% if event.settings.presale_start_show_date %}
         <br><span class="text-muted">
         {% html_time event.event.effective_presale_start "SHORT_DATE_FORMAT" as date %}
-            {% blocktrans with date=date %}
+            {% blocktrans trimmed with date=date %}
                 Sale starts {{ date }}
             {% endblocktrans %}
         </span>
