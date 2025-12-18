@@ -56,7 +56,7 @@ from django.utils.translation import (
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
-from pretix.base.invoicing.transmission import get_transmission_types
+from pretix.base.invoicing.transmission import transmission_types
 from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.items import Question
 from pretix.base.models.orders import (
@@ -1507,6 +1507,20 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     label = pgettext_lazy('checkoutflow', 'Review order')
     icon = 'eye'
 
+    def _default_invisible(self, transmission_type):
+        # reusing hack from questions.py for default transmission -- this should at least be fast
+        for k, __ in transmission_type.invoice_address_form_fields.items():
+            if (
+                transmission_type.identifier == "email" and
+                k in ("transmission_email_other", "transmission_email_address") and
+                (
+                    self.event.settings.invoice_generate == "False" or
+                    not self.event.settings.invoice_email_attachment
+                )
+            ):
+                return True
+        return False
+
     def is_applicable(self, request):
         return True
 
@@ -1546,17 +1560,14 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['invoice_address_asked'] = self.address_asked
         ctx['customer'] = self.cart_customer
 
-        transmission_visible = False
-        for transmission_type in get_transmission_types():
-            if (
-                    transmission_type.identifier == self.invoice_address.transmission_type and
-                    transmission_type.invoice_address_form_fields_visible(
-                        country=self.invoice_address.country, is_business=self.invoice_address.is_business
-                    )
-            ):
-                transmission_visible = True
-                break
-        ctx['show_transmission_type'] = transmission_visible
+        transmission_fields = []
+        transmission_type, __ = transmission_types.get(identifier=self.invoice_address.transmission_type)
+        if not self._default_invisible(transmission_type) and transmission_type.invoice_address_form_fields_visible(
+            country=self.invoice_address.country, is_business=self.invoice_address.is_business
+        ):
+            for line in self.invoice_address.describe_transmission():
+                transmission_fields.append(line)
+        ctx['transmission_fields'] = transmission_fields
 
         self.cart_session['shown_total'] = str(ctx['cart']['total'])
 
