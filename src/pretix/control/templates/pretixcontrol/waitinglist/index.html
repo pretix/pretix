@@ -269,8 +269,8 @@
                                     <span class="fa fa-thumbs-down"></span>
                                 </button>
 
-                                <a href="{% url "control:event.orders.waitinglist.transfer" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}"
-                                   class="btn btn-default btn-sm" title="{% trans "Transfer to other date" context "subevent" %}"
+                                <a href="{% url "control:event.orders.waitinglist.edit" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}"
+                                   class="btn btn-default btn-sm" title="{% trans "Edit entry" context "subevent" %}"
                                     data-toggle="tooltip">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>

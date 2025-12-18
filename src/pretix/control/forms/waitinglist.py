@@ -33,7 +33,7 @@ from pretix.base.models import Item, ItemVariation, WaitingListEntry
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 
 
-class WaitingListEntryTransferForm(I18nModelForm):
+class WaitingListEntryEditForm(I18nModelForm):
     itemvar = ChoiceField()
 
     def __init__(self, *args, **kwargs):
@@ -125,7 +125,6 @@ class WaitingListEntryTransferForm(I18nModelForm):
 
         if not self.instance.item.allow_waitinglist:
             self.add_error('itemvar', _('The selected product does not allow waiting list entries.'))
-
         if self.instance.item and not self.instance.item.quotas.filter(subevent=self.data.get('subevent')).exists():
             self.add_error('itemvar', _('The selected product is not on sale because there is no quota configured for it.'))
         if self.instance.variation and not self.instance.variation.quotas.filter(subevent=self.data.get('subevent')).exists():

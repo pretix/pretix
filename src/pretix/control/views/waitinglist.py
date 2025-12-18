@@ -54,7 +54,7 @@ from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.waitinglist import (
-    WaitingListEntryTransferForm,
+    WaitingListEntryEditForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
@@ -401,11 +401,11 @@ class EntryDelete(EventPermissionRequiredMixin, CompatDeleteView):
             'organizer': self.request.event.organizer.slug
         })
 
-class EntryTransfer(EventPermissionRequiredMixin, UpdateView):
+class EntryEdit(EventPermissionRequiredMixin, UpdateView):
     model = WaitingListEntry
-    template_name = 'pretixcontrol/waitinglist/transfer.html'
+    template_name = 'pretixcontrol/waitinglist/edit.html'
     permission = 'can_change_orders'
-    form_class = WaitingListEntryTransferForm
+    form_class = WaitingListEntryEditForm
     context_object_name = 'entry'
 
     def get_object(self, queryset=None) -> WaitingListEntry:
