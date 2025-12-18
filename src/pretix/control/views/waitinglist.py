@@ -53,9 +53,7 @@ from pretix.base.models import Item, LogEntry, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
-from pretix.control.forms.waitinglist import (
-    WaitingListEntryEditForm,
-)
+from pretix.control.forms.waitinglist import WaitingListEntryEditForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 
@@ -400,6 +398,7 @@ class EntryDelete(EventPermissionRequiredMixin, CompatDeleteView):
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug
         })
+
 
 class EntryEdit(EventPermissionRequiredMixin, UpdateView):
     model = WaitingListEntry

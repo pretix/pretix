@@ -56,11 +56,8 @@ def env():
     event.settings.set('waiting_list_names_asked', False)
     event.settings.set('waiting_list_names_required', False)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    item1 = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True, allow_waitinglist=True)
-    item2 = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True)
-
+    item1 = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    item2 = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True)
 
     for i in range(5):
         WaitingListEntry.objects.create(
@@ -198,8 +195,7 @@ def test_delete_bulk(client, env):
 @pytest.mark.django_db
 def test_edit(client, env):
     event = env[0]
-    item = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True, allow_waitinglist=True)
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
     quota = Quota.objects.create(event=event)
     quota.items.add(item)
 
@@ -221,12 +217,12 @@ def test_edit(client, env):
     )
     assert response.wsgi_request.path == '/control/event/dummy/dummy/waitinglist/'
 
+
 @pytest.mark.django_db
 def test_edit_itemvariation(client, env):
     event = env[0]
 
-    item = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True, allow_waitinglist=True)
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
     variation = ItemVariation.objects.create(item=item)
     quota = Quota.objects.create(event=event)
     quota.items.add(item)
@@ -257,8 +253,7 @@ def test_edit_itemvariation(client, env):
 def test_edit_voucher_send_out(client, env):
     event = env[0]
 
-    item = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True, allow_waitinglist=True)
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
 
     quota = Quota.objects.create(event=event, size=100)
     quota.items.add(item)
@@ -281,13 +276,12 @@ def test_edit_voucher_send_out(client, env):
     )
     assert response.status_code == 404
 
+
 @pytest.mark.django_db
 def test_edit_item_without_waitinglist(client, env):
     event = env[0]
-    item = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True, allow_waitinglist=True)
-    item_without_waitinglist = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True, allow_waitinglist=False)
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    item_without_waitinglist = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=False)
     quota = Quota.objects.create(event=event)
     quota.items.add(item)
     quota.items.add(item_without_waitinglist)
@@ -310,16 +304,14 @@ def test_edit_item_without_waitinglist(client, env):
     )
     assert response.context['form'].errors == {'itemvar': ["The selected product does not allow waiting list entries."]}
 
+
 @pytest.mark.django_db
 def test_edit_item_without_quota(client, env):
     event = env[0]
-    item = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True, allow_waitinglist=True)
-    item_without_waitinglist = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True, allow_waitinglist=True)
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    item_without_waitinglist = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
     quota = Quota.objects.create(event=event)
     quota.items.add(item)
-
 
     client.login(email='dummy@dummy.dummy', password='dummy')
     with scopes_disabled():
@@ -338,6 +330,7 @@ def test_edit_item_without_quota(client, env):
         follow=True
     )
     assert response.context['form'].errors == {'itemvar': ["The selected product is not on sale because there is no quota configured for it."]}
+
 
 @pytest.mark.django_db
 def test_dashboard(client, env):
