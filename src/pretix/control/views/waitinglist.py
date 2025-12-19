@@ -139,12 +139,13 @@ class WaitingListQuerySetMixin:
             qs = qs.none()
 
         if self.request_data.get("search", "") != "":
-            search_q = Q(email__icontains=self.request_data.get("search", ""))
+            s = self.request_data.get("search", "")
+            search_q = Q(email__icontains=s)
 
             if self.request.event.settings.waiting_list_names_asked:
-                search_q = search_q | Q(name_cached__icontains=self.request_data.get("search", ""))
+                search_q = search_q | Q(name_cached__icontains=s)
             if self.request.event.settings.waiting_list_phones_asked:
-                search_q = search_q | Q(phone__icontains=self.request_data.get("search", ""))
+                search_q = search_q | Q(phone__icontains=s)
 
             qs = qs.filter(search_q)
 
