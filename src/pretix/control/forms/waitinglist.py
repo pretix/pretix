@@ -75,7 +75,7 @@ class WaitingListEntryEditForm(I18nModelForm):
         else:
             del self.fields['name_parts']
 
-        if not self.event.settings.waiting_list_names_asked:
+        if not self.event.settings.waiting_list_phones_asked:
             del self.fields['phone']
 
         choices = []
