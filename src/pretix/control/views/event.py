@@ -829,8 +829,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return locales
 
     # get all supported placeholders with dummy values
-    def placeholders(self, item):
-        return get_sample_context(self.request.event, MailSettingsForm.base_context[item])
+    def placeholders(self, item, rich=True):
+        return get_sample_context(self.request.event, MailSettingsForm.base_context[item], rich=rich)
 
     def post(self, request, *args, **kwargs):
         preview_item = request.POST.get('item', '')
@@ -854,7 +854,9 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                             elif preview_item in MailSettingsForm.plain_rendering:
                                 msgs[self.supported_locale[idx]] = mark_safe(
                                     format_map(
-                                        conditional_escape(v), self.placeholders(preview_item), raise_on_missing=True
+                                        conditional_escape(v),
+                                        self.placeholders(preview_item, rich=False),
+                                        raise_on_missing=True
                                     ).replace("\n", "<br />")
                                 )
                             else:

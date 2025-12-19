@@ -1510,7 +1510,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         self.event.meta_values_cached = self.event.meta_values.select_related('property').all()
 
         for k, v in self.base_context.items():
-            self._set_field_placeholders(k, v, rich=k.startswith('mail_text_'))
+            self._set_field_placeholders(k, v, rich=k.startswith('mail_text_') and k not in self.plain_rendering)
 
         for k, v in list(self.fields.items()):
             if k.endswith('_attendee') and not event.settings.attendee_emails_asked:
