@@ -1317,7 +1317,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
                 "This will only be used if the invoice is sent to a different email address or at a different time "
                 "than the order confirmation."
             )) + " " + str(_(
-                "Formatting is not supported, as some accounting departments process mail automatically and to not "
+                "Formatting is not supported, as some accounting departments process mail automatically and do not "
                 "handle formatted emails properly."
             )),
             str

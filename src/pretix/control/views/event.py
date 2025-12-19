@@ -851,7 +851,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                                 msgs[self.supported_locale[idx]] = prefix_subject(self.request.event, format_map(
                                     bleach.clean(v), self.placeholders(preview_item), raise_on_missing=True
                                 ), highlight=True)
-                            elif k in MailSettingsForm.plain_rendering:
+                            elif preview_item in MailSettingsForm.plain_rendering:
                                 msgs[self.supported_locale[idx]] = mark_safe(
                                     conditional_escape(format_map(
                                         bleach.clean(v), self.placeholders(preview_item), raise_on_missing=True
