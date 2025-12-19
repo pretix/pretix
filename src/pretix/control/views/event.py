@@ -853,9 +853,9 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                                 ), highlight=True)
                             elif preview_item in MailSettingsForm.plain_rendering:
                                 msgs[self.supported_locale[idx]] = mark_safe(
-                                    conditional_escape(format_map(
-                                        bleach.clean(v), self.placeholders(preview_item), raise_on_missing=True
-                                    ), highlight=True).replace("\n", "<br />")
+                                    format_map(
+                                        conditional_escape(v), self.placeholders(preview_item), raise_on_missing=True
+                                    ).replace("\n", "<br />")
                                 )
                             else:
                                 placeholders = self.placeholders(preview_item)
