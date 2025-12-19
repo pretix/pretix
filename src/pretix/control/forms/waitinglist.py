@@ -100,7 +100,7 @@ class WaitingListEntryEditForm(I18nModelForm):
                     f'<strike class="text-muted">{escape(item)}</strike>')))
 
         self.fields['itemvar'].label = _("Product")
-        self.fields['itemvar'].help_text = _("Only includes Products with an enabled waiting list.")
+        self.fields['itemvar'].help_text = _("Only includes products which have the waiting list enabled.")
         self.fields['itemvar'].required = True
         self.fields['itemvar'].widget = Select2ItemVarQuota(
             attrs={
