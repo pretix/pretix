@@ -478,8 +478,6 @@ urlpatterns = [
                 name='event.orders.waitinglist.delete'),
         re_path(r'^waitinglist/(?P<entry>\d+)/edit$', waitinglist.EntryEdit.as_view(),
                 name='event.orders.waitinglist.edit'),
-        re_path(r'^waitinglist/(?P<entry>\d+)/transfer$', waitinglist.EntryEdit.as_view(),  # alias of /edit
-                name='event.orders.waitinglist.edit'),
         re_path(r'^checkins/$', checkin.CheckinListView.as_view(), name='event.orders.checkins'),
         re_path(r'^checkinlists/$', checkin.CheckinListList.as_view(), name='event.orders.checkinlists'),
         re_path(r'^checkinlists/add$', checkin.CheckinListCreate.as_view(), name='event.orders.checkinlists.add'),
