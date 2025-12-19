@@ -45,7 +45,7 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import formset_factory, inlineformset_factory
 from django.urls import reverse
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property, lazy
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
@@ -53,7 +53,7 @@ from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django_countries.fields import LazyTypedChoiceField
 from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import (
-    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextInput,
+    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
 )
 from pytz import common_timezones
 
@@ -1311,9 +1311,17 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_invoice = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nMarkdownTextarea,
-        help_text=_("This will only be used if the invoice is sent to a different email address or at a different time "
-                    "than the order confirmation."),
+        widget=I18nTextarea,  # no Markdown supported
+        help_text=lazy(
+            lambda: str(_(
+                "This will only be used if the invoice is sent to a different email address or at a different time "
+                "than the order confirmation."
+            )) + " " + str(_(
+                "Formatting is not supported, as some accounting departments process mail automatically and to not "
+                "handle formatted emails properly."
+            )),
+            str
+        )()
     )
     mail_subject_download_reminder = I18nFormField(
         label=_("Subject sent to order contact address"),
@@ -1480,6 +1488,9 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         'mail_text_resend_all_links': ['event', 'orders'],
         'mail_subject_resend_all_links': ['event', 'orders'],
         'mail_attach_ical_description': ['event', 'event_or_subevent'],
+    }
+    plain_rendering = {
+        'mail_text_order_invoice',
     }
 
     def __init__(self, *args, **kwargs):
