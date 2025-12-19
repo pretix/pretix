@@ -1509,7 +1509,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     def _default_invisible(self, transmission_type):
         # reusing hack from questions.py for default transmission -- this should at least be fast
-        for k, __ in transmission_type.invoice_address_form_fields.items():
+        for k in transmission_type.invoice_address_form_fields.keys():
             if (
                 transmission_type.identifier == "email" and
                 k in ("transmission_email_other", "transmission_email_address") and
