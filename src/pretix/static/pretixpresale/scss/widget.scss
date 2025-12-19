@@ -848,6 +848,9 @@ $table-bg-accent: rgba(128, 128, 128, 0.05);
     outline: 2px solid $brand-primary;
     outline-offset: 2px;
   }
+  &:not([open]) {
+    display: none;
+  }
 }
 .pretix-widget-frame-isloading:focus {
   outline: none;
