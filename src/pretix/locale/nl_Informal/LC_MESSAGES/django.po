@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-08 07:00+0000\n"
+"PO-Revision-Date: 2025-12-22 01:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -1849,7 +1849,7 @@ msgstr "Postcode"
 #: pretix/plugins/checkinlists/exporters.py:538
 #: pretix/plugins/reports/exporters.py:854
 msgid "City"
-msgstr "Stad"
+msgstr "Plaats"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:222
 #: pretix/base/exporters/invoices.py:349 pretix/base/exporters/orderlist.py:271
@@ -2349,7 +2349,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:116 pretix/control/forms/event.py:1774
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
-msgstr "Evenementsslug"
+msgstr "Evenement-slug"
 
 #: pretix/base/exporters/orderlist.py:263
 #: pretix/base/exporters/orderlist.py:453
@@ -2492,8 +2492,9 @@ msgstr "Betaald met {method}"
 
 #: pretix/base/exporters/orderlist.py:458
 #: pretix/base/exporters/orderlist.py:914
+#, fuzzy
 msgid "Fee type"
-msgstr "Soort kosten"
+msgstr "Gratis kaartjes"
 
 #: pretix/base/exporters/orderlist.py:460
 #: pretix/base/exporters/orderlist.py:601
@@ -2529,8 +2530,9 @@ msgstr "geannuleerd"
 #: pretix/base/exporters/orderlist.py:585
 #: pretix/base/exporters/orderlist.py:907
 #: pretix/plugins/checkinlists/exporters.py:761
+#, fuzzy
 msgid "Position ID"
-msgstr "Plaatsnummer"
+msgstr "Plaats"
 
 #: pretix/base/exporters/orderlist.py:594
 #: pretix/base/exporters/orderlist.py:1160
@@ -2870,8 +2872,9 @@ msgstr "Terugbetalingsstatus"
 #: pretix/plugins/checkinlists/exporters.py:375
 #: pretix/presale/templates/pretixpresale/event/order.html:67
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:70
+#, fuzzy
 msgid "Order"
-msgstr "Bestelling"
+msgstr "Besteldatum"
 
 #: pretix/base/exporters/orderlist.py:1097
 #: pretix/base/exporters/orderlist.py:1282
@@ -10861,9 +10864,6 @@ msgid "Automatic, but prefer invoice date over event date"
 msgstr ""
 
 #: pretix/base/settings.py:1142 pretix/base/settings.py:1153
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice date"
 msgstr "Factuurdatum"
 
@@ -10928,7 +10928,7 @@ msgstr "bijv. belastingnummer in Duitsland, ABN in Australië, …"
 
 #: pretix/base/settings.py:1283
 msgid "EU VAT ID"
-msgstr "EU-btw-nummer"
+msgstr "Europees btw-nummer"
 
 #: pretix/base/settings.py:1297
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -15605,8 +15605,9 @@ msgstr "Alle inchecklijsten"
 #: pretix/plugins/checkinlists/exporters.py:475
 #: pretix/plugins/checkinlists/exporters.py:758
 #: pretix/plugins/checkinlists/exporters.py:846
+#, fuzzy
 msgid "Check-in list"
-msgstr "Inchecklijst"
+msgstr "Naam van inchecklijst"
 
 #: pretix/control/forms/filter.py:2633
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:82
