@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-22 10:29+0000\n"
-"Last-Translator: Jan Van Haver <jan.van.haver@gmail.com>\n"
+"PO-Revision-Date: 2025-12-22 20:00+0000\n"
+"Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -13291,15 +13291,13 @@ msgid "Contact:"
 msgstr "Contact:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-format
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
 msgstr ""
 "U ontvangt deze e-mail omdat u een bestelling geplaatst heeft voor het "
-"evenement {event}."
+"evenement <strong>%(event)s</strong>."
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
