@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-22 01:00+0000\n"
+"PO-Revision-Date: 2025-12-22 20:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -188,19 +188,17 @@ msgid "Allowed URIs list, space separated"
 msgstr "Lijst van toegestane URI's, gescheiden met spaties"
 
 #: pretix/api/models.py:47
-#, fuzzy
-#| msgid "Allowed URIs list, space separated"
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Lijst van toegestane URI's, gescheiden met spaties"
+msgstr "Lijst met toegestane URI's na uitloggen, gescheiden door spaties"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:426
 #: pretix/plugins/paypal/payment.py:114 pretix/plugins/paypal2/payment.py:111
 msgid "Client ID"
-msgstr "Client ID"
+msgstr "Klant-ID"
 
 #: pretix/api/models.py:55
 msgid "Client secret"
-msgstr "Cliëntgeheim"
+msgstr "Klantgeheim"
 
 #: pretix/api/models.py:116
 msgid "Enable webhook"
@@ -242,7 +240,7 @@ msgstr "Het product \"{}\" is niet toegewezen aan een quotum."
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1724
 #: pretix/base/models/items.py:1916 pretix/base/models/items.py:2202
 msgid "One or more items do not belong to this event."
-msgstr "Één of meer items horen niet bij dit evenement."
+msgstr "Een of meer items horen niet bij dit evenement."
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:2213 pretix/base/models/items.py:2216
@@ -267,7 +265,7 @@ msgstr "Metadata-eigenschap '{name}' bestaat niet."
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
 msgstr ""
-"De waarde '{value}' is niet toegestaan voor de metadataeigenschap '{name}'."
+"De waarde '{value}' is niet toegestaan voor de metadata-eigenschap '{name}'."
 
 #: pretix/api/serializers/event.py:283 pretix/api/serializers/organizer.py:85
 #, python-brace-format
@@ -275,10 +273,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Onbekende plug-in: '{name}'."
 
 #: pretix/api/serializers/event.py:286 pretix/api/serializers/organizer.py:88
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Onbekende plug-in: '{name}'."
+msgstr "Beperkte plug-in: '{name}'."
 
 #: pretix/api/serializers/item.py:87 pretix/api/serializers/item.py:149
 #: pretix/api/serializers/item.py:405
@@ -292,45 +289,32 @@ msgstr "Een product kan niet zichzelf bevatten."
 
 #: pretix/api/serializers/item.py:217 pretix/control/forms/item.py:1279
 msgid "The bundled item must not have bundles on its own."
-msgstr "Een product kan geen andere bundels bevatten."
+msgstr "Het gebundelde artikel mag zelf geen bundels bevatten."
 
 #: pretix/api/serializers/item.py:235
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "De betaling is te laat om geaccepteerd te worden."
+msgstr "Het begin van het programma mag niet leeg zijn."
 
 #: pretix/api/serializers/item.py:239
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "De betaling is te laat om geaccepteerd te worden."
+msgstr "Het einde van het programma mag niet leeg zijn."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2321
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The program end must not be before the program start."
-msgstr "Het maximale aantal moet groter zijn dan het minimum aantal."
+msgstr ""
+"Het einde van het programma mag niet vóór het begin van het programma liggen."
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2315
-#, fuzzy
-#| msgid "You can not select a subevent if your event is not an event series."
 msgid "You cannot use program times on an event series."
-msgstr ""
-"Je kan geen onderevenement selecteren als je evenement geen evenementreeks "
-"is."
+msgstr "Je kunt geen programmatijden gebruiken voor een reeks evenementen."
 
 #: pretix/api/serializers/item.py:337
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
-#| "Please use the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, program times or variations via PATCH/PUT is not "
 "supported. Please use the dedicated nested endpoint."
 msgstr ""
-"Add-ons, bundels of varianten bijwerken via PATCH/PUT wordt niet "
-"ondersteund. Gebruik alsjeblieft het speciale geneste endpoint."
+"Het bijwerken van add-ons, bundels, programmatijden of variaties via PATCH/"
+"PUT wordt niet ondersteund. Gebruik hiervoor het speciale geneste eindpunt."
 
 #: pretix/api/serializers/item.py:345
 msgid "Only admission products can currently be personalized."
@@ -341,51 +325,48 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
-"Cadeaukaartproducten moeten niet worden gekoppeld aan een positief "
-"belastingtarief, omdat de belasting al wordt toegepast wanneer de "
-"cadeaukaart wordt verzilverd."
+"Cadeaubonnen mogen niet worden geassocieerd met belastingtarieven die niet "
+"nul zijn, aangezien er omzetbelasting wordt geheven wanneer de cadeaubon "
+"wordt ingewisseld."
 
 #: pretix/api/serializers/item.py:361 pretix/control/forms/item.py:784
 msgid "Gift card products should not be admission products at the same time."
-msgstr "Cadeaukaartproducten kunnen niet tegelijkertijd toegangsbewijzen zijn."
+msgstr ""
+"Producten voor cadeaubonnen mogen niet tegelijkertijd toegangsproducten zijn."
 
 #: pretix/api/serializers/item.py:573
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
-"Add-ons bijwerken via PATCH/PUT wordt niet ondersteund. Gebruik alsjeblieft "
-"het speciale geneste eindpunt."
+"Opties bijwerken via PATCH/PUT wordt niet ondersteund. Gebruik het speciale "
+"geneste eindpunt."
 
 #: pretix/api/serializers/item.py:587 pretix/control/forms/item.py:177
 msgid "Question cannot depend on a question asked during check-in."
 msgstr ""
-"Deze vraag kan niet van een vraag die tijdens het inchecken gesteld wordt "
-"afhangen."
+"De vraag mag niet afhankelijk zijn van een vraag die tijdens het inchecken "
+"wordt gesteld."
 
 #: pretix/api/serializers/item.py:592 pretix/control/forms/item.py:182
 msgid "Circular dependency between questions detected."
-msgstr "Kringafhankelijkheid tussen vragen gedetecteerd."
+msgstr "Circulaire afhankelijkheid tussen vragen gedetecteerd."
 
 #: pretix/api/serializers/item.py:597 pretix/control/forms/item.py:191
 msgid "This type of question cannot be asked during check-in."
-msgstr "Deze soort vraag kan niet bij het inchecken worden gesteld."
+msgstr "Dit soort vragen kan niet worden gesteld tijdens het inchecken."
 
 #: pretix/api/serializers/item.py:600 pretix/control/forms/item.py:199
 msgid "This type of question cannot be shown during check-in."
-msgstr "Deze soort vraag kan niet bij het inchecken worden getoond."
+msgstr "Dit soort vragen kan niet worden getoond tijdens het inchecken."
 
 #: pretix/api/serializers/media.py:108
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Een cadeaukaart met dezelfde code bestaat al in jouw organisatoraccount of "
-"een met je account verbonden organisatoraccount."
+"Er bestaat al een medium met dezelfde identificatie en hetzelfde type in je "
+"organisatoraccount."
 
 #: pretix/api/serializers/order.py:85
 #, python-brace-format
@@ -449,7 +430,7 @@ msgstr ""
 
 #: pretix/api/views/checkin.py:627 pretix/api/views/checkin.py:634
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Medium verbonden met ander evenement"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:764
 #, python-brace-format
@@ -614,6 +595,8 @@ msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
+"Dit omvat toegevoegde of verwijderde producten en wijzigingen aan geneste "
+"objecten zoals variaties of bundels."
 
 #: pretix/api/webhooks.py:380
 msgid "Shop taken live"
@@ -664,6 +647,8 @@ msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
 msgstr ""
+"Omvat alleen expliciete wijzigingen aan de voucher, niet bijvoorbeeld een "
+"verhoging van het aantal inwisselingen."
 
 #: pretix/api/webhooks.py:421
 #, fuzzy
@@ -732,7 +717,7 @@ msgstr "{system}gebruiker"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:31
 #: pretix/presale/templates/pretixpresale/event/order.html:300
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:226 pretix/base/models/auth.py:750
@@ -744,7 +729,7 @@ msgstr "Wachtwoord"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "Je wachtwoord moet zowel cijfers als letters bevatten."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
 #, python-format
@@ -752,8 +737,10 @@ msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "Je wachtwoord mag niet hetzelfde zijn als je vorige wachtwoord."
 msgstr[1] ""
+"Je wachtwoord mag niet hetzelfde zijn als een van je %(history_length)s "
+"vorige wachtwoorden."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -761,13 +748,15 @@ msgstr "Online winkel"
 
 #: pretix/base/channels.py:174
 msgid "API"
-msgstr ""
+msgstr "API"
 
 #: pretix/base/channels.py:175
 msgid ""
 "API sales channels come with no built-in functionality, but may be used for "
 "custom integrations."
 msgstr ""
+"API-verkoopkanalen hebben geen ingebouwde functionaliteit, maar kunnen "
+"worden gebruikt voor aangepaste integraties."
 
 #: pretix/base/context.py:38
 #, fuzzy, python-brace-format
@@ -829,8 +818,8 @@ msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
-"Het email adres in deze account is nog niet gevalideerd. Gelieve eerst het "
-"email adres te bevestigen in uw account."
+"Het e-mailadres in deze account is nog niet gevalideerd. Gelieve eerst het e-"
+"mailadres te bevestigen in je account."
 
 #: pretix/base/datasync/datasync.py:263
 #, python-brace-format
@@ -838,6 +827,8 @@ msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
 msgstr ""
+"Het veld “{field_name}” bestaat niet. Controleer je {provider_name} "
+"instellingen."
 
 #: pretix/base/datasync/datasync.py:270
 #, python-brace-format
@@ -845,6 +836,8 @@ msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
+"Het veld “{field_name}” vereist {required_input}, maar heeft slechts "
+"{available_inputs} ontvangen. Controleer je {provider_name} instellingen."
 
 #: pretix/base/datasync/datasync.py:281
 #, python-brace-format
@@ -852,6 +845,8 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
+"Werk de waardetoewijzing voor het veld “{field_name}” bij - optie “{val}” "
+"niet toegewezen"
 
 #: pretix/base/datasync/sourcefields.py:128
 #, fuzzy
@@ -1116,7 +1111,7 @@ msgstr "Korte naam evenement"
 #: pretix/control/templates/pretixcontrol/events/index.html:68
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 msgid "Event name"
-msgstr "Evenementsnaam"
+msgstr "Naam van het evenement"
 
 #: pretix/base/datasync/sourcefields.py:446
 #: pretix/base/exporters/invoices.py:330
@@ -1486,7 +1481,7 @@ msgstr "Taal"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:73
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:68
 msgid "Notes"
-msgstr "Notities"
+msgstr "Opmerkingen"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -2282,6 +2277,10 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Download een spreadsheet met alle bestellingen. De spreadsheet bevat drie "
+"bladen: één met een regel voor elke bestelling, één met een regel voor elke "
+"bestelpositie en één met een regel voor elke extra kostenpost die in een "
+"bestelling in rekening is gebracht."
 
 #: pretix/base/exporters/orderlist.py:102 pretix/base/models/orders.py:337
 #: pretix/control/navigation.py:255 pretix/control/navigation.py:362
@@ -2433,7 +2432,7 @@ msgstr "Datum van laatste betaling"
 
 #: pretix/base/exporters/orderlist.py:272 pretix/base/services/stats.py:238
 msgid "Fees"
-msgstr "Toeslagen"
+msgstr "Kosten"
 
 #: pretix/base/exporters/orderlist.py:277
 #, python-brace-format
@@ -2714,6 +2713,10 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"Download een spreadsheet met alle belangrijke wijzigingen in bestellingen, "
+"d.w.z. alle wijzigingen in producten, prijzen of belastingtarieven. De "
+"informatie is alleen correct voor wijzigingen die zijn aangebracht met "
+"pretix-versies die na oktober 2021 zijn uitgebracht."
 
 #: pretix/base/exporters/orderlist.py:860
 #, fuzzy
@@ -2820,10 +2823,12 @@ msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Deze waarde wordt ter informatie verstrekt, maakt geen deel uit van de "
+"oorspronkelijke transactiegegevens en kan sinds de transactie zijn gewijzigd."
 
 #: pretix/base/exporters/orderlist.py:959
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Omgezet vanuit oude versie"
 
 #: pretix/base/exporters/orderlist.py:1021
 #, fuzzy
@@ -2834,6 +2839,8 @@ msgstr "Betalingen en terugbetalingen van bestelling"
 #: pretix/base/exporters/orderlist.py:1023
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Download een spreadsheet met alle betalingen of terugbetalingen van elke "
+"bestelling."
 
 #: pretix/base/exporters/orderlist.py:1033
 #, fuzzy
@@ -2846,10 +2853,12 @@ msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Houd er rekening mee dat hierdoor alle niet-bevestigde betalingen of niet-"
+"voltooide terugbetalingen worden uitgesloten."
 
 #: pretix/base/exporters/orderlist.py:1040
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Datumbereik (begin van transactie)"
 
 #: pretix/base/exporters/orderlist.py:1046
 msgid "Payment states"
@@ -2948,6 +2957,8 @@ msgstr "Quota beschikbaarheid"
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
 msgstr ""
+"Download een spreadsheet met alle quota, inclusief hun huidige "
+"beschikbaarheid."
 
 #: pretix/base/exporters/orderlist.py:1155
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -3006,7 +3017,7 @@ msgstr "Cadeaubonnen"
 
 #: pretix/base/exporters/orderlist.py:1205
 msgid "Download a spreadsheet of all gift card transactions."
-msgstr ""
+msgstr "Download een spreadsheet met alle transacties met cadeaubonnen."
 
 #: pretix/base/exporters/orderlist.py:1234
 #: pretix/base/exporters/orderlist.py:1282
@@ -3083,6 +3094,8 @@ msgstr "Cadeaubonverzilveringen"
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
+"Download een spreadsheet met alle betalingen of terugbetalingen waarbij "
+"cadeaubonnen betrokken zijn."
 
 #: pretix/base/exporters/orderlist.py:1282
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:16
@@ -3102,7 +3115,7 @@ msgstr "Cadeaubonnen"
 
 #: pretix/base/exporters/orderlist.py:1312
 msgid "Download a spreadsheet of all gift cards including their current value."
-msgstr ""
+msgstr "Download een spreadsheet met alle cadeaubonnen en hun huidige waarde."
 
 #: pretix/base/exporters/orderlist.py:1319
 msgid "Show value at"
@@ -3110,7 +3123,7 @@ msgstr "Toon waarde op"
 
 #: pretix/base/exporters/orderlist.py:1322
 msgid "Defaults to the time of report."
-msgstr ""
+msgstr "Standaard ingesteld op het tijdstip van het rapport."
 
 #: pretix/base/exporters/orderlist.py:1327
 #: pretix/base/exporters/orderlist.py:1337 pretix/control/forms/filter.py:550
@@ -3210,7 +3223,7 @@ msgstr "Laatste factuurdatum van bestelling"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:9
 msgid "Reusable media"
-msgstr ""
+msgstr "Herbruikbare media"
 
 #: pretix/base/exporters/reusablemedia.py:35
 #, fuzzy
@@ -3282,7 +3295,7 @@ msgstr "Wachtlijst"
 
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
-msgstr ""
+msgstr "Download een spreadsheet met alle wachtlijstgegevens."
 
 #: pretix/base/exporters/waitinglist.py:50
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:102
@@ -3335,7 +3348,7 @@ msgstr "Prioriteit"
 #: pretix/base/forms/__init__.py:118
 #, python-brace-format
 msgid "You can use {markup_name} in this field."
-msgstr ""
+msgstr "Je kunt {markup_name} in dit veld gebruiken."
 
 #: pretix/base/forms/__init__.py:178
 #, python-format
@@ -3343,6 +3356,8 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
+"Om technische redenen kun je invoer die gemaskeerd moet worden (bijvoorbeeld "
+"wachtwoorden) niet instellen op %(value)s."
 
 #: pretix/base/forms/auth.py:61 pretix/base/forms/auth.py:179
 msgid "Keep me logged in"
@@ -3358,8 +3373,8 @@ msgstr ""
 #: pretix/presale/forms/customer.py:385 pretix/presale/forms/customer.py:457
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr ""
-"Om veiligheidsredenen moet je vijf minuten wachten voor je dit opnieuw kunt "
-"proberen."
+"Om veiligheidsredenen moet je 5 minuten wachten voordat je het opnieuw "
+"probeert."
 
 #: pretix/base/forms/auth.py:67 pretix/base/forms/auth.py:286
 msgid "This account is inactive."
@@ -3450,6 +3465,7 @@ msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
 msgstr ""
+"Als je dit veld leeg laat, is het ticket geldig vanaf het moment van aankoop."
 
 #: pretix/base/forms/questions.py:709 pretix/base/forms/questions.py:1102
 msgid "Street and Number"
@@ -3460,6 +3476,8 @@ msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Dit is optioneel, maar afhankelijk van het land waar je woont, kunnen we je "
+"extra belastingen in rekening brengen als je dit niet invult."
 
 #: pretix/base/forms/questions.py:1168 pretix/base/forms/questions.py:1174
 msgid "If you are registered in Switzerland, you can enter your UID instead."
@@ -3470,6 +3488,8 @@ msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Optioneel, maar het kan nodig zijn om belastingvoordelen op je factuur te "
+"claimen, afhankelijk van het land waar jij en de verkoper woonachtig zijn."
 
 #: pretix/base/forms/questions.py:1181
 #, fuzzy
@@ -3479,7 +3499,7 @@ msgstr "Annulering aangevraagd"
 
 #: pretix/base/forms/questions.py:1183
 msgid "Invoice transmission method"
-msgstr ""
+msgstr "Wijze van verzending van facturen"
 
 #: pretix/base/forms/questions.py:1329
 msgid "You need to provide a company name."
@@ -3494,6 +3514,8 @@ msgid ""
 "If you enter an invoice address, you also need to select an invoice "
 "transmission method."
 msgstr ""
+"Als je een factuuradres opgeeft, moet je ook een wijze van verzending van "
+"facturen kiezen."
 
 #: pretix/base/forms/questions.py:1385
 #, fuzzy
@@ -3508,10 +3530,12 @@ msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
 msgstr ""
+"Het geselecteerde type factuurverzending vereist een veld dat momenteel niet "
+"beschikbaar is. Neem contact op met de organisator."
 
 #: pretix/base/forms/questions.py:1398
 msgid "This field is required for the selected type of invoice transmission."
-msgstr ""
+msgstr "Dit veld is verplicht voor het geselecteerde type factuurverzending."
 
 #: pretix/base/forms/user.py:54 pretix/control/forms/organizer.py:458
 #: pretix/control/forms/users.py:58
@@ -3581,16 +3605,12 @@ msgstr ""
 "mailadres."
 
 #: pretix/base/forms/user.py:179
-#, fuzzy
-#| msgid "Email address"
 msgid "Old email address"
-msgstr "E-mailadres"
+msgstr "Oud e-mailadres"
 
 #: pretix/base/forms/user.py:180
-#, fuzzy
-#| msgid "Email address"
 msgid "New email address"
-msgstr "E-mailadres"
+msgstr "Nieuw e-mailadres"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -3599,23 +3619,25 @@ msgid ""
 "up. Please note: to use literal \"{\" or \"}\", you need to double them as "
 "\"{{\" and \"}}\"."
 msgstr ""
+"Er is een fout in de syntaxis van de plaatshouder. Controleer of de "
+"openings- “{” en sluitings- “}” accolades van de plaatshouders overeenkomen. "
+"Let op: om letterlijke “{” of “}” te gebruiken, moet je ze verdubbelen als “{"
+"{” en “}}”."
 
 #: pretix/base/forms/validators.py:72 pretix/control/views/event.py:870
-#, fuzzy, python-format
-#| msgid "Invalid placeholder(s): %(value)s"
+#, python-format
 msgid "Invalid placeholder: {%(value)s}"
-msgstr "Ongeldige plaatsaanduiding(en): %(value)s"
+msgstr "Ongeldige placeholder: %(value)s"
 
 #: pretix/base/forms/widgets.py:68
-#, fuzzy, python-format
-#| msgid "Sample city"
+#, python-format
 msgid "Sample: %s"
-msgstr "Voorbeeldstad"
+msgstr "Voorbeeld: %s"
 
 #: pretix/base/forms/widgets.py:71
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "Beschikbare plaatsaanduidingen: {list}"
+msgstr "Beschikbare placeholders: {list}"
 
 #: pretix/base/forms/widgets.py:214 pretix/base/models/items.py:1655
 #: pretix/plugins/checkinlists/exporters.py:757
@@ -3634,7 +3656,7 @@ msgstr "Particuliere klant"
 
 #: pretix/base/invoicing/email.py:50
 msgid "Email invoice directly to accounting department"
-msgstr ""
+msgstr "E-mail factuur rechtstreeks naar de boekhoudafdeling"
 
 #: pretix/base/invoicing/email.py:51
 #, fuzzy
@@ -3659,12 +3681,12 @@ msgstr "Toon voorbeeld email"
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr ""
+msgstr "Italiaans uitwisselingssysteem (SdI)"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
 msgid "Exchange System (SdI)"
-msgstr ""
+msgstr "Uitwisselingssysteem (SdI)"
 
 #: pretix/base/invoicing/national.py:49
 #, fuzzy
@@ -3676,7 +3698,7 @@ msgstr "Cadeauboncode"
 #: pretix/base/invoicing/national.py:53
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
-msgstr ""
+msgstr "Adres voor gecertificeerde elektronische post"
 
 #: pretix/base/invoicing/national.py:57
 #, fuzzy
@@ -3693,6 +3715,10 @@ msgid ""
 "in accordance with the procedures and terms set forth in No. 89757/2018 of "
 "April 30, 2018, issued by the Director of the Revenue Agency."
 msgstr ""
+"Dit PDF-document is een visuele kopie van de factuur en vormt geen factuur "
+"voor btw-doeleinden. De factuur wordt uitgegeven in XML-formaat en verzonden "
+"in overeenstemming met de procedures en voorwaarden uiteengezet in nr. 89757/"
+"2018 van 30 april 2018, uitgegeven door de directeur van de belastingdienst."
 
 #: pretix/base/invoicing/pdf.py:143
 #, python-format
@@ -3839,7 +3865,7 @@ msgstr "Bedrag"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Enkele prijs: {net_price} netto / {gross_price} bruto"
 
 #: pretix/base/invoicing/pdf.py:901
 #, fuzzy, python-brace-format
@@ -3934,7 +3960,7 @@ msgstr ""
 
 #: pretix/base/invoicing/pdf.py:1129
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "Standaard factuurweergave (Europese briefstijl)"
 
 #: pretix/base/invoicing/pdf.py:1218
 msgctxt "invoice"
@@ -3943,7 +3969,7 @@ msgstr "(Gelieve steeds te vermelden.)"
 
 #: pretix/base/invoicing/pdf.py:1265
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Vereenvoudigde factuurweergave"
 
 #: pretix/base/invoicing/pdf.py:1284
 #, fuzzy, python-brace-format
@@ -3956,6 +3982,8 @@ msgstr "Datumbereik evenement"
 msgid ""
 "A Peppol participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
+"Een Peppol-deelnemers-ID begint altijd met een voorvoegsel, gevolgd door een "
+"dubbele punt (:)."
 
 #: pretix/base/invoicing/peppol.py:132
 #, python-format
@@ -3963,6 +3991,8 @@ msgid ""
 "The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"Het Peppol-deelnemers-ID-voorvoegsel %(number)s is niet bekend bij ons "
+"systeem. Neem contact met ons op als je zeker weet dat dit ID correct is."
 
 #: pretix/base/invoicing/peppol.py:136
 #, python-format
@@ -3970,10 +4000,13 @@ msgid ""
 "The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"De Peppol-deelnemers-ID voldoet niet aan de validatieregels voor het "
+"voorvoegsel %(number)s. Neem contact met ons op als je zeker weet dat deze "
+"ID correct is."
 
 #: pretix/base/invoicing/peppol.py:156
 msgid "Peppol participant ID"
-msgstr ""
+msgstr "Peppol-deelnemers-ID"
 
 #: pretix/base/invoicing/peppol.py:170
 #, fuzzy
@@ -3989,12 +4022,17 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
+"Dit PDF-document is een visuele kopie van de factuur en vormt geen factuur "
+"voor btw-doeleinden. De originele factuur wordt uitgegeven in XML-formaat en "
+"verzonden via het Peppol-netwerk."
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"De betreffende plug-in is momenteel niet actief. Om deze te activeren, klik "
+"hier om naar de instellingen van de plug-in te gaan."
 
 #: pretix/base/logentrytype_registry.py:53
 #, fuzzy
@@ -4056,12 +4094,12 @@ msgstr "Belastingregel {val}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Barcode / QR-code"
 
 #: pretix/base/media.py:88
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:255
 msgid "NFC UID-based"
-msgstr ""
+msgstr "Op NFC UID gebaseerd"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -4080,12 +4118,12 @@ msgstr "Ongeldige instelling voor kolom \"{header}\"."
 #: pretix/base/modelimport.py:206
 #, python-brace-format
 msgid "Could not parse {value} as a yes/no value."
-msgstr ""
+msgstr "Kan {value} niet verwerken als een ja/nee-waarde."
 
 #: pretix/base/modelimport.py:229
 #, python-brace-format
 msgid "Could not parse {value} as a date and time."
-msgstr ""
+msgstr "Kan {value} niet als datum en tijd interpreteren."
 
 #: pretix/base/modelimport.py:239 pretix/control/views/orders.py:1179
 #: pretix/control/views/orders.py:1208 pretix/control/views/orders.py:1253
@@ -4105,7 +4143,7 @@ msgstr "Er zijn meerdere overeenkomende datums gevonden."
 
 #: pretix/base/modelimport_orders.py:73
 msgid "Grouping"
-msgstr ""
+msgstr "Groeperen"
 
 #: pretix/base/modelimport_orders.py:75
 msgid ""
@@ -4113,6 +4151,10 @@ msgid ""
 "together...\". Lines with the same grouping value will be put in the same "
 "order, but MUST be consecutive lines of the input file."
 msgstr ""
+"Alleen van toepassing wanneer “Importmodus” is ingesteld op “Meerdere regels "
+"samenvoegen...”. Regels met dezelfde groeperingswaarde worden in dezelfde "
+"volgorde geplaatst, maar MOETEN opeenvolgende regels van het invoerbestand "
+"zijn."
 
 #: pretix/base/modelimport_orders.py:101
 msgid "Enter a valid phone number."
@@ -4124,6 +4166,9 @@ msgid ""
 "The date can be specified through its full name, full date and time, or "
 "internal ID, provided only one date in the system matches the input."
 msgstr ""
+"De datum kan worden opgegeven via de volledige naam, de volledige datum en "
+"tijd of het interne ID, op voorwaarde dat slechts één datum in het systeem "
+"overeenkomt met de invoer."
 
 #: pretix/base/modelimport_orders.py:120 pretix/presale/views/waiting.py:157
 msgctxt "subevent"
@@ -4134,6 +4179,8 @@ msgstr "Je moet een datum selecteren."
 msgid ""
 "The product can be specified by its internal ID, full name or internal name."
 msgstr ""
+"Het product kan worden gespecificeerd aan de hand van zijn interne ID, "
+"volledige naam of interne naam."
 
 #: pretix/base/modelimport_orders.py:149
 #: pretix/base/modelimport_vouchers.py:194
@@ -4154,6 +4201,8 @@ msgstr "Productvariant"
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
 msgstr ""
+"De variatie kan worden gespecificeerd aan de hand van de interne ID of de "
+"volledige naam."
 
 #: pretix/base/modelimport_orders.py:181
 #: pretix/base/modelimport_vouchers.py:225
@@ -4184,6 +4233,7 @@ msgstr "Vul een geldige landcode in."
 #: pretix/base/modelimport_orders.py:290 pretix/base/modelimport_orders.py:441
 msgid "The state can be specified by its short form or full name."
 msgstr ""
+"De staat kan worden gespecificeerd door de afkorting of de volledige naam."
 
 #: pretix/base/modelimport_orders.py:300 pretix/base/modelimport_orders.py:450
 msgid "States are not supported for this country."
@@ -4240,6 +4290,8 @@ msgid ""
 "The sales channel can be specified by it's internal identifier or its full "
 "name."
 msgstr ""
+"Het verkoopkanaal kan worden gespecificeerd aan de hand van zijn interne "
+"identificatiecode of zijn volledige naam."
 
 #: pretix/base/modelimport_orders.py:599 pretix/base/modelimport_orders.py:601
 msgid "Please enter a valid sales channel."
@@ -4345,7 +4397,7 @@ msgstr "Prijsberekening"
 #: pretix/base/modelimport_vouchers.py:150
 #, python-brace-format
 msgid "Could not parse {value} as a price mode, use one of {options}."
-msgstr ""
+msgstr "Kan {value} niet als prijsmodus parseren, gebruik een van {options}."
 
 #: pretix/base/modelimport_vouchers.py:160 pretix/base/models/vouchers.py:248
 msgid "Voucher value"
@@ -4353,7 +4405,7 @@ msgstr "Voucherwaarde"
 
 #: pretix/base/modelimport_vouchers.py:165
 msgid "It is pointless to set a value without a price mode."
-msgstr ""
+msgstr "Het heeft geen zin om een waarde in te stellen zonder een prijsmodus."
 
 #: pretix/base/modelimport_vouchers.py:237 pretix/base/models/items.py:2120
 #: pretix/base/models/vouchers.py:275
@@ -4400,12 +4452,16 @@ msgstr "Toon verborgen producten die overeenkomen met deze voucher"
 #: pretix/base/modelimport_vouchers.py:343 pretix/base/models/vouchers.py:304
 msgid "Offer all add-on products for free when redeeming this voucher"
 msgstr ""
+"Bied alle aanvullende producten gratis aan bij het inwisselen van deze "
+"voucher"
 
 #: pretix/base/modelimport_vouchers.py:351 pretix/base/models/vouchers.py:308
 msgid ""
 "Include all bundled products without a designated price when redeeming this "
 "voucher"
 msgstr ""
+"Voeg alle gebundelde producten zonder een aangegeven prijs toe bij het "
+"inwisselen van deze voucher"
 
 #: pretix/base/models/auth.py:252
 msgid "Is active"
@@ -4463,6 +4519,8 @@ msgid ""
 "to confirm changing your email address from {old_email}\n"
 "to {new_email}, use the following code:"
 msgstr ""
+"om te bevestigen datje je e-mailadres wilt wijzigen van {old_email}\n"
+"naar {new_email}, gebruik je de volgende code:"
 
 #: pretix/base/models/auth.py:378
 #, python-brace-format
@@ -4910,6 +4968,12 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
+"Met deze optie kun je kortingen van het type “koop X en krijg Y met korting/"
+"gratis” aanmaken. Als je bijvoorbeeld “Minimumaantal overeenkomende producten"
+"” instelt op vier en deze waarde op twee, wordt het winkelwagentje van de "
+"klant opgesplitst in groepen van vier tickets en krijgen de twee goedkoopste "
+"tickets binnen elke groep korting. Als je de korting op alle overeenkomende "
+"producten wilt toekennen, laat je dit veld leeg."
 
 #: pretix/base/models/discount.py:165
 msgid "Apply to add-on products"
@@ -4994,7 +5058,9 @@ msgstr ""
 
 #: pretix/base/models/event.py:607 pretix/base/models/organizer.py:89
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr "De slug mag alleen letters, cijfers, punten en streepjes bevatten."
+msgstr ""
+"De slug (verkorte vorm) mag alleen letters, cijfers, punten en streepjes "
+"bevatten."
 
 #: pretix/base/models/event.py:624 pretix/base/models/event.py:1525
 msgid "Show in lists"
@@ -5447,6 +5513,7 @@ msgstr ""
 #: pretix/base/models/items.py:126
 msgid "Only show if the cart contains one of the following products"
 msgstr ""
+"Alleen weergeven als het winkelwagentje een van de volgende producten bevat"
 
 #: pretix/base/models/items.py:129
 msgid "Cross-selling condition"
@@ -6521,17 +6588,13 @@ msgstr ""
 "wordt iedere waarde toegestaan."
 
 #: pretix/base/models/items.py:2310
-#, fuzzy
-#| msgid "Start date"
 msgid "Start"
-msgstr "Begindatum"
+msgstr "Begin"
 
 #: pretix/base/models/items.py:2311
 #: pretix/plugins/reports/accountingreport.py:129
-#, fuzzy
-#| msgid "Enabled"
 msgid "End"
-msgstr "Ingeschakeld"
+msgstr "Einde"
 
 #: pretix/base/models/memberships.py:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:28
@@ -6921,10 +6984,8 @@ msgid "Ticket"
 msgstr "Kaartje"
 
 #: pretix/base/models/orders.py:3634
-#, fuzzy
-#| msgid "Verification failed"
 msgid "Certificate"
-msgstr "Verificatie mislukt"
+msgstr "Certificaat"
 
 #: pretix/base/models/orders.py:3635 pretix/control/views/event.py:393
 #: pretix/control/views/event.py:398 pretix/control/views/organizer.py:649
@@ -7446,6 +7507,10 @@ msgid ""
 "of a specific product, you can also select a quota. In this case, all "
 "products assigned to this quota can be selected."
 msgstr ""
+"Dit product wordt aan het winkelwagentje van de gebruiker toegevoegd als de "
+"voucher wordt ingewisseld. In plaats van een specifiek product kun je ook "
+"een quotum selecteren. In dat geval kunnen alle producten die aan dit quotum "
+"zijn toegewezen, worden geselecteerd."
 
 #: pretix/base/models/vouchers.py:268
 msgid "This variation of the product select above is being used."
@@ -8710,29 +8775,25 @@ msgstr ""
 "door jou gekozen hoeveelheid. Zie hieronder voor de details."
 
 #: pretix/base/services/cart.py:118
-#, fuzzy, python-format
-#| msgid ""
-#| "Some of the products you selected are no longer available in the quantity "
-#| "you selected. Please see below for details."
+#, python-format
 msgid ""
 "Some of the products you selected are no longer available. The following "
 "products are affected and have not been added to your cart: %s"
 msgstr ""
-"Sommige van de door jou gekozen producten zijn niet meer beschikbaar in de "
-"door jou gekozen hoeveelheid. Zie hieronder voor de details."
+"Sommige van de geselecteerde producten zijn niet langer beschikbaar. De "
+"volgende producten zijn hierdoor getroffen en zijn niet aan je winkelwagen "
+"toegevoegd: %s"
 
 #: pretix/base/services/cart.py:122
-#, fuzzy, python-format
-#| msgid ""
-#| "Some of the products you selected are no longer available in the quantity "
-#| "you selected. Please see below for details."
+#, python-format
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. The following products are affected and have not been added to "
 "your cart: %s"
 msgstr ""
-"Sommige van de door jou gekozen producten zijn niet meer beschikbaar in de "
-"door jou gekozen hoeveelheid. Zie hieronder voor de details."
+"Sommige van de geselecteerde producten zijn niet langer beschikbaar in de "
+"geselecteerde hoeveelheid. De volgende producten zijn hierdoor getroffen en "
+"zijn niet aan je winkelwagen toegevoegd: %s"
 
 #: pretix/base/services/cart.py:127 pretix/base/services/orders.py:150
 #, fuzzy, python-format
@@ -8803,28 +8864,20 @@ msgstr ""
 "voor dit evenement al moeten zijn ontvangen."
 
 #: pretix/base/services/cart.py:149
-#, fuzzy
-#| msgid ""
-#| "The presale period for this event has not yet started. The affected "
-#| "positions have been removed from your cart."
 msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
-"De verkoopperiode van dit evenement is nog niet begonnen. De getroffen "
-"kaartjes zijn uit je winkelwagen verwijderd."
+"De boekingsperiode voor dit evenement is nog niet begonnen. De betreffende "
+"producten zijn uit je winkelwagen verwijderd."
 
 #: pretix/base/services/cart.py:152 pretix/base/services/orders.py:190
-#, fuzzy
-#| msgid ""
-#| "The presale period for one of the events in your cart has ended. The "
-#| "affected positions have been removed from your cart."
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
-"De verkoopperiode voor een van de evenementen in je winkelwagen is "
-"afgelopen. De getroffen kaartjes zijn verwijderd uit je winkelwagen."
+"De boekingsperiode voor een van de evenementen in je winkelwagen is "
+"verstreken. De betreffende producten zijn uit je winkelwagen verwijderd."
 
 #: pretix/base/services/cart.py:154
 #, fuzzy
@@ -8862,7 +8915,15 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
+"De vouchercode “%(voucher)s” kan alleen worden gebruikt als je ten minste %"
+"(number)s overeenkomende producten selecteert. We hebben daarom enkele "
+"artikelen uit je winkelwagen verwijderd die op deze manier niet meer kunnen "
+"worden gekocht."
 msgstr[1] ""
+"De vouchercode “%(voucher)s” kan alleen worden gebruikt als je ten minste %"
+"(number)s overeenkomende producten selecteert. We hebben daarom enkele "
+"artikelen uit je winkelwagen verwijderd die op deze manier niet meer kunnen "
+"worden gekocht."
 
 #: pretix/base/services/cart.py:169
 msgid ""
@@ -8893,6 +8954,8 @@ msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
+"Het toepassen van een voucher op de hele winkelwagen mag niet worden "
+"gecombineerd met andere bewerkingen."
 
 #: pretix/base/services/cart.py:179
 msgid ""
@@ -9784,8 +9847,8 @@ msgid ""
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
-"Bij het plaatsen van uw bestelling is het totaalbedrag van de bestelling "
-"veranderd. Dit kan gebeuren doordat de prijs van een van de gekochte "
+"Bij het plaatsen van je bestelling is het totaalbedrag van de bestelling "
+"veranderd. Dat kan gebeuren doordat de prijs van een van de gekochte "
 "producten zojuist is veranderd, of doordat een cadeaubon die je hebt "
 "gebruikt in de tussentijd door een andere bestelling is gebruikt. Controleer "
 "de getoonde bedragen hieronder en probeer het opnieuw."
@@ -9912,7 +9975,7 @@ msgstr "Een individuele tekst met een reden kan hier worden ingevoerd."
 
 #: pretix/base/services/placeholders.py:695
 msgid "The amount has been charged to your card."
-msgstr "Het bedrag is van uw kaart afgeschreven."
+msgstr "Het bedrag is van je kaart afgeschreven."
 
 #: pretix/base/services/placeholders.py:699
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
@@ -10488,7 +10551,7 @@ msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
-"Het deel van uw factuurnummer na je prefix zal worden opgevuld met "
+"Het deel van je factuurnummer na je prefix zal worden opgevuld met "
 "voorloopnullen tot deze lengte, bijv. INV-001 of INV-00001."
 
 #: pretix/base/settings.py:703
@@ -12076,6 +12139,16 @@ msgid ""
 "sent before payment is confirmed or the order is approved. To avoid this "
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
+"Dit bestand wordt bijgevoegd bij de eerste e-mail die we voor elke nieuwe "
+"bestelling versturen. Het wordt dus gecombineerd met de teksten ‘Bestelling "
+"geplaatst’, ‘Gratis bestelling’ of ‘Bestelling ontvangen’ van hierboven. Het "
+"wordt zowel naar de contactpersonen van de bestelling als naar de deelnemers "
+"gestuurd. Je kunt dit bijvoorbeeld gebruiken om je servicevoorwaarden te "
+"versturen. Gebruik het niet om niet-openbare informatie te versturen, "
+"aangezien dit bestand kan worden verzonden voordat de betaling is bevestigd "
+"of de bestelling is goedgekeurd. Om te voorkomen dat deze belangrijke e-mail "
+"in de spamfolder terechtkomt, kunt je alleen pdf-bestanden uploaden met een "
+"maximale grootte van {size} MB."
 
 #: pretix/base/settings.py:2474
 #, python-brace-format
@@ -12660,9 +12733,9 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Hoi,\n"
+"Hallo,\n"
 "\n"
-"Iemand heeft een lijst van jouw bestellingen aangevraagd voor {event}. Dit "
+"Iemand heeft een lijst van je bestellingen aangevraagd voor {event}. Dit "
 "zijn je bestellingen:\n"
 "\n"
 "{orders}\n"
@@ -13484,7 +13557,7 @@ msgstr ""
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
-msgstr "Bad Request"
+msgstr "Ongeldige aanvraag"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
@@ -13583,7 +13656,7 @@ msgstr "Interne serverfout"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr "We hadden moeite met het verwerken van je verzoek."
+msgstr "We hadden problemen met het verwerken van je verzoek."
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
@@ -13716,15 +13789,13 @@ msgid "Contact:"
 msgstr "Contact:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-format
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
 msgstr ""
-"Je ontvangt deze e-mail omdat je een bestelling geplaatst hebt voor het "
-"evenement {event}."
+"Je krijgt deze e-mail omdat je een bestelling hebt geplaatst voor <strong>%"
+"(event)s</strong>."
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
@@ -13745,10 +13816,8 @@ msgstr "Details"
 #: pretix/base/templates/pretixbase/email/order_details.html:136
 #: pretix/presale/templates/pretixpresale/event/base.html:222
 #: pretix/presale/templates/pretixpresale/organizers/base.html:100
-#, fuzzy
-#| msgid "Contact:"
 msgid "Contact"
-msgstr "Contact:"
+msgstr "Contact"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt:2
 #, python-format
@@ -15323,14 +15392,14 @@ msgstr "Uitgeschakeld"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:117
 #: pretix/control/templates/pretixcontrol/subevents/index.html:170
 msgid "Presale not started"
-msgstr "Verkoop nog niet begonnen"
+msgstr "Voorverkoop nog niet begonnen"
 
 #: pretix/control/forms/filter.py:1236 pretix/control/forms/filter.py:1703
 #: pretix/control/templates/pretixcontrol/events/index.html:151
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:115
 #: pretix/control/templates/pretixcontrol/subevents/index.html:168
 msgid "Presale over"
-msgstr "Verkoop afgelopen"
+msgstr "Voorverkoop afgelopen"
 
 #: pretix/control/forms/filter.py:1241 pretix/control/forms/filter.py:1244
 #: pretix/control/forms/filter.py:1729 pretix/control/forms/filter.py:1732
@@ -16829,11 +16898,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/organizer.py:195
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to choose an event."
-msgstr "Je moet een datum selecteren."
+msgstr "Je moet een evenement kiezen."
 
 #: pretix/control/forms/organizer.py:227
 msgid "You may set only one organizer domain."
@@ -16893,7 +16959,7 @@ msgstr "Er is al een klantenaccount met dit e-mailadres geregistreerd."
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:62
 #: pretix/presale/forms/customer.py:169 pretix/presale/forms/customer.py:493
 msgid "Phone"
-msgstr ""
+msgstr "Telefoon"
 
 #: pretix/control/forms/organizer.py:1048
 #, fuzzy
@@ -20068,7 +20134,7 @@ msgstr "Geen gast gevonden."
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:108
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:155
 msgid "select all rows for batch-operation"
-msgstr ""
+msgstr "selecteer alle rijen voor batchbewerking"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:114
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
@@ -20081,7 +20147,7 @@ msgstr "Timestamp"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:117
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:181
 msgid "Select all results on other pages as well"
-msgstr ""
+msgstr "Selecteer ook alle resultaten op andere pagina's"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:142
 msgid "unpaid"
@@ -20758,25 +20824,31 @@ msgstr "Organisatorinstellingen"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr ""
+msgstr "Dit SPF-bestand hebben we op je domein gevonden:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
 msgstr ""
+"Om dit te verhelpen, voeg je het volgende gedeelte toe vóór het laatste "
+"woord:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:38
 msgid "Your new SPF record could look like this:"
-msgstr ""
+msgstr "Je nieuwe SPF-record zou er als volgt uit kunnen zien:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:43
 msgid ""
 "Please keep in mind that updates to DNS might require multiple hours to take "
 "effect."
 msgstr ""
+"Houd er rekening mee dat het enkele uren kan duren voordat updates van DNS "
+"van kracht worden."
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:48
 msgid "We found an SPF record on your domain that includes this system. Great!"
 msgstr ""
+"We hebben een SPF-record gevonden op je domein dat dit systeem bevat. "
+"Geweldig!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:54
 #, fuzzy
@@ -21038,7 +21110,7 @@ msgstr "Geocoding-data © OpenStreetMap"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:4
 msgid "Failed to retrieve geo coordinates"
-msgstr ""
+msgstr "Kan geen geografische coördinaten ophalen"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:5
 #, fuzzy
@@ -22579,7 +22651,7 @@ msgstr "Winkel uitgeschakeld"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:172
 #: pretix/control/views/dashboards.py:542
 msgid "On sale"
-msgstr "In de verkoop"
+msgstr "Verkoop loopt"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:160
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:124
@@ -23444,6 +23516,9 @@ msgid ""
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
 msgstr ""
+"Elk product in het winkelwagentje kan slechts door één korting worden "
+"beïnvloed. Als je overlappende kortingen hebt, geldt de eerste korting in de "
+"onderstaande lijst."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:37
 #, fuzzy
@@ -23643,7 +23718,7 @@ msgstr "Aantal kaartjes"
 #: pretix/plugins/reports/accountingreport.py:442
 #: pretix/plugins/reports/accountingreport.py:566
 msgid "Sum"
-msgstr ""
+msgstr "Totaal"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:125
 msgid "Question history"
@@ -24767,7 +24842,7 @@ msgstr "Geldig EU btw-nummer"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:1053
 msgid "Check"
-msgstr "Controleren"
+msgstr "Controle"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:1107
 msgid "Order history"
@@ -25492,7 +25567,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:122
 msgid "Owner"
-msgstr ""
+msgstr "Eigenaar"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:128
 msgid ""
@@ -25644,7 +25719,7 @@ msgstr "Bestelling betaald / totaal"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:153
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:192
 msgid "select row for batch-operation"
-msgstr ""
+msgstr "selecteer rij voor batchbewerking"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:192
 #: pretix/control/templates/pretixcontrol/orders/index.html:194
@@ -25692,7 +25767,7 @@ msgstr "VOLLEDIG BETAALD"
 #: pretix/control/templates/pretixcontrol/orders/index.html:239
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:271
 msgid "INVOICE NOT CANCELED"
-msgstr ""
+msgstr "FACTUUR NIET GEANNULEERD"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:251
 msgid "Sum over all pages"
@@ -26221,7 +26296,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:161
 msgid "Privacy"
-msgstr ""
+msgstr "Privacy"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:165
 msgid ""
@@ -27144,7 +27219,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:93
 msgid "Dynamic image"
-msgstr ""
+msgstr "Dynamische afbeelding"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:100
 msgid "pretix Logo"
@@ -27313,10 +27388,8 @@ msgstr "E-mailinhoud"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:20
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:34
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:29
-#, fuzzy
-#| msgid "Bancontact"
 msgid "Content"
-msgstr "Bancontact"
+msgstr "Inhoud"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:343
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:50
@@ -27719,6 +27792,9 @@ msgid ""
 "You selected a set of dates that currently have different check-in list "
 "setups. You can therefore not change their check-in lists in bulk."
 msgstr ""
+"Je hebt een reeks data geselecteerd waarvoor momenteel verschillende check-"
+"inlijsten zijn ingesteld. Je kunt daarom hun check-inlijsten niet in bulk "
+"wijzigen."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:372
 #, fuzzy
@@ -28502,6 +28578,10 @@ msgid ""
 "a purchase. This can be really confusing. Only use this if you know that the "
 "session is no longer in use."
 msgstr ""
+"Hierdoor worden producten stilzwijgend verwijderd uit het winkelwagentje van "
+"een gebruiker die op dat moment een aankoop doet. Dit kan erg verwarrend "
+"zijn. Gebruik deze functie alleen als je zeker weet dat de sessie niet meer "
+"in gebruik is."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
@@ -28520,6 +28600,8 @@ msgid ""
 "This voucher is currently used in %(number)s cart sessions and might not be "
 "free to use until the cart sessions expire."
 msgstr ""
+"Deze voucher wordt momenteel gebruikt in %(number)s winkelmandjesessies en "
+"kan mogelijk pas worden gebruikt nadat de winkelmandjesessies zijn verlopen."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:28
 #, fuzzy
@@ -28889,10 +28971,8 @@ msgstr ""
 "evenement aan te passen."
 
 #: pretix/control/templatetags/hierarkey_form.py:79
-#, fuzzy
-#| msgid "Blocked"
 msgid "Unlock"
-msgstr "Geblokkeerd"
+msgstr "Ontgrendelen"
 
 #: pretix/control/templatetags/hierarkey_form.py:80
 #, fuzzy
@@ -29038,7 +29118,8 @@ msgstr "De nieuwe inchecklijst is aangemaakt."
 #: pretix/plugins/stripe/views.py:682
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
-msgstr "We konden je wijzigingen niet opslaan. Zie hieronder voor details."
+msgstr ""
+"We konden je wijzigingen niet opslaan. Zie hieronder voor meer informatie."
 
 #: pretix/control/views/checkin.py:420 pretix/control/views/checkin.py:457
 msgid "The requested list does not exist."
@@ -29607,6 +29688,11 @@ msgid ""
 "the domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
+"We konden geen SPF-record vinden voor het domein dat je probeert te "
+"gebruiken. Dit betekent dat de kans zeer groot is dat de meeste e-mails "
+"worden geweigerd of als spam worden gemarkeerd. We raden je ten zeerste aan "
+"om een SPF-record in te stellen voor het domein. Je kunt dit doen via de DNS-"
+"instellingen bij de provider waar je het domein hebt geregistreerd."
 
 #: pretix/control/views/mailsetup.py:207
 msgid ""
@@ -29616,6 +29702,11 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
+"We hebben een SPF-record gevonden voor het domein dat je wilt gebruiken, "
+"maar het bevat niet de e-mailserver van dit systeem. Dit betekent dat de "
+"kans zeer groot is dat de meeste e-mails worden geweigerd of als spam worden "
+"gemarkeerd. Je moet de DNS-instellingen van je domein bijwerken om dit "
+"systeem op te nemen in het SPF-record."
 
 #: pretix/control/views/mailsetup.py:216
 #, fuzzy
@@ -30430,10 +30521,8 @@ msgstr "De volgorde van items is bijgewerkt."
 #: pretix/control/views/organizer.py:2822
 #: pretix/control/views/organizer.py:2952
 #: pretix/control/views/organizer.py:3220
-#, fuzzy
-#| msgid "The selected product has been deleted."
 msgid "The selected object has been deleted."
-msgstr "Het gekozen product is verwijderd."
+msgstr "Het geselecteerde object is verwijderd."
 
 #: pretix/control/views/organizer.py:2741
 #, fuzzy
@@ -30921,16 +31010,12 @@ msgid "Alternative organizer domain for a set of events"
 msgstr "Informatietekst van de evenementorganisator"
 
 #: pretix/multidomain/models.py:38
-#, fuzzy
-#| msgid "Event location"
 msgid "Event domain"
-msgstr "Evenementlocatie"
+msgstr "Evenementendomein"
 
 #: pretix/multidomain/models.py:44
-#, fuzzy
-#| msgid "Company name"
 msgid "Domain name"
-msgstr "Bedrijfsnaam"
+msgstr "Domeinnaam"
 
 #: pretix/multidomain/models.py:50
 msgid "Mode"
@@ -32674,7 +32759,8 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:335 pretix/plugins/paypal2/views.py:251
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
+"Er is een fout opgetreden tijdens het verbinden met PayPal. Probeer het "
+"opnieuw."
 
 #: pretix/plugins/paypal2/payment.py:467 pretix/plugins/paypal2/payment.py:599
 #: pretix/plugins/paypal2/payment.py:673 pretix/plugins/paypal2/payment.py:736
@@ -32904,37 +32990,36 @@ msgstr ""
 "opnieuw of neem contact met ons op."
 
 #: pretix/plugins/paypal2/views.py:224
-#, fuzzy
-#| msgid "An error occurred during connecting with PayPal, please try again."
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
+"Er is een fout opgetreden bij het terugkeren van PayPal: verzoekparameters "
+"ontbreken. Probeer het opnieuw."
 
 #: pretix/plugins/paypal2/views.py:260
-#, fuzzy
-#| msgid "An error occurred during connecting with PayPal, please try again."
 msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
+"Er is een fout opgetreden bij het terugkeren van PayPal: resultaatparameters "
+"ontbreken. Probeer het opnieuw."
 
 #: pretix/plugins/paypal2/views.py:265
-#, fuzzy
-#| msgid "An error occurred during connecting with PayPal, please try again."
 msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
+"Er is een fout opgetreden bij het terugkeren van PayPal: sessieparameter "
+"komt niet overeen. Probeer het opnieuw."
 
 #: pretix/plugins/paypal2/views.py:270
 msgid ""
 "The email address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
+"Het e-mailadres van je PayPal-rekening is nog niet bevestigd. Je moet dit "
+"doen voordat je betalingen kunt accepteren."
 
 #: pretix/plugins/paypal2/views.py:276
 msgid ""
@@ -34017,7 +34102,7 @@ msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
 msgstr ""
-"Als uw evenement in testmodus is zullen we altijd de test-API van Stripe "
+"Als je evenement in testmodus is, zullen we altijd de test-API van Stripe "
 "gebruiken, onafhankelijk van deze instelling."
 
 #: pretix/plugins/stripe/payment.py:277
@@ -35062,6 +35147,7 @@ msgid ""
 "Your cart includes a product that requires an active membership to be "
 "selected."
 msgstr ""
+"Je winkelwagen bevat een product waarvoor een actief lidmaatschap vereist is."
 
 #: pretix/presale/checkoutflow.py:487
 msgctxt "checkoutflow"
@@ -35536,7 +35622,7 @@ msgstr "Bevestigingen"
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:137
 #: pretix/presale/templates/pretixpresale/organizers/base.html:103
 msgid "Privacy policy"
-msgstr ""
+msgstr "Privacybeleid"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:239
 #: pretix/presale/templates/pretixpresale/organizers/base.html:117
@@ -35563,6 +35649,9 @@ msgid ""
 "A product in your cart is only sold in combination with add-on products that "
 "are not available. Please contact the event organizer."
 msgstr ""
+"Een product in je winkelwagen wordt alleen verkocht in combinatie met "
+"aanvullende producten die niet beschikbaar zijn. Neem contact op met de "
+"organisator van het evenement."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "We're now trying to book these add-ons for you!"
@@ -35600,7 +35689,7 @@ msgstr "Ga terug"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:7
 #, python-format
 msgid "Step %(current)s of %(total)s: %(label)s"
-msgstr ""
+msgstr "Stap %(current)s van %(total)s: %(label)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:12
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:56
@@ -36267,7 +36356,7 @@ msgstr "Ok, dat halen we weg…"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:290
 #, python-format
 msgid "Remove %(item)s from your cart"
-msgstr ""
+msgstr "Verwijder %(item)s uit je winkelwagen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:293
 #, fuzzy, python-format
@@ -36315,6 +36404,8 @@ msgid ""
 "Add one more %(item)s to your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
+"Voeg nog één %(item)s toe aan je winkelwagen. Je hebt momenteel %(count)s in "
+"je winkelwagen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:385
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
@@ -36592,18 +36683,13 @@ msgstr ""
 "kaartjes te ontvangen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:21
-#, fuzzy
-#| msgid ""
-#| "You can also download them right here as soon as the person who placed "
-#| "the order clicked the link in the email they received to confirm the "
-#| "email address is valid."
 msgid ""
 "You can download your tickets right here as soon as the person who placed "
 "the order clicked the link in the email they received to confirm the email "
 "address is valid."
 msgstr ""
-"Je kan je kaartjes ook op deze pagina downloaden zodra het opgegeven e-"
-"mailadres is bevestigd. Dit kan de persoon die de bestelling heeft geplaatst "
+"Je kan je tickets ook op deze pagina downloaden zodra het opgegeven e-"
+"mailadres bevestigd is. Dat kan de persoon die de bestelling heeft geplaatst "
 "doen door te klikken op de link in de toegezonden mail."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:26
@@ -37507,7 +37593,7 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
-"Als je de link naar je bestelling bent kwijtgeraakt voer je het e-mailadres "
+"Als je de link naar je bestelling bent kwijtgeraakt, voer je het e-mailadres "
 "in dat bij je bestelling gebruikt is. We sturen je dan een e-mail met de "
 "links naar alle bestellingen die met dit e-mailadres geplaatst zijn."
 
@@ -37817,6 +37903,8 @@ msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
+"Functionele cookies (bijv. winkelwagen, login, betaling, taalvoorkeur) en "
+"technische cookies (bijv. beveiligingsdoeleinden)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:106
 msgctxt "cookie_usage"
@@ -37859,6 +37947,8 @@ msgid ""
 "Please tick a checkbox or enter a quantity for one of the ticket types to "
 "add to the cart."
 msgstr ""
+"Vink een selectievakje aan of voer een hoeveelheid in voor een van de "
+"ticketsoorten om deze aan het winkelwagentje toe te voegen."
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -38269,7 +38359,7 @@ msgstr ""
 #: pretix/presale/views/cart.py:476 pretix/presale/views/cart.py:484
 msgid ""
 "The gift card has been saved to your cart. Please continue your checkout."
-msgstr ""
+msgstr "De cadeaubon is opgeslagen in je winkelwagen. Ga verder met afrekenen."
 
 #: pretix/presale/views/cart.py:520
 msgid "Your cart has been updated."
@@ -38300,6 +38390,8 @@ msgid ""
 "The gift card has been saved to your cart. Please now select the products "
 "you want to purchase."
 msgstr ""
+"De cadeaubon is opgeslagen in je winkelwagen. Selecteer nu de producten die "
+"je wilt kopen."
 
 #: pretix/presale/views/cart.py:791
 #, fuzzy
