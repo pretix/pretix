@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-05 18:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2025-12-22 20:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -303,12 +303,8 @@ msgid "The program end must not be before the program start."
 msgstr "プログラムの終了日時は開始日時より後に設定してください。"
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2315
-#, fuzzy
-#| msgid "You can not select a subevent if your event is not an event series."
 msgid "You cannot use program times on an event series."
-msgstr ""
-"イベントがイベントシリーズでない場合、サブイベントを選択することはできませ"
-"ん。"
+msgstr "イベントシリーズでは、プログラム時間を使用することはできません。"
 
 #: pretix/api/serializers/item.py:337
 msgid ""
@@ -1670,7 +1666,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:236
 #: pretix/presale/templates/pretixpresale/event/order.html:257
 msgid "Invoices"
-msgstr "請求書"
+msgstr "インボイス"
 
 #: pretix/base/exporters/invoices.py:194
 msgid "Invoice lines"
@@ -4541,7 +4537,7 @@ msgstr "会社名"
 #: pretix/base/models/orders.py:3399 pretix/base/settings.py:91
 #: pretix/plugins/stripe/payment.py:272
 msgid "Select country"
-msgstr "選択された国"
+msgstr "国を選択する"
 
 #: pretix/base/models/customers.py:401
 msgctxt "openidconnect"
@@ -5344,23 +5340,16 @@ msgstr ""
 "は、この価格が使用されます。"
 
 #: pretix/base/models/items.py:506
-#, fuzzy
-#| msgid ""
-#| "If this option is active, your users can choose the price themselves. The "
-#| "price configured above is then interpreted as the minimum price a user "
-#| "has to enter. You could use this e.g. to collect additional donations for "
-#| "your event. This is currently not supported for products that are bought "
-#| "as an add-on to other products."
 msgid ""
 "If this option is active, your users can choose the price themselves. The "
 "price configured above is then interpreted as the minimum price a user has "
 "to enter. You could use this e.g. to collect additional donations for your "
 "event."
 msgstr ""
-"このオプションが有効な場合、ユーザーは自分で価格を選択できます。上で設定され"
-"た価格は、ユーザーが入力しなければならない最低価格として解釈されます。たとえ"
-"ば、イベントの追加寄付を集めるために使用できます。ただし、他の製品のアドオン"
-"として購入される製品には現在対応していません。"
+"このオプションが有効になっている場合、ユーザーは自分で価格を選択できます。上"
+"記に設定された価格は、ユーザーが入力しなければならない最低価格として解釈され"
+"ます。例えば、イベントのために追加の寄付を集めるためにこれを使うことができま"
+"す。"
 
 #: pretix/base/models/items.py:511 pretix/base/models/items.py:1175
 msgid "Suggested price"
@@ -16916,10 +16905,8 @@ msgid "The voucher has been deleted."
 msgstr "そのバウチャーは削除されました。"
 
 #: pretix/control/logdisplay.py:585
-#, fuzzy
-#| msgid "The selected voucher has been deleted."
 msgid "Cart positions including the voucher have been deleted."
-msgstr "選択したバウチャーは削除されました。"
+msgstr "バウチャーを含むカートの位置が削除されました。"
 
 #: pretix/control/logdisplay.py:586
 #, python-brace-format
@@ -32510,18 +32497,12 @@ msgstr "行番号"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:7
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_messaging_noform.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_noform.html:5
-#, fuzzy
-#| msgid ""
-#| "After you submitted your order, we will redirect you to the payment "
-#| "service provider to complete your payment. You will then be redirected "
-#| "back here to get your tickets."
 msgid ""
 "After you submitted your order, we will redirect you to the payment service "
 "provider to complete your payment. You will then be redirected back here."
 msgstr ""
-"ご注文を送信した後、お支払いを完了するためにお支払いサービスプロバイダーにリ"
-"ダイレクトされます。その後、チケットを受け取るためにこちらに再度リダイレクト"
-"されます。"
+"注文を送信した後、支払いサービスプロバイダにリダイレクトして支払いを完了しま"
+"す。その後、ここにリダイレクトされます。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
