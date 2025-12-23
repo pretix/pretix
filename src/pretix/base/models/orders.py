@@ -3480,7 +3480,7 @@ class InvoiceAddress(models.Model):
     def state_name(self):
         sd = pycountry.subdivisions.get(code='{}-{}'.format(self.country, self.state))
         if sd:
-            return sd.name
+            return _(sd.name)
         return self.state
 
     @property
