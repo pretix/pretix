@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2024-09-16 13:00+0000\n"
-"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
+"PO-Revision-Date: 2025-12-24 00:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Estonian <https://translate.pretix.eu/projects/pretix/pretix/"
 "et/>\n"
 "Language: et\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -25,11 +25,11 @@ msgstr "Inglise"
 
 #: pretix/_base_settings.py:88
 msgid "German"
-msgstr ""
+msgstr "saksa keel"
 
 #: pretix/_base_settings.py:89
 msgid "German (informal)"
-msgstr ""
+msgstr "Saksa keel (mitteametlik)"
 
 #: pretix/_base_settings.py:90
 msgid "Arabic"
@@ -27331,7 +27331,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
-msgstr ""
+msgstr "Kommentaar:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
@@ -27574,7 +27574,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:1097
 #: pretix/plugins/paypal2/payment.py:1098 pretix/plugins/stripe/payment.py:1816
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/apps.py:53
 msgid ""
