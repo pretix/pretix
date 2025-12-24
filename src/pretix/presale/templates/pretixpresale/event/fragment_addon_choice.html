@@ -24,7 +24,7 @@
         {% elif c.min_count == 0 %}
             <p class="addon-count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                 {% blocktrans trimmed count max_count=c.max_count %}
-                    You can choose {{ max_count }} option from this category.
+                    You can choose one option from this category.
                 {% plural %}
                     You can choose up to {{ max_count }} options from this category.
                 {% endblocktrans %}
