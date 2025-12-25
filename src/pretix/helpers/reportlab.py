@@ -100,3 +100,11 @@ class FontFallbackParagraph(Paragraph):
                 if (original_font.endswith("Bd") or original_font.endswith(" B")) and "bold" in styles:
                     return family + " B"
                 return family
+
+
+def register_ttf_font_if_new(name, path):
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+
+    if name not in pdfmetrics.getRegisteredFontNames():
+        pdfmetrics.registerFont(TTFont(name, path))

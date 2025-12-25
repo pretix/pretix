@@ -69,7 +69,9 @@ from pretix.base.timeframes import (
     resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
 )
 from pretix.control.forms.filter import OverviewFilterForm
-from pretix.helpers.reportlab import FontFallbackParagraph
+from pretix.helpers.reportlab import (
+    FontFallbackParagraph, register_ttf_font_if_new,
+)
 from pretix.presale.style import get_fonts
 
 
@@ -130,21 +132,18 @@ class ReportlabExportMixin:
 
     @staticmethod
     def register_fonts():
-        from reportlab.pdfbase import pdfmetrics
-        from reportlab.pdfbase.ttfonts import TTFont
-
-        pdfmetrics.registerFont(TTFont('OpenSans', finders.find('fonts/OpenSans-Regular.ttf')))
-        pdfmetrics.registerFont(TTFont('OpenSansIt', finders.find('fonts/OpenSans-Italic.ttf')))
-        pdfmetrics.registerFont(TTFont('OpenSansBd', finders.find('fonts/OpenSans-Bold.ttf')))
+        register_ttf_font_if_new('OpenSans', finders.find('fonts/OpenSans-Regular.ttf'))
+        register_ttf_font_if_new('OpenSansIt', finders.find('fonts/OpenSans-Italic.ttf'))
+        register_ttf_font_if_new('OpenSansBd', finders.find('fonts/OpenSans-Bold.ttf'))
 
         for family, styles in get_fonts(None, pdf_support_required=True).items():
-            pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
+            register_ttf_font_if_new(family, finders.find(styles['regular']['truetype']))
             if 'italic' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
+                register_ttf_font_if_new(family + ' I', finders.find(styles['italic']['truetype']))
             if 'bold' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
+                register_ttf_font_if_new(family + ' B', finders.find(styles['bold']['truetype']))
             if 'bolditalic' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
+                register_ttf_font_if_new(family + ' B I', finders.find(styles['bolditalic']['truetype']))
 
     def get_doc_template(self):
         from reportlab.platypus import BaseDocTemplate
