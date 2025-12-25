@@ -72,9 +72,7 @@ from reportlab.lib.colors import Color
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
-from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.pdfmetrics import getAscentDescent
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
@@ -85,7 +83,9 @@ from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.helpers.daterange import datetimerange
-from pretix.helpers.reportlab import ThumbnailingImageReader, reshaper
+from pretix.helpers.reportlab import (
+    ThumbnailingImageReader, register_ttf_font_if_new, reshaper,
+)
 from pretix.presale.style import get_fonts
 
 logger = logging.getLogger(__name__)
@@ -795,19 +795,19 @@ class Renderer:
     def _register_fonts(cls, event: Event = None):
         if hasattr(cls, '_fonts_registered'):
             return
-        pdfmetrics.registerFont(TTFont('Open Sans', finders.find('fonts/OpenSans-Regular.ttf')))
-        pdfmetrics.registerFont(TTFont('Open Sans I', finders.find('fonts/OpenSans-Italic.ttf')))
-        pdfmetrics.registerFont(TTFont('Open Sans B', finders.find('fonts/OpenSans-Bold.ttf')))
-        pdfmetrics.registerFont(TTFont('Open Sans B I', finders.find('fonts/OpenSans-BoldItalic.ttf')))
+        register_ttf_font_if_new('Open Sans', finders.find('fonts/OpenSans-Regular.ttf'))
+        register_ttf_font_if_new('Open Sans I', finders.find('fonts/OpenSans-Italic.ttf'))
+        register_ttf_font_if_new('Open Sans B', finders.find('fonts/OpenSans-Bold.ttf'))
+        register_ttf_font_if_new('Open Sans B I', finders.find('fonts/OpenSans-BoldItalic.ttf'))
 
         for family, styles in get_fonts(event, pdf_support_required=True).items():
-            pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
+            register_ttf_font_if_new(family, finders.find(styles['regular']['truetype']))
             if 'italic' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
+                register_ttf_font_if_new(family + ' I', finders.find(styles['italic']['truetype']))
             if 'bold' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
+                register_ttf_font_if_new(family + ' B', finders.find(styles['bold']['truetype']))
             if 'bolditalic' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
+                register_ttf_font_if_new(family + ' B I', finders.find(styles['bolditalic']['truetype']))
 
         cls._fonts_registered = True
 

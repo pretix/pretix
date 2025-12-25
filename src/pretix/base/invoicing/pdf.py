@@ -47,7 +47,6 @@ from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.pdfmetrics import stringWidth
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import (
     BaseDocTemplate, Flowable, Frame, KeepTogether, NextPageTemplate,
@@ -60,7 +59,8 @@ from pretix.base.services.currencies import SOURCE_NAMES
 from pretix.base.signals import register_invoice_renderers
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.reportlab import (
-    FontFallbackParagraph, ThumbnailingImageReader, reshaper,
+    FontFallbackParagraph, ThumbnailingImageReader, register_ttf_font_if_new,
+    reshaper,
 )
 from pretix.presale.style import get_fonts
 
@@ -235,25 +235,25 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         """
         Register fonts with reportlab. By default, this registers the OpenSans font family
         """
-        pdfmetrics.registerFont(TTFont('OpenSans', finders.find('fonts/OpenSans-Regular.ttf')))
-        pdfmetrics.registerFont(TTFont('OpenSansIt', finders.find('fonts/OpenSans-Italic.ttf')))
-        pdfmetrics.registerFont(TTFont('OpenSansBd', finders.find('fonts/OpenSans-Bold.ttf')))
-        pdfmetrics.registerFont(TTFont('OpenSansBI', finders.find('fonts/OpenSans-BoldItalic.ttf')))
+        register_ttf_font_if_new('OpenSans', finders.find('fonts/OpenSans-Regular.ttf'))
+        register_ttf_font_if_new('OpenSansIt', finders.find('fonts/OpenSans-Italic.ttf'))
+        register_ttf_font_if_new('OpenSansBd', finders.find('fonts/OpenSans-Bold.ttf'))
+        register_ttf_font_if_new('OpenSansBI', finders.find('fonts/OpenSans-BoldItalic.ttf'))
         pdfmetrics.registerFontFamily('OpenSans', normal='OpenSans', bold='OpenSansBd',
                                       italic='OpenSansIt', boldItalic='OpenSansBI')
 
         for family, styles in get_fonts(event=self.event, pdf_support_required=True).items():
-            pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
+            register_ttf_font_if_new(family, finders.find(styles['regular']['truetype']))
             if family == self.event.settings.invoice_renderer_font:
                 self.font_regular = family
                 if 'bold' in styles:
                     self.font_bold = family + ' B'
             if 'italic' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
+                register_ttf_font_if_new(family + ' I', finders.find(styles['italic']['truetype']))
             if 'bold' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
+                register_ttf_font_if_new(family + ' B', finders.find(styles['bold']['truetype']))
             if 'bolditalic' in styles:
-                pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
+                register_ttf_font_if_new(family + ' B I', finders.find(styles['bolditalic']['truetype']))
 
     def _normalize(self, text):
         # reportlab does not support unicode combination characters
