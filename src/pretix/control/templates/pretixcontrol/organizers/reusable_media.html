@@ -82,13 +82,13 @@
                                     </a>
                                 </span>
                             {% endif %}
-                            {% if m.linked_orderposition %}
+                            {% for op in m.linked_orderpositions.all %}
                                 <span class="helper-display-block">
                                     <span class="fa fa-ticket fa-fw"></span>
-                                    <a href="{% url "control:event.order" event=m.linked_orderposition.order.event.slug organizer=request.organizer.slug code=m.linked_orderposition.order.code %}">
-                                        {{ m.linked_orderposition.order.code }}</a>-{{ m.linked_orderposition.positionid }}
+                                    <a href="{% url "control:event.order" event=op.order.event.slug organizer=request.organizer.slug code=op.order.code %}">
+                                        {{ op.order.code }}</a>-{{ op.positionid }}
                                 </span>
-                            {% endif %}
+                            {% endfor %}
                             {% if m.linked_giftcard %}
                                 <span class="helper-display-block">
                                     <span class="fa fa-credit-card fa-fw"></span>

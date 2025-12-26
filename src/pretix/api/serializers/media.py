@@ -65,9 +65,11 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if 'linked_giftcard' in self.context['request'].query_params.getlist('expand'):
+        expand_nested = self.context['request'].query_params.getlist('expand')
+
+        if 'linked_giftcard' in expand_nested:
             self.fields['linked_giftcard'] = NestedGiftCardSerializer(read_only=True, context=self.context)
-            if 'linked_giftcard.owner_ticket' in self.context['request'].query_params.getlist('expand'):
+            if 'linked_giftcard.owner_ticket' in expand_nested:
                 self.fields['linked_giftcard'].fields['owner_ticket'] = NestedOrderPositionSerializer(read_only=True, context=self.context)
         else:
             self.fields['linked_giftcard'] = serializers.PrimaryKeyRelatedField(
@@ -76,16 +78,27 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                 queryset=self.context['organizer'].issued_gift_cards.all()
             )
 
-        if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
-            self.fields['linked_orderposition'] = NestedOrderPositionSerializer(read_only=True)
+        # keep linked_orderposition (singular) for backwards compatibility, will be overwritten in self.validate
+        self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
+            required=False,
+            allow_null=True,
+            queryset=OrderPosition.all.filter(order__event__organizer=self.context['organizer']),
+        )
+
+        if 'linked_orderposition' in expand_nested or 'linked_orderpositions' in expand_nested:
+            self.fields['linked_orderpositions'] = NestedOrderPositionSerializer(
+                many=True,
+                read_only=True
+            )
         else:
-            self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
+            self.fields['linked_orderpositions'] = serializers.PrimaryKeyRelatedField(
+                many=True,
                 required=False,
                 allow_null=True,
                 queryset=OrderPosition.all.filter(order__event__organizer=self.context['organizer']),
             )
 
-        if 'customer' in self.context['request'].query_params.getlist('expand'):
+        if 'customer' in expand_nested:
             self.fields['customer'] = CustomerSerializer(read_only=True)
         else:
             self.fields['customer'] = serializers.SlugRelatedField(
@@ -97,6 +110,20 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
+        if 'linked_orderposition' in data:
+            linked_orderposition = data['linked_orderposition']
+            # backwards-compatibility
+            if 'linked_orderpositions' in data:
+                raise ValidationError({
+                    'linked_orderposition': _('You cannot use linked_orderposition and linked_orderpositions at the same time.')
+                })
+            if self.instance.linked_orderpositions.count() > 1:
+                raise ValidationError({
+                    'linked_orderposition': _('There are more than one linked_orderposition. You need to use linked_orderpositions.')
+                })
+
+            data['linked_orderpositions'] = [linked_orderposition] if linked_orderposition else []
+
         if 'type' in data and 'identifier' in data:
             qs = self.context['organizer'].reusable_media.filter(
                 identifier=data['identifier'], type=data['type']
@@ -109,6 +136,14 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                 )
         return data
 
+    def to_representation(self, obj):
+        r = super(ReusableMediaSerializer, self).to_representation(obj)
+        ops = r.get('linked_orderpositions')
+        if len(ops) < 2:
+            # add linked_orderposition (singular) for backwards compatibility
+            r['linked_orderposition'] = ops[0] if ops else None
+        return r
+
     class Meta:
         model = ReusableMedium
         fields = (
@@ -118,10 +153,12 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             'updated',
             'type',
             'identifier',
+            'claim_token',
+            'label',
             'active',
             'expires',
             'customer',
-            'linked_orderposition',
+            'linked_orderpositions',
             'linked_giftcard',
             'info',
             'notes',
