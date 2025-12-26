@@ -801,7 +801,11 @@ def get_sample_context(event, context_parameters, rich=True):
         sample = v.render_sample(event)
         if isinstance(sample, PlainHtmlAlternativeString):
             context_dict[k] = PlainHtmlAlternativeString(
-                sample.plain,
+                '<{el} class="placeholder" title="{title}">{plain}</{el}>'.format(
+                    el='span',
+                    title=lbl,
+                    plain=escape(sample.plain),
+                ),
                 '<{el} class="placeholder placeholder-html" title="{title}">{html}</{el}>'.format(
                     el='div' if sample.is_block else 'span',
                     title=lbl,
