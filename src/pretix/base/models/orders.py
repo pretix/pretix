@@ -3526,11 +3526,30 @@ class InvoiceAddress(models.Model):
         })
         return d
 
-    def describe_transmission(self):
+    def describe_transmission(self, event=None):
+        # we only need an explicit event if the order is not yet created and we do not want to show unnecessary data to customers
         from pretix.base.invoicing.transmission import transmission_types
         data = []
 
-        t, __ = transmission_types.get(identifier=self.transmission_type)
+        t, m = transmission_types.get(identifier=self.transmission_type)
+
+        d_event = self.order.event if self.order else event
+        # reusing hack from questions.py for default transmission -- this should at least be fast
+        if d_event:
+            if (
+                t.identifier == "email" and
+                m in ("transmission_email_other", "transmission_email_address") and
+                (
+                    d_event.settings.invoice_generate == "False" or
+                    not d_event.settings.invoice_email_attachment
+                )
+            ):
+                return data
+
+        # we also don't show transmission data if we never showed the corresponding form fields
+        if not t.invoice_address_form_fields_visible(country=self.country, is_business=self.is_business):
+            return data
+
         data.append((_("Transmission type"), t.public_name))
         form_data = t.transmission_info_to_form_data(self.transmission_info or {})
         for k, f in t.invoice_address_form_fields.items():
