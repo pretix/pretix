@@ -46,6 +46,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from freezegun import freeze_time
 from tests.base import SoupTest
 from tests.testdummy.signals import FoobarSalesChannel
 
@@ -271,6 +272,48 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
             Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertNotIn("Early-bird", resp.rendered_content)
+
+    def tiered_availability_by_date_and_quota(self, q1_size, q2_size, time_offset, expected_phase):
+        current_time = now()
+
+        with scopes_disabled():
+            q1 = Quota.objects.create(event=self.event, name='Phase 1', size=q1_size)
+            item1 = Item.objects.create(
+                event=self.event,
+                name='Phase 1',
+                default_price=0,
+                available_from=current_time,
+                available_until=current_time + datetime.timedelta(days=1),
+                available_from_mode=Item.UNAVAIL_MODE_HIDDEN,
+                available_until_mode=Item.UNAVAIL_MODE_HIDDEN,
+                hidden_if_item_available_mode=Item.UNAVAIL_MODE_HIDDEN,
+            )
+            q1.items.add(item1)
+            q2 = Quota.objects.create(event=self.event, name='Phase 2', size=q2_size)
+            item2 = Item.objects.create(
+                event=self.event,
+                name='Phase 2',
+                default_price=0,
+                available_from=current_time + datetime.timedelta(days=0),
+                available_until=current_time + datetime.timedelta(days=2),
+                available_from_mode=Item.UNAVAIL_MODE_HIDDEN,
+                available_until_mode=Item.UNAVAIL_MODE_HIDDEN,
+                hidden_if_item_available_mode=Item.UNAVAIL_MODE_HIDDEN,
+                hidden_if_item_available=item1
+            )
+            q2.items.add(item2)
+            with freeze_time(current_time + time_offset):
+                resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+                self.assertIn(expected_phase, resp.rendered_content)
+
+    def test_tiered_availability_by_date_and_quota_phase1_available(self):
+        self.tiered_availability_by_date_and_quota(1, 1, datetime.timedelta(seconds=1), "Phase 1")
+
+    def test_tiered_availability_by_date_and_quota_phase1_sold_out(self):
+        self.tiered_availability_by_date_and_quota(0, 1, datetime.timedelta(seconds=1), "Phase 2")
+
+    def test_tiered_availability_by_date_and_quota_phase1_timed_out(self):
+        self.tiered_availability_by_date_and_quota(1, 1, datetime.timedelta(days=1, hours=1), "Phase 2")
 
     def test_subevents_inactive_unknown(self):
         self.event.has_subevents = True
