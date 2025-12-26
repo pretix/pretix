@@ -46,24 +46,16 @@ class AutoCheckinFormTest(SoupTest):
         )
         t = Team.objects.create(
             organizer=self.orga1,
-            can_change_event_settings=True,
-            can_view_orders=True,
-            can_change_items=True,
+            all_organizer_permissions=True,
+            all_event_permissions=True,
             all_events=True,
-            can_create_events=True,
-            can_change_orders=True,
-            can_change_vouchers=True,
         )
         t.members.add(self.user)
         t = Team.objects.create(
             organizer=self.orga2,
-            can_change_event_settings=True,
-            can_view_orders=True,
-            can_change_items=True,
+            all_organizer_permissions=True,
+            all_event_permissions=True,
             all_events=True,
-            can_create_events=True,
-            can_change_orders=True,
-            can_change_vouchers=True,
         )
         t.members.add(self.user)
         self.client.login(email="dummy@dummy.dummy", password="dummy")

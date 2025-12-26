@@ -58,6 +58,7 @@ from localflavor.generic.forms import BICFormField, IBANFormField
 
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
+from pretix.base.models.organizer import TeamQuerySet
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.base.templatetags.money import money_filter
@@ -80,7 +81,7 @@ logger = logging.getLogger('pretix.plugins.banktransfer')
 
 
 class ActionView(View):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def _discard(self, trans):
         trans.state = BankTransaction.STATE_DISCARDED
@@ -285,7 +286,7 @@ class ActionView(View):
 
 class JobDetailView(DetailView):
     template_name = 'pretixplugins/banktransfer/job_detail.html'
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     context_objectname = 'job'
 
     def redirect_form(self):
@@ -374,7 +375,7 @@ class BankTransactionFilterForm(forms.Form):
 
 class ImportView(ListView):
     template_name = 'pretixplugins/banktransfer/import_form.html'
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     context_object_name = 'transactions_unhandled'
     paginate_by = 30
 
@@ -635,40 +636,46 @@ class OrganizerBanktransferView:
 
 
 class EventImportView(EventPermissionRequiredMixin, ImportView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
 
 class OrganizerImportView(OrganizerBanktransferView, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin,
                           ImportView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
 
 class EventJobDetailView(EventPermissionRequiredMixin, JobDetailView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
 
 class OrganizerJobDetailView(OrganizerBanktransferView, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin,
                              JobDetailView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
 
 class EventActionView(EventPermissionRequiredMixin, ActionView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
 
 class OrganizerActionView(OrganizerBanktransferView, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin,
                           ActionView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def order_qs(self):
-        all = self.request.user.teams.filter(organizer=self.request.organizer, can_change_orders=True,
-                                             can_view_orders=True, all_events=True).exists()
+        all = self.request.user.teams.filter(
+            TeamQuerySet.event_permission_q("event.orders:read"),
+            TeamQuerySet.event_permission_q("event.orders:write"),
+            all_events=True,
+            organizer=self.request.organizer,
+        ).exists()
         if self.request.user.has_active_staff_session(self.request.session.session_key) or all:
             return Order.objects.filter(event__organizer=self.request.organizer)
         else:
             return Order.objects.filter(
                 event_id__in=self.request.user.teams.filter(
-                    organizer=self.request.organizer, can_change_orders=True, can_view_orders=True
+                    TeamQuerySet.event_permission_q("event.orders:read"),
+                    TeamQuerySet.event_permission_q("event.orders:write"),
+                    organizer=self.request.organizer,
                 ).values_list('limit_events__id', flat=True)
             )
 
@@ -761,7 +768,7 @@ class RefundExportListView(ListView):
 
 
 class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def get_success_url(self):
         return reverse('plugins:banktransfer:refunds.list', kwargs={
@@ -784,7 +791,7 @@ class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListVi
 
 
 class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExportListView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def get_success_url(self):
         return reverse('plugins:banktransfer:refunds.list', kwargs={
@@ -817,7 +824,7 @@ class DownloadRefundExportView(DetailView):
 
 
 class EventDownloadRefundExportView(EventPermissionRequiredMixin, DownloadRefundExportView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(
@@ -828,7 +835,7 @@ class EventDownloadRefundExportView(EventPermissionRequiredMixin, DownloadRefund
 
 
 class OrganizerDownloadRefundExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, DownloadRefundExportView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(
@@ -875,7 +882,7 @@ class SepaXMLExportView(SingleObjectMixin, FormView):
 
 
 class EventSepaXMLExportView(EventPermissionRequiredMixin, SepaXMLExportView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(
@@ -891,7 +898,7 @@ class EventSepaXMLExportView(EventPermissionRequiredMixin, SepaXMLExportView):
 
 
 class OrganizerSepaXMLExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, SepaXMLExportView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(

@@ -67,7 +67,7 @@ def env():
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True, can_manage_customers=True)
+    t = Team.objects.create(organizer=o, all_event_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
     o = Order.objects.create(
@@ -1422,7 +1422,7 @@ class OrderChangeTests(SoupTest):
         self.quota.items.add(self.ticket)
         self.quota.items.add(self.shirt)
         user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-        t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
+        t = Team.objects.create(organizer=o, all_event_permissions=True)
         t.members.add(user)
         t.limit_events.add(self.event)
         self.client.login(email='dummy@dummy.dummy', password='dummy')

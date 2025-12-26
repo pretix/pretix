@@ -40,8 +40,7 @@ def env():
     )
     event.settings.set("ticketoutput_testdummy__enabled", True)
     user = User.objects.create_user("dummy@dummy.dummy", "dummy")
-    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True, can_manage_customers=True,
-                            can_change_event_settings=True)
+    t = Team.objects.create(organizer=o, all_event_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
 
@@ -163,7 +162,7 @@ def test_event_export_schedule(client, env):
 
 @pytest.mark.django_db(transaction=True)
 def test_event_limited_permission(client, env):
-    env[2].can_change_event_settings = False
+    env[2].limit_event_permissions = []
     env[2].save()
     user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
 
@@ -199,7 +198,7 @@ def test_event_limited_permission(client, env):
     response = client.get(f"/control/event/dummy/dummy/orders/export/{s2.pk}/delete")
     assert response.status_code == 404
 
-    env[2].can_change_event_settings = True
+    env[2].limit_event_permissions = {"event:settings.general:write": True}
     env[2].save()
     response = client.get("/control/event/dummy/dummy/orders/export/")
     assert b"RULE1" in response.content
@@ -366,7 +365,7 @@ def test_organizer_limited_permission(client, env):
     response = client.post(f"/control/organizer/dummy/export/{s2.pk}/run")
     assert response.status_code == 404
 
-    env[2].can_change_organizer_settings = True
+    env[2].limit_event_permissions = {"event:settings.general:write": True}
     env[2].save()
     response = client.get("/control/organizer/dummy/export/")
     assert b"RULE1" in response.content

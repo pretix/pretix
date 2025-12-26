@@ -53,9 +53,9 @@ def event_permission_required(permission):
     This view decorator rejects all requests with a 403 response which are not from
     users having the given permission for the event the request is associated with.
     """
-    if permission == 'can_change_settings':
+    if permission == 'event.settings.general:write':
         # Legacy support
-        permission = 'can_change_event_settings'
+        permission = 'event.settings.general:write'
 
     def decorator(function):
         def wrapper(request, *args, **kw):
@@ -92,9 +92,9 @@ def organizer_permission_required(permission):
     This view decorator rejects all requests with a 403 response which are not from
     users having the given permission for the event the request is associated with.
     """
-    if permission == 'can_change_settings':
+    if permission == 'event.settings.general:write':
         # Legacy support
-        permission = 'can_change_organizer_settings'
+        permission = 'organizer.settings.general:write'
 
     def decorator(function):
         def wrapper(request, *args, **kw):
