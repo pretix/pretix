@@ -39,7 +39,8 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, Item, Organizer, Quota, Team, User, Voucher, WaitingListEntry,
+    Event, Item, ItemVariation, Organizer, Quota, Team, User, Voucher,
+    WaitingListEntry,
 )
 from pretix.control.views.dashboards import waitinglist_widgets
 
@@ -52,11 +53,11 @@ def env():
         date_from=now(), plugins='pretix.plugins.banktransfer,tests.testdummy'
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
+    event.settings.set('waiting_list_names_asked', False)
+    event.settings.set('waiting_list_names_required', False)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    item1 = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True)
-    item2 = Item.objects.create(event=event, name="Ticket", default_price=23,
-                                admission=True)
+    item1 = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    item2 = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True)
 
     for i in range(5):
         WaitingListEntry.objects.create(
@@ -192,10 +193,151 @@ def test_delete_bulk(client, env):
 
 
 @pytest.mark.django_db
+def test_edit(client, env):
+    event = env[0]
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    quota = Quota.objects.create(event=event)
+    quota.items.add(item)
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.create(
+            event=event, item=item, email='foo@bar.com'
+        )
+
+    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": item.pk
+        },
+        follow=True
+    )
+    assert response.wsgi_request.path == '/control/event/dummy/dummy/waitinglist/'
+
+
+@pytest.mark.django_db
+def test_edit_itemvariation(client, env):
+    event = env[0]
+
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    variation = ItemVariation.objects.create(item=item)
+    quota = Quota.objects.create(event=event)
+    quota.items.add(item)
+    quota.variations.add(variation)
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.create(
+            event=event, item=item, variation=variation, email='foo@bar.com'
+        )
+
+    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+
+    itemvar = f"{item.pk}-{variation.pk}"
+
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": itemvar
+        },
+        follow=True
+    )
+    assert response.wsgi_request.path == '/control/event/dummy/dummy/waitinglist/'
+
+
+@pytest.mark.django_db
+def test_edit_voucher_send_out(client, env):
+    event = env[0]
+
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+
+    quota = Quota.objects.create(event=event, size=100)
+    quota.items.add(item)
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.create(
+            event=event, item=item, email='foo@bar.com'
+        )
+        client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+        wle.send_voucher()
+
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": item.pk
+        },
+        follow=True
+    )
+    assert response.status_code == 404
+
+
+@pytest.mark.django_db
+def test_edit_item_without_waitinglist(client, env):
+    event = env[0]
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    item_without_waitinglist = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=False)
+    quota = Quota.objects.create(event=event)
+    quota.items.add(item)
+    quota.items.add(item_without_waitinglist)
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.create(
+            event=event, item=item, email='foo@bar.com'
+        )
+
+    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": item_without_waitinglist.pk
+        },
+        follow=True
+    )
+    assert response.context['form'].errors == {'itemvar': ["The selected product does not allow waiting list entries."]}
+
+
+@pytest.mark.django_db
+def test_edit_item_without_quota(client, env):
+    event = env[0]
+    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    item_without_waitinglist = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    quota = Quota.objects.create(event=event)
+    quota.items.add(item)
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.create(
+            event=event, item=item, email='foo@bar.com'
+        )
+
+    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": item_without_waitinglist.pk
+        },
+        follow=True
+    )
+    assert response.context['form'].errors == {'itemvar': ["The selected product is not on sale because there is no quota configured for it."]}
+
+
+@pytest.mark.django_db
 def test_dashboard(client, env):
     with scopes_disabled():
         quota = Quota.objects.create(name="Test", size=2, event=env[0])
         quota.items.add(env[3])
         w = waitinglist_widgets(env[0])
+
     assert '1' in w[0]['content']
     assert '5' in w[1]['content']

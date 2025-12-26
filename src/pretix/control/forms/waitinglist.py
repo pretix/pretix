@@ -19,17 +19,33 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.forms import ChoiceField, EmailField
 from django.urls import reverse
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelChoiceField
+from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.models import WaitingListEntry
-from pretix.control.forms.widgets import Select2
+from pretix.base.forms.questions import NamePartsFormField
+from pretix.base.models import Item, ItemVariation, WaitingListEntry
+from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 
 
-class WaitingListEntryTransferForm(I18nModelForm):
+class WaitingListEntryEditForm(I18nModelForm):
+    itemvar = ChoiceField()
 
     def __init__(self, *args, **kwargs):
+        self.instance = kwargs.get('instance', None)
+        initial = kwargs.get('initial', {})
+        if self.instance and self.instance.pk and 'itemvar' not in initial:
+            if self.instance.variation is not None:
+                initial['itemvar'] = f'{self.instance.item.pk}-{self.instance.variation.pk}'
+            else:
+                initial['itemvar'] = self.instance.item.pk
+        kwargs['initial'] = initial
+
         super().__init__(*args, **kwargs)
 
         if self.event.has_subevents:
@@ -45,12 +61,95 @@ class WaitingListEntryTransferForm(I18nModelForm):
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        else:
+            del self.fields['subevent']
+
+        if self.event.settings.waiting_list_names_asked:
+            self.fields['name_parts'] = NamePartsFormField(
+                max_length=255,
+                required=self.event.settings.waiting_list_names_required,
+                scheme=self.event.organizer.settings.name_scheme,
+                titles=self.event.organizer.settings.name_scheme_titles,
+                label=_('Name'),
+            )
+        else:
+            del self.fields['name_parts']
+
+        if not self.event.settings.waiting_list_phones_asked:
+            del self.fields['phone']
+
+        choices = []
+
+        items = self.event.items.prefetch_related('variations').prefetch_related('quotas')
+        for item in items:
+            # don't offer items in the selection if they don't allow waitinglists or aren't on sale at all
+            if not item.allow_waitinglist | item.quotas.exists():
+                # except if they are currently set in the waitinglist, this will be then caught on submit in the clean step
+                if not self.instance.item.pk == item.pk:
+                    continue
+
+            if len(item.variations.all()) > 0:
+                for v in item.variations.all():
+                    choices.append((
+                        '{}-{}'.format(item.pk, v.pk),
+                        '{} – {}'.format(item, v.value) if item.active else mark_safe(
+                            f'<strike class="text-muted">{escape(item)} – {escape(v.value)}</strike>')
+                    ))
+            else:
+                choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(
+                    f'<strike class="text-muted">{escape(item)}</strike>')))
+
+        self.fields['itemvar'].label = _("Product")
+        self.fields['itemvar'].help_text = _("Only includes products which have the waiting list enabled.")
+        self.fields['itemvar'].required = True
+        self.fields['itemvar'].widget = Select2ItemVarQuota(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.items.itemvars.select2', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }),
+            },
+            choices=choices
+        )
+        self.fields['itemvar'].choices = choices
+
+    def clean(self):
+        if self.instance.voucher is not None:
+            self.add_error(None, _('A voucher for this waiting list entry was sent out already.'))
+
+        itemvar = self.data.get('itemvar')
+        if itemvar is None:
+            self.add_error('itemvar', _('Item and Variation are required'))
+        else:
+            self.instance.item = Item.objects.get(pk=itemvar.split('-')[0])
+            if '-' in itemvar:
+                self.instance.variation = ItemVariation.objects.get(pk=itemvar.split('-')[1])
+
+        if not self.instance.item.allow_waitinglist:
+            self.add_error('itemvar', _('The selected product does not allow waiting list entries.'))
+        if self.instance.item and not self.instance.item.quotas.filter(subevent=self.data.get('subevent')).exists():
+            self.add_error('itemvar', _('The selected product is not on sale because there is no quota configured for it.'))
+        if self.instance.variation and not self.instance.variation.quotas.filter(subevent=self.data.get('subevent')).exists():
+            self.add_error('itemvar', _('The selected product is not on sale because there is no quota configured for it.'))
+
+        data = super().clean()
+        return data
 
     class Meta:
         model = WaitingListEntry
         fields = [
+            'email',
+            'name_parts',
+            'phone',
             'subevent',
         ]
         field_classes = {
             'subevent': SafeModelChoiceField,
+            'email': EmailField,
+            'phone': PhoneNumberField,
         }
+        exclude = [
+            'voucher',  # handled by the assign operation in the WaitingListActionView
+            'priority'  # handled via thumbs up/down
+        ]
