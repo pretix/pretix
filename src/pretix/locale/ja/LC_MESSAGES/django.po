@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-22 20:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2025-12-27 14:00+0000\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -13598,7 +13598,7 @@ msgstr "デフォルト（{value}）"
 
 #: pretix/control/forms/event.py:380
 msgid "The currency cannot be changed because orders already exist."
-msgstr ""
+msgstr "注文がすでに存在するため、通貨を変更できません。"
 
 #: pretix/control/forms/event.py:391 pretix/control/forms/event.py:404
 msgid "Domain"
@@ -25139,7 +25139,7 @@ msgstr "新しい値を追加"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:95
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "アルファベット順に並べ替え"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:14
 msgid "No media have been created yet."
@@ -31585,7 +31585,7 @@ msgstr "最後のスケジュール計算"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
 msgid "Scheduled email rules"
-msgstr "スケジュール済みメールのルール"
+msgstr "予定されたメールのルール"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
 msgid ""
@@ -31619,7 +31619,7 @@ msgstr "予定された時間を調査します"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:83
 msgid "Use as a template for a new rule"
-msgstr "新しいルールのテンプレートを使う"
+msgstr "新しいルールのテンプレートとして使用"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:7
