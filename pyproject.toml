@@ -33,7 +33,7 @@ dependencies = [
   "celery==5.6.*",
   "chardet==5.2.*",
   "cryptography>=44.0.0",
-  "css-inline==0.18.*",
+  "css-inline==0.19.*",
   "defusedcsv>=1.1.0",
   "dnspython==2.*",
   "Django[argon2]==4.2.*,>=4.2.26",
