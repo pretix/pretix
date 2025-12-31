@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-27 14:00+0000\n"
+"PO-Revision-Date: 2025-12-31 16:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -1088,7 +1088,7 @@ msgstr "チケット価格"
 #: pretix/base/datasync/sourcefields.py:491 pretix/base/notifications.py:204
 #: pretix/control/forms/filter.py:216 pretix/control/forms/modelimport.py:90
 msgid "Order status"
-msgstr "注文の状況"
+msgstr "注文ステータス"
 
 #: pretix/base/datasync/sourcefields.py:500
 msgid "Ticket status"
@@ -1108,7 +1108,7 @@ msgstr "支払日時"
 #: pretix/control/templates/pretixcontrol/order/index.html:193
 #: pretix/control/templates/pretixcontrol/pdf/index.html:249
 msgid "Order locale"
-msgstr "注文のロケール"
+msgstr "注文の言語"
 
 #: pretix/base/datasync/sourcefields.py:536
 msgid "Order position ID"
@@ -2122,11 +2122,11 @@ msgstr "製品のキャンセル・変更を許可"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:640
 msgid "Minimum amount per order"
-msgstr "注文あたりの下限数量"
+msgstr "注文あたりの最小数量"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:647
 msgid "Maximum amount per order"
-msgstr "注文あたりの上限数量"
+msgstr "注文あたりの最大数量"
 
 #: pretix/base/exporters/items.py:89 pretix/base/exporters/orderlist.py:284
 #: pretix/base/modelimport_orders.py:652 pretix/base/models/items.py:655
@@ -2213,16 +2213,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:13
 #: pretix/presale/views/customer.py:360
 msgid "Orders"
-msgstr "ご注文内容"
+msgstr "注文"
 
 #: pretix/base/exporters/orderlist.py:103 pretix/base/models/orders.py:2631
 #: pretix/base/notifications.py:205
 msgid "Order positions"
-msgstr "受注ライン"
+msgstr "注文明細"
 
 #: pretix/base/exporters/orderlist.py:104
 msgid "Order fees"
-msgstr "注文金額"
+msgstr "注文手数料"
 
 #: pretix/base/exporters/orderlist.py:112
 msgid "Only paid orders"
@@ -3088,7 +3088,7 @@ msgstr "現在の価値"
 
 #: pretix/base/exporters/orderlist.py:1385
 msgid "Created in order"
-msgstr "作成された目的"
+msgstr "作成元の注文"
 
 #: pretix/base/exporters/orderlist.py:1386
 msgid "Last invoice number of order"
@@ -4381,8 +4381,8 @@ msgid ""
 "With this option, people will be able to check in even if the order has not "
 "been paid."
 msgstr ""
-"このオプションを使用すると、注文が支払われていなくても、人々はチェックインで"
-"きるようになります。"
+"このオプションを有効にすると、注文が支払われていない場合でもチェックインでき"
+"るようになります。"
 
 #: pretix/base/models/checkin.py:79
 msgid "Allow checking in add-on tickets by scanning the main ticket"
@@ -4818,10 +4818,10 @@ msgid ""
 "you can also choose to use a random value. This will be used in URLs, order "
 "codes, invoice numbers, and bank transfer references."
 msgstr ""
-"イベント名は短く、小文字、数字、ピリオド、ダッシュのみを含み、他のイベントと"
-"は異なる必要があります。簡単に覚えられるような略語や10文字未満の日付をお勧め"
-"しますが、ランダムな値を使用することもできます。これはURL、注文コード、請求書"
-"番号、銀行振込の参照に使用されます。"
+"短く、小文字、数字、ドット、ハイフンのみを含み、イベント間で一意である必要が"
+"あります。覚えやすい10文字未満の略語や日付の使用をお勧めしますが、ランダムな"
+"値を使用することもできます。これはURL、注文コード、請求書番号、銀行振込の参照"
+"に使用されます。"
 
 #: pretix/base/models/event.py:607 pretix/base/models/organizer.py:89
 msgid "The slug may only contain letters, numbers, dots and dashes."
@@ -5483,10 +5483,9 @@ msgid ""
 "event apply. If this is unchecked, orders containing this product can not be "
 "canceled by users but only by you."
 msgstr ""
-"これがチェックされている場合、このイベントの通常のキャンセルおよび注文変更設"
-"定が適用されます。これがチェックされていない場合、この製品を含む注文はユー"
-"ザーによってキャンセルされることはできず、あなたによってのみキャンセルされま"
-"す。"
+"このオプションをオンにすると、このイベントの通常のキャンセルおよび注文変更の"
+"設定が適用されます。オフにすると、この製品を含む注文はユーザーがキャンセルす"
+"ることはできず、主催者のみがキャンセルできます。"
 
 #: pretix/base/models/items.py:643
 msgid ""
@@ -5505,9 +5504,9 @@ msgid ""
 "product. The limit for the maximum number of items in the whole order "
 "applies regardless."
 msgstr ""
-"この製品は、1注文内で最大この回数までしか購入できません。フィールドを空白のま"
-"まにするか、0に設定すると、この製品に特別な制限はありません。全体の注文内のア"
-"イテムの最大数の制限は適用されます。"
+"この製品は1回の注文で最大この回数まで購入できます。フィールドを空にするか0に"
+"設定すると、この製品に対する特別な制限はありません。注文全体のアイテム数の上"
+"限は、この設定に関係なく適用されます。"
 
 #: pretix/base/models/items.py:657 pretix/base/models/items.py:1243
 msgid ""
@@ -5731,9 +5730,7 @@ msgstr ""
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
-msgstr ""
-"1つの注文あたりの最大数は、1つの注文あたりの最小数よりも低くすることはできま"
-"せん。"
+msgstr "注文あたりの最大数量は、注文あたりの最小数量より少なくすることはできません。"
 
 #: pretix/base/models/items.py:1012
 msgid "The item's category must belong to the same event as the item."
@@ -6299,7 +6296,7 @@ msgstr "期限切れ"
 #: pretix/base/models/orders.py:254 pretix/control/forms/filter.py:592
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:65
 msgid "Locale"
-msgstr "ロケール"
+msgstr "言語"
 
 #: pretix/base/models/orders.py:269 pretix/control/forms/filter.py:603
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
@@ -6316,8 +6313,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:278
 msgid "We'll show you this order to be due for a follow-up on this day."
-msgstr ""
-"この注文については、この日にフォローアップが必要となることをお知らせします。"
+msgstr "この日にフォローアップが必要な注文として表示されます。"
 
 #: pretix/base/models/orders.py:284
 msgid ""
@@ -6326,10 +6322,10 @@ msgid ""
 "custom message, so you need to brief your check-in staff how to handle these "
 "cases."
 msgstr ""
-"これを設定すると、チェックインアプリでこの注文のチケットが特別な注意を必要と"
-"することを示す警告が表示されます。詳細やカスタムメッセージは表示されないた"
-"め、これらのケースへの対応方法についてチェックインスタッフに事前説明する必要"
-"があります。"
+"この設定を有効にすると、チェックインアプリでこの注文のチケットに特別な注意が"
+"必要であることを示す警告が表示されます。詳細やカスタムメッセージは表示されな"
+"いため、このようなケースの対応方法についてチェックインスタッフに事前に説明し"
+"ておく必要があります。"
 
 #: pretix/base/models/orders.py:291
 msgid ""
@@ -6372,8 +6368,8 @@ msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
 msgstr ""
-"支払いは受け付けられません。注文が期限切れになっており、支払い設定で遅延した"
-"支払いを受け付けないように設定されています。"
+"この注文は有効期限が切れており、決済設定で遅延支払いを受け付けないように設定"
+"されているため、この支払いを受け付けることができません。"
 
 #: pretix/base/models/orders.py:1040
 msgid "This order is not yet approved by the event organizer."
@@ -6382,7 +6378,7 @@ msgstr "この注文はまだイベント主催者によって承認されてい
 #: pretix/base/models/orders.py:1065
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
-msgstr "注文された製品「{item}」は利用できません。"
+msgstr "注文された製品「{item}」は現在利用できません。"
 
 #: pretix/base/models/orders.py:1066
 #, python-brace-format
@@ -6550,7 +6546,7 @@ msgstr "価格"
 
 #: pretix/base/models/orders.py:2630
 msgid "Order position"
-msgstr "注文の位置"
+msgstr "注文明細"
 
 #: pretix/base/models/orders.py:3201
 msgid "Cart ID (e.g. session key)"
@@ -6685,11 +6681,11 @@ msgstr "製品の設定を変更できます"
 
 #: pretix/base/models/organizer.py:397
 msgid "Can view orders"
-msgstr "注文を表示できます"
+msgstr "注文の閲覧が可能"
 
 #: pretix/base/models/organizer.py:401
 msgid "Can change orders"
-msgstr "注文を変更できます"
+msgstr "注文の変更が可能"
 
 #: pretix/base/models/organizer.py:405
 msgid "Can perform check-ins"
@@ -6701,9 +6697,8 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
-"これには参加者の検索も含まれ、これによって参加者の個人情報を取得することがで"
-"きます。また、「注文の変更ができる」という権限を持つユーザーは、チェックイン"
-"も行うことができます。"
+"これには参加者の検索が含まれ、参加者の個人情報を取得することができます。「注"
+"文の変更が可能」権限を持つユーザーはチェックインを実行することもできます。"
 
 #: pretix/base/models/organizer.py:411
 msgid "Can view vouchers"
@@ -7330,17 +7325,17 @@ msgstr "購入した製品"
 #: pretix/base/services/placeholders.py:424
 #: pretix/base/templates/pretixbase/email/order_details.html:151
 msgid "View order details"
-msgstr "注文の詳細を表示する"
+msgstr "注文の詳細を表示"
 
 #: pretix/base/notifications.py:234
 #, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr "新しい注文が入りました: {order.code}"
+msgstr "新しい注文が作成されました: {order.code}"
 
 #: pretix/base/notifications.py:240
 #, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr "新しい注文があり、承認が必要です：{order.code}"
+msgstr "承認が必要な新しい注文が作成されました: {order.code}"
 
 #: pretix/base/notifications.py:246
 #, python-brace-format
@@ -7350,22 +7345,22 @@ msgstr "注文 {order.code} が支払い済みとしてマークされました�
 #: pretix/base/notifications.py:252
 #, python-brace-format
 msgid "Order {order.code} has been canceled."
-msgstr "注文{order.code}はキャンセルされました。"
+msgstr "注文 {order.code} がキャンセルされました。"
 
 #: pretix/base/notifications.py:258
 #, python-brace-format
 msgid "Order {order.code} has been reactivated."
-msgstr "注文{order.code}が再度アクティブ化されました。"
+msgstr "注文 {order.code} が再有効化されました。"
 
 #: pretix/base/notifications.py:264
 #, python-brace-format
 msgid "Order {order.code} has been marked as expired."
-msgstr "注文{order.code}は期限切れとしてマークされました。"
+msgstr "注文 {order.code} が期限切れとしてマークされました。"
 
 #: pretix/base/notifications.py:270
 #, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
-msgstr "注文{order.code}のチケット情報が変更されました。"
+msgstr "注文 {order.code} のチケット情報が変更されました。"
 
 #: pretix/base/notifications.py:276
 #, python-brace-format
@@ -7379,17 +7374,17 @@ msgstr "注文{order.code}が変更されました。"
 
 #: pretix/base/notifications.py:287
 msgid "Order has been overpaid"
-msgstr "注文が過払いされました"
+msgstr "注文が過払い状態です"
 
 #: pretix/base/notifications.py:288
 #, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr "注文{order.code}は過払いされています。"
+msgstr "注文 {order.code} が過払いになりました。"
 
 #: pretix/base/notifications.py:294
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr "外部から{order.code}の払い戻しが発生しました。"
+msgstr "注文 {order.code} に対して外部での払い戻しが発生しました。"
 
 #: pretix/base/notifications.py:299
 msgid "Refund requested"
@@ -7484,7 +7479,7 @@ msgstr ""
 
 #: pretix/base/payment.py:406
 msgid "Minimum order total"
-msgstr "最低注文金額"
+msgstr "注文の最低金額"
 
 #: pretix/base/payment.py:407
 msgid ""
@@ -7492,13 +7487,13 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
-"この支払いは、注文の合計が指定された値と等しいかそれを超える場合にのみ利用可"
-"能です。この目的のための注文の合計は、この支払い方法によって課せられる手数料"
-"を考慮に入れずに計算されることがあります。"
+"この決済方法は、注文合計が指定した金額以上の場合にのみ利用可能になります。こ"
+"の判定に使用される注文合計は、この決済方法による手数料を含めずに計算される場"
+"合があります。"
 
 #: pretix/base/payment.py:417
 msgid "Maximum order total"
-msgstr "最大注文合計"
+msgstr "注文の最大金額"
 
 #: pretix/base/payment.py:418
 msgid ""
@@ -7550,9 +7545,9 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
-"支払い金額のすぐ下に印刷され、締めのテキストの直上に載せられます。この文は、"
-"注文が支払われる前に請求書が生成された場合にのみ使用されます。後で生成された"
-"請求書の場合は、すでに支払われたことを示すテキストが表示されます。"
+"請求書の支払い金額の直下、締めの文章の上に印刷されます。これは注文が支払われ"
+"る前に請求書が生成された場合にのみ使用されます。支払い後に請求書が生成された"
+"場合は、支払い済みであることを示すテキストが表示されます。"
 
 #: pretix/base/payment.py:463
 msgid "Restrict to countries"
@@ -12561,8 +12556,8 @@ msgstr "県"
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
-"デフォルトのロケールもイベントで有効にする必要があります（上のボックスを参"
-"照）。"
+"デフォルト言語はイベントで有効になっている必要があります（上のボックスを参照"
+"）。"
 
 #: pretix/base/settings.py:3988
 msgid ""
@@ -13570,7 +13565,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:232
 msgid "Your default locale must be specified."
-msgstr "デフォルトのロケールを指定する必要があります。"
+msgstr "デフォルト言語を指定してください。"
 
 #: pretix/control/forms/event.py:236
 #, python-brace-format
@@ -16711,7 +16706,7 @@ msgstr "顧客アカウントが変更されました。"
 
 #: pretix/control/logdisplay.py:523
 msgid "The order locale has been changed."
-msgstr "注文のロケールが変更されました。"
+msgstr "注文の言語が変更されました。"
 
 #: pretix/control/logdisplay.py:524 pretix/control/views/orders.py:1616
 #: pretix/presale/views/order.py:745 pretix/presale/views/order.py:825
