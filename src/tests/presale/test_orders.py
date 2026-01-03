@@ -1836,3 +1836,32 @@ class OrdersTest(BaseOrdersTest):
         assert "pending" in doc.select(".order-details")[0].text.lower()
         assert "Peter" in response.content.decode()
         assert "Lukas" not in response.content.decode()
+
+    def test_require_login_for_order_access_enabled_wrong_customer(self):
+        self.orga.settings.customer_accounts = True
+
+        with scopes_disabled():
+            customer = self.orga.customers.create(email='john@example.org', is_verified=True)
+            customer.set_password("foo")
+            customer.save()
+
+        self.order.customer = customer
+        self.order.save()
+
+        with scopes_disabled():
+            customer = self.orga.customers.create(email='jill@example.org', is_verified=True)
+            customer.set_password("bar")
+            customer.save()
+
+        self.orga.settings.customer_accounts_require_login_for_order_access = True
+
+        response = self.client.post('/%s/account/login' % (self.orga.slug), {
+            'email': 'jill@example.org',
+            'password': 'bar',
+        })
+        assert response.status_code == 302
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 404
