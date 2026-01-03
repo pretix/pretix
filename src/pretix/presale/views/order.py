@@ -128,7 +128,7 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
             if has_event_access_permission(self.request, 'can_view_orders'):
                 return order
 
-            if order.customer is None or self._allow_anonymous_access():
+            if order.customer is None or not order.customer.is_verified or self._allow_anonymous_access():
                 return order
 
             if not self.request.customer:
