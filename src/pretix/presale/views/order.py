@@ -131,14 +131,13 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
             if order.customer is None or self._allow_anonymous_access():
                 return order
 
-            else:
-                if self.request.customer:
-                    if order.customer_id == self.request.customer.pk:
-                        return order
-                    else:
-                        return None
-                else:
-                    return False
+            if not self.request.customer:
+                return False
+
+            if order.customer_id == self.request.customer.pk:
+                return order
+
+            return None
 
         except Order.DoesNotExist:
             return None
