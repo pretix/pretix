@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2025-12-31 16:00+0000\n"
+"PO-Revision-Date: 2026-01-05 10:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -2184,8 +2184,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
-"購入者またはチケット所有者から収集したすべてのメールアドレスを含むテキスト"
-"ファイルをダウンロードします。"
+"購入者またはチケット保有者から収集したすべてのメールアドレスを含む"
+"テキストファイルをダウンロードします。"
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:498
 #: pretix/plugins/reports/exporters.py:681
@@ -5125,7 +5125,7 @@ msgstr "値には区切り文字を含めることはできません。"
 #: pretix/base/models/giftcards.py:81
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
 msgid "Owned by ticket holder"
-msgstr "チケット保持者が所有"
+msgstr "チケット保有者が所有"
 
 #: pretix/base/models/giftcards.py:88
 msgid "Owned by customer account"
@@ -7098,8 +7098,8 @@ msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
-"このバウチャーコードを持っている人は、売り切れた場合でも、チケットを購入する"
-"ことができます。"
+"有効にすると、このバウチャーコードを持っている人は、チケットが完売していても"
+"購入できます。"
 
 #: pretix/base/models/vouchers.py:257 pretix/control/forms/vouchers.py:69
 msgid ""
@@ -23814,8 +23814,8 @@ msgid ""
 "Run export and send via email now. This will not change the next scheduled "
 "execution."
 msgstr ""
-"今すぐエクスポートを実行してメールで送信します。これにより次回のスケジュール"
-"実行が変更されることはありません。"
+"今すぐエクスポートを実行してメールで送信します。次回の予定実行には影響しませ"
+"ん。"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:95
 #: pretix/control/templates/pretixcontrol/organizers/export.html:95
@@ -25774,12 +25774,11 @@ msgid ""
 "however most of them can also be empty in some cases depending on "
 "configuration."
 msgstr ""
-"カスタムテキストのチケットにはプレースホルダーを使用して、個々のデータをテキ"
-"ストに豊かにすることができます。使用可能なプレースホルダーは、イベントの設"
-"定、有効化されているプラグイン、選択した製品、およびユーザーの入力によって異"
-"なります。このページでは、イベントで技術的に使用可能なすべてのプレースホル"
-"ダーがリストされていますが、設定によってはいくつかの場合には空白のままになる"
-"こともあります。"
+"チケットのカスタムテキストにプレースホルダーを使用して、個別のデータを挿入で"
+"きます。使用可能なプレースホルダーは、イベントの設定、有効化されたプラグイン"
+"、選択した製品、およびユーザーの入力によって異なります。このページでは、"
+"イベントで技術的に使用可能なすべてのプレースホルダーを一覧表示していますが、"
+"設定によってはほとんどのプレースホルダーが空になる場合もあります。"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:31
 msgid "Placeholder"
@@ -31440,7 +31439,7 @@ msgstr[0] "%(time)sに開始するイベントの%(count)d 日前"
 
 #: pretix/plugins/sendmail/signals.py:102
 msgid "Scheduled emails"
-msgstr "スケジュール済みメール"
+msgstr "送信予約メール"
 
 #: pretix/plugins/sendmail/signals.py:122
 msgid "Mass email was sent to customers or attendees."
@@ -31456,7 +31455,7 @@ msgstr "注文が一斉メールを受信しました。"
 
 #: pretix/plugins/sendmail/signals.py:129
 msgid "A ticket holder of this order received a mass email."
-msgstr "この注文のチケット保持者が一斉メールを受信しました。"
+msgstr "この注文のチケット保有者に一斉メールが送信されました。"
 
 #: pretix/plugins/sendmail/signals.py:134
 msgid "The person on the waiting list received a mass email."
@@ -31472,11 +31471,11 @@ msgstr "メールのルールが更新されました"
 
 #: pretix/plugins/sendmail/signals.py:141
 msgid "A scheduled email was sent to the order"
-msgstr "スケジュール済みメールが注文に送信されました"
+msgstr "送信予約メールが注文に送信されました"
 
 #: pretix/plugins/sendmail/signals.py:142
 msgid "A scheduled email was sent to a ticket holder"
-msgstr "スケジュール済みメールがチケット保持者に送信されました"
+msgstr "送信予約メールがチケット保有者に送信されました"
 
 #: pretix/plugins/sendmail/signals.py:143
 msgid "An email rule was deleted"
@@ -31529,8 +31528,7 @@ msgstr "メールのルールを作成"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
 msgid "Scheduled emails are not sent as long as your ticket shop is offline."
-msgstr ""
-"チケットショップがオフラインの間は、スケジュール済みメールは送信されません。"
+msgstr "チケットショップがオフラインの間、送信予約メールは送信されません。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:63
@@ -31580,7 +31578,7 @@ msgstr "最後のスケジュール計算"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
 msgid "Scheduled email rules"
-msgstr "予定されたメールのルール"
+msgstr "送信予約メールのルール"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
 msgid ""
