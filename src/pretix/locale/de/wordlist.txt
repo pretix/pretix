@@ -167,6 +167,7 @@ Footer
 Footer-Link
 Footer-Text
 Galicisch
+GBP
 Geocoding
 Geocoding-Daten
 Geo-Koordinaten
@@ -255,6 +256,7 @@ NFC-Chip
 NFC-Chips
 NFC-Medien
 NFC-Zahlungsmitteln
+NIF
 Nr
 NREI
 number
@@ -330,6 +332,7 @@ pretix-Versionen
 pretix-Widget
 Produkt-ID
 Produkt-Metadaten
+PromptPay
 Przelewy
 pt
 px

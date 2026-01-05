@@ -58,6 +58,7 @@ filetype
 frontend
 frontpage
 Galician
+GBP
 GENEXAMPLE
 Geo
 geo
@@ -99,6 +100,7 @@ Mx
 MyBank
 multiline
 NFC
+NIF
 NREI
 NXP
 OpenCage
@@ -126,6 +128,7 @@ pretixdroid
 pretixPOS
 pretixPRINT
 pretixSCAN
+PromptPay
 Przelewy
 Pseudonymization
 px
