@@ -38,7 +38,8 @@ from pretix.base.settings import (
 
 VAT_ID_LABELS = {
     # VAT ID is a EU concept and Switzerland has a distinct, but differently-named concept
-    "CH": pgettext_lazy("tax_id_swiss", "UID"),  # Translators: Only translate to French (IDE) and Italien (IDI), otherwise keep the same
+    # Translators: Only translate to French (IDE) and Italien (IDI), otherwise keep the same
+    "CH": pgettext_lazy("tax_id_swiss", "UID"),
 
     # Awareness around VAT IDs differes by EU country. For example, in Germany the VAT ID is assigned
     # separately to each company and only used in cross-country transactions. Therefore, it makes sense
@@ -46,10 +47,15 @@ VAT_ID_LABELS = {
     # In contrast, in Italy the EU-compatible VAT ID is not separately assigned, but is just "IT" + the national tax
     # number (Partita IVA) and also used on domestic transactions. So someone who never purchased something international
     # for their company, might still know the value, if we call it the right way and not just "VAT ID".
-    "IT": pgettext_lazy("tax_id_italy", "VAT ID / P.IVA"),  # Translators: Translate to only "P.IVA" in Italian, keep second part as-is in other languages
-    "GR": pgettext_lazy("tax_id_greece", "VAT ID / TIN"),  # Translators: Translate to only "ΑΦΜ" in Greek
-    "ES": pgettext_lazy("tax_id_spain", "VAT ID / NIF"),  # Translators: Translate to only "NIF" in Spanish
-    "PT": pgettext_lazy("tax_id_portugal", "VAT ID / NIF"),  # Translators: Translate to only "NIF" in Portuguese
+
+    # Translators: Translate to only "P.IVA" in Italian, keep second part as-is in other languages
+    "IT": pgettext_lazy("tax_id_italy", "VAT ID / P.IVA"),
+    # Translators: Translate to only "ΑΦΜ" in Greek
+    "GR": pgettext_lazy("tax_id_greece", "VAT ID / TIN"),
+    # Translators: Translate to only "NIF" in Spanish
+    "ES": pgettext_lazy("tax_id_spain", "VAT ID / NIF"),
+    # Translators: Translate to only "NIF" in Portuguese
+    "PT": pgettext_lazy("tax_id_portugal", "VAT ID / NIF"),
 }
 
 
