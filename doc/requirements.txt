@@ -1,5 +1,5 @@
 -e ../
-sphinx==7.4.*
+sphinx==9.1.*
 jinja2==3.1.*
 sphinx-rtd-theme
 sphinxcontrib-httpdomain
