@@ -265,6 +265,7 @@ Objekt-IDs
 Offline-Scan
 OK
 Online-Banking
+Onlinebanking
 Onlinebanking-Zugangsdaten
 Open
 OpenCage-API-Key
@@ -294,6 +295,7 @@ Peppol-Netzwerk
 Peppol-Teilnehmer-ID
 Peppol-Teilnehmer-IDs
 Personalisierung
+P.IVA
 PKCE-Erweiterung
 Platzhalterzeichen
 Play
@@ -333,6 +335,8 @@ pretix-Widget
 Produkt-ID
 Produkt-Metadaten
 PromptPay
+PromptPay-QR-Code
+PromptPay-Zahlung
 Przelewy
 pt
 px
@@ -452,6 +456,7 @@ Ticketing
 Ticketing-Firma
 Ticket-Output
 Ticket-QR-Code
+TIN
 TODO
 To-Do-Liste
 TOTP
