@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 10:37+0000\n"
+"POT-Creation-Date: 2026-01-05 12:13+0000\n"
 "PO-Revision-Date: 2023-11-16 04:00+0000\n"
 "Last-Translator: Ramazan Sancar <ramazansancar4545@gmail.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -144,7 +144,7 @@ msgstr "Devam et"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
 msgid "Confirming your payment …"
 msgstr ""
 
@@ -365,7 +365,7 @@ msgstr "Hiçbiri"
 msgid "close"
 msgstr "Kapalı"
 
-#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixbase/js/addressform.js:101
 #: pretix/static/pretixpresale/js/ui/main.js:529
 #, fuzzy
 #| msgid "Cart expired"

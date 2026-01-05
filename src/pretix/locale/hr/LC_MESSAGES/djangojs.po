@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 10:37+0000\n"
+"POT-Creation-Date: 2026-01-05 12:13+0000\n"
 "PO-Revision-Date: 2025-03-16 10:17+0000\n"
 "Last-Translator: Robert Rigo <kontakt@bicikli.hr>\n"
 "Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -142,7 +142,7 @@ msgstr ""
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
 msgid "Confirming your payment …"
 msgstr ""
 
@@ -346,7 +346,7 @@ msgstr "Ne"
 msgid "close"
 msgstr "zatvori"
 
-#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixbase/js/addressform.js:101
 #: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr ""

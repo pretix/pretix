@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 10:37+0000\n"
+"POT-Creation-Date: 2026-01-05 12:13+0000\n"
 "PO-Revision-Date: 2025-12-10 15:49+0000\n"
 "Last-Translator: Ana Rute Pacheco Vivas <rute.vivas@om.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -146,7 +146,7 @@ msgstr "Continuar"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
 msgid "Confirming your payment …"
 msgstr "A confirmar o seu pagamento…"
 
@@ -361,7 +361,7 @@ msgstr "Não"
 msgid "close"
 msgstr "Fechar"
 
-#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixbase/js/addressform.js:101
 #: pretix/static/pretixpresale/js/ui/main.js:529
 #, fuzzy
 #| msgid "Cart expired"
