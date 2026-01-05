@@ -33,7 +33,7 @@ from pretix.api.serializers.order import (
     OrderFeeCreateSerializer, OrderPositionCreateSerializer,
 )
 from pretix.base.models import ItemVariation, Order, OrderFee, OrderPosition
-from pretix.base.services.orders import OrderError, OrderChangeManager
+from pretix.base.services.orders import OrderChangeManager, OrderError
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 
 logger = logging.getLogger(__name__)
