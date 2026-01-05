@@ -39,7 +39,7 @@ as well as the type of underlying hardware. Example:
        "rsa_pubkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqh…nswIDAQAB\n-----END PUBLIC KEY-----\n"
    }
 
-The ``rsa_pubkey`` is optional any only required for certain fatures such as working with reusable
+The ``rsa_pubkey`` is optional any only required for certain features such as working with reusable
 media and NFC cryptography.
 
 Every initialization token can only be used once. On success, you will receive a response containing
