@@ -25,7 +25,9 @@ from django.utils import translation
 from django.utils.translation import gettext_noop
 from django_countries import Countries, collator
 from django_countries.fields import CountryField
-from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
+from phonenumbers import (
+    COUNTRY_CODE_TO_REGION_CODE, REGION_CODE_FOR_NON_GEO_ENTITY,
+)
 
 from pretix.base.i18n import get_babel_locale, get_language_without_region
 
@@ -107,9 +109,11 @@ def get_phone_prefixes_sorted_and_localized():
     val = []
 
     locale = Locale(translation.to_locale(language))
-    for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+    for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
         prefix = "+%d" % prefix
         for country_code in values:
+            if country_code == REGION_CODE_FOR_NON_GEO_ENTITY:
+                continue
             country_name = locale.territories.get(country_code)
             if country_name:
                 val.append((prefix, "{} {}".format(country_name, prefix)))
