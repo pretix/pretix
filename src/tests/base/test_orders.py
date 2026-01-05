@@ -2466,6 +2466,16 @@ class OrderChangeManagerTests(TestCase):
         assert nop.subevent == se1
 
     @classscope(attr='o')
+    def test_add_item_result_value(self):
+        res_shirt = self.ocm.add_position(self.shirt, None, None, None)
+        res_ticket2 = self.ocm.add_position(self.ticket2, None, None, None)
+        with self.assertRaises(RuntimeError):
+            _ = res_ticket2.position
+        self.ocm.commit()
+        assert res_shirt.position.item == self.shirt
+        assert res_ticket2.position.item == self.ticket2
+
+    @classscope(attr='o')
     def test_add_item_with_rounding(self):
         self.order.tax_rounding_mode = "sum_by_net"
         self.order.save()

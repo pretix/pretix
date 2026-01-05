@@ -1630,7 +1630,7 @@ class OrderChangeManager:
     MembershipOperation = namedtuple('MembershipOperation', ('position', 'membership'))
     CancelOperation = namedtuple('CancelOperation', ('position', 'price_diff'))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership',
-                                               'valid_from', 'valid_until', 'is_bundled'))
+                                               'valid_from', 'valid_until', 'is_bundled', 'result'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
@@ -1641,6 +1641,18 @@ class OrderChangeManager:
     ChangeValidUntilOperation = namedtuple('ChangeValidUntilOperation', ('position', 'valid_until'))
     AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
     RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
+
+    class AddPositionResult:
+        _position: Optional[OrderPosition]
+
+        def __init__(self):
+            self._position = None
+
+        @property
+        def position(self) -> OrderPosition:
+            if self._position is None:
+                raise RuntimeError("Order position has not been created yet. Call commit() first on OrderChangeManager.")
+            return self._position
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True, allow_blocked_seats=False):
         self.order = order
@@ -1846,7 +1858,7 @@ class OrderChangeManager:
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: OrderPosition = None,
                      subevent: SubEvent = None, seat: Seat = None, membership: Membership = None,
-                     valid_from: datetime = None, valid_until: datetime = None):
+                     valid_from: datetime = None, valid_until: datetime = None) -> 'OrderChangeManager.AddPositionResult':
         if isinstance(seat, str):
             if not seat:
                 seat = None
@@ -1905,8 +1917,11 @@ class OrderChangeManager:
         self._quotadiff.update(new_quotas)
         if seat:
             self._seatdiff.update([seat])
+
+        result = self.AddPositionResult()
         self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership,
-                                                  valid_from, valid_until, is_bundled))
+                                                  valid_from, valid_until, is_bundled, result))
+        return result
 
     def split(self, position: OrderPosition):
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
@@ -2525,6 +2540,7 @@ class OrderChangeManager:
                     'valid_from': op.valid_from.isoformat() if op.valid_from else None,
                     'valid_until': op.valid_until.isoformat() if op.valid_until else None,
                 })
+                op.result._position = pos
             elif isinstance(op, self.SplitOperation):
                 position = position_cache.setdefault(op.position.pk, op.position)
                 split_positions.append(position)
