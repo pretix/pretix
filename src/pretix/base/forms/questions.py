@@ -66,8 +66,10 @@ from geoip2.errors import AddressNotFoundError
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
-from phonenumbers import NumberParseException, national_significant_number
-from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
+from phonenumbers import (
+    COUNTRY_CODE_TO_REGION_CODE, REGION_CODE_FOR_NON_GEO_ENTITY,
+    NumberParseException, national_significant_number,
+)
 from PIL import ImageOps
 
 from pretix.base.forms.widgets import (
@@ -305,7 +307,9 @@ class WrappedPhonePrefixSelect(Select):
         choices = [("", "---------")]
 
         if initial:
-            for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+            for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
+                if all(v == REGION_CODE_FOR_NON_GEO_ENTITY for v in values):
+                    continue
                 if initial in values:
                     self.initial = "+%d" % prefix
                     break
@@ -437,7 +441,9 @@ def guess_phone_prefix_from_request(request, event):
 
 
 def get_phone_prefix(country):
-    for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+    if country == REGION_CODE_FOR_NON_GEO_ENTITY:
+        return None
+    for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
         if country in values:
             return prefix
     return None
