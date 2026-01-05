@@ -33,7 +33,7 @@ from pretix.api.serializers.order import (
     OrderFeeCreateSerializer, OrderPositionCreateSerializer,
 )
 from pretix.base.models import ItemVariation, Order, OrderFee, OrderPosition
-from pretix.base.services.orders import OrderError
+from pretix.base.services.orders import OrderError, OrderChangeManager
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 
 logger = logging.getLogger(__name__)
@@ -82,11 +82,11 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
         return data
 
     def create(self, validated_data):
-        ocm = self.context['ocm']
+        ocm: OrderChangeManager = self.context['ocm']
         check_quotas = self.context.get('check_quotas', True)
 
         try:
-            ocm.add_position(
+            new_position = ocm.add_position(
                 item=validated_data['item'],
                 variation=validated_data.get('variation'),
                 price=validated_data.get('price'),
@@ -98,7 +98,7 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
             )
             if self.context.get('commit', True):
                 ocm.commit(check_quotas=check_quotas)
-                return validated_data['order'].positions.order_by('-positionid').first()
+                return new_position.position
             else:
                 return OrderPosition()  # fake to appease DRF
         except OrderError as e:
@@ -131,7 +131,7 @@ class OrderFeeCreateForExistingOrderSerializer(OrderFeeCreateSerializer):
         return data
 
     def create(self, validated_data):
-        ocm = self.context['ocm']
+        ocm: OrderChangeManager = self.context['ocm']
 
         try:
             f = OrderFee(
@@ -310,7 +310,7 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        ocm = self.context['ocm']
+        ocm: OrderChangeManager = self.context['ocm']
         check_quotas = self.context.get('check_quotas', True)
         current_seat = {'seat_guid': instance.seat.seat_guid} if instance.seat else None
         item = validated_data.get('item', instance.item)
@@ -399,7 +399,7 @@ class OrderFeeChangeSerializer(serializers.ModelSerializer):
         )
 
     def update(self, instance, validated_data):
-        ocm = self.context['ocm']
+        ocm: OrderChangeManager = self.context['ocm']
         value = validated_data.get('value', instance.value)
 
         try:
