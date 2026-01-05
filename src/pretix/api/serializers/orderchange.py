@@ -146,7 +146,7 @@ class OrderFeeCreateForExistingOrderSerializer(OrderFeeCreateSerializer):
             ocm.add_fee(f)
             if self.context.get('commit', True):
                 ocm.commit()
-                return validated_data['order'].fees.order_by('-pk').first()
+                return f
             else:
                 return OrderFee()  # fake to appease DRF
         except OrderError as e:
