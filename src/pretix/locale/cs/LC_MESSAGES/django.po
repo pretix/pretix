@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-05 14:52+0000\n"
+"PO-Revision-Date: 2026-01-05 15:14+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -20238,10 +20238,8 @@ msgid "Invoice customization"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:79
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Invoice transmission"
-msgstr "Informace o faktuře"
+msgstr "Způsob doručení faktury"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:81
 msgid ""
@@ -22969,7 +22967,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:35
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:29
 msgid "Invoice information"
-msgstr "Informace o faktuře"
+msgstr "Fakturační údaje"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:26
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:36
@@ -29843,15 +29841,12 @@ msgstr "Částka:"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:34
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:30
 msgid "There is no further action required on this website."
-msgstr ""
+msgstr "Na této stránce není nutné provádět další kroky."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:35
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:31
-#, fuzzy
 msgid "We will send you an email as soon as we received your payment."
-msgstr ""
-"Jakmile organizátor vaši objednávku schválí nebo zamítne, budeme vás "
-"informovat e-mailem."
+msgstr "Zašleme vám e-mail, jakmile platbu obdržíme."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
@@ -32713,7 +32708,7 @@ msgstr "Zadávejte prosím pouze čísla."
 #: pretix/presale/checkoutflow.py:758
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr "Informace pro vás"
+msgstr "Osobní údaje"
 
 #: pretix/presale/checkoutflow.py:992
 msgid ""
@@ -33244,7 +33239,7 @@ msgstr "Upravit"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:75
 msgid "Modify invoice information"
-msgstr "Upravit informace na faktuře"
+msgstr "Upravit fakturační údaje"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:127
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:19
@@ -34564,7 +34559,7 @@ msgstr "Požádat o fakturu"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:287
 msgid "Your information"
-msgstr "Informace pro vás"
+msgstr "Fakturační údaje"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 msgid "Change your information"
