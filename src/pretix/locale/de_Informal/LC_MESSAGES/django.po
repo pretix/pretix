@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2025-11-27 14:28+0000\n"
+"PO-Revision-Date: 2026-01-05 14:44+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -3855,7 +3855,7 @@ msgstr ""
 
 #: pretix/base/invoicing/peppol.py:164
 msgid "The Peppol participant ID is not registered on the Peppol network."
-msgstr ""
+msgstr "Die Peppol-Teilnehmer-ID ist nicht im Peppol-Netzwerk registriert."
 
 #: pretix/base/invoicing/peppol.py:184
 msgid "Peppol participant ID"
@@ -8436,6 +8436,8 @@ msgid ""
 "Some products can no longer be purchased and have been removed from your "
 "cart for the following reason: %s"
 msgstr ""
+"Einige Produkte können nicht mehr erworben werden und wurden aus folgendem "
+"Grund aus deinem Warenkorb entfernt: %s"
 
 #: pretix/base/services/cart.py:117
 msgid ""
@@ -9625,21 +9627,14 @@ msgid "Uncategorized"
 msgstr "Unkategorisiert"
 
 #: pretix/base/services/tax.py:43
-#, fuzzy
-#| msgid ""
-#| "Your VAT ID could not be checked, as the VAT checking service of your "
-#| "country is currently not available. We will therefore need to charge VAT "
-#| "on your invoice. You can get the tax amount back via the VAT "
-#| "reimbursement process."
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country is currently not available. We will therefore need to charge you the "
 "same tax rate as if you did not enter a VAT ID."
 msgstr ""
-"Die USt-ID-Nr. konnte nicht geprüft werden, da der Prüfdienst deines Landes "
-"im Moment nicht verfügbar ist. Wir müssen daher USt auf deine Bestellung "
-"berechnen. Du kannst den Steuerbetrag über das "
-"Umsatzsteuervergütungsverfahren zurück erlangen."
+"Die USt-ID-Nr. konnte nicht geprüft werden, da der Prüfdienst Ihres Landes "
+"im Moment nicht verfügbar ist. Wir müssen daher den selben Steuersatz "
+"berechnen, wie wenn keine USt-ID-Nr. eingegeben worden wäre."
 
 #: pretix/base/services/tax.py:47 pretix/base/services/tax.py:366
 #: pretix/base/services/tax.py:393
@@ -10068,24 +10063,17 @@ msgid "Ask for VAT ID"
 msgstr "Nach USt-ID fragen"
 
 #: pretix/base/settings.py:632
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Only works if an invoice address is asked for. VAT ID is never required "
-#| "and only requested from business customers in the following countries: "
-#| "{countries}"
+#, python-brace-format
 msgid ""
 "Only works if an invoice address is asked for. VAT ID is only requested from "
 "business customers in the following countries: {countries}."
 msgstr ""
 "Funktioniert nur, wenn auch nach einer Rechnungsadresse gefragt ist. Die USt-"
-"ID ist nie ein Pflichtfeld und wird nur von Firmenkunden aus folgenden "
-"Ländern abgefragt: {countries}"
+"ID wird nur von Firmenkunden aus folgenden Ländern abgefragt: {countries}"
 
 #: pretix/base/settings.py:651
-#, fuzzy
-#| msgid "Require name"
 msgid "Require VAT ID in"
-msgstr "Namen erfordern"
+msgstr "USt-ID erforderlich in"
 
 #: pretix/base/settings.py:657
 msgid ""
@@ -10093,6 +10081,9 @@ msgid ""
 "ID in all countries. VAT ID will be required for all business addresses in "
 "the selected countries."
 msgstr ""
+"Die USt-ID ist standardmäßig optional, da nicht in allen Ländern alle "
+"Firmenkunden eine USt-ID zugeteilt bekommen. Die USt-ID wird in den "
+"ausgewählten Ländern für alle Firmenadressen zum Pflichtfeld."
 
 #: pretix/base/settings.py:672
 msgid "Invoice address explanation"
@@ -13829,11 +13820,9 @@ msgstr ""
 "zumindest für diese Website."
 
 #: pretix/base/views/js_helpers.py:41
-#, fuzzy
-#| msgid "ID"
 msgctxt "tax_id_swiss"
 msgid "UID"
-msgstr "ID"
+msgstr "UID"
 
 #. Translators: Only translate to French (IDE) and Italien (IDI), otherwise keep the same
 #. Awareness around VAT IDs differes by EU country. For example, in Germany the VAT ID is assigned
@@ -13843,35 +13832,27 @@ msgstr "ID"
 #. number (Partita IVA) and also used on domestic transactions. So someone who never purchased something international
 #. for their company, might still know the value, if we call it the right way and not just "VAT ID".
 #: pretix/base/views/js_helpers.py:49
-#, fuzzy
-#| msgid "VAT ID"
 msgctxt "tax_id_italy"
 msgid "VAT ID / P.IVA"
-msgstr "USt-ID"
+msgstr "USt-ID-Nr. / P.IVA"
 
 #. Translators: Translate to only "P.IVA" in Italian, keep second part as-is in other languages
 #: pretix/base/views/js_helpers.py:50
-#, fuzzy
-#| msgid "VAT ID"
 msgctxt "tax_id_greece"
 msgid "VAT ID / TIN"
-msgstr "USt-ID"
+msgstr "USt-ID-Nr. / TIN"
 
 #. Translators: Translate to only "ΑΦΜ" in Greek
 #: pretix/base/views/js_helpers.py:51
-#, fuzzy
-#| msgid "VAT ID"
 msgctxt "tax_id_spain"
 msgid "VAT ID / NIF"
-msgstr "USt-ID"
+msgstr "USt-ID-Nr. / NIF"
 
 #. Translators: Translate to only "NIF" in Spanish
 #: pretix/base/views/js_helpers.py:52
-#, fuzzy
-#| msgid "VAT ID"
 msgctxt "tax_id_portugal"
 msgid "VAT ID / NIF"
-msgstr "USt-ID"
+msgstr "USt-ID-Nr. / NIF"
 
 #: pretix/base/views/tasks.py:185
 msgid "An unexpected error has occurred, please try again later."
@@ -14424,6 +14405,8 @@ msgid ""
 "Formatting is not supported, as some accounting departments process mail "
 "automatically and do not handle formatted emails properly."
 msgstr ""
+"Formatierung wird nicht unterstützt, da einige Buchhaltungsabteilungen diese "
+"E-Mails automatisch einlesen und formatierte E-Mails nicht korrekt behandeln."
 
 #: pretix/control/forms/event.py:1356
 msgid ""
@@ -14879,7 +14862,7 @@ msgstr "bezahlt"
 #: pretix/control/forms/filter.py:1304
 msgctxt "subevent"
 msgid "Date doesn't start in selected date range."
-msgstr ""
+msgstr "Der Termin beginnt nicht im ausgewählten Datumsbereich."
 
 #: pretix/control/forms/filter.py:1360 pretix/control/forms/filter.py:1827
 msgid "Shop live and presale running"
@@ -28771,6 +28754,9 @@ msgid ""
 "automatically. We recommend that you rename these in your source file to "
 "avoid problems during import."
 msgstr ""
+"Mehrere Spalten in der CSV-Datei haben den selben Namen und wurden "
+"automatisch umbenannt. Wir empfehlen, diese Spalten in der Quelldatei "
+"umzubenennen, um Probleme beim Import zu vermeiden."
 
 #: pretix/control/views/modelimport.py:188
 msgid "The import was successful."
@@ -30433,7 +30419,7 @@ msgstr "Installiere das Python-Paket 'chardet' für verbesserten CSV-Import."
 
 #: pretix/plugins/banktransfer/camtimport.py:33
 msgid "Empty file or unknown format."
-msgstr ""
+msgstr "Leere Datei oder unbekanntes Format."
 
 #: pretix/plugins/banktransfer/payment.py:69
 msgid ""
@@ -32997,16 +32983,16 @@ msgid "Przelewy24"
 msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:417 pretix/plugins/stripe/payment.py:1836
-#, fuzzy
-#| msgid "Payment by bank transfer"
 msgid "Pay by bank"
-msgstr "Zahlung per Banküberweisung"
+msgstr "Zahlung per Onlinebanking"
 
 #: pretix/plugins/stripe/payment.py:422
 msgid ""
 "Currently only available for charges in GBP and customers with UK bank "
 "accounts, and in private preview for France and Germany."
 msgstr ""
+"Derzeit nur verfügbar für Zahlungen in GBP und Kunden mit britischen "
+"Bankkonten, private Vorschau für Frankreich und Deutschland."
 
 #: pretix/plugins/stripe/payment.py:429 pretix/plugins/stripe/payment.py:1789
 msgid "WeChat Pay"
@@ -33316,16 +33302,16 @@ msgstr ""
 "halte deine Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/payment.py:1835
-#, fuzzy
-#| msgid "PayPal via Stripe"
 msgid "Pay by bank via Stripe"
-msgstr "PayPal über Stripe"
+msgstr "Zahlung per Onlinebanking über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1841
 msgid ""
 "Pay by bank allows you to authorize a secure Open Banking payment from your "
 "banking app. Currently available only with a UK bank account."
 msgstr ""
+"Zahlung per Onlinebanking erlaubt die sichere Zahlung über Ihre Banking-App. "
+"Derzeit nur für britische Bankkonten verfügbar."
 
 #: pretix/plugins/stripe/payment.py:1861
 msgid "PayPal via Stripe"
@@ -33344,22 +33330,16 @@ msgstr ""
 "BankID zur Verfügung. Bitte halte deine Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/payment.py:1893
-#, fuzzy
-#| msgid "giropay via Stripe"
 msgid "PromptPay via Stripe"
-msgstr "giropay über Stripe"
+msgstr "PromptPay über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1898
-#, fuzzy
-#| msgid ""
-#| "This payment method is available to MobilePay app users in Denmark and "
-#| "Finland. Please have your app ready."
 msgid ""
 "This payment method is available to PromptPay users in Thailand. Please have "
 "your app ready."
 msgstr ""
-"Diese Zahlungsmethode steht den Nutzern der App MobilePay in Dänemark und "
-"Finnland zur Verfügung. Bitte halte deine App bereit."
+"Diese Zahlungsmethode steht den Nutzern von PromptPay in Thailand zur "
+"Verfügung. Bitte halte deine App bereit."
 
 #: pretix/plugins/stripe/payment.py:1917
 msgid "TWINT via Stripe"
@@ -33672,22 +33652,16 @@ msgid "Confirm payment: %(code)s"
 msgstr "Zahlung bestätigen: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:32
-#, fuzzy
-#| msgid ""
-#| "Please scan the barcode below to complete your WeChat payment. Once you "
-#| "have completed your payment, you can refresh this page."
 msgid ""
 "Please scan the QR code below to complete your PromptPay payment. Once you "
 "have completed your payment, you can refresh this page."
 msgstr ""
-"Bitte scanne den angezeigten Barcode um deine WeChat-Zahlung durchzuführen. "
-"Danach kannst du diese Seite neu laden."
+"Bitte scanne den angezeigten QR-Code, um deine PromptPay-Zahlung "
+"durchzuführen. Danach kannst du diese Seite neu laden."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:37
-#, fuzzy
-#| msgid "Create QR code"
 msgid "PromptPay QR code"
-msgstr "QR-Code erstellen"
+msgstr "PromptPay-QR-Code"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:20
 msgid "Confirming your payment…"
@@ -34728,15 +34702,11 @@ msgstr[1] ""
 "Du musst genau %(min_count)s Optionen aus dieser Kategorie auswählen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:26
-#, fuzzy, python-format
-#| msgid "You can choose at most one option from this category."
-#| msgid_plural ""
-#| "You can choose up to %(max_count)s options from this category."
+#, python-format
 msgid "You can choose one option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] "Du kannst höchstens eine Option aus dieser Kategorie auswählen."
-msgstr[1] ""
-"Du kannst höchstens %(max_count)s Optionen aus dieser Kategorie auswählen."
+msgstr[0] "Du kannst eine Option aus dieser Kategorie auswählen."
+msgstr[1] "Du kannst bis zu %(max_count)s Optionen aus dieser Kategorie auswählen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:34
 #, python-format
@@ -36848,6 +36818,8 @@ msgid ""
 "Your cart timeout was extended. Please note that some of the prices in your "
 "cart changed."
 msgstr ""
+"Die Ablaufzeit deines Warenkorbs wurde aktualisiert. Bitte beachte, dass "
+"sich Preise in deinem Warenkorb geändert haben."
 
 #: pretix/presale/views/cart.py:573
 msgid "Your cart timeout was extended."
