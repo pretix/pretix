@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-27 13:57+0000\n"
-"PO-Revision-Date: 2026-01-05 10:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2026-01-05 12:12+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -6546,7 +6546,7 @@ msgstr "価格"
 
 #: pretix/base/models/orders.py:2630
 msgid "Order position"
-msgstr "注文明細"
+msgstr "注文状況"
 
 #: pretix/base/models/orders.py:3201
 msgid "Cart ID (e.g. session key)"
