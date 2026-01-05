@@ -6551,7 +6551,7 @@ msgstr "価格"
 
 #: pretix/base/models/orders.py:2630
 msgid "Order position"
-msgstr "注文明細"
+msgstr "注文状況"
 
 #: pretix/base/models/orders.py:3201
 msgid "Cart ID (e.g. session key)"
