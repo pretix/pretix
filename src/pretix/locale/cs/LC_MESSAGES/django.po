@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-04 23:00+0000\n"
+"PO-Revision-Date: 2026-01-05 14:44+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1062,10 +1062,8 @@ msgid "Order total"
 msgstr "Celkem"
 
 #: pretix/base/datasync/sourcefields.py:398
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Product and variation name"
-msgstr "Název a varianta produktu"
+msgstr "Název produktu a název varianty"
 
 #: pretix/base/datasync/sourcefields.py:410 pretix/base/exporters/items.py:57
 #: pretix/base/exporters/orderlist.py:598
@@ -1430,7 +1428,7 @@ msgstr "Celé jméno"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:35
 #: pretix/presale/templates/pretixpresale/event/order.html:312
 msgid "Name"
-msgstr "Název"
+msgstr "Jméno"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:106
 msgid "Account active"
@@ -2049,7 +2047,7 @@ msgstr "Kategorie produktu"
 #: pretix/base/models/tax.py:321 pretix/control/forms/organizer.py:264
 #: pretix/control/templates/pretixcontrol/items/discounts.html:57
 msgid "Internal name"
-msgstr "Interní jméno"
+msgstr "Interní název"
 
 #: pretix/base/exporters/items.py:64 pretix/base/models/items.py:480
 msgid "Item name"
@@ -3433,22 +3431,23 @@ msgid ""
 msgstr ""
 
 #: pretix/base/forms/questions.py:1397
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid ""
 "The selected transmission type is not available in your country or for your "
 "type of address."
-msgstr "Vybraný typ média není v nastavení organizéru povolen."
+msgstr ""
+"Vámi zvolený způsob doručení faktury není dostupný pro vaši zemi nebo adresu."
 
 #: pretix/base/forms/questions.py:1406
 msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
 msgstr ""
+"Vámi zvolený způsob doručení faktury vyžaduje informace, které aktuálně "
+"nelze do formuláře vyplnit. Kontaktujte prosím organizátory."
 
 #: pretix/base/forms/questions.py:1410
 msgid "This field is required for the selected type of invoice transmission."
-msgstr ""
+msgstr "Toto pole je povinné pro vámi zvolený způsob doručení faktury."
 
 #: pretix/base/forms/user.py:54 pretix/control/forms/organizer.py:458
 #: pretix/control/forms/users.py:58
@@ -3565,11 +3564,8 @@ msgid "Individual customer"
 msgstr "Zákazník"
 
 #: pretix/base/invoicing/email.py:50
-#, fuzzy
-#| msgid ""
-#| "Please additionally send my invoice directly to our accounting department"
 msgid "Email invoice directly to accounting department"
-msgstr "Prosím o dodatečné zaslání faktury přímo našemu účetnímu oddělení"
+msgstr "Zaslat fakturu přímo účetnímu oddělení"
 
 #: pretix/base/invoicing/email.py:51
 msgid ""
@@ -6642,10 +6638,8 @@ msgid "This reference will be printed on your invoice for your convenience."
 msgstr "Tento odkaz bude pro vaše potřeby vytištěn na faktuře."
 
 #: pretix/base/models/orders.py:3534
-#, fuzzy
-#| msgid "Transaction time"
 msgid "Transmission type"
-msgstr "Čas transakce"
+msgstr "Způsob doručení faktury"
 
 #: pretix/base/models/orders.py:3632
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
