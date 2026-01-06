@@ -227,7 +227,9 @@ def test_placeholder_html_rendering_from_string(env):
               "Event website: [{event}](https://example.org/{event_slug})\n\n"
               "Other website: [{event}]({meta_Website})\n\n"
               "URL: {url}\n\n"
-              "URL with text: <a href=\"{url}\">Test</a>"
+              "URL with text: <a href=\"{url}\">Test</a>\n\n"
+              "URL with params: https://example.com/form?action=foo&eventid={event_slug}\n\n"
+              "URL with params and text: [Link & Text](https://example.com/form?action=foo&eventid={event_slug})\n\n"
     })
     djmail.outbox = []
     event, user, organizer = env
@@ -249,6 +251,8 @@ def test_placeholder_html_rendering_from_string(env):
     assert '**Meta**: *Beep*' in djmail.outbox[0].body
     assert 'URL: https://google.com' in djmail.outbox[0].body
     assert 'URL with text: <a href="https://google.com">Test</a>' in djmail.outbox[0].body
+    assert 'URL with params: https://example.com/form?action=foo&eventid=dummy' in djmail.outbox[0].body
+    assert 'URL with params and text: [Link & Text](https://example.com/form?action=foo&eventid=dummy)' in djmail.outbox[0].body
     assert '&lt;' not in djmail.outbox[0].body
     assert '&amp;' not in djmail.outbox[0].body
     html = _extract_html(djmail.outbox[0])
@@ -270,5 +274,15 @@ def test_placeholder_html_rendering_from_string(env):
     )
     assert re.search(
         r'URL with text: <a href="https://google.com" rel="noopener" style="[^"]+" target="_blank">Test</a>',
+        html
+    )
+    assert re.search(
+        r'URL with params: <a href="https://example.com/form\?action=foo&amp;eventid=dummy" rel="noopener" '
+        r'style="[^"]+" target="_blank">https://example.com/form\?action=foo&amp;eventid=dummy</a>',
+        html
+    )
+    assert re.search(
+        r'URL with params and text: <a href="https://example.com/form\?action=foo&amp;eventid=dummy" rel="noopener" '
+        r'style="[^"]+" target="_blank">Link &amp; Text</a>',
         html
     )
