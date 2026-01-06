@@ -36,7 +36,7 @@ dependencies = [
   "css-inline==0.19.*",
   "defusedcsv>=1.1.0",
   "dnspython==2.*",
-  "Django[argon2]==4.2.*,>=4.2.26",
+  "Django[argon2]==6.0.*",
   "django-bootstrap3==25.2",
   "django-compressor==4.5.1",
   "django-countries==8.2.*",
