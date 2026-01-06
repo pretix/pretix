@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2025-11-22 23:00+0000\n"
+"PO-Revision-Date: 2026-01-06 14:46+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
-"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
-">\n"
+"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -3874,6 +3874,8 @@ msgstr ""
 #: pretix/base/invoicing/peppol.py:164
 msgid "The Peppol participant ID is not registered on the Peppol network."
 msgstr ""
+"L'identifiant Peppol du participant n'est pas enregistré sur le réseau "
+"Peppol."
 
 #: pretix/base/invoicing/peppol.py:184
 msgid "Peppol participant ID"
@@ -8495,6 +8497,8 @@ msgid ""
 "Some products can no longer be purchased and have been removed from your "
 "cart for the following reason: %s"
 msgstr ""
+"Certains produits ne peuvent plus être achetés et ont été retirés de votre "
+"panier pour la raison suivante : %s"
 
 #: pretix/base/services/cart.py:117
 msgid ""
@@ -9690,21 +9694,15 @@ msgid "Uncategorized"
 msgstr "Non catégorisé"
 
 #: pretix/base/services/tax.py:43
-#, fuzzy
-#| msgid ""
-#| "Your VAT ID could not be checked, as the VAT checking service of your "
-#| "country is currently not available. We will therefore need to charge VAT "
-#| "on your invoice. You can get the tax amount back via the VAT "
-#| "reimbursement process."
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country is currently not available. We will therefore need to charge you the "
 "same tax rate as if you did not enter a VAT ID."
 msgstr ""
-"Votre numéro de TVA n' a pas pu être vérifié, car le service de contrôle de "
-"la TVA de votre pays n'est actuellement pas disponible. Nous devons donc "
-"facturer la TVA sur votre facture. Vous pouvez récupérer le montant de la "
-"taxe via le processus de remboursement de la TVA."
+"Votre numéro d'identification TVA n'a pas pu être vérifié, car le service de "
+"vérification de la TVA de votre pays n'est actuellement pas disponible. Nous "
+"devrons donc vous facturer le même taux de taxe que si vous n'aviez pas "
+"saisi de numéro d'identification TVA."
 
 #: pretix/base/services/tax.py:47 pretix/base/services/tax.py:366
 #: pretix/base/services/tax.py:393
@@ -10144,24 +10142,18 @@ msgid "Ask for VAT ID"
 msgstr "Demander l'identification TVA"
 
 #: pretix/base/settings.py:632
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Only works if an invoice address is asked for. VAT ID is never required "
-#| "and only requested from business customers in the following countries: "
-#| "{countries}"
+#, python-brace-format
 msgid ""
 "Only works if an invoice address is asked for. VAT ID is only requested from "
 "business customers in the following countries: {countries}."
 msgstr ""
-"Ne fonctionne que si une adresse de facturation est demandée. Le numéro de "
-"TVA n’est jamais requis et n’est demandé qu’aux clients professionnels des "
-"pays suivants : {countries}"
+"Fonctionne uniquement si une adresse de facturation est demandée. Le numéro "
+"d'identification TVA n'est demandé qu'aux clients professionnels dans les "
+"pays suivants : {countries}."
 
 #: pretix/base/settings.py:651
-#, fuzzy
-#| msgid "Require name"
 msgid "Require VAT ID in"
-msgstr "Nom requis"
+msgstr "Exiger un numéro d'identification TVA dans"
 
 #: pretix/base/settings.py:657
 msgid ""
@@ -10169,6 +10161,10 @@ msgid ""
 "ID in all countries. VAT ID will be required for all business addresses in "
 "the selected countries."
 msgstr ""
+"Le numéro d'identification TVA est facultatif par défaut, car toutes les "
+"entreprises ne se voient pas attribuer un numéro d'identification TVA dans "
+"tous les pays. Le numéro d'identification TVA sera obligatoire pour toutes "
+"les adresses professionnelles dans les pays sélectionnés."
 
 #: pretix/base/settings.py:672
 msgid "Invoice address explanation"
@@ -13964,11 +13960,9 @@ msgstr ""
 "origine."
 
 #: pretix/base/views/js_helpers.py:41
-#, fuzzy
-#| msgid "ID"
 msgctxt "tax_id_swiss"
 msgid "UID"
-msgstr "ID"
+msgstr "UID"
 
 #. Translators: Only translate to French (IDE) and Italien (IDI), otherwise keep the same
 #. Awareness around VAT IDs differes by EU country. For example, in Germany the VAT ID is assigned
@@ -13978,35 +13972,27 @@ msgstr "ID"
 #. number (Partita IVA) and also used on domestic transactions. So someone who never purchased something international
 #. for their company, might still know the value, if we call it the right way and not just "VAT ID".
 #: pretix/base/views/js_helpers.py:49
-#, fuzzy
-#| msgid "VAT ID"
 msgctxt "tax_id_italy"
 msgid "VAT ID / P.IVA"
-msgstr "Identifiant de TVA"
+msgstr "Numéro d'identification TVA"
 
 #. Translators: Translate to only "P.IVA" in Italian, keep second part as-is in other languages
 #: pretix/base/views/js_helpers.py:50
-#, fuzzy
-#| msgid "VAT ID"
 msgctxt "tax_id_greece"
 msgid "VAT ID / TIN"
-msgstr "Identifiant de TVA"
+msgstr "Numéro d'identification TVA / TIN"
 
 #. Translators: Translate to only "ΑΦΜ" in Greek
 #: pretix/base/views/js_helpers.py:51
-#, fuzzy
-#| msgid "VAT ID"
 msgctxt "tax_id_spain"
 msgid "VAT ID / NIF"
-msgstr "Identifiant de TVA"
+msgstr "Numéro d'identification TVA"
 
 #. Translators: Translate to only "NIF" in Spanish
 #: pretix/base/views/js_helpers.py:52
-#, fuzzy
-#| msgid "VAT ID"
 msgctxt "tax_id_portugal"
 msgid "VAT ID / NIF"
-msgstr "Identifiant de TVA"
+msgstr "Numéro d'identification TVA / NIF"
 
 #: pretix/base/views/tasks.py:185
 msgid "An unexpected error has occurred, please try again later."
@@ -14566,6 +14552,9 @@ msgid ""
 "Formatting is not supported, as some accounting departments process mail "
 "automatically and do not handle formatted emails properly."
 msgstr ""
+"Le formatage n'est pas pris en charge, car certains services comptables "
+"traitent automatiquement le courrier et ne gèrent pas correctement les e-"
+"mails formatés."
 
 #: pretix/control/forms/event.py:1356
 msgid ""
@@ -15017,7 +15006,7 @@ msgstr "Payé"
 #: pretix/control/forms/filter.py:1304
 msgctxt "subevent"
 msgid "Date doesn't start in selected date range."
-msgstr ""
+msgstr "La date ne commence pas dans la plage de dates sélectionnée."
 
 #: pretix/control/forms/filter.py:1360 pretix/control/forms/filter.py:1827
 msgid "Shop live and presale running"
