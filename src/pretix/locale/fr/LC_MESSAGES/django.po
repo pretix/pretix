@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-06 14:46+0000\n"
+"PO-Revision-Date: 2026-01-06 23:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
 "fr/>\n"
@@ -13974,25 +13974,25 @@ msgstr "UID"
 #: pretix/base/views/js_helpers.py:49
 msgctxt "tax_id_italy"
 msgid "VAT ID / P.IVA"
-msgstr "Numéro d'identification TVA"
+msgstr "Numéro de TVA intracommunautaire"
 
 #. Translators: Translate to only "P.IVA" in Italian, keep second part as-is in other languages
 #: pretix/base/views/js_helpers.py:50
 msgctxt "tax_id_greece"
 msgid "VAT ID / TIN"
-msgstr "Numéro d'identification TVA / TIN"
+msgstr "Numéro de TVA intracommunautaire / TIN"
 
 #. Translators: Translate to only "ΑΦΜ" in Greek
 #: pretix/base/views/js_helpers.py:51
 msgctxt "tax_id_spain"
 msgid "VAT ID / NIF"
-msgstr "Numéro d'identification TVA"
+msgstr "Numéro de TVA intracommunautaire"
 
 #. Translators: Translate to only "NIF" in Spanish
 #: pretix/base/views/js_helpers.py:52
 msgctxt "tax_id_portugal"
 msgid "VAT ID / NIF"
-msgstr "Numéro d'identification TVA / NIF"
+msgstr "Numéro de TVA intracommunautaire / NIF"
 
 #: pretix/base/views/tasks.py:185
 msgid "An unexpected error has occurred, please try again later."
@@ -29015,6 +29015,9 @@ msgid ""
 "automatically. We recommend that you rename these in your source file to "
 "avoid problems during import."
 msgstr ""
+"Plusieurs colonnes du fichier CSV portent le même nom et ont été renommées "
+"automatiquement. Nous vous recommandons de les renommer dans votre fichier "
+"source afin d'éviter tout problème lors de l'importation."
 
 #: pretix/control/views/modelimport.py:188
 msgid "The import was successful."
@@ -30705,7 +30708,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/camtimport.py:33
 msgid "Empty file or unknown format."
-msgstr ""
+msgstr "Fichier vide ou format inconnu."
 
 #: pretix/plugins/banktransfer/payment.py:69
 msgid ""
@@ -33300,16 +33303,17 @@ msgid "Przelewy24"
 msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:417 pretix/plugins/stripe/payment.py:1836
-#, fuzzy
-#| msgid "Payment by bank transfer"
 msgid "Pay by bank"
-msgstr "Paiement par virement bancaire"
+msgstr "Payer par virement bancaire"
 
 #: pretix/plugins/stripe/payment.py:422
 msgid ""
 "Currently only available for charges in GBP and customers with UK bank "
 "accounts, and in private preview for France and Germany."
 msgstr ""
+"Actuellement disponible uniquement pour les frais en livre sterling et les "
+"clients disposant d'un compte bancaire au Royaume-Uni, et pour les clients "
+"en test restreint pour la France et l'Allemagne."
 
 #: pretix/plugins/stripe/payment.py:429 pretix/plugins/stripe/payment.py:1789
 msgid "WeChat Pay"
@@ -33626,16 +33630,17 @@ msgstr ""
 "connexion à porter de main."
 
 #: pretix/plugins/stripe/payment.py:1835
-#, fuzzy
-#| msgid "PayPal via Stripe"
 msgid "Pay by bank via Stripe"
-msgstr "PayPal via Stripe"
+msgstr "Payer par virement bancaire via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1841
 msgid ""
 "Pay by bank allows you to authorize a secure Open Banking payment from your "
 "banking app. Currently available only with a UK bank account."
 msgstr ""
+"Le paiement par virement bancaire vous permet d'autoriser un paiement "
+"sécurisé via Open Banking depuis votre application bancaire. Actuellement "
+"disponible uniquement avec un compte bancaire britannique."
 
 #: pretix/plugins/stripe/payment.py:1861
 msgid "PayPal via Stripe"
@@ -33654,22 +33659,16 @@ msgstr ""
 "suédoises Swish et BankID. Veuillez préparer votre application."
 
 #: pretix/plugins/stripe/payment.py:1893
-#, fuzzy
-#| msgid "giropay via Stripe"
 msgid "PromptPay via Stripe"
-msgstr "giropay via Stripe"
+msgstr "PromptPay via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1898
-#, fuzzy
-#| msgid ""
-#| "This payment method is available to MobilePay app users in Denmark and "
-#| "Finland. Please have your app ready."
 msgid ""
 "This payment method is available to PromptPay users in Thailand. Please have "
 "your app ready."
 msgstr ""
-"Ce mode de paiement est disponible pour les utilisateurs de l'application "
-"MobilePay au Danemark et en Finlande. Veuillez préparer votre application."
+"Ce mode de paiement est disponible pour les utilisateurs de PromptPay en "
+"Thaïlande. Veuillez préparer votre application."
 
 #: pretix/plugins/stripe/payment.py:1917
 msgid "TWINT via Stripe"
@@ -33984,23 +33983,17 @@ msgid "Confirm payment: %(code)s"
 msgstr "Confirmer le paiement : %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:32
-#, fuzzy
-#| msgid ""
-#| "Please scan the barcode below to complete your WeChat payment. Once you "
-#| "have completed your payment, you can refresh this page."
 msgid ""
 "Please scan the QR code below to complete your PromptPay payment. Once you "
 "have completed your payment, you can refresh this page."
 msgstr ""
-"Veuillez scanner le code-barres ci-dessous pour effectuer votre paiement "
-"WeChat. Une fois que vous avez effectué votre paiement, vous pouvez "
-"actualiser cette page."
+"Veuillez scanner le code QR ci-dessous pour effectuer votre paiement "
+"PromptPay. Une fois votre paiement effectué, vous pouvez actualiser cette "
+"page."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:37
-#, fuzzy
-#| msgid "Create QR code"
 msgid "PromptPay QR code"
-msgstr "Créer un code QR"
+msgstr "Code QR PromptPay"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:20
 msgid "Confirming your payment…"
@@ -35057,14 +35050,11 @@ msgstr[0] "Vous devez choisir exactement une option de cette catégorie."
 msgstr[1] "Vous devez choisir les options %(min_count)s de cette catégorie."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:26
-#, fuzzy, python-format
-#| msgid "You can choose at most one option from this category."
-#| msgid_plural ""
-#| "You can choose up to %(max_count)s options from this category."
+#, python-format
 msgid "You can choose one option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] "Vous pouvez choisir au plus une option de cette catégorie."
-msgstr[1] "Vous pouvez choisir jusqu' à %(max_count)s dans cette catégorie."
+msgstr[0] "Vous pouvez choisir une option dans cette catégorie."
+msgstr[1] "Vous pouvez choisir jusqu'à %(max_count)s options dans cette catégorie."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:34
 #, python-format
@@ -37195,6 +37185,8 @@ msgid ""
 "Your cart timeout was extended. Please note that some of the prices in your "
 "cart changed."
 msgstr ""
+"Le délai d'expiration de votre panier a été prolongé. Veuillez noter que "
+"certains prix dans votre panier ont changé."
 
 #: pretix/presale/views/cart.py:573
 msgid "Your cart timeout was extended."
