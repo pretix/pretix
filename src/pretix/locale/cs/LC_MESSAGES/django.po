@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-05 15:14+0000\n"
+"PO-Revision-Date: 2026-01-08 04:00+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -1881,7 +1881,7 @@ msgstr "IČO"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:327
 msgid "VAT ID"
-msgstr "DPH"
+msgstr "DIČ"
 
 #: pretix/base/exporters/invoices.py:216 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:218 pretix/base/exporters/invoices.py:219
@@ -1926,7 +1926,7 @@ msgstr "Příjemce"
 #: pretix/control/templates/pretixcontrol/order/index.html:1064
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:111
 msgid "Internal reference"
-msgstr "Interní číslo"
+msgstr "Interní označení"
 
 #: pretix/base/exporters/invoices.py:226 pretix/base/models/tax.py:161
 #: pretix/control/forms/event.py:1628
@@ -2594,7 +2594,7 @@ msgstr "Kód vstupenky"
 #: pretix/base/modelimport_vouchers.py:272
 #: pretix/plugins/checkinlists/exporters.py:527
 msgid "Seat ID"
-msgstr "ID sedadla"
+msgstr "ID místa"
 
 #: pretix/base/exporters/orderlist.py:623
 #: pretix/plugins/checkinlists/exporters.py:528
@@ -2614,7 +2614,7 @@ msgstr "Řada"
 #: pretix/base/exporters/orderlist.py:626
 #: pretix/plugins/checkinlists/exporters.py:531
 msgid "Seat number"
-msgstr "Číslo sedadla"
+msgstr "Číslo místa"
 
 #: pretix/base/exporters/orderlist.py:627
 #: pretix/control/templates/pretixcontrol/order/change.html:224
@@ -3345,7 +3345,7 @@ msgstr "Prosím uveďte kratší jméno."
 #: pretix/base/forms/questions.py:314
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "PSČ"
+msgstr "Mezinárodní předvolba"
 
 #: pretix/base/forms/questions.py:340
 msgctxt "phonenumber"
@@ -3561,7 +3561,7 @@ msgstr "Firma nebo instituce"
 
 #: pretix/base/forms/widgets.py:238
 msgid "Individual customer"
-msgstr "Zákazník"
+msgstr "Fyzická osoba"
 
 #: pretix/base/invoicing/email.py:50
 msgid "Email invoice directly to accounting department"
@@ -3571,19 +3571,15 @@ msgstr "Zaslat fakturu přímo účetnímu oddělení"
 msgid ""
 "If not selected, the invoice will be sent to you using the email address "
 "listed above."
-msgstr ""
+msgstr "Pokud tuto možnost nezvolíte, zašleme fakturu na e-mail uvedený výše."
 
 #: pretix/base/invoicing/email.py:55
-#, fuzzy
-#| msgid "Email address verified"
 msgid "Email address for invoice"
-msgstr "E-mailová adresa ověřena"
+msgstr "E-mail pro zaslání faktury"
 
 #: pretix/base/invoicing/email.py:91
-#, fuzzy
-#| msgid "Preview email"
 msgid "PDF via email"
-msgstr "Náhled e-mailu"
+msgstr "PDF do e-mailu"
 
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
@@ -3642,7 +3638,7 @@ msgstr "Faktura od"
 #: pretix/base/invoicing/pdf.py:433
 msgctxt "invoice"
 msgid "Invoice to"
-msgstr "Faktura na"
+msgstr "Fakturováno"
 
 #: pretix/base/invoicing/pdf.py:470 pretix/base/invoicing/pdf.py:1221
 msgctxt "invoice"
@@ -3672,12 +3668,12 @@ msgstr "Datum zrušení"
 #: pretix/base/invoicing/pdf.py:504
 msgctxt "invoice"
 msgid "Original invoice date"
-msgstr "Původní datum faktury"
+msgstr "Datum originální faktury"
 
 #: pretix/base/invoicing/pdf.py:511 pretix/base/invoicing/pdf.py:1258
 msgctxt "invoice"
 msgid "Invoice date"
-msgstr "Datum faktury"
+msgstr "Datum vystavení"
 
 #: pretix/base/invoicing/pdf.py:527
 msgctxt "invoice"
@@ -3704,7 +3700,7 @@ msgstr "Faktura č. {num}"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "Referenční číslo zákazníka: {reference}"
+msgstr "Interní označení: {reference}"
 
 #: pretix/base/invoicing/pdf.py:668
 msgctxt "invoice"
@@ -3732,7 +3728,7 @@ msgstr "Faktura"
 #: pretix/presale/templates/pretixpresale/event/order.html:244
 msgctxt "invoice"
 msgid "Cancellation"
-msgstr "Zrušení"
+msgstr "Storno"
 
 #: pretix/base/invoicing/pdf.py:732 pretix/base/invoicing/pdf.py:740
 msgctxt "invoice"
@@ -3768,13 +3764,13 @@ msgstr "Suma"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr "Jednotlivá cena: {net_price} netto / {gross_price} brutto"
+msgstr "Jednotková cena: {net_price} netto / {gross_price} brutto"
 
 #: pretix/base/invoicing/pdf.py:900
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Jednotná cena: {price}"
+msgstr "Jednotková cena: {price}"
 
 #: pretix/base/invoicing/pdf.py:943 pretix/base/invoicing/pdf.py:948
 msgctxt "invoice"
@@ -3802,12 +3798,10 @@ msgid "Remaining amount"
 msgstr "Zbývající částka"
 
 #: pretix/base/invoicing/pdf.py:1008
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Event date: {date_range}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "Datum akce: {date_range}"
+msgstr "Fakturované období: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:1039
 msgctxt "invoice"
@@ -4175,7 +4169,7 @@ msgstr "Bylo nalezeno více shodných míst."
 #: pretix/base/modelimport_orders.py:628
 #: pretix/base/modelimport_vouchers.py:293
 msgid "No matching seat was found."
-msgstr "Nebylo nalezeno žádné odpovídající sedadlo."
+msgstr "Nebylo nalezeno žádné odpovídající místo."
 
 #: pretix/base/modelimport_orders.py:631
 #: pretix/base/modelimport_vouchers.py:296 pretix/base/services/cart.py:220
@@ -4280,7 +4274,7 @@ msgstr "Pokud si vyberete místo, musíte si vybrat datum."
 
 #: pretix/base/modelimport_vouchers.py:299 pretix/base/models/vouchers.py:516
 msgid "You need to choose a specific product if you select a seat."
-msgstr "Pokud si vyberete sedadlo, musíte si vybrat konkrétní produkt."
+msgstr "Pokud si vyberete místo, musíte zvolit konkrétní produkt."
 
 #: pretix/base/modelimport_vouchers.py:302 pretix/base/models/vouchers.py:519
 msgid "Seat-specific vouchers can only be used once."
@@ -4289,7 +4283,7 @@ msgstr "Poukazy na konkrétní místo lze použít pouze jednou."
 #: pretix/base/modelimport_vouchers.py:306 pretix/base/models/vouchers.py:522
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "Pro toto sedadlo je třeba vybrat produkt \"{prod}\"."
+msgstr "Pro toto místo je třeba vybrat produkt \"{prod}\"."
 
 #: pretix/base/modelimport_vouchers.py:318 pretix/base/models/vouchers.py:288
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:129
@@ -5237,13 +5231,13 @@ msgstr ""
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr "DIČ: %s"
+msgstr "IČO: %s"
 
 #: pretix/base/models/invoices.py:240 pretix/base/services/invoices.py:155
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr "IČO: %s"
+msgstr "DIČ: %s"
 
 #: pretix/base/models/items.py:93
 msgid "Category name"
@@ -6446,7 +6440,7 @@ msgstr "Objednaný produkt \"{item}\" již není k dispozici."
 #: pretix/base/models/orders.py:1066
 #, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr "Sedadlo \"{seat}\" již není k dispozici.."
+msgstr "Místo \"{seat}\" již není k dispozici."
 
 #: pretix/base/models/orders.py:1067
 #, python-brace-format
@@ -6635,7 +6629,7 @@ msgstr "Obchodní zákazník"
 
 #: pretix/base/models/orders.py:3407
 msgid "This reference will be printed on your invoice for your convenience."
-msgstr "Tento odkaz bude pro vaše potřeby vytištěn na faktuře."
+msgstr "Tato informace bude uvedena na faktuře pro vaše potřeby."
 
 #: pretix/base/models/orders.py:3534
 msgid "Transmission type"
@@ -6831,7 +6825,7 @@ msgstr "Řada {number}"
 #: pretix/base/models/seating.py:205
 #, python-brace-format
 msgid "Seat {number}"
-msgstr "Sedadlo {number}"
+msgstr "Místo {number}"
 
 #: pretix/base/models/tax.py:143
 msgid "Standard rates"
@@ -7273,7 +7267,7 @@ msgstr ""
 #: pretix/base/models/vouchers.py:507
 #, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr "Zadané ID sedadla \"{id}\" pro tuto událost neexistuje."
+msgstr "Zadané ID místa \"{id}\" pro tuto událost neexistuje."
 
 #: pretix/base/models/vouchers.py:511
 #, python-brace-format
@@ -7314,7 +7308,7 @@ msgstr "Tento produkt není v současné době k dispozici."
 
 #: pretix/base/models/waitinglist.py:186
 msgid "No seat with this product is currently available."
-msgstr "K tomuto produktu není v současné době k dispozici žádné sedadlo."
+msgstr "K tomuto produktu nejsou v současné době k dispozici žádná místa."
 
 #: pretix/base/models/waitinglist.py:189
 msgid "A voucher has already been sent to this person."
@@ -8133,11 +8127,11 @@ msgstr ""
 
 #: pretix/base/pdf.py:505
 msgid "Seat: Full name"
-msgstr "Sedadlo: Celé jméno"
+msgstr "Místo: Celé jméno"
 
 #: pretix/base/pdf.py:506
 msgid "Ground floor, Row 3, Seat 4"
-msgstr "Přízemí, řada 3, sedadlo 4"
+msgstr "Přízemí, řada 3, místo 4"
 
 #: pretix/base/pdf.py:508 pretix/base/pdf.py:514
 #: pretix/control/forms/orders.py:344
@@ -8146,7 +8140,7 @@ msgstr "včetně všech daní"
 
 #: pretix/base/pdf.py:511
 msgid "Seat: zone"
-msgstr "Sedadlo: zóna"
+msgstr "Místo: zóna"
 
 #: pretix/base/pdf.py:512
 msgid "Ground floor"
@@ -8154,11 +8148,11 @@ msgstr "parket"
 
 #: pretix/base/pdf.py:517
 msgid "Seat: row"
-msgstr "sedadlo: řada"
+msgstr "Místo: řada"
 
 #: pretix/base/pdf.py:522
 msgid "Seat: seat number"
-msgstr "sedadlo: číslo"
+msgstr "Místo: číslo"
 
 #: pretix/base/pdf.py:527
 msgid "Date and time of first scan"
@@ -8554,7 +8548,7 @@ msgstr "Tento poukaz není platný pro tento produkt."
 
 #: pretix/base/services/cart.py:191
 msgid "This voucher is not valid for this seat."
-msgstr "Tento poukaz není platný pro toto sedadlo."
+msgstr "Tento poukaz není platný pro toto místo."
 
 #: pretix/base/services/cart.py:193
 msgid ""
@@ -10354,11 +10348,8 @@ msgid "Automatic, but prefer invoice date over event date"
 msgstr ""
 
 #: pretix/base/settings.py:1169 pretix/base/settings.py:1180
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice date"
-msgstr "Datum faktury"
+msgstr "Datum vystavení"
 
 #: pretix/base/settings.py:1173
 #, fuzzy
@@ -10411,11 +10402,11 @@ msgstr "ulice Alberta-Einstein 52"
 
 #: pretix/base/settings.py:1299
 msgid "Domestic tax ID"
-msgstr "Domácí daňové identifikační číslo"
+msgstr "Lokální identifikační číslo"
 
 #: pretix/base/settings.py:1300
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr "např. daňové číslo v Německu, číslo ABN v Austrálii, …"
+msgstr "např. IČO v Česku, daňové číslo v Německu, číslo ABN v Austrálii, …"
 
 #: pretix/base/settings.py:1310
 msgid "EU VAT ID"
@@ -12707,7 +12698,7 @@ msgstr "Pan"
 #: pretix/base/settings.py:3873
 msgctxt "person_name"
 msgid "Degree (after name)"
-msgstr "titul (za jménem)"
+msgstr "Titul (za jménem)"
 
 #: pretix/base/settings.py:3895
 msgctxt "person_name_sample"
@@ -12922,7 +12913,7 @@ msgstr "Očekávaný název hostitele podle konfigurace"
 
 #: pretix/base/templates/400_hostname.html:26
 msgid "Received headers"
-msgstr "Přijaté titulky"
+msgstr "Přijaté hlavičky"
 
 #: pretix/base/templates/400_hostname.html:32
 msgid "ignored"
@@ -15751,7 +15742,7 @@ msgstr "Doplňkový produkt k"
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:23
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:101
 msgid "Seat"
-msgstr "Sedadlo"
+msgstr "Místo"
 
 #: pretix/control/forms/orders.py:348
 #: pretix/control/templates/pretixcontrol/order/change.html:182
@@ -16557,7 +16548,7 @@ msgstr "Pozice #{posid}: Použité členství bylo změněno."
 #: pretix/control/logdisplay.py:117
 #, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
-msgstr "Pozice #{posid}: Sedadlo \" {old_seat}\" se změnilo na \"{new_seat}\"."
+msgstr "Pozice #{posid}: Místo \" {old_seat}\" se změnilo na \"{new_seat}\"."
 
 #: pretix/control/logdisplay.py:127
 #, python-brace-format
@@ -18641,7 +18632,7 @@ msgstr "běží v režimu vývoje"
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr "Pokud to trvá déle než několik minut, kontaktujte nás."
+msgstr "Pokud akce trvá déle než několik minut, kontaktujte nás."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
@@ -21587,9 +21578,8 @@ msgid "August"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:24
-#, fuzzy
 msgid "September"
-msgstr "Číslo sedadla"
+msgstr "Září"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:25
 msgid "October"
@@ -23309,12 +23299,12 @@ msgstr "Celkem"
 #: pretix/control/templates/pretixcontrol/order/index.html:789
 #: pretix/presale/templates/pretixpresale/event/order.html:210
 msgid "Successful payments"
-msgstr ""
+msgstr "Úspěšné platby"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:798
 #: pretix/presale/templates/pretixpresale/event/order.html:219
 msgid "Pending total"
-msgstr ""
+msgstr "Čeká na platbu"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:824
 #: pretix/control/templates/pretixcontrol/search/payments.html:88
@@ -28356,7 +28346,7 @@ msgstr ""
 #: pretix/control/views/organizer.py:3483
 #: pretix/control/views/organizer.py:3527
 msgid "Your changes could not be saved."
-msgstr ""
+msgstr "Vaše změny nebyly uloženy."
 
 #: pretix/control/views/organizer.py:982
 msgid "The selected team cannot be deleted."
@@ -30853,7 +30843,7 @@ msgstr "Stránka %d z %d"
 #: pretix/plugins/reports/exporters.py:210
 #, python-format
 msgid "Page %d"
-msgstr "Strana %dd"
+msgstr "Stránka %dd"
 
 #: pretix/plugins/reports/exporters.py:212
 #, python-format
@@ -33199,7 +33189,7 @@ msgstr "Váš košík"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
-msgstr "Nákupní košík vypršel"
+msgstr "Rezervace košíku vypršela"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
 msgid "Show full cart"
@@ -33430,7 +33420,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:9
 msgid "Before we continue, we need you to answer some questions."
-msgstr "Před provedením objednávky prosím odpovězte na níže uvedené otázky."
+msgstr "Pro dokončení objednávky potřebujeme následující údaje."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:49
 msgid "Auto-fill with address"
@@ -33444,7 +33434,7 @@ msgstr "Vyplnit formulář"
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:93
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:170
 msgid "Copy answers from above"
-msgstr "Zkopírujte odpovědi z výše uvedených položek"
+msgstr "Zkopírujte odpovědi z předchozího"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:150
 msgid "Auto-fill with profile"
@@ -33569,7 +33559,7 @@ msgstr "Zobrazit varianty"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:147
 #: pretix/presale/templates/pretixpresale/event/voucher.html:304
 msgid "Original price:"
-msgstr "Originální cena:"
+msgstr "Původní cena:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:136
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:278
@@ -33717,7 +33707,7 @@ msgstr "Celková cena"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:46
 msgid "Seat:"
-msgstr "Sedadlo:"
+msgstr "Místo:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:61
 msgctxt "subevent"
@@ -33862,16 +33852,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
-#, fuzzy
-#| msgid "Event description"
 msgid "Renew reservation"
-msgstr "Popis akce"
+msgstr "Obnovit rezervaci"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:526
-#, fuzzy
-#| msgid "Reservation period"
 msgid "Reservation renewed"
-msgstr "Doba rezervace"
+msgstr "Rezervace obnovena"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:532
 msgid "Overview of your ordered products."
@@ -34176,14 +34162,12 @@ msgstr "Zobrazit obraz %(item)s v celé velikosti"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:131
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:288
-#, fuzzy, python-format
-#| msgid "%(count)s event"
-#| msgid_plural "%(count)s events"
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "%(count)s akce"
-msgstr[1] "%(count)s akce"
-msgstr[2] "%(count)s akcí"
+msgstr[0] "%(amount)s× ve vašem košíku"
+msgstr[1] "%(amount)s× ve vašem košíku"
+msgstr[2] "%(amount)s× ve vašem košíku"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:209
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:374
@@ -34567,7 +34551,7 @@ msgstr "Změňte své údaje"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:335
 msgid "Internal Reference"
-msgstr "Interní reference"
+msgstr "Interní označení"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:354
 msgctxt "action"
@@ -35631,12 +35615,12 @@ msgid ""
 "Your cart timeout was extended. Please note that some of the prices in your "
 "cart changed."
 msgstr ""
+"Platnost vašeho košíku byla prodloužena. Berte prosím na vědomí, že ceny "
+"některých položek ve vašem košíku se změnily."
 
 #: pretix/presale/views/cart.py:573
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "Your cart timeout was extended."
-msgstr "Váš košík byl aktualizován."
+msgstr "Platnost vašeho košíku byla prodloužena."
 
 #: pretix/presale/views/cart.py:588
 msgid "The products have been successfully added to your cart."
