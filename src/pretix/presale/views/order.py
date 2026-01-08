@@ -113,8 +113,14 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
 
         if o is False:
             login_url = eventreverse(self.request.organizer, 'presale:organizer.customer.login', kwargs={})
-            next_url = quote(self.request.get_full_path())
-            return redirect_to_url(f'{login_url}?next={next_url}')
+
+            if hasattr(self.request, "event_domain") and self.request.event_domain:
+                next_url = quote(self.request.scheme + "://" + self.request.get_host() + self.request.get_full_path())
+                return redirect_to_url(f'{login_url}?next={next_url}&request_cross_domain_customer_auth=true')
+
+            else:
+                next_url = quote(self.request.get_full_path())
+                return redirect_to_url(f'{login_url}?next={next_url}')
 
         return None
 
