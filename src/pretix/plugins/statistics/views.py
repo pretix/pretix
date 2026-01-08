@@ -103,7 +103,10 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 day = o['datetime'].astimezone(tz).date()
                 ordered_by_day[day] = ordered_by_day.get(day, 0) + 1
             paid_by_day = {}
-            for o in oqs.filter(event=self.request.event, payment_date__isnull=False).values('payment_date'):
+            for o in oqs.filter(
+                event=self.request.event, payment_date__isnull=False,
+                status=Order.STATUS_PAID, all_positions__canceled=False
+            ).distinct().values('payment_date'):
                 day = o['payment_date'].astimezone(tz).date()
                 paid_by_day[day] = paid_by_day.get(day, 0) + 1
 
