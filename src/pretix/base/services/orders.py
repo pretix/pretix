@@ -914,7 +914,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
         sales_channel.identifier,
         [
             (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.line_price_gross,
-             bool(cp.addon_to), cp.is_bundled, cp.listed_price - cp.price_after_voucher)
+             cp.addon_to, cp.is_bundled, cp.listed_price - cp.price_after_voucher)
             for cp in sorted_positions
         ]
     )

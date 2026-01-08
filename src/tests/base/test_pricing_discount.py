@@ -781,6 +781,39 @@ testcases_single_rule = [
         )
     ),
 
+    # Distribute discounts somewhat equally over addon groups
+    (
+        (
+            Discount(
+                condition_min_count=3,
+                benefit_discount_matching_percent=20,
+                condition_apply_to_addons=True,
+                benefit_only_apply_to_cheapest_n_matches=1,
+                condition_ignore_voucher_discounted=True,
+            ),
+        ),
+        (
+            (2, 1, now(), Decimal('0.00'), None, False, Decimal('10.00')),  # Main product
+            (1, 1, now(), Decimal('100.00'), 1, False, Decimal('0.00')),
+            (1, 1, now(), Decimal('100.00'), 1, False, Decimal('0.00')),
+            (1, 1, now(), Decimal('100.00'), 1, False, Decimal('0.00')),
+            (2, 1, now(), Decimal('0.00'), None, False, Decimal('10.00')),  # Main product
+            (1, 1, now(), Decimal('100.00'), 2, False, Decimal('0.00')),
+            (1, 1, now(), Decimal('100.00'), 2, False, Decimal('0.00')),
+            (1, 1, now(), Decimal('100.00'), 2, False, Decimal('0.00')),
+        ),
+        (
+            Decimal('0.00'),
+            Decimal('100.00'),
+            Decimal('100.00'),
+            Decimal('80.00'),
+            Decimal('0.00'),
+            Decimal('100.00'),
+            Decimal('100.00'),
+            Decimal('80.00'),
+        )
+    ),
+
     # Ignore bundled
     (
         (
