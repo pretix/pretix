@@ -178,7 +178,9 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Require login to access order confirmation pages"),
-            help_text=_("If enabled, users who were logged in at the time of purchase must also log in to access their order information."),
+            help_text=_("If enabled, users who were logged in at the time of purchase must also log in to access their order information. "
+                        "If a customer account is created while placing an order, the restriction only becomes active after the customer "
+                        "account is activated."),
             widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
         )
     },
