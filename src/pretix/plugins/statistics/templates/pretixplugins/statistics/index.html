@@ -45,10 +45,19 @@
                 {% endif %}
                 <p class="help-block">
                     <small>
-                        {% blocktrans trimmed %}
-                            Only fully paid orders are counted.
-                            Orders paid in multiple payments are shown with the date of their last payment.
-                        {% endblocktrans %}
+                        {% if request.GET.subevent %}
+                            {% blocktrans trimmed %}
+                                Only fully paid orders are counted.
+                                Orders paid in multiple payments are shown with the date of their last payment.
+                                Revenue excludes all fees, including cancellation fees.
+                            {% endblocktrans %}
+                        {% else %}
+                            {% blocktrans trimmed %}
+                                Only fully paid orders are counted.
+                                Orders paid in multiple payments are shown with the date of their last payment.
+                                Revenue includes all fees, including cancellation fees from cancelled orders.
+                            {% endblocktrans %}
+                        {% endif %}
                     </small>
                 </p>
             </div>
