@@ -3,7 +3,7 @@ name = "pretix"
 dynamic = ["version"]
 description = "Reinventing presales, one ticket at a time"
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {file = "LICENSE"}
 keywords = ["tickets", "web", "shop", "ecommerce"]
 authors = [
