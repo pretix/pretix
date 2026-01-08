@@ -209,6 +209,8 @@ class CartMixin:
                     pos.valid_from,
                     pos.valid_until,
                     pos.used_membership_id,
+                    pos.gross_price_before_rounding,
+                    pos.tax_value_before_rounding,
                 )
 
         positions = []
@@ -222,8 +224,8 @@ class CartMixin:
             if not hasattr(group, 'tax_rule'):
                 group.tax_rule = group.item.tax_rule
 
-            group.bundle_sum = group.price + sum(a.price for a in has_addons[group.pk])
-            group.bundle_sum_net = group.net_price + sum(a.net_price for a in has_addons[group.pk])
+            group.price_for_input = group.gross_price_before_rounding + sum(a.gross_price_before_rounding for a in has_addons[group.pk])
+            group.price_for_input_net = group.net_price_before_rounding + sum(a.net_price_before_rounding for a in has_addons[group.pk])
 
             if answers:
                 group.cache_answers(all=False)
