@@ -33,6 +33,23 @@
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Orders by time" %}</h3>
+            </div>
+            <div class="panel-body">
+                <div id="obt_chart" class="chart"></div>
+                <p class="help-block">
+                    <small>
+                        {% blocktrans trimmed %}
+                            Orders paid in multiple payments are shown with the date of their last payment.
+                            Placed orders include all orders (pending, paid, cancelled, and expired);
+                            paid orders include only paid orders and exclude all cancelled orders.
+                        {% endblocktrans %}
+                    </small>
+                </p>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
                 <h3 class="panel-title">{% trans "Attendees by day" %}</h3>
             </div>
             <div class="panel-body">
@@ -217,6 +234,7 @@
             </div>
         {% endif %}
         <script type="application/json" id="obd-data">{{ obd_data|escapejson }}</script>
+        <script type="application/json" id="obt-data">{{ obt_data|escapejson }}</script>
         <script type="application/json" id="abd-data">{{ abd_data|escapejson }}</script>
         <script type="application/json" id="abt-data">{{ abt_data|escapejson }}</script>
         <script type="application/json" id="rev-data">{{ rev_data|escapejson }}</script>
