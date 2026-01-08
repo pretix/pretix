@@ -814,7 +814,7 @@ class OrganizerPluginStateLogEntryType(LogEntryType):
             if app and hasattr(app, 'PretixPluginMeta'):
                 return {
                     'href': reverse('control:organizer.settings.plugins', kwargs={
-                        'organizer': logentry.event.organizer.slug,
+                        'organizer': logentry.organizer.slug,
                     }) + '#plugin_' + logentry.parsed_data['plugin'],
                     'val': app.PretixPluginMeta.name
                 }
