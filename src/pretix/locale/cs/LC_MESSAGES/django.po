@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-08 04:00+0000\n"
+"PO-Revision-Date: 2026-01-08 21:00+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -6672,7 +6672,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/index.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:8
 msgid "Organizers"
-msgstr "Organizátor"
+msgstr "Pořadatelé"
 
 #: pretix/base/models/organizer.py:350
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:35
@@ -8070,14 +8070,12 @@ msgid "Printing time"
 msgstr "Datum tisku"
 
 #: pretix/base/pdf.py:422 pretix/control/forms/item.py:741
-#, fuzzy
 msgid "Purchase date"
-msgstr "Zakoupeno"
+msgstr "Zakoupeno dne"
 
 #: pretix/base/pdf.py:430
-#, fuzzy
 msgid "Purchase date and time"
-msgstr "Zakoupeno"
+msgstr "Zakoupeno dne a v čase"
 
 #: pretix/base/pdf.py:438
 #, fuzzy
@@ -23235,7 +23233,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:465
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:55
 msgid "Voucher code used:"
-msgstr ""
+msgstr "Použitý poukaz:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:467
 #, python-format
@@ -34430,19 +34428,14 @@ msgid "Please note that we still await your payment to complete the process."
 msgstr "Upozorňujeme, že k dokončení procesu stále čekáme na vaši platbu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:56
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to access "
-#| "your order later. We also sent you an email containing the link to the "
-#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email to the address you specified "
 "containing the link to this page."
 msgstr ""
-"Pokud chcete mít přístup ke své objednávce později, přidejte si prosím odkaz "
-"na tuto stránku do záložek nebo si jej uložte. Na vaši zadanou adresu jsme "
-"vám také zaslali e-mail s odkazem."
+"Pokud chcete mít k objednávce přístup i později, přidejte si prosím tuto "
+"stránku do záložek. Na vámi zadanou adresu jsme vám také zaslali e-mail s "
+"odkazem na tuto stránku."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:60
 msgid ""
@@ -34565,10 +34558,9 @@ msgid "Change your order"
 msgstr "Změnit objednávku"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:358
-#, fuzzy
 msgctxt "action"
 msgid "Cancel your order"
-msgstr "Zrušit objednávku"
+msgstr "Zrušení objednávky"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:366
 msgid ""
