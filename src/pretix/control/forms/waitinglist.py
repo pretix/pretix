@@ -19,7 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.forms import ChoiceField, EmailField
+from django.db.models import Q
+from django.forms import ChoiceField, EmailField, ValidationError
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -28,7 +29,7 @@ from django_scopes.forms import SafeModelChoiceField
 from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.forms.questions import NamePartsFormField
+from pretix.base.forms.questions import NamePartsFormField, WrappedPhoneNumberPrefixWidget
 from pretix.base.models import Item, ItemVariation, WaitingListEntry
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 
@@ -133,9 +134,5 @@ class WaitingListEntryEditForm(I18nModelForm):
         field_classes = {
             'subevent': SafeModelChoiceField,
             'email': EmailField,
-            'phone': PhoneNumberField,
+            'phone': WrappedPhoneNumberPrefixWidget,
         }
-        exclude = [
-            'voucher',  # handled by the assign operation in the WaitingListActionView
-            'priority'  # handled via thumbs up/down
-        ]

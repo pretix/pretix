@@ -272,7 +272,7 @@
                                 <a href="{% url "control:event.orders.waitinglist.edit" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}"
                                    class="btn btn-default btn-sm" title="{% trans "Edit entry" context "subevent" %}"
                                     data-toggle="tooltip">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                    <i class="fa fa-edit" aria-hidden="true"></i>
                                 </a>
 
                                 <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>

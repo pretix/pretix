@@ -6,9 +6,6 @@
     <h1>{% trans "Edit entry" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
-        <p>{% blocktrans trimmed context "subevent" %}
-            Please make the desired changes to the following waiting list entry: <strong>{{ entry }}</strong>
-        {% endblocktrans %}</p>
 
         {% if form.subevent %}
             {% bootstrap_field form.subevent layout="control" %}

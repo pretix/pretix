@@ -414,7 +414,7 @@ class EntryEdit(EventPermissionRequiredMixin, UpdateView):
     @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
-            messages.success(self.request, _('The waitinglist entry has been modified.'))
+            messages.success(self.request, _('The waitinglist entry has been changed.'))
             self.object.log_action(
                 'pretix.event.orders.waitinglist.changed', user=self.request.user, data={
                     k: form.cleaned_data.get(k) for k in form.changed_data
