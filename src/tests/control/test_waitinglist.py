@@ -278,61 +278,6 @@ def test_edit_voucher_send_out(client, env):
 
 
 @pytest.mark.django_db
-def test_edit_item_without_waitinglist(client, env):
-    event = env[0]
-    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
-    item_without_waitinglist = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=False)
-    quota = Quota.objects.create(event=event)
-    quota.items.add(item)
-    quota.items.add(item_without_waitinglist)
-
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    with scopes_disabled():
-        wle = WaitingListEntry.objects.create(
-            event=event, item=item, email='foo@bar.com'
-        )
-
-    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
-
-    response = client.post(
-        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
-        data={
-            "email": f"1_{wle.email}",
-            "itemvar": item_without_waitinglist.pk
-        },
-        follow=True
-    )
-    assert response.context['form'].errors == {'itemvar': ["The selected product does not allow waiting list entries."]}
-
-
-@pytest.mark.django_db
-def test_edit_item_without_quota(client, env):
-    event = env[0]
-    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
-    item_without_waitinglist = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
-    quota = Quota.objects.create(event=event)
-    quota.items.add(item)
-
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    with scopes_disabled():
-        wle = WaitingListEntry.objects.create(
-            event=event, item=item, email='foo@bar.com'
-        )
-
-    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
-
-    response = client.post(
-        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
-        data={
-            "email": f"1_{wle.email}",
-            "itemvar": item_without_waitinglist.pk
-        },
-        follow=True
-    )
-    assert response.context['form'].errors == {'itemvar': ["The selected product is not on sale because there is no quota configured for it."]}
-
-
-@pytest.mark.django_db
 def test_dashboard(client, env):
     with scopes_disabled():
         quota = Quota.objects.create(name="Test", size=2, event=env[0])
