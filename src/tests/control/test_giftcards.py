@@ -51,15 +51,14 @@ def gift_card(organizer):
 @pytest.fixture
 def admin_user(organizer):
     u = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    admin_team = Team.objects.create(organizer=organizer, can_manage_gift_cards=True, name='Admin team',
-                                     can_change_organizer_settings=True)
+    admin_team = Team.objects.create(organizer=organizer, name='Admin team', all_organizer_permissions=True)
     admin_team.members.add(u)
     return u
 
 
 @pytest.fixture
 def team2(admin_user, organizer2):
-    admin_team = Team.objects.create(organizer=organizer2, can_manage_gift_cards=True, name='Admin team')
+    admin_team = Team.objects.create(organizer=organizer2, name='Admin team', all_organizer_permissions=True)
     admin_team.members.add(admin_user)
 
 

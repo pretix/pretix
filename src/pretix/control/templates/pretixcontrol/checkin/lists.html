@@ -63,7 +63,7 @@
                 {% endif %}
             </p>
 
-            {% if "can_change_event_settings" in request.eventpermset %}
+            {% if "event.settings.general:write" in request.eventpermset %}
                 <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new check-in list" %}
                 </a>
@@ -75,7 +75,7 @@
         </div>
     {% else %}
         <p>
-            {% if "can_change_event_settings" in request.eventpermset %}
+            {% if "event.settings.general:write" in request.eventpermset %}
                 <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new check-in list" %}</a>
             {% endif %}
@@ -83,7 +83,7 @@
                 <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}"
                    class="btn btn-default"><i class="fa fa-tablet"></i> {% trans "Connected devices" %}</a>
             {% endif %}
-            {% if "can_change_orders" in request.eventpermset %}
+            {% if "event.settings.general:write" in request.eventpermset %}
                 <a href="{% url "control:event.orders.checkinlists.reset" organizer=request.event.organizer.slug event=request.event.slug %}"
                    class="btn btn-default">
                     <span class="fa fa-repeat"></span>
@@ -158,7 +158,7 @@
                         <td class="text-right flip">
                             <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}"
                                class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
-                            {% if "can_change_event_settings" in request.eventpermset %}
+                            {% if "event.settings.general:write" in request.eventpermset %}
                                 <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ cl.id }}"
                                    class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">
                                     <span class="fa fa-copy"></span>

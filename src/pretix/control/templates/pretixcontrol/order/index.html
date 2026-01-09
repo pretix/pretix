@@ -26,7 +26,7 @@
         {% endif %}
         {% include "pretixcontrol/orders/fragment_order_status.html" with order=order class="pull-right flip" %}
     </h1>
-    {% if 'can_change_orders' in request.eventpermset %}
+    {% if 'event.orders:write' in request.eventpermset %}
         <form action="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
                 method="post">
             {% csrf_token %}
@@ -193,7 +193,7 @@
                         <dt>{% trans "Order locale" %}</dt>
                         <dd>
                             {{ display_locale }}
-                            {% if "can_change_orders" in request.eventpermset %}
+                            {% if "event.orders:write" in request.eventpermset %}
                                 <a href="{% url "control:event.order.locale" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                     <span class="fa fa-edit"></span>
                                 </a>
@@ -220,7 +220,7 @@
                                         {{ order.customer.identifier }} – {{ order.customer.email }}
                                     </a>
                                 {% endif %}
-                                {% if "can_change_orders" in request.eventpermset %}
+                                {% if "event.orders:write" in request.eventpermset %}
                                     <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                         <span class="fa fa-edit"></span>
                                     </a>
@@ -233,7 +233,7 @@
                             {% if order.email and order.email_known_to_work %}
                                 <span class="fa fa-check-circle text-success" data-toggle="tooltip" title="{% trans "We know that this email address works because the user clicked a link we sent them." %}"></span>
                             {% endif %}
-                            {% if "can_change_orders" in request.eventpermset %}
+                            {% if "event.orders:write" in request.eventpermset %}
                                 <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                     <span class="fa fa-edit"></span>
                                 </a>
@@ -257,7 +257,7 @@
                             <dt>{% trans "Phone number" %}</dt>
                             <dd>
                                 {{ order.phone|default_if_none:""|phone_format }}
-                                {% if "can_change_orders" in request.eventpermset %}
+                                {% if "event.orders:write" in request.eventpermset %}
                                     <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
                                         <span class="fa fa-edit"></span>
                                     </a>
@@ -371,7 +371,7 @@
                                         <br/>
                                     {% endif %}
                                 {% endfor %}
-                                {% if can_generate_invoice and 'can_change_orders' in request.eventpermset %}
+                                {% if can_generate_invoice and 'event.orders:write' in request.eventpermset %}
                                     <br/>
                                     <form class="form-inline helper-display-inline" method="post"
                                             action="{% url "control:event.order.geninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
@@ -382,7 +382,7 @@
                                     </form>
                                 {% endif %}
                             </dd>
-                        {% elif can_generate_invoice and 'can_change_orders' in request.eventpermset %}
+                        {% elif can_generate_invoice and 'event.orders:write' in request.eventpermset %}
                             <dt>{% trans "Invoices" %}</dt>
                             <dd>
                                 <form class="form-inline helper-display-inline" method="post"
@@ -400,7 +400,7 @@
             <div class="panel panel-default items">
                 <div class="panel-heading">
                     <div class="pull-right flip">
-                        {% if 'can_change_orders' in request.eventpermset %}
+                        {% if 'event.orders:write' in request.eventpermset %}
                             <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Change answers" %}
@@ -893,7 +893,7 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
-                                {% if order.payment_refund_sum > 0 and "can_change_orders" in request.eventpermset %}
+                                {% if order.payment_refund_sum > 0 and "event.orders:write" in request.eventpermset %}
                                     <a href="{% url "control:event.order.refunds.start" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
                                         {% trans "Create a refund" %}
                                     </a>
@@ -1012,7 +1012,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <div class="pull-right flip">
-                                    {% if 'can_change_orders' in request.eventpermset %}
+                                    {% if 'event.orders:write' in request.eventpermset %}
                                         <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                             <span class="fa fa-edit"></span>
                                             {% trans "Change" %}
@@ -1088,7 +1088,7 @@
                                 {% bootstrap_field comment_form.custom_followup_at %}
                                 {% bootstrap_field comment_form.checkin_attention show_help=True show_label=False %}
                                 {% bootstrap_field comment_form.checkin_text show_help=True show_label=False %}
-                                {% if "can_change_orders" in request.eventpermset %}
+                                {% if "event.orders:write" in request.eventpermset %}
                                     <button class="btn btn-default">
                                         {% trans "Update comment" %}
                                     </button>

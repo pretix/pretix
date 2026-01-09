@@ -65,7 +65,7 @@
                 </div>
             </form>
         </div>
-        {% if "can_change_event_settings" in request.eventpermset %}
+        {% if "event.subevents:write" in request.eventpermset %}
             <p>
                 <a href="{% url "control:event.subevents.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                         class="btn btn-default"><i class="fa fa-plus"></i>
@@ -85,7 +85,7 @@
                     <thead>
                     <tr>
                         <th>
-                            {% if "can_change_event_settings" in request.eventpermset %}
+                            {% if "event.subevents:write" in request.eventpermset %}
                                 <label aria-label="{% trans "select all rows for batch-operation" %}" class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
                             {% endif %}
                         </th>
@@ -107,7 +107,7 @@
                         </th>
                         <th></th>
                     </tr>
-                    {% if "can_change_event_settings" in request.eventpermset and page_obj.paginator.num_pages > 1 %}
+                    {% if "event.subevents:write" in request.eventpermset and page_obj.paginator.num_pages > 1 %}
                         <tr class="table-select-all warning hidden">
                             <td>
                                 <input type="checkbox" name="__ALL" id="__all" data-results-total="{{ page_obj.paginator.count }}">
@@ -124,7 +124,7 @@
                     {% for s in subevents %}
                         <tr>
                             <td>
-                                {% if "can_change_event_settings" in request.eventpermset %}
+                                {% if "event.subevents:write" in request.eventpermset %}
                                     <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label"><input type="checkbox" name="subevent" class="batch-select-checkbox" value="{{ s.pk }}"/></label>
                                 {% endif %}
                             </td>
@@ -201,7 +201,7 @@
                     </tbody>
                 </table>
             </div>
-            {% if "can_change_event_settings" in request.eventpermset %}
+            {% if "event.subevents:write" in request.eventpermset %}
                 <div class="batch-select-actions">
                     <button type="submit" class="btn btn-danger btn-save" name="action" value="delete">
                         <i class="fa fa-trash"></i>{% trans "Delete selected" %}
