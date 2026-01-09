@@ -185,7 +185,7 @@ event_permission_sub_urls = [
     ('delete', 'event.settings.general:write', 'checkinlists/1/', 404),
     ('get', 'event.orders:read', 'checkinlists/1/positions/', 404),
     ('post', 'event.orders:write', 'checkinlists/1/positions/3/redeem/', 404),
-    ('post', 'organizer.events:create', 'clone/', 400),
+    ('post', ('organizer.events:create', 'event.settings.general:write'), 'clone/', 400),
     ('get', 'event.orders:read', 'cartpositions/', 200),
     ('get', 'event.orders:read', 'cartpositions/1/', 404),
     ('post', 'event.orders:write', 'cartpositions/', 400),
@@ -328,7 +328,7 @@ def test_event_allowed_all_events(token_client, team, organizer, event, url):
 @pytest.mark.parametrize("url", event_urls)
 def test_event_allowed_all_events_device(device_client, device, organizer, event, url):
     resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
-    if url[0] is None or url[0] in device.permission_set():
+    if url[0] is None or url[0] in device._event_permission_set():
         assert resp.status_code == 200
     else:
         assert resp.status_code == 403
@@ -351,7 +351,7 @@ def test_event_allowed_limit_events_device(device_client, organizer, device, eve
     device.save()
     device.limit_events.add(event)
     resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
-    if url[0] is None or url[0] in device.permission_set():
+    if url[0] is None or url[0] in device._event_permission_set():
         assert resp.status_code == 200
     else:
         assert resp.status_code == 403
@@ -386,8 +386,14 @@ def test_event_not_existing(token_client, organizer, url, event):
 @pytest.mark.parametrize("urlset", event_permission_sub_urls)
 def test_token_event_subresources_permission_allowed(token_client, team, organizer, event, urlset):
     team.all_events = True
-    if urlset[1]:
-        setattr(team, urlset[1], True)
+    if urlset[1] is not None:
+        for t in ((urlset[1],) if isinstance(urlset[1], str) else urlset[1]):
+            if "organizer" in urlset[1]:
+                team.all_organizer_permissions = False
+                team.limit_organizer_permissions[t] = True
+            else:
+                team.all_event_permissions = False
+                team.limit_event_permissions[t] = True
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
@@ -401,7 +407,10 @@ def test_token_event_subresources_permission_not_allowed(token_client, team, org
         team.all_events = False
     else:
         team.all_events = True
-        setattr(team, urlset[1], False)
+        team.all_event_permissions = False
+        team.limit_event_permissions.pop(urlset[1], None)
+        team.all_organizer_permissions = False
+        team.limit_organizer_permissions.pop(urlset[1], None)
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
@@ -415,7 +424,14 @@ def test_token_event_subresources_permission_not_allowed(token_client, team, org
 @pytest.mark.parametrize("urlset", event_permission_root_urls)
 def test_token_event_permission_allowed(token_client, team, organizer, event, urlset):
     team.all_events = True
-    setattr(team, urlset[1], True)
+    if urlset[1] is not None:
+        for t in ((urlset[1],) if isinstance(urlset[1], str) else urlset[1]):
+            if "organizer" in urlset[1]:
+                team.all_organizer_permissions = False
+                team.limit_organizer_permissions[t] = True
+            else:
+                team.all_event_permissions = False
+                team.limit_event_permissions[t] = True
     team.save()
     if urlset[0] == 'post':
         resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/'.format(organizer.slug))
@@ -428,7 +444,9 @@ def test_token_event_permission_allowed(token_client, team, organizer, event, ur
 @pytest.mark.parametrize("urlset", event_permission_root_urls)
 def test_token_event_permission_not_allowed(token_client, team, organizer, event, urlset):
     team.all_events = True
-    setattr(team, urlset[1], False)
+    team.all_event_permissions = False
+    team.limit_event_permissions.pop(urlset[1], None)
+    team.all_organizer_permissions = False
     team.save()
     if urlset[0] == 'post':
         resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/'.format(organizer.slug))
@@ -540,7 +558,7 @@ def test_device_subresource_permission_check(device_client, device, organizer, e
         return
     resp = getattr(device_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
-    if urlset[1] is None or urlset[1] in device.permission_set():
+    if urlset[1] is None or urlset[1] in device._event_permission_set():
         assert resp.status_code == urlset[3]
     else:
         if urlset[3] == 404:
@@ -554,7 +572,8 @@ def test_device_subresource_permission_check(device_client, device, organizer, e
 def test_token_org_subresources_permission_allowed(token_client, team, organizer, event, urlset):
     team.all_events = True
     if urlset[1]:
-        setattr(team, urlset[1], True)
+        team.all_organizer_permissions = False
+        team.limit_organizer_permissions[urlset[1]] = True
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/{}'.format(
         organizer.slug, urlset[2].format(team_id=team.pk)))
@@ -567,8 +586,8 @@ def test_token_org_subresources_permission_not_allowed(token_client, team, organ
     if urlset[1] is None:
         team.all_events = False
     else:
-        team.all_events = True
-        setattr(team, urlset[1], False)
+        team.all_organizer_permissions = False
+        team.limit_organizer_permissions.pop(urlset[1], None)
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/{}'.format(
         organizer.slug, urlset[2].format(team_id=team.pk)))

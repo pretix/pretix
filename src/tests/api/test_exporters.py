@@ -364,8 +364,8 @@ def test_event_scheduled_export_list_user(user_client, organizer, event, user, t
     resp = user_client.get('/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
 
-    team.limit_organizer_permissions = {"organizer.events:create": True}
     team.all_organizer_permissions = False
+    team.limit_event_permissions = {"event.orders:read": True}
     team.all_event_permissions = False
     team.save()
 

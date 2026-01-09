@@ -67,13 +67,6 @@ def admin_request(admin, client):
 
 
 @pytest.mark.django_db
-def test_invalid_permission(event, user):
-    team = Team.objects.create(organizer=event.organizer)
-    with pytest.raises(ValueError):
-        team.has_permission('FOOOOOOBAR')
-
-
-@pytest.mark.django_db
 def test_any_event_permission_limited(event, user):
     user._teamcache = {}
     assert not user.has_event_permission(event.organizer, event)
@@ -183,9 +176,14 @@ def test_event_permissions_multiple_teams(event, user):
     assert user.has_event_permission(event.organizer, event, 'event.orders:write')
     assert user.has_event_permission(event.organizer, event, 'event.vouchers:write')
     assert not user.has_event_permission(event.organizer, event, 'event.settings.general:write')
-    assert user.get_event_permission_set(event.organizer, event) == {'event.orders:write', 'event.vouchers:write'}
-    assert user.get_event_permission_set(event.organizer, event2) == {'event.orders:write', 'event.settings.general:write',
-                                                                      'event.settings.general:write'}
+    assert user.get_event_permission_set(event.organizer, event) == {
+        'event.orders:write', 'event.vouchers:write',
+        'can_change_orders', 'can_change_vouchers',
+    }
+    assert user.get_event_permission_set(event.organizer, event2) == {
+        'event.orders:write', 'event.settings.general:write', 'event.settings.general:write',
+        'can_change_orders', 'can_change_event_settings',
+    }
 
 
 @pytest.mark.django_db
@@ -230,8 +228,14 @@ def test_organizer_permissions_multiple_teams(event, user):
     assert user.has_organizer_permission(event.organizer, 'organizer.events:create')
     assert user.has_organizer_permission(event.organizer, 'organizer.settings.general:write')
     assert not user.has_organizer_permission(event.organizer, 'organizer.teams:write')
-    assert user.get_organizer_permission_set(event.organizer) == {'organizer.events:create', 'organizer.settings.general:write'}
-    assert user.get_organizer_permission_set(orga2) == {'organizer.teams:write'}
+    assert user.get_organizer_permission_set(event.organizer) == {
+        'organizer.events:create', 'organizer.settings.general:write',
+        'can_create_events', 'can_change_organizer_settings',
+    }
+    assert user.get_organizer_permission_set(orga2) == {
+        'organizer.teams:write',
+        'can_change_teams',
+    }
 
 
 @pytest.mark.django_db

@@ -376,7 +376,7 @@ class TeamForm(forms.ModelForm):
 
     def clean(self):
         data = super().clean()
-        if self.instance.pk and not data['all_organizer_permissions'] and not data.get('limit_organizer_permissions', {}).get('organizer.teams:write'):
+        if self.instance.pk and not data['all_organizer_permissions'] and 'organizer.teams:write' not in data.get('limit_organizer_permissions', []):
             if not self.instance.organizer.teams.exclude(pk=self.instance.pk).filter(
                 TeamQuerySet.organizer_permission_q("organizer.teams:write"),
                 members__isnull=False
