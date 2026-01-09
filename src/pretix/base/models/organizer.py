@@ -397,18 +397,12 @@ class Team(LoggedModel):
             'object': str(self.organizer),
         }
 
-    def permission_set(self, include_legacy=True) -> set:
-        from ..permissions import (
-            get_all_event_permissions, get_all_organizer_permissions,
-        )
+    def event_permission_set(self, include_legacy=True) -> set:
+        from ..permissions import get_all_event_permissions
 
         result = set()
         for permission in get_all_event_permissions().keys():
             if self.all_event_permissions or self.limit_event_permissions.get(permission):
-                result.add(permission)
-
-        for permission in get_all_organizer_permissions().keys():
-            if self.all_organizer_permissions or self.limit_organizer_permissions.get(permission):
                 result.add(permission)
 
         if include_legacy:
@@ -417,6 +411,18 @@ class Team(LoggedModel):
                 if self.all_event_permissions or all(self.limit_event_permissions.get(kk) for kk in v):
                     result.add(k)
 
+        return result
+
+    def organizer_permission_set(self, include_legacy=True) -> set:
+        from ..permissions import get_all_organizer_permissions
+
+        result = set()
+        for permission in get_all_organizer_permissions().keys():
+            if self.all_organizer_permissions or self.limit_organizer_permissions.get(permission):
+                result.add(permission)
+
+        if include_legacy:
+            # Add legacy permissions as well for plugin compatibility
             for k, v in OLD_TO_NEW_ORGANIZER_COMPAT.items():
                 if self.all_organizer_permissions or all(self.limit_organizer_permissions.get(kk) for kk in v):
                     result.add(k)
@@ -516,7 +522,7 @@ class TeamAPIToken(models.Model):
         has_event_access = (self.team.all_events and organizer == self.team.organizer) or (
             event in self.team.limit_events.all()
         )
-        return self.team.permission_set() if has_event_access else set()
+        return self.team.event_permission_set() if has_event_access else set()
 
     def get_organizer_permission_set(self, organizer) -> set:
         """
@@ -525,7 +531,7 @@ class TeamAPIToken(models.Model):
         :param organizer: The organizer of the event
         :return: set of permissions
         """
-        return self.team.permission_set() if self.team.organizer == organizer else set()
+        return self.team.organizer_permission_set() if self.team.organizer == organizer else set()
 
     def has_event_permission(self, organizer, event, perm_name=None, request=None) -> bool:
         """

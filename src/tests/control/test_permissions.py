@@ -425,7 +425,8 @@ def test_wrong_event_permission(perf_patch, client, env, perm, url, code, http_m
     t = Team(
         pk=2, organizer=env[2], all_events=True
     )
-    setattr(t, perm, False)
+    t.all_event_permissions = False
+    t.limit_event_permissions.pop(perm, None)
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -443,7 +444,7 @@ def test_limited_event_permission_for_other_event(perf_patch, client, env, perm,
         organizer=env[2], name='Dummy', slug='dummy2',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(pk=2, organizer=env[2], can_change_event_settings=True)
+    t = Team.objects.create(pk=2, organizer=env[2], all_event_permissions=True)
     t.members.add(env[1])
     t.limit_events.add(event2)
 
@@ -461,13 +462,15 @@ def test_current_permission(client, env):
         pk=2, organizer=env[2], all_events=True
     )
     setattr(t, 'event.settings.general:write', True)
+    t.all_event_permissions = False
+    t.limit_event_permissions['event.settings.general:write'] = True
     t.save()
     t.members.add(env[1])
 
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/settings/')
     assert response.status_code == 200
-    setattr(t, 'event.settings.general:write', False)
+    t.limit_event_permissions.pop('event.settings.general:write', None)
     t.save()
     response = client.get('/control/event/dummy/dummy/settings/')
     assert response.status_code == 403
@@ -477,7 +480,8 @@ def test_current_permission(client, env):
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_correct_event_permission_all_events(perf_patch, client, env, perm, url, code, http_method):
     t = Team(pk=2, organizer=env[2], all_events=True)
-    setattr(t, perm, True)
+    t.all_event_permissions = False
+    t.limit_event_permissions[perm] = True
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -495,7 +499,8 @@ def test_correct_event_permission_all_events(perf_patch, client, env, perm, url,
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_correct_event_permission_limited(perf_patch, client, env, perm, url, code, http_method):
     t = Team(pk=2, organizer=env[2])
-    setattr(t, perm, True)
+    t.all_event_permissions = False
+    t.limit_event_permissions[perm] = True
     t.save()
     t.members.add(env[1])
     t.limit_events.add(env[0])
@@ -590,8 +595,11 @@ organizer_permission_urls = [
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
 def test_wrong_organizer_permission(perf_patch, client, env, perm, url, code):
-    t = Team(pk=2, organizer=env[2])
-    setattr(t, perm, False)
+    t = Team(pk=2, organizer=env[2], all_events=True)
+    t.all_organizer_permissions = False
+    t.limit_organizer_permissions.pop(perm, None)
+    t.all_event_permissions = False
+    t.limit_event_permissions.pop(perm, None)
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -602,8 +610,14 @@ def test_wrong_organizer_permission(perf_patch, client, env, perm, url, code):
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
 def test_correct_organizer_permission(perf_patch, client, env, perm, url, code):
-    t = Team(pk=2, organizer=env[2])
-    setattr(t, perm, True)
+    t = Team(pk=2, organizer=env[2], all_events=True)
+    if perm.startswith("event."):
+        t.all_organizer_permissions = False
+        t.all_event_permissions = False
+        t.limit_event_permissions[perm] = True
+    else:
+        t.all_organizer_permissions = False
+    t.limit_organizer_permissions[perm] = True
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')

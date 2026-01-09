@@ -140,7 +140,8 @@ def test_typeahead(organizer, admin_user, client, gift_card):
 
     # Unprivileged user can only do exact match
     team.all_events = True
-    team.limit_event_permissions["event.orders:read"] = False
+    team.all_event_permissions = False
+    team.limit_event_permissions = {"event.vouchers:read": True}
     team.save()
 
     r = client.get('/control/organizer/dummy/ticket_select2?query=' + op.secret[0:3])

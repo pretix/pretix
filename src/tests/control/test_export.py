@@ -162,7 +162,8 @@ def test_event_export_schedule(client, env):
 
 @pytest.mark.django_db(transaction=True)
 def test_event_limited_permission(client, env):
-    env[2].limit_event_permissions = []
+    env[2].all_event_permissions = False
+    env[2].limit_event_permissions = {"event.orders:read": True}
     env[2].save()
     user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
 
@@ -198,7 +199,7 @@ def test_event_limited_permission(client, env):
     response = client.get(f"/control/event/dummy/dummy/orders/export/{s2.pk}/delete")
     assert response.status_code == 404
 
-    env[2].limit_event_permissions = {"event:settings.general:write": True}
+    env[2].limit_event_permissions = {"event.settings.general:write": True, "event.orders:read": True}
     env[2].save()
     response = client.get("/control/event/dummy/dummy/orders/export/")
     assert b"RULE1" in response.content
@@ -330,7 +331,7 @@ def test_organizer_export_schedule(client, env):
 @pytest.mark.django_db(transaction=True)
 def test_organizer_limited_permission(client, env):
     env[2].all_organizer_permissions = False
-    env[2].all_event_permissions = False
+    env[2].all_event_permissions = True
     env[2].save()
     user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
 
@@ -366,7 +367,7 @@ def test_organizer_limited_permission(client, env):
     response = client.post(f"/control/organizer/dummy/export/{s2.pk}/run")
     assert response.status_code == 404
 
-    env[2].limit_event_permissions = {"event:settings.general:write": True}
+    env[2].limit_organizer_permissions = {"organizer.settings.general:write": True}
     env[2].save()
     response = client.get("/control/organizer/dummy/export/")
     assert b"RULE1" in response.content

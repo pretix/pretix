@@ -245,7 +245,7 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
 class OrganizerTeamView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     model = Organizer
     template_name = 'pretixcontrol/organizers/teams.html'
-    permission = 'organizer.teams:read'
+    permission = 'organizer.teams:write'
     context_object_name = 'organizer'
 
 
@@ -1067,7 +1067,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                     TeamQuerySet.organizer_permission_q("organizer.teams:write"),
                     members__isnull=False
                 ).exists() or self.request.user.has_active_staff_session(self.request.session.session_key)
-                if not other_admin_teams and self.object.has_permission() and self.object.members.count() == 1:
+                if not other_admin_teams and self.object.has_organizer_permission("organizer.teams:write") and self.object.members.count() == 1:
                     messages.error(self.request, _('You cannot remove the last member from this team as no one would '
                                                    'be left with the permission to change teams.'))
                     return redirect(self.get_success_url())
@@ -1753,7 +1753,7 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
 class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = GiftCard
     template_name = 'pretixcontrol/organizers/giftcards.html'
-    permission = 'organizer.giftcards:write'
+    permission = 'organizer.giftcards:read'
     context_object_name = 'giftcards'
     paginate_by = 50
 
@@ -1787,7 +1787,7 @@ class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
 class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     template_name = 'pretixcontrol/organizers/giftcard.html'
-    permission = 'organizer.giftcards:write'
+    permission = 'organizer.giftcards:read'
     context_object_name = 'card'
 
     def get_object(self, queryset=None) -> Organizer:
@@ -1798,6 +1798,8 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
+        if not request.user.has_organizer_permission(request.organizer, "organizer.giftcards:write", request=request):
+            raise PermissionDenied()
         self.object = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
         if 'revert' in request.POST:
             t = get_object_or_404(self.object.transactions.all(), pk=request.POST.get('revert'), order__isnull=False)

@@ -67,7 +67,7 @@ def env():
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=o, all_event_permissions=True)
+    t = Team.objects.create(organizer=o, all_event_permissions=True, all_organizer_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
     o = Order.objects.create(

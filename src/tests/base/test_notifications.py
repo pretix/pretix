@@ -142,7 +142,8 @@ def test_notification_ignore_same_user(event, order, user, monkeypatch_on_commit
 @pytest.mark.django_db
 def test_notification_ignore_insufficient_permissions(event, order, user, team, monkeypatch_on_commit):
     djmail.outbox = []
-    team.limit_event_permissions["event.orders:read"] = False
+    team.all_event_permissions = False
+    team.limit_event_permissions = {"event.vouchers:read": True}
     team.save()
     user.notification_settings.create(
         method='mail', event=event, action_type='pretix.event.order.paid', enabled=True

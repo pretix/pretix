@@ -469,7 +469,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         :return: set
         """
         teams = self._get_teams_for_event(organizer, event)
-        sets = [t.permission_set() for t in teams]
+        sets = [t.event_permission_set() for t in teams]
         if sets:
             return set.union(*sets)
         else:
@@ -483,7 +483,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         :return: set
         """
         teams = self._get_teams_for_organizer(organizer)
-        sets = [t.permission_set() for t in teams]
+        sets = [t.organizer_permission_set() for t in teams]
         if sets:
             return set.union(*sets)
         else:

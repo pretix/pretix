@@ -242,8 +242,8 @@ def test_organizer_list(token_client, team, organizer, event, order, item, taxru
     assert resp.data["count"] == 0
 
     team.all_events = True
-    team.limit_organizer_permissions = {"event.vouchers:read": True}
-    team.all_organizer_permissions = False
+    team.limit_event_permissions = {"event.vouchers:read": True}
+    team.all_event_permissions = False
     team.save()
 
     resp = token_client.get(

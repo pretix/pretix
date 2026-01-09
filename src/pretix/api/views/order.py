@@ -1905,10 +1905,15 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('nr',)
     ordering_fields = ('nr', 'date')
     filterset_class = InvoiceFilter
-    permission = 'event.orders:read'
     lookup_url_kwarg = 'number'
     lookup_field = 'nr'
-    write_permission = 'event.orders:write'
+
+    def _get_permission_name(self, request):
+        if 'event' in request.resolver_match.kwargs:
+            if request.method not in SAFE_METHODS:
+                return "event.orders:write"
+            return "event.orders:read"
+        return None  # org-level is handled by event__in check
 
     def get_queryset(self):
         perm = "event.orders:read" if self.request.method in SAFE_METHODS else "event.orders:write"

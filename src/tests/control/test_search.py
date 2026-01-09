@@ -98,7 +98,8 @@ class OrderSearchTest(SoupTest):
         assert 'DEFFO2' not in resp
 
     def test_team_limit_event_wrong_permission(self):
-        self.team.limit_event_permissions["event.orders:read"] = False
+        self.team.all_event_permissions = False
+        self.team.limit_event_permissions = {"event.vouchers:read": True}
         self.team.save()
         resp = self.client.get('/control/search/orders/').content.decode()
         assert 'ABCFO1' not in resp
@@ -113,7 +114,8 @@ class OrderSearchTest(SoupTest):
 
     def test_team_all_events_wrong_permission(self):
         self.team.all_events = True
-        self.team.limit_event_permissions["event.orders:read"] = False
+        self.team.all_event_permissions = False
+        self.team.limit_event_permissions = {"event.vouchers:read": True}
         self.team.save()
         resp = self.client.get('/control/search/orders/').content.decode()
         assert 'ABCFO1' not in resp
@@ -283,7 +285,8 @@ class PaymentSearchTest(SoupTest):
         assert 'DEFFO2' not in resp
 
     def test_team_limit_event_wrong_permission(self):
-        self.team.limit_event_permissions["event.orders:read"] = False
+        self.team.all_event_permissions = False
+        self.team.limit_event_permissions = {"event.vouchers:read": True}
         self.team.save()
         resp = self.client.get('/control/search/payments/').content.decode()
         assert 'ABCFO1' not in resp
@@ -298,7 +301,8 @@ class PaymentSearchTest(SoupTest):
 
     def test_team_all_events_wrong_permission(self):
         self.team.all_events = True
-        self.team.limit_event_permissions["event.orders:read"] = False
+        self.team.all_event_permissions = False
+        self.team.limit_event_permissions = {"event.vouchers:read": True}
         self.team.save()
         resp = self.client.get('/control/search/payments/').content.decode()
         assert 'ABCFO1' not in resp
