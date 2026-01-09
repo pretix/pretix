@@ -126,12 +126,6 @@ class WaitingListEntryEditForm(I18nModelForm):
             if '-' in itemvar:
                 self.instance.variation = self.instance.item.variations.get(pk=itemvar.split('-')[1])
 
-        if not self.instance.item.allow_waitinglist:
-            self.add_error('itemvar', _('The selected product does not allow waiting list entries.'))
-        if self.instance.item and not self.instance.item.quotas.filter(subevent=self.data.get('subevent')).exists():
-            self.add_error('itemvar', _('The selected product is not on sale because there is no quota configured for it.'))
-        if self.instance.variation and not self.instance.variation.quotas.filter(subevent=self.data.get('subevent')).exists():
-            self.add_error('itemvar', _('The selected product is not on sale because there is no quota configured for it.'))
         if ((self.instance.item and not self.instance.item.active) or
                 (self.instance.variation and not self.instance.variation.active)):
             self.add_error('itemvar', _('The selected product is not active.'))
