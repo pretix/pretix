@@ -316,7 +316,7 @@ class EventSlugField(serializers.SlugRelatedField):
 class PermissionMultipleChoiceField(serializers.MultipleChoiceField):
     def to_internal_value(self, data):
         return {
-            p: True for p in data
+            p: True for p in super().to_internal_value(data)
         }
 
     def to_representation(self, value):
@@ -328,11 +328,29 @@ class TeamSerializer(serializers.ModelSerializer):
     limit_event_permissions = PermissionMultipleChoiceField(choices=[], required=False, allow_null=False, allow_empty=True)
     limit_organizer_permissions = PermissionMultipleChoiceField(choices=[], required=False, allow_null=False, allow_empty=True)
 
+    # Legacy fields, handled in to_representation and validate
+    can_change_event_settings = serializers.BooleanField(required=False, write_only=True)
+    can_change_items = serializers.BooleanField(required=False, write_only=True)
+    can_view_orders = serializers.BooleanField(required=False, write_only=True)
+    can_change_orders = serializers.BooleanField(required=False, write_only=True)
+    can_checkin_orders = serializers.BooleanField(required=False, write_only=True)
+    can_view_vouchers = serializers.BooleanField(required=False, write_only=True)
+    can_change_vouchers = serializers.BooleanField(required=False, write_only=True)
+    can_create_events = serializers.BooleanField(required=False, write_only=True)
+    can_change_organizer_settings = serializers.BooleanField(required=False, write_only=True)
+    can_change_teams = serializers.BooleanField(required=False, write_only=True)
+    can_manage_gift_cards = serializers.BooleanField(required=False, write_only=True)
+    can_manage_customers = serializers.BooleanField(required=False, write_only=True)
+    can_manage_reusable_media = serializers.BooleanField(required=False, write_only=True)
+
     class Meta:
         model = Team
         fields = (
             'id', 'name', 'require_2fa', 'all_events', 'limit_events', 'all_event_permissions', 'limit_event_permissions',
-            'all_organizer_permissions', 'limit_organizer_permissions',
+            'all_organizer_permissions', 'limit_organizer_permissions', 'can_change_event_settings',
+            'can_change_items', 'can_view_orders', 'can_change_orders', 'can_checkin_orders', 'can_view_vouchers',
+            'can_change_vouchers', 'can_create_events', 'can_change_organizer_settings', 'can_change_teams',
+            'can_manage_gift_cards', 'can_manage_customers', 'can_manage_reusable_media'
         )
 
     def __init__(self, *args, **kwargs):
@@ -356,35 +374,36 @@ class TeamSerializer(serializers.ModelSerializer):
         if old_data_set and new_data_set:
             raise ValidationError("You cannot set deprecated and current permission attributes at the same time.")
 
+        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
+        full_data.update(data)
+
         if new_data_set:
-            if data.get('limit_event_permissions') and data.get('all_event_permissions'):
+            if full_data.get('limit_event_permissions') and full_data.get('all_event_permissions'):
                 raise ValidationError('Do not set both limit_event_permissions and all_event_permissions.')
-            if data.get('limit_organizer_permissions') and data.get('all_organizer_permissions'):
+            if full_data.get('limit_organizer_permissions') and full_data.get('all_organizer_permissions'):
                 raise ValidationError('Do not set both limit_organizer_permissions and all_organizer_permissions.')
 
         if old_data_set:
             # Migrate with same logic as in migration 0297_plugable_permissions
-            if all(data.get("k") is True for k in OLD_TO_NEW_EVENT_MIGRATION.keys() if k != "can_checkin_orders"):
+            if all(full_data.get(k) is True for k in OLD_TO_NEW_EVENT_MIGRATION.keys() if k != "can_checkin_orders"):
                 data["all_event_permissions"] = True
-                data["limit_event_permissions"] = []
+                data["limit_event_permissions"] = {}
             else:
                 data["all_event_permissions"] = False
-                data["limit_event_permissions"] = []
+                data["limit_event_permissions"] = {}
                 for k, v in OLD_TO_NEW_EVENT_MIGRATION.items():
-                    if data.get(k) is True:
-                        data["limit_event_permissions"].extend(v)
-            if all(data.get("k") is True for k in OLD_TO_NEW_ORGANIZER_MIGRATION.keys() if k != "can_checkin_orders"):
+                    if full_data.get(k) is True:
+                        data["limit_event_permissions"].update({kk: True for kk in v})
+            if all(full_data.get(k) is True for k in OLD_TO_NEW_ORGANIZER_MIGRATION.keys() if k != "can_checkin_orders"):
                 data["all_organizer_permissions"] = True
-                data["limit_organizer_permissions"] = []
+                data["limit_organizer_permissions"] = {}
             else:
                 data["all_organizer_permissions"] = False
-                data["limit_organizer_permissions"] = []
-                for k, v in OLD_TO_NEW_EVENT_MIGRATION.items():
-                    if data.get(k) is True:
-                        data["limit_organizer_permissions"].extend(v)
+                data["limit_organizer_permissions"] = {}
+                for k, v in OLD_TO_NEW_ORGANIZER_MIGRATION.items():
+                    if full_data.get(k) is True:
+                        data["limit_organizer_permissions"].update({kk: True for kk in v})
 
-        full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
-        full_data.update(data)
         if full_data.get('limit_events') and full_data.get('all_events'):
             raise ValidationError('Do not set both limit_events and all_events.')
         return data
