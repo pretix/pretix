@@ -656,6 +656,11 @@ LOGGING = {
             'handlers': ['null'],
             'propagate': False,
         },
+        'celery.utils.functional': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',  # Do not output all the queries
+            'propagate': False,
+        },
         'django.db.backends': {
             'handlers': ['file', 'console'],
             'level': 'INFO',  # Do not output all the queries
