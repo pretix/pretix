@@ -131,8 +131,9 @@ def user():
 @pytest.fixture
 @scopes_disabled()
 def user_client(client, team, user):
-    team.limit_event_permissions["event.orders:read"] = True
-    team.limit_event_permissions["event.vouchers:read"] = True
+    if not team.all_event_permissions:
+        team.limit_event_permissions["event.orders:read"] = True
+        team.limit_event_permissions["event.vouchers:read"] = True
     team.all_events = True
     team.save()
     team.members.add(user)
@@ -143,8 +144,9 @@ def user_client(client, team, user):
 @pytest.fixture
 @scopes_disabled()
 def token_client(client, team):
-    team.limit_event_permissions["event.orders:read"] = True
-    team.limit_event_permissions["event.vouchers:read"] = True
+    if not team.all_event_permissions:
+        team.limit_event_permissions["event.orders:read"] = True
+        team.limit_event_permissions["event.vouchers:read"] = True
     team.all_events = True
     team.save()
     t = team.tokens.create(name='Foo')

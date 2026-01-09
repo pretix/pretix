@@ -30,7 +30,7 @@ OLD_TO_NEW_EVENT_MIGRATION = {
         "event.settings.payment:write",
         "event.settings.plugins:write",
         "event.settings.email.sender:write",
-        "event.settings.tax:write"
+        "event.settings.tax:write",
         "event.settings.invoicing:write",
         "event.subevents:write",
     ],
