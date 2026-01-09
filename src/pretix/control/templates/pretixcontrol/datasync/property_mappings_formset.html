@@ -55,7 +55,7 @@
                 <div class="col-md-2">
                     {% bootstrap_field formset.empty_form.overwrite layout='inline' form_group_class="" %}
                 </div>
-                {{ f.value_map.as_hidden }}
+                {{ formset.empty_form.value_map.as_hidden }}
                 <div class="col-md-2 text-right flip">
                     <i class="fa fa-warning hidden" data-toggle="tooltip" title=""></i>
                     <button type="button" class="btn btn-default hidden" data-edit-value-map data-toggle="modal"
