@@ -215,7 +215,10 @@ def test_edit(client, env):
         },
         follow=True
     )
-    assert response.wsgi_request.path == '/control/event/dummy/dummy/waitinglist/'
+
+    with scopes_disabled():
+        assert WaitingListEntry.objects.get(id=wle.id).item == item
+
 
 
 @pytest.mark.django_db
@@ -238,7 +241,7 @@ def test_edit_itemvariation(client, env):
 
     itemvar = f"{item.pk}-{variation.pk}"
 
-    response = client.post(
+    client.post(
         '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
         data={
             "email": f"1_{wle.email}",
@@ -246,7 +249,9 @@ def test_edit_itemvariation(client, env):
         },
         follow=True
     )
-    assert response.wsgi_request.path == '/control/event/dummy/dummy/waitinglist/'
+
+    with scopes_disabled():
+        assert WaitingListEntry.objects.get(id=wle.id).variation == variation
 
 
 @pytest.mark.django_db
