@@ -141,8 +141,9 @@ class LogEntry(models.Model):
 
         log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
         if log_entry_type:
+            sender = self.event if self.event else self.organizer
             link_info = log_entry_type.get_object_link_info(self)
-            if is_app_active(self.event, meta['plugin']):
+            if is_app_active(sender, meta['plugin']):
                 return make_link(link_info, log_entry_type.object_link_wrapper)
             else:
                 return make_link(link_info, log_entry_type.object_link_wrapper, is_active=False,
