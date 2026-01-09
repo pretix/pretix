@@ -32,13 +32,14 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import html
 import re
 import urllib.parse
 
 import bleach
 import markdown
-from bleach import DEFAULT_CALLBACKS
-from bleach.linkifier import build_email_re, build_url_re
+from bleach import DEFAULT_CALLBACKS, html5lib_shim
+from bleach.linkifier import build_email_re
 from django import template
 from django.conf import settings
 from django.core import signing
@@ -123,6 +124,23 @@ ALLOWED_ATTRIBUTES = {
 }
 
 ALLOWED_PROTOCOLS = {'http', 'https', 'mailto', 'tel'}
+
+
+def build_url_re(tlds=tld_set, protocols=html5lib_shim.allowed_protocols):
+    # Differs from bleach regex by allowing { and } in URL to allow placeholders in URL parameters
+    return re.compile(
+        r"""\(*  # Match any opening parentheses.
+        \b(?<![@.])(?:(?:{0}):/{{0,3}}(?:(?:\w+:)?\w+@)?)?  # http://
+        ([\w-]+\.)+(?:{1})(?:\:[0-9]+)?(?!\.\w)\b   # xx.yy.tld(:##)?
+        (?:[/?][^\s\|\\\^`<>"]*)?
+            # /path/zz (excluding "unsafe" chars from RFC 3986,
+            # except for # and ~, which happen in practice)
+        """.format(
+            "|".join(sorted(protocols)), "|".join(sorted(tlds))
+        ),
+        re.IGNORECASE | re.VERBOSE | re.UNICODE,
+    )
+
 
 URL_RE = SimpleLazyObject(lambda: build_url_re(tlds=sorted(tld_set, key=len, reverse=True)))
 
@@ -333,8 +351,14 @@ def markdown_compile_email(source, allowed_tags=None, allowed_attributes=ALLOWED
         # This is a workaround to fix placeholders in URL targets
         def context_callback(attrs, new=False):
             if (None, "href") in attrs and "{" in attrs[None, "href"]:
-                # Do not use MODE_RICH_TO_HTML to avoid recursive linkification
-                attrs[None, "href"] = escape(format_map(attrs[None, "href"], context=context, mode=SafeFormatter.MODE_RICH_TO_PLAIN))
+                # Do not use MODE_RICH_TO_HTML to avoid recursive linkification.
+                # We want to esacpe the end result, however, we need to unescape the input to prevent & being turned
+                # to &amp;amp; because the input is already escaped by the markdown parser.
+                attrs[None, "href"] = escape(format_map(
+                    html.unescape(attrs[None, "href"]),
+                    context=context,
+                    mode=SafeFormatter.MODE_RICH_TO_PLAIN
+                ))
             return attrs
 
         context_callbacks.append(context_callback)
