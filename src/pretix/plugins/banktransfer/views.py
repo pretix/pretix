@@ -44,6 +44,7 @@ from typing import Set
 
 from django import forms
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Count, Q, QuerySet
 from django.http import FileResponse, JsonResponse
@@ -61,9 +62,7 @@ from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.models.organizer import TeamQuerySet
 from pretix.base.settings import SettingsSandbox
 from pretix.base.templatetags.money import money_filter
-from pretix.control.permissions import (
-    EventPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
-)
+from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.helpers.json import CustomJSONEncoder
 from pretix.plugins.banktransfer import camtimport, csvimport, mt940import
@@ -626,6 +625,11 @@ class ImportView(ListView):
 
 class OrganizerBanktransferView:
     def dispatch(self, request, *args, **kwargs):
+        has_any_event_perm = request.user.get_events_with_permission(
+            "event.orders:write", request=request
+        ).filter(organizer=request.organizer).exists()
+        if not has_any_event_perm:
+            raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -633,27 +637,26 @@ class EventImportView(EventPermissionRequiredMixin, ImportView):
     permission = 'event.orders:write'
 
 
-class OrganizerImportView(OrganizerBanktransferView, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin,
+class OrganizerImportView(OrganizerBanktransferView, OrganizerDetailViewMixin,
                           ImportView):
-    permission = 'event.orders:write'
+    pass
 
 
 class EventJobDetailView(EventPermissionRequiredMixin, JobDetailView):
     permission = 'event.orders:write'
 
 
-class OrganizerJobDetailView(OrganizerBanktransferView, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin,
+class OrganizerJobDetailView(OrganizerBanktransferView, OrganizerDetailViewMixin,
                              JobDetailView):
-    permission = 'event.orders:write'
+    pass
 
 
 class EventActionView(EventPermissionRequiredMixin, ActionView):
     permission = 'event.orders:write'
 
 
-class OrganizerActionView(OrganizerBanktransferView, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin,
+class OrganizerActionView(OrganizerBanktransferView, OrganizerDetailViewMixin,
                           ActionView):
-    permission = 'event.orders:write'
 
     def order_qs(self):
         all = self.request.user.teams.filter(
@@ -784,8 +787,7 @@ class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListVi
         )
 
 
-class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExportListView):
-    permission = 'event.orders:write'
+class OrganizerRefundExportListView(OrganizerBanktransferView, RefundExportListView):
 
     def get_success_url(self):
         return reverse('plugins:banktransfer:refunds.list', kwargs={
@@ -828,8 +830,7 @@ class EventDownloadRefundExportView(EventPermissionRequiredMixin, DownloadRefund
         )
 
 
-class OrganizerDownloadRefundExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, DownloadRefundExportView):
-    permission = 'event.orders:write'
+class OrganizerDownloadRefundExportView(OrganizerBanktransferView, OrganizerDetailViewMixin, DownloadRefundExportView):
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(
@@ -857,9 +858,9 @@ class SepaXMLExportView(SingleObjectMixin, FormView):
     template_name = 'pretixplugins/banktransfer/sepa_export.html'
     context_object_name = "export"
 
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
+    def dispatch(self, request, *args, **kwargs):
         self.object: RefundExport = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         self.object.downloaded = True
@@ -891,8 +892,7 @@ class EventSepaXMLExportView(EventPermissionRequiredMixin, SepaXMLExportView):
         return form
 
 
-class OrganizerSepaXMLExportView(OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, SepaXMLExportView):
-    permission = 'event.orders:write'
+class OrganizerSepaXMLExportView(OrganizerBanktransferView, OrganizerDetailViewMixin, SepaXMLExportView):
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(

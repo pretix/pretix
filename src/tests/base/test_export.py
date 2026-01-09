@@ -143,7 +143,8 @@ def test_event_fail_user_no_permission(event, user, team):
     s.error_counter = 0
     s.save()
 
-    team.limit_event_permissions["event.orders:read"] = False
+    team.all_event_permissions = False
+    team.limit_event_permissions = {"event.vouchers:read": True}
     team.save()
 
     run_scheduled_exports(None)

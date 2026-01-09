@@ -14,7 +14,8 @@ Core
    :members: periodic_task, event_live_issues, event_copy_data, email_filter, register_notification_types, notification,
       item_copy_data, register_sales_channel_types, register_global_settings, quota_availability, global_email_filter,
       register_ticket_secret_generators, gift_card_transaction_display,
-      register_text_placeholders, register_mail_placeholders, device_info_updated
+      register_text_placeholders, register_mail_placeholders, device_info_updated,
+      register_event_permissions, register_organizer_permissions
 
 Order events
 """"""""""""

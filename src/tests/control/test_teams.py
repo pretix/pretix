@@ -231,15 +231,16 @@ def test_create_team(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/organizer/dummy/team/add', {
         'name': 'Foo',
-        'organizer.events:create': 'on',
+        'limit_organizer_permissions': ['organizer.events:create'],
         'limit_events': str(event.pk),
-        'event.settings.general:write': 'on'
+        'limit_event_permissions': ['event.settings.general:write']
     }, follow=True)
     with scopes_disabled():
         t = Team.objects.last()
-        assert t.can_change_event_settings
-        assert t.can_create_events
-        assert not t.can_change_organizer_settings
+        assert not t.all_event_permissions
+        assert t.limit_event_permissions == {"event.settings.general:write": True}
+        assert not t.all_organizer_permissions
+        assert t.limit_organizer_permissions == {"organizer.events:create": True}
         assert list(t.limit_events.all()) == [event]
         assert list(t.members.all()) == [admin_user]
 
@@ -249,13 +250,16 @@ def test_update_team(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/organizer/dummy/team/{}/edit'.format(admin_team.pk), {
         'name': 'Admin',
-        'organizer.teams:write': 'on',
+        'limit_organizer_permissions': ['organizer.teams:write'],
         'limit_events': str(event.pk),
-        'event.settings.general:write': 'on'
+        'all_event_permissions': 'on',
+        'all_organizer_permissions': '',
     }, follow=True)
     admin_team.refresh_from_db()
-    assert admin_team.can_change_event_settings
-    assert not admin_team.can_change_organizer_settings
+    assert admin_team.all_event_permissions
+    assert admin_team.limit_event_permissions == {}
+    assert not admin_team.all_organizer_permissions
+    assert admin_team.limit_organizer_permissions == {"organizer.teams:write": True}
     with scopes_disabled():
         assert list(admin_team.limit_events.all()) == [event]
 

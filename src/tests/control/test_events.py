@@ -76,7 +76,7 @@ class EventsTest(SoupTest):
             date_from=datetime.datetime(2014, 9, 5, tzinfo=datetime.timezone.utc),
         )
 
-        self.team1 = Team.objects.create(organizer=self.orga1, all_organizer_permissions=True, all_event_permissions=True)
+        self.team1 = Team.objects.create(organizer=self.orga1, all_event_permissions=True, limit_organizer_permissions={"organizer.events:create": True})
         self.team1.members.add(self.user)
         self.team1.limit_events.add(self.event1)
 

@@ -341,7 +341,7 @@ class CloneEventViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
     http_method_names = ['post']
-    write_permission = 'organizer.events:create'
+    write_permission = 'event.settings.general:write'
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -350,6 +350,12 @@ class CloneEventViewSet(viewsets.ModelViewSet):
         return ctx
 
     def perform_create(self, serializer):
+        # Weird edge case: Requires settings permission on the event (to read) but also on the organizer (two write)
+        perm_holder = (self.request.auth if isinstance(self.request.auth, (Device, TeamAPIToken))
+                       else self.request.user)
+        if not perm_holder.has_organizer_permission(self.request.organizer, "organizer.events:create", request=self.request):
+            raise PermissionDenied("No permission to create events")
+
         serializer.save(organizer=self.request.organizer)
 
         serializer.instance.log_action(
