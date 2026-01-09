@@ -317,7 +317,7 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
         ctx['checkinlists'] = clists
 
-        ctx['organizer.settings.general:write'] = self.request.user.has_organizer_permission(
+        ctx['can_change_organizer_settings'] = self.request.user.has_organizer_permission(
             self.request.organizer,
             'organizer.settings.general:write',
             self.request

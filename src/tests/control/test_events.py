@@ -337,7 +337,7 @@ class EventsTest(SoupTest):
         self.orga1.refresh_from_db()
         assert "tests.testdummyhybrid" not in self.orga1.plugins
 
-        t2 = Team.objects.create(organizer=self.orga1, can_change_organizer_settings=True)
+        t2 = Team.objects.create(organizer=self.orga1, all_organizer_permissions=True, all_event_permissions=True)
         t2.members.add(self.user)
 
         self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
