@@ -101,16 +101,6 @@ class WaitingListEntryEditForm(I18nModelForm):
         self.fields['itemvar'].label = _("Product")
         self.fields['itemvar'].help_text = _("Only includes active products.")
         self.fields['itemvar'].required = True
-        self.fields['itemvar'].widget = Select2ItemVarQuota(
-            attrs={
-                'data-model-select2': 'generic',
-                'data-select2-url': reverse('control:event.items.itemvars.select2', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                }),
-            },
-            choices=choices
-        )
         self.fields['itemvar'].choices = choices
 
     def clean(self):
