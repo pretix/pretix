@@ -9,7 +9,7 @@
 {% block inside %}
     <h1>
         {% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}
-        {% if 'can_change_event_settings' in request.eventpermset %}
+        {% if 'event.settings.general:write' in request.eventpermset %}
             <a href="{% url "control:event.orders.checkinlists.edit" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}"
                class="btn btn-default">
                 <span class="fa fa-wrench"></span>

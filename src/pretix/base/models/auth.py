@@ -498,7 +498,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
         :param organizer: The organizer of the event
         :param event: The event to check
-        :param perm_name: The permission, e.g. ``can_change_teams``
+        :param perm_name: The permission, e.g. ``event.orders:read``
         :param request: The current request (optional)
         :param session_key: The current session key (optional)
         :return: bool
@@ -521,7 +521,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         to the organizer ``organizer``.
 
         :param organizer: The organizer to check
-        :param perm_name: The permission, e.g. ``can_change_teams``
+        :param perm_name: The permission, e.g. ``organizer.events:create``
         :param request: The current request (optional). Required to detect staff sessions properly.
         :return: bool
         """

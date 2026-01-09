@@ -70,7 +70,7 @@ class EventTestMixin:
             live=True,
         )
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-        t = Team.objects.create(organizer=self.orga, can_change_event_settings=True)
+        t = Team.objects.create(organizer=self.orga, all_event_permissions=True)
         t.members.add(self.user)
         t.limit_events.add(self.event)
 

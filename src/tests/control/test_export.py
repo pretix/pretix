@@ -329,7 +329,8 @@ def test_organizer_export_schedule(client, env):
 
 @pytest.mark.django_db(transaction=True)
 def test_organizer_limited_permission(client, env):
-    env[2].can_change_organizer_settings = False
+    env[2].all_organizer_permissions = False
+    env[2].all_event_permissions = False
     env[2].save()
     user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
 

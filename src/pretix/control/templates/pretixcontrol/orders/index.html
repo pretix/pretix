@@ -122,7 +122,7 @@
                 <table class="table table-condensed table-hover table-orders">
                     <thead>
                     <tr>
-                        {% if "can_change_orders" in request.eventpermset %}
+                        {% if "event.orders:write" in request.eventpermset %}
                             <th>
                                 <label aria-label="{% trans "select all rows for batch-operation" %}"
                                        class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
@@ -154,7 +154,7 @@
                             <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                     </tr>
-                    {% if page_obj.paginator.num_pages > 1 and "can_change_orders" in request.eventpermset %}
+                    {% if page_obj.paginator.num_pages > 1 and "event.orders:write" in request.eventpermset %}
                         <tr class="table-select-all warning hidden">
                             <td>
                                 <input type="checkbox" name="__ALL" id="__all"
@@ -171,7 +171,7 @@
                     <tbody>
                     {% for o in orders %}
                         <tr>
-                            {% if "can_change_orders" in request.eventpermset %}
+                            {% if "event.orders:write" in request.eventpermset %}
                                 <td>
                                     <label aria-label="{% trans "select row for batch-operation" %}"
                                            class="batch-select-label"><input type="checkbox" name="order"
@@ -281,7 +281,7 @@
                     {% endif %}
                 </table>
             </div>
-            {% if "can_change_orders" in request.eventpermset %}
+            {% if "event.orders:write" in request.eventpermset %}
                 <div class="batch-select-actions">
                     <div class="btn-group dropup">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"

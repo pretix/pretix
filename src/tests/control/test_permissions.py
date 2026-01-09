@@ -292,7 +292,7 @@ def test_wrong_event(perf_patch, client, env, url):
         organizer=env[2], name='Dummy', slug='dummy2',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(pk=2, organizer=env[2], can_change_event_settings=True)
+    t = Team.objects.create(pk=2, organizer=env[2], all_event_permissions=True)
     t.members.add(env[1])
     t.limit_events.add(event2)
 

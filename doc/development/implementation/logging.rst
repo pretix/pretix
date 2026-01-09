@@ -196,7 +196,7 @@ A simple implementation could look like this:
 .. code-block:: python
 
     class MyNotificationType(NotificationType):
-        required_permission = "can_view_orders"
+        required_permission = "event.orders:read"
         action_type = "pretix.event.order.paid"
         verbose_name = _("Order has been paid")
 

@@ -120,7 +120,7 @@
                 </div>
             </div>
         </div>
-        {% if "can_change_vouchers" in request.eventpermset %}
+        {% if "event.vouchers:write" in request.eventpermset %}
             <div class="form-group submit-group">
                 <button type="submit" class="btn btn-primary btn-save">
                     {% trans "Save" %}
