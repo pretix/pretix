@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-08 21:00+0000\n"
+"PO-Revision-Date: 2026-01-11 06:00+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -8134,7 +8134,7 @@ msgstr "Přízemí, řada 3, místo 4"
 #: pretix/base/pdf.py:508 pretix/base/pdf.py:514
 #: pretix/control/forms/orders.py:344
 msgid "General admission"
-msgstr "včetně všech daní"
+msgstr "Základní vstupné"
 
 #: pretix/base/pdf.py:511
 msgid "Seat: zone"
@@ -18748,7 +18748,7 @@ msgstr "ID transakce"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
 msgid "Reference"
-msgstr "Důvod převodu"
+msgstr "Zpráva pro příjemce"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:100
 msgid "Terminal ID"
@@ -34815,7 +34815,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/payment_qr_codes.html:36
 msgid "Scan the QR code with your banking app"
-msgstr ""
+msgstr "Naskenujte QR kód svou bankovní aplikací"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
 msgid "Registration details"
