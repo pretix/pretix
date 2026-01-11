@@ -14,7 +14,7 @@ def navbar_info(sender, request, **kwargs):
             'event': request.event.slug,
             'organizer': request.event.organizer.slug,
         }),
-        'active': url.startswith('settings'),
+        'active': url == 'settings' and 'zalozns' in request.resolver_match.namespaces,
     }]
 
 @receiver(order_paid, dispatch_uid="zalozns_order_paid")
