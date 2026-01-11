@@ -28,20 +28,29 @@ class OnePay(BasePaymentProvider):
     public_name = _('OnePay')
 
     @property
+    def test_mode_message(self):
+        if 'mtf.onepay.vn' in self.settings.get('endpoint', ''):
+            return _('The OnePay plugin is operating in test mode. No money will actually be transferred.')
+        return None
+
+    @property
     def settings_form_fields(self):
         return OrderedDict(
             [
                 ('merchant_id',
                  forms.CharField(
                      label=_('Merchant ID'),
+                     help_text=_('Your OnePay Merchant ID.'),
                  )),
                 ('access_code',
                  forms.CharField(
                      label=_('Access Code'),
+                     help_text=_('Your OnePay Access Code.'),
                  )),
                 ('hash_key',
                  forms.CharField(
                      label=_('Hash Key'),
+                     help_text=_('Your OnePay Secure Hash Key (Hex or String).'),
                  )),
                 ('endpoint',
                  forms.ChoiceField(
