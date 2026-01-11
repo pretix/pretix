@@ -745,7 +745,6 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
         cp._cached_quotas = list(cp.quotas)
 
     # Create locks
-    sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]  # eliminate deleted
     if any(cp.expires < now() + timedelta(seconds=LOCK_TRUST_WINDOW) for cp in sorted_positions):
         # No need to perform any locking if the cart positions still guarantee everything long enough.
         full_lock_required = any(
