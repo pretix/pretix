@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2024-03-30 11:00+0000\n"
-"Last-Translator: Thatthep <amaudy@gmail.com>\n"
-"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/"
-">\n"
+"PO-Revision-Date: 2026-01-12 17:00+0000\n"
+"Last-Translator: chondaen12 <chondaen12@gmail.com>\n"
+"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
+"\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -29,7 +29,7 @@ msgstr "เยอรมัน"
 
 #: pretix/_base_settings.py:89
 msgid "German (informal)"
-msgstr "เยอรมัน"
+msgstr "เยอรมัน (ไม่เป็นทางการ)"
 
 #: pretix/_base_settings.py:90
 msgid "Arabic"
@@ -3567,7 +3567,7 @@ msgstr ""
 #: pretix/base/invoicing/pdf.py:732 pretix/base/invoicing/pdf.py:740
 msgctxt "invoice"
 msgid "Description"
-msgstr ""
+msgstr "คำอธิบาย"
 
 #: pretix/base/invoicing/pdf.py:733 pretix/base/invoicing/pdf.py:741
 msgctxt "invoice"
@@ -3577,7 +3577,7 @@ msgstr ""
 #: pretix/base/invoicing/pdf.py:734 pretix/base/invoicing/pdf.py:1038
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr ""
+msgstr "อัตราภาษี"
 
 #: pretix/base/invoicing/pdf.py:735
 msgctxt "invoice"
@@ -3592,7 +3592,7 @@ msgstr ""
 #: pretix/base/invoicing/pdf.py:742
 msgctxt "invoice"
 msgid "Amount"
-msgstr ""
+msgstr "จำนวน"
 
 #: pretix/base/invoicing/pdf.py:869
 #, python-brace-format
@@ -3624,12 +3624,12 @@ msgstr ""
 #: pretix/base/invoicing/pdf.py:979
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr ""
+msgstr "จ่ายโดยบัตรของขวัญ"
 
 #: pretix/base/invoicing/pdf.py:984
 msgctxt "invoice"
 msgid "Remaining amount"
-msgstr ""
+msgstr "จำนวนคงเหลือ"
 
 #: pretix/base/invoicing/pdf.py:1008
 #, python-brace-format
@@ -3640,7 +3640,7 @@ msgstr ""
 #: pretix/base/invoicing/pdf.py:1039
 msgctxt "invoice"
 msgid "Net value"
-msgstr ""
+msgstr "ยอดสุทธิ"
 
 #: pretix/base/invoicing/pdf.py:1040
 msgctxt "invoice"
@@ -3650,7 +3650,7 @@ msgstr ""
 #: pretix/base/invoicing/pdf.py:1041
 msgctxt "invoice"
 msgid "Tax"
-msgstr ""
+msgstr "ภาษี"
 
 #: pretix/base/invoicing/pdf.py:1071
 msgctxt "invoice"
