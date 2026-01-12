@@ -19,19 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
-# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
-# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
-#
-# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
-# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
-#
-# This file contains Apache-licensed contributions copyrighted by: Daniel
-#
-# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
-# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations under the License.
-
 from datetime import timedelta
 
 import pytest
@@ -80,7 +67,16 @@ def env():
     t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
     t.members.add(user)
     t.limit_events.add(event)
-    return event, user, o, item1
+
+    wle = WaitingListEntry.objects.filter(item=item1).first()
+    variation = ItemVariation.objects.create(item=item1)
+
+    return {
+        "event": event,
+        "item1": item1,
+        "wle": wle,
+        "variation": variation,
+    }
 
 
 @pytest.mark.django_db
@@ -124,7 +120,7 @@ def test_list(client, env):
     assert 'foo0@bar.com' not in response.content.decode()
     assert 'valid@example.org' not in response.content.decode()
 
-    response = client.get('/control/event/dummy/dummy/waitinglist/?item=%d' % env[3].pk)
+    response = client.get('/control/event/dummy/dummy/waitinglist/?item=%d' % env['item1'].pk)
     assert 'item2@example.org' not in response.content.decode()
     assert 'foo0@bar.com' in response.content.decode()
 
@@ -195,16 +191,9 @@ def test_delete_bulk(client, env):
 
 @pytest.mark.django_db
 def test_edit_settings(client, env):
-    event = env[0]
-    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
-    quota = Quota.objects.create(event=event)
-    quota.items.add(item)
-
+    event = env['event']
+    wle = env['wle']
     client.login(email='dummy@dummy.dummy', password='dummy')
-    with scopes_disabled():
-        wle = WaitingListEntry.objects.create(
-            event=event, item=item, email='foo@bar.com'
-        )
 
     response = client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
     assert ['email', 'itemvar'] == list(response.context_data['form'].fields.keys())
@@ -224,21 +213,11 @@ def test_edit_settings(client, env):
 
 @pytest.mark.django_db
 def test_edit_itemvariation(client, env):
-    event = env[0]
-
-    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
-    variation = ItemVariation.objects.create(item=item)
-    quota = Quota.objects.create(event=event)
-    quota.items.add(item)
-    quota.variations.add(variation)
+    item = env['item1']
+    variation = env['variation']
+    wle = env['wle']
 
     client.login(email='dummy@dummy.dummy', password='dummy')
-    with scopes_disabled():
-        wle = WaitingListEntry.objects.create(
-            event=event, item=item, variation=variation, email='foo@bar.com'
-        )
-
-    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
 
     itemvar = f"{item.pk}-{variation.pk}"
 
@@ -247,29 +226,105 @@ def test_edit_itemvariation(client, env):
         data={
             "email": f"1_{wle.email}",
             "itemvar": itemvar
-        },
-        follow=True
+        }
     )
 
-    with scopes_disabled():
-        assert WaitingListEntry.objects.get(id=wle.id).variation == variation
+    wle.refresh_from_db()
+    assert wle.variation == variation
+
+
+@pytest.mark.django_db
+def test_edit_validations_only_valid_item(client, env):
+    item = env['item1']
+    wle = env['wle']
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+
+    itemvar = f"{item.pk + 10000}"
+
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": itemvar
+        }
+    )
+    assert response.context_data['form'].errors['itemvar'] == ["Select a valid choice."]
+
+
+@pytest.mark.django_db
+def test_edit_validations_only_valid_variation(client, env):
+    item = env['item1']
+    wle = env['wle']
+    variation = env['variation']
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+
+    itemvar = f"{item.pk}-{variation.pk + 1}"
+
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": itemvar
+        }
+    )
+    assert response.context_data['form'].errors['itemvar'] == ["Select a valid choice."]
+
+
+@pytest.mark.django_db
+def test_edit_validations_inactive_item(client, env):
+    item = env['item1']
+    wle = env['wle']
+    item.active = False
+    item.save()
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": f"{item.pk}"
+        }
+    )
+    assert response.context_data['form'].errors['itemvar'] == ["The selected product is not active."]
+
+
+@pytest.mark.django_db
+def test_edit_validations_inactive_variation(client, env):
+    item = env['item1']
+    wle = env['wle']
+    variation = env['variation']
+    wle.variation = variation
+    wle.save()
+
+    variation.active = False
+    variation.save()
+
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    response = client.post(
+        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
+        data={
+            "email": f"1_{wle.email}",
+            "itemvar": f"{item.pk}-{variation.pk}"
+        }
+    )
+    assert response.context_data['form'].errors['itemvar'] == ["The selected product is not active."]
 
 
 @pytest.mark.django_db
 def test_edit_voucher_send_out(client, env):
-    event = env[0]
-
-    item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
+    event = env['event']
+    item = env['item1']
+    wle = env['wle']
 
     quota = Quota.objects.create(event=event, size=100)
     quota.items.add(item)
 
     client.login(email='dummy@dummy.dummy', password='dummy')
+
     with scopes_disabled():
-        wle = WaitingListEntry.objects.create(
-            event=event, item=item, email='foo@bar.com'
-        )
-        client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
         wle.send_voucher()
 
     response = client.post(
@@ -286,9 +341,9 @@ def test_edit_voucher_send_out(client, env):
 @pytest.mark.django_db
 def test_dashboard(client, env):
     with scopes_disabled():
-        quota = Quota.objects.create(name="Test", size=2, event=env[0])
-        quota.items.add(env[3])
-        w = waitinglist_widgets(env[0])
+        quota = Quota.objects.create(name="Test", size=2, event=env['event'])
+        quota.items.add(env['item1'])
+        w = waitinglist_widgets(env['event'])
 
     assert '1' in w[0]['content']
     assert '5' in w[1]['content']

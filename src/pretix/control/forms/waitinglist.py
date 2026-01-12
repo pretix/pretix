@@ -35,7 +35,11 @@ from pretix.control.forms.widgets import Select2
 
 
 class WaitingListEntryEditForm(I18nModelForm):
-    itemvar = ChoiceField()
+    itemvar = ChoiceField(
+        error_messages={
+            'invalid_choice': _("Select a valid choice.")
+        }
+    )
 
     def __init__(self, *args, **kwargs):
         self.instance = kwargs.get('instance', None)
@@ -115,7 +119,6 @@ class WaitingListEntryEditForm(I18nModelForm):
             raise ValidationError(_('A voucher for this waiting list entry was already sent out.'))
 
         itemvar = cleaned_data.get('itemvar')
-
         if itemvar:
             self.instance.item = self.event.items.get(pk=itemvar.split('-')[0])
             if '-' in itemvar:
