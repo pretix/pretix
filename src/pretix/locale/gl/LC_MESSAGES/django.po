@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2025-12-15 20:00+0000\n"
+"PO-Revision-Date: 2026-01-12 17:00+0000\n"
 "Last-Translator: sandra r <sandrarial@gestiontickets.online>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -1149,7 +1149,7 @@ msgstr "Pregunta: {name}"
 #: pretix/base/settings.py:3775 pretix/base/settings.py:3828
 #: pretix/base/settings.py:3849 pretix/base/settings.py:3871
 msgid "Given name"
-msgstr "Nombre"
+msgstr "Nome"
 
 #: pretix/base/datasync/sourcefields.py:628
 #: pretix/base/datasync/sourcefields.py:638 pretix/base/settings.py:3670
@@ -24293,7 +24293,7 @@ msgstr "Sí, aprobar la orden"
 #: pretix/presale/templates/pretixpresale/event/order.html:483
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
 msgid "Cancel order"
-msgstr "Cancelar a orde"
+msgstr "Cancelar o pedido"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:12
 #: pretix/control/templates/pretixcontrol/order/deny.html:11
@@ -35952,10 +35952,9 @@ msgstr ""
 
 #: pretix/presale/forms/renderers.py:66
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
-#, fuzzy
 msgctxt "form"
 msgid "required"
-msgstr "expirado"
+msgstr "obrigatorio"
 
 #: pretix/presale/ical.py:87 pretix/presale/ical.py:146
 #: pretix/presale/ical.py:182
@@ -37539,14 +37538,13 @@ msgid "A payment of %(total)s is still pending for this order."
 msgstr "Un pago de %(total)s aínda está pendente para esta orde."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:97
-#, fuzzy, python-format
+#, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr "Por favor complete su pago antes de %(date)s"
+msgstr "Por favor complete o seu pago antes de %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:108
-#, fuzzy
 msgid "Re-try payment or choose another payment method"
-msgstr "Vuelva a intentar el pago o elija otro método de pago"
+msgstr "Volva tentar o pago ou escolla outro método de pago"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:126
 #, fuzzy
