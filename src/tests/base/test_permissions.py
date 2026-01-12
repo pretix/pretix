@@ -302,3 +302,68 @@ def test_list_of_events(event, user, admin, admin_request):
         assert set(event3.get_users_with_permission('event.settings.general:write')) == {user}
         assert set(event4.get_users_with_permission('event.settings.general:write')) == set()
         assert set(event.get_users_with_permission('event.orders:write')) == {user}
+
+
+@pytest.mark.django_db
+@pytest.mark.filterwarnings("ignore")
+def test_check_with_legacy_permission_names(event, user):
+    team1 = Team.objects.create(
+        organizer=event.organizer,
+        limit_event_permissions={"event.settings.general:write": True},
+        limit_organizer_permissions={
+            "organizer.giftcards:read": True,
+            "organizer.giftcards:write": True,
+            "organizer.reusablemedia:write": True,
+        },
+        all_events=True
+    )
+    team1.members.add(user)
+
+    # Team methods
+    assert team1.has_event_permission('can_change_event_settings')
+    assert team1.has_event_permission('can_change_settings')
+    assert not team1.has_event_permission('can_view_orders')
+    assert team1.has_organizer_permission('can_manage_gift_cards')
+    assert not team1.has_organizer_permission('can_manage_reusable_media')
+    assert team1.organizer_permission_set() == {
+        "organizer.giftcards:read",
+        "organizer.giftcards:write",
+        "organizer.reusablemedia:write",
+        "can_manage_gift_cards",
+    }
+    assert team1.organizer_permission_set(include_legacy=False) == {
+        "organizer.giftcards:read",
+        "organizer.giftcards:write",
+        "organizer.reusablemedia:write",
+    }
+    assert team1.event_permission_set() == {
+        "event.settings.general:write", "can_change_event_settings",
+    }
+    assert team1.event_permission_set(include_legacy=False) == {
+        "event.settings.general:write",
+    }
+
+    # User methods
+    user._teamcache = {}
+    assert user.get_event_permission_set(event.organizer, event) == {
+        "event.settings.general:write", "can_change_event_settings",
+    }
+    assert user.get_organizer_permission_set(event.organizer) == {
+        "organizer.giftcards:read",
+        "organizer.giftcards:write",
+        "organizer.reusablemedia:write",
+        "can_manage_gift_cards",
+    }
+    assert user.has_event_permission(event.organizer, event, 'can_change_event_settings')
+    assert user.has_event_permission(event.organizer, event, 'can_change_settings')
+    assert not user.has_event_permission(event.organizer, event, 'can_view_orders')
+    assert user.has_organizer_permission(event.organizer, 'can_manage_gift_cards')
+    assert not user.has_organizer_permission(event.organizer, 'can_manage_reusable_media')
+    assert user.get_events_with_permission("can_change_event_settings").get() == event
+    assert not user.get_events_with_permission("can_view_orders").exists()
+    assert user.get_organizers_with_permission("can_manage_gift_cards").get() == event.organizer
+    assert not user.get_organizers_with_permission("can_manage_reusable_media").exists()
+
+    # Event methods
+    assert event.get_users_with_permission("can_change_event_settings").get() == user
+    assert not event.get_users_with_permission("can_view_orders").exists()
