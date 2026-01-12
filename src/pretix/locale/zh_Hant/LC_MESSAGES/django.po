@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2025-12-22 20:00+0000\n"
+"PO-Revision-Date: 2026-01-12 17:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
@@ -288,39 +288,28 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "捆綁商品不得單獨捆綁。"
 
 #: pretix/api/serializers/item.py:235
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "付款太晚無法接受。"
+msgstr "程式啟動不能為空。"
 
 #: pretix/api/serializers/item.py:239
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "付款太晚無法接受。"
+msgstr "程式結束不能為空。"
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2321
-#, fuzzy
-#| msgid "The maximum date must not be before the minimum value."
 msgid "The program end must not be before the program start."
-msgstr "最大日期不得早於最小值。"
+msgstr "程式不能在程式開始之前結束。"
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2315
-#, fuzzy
-#| msgid "You can not select a subevent if your event is not an event series."
 msgid "You cannot use program times on an event series."
-msgstr "如果你的活動不是活動系列，則無法選擇子活動。"
+msgstr "您不能在事件系列中使用程式時間。"
 
 #: pretix/api/serializers/item.py:337
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
-#| "Please use the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, program times or variations via PATCH/PUT is not "
 "supported. Please use the dedicated nested endpoint."
 msgstr ""
-"不支持通過 PATCH/PUT 更新附加組件、捆綁包或變體。 請使用專用的嵌套端點。"
+"不支援透過PATCH/PUT更新附加元件、捆綁包、程式時間或變體。 請使用專用的巢狀端"
+"點。"
 
 #: pretix/api/serializers/item.py:345
 msgid "Only admission products can currently be personalized."
@@ -570,10 +559,8 @@ msgid "Event series date deleted"
 msgstr "活動系列日期已刪除"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "商品名稱"
+msgstr "產品已更改"
 
 #: pretix/api/webhooks.py:376
 msgid ""
@@ -614,16 +601,12 @@ msgid "Waiting list entry received voucher"
 msgstr "候補名單條目收到憑證"
 
 #: pretix/api/webhooks.py:413
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "優惠券代碼"
+msgstr "添加了優惠券"
 
 #: pretix/api/webhooks.py:417
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "已分配的優惠券"
+msgstr "優惠券已更改"
 
 #: pretix/api/webhooks.py:418
 msgid ""
