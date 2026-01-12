@@ -1,0 +1,50 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %} {% trans "Zalo ZNS History" %} {% endblock %}
+{% block content %}
+    <h1>{% trans "Zalo ZNS History" %}</h1>
+    {% if logs %}
+        <div class="table-responsive">
+            <table class="table table-hover table-striped">
+                <thead>
+                <tr>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Order" %}</th>
+                    <th>{% trans "Action" %}</th>
+                    <th>{% trans "Data" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for log in logs %}
+                    <tr>
+                        <td>{{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>
+                            <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=log.order.code %}">
+                                {{ log.order.code }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if log.action_type == 'pretix.plugins.zalozns.sent' %}
+                                <span class="label label-success">{% trans "Sent" %}</span>
+                            {% else %}
+                                <span class="label label-danger">{% trans "Failed" %}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <code>{{ log.parsed_data }}</code>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% else %}
+        <div class="empty-collection">
+            <p>
+                {% trans "No ZNS messages have been sent yet." %}
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -744,6 +744,24 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
     for cp in sorted_positions:
         cp._cached_quotas = list(cp.quotas)
 
+    # Create locks
+    if any(cp.expires < now() + timedelta(seconds=LOCK_TRUST_WINDOW) for cp in sorted_positions):
+        # No need to perform any locking if the cart positions still guarantee everything long enough.
+        full_lock_required = any(
+            getattr(o, 'seat', False) for o in sorted_positions
+        ) and event.settings.seating_minimal_distance > 0
+        if full_lock_required:
+            # We lock the entire event in this case since we don't want to deal with fine-granular locking
+            # in the case of seating distance enforcement
+            lock_objects([event])
+        else:
+            lock_objects(
+                [q for q in reduce(operator.or_, (set(cp._cached_quotas) for cp in sorted_positions), set()) if q.size is not None] +
+                [op.voucher for op in sorted_positions if op.voucher] +
+                [op.seat for op in sorted_positions if op.seat],
+                shared_lock_objects=[event]
+            )
+
     for cp in sorted_positions:
         try:
             cart._check_position_constraints(
@@ -768,24 +786,7 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
             err = error_messages['positions_removed'] % str(e)
             delete(cp)
 
-    # Create locks
     sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]  # eliminate deleted
-    if any(cp.expires < now() + timedelta(seconds=LOCK_TRUST_WINDOW) for cp in sorted_positions):
-        # No need to perform any locking if the cart positions still guarantee everything long enough.
-        full_lock_required = any(
-            getattr(o, 'seat', False) for o in sorted_positions
-        ) and event.settings.seating_minimal_distance > 0
-        if full_lock_required:
-            # We lock the entire event in this case since we don't want to deal with fine-granular locking
-            # in the case of seating distance enforcement
-            lock_objects([event])
-        else:
-            lock_objects(
-                [q for q in reduce(operator.or_, (set(cp._cached_quotas) for cp in sorted_positions), set()) if q.size is not None] +
-                [op.voucher for op in sorted_positions if op.voucher] +
-                [op.seat for op in sorted_positions if op.seat],
-                shared_lock_objects=[event]
-            )
 
     # Check maximum order size
     limit = min(int(event.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)

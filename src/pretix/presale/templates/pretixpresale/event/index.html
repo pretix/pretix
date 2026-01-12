@@ -28,6 +28,31 @@
 
 {% block custom_header %}
     {{ block.super }}
+    <style>
+        .bottom-cart-sticky-container {
+            position: -webkit-sticky;
+            position: sticky;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            margin-top: 20px;
+            margin-bottom: 0 !important;
+            border-top: 1px solid #ddd;
+            z-index: 100;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+        }
+        .product-row {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-radius: 4px;
+        }
+        .product-row:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            z-index: 10;
+            position: relative;
+        }
+    </style>
     <meta property="og:title" content="{{ ev.name }}" />
     {% if request.event.has_subevents and not subevent %}
         <meta property="og:description" content="{% trans "Event series" %}" />
@@ -221,7 +246,7 @@
                 <h2 class="sr-only">{% trans "Products" %}</h2>
                 {% include "pretixpresale/event/fragment_product_list.html" %}
                 {% if ev.presale_is_running and display_add_to_cart %}
-                    <div class="front-page">
+                    <div class="front-page bottom-cart-sticky-container">
                         <div class="row">
                             <div class="col-md-4 col-md-offset-8 col-xs-12">
                                 <button class="btn btn-block btn-primary btn-lg" type="submit" id="btn-add-to-cart">
