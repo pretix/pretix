@@ -664,7 +664,7 @@ class QuestionMixin:
 class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView):
     model = Question
     template_name = 'pretixcontrol/items/question.html'
-    permission = 'event.items:write'
+    permission = None
     template_name_field = 'question'
 
     @cached_property

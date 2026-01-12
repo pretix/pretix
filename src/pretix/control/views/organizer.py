@@ -1234,7 +1234,7 @@ class DeviceQueryMixin:
 class DeviceListView(DeviceQueryMixin, OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = Device
     template_name = 'pretixcontrol/organizers/devices.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:read'
     context_object_name = 'devices'
     paginate_by = 100
 
@@ -1247,7 +1247,7 @@ class DeviceListView(DeviceQueryMixin, OrganizerDetailViewMixin, OrganizerPermis
 class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     model = Device
     template_name = 'pretixcontrol/organizers/device_edit.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:write'
     form_class = DeviceForm
 
     def get_form_kwargs(self):
@@ -1278,7 +1278,7 @@ class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
 class DeviceLogView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     template_name = 'pretixcontrol/organizers/device_logs.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:read'
     model = LogEntry
     context_object_name = 'logs'
     paginate_by = 20
@@ -1306,7 +1306,7 @@ class DeviceLogView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, 
 class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     model = Device
     template_name = 'pretixcontrol/organizers/device_edit.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:write'
     context_object_name = 'device'
     form_class = DeviceForm
 
@@ -1349,7 +1349,7 @@ class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
 class DeviceBulkUpdateView(DeviceQueryMixin, OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
     template_name = 'pretixcontrol/organizers/device_bulk_edit.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:write'
     context_object_name = 'device'
     form_class = DeviceBulkEditForm
 
@@ -1463,7 +1463,7 @@ class DeviceBulkUpdateView(DeviceQueryMixin, OrganizerDetailViewMixin, Organizer
 class DeviceConnectView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     model = Device
     template_name = 'pretixcontrol/organizers/device_connect.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:write'
     context_object_name = 'device'
 
     def get_object(self, queryset=None):
@@ -1495,7 +1495,7 @@ class DeviceConnectView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
 class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     model = Device
     template_name = 'pretixcontrol/organizers/device_revoke.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:write'
     context_object_name = 'device'
 
     def get_object(self, queryset=None):
@@ -2283,7 +2283,7 @@ class RunScheduledExportView(OrganizerPermissionRequiredMixin, ExportMixin, View
 class GateListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = Gate
     template_name = 'pretixcontrol/organizers/gates.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:read'
     context_object_name = 'gates'
 
     def get_queryset(self):
@@ -2293,7 +2293,7 @@ class GateListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, L
 class GateCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     model = Gate
     template_name = 'pretixcontrol/organizers/gate_edit.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:write'
     form_class = GateForm
 
     def get_form_kwargs(self):
@@ -2327,7 +2327,7 @@ class GateCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 class GateUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
     model = Gate
     template_name = 'pretixcontrol/organizers/gate_edit.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:write'
     context_object_name = 'gate'
     form_class = GateForm
 
@@ -2362,7 +2362,7 @@ class GateUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
 class GateDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = Gate
     template_name = 'pretixcontrol/organizers/gate_delete.html'
-    permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:write'
     context_object_name = 'gate'
 
     def get_object(self, queryset=None):
@@ -2972,7 +2972,7 @@ class SSOClientDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
 class CustomerListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     model = Customer
     template_name = 'pretixcontrol/organizers/customers.html'
-    permission = 'organizer.customers:write'
+    permission = 'organizer.customers:read'
     context_object_name = 'customers'
 
     def get_queryset(self):
@@ -2993,7 +2993,7 @@ class CustomerListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
 class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     template_name = 'pretixcontrol/organizers/customer.html'
-    permission = 'organizer.customers:write'
+    permission = 'organizer.customers:read'
     context_object_name = 'orders'
 
     def get_queryset(self):

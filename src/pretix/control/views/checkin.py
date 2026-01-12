@@ -295,7 +295,7 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
 class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = CheckinList
     context_object_name = 'checkinlists'
-    permission = 'event.orders:read'
+    permission = ('event.orders:read', 'event.settings.general:write')
     template_name = 'pretixcontrol/checkin/lists.html'
     ordering = ('subevent__date_from', 'name', 'pk')
 
@@ -317,9 +317,9 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
         ctx['checkinlists'] = clists
 
-        ctx['can_change_organizer_settings'] = self.request.user.has_organizer_permission(
+        ctx['link_device_settings'] = self.request.user.has_organizer_permission(
             self.request.organizer,
-            'organizer.settings.general:write',
+            'organizer.devices:read',
             self.request
         )
         ctx['filter_form'] = self.filter_form
@@ -577,6 +577,12 @@ class CheckInResetView(CheckInListQueryMixin, EventPermissionRequiredMixin, Asyn
     form_class = CheckinResetForm
     permission = "event.orders:write"
     template_name = "pretixcontrol/checkin/reset.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        # Special case, we want two permissions to be set
+        if not request.user.has_event_permission(request.organizer, request.event, "event.settings.general:write", request=request):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
 
     def get_error_url(self, *args):
         return reverse(

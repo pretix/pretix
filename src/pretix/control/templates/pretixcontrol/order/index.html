@@ -319,7 +319,7 @@
                                             <span class="fa fa-check text-success fa-stack-1x fa-stack-shifted"></span>
                                         </span>
                                     {% endif %}
-                                    {% if i.transmission_status != "inflight" %}
+                                    {% if i.transmission_status != "inflight" and "event.orders:write" in request.eventpermset %}
                                         <form class="form-inline helper-display-inline" method="post"
                                               action="{% url "control:event.order.retransmitinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                             {% csrf_token %}
@@ -334,7 +334,7 @@
                                         </form>
                                     {% endif %}
                                     {% if not i.canceled %}
-                                        {% if i.regenerate_allowed %}
+                                        {% if i.regenerate_allowed and "event.orders:write" in request.eventpermset %}
                                             <form class="form-inline helper-display-inline" method="post"
                                                     action="{% url "control:event.order.regeninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                                 {% csrf_token %}
@@ -344,7 +344,7 @@
                                                 </button>
                                             </form>
                                         {% endif %}
-                                        {% if not i.is_cancellation %}
+                                        {% if not i.is_cancellation and "event.orders:write" in request.eventpermset %}
                                             <form class="form-inline helper-display-inline" method="post"
                                                     action="{% url "control:event.order.reissueinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                                 {% csrf_token %}

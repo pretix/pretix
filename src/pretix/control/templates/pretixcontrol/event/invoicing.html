@@ -165,13 +165,15 @@
                 </p>
             </fieldset>
         </div>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-default btn-lg" name="preview" value="preview" formtarget="_blank">
-                {% trans "Save and show preview" %}
-            </button>
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
-        </div>
+        {% if "event.settings.invoicing:write" in request.eventpermset %}
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-default btn-lg" name="preview" value="preview" formtarget="_blank">
+                    {% trans "Save and show preview" %}
+                </button>
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        {% endif %}
     </form>
 {% endblock %}

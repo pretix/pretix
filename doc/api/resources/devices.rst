@@ -30,7 +30,7 @@ software_brand                        string                     Device software
 software_version                      string                     Device software version (read-only)
 created                               datetime                   Creation time
 initialized                           datetime                   Time of initialization (or ``null``)
-initialization_token                  string                     Token for initialization
+initialization_token                  string                     Token for initialization (field invisible without without write permission)
 revoked                               boolean                    Whether this device no longer has access
 security_profile                      string                     The name of a supported security profile restricting API access
 ===================================== ========================== =======================================================
