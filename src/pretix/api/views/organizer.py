@@ -221,7 +221,7 @@ with scopes_disabled():
 class GiftCardViewSet(viewsets.ModelViewSet):
     serializer_class = GiftCardSerializer
     queryset = GiftCard.objects.none()
-    permission = 'organizer.giftcards:write'
+    permission = 'organizer.giftcards:read'
     write_permission = 'organizer.giftcards:write'
     filter_backends = (DjangoFilterBackend,)
     filterset_class = GiftCardFilter
@@ -344,7 +344,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
 class GiftCardTransactionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = GiftCardTransactionSerializer
     queryset = GiftCardTransaction.objects.none()
-    permission = 'organizer.giftcards:write'
+    permission = 'organizer.giftcards:read'
     write_permission = 'organizer.giftcards:write'
 
     @cached_property
@@ -532,8 +532,8 @@ class DeviceViewSet(mixins.CreateModelMixin,
                     GenericViewSet):
     serializer_class = DeviceSerializer
     queryset = Device.objects.none()
-    permission = 'organizer.settings.general:write'
-    write_permission = 'organizer.settings.general:write'
+    permission = 'organizer.devices:read'
+    write_permission = 'organizer.devices:write'
     lookup_field = 'device_id'
 
     def get_queryset(self):
@@ -542,6 +542,9 @@ class DeviceViewSet(mixins.CreateModelMixin,
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['organizer'] = self.request.organizer
+        ctx['can_see_tokens'] = (
+            self.request.user if self.request.user and self.request.user.is_authenticated else self.request.auth
+        ).has_organizer_permission(self.request.organizer, 'organizer.devices:write', request=self.request)
         return ctx
 
     @transaction.atomic()
@@ -572,7 +575,7 @@ class OrganizerSettingsView(views.APIView):
 
     def get(self, request, *args, **kwargs):
         s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer, context={
-            'request': request
+            'request': request, 'permissions': request.orgapermset
         })
         if 'explain' in request.GET:
             return Response({
@@ -589,7 +592,7 @@ class OrganizerSettingsView(views.APIView):
         s = OrganizerSettingsSerializer(
             instance=request.organizer.settings, data=request.data, partial=True,
             organizer=request.organizer, context={
-                'request': request
+                'request': request, 'permissions': request.orgapermset
             }
         )
         s.is_valid(raise_exception=True)
@@ -601,7 +604,7 @@ class OrganizerSettingsView(views.APIView):
                 }
             )
         s = OrganizerSettingsSerializer(instance=request.organizer.settings, organizer=request.organizer, context={
-            'request': request
+            'request': request, 'permissions': request.orgapermset
         })
         return Response(s.data)
 
@@ -618,7 +621,8 @@ with scopes_disabled():
 class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
     queryset = Customer.objects.none()
-    permission = 'organizer.customers:write'
+    permission = 'organizer.customers:read'
+    write_permission = 'organizer.customers:write'
     lookup_field = 'identifier'
     filter_backends = (DjangoFilterBackend,)
     filterset_class = CustomerFilter
@@ -735,7 +739,8 @@ with scopes_disabled():
 class MembershipViewSet(viewsets.ModelViewSet):
     serializer_class = MembershipSerializer
     queryset = Membership.objects.none()
-    permission = 'organizer.customers:write'
+    permission = 'organizer.customers:read'
+    write_permission = 'organizer.customers:write'
     filter_backends = (DjangoFilterBackend,)
     filterset_class = MembershipFilter
 

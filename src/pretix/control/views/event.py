@@ -502,7 +502,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
 class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Event
     context_object_name = 'event'
-    permission = 'event.settings.general:write'
+    permission = 'event.settings.payment:write'
     template_name = 'pretixcontrol/event/payment_provider.html'
 
     def get_success_url(self) -> str:
@@ -618,10 +618,28 @@ class EventSettingsFormView(EventPermissionRequiredMixin, DecoupleMixin, FormVie
             return self.render_to_response(self.get_context_data(form=form))
 
 
-class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
+class WritePermissionMixin:
+    def post(self, request, *args, **kwargs):
+        # Special case, we want to allow different access for read and write
+        if not request.user.has_event_permission(request.organizer, request.event, self.write_permission,
+                                                 request=request):
+            raise PermissionDenied()
+        return super().post(request, *args, **kwargs)
+
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        if not self.request.user.has_event_permission(
+                self.request.organizer, self.request.event, self.write_permission, request=self.request):
+            for f in form.fields.values():
+                f.disabled = True
+        return form
+
+
+class PaymentSettings(WritePermissionMixin, EventSettingsViewMixin, EventSettingsFormView):
     template_name = 'pretixcontrol/event/payment.html'
     form_class = PaymentSettingsForm
-    permission = 'event.settings.general:write'
+    permission = ('event.settings.payment:write', 'event.settings.general:write')
+    write_permission = 'event.settings.payment:write'
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.payment', kwargs={
@@ -647,10 +665,11 @@ class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
         return context
 
 
-class TaxSettings(EventSettingsViewMixin, EventSettingsFormView):
+class TaxSettings(WritePermissionMixin, EventSettingsViewMixin, EventSettingsFormView):
     template_name = 'pretixcontrol/event/tax.html'
     form_class = TaxSettingsForm
-    permission = 'event.settings.general:write'
+    permission = ('event.settings.tax:write', 'event.settings.general:write')
+    write_permission = 'event.settings.tax:write'
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.tax', kwargs={
@@ -666,11 +685,12 @@ class TaxSettings(EventSettingsViewMixin, EventSettingsFormView):
         return context
 
 
-class InvoiceSettings(EventSettingsViewMixin, EventSettingsFormView):
+class InvoiceSettings(WritePermissionMixin, EventSettingsViewMixin, EventSettingsFormView):
     model = Event
     form_class = InvoiceSettingsForm
     template_name = 'pretixcontrol/event/invoicing.html'
-    permission = 'event.settings.general:write'
+    permission = ('event.settings.invoicing:write', 'event.settings.general:write')
+    write_permission = 'event.settings.invoicing:write'
 
     def get_context_data(self, **kwargs):
         types = get_transmission_types()
@@ -738,7 +758,7 @@ class CancelSettings(EventSettingsViewMixin, EventSettingsFormView):
 
 
 class InvoicePreview(EventPermissionRequiredMixin, View):
-    permission = 'event.settings.general:write'
+    permission = 'event.settings.invoicing:write'
 
     def get(self, request, *args, **kwargs):
         fname, ftype, fcontent = build_preview_invoice_pdf(request.event)
@@ -1297,7 +1317,7 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
     model = TaxRule
     form_class = TaxRuleForm
     template_name = 'pretixcontrol/event/tax_edit.html'
-    permission = 'event.settings.general:write'
+    permission = 'event.settings.tax:write'
     context_object_name = 'taxrule'
 
     def get_success_url(self) -> str:
@@ -1358,7 +1378,7 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
     model = TaxRule
     form_class = TaxRuleForm
     template_name = 'pretixcontrol/event/tax_edit.html'
-    permission = 'event.settings.general:write'
+    permission = 'event.settings.tax:write'
     context_object_name = 'rule'
 
     def get_object(self, queryset=None) -> TaxRule:
@@ -1422,7 +1442,7 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
 
 class TaxDefault(EventSettingsViewMixin, EventPermissionRequiredMixin, DetailView):
     model = TaxRule
-    permission = 'event.settings.general:write'
+    permission = 'event.settings.tax:write'
 
     def get_object(self, queryset=None) -> TaxRule:
         try:
@@ -1467,7 +1487,7 @@ class TaxDefault(EventSettingsViewMixin, EventPermissionRequiredMixin, DetailVie
 class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, CompatDeleteView):
     model = TaxRule
     template_name = 'pretixcontrol/event/tax_delete.html'
-    permission = 'event.settings.general:write'
+    permission = 'event.settings.tax:write'
     context_object_name = 'taxrule'
 
     def get_object(self, queryset=None) -> TaxRule:

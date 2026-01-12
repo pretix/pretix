@@ -1118,6 +1118,9 @@ api_event_settings_fields = EventPluginSignal()
 This signal is sent out to collect serializable settings fields for the API. You are expected to
 return a dictionary mapping names of attributes in the settings store to DRF serializer field instances.
 
+These are readable for all users with access to the events, therefore secrets made in the settings store
+should not be included!
+
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 

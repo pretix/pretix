@@ -28,8 +28,6 @@ OLD_TO_NEW_EVENT_MIGRATION = {
     "can_change_event_settings": [
         "event.settings.general:write",
         "event.settings.payment:write",
-        "event.settings.plugins:write",
-        "event.settings.email.sender:write",
         "event.settings.tax:write",
         "event.settings.invoicing:write",
         "event.subevents:write",

@@ -100,28 +100,30 @@
                             {{ r.amount|money:request.event.currency }}
                         </td>
                         <td class="text-right flip">
-                            {% if r.state == "transit" or r.state == "created" %}
-                                <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
-                                   class="btn btn-danger btn-xs" data-toggle="tooltip">
-                                    <span class="fa fa-times"></span>
-                                    {% trans "Cancel" %}
-                                </a>
-                                <a href="{% url "control:event.order.refunds.done" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
-                                   class="btn btn-primary btn-xs" data-toggle="tooltip">
-                                    <span class="fa fa-check"></span>
-                                    {% trans "Confirm as done" %}
-                                </a>
+                            {% if "event.orders:write" in request.eventpermset %}
+                                {% if r.state == "transit" or r.state == "created" %}
+                                    <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                       class="btn btn-danger btn-xs" data-toggle="tooltip">
+                                        <span class="fa fa-times"></span>
+                                        {% trans "Cancel" %}
+                                    </a>
+                                    <a href="{% url "control:event.order.refunds.done" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                       class="btn btn-primary btn-xs" data-toggle="tooltip">
+                                        <span class="fa fa-check"></span>
+                                        {% trans "Confirm as done" %}
+                                    </a>
                                 {% elif r.state == "external" %}
-                                <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
-                                   class="btn btn-default btn-xs" data-toggle="tooltip">
-                                    <span class="fa fa-times"></span>
-                                    {% trans "Ignore" %}
-                                </a>
-                                <a href="{% url "control:event.order.refunds.process" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
-                                   class="btn btn-primary btn-xs" data-toggle="tooltip">
-                                    <span class="fa fa-check"></span>
-                                    {% trans "Process refund" %}
-                                </a>
+                                    <a href="{% url "control:event.order.refunds.cancel" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                       class="btn btn-default btn-xs" data-toggle="tooltip">
+                                        <span class="fa fa-times"></span>
+                                        {% trans "Ignore" %}
+                                    </a>
+                                    <a href="{% url "control:event.order.refunds.process" event=request.event.slug organizer=request.event.organizer.slug code=r.order.code refund=r.pk %}?next={{ request.get_full_path|urlencode }}"
+                                       class="btn btn-primary btn-xs" data-toggle="tooltip">
+                                        <span class="fa fa-check"></span>
+                                        {% trans "Process refund" %}
+                                    </a>
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>

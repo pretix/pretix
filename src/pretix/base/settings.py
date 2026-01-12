@@ -345,6 +345,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.tax:write',
         'form_kwargs': dict(
             label=_("Show net prices instead of gross prices in the product list"),
             help_text=_("Independent of your choice, the cart will show gross prices as this is the price that needs to be "
@@ -492,6 +493,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
+        'write_permission': 'event.settings.tax:write',
         'form_kwargs': dict(
             label=_("Rounding of taxes"),
             widget=forms.RadioSelect,
@@ -511,15 +513,17 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Ask for invoice address"),
-        )
+        ),
     },
     'invoice_address_not_asked_free': {
         'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_('Do not ask for invoice address if an order is free'),
         )
@@ -529,6 +533,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Require customer name"),
         )
@@ -538,6 +543,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Show attendee names on invoices"),
         )
@@ -547,6 +553,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Show event location on invoices"),
             help_text=_("The event location will be shown below the list of products if it is the same for all "
@@ -558,6 +565,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Show exchange rates"),
             widget=forms.RadioSelect,
@@ -581,6 +589,7 @@ DEFAULTS = {
         'default': 'False',
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'type': bool,
         'form_kwargs': dict(
             label=_("Require invoice address"),
@@ -591,6 +600,7 @@ DEFAULTS = {
         'default': 'False',
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'type': bool,
         'form_kwargs': dict(
             label=_("Require a business address"),
@@ -603,6 +613,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Ask for beneficiary"),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
@@ -613,6 +624,7 @@ DEFAULTS = {
         'type': LazyI18nString,
         'form_class': I18nFormField,
         'serializer_class': I18nField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Custom recipient field label"),
             widget=I18nTextInput,
@@ -628,6 +640,7 @@ DEFAULTS = {
         'type': LazyI18nString,
         'form_class': I18nFormField,
         'serializer_class': I18nField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Custom recipient field help text"),
             widget=I18nTextInput,
@@ -640,6 +653,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Ask for VAT ID"),
             help_text=format_lazy(
@@ -655,6 +669,7 @@ DEFAULTS = {
         'type': list,
         'form_class': forms.MultipleChoiceField,
         'serializer_class': serializers.MultipleChoiceField,
+        'write_permission': 'event.settings.invoicing:write',
         'serializer_kwargs': dict(
             choices=lazy(
                 lambda *args: sorted([(cc, gettext(Country(cc).name)) for cc in VAT_ID_COUNTRIES], key=lambda c: c[1]),
@@ -682,6 +697,7 @@ DEFAULTS = {
         'type': LazyI18nString,
         'form_class': I18nFormField,
         'serializer_class': I18nField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Invoice address explanation"),
             widget=I18nMarkdownTextarea,
@@ -694,6 +710,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Show paid amount on partially paid invoices"),
             help_text=_("If an invoice has already been paid partially, this option will add the paid and pending "
@@ -705,6 +722,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Show free products on invoices"),
             help_text=_("Note that invoices will never be generated for orders that contain only free "
@@ -716,6 +734,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Show expiration date of order"),
             help_text=_("The expiration date will not be shown if the invoice is generated after the order is paid."),
@@ -727,6 +746,7 @@ DEFAULTS = {
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
         'serializer_kwargs': dict(),
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Minimum length of invoice number after prefix"),
             help_text=_("The part of your invoice number after your prefix will be filled up with leading zeros up to this length, e.g. INV-001 or INV-00001."),
@@ -740,6 +760,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Generate invoices with consecutive numbers"),
             help_text=_("If deactivated, the order code will be used in the invoice number."),
@@ -750,6 +771,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Invoice number prefix"),
             help_text=_("This will be prepended to invoice numbers. If you leave this field empty, your event slug will "
@@ -777,6 +799,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Invoice number prefix for cancellations"),
             help_text=_("This will be prepended to invoice numbers of cancellations. If you leave this field empty, "
@@ -800,6 +823,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Highlight order code to make it stand out visibly"),
             help_text=_("Only respected by some invoice renderers."),
@@ -811,6 +835,7 @@ DEFAULTS = {
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
         'serializer_kwargs': lambda: dict(**invoice_font_kwargs()),
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': lambda: dict(
             label=_('Font'),
             help_text=_("Only respected by some invoice renderers."),
@@ -821,6 +846,7 @@ DEFAULTS = {
     'invoice_renderer': {
         'default': 'classic',  # default for new events is 'modern1'
         'type': str,
+        'write_permission': 'event.settings.invoicing:write',
     },
     'ticket_secret_generator': {
         'default': 'random',
@@ -897,6 +923,7 @@ DEFAULTS = {
         'type': LazyI18nString,
         'form_class': I18nFormField,
         'serializer_class': I18nField,
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {
@@ -918,6 +945,7 @@ DEFAULTS = {
                 ('minutes', _("in minutes"))
             ),
         ),
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_("Set payment term"),
             widget=forms.RadioSelect,
@@ -935,6 +963,7 @@ DEFAULTS = {
         'type': int,
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_('Payment term in days'),
             widget=forms.NumberInput(
@@ -960,6 +989,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_('Only end payment terms on weekdays'),
             help_text=_("If this is activated and the payment term of any order ends on a Saturday or Sunday, it will be "
@@ -977,6 +1007,7 @@ DEFAULTS = {
         'type': int,
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_('Payment term in minutes'),
             help_text=_("The number of minutes after placing an order the user has to pay to preserve their reservation. "
@@ -1001,6 +1032,7 @@ DEFAULTS = {
         'type': RelativeDateWrapper,
         'form_class': RelativeDateField,
         'serializer_class': SerializerRelativeDateField,
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_('Last date of payments'),
             help_text=_("The last date any payments are accepted. This has precedence over the terms "
@@ -1013,6 +1045,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_('Automatically expire unpaid orders'),
             help_text=_("If checked, all unpaid orders will automatically go from 'pending' to 'expired' "
@@ -1025,6 +1058,7 @@ DEFAULTS = {
         'type': int,
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_('Expiration delay'),
             help_text=_("The order will only actually expire this many days after the expiration date communicated "
@@ -1047,6 +1081,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_('Hide "payment pending" state on customer-facing pages'),
             help_text=_("The payment instructions panel will still be shown to the primary customer, but no indication "
@@ -1058,9 +1093,11 @@ DEFAULTS = {
         'default': 'True',
         'type': bool,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.payment:write',
     },
     'payment_giftcard_public_name': {
         'default': LazyI18nString.from_gettext(gettext_noop('Gift card')),
+        'write_permission': 'event.settings.payment:write',
         'type': LazyI18nString
     },
     'payment_giftcard_public_description': {
@@ -1069,10 +1106,12 @@ DEFAULTS = {
             'enough credit to pay for the full order, you will be shown this page again and you can either '
             'redeem another gift card or select a different payment method for the difference.'
         )),
+        'write_permission': 'event.settings.payment:write',
         'type': LazyI18nString
     },
     'payment_resellers__restrict_to_sales_channels': {
         'default': ['resellers'],
+        'write_permission': 'event.settings.payment:write',
         'type': list
     },
     'payment_term_accept_late': {
@@ -1080,6 +1119,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_('Accept late payments'),
             help_text=_("Accept payments for orders even when they are in 'expired' state as long as enough "
@@ -1109,6 +1149,7 @@ DEFAULTS = {
                 ('none', _('Charge no taxes')),
             ),
         ),
+        'write_permission': 'event.settings.payment:write',
         'form_kwargs': dict(
             label=_("Tax handling on payment fees"),
             widget=forms.RadioSelect,
@@ -1155,6 +1196,7 @@ DEFAULTS = {
                 ('paid', _('Automatically on payment or when required by payment method')),
             ),
         ),
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Generate invoices"),
             widget=forms.RadioSelect,
@@ -1183,6 +1225,7 @@ DEFAULTS = {
                 ('invoice_date', _('Invoice date')),
             ),
         ),
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Date of service"),
             widget=forms.RadioSelect,
@@ -1203,6 +1246,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Automatically cancel and reissue invoice on address changes"),
             help_text=_("If customers change their invoice address on an existing order, the invoice will "
@@ -1215,6 +1259,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Allow to update existing invoices"),
             help_text=_("By default, invoices can never again be changed once they are issued. In most countries, we "
@@ -1224,6 +1269,7 @@ DEFAULTS = {
     },
     'invoice_generate_sales_channels': {
         'default': json.dumps(['web']),
+        'write_permission': 'event.settings.invoicing:write',
         'type': list
     },
     'invoice_generate_only_business': {
@@ -1240,6 +1286,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Address line"),
             widget=forms.Textarea(attrs={
@@ -1255,6 +1302,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             max_length=190,
             label=_("Company name"),
@@ -1265,6 +1313,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             widget=forms.TextInput(attrs={
                 'placeholder': '12345'
@@ -1278,6 +1327,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             widget=forms.TextInput(attrs={
                 'placeholder': _('Random City')
@@ -1294,6 +1344,7 @@ DEFAULTS = {
         'serializer_kwargs': {
             'choices': [('', '')],
         },
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': {
             "label": pgettext_lazy('address', 'State'),
             'choices': [('', '')],
@@ -1305,6 +1356,7 @@ DEFAULTS = {
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
         'serializer_kwargs': lambda: dict(**country_choice_kwargs()),
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': lambda: dict(
             label=_('Country'),
             widget=forms.Select(attrs={
@@ -1318,6 +1370,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Domestic tax ID"),
             help_text=_("e.g. tax number in Germany, ABN in Australia, …"),
@@ -1329,6 +1382,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("EU VAT ID"),
             max_length=190,
@@ -1339,6 +1393,7 @@ DEFAULTS = {
         'type': LazyI18nString,
         'form_class': I18nFormField,
         'serializer_class': I18nField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             widget=I18nTextarea,
             widget_kwargs={'attrs': {
@@ -1356,6 +1411,7 @@ DEFAULTS = {
         'type': LazyI18nString,
         'form_class': I18nFormField,
         'serializer_class': I18nField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             widget=I18nTextarea,
             widget_kwargs={'attrs': {
@@ -1373,6 +1429,7 @@ DEFAULTS = {
         'type': LazyI18nString,
         'form_class': I18nFormField,
         'serializer_class': I18nField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             widget=I18nTextarea,
             widget_kwargs={'attrs': {
@@ -1387,6 +1444,7 @@ DEFAULTS = {
     },
     'invoice_language': {
         'default': '__user__',
+        'write_permission': 'event.settings.invoicing:write',
         'type': str
     },
     'invoice_email_attachment': {
@@ -1394,6 +1452,7 @@ DEFAULTS = {
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Attach invoices to emails"),
             help_text=_("If invoices are automatically generated for all orders, they will be attached to the order "
@@ -1407,6 +1466,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
+        'write_permission': 'event.settings.invoicing:write',
         'form_kwargs': dict(
             label=_("Email address to receive a copy of each invoice"),
             help_text=_("Each newly created invoice will be sent to this email address shortly after creation. You can "
@@ -3260,7 +3320,8 @@ Your {organizer} team"""))  # noqa: W291
                 'image/png', 'image/jpeg', 'image/gif'
             ],
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
-        )
+        ),
+        'write_permission': 'event.settings.invoicing:write',
     },
     'frontpage_text': {
         'default': '',

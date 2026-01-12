@@ -1387,7 +1387,14 @@ def test_get_event_settings(token_client, organizer, event):
 
 
 @pytest.mark.django_db
-def test_patch_event_settings(token_client, organizer, event):
+def test_patch_event_settings(token_client, organizer, event, team):
+    team.all_event_permissions = False
+    team.limit_event_permissions = {
+        "event.settings.general:write": True,
+        "event.settings.tax:write": True,
+    }
+    team.save()
+
     organizer.settings.imprint_url = 'https://example.org'
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
@@ -1502,6 +1509,29 @@ def test_patch_event_settings(token_client, organizer, event):
     assert set(resp.data['locales']) == set(locales)
     event.settings.flush()
     assert set(event.settings.locales) == set(locales)
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'display_net_prices': True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.settings.flush()
+    assert event.settings.display_net_prices
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'invoice_address_asked': False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'invoice_address_asked': ['Setting this field requires permission event.settings.invoicing:write']
+    }
 
 
 @pytest.mark.django_db

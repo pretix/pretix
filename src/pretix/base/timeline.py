@@ -32,7 +32,11 @@ from pretix.base.models import ItemVariation
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.signals import timeline_events
 
-TimelineEvent = namedtuple('TimelineEvent', ('event', 'subevent', 'datetime', 'description', 'edit_url'))
+TimelineEvent = namedtuple(
+    'TimelineEvent',
+    ('event', 'subevent', 'datetime', 'description', 'edit_url', 'edit_permission'),
+    defaults=(None, None, None, None, None, 'event.settings.general:write')
+)
 
 
 def timeline_for_event(event, subevent=None):
@@ -46,6 +50,7 @@ def timeline_for_event(event, subevent=None):
                 'subevent': subevent.pk
             }
         )
+        ev_edit_permission = 'event.subevents:write'
     else:
         ev_edit_url = reverse(
             'control:event.settings', kwargs={
@@ -53,12 +58,14 @@ def timeline_for_event(event, subevent=None):
                 'organizer': event.organizer.slug
             }
         )
+        ev_edit_permission = 'event.settings.general:write'
 
     tl.append(TimelineEvent(
         event=event, subevent=subevent,
         datetime=ev.date_from,
         description=pgettext_lazy('timeline', 'Your event starts'),
-        edit_url=ev_edit_url + '#id_date_from_0'
+        edit_url=ev_edit_url + '#id_date_from_0',
+        edit_permission=ev_edit_permission,
     ))
 
     if ev.date_to:
@@ -66,7 +73,8 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=ev.date_to,
             description=pgettext_lazy('timeline', 'Your event ends'),
-            edit_url=ev_edit_url + '#id_date_to_0'
+            edit_url=ev_edit_url + '#id_date_to_0',
+            edit_permission=ev_edit_permission,
         ))
 
     if ev.date_admission:
@@ -74,7 +82,8 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=ev.date_admission,
             description=pgettext_lazy('timeline', 'Admissions for your event start'),
-            edit_url=ev_edit_url + '#id_date_admission_0'
+            edit_url=ev_edit_url + '#id_date_admission_0',
+            edit_permission=ev_edit_permission,
         ))
 
     if ev.presale_start:
@@ -82,7 +91,8 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=ev.presale_start,
             description=pgettext_lazy('timeline', 'Start of ticket sales'),
-            edit_url=ev_edit_url + '#id_presale_start_0'
+            edit_url=ev_edit_url + '#id_presale_start_0',
+            edit_permission=ev_edit_permission,
         ))
 
     tl.append(TimelineEvent(
@@ -97,7 +107,8 @@ def timeline_for_event(event, subevent=None):
         ) if not ev.presale_end else (
             pgettext_lazy('timeline', 'End of ticket sales')
         ),
-        edit_url=ev_edit_url + '#id_presale_end_0'
+        edit_url=ev_edit_url + '#id_presale_end_0',
+        edit_permission=ev_edit_permission,
     ))
 
     rd = event.settings.get('last_order_modification_date', as_type=RelativeDateWrapper)
@@ -106,7 +117,8 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=rd.datetime(ev),
             description=pgettext_lazy('timeline', 'Customers can no longer modify their order information'),
-            edit_url=ev_edit_url + '#id_settings-last_order_modification_date_0_0'
+            edit_url=ev_edit_url + '#id_settings-last_order_modification_date_0_0',
+            edit_permission='event.settings.general:write',
         ))
 
     rd = event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
@@ -122,7 +134,8 @@ def timeline_for_event(event, subevent=None):
             edit_url=reverse('control:event.settings.payment', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug
-            })
+            }),
+            edit_permission='event.settings.payment:write',
         ))
 
     rd = event.settings.get('ticket_download_date', as_type=RelativeDateWrapper)
@@ -134,7 +147,8 @@ def timeline_for_event(event, subevent=None):
             edit_url=reverse('control:event.settings.tickets', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug
-            })
+            }),
+            edit_permission='event.settings.general:write',
         ))
 
     rd = event.settings.get('cancel_allow_user_until', as_type=RelativeDateWrapper)
@@ -146,7 +160,8 @@ def timeline_for_event(event, subevent=None):
             edit_url=reverse('control:event.settings.cancel', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug
-            })
+            }),
+            edit_permission='event.settings.general:write',
         ))
 
     rd = event.settings.get('cancel_allow_user_paid_until', as_type=RelativeDateWrapper)
@@ -158,7 +173,8 @@ def timeline_for_event(event, subevent=None):
             edit_url=reverse('control:event.settings.cancel', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug
-            })
+            }),
+            edit_permission='event.settings.general:write',
         ))
 
     rd = event.settings.get('change_allow_user_until', as_type=RelativeDateWrapper)
@@ -170,7 +186,8 @@ def timeline_for_event(event, subevent=None):
             edit_url=reverse('control:event.settings.cancel', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug
-            })
+            }),
+            edit_permission='event.settings.general:write',
         ))
 
     rd = event.settings.get('waiting_list_auto_disable', as_type=RelativeDateWrapper)
@@ -182,7 +199,8 @@ def timeline_for_event(event, subevent=None):
             edit_url=reverse('control:event.settings', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug
-            }) + '#waiting-list-open'
+            }) + '#waiting-list-open',
+            edit_permission='event.settings.general:write',
         ))
 
     if not event.has_subevents:
@@ -196,7 +214,8 @@ def timeline_for_event(event, subevent=None):
                 edit_url=reverse('control:event.settings.mail', kwargs={
                     'event': event.slug,
                     'organizer': event.organizer.slug
-                })
+                }),
+                edit_permission='event.settings.general:write',
             ))
 
     if subevent:
@@ -210,7 +229,8 @@ def timeline_for_event(event, subevent=None):
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'subevent': subevent.pk,
-                    })
+                    }),
+                    edit_permission='event.subevents:write',
                 ))
             if sei.available_until:
                 tl.append(TimelineEvent(
@@ -221,7 +241,8 @@ def timeline_for_event(event, subevent=None):
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'subevent': subevent.pk,
-                    })
+                    }),
+                    edit_permission='event.subevents:write',
                 ))
         for sei in subevent.var_overrides.values():
             if sei.available_from:
@@ -234,7 +255,8 @@ def timeline_for_event(event, subevent=None):
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'subevent': subevent.pk,
-                    })
+                    }),
+                    edit_permission='event.subevents:write',
                 ))
             if sei.available_until:
                 tl.append(TimelineEvent(
@@ -246,7 +268,8 @@ def timeline_for_event(event, subevent=None):
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'subevent': subevent.pk,
-                    })
+                    }),
+                    edit_permission='event.subevents:write',
                 ))
 
     for d in event.discounts.filter(Q(available_from__isnull=False) | Q(available_until__isnull=False)):
@@ -259,7 +282,8 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'discount': d.pk,
-                })
+                }),
+                edit_permission='event.items:write',
             ))
         if d.available_until:
             tl.append(TimelineEvent(
@@ -270,7 +294,8 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'discount': d.pk,
-                })
+                }),
+                edit_permission='event.items:write',
             ))
 
     for p in event.items.filter(Q(available_from__isnull=False) | Q(available_until__isnull=False)):
@@ -283,7 +308,8 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'item': p.pk,
-                }) + '#id_available_from_0'
+                }) + '#id_available_from_0',
+                edit_permission='event.items:write',
             ))
         if p.available_until:
             tl.append(TimelineEvent(
@@ -294,7 +320,8 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'item': p.pk,
-                }) + '#id_available_until_0'
+                }) + '#id_available_until_0',
+                edit_permission='event.items:write',
             ))
 
     for v in ItemVariation.objects.filter(
@@ -313,7 +340,8 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'item': v.item.pk,
-                }) + '#tab-0-3-open'
+                }) + '#tab-0-3-open',
+                edit_permission='event.items:write',
             ))
         if v.available_until:
             tl.append(TimelineEvent(
@@ -327,7 +355,8 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'item': v.item.pk,
-                }) + '#tab-0-3-open'
+                }) + '#tab-0-3-open',
+                edit_permission='event.items:write',
             ))
 
     pprovs = event.get_payment_providers()
@@ -357,7 +386,8 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'provider': pprov.identifier,
-                })
+                }),
+                edit_permission='event.settings.payment:write',
             ))
         availability_date = pprov.settings.get('_availability_date', as_type=RelativeDateWrapper)
         if availability_date:
@@ -375,7 +405,8 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'provider': pprov.identifier,
-                })
+                }),
+                edit_permission='event.settings.payment:write',
             ))
 
     for recv, resp in timeline_events.send(sender=event, subevent=subevent):

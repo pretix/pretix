@@ -422,7 +422,7 @@ class DeviceSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(read_only=True)
     revoked = serializers.BooleanField(read_only=True)
     initialized = serializers.DateTimeField(read_only=True)
-    initialization_token = serializers.DateTimeField(read_only=True)
+    initialization_token = serializers.CharField(read_only=True)
     security_profile = serializers.ChoiceField(choices=[], required=False, default="full")
 
     class Meta:
@@ -436,6 +436,8 @@ class DeviceSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['security_profile'].choices = [(k, v.verbose_name) for k, v in get_all_security_profiles().items()]
+        if not self.context['can_see_tokens']:
+            del self.fields['initialization_token']
 
 
 class TeamInviteSerializer(serializers.ModelSerializer):
@@ -519,7 +521,10 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 
 
 class OrganizerSettingsSerializer(SettingsSerializer):
+    default_write_permission = 'organizer.settings.general:write'
     default_fields = [
+        # These are readable for all users with access to the events, therefore secrets made in the settings store
+        # should not be included!
         'customer_accounts',
         'customer_accounts_native',
         'customer_accounts_link_by_email',

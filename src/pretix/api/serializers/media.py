@@ -24,7 +24,7 @@ from decimal import Decimal
 
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import OrderPositionSerializer
@@ -66,6 +66,9 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
         super().__init__(*args, **kwargs)
 
         if 'linked_giftcard' in self.context['request'].query_params.getlist('expand'):
+            if not self.context["can_read_giftcards"]:
+                raise PermissionDenied("No permission to access gift card details.")
+
             self.fields['linked_giftcard'] = NestedGiftCardSerializer(read_only=True, context=self.context)
             if 'linked_giftcard.owner_ticket' in self.context['request'].query_params.getlist('expand'):
                 self.fields['linked_giftcard'].fields['owner_ticket'] = NestedOrderPositionSerializer(read_only=True, context=self.context)
@@ -77,6 +80,8 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             )
 
         if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
+            # No additional permission check performed, documented limitation of the permission system
+            # Would get to complex/unusable otherwise since the permission depends on the event
             self.fields['linked_orderposition'] = NestedOrderPositionSerializer(read_only=True)
         else:
             self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
@@ -86,6 +91,9 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             )
 
         if 'customer' in self.context['request'].query_params.getlist('expand'):
+            if not self.context["can_read_customers"]:
+                raise PermissionDenied("No permission to access customer details.")
+
             self.fields['customer'] = CustomerSerializer(read_only=True)
         else:
             self.fields['customer'] = serializers.SlugRelatedField(

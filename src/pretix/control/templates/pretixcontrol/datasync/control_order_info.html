@@ -11,18 +11,20 @@
     <ul class="list-group">
         {% for identifier, display_name, pending, objects in providers %}
             <li class="list-group-item">
-                <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=identifier %}" method="post" class="form-inline pull-right">
-                    {% csrf_token %}
-                    {% if pending %}
-                        {% if pending.not_before > now or pending.need_manual_retry %}
-                            <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
+                {% if "event.orders:write" in request.eventpermset %}
+                    <form action="{% url "control:event.order.sync_job" organizer=event.organizer.slug event=event.slug code=order.code provider=identifier %}" method="post" class="form-inline pull-right">
+                        {% csrf_token %}
+                        {% if pending %}
+                            {% if pending.not_before > now or pending.need_manual_retry %}
+                                <button type="submit" name="run_job_now" value="{{ pending.pk }}" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Retry now" %}</button>
+                            {% endif %}
+                            <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-times"></i> {% trans "Cancel" %}</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
+                            <input type="hidden" name="queue_sync" value="true">
                         {% endif %}
-                        <button type="submit" name="cancel_job" value="{{ pending.pk }}" class="btn btn-danger"><i class="fa fa-times"></i> {% trans "Cancel" %}</button>
-                    {% else %}
-                        <button type="submit" class="btn btn-default"><i class="fa fa-refresh"></i> {% trans "Sync now" %}</button>
-                        <input type="hidden" name="queue_sync" value="true">
-                    {% endif %}
-                </form>
+                    </form>
+                {% endif %}
                 <p><b>{{ display_name }}</b></p>
                 {% if pending %}
                     <p>

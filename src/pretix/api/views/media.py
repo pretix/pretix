@@ -95,6 +95,8 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['organizer'] = self.request.organizer
+        ctx['can_read_giftcards'] = 'organizer.giftcards:read' in self.request.orgapermset
+        ctx['can_read_customers'] = 'organizer.customers:read' in self.request.orgapermset
         return ctx
 
     @transaction.atomic()

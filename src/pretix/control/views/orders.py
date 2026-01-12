@@ -2961,7 +2961,7 @@ class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
 class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
     template_name = 'pretixcontrol/orders/cancel.html'
-    permission = 'event.orders:write'
+    permission = 'event:cancel'
     form_class = EventCancelForm
     task = cancel_event
     known_errortypes = ['OrderError']
