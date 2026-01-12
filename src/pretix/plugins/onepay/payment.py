@@ -99,7 +99,15 @@ class OnePay(BasePaymentProvider):
         params['vpc_OrderInfo'] = payment.order.code
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         params['vpc_Amount'] = int(payment.amount * (10 ** places))
-        params['vpc_TicketNo'] = request.META.get('REMOTE_ADDR', '127.0.0.1')
+
+        # Get client IP
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR', '127.0.0.1')
+        params['vpc_TicketNo'] = ip
+
         params['vpc_Currency'] = self.event.currency
 
         # Additional params usually required
@@ -117,13 +125,30 @@ class OnePay(BasePaymentProvider):
         # NOTE: This implementation assumes standard OnePay/VPC logic.
         # Actual implementation might require tweaking based on specific OnePay contract (Domestic vs International often differ slightly).
 
-        query_params = []
-        for key in sorted(params.keys()):
-            val = str(params[key])
-            if len(val) > 0:
-                query_params.append(f"{key}={val}")
+        # Proper URL encoding is crucial
+        # Note: OnePay hashing usually requires the RAW string (key=value&key=value) *before* URL encoding,
+        # OR it requires hashing the values as they will be sent.
+        # Standard VPC: Hash the string `key=value&key=value` (values not URL encoded), then URL encode the whole thing for the redirect.
+        # However, `vpc_ReturnURL` often contains special chars.
 
-        querystring = "&".join(query_params)
+        # Let's clarify OnePay/VPC standard:
+        # 1. Create string for hashing: key=value&key=value (sorted by key). Values are NOT URL encoded yet?
+        #    Actually, most VPC docs say values SHOULD be URL encoded *if* they contain special chars?
+        #    Let's check `urllib.parse.urlencode`. It encodes by default.
+        #    If OnePay expects raw values in hash, we must be careful.
+        #    Common practice: Build dict, `urlencode` it to get query string, use that query string to sign?
+        #    NO. Usually: keys are sorted.
+
+        # Safe approach for Python and OnePay:
+        # 1. Sort items.
+        # 2. Build string `key=value&key=value` WITHOUT encoding for HASHING (if OnePay specifies so).
+        #    BUT standard VPC often hashes the *URL-encoded* string?
+        #    Let's assume the safest path: `urllib.parse.urlencode` handles spaces and special chars.
+        #    Most modern gateways hash the query string as it appears in the URL.
+
+        sorted_params = sorted(params.items())
+        # Use urlencode to create the query string safely (handles ' ', '/', etc.)
+        querystring = urllib.parse.urlencode(sorted_params)
 
         # HMAC SHA256
         import hmac
@@ -138,6 +163,7 @@ class OnePay(BasePaymentProvider):
 
         signature = hmac.new(key, querystring.encode('utf-8'), hashlib.sha256).hexdigest().upper()
 
+        # The final URL needs the signature appended
         redirect_url = f"{endpoint}?{querystring}&vpc_SecureHash={signature}"
 
         return redirect(redirect_url)

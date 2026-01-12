@@ -63,7 +63,7 @@ class ReturnView(View):
 
         signature = hmac.new(key, querystring.encode('utf-8'), hashlib.sha256).hexdigest().upper()
 
-        if signature != vpc_SecureHash:
+        if not hmac.compare_digest(signature, vpc_SecureHash):
             logger.error(f'OnePay return: Hash mismatch. Calculated {signature}, received {vpc_SecureHash}')
             messages.error(request, _('Security check failed.'))
             payment.fail(info=params)
@@ -73,6 +73,21 @@ class ReturnView(View):
             }))
 
         if vpc_TxnResponseCode == '0':
+            # Check Amount
+            from django.conf import settings
+            places = settings.CURRENCY_PLACES.get(request.event.currency, 2)
+            expected_amount = int(payment.amount * (10 ** places))
+            returned_amount = params.get('vpc_Amount')
+
+            if str(expected_amount) != str(returned_amount):
+                logger.error(f'OnePay return: Amount mismatch. Expected {expected_amount}, received {returned_amount}')
+                messages.error(request, _('Payment amount mismatch.'))
+                payment.fail(info=params)
+                return redirect(eventreverse(request.event, 'presale:event.order', kwargs={
+                    'order': order.code,
+                    'secret': order.secret,
+                }))
+
             # Success
             try:
                 payment.confirm()
