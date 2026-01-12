@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.db.models import Q
+from django.db.models import Prefetch
 from django.forms import ChoiceField, EmailField, ValidationError
 from django.urls import reverse
 from django.utils.html import escape
@@ -32,6 +32,7 @@ from pretix.base.forms import I18nModelForm
 from pretix.base.forms.questions import NamePartsFormField, WrappedPhoneNumberPrefixWidget
 from pretix.base.models import Item, ItemVariation, WaitingListEntry
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
+from pretix.base.models import ItemVariation, WaitingListEntry
 
 
 class WaitingListEntryEditForm(I18nModelForm):
@@ -86,13 +87,17 @@ class WaitingListEntryEditForm(I18nModelForm):
         if not self.event.settings.waiting_list_phones_asked:
             del self.fields['phone']
 
-
-        items = self.event.items.filter(active=True).prefetch_related('variations')
+        items = self.event.items.filter(active=True).prefetch_related(
+            Prefetch(
+                'variations',
+                queryset=(ItemVariation.objects.filter(item__event=self.event, active=True)),
+                to_attr='active_variations',
+            )
+        )
 
         for item in items:
-            active_variations = item.variations.filter(active=True)
-            if len(active_variations) > 0:
-                for variation in active_variations:
+            if len(item.active_variations) > 0:
+                for variation in item.active_variations:
                     choices.append(
                         ('{}-{}'.format(item.pk, variation.pk), str(variation))
                     )
