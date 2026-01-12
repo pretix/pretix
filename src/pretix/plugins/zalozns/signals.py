@@ -3,11 +3,11 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.template.loader import get_template
 from pretix.base.signals import order_paid
-from pretix.control.signals import nav_event_settings, order_info
+from pretix.control.signals import nav_event, nav_event_settings, order_info
 from .tasks import send_zns
 
-@receiver(nav_event_settings, dispatch_uid='zalozns_nav')
-def navbar_info(sender, request, **kwargs):
+@receiver(nav_event_settings, dispatch_uid='zalozns_nav_settings')
+def navbar_settings(sender, request, **kwargs):
     url = request.resolver_match.url_name
     return [{
         'label': _('Zalo ZNS'),
@@ -16,6 +16,19 @@ def navbar_info(sender, request, **kwargs):
             'organizer': request.event.organizer.slug,
         }),
         'active': url == 'settings' and 'zalozns' in request.resolver_match.namespaces,
+    }]
+
+@receiver(nav_event, dispatch_uid='zalozns_nav_history')
+def navbar_history(sender, request, **kwargs):
+    url = request.resolver_match.url_name
+    return [{
+        'label': _('Zalo ZNS History'),
+        'url': reverse('plugins:zalozns:history', kwargs={
+            'event': request.event.slug,
+            'organizer': request.event.organizer.slug,
+        }),
+        'active': url == 'history' and 'zalozns' in request.resolver_match.namespaces,
+        'icon': 'history',
     }]
 
 @receiver(order_info, dispatch_uid="zalozns_order_info")
