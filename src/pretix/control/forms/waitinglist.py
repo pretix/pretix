@@ -29,10 +29,11 @@ from django_scopes.forms import SafeModelChoiceField
 from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms import I18nModelForm
-from pretix.base.forms.questions import NamePartsFormField, WrappedPhoneNumberPrefixWidget
-from pretix.base.models import Item, ItemVariation, WaitingListEntry
-from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
+from pretix.base.forms.questions import (
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
+)
 from pretix.base.models import ItemVariation, WaitingListEntry
+from pretix.control.forms.widgets import Select2
 
 
 class WaitingListEntryEditForm(I18nModelForm):
