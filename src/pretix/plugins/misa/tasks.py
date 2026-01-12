@@ -50,13 +50,14 @@ def create_misa_invoice(self, order_id):
             "TaxRate": float(p.tax_rate) if p.tax_rate else 0
         })
 
+    ia = getattr(order, 'invoice_address', None)
     invoice_data = {
         "RefId": order.code,
         "InvSeries": s.misa_series,
         "InvTemplate": s.misa_template_code,
-        "BuyerLegalName": order.invoice_address.name if getattr(order, 'invoice_address', None) else "Khách lẻ",
-        "BuyerTaxCode": order.invoice_address.vat_id if getattr(order, 'invoice_address', None) else "",
-        "BuyerEmail": order.email,
+        "BuyerLegalName": ia.name if ia else "Khách lẻ",
+        "BuyerTaxCode": ia.vat_id if ia else "",
+        "BuyerEmail": order.email or "",
         "Items": items
     }
 
