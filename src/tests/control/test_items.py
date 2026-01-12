@@ -57,9 +57,9 @@ class ItemFormTest(SoupTest):
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
         )
         self.item1 = Item.objects.create(event=self.event1, name="Standard", default_price=0, position=1)
-        t = Team.objects.create(organizer=self.orga1, all_event_permissions=True)
-        t.members.add(self.user)
-        t.limit_events.add(self.event1)
+        self.team = Team.objects.create(organizer=self.orga1, all_event_permissions=True)
+        self.team.members.add(self.user)
+        self.team.limit_events.add(self.event1)
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
 
@@ -269,6 +269,14 @@ class QuestionsTest(ItemFormTest):
         doc = self.get_doc('/control/event/%s/%s/questions/%s/?status=p' % (self.orga1.slug, self.event1.slug, c.id))
         tbl = doc.select('.container-fluid table.table-bordered tbody')[0]
         assert tbl.select('tr')[0].select('td')[0].text.strip() == '42'
+
+        # Test permission requirement
+        self.team.all_event_permissions = False
+        self.team.limit_event_permissions = {}
+        self.team.save()
+        doc = self.get_doc('/control/event/%s/%s/questions/%s/' % (self.orga1.slug, self.event1.slug, c.id))
+        assert not doc.select('.container-fluid table.table-bordered tbody')
+        assert doc.select('.empty-collection')
 
     def test_set_dependency(self):
         with scopes_disabled():

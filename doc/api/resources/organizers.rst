@@ -110,8 +110,6 @@ Endpoints
 
    Updates an organizer. Currently only the ``plugins`` field may be updated.
 
-   Permission required: "Can change organizer settings"
-
    **Example request**:
 
    .. sourcecode:: http
@@ -171,8 +169,6 @@ information about the properties.
 .. http:get:: /api/v1/organizers/(organizer)/settings/
 
    Get current values of organizer settings.
-
-   Permission required: "Can change organizer settings"
 
    **Example request**:
 

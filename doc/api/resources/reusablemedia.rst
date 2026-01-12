@@ -154,7 +154,7 @@ Endpoints
 .. http:post:: /api/v1/organizers/(organizer)/reusablemedia/lookup/
 
    Look up a new reusable medium by its identifier. In some cases, this might lead to the automatic creation of a new
-   medium behind the scenes.
+   medium behind the scenes, therefore this endpoint requires write permissions.
 
    This endpoint, and this endpoint only, might return media from a different organizer if there is a cross-acceptance
    agreement. In this case, only linked gift cards will be returned, no order position or customer records,

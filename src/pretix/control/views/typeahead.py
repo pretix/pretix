@@ -1013,10 +1013,16 @@ def item_meta_values(request, organizer, event):
     })
 
 
-@organizer_permission_required(("event.orders:read", "organizer.settings.general:write"))
-# This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
-# anyone who can see orders for any event can see the check-in log view where this is used as a filter
 def devices_select2(request, **kwargs):
+    allowed = (
+        # This check is a bit of a hack since this is not technically an organizer permission, but it does the job here --
+        # anyone who can see orders for any event can see the check-in log view where this is used as a filter
+        request.user.has_organizer_permission(request.organizer, "organizer.devices:read", request=request) or
+        request.user.get_events_with_permission("event.orders:read").filter(organizer=request.organizer).exists()
+    )
+    if not allowed:
+        raise PermissionDenied()
+
     query = request.GET.get('query', '')
     try:
         page = int(request.GET.get('page', '1'))
@@ -1051,10 +1057,16 @@ def devices_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("event.orders:read", "event.settings.general:write", "organizer.settings.general:write"))
-# This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
-# anyone who can see orders for any event can see the check-in log view where this is used as a filter
 def gate_select2(request, **kwargs):
+    allowed = (
+        # This check is a bit of a hack since this is not technically an organizer permission, but it does the job here --
+        # anyone who can see orders for any event can see the check-in log view where this is used as a filter
+        request.user.has_organizer_permission(request.organizer, "organizer.devices:read", request=request) or
+        request.user.get_events_with_permission("event.orders:read").filter(organizer=request.organizer).exists()
+    )
+    if not allowed:
+        raise PermissionDenied()
+
     query = request.GET.get('query', '')
     try:
         page = int(request.GET.get('page', '1'))

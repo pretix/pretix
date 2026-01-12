@@ -175,8 +175,6 @@ def test_team_update_legacy_add_perm(token_client, organizer, event, second_team
     assert second_team.limit_event_permissions == {
         "event.settings.general:write": True,
         "event.settings.payment:write": True,
-        "event.settings.plugins:write": True,
-        "event.settings.email.sender:write": True,
         "event.settings.tax:write": True,
         "event.settings.invoicing:write": True,
         "event.subevents:write": True,

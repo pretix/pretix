@@ -432,7 +432,7 @@ with scopes_disabled():
 class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SubEventSerializer
     queryset = SubEvent.objects.none()
-    write_permission = 'event.settings.general:write'
+    write_permission = 'event.subevents:write'
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('date_from',)
     ordering_fields = ('id', 'date_from', 'last_modified')
@@ -552,7 +552,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
 class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = TaxRuleSerializer
     queryset = TaxRule.objects.none()
-    write_permission = 'event.settings.general:write'
+    write_permission = 'event.settings.tax:write'
 
     def get_queryset(self):
         return self.request.event.tax_rules.all()
@@ -647,14 +647,13 @@ class EventSettingsView(views.APIView):
     def get(self, request, *args, **kwargs):
         if isinstance(request.auth, Device):
             s = DeviceEventSettingsSerializer(instance=request.event.settings, event=request.event, context={
-                'request': request
-            })
-        elif 'event.settings.general:write' in request.eventpermset:
-            s = EventSettingsSerializer(instance=request.event.settings, event=request.event, context={
-                'request': request
+                'request': request, 'permissions': request.eventpermset
             })
         else:
-            raise PermissionDenied()
+            s = EventSettingsSerializer(instance=request.event.settings, event=request.event, context={
+                'request': request, 'permissions': request.eventpermset,
+            })
+
         if 'explain' in request.GET:
             return Response({
                 fname: {
@@ -668,7 +667,7 @@ class EventSettingsView(views.APIView):
 
     def patch(self, request, *wargs, **kwargs):
         s = EventSettingsSerializer(instance=request.event.settings, data=request.data, partial=True,
-                                    event=request.event, context={'request': request})
+                                    event=request.event, context={'request': request, 'permissions': request.eventpermset})
         s.is_valid(raise_exception=True)
         with transaction.atomic():
             s.save()
@@ -680,7 +679,7 @@ class EventSettingsView(views.APIView):
                 )
         s = EventSettingsSerializer(
             instance=request.event.settings, event=request.event, context={
-                'request': request
+                'request': request, 'permissions': request.eventpermset
             })
         return Response(s.data)
 

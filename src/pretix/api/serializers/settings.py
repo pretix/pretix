@@ -37,6 +37,8 @@ logger = logging.getLogger(__name__)
 class SettingsSerializer(serializers.Serializer):
     default_fields = []
     readonly_fields = []
+    default_write_permission = 'organizer.settings.general:write'
+    write_permission_required = {}
 
     def __init__(self, *args, **kwargs):
         self.changed_data = []
@@ -58,9 +60,17 @@ class SettingsSerializer(serializers.Serializer):
             f._label = str(form_kwargs.get('label', fname))
             f._help_text = str(form_kwargs.get('help_text'))
             f.parent = self
+
+            self.write_permission_required[fname] = DEFAULTS[fname].get('write_permission', self.default_write_permission)
+
             self.fields[fname] = f
 
     def validate(self, attrs):
+        for k in attrs.keys():
+            p = self.write_permission_required.get(k, self.default_write_permission)
+            if p not in self.context["permissions"]:
+                raise ValidationError({k: f"Setting this field requires permission {p}"})
+
         return {k: v for k, v in attrs.items() if k not in self.readonly_fields}
 
     def update(self, instance: HierarkeyProxy, validated_data):

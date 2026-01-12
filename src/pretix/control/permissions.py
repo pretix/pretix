@@ -53,7 +53,7 @@ def event_permission_required(permission):
     This view decorator rejects all requests with a 403 response which are not from
     users having the given permission for the event the request is associated with.
     """
-    if permission == 'event.settings.general:write':
+    if permission == 'can_change_settings':
         # Legacy support
         permission = 'event.settings.general:write'
 

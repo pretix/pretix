@@ -16,14 +16,18 @@
                 {% endblocktrans %}
             </p>
 
-            <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new category" %}</a>
+            {% if 'event.items:write' in request.eventpermset %}
+                <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new category" %}</a>
+            {% endif %}
         </div>
     {% else %}
-        <p>
-            <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new category" %}
-            </a>
-        </p>
+        {% if 'event.items:write' in request.eventpermset %}
+            <p>
+                <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new category" %}
+                </a>
+            </p>
+        {% endif %}
         <form method="post">
             {% csrf_token %}
         <div class="table-responsive">
@@ -39,7 +43,11 @@
                 {% for c in categories %}
                     <tr data-dnd-id="{{ c.id }}">
                         <td>
-                            <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.internal_name|default:c.name }}</a></strong>
+                            {% if 'event.items:write' in request.eventpermset %}
+                                <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.internal_name|default:c.name }}</a></strong>
+                            {% else %}
+                                <strong>{{ c.internal_name|default:c.name }}</strong>
+                            {% endif %}
                             <br>
                             <small class="text-muted">
                                 #{{ c.pk }}
@@ -49,15 +57,17 @@
                             {{ c.get_category_type_display }}
                         </td>
                         <td class="text-right flip">
-                            <button title="{% trans "Move up" %}" formaction="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
-                            <button title="{% trans "Move down" %}" formaction="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
-                            <span class="dnd-container" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
-                            <a title="{% trans "Edit" %}" href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                            <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ c.id }}"
-                               class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">
-                                <span class="fa fa-copy"></span>
-                            </a>
-                            <a title="{% trans "Delete" %}" href="{% url "control:event.items.categories.delete" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            {% if 'event.items:write' in request.eventpermset %}
+                                <button title="{% trans "Move up" %}" formaction="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
+                                <button title="{% trans "Move down" %}" formaction="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
+                                <span class="dnd-container" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
+                                <a title="{% trans "Edit" %}" href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "control:event.items.categories.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ c.id }}"
+                                   class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">
+                                    <span class="fa fa-copy"></span>
+                                </a>
+                                <a title="{% trans "Delete" %}" href="{% url "control:event.items.categories.delete" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
