@@ -140,5 +140,8 @@ class WaitingListEntryEditForm(I18nModelForm):
         field_classes = {
             'subevent': SafeModelChoiceField,
             'email': EmailField,
+            'phone': PhoneNumberField,
+        }
+        widgets = {
             'phone': WrappedPhoneNumberPrefixWidget,
         }
