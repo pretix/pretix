@@ -55,6 +55,7 @@ def env():
     event.settings.set('ticketoutput_testdummy__enabled', True)
     event.settings.set('waiting_list_names_asked', False)
     event.settings.set('waiting_list_names_required', False)
+    event.settings.set('waiting_list_phones_asked', False)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
     item2 = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True)
@@ -193,7 +194,7 @@ def test_delete_bulk(client, env):
 
 
 @pytest.mark.django_db
-def test_edit(client, env):
+def test_edit_settings(client, env):
     event = env[0]
     item = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True, allow_waitinglist=True)
     quota = Quota.objects.create(event=event)
@@ -205,20 +206,20 @@ def test_edit(client, env):
             event=event, item=item, email='foo@bar.com'
         )
 
-    client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+    response = client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+    assert ['email', 'itemvar'] == list(response.context_data['form'].fields.keys())
 
-    response = client.post(
-        '/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id,
-        data={
-            "email": f"1_{wle.email}",
-            "itemvar": item.pk
-        },
-        follow=True
-    )
+    event.settings.set('waiting_list_names_asked', True)
+    response = client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+    assert 'name_parts' in list(response.context_data['form'].fields.keys())
 
-    with scopes_disabled():
-        assert WaitingListEntry.objects.get(id=wle.id).item == item
+    event.settings.set('waiting_list_names_required', True)
+    response = client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+    assert response.context_data['form'].fields['name_parts'].required is True
 
+    event.settings.set('waiting_list_phones_asked', True)
+    response = client.get('/control/event/dummy/dummy/waitinglist/%s/edit' % wle.id)
+    assert 'phone' in list(response.context_data['form'].fields.keys())
 
 
 @pytest.mark.django_db
