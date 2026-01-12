@@ -22,8 +22,6 @@
 from django.db.models import Prefetch
 from django.forms import ChoiceField, EmailField, ValidationError
 from django.urls import reverse
-from django.utils.html import escape
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelChoiceField
 from phonenumber_field.formfields import PhoneNumberField
@@ -114,7 +112,7 @@ class WaitingListEntryEditForm(I18nModelForm):
         cleaned_data = super().clean()
 
         if self.instance.voucher is not None:
-            raise ValidationError(_('A voucher for this waiting list entry was sent out already.'))
+            raise ValidationError(_('A voucher for this waiting list entry was already sent out.'))
 
         itemvar = cleaned_data.get('itemvar')
 
