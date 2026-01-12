@@ -1,0 +1,73 @@
+version: '3.9'
+
+services:
+  pretix:
+    build: .
+    image: pretix/pretix:latest
+    container_name: pretix_app
+    ports:
+      - "8000:80"
+    environment:
+      - PRETIX_DEBUG=True
+      - PRETIX_URL=http://localhost:8000
+      - PRETIX_DATABASE_BACKEND=postgresql
+      - PRETIX_DATABASE_NAME=pretix
+      - PRETIX_DATABASE_USER=pretix
+      - PRETIX_DATABASE_PASSWORD=pretix
+      - PRETIX_DATABASE_HOST=db
+      - PRETIX_REDIS_LOCATION=redis://redis/0
+      - PRETIX_CELERY_BROKER=redis://redis/1
+      - PRETIX_CELERY_BACKEND=redis://redis/2
+      - PRETIX_MAIL_FROM=pretix@localhost
+      # Automated migration on startup
+      - AUTOMIGRATE=yes
+    volumes:
+      - ./data:/data
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  pretix-worker:
+    build: .
+    image: pretix/pretix:latest
+    container_name: pretix_worker
+    command: taskworker
+    environment:
+      - PRETIX_DEBUG=True
+      - PRETIX_URL=http://localhost:8000
+      - PRETIX_DATABASE_BACKEND=postgresql
+      - PRETIX_DATABASE_NAME=pretix
+      - PRETIX_DATABASE_USER=pretix
+      - PRETIX_DATABASE_PASSWORD=pretix
+      - PRETIX_DATABASE_HOST=db
+      - PRETIX_REDIS_LOCATION=redis://redis/0
+      - PRETIX_CELERY_BROKER=redis://redis/1
+      - PRETIX_CELERY_BACKEND=redis://redis/2
+      - PRETIX_MAIL_FROM=pretix@localhost
+      - AUTOMIGRATE=skip
+    volumes:
+      - ./data:/data
+    depends_on:
+      - db
+      - redis
+    restart: unless-stopped
+
+  db:
+    image: postgres:15-alpine
+    container_name: pretix_db
+    environment:
+      - POSTGRES_DB=pretix
+      - POSTGRES_USER=pretix
+      - POSTGRES_PASSWORD=pretix
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:alpine
+    container_name: pretix_redis
+    restart: unless-stopped
+
+volumes:
+  db-data:

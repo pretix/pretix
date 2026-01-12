@@ -51,10 +51,12 @@ class ReturnView(View):
         # Remove vpc_SecureHash and vpc_SecureHashType from params to calculate hash
         hash_params = {k: v for k, v in params.items() if k not in ('vpc_SecureHash', 'vpc_SecureHashType') and len(v) > 0}
 
-        query_params = []
-        for key in sorted(hash_params.keys()):
-            query_params.append(f"{key}={hash_params[key]}")
-        querystring = "&".join(query_params)
+        # Use urllib.parse.urlencode to match the behavior in payment.py
+        # This ensures parameters (like messages or URLs) are encoded exactly as they were when sent,
+        # providing the OnePay gateway returned them intact (which is standard behavior).
+        import urllib.parse
+        sorted_params = sorted(hash_params.items())
+        querystring = urllib.parse.urlencode(sorted_params)
 
         try:
             key = bytes.fromhex(hash_key)
