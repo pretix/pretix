@@ -2031,7 +2031,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             order = Order.objects.select_for_update(of=OF_SELF).get(pk=inv.order_id)
             c = generate_cancellation(inv)
-            if inv.order.status != Order.STATUS_CANCELED:
+            if invoice_qualified(order):
                 inv = generate_invoice(order)
             else:
                 inv = c

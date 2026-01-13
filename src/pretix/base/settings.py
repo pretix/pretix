@@ -1225,6 +1225,15 @@ DEFAULTS = {
         'default': json.dumps(['web']),
         'type': list
     },
+    'invoice_generate_only_business': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Only issue invoices to business customers"),
+        )
+    },
     'invoice_address_from': {
         'default': '',
         'type': str,

@@ -1742,7 +1742,7 @@ class OrderInvoiceReissue(OrderView):
                     messages.error(self.request, _('The invoice has been cleaned of personal data.'))
                 else:
                     c = generate_cancellation(inv)
-                    if order.status not in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
+                    if invoice_qualified(order):
                         inv = generate_invoice(order)
                     else:
                         inv = c
