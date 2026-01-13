@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:13+0000\n"
-"PO-Revision-Date: 2026-01-13 12:23+0000\n"
-"Last-Translator: Mario Montes <mario@t3chfest.es>\n"
+"PO-Revision-Date: 2026-01-14 00:00+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/es/>\n"
 "Language: es\n"
@@ -736,11 +736,10 @@ msgid "Your cart is about to expire."
 msgstr "Su carrito está a punto de caducar."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:62
-#, fuzzy
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "Los elementos en su carrito se han reservado durante un minuto."
-msgstr[1] "Los elementos en su carrito se han reservado durante {num} minutos."
+msgstr[0] "Los artículos de la cesta están reservados durante un minuto."
+msgstr[1] "Los artículos de la cesta están reservados durante {num} minutos."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
 msgid "Your cart has expired."
@@ -763,14 +762,12 @@ msgid "Renew reservation"
 msgstr "Renovar reserva"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
-#, fuzzy
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr "El organizador se queda %(currency)s %(amount)s"
+msgstr "El organizador retiene %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:202
-#, fuzzy
 msgid "You get %(currency)s %(amount)s back"
-msgstr "Obtienes %(currency)s %(amount)s de vuelta"
+msgstr "Se le devolverá %(moneda)s %(cantidad)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:218
 msgid "Please enter the amount the organizer can keep."
