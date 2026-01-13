@@ -1417,7 +1417,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
                 self.instance.transmission_type = transmission_type.identifier
                 self.instance.transmission_info = transmission_type.form_data_to_transmission_info(data)
-            elif transmission_type.exclusive:
+            elif transmission_type.is_exclusive(self.event, data.get("country"), data.get("is_business")):
                 if transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
                     raise ValidationError({
                         "transmission_type": "The transmission type '%s' must be used for this country or address type." % (

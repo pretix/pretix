@@ -59,15 +59,6 @@ class TransmissionType:
         return 100
 
     @property
-    def exclusive(self) -> bool:
-        """
-        If a transmission type is exclusive, no other type can be chosen if this type is
-        available. Use e.g. if a certain transmission type is legally required in a certain
-        jurisdiction.
-        """
-        return False
-
-    @property
     def enforce_transmission(self) -> bool:
         """
         If a transmission type enforces transmission, every invoice created with this type will be transferred.
@@ -81,6 +72,15 @@ class TransmissionType:
             provider.is_available(event, country, is_business)
             for provider, _ in providers
         )
+
+    def is_exclusive(self, event, country: Country, is_business: bool) -> bool:
+        """
+        If a transmission type is exclusive, no other type can be chosen if this type is
+        available. Use e.g. if a certain transmission type is legally required in a certain
+        jurisdiction. Event can be None in organizer-level contexts. Exclusiveness has no effect if
+        the type is not available.
+        """
+        return False
 
     def invoice_address_form_fields_required(self, country: Country, is_business: bool):
         return set()

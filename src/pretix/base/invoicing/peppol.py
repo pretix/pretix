@@ -179,6 +179,12 @@ class PeppolTransmissionType(TransmissionType):
     def is_available(self, event, country: Country, is_business: bool):
         return is_business and super().is_available(event, country, is_business)
 
+    def is_exclusive(self, event, country: Country, is_business: bool) -> bool:
+        if is_business and str(country) == "BE" and event and event.settings.invoice_address_from_country == "BE":
+            # Peppol is required to be used for intra-Belgian B2B invoices
+            return True
+        return False
+
     @property
     def invoice_address_form_fields(self) -> dict:
         return {

@@ -109,7 +109,7 @@ def address_form(request):
             for t in get_transmission_types():
                 if t.is_available(event=event, country=country, is_business=is_business):
                     result = {"name": str(t.public_name), "code": t.identifier}
-                    if t.exclusive:
+                    if t.is_exclusive(event=event, country=country, is_business=is_business):
                         info["transmission_types"] = [result]
                         break
                     else:
