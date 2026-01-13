@@ -154,8 +154,8 @@ class OrganizerViewSet(mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
 class SeatingPlanViewSet(viewsets.ModelViewSet):
     serializer_class = SeatingPlanSerializer
     queryset = SeatingPlan.objects.none()
-    permission = 'organizer.settings.general:write'
-    write_permission = 'organizer.settings.general:write'
+    permission = None
+    write_permission = 'organizer.seatingplans:write'
 
     def get_queryset(self):
         return self.request.organizer.seating_plans.order_by('name')
