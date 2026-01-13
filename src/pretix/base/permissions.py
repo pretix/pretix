@@ -112,4 +112,6 @@ def register_default_organizer_permissions(sender, **kwargs):
         Permission("organizer.devices:read", _("View devices and gates"), None, None),
         Permission("organizer.devices:write", _("Change devices and gates"), None,
                    _("This includes the ability to give access to events and data oneself does not have access to.")),
+        Permission("organizer.seatingplans:write", _("Change seating plans"), None,
+                   _("Read access is implicitly given to all teams.")),
     ]

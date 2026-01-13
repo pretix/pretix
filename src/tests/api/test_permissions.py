@@ -274,6 +274,9 @@ org_permission_sub_urls = [
     ('post', 'organizer.reusablemedia:write', 'reusablemedia/', 400),
     ('patch', 'organizer.reusablemedia:write', 'reusablemedia/1/', 404),
     ('put', 'organizer.reusablemedia:write', 'reusablemedia/1/', 404),
+    ('post', 'organizer.seatingplans:write', 'seatingplans/', 400),
+    ('patch', 'organizer.seatingplans:write', 'seatingplans/1/', 404),
+    ('put', 'organizer.seatingplans:write', 'seatingplans/1/', 404),
 ]
 
 
