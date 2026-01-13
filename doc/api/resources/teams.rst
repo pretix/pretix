@@ -50,6 +50,7 @@ Possible values for ``limit_organizer_permissions`` defined in the core pretix s
     organizer.events:create
     organizer.settings.general:write
     organizer.teams:write
+    organizer.seatingplans:write
     organizer.giftcards:read
     organizer.giftcards:write
     organizer.customers:read
