@@ -1733,6 +1733,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             rounding_mode = self.context["event"].settings.tax_rounding
         changed = apply_rounding(
             rounding_mode,
+            ia,
             self.context["event"].currency,
             [*pos_map.values(), *fees]
         )

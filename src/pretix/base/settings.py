@@ -81,6 +81,7 @@ from pretix.helpers.countries import CachedCountries
 ROUNDING_MODES = (
     ('line', _('Compute taxes for every line individually')),
     ('sum_by_net', _('Compute taxes based on net total')),
+    ('sum_by_net_only_business', _('Compute taxes based on net total for business customers')),
     ('sum_by_net_keep_gross', _('Compute taxes based on net total with stable gross prices')),
     # We could also have sum_by_gross, but we're not aware of any use-cases for it
 )

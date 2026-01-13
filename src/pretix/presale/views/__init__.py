@@ -167,7 +167,7 @@ class CartMixin:
             fees = []
 
         if not order:
-            apply_rounding(self.request.event.settings.tax_rounding, self.request.event.currency, [*lcp, *fees])
+            apply_rounding(self.request.event.settings.tax_rounding, self.invoice_address, self.request.event.currency, [*lcp, *fees])
 
         total = sum([c.price for c in lcp]) + sum([f.value for f in fees])
         net_total = sum(p.price - p.tax_value for p in lcp) + sum([f.net_value for f in fees])
@@ -262,6 +262,11 @@ class CartMixin:
             'max_expiry_extend': max_expiry_extend,
             'is_ordered': bool(order),
             'itemcount': sum(c.count for c in positions if not c.addon_to),
+            'show_rounding_info': (
+                self.request.event.settings.tax_rounding == "sum_by_net_only_business" and
+                not self.request.event.settings.display_net_prices and
+                sum(c.price_includes_rounding_correction for c in positions) + sum(f.price_includes_rounding_correction for f in fees)
+            ),
             'itemvarsums': itemvarsums,
             'current_selected_payments': [
                 p for p in self.current_selected_payments(positions, fees, self.invoice_address)
@@ -273,7 +278,7 @@ class CartMixin:
         raw_payments = copy.deepcopy(self.cart_session.get('payments', []))
         fees = [f for f in fees if f.fee_type != OrderFee.FEE_TYPE_PAYMENT]  # we re-compute these here
 
-        apply_rounding(self.request.event.settings.tax_rounding, self.request.event.currency, [*positions, *fees])
+        apply_rounding(self.request.event.settings.tax_rounding, invoice_address, self.request.event.currency, [*positions, *fees])
         total = sum([c.price for c in positions]) + sum([f.value for f in fees])
 
         payments = []
@@ -327,7 +332,7 @@ class CartMixin:
                 fees.append(pf)
 
                 # Re-apply rounding as grand total has changed
-                apply_rounding(self.request.event.settings.tax_rounding, self.request.event.currency, [*positions, *fees])
+                apply_rounding(self.request.event.settings.tax_rounding, invoice_address, self.request.event.currency, [*positions, *fees])
                 total = sum([c.price for c in positions]) + sum([f.value for f in fees])
 
                 # Re-calculate to_pay as grand total has changed

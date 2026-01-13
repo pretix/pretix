@@ -493,7 +493,18 @@
         </div>
     {% endif %}
 </div>
-
+{% if cart.show_rounding_info %}
+    <div class="text-muted">
+        <small>
+            {% icon "info-circle" %}
+            {% blocktrans trimmed %}
+                Since you entered a business address, your price was computed from the
+                VAT-exclusive price. Due to rounding, this caused a small change to the
+                total price.
+            {% endblocktrans %}
+        </small>
+    </div>
+{% endif %}
 <div class="row">
     <div class="col-md-12">
     {% if not cart.is_ordered %}

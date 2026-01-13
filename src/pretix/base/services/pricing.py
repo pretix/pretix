@@ -209,7 +209,8 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
     return [new_prices.get(idx, (p[3], None)) for idx, p in enumerate(positions)]
 
 
-def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_keep_gross"], currency: str,
+def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_only_business", "sum_by_net_keep_gross"],
+                   invoice_address: Optional[InvoiceAddress], currency: str,
                    lines: List[Union[OrderPosition, CartPosition, OrderFee]]) -> list:
     """
     Given a list of order positions / cart positions / order fees (may be mixed), applies the given rounding mode
@@ -224,11 +225,17 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_keep
     When rounding mode is set to ``"sum_by_net"``, the gross prices and tax values of the individual lines will be
     adjusted such that the per-taxrate/taxcode subtotal is rounded correctly. The net prices will stay constant.
 
-    :param rounding_mode: One of ``"line"``, ``"sum_by_net"``, or ``"sum_by_net_keep_gross"``.
+    :param rounding_mode: One of ``"line"``, ``"sum_by_net"``, ``"sum_by_net_only_business"``, or ``"sum_by_net_keep_gross"``.
+    :param invoice_address: The invoice address, or ``None``
     :param currency: Currency that will be used to determine rounding precision
     :param lines: List of order/cart contents
     :return: Collection of ``lines`` members that have been changed and may need to be persisted to the database.
     """
+    if rounding_mode == "sum_by_net_only_business":
+        if invoice_address and invoice_address.is_business:
+            rounding_mode = "sum_by_net"
+        else:
+            rounding_mode = "line"
 
     def _key(line):
         return (line.tax_rate, line.tax_code or "")
