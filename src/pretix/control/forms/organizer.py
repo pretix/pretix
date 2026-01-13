@@ -313,6 +313,21 @@ class PermissionMultipleChoiceField(forms.MultipleChoiceField):
 
 
 class TeamForm(forms.ModelForm):
+    def _make_label(self, p):
+        source = '{}'
+        params = [p.label]
+
+        if p.plugin_name:
+            source = '<span class="fa fa-puzzle-piece text-muted" data-toggle="tooltip" title="{}"></span> ' + source
+            params.insert(0, _("Provided by a plugin"))
+
+        if p.help_text:
+            source += ' <span class="fa fa-info-circle text-muted" data-toggle="tooltip" title="{}"></span>'
+            params.append(p.help_text)
+
+        source += ' (<code>{}</code>)'
+        params.append(p.name)
+        return format_html(source, *params)
 
     def __init__(self, *args, **kwargs):
         organizer = kwargs.pop('organizer')
@@ -323,15 +338,7 @@ class TeamForm(forms.ModelForm):
         self.fields['limit_event_permissions'] = PermissionMultipleChoiceField(
             label=self.fields['limit_event_permissions'].label,
             choices=[
-                (
-                    p.name,
-                    format_html(
-                        '{} <span class="fa fa-info-circle text-muted" data-toggle="tooltip" title="{}"></span> (<code>{}</code>)',
-                        p.label, p.help_text, p.name
-                    ) if p.help_text
-                    else format_html('{} (<code>{}</code>)', p.label, p.name)
-                )
-                for p in get_all_event_permissions().values()
+                (p.name, self._make_label(p)) for p in get_all_event_permissions().values()
             ],
             widget=forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '#id_all_event_permissions',
@@ -342,15 +349,7 @@ class TeamForm(forms.ModelForm):
         self.fields['limit_organizer_permissions'] = PermissionMultipleChoiceField(
             label=self.fields['limit_organizer_permissions'].label,
             choices=[
-                (
-                    p.name,
-                    format_html(
-                        '{} <span class="fa fa-info-circle text-muted" data-toggle="tooltip" title="{}"></span> (<code>{}</code>)',
-                        p.label, p.help_text, p.name
-                    ) if p.help_text
-                    else format_html('{} (<code>{}</code>)', p.label, p.name)
-                )
-                for p in get_all_organizer_permissions().values()
+                (p.name, self._make_label(p)) for p in get_all_organizer_permissions().values()
             ],
             widget=forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '#id_all_organizer_permissions',
