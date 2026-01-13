@@ -447,15 +447,14 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                             continue
 
                         if getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
-                            if not request.user.has_organizer_permission(request.organizer, "organizer.settings.general:write", request):
-                                messages.error(
-                                    request,
-                                    _("You do not have sufficient permission to enable plugins that need to be enabled "
-                                      "for the entire organizer account.")
-                                )
-                                continue
-
                             if module not in self.object.organizer.get_plugins():
+                                if not request.user.has_organizer_permission(request.organizer, "organizer.settings.general:write", request):
+                                    messages.error(
+                                        request,
+                                        _("You do not have sufficient permission to enable plugins that need to be enabled "
+                                          "for the entire organizer account.")
+                                    )
+                                    continue
                                 self.object.organizer.log_action('pretix.organizer.plugins.enabled', user=self.request.user,
                                                                  data={'plugin': module})
                                 self.object.organizer.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
