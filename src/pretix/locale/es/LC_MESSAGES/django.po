@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
 "PO-Revision-Date: 2026-01-14 00:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"Last-Translator: Mario Montes <mario@t3chfest.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -36852,11 +36852,11 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:520
 msgid "Your cart has been updated."
-msgstr "Su carrito ha sido actualizada."
+msgstr "Su carrito ha sido actualizado."
 
 #: pretix/presale/views/cart.py:523 pretix/presale/views/cart.py:549
 msgid "Your cart is now empty."
-msgstr "Su carrito ha sido vaciada."
+msgstr "Su carrito está vacio."
 
 #: pretix/presale/views/cart.py:570
 msgid ""
