@@ -932,6 +932,12 @@ def test_search(token_client, organizer, event, clist, clist_all, item, other_it
     assert resp.status_code == 200
     assert [p1] == resp.data['results']
 
+    with django_assert_max_num_queries(25):
+        resp = token_client.get(
+            '/api/v1/organizers/{}/checkinrpc/search/?list={}&search=z3fsn8jyu&expand=item'.format(organizer.slug, clist_all.pk))
+    assert resp.status_code == 200
+    assert resp.data['results'][0]['item']['name']
+
 
 @pytest.mark.django_db
 def test_search_no_list(token_client, organizer, event, clist, clist_all, item, other_item, order):
