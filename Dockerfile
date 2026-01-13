@@ -30,7 +30,7 @@ RUN apt-get update && \
     /usr/sbin/update-locale LANG=C.UTF-8 && \
     mkdir /etc/pretix && \
     mkdir /data && \
-    useradd -ms /bin/bash -d /pretix -u 15371 pretixuser && \
+    useradd -ms /bin/bash -d /pretix -u 2000 pretixuser && \
     echo 'pretixuser ALL=(ALL) NOPASSWD:SETENV: /usr/bin/supervisord' >> /etc/sudoers && \
     mkdir /static && \
     mkdir /etc/supervisord
@@ -44,11 +44,12 @@ COPY deployment/docker/supervisord /etc/supervisord
 COPY deployment/docker/supervisord.all.conf /etc/supervisord.all.conf
 COPY deployment/docker/supervisord.web.conf /etc/supervisord.web.conf
 COPY deployment/docker/nginx.conf /etc/nginx/nginx.conf
-COPY deployment/docker/nginx-max-body-size.conf /etc/nginx/conf.d/nginx-max-body-size.conf
+#COPY deployment/docker/nginx-max-body-size.conf /etc/nginx/conf.d/nginx-max-body-size.conf
 COPY deployment/docker/production_settings.py /pretix/src/production_settings.py
 COPY pyproject.toml /pretix/pyproject.toml
 COPY _build /pretix/_build
 COPY src /pretix/src
+COPY pretix-regex-validation /pretix/pretix-regex-validation
 
 RUN pip3 install -U \
         pip \
@@ -60,13 +61,21 @@ RUN pip3 install -U \
         gunicorn django-extensions ipython && \
     rm -rf ~/.cache/pip
 
+
 RUN chmod +x /usr/local/bin/pretix && \
     rm /etc/nginx/sites-enabled/default && \
     cd /pretix/src && \
     rm -f pretix.cfg &&  \
     mkdir -p data && \
+    chmod +x /pretix/src/manage.py && \
     chown -R pretixuser:pretixuser /pretix /data data &&  \
     sudo -u pretixuser make production
+
+RUN cd /pretix/pretix-regex-validation && \
+    ls -al && \
+    pip install -e . && \
+    make && \
+    cd ..
 
 USER pretixuser
 VOLUME ["/etc/pretix", "/data"]
