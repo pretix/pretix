@@ -1,6 +1,6 @@
 -e ../
 sphinx==9.1.*
-sphinx-rtd-theme~=3.1.0rc2
+sphinx-rtd-theme~=3.1.0
 sphinxcontrib-httpdomain~=1.8.1
 sphinxcontrib-images~=1.0.1
 sphinxcontrib-jquery~=4.1
