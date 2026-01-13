@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-06 23:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"PO-Revision-Date: 2026-01-13 12:23+0000\n"
+"Last-Translator: Mario Montes <mario@t3chfest.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -35586,9 +35586,9 @@ msgstr "El período de preventa para este evento ha terminado."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:163
 #: pretix/presale/views/widget.py:807
-#, python-format
+#, fuzzy, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
-msgstr "La preventa para este evento comenzará en %(date)s a %(time)s."
+msgstr "La preventa para este evento comenzará el %(date)s a %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:185
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
