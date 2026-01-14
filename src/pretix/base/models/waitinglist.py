@@ -185,44 +185,47 @@ class WaitingListEntry(LoggedModel):
             if not free_seats:
                 raise WaitingListException(_('No seat with this product is currently available.'))
 
-        if self.voucher:
-            raise WaitingListException(_('A voucher has already been sent to this person.'))
         if '@' not in self.email:
             raise WaitingListException(_('This entry is anonymized and can no longer be used.'))
 
         with transaction.atomic():
-            e = self.email
-            if self.name:
-                e += ' / ' + self.name
+            locked_wle = WaitingListEntry.objects.select_for_update().get(pk=self.pk)
+            if locked_wle.voucher:
+                raise WaitingListException(_('A voucher has already been sent to this person.'))
+            e = locked_wle.email
+            if locked_wle.name:
+                e += ' / ' + locked_wle.name
             v = Voucher.objects.create(
-                event=self.event,
+                event=locked_wle.event,
                 max_usages=1,
-                valid_until=now() + timedelta(hours=self.event.settings.waiting_list_hours),
-                item=self.item,
-                variation=self.variation,
+                valid_until=now() + timedelta(hours=locked_wle.event.settings.waiting_list_hours),
+                item=locked_wle.item,
+                variation=locked_wle.variation,
                 tag='waiting-list',
                 comment=_('Automatically created from waiting list entry for {email}').format(
                     email=e
                 ),
                 block_quota=True,
-                subevent=self.subevent,
+                subevent=locked_wle.subevent,
             )
             v.log_action('pretix.voucher.added', {
-                'item': self.item.pk,
-                'variation': self.variation.pk if self.variation else None,
+                'item': locked_wle.item.pk,
+                'variation': locked_wle.variation.pk if locked_wle.variation else None,
                 'tag': 'waiting-list',
                 'block_quota': True,
                 'valid_until': v.valid_until.isoformat(),
                 'max_usages': 1,
-                'subevent': self.subevent.pk if self.subevent else None,
+                'subevent': locked_wle.subevent.pk if locked_wle.subevent else None,
                 'source': 'waitinglist',
             }, user=user, auth=auth)
             v.log_action('pretix.voucher.added.waitinglist', {
-                'email': self.email,
-                'waitinglistentry': self.pk,
+                'email': locked_wle.email,
+                'waitinglistentry': locked_wle.pk,
             }, user=user, auth=auth)
-            self.voucher = v
-            self.save()
+            locked_wle.voucher = v
+            locked_wle.save()
+
+        self.refresh_from_db()
 
         with language(self.locale, self.event.settings.region):
             self.send_mail(
