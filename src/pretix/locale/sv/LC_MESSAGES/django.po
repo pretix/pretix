@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2025-11-07 23:00+0000\n"
+"PO-Revision-Date: 2026-01-14 21:00+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.2\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8996,7 +8996,9 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "{expire_date}."
+msgstr ""
+"Om din betalning inte gick igenom, se till att uppdatera din "
+"betalningsinformation innan {expire_date} via knappen nedan."
 
 #: pretix/base/services/invoices.py:128
 #, python-brace-format
@@ -35834,7 +35836,7 @@ msgstr "Visa i backend"
 #: pretix/presale/templates/pretixpresale/event/order.html:92
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr "En faktura på totalt  %(total)s kommer att skickas från Coeo."
+msgstr "Tack för din bokning  på %(total)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:97
 #, fuzzy, python-format
@@ -35843,7 +35845,7 @@ msgstr "Tack för din bokning!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:108
 msgid "Re-try payment or choose another payment method"
-msgstr "Tack"
+msgstr "Uppdatera eller ändra betalningsmetod"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:126
 msgid ""
