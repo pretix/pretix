@@ -189,7 +189,7 @@ class WaitingListEntry(LoggedModel):
             raise WaitingListException(_('This entry is anonymized and can no longer be used.'))
 
         with transaction.atomic():
-            locked_wle = WaitingListEntry.objects.select_for_update().get(pk=self.pk)
+            locked_wle = WaitingListEntry.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
             if locked_wle.voucher:
                 raise WaitingListException(_('A voucher has already been sent to this person.'))
             e = locked_wle.email
