@@ -2,6 +2,21 @@
 (function() {
     'use strict';
     
+    function getOrdinalSuffix(num) {
+        var j = num % 10;
+        var k = num % 100;
+        if (j === 1 && k !== 11) {
+            return num + 'st';
+        }
+        if (j === 2 && k !== 12) {
+            return num + 'nd';
+        }
+        if (j === 3 && k !== 13) {
+            return num + 'rd';
+        }
+        return num + 'th';
+    }
+    
     function initFillVoucherButton() {
         var fillBtn = document.getElementById('fill-voucher-btn');
         if (!fillBtn) {
@@ -67,8 +82,9 @@
                     if (data.rank === 0) {
                         rankResult.textContent = rankResult.getAttribute('data-voucher-text') || 'You have a voucher waiting for redemption!';
                     } else {
-                        var rankLabel = rankResult.getAttribute('data-rank-label') || 'Your rank:';
-                        rankResult.textContent = rankLabel + ' ' + data.rank;
+                        var rankLabel = rankResult.getAttribute('data-rank-label') || 'You are {ordinal} in line';
+                        var ordinalRank = getOrdinalSuffix(data.rank);
+                        rankResult.textContent = rankLabel.replace('{ordinal}', ordinalRank);
                     }
                 }
             } else if (data.error) {
