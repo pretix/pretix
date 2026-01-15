@@ -161,10 +161,7 @@ class WaitingListEntry(LoggedModel):
         # Check if entry has a voucher
         if self.voucher:
             # Check if voucher is expired
-            if self.voucher.valid_until is not None and self.voucher.valid_until < now():
-                return None
-            # Check if voucher is fully redeemed
-            if self.voucher.redeemed >= self.voucher.max_usages:
+            if not self.voucher.is_active():
                 return None
             # Voucher is valid and not fully redeemed - waiting for redemption
             return 0
