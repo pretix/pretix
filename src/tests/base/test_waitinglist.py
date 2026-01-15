@@ -246,3 +246,201 @@ class WaitingListTestCase(TestCase):
         process_waitinglist(None)
         with scope(organizer=self.o):
             assert Voucher.objects.count() == 5
+
+    @classscope(attr='o')
+    def test_get_rank_basic(self):
+        """Test rank calculation for basic waiting list entries (no voucher)"""
+        # Create 5 entries
+        entries = []
+        for i in range(5):
+            entry = WaitingListEntry.objects.create(
+                event=self.event, item=self.item1, email='user{}@bar.com'.format(i)
+            )
+            entries.append(entry)
+        
+        # First entry should have rank 1
+        assert entries[0].get_rank() == 1
+        # Second entry should have rank 2
+        assert entries[1].get_rank() == 2
+        # Last entry should have rank 5
+        assert entries[4].get_rank() == 5
+
+    @classscope(attr='o')
+    def test_get_rank_returns_zero_for_valid_voucher(self):
+        """Test that entries with valid, unredeemed vouchers return 0"""
+        wle = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user@bar.com'
+        )
+        wle.save()
+        assert wle.get_rank() != 0
+
+        v = Voucher.objects.create(
+            event=self.event, item=self.item1, max_usages=1, redeemed=0,
+            valid_until=now() + timedelta(days=1)
+        )
+        wle.voucher = v
+        wle.save()
+        
+        assert wle.get_rank() == 0
+
+    @classscope(attr='o')
+    def test_get_rank_returns_none_for_redeemed_voucher(self):
+        """Test that fully redeemed vouchers return None"""
+        wle = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user@bar.com'
+        )
+        wle.save()
+        assert wle.get_rank() == 1
+
+        v = Voucher.objects.create(
+            event=self.event, item=self.item1, max_usages=1, redeemed=1
+        )
+        wle.voucher = v
+        wle.save()
+        
+        assert wle.get_rank() is None
+
+    @classscope(attr='o')
+    def test_get_rank_returns_none_for_expired_voucher(self):
+        """Test that expired vouchers return None"""
+        wle = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user@bar.com'
+        )
+        v = Voucher.objects.create(
+            event=self.event, item=self.item1, max_usages=1, redeemed=0,
+            valid_until=now() - timedelta(days=1)
+        )
+        wle.voucher = v
+        wle.save()
+        
+        assert wle.get_rank() is None
+
+    @classscope(attr='o')
+    def test_get_rank_includes_unredeemed_voucher_holders_in_count(self):
+        """Test that entries with valid vouchers are included when counting ranks for entries without vouchers"""
+        # Create entry with valid voucher
+        wle1 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user1@bar.com'
+        )
+        v = Voucher.objects.create(
+            event=self.event, item=self.item1, max_usages=1, redeemed=0,
+            valid_until=now() + timedelta(days=1)
+        )
+        wle1.voucher = v
+        wle1.save()
+        
+        # Create entry without voucher
+        wle2 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user2@bar.com'
+        )
+        
+        # Entry with voucher should return 0
+        assert wle1.get_rank() == 0
+        # Entry without voucher should have rank 2 (1 for voucher holder + 1 for itself)
+        assert wle2.get_rank() == 2
+
+    @classscope(attr='o')
+    def test_get_rank_excludes_redeemed_expired_from_count(self):
+        """Test that redeemed and expired vouchers are excluded when counting ranks"""
+        # Create entry with expired voucher
+        wle1 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user1@bar.com'
+        )
+        v_expired = Voucher.objects.create(
+            event=self.event, item=self.item1, max_usages=1, redeemed=0,
+            valid_until=now() - timedelta(days=1)
+        )
+        wle1.voucher = v_expired
+        wle1.save()
+        
+        # Create entry with redeemed voucher
+        wle2 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user2@bar.com'
+        )
+        v_redeemed = Voucher.objects.create(
+            event=self.event, item=self.item1, max_usages=1, redeemed=1
+        )
+        wle2.voucher = v_redeemed
+        wle2.save()
+        
+        # Create entry without voucher
+        wle3 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user3@bar.com'
+        )
+        
+        # Expired and redeemed should return None
+        assert wle1.get_rank() is None
+        assert wle2.get_rank() is None
+        # Entry without voucher should have rank 1 (expired/redeemed are excluded)
+        assert wle3.get_rank() == 1
+
+    @classscope(attr='o')
+    def test_get_rank_ordering(self):
+        """Verify rank respects priority and created date ordering"""
+        # Create entries with different priorities and timestamps
+        wle1 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user1@bar.com',
+            priority=10
+        )
+        wle2 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user2@bar.com',
+            priority=5
+        )
+        wle3 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user3@bar.com',
+            priority=10  # Same priority as wle1, but created later
+        )
+        
+        # Higher priority should have lower rank (rank 1)
+        assert wle1.get_rank() == 1
+        # Lower priority should have higher rank (rank 3)
+        assert wle2.get_rank() == 3
+        # Same priority, created earlier should have lower rank (rank 2)
+        assert wle3.get_rank() == 2
+
+    @classscope(attr='o')
+    def test_get_rank_subevent(self):
+        """Test rank calculation with subevents"""
+        from pretix.base.models import SubEvent
+        
+        subevent1 = SubEvent.objects.create(event=self.event, name='Day 1', date_from=now())
+        subevent2 = SubEvent.objects.create(event=self.event, name='Day 2', date_from=now())
+        
+        # Create entries for different subevents
+        wle1 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user1@bar.com',
+            subevent=subevent1
+        )
+        wle2 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user2@bar.com',
+            subevent=subevent1
+        )
+        wle3 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user3@bar.com',
+            subevent=subevent2
+        )
+        
+        # Ranks should be separate per subevent
+        assert wle1.get_rank() == 1
+        assert wle2.get_rank() == 2
+        # Entry for different subevent should have rank 1 (separate list)
+        assert wle3.get_rank() == 1
+
+    @classscope(attr='o')
+    def test_get_rank_item_variation(self):
+        """Test rank is per item/variation combination"""
+        # Create entries for different items
+        wle1 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='user1@bar.com'
+        )
+        wle2 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='user2@bar.com'
+        )
+        wle3 = WaitingListEntry.objects.create(
+            event=self.event, item=self.item2, variation=self.var1, email='user3@bar.com'
+        )
+        
+        # Ranks should be separate per item/variation
+        assert wle1.get_rank() == 1
+        assert wle2.get_rank() == 1
+        assert wle3.get_rank() == 2
