@@ -35,6 +35,7 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import User, Voucher
 from pretix.base.services.mail import SendMailException, mail, render_mail
+from pretix.helpers import OF_SELF
 
 from ...helpers.format import format_map
 from ...helpers.names import build_name
