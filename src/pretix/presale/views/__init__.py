@@ -266,7 +266,7 @@ class CartMixin:
             'itemcount': sum(c.count for c in positions if not c.addon_to),
             'itemvarsums': itemvarsums,
             'current_selected_payments': [
-                p for p in self.current_selected_payments(positions, fees, self.invoice_address)
+                p for p in self.current_selected_payments(lcp, fees, self.invoice_address)
                 if p.get('multi_use_supported')
             ]
         }
