@@ -316,7 +316,6 @@ class Discount(LoggedModel):
         return len([1 for i, p in positions.items() if i < idx and p.addon_to == positions[idx].addon_to])
 
     def _apply_min_count(self, positions, condition_idx_group, benefit_idx_group, result, collect_potential_discounts, subevent_id):
-        print("POS", [self._addon_idx(positions, idx) for idx in sorted(positions.keys())])
         if len(condition_idx_group) < self.condition_min_count:
             return
 
