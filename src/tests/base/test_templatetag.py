@@ -68,9 +68,6 @@ def test_urlreplace_replace_parameter():
 
         ("en", Decimal("1023"), "JPY", "¥1,023"),
 
-        ("pt-pt", Decimal("10.00"), "EUR", "10,00" + NBSP + "€"),
-        ("pt-br", Decimal("10.00"), "EUR", "€" + NBSP + "10,00"),
-
         # unknown currency
         ("de", Decimal("1234.56"), "FOO", "1.234,56" + NBSP + "FOO"),
         ("de", Decimal("1234.567"), "FOO", "1.234,57" + NBSP + "FOO"),

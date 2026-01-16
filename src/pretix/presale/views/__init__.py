@@ -48,7 +48,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scopes_disabled
 
-from pretix.base.i18n import get_language_without_region
+from pretix.base.i18n import get_language_without_region, set_region
 from pretix.base.middleware import get_supported_language
 from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderFee, Question,
@@ -544,6 +544,7 @@ def iframe_entry_view_wrapper(view_func):
                 region = request.event.settings.region
                 if '-' not in lng and region:
                     lng += '-' + region.lower()
+                set_region(region)
 
             # with language() is not good enough here – we really need to take the role of LocaleMiddleware and modify
             # global state, because template rendering might be happening lazily.
