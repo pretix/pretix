@@ -188,6 +188,8 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
             return None, None
         try:
             for k, v in pkg.metadata.items():
+                if k == "License-Expression":
+                    license = v
                 if k == "License":
                     license = v
                 if k == "Home-page":
