@@ -124,13 +124,13 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
 
         return None
 
-    """
-    Returns the order object when access is permitted, returns `False` when the
-    order exists but requires authentication, and returns `None` when the order
-    does not exist or access is denied entirely.
-    """
-    @cached_property
-    def order(self):
+@cached_property
+def order(self):
+        """
+        Returns the order object when access is permitted, returns `False` when the
+        order exists but requires authentication, and returns `None` when the order
+        does not exist or access is denied entirely.
+        """
         try:
             order = self.request.event.orders.filter().select_related('event').get_with_secret_check(
                 code=self.kwargs['order'], received_secret=self.kwargs['secret'], tag=None,
