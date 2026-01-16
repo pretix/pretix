@@ -123,18 +123,19 @@ def get_babel_locale():
     # fallback to english
 
     try_locales = []
-    if "-" in current_language:
-        lng_parts = current_language.split("-")
-        if current_region:
-            try_locales.append(f"{lng_parts[0]}_{lng_parts[1].title()}_{current_region.upper()}")
-            try_locales.append(f"{lng_parts[0]}_{current_region.upper()}")
-        try_locales.append(f"{lng_parts[0]}_{lng_parts[1].upper()}")
-        try_locales.append(f"{lng_parts[0]}_{lng_parts[1].title()}")
-        try_locales.append(f"{lng_parts[0]}")
-    else:
-        if current_region:
-            try_locales.append(f"{current_language}_{current_region.upper()}")
-        try_locales.append(f"{current_language}")
+    if current_language:
+        if "-" in current_language:
+            lng_parts = current_language.split("-")
+            if current_region:
+                try_locales.append(f"{lng_parts[0]}_{lng_parts[1].title()}_{current_region.upper()}")
+                try_locales.append(f"{lng_parts[0]}_{current_region.upper()}")
+            try_locales.append(f"{lng_parts[0]}_{lng_parts[1].upper()}")
+            try_locales.append(f"{lng_parts[0]}_{lng_parts[1].title()}")
+            try_locales.append(f"{lng_parts[0]}")
+        else:
+            if current_region:
+                try_locales.append(f"{current_language}_{current_region.upper()}")
+            try_locales.append(f"{current_language}")
 
     try_locales.append(settings.LANGUAGE_CODE)
 
