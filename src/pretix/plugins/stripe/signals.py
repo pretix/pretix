@@ -38,7 +38,6 @@ from pretix.base.signals import (
 )
 from pretix.control.signals import nav_organizer
 from pretix.plugins.stripe.forms import StripeKeyValidator
-from pretix.plugins.stripe.payment import StripeMethod
 from pretix.presale.signals import html_head, process_response
 
 
@@ -47,15 +46,17 @@ def register_payment_provider(sender, **kwargs):
     from .payment import (
         StripeAffirm, StripeAlipay, StripeBancontact, StripeCC, StripeEPS,
         StripeGiropay, StripeIdeal, StripeKlarna, StripeMobilePay,
-        StripeMultibanco, StripePayPal, StripePrzelewy24, StripeRevolutPay,
-        StripeSEPADirectDebit, StripeSettingsHolder, StripeSofort, StripeSwish,
-        StripeTwint, StripeWeChatPay,
+        StripeMultibanco, StripePayByBank, StripePayPal, StripePromptPay,
+        StripePrzelewy24, StripeRevolutPay, StripeSEPADirectDebit,
+        StripeSettingsHolder, StripeSofort, StripeSwish, StripeTwint,
+        StripeWeChatPay,
     )
 
     return [
         StripeSettingsHolder, StripeCC, StripeGiropay, StripeIdeal, StripeAlipay, StripeBancontact,
-        StripeSofort, StripeEPS, StripeMultibanco, StripePrzelewy24, StripeRevolutPay, StripeWeChatPay,
-        StripeSEPADirectDebit, StripeAffirm, StripeKlarna, StripePayPal, StripeSwish, StripeTwint, StripeMobilePay
+        StripeSofort, StripeEPS, StripeMultibanco, StripePayByBank, StripePrzelewy24, StripePromptPay, StripeRevolutPay,
+        StripeWeChatPay, StripeSEPADirectDebit, StripeAffirm, StripeKlarna, StripePayPal, StripeSwish,
+        StripeTwint, StripeMobilePay
     ]
 
 
@@ -189,6 +190,8 @@ def nav_o(sender, request, organizer, **kwargs):
 
 @receiver(signal=process_response, dispatch_uid="stripe_middleware_resp")
 def signal_process_response(sender, request: HttpRequest, response: HttpResponse, **kwargs):
+    from pretix.plugins.stripe.payment import StripeMethod
+
     provider = StripeMethod(sender)
     url = resolve(request.path_info)
 

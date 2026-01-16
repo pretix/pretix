@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-29 07:55+0000\n"
+"POT-Creation-Date: 2026-01-05 12:13+0000\n"
 "PO-Revision-Date: 2024-03-10 03:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -141,7 +141,7 @@ msgstr "Fortsett"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
 msgid "Confirming your payment …"
 msgstr "Bekrefter betalingen din…"
 
@@ -345,8 +345,8 @@ msgstr "Nei"
 msgid "close"
 msgstr "lukk"
 
-#: pretix/static/pretixbase/js/addressform.js:90
-#: pretix/static/pretixpresale/js/ui/main.js:525
+#: pretix/static/pretixbase/js/addressform.js:101
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "nødvendig"
 
@@ -641,13 +641,13 @@ msgstr "Genererer meldinger…"
 msgid "Unknown error."
 msgstr "Ukjent feil."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:292
+#: pretix/static/pretixcontrol/js/ui/main.js:309
 #, fuzzy
 #| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Fargen du valgte har høy kontrast og er veldig enkel å lese!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:296
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 #, fuzzy
 #| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
@@ -655,46 +655,46 @@ msgid ""
 "requirements."
 msgstr "Fargen du valgte har grei kontrast og er ganske enkel å lese!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:300
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:418
-#: pretix/static/pretixcontrol/js/ui/main.js:438
+#: pretix/static/pretixcontrol/js/ui/main.js:443
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "Søkeord"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Ingen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:441
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "Kun valgte"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:814
+#: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:817
+#: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:975
+#: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
 msgstr "Bruk et annet navn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1015
+#: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
 msgstr "Klikk for å lukke"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1096
+#: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
 msgstr "Du har ikke-lagrede endringer!"
 
@@ -783,7 +783,7 @@ msgstr "Du mottar %(currency)s %(amount)s tilbake"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Vennligst skriv inn beløpet arrangøren kan beholde."
 
-#: pretix/static/pretixpresale/js/ui/main.js:570
+#: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
 msgstr "Din lokale tid:"
 

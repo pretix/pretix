@@ -474,6 +474,7 @@ class OrganizerSettingsForm(SettingsForm):
         'customer_accounts',
         'customer_accounts_native',
         'customer_accounts_link_by_email',
+        'customer_accounts_require_login_for_order_access',
         'invoice_regenerate_allowed',
         'contact_mail',
         'imprint_url',
@@ -1024,6 +1025,13 @@ class OrganizerFooterLinkForm(I18nModelForm):
     class Meta:
         model = OrganizerFooterLink
         fields = ('label', 'url')
+        widgets = {
+            "url": forms.URLInput(
+                attrs={
+                    "placeholder": "https://..."
+                }
+            )
+        }
 
 
 class BaseOrganizerFooterLinkFormSet(I18nFormSetMixin, forms.BaseInlineFormSet):

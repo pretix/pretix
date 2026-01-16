@@ -391,6 +391,8 @@ urlpatterns = [
                 name='event.order.retransmitinvoice'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/reissue$', orders.OrderInvoiceReissue.as_view(),
                 name='event.order.reissueinvoice'),
+        re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/inspect$', orders.OrderInvoiceInspect.as_view(),
+                name='event.order.inspect'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/download/(?P<position>\d+)/(?P<output>[^/]+)/$',
                 orders.OrderDownload.as_view(),
                 name='event.order.download.ticket'),

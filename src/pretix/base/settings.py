@@ -180,6 +180,19 @@ DEFAULTS = {
             widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
         )
     },
+    'customer_accounts_require_login_for_order_access': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Require login to access order confirmation pages"),
+            help_text=_("If enabled, users who were logged in at the time of purchase must also log in to access their order information. "
+                        "If a customer account is created while placing an order, the restriction only becomes active after the customer "
+                        "account is activated."),
+            widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
+        )
+    },
     'customer_accounts_link_by_email': {
         'default': 'False',
         'type': bool,
@@ -629,11 +642,38 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Ask for VAT ID"),
             help_text=format_lazy(
-                _("Only works if an invoice address is asked for. VAT ID is never required and only requested from "
-                  "business customers in the following countries: {countries}"),
+                _("Only works if an invoice address is asked for. VAT ID is only requested from business customers "
+                  "in the following countries: {countries}."),
                 countries=lazy(lambda *args: ', '.join(sorted(gettext(Country(cc).name) for cc in VAT_ID_COUNTRIES)), str)()
             ),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
+        )
+    },
+    'invoice_address_vatid_required_countries': {
+        'default': ['IT', 'GR'],
+        'type': list,
+        'form_class': forms.MultipleChoiceField,
+        'serializer_class': serializers.MultipleChoiceField,
+        'serializer_kwargs': dict(
+            choices=lazy(
+                lambda *args: sorted([(cc, gettext(Country(cc).name)) for cc in VAT_ID_COUNTRIES], key=lambda c: c[1]),
+                list
+            )(),
+        ),
+        'form_kwargs': dict(
+            label=_("Require VAT ID in"),
+            choices=lazy(
+                lambda *args: sorted([(cc, gettext(Country(cc).name)) for cc in VAT_ID_COUNTRIES], key=lambda c: c[1]),
+                list
+            )(),
+            help_text=format_lazy(
+                _("VAT ID is optional by default, because not all businesses are assigned a VAT ID in all countries. "
+                  "VAT ID will be required for all business addresses in the selected countries."),
+            ),
+            widget=forms.CheckboxSelectMultiple(attrs={
+                "class": "scrolling-multiple-choice",
+                'data-display-dependency': '#id_invoice_address_vatid'
+            }),
         )
     },
     'invoice_address_explanation_text': {
@@ -690,6 +730,7 @@ DEFAULTS = {
             label=_("Minimum length of invoice number after prefix"),
             help_text=_("The part of your invoice number after your prefix will be filled up with leading zeros up to this length, e.g. INV-001 or INV-00001."),
             max_value=12,
+            min_value=1,
             required=True,
         )
     },
@@ -725,8 +766,9 @@ DEFAULTS = {
                     message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
                         allowed='A-Z, a-z, 0-9, -./:#'
                     ), str)()
-                )
+                ),
             ],
+            max_length=155,
         )
     },
     'invoice_numbers_prefix_cancellations': {
@@ -747,8 +789,9 @@ DEFAULTS = {
                     message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
                         allowed='A-Z, a-z, 0-9, -./:#'
                     ), str)()
-                )
+                ),
             ],
+            max_length=155,
         )
     },
     'invoice_renderer_highlight_order_code': {
@@ -1203,6 +1246,7 @@ DEFAULTS = {
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
+            max_length=190,
             label=_("Company name"),
         )
     },
@@ -1216,6 +1260,7 @@ DEFAULTS = {
                 'placeholder': '12345'
             }),
             label=_("ZIP code"),
+            max_length=190,
         )
     },
     'invoice_address_from_city': {
@@ -1228,6 +1273,7 @@ DEFAULTS = {
                 'placeholder': _('Random City')
             }),
             label=_("City"),
+            max_length=190,
         )
     },
     'invoice_address_from_state': {
@@ -1264,7 +1310,8 @@ DEFAULTS = {
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("Domestic tax ID"),
-            help_text=_("e.g. tax number in Germany, ABN in Australia, …")
+            help_text=_("e.g. tax number in Germany, ABN in Australia, …"),
+            max_length=190,
         )
     },
     'invoice_address_from_vat_id': {
@@ -1274,6 +1321,7 @@ DEFAULTS = {
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("EU VAT ID"),
+            max_length=190,
         )
     },
     'invoice_introductory_text': {

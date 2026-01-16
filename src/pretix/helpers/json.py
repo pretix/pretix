@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django.core.files import File
+from django_countries.fields import Country
 from i18nfield.utils import I18nJSONEncoder
 from phonenumber_field.phonenumber import PhoneNumber
 
@@ -36,7 +37,9 @@ class CustomJSONEncoder(I18nJSONEncoder):
             return obj.name
         elif isinstance(obj, LazyI18nStringList):
             return [s.data for s in obj.data]
-        if isinstance(obj, PhoneNumber):
+        elif isinstance(obj, PhoneNumber):
+            return str(obj)
+        elif isinstance(obj, Country):
             return str(obj)
         else:
             return super().default(obj)

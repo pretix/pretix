@@ -582,6 +582,7 @@ class CoreOrderLogEntryType(OrderLogEntryType):
         'The voucher has been set to expire because the recipient removed themselves from the waiting list.'),
     'pretix.voucher.changed': _('The voucher has been changed.'),
     'pretix.voucher.deleted': _('The voucher has been deleted.'),
+    'pretix.voucher.carts.deleted': _('Cart positions including the voucher have been deleted.'),
     'pretix.voucher.added.waitinglist': _('The voucher has been assigned to {email} through the waiting list.'),
 })
 class CoreVoucherLogEntryType(VoucherLogEntryType):
@@ -813,7 +814,7 @@ class OrganizerPluginStateLogEntryType(LogEntryType):
             if app and hasattr(app, 'PretixPluginMeta'):
                 return {
                     'href': reverse('control:organizer.settings.plugins', kwargs={
-                        'organizer': logentry.event.organizer.slug,
+                        'organizer': logentry.organizer.slug,
                     }) + '#plugin_' + logentry.parsed_data['plugin'],
                     'val': app.PretixPluginMeta.name
                 }

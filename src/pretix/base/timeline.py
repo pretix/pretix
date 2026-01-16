@@ -93,7 +93,9 @@ def timeline_for_event(event, subevent=None):
         description=format_lazy(
             '{} ({})',
             pgettext_lazy('timeline', 'End of ticket sales'),
-            pgettext_lazy('timeline', 'automatically because the event is over and no end of presale has been configured') if not ev.presale_end else ""
+            pgettext_lazy('timeline', 'automatically because the event is over and no end of presale has been configured')
+        ) if not ev.presale_end else (
+            pgettext_lazy('timeline', 'End of ticket sales')
         ),
         edit_url=ev_edit_url + '#id_presale_end_0'
     ))

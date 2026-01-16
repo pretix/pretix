@@ -347,11 +347,53 @@ if HAS_CELERY:
     CELERY_RESULT_BACKEND = config.get('celery', 'backend')
     if HAS_CELERY_BROKER_TRANSPORT_OPTS:
         CELERY_BROKER_TRANSPORT_OPTIONS = loads(config.get('celery', 'broker_transport_options'))
+    else:
+        CELERY_BROKER_TRANSPORT_OPTIONS = {}
     if HAS_CELERY_BACKEND_TRANSPORT_OPTS:
         CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = loads(config.get('celery', 'backend_transport_options'))
     CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+    if CELERY_BROKER_URL.startswith("amqp://"):
+        # https://docs.celeryq.dev/en/latest/userguide/routing.html#routing-options-rabbitmq-priorities
+        # Enable priorities for all queues
+        CELERY_TASK_QUEUE_MAX_PRIORITY = 3
+        # On RabbitMQ, higher number is higher priority, and having less levels makes rabbitmq use less CPU and RAM
+        PRIORITY_CELERY_LOW = 1
+        PRIORITY_CELERY_MID = 2
+        PRIORITY_CELERY_HIGH = 3
+        PRIORITY_CELERY_LOWEST_FUNC = min
+        PRIORITY_CELERY_HIGHEST_FUNC = max
+        # Set default
+        CELERY_TASK_DEFAULT_PRIORITY = PRIORITY_CELERY_MID
+    elif CELERY_BROKER_URL.startswith("redis://"):
+        # https://docs.celeryq.dev/en/latest/userguide/routing.html#redis-message-priorities
+        CELERY_BROKER_TRANSPORT_OPTIONS.update({
+            "queue_order_strategy": "priority",
+            "sep": ":",
+            "priority_steps": [0, 4, 8]
+        })
+        # On redis, lower number is higher priority, and it appears that there are always levels 0-9 even though it
+        # is only really executed based on the 3 steps listed above.
+        PRIORITY_CELERY_LOW = 9
+        PRIORITY_CELERY_MID = 5
+        PRIORITY_CELERY_HIGH = 0
+        PRIORITY_CELERY_LOWEST_FUNC = max
+        PRIORITY_CELERY_HIGHEST_FUNC = min
+        CELERY_TASK_DEFAULT_PRIORITY = PRIORITY_CELERY_MID
+    else:
+        # No priority support assumed
+        PRIORITY_CELERY_LOW = 0
+        PRIORITY_CELERY_MID = 0
+        PRIORITY_CELERY_HIGH = 0
+        PRIORITY_CELERY_LOWEST_FUNC = min
+        PRIORITY_CELERY_HIGHEST_FUNC = max
 else:
     CELERY_TASK_ALWAYS_EAGER = True
+    PRIORITY_CELERY_LOW = 0
+    PRIORITY_CELERY_MID = 0
+    PRIORITY_CELERY_HIGH = 0
+    PRIORITY_CELERY_LOWEST_FUNC = min
+    PRIORITY_CELERY_HIGHEST_FUNC = max
 
 CACHE_TICKETS_HOURS = config.getint('cache', 'tickets', fallback=24 * 3)
 
@@ -612,6 +654,11 @@ LOGGING = {
         },
         'django.security.DisallowedHost': {
             'handlers': ['null'],
+            'propagate': False,
+        },
+        'celery.utils.functional': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',  # Do not output all the queries
             'propagate': False,
         },
         'django.db.backends': {

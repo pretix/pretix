@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-29 07:55+0000\n"
-"PO-Revision-Date: 2025-09-08 18:57+0000\n"
-"Last-Translator: Alois Pospíšil <alois.pospisil@gmail.com>\n"
+"POT-Creation-Date: 2026-01-05 12:13+0000\n"
+"PO-Revision-Date: 2026-01-08 04:00+0000\n"
+"Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "cs/>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -141,7 +141,7 @@ msgstr "Pokračovat"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
 msgid "Confirming your payment …"
 msgstr "Potvrzuji vaši platbu …"
 
@@ -345,8 +345,8 @@ msgstr "Ne"
 msgid "close"
 msgstr "zavřít"
 
-#: pretix/static/pretixbase/js/addressform.js:90
-#: pretix/static/pretixpresale/js/ui/main.js:525
+#: pretix/static/pretixbase/js/addressform.js:101
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "povinný"
 
@@ -416,7 +416,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "Pokud akce trvá déle než několik minut, kontaktujte nás."
 
 #: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
@@ -647,57 +647,57 @@ msgstr "Vytváření zpráv…"
 msgid "Unknown error."
 msgstr "Neznámá chyba."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:292
+#: pretix/static/pretixcontrol/js/ui/main.js:309
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Tato barva má velmi dobrý kontrast a je velmi dobře čitelná."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:296
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr ""
 "Tato barva má slušný kontrast a pravděpodobně je dostatečně dobře čitelná."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:300
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:418
-#: pretix/static/pretixcontrol/js/ui/main.js:438
+#: pretix/static/pretixcontrol/js/ui/main.js:443
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "Hledaný výraz"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "Všechny"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Žádný"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:441
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "Pouze vybrané"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:814
+#: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:817
+#: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:975
+#: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
 msgstr "Interně používat jiný název"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1015
+#: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
 msgstr "Kliknutím zavřete"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1096
+#: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
 msgstr "Máte neuložené změny!"
 
@@ -734,7 +734,7 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:49
 msgid "Cart expired"
-msgstr "Nákupní košík vypršel"
+msgstr "Rezervace košíku vypršela"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:58
 #: pretix/static/pretixpresale/js/ui/cart.js:84
@@ -753,27 +753,23 @@ msgstr[2] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
 msgid "Your cart has expired."
-msgstr "Nákupní košík vypršel."
+msgstr "Platnost rezervace vašeho košíku vypršela."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
-#, fuzzy
-#| msgid ""
-#| "The items in your cart are no longer reserved for you. You can still "
-#| "complete your order as long as they’re available."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
 msgstr ""
-"Produkty v nákupním košíku již nejsou pro vás rezervovány. Pokud je lístek "
-"stále dostupný, můžete objednávku dokončit."
+"Produkty v nákupním košíku již nejsou rezervovány. Svou objednávku se přesto "
+"můžete pokusit dokončit, některé položky však už nemusí být dostupné."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
-msgstr ""
+msgstr "Chcete obnovit rezervaci košíku?"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Renew reservation"
-msgstr ""
+msgstr "Obnovit rezervaci"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -787,7 +783,7 @@ msgstr "Dostanete %(currency)s %(amount)s zpět"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Zadejte částku, kterou si organizátor může ponechat."
 
-#: pretix/static/pretixpresale/js/ui/main.js:570
+#: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
 msgstr "Místní čas:"
 

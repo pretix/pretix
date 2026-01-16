@@ -45,10 +45,19 @@
                 {% endif %}
                 <p class="help-block">
                     <small>
-                        {% blocktrans trimmed %}
-                            Only fully paid orders are counted.
-                            Orders paid in multiple payments are shown with the date of their last payment.
-                        {% endblocktrans %}
+                        {% if request.GET.subevent %}
+                            {% blocktrans trimmed %}
+                                Only fully paid orders are counted.
+                                Orders paid in multiple payments are shown with the date of their last payment.
+                                Revenue excludes all fees, including cancellation fees.
+                            {% endblocktrans %}
+                        {% else %}
+                            {% blocktrans trimmed %}
+                                Only fully paid orders are counted.
+                                Orders paid in multiple payments are shown with the date of their last payment.
+                                Revenue includes all fees, including cancellation fees from cancelled orders.
+                            {% endblocktrans %}
+                        {% endif %}
                     </small>
                 </p>
             </div>
@@ -59,6 +68,14 @@
             </div>
             <div class="panel-body">
                 <div id="obp_chart" class="chart"></div>
+                <p class="help-block">
+                    <small>
+                        {% blocktrans trimmed %}
+                            Placed orders include all orders (pending, paid, cancelled, and expired);
+                            paid orders include only paid orders and exclude all cancelled orders.
+                        {% endblocktrans %}
+                    </small>
+                </p>
             </div>
         </div>
         {% if seats %}

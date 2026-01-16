@@ -623,7 +623,7 @@ class Voucher(LoggedModel):
         return max(1, self.min_usages - self.redeemed)
 
     @classmethod
-    def annotate_budget_used_orders(cls, qs):
+    def annotate_budget_used(cls, qs):
         opq = OrderPosition.objects.filter(
             voucher_id=OuterRef('pk'),
             voucher_budget_use__isnull=False,
@@ -632,7 +632,7 @@ class Voucher(LoggedModel):
                 Order.STATUS_PENDING
             ]
         ).order_by().values('voucher_id').annotate(s=Sum('voucher_budget_use')).values('s')
-        return qs.annotate(budget_used_orders=Coalesce(Subquery(opq, output_field=models.DecimalField(max_digits=13, decimal_places=2)), Decimal('0.00')))
+        return qs.annotate(budget_used=Coalesce(Subquery(opq, output_field=models.DecimalField(max_digits=13, decimal_places=2)), Decimal('0.00')))
 
     def budget_used(self):
         ops = OrderPosition.objects.filter(

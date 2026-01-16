@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-29 07:55+0000\n"
+"POT-Creation-Date: 2026-01-05 12:13+0000\n"
 "PO-Revision-Date: 2022-04-06 03:00+0000\n"
 "Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -144,7 +144,7 @@ msgstr "Turpināt"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
 msgid "Confirming your payment …"
 msgstr "Jūsu maksājums tiek apstrādāts …"
 
@@ -352,8 +352,8 @@ msgstr "Nē"
 msgid "close"
 msgstr "aizvērt"
 
-#: pretix/static/pretixbase/js/addressform.js:90
-#: pretix/static/pretixpresale/js/ui/main.js:525
+#: pretix/static/pretixbase/js/addressform.js:101
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "obligāts"
 
@@ -657,13 +657,13 @@ msgstr "Ziņas tiek ģenerētas …"
 msgid "Unknown error."
 msgstr "Nezināma kļūda."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:292
+#: pretix/static/pretixcontrol/js/ui/main.js:309
 #, fuzzy
 #| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Izvēlētā teksta krāsa ļoti labi izceļas un ir viegli izlasāma!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:296
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 #, fuzzy
 #| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
@@ -673,46 +673,46 @@ msgstr ""
 "Izvēlētā teksta krāsa pietiekami izceļas un visdrīzāk būs samērā viegli "
 "izlasāma!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:300
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:418
-#: pretix/static/pretixcontrol/js/ui/main.js:438
+#: pretix/static/pretixcontrol/js/ui/main.js:443
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "Meklēšanas pieprasījums"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "Visi"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Neviens"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:441
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "Tikai atzīmētos"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:814
+#: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:817
+#: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:975
+#: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
 msgstr "Izmantojiet citu nosaukumu iekšēji"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1015
+#: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
 msgstr "Noklikšķiniet, lai aizvērtu"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1096
+#: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
 msgstr "Jums ir nesaglabātas izmaiņas!"
 
@@ -803,7 +803,7 @@ msgstr "Jūs saņemsiet %(valūta)s %(cena)s atpakaļ"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Lūdzu ievadiet skaitu (summu), ko pasākuma organizators var paturēt."
 
-#: pretix/static/pretixpresale/js/ui/main.js:570
+#: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
 msgstr "Vietējais laiks:"
 

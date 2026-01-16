@@ -66,7 +66,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.helpers.json import CustomJSONEncoder
-from pretix.plugins.banktransfer import csvimport, mt940import
+from pretix.plugins.banktransfer import camtimport, csvimport, mt940import
 from pretix.plugins.banktransfer.models import (
     BankImportJob, BankTransaction, RefundExport,
 )
@@ -419,6 +419,9 @@ class ImportView(ListView):
         ):
             return self.process_mt940()
 
+        elif 'file' in self.request.FILES and '.xml' in self.request.FILES.get('file').name.lower():
+            return self.process_camt()
+
         elif self.request.FILES.get('file') is None:
             messages.error(self.request, _('You must choose a file to import.'))
             return self.redirect_back()
@@ -431,6 +434,14 @@ class ImportView(ListView):
     @cached_property
     def settings(self):
         return SettingsSandbox('payment', 'banktransfer', getattr(self.request, 'event', self.request.organizer))
+
+    def process_camt(self):
+        try:
+            return self.start_processing(camtimport.parse(self.request.FILES.get('file')))
+        except:
+            logger.exception('Failed to import CAMT file')
+            messages.error(self.request, _('We were unable to process your input.'))
+            return self.redirect_back()
 
     def process_mt940(self):
         try:
@@ -674,6 +685,7 @@ def _unite_transaction_rows(transaction_rows):
         united_transactions_rows.append({
             "iban": iban,
             "bic": bic,
+            "locale": rows[0].get('locale', 'en'),
             "id": ", ".join(sorted(set(r['id'] for r in rows))),
             "payer": ", ".join(sorted(set(r['payer'] for r in rows))),
             "amount": sum(r['amount'] for r in rows),
@@ -726,6 +738,7 @@ class RefundExportListView(ListView):
                     "amount": refund.amount,
                     "id": refund.full_id,
                     "comment": refund.comment,
+                    "locale": refund.order.locale,
                     **{key: data.get(key) for key in ("payer", "iban", "bic")}
                 })
                 refund.done(user=self.request.user)

@@ -71,15 +71,20 @@ def assign_properties(
     return out
 
 
-def _add_to_list(out, field_name, current_value, new_item, list_sep):
-    new_item = str(new_item)
+def _add_to_list(out, field_name, current_value, new_item_input, list_sep):
     if list_sep is not None:
-        new_item = new_item.replace(list_sep, "")
+        new_items = str(new_item_input).split(list_sep)
         current_value = current_value.split(list_sep) if current_value else []
-    elif not isinstance(current_value, (list, tuple)):
-        current_value = [str(current_value)]
-    if new_item not in current_value:
-        new_list = current_value + [new_item]
+    else:
+        new_items = [str(new_item_input)]
+        if not isinstance(current_value, (list, tuple)):
+            current_value = [str(current_value)]
+
+    new_list = list(current_value)
+    for new_item in new_items:
+        if new_item not in current_value:
+            new_list.append(new_item)
+    if new_list != current_value:
         if list_sep is not None:
             new_list = list_sep.join(new_list)
         out[field_name] = new_list

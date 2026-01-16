@@ -40,7 +40,7 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 
 from pretix.api.pagination import TotalOrderingFilter
@@ -293,6 +293,8 @@ class ItemProgramTimeViewSet(viewsets.ModelViewSet):
         return get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
 
     def get_queryset(self):
+        if self.request.event.has_subevents:
+            raise ValidationError('You cannot use program times on an event series.')
         return self.item.program_times.all()
 
     def get_serializer_context(self):
@@ -565,7 +567,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     write_permission = 'can_change_items'
 
     def get_queryset(self):
-        return self.request.event.quotas.all()
+        return self.request.event.quotas.select_related('subevent').prefetch_related('items', 'variations').all()
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset()).distinct()

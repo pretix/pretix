@@ -247,7 +247,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         cf = None
         if request.POST.get("background", "").strip():
             try:
-                cf = CachedFile.objects.get(id=request.POST.get("background"))
+                cf = CachedFile.objects.get(id=request.POST.get("background"), web_download=True)
             except CachedFile.DoesNotExist:
                 pass
 

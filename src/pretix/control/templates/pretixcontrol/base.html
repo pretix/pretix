@@ -126,7 +126,9 @@
                     {% endif %}
                     <a class="navbar-brand" href="{% url "control:index" %}">
                         <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" />
-                        {{ settings.PRETIX_INSTANCE_NAME }}
+                        <span>
+                            {{ settings.PRETIX_INSTANCE_NAME }}
+                        </span>
                     </a>
                 </div>
                 <ul class="nav navbar-nav navbar-top-links navbar-left flip hidden-xs">

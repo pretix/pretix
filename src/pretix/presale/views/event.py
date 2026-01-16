@@ -438,9 +438,6 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
                                 base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
                     ) if var.original_price or item.original_price else None
 
-                if not display_add_to_cart:
-                    display_add_to_cart = not item.requires_seat and var.order_max > 0
-
                 var.current_unavailability_reason = var.unavailability_reason(has_voucher=voucher, subevent=subevent)
 
             item.original_price = (
@@ -471,6 +468,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
                 item.best_variation_availability = max([v.cached_availability[0] for v in item.available_variations])
 
             item._remove = not bool(item.available_variations)
+            if not item._remove and not display_add_to_cart:
+                display_add_to_cart = not item.requires_seat and any(v.order_max > 0 for v in item.available_variations)
 
     if not quota_cache_existed and not voucher and not allow_addons and not base_qs_set and not filter_items and not filter_categories:
         event.cache.set(quota_cache_key, quota_cache, 5)
@@ -689,7 +688,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             self._set_month_year()
             tz = self.request.event.timezone
             _, ndays = calendar.monthrange(self.year, self.month)
-            before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
+            before = datetime(self.year, self.month, 1, 23, 59, 59, tzinfo=tz) - timedelta(days=1)
             after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
 
             if self.request.event.settings.event_calendar_future_only:
@@ -750,7 +749,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             tz = self.request.event.timezone
             week = isoweek.Week(self.year, self.week)
             before = datetime(
-                week.monday().year, week.monday().month, week.monday().day, 0, 0, 0, tzinfo=tz
+                week.monday().year, week.monday().month, week.monday().day, 23, 59, 59, tzinfo=tz
             ) - timedelta(days=1)
             after = datetime(
                 week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz

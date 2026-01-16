@@ -24,7 +24,7 @@ import responses
 from requests import Timeout
 
 from pretix.base.services.tax import (
-    VATIDFinalError, VATIDTemporaryError, validate_vat_id,
+    VATIDFinalError, VATIDTemporaryError, normalize_vat_id, validate_vat_id,
 )
 
 
@@ -49,6 +49,18 @@ def test_eu_no_prefix():
 def test_eu_country_mismatch():
     with pytest.raises(VATIDFinalError):
         validate_vat_id('AT12345', 'DE')
+
+
+@responses.activate
+def test_normalize():
+    assert normalize_vat_id('AT U 12345678', 'AT') == 'ATU12345678'
+    assert normalize_vat_id('U12345678', 'AT') == 'ATU12345678'
+    assert normalize_vat_id('IT.123.456.789.00', 'IT') == 'IT12345678900'
+    assert normalize_vat_id('12345678900', 'IT') == 'IT12345678900'
+    assert normalize_vat_id('123456789MVA', 'NO') == "NO123456789MVA"
+    assert normalize_vat_id('CHE 123456789 MWST', 'CH') == "CHE123456789"
+    # Bad combination is left for validation
+    assert normalize_vat_id('ATU12345678', 'IT') == 'ATU12345678'
 
 
 @responses.activate

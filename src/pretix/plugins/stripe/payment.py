@@ -137,7 +137,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # Real-time payments
 # - Swish: ✓
 # - PayNow: ✗
-# - PromptPay: ✗
+# - PromptPay: ✓
 # - Pix: ✗
 #
 # Vouchers
@@ -412,6 +412,18 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'before they work properly.'),
                      required=False,
                  )),
+                ('method_pay_by_bank',
+                 forms.BooleanField(
+                     label=_('Pay by bank'),
+                     disabled=self.event.currency not in ['EUR', 'GBP'],
+                     help_text=' '.join([
+                         str(_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                               'before they work properly.')),
+                         str(_('Currently only available for charges in GBP and customers with UK bank accounts, and '
+                               'in private preview for France and Germany.'))
+                     ]),
+                     required=False,
+                 )),
                 ('method_wechatpay',
                  forms.BooleanField(
                      label=_('WeChat Pay'),
@@ -423,7 +435,15 @@ class StripeSettingsHolder(BasePaymentProvider):
                 ('method_revolut_pay',
                  forms.BooleanField(
                      label='Revolut Pay',
-                     disabled=self.event.currency not in ['EUR', 'GBP'],
+                     disabled=self.event.currency not in ['EUR', 'GBP', 'RON', 'HUF', 'PLN', 'DKK'],
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before they work properly.'),
+                     required=False,
+                 )),
+                ('method_promptpay',
+                 forms.BooleanField(
+                     label='PromptPay',
+                     disabled=self.event.currency != 'THB',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
                                  'before they work properly.'),
                      required=False,
@@ -1810,6 +1830,32 @@ class StripeRevolutPay(StripeRedirectMethod):
         }
 
 
+class StripePayByBank(StripeRedirectMethod):
+    identifier = 'stripe_pay_by_bank'
+    verbose_name = _('Pay by bank via Stripe')
+    public_name = _('Pay by bank')
+    method = 'pay_by_bank'
+    redirect_in_widget_allowed = False
+    confirmation_method = 'automatic'
+    explanation = _(
+        'Pay by bank allows you to authorize a secure Open Banking payment from your banking app. Currently available '
+        'only with a UK bank account.'
+    )
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return super().is_allowed(request, total) and self.event.currency == 'GBP'
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "pay_by_bank",
+                "billing_details": {
+                    "email": payment.order.email,
+                },
+            },
+        }
+
+
 class StripePayPal(StripeRedirectMethod):
     identifier = 'stripe_paypal'
     verbose_name = _('PayPal via Stripe')
@@ -1839,6 +1885,30 @@ class StripeSwish(StripeRedirectMethod):
                     "reference": payment.order.full_code,
                 },
             }
+        }
+
+
+class StripePromptPay(StripeRedirectMethod):
+    identifier = 'stripe_promptpay'
+    verbose_name = _('PromptPay via Stripe')
+    public_name = 'PromptPay'
+    method = 'promptpay'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to PromptPay users in Thailand. Please have your app ready.'
+    )
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return super().is_allowed(request, total) and request.event.currency == "THB"
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "promptpay",
+                "billing_details": {
+                    "email": payment.order.email,
+                },
+            },
         }
 
 

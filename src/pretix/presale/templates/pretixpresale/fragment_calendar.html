@@ -1,3 +1,4 @@
+{% load html_time %}
 {% load i18n %}
 {% load date_fast %}
 {% load calendarhead %}
@@ -55,7 +56,7 @@
         running
     {% elif event.event.presale_has_ended %}
         over
-    {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
+    {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
         soon
     {% else %}
         soon
@@ -108,13 +109,12 @@
                                                     <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
                                                 {% elif event.event.presale_has_ended %}
                                                     {% trans "Sale over" %}
-                                                {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
+                                                {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
                                                     <span class="fa fa-ticket" aria-hidden="true"></span>
-                                                    {% with date_human=event.event.presale_start|date_fast:"SHORT_DATE_FORMAT" date_iso=event.event.presale_start|date_fast:"c"  %}
-                                                    {% blocktrans with start_date="<time datetime='"|add:date_iso|add:"'>"|add:date_human|add:"</time>"|safe %}
+                                                    {% html_time event.event.effective_presale_start "SHORT_DATE_FORMAT" as start_date %}
+                                                    {% blocktrans with start_date=start_date %}
                                                         from {{ start_date }}
                                                     {% endblocktrans %}
-                                                    {% endwith %}
                                                 {% else %}
                                                     <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Soon" %}
                                                 {% endif %}

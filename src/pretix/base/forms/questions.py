@@ -66,8 +66,10 @@ from geoip2.errors import AddressNotFoundError
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
-from phonenumbers import NumberParseException, national_significant_number
-from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
+from phonenumbers import (
+    COUNTRY_CODE_TO_REGION_CODE, REGION_CODE_FOR_NON_GEO_ENTITY,
+    NumberParseException, national_significant_number,
+)
 from PIL import ImageOps
 
 from pretix.base.forms.widgets import (
@@ -83,7 +85,7 @@ from pretix.base.invoicing.transmission import (
 from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.services.tax import (
-    VATIDFinalError, VATIDTemporaryError, validate_vat_id,
+    VATIDFinalError, VATIDTemporaryError, normalize_vat_id, validate_vat_id,
 )
 from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, COUNTRY_STATE_LABEL,
@@ -305,7 +307,9 @@ class WrappedPhonePrefixSelect(Select):
         choices = [("", "---------")]
 
         if initial:
-            for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+            for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
+                if all(v == REGION_CODE_FOR_NON_GEO_ENTITY for v in values):
+                    continue
                 if initial in values:
                     self.initial = "+%d" % prefix
                     break
@@ -437,7 +441,9 @@ def guess_phone_prefix_from_request(request, event):
 
 
 def get_phone_prefix(country):
-    for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+    if country == REGION_CODE_FOR_NON_GEO_ENTITY:
+        return None
+    for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
         if country in values:
             return prefix
     return None
@@ -1165,13 +1171,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             self.fields['vat_id'].help_text = '<br/>'.join([
                 str(_('Optional, but depending on the country you reside in we might need to charge you '
                       'additional taxes if you do not enter it.')),
-                str(_('If you are registered in Switzerland, you can enter your UID instead.')),
             ])
         else:
             self.fields['vat_id'].help_text = '<br/>'.join([
                 str(_('Optional, but it might be required for you to claim tax benefits on your invoice '
                       'depending on your and the seller’s country of residence.')),
-                str(_('If you are registered in Switzerland, you can enter your UID instead.')),
             ])
 
         transmission_type_choices = [
@@ -1358,13 +1362,24 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                                             "transmission method.")}
                 )
 
+        vat_id_applicable = (
+            'vat_id' in self.fields and
+            data.get('is_business') and
+            ask_for_vat_id(data.get('country'))
+        )
+        vat_id_required = vat_id_applicable and str(data.get('country')) in self.event.settings.invoice_address_vatid_required_countries
+        if vat_id_required and not data.get('vat_id'):
+            raise ValidationError({
+                "vat_id": _("This field is required.")
+            })
+
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
-            pass
-        elif self.validate_vat_id and data.get('is_business') and ask_for_vat_id(data.get('country')) and data.get('vat_id'):
+            pass  # Skip re-validation if it is validated
+        elif self.validate_vat_id and vat_id_applicable:
             try:
                 normalized_id = validate_vat_id(data.get('vat_id'), str(data.get('country')))
                 self.instance.vat_id_validated = True
-                self.instance.vat_id = normalized_id
+                self.instance.vat_id = data['vat_id'] = normalized_id
             except VATIDFinalError as e:
                 if self.all_optional:
                     self.instance.vat_id_validated = False
@@ -1372,6 +1387,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 else:
                     raise ValidationError({"vat_id": e.message})
             except VATIDTemporaryError as e:
+                # We couldn't check it online, but we can still normalize it
+                normalized_id = normalize_vat_id(data.get('vat_id'), str(data.get('country')))
+                self.instance.vat_id = data['vat_id'] = normalized_id
                 self.instance.vat_id_validated = False
                 if self.request and self.vat_warning:
                     messages.warning(self.request, e.message)

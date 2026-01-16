@@ -19,8 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import base64
+import hashlib
 import re
 
+import dns.resolver
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _, pgettext
@@ -70,6 +73,9 @@ class PeppolIdValidator:
         "0205": "[A-Z0-9]+",
         "0221": "T[0-9]{13}",
         "0230": ".*",
+        "0244": "[0-9]{13}",
+        "0245": "[0-9]{10}",
+        "0246": "DE[0-9]{9}(-[0-9]{5})?(\\.[0-9A-Z]{1,8})?",
         "9901": ".*",
         "9902": "[1-9][0-9]{7}",
         "9904": "DK[0-9]{8}",
@@ -117,11 +123,13 @@ class PeppolIdValidator:
         "9951": ".*",
         "9952": ".*",
         "9953": ".*",
-        "9954": ".*",
         "9956": "0[0-9]{9}",
         "9957": ".*",
         "9959": ".*",
     }
+
+    def __init__(self, validate_online=False):
+        self.validate_online = validate_online
 
     def __call__(self, value):
         if ":" not in value:
@@ -136,6 +144,28 @@ class PeppolIdValidator:
             raise ValidationError(_("The Peppol participant ID does not match the validation rules for the prefix "
                                     "%(number)s. Please reach out to us if you are sure this ID is correct."),
                                   params={"number": prefix})
+
+        if self.validate_online:
+            base_hostnames = ['edelivery.tech.ec.europa.eu', 'acc.edelivery.tech.ec.europa.eu']
+            smp_id = base64.b32encode(hashlib.sha256(value.lower().encode()).digest()).decode().rstrip("=")
+            for base_hostname in base_hostnames:
+                smp_domain = f'{smp_id}.iso6523-actorid-upis.{base_hostname}'
+                resolver = dns.resolver.Resolver()
+                try:
+                    answers = resolver.resolve(smp_domain, 'NAPTR', lifetime=1.0)
+                    if answers:
+                        return value
+                except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
+                    # ID not registered, do not set found=True
+                    pass
+                except Exception:  # noqa
+                    # Error likely on our end or infrastructure is down, allow user to proceed
+                    return value
+
+            raise ValidationError(
+                _("The Peppol participant ID is not registered on the Peppol network."),
+            )
+
         return value
 
 
@@ -155,7 +185,9 @@ class PeppolTransmissionType(TransmissionType):
             "transmission_peppol_participant_id": forms.CharField(
                 label=_("Peppol participant ID"),
                 validators=[
-                    PeppolIdValidator(),
+                    PeppolIdValidator(
+                        validate_online=True,
+                    ),
                 ]
             ),
         }

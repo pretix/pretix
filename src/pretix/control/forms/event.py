@@ -42,11 +42,10 @@ import pycountry
 from django import forms
 from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
-from django.core.validators import MaxValueValidator
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import formset_factory, inlineformset_factory
 from django.urls import reverse
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property, lazy
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
@@ -54,7 +53,7 @@ from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django_countries.fields import LazyTypedChoiceField
 from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import (
-    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextInput,
+    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
 )
 from pytz import common_timezones
 
@@ -208,6 +207,7 @@ class EventWizardBasicsForm(I18nModelForm):
             'Sample Conference Center\nHeidelberg, Germany'
         )
         self.fields['slug'].widget.prefix = build_absolute_uri(self.organizer, 'presale:organizer.index')
+        self.fields['tax_rate']._required = True  # Do not render as optional because it is conditionally required
         if self.has_subevents:
             del self.fields['presale_start']
             del self.fields['presale_end']
@@ -374,6 +374,13 @@ class EventUpdateForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         if not self.change_slug:
             self.fields['slug'].widget.attrs['readonly'] = 'readonly'
+
+        if self.instance.orders.exists():
+            self.fields['currency'].disabled = True
+            self.fields['currency'].help_text = _(
+                'The currency cannot be changed because orders already exist.'
+            )
+
         self.fields['location'].widget.attrs['rows'] = '3'
         self.fields['location'].widget.attrs['placeholder'] = _(
             'Sample Conference Center\nHeidelberg, Germany'
@@ -921,6 +928,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_address_asked',
         'invoice_address_required',
         'invoice_address_vatid',
+        'invoice_address_vatid_required_countries',
         'invoice_address_company_required',
         'invoice_address_beneficiary',
         'invoice_address_custom_field',
@@ -993,8 +1001,6 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         self.fields['invoice_generate_sales_channels'].choices = (
             (c.identifier, c.label) for c in event.organizer.sales_channels.all()
         )
-        self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
-
         pps = [str(pp.verbose_name) for pp in event.get_payment_providers().values() if pp.requires_invoice_immediately]
         if pps:
             generate_paid_help_text = _('An invoice will be issued before payment if the customer selects one of the following payment methods: {list}').format(
@@ -1305,9 +1311,17 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_invoice = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nMarkdownTextarea,
-        help_text=_("This will only be used if the invoice is sent to a different email address or at a different time "
-                    "than the order confirmation."),
+        widget=I18nTextarea,  # no Markdown supported
+        help_text=lazy(
+            lambda: str(_(
+                "This will only be used if the invoice is sent to a different email address or at a different time "
+                "than the order confirmation."
+            )) + " " + str(_(
+                "Formatting is not supported, as some accounting departments process mail automatically and do not "
+                "handle formatted emails properly."
+            )),
+            str
+        )()
     )
     mail_subject_download_reminder = I18nFormField(
         label=_("Subject sent to order contact address"),
@@ -1475,6 +1489,9 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         'mail_subject_resend_all_links': ['event', 'orders'],
         'mail_attach_ical_description': ['event', 'event_or_subevent'],
     }
+    plain_rendering = {
+        'mail_text_order_invoice',
+    }
 
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.get('obj')
@@ -1493,7 +1510,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         self.event.meta_values_cached = self.event.meta_values.select_related('property').all()
 
         for k, v in self.base_context.items():
-            self._set_field_placeholders(k, v, rich=k.startswith('mail_text_'))
+            self._set_field_placeholders(k, v, rich=k.startswith('mail_text_') and k not in self.plain_rendering)
 
         for k, v in list(self.fields.items()):
             if k.endswith('_attendee') and not event.settings.attendee_emails_asked:
@@ -1860,7 +1877,11 @@ class QuickSetupForm(I18nForm):
         self.fields['payment_banktransfer_bank_details'].required = False
         for f in self.fields.values():
             if 'data-required-if' in f.widget.attrs:
-                del f.widget.attrs['data-required-if']
+                f.widget.attrs['data-required-if'] += ",#id_payment_banktransfer__enabled"
+
+        self.fields['payment_banktransfer_bank_details'].widget.attrs["data-required-if"] = (
+            "#id_payment_banktransfer_bank_details_type_1,#id_payment_banktransfer__enabled"
+        )
 
     def clean(self):
         cleaned_data = super().clean()
@@ -1949,6 +1970,13 @@ class EventFooterLinkForm(I18nModelForm):
     class Meta:
         model = EventFooterLink
         fields = ('label', 'url')
+        widgets = {
+            "url": forms.URLInput(
+                attrs={
+                    "placeholder": "https://..."
+                }
+            )
+        }
 
 
 class BaseEventFooterLinkFormSet(I18nFormSetMixin, forms.BaseInlineFormSet):

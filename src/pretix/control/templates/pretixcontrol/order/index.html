@@ -362,6 +362,11 @@
                                             </form>
                                         {% endif %}
                                     {% endif %}
+                                    {% if staff_session %}
+                                        <a class="btn btn-default btn-xs admin-only" href="{% url "control:event.order.inspect" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
+                                            {% trans "Inspect" %}
+                                        </a>
+                                    {% endif %}
                                     {% if forloop.revcounter0 > 0 %}
                                         <br/>
                                     {% endif %}

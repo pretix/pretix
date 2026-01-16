@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-29 07:55+0000\n"
+"POT-Creation-Date: 2026-01-05 12:13+0000\n"
 "PO-Revision-Date: 2025-10-28 17:00+0000\n"
 "Last-Translator: Sven Muhlen <sven.muhlen@bnl.etat.lu>\n"
 "Language-Team: Luxembourgish <https://translate.pretix.eu/projects/pretix/"
@@ -141,7 +141,7 @@ msgstr "Weider"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
 msgid "Confirming your payment …"
 msgstr "Bezuelung gëtt confirméiert…"
 
@@ -345,8 +345,8 @@ msgstr "Nee"
 msgid "close"
 msgstr "Zoumaachen"
 
-#: pretix/static/pretixbase/js/addressform.js:90
-#: pretix/static/pretixpresale/js/ui/main.js:525
+#: pretix/static/pretixbase/js/addressform.js:101
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "obligatoresch"
 
@@ -637,17 +637,17 @@ msgstr "Messagen ginn generéiert…"
 msgid "Unknown error."
 msgstr "Onbekannte Feeler."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:292
+#: pretix/static/pretixcontrol/js/ui/main.js:309
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Är Faarf huet e gudde Kontrast an ass einfach ze liesen."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:296
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr "Är Faarf huet e genuch Kontrast an ass gutt genuch ze liesen."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:300
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
@@ -655,40 +655,40 @@ msgstr ""
 "Är Faarf huet net genuch Kontrast. D'Accessibilitéit vun Ärer Säit wäert "
 "beanträchtegt sinn."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:418
-#: pretix/static/pretixcontrol/js/ui/main.js:438
+#: pretix/static/pretixcontrol/js/ui/main.js:443
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "Sich"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:436
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "All"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:437
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Keen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:441
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "Nëmmen ausgewielten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:814
+#: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Gitt eng Säitenzuel tëscht 1 an %(max)s un."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:817
+#: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
 msgstr "Ongülteg Säitenzuel."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:975
+#: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
 msgstr "Intern en aneren Numm benotzen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1015
+#: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
 msgstr "Klickt fir zouzemaachen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1096
+#: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
 msgstr "Dir hutt net gespäichert Ännerungen!"
 
@@ -771,7 +771,7 @@ msgstr "Dir kritt %(currency)s %(amount)s zréck"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Gitt wgl. e Montant an, deen den Organisateur hale kann."
 
-#: pretix/static/pretixpresale/js/ui/main.js:570
+#: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
 msgstr "Är lokal Auerzäit:"
 

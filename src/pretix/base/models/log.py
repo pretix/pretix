@@ -35,10 +35,13 @@
 import json
 import logging
 
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections, models
 from django.utils.functional import cached_property
+
+from pretix.helpers.celery import get_task_priority
 
 
 class VisibleOnlyManager(models.Manager):
@@ -138,8 +141,9 @@ class LogEntry(models.Model):
 
         log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
         if log_entry_type:
+            sender = self.event if self.event else self.organizer
             link_info = log_entry_type.get_object_link_info(self)
-            if is_app_active(self.event, meta['plugin']):
+            if is_app_active(sender, meta['plugin']):
                 return make_link(link_info, log_entry_type.object_link_wrapper)
             else:
                 return make_link(link_info, log_entry_type.object_link_wrapper, is_active=False,
@@ -186,7 +190,19 @@ class LogEntry(models.Model):
 
         to_notify = [o.id for o in objects if o.notification_type]
         if to_notify:
-            notify.apply_async(args=(to_notify,))
+            organizer_ids = set(o.organizer_id for o in objects if o.notification_type)
+            notify.apply_async(
+                args=(to_notify,),
+                priority=settings.PRIORITY_CELERY_HIGHEST_FUNC(
+                    get_task_priority("notifications", oid) for oid in organizer_ids
+                ),
+            )
         to_wh = [o.id for o in objects if o.webhook_type]
         if to_wh:
-            notify_webhooks.apply_async(args=(to_wh,))
+            organizer_ids = set(o.organizer_id for o in objects if o.webhook_type)
+            notify_webhooks.apply_async(
+                args=(to_wh,),
+                priority=settings.PRIORITY_CELERY_HIGHEST_FUNC(
+                    get_task_priority("notifications", oid) for oid in organizer_ids
+                ),
+            )

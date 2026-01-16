@@ -5,6 +5,7 @@ Resource description
 --------------------
 
 Program times for products (items) that can be set in addition to event times, e.g. to display seperate schedules within an event.
+Note that ``program_times`` are not available for items inside event series.
 The program times resource contains the following public fields:
 
 .. rst-class:: rest-resource-table
@@ -45,28 +46,28 @@ Endpoints
       Vary: Accept
       Content-Type: application/json
 
-   {
-      "count": 3,
-      "next": null,
-      "previous": null,
-      "results": [
-         {
-            "id": 2,
-            "start": "2025-08-14T22:00:00Z",
-            "end": "2025-08-15T00:00:00Z"
-         },
-         {
-            "id": 3,
-            "start": "2025-08-12T22:00:00Z",
-            "end": "2025-08-13T22:00:00Z"
-         },
-         {
-            "id": 14,
-            "start": "2025-08-15T22:00:00Z",
-            "end": "2025-08-17T22:00:00Z"
-         }
-      ]
-   }
+      {
+         "count": 3,
+         "next": null,
+         "previous": null,
+         "results": [
+            {
+               "id": 2,
+               "start": "2025-08-14T22:00:00Z",
+               "end": "2025-08-15T00:00:00Z"
+            },
+            {
+               "id": 3,
+               "start": "2025-08-12T22:00:00Z",
+               "end": "2025-08-13T22:00:00Z"
+            },
+            {
+               "id": 14,
+               "start": "2025-08-15T22:00:00Z",
+               "end": "2025-08-17T22:00:00Z"
+            }
+        ]
+      }
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
