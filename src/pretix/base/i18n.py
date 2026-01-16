@@ -128,8 +128,8 @@ def get_babel_locale():
         if current_region:
             try_locales.append(f"{lng_parts[0]}_{lng_parts[1].title()}_{current_region.upper()}")
             try_locales.append(f"{lng_parts[0]}_{current_region.upper()}")
-        try_locales.append(f"{lng_parts[0]}_{lng_parts[1].title()}")
         try_locales.append(f"{lng_parts[0]}_{lng_parts[1].upper()}")
+        try_locales.append(f"{lng_parts[0]}_{lng_parts[1].title()}")
         try_locales.append(f"{lng_parts[0]}")
     else:
         if current_region:

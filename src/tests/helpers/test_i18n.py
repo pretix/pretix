@@ -48,6 +48,9 @@ def test_get_locale():
 @pytest.mark.parametrize(
     ["lng_in", "region_in", "lng_out", "lng_without_region_out", "babel_out"],
     [
+        ("en", None, "en", "en", "en"),
+        ("en-us", None, "en-us", "en", "en_US"),
+        ("en", "US", "en-us", "en", "en_US"),
         ("de", None, "de", "de", "de"),
         ("de", "US", "de-us", "de", "de"),
         ("de", "DE", "de-de", "de", "de_DE"),
