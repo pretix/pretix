@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-14 21:00+0000\n"
-"Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
+"PO-Revision-Date: 2026-01-16 09:22+0000\n"
+"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -8993,7 +8993,7 @@ msgstr ""
 "exporter."
 
 #: pretix/base/services/invoices.py:116
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
 msgstr ""
