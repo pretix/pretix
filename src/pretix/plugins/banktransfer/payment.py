@@ -314,51 +314,6 @@ class BankTransfer(BasePaymentProvider):
         t += str(self.settings.get('bank_details', as_type=LazyI18nString))
         return t
 
-    def swiss_qrbill(self, payment):
-        if not self.settings.get('bank_details_sepa_iban') or not self.settings.get('bank_details_sepa_iban')[:2] in ('CH', 'LI'):
-            return
-        if self.event.currency not in ('EUR', 'CHF'):
-            return
-        if not self.event.settings.invoice_address_from or not self.event.settings.invoice_address_from_country:
-            return
-
-        data_fields = [
-            'SPC',
-            '0200',
-            '1',
-            self.settings.get('bank_details_sepa_iban'),
-            'K',
-            self.settings.get('bank_details_sepa_name')[:70],
-            self.event.settings.invoice_address_from.replace('\n', ', ')[:70],
-            (self.event.settings.invoice_address_from_zipcode + ' ' + self.event.settings.invoice_address_from_city)[:70],
-            '',
-            '',
-            str(self.event.settings.invoice_address_from_country),
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            '',  # rfu
-            str(payment.amount),
-            self.event.currency,
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            '',  # debtor address
-            'NON',
-            '',  # structured reference
-            self._code(payment.order, force=True),
-            'EPD',
-        ]
-
-        data_fields = [unidecode(d or '') for d in data_fields]
-        return '\r\n'.join(data_fields)
-
     def payment_pending_render(self, request: HttpRequest, payment: OrderPayment):
         template = get_template('pretixplugins/banktransfer/pending.html')
         ctx = {
