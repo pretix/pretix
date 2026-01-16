@@ -352,10 +352,8 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
         qs = sorted(qs, key=lambda o: o.priority, reverse=True)
 
         if not revert:
-            # Set the event-specific setting for the lottery date
             self.request.event.settings.set('main_lottery_date', now().isoformat())
         else:
-            # Delete the event setting when reverting
             self.request.event.settings.delete('main_lottery_date')
 
         headers = [
