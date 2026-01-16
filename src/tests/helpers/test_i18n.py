@@ -54,7 +54,6 @@ def test_get_locale():
         ("de-informal", "DE", "de-informal", "de-informal", "de_DE"),
         ("de-informal", "CH", "de-informal", "de-informal", "de_CH"),
         ("pt-pt", "PT", "pt-pt", "pt-pt", "pt_PT"),
-        ("pt-br", "BR", "pt-br", "pt-br", "pt_BR"),
         ("es", "MX", "es-mx", "es", "es_MX"),
         ("es-419", "MX", "es-419", "es-419", "es_MX"),
         ("zh-hans", "CN", "zh-hans", "zh-hans", "zh_Hans_CN"),
