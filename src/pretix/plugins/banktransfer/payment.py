@@ -272,6 +272,7 @@ class BankTransfer(BasePaymentProvider):
             'event': self.event,
             'settings': self.settings,
             'code': self._code(order, force=False) if order else None,
+            'order': order,
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }
         return template.render(ctx)
