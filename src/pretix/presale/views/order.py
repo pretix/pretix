@@ -124,8 +124,8 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
 
         return None
 
-@cached_property
-def order(self):
+    @cached_property
+    def order(self):
         """
         Returns the order object when access is permitted, returns `False` when the
         order exists but requires authentication, and returns `None` when the order
