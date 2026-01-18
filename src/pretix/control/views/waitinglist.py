@@ -351,6 +351,11 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
 
         qs = sorted(qs, key=lambda o: o.priority, reverse=True)
 
+        if not revert:
+            self.request.event.settings.set('main_lottery_date', now().isoformat())
+        else:
+            self.request.event.settings.delete('main_lottery_date')
+
         headers = [
             _('Name'), _('E-mail address'), _('Phone number'), _('Product'), _('On list since'), _('Status'),
             _('Voucher code'),
