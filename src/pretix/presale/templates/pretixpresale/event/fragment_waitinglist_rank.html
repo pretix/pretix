@@ -1,0 +1,18 @@
+{% load i18n %}
+{% load eventurl %}
+{% load static %}
+<div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div id="rank-result" 
+             data-rank-url="{% eventurl event "presale:event.waitinglist.rank" %}"
+             data-loading-text="{% trans "Loading..." %}"
+             data-voucher-text="{% trans "You have a voucher waiting for redemption! Check your email for details." %}"
+             data-rank-label="{% trans "You are {ordinal} in line" %}"
+             data-error-text="{% trans "An error occurred. Please try again." %}">
+            {% trans "Loading..." %}
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script src="{% static "pretixpresale/js/ui/waitinglist_rank.js" %}"></script>
+
