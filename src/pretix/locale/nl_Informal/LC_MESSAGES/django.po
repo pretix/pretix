@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-12 17:00+0000\n"
+"PO-Revision-Date: 2026-01-19 18:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -253,7 +253,7 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
-"Evenementen kunnen niet 'live' worden aangemaakt. Er moeten eerst quota en "
+"Evenementen kunnen niet als 'live' worden aangemaakt. Er moeten quota en "
 "betalingsmethoden worden toegevoegd voor het evenement live kan gaan."
 
 #: pretix/api/serializers/event.py:234 pretix/api/serializers/event.py:554
@@ -285,7 +285,9 @@ msgstr "De meta-eigenschap '{name}' bestaat niet."
 
 #: pretix/api/serializers/item.py:214 pretix/control/forms/item.py:1277
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "Een product kan niet zichzelf bevatten."
+msgstr ""
+"Het gebundelde artikel mag niet hetzelfde artikel zijn als het artikel "
+"waarmee het wordt gebundeld."
 
 #: pretix/api/serializers/item.py:217 pretix/control/forms/item.py:1279
 msgid "The bundled item must not have bundles on its own."
@@ -318,7 +320,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:345
 msgid "Only admission products can currently be personalized."
-msgstr "Enkel toegangsbewijzen kunnen gepersonaliseerd worden."
+msgstr "Alleen toegangsbewijzen kunnen gepersonaliseerd worden."
 
 #: pretix/api/serializers/item.py:356
 msgid ""
@@ -371,7 +373,7 @@ msgstr ""
 #: pretix/api/serializers/order.py:85
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "{input} is geen geldige keuze."
+msgstr "\"{input}\" is geen geldige keuze."
 
 #: pretix/api/serializers/order.py:1453 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1605
@@ -403,8 +405,8 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
-"Een cadeaukaart met dezelfde code bestaat al in jouw organisatoraccount of "
-"een met je account verbonden organisatoraccount."
+"Een cadeaubon met dezelfde code bestaat al in je organisatoraccount of een "
+"met je account verbonden organisatoraccount."
 
 #: pretix/api/serializers/organizer.py:369
 #: pretix/control/views/organizer.py:1042
@@ -425,7 +427,7 @@ msgstr "Deze gebruiker heeft al rechten voor dit team."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
 msgstr ""
-"Deze vouchercode heeft zijn maximum bereikt en kan niet langer worden "
+"Deze vouchercode heeft haar maximum bereikt en kan niet langer worden "
 "gebruikt."
 
 #: pretix/api/views/checkin.py:627 pretix/api/views/checkin.py:634
@@ -438,7 +440,7 @@ msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
-"De applicatie \"{application_name}\" is toegang gegeven tot jouw account."
+"De applicatie \"{application_name}\" heeft toegang tot je account gekregen."
 
 #: pretix/api/views/order.py:609 pretix/control/views/orders.py:1608
 #: pretix/presale/views/order.py:736 pretix/presale/views/order.py:816
@@ -3152,7 +3154,7 @@ msgstr "Standaard ingesteld op het tijdstip van het rapport."
 #: pretix/plugins/reports/accountingreport.py:105
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
 msgid "All"
-msgstr "Alle"
+msgstr "Alles"
 
 #: pretix/base/exporters/orderlist.py:1329 pretix/control/forms/filter.py:1577
 msgid "Live"
@@ -19711,6 +19713,8 @@ msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
 msgstr ""
+"Klik hier om een licentiecontrole uit te voeren om na te gaan of je gebruik "
+"van pretix in overeenstemming is met de licentie van pretix."
 
 #: pretix/control/templates/pretixcontrol/base.html:430
 msgid ""
@@ -20364,7 +20368,7 @@ msgstr "Bewerken"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:89
 msgid "Visualize"
-msgstr ""
+msgstr "Visualiseren"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:107
 msgid ""
@@ -22770,6 +22774,8 @@ msgstr "Op dit moment beschikbaar: %(num)s"
 msgid ""
 "This page is intended to help you use pretix in compliance with its license."
 msgstr ""
+"Deze pagina is bedoeld om je te helpen pretix te gebruiken in "
+"overeenstemming met de licentie."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:11
 msgid ""
@@ -22777,22 +22783,30 @@ msgid ""
 "page does not guarantee you are within the license. Only the original "
 "license text is legally binding."
 msgstr ""
+"De tekst en uitvoer van deze pagina zijn niet wettelijk bindend en het "
+"invullen van deze pagina garandeert niet dat je binnen de licentie valt. "
+"Alleen de originele licentietekst is wettelijk bindend."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:14
 msgid ""
 "You should have received a copy of pretix' license together with your copy "
 "of pretix. You can also view the current version of the license file here:"
 msgstr ""
+"Je zou een kopie van de licentie van pretix hebben moeten ontvangen samen "
+"met je exemplaar van pretix. Je kunt de huidige versie van het "
+"licentiebestand ook hier bekijken:"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:18
 msgid "Answers to common questions about the license can be found here:"
-msgstr ""
+msgstr "Antwoorden op veelgestelde vragen over de licentie vind je hier:"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:22
 msgid ""
 "For more information or to obtain a paid pretix Enterprise license, contact "
 "support@pretix.eu."
 msgstr ""
+"Voor meer informatie of om een betaalde pretix Enterprise-licentie aan te "
+"schaffen: neem contact op met support@pretix.eu."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:26
 #, fuzzy
@@ -22830,7 +22844,7 @@ msgstr "Resultaten updatecontrole"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:79
 msgid "The automated license check did not identify any issues."
-msgstr ""
+msgstr "De geautomatiseerde licentiecontrole heeft geen problemen vastgesteld."
 
 #: pretix/control/templates/pretixcontrol/global_message.html:5
 #: pretix/control/templates/pretixcontrol/global_message.html:7
@@ -23415,7 +23429,7 @@ msgstr "Extra instellingen"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:264
 msgid "Membership duration after purchase"
-msgstr ""
+msgstr "Lidmaatschapsduur na aankoop"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:313
 msgid "Product history"
@@ -26056,7 +26070,7 @@ msgstr "Teamlidmaatschappen"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:241
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:29
 msgid "Matched to the account based on the email address."
-msgstr ""
+msgstr "Gekoppeld aan het account op basis van het e-mailadres."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:294
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
@@ -26086,13 +26100,15 @@ msgstr "Weet je zeker dat je de toegangslocatie wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:20
 msgid "All orders will be disconnected from this customer account."
-msgstr ""
+msgstr "Alle bestellingen worden losgekoppeld van dit klantaccount."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:22
 msgid ""
 "The orders themselves will not be anonymized and can still contain personal "
 "information!"
 msgstr ""
+"De bestellingen zelf worden niet geanonimiseerd en kunnen nog steeds "
+"persoonlijke informatie bevatten!"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:26
 msgid ""
@@ -26319,7 +26335,7 @@ msgstr "Je hebt nog geen apparaten verbonden."
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:24
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:56
 msgid "Connect a device"
-msgstr "Verbind een apparaat"
+msgstr "Apparaat verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:81
 msgid "Hardware model"
@@ -26546,10 +26562,8 @@ msgstr "Transacties"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:81
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:7
 #: pretix/presale/templates/pretixpresale/giftcard/checkout.html:9
-#, fuzzy
-#| msgid "Confirmations"
 msgid "Information"
-msgstr "Bevestigingen"
+msgstr "Informatie"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:94
 msgid ""
@@ -26568,26 +26582,24 @@ msgid "Gift card history"
 msgstr "Cadeaubongeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_invite.html:8
-#, fuzzy
-#| msgid "Delete organizer"
 msgid "Invite organizer"
-msgstr "Verwijder organisator"
+msgstr "Organisator uitnodigen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:8
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift cards acceptance"
-msgstr "Cadeauboncode"
+msgstr "Acceptatie van cadeaubonnen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:11
 msgid ""
 "This feature allows you to configure acceptance of gift cards across "
 "multiple organizer accounts."
 msgstr ""
+"Met deze functie kun je de acceptatie van cadeaubonnen configureren voor "
+"meerdere organisatoraccounts."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:18
 msgid "Other organizers you accept gift cards from"
-msgstr ""
+msgstr "Andere organisatoren waarvan je cadeaubonnen accepteert"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:23
 msgid ""
@@ -26595,13 +26607,14 @@ msgid ""
 "do so, the other organizer can add you to their list and afterwards, you can "
 "confirm this here."
 msgstr ""
+"Je accepteert nog geen cadeaubonnen van andere organisatoren. Als je dat "
+"wilt doen, kan de andere organisator je aan zijn lijst toevoegen en daarna "
+"kun je dit hier bevestigen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:49
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:128
-#, fuzzy
-#| msgid "Unlimited"
 msgid "invited"
-msgstr "Onbeperkt"
+msgstr "uitgenodigd"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:62
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:140
@@ -26612,20 +26625,16 @@ msgid "Remove"
 msgstr "Verwijderen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:66
-#, fuzzy
-#| msgid "Accept anyway"
 msgid "Accept"
-msgstr "Alsnog accepteren"
+msgstr "Accepteren"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:69
-#, fuzzy
-#| msgid "Deadlines"
 msgid "Decline"
-msgstr "Deadlines"
+msgstr "Afwijzen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:84
 msgid "Other organizers accepting gift cards from you"
-msgstr ""
+msgstr "Andere organisatoren die jouw cadeaubonnen accepteren"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:87
 msgid ""
@@ -26636,6 +26645,12 @@ msgid ""
 "responsibility to handle the exchange of money to offset the transactions "
 "between the two organizers."
 msgstr ""
+"Je kunt andere organisatoren uitnodigen om je cadeaubonnen te accepteren. "
+"Nadat je dit hebt gedaan, moeten zij naar dezelfde pagina in hun account "
+"gaan en je uitnodiging accepteren. Houd er rekening mee dat andere "
+"organisatoren ook geld kunnen toevoegen aan cadeaubonnen, dat je vervolgens "
+"bij hen moet ophalen. Het is jouw verantwoordelijkheid om de geldtransacties "
+"tussen de twee organisatoren te regelen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:95
 msgid ""
@@ -26643,6 +26658,9 @@ msgid ""
 "is required if you want them to participate in a shared system with e.g. NFC "
 "payment chips."
 msgstr ""
+"Je kunt desgewenst bepalen of zij toegang hebben tot je herbruikbare media. "
+"Dit is nodig als je wilt dat zij deelnemen aan een gedeeld systeem met "
+"bijvoorbeeld NFC-betaalchips."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:99
 msgid ""
@@ -26650,12 +26668,14 @@ msgid ""
 "on the activated medium types) this will grant the other organizer access to "
 "cryptographic key material required to interact with the media type."
 msgstr ""
+"Gebruik deze optie alleen voor organisatoren die je vertrouwt, aangezien "
+"(afhankelijk van de geactiveerde mediatypen) dit de andere organisator "
+"toegang geeft tot cryptografisch sleutelmateriaal dat nodig is om met het "
+"mediatype te communiceren."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:106
-#, fuzzy
-#| msgid "Create a new organizer"
 msgid "Invite new organizer"
-msgstr "Nieuwe organisator aanmaken"
+msgstr "Nieuwe organisator uitnodigen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:8
 msgid "Issued gift cards"
@@ -26685,60 +26705,42 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:6
-#, fuzzy
-#| msgid "Organizers"
 msgid "Organizer logs"
-msgstr "Organisatoren"
+msgstr "Organisatorlogboeken"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:60
-#, fuzzy
-#| msgid "Submit registration"
 msgid "Customer account registration"
-msgstr "Verstuur aanmelding"
+msgstr "Registratie van een klantaccount"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:63
-#, fuzzy
-#| msgid "Customer actions"
 msgid "Customer account email change"
-msgstr "Klantacties"
+msgstr "Mailwijziging klantaccount"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:66
-#, fuzzy
-#| msgid "Your current password"
 msgid "Customer account password reset"
-msgstr "Je huidige wachtwoord"
+msgstr "Wachtwoordherstel van klantaccount"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:5
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Delete membership type:"
-msgstr "Teamlidmaatschappen"
+msgstr "Verwijder lidmaatschapstype:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete this membership type?"
-msgstr "Weet je zeker dat je de toegangslocatie wilt verwijderen?"
+msgstr "Weet je zeker dat je de dit lidmaatschapstype wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:11
-#, fuzzy
-#| msgid "A voucher can not be deleted if it already has been redeemed."
 msgid "This membership type cannot be deleted since it has already been used."
 msgstr ""
-"Een voucher kan niet worden verwijderd wanneer de voucher al is verzilverd."
+"Dit lidmaatschapstype kan niet worden verwijderd, omdat het al is gebruikt."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:6
-#, fuzzy
-#| msgid "Members"
 msgid "Membership type:"
-msgstr "Leden"
+msgstr "Lidmaatschapstype:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:21
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Create a new membership type"
-msgstr "Nieuw evenement aanmaken"
+msgstr "Nieuw lidmaatschapstype aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:8
 msgid ""
@@ -26747,6 +26749,10 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
+"Je kunt lidmaatschapstypes definiëren. Hiermee kun je producten van "
+"verschillende evenementen aan elkaar koppelen. Je kunt een lidmaatschap "
+"verkopen als onderdeel van een product in het ene evenement en geldige "
+"lidmaatschappen vereisen om aankopen in een ander evenement toe te staan."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:15
 msgid ""
@@ -26755,10 +26761,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
-#, fuzzy, python-format
-#| msgid "Event timezone"
+#, python-format
 msgid "Events with plugin %(name)s"
-msgstr "Tijdzone evenement"
+msgstr "Evenementen met plug-in %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:18
 #, python-format
@@ -26766,6 +26771,8 @@ msgid ""
 "The plugin \"%(name)s\" can be enabled or disabled for every event "
 "individually."
 msgstr ""
+"De plug-in \"%(name)s\" kan in- of uitgeschakeld worden voor elk "
+"afzonderlijk evenement."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
@@ -26773,6 +26780,9 @@ msgid ""
 "The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
+"De plug-in “%(name)s” is ingeschakeld voor je organisatoraccount, maar moet "
+"ook worden ingeschakeld voor de specifieke evenementen waarvoor je hem wilt "
+"gebruiken."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:31
 msgid ""
@@ -26780,6 +26790,9 @@ msgid ""
 "that it might still be necessary to configure the plugin for each event "
 "individually."
 msgstr ""
+"Met dit formulier kun je de plug-in snel in- of uitschakelen voor veel "
+"evenementen. Houd er rekening mee dat het nog steeds nodig kan zijn om de "
+"plug-in voor elk evenement afzonderlijk te configureren."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:8
 msgid ""
@@ -26787,40 +26800,40 @@ msgid ""
 "account. Plugins might bring additional software functionality, connect your "
 "events to third-party services, or apply other forms of customizations."
 msgstr ""
+"Op deze pagina kun je plug-ins kiezen die je wilt inschakelen voor je "
+"organisatoraccount. Plug-ins kunnen extra softwarefunctionaliteit bieden, je "
+"evenementen koppelen aan diensten van derden of andere vormen van "
+"aanpassingen toepassen."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:81
-#, fuzzy
-#| msgid "All events"
 msgid "Active (all events)"
-msgstr "Alle evenementen"
+msgstr "Actief (alle evenementen)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:86
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:95
-#, fuzzy, python-format
-#| msgid "%(count)s elements"
+#, python-format
 msgid "Active (%(count)s event)"
 msgid_plural "Active (%(count)s events)"
-msgstr[0] "%(count)s elementen"
-msgstr[1] "%(count)s elementen"
+msgstr[0] "Actief (%(count)s evenement)"
+msgstr[1] "Actief (%(count)s evenementen)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:118
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:175
 msgid ""
 "Parts of this plugin can be enabled or disabled for events individually."
 msgstr ""
+"Delen van deze plug-in kunnen voor afzonderlijke evenementen worden in- of "
+"uitgeschakeld."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:151
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:169
-#, fuzzy
-#| msgid "Upcoming events"
 msgid "Manage events"
-msgstr "Aankomende evenementen"
+msgstr "Evenementen beheren"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:164
-#, fuzzy
-#| msgid "This plugin cannot be enabled for the following reasons:"
 msgid "This plugin can be enabled or disabled for events individually."
-msgstr "Deze plug-in kan om de volgende redenen niet worden ingeschakeld:"
+msgstr ""
+"Deze plug-in kan voor individuele evenementen worden in- of uitgeschakeld."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -26828,150 +26841,114 @@ msgid ""
 "can later set for your events and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of events."
 msgstr ""
-"Je kan hier een set metadataeigenschappen (bijv. variabelen) die je later "
+"Je kan hier een set metadata-eigenschappen (bijv. variabelen) die je later "
 "kunt instellen voor je evenementen en hergebruiken in plaatsen als "
 "kaartjeslayouts. Dit kan je tijd schelen als je veel evenementen aanmaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:15
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:9
-#, fuzzy
-#| msgid "Create a new product"
 msgid "Create a new property"
-msgstr "Nieuw product aanmaken"
+msgstr "Nieuwe eigenschap aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:5
-#, fuzzy
-#| msgid "Delete product"
 msgid "Delete property:"
-msgstr "Product verwijderen"
+msgstr "Eigenschap verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:8
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete the property?"
-msgstr "Weet je zeker dat je de toegangslocatie wilt verwijderen?"
+msgstr "Weet je zeker dat je de eigenschap wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:7
-#, fuzzy
-#| msgid "Add property"
 msgid "Property:"
-msgstr "Eigenschap toevoegen"
+msgstr "Eigenschap:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:26
-#, fuzzy
-#| msgid "Variation"
 msgid "Validation"
-msgstr "Variant"
+msgstr "Validering"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:31
-#, fuzzy
-#| msgid "Allowed titles"
 msgid "Allowed values"
-msgstr "Te kiezen titels"
+msgstr "Toegestane waarden"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:35
 msgid "If you keep this empty, all input will be allowed."
-msgstr ""
+msgstr "Als je dit veld leeg laat, wordt alle invoer toegestaan."
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:93
-#, fuzzy
-#| msgid "Add a new rule"
 msgid "Add a new value"
-msgstr "Voeg een nieuwe regel toe"
+msgstr "Nieuwe waarde toevoegen"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:95
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Alfabetisch ordenen"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:14
-#, fuzzy
-#| msgid "No exports have been created yet."
 msgid "No media have been created yet."
-msgstr "Er zijn nog geen exports aangemaakt."
+msgstr "Er zijn nog geen media aangemaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:19
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:45
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Create a new medium"
-msgstr "Nieuw team aanmaken"
+msgstr "Nieuw medium aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:51
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:30
-#, fuzzy
-#| msgid "Internal identifier"
 msgctxt "reusable_media"
 msgid "Identifier"
-msgstr "Intern kenmerk"
+msgstr "Identificatie"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:56
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:28
-#, fuzzy
-#| msgid "Fee type"
 msgctxt "reusable_media"
 msgid "Media type"
-msgstr "Soort kosten"
+msgstr "Mediatype"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:59
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:42
-#, fuzzy
-#| msgid "Connect"
 msgctxt "reusable_media"
 msgid "Connections"
-msgstr "Verbinden"
+msgstr "Verbindingen"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:12
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:18
-#, fuzzy, python-format
-#| msgid "Custom fields"
+#, python-format
 msgctxt "reusable_media"
 msgid "Medium %(id)s"
-msgstr "Aangepaste velden"
+msgstr "Medium %(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:86
-#, fuzzy
-#| msgid "Team history"
 msgctxt "reusable_media"
 msgid "Medium history"
-msgstr "Teamgeschiedenis"
+msgstr "Mediumgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:16
 msgctxt "reusable_media"
 msgid "New medium"
-msgstr ""
+msgstr "Nieuw medium"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:5
-#, fuzzy
-#| msgid "Delete event"
 msgid "Delete SSO client:"
-msgstr "Verwijder evenement"
+msgstr "Verwijder SSO-cliënt:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete this SSO client?"
-msgstr "Weet je zeker dat je de toegangslocatie wilt verwijderen?"
+msgstr "Weet je zeker dat je de SSO-cliënt wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:11
-#, fuzzy
-#| msgid "A voucher can not be deleted if it already has been redeemed."
 msgid "This SSO client cannot be deleted since it has already been used."
-msgstr ""
-"Een voucher kan niet worden verwijderd wanneer de voucher al is verzilverd."
+msgstr "Deze SSO-cliënt kan niet worden verwijderd omdat hij al is gebruikt."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:6
 msgid "SSO client:"
-msgstr ""
+msgstr "SSO-cliënt:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:15
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Create a new SSO client"
-msgstr "Nieuw evenement aanmaken"
+msgstr "Nieuwe SSO-cliënt aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:8
 msgid ""
@@ -26979,51 +26956,43 @@ msgid ""
 "account credentials by setting up your other systems as a Single-Sign-On "
 "(SSO) client based on OpenID Connect."
 msgstr ""
+"Je kunt je klanten toestaan om met hun klantaccountgegevens in te loggen op "
+"andere systemen door je andere systemen in te stellen als een Single-Sign-On "
+"(SSO)-cliënt op basis van OpenID Connect."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:5
-#, fuzzy
-#| msgid "Delete product"
 msgid "Delete SSO provider:"
-msgstr "Product verwijderen"
+msgstr "SSO-aanbieder verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete this SSO provider?"
-msgstr "Weet je zeker dat je de toegangslocatie wilt verwijderen?"
+msgstr "Weet je zeker dat je de SSO-aanbieder wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:11
-#, fuzzy
-#| msgid "A voucher can not be deleted if it already has been redeemed."
 msgid "This SSO provider cannot be deleted since it has already been used."
-msgstr ""
-"Een voucher kan niet worden verwijderd wanneer de voucher al is verzilverd."
+msgstr "Deze SSO-provider kan niet worden verwijderd omdat hij al is gebruikt."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:6
-#, fuzzy
-#| msgid "Payment provider:"
 msgid "SSO provider:"
-msgstr "Betalingsprovider:"
+msgstr "SSO-provider:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:15
-#, fuzzy
-#| msgid "Create a new product"
 msgid "Create a new SSO provider"
-msgstr "Nieuw product aanmaken"
+msgstr "Nieuwe SSO-aanbieder aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:16
-#, fuzzy
-#| msgid "Redirection URIs"
 msgctxt "sso"
 msgid "Redirection URL"
-msgstr "Doorverwijzings-URI's"
+msgstr "Doorverwijzings-URL"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:8
 msgid ""
 "You can connect existing Single-Sign-On (SSO) providers to allow your "
 "customers to log in using your own account system."
 msgstr ""
+"Je kunt bestaande Single-Sign-On (SSO)-providers koppelen, zodat je klanten "
+"kunnen inloggen met je eigen accountsysteem."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
@@ -27053,7 +27022,7 @@ msgstr "Nieuw team aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:10
 msgid "You will be able to add team members in the next step."
-msgstr "Je kan in de volgende stap teamleden toevoegen."
+msgstr "In de volgende stap kun je teamleden toevoegen."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:24
 msgid "Organizer permissions"
@@ -27110,7 +27079,7 @@ msgstr "Teamgeschiedenis"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:8
 msgid "The list below shows all teams that exist within this organizer."
 msgstr ""
-"De lijst hieronder toont alle teams die bestaan binnen deze organisator."
+"De onderstaande lijst toont alle teams die binnen deze organisator bestaan."
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:38
 msgid "Members"
@@ -27513,13 +27482,15 @@ msgstr "Tekstkleur"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:415
 msgid "Render without whitespace"
-msgstr ""
+msgstr "Render zonder witruimte"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:417
 msgid ""
 "Required for consistent size across platforms. Supported on Android starting "
 "with pretixPRINT 2.3.3 and on Desktop with pretixSCAN 1.9.3."
 msgstr ""
+"Vereist voor consistente grootte op alle platforms. Ondersteund op Android "
+"vanaf pretixPRINT 2.3.3 en op desktop met pretixSCAN 1.9.3."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:428
 msgid "Rotation (°)"
@@ -27819,6 +27790,8 @@ msgid ""
 "These settings are optional, if you leave them empty, the default values "
 "from the product settings will be used."
 msgstr ""
+"Deze instellingen zijn optioneel. Als je ze leeg laat, worden de "
+"standaardwaarden uit de productinstellingen gebruikt."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:523
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:166
@@ -29554,6 +29527,10 @@ msgid ""
 "others, you must either use pretix under AGPLv3 terms or obtain a pretix "
 "Enterprise license."
 msgstr ""
+"Je overtreedt de licentie. Als je niet zeker weet of je in aanmerking komt "
+"voor de aanvullende toestemming of als je de functionaliteit van pretix aan "
+"anderen aanbiedt, moet je pretix gebruiken onder de voorwaarden van AGPLv3 "
+"of een pretix Enterprise-licentie aanschaffen."
 
 #: pretix/control/views/global_settings.py:214
 msgid ""
@@ -29561,18 +29538,26 @@ msgid ""
 "license if you install any plugins licensed with strong copyleft, otherwise "
 "you are likely in violation of the license of these plugins."
 msgstr ""
+"Je mag geen gebruik maken van de aanvullende toestemming of van een pretix "
+"Enterprise-licentie als je plug-ins installeert die onder een sterke "
+"copyleft-licentie vallen, anders overtreed je waarschijnlijk de licentie van "
+"deze plug-ins."
 
 #: pretix/control/views/global_settings.py:222
 msgid ""
 "If you're using pretix under AGPL license, you need to provide instructions "
 "on how to access the source code."
 msgstr ""
+"Als je pretix onder AGPL-licentie gebruikt, moet je instructies geven over "
+"hoe je toegang krijgt tot de broncode."
 
 #: pretix/control/views/global_settings.py:229
 msgid ""
 "You must not use pretix under AGPL terms if you use pretix Enterprise "
 "plugins."
 msgstr ""
+"Je mag pretix niet onder AGPL-voorwaarden gebruiken als je pretix Enterprise-"
+"plugins gebruikt."
 
 #: pretix/control/views/global_settings.py:236
 msgid ""
@@ -29581,6 +29566,10 @@ msgid ""
 "license terms as pretix (AGPLv3 + additional restrictions). Make sure to "
 "keep it up to date!"
 msgstr ""
+"Je moet alle wijzigingen die je hebt aangebracht in de broncode van pretix "
+"vrij beschikbaar stellen aan elke bezoeker van je site in de vorm van "
+"broncode onder dezelfde licentievoorwaarden als pretix (AGPLv3 + aanvullende "
+"beperkingen). Zorg ervoor dat je deze up-to-date houdt!"
 
 #: pretix/control/views/global_settings.py:243
 msgid ""
@@ -29588,6 +29577,10 @@ msgid ""
 "visitor of your site in source code form under the same license terms as "
 "pretix (AGPLv3 + additional restrictions). Make sure to keep it up to date!"
 msgstr ""
+"Je moet al je geïnstalleerde plug-ins vrij beschikbaar stellen aan elke "
+"bezoeker van je site in de vorm van broncode onder dezelfde "
+"licentievoorwaarden als pretix (AGPLv3 + aanvullende beperkingen). Zorg "
+"ervoor dat je deze up-to-date houdt!"
 
 #: pretix/control/views/global_settings.py:254
 #, python-brace-format
@@ -29595,6 +29588,8 @@ msgid ""
 "We found the plugin \"{plugin}\" with license \"{license}\" which this tool "
 "does not know about and therefore cannot give any recommendations."
 msgstr ""
+"We hebben de plug-in “{plugin}” met licentie “{license}” gevonden. Deze tool "
+"kent die plug-in niet en kan daarom geen aanbevelingen doen."
 
 #: pretix/control/views/global_settings.py:262
 #, python-brace-format
@@ -29602,6 +29597,8 @@ msgid ""
 "You selected that you have no active pretix Enterprise licenses, but we "
 "found the following Enterprise plugin: {plugin}"
 msgstr ""
+"Je hebt aangegeven dat je geen actieve pretix Enterprise-licenties hebt, "
+"maar we hebben de volgende Enterprise-plugin gevonden: {plugin}"
 
 #: pretix/control/views/global_settings.py:269
 #, python-brace-format
@@ -29609,6 +29606,9 @@ msgid ""
 "You selected that you have no copyleft-licensed plugins installed, but we "
 "found the plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
+"Je hebt aangegeven dat je geen plug-ins met copyleft-licentie hebt "
+"geïnstalleerd, maar we hebben de plug-in “{plugin}” met licentie “{license}” "
+"gevonden."
 
 #: pretix/control/views/global_settings.py:276
 #, python-brace-format
@@ -29616,6 +29616,8 @@ msgid ""
 "You selected that you have no free plugins installed, but we found the "
 "plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
+"Je hebt aangegeven dat je geen gratis plug-ins hebt geïnstalleerd, maar we "
+"hebben de plug-in “{plugin}” met licentie “{license}” gevonden."
 
 #: pretix/control/views/item.py:141 pretix/control/views/item.py:1606
 msgid "The requested product does not exist."
@@ -30400,7 +30402,7 @@ msgstr "Een betaling staat momenteel open voor deze bestelling."
 
 #: pretix/control/views/organizer.py:902
 msgid "The team has been created. You can now add members to the team."
-msgstr "Het team is aangemaakt. Je kan nu leden aan het team toevoegen."
+msgstr "Het team is aangemaakt. Je kunt nu leden aan het team toevoegen."
 
 #: pretix/control/views/organizer.py:913 pretix/control/views/organizer.py:949
 #: pretix/control/views/organizer.py:1185
@@ -30421,11 +30423,11 @@ msgstr "Het team is aangemaakt. Je kan nu leden aan het team toevoegen."
 #: pretix/control/views/organizer.py:3483
 #: pretix/control/views/organizer.py:3527
 msgid "Your changes could not be saved."
-msgstr "Je wijzigingen konden niet worden opgeslagen."
+msgstr "Je wijzigingen konden niet opgeslagen worden."
 
 #: pretix/control/views/organizer.py:982
 msgid "The selected team cannot be deleted."
-msgstr "Het gekozen team kan niet worden verwijderd."
+msgstr "Het geselecteerde team kan niet verwijderd worden."
 
 #: pretix/control/views/organizer.py:994
 msgid ""
@@ -30447,7 +30449,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:1008
 msgid "The selected team has been deleted."
-msgstr "Het gekozen team is verwijderd."
+msgstr "Het geselecteerde team is verwijderd."
 
 #: pretix/control/views/organizer.py:1072
 msgid ""
@@ -35570,7 +35572,7 @@ msgstr "Geldig"
 #: pretix/presale/forms/renderers.py:53
 msgctxt "form"
 msgid "has errors"
-msgstr ""
+msgstr "bevat fouten"
 
 #: pretix/presale/forms/renderers.py:66
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
