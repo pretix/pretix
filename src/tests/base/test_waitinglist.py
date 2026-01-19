@@ -39,6 +39,13 @@ from pretix.base.services.waitinglist import (
 from pretix.testutils.queries import assert_num_queries
 from pretix.testutils.scope import classscope
 
+original_execute = django.db.backends.utils.CursorWrapper.execute
+
+def debug_execute(self, sql, params=None):
+
+    return original_execute(self, sql, params)
+
+django.db.backends.utils.CursorWrapper.execute = debug_execute
 
 class WaitingListTestCase(TestCase):
 
@@ -153,7 +160,7 @@ class WaitingListTestCase(TestCase):
                 )
 
         with scope(organizer=self.o):
-            with assert_num_queries(469):
+            with assert_num_queries(335):
                 assign_automatically.apply(args=(self.event.pk,))
 
             assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 3
