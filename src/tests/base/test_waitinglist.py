@@ -34,6 +34,7 @@ from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.waitinglist import (
     assign_automatically, process_waitinglist,
 )
+from pretix.testutils.queries import assert_num_queries
 from pretix.testutils.scope import classscope
 
 
@@ -145,7 +146,8 @@ class WaitingListTestCase(TestCase):
                     event=self.event, item=self.item1, email='bar{}@bar.com'.format(i)
                 )
 
-        assign_automatically.apply(args=(self.event.pk,))
+        with assert_num_queries(574):
+            assign_automatically.apply(args=(self.event.pk,))
         with scope(organizer=self.o):
             assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 3
             assert Voucher.objects.count() == 17
