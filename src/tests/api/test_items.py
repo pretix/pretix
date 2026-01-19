@@ -50,6 +50,7 @@ from pretix.base.models import (
     QuestionOption, Quota,
 )
 from pretix.base.models.orders import OrderFee
+from pretix.testutils.queries import assert_num_queries
 
 
 @pytest.fixture
@@ -420,6 +421,13 @@ def test_item_list(token_client, organizer, event, team, item):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/?search=Free'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_item_list_queries(token_client, organizer, event, team, item, item3):
+    with assert_num_queries(18):
+        resp = token_client.get('/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug))
+        assert resp.status_code == 200
 
 
 @pytest.mark.django_db
