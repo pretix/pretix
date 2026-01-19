@@ -159,6 +159,7 @@ class WaitingListEntry(LoggedModel):
         if availability[1] is None or availability[1] < 1:
             raise WaitingListException(_('This product is currently not available.'))
 
+        event = self.event
         ev = self.subevent or self.event
         if ev.seat_category_mappings.filter(product=self.item).exists():
             # Generally, we advertise the waiting list to be based on quotas only. This makes it dangerous
@@ -228,6 +229,7 @@ class WaitingListEntry(LoggedModel):
             locked_wle.save()
 
         self.refresh_from_db()
+        self.event = event
 
         with language(self.locale, self.event.settings.region):
             self.send_mail(

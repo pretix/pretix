@@ -146,7 +146,7 @@ class WaitingListTestCase(TestCase):
                     event=self.event, item=self.item1, email='bar{}@bar.com'.format(i)
                 )
 
-        with assert_num_queries(556):
+        with assert_num_queries(471):
             assign_automatically.apply(args=(self.event.pk,))
         with scope(organizer=self.o):
             assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 3
