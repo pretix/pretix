@@ -21,7 +21,6 @@
 #
 from datetime import timedelta
 
-import django.db.backends.utils
 from django.contrib.contenttypes.models import ContentType
 from django.core import mail as djmail
 from django.test import TestCase
@@ -39,13 +38,6 @@ from pretix.base.services.waitinglist import (
 from pretix.testutils.queries import assert_num_queries
 from pretix.testutils.scope import classscope
 
-original_execute = django.db.backends.utils.CursorWrapper.execute
-
-def debug_execute(self, sql, params=None):
-
-    return original_execute(self, sql, params)
-
-django.db.backends.utils.CursorWrapper.execute = debug_execute
 
 class WaitingListTestCase(TestCase):
 
