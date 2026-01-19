@@ -21,6 +21,7 @@
 #
 from datetime import timedelta
 
+import django.db.backends.utils
 from django.contrib.contenttypes.models import ContentType
 from django.core import mail as djmail
 from django.test import TestCase

@@ -192,7 +192,7 @@ class WaitingListEntry(LoggedModel):
 
         with transaction.atomic():
             locked_wle = WaitingListEntry.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
-            locked_wle.event = ev
+            locked_wle.event = event
             if locked_wle.voucher:
                 raise WaitingListException(_('A voucher has already been sent to this person.'))
             e = locked_wle.email
