@@ -363,7 +363,7 @@ class Forgot(TemplateView):
                 else:
                     messages.info(request, _('If the address is registered to valid account, then we have sent you an email containing further instructions.'))
 
-                return redirect('control:auth.forgot')
+            return redirect('control:auth.forgot')
         else:
             return self.get(request, *args, **kwargs)
 
