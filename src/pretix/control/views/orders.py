@@ -33,6 +33,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import copy
 import json
 import logging
 import mimetypes
@@ -2677,8 +2678,8 @@ class ExportMixin:
             if id != ex.identifier:
                 continue
 
-            if self.scheduled:
-                initial = dict(self.scheduled.export_form_data)
+            if self.scheduled or self.scheduled_copy_from:
+                initial = dict((self.scheduled or self.scheduled_copy_from).export_form_data)
 
                 test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
                 test_form.fields = ex.export_form_fields
@@ -2720,6 +2721,11 @@ class ExportMixin:
             return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.POST.get("scheduled"))
         elif "scheduled" in self.request.GET:
             return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled"))
+
+    @cached_property
+    def scheduled_copy_from(self):
+        if "scheduled_copy_from" in self.request.GET:
+            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled_copy_from"))
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -2829,6 +2835,8 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     def rrule_form(self):
         if self.scheduled:
             initial = RRuleForm.initial_from_rrule(self.scheduled.schedule_rrule)
+        elif self.scheduled_copy_from:
+            initial = RRuleForm.initial_from_rrule(self.scheduled_copy_from.schedule_rrule)
         else:
             initial = {}
         return RRuleForm(
@@ -2839,11 +2847,15 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
 
     @cached_property
     def schedule_form(self):
-        instance = self.scheduled or ScheduledEventExport(
-            event=self.request.event,
-            owner=self.request.user,
-        )
-        if not self.scheduled:
+        if self.scheduled_copy_from:
+            instance = copy.copy(self.scheduled_copy_from)
+            instance.pk = None
+        else:
+            instance = self.scheduled or ScheduledEventExport(
+                event=self.request.event,
+                owner=self.request.user,
+            )
+        if not self.scheduled and not self.scheduled_copy_from:
             initial = {
                 "mail_subject": gettext("Export: {title}").format(title=self.exporter.verbose_name),
                 "mail_template": gettext("Hello,\n\nattached to this email, you can find a new scheduled report for {name}.").format(
@@ -2868,7 +2880,7 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        if "schedule" in self.request.POST or self.scheduled:
+        if "schedule" in self.request.POST or self.scheduled or self.scheduled_copy_from:
             if "schedule" in self.request.POST and not self.has_permission():
                 messages.error(
                     self.request,
