@@ -364,7 +364,7 @@ class OrderListExporter(MultiSheetListExporter):
                     order.invoice_address.city,
                     order.invoice_address.country if order.invoice_address.country else
                     order.invoice_address.country_old,
-                    order.invoice_address.state,
+                    order.invoice_address.state_for_address,
                     order.invoice_address.custom_field,
                     order.invoice_address.vat_id,
                 ]
@@ -515,7 +515,7 @@ class OrderListExporter(MultiSheetListExporter):
                     order.invoice_address.city,
                     order.invoice_address.country if order.invoice_address.country else
                     order.invoice_address.country_old,
-                    order.invoice_address.state,
+                    order.invoice_address.state_for_address,
                     order.invoice_address.vat_id,
                 ]
             except InvoiceAddress.DoesNotExist:
@@ -732,7 +732,7 @@ class OrderListExporter(MultiSheetListExporter):
                     op.zipcode or '',
                     op.city or '',
                     op.country if op.country else '',
-                    op.state or '',
+                    op.state_for_address or '',
                     op.voucher.code if op.voucher else '',
                     op.pseudonymization_id,
                     op.secret,
@@ -797,7 +797,7 @@ class OrderListExporter(MultiSheetListExporter):
                         order.invoice_address.city,
                         order.invoice_address.country if order.invoice_address.country else
                         order.invoice_address.country_old,
-                        order.invoice_address.state,
+                        order.invoice_address.state_for_address,
                         order.invoice_address.vat_id,
                     ]
                 except InvoiceAddress.DoesNotExist:
