@@ -2790,7 +2790,16 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
         if request.POST.get("schedule") == "save":
-            if self.exporter.form.is_valid() and self.rrule_form.is_valid() and self.schedule_form.is_valid():
+            if not self.has_permission():
+                messages.error(
+                    self.request,
+                    _(
+                        "Your user account does not have sufficient permission to run this report, therefore "
+                        "you cannot schedule it."
+                    )
+                )
+                return super().get(request, *args, **kwargs)
+            elif self.exporter.form.is_valid() and self.rrule_form.is_valid() and self.schedule_form.is_valid():
                 self.schedule_form.instance.export_identifier = self.exporter.identifier
                 self.schedule_form.instance.export_form_data = self.exporter.form.cleaned_data
                 self.schedule_form.instance.schedule_rrule = str(self.rrule_form.to_rrule())
@@ -2869,17 +2878,8 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         if "schedule" in self.request.POST or self.scheduled:
-            if "schedule" in self.request.POST and not self.has_permission():
-                messages.error(
-                    self.request,
-                    _(
-                        "Your user account does not have sufficient permission to run this report, therefore "
-                        "you cannot schedule it."
-                    )
-                )
-            else:
-                ctx['schedule_form'] = self.schedule_form
-                ctx['rrule_form'] = self.rrule_form
+            ctx['schedule_form'] = self.schedule_form
+            ctx['rrule_form'] = self.rrule_form
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:
