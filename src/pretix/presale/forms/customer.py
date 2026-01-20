@@ -269,18 +269,21 @@ class RegistrationForm(forms.Form):
         return self.cleaned_data
 
     def create(self):
-        customer = self.request.organizer.customers.create(
+        customer, created = self.request.organizer.customers.get_or_create(
             email=self.cleaned_data['email'],
-            name_parts=self.cleaned_data['name_parts'],
-            phone=self.cleaned_data.get('phone'),
-            is_active=True,
-            is_verified=False,
-            locale=get_language_without_region(),
+            defaults={
+                "name_parts": self.cleaned_data['name_parts'],
+                "phone": self.cleaned_data.get('phone'),
+                "is_active": True,
+                "is_verified": False,
+                "locale": get_language_without_region(),
+            }
         )
-        customer.set_unusable_password()
-        customer.save()
-        customer.log_action('pretix.customer.created', {})
-        customer.send_activation_mail()
+        if created:
+            customer.set_unusable_password()
+            customer.save()
+            customer.log_action('pretix.customer.created', {})
+            customer.send_activation_mail()
         return customer
 
 
