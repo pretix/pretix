@@ -704,6 +704,16 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
         if 'answers.question' in self.context['expand']:
             self.fields['answers'].child.fields['question'] = QuestionSerializer(read_only=True)
 
+        if 'addons' in self.context['expand']:
+            # Experimental feature, undocumented on purpose for now in case we need to remove it again
+            # for performance reasons
+            subl = CheckinListOrderPositionSerializer(read_only=True, many=True, context={
+                **self.context,
+                'expand': [v for v in self.context['expand'] if v != 'addons'],
+                'pdf_data': False,
+            })
+            self.fields['addons'] = subl
+
 
 class OrderPaymentTypeField(serializers.Field):
     # TODO: Remove after pretix 2.2

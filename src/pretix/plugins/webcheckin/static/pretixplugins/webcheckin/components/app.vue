@@ -38,6 +38,7 @@
           <div class="details">
             <code>{{ checkResult.position.order }}-{{ checkResult.position.positionid }}</code>
             <h4>{{ checkResult.position.attendee_name }}</h4>
+            <div v-if="checkResultAddons" class="addons">{{ checkResultAddons }}</div>
             <span v-if="checkResultSubevent">{{ checkResultSubevent }}<br></span>
             <span class="secret">{{ checkResult.position.secret }}</span>
             <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
@@ -265,6 +266,16 @@ export default {
       const date = moment.utc(this.checkinlist.subevent.date_from).tz(this.$root.timezone).format(this.$root.datetime_format)
       return `${name} · ${date}`
     },
+    checkResultAddons() {
+      if (!this.checkResult) return ''
+      if (!this.checkResult.position.addons) return ''
+      return this.checkResult.position.addons.map((addon) => {
+        if (this.checkResult.position.variation) {
+          return `+ ${addon.item.internal_name || i18nstring_localize(addon.item.name)} – ${i18nstring_localize(addon.variation.value)}`
+        }
+        return "+ " + (addon.item.internal_name || i18nstring_localize(addon.item.name));
+      }).join("\n")
+    },
     checkResultSubevent() {
       if (!this.checkResult) return ''
       if (!this.checkResult.position.subevent) return ''
@@ -369,7 +380,7 @@ export default {
         this.$refs.input.blur()
       })
 
-      let url = this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=subevent&expand=variation&expand=answers.question'
+      let url = this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=subevent&expand=variation&expand=answers.question&expand=addons'
       if (untrusted)  {
         url += '&untrusted_input=true'
       }
