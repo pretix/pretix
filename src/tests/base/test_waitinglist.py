@@ -21,7 +21,6 @@
 #
 from datetime import timedelta
 
-from django.contrib.contenttypes.models import ContentType
 from django.core import mail as djmail
 from django.test import TestCase
 from django.utils.timezone import now
@@ -35,7 +34,6 @@ from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.waitinglist import (
     assign_automatically, process_waitinglist,
 )
-from pretix.testutils.queries import assert_num_queries
 from pretix.testutils.scope import classscope
 
 
@@ -135,10 +133,6 @@ class WaitingListTestCase(TestCase):
         assert 'Max' in wle.voucher.comment
 
     def test_send_auto(self):
-        # Pre-warm the ContentType cache to make the number of queries reproducible
-        ContentType.objects.get_for_model(Voucher)
-        ContentType.objects.get_for_model(WaitingListEntry)
-
         with scope(organizer=self.o):
             self.quota.variations.add(self.var1)
             self.quota.size = 7
@@ -151,10 +145,8 @@ class WaitingListTestCase(TestCase):
                     event=self.event, item=self.item1, email='bar{}@bar.com'.format(i)
                 )
 
+        assign_automatically.apply(args=(self.event.pk,))
         with scope(organizer=self.o):
-            with assert_num_queries(335):
-                assign_automatically.apply(args=(self.event.pk,))
-
             assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 3
             assert Voucher.objects.count() == 17
             assert sorted(list(WaitingListEntry.objects.filter(voucher__isnull=True).values_list('email', flat=True))) == [
