@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:13+0000\n"
-"PO-Revision-Date: 2025-06-10 04:00+0000\n"
-"Last-Translator: Tim Maurizio Dullaart <Tim.maurizio@gmail.com>\n"
+"PO-Revision-Date: 2026-01-21 21:00+0000\n"
+"Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
 "Language: nl\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -564,11 +564,11 @@ msgstr "afwezig"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
 msgid "Error: Product not found!"
-msgstr ""
+msgstr "Fout: product niet gevonden!"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
 msgid "Error: Variation not found!"
-msgstr ""
+msgstr "Fout: variant niet gevonden!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
