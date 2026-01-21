@@ -2306,10 +2306,17 @@ class ItemProgramTime(models.Model):
     :type start: datetime
     :param end: The date and time this program time ends
     :type end: datetime
+    :param location: venue
+    :type location: str
     """
     item = models.ForeignKey('Item', related_name='program_times', on_delete=models.CASCADE)
     start = models.DateTimeField(verbose_name=_("Start"))
     end = models.DateTimeField(verbose_name=_("End"))
+    location = I18nTextField(
+        null=True, blank=True,
+        max_length=200,
+        verbose_name=_("Location"),
+    )
 
     def clean(self):
         if hasattr(self, 'item') and self.item and self.item.event.has_subevents:

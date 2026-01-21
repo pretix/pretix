@@ -1354,6 +1354,10 @@ class ItemProgramTimeForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['end'].widget.attrs['data-date-after'] = '#id_{prefix}-start_0'.format(prefix=self.prefix)
+        self.fields['location'].widget.attrs['rows'] = '1'
+        self.fields['location'].widget.attrs['placeholder'] = _(
+            'Sample Conference Center, Heidelberg, Germany'
+        )
 
     class Meta:
         model = ItemProgramTime
@@ -1361,6 +1365,7 @@ class ItemProgramTimeForm(I18nModelForm):
         fields = [
             'start',
             'end',
+            'location'
         ]
         field_classes = {
             'start': forms.SplitDateTimeField,

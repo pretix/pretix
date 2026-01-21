@@ -153,7 +153,7 @@ def get_private_icals(event, positions):
                     # Actual ical organizer field is not useful since it will cause "your invitation was accepted" emails to the organizer
                     descr.append(_('Organizer: {organizer}').format(organizer=event.organizer.name))
                     description = '\n'.join(descr)
-                location = None
+                location = ", ".join(l.strip() for l in str(pt.location).splitlines() if l.strip())
                 dtstart = pt.start.astimezone(tz)
                 dtend = pt.end.astimezone(tz)
                 uid = 'pretix-{}-{}-{}-{}@{}'.format(
