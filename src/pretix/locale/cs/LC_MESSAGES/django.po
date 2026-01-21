@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-18 03:00+0000\n"
+"PO-Revision-Date: 2026-01-21 21:00+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -1623,7 +1623,7 @@ msgstr "Čas konce události"
 #: pretix/base/models/event.py:1536 pretix/control/forms/subevents.py:494
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr "Vstupní čas"
+msgstr "Vstup"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:634
 #: pretix/base/models/event.py:1545 pretix/control/forms/subevents.py:93
@@ -35218,10 +35218,8 @@ msgid "Save selection"
 msgstr "Uložit volbu"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:145
-#, fuzzy
-#| msgid "You did not select any products."
 msgid "You didn't select any ticket."
-msgstr "Nevybrali jste žádné produkty."
+msgstr "Nevybrali jste žádné vstupenky."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:146
 msgid ""
