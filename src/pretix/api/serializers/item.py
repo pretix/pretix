@@ -222,7 +222,7 @@ class ItemBundleSerializer(serializers.ModelSerializer):
 class ItemProgramTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemProgramTime
-        fields = ('id', 'start', 'end')
+        fields = ('id', 'start', 'end', 'location')
 
     def validate(self, data):
         data = super().validate(data)

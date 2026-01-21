@@ -34,6 +34,7 @@
                     {% bootstrap_form_errors form %}
                     {% bootstrap_field form.start layout="control" %}
                     {% bootstrap_field form.end layout="control" %}
+                    {% bootstrap_field form.location layout="control" %}
                 </div>
             </div>
         {% endfor %}
@@ -59,6 +60,7 @@
                 <div class="panel-body form-horizontal">
                     {% bootstrap_field formset.empty_form.start layout="control" %}
                     {% bootstrap_field formset.empty_form.end layout="control" %}
+                    {% bootstrap_field formset.empty_form.location layout="control" %}
                 </div>
             </div>
         {% endescapescript %}
