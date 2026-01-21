@@ -1,0 +1,312 @@
+[
+    {
+        "model": "pretixbase.organizer",
+        "pk": 1,
+        "fields": {
+            "name": "SideBurn Staging",
+            "slug": "sideburnstage"
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 1,
+        "fields": {
+            "key": "cookie_consent",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 2,
+        "fields": {
+            "key": "name_scheme_titles",
+            "value": "",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 3,
+        "fields": {
+            "key": "organizer_logo_image",
+            "value": "file://pub/sideburnstage/sideburn_fullcolour_vertical_rgbtransparent_1x.png.xLCF1YbU.png.pfKowSzO.png",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 4,
+        "fields": {
+            "key": "contact_mail",
+            "value": "",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 5,
+        "fields": {
+            "key": "imprint_url",
+            "value": "",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 6,
+        "fields": {
+            "key": "organizer_info_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 7,
+        "fields": {
+            "key": "event_list_availability",
+            "value": "False",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 8,
+        "fields": {
+            "key": "organizer_homepage_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 9,
+        "fields": {
+            "key": "organizer_logo_image_inherit",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 10,
+        "fields": {
+            "key": "meta_noindex",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 11,
+        "fields": {
+            "key": "primary_color",
+            "value": "#8e44b3",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 12,
+        "fields": {
+            "key": "privacy_url",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 13,
+        "fields": {
+            "key": "presale_css_file",
+            "value": "pub/sideburnstage/presale.c65ab86e98da9201.css",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 14,
+        "fields": {
+            "key": "presale_css_checksum",
+            "value": "c65ab86e98da9201b67f71b78aad35a382baf4ce",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 15,
+        "fields": {
+            "key": "presale_widget_css_file",
+            "value": "pub/sideburnstage/widget.5671b7ff9e260bec.css",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 16,
+        "fields": {
+            "key": "presale_widget_css_checksum",
+            "value": "5671b7ff9e260becc3e1e79b97447ebcffb473cb",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 17,
+        "fields": {
+            "key": "timezone",
+            "value": "America/Toronto",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 18,
+        "fields": {
+            "key": "locales",
+            "value": "[\"en\", \"fr\"]",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 19,
+        "fields": {
+            "key": "name_scheme",
+            "value": "given_middle_family",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 20,
+        "fields": {
+            "key": "customer_accounts",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 21,
+        "fields": {
+            "key": "customer_accounts_link_by_email",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 22,
+        "fields": {
+            "key": "mail_bcc",
+            "value": "",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 23,
+        "fields": {
+            "key": "mail_text_signature",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 24,
+        "fields": {
+            "key": "mail_text_customer_registration",
+            "value": "{\"en\": \"Hello {name},\\r\\n\\r\\nthank you for signing up for an account at {organizer}!\\r\\n\\r\\nTo activate your account and set a password, please click here:\\r\\n\\r\\n{url}\\r\\n\\r\\nThis link is valid for one day.\\r\\n\\r\\nIf you did not sign up yourself, please ignore this email.\\r\\n\\r\\nBest regards,  \\r\\n\\r\\nYour {organizer} team\", \"fr\": \"Bonjour {name},\\r\\n\\r\\nMerci de vous \\u00eatre inscrit pour un compte sur {organizer}\\u202f!\\r\\n\\r\\nPour activer votre compte et d\\u00e9finir un mot de passe, veuillez cliquer ici\\u202f:\\r\\n\\r\\n{url}\\r\\n\\r\\nCe lien est valable pour une journ\\u00e9e.\\r\\n\\r\\nSi vous ne vous \\u00eates pas inscrit vous-m\\u00eame, veuillez ignorer cet e-mail.\\r\\n\\r\\nSinceres salutations  \\r\\n\\r\\nVotre \\u00e9quipe {organizer}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 25,
+        "fields": {
+            "key": "mail_text_customer_email_change",
+            "value": "{\"en\": \"Hello {name},\\r\\n\\r\\nyou requested to change the email address of your account at {organizer}!\\r\\n\\r\\nTo confirm the change, please click here:\\r\\n\\r\\n{url}\\r\\n\\r\\nThis link is valid for one day.\\r\\n\\r\\nIf you did not request this, please ignore this email.\\r\\n\\r\\nBest regards,  \\r\\n\\r\\nYour {organizer} team\", \"fr\": \"Bonjour {name},\\r\\n\\r\\nVous avez demand\\u00e9 \\u00e0 changer l\\u2019adresse e-mail de votre compte sur {organizer}\\u202f!\\r\\n\\r\\nPour confirmer le changement, veuillez cliquer ici\\u202f:\\r\\n\\r\\n{url}\\r\\n\\r\\nCe lien est valable pour une journ\\u00e9e.\\r\\n\\r\\nSi vous ne l\\u2019avez pas demand\\u00e9, veuillez ignorer cet e-mail.\\r\\n\\r\\nSinceres salutations  \\r\\n\\r\\nVotre \\u00e9quipe {organizer}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 26,
+        "fields": {
+            "key": "mail_text_customer_reset",
+            "value": "{\"en\": \"Hello {name},\\r\\n\\r\\nyou requested a new password for your account at {organizer}!\\r\\n\\r\\nTo set a new password, please click here:\\r\\n\\r\\n{url}\\r\\n\\r\\nThis link is valid for one day.\\r\\n\\r\\nIf you did not request a new password, please ignore this email.\\r\\n\\r\\nBest regards,  \\r\\n\\r\\nYour {organizer} team\", \"fr\": \"Bonjour {name},\\r\\n\\r\\nVous avez demand\\u00e9 un nouveau mot de passe pour votre compte sur {organizer}\\u202f!\\r\\n\\r\\nPour d\\u00e9finir un nouveau mot de passe, veuillez cliquer ici\\u202f:\\r\\n\\r\\n{url}\\r\\n\\r\\nCe lien est valable pour une journ\\u00e9e.\\r\\n\\r\\nSi vous n\\u2019avez pas demand\\u00e9 de nouveau mot de passe, veuillez ignorer cet e-mail.\\r\\n\\r\\nSinceres salutations  \\r\\n\\r\\nVotre \\u00e9quipe {organizer}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 27,
+        "fields": {
+            "key": "mail_from_name",
+            "value": "Sideburn Staging",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 28,
+        "fields": {
+            "key": "sso_server_signing_key_rsa256_private",
+            "value": "-----BEGIN PRIVATE KEY-----\n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\nivl82DWZoZbP8JBi3Y9uX3c0qrbW\n-----END PRIVATE KEY-----\n",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.organizer_settingsstore",
+        "pk": 29,
+        "fields": {
+            "key": "sso_server_signing_key_rsa256_public",
+            "value": "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsrFCX3ECoJ/bUHhSOqu7\ncrcErVVA9q/WDyIEYikRs/7aShvKBe6kFPw7H9C/YPGp0TzGvtBMouc3pXf2Fjse\n56fO3Qg8+iSufYtUxSfFiVIJYYslCfIZvA4Q64E2j5KVEzMXfUvL6j9LX8dN4fBn\nCdZAu49JrDhVOa5anniqRkdhI4gHjm1OneDjrP914muuBsBdtNKuHZFJs56n/LeB\nJ0m1IjN85LRSqw1ExbMRFZ05N8dwFpCYdLV5QnvbNvOfoevwvGnCW4w6aXFQHae4\nexXThK6YLaZHfzl1Z5CYsa7Tfh8pAVSdLLrZoUX6QbQOZhUdNaxGQzEB4nSA9x2e\nQB42QIoL2rWAeiLIxLITADGaatD3lL3MlWggMJV4ZZBYxbiEPWozMM/ZRquYHTTj\nbvfqfGe6HBjKR0uw3qtWWF3qqHslQuvUQBIRaG3SF991A2L+tU8EPqCgzIgio4Oe\nzSmKzg+QgQPSEEEh90IuaZCS8oGA495J+OwsudG0OlcUPcZO/iSkGb/pY8w8jCq2\noYG24TzjWTpq2Sas2GVhnZAzOb/8LU5wT4Ol37rymU7TEjvefcCQ66eAGXHA8mve\nRaDO8hZmbVL6r8OSMJAiVxokAMPWSevY/SZJ2YKCiMOBgJ+ubUa8MRiPLY5UOiSL\njkPASGwdZs0BE6PLVfZHFBECAwEAAQ==\n-----END PUBLIC KEY-----\n",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.team",
+        "pk": 1,
+        "fields": {
+            "organizer": 1,
+            "name": "Administrators",
+            "all_events": true,
+            "can_create_events": true,
+            "can_change_teams": true,
+            "can_change_organizer_settings": true,
+            "can_manage_customers": true,
+            "can_manage_reusable_media": true,
+            "can_manage_gift_cards": true,
+            "can_change_event_settings": true,
+            "can_change_items": true,
+            "can_view_orders": true,
+            "can_change_orders": true,
+            "can_checkin_orders": false,
+            "can_view_vouchers": true,
+            "can_change_vouchers": true,
+            "members": [
+                1
+            ],
+            "limit_events": []
+        }
+    },
+    {
+        "model": "pretixbase.customerssoclient",
+        "pk": 1,
+        "fields": {
+            "organizer": 1,
+            "name": "SideburnStagingAuth",
+            "is_active": true,
+            "client_id": "PeP1pJ1yqeyaOHLiYXYGg9ZzH5UECwyYQaTyRay0",
+            "client_secret": "pbkdf2_sha256$600000$Qn3G3EOOx8wSoCQlpRaC4T$HxrOdkFkPYbuPch+4A/AWZdAZ6xxAjbiwFgiMJoina8=",
+            "client_type": "confidential",
+            "authorization_grant_type": "implicit",
+            "redirect_uris": "https://volunteer-stage.sideburn.ca/site/login, http://volunteer-stage.sideburn.ca/site/login",
+            "allowed_scopes": "['openid', 'profile', 'email', 'phone']"
+        }
+    }
+]

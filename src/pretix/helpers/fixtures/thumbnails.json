@@ -1,0 +1,52 @@
+[
+    {
+        "model": "pretixhelpers.thumbnail",
+        "pk": 1,
+        "fields": {
+            "source": "/data/media/pub/sideburnstage/sideburn_fullcolour_vertical_rgbtransparent_1x.png.xLCF1YbU.png.pfKowSzO.png",
+            "size": "200x100",
+            "thumb": "pub/thumbs/52294542078340f69c1630c2d6258b0e.200x100.png",
+            "created": "2026-01-17T17:04:18.081Z"
+        }
+    },
+    {
+        "model": "pretixhelpers.thumbnail",
+        "pk": 2,
+        "fields": {
+            "source": "/data/media/pub/sideburnstage/sideburn-staging/sideburn_fullcolour_vertical_rgbtransparent_1x.png.xLCF1YbU.png.8fHjS7b6.png",
+            "size": "200x100",
+            "thumb": "pub/thumbs/52294542078340f69c1630c2d6258b0e.200x100_LdRQTYq.png",
+            "created": "2026-01-17T17:12:03.929Z"
+        }
+    },
+    {
+        "model": "pretixhelpers.thumbnail",
+        "pk": 3,
+        "fields": {
+            "source": "pub/sideburnstage/sideburn_fullcolour_vertical_rgbtransparent_1x.png.xLCF1YbU.png.pfKowSzO.png",
+            "size": "5000x120",
+            "thumb": "pub/thumbs/52294542078340f69c1630c2d6258b0e.5000x120.png",
+            "created": "2026-01-17T17:50:24.770Z"
+        }
+    },
+    {
+        "model": "pretixhelpers.thumbnail",
+        "pk": 4,
+        "fields": {
+            "source": "pub/sideburnstage/sideburn-staging/sideburn_fullcolour_vertical_rgbtransparent_1x.png.xLCF1YbU.png.8fHjS7b6.png",
+            "size": "5000x1200",
+            "thumb": "pub/thumbs/52294542078340f69c1630c2d6258b0e.5000x1200.png",
+            "created": "2026-01-17T19:36:09.480Z"
+        }
+    },
+    {
+        "model": "pretixhelpers.thumbnail",
+        "pk": 5,
+        "fields": {
+            "source": "pub/sideburnstage/sideburn-staging/sideburn_fullcolour_vertical_rgbtransparent_1x.png.xLCF1YbU.png.8fHjS7b6.png",
+            "size": "5000x120",
+            "thumb": "pub/thumbs/52294542078340f69c1630c2d6258b0e.5000x120_4M4S3xb.png",
+            "created": "2026-01-17T19:36:09.735Z"
+        }
+    }
+]

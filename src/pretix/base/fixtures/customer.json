@@ -1,0 +1,40 @@
+[
+    {
+        "model": "pretixbase.customer",
+        "pk": 1,
+        "fields": {
+            "organizer": 1,
+            "provider": null,
+            "identifier": "EHYMEJM",
+            "email": "omarkazmi@gmail.com",
+            "phone": null,
+            "password": "pbkdf2_sha256$600000$kXvbmgIlUeKB1Qs2r1tQTz$oacp8+86h2tzC6b12RmWiYWNvxVON30HScIOv4zQyE4=",
+            "name_cached": "Shan Omar Kazmi",
+            "name_parts": {
+                "_scheme": "given_middle_family",
+                "given_name": "Shan",
+                "family_name": "Kazmi",
+                "middle_name": "Omar"
+            },
+            "is_active": true,
+            "is_verified": true,
+            "last_login": "2026-01-17T19:34:29.405Z",
+            "date_joined": "2026-01-17T17:51:54.420Z",
+            "locale": "en",
+            "last_modified": "2026-01-17T19:34:29.405Z",
+            "external_identifier": null,
+            "notes": null
+        }
+    },
+    {
+        "model": "pretixbase.notificationsetting",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "action_type": "pretix.event.order.refund.requested",
+            "event": null,
+            "method": "mail",
+            "enabled": true
+        }
+    }
+]
