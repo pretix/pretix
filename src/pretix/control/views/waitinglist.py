@@ -325,7 +325,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
         elif request.GET.get("lottery", "") == "run" or request.GET.get("lottery", "") == "revert":
             item_id = request.GET.get("item", "")
             if not item_id:
-                messages.error(request, _('You must select a product to revert the lottery.'))
+                messages.error(request, _('You must select a product to run or revert its lottery.'))
                 return redirect(reverse('control:event.orders.waitinglist', kwargs={
                     'event': self.request.event.slug,
                     'organizer': self.request.event.organizer.slug
