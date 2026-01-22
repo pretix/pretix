@@ -129,10 +129,11 @@
         <a href="?{% url_replace request "download" "yes" %}"
                 class="btn btn-default"><i class="fa fa-download"></i>
             {% trans "Download list" %}</a>
-        <button type="button" id="run-lottery-btn" class="btn btn-default">
-            <i class="fa fa-download"></i>
-            {% trans "Run lottery" %}
-        </button>
+        {% if request.GET.item %}
+            <button type="button" id="run-lottery-btn" class="btn btn-default">
+                <i class="fa fa-download"></i>
+                {% trans "Run lottery" %}
+            </button>
 
             <a href="?{% url_replace request "lottery" "revert" %}"
                     class="btn btn-default"><i class="fa fa-download"></i>
