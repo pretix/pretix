@@ -21,6 +21,10 @@
                                     <span class="text-success">
                                         {% trans "You have a voucher waiting for redemption! Check your email for details." %}
                                     </span>
+                                {% elif not product.lottery_run %}
+                                    <span class="text-muted">
+                                        {% trans "You are on the waiting list for this event. The lottery hasn't yet been run." %}
+                                    </span>
                                 {% elif product.rank %}
                                     {% blocktrans with ordinal=product.rank|ordinal %}You are {{ ordinal }} in line{% endblocktrans %}
                                 {% else %}

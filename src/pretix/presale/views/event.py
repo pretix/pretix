@@ -561,6 +561,20 @@ class EventIndex(CustomerRequiredMixin, EventViewMixin, EventListMixin, CartMixi
         else:
             context['cart_redirect'] = self.request.path
 
+        # Populate waiting_list_ranks if customer is logged in
+        context['waiting_list_ranks'] = []
+        if getattr(self.request, 'customer', None):
+            try:
+                # Import here to avoid circular import
+                from pretix.presale.views.waiting import get_waiting_list_ranks
+                context['waiting_list_ranks'] = get_waiting_list_ranks(
+                    self.request.event,
+                    self.request.customer.email
+                )
+            except Exception:
+                # If there's any error, just leave waiting_list_ranks as empty list
+                context['waiting_list_ranks'] = []
+
         return context
 
     def _subevent_list_cachekey(self):
