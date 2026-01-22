@@ -40,9 +40,32 @@
         .then(function(response) {
             return response.json();
         })
-        .then(function(data) {  
-            if (data.products && Array.isArray(data.products)) {
-                // New format: multiple products
+        .then(function(data) {
+            // If products is present but not an array, forcibly make it an empty array.
+            if (data.products !== undefined && !Array.isArray(data.products)) {
+                data.products = [];
+            }
+
+            // Support for expired vouchers
+            if (data.expired_voucher) {
+                var expiredText = rankResult.getAttribute('data-expired-voucher-text') || 'You have an expired voucher.';
+                var sentDateText = '';
+                
+                if (data.voucher_sent_date) {
+                    try {
+                        var sentDate = new Date(data.voucher_sent_date);
+                        var dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+                        var formattedDate = sentDate.toLocaleDateString(undefined, dateOptions);
+                        sentDateText = ' ' + (rankResult.getAttribute('data-sent-date-text') || 'It was sent on {date}.').replace('{date}', formattedDate);
+                    } catch (e) {
+                        // If date parsing fails, just show the expired message
+                    }
+                }
+                
+                rankResult.textContent = expiredText + sentDateText;
+
+            } else if (data.products && Array.isArray(data.products)) {
+                // Multiple product format
                 if (data.products.length === 0) {
                     rankResult.textContent = rankResult.getAttribute('data-error-text') || 'Unable to determine your rank.';
                     return;
@@ -101,15 +124,15 @@
                 // Clear and add table
                 rankResult.innerHTML = '';
                 rankResult.appendChild(table);
-                
+
             } else if (data.rank !== undefined) {
-                // Legacy format: single rank (for backwards compatibility)
+                // Single rank/legacy format
                 if (data.rank === 0) {
                     rankResult.textContent = rankResult.getAttribute('data-voucher-text') || 'You have a voucher waiting for redemption!';
                 } else {
-                    var rankLabel = rankResult.getAttribute('data-rank-label') || 'You are {ordinal} in line';
-                    var ordinalRank = getOrdinalSuffix(data.rank);
-                    rankResult.textContent = rankLabel.replace('{ordinal}', ordinalRank);
+                    var rankLabel2 = rankResult.getAttribute('data-rank-label') || 'You are {ordinal} in line';
+                    var ordinalRank2 = getOrdinalSuffix(data.rank);
+                    rankResult.textContent = rankLabel2.replace('{ordinal}', ordinalRank2);
                 }
             } else if (data.error) {
                 rankResult.textContent = data.error;

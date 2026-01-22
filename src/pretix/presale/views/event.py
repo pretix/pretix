@@ -61,7 +61,7 @@ from django.views.generic import TemplateView
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
-    ItemVariation, Quota, SeatCategoryMapping, Voucher,
+    ItemVariation, Quota, SeatCategoryMapping, Voucher, WaitingListEntry,
 )
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
@@ -77,6 +77,7 @@ from pretix.presale.views.organizer import (
     filter_qs_by_attr, has_before_after, weeks_for_template,
 )
 from pretix.presale.views.customer import CustomerRequiredMixin
+from pretix.presale.views.cart import get_or_create_cart_id
 
 from ...helpers.formats.en.formats import SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT
 from . import (
@@ -415,8 +416,6 @@ class EventIndex(CustomerRequiredMixin, EventViewMixin, EventListMixin, CartMixi
             get_params["date"] = "%s-W%s" % (request.GET.get("year"), request.GET.get("week"))
             return redirect(self.request.path + "?" + urlencode(get_params))
 
-        from pretix.presale.views.cart import get_or_create_cart_id
-
         self.subevent = None
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget
@@ -529,6 +528,12 @@ class EventIndex(CustomerRequiredMixin, EventViewMixin, EventListMixin, CartMixi
             # Regroup those by category
             context['items_by_category'] = item_group_by_category(items)
             context['display_add_to_cart'] = display_add_to_cart
+            
+            # Check if any item has a lottery date set
+            context['has_lottery_date'] = any(
+                self.request.event.settings.get(f'lottery_date_for_item_{item.pk}') 
+                for item in items
+            )
 
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
@@ -761,8 +766,6 @@ class SeatingPlanView(EventViewMixin, TemplateView):
     template_name = "pretixpresale/event/seatingplan.html"
 
     def get(self, request, *args, **kwargs):
-        from pretix.presale.views.cart import get_or_create_cart_id
-
         self.subevent = None
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget

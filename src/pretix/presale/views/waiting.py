@@ -26,6 +26,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.contenttypes.models import ContentType
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -38,7 +39,7 @@ from pretix.presale.views import EventViewMixin, iframe_entry_view_wrapper
 from pretix.presale.views.customer import CustomerRequiredMixin
 
 from ...base.i18n import get_language_without_region
-from ...base.models import Voucher, WaitingListEntry
+from ...base.models import LogEntry, Voucher, WaitingListEntry
 from ..forms.waitinglist import WaitingListForm
 from . import allow_frame_if_namespaced
 
@@ -203,9 +204,29 @@ class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
                     'error': _('You are not on the waiting list for this event.')
                 }, status=404)
             
-            # Group entries by product (item + variation combination)
-            products_data = []
-            seen_products = set()
+            # Check if entry has an expired voucher
+            if entry.voucher and not entry.voucher.is_active():
+                # Get the date when the voucher was sent (from log entry)
+                voucher_sent_date = None
+                try:
+                    content_type = ContentType.objects.get_for_model(WaitingListEntry)
+                    log_entry = LogEntry.objects.filter(
+                        content_type=content_type,
+                        object_id=entry.pk,
+                        action_type='pretix.event.orders.waitinglist.voucher_assigned'
+                    ).order_by('-datetime').first()
+                    
+                    if log_entry:
+                        voucher_sent_date = log_entry.datetime
+                except Exception:
+                    pass
+                
+                return JsonResponse({
+                    'expired_voucher': True,
+                    'voucher_sent_date': voucher_sent_date.isoformat() if voucher_sent_date else None
+                })
+            
+            rank = entry.get_rank()
             
             for entry in entries:
                 # Create a unique key for this product (item + variation)
