@@ -29,3 +29,8 @@ class FailingEmailBackend(EmailBackend):
         raise smtplib.SMTPRecipientsRefused({
             'recipient@example.org': (450, b'Recipient unknown')
         })
+
+
+class PermanentlyFailingEmailBackend(EmailBackend):
+    def send_messages(self, email_messages):
+        raise smtplib.SMTPNotSupportedError()

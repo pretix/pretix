@@ -39,14 +39,15 @@ from email.mime.text import MIMEText
 import pytest
 from django.conf import settings
 from django.core import mail as djmail
+from django.test import override_settings
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scope
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
-from pretix.base.models import Event, Organizer, User
-from pretix.base.services.mail import mail
+from pretix.base.models import Event, Organizer, OutgoingMail, User
+from pretix.base.services.mail import mail, mail_send_task
 
 
 @pytest.fixture
@@ -160,6 +161,101 @@ def test_send_mail_with_user_locale(env):
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == 'Benutzer'
     assert 'The language code used for rendering this email is de.' in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+def test_queue_state_sent(env):
+    m = OutgoingMail.objects.create(
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+        headers={},
+    )
+    assert m.status == OutgoingMail.STATUS_QUEUED
+    mail_send_task.apply(kwargs={
+        'outgoing_mail': m.pk,
+    }, max_retries=0)
+    m.refresh_from_db()
+    assert m.status == OutgoingMail.STATUS_SENT
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_BACKEND='pretix.testutils.mail.PermanentlyFailingEmailBackend')
+def test_queue_state_permanent_failure(env):
+    m = OutgoingMail.objects.create(
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+        headers={},
+    )
+    assert m.status == OutgoingMail.STATUS_QUEUED
+    mail_send_task.apply(kwargs={
+        'outgoing_mail': m.pk,
+    }, max_retries=0)
+    m.refresh_from_db()
+    assert m.status == OutgoingMail.STATUS_FAILED
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_BACKEND='pretix.testutils.mail.FailingEmailBackend')
+def test_queue_state_retry_failure(env, monkeypatch):
+    def retry(*args, **kwargs):
+        raise Exception()
+
+    monkeypatch.setattr('celery.app.task.Task.retry', retry, raising=True)
+    m = OutgoingMail.objects.create(
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+        headers={},
+    )
+    assert m.status == OutgoingMail.STATUS_QUEUED
+    mail_send_task.apply(kwargs={
+        'outgoing_mail': m.pk,
+    }, max_retries=0)
+    m.refresh_from_db()
+    assert m.status == OutgoingMail.STATUS_AWAWITING_RETRY
+    assert m.retry_after > now()
+
+
+@pytest.mark.django_db
+def test_queue_state_foreign_key_handling():
+    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=o, name='Dummy', slug='dummy',
+        date_from=now()
+    )
+
+    mail_queued = OutgoingMail.objects.create(
+        organizer=o,
+        event=event,
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+        headers={},
+    )
+    mail_sent = OutgoingMail.objects.create(
+        organizer=o,
+        event=event,
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+        headers={},
+        status=OutgoingMail.STATUS_SENT,
+    )
+
+    event.delete()
+
+    assert not OutgoingMail.objects.filter(pk=mail_queued.pk).exists()
+    assert OutgoingMail.objects.get(pk=mail_sent.pk).event is None
+
+    o.delete()
+    assert not OutgoingMail.objects.filter(pk=mail_sent.pk).exists()
 
 
 @pytest.mark.django_db

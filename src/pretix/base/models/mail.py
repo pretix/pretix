@@ -25,6 +25,19 @@ from django.utils.translation import gettext_lazy as _
 from django_scopes import scope, scopes_disabled
 
 
+def CASCADE_IF_QUEUED(collector, field, sub_objs, using):
+    # If the email is still queued and the thing it is related to vanishes, the email can vanish as well
+    print(sub_objs)
+    cascade_objs = [
+        o for o in sub_objs if o.status == OutgoingMail.STATUS_QUEUED
+    ]
+    if cascade_objs:
+        models.CASCADE(collector, field, cascade_objs, using)
+
+    # In all other cases, set to NULL to keep the email on record
+    models.SET_NULL(collector, field, [o for o in sub_objs if o not in cascade_objs], using)
+
+
 class OutgoingMail(models.Model):
     STATUS_QUEUED = "queued"
     STATUS_INFLIGHT = "inflight"
@@ -42,9 +55,23 @@ class OutgoingMail(models.Model):
     status = models.CharField(max_length=200, choices=STATUS_CHOICES, default=STATUS_QUEUED)
     created = models.DateTimeField(auto_now_add=True)
     sent = models.DateTimeField(null=True, blank=True)
+    inflight_since = models.DateTimeField(null=True, blank=True)
+    retry_after = models.DateTimeField(null=True, blank=True)
     error = models.TextField(null=True, blank=True)
     error_detail = models.TextField(null=True, blank=True)
 
+    # There is a conflict here between the different purposes of the model. As a system administrator,
+    # one wants *all* emails to be persisted as long as possible to debug issues. This means that if
+    # e.g. the event or order is deleted, we want SET_NULL behavior. However, in that case, the email
+    # would be an "orphan" forever and there's no way to remove the personal information.
+    # We try to find a middle-ground with the following behaviour:
+    # - The email is always deleted if the entire organize or user is deleted
+    # - The email is always deleted if it has not yet been sent
+    # - The email is kept in all other cases
+    # This is only an acceptable trade-off since emails are stored for a short period only, and because
+    # orders and customers are never deleted during normal operation. If we ever make this a long-term
+    # storage / email archive, we'd need to find another way to make sure personal information is removed
+    # if personal information of orders etc is removed.
     organizer = models.ForeignKey(
         'pretixbase.Organizer',
         on_delete=models.CASCADE,
@@ -53,31 +80,31 @@ class OutgoingMail(models.Model):
     )
     event = models.ForeignKey(
         'pretixbase.Event',
-        on_delete=models.SET_NULL,  # todo think, only for non-queued!
+        on_delete=CASCADE_IF_QUEUED,
         related_name='outgoing_mails',
         null=True, blank=True,
     )
     order = models.ForeignKey(
         'pretixbase.Order',
-        on_delete=models.SET_NULL,
+        on_delete=CASCADE_IF_QUEUED,
         related_name='outgoing_mails',
         null=True, blank=True,
     )
     orderposition = models.ForeignKey(
         'pretixbase.OrderPosition',
-        on_delete=models.SET_NULL,
+        on_delete=CASCADE_IF_QUEUED,
         related_name='outgoing_mails',
         null=True, blank=True,
     )
     customer = models.ForeignKey(
         'pretixbase.Customer',
-        on_delete=models.SET_NULL,
+        on_delete=CASCADE_IF_QUEUED,
         related_name='outgoing_mails',
         null=True, blank=True,
     )
     user = models.ForeignKey(
         'pretixbase.User',
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name='outgoing_mails',
         null=True, blank=True,
     )
@@ -91,17 +118,25 @@ class OutgoingMail(models.Model):
     cc = models.JSONField(default=list)
     bcc = models.JSONField(default=list)
 
+    # We don't store the actual invoices, tickets or calendar invites, so if the email is re-sent at a later time, a
+    # newer version of the files might be used. We accept that risk to save on storage and also because the new
+    # version might actually be more useful.
     should_attach_invoices = models.ManyToManyField(
         'pretixbase.Invoice',
         related_name='outgoing_mails'
     )
     should_attach_tickets = models.BooleanField(default=False)
     should_attach_ical = models.BooleanField(default=False)
+
+    # We need to make sure cached files are kept as l
     should_attach_cached_files = models.ManyToManyField(
         'pretixbase.CachedFile',
         related_name='outgoing_mails',
     )  # todo: prevent deletion?
-    should_attach_other_files = models.JSONField(default=list)  # todo_ prevent deletion?
+
+    # This is used to send files stored in settings. In most cases, these aren't short-lived and should still be there
+    # if the email is sent. Otherwise, they will be skipped. We accept that risk.
+    should_attach_other_files = models.JSONField(default=list)
 
     actual_attachments = models.JSONField(default=list)
 
