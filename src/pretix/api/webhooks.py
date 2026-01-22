@@ -202,17 +202,6 @@ class ParametrizedGiftcardTransactionWebhookEvent(ParametrizedWebhookEvent):
         }
 
 
-class ParametrizedGiftcardAcceptanceWebhookEvent(ParametrizedWebhookEvent):
-    def build_payload(self, logentry: LogEntry):
-        return {
-            'notification_id': logentry.pk,
-            'organizer': logentry.organizer_id,
-            'acceptor': logentry.parsed_data.get('acceptor'),
-            'issuer': logentry.parsed_data.get('issuer'),
-            'action': logentry.action_type,
-        }
-
-
 class ParametrizedVoucherWebhookEvent(ParametrizedWebhookEvent):
 
     def build_payload(self, logentry: LogEntry):
@@ -483,10 +472,6 @@ def register_default_webhook_events(sender, **kwargs):
         ParametrizedGiftcardTransactionWebhookEvent(
             'pretix.giftcards.transaction.*',
             _('Gift card used in transcation'),
-        ),
-        ParametrizedGiftcardAcceptanceWebhookEvent(
-            'pretix.giftcards.acceptance.*',
-            _('Gift card acceptance modified'),
         )
     )
 
