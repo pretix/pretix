@@ -1646,6 +1646,12 @@ class GiftCardPayment(BasePaymentProvider):
                     'transaction_id': trans.pk,
                 }
                 payment.confirm(send_mail=not is_early_special_case, generate_invoice=not is_early_special_case)
+                gc.log_action(
+                    action='pretix.giftcards.transaction.payment',
+                    data={
+                        'value': trans.value
+                    }
+                )
         except PaymentException as e:
             payment.fail(info={'error': str(e)})
             raise e
@@ -1670,6 +1676,13 @@ class GiftCardPayment(BasePaymentProvider):
             'transaction_id': trans.pk,
         }
         refund.done()
+        gc.log_action(
+            action='pretix.giftcards.transaction.refund',
+            data={
+                'value': refund.amount,
+                'text': refund.comment,
+            }
+        )
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_free")
