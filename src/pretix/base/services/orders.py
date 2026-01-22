@@ -3131,7 +3131,10 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
                 customer=order.customer,
                 testmode=order.testmode
             )
-            giftcard.log_action('pretix.giftcards.created', data={})
+            giftcard.log_action(
+                action='pretix.giftcards.created',
+                data={}
+            )
             r = order.refunds.create(
                 order=order,
                 payment=None,

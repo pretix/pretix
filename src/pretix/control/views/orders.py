@@ -1230,7 +1230,11 @@ class OrderRefundView(OrderView):
                     customer=order.customer,
                     testmode=order.testmode
                 )
-                giftcard.log_action('pretix.giftcards.created', user=self.request.user, data={})
+                giftcard.log_action(
+                    action='pretix.giftcards.created',
+                    user=self.request.user,
+                    data={}
+                )
                 refunds.append(OrderRefund(
                     order=order,
                     payment=None,
