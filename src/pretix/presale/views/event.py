@@ -61,7 +61,7 @@ from django.views.generic import TemplateView
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
-    ItemVariation, Quota, SeatCategoryMapping, Voucher, WaitingListEntry,
+    ItemVariation, Quota, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
@@ -77,7 +77,6 @@ from pretix.presale.views.organizer import (
     filter_qs_by_attr, has_before_after, weeks_for_template,
 )
 from pretix.presale.views.customer import CustomerRequiredMixin
-from pretix.presale.views.cart import get_or_create_cart_id
 
 from ...helpers.formats.en.formats import SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT
 from . import (
@@ -416,6 +415,8 @@ class EventIndex(CustomerRequiredMixin, EventViewMixin, EventListMixin, CartMixi
             get_params["date"] = "%s-W%s" % (request.GET.get("year"), request.GET.get("week"))
             return redirect(self.request.path + "?" + urlencode(get_params))
 
+        from pretix.presale.views.cart import get_or_create_cart_id
+
         self.subevent = None
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget
@@ -559,37 +560,6 @@ class EventIndex(CustomerRequiredMixin, EventViewMixin, EventListMixin, CartMixi
                 context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
         else:
             context['cart_redirect'] = self.request.path
-
-        # Add waiting list rank data if customer is logged in and lottery has run
-        context['waiting_list_ranks'] = []
-        if (context.get('allow_waitinglist') and 
-            self.request.event.settings.main_lottery_date and
-            getattr(self.request, 'customer', None)):
-            from pretix.base.models import WaitingListEntry
-            
-            customer_email = self.request.customer.email
-            entries = WaitingListEntry.objects.filter(
-                event=self.request.event,
-                email__iexact=customer_email
-            ).select_related('item', 'variation', 'voucher').order_by('item', 'variation', '-created', '-pk')
-            
-            seen_products = set()
-            for entry in entries:
-                product_key = (entry.item_id, entry.variation_id if entry.variation else None)
-                if product_key in seen_products:
-                    continue
-                seen_products.add(product_key)
-                
-                rank = entry.get_rank()
-                if rank is None:
-                    continue
-                
-                context['waiting_list_ranks'].append({
-                    'item_name': str(entry.item),
-                    'variation_name': str(entry.variation) if entry.variation else None,
-                    'rank': rank,
-                    'voucher_code': entry.voucher.code if (rank == 0 and entry.voucher) else None,
-                })
 
         return context
 
@@ -766,6 +736,8 @@ class SeatingPlanView(EventViewMixin, TemplateView):
     template_name = "pretixpresale/event/seatingplan.html"
 
     def get(self, request, *args, **kwargs):
+        from pretix.presale.views.cart import get_or_create_cart_id
+
         self.subevent = None
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget
