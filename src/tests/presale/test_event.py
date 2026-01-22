@@ -1163,8 +1163,6 @@ class WaitingListTest(EventTestMixin, SoupTest):
             WaitingListEntry.objects.create(
                 event=self.event, item=self.item, email='test@example.com'
             )
-            
-            self.event.settings.set('main_lottery_date', now().isoformat())
         
         # Login through the customer login endpoint to properly set up customer session
         login_response = self.client.post('/%s/account/login' % self.orga.slug, {
@@ -1182,6 +1180,7 @@ class WaitingListTest(EventTestMixin, SoupTest):
         self.assertEqual(ranks[0]['item_name'], 'Early-bird ticket')
         self.assertEqual(ranks[0]['rank'], 1)  # First in line
         self.assertIsNone(ranks[0]['variation_name'])
+        self.assertEqual(ranks[0]['lottery_run'], False)
 
     def test_waiting_list_rank_display_multiple_products(self):
         """Test rank display with multiple products"""
@@ -1204,8 +1203,6 @@ class WaitingListTest(EventTestMixin, SoupTest):
             WaitingListEntry.objects.create(
                 event=self.event, item=item2, email='test@example.com'
             )
-            
-            self.event.settings.set('main_lottery_date', now().isoformat())
         
         # Login through the customer login endpoint to properly set up customer session
         login_response = self.client.post('/%s/account/login' % self.orga.slug, {
@@ -1238,8 +1235,6 @@ class WaitingListTest(EventTestMixin, SoupTest):
             WaitingListEntry.objects.create(
                 event=self.event, item=self.item, email='test@example.com', voucher=v
             )
-            
-            self.event.settings.set('main_lottery_date', now().isoformat())
         
         # Login through the customer login endpoint to properly set up customer session
         login_response = self.client.post('/%s/account/login' % self.orga.slug, {
@@ -1266,8 +1261,6 @@ class WaitingListTest(EventTestMixin, SoupTest):
             customer = self.orga.customers.create(email='test@example.com', is_verified=True, is_active=True)
             customer.set_password('test')
             customer.save()
-            
-            self.event.settings.set('main_lottery_date', now().isoformat())
         
         # Login through the customer login endpoint to properly set up customer session
         login_response = self.client.post('/%s/account/login' % self.orga.slug, {
@@ -1299,8 +1292,6 @@ class WaitingListTest(EventTestMixin, SoupTest):
             WaitingListEntry.objects.create(
                 event=self.event, item=self.item, email='test@example.com'
             )
-            
-            self.event.settings.set('main_lottery_date', now().isoformat())
         
         # Login and check initial rank (should be 4th, since 3 others were created first)
         login_response = self.client.post('/%s/account/login' % self.orga.slug, {
@@ -1315,6 +1306,7 @@ class WaitingListTest(EventTestMixin, SoupTest):
         ranks_before = response.context['waiting_list_ranks']
         self.assertEqual(len(ranks_before), 1)
         rank_before = ranks_before[0]['rank']
+        self.assertEqual(ranks_before[0]['lottery_run'], False)
         
         # Now run lottery via control panel (simulate admin running lottery)
         # We need to login as admin first
@@ -1352,6 +1344,7 @@ class WaitingListTest(EventTestMixin, SoupTest):
         # Rank should still be valid (1-4), but may have changed due to lottery shuffle
         self.assertGreaterEqual(rank_after, 1)
         self.assertLessEqual(rank_after, 4)
+        self.assertEqual(ranks_after[0]['lottery_run'], True)
 
 
 class DeadlineTest(EventTestMixin, TestCase):
