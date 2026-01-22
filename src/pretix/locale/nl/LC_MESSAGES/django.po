@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-22 07:00+0000\n"
+"PO-Revision-Date: 2026-01-22 19:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -184,11 +184,11 @@ msgstr "Doorverwijzings-URI's"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:446
 msgid "Allowed URIs list, space separated"
-msgstr "Lijst van toegestane URI's, gescheiden met spaties"
+msgstr "Lijst van toegestane URI's, gescheiden door spaties"
 
 #: pretix/api/models.py:47
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Lijst van toegestane URI's na uitloggen, gescheiden met spaties"
+msgstr "Lijst van toegestane URI's na uitloggen, gescheiden door spaties"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:426
 #: pretix/plugins/paypal/payment.py:114 pretix/plugins/paypal2/payment.py:111
@@ -987,7 +987,7 @@ msgstr "Factuuradres: land"
 
 #: pretix/base/datasync/sourcefields.py:353
 msgid "Order email"
-msgstr "Bestelling e-mail"
+msgstr "E-mail bestelling"
 
 #: pretix/base/datasync/sourcefields.py:362
 msgid "Order email domain"
@@ -2484,7 +2484,7 @@ msgstr "Product-ID"
 #: pretix/plugins/checkinlists/exporters.py:514
 #: pretix/plugins/checkinlists/exporters.py:704
 msgid "Start date"
-msgstr "Startdatum"
+msgstr "Begindatum"
 
 #: pretix/base/exporters/orderlist.py:595
 #: pretix/base/exporters/orderlist.py:1161
@@ -3429,7 +3429,7 @@ msgstr "E-mailadres wijzigen"
 
 #: pretix/base/forms/user.py:83
 msgid "Device name"
-msgstr "Naam van het apparaat"
+msgstr "Naam apparaat"
 
 #: pretix/base/forms/user.py:84
 msgid "Device type"
@@ -4272,7 +4272,7 @@ msgstr "U dient het product \"{prod}\" te selecteren voor deze zitplaats."
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:42
 #: pretix/control/views/vouchers.py:120
 msgid "Tag"
-msgstr "Label"
+msgstr "Tag"
 
 #: pretix/base/modelimport_vouchers.py:334 pretix/base/models/vouchers.py:300
 msgid "Shows hidden products that match this voucher"
@@ -4375,7 +4375,7 @@ msgstr "Alle producten (inclusief nieuwe gemaakte)"
 #: pretix/base/models/checkin.py:56 pretix/plugins/badges/exporters.py:436
 #: pretix/plugins/checkinlists/exporters.py:854
 msgid "Limit to products"
-msgstr "Tot producten limiteren"
+msgstr "Beperken tot producten"
 
 #: pretix/base/models/checkin.py:60
 msgid ""
@@ -6391,7 +6391,7 @@ msgstr "verlopen"
 #: pretix/base/models/orders.py:254 pretix/control/forms/filter.py:596
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:65
 msgid "Locale"
-msgstr "Locale"
+msgstr "Lokalisatie"
 
 #: pretix/base/models/orders.py:269 pretix/control/forms/filter.py:607
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
@@ -6696,7 +6696,7 @@ msgstr "Certificaat"
 #: pretix/control/views/event.py:397 pretix/control/views/organizer.py:649
 #: pretix/control/views/organizer.py:654
 msgid "Other"
-msgstr "Andere"
+msgstr "Ander"
 
 #: pretix/base/models/organizer.py:81
 msgid ""
@@ -7177,7 +7177,7 @@ msgstr "Aantal keren dat deze voucher kan worden ingewisseld."
 
 #: pretix/base/models/vouchers.py:204 pretix/control/views/vouchers.py:120
 msgid "Redeemed"
-msgstr "Gebruikt"
+msgstr "Ingewisseld"
 
 #: pretix/base/models/vouchers.py:209
 msgid ""
@@ -8048,7 +8048,7 @@ msgstr "Dag van de week waarop het evenement begint"
 #: pretix/base/pdf.py:277 pretix/base/pdf.py:306
 #: pretix/base/services/checkin.py:362 pretix/control/forms/filter.py:1398
 msgid "Friday"
-msgstr "Vrijdag"
+msgstr "vrijdag"
 
 #: pretix/base/pdf.py:281
 msgid "Event end date and time"
@@ -8286,7 +8286,7 @@ msgstr "Meneer Janssen"
 #: pretix/plugins/ticketoutputpdf/exporters.py:99
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr "Naam van aanwezige: {part}"
+msgstr "Naam van deelnemer: {part}"
 
 #: pretix/base/pdf.py:688
 msgid "Invoice address name for salutation"
@@ -8828,27 +8828,27 @@ msgstr "doordeweekse dag"
 
 #: pretix/base/services/checkin.py:358 pretix/control/forms/filter.py:1394
 msgid "Monday"
-msgstr "Maandag"
+msgstr "maandag"
 
 #: pretix/base/services/checkin.py:359 pretix/control/forms/filter.py:1395
 msgid "Tuesday"
-msgstr "Dinsdag"
+msgstr "dinsdag"
 
 #: pretix/base/services/checkin.py:360 pretix/control/forms/filter.py:1396
 msgid "Wednesday"
-msgstr "Woensdag"
+msgstr "woensdag"
 
 #: pretix/base/services/checkin.py:361 pretix/control/forms/filter.py:1397
 msgid "Thursday"
-msgstr "Donderdag"
+msgstr "donderdag"
 
 #: pretix/base/services/checkin.py:363 pretix/control/forms/filter.py:1399
 msgid "Saturday"
-msgstr "Zaterdag"
+msgstr "zaterdag"
 
 #: pretix/base/services/checkin.py:364 pretix/control/forms/filter.py:1400
 msgid "Sunday"
-msgstr "Zondag"
+msgstr "zondag"
 
 #: pretix/base/services/checkin.py:368
 #, python-brace-format
@@ -15123,7 +15123,7 @@ msgstr "Alle inchecklijsten"
 #: pretix/plugins/checkinlists/exporters.py:758
 #: pretix/plugins/checkinlists/exporters.py:846
 msgid "Check-in list"
-msgstr "Inchecklijst"
+msgstr "Check-inlijst"
 
 #: pretix/control/forms/filter.py:2760
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:82
@@ -18380,7 +18380,7 @@ msgstr "Alle vouchers"
 
 #: pretix/control/navigation.py:284
 msgid "Tags"
-msgstr "Labels"
+msgstr "Tags"
 
 #: pretix/control/navigation.py:296
 msgctxt "navigation"
@@ -18468,7 +18468,7 @@ msgstr "Problemen met gegevenssynchronisatie"
 #: pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
 msgid "Event metadata"
-msgstr "Evenementsmetadata"
+msgstr "Metadata evenement"
 
 #: pretix/control/navigation.py:527
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
@@ -19182,7 +19182,7 @@ msgstr "Annuleren"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:34
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:29
 msgid "Delete"
-msgstr "Verwijder"
+msgstr "Verwijderen"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -23673,7 +23673,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:230
 msgid "Contact email"
-msgstr "Contact e-mailadres"
+msgstr "Contactmailadres"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:234
 msgid ""
@@ -24903,8 +24903,8 @@ msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
-"Als u een enkele datum selecteert zullen toeslagen hier niet getoond worden, "
-"omdat het onduidelijk kan zijn bij welke datum ze horen."
+"Als u een enkele datum selecteert, zullen toeslagen hier niet getoond "
+"worden, omdat het onduidelijk kan zijn bij welke datum ze horen."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:80
 #: pretix/plugins/reports/exporters.py:392
@@ -28038,7 +28038,7 @@ msgstr "De nieuwe inchecklijst is aangemaakt."
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
 msgstr ""
-"De wijzigingen konden niet worden opgeslagen, zie hieronder voor meer "
+"De wijzigingen konden niet worden opgeslagen. Zie hieronder voor meer "
 "informatie."
 
 #: pretix/control/views/checkin.py:420 pretix/control/views/checkin.py:457
@@ -31072,7 +31072,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:92
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
 msgid "Only include tickets for dates within this range."
-msgstr "Alleen tickets voor datums in deze reeks."
+msgstr "Neem alleen tickets op voor data binnen dit bereik."
 
 #: pretix/plugins/checkinlists/exporters.py:96
 msgid "Include QR-code secret"
@@ -31178,7 +31178,7 @@ msgstr "Uploaddatum"
 
 #: pretix/plugins/checkinlists/exporters.py:773
 msgid "Upload time"
-msgstr "Uploadtijd"
+msgstr "Tijdstip van uploaden"
 
 #: pretix/plugins/checkinlists/exporters.py:830
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:523
@@ -31392,7 +31392,7 @@ msgstr "Het betalingsproces is begonnen in een nieuwe venster."
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
-"Het venster om je betaling in te voeren is niet geopend of was gesloten?"
+"Het venster om uw betaling in te voeren is niet geopend of was gesloten?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
@@ -31737,7 +31737,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:5
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
 msgid "Pay order"
-msgstr "Betaal bestelling"
+msgstr "Bestelling betalen"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:16
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:8
@@ -32861,7 +32861,7 @@ msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:366
 msgid "SEPA Direct Debit"
-msgstr "SEPA Automatische Incasso"
+msgstr "SEPA-incasso"
 
 #: pretix/plugins/stripe/payment.py:369
 msgid ""
@@ -33550,7 +33550,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:48
 msgid "Confirm payment"
-msgstr "Bevestig betaling"
+msgstr "Betaling bevestigen"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:54
 msgid ""
@@ -33615,8 +33615,8 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
-"Sorry, er was een fout in het betalingsproces. Klik op de link in je e-mail "
-"om door te gaan."
+"Sorry, er heeft zich een fout voorgedaan in het betalingsproces. Klik op de "
+"link in uw e-mails om door te gaan."
 
 #: pretix/plugins/stripe/views.py:576
 msgid ""
