@@ -529,12 +529,6 @@ class EventIndex(CustomerRequiredMixin, EventViewMixin, EventListMixin, CartMixi
             # Regroup those by category
             context['items_by_category'] = item_group_by_category(items)
             context['display_add_to_cart'] = display_add_to_cart
-            
-            # Check if any item has a lottery date set
-            context['has_lottery_date'] = any(
-                self.request.event.settings.get(f'lottery_date_for_item_{item.pk}') 
-                for item in items
-            )
 
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
