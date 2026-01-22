@@ -259,7 +259,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
             action='pretix.giftcards.transaction.manual',
             user=self.request.user,
             auth=self.request.auth,
-            data=merge_dicts(self.request.data, {'id': inst.pk})
+            data=merge_dicts(self.request.data, {'id': inst.pk, 'acceptor_id':self.request.organizer.id})
         )
 
     @transaction.atomic()
@@ -290,7 +290,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
                 action='pretix.giftcards.transaction.manual',
                 user=self.request.user,
                 auth=self.request.auth,
-                data={'value': diff}
+                data={'value': diff, 'acceptor_id':self.request.organizer.id}
             )
 
         return inst
@@ -319,7 +319,8 @@ class GiftCardViewSet(viewsets.ModelViewSet):
             auth=self.request.auth,
             data={
                 'value': value,
-                'text': text
+                'text': text,
+                'acceptor_id': self.request.organizer.id
             }
         )
         return Response(GiftCardSerializer(gc, context=self.get_serializer_context()).data, status=status.HTTP_200_OK)

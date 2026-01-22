@@ -1851,7 +1851,8 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                         action='pretix.giftcards.transaction.manual',
                         data={
                             'value': value,
-                            'text': request.POST.get('text')
+                            'text': request.POST.get('text'),
+                            'acceptor_id': self.request.organizer.id
                         },
                         user=self.request.user,
                     )
@@ -1913,7 +1914,8 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                 action='pretix.giftcards.transaction.manual',
                 user=self.request.user,
                 data={
-                    'value': form.cleaned_data['value']
+                    'value': form.cleaned_data['value'],
+                    'acceptor_id': self.request.organizer.id
                 }
             )
         return redirect(reverse(
