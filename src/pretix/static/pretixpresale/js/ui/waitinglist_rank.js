@@ -40,9 +40,13 @@
         .then(function(response) {
             return response.json();
         })
-        .then(function(data) {  
-            if (data.products && Array.isArray(data.products)) {
-                // New format: multiple products
+        .then(function(data) {
+            // If products is present but not an array, forcibly make it an empty array.
+            if (data.products !== undefined && !Array.isArray(data.products)) {
+                data.products = [];
+            }
+
+            if (data.products) {
                 if (data.products.length === 0) {
                     rankResult.textContent = rankResult.getAttribute('data-error-text') || 'Unable to determine your rank.';
                     return;
@@ -101,16 +105,6 @@
                 // Clear and add table
                 rankResult.innerHTML = '';
                 rankResult.appendChild(table);
-                
-            } else if (data.rank !== undefined) {
-                // Legacy format: single rank (for backwards compatibility)
-                if (data.rank === 0) {
-                    rankResult.textContent = rankResult.getAttribute('data-voucher-text') || 'You have a voucher waiting for redemption!';
-                } else {
-                    var rankLabel = rankResult.getAttribute('data-rank-label') || 'You are {ordinal} in line';
-                    var ordinalRank = getOrdinalSuffix(data.rank);
-                    rankResult.textContent = rankLabel.replace('{ordinal}', ordinalRank);
-                }
             } else if (data.error) {
                 rankResult.textContent = data.error;
             } else {

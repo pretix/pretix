@@ -235,6 +235,12 @@ class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
                 if rank == 0 and entry.voucher:
                     product_data['voucher_code'] = entry.voucher.code
                 
+                # Check if entry has an expired voucher and include expiry date
+                if entry.voucher and not entry.voucher.is_active():
+                    product_data['expired_voucher'] = True
+                    if entry.voucher.valid_until:
+                        product_data['voucher_expiry_date'] = entry.voucher.valid_until.isoformat()
+                
                 products_data.append(product_data)
             
             if not products_data:
