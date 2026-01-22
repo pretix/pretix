@@ -41,7 +41,69 @@
             return response.json();
         })
         .then(function(data) {  
-            if (data.rank !== undefined) {
+            if (data.products && Array.isArray(data.products)) {
+                // New format: multiple products
+                if (data.products.length === 0) {
+                    rankResult.textContent = rankResult.getAttribute('data-error-text') || 'Unable to determine your rank.';
+                    return;
+                }
+                
+                // Create table structure
+                var table = document.createElement('table');
+                table.className = 'table table-striped table-condensed';
+                
+                var thead = document.createElement('thead');
+                var headerRow = document.createElement('tr');
+                var headerProduct = document.createElement('th');
+                headerProduct.textContent = 'Product';
+                var headerRank = document.createElement('th');
+                headerRank.textContent = 'Status';
+                headerRow.appendChild(headerProduct);
+                headerRow.appendChild(headerRank);
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+                
+                var tbody = document.createElement('tbody');
+                var voucherText = rankResult.getAttribute('data-voucher-text') || 'You have a voucher waiting for redemption!';
+                var rankLabel = rankResult.getAttribute('data-rank-label') || 'You are {ordinal} in line';
+                
+                data.products.forEach(function(product) {
+                    var row = document.createElement('tr');
+                    
+                    // Product name cell
+                    var productCell = document.createElement('td');
+                    var productName = product.item_name;
+                    if (product.variation_name) {
+                        productName += ' – ' + product.variation_name;
+                    }
+                    productCell.textContent = productName;
+                    row.appendChild(productCell);
+                    
+                    // Rank/Status cell
+                    var rankCell = document.createElement('td');
+                    if (product.rank === 0) {
+                        rankCell.textContent = voucherText;
+                        rankCell.className = 'text-success';
+                    } else if (product.rank !== null && product.rank !== undefined) {
+                        var ordinalRank = getOrdinalSuffix(product.rank);
+                        rankCell.textContent = rankLabel.replace('{ordinal}', ordinalRank);
+                    } else {
+                        rankCell.textContent = rankResult.getAttribute('data-error-text') || 'Unable to determine rank.';
+                        rankCell.className = 'text-muted';
+                    }
+                    row.appendChild(rankCell);
+                    
+                    tbody.appendChild(row);
+                });
+                
+                table.appendChild(tbody);
+                
+                // Clear and add table
+                rankResult.innerHTML = '';
+                rankResult.appendChild(table);
+                
+            } else if (data.rank !== undefined) {
+                // Legacy format: single rank (for backwards compatibility)
                 if (data.rank === 0) {
                     rankResult.textContent = rankResult.getAttribute('data-voucher-text') || 'You have a voucher waiting for redemption!';
                 } else {

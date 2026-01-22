@@ -555,6 +555,37 @@ class EventIndex(CustomerRequiredMixin, EventViewMixin, EventListMixin, CartMixi
         else:
             context['cart_redirect'] = self.request.path
 
+        # Add waiting list rank data if customer is logged in and lottery has run
+        context['waiting_list_ranks'] = []
+        if (context.get('allow_waitinglist') and 
+            self.request.event.settings.main_lottery_date and
+            getattr(self.request, 'customer', None)):
+            from pretix.base.models import WaitingListEntry
+            
+            customer_email = self.request.customer.email
+            entries = WaitingListEntry.objects.filter(
+                event=self.request.event,
+                email__iexact=customer_email
+            ).select_related('item', 'variation', 'voucher').order_by('item', 'variation', '-created', '-pk')
+            
+            seen_products = set()
+            for entry in entries:
+                product_key = (entry.item_id, entry.variation_id if entry.variation else None)
+                if product_key in seen_products:
+                    continue
+                seen_products.add(product_key)
+                
+                rank = entry.get_rank()
+                if rank is None:
+                    continue
+                
+                context['waiting_list_ranks'].append({
+                    'item_name': str(entry.item),
+                    'variation_name': str(entry.variation) if entry.variation else None,
+                    'rank': rank,
+                    'voucher_code': entry.voucher.code if (rank == 0 and entry.voucher) else None,
+                })
+
         return context
 
     def _subevent_list_cachekey(self):

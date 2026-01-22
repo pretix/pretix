@@ -230,7 +230,7 @@
         {% endif %}
     {% endif %}
     </main>
-    {% if allow_waitinglist and event.settings.main_lottery_date %}
+    {% if allow_waitinglist and event.settings.main_lottery_date and request.customer %}
         <aside class="front-page" aria-labelledby="check-waiting-list-rank">
             <h3 id="check-waiting-list-rank">{% trans "Check my spot in line" %}</h3>
             {% include "pretixpresale/event/fragment_waitinglist_rank.html" %}

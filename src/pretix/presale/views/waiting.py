@@ -191,35 +191,60 @@ class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         customer_email = request.customer.email
         
-        # Find the most recent waiting list entry for this customer/event
-        # For now, we assume one item per event, so we just get the most recent one
+        # Find all waiting list entries for this customer/event, grouped by product
         try:
-            entry = WaitingListEntry.objects.filter(
+            entries = WaitingListEntry.objects.filter(
                 event=request.event,
                 email__iexact=customer_email
-            ).order_by('-created', '-pk').first()
+            ).select_related('item', 'variation', 'voucher').order_by('item', 'variation', '-created', '-pk')
             
-            if not entry:
+            if not entries.exists():
                 return JsonResponse({
                     'error': _('You are not on the waiting list for this event.')
                 }, status=404)
             
-            rank = entry.get_rank()
+            # Group entries by product (item + variation combination)
+            products_data = []
+            seen_products = set()
             
-            if rank is None:
+            for entry in entries:
+                # Create a unique key for this product (item + variation)
+                product_key = (entry.item_id, entry.variation_id if entry.variation else None)
+                
+                # Only process the most recent entry for each product
+                if product_key in seen_products:
+                    continue
+                
+                seen_products.add(product_key)
+                
+                rank = entry.get_rank()
+                
+                # Skip entries that are no longer active (rank is None)
+                if rank is None:
+                    continue
+                
+                product_data = {
+                    'item_id': entry.item_id,
+                    'item_name': str(entry.item),
+                    'variation_id': entry.variation_id,
+                    'variation_name': str(entry.variation) if entry.variation else None,
+                    'rank': rank
+                }
+                
+                # Include voucher code if rank is 0 (user has an unredeemed voucher)
+                if rank == 0 and entry.voucher:
+                    product_data['voucher_code'] = entry.voucher.code
+                
+                products_data.append(product_data)
+            
+            if not products_data:
                 return JsonResponse({
-                    'error': _('Your waiting list entry is no longer active.')
+                    'error': _('Your waiting list entries are no longer active.')
                 }, status=200)
             
-            response_data = {
-                'rank': rank
-            }
-            
-            # Include voucher code if rank is 0 (user has an unredeemed voucher)
-            if rank == 0 and entry.voucher:
-                response_data['voucher_code'] = entry.voucher.code
-            
-            return JsonResponse(response_data)
+            return JsonResponse({
+                'products': products_data
+            })
             
         except Exception as e:
             return JsonResponse({

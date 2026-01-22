@@ -50,8 +50,8 @@ from tests.base import SoupTest
 from tests.testdummy.signals import FoobarSalesChannel
 
 from pretix.base.models import (
-    Event, Item, ItemCategory, ItemVariation, Order, Organizer, Quota, Team,
-    User, WaitingListEntry,
+    Customer, Event, Item, ItemCategory, ItemVariation, Order, Organizer, Quota, Team,
+    User, Voucher, WaitingListEntry,
 )
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 
@@ -1149,6 +1149,209 @@ class WaitingListTest(EventTestMixin, SoupTest):
         self.assertEqual(response.status_code, 302)
         v.refresh_from_db()
         assert v.is_active()
+
+    def test_waiting_list_rank_display_single_product(self):
+        """Test rank display with single product"""
+        with scopes_disabled():
+            self.orga.settings.customer_accounts = True
+            self.orga.save()
+            
+            customer = self.orga.customers.create(email='test@example.com', is_verified=True, is_active=True)
+            customer.set_password('test')
+            customer.save()
+            
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item, email='test@example.com'
+            )
+            
+            self.event.settings.set('main_lottery_date', now().isoformat())
+        
+        # Login through the customer login endpoint to properly set up customer session
+        login_response = self.client.post('/%s/account/login' % self.orga.slug, {
+            'email': 'test@example.com',
+            'password': 'test',
+        })
+        self.assertEqual(login_response.status_code, 302)  # Should redirect after login
+        
+        response = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(response.status_code, 200)
+        
+        self.assertIn('waiting_list_ranks', response.context)
+        ranks = response.context['waiting_list_ranks']
+        self.assertEqual(len(ranks), 1)
+        self.assertEqual(ranks[0]['item_name'], 'Early-bird ticket')
+        self.assertEqual(ranks[0]['rank'], 1)  # First in line
+        self.assertIsNone(ranks[0]['variation_name'])
+
+    def test_waiting_list_rank_display_multiple_products(self):
+        """Test rank display with multiple products"""
+        with scopes_disabled():
+            self.orga.settings.customer_accounts = True
+            self.orga.save()
+            
+            customer = self.orga.customers.create(email='test@example.com', is_verified=True, is_active=True)
+            customer.set_password('test')
+            customer.save()
+            
+            item2 = Item.objects.create(event=self.event, name='VIP ticket', default_price=Decimal('50.00'),
+                                        active=True)
+            self.q.items.add(item2)
+            
+            # Create waiting list entries for both products
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item, email='test@example.com'
+            )
+            WaitingListEntry.objects.create(
+                event=self.event, item=item2, email='test@example.com'
+            )
+            
+            self.event.settings.set('main_lottery_date', now().isoformat())
+        
+        # Login through the customer login endpoint to properly set up customer session
+        login_response = self.client.post('/%s/account/login' % self.orga.slug, {
+            'email': 'test@example.com',
+            'password': 'test',
+        })
+        self.assertEqual(login_response.status_code, 302)  # Should redirect after login
+        
+        response = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(response.status_code, 200)
+        
+        # Check that both products are in ranks
+        ranks = response.context['waiting_list_ranks']
+        self.assertEqual(len(ranks), 2)
+        item_names = [r['item_name'] for r in ranks]
+        self.assertIn('Early-bird ticket', item_names)
+        self.assertIn('VIP ticket', item_names)
+
+    def test_waiting_list_rank_display_with_voucher(self):
+        """Test rank display when user has a voucher (rank = 0)"""
+        with scopes_disabled():
+            self.orga.settings.customer_accounts = True
+            self.orga.save()
+            
+            customer = self.orga.customers.create(email='test@example.com', is_verified=True, is_active=True)
+            customer.set_password('test')
+            customer.save()
+            
+            v = self.event.vouchers.create(item=self.item, block_quota=True, valid_until=now() + datetime.timedelta(days=5))
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item, email='test@example.com', voucher=v
+            )
+            
+            self.event.settings.set('main_lottery_date', now().isoformat())
+        
+        # Login through the customer login endpoint to properly set up customer session
+        login_response = self.client.post('/%s/account/login' % self.orga.slug, {
+            'email': 'test@example.com',
+            'password': 'test',
+        })
+        self.assertEqual(login_response.status_code, 302)  # Should redirect after login
+        
+        response = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(response.status_code, 200)
+        
+        # Check that rank is 0 (has voucher)
+        ranks = response.context['waiting_list_ranks']
+        self.assertEqual(len(ranks), 1)
+        self.assertEqual(ranks[0]['rank'], 0)
+        self.assertEqual(ranks[0]['voucher_code'], v.code)
+
+    def test_waiting_list_rank_display_no_entries(self):
+        """Test rank display when user has no waiting list entries"""
+        with scopes_disabled():
+            self.orga.settings.customer_accounts = True
+            self.orga.save()
+            
+            customer = self.orga.customers.create(email='test@example.com', is_verified=True, is_active=True)
+            customer.set_password('test')
+            customer.save()
+            
+            self.event.settings.set('main_lottery_date', now().isoformat())
+        
+        # Login through the customer login endpoint to properly set up customer session
+        login_response = self.client.post('/%s/account/login' % self.orga.slug, {
+            'email': 'test@example.com',
+            'password': 'test',
+        })
+        self.assertEqual(login_response.status_code, 302)  # Should redirect after login
+        
+        response = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(response.status_code, 200)
+        
+        ranks = response.context['waiting_list_ranks']
+        self.assertEqual(len(ranks), 0)
+
+    def test_waiting_list_rank_display_after_lottery(self):
+        """Test that rank display updates correctly after lottery is run"""
+        with scopes_disabled():
+            self.orga.settings.customer_accounts = True
+            self.orga.save()
+            
+            customer = self.orga.customers.create(email='test@example.com', is_verified=True, is_active=True)
+            customer.set_password('test')
+            customer.save()
+            
+            for i in range(3):
+                WaitingListEntry.objects.create(
+                    event=self.event, item=self.item, email='other{}@example.com'.format(i)
+                )
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item, email='test@example.com'
+            )
+            
+            self.event.settings.set('main_lottery_date', now().isoformat())
+        
+        # Login and check initial rank (should be 4th, since 3 others were created first)
+        login_response = self.client.post('/%s/account/login' % self.orga.slug, {
+            'email': 'test@example.com',
+            'password': 'test',
+        })
+        self.assertEqual(login_response.status_code, 302)  # Should redirect after login
+        
+        response = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(response.status_code, 200)
+        
+        ranks_before = response.context['waiting_list_ranks']
+        self.assertEqual(len(ranks_before), 1)
+        rank_before = ranks_before[0]['rank']
+        
+        # Now run lottery via control panel (simulate admin running lottery)
+        # We need to login as admin first
+        from pretix.base.models import User, Team
+        with scopes_disabled():
+            user = User.objects.create_user('admin@example.com', 'admin')
+            t = Team.objects.create(organizer=self.orga, can_view_orders=True, can_change_orders=True)
+            t.members.add(user)
+            t.limit_events.add(self.event)
+        
+        self.client.logout()
+        self.client.login(email='admin@example.com', password='admin')
+        
+        # Run lottery for the item
+        response = self.client.get('/control/event/%s/%s/waitinglist/?lottery=run&item=%d' % (
+            self.orga.slug, self.event.slug, self.item.pk
+        ))
+        self.assertEqual(response.status_code, 200)
+        
+        # Login back as customer and check rank again
+        self.client.logout()
+        login_response = self.client.post('/%s/account/login' % self.orga.slug, {
+            'email': 'test@example.com',
+            'password': 'test',
+        })
+        self.assertEqual(login_response.status_code, 302)  # Should redirect after login
+        
+        response = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(response.status_code, 200)
+        
+        ranks_after = response.context['waiting_list_ranks']
+        self.assertEqual(len(ranks_after), 1)
+        rank_after = ranks_after[0]['rank']
+        
+        # Rank should still be valid (1-4), but may have changed due to lottery shuffle
+        self.assertGreaterEqual(rank_after, 1)
+        self.assertLessEqual(rank_after, 4)
 
 
 class DeadlineTest(EventTestMixin, TestCase):

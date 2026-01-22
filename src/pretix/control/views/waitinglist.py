@@ -329,6 +329,15 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
         return super().get(request, *args, **kwargs)
 
     def _run_lottery(self, revert=False):
+        # Ensure a specific product is selected - lottery must be run per product
+        item_param = self.request_data.get("item", "")
+        if not item_param:
+            messages.error(self.request, _('You must select a specific product to run the lottery. Please select a product from the dropdown and try again.'))
+            return redirect(reverse('control:event.orders.waitinglist', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug
+            }))
+        
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
 

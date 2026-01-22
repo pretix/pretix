@@ -78,7 +78,13 @@ def env():
     t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
     t.members.add(user)
     t.limit_events.add(event)
-    return event, user, o, item1
+    return event, user, o, item1, item2
+
+def get_priorities(event, item):
+    priorities = list(WaitingListEntry.objects.filter(
+        event=event, item=item, voucher__isnull=True
+    ).values_list('id', 'priority'))
+    return {entry_id: priority for entry_id, priority in priorities}
 
 
 @pytest.mark.django_db
@@ -199,3 +205,76 @@ def test_dashboard(client, env):
         w = waitinglist_widgets(env[0])
     assert '1' in w[0]['content']
     assert '5' in w[1]['content']
+
+
+@pytest.mark.django_db
+def test_lottery_requires_product(client, env):
+    """Test that lottery cannot be run without selecting a product"""
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    
+    response = client.get('/control/event/dummy/dummy/waitinglist/?lottery=run')
+    
+    assert response.status_code == 302
+    assert '/control/event/dummy/dummy/waitinglist/' in response.url
+    
+    response = client.get(response.url)
+    assert 'You must select a specific product' in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_lottery_with_single_product(client, env):
+    """Test that lottery runs successfully with a single product selected"""
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    event, user, o, item1, _ = env
+    
+    with scopes_disabled():
+        initial_priorities = get_priorities(event, item1)
+    
+    response = client.get('/control/event/dummy/dummy/waitinglist/?lottery=run&item=%d' % item1.pk)
+    assert response.status_code == 200
+    assert response['Content-Type'] == 'text/csv'
+    
+    with scopes_disabled():
+        after_priorities = get_priorities(event, item1)
+    
+    item1_changed = initial_priorities != after_priorities
+    assert item1_changed, "Priorities should have been shuffled"
+
+
+@pytest.mark.django_db
+def test_lottery_isolation(client, env):
+    """Test that running lottery for one product doesn't affect another product"""
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    event, user, o, item1, item2 = env
+    
+    with scopes_disabled():
+        
+        for i in range(3):
+            WaitingListEntry.objects.create(
+                event=event, item=item2, email='item2foo{}@bar.com'.format(i)
+            )
+        
+        initial_priorities_item1 = get_priorities(event, item1)
+        initial_priorities_item2 = get_priorities(event, item2)
+    
+    response = client.get('/control/event/dummy/dummy/waitinglist/?lottery=run&item=%d' % item1.pk)
+    assert response.status_code == 200
+    
+    with scopes_disabled():
+        after_priorities_item1 = get_priorities(event, item1)
+        after_priorities_item2 = get_priorities(event, item2)
+    
+    assert initial_priorities_item1 != after_priorities_item1, "Item1 priorities should have been shuffled"
+    assert initial_priorities_item2 == after_priorities_item2, "Item2 priorities should not have changed"
+    
+    item1_after_first_lottery = after_priorities_item1.copy()
+    
+    response = client.get('/control/event/dummy/dummy/waitinglist/?lottery=run&item=%d' % item2.pk)
+    assert response.status_code == 200
+    
+    with scopes_disabled():
+        final_priorities_item1 = get_priorities(event, item1)
+        final_priorities_item2 = get_priorities(event, item2)
+    
+    assert final_priorities_item1 == item1_after_first_lottery, "Item1 priorities should not have changed after second lottery"
+    assert initial_priorities_item2 != final_priorities_item2, "Item2 priorities should have been shuffled"
