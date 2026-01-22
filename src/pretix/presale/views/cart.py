@@ -661,11 +661,7 @@ class RedeemView(CustomerRequiredMixin, NoSearchIndexViewMixin, EventViewMixin, 
 
         if err:
             messages.error(request, str(err))
-            if err == error_messages['voucher_expired']:
-                error_param = "voucher_expired"
-            else:
-                error_param = "voucher_invalid"
-            return redirect_to_url(self.get_next_url() + f"?{error_param}")
+            return redirect_to_url(self.get_next_url() + "?voucher_invalid")
 
         return super().dispatch(request, *args, **kwargs)
 
