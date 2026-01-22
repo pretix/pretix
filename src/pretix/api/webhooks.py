@@ -174,6 +174,45 @@ class ParametrizedEventWebhookEvent(ParametrizedWebhookEvent):
         }
 
 
+class ParametrizedGiftcardWebhookEvent(ParametrizedWebhookEvent):
+    def build_payload(self, logentry: LogEntry):
+        giftcard = logentry.content_object
+        if not giftcard:
+            return None
+
+        return {
+            'notification_id': logentry.pk,
+            'issuer': logentry.organizer_id,
+            'giftcard': giftcard.pk,
+            'action': logentry.action_type,
+        }
+
+
+class ParametrizedGiftcardTransactionWebhookEvent(ParametrizedWebhookEvent):
+    def build_payload(self, logentry: LogEntry):
+        giftcard = logentry.content_object
+        if not giftcard:
+            return None
+
+        return {
+            'notification_id': logentry.pk,
+            'acceptor': logentry.organizer_id,
+            'giftcard': giftcard.pk,
+            'action': logentry.action_type,
+        }
+
+
+class ParametrizedGiftcardAcceptanceWebhookEvent(ParametrizedWebhookEvent):
+    def build_payload(self, logentry: LogEntry):
+        return {
+            'notification_id': logentry.pk,
+            'organizer': logentry.organizer_id,
+            'acceptor': logentry.parsed_data.get('acceptor'),
+            'issuer': logentry.parsed_data.get('issuer'),
+            'action': logentry.action_type,
+        }
+
+
 class ParametrizedVoucherWebhookEvent(ParametrizedWebhookEvent):
 
     def build_payload(self, logentry: LogEntry):
@@ -433,6 +472,22 @@ def register_default_webhook_events(sender, **kwargs):
             'pretix.customer.anonymized',
             _('Customer account anonymized'),
         ),
+        ParametrizedGiftcardWebhookEvent(
+            'pretix.giftcards.created',
+            _('Gift card added'),
+        ),
+        ParametrizedGiftcardWebhookEvent(
+            'pretix.giftcards.modified',
+            _('Gift card modified'),
+        ),
+        ParametrizedGiftcardTransactionWebhookEvent(
+            'pretix.giftcards.transaction.*',
+            _('Gift card used in transcation'),
+        ),
+        ParametrizedGiftcardAcceptanceWebhookEvent(
+            'pretix.giftcards.acceptance.*',
+            _('Gift card acceptance modified'),
+        )
     )
 
 
