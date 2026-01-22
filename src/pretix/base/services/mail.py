@@ -42,7 +42,7 @@ import smtplib
 import warnings
 from email.mime.image import MIMEImage
 from email.utils import formataddr
-from typing import Any, Dict, Sequence, Union
+from typing import Any, Dict, Optional, Sequence, Union
 from urllib.parse import urljoin, urlparse
 from zoneinfo import ZoneInfo
 
@@ -554,18 +554,18 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                     retry_after = min(30 + cnt * 10, 1800)
 
                     outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
-                    outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent"])
+                    outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent"])
                     self.retry(max_retries=max_retries, countdown=retry_after)  # throws RetryException, ends function flow
                 elif retry_strategy in ("microsoft_concurrency", "quick"):
                     max_retries = 5
                     retry_after = [10, 30, 60, 300, 900, 900][self.request.retries]
                     outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
-                    outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent"])
+                    outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent"])
                     self.retry(max_retries=max_retries, countdown=retry_after)  # throws RetryException, ends function flow
 
                 elif retry_strategy == "slow":
                     outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
-                    outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent"])
+                    outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent"])
                     self.retry(max_retries=5, countdown=[60, 300, 600, 1200, 1800, 1800][self.request.retries])  # throws RetryException, ends function flow
 
             except MaxRetriesExceededError:
@@ -591,7 +591,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
             # If we reach this, it's a non-retryable error
             outgoing_mail.status = OutgoingMail.STATUS_FAILED
             outgoing_mail.sent = now()
-            outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent"])
+            outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent"])
             for i in invoices_to_mark_transmitted:
                 i.set_transmission_failed(provider="email_pdf", data={
                     "reason": "exception",
@@ -615,7 +615,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
             outgoing_mail.error_detail = None
             outgoing_mail.actual_attachments = actual_attachments
             outgoing_mail.sent = now()
-            outgoing_mail.save(upate_fields=["status", "error", "error_detail", "sent", "actual_attachments"])
+            outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "actual_attachments"])
             for i in invoices_to_mark_transmitted:
                 if i.transmission_status != Invoice.TRANSMISSION_STATUS_COMPLETED:
                     i.transmission_date = now()
@@ -624,7 +624,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                     i.transmission_info = {
                         "sent": [
                             {
-                                "recipients": to,
+                                "recipients": outgoing_mail.to,
                                 "datetime": now().isoformat(),
                             }
                         ]
@@ -636,7 +636,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                 elif i.transmission_provider == "email_pdf":
                     i.transmission_info["sent"].append(
                         {
-                            "recipients": to,
+                            "recipients": outgoing_mail.to,
                             "datetime": now().isoformat(),
                         }
                     )
@@ -650,7 +650,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                         "transmission_provider": "email_pdf",
                         "transmission_type": "email",
                         "data": {
-                            "recipients": [to],
+                            "recipients": outgoing_mail.to,
                         },
                     }
                 )

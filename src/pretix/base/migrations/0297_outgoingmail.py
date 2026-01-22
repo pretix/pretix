@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0288_invoice_transmission"),
+        ("pretixbase", "0296_invoice_invoice_from_state"),
     ]
 
     operations = [
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ("error_detail", models.TextField(null=True)),
                 ("subject", models.TextField()),
                 ("body_plain", models.TextField()),
-                ("body_html", models.TextField()),
+                ("body_html", models.TextField(null=True)),
                 ("sender", models.CharField(max_length=500)),
                 ("headers", models.JSONField(default=dict)),
                 ("to", models.JSONField(default=list)),
