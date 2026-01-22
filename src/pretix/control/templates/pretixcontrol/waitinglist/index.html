@@ -134,9 +134,10 @@
             {% trans "Run lottery" %}
         </button>
 
-        <a href="?{% url_replace request "lottery" "revert" %}"
-                class="btn btn-default"><i class="fa fa-download"></i>
-            {% trans "Revert list" %}</a>
+        <button type="button" id="revert-list-btn" class="btn btn-default">
+            <i class="fa fa-download"></i>
+            {% trans "Revert list" %}
+        </button>
 
     </form>
     </p>
@@ -308,7 +309,7 @@
     </form>
     {% include "pretixcontrol/pagination.html" %}
 
-    <!-- Confirmation Modal for Lottery -->
+    <!-- Confirmation Modal for Lottery and Reversion -->
     <div class="modal fade" id="lottery-confirm-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -316,14 +317,14 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="{% trans "Close" %}">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">{% trans "Confirm Lottery Run" %}</h4>
+                    <h4 class="modal-title" id="lottery-modal-title">{% trans "Confirm Lottery Run" %}</h4>
                 </div>
                 <div class="modal-body">
                     <div class="alert alert-warning">
                         <strong>{% trans "Warning!" %}</strong>
-                        <p>{% trans "You are about to run the lottery for the following product:" %}</p>
-                        <p><strong id="lottery-product-name"></strong></p>
-                        <p>{% trans "This action will shuffle the waiting list priorities for this product. This cannot be easily undone." %}</p>
+                        <p id="lottery-modal-description"></p>
+                        <p id="lottery-product-container"><strong id="lottery-product-name"></strong></p>
+                        <p id="lottery-modal-warning"></p>
                     </div>
                     <p>{% trans "Are you sure you want to proceed?" %}</p>
                 </div>
