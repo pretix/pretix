@@ -203,6 +203,7 @@ class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
                     'error': _('You are not on the waiting list for this event.')
                 }, status=404)
             
+            # Group entries by product (item + variation combination)
             products_data = []
             seen_products = set()
             
@@ -229,6 +230,7 @@ class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
                     'variation_name': str(entry.variation) if entry.variation else None,
                     'rank': rank
                 }
+                
                 # Include voucher code if rank is 0 (user has an unredeemed voucher)
                 if rank == 0 and entry.voucher:
                     product_data['voucher_code'] = entry.voucher.code
