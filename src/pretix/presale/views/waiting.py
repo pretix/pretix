@@ -24,11 +24,12 @@ from datetime import timedelta
 from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, TemplateView, View
 
 from pretix.base.models import Quota, SubEvent
 from pretix.base.templatetags.urlreplace import url_replace
@@ -47,7 +48,7 @@ def get_waiting_list_ranks(event, customer_email):
     Get waiting list ranks for a customer.
     
     Returns a list of product data dictionaries with rank information.
-    Each dictionary contains: item_id, item_name, variation_id, variation_name, rank, and optionally voucher_code.
+    Each dictionary contains: item_id, item_name, variation_id, variation_name, rank, lottery_run, and optionally voucher_code.
     """
     entries = WaitingListEntry.objects.filter(
         event=event,
@@ -74,12 +75,17 @@ def get_waiting_list_ranks(event, customer_email):
         if rank is None:
             continue
         
+        # Check if lottery has been run for this product
+        lottery_date = event.settings.get(f'lottery_date_for_item_{entry.item_id}')
+        lottery_run = bool(lottery_date)
+        
         product_data = {
             'item_id': entry.item_id,
             'item_name': str(entry.item),
             'variation_id': entry.variation_id,
             'variation_name': str(entry.variation) if entry.variation else None,
-            'rank': rank
+            'rank': rank,
+            'lottery_run': lottery_run
         }
         
         # Include voucher code if rank is 0 (user has an unredeemed voucher)
@@ -227,5 +233,33 @@ class WaitingRemoveView(EventViewMixin, CustomerRequiredMixin, TemplateView):
 
     def get_success_url(self):
         return self.get_index_url()
+
+
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
+class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
+    """
+    View to check a customer's rank in the waiting list.
+    Returns JSON with the rank or error message.
+    """
+
+    def get(self, request, *args, **kwargs):
+        customer_email = request.customer.email
+        
+        try:
+            products_data = get_waiting_list_ranks(request.event, customer_email)
+            
+            if not products_data:
+                return JsonResponse({
+                    'error': _('You are not on the waiting list for this event.')
+                }, status=404)
+            
+            return JsonResponse({
+                'products': products_data
+            })
+            
+        except Exception as e:
+            return JsonResponse({
+                'error': _('An error occurred while checking your rank.')
+            }, status=500)
 
 
