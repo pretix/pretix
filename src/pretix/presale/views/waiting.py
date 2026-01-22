@@ -203,8 +203,8 @@ class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
                     'error': _('You are not on the waiting list for this event.')
                 }, status=404)
             
-            seen_products = set()
             products_data = []
+            seen_products = set()
             
             for entry in entries:
                 # Create a unique key for this product (item + variation)
