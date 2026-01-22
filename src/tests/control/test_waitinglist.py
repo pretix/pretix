@@ -218,7 +218,7 @@ def test_lottery_requires_product(client, env):
     assert '/control/event/dummy/dummy/waitinglist/' in response.url
     
     response = client.get(response.url)
-    assert 'You must select a specific product' in response.content.decode()
+    assert 'You must select a product' in response.content.decode()
 
 
 @pytest.mark.django_db
