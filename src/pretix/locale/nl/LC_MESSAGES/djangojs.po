@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:13+0000\n"
-"PO-Revision-Date: 2026-01-23 15:00+0000\n"
+"PO-Revision-Date: 2026-01-24 01:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -249,7 +249,7 @@ msgstr "Ingewisseld"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 msgid "Cancel"
-msgstr "Annuleer"
+msgstr "Annuleren"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
@@ -389,14 +389,14 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:162
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
-msgstr "De aanvraag duurde te lang, probeer het alstublieft opnieuw."
+msgstr "De aanvraag duurde te lang. Probeer het opnieuw."
 
 #: pretix/static/pretixbase/js/asynctask.js:188
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
-"De server is op dit moment niet bereikbaar, probeer het alstublieft opnieuw. "
+"De server is op dit moment niet bereikbaar. Probeer het alstublieft opnieuw. "
 "Foutcode: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:216
@@ -466,11 +466,11 @@ msgstr "Huidige datum en tijd"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "Huidige dag van de week (1 = Maandag, 7 = Zondag)"
+msgstr "Huidige dag van de week (1 = maandag, 7 = zondag)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Current entry status"
-msgstr "Huidige toegangstatus"
+msgstr "Huidige toegangsstatus"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
@@ -530,7 +530,7 @@ msgstr "Toegangstijd evenement"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
 msgid "custom date and time"
-msgstr "Aangepaste datum en tijd"
+msgstr "aangepaste datum en tijd"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
 msgid "custom time"
@@ -550,7 +550,7 @@ msgstr "minuten"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
 msgid "Duplicate"
-msgstr "duplicaat"
+msgstr "Duplicaat"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
 msgctxt "entry_status"
@@ -588,7 +588,7 @@ msgstr "Tekstobject (verouderd)"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:911
 msgid "Text box"
-msgstr "Tekstkader"
+msgstr "Tekstvak"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Barcode area"
@@ -617,7 +617,7 @@ msgstr "Opslaan mislukt."
 #: pretix/static/pretixcontrol/js/ui/editor.js:1361
 #: pretix/static/pretixcontrol/js/ui/editor.js:1412
 msgid "Error while uploading your PDF file, please try again."
-msgstr "Probleem bij het uploaden van het PDF-bestand, probeer het opnieuw."
+msgstr "Probleem bij het uploaden van het PDF-bestand. Probeer het opnieuw."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1395
 msgid "Do you really want to leave the editor without saving your changes?"
@@ -638,7 +638,7 @@ msgstr "Onbekende fout."
 #: pretix/static/pretixcontrol/js/ui/main.js:309
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr ""
-"Uw kleur heeft een goed contrast, en zal zorgen voor een uitstekende "
+"Uw kleur heeft een goed contrast en zal zorgen voor een uitstekende "
 "toegankelijkheid."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:313
@@ -646,16 +646,16 @@ msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr ""
-"Uw kleur heeft een redelijk contrast, en is voldoende voor de minimale "
-"toegankelijkheids eisen."
+"Uw kleur heeft een redelijk contrast en is voldoende voor de minimale "
+"toegankelijkheidseisen."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
-"Uw kleur heeft een te weinig contrast met wit. De toegankelijkheid van jouw "
-"site wordt beïnvloed."
+"Uw kleur heeft te weinig contrast met wit. De toegankelijkheid van uw site "
+"wordt negatief beïnvloed."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:443
 #: pretix/static/pretixcontrol/js/ui/main.js:463
@@ -676,11 +676,11 @@ msgstr "Alleen geselecteerde"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:839
 msgid "Enter page number between 1 and %(max)s."
-msgstr "voer een pagina nummer tussen 1 en %(max)s in."
+msgstr "Voer een paginanummer tussen 1 en %(max)s in."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:842
 msgid "Invalid page number."
-msgstr "Ongeldig pagina nummer."
+msgstr "Ongeldig paginanummer."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
@@ -692,7 +692,7 @@ msgstr "Klik om te sluiten"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1121
 msgid "You have unsaved changes!"
-msgstr "U heeft nog niet opgeslagen wijzigingen!"
+msgstr "Sommige wijzigingen zijn nog niet opgeslagen!"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 msgid "Calculating default price…"
@@ -731,7 +731,7 @@ msgstr "Winkelwagen is verlopen"
 #: pretix/static/pretixpresale/js/ui/cart.js:58
 #: pretix/static/pretixpresale/js/ui/cart.js:84
 msgid "Your cart is about to expire."
-msgstr "Uw winkelwagen staat op het punt om te verlopen."
+msgstr "Uw winkelwagen verloopt bijna."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:62
 msgid "The items in your cart are reserved for you for one minute."
@@ -754,7 +754,7 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
-msgstr "Wilt u de reservererings periode vernieuwen?"
+msgstr "Wilt u de reserveringsperiode vernieuwen?"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Renew reservation"
@@ -893,7 +893,7 @@ msgstr "incl. belasting"
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "plus taxes"
-msgstr "excl. belasting"
+msgstr "plus belasting"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #, javascript-format
@@ -960,9 +960,7 @@ msgstr "Afrekenen"
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
-"De winkelwagen kon niet gemaakt worden. Probeer het alstublieft later "
-"opnieuw."
+msgstr "De winkelwagen kon niet aangemaakt worden. Probeer het later opnieuw."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"
@@ -971,8 +969,8 @@ msgid ""
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
 "Uw winkelwagen kon niet worden aangemaakt omdat er op dit moment te veel "
-"gebruikers actief zijn in deze ticketwinkel. Klik op \"Doorgaan\" om dit "
-"opnieuw te proberen in een nieuw tabblad."
+"gebruikers actief zijn in deze ticketwinkel. Klik op \"Doorgaan\" om opnieuw "
+"te proberen in een nieuw tabblad."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgctxt "widget"
@@ -985,8 +983,8 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
-"U heeft momenteel een actieve winkelwagen voor dit evenement. Als u meer "
-"producten selecteert worden deze toegevoegd aan uw bestaande winkelwagen."
+"U hebt momenteel een actieve winkelwagen voor dit evenement. Als u meer "
+"producten selecteert, worden deze toegevoegd aan uw bestaande winkelwagen."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
@@ -996,12 +994,12 @@ msgstr "Doorgaan met afrekenen"
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr "Verzilver een voucher"
+msgstr "Voucher inwisselen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgctxt "widget"
 msgid "Redeem"
-msgstr "Verzilveren"
+msgstr "Inwisselen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgctxt "widget"
@@ -1016,18 +1014,17 @@ msgstr "Sluiten"
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
 msgid "Close checkout"
-msgstr "Stoppen met afrekenen"
+msgstr "Afrekenen sluiten"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
-msgstr ""
-"U kan niet deze actie annuleren. Alstublieft wacht tot het laden is voltooid."
+msgstr "U kunt deze actie niet annuleren. Wacht tot het laden is voltooid."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
 msgid "Continue"
-msgstr "Ga verder"
+msgstr "Doorgaan"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
 msgctxt "widget"
@@ -1086,9 +1083,9 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
-"Sommige of alle tiketcategorieën zijn op heden uitverkocht. Als je wilt, kun "
-"je jezelf toevoegen aan de wachtlijst. We zullen je informeren wanneer er "
-"weer plaatsen beschikbaar zijn."
+"Sommige of alle ticketcategorieën zijn uitverkocht. Als u wilt, kunt u zich "
+"op de wachtlijst zetten. We zullen u informeren wanneer er weer plaatsen "
+"beschikbaar zijn."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:76
 msgctxt "widget"
