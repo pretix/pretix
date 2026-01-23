@@ -270,7 +270,7 @@ export default {
       if (!this.checkResult) return ''
       if (!this.checkResult.position.addons) return ''
       return this.checkResult.position.addons.map((addon) => {
-        if (this.checkResult.position.variation) {
+        if (addon.variation) {
           return `+ ${addon.item.internal_name || i18nstring_localize(addon.item.name)} – ${i18nstring_localize(addon.variation.value)}`
         }
         return "+ " + (addon.item.internal_name || i18nstring_localize(addon.item.name));
