@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-22 19:00+0000\n"
+"PO-Revision-Date: 2026-01-23 15:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -403,7 +403,7 @@ msgid ""
 "organizer account."
 msgstr ""
 "Een cadeaubon met dezelfde code bestaat al in uw organisatoraccount of een "
-"met uw account verbonden organisatoraccount."
+"aangesloten organisatoraccount."
 
 #: pretix/api/serializers/organizer.py:369
 #: pretix/control/views/organizer.py:1042
@@ -4507,7 +4507,7 @@ msgstr "Tickettype hier niet toegestaan"
 
 #: pretix/base/models/checkin.py:363
 msgid "Ticket code is ambiguous on list"
-msgstr "Ticket-code op de lijst is niet eenduidig"
+msgstr "Ticketcode op de lijst is niet eenduidig"
 
 #: pretix/base/models/checkin.py:364
 msgid "Server error"
@@ -6396,7 +6396,7 @@ msgstr "Lokalisatie"
 #: pretix/base/models/orders.py:269 pretix/control/forms/filter.py:607
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
-msgstr "Totaal bedrag"
+msgstr "Totaalbedrag"
 
 #: pretix/base/models/orders.py:273 pretix/base/models/vouchers.py:296
 msgid ""
@@ -10545,7 +10545,7 @@ msgstr "bijv. belastingnummer in Duitsland, ABN in Australië, …"
 
 #: pretix/base/settings.py:1310
 msgid "EU VAT ID"
-msgstr "EU BTW-nummer"
+msgstr "EU-btw-nummer"
 
 #: pretix/base/settings.py:1324
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -30606,7 +30606,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:14
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:21
 msgid "Reference code (important):"
-msgstr "Betalingscode (belangrijk, plaats in omschrijving):"
+msgstr "Betalingscode (belangrijk):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:30
 msgid ""
@@ -30832,7 +30832,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
 msgid "Go to organizer-level exports"
-msgstr "Ga naar export op organisator-niveau"
+msgstr "Ga naar export op organisatorniveau"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:32
 msgid "Create new export file"
