@@ -966,6 +966,7 @@ class CheckinRPCSearchView(ListAPIView):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['expand'] = self.request.query_params.getlist('expand')
+        ctx['organizer'] = self.request.organizer
         ctx['pdf_data'] = False
         return ctx
 
