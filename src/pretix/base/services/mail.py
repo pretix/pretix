@@ -44,7 +44,7 @@ import warnings
 from datetime import timedelta
 from email.mime.image import MIMEImage
 from email.utils import formataddr
-from typing import Any, Dict, Optional, Sequence, Union
+from typing import Any, Dict, List, Optional, Sequence, Union
 from urllib.parse import urljoin, urlparse
 from zoneinfo import ZoneInfo
 
@@ -679,8 +679,34 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                 )
 
 
-def mail_send(*args, **kwargs):
-    mail_send_task.apply_async(args=args, kwargs=kwargs)
+def mail_send(to: List[str], subject: str, body: str, html: str, sender: str,
+              event: int = None, position: int = None, headers: dict = None, cc: List[str] = None, bcc: List[str] = None,
+              invoices: List[int] = None, order: int = None, attach_tickets=False, user=None,
+              organizer=None, customer=None, attach_ical=False, attach_cached_files: List[int] = None,
+              attach_other_files: List[str] = None):
+    """
+    Low-level function to send mails, kept for backwards-compatibility. You should usually use mail() instead.
+    """
+    m = OutgoingMail.objects.create(
+        organizer=organizer,
+        event=event,
+        order=order,
+        orderposition=position,
+        customer=customer,
+        user=user,
+        to=[to.lower()] if isinstance(to, str) else [e.lower() for e in to],
+        cc=[e.lower() for e in cc] if cc else [],
+        bcc=[e.lower() for e in bcc] if bcc else [],
+        subject=subject,
+        body_plain=body,
+        body_html=html,
+        sender=sender,
+        headers=headers,
+        should_attach_tickets=attach_tickets,
+        should_attach_ical=attach_ical,
+        should_attach_other_files=attach_other_files or [],
+    )
+    mail_send_task.apply_async(kwargs={"outgoing_mail": m.pk})
 
 
 def render_mail(template, context, placeholder_mode: Optional[int]=SafeFormatter.MODE_RICH_TO_PLAIN):
