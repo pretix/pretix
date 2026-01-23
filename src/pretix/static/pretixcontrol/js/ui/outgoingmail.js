@@ -4,6 +4,7 @@ function is_sandbox_supported() {
 }
 
 function safe_render(url, parent) {
+    // Estimate the height that prevents the user from having to scroll on two levels to see the full email
     const height = (
         window.innerHeight - parent.parent().get(0).getBoundingClientRect().top - document.querySelector("footer").getBoundingClientRect().height - 20
     ) + "px";

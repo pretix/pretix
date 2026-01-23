@@ -133,7 +133,7 @@
                             </td>
                             <td>
                                 {% if m.status == "queued" %}
-                                    <span class="label label-info">{% icon "clock" %} {% trans "queued" %}</span>
+                                    <span class="label label-info">{% icon "clock-o" %} {% trans "queued" %}</span>
                                 {% elif m.status == "inflight" %}
                                     <span class="label label-info">{% icon "send" %} {% trans "being sent" %}</span>
                                 {% elif m.status == "awaiting_retry" %}
@@ -141,7 +141,11 @@
                                 {% elif m.status == "failed" %}
                                     <span class="label label-danger">{% icon "warning" %} {% trans "failed" %}</span>
                                 {% elif m.status == "bounced" %}
-                                    <span class="label label-danger">{% icon "ban" %} {% trans "bounced" %}</span>
+                                    <span class="label label-danger">{% icon "exclamation-circle" %} {% trans "bounced" %}</span>
+                                {% elif m.status == "withheld" %}
+                                    <span class="label label-warning">{% icon "ban" %} {% trans "withheld" %}</span>
+                                {% elif m.status == "aborted" %}
+                                    <span class="label label-danger">{% icon "ban" %} {% trans "aborted" %}</span>
                                 {% elif m.status == "sent" %}
                                     <span class="label label-success">{% icon "check" %} {% trans "sent" %}</span>
                                 {% endif %}
@@ -165,7 +169,11 @@
             <div class="batch-select-actions">
                 <button type="submit" class="btn btn-primary btn-save" name="action" value="retry">
                     {% icon "repeat" %}
-                    {% trans "Retry failed" %}
+                    {% trans "Retry (if failed or withheld)" %}
+                </button>
+                <button type="submit" class="btn btn-danger btn-save" name="action" value="abort">
+                    {% icon "ban" %}
+                    {% trans "Abort (if queued, awaiting retry or withheld)" %}
                 </button>
             </div>
         </form>

@@ -103,6 +103,12 @@ class SendMailException(Exception):
     pass
 
 
+class WithholdMailException(Exception):
+    def __init__(self, error, error_detail):
+        self.error = error
+        self.error_detail = error_detail
+
+
 def clean_sender_name(sender_name: str) -> str:
     # Even though we try to properly escape sender names, some characters seem to cause problems when the escaping
     # fails due to some forwardings, etc.
@@ -366,13 +372,13 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
         try:
             outgoing_mail = OutgoingMail.objects.select_for_update(of=OF_SELF).get(pk=outgoing_mail)
         except OutgoingMail.DoesNotExist:
-            logger.info(f"Ignoring job for non existing email {outgoing_mail}")
+            logger.info(f"Ignoring job for non existing email {outgoing_mail.guid}")
             return False
         if outgoing_mail.status == OutgoingMail.STATUS_INFLIGHT:
-            logger.info(f"Ignoring job for inflight email {outgoing_mail.pk}")
+            logger.info(f"Ignoring job for inflight email {outgoing_mail.guid}")
             return False
-        elif outgoing_mail.status in (OutgoingMail.STATUS_SENT, OutgoingMail.STATUS_FAILED):
-            logger.info(f"Ignoring job for email {outgoing_mail.pk} in final state {outgoing_mail.status}")
+        elif outgoing_mail.status not in (OutgoingMail.STATUS_AWAITING_RETRY, OutgoingMail.STATUS_QUEUED):
+            logger.info(f"Ignoring job for email {outgoing_mail.guid} in final state {outgoing_mail.status}")
             return False
         outgoing_mail.status = OutgoingMail.STATUS_INFLIGHT
         outgoing_mail.inflight_since = now()
@@ -387,7 +393,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
         to=outgoing_mail.to,
         cc=outgoing_mail.cc,
         bcc=outgoing_mail.bcc,
-        headers=outgoing_mail.headers,
+        headers=headers,
     )
 
     # Rewrite all <img> tags from real URLs or data URLs to inline attachments referred to by content ID
@@ -420,7 +426,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                         except MaxRetriesExceededError:
                             # Well then, something is really wrong, let's send it without attachment before we
                             # don't sent at all
-                            logger.exception(f'Could not attach tickets to email {outgoing_mail.pk}')
+                            logger.exception(f'Could not attach tickets to email {outgoing_mail.guid}')
                             pass
 
                 if attach_size * 1.37 < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1024 * 1024:
@@ -479,7 +485,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                         )
                     invoices_attached.append(inv)
                 except Exception:
-                    logger.exception(f'Could not attach invoice to email {outgoing_mail.pk}')
+                    logger.exception(f'Could not attach invoice to email {outgoing_mail.guid}')
                     pass
                 else:
                     if inv.transmission_type == "email":
@@ -509,7 +515,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                     ftype
                 )
             except:
-                logger.exception(f'Could not attach file to email {outgoing_mail.pk}')
+                logger.exception(f'Could not attach file to email {outgoing_mail.guid}')
                 pass
 
         for cf in outgoing_mail.should_attach_cached_files.all():
@@ -521,19 +527,8 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                         cf.type,
                     )
                 except:
-                    logger.exception(f'Could not attach file to email {outgoing_mail.pk}')
+                    logger.exception(f'Could not attach file to email {outgoing_mail.guid}')
                     pass
-
-        if outgoing_mail.event:
-            with outgoing_mail.scope_manager():
-                email = email_filter.send_chained(
-                    outgoing_mail.event, 'message', message=email, order=outgoing_mail.order, user=outgoing_mail.user
-                )
-
-        email = global_email_filter.send_chained(
-            outgoing_mail.event, 'message', message=email, user=outgoing_mail.user, order=outgoing_mail.order,
-            organizer=outgoing_mail.organizer, customer=outgoing_mail.customer
-        )
 
         outgoing_mail.actual_attachments = [
             {
@@ -543,11 +538,58 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
             } for a in email.attachments
         ]
 
+        try:
+            if outgoing_mail.event:
+                with outgoing_mail.scope_manager():
+                    email = email_filter.send_chained(
+                        sender=outgoing_mail.event,
+                        chain_kwarg_name='message',
+                        message=email,
+                        order=outgoing_mail.order,
+                        user=outgoing_mail.user,
+                        outgoing_mail=outgoing_mail,
+                    )
+
+            email = global_email_filter.send_chained(
+                sender=outgoing_mail.event,
+                chain_kwarg_name='message',
+                message=email,
+                user=outgoing_mail.user,
+                order=outgoing_mail.order,
+                organizer=outgoing_mail.organizer,
+                customer=outgoing_mail.customer,
+                outgoing_mail=outgoing_mail,
+            )
+        except WithholdMailException as e:
+            outgoing_mail.status = OutgoingMail.STATUS_WITHHELD
+            outgoing_mail.error = e.error
+            outgoing_mail.error_detail = e.error_detail
+            outgoing_mail.sent = now()
+            outgoing_mail.retry_after = None
+            outgoing_mail.actual_attachments = [
+                {
+                    "name": a[0],
+                    "size": len(a[1]),
+                    "type": a[2],
+                } for a in email.attachments
+            ]
+            outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after", "actual_attachments"])
+            logger.info(f"Email {outgoing_mail.guid} withheld")
+            return False
+
+        # Seems duplicate, but needs to be in this order since plugins might change this
+        outgoing_mail.actual_attachments = [
+            {
+                "name": a[0],
+                "size": len(a[1]),
+                "type": a[2],
+            } for a in email.attachments
+        ]
         backend = outgoing_mail.get_mail_backend()
         try:
             backend.send_messages([email])
         except Exception as e:
-            logger.exception(f'Error sending email {outgoing_mail.pk}')
+            logger.exception(f'Error sending email {outgoing_mail.guid}')
             retry_strategy = _retry_strategy(e)
             err, err_detail = _format_error(e)
 
@@ -568,21 +610,21 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                     max_retries = 10
                     retry_after = min(30 + cnt * 10, 1800)
 
-                    outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
+                    outgoing_mail.status = OutgoingMail.STATUS_AWAITING_RETRY
                     outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
                     outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after", "actual_attachments"])
                     self.retry(max_retries=max_retries, countdown=retry_after)  # throws RetryException, ends function flow
                 elif retry_strategy in ("microsoft_concurrency", "quick"):
                     max_retries = 5
                     retry_after = [10, 30, 60, 300, 900, 900][self.request.retries]
-                    outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
+                    outgoing_mail.status = OutgoingMail.STATUS_AWAITING_RETRY
                     outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
                     outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after", "actual_attachments"])
                     self.retry(max_retries=max_retries, countdown=retry_after)  # throws RetryException, ends function flow
 
                 elif retry_strategy == "slow":
                     retry_after = [60, 300, 600, 1200, 1800, 1800][self.request.retries]
-                    outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
+                    outgoing_mail.status = OutgoingMail.STATUS_AWAITING_RETRY
                     outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
                     outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after", "actual_attachments"])
                     self.retry(max_retries=5, countdown=retry_after)  # throws RetryException, ends function flow
@@ -681,7 +723,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                 )
 
 
-def mail_send(to: List[str], subject: str, body: str, html: str, sender: str,
+def mail_send(to: List[str], subject: str, body: str, html: Optional[str], sender: str,
               event: int = None, position: int = None, headers: dict = None, cc: List[str] = None, bcc: List[str] = None,
               invoices: List[int] = None, order: int = None, attach_tickets=False, user=None,
               organizer=None, customer=None, attach_ical=False, attach_cached_files: List[int] = None,
@@ -708,6 +750,15 @@ def mail_send(to: List[str], subject: str, body: str, html: str, sender: str,
         should_attach_ical=attach_ical,
         should_attach_other_files=attach_other_files or [],
     )
+    if invoices and not position:
+        m.should_attach_invoices.add(*invoices)
+    if attach_cached_files:
+        for cf in attach_cached_files:
+            if not isinstance(cf, CachedFile):
+                m.should_attach_cached_files.add(CachedFile.objects.get(pk=cf))
+            else:
+                m.should_attach_cached_files.add(cf)
+
     mail_send_task.apply_async(kwargs={"outgoing_mail": m.pk})
 
 
@@ -1007,7 +1058,7 @@ def retry_stuck_queued_mails(sender, **kwargs):
             status=OutgoingMail.STATUS_QUEUED,
             created__lt=now() - timedelta(hours=1),
         ) | Q(
-            status=OutgoingMail.STATUS_AWAWITING_RETRY,
+            status=OutgoingMail.STATUS_AWAITING_RETRY,
             retry_after__lt=now() - timedelta(hours=1),
         )
     ):

@@ -40,6 +40,7 @@ class Migration(migrations.Migration):
                 ("to", models.JSONField(default=list)),
                 ("cc", models.JSONField(default=list)),
                 ("bcc", models.JSONField(default=list)),
+                ("recipient_count", models.IntegerField(default=1)),
                 ("should_attach_tickets", models.BooleanField(default=False)),
                 ("should_attach_ical", models.BooleanField(default=False)),
                 ("should_attach_other_files", models.JSONField(default=list)),

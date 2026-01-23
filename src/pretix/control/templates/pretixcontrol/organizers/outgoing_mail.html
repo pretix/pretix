@@ -35,7 +35,7 @@
                         <dt>{% trans "Status" %}</dt>
                         <dd>
                             {% if mail.status == "queued" %}
-                                <span class="label label-info">{% icon "clock" %} {% trans "queued" %}</span>
+                                <span class="label label-info">{% icon "clock-o" %} {% trans "queued" %}</span>
                             {% elif mail.status == "inflight" %}
                                 <span class="label label-info">{% icon "send" %} {% trans "being sent" %}</span>
                             {% elif mail.status == "awaiting_retry" %}
@@ -43,7 +43,11 @@
                             {% elif mail.status == "failed" %}
                                 <span class="label label-danger">{% icon "warning" %} {% trans "failed" %}</span>
                             {% elif mail.status == "bounced" %}
-                                <span class="label label-danger">{% icon "ban" %} {% trans "bounced" %}</span>
+                                <span class="label label-danger">{% icon "exclamation-circle" %} {% trans "bounced" %}</span>
+                            {% elif mail.status == "withheld" %}
+                                <span class="label label-warning">{% icon "ban" %} {% trans "withheld" %}</span>
+                            {% elif mail.status == "aborted" %}
+                                <span class="label label-danger">{% icon "ban" %} {% trans "aborted" %}</span>
                             {% elif mail.status == "sent" %}
                                 <span class="label label-success">{% icon "check" %} {% trans "sent" %}</span>
                             {% endif %}

@@ -131,7 +131,7 @@ class OutgoingMailBulkAction(OutgoingMailQueryMixin, OrganizerPermissionRequired
     def post(self, request, *args, **kwargs):
         if request.POST.get('action') == 'retry':
             ids = set(
-                self.get_queryset().filter(status=OutgoingMail.STATUS_FAILED).values_list("pk", flat=True)
+                self.get_queryset().filter(status__in=OutgoingMail.STATUS_LIST_RETRYABLE).values_list("pk", flat=True)
             )
             with transaction.atomic():
                 OutgoingMail.objects.filter(pk__in=ids).update(
@@ -149,6 +149,30 @@ class OutgoingMailBulkAction(OutgoingMailQueryMixin, OrganizerPermissionRequired
             messages.success(request, ngettext(
                 "A retry of one email was scheduled.",
                 "A retry of {num} emails was scheduled.",
+                len(ids),
+            ).format(num=len(ids)))
+        elif request.POST.get('action') == 'abort':
+            ids = set(
+                self.get_queryset().filter(
+                    status__in=(OutgoingMail.STATUS_QUEUED, OutgoingMail.STATUS_AWAITING_RETRY)
+                ).values_list("pk", flat=True)
+            )
+            with transaction.atomic():
+                OutgoingMail.objects.filter(pk__in=ids).update(
+                    status=OutgoingMail.STATUS_ABORTED,
+                    sent=None,
+                )
+                self.request.organizer.log_action(
+                    'pretix.organizer.outgoingmails.aborted', user=self.request.user, data={
+                        'mails': list(ids)
+                    }, save=False
+                )
+            for i in ids:
+                mail_send_task.apply_async(kwargs={"outgoing_mail": i})
+
+            messages.success(request, ngettext(
+                "One email was aborted and will not be sent.",
+                "{num} emails were aborted and will not be sent.",
                 len(ids),
             ).format(num=len(ids)))
         return redirect(self.get_success_url())

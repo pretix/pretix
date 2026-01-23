@@ -217,7 +217,7 @@ def test_queue_state_retry_failure(env, monkeypatch):
         'outgoing_mail': m.pk,
     }, max_retries=0)
     m.refresh_from_db()
-    assert m.status == OutgoingMail.STATUS_AWAWITING_RETRY
+    assert m.status == OutgoingMail.STATUS_AWAITING_RETRY
     assert m.retry_after > now()
 
 

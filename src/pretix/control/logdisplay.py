@@ -700,6 +700,7 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.organizer.export.schedule.executed': _('A scheduled export has been executed.'),
     'pretix.organizer.export.schedule.failed': _('A scheduled export has failed: {reason}.'),
     'pretix.organizer.outgoingmails.retried': _('Failed emails have been scheduled to be retried.'),
+    'pretix.organizer.outgoingmails.aborted': _('Queued emails have been aborted.'),
     'pretix.giftcards.acceptance.added': _('Gift card acceptance for another organizer has been added.'),
     'pretix.giftcards.acceptance.removed': _('Gift card acceptance for another organizer has been removed.'),
     'pretix.giftcards.acceptance.acceptor.invited': _('A new gift card acceptor has been invited.'),

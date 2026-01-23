@@ -42,26 +42,48 @@ def CASCADE_IF_QUEUED(collector, field, sub_objs, using):
 
 class OutgoingMail(models.Model):
     STATUS_QUEUED = "queued"
+    STATUS_WITHHELD = "withheld"
     STATUS_INFLIGHT = "inflight"
-    STATUS_AWAWITING_RETRY = "awaiting_retry"
+    STATUS_AWAITING_RETRY = "awaiting_retry"
     STATUS_FAILED = "failed"
     STATUS_SENT = "sent"
     STATUS_BOUNCED = "bounced"
+    STATUS_ABORTED = "aborted"
     STATUS_CHOICES = (
         (STATUS_QUEUED, _("queued")),
         (STATUS_INFLIGHT, _("being sent")),
-        (STATUS_AWAWITING_RETRY, _("awaiting retry")),
+        (STATUS_AWAITING_RETRY, _("awaiting retry")),
+        (STATUS_WITHHELD, _("withheld")),  # for plugin use
         (STATUS_FAILED, _("failed")),
+        (STATUS_ABORTED, _("aborted")),
         (STATUS_SENT, _("sent")),
-        (STATUS_BOUNCED, _("bounced")),
+        (STATUS_BOUNCED, _("bounced")),  # for plugin use
     )
+    STATUS_LIST_ABORTABLE = {
+        STATUS_QUEUED,
+        STATUS_WITHHELD,
+        STATUS_AWAITING_RETRY,
+    }
+    STATUS_LIST_RETRYABLE = {
+        STATUS_FAILED,
+        STATUS_WITHHELD,
+    }
 
+    # The GUID is a globally unique ID for the email added to a header of the email for later tracing
+    # in bug reports etc. We could theoretically also use this as a basis for the Message-ID header, but
+    # we currently don't since we are unsure if some intermediary SMTP servers have opinions on setting
+    # their own Message-ID headers.
     guid = models.UUIDField(db_index=True, default=uuid.uuid4)
+
     status = models.CharField(max_length=200, choices=STATUS_CHOICES, default=STATUS_QUEUED)
     created = models.DateTimeField(auto_now_add=True)
+
+    # sent will be the time the email was sent or the email failed
     sent = models.DateTimeField(null=True, blank=True)
+
     inflight_since = models.DateTimeField(null=True, blank=True)
     retry_after = models.DateTimeField(null=True, blank=True)
+
     error = models.TextField(null=True, blank=True)
     error_detail = models.TextField(null=True, blank=True)
 
@@ -122,6 +144,7 @@ class OutgoingMail(models.Model):
     to = models.JSONField(default=list)
     cc = models.JSONField(default=list)
     bcc = models.JSONField(default=list)
+    recipient_count = models.IntegerField()
 
     # We don't store the actual invoices, tickets or calendar invites, so if the email is re-sent at a later time, a
     # newer version of the files might be used. We accept that risk to save on storage and also because the new
@@ -143,6 +166,7 @@ class OutgoingMail(models.Model):
     # if the email is sent. Otherwise, they will be skipped. We accept that risk.
     should_attach_other_files = models.JSONField(default=list)
 
+    # [{name, type size}] of the attachments we actually setn
     actual_attachments = models.JSONField(default=list)
 
     class Meta:
@@ -164,7 +188,11 @@ class OutgoingMail(models.Model):
 
     @property
     def is_failed(self):
-        return self.status in (OutgoingMail.STATUS_FAILED, OutgoingMail.STATUS_AWAWITING_RETRY, OutgoingMail.STATUS_BOUNCED)
+        return self.status in (
+            OutgoingMail.STATUS_FAILED,
+            OutgoingMail.STATUS_AWAITING_RETRY,
+            OutgoingMail.STATUS_BOUNCED,
+        )
 
     def save(self, *args, **kwargs):
         if self.orderposition_id and not self.order_id:
@@ -175,6 +203,7 @@ class OutgoingMail(models.Model):
             self.organizer = self.event.organizer
         if self.customer_id and not self.organizer_id:
             self.organizer = self.customer.organizer
+        self.recipient_count = len(self.to) + len(self.cc) + len(self.bcc)
         super().save(*args, **kwargs)
 
     def log_parameters(self):

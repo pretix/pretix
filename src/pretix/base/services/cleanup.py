@@ -56,7 +56,7 @@ def clean_cached_files(sender, **kwargs):
             status__in=(
                 OutgoingMail.STATUS_QUEUED,
                 OutgoingMail.STATUS_INFLIGHT,
-                OutgoingMail.STATUS_AWAWITING_RETRY,
+                OutgoingMail.STATUS_AWAITING_RETRY,
                 OutgoingMail.STATUS_FAILED,
             ),
         )
