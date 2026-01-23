@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-23 15:00+0000\n"
+"PO-Revision-Date: 2026-01-24 01:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -423,7 +423,7 @@ msgstr "Deze gebruiker heeft al rechten voor dit team."
 #: pretix/api/views/cart.py:209
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr "Deze voucher is al het maximale aantal keren gebruikt."
+msgstr "Deze voucher is al het maximumaantal keren gebruikt."
 
 #: pretix/api/views/checkin.py:627 pretix/api/views/checkin.py:634
 msgid "Medium connected to other event"
@@ -435,7 +435,7 @@ msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
-"De applicatie \"{application_name}\" is toegang gegeven tot uw account."
+"De applicatie \"{application_name}\" heeft toegang gekregen tot uw account."
 
 #: pretix/api/views/order.py:609 pretix/control/views/orders.py:1608
 #: pretix/presale/views/order.py:736 pretix/presale/views/order.py:816
@@ -489,7 +489,7 @@ msgstr "Bestelling verlopen"
 
 #: pretix/api/webhooks.py:287
 msgid "Order expiry date changed"
-msgstr "Vervaldatum van de bestelling gewijzigd"
+msgstr "Vervaldatum van bestelling gewijzigd"
 
 #: pretix/api/webhooks.py:291 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -744,7 +744,7 @@ msgid ""
 "custom integrations."
 msgstr ""
 "API-verkoopkanalen hebben standaard geen functionaliteit, maar kunnen "
-"gebruikt worden door integraties."
+"gebruikt worden voor integraties."
 
 #: pretix/base/context.py:38
 #, python-brace-format
@@ -756,7 +756,7 @@ msgstr ""
 #: pretix/base/context.py:48
 #, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "<a {a_attr}>mogelijk gemaakt door {name} gebasseerd op pretix</a>"
+msgstr "<a {a_attr}>mogelijk gemaakt door {name} gebaseerd op pretix</a>"
 
 #: pretix/base/context.py:55
 #, python-format
@@ -924,7 +924,7 @@ msgstr "E-mailadres van deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:219
 msgid "Attendee or order email"
-msgstr "E-mailadres van de deelnemer of de bestelling"
+msgstr "E-mailadres van deelnemer of bestelling"
 
 #: pretix/base/datasync/sourcefields.py:232
 #: pretix/base/exporters/orderlist.py:613 pretix/base/pdf.py:188
@@ -1024,7 +1024,7 @@ msgstr "Bestelcode"
 
 #: pretix/base/datasync/sourcefields.py:380
 msgid "Event and order code"
-msgstr "Code van event en bestelling"
+msgstr "Code van evenement en bestelling"
 
 #: pretix/base/datasync/sourcefields.py:389
 #: pretix/base/exporters/orderlist.py:263 pretix/base/notifications.py:201
@@ -1131,11 +1131,11 @@ msgstr "ID besteld product"
 #: pretix/base/datasync/sourcefields.py:545
 #: pretix/base/exporters/orderlist.py:292
 msgid "Order link"
-msgstr "Bestellink"
+msgstr "Bestel-link"
 
 #: pretix/base/datasync/sourcefields.py:560
 msgid "Ticket link"
-msgstr "Ticketlink"
+msgstr "Ticket-link"
 
 #: pretix/base/datasync/sourcefields.py:578
 #, python-brace-format
@@ -1210,7 +1210,7 @@ msgstr "Gecombineerde Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:54
 msgid "Question answer file uploads"
-msgstr "Vraag-antwoordbestand uploads"
+msgstr "Uploads vraag-antwoordbestanden"
 
 #: pretix/base/exporters/answers.py:55 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:88
@@ -1545,7 +1545,7 @@ msgstr ""
 #: pretix/base/models/organizer.py:93
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr "Verkorting"
+msgstr "Verkorte vorm"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:613
 msgid "Shop is live"
@@ -1890,7 +1890,7 @@ msgstr "Omgekeerde belastingheffing"
 
 #: pretix/base/exporters/invoices.py:227
 msgid "Shown foreign currency"
-msgstr "Getoonde andere munteenheid"
+msgstr "Getoonde vreemde munteenheid"
 
 #: pretix/base/exporters/invoices.py:228
 msgid "Foreign currency rate"
@@ -2137,11 +2137,11 @@ msgstr "Product mag geannuleerd of veranderd worden"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:640
 msgid "Minimum amount per order"
-msgstr "Minimumaantal per bestelling"
+msgstr "Minimum per bestelling"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:647
 msgid "Maximum amount per order"
-msgstr "Maximumaantal per bestelling"
+msgstr "Maximum per bestelling"
 
 #: pretix/base/exporters/items.py:89 pretix/base/exporters/orderlist.py:284
 #: pretix/base/modelimport_orders.py:652 pretix/base/models/items.py:655
@@ -2199,7 +2199,7 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
-"Download een tekstbestand met alle e-mailadressen van kopers én "
+"Download een tekstbestand met alle e-mailadressen van kopers en "
 "tickethouders."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:497
@@ -2285,7 +2285,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:116 pretix/control/forms/event.py:1787
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
-msgstr "Evenement-slug"
+msgstr "Evenement-slug (verkorte vorm)"
 
 #: pretix/base/exporters/orderlist.py:263
 #: pretix/base/exporters/orderlist.py:453
@@ -2429,7 +2429,7 @@ msgstr "Betaald met {method}"
 #: pretix/base/exporters/orderlist.py:458
 #: pretix/base/exporters/orderlist.py:914
 msgid "Fee type"
-msgstr "Type kost"
+msgstr "Type kosten"
 
 #: pretix/base/exporters/orderlist.py:460
 #: pretix/base/exporters/orderlist.py:601
@@ -2484,7 +2484,7 @@ msgstr "Product-ID"
 #: pretix/plugins/checkinlists/exporters.py:514
 #: pretix/plugins/checkinlists/exporters.py:704
 msgid "Start date"
-msgstr "Begindatum"
+msgstr "Startdatum"
 
 #: pretix/base/exporters/orderlist.py:595
 #: pretix/base/exporters/orderlist.py:1161
@@ -2628,7 +2628,7 @@ msgstr "Inchecklijsten"
 
 #: pretix/base/exporters/orderlist.py:672
 msgid "Position order link"
-msgstr "Bestellink producten"
+msgstr "Bestel-link producten"
 
 #: pretix/base/exporters/orderlist.py:841
 msgid "Order transaction data"
@@ -2642,7 +2642,7 @@ msgid ""
 msgstr ""
 "Download een spreadsheet met alle substantiële aanpassingen van bestellingen "
 "(bv. aanpassingen van producten, prijzen of btw-tarieven). Deze informatie "
-"is enkel accuraat voor veranderingen doorgevoerd met pretixversies "
+"is enkel accuraat voor veranderingen doorgevoerd met pretix-versies "
 "uitgebracht na oktober 2021."
 
 #: pretix/base/exporters/orderlist.py:860
@@ -2712,7 +2712,7 @@ msgstr "Intern tarieftype"
 #: pretix/base/exporters/orderlist.py:917
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Datum ID"
+msgstr "Datum-ID"
 
 #: pretix/base/exporters/orderlist.py:922
 msgid "Tax rule ID"
@@ -4124,7 +4124,7 @@ msgstr "U kunt geen bestaand productgeheim toewijzen."
 
 #: pretix/base/modelimport_orders.py:528
 msgid "Please enter a valid language code."
-msgstr "Vul een geldige taalcode in."
+msgstr "Voer een geldige taalcode in."
 
 #: pretix/base/modelimport_orders.py:581
 msgid ""
@@ -4158,8 +4158,7 @@ msgstr "Geen overeenkomende stoel gevonden."
 #: pretix/base/services/modelimport.py:299
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
-msgstr ""
-"De stoel die u selecteerde is al bezet. Kies alstublieft een andere stoel."
+msgstr "De door u geselecteerde stoel is al bezet. Selecteer een andere stoel."
 
 #: pretix/base/modelimport_orders.py:634 pretix/base/services/cart.py:217
 msgid "You need to select a specific seat."
@@ -6402,7 +6401,9 @@ msgstr "Totaalbedrag"
 msgid ""
 "The text entered in this field will not be visible to the user and is "
 "available for your convenience."
-msgstr "Tekst in dit veld is niet zichtbaar voor de gebruiker."
+msgstr ""
+"De tekst die in dit veld wordt ingevoerd, is niet zichtbaar voor de "
+"gebruiker en is alleen bedoeld voor uw gemak."
 
 #: pretix/base/models/orders.py:278
 msgid "We'll show you this order to be due for a follow-up on this day."
@@ -7437,7 +7438,7 @@ msgstr "Datums"
 #: pretix/plugins/reports/accountingreport.py:318
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:446
 msgid "Net total"
-msgstr "Netto totaal"
+msgstr "Nettototaal"
 
 #: pretix/base/notifications.py:202
 msgid "Pending amount"
@@ -7948,7 +7949,7 @@ msgstr "Prijs inclusief add-ons en bundel van producten"
 #: pretix/base/services/placeholders.py:703
 #: pretix/base/services/placeholders.py:712 pretix/control/views/event.py:916
 msgid "John Doe"
-msgstr "John Doe"
+msgstr "Jan Peeters"
 
 #: pretix/base/pdf.py:189 pretix/base/pdf.py:347
 #: pretix/base/services/tickets.py:116 pretix/control/views/pdf.py:115
@@ -7972,7 +7973,7 @@ msgstr ""
 "Piet Janssen\n"
 "Voorbeeld bedrijf\n"
 "Sesamstraat 42\n"
-"1234AB Amsterdam\n"
+"1234 AB Amsterdam\n"
 "Nederland"
 
 #: pretix/base/pdf.py:198
@@ -8277,7 +8278,7 @@ msgstr "Naam aanwezige voor begroeting"
 #: pretix/base/services/placeholders.py:730
 #: pretix/control/forms/organizer.py:664
 msgid "Mr Doe"
-msgstr "Meneer Janssen"
+msgstr "Mr Modaal"
 
 #: pretix/base/pdf.py:672 pretix/base/pdf.py:679
 #: pretix/plugins/badges/exporters.py:501
@@ -9230,7 +9231,7 @@ msgstr ""
 #: pretix/base/services/modelimport.py:289
 #, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr "Ongeldige data op regel {row}: {message}"
+msgstr "Ongeldige gegevens in rij {row}: {message}"
 
 #: pretix/base/services/modelimport.py:270
 msgid "A voucher cannot be created without a code."
@@ -13061,7 +13062,7 @@ msgstr ""
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
-msgstr "Bad Request"
+msgstr "Ongeldig verzoek"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
@@ -13159,7 +13160,7 @@ msgstr "Interne serverfout"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr "We hadden moeite met het verwerken van uw verzoek."
+msgstr "We hadden problemen met het verwerken van uw verzoek."
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
@@ -14798,7 +14799,7 @@ msgstr "Alle betalingen"
 
 #: pretix/control/forms/filter.py:1066
 msgid "Payment created from"
-msgstr "Betaling aangemaakt op"
+msgstr "Betaling aangemaakt vanaf"
 
 #: pretix/control/forms/filter.py:1071
 msgid "Payment created until"
@@ -18504,7 +18505,7 @@ msgstr "Apparaten"
 #: pretix/control/permissions.py:72 pretix/control/permissions.py:109
 #: pretix/control/permissions.py:140 pretix/control/permissions.py:157
 msgid "You do not have permission to view this content."
-msgstr "U heeft geen toestemming om deze inhoud te bekijken."
+msgstr "U hebt geen toestemming om deze inhoud te bekijken."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:42
 #: pretix/control/templates/pretixcontrol/base.html:360
@@ -18554,7 +18555,7 @@ msgstr "Registreren"
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:28
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:44
 msgid "Log in"
-msgstr "Log in"
+msgstr "Inloggen"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:38
 msgid "Lost password?"
@@ -19294,7 +19295,7 @@ msgstr "Geweigerd"
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:27
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:33
 msgid "Copy to clipboard"
-msgstr "Kopieer naar klembord"
+msgstr "Kopiëren naar klembord"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -23937,7 +23938,7 @@ msgstr "Veranderen"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:90
 #: pretix/presale/templates/pretixpresale/event/order.html:318
 msgid "ZIP code and city"
-msgstr "Postcode en stad"
+msgstr "Postcode en woonplaats"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:1047
 msgid "Valid EU VAT ID"
@@ -23964,8 +23965,8 @@ msgid ""
 "This email has been sent with an older version of pretix. We are therefore "
 "not able to display it here accurately."
 msgstr ""
-"Deze email is verstuurd met een oudere versie van pretix. We zijn hierom "
-"niet in staat om hem hier nauwkeurig weer te geven."
+"Deze e-mail is verzonden met een oudere versie van pretix. Daarom kunnen we "
+"hem hier niet correct weergeven."
 
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:39
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:50
@@ -24676,12 +24677,12 @@ msgstr "Aanwezigen importeren"
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:13
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:13
 msgid "Data preview"
-msgstr "Voorvertoning van data"
+msgstr "Preview gegevens"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:43
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:43
 msgid "Import settings"
-msgstr "Import-instellingen"
+msgstr "Instellingen importeren"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:49
@@ -24689,13 +24690,13 @@ msgid ""
 "The import will be performed regardless of your quotas, so it will be "
 "possible to overbook your event using this option."
 msgstr ""
-"Het is mogelijk om uw evenement te overboeken met deze optie, omdat de "
-"import onafhankelijk van uw quota zal worden uitgevoerd."
+"De import wordt uitgevoerd ongeacht uw quota, dus het is mogelijk dat uw "
+"evenement met deze optie overboekt raakt."
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:57
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:57
 msgid "Perform import"
-msgstr "Import uitvoeren"
+msgstr "Importeren"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:10
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:10
@@ -24709,14 +24710,14 @@ msgid ""
 "The uploaded file should be a CSV file with a header row. You will be able "
 "to assign the meanings of the different columns in the next step."
 msgstr ""
-"Het geüploade bestand moet een CSV-bestand zijn met een headerregel. U kunt "
-"in de volgende stap de betekenis van elke kolom aangeven."
+"Het geüploade bestand moet een CSV-bestand zijn met een header-rij. In de "
+"volgende stap kunt u de betekenis van de verschillende kolommen toewijzen."
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:22
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:22
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:46
 msgid "Import file"
-msgstr "Bestand importeren"
+msgstr "Importeer bestand"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:25
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:25
@@ -24731,7 +24732,7 @@ msgstr "Automatisch detecteren"
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:35
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:35
 msgid "Start import"
-msgstr "Start import"
+msgstr "Begin met importeren"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:14
 msgid "Nobody ordered a ticket yet."
@@ -26183,7 +26184,7 @@ msgstr "Code"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:52
 msgid "Text box"
-msgstr "Tekstkader"
+msgstr "Tekstvak"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:59
 msgid "QR Code"
@@ -27632,7 +27633,7 @@ msgstr "Download lijst"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:119
 msgid "Redemptions"
-msgstr "Verzilveringen"
+msgstr "Inwisselingen"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:124
 msgid "Expiry"
@@ -27641,7 +27642,7 @@ msgstr "Verloop"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:183
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
-msgstr "Elk product in quotum \"%(quota)s\""
+msgstr "Elk product in het quotum “%(quota)s”"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:197
 msgid "Use as a template for new vouchers"
@@ -31174,7 +31175,7 @@ msgstr "Foutmelding"
 
 #: pretix/plugins/checkinlists/exporters.py:772
 msgid "Upload date"
-msgstr "Uploaddatum"
+msgstr "Datum upload"
 
 #: pretix/plugins/checkinlists/exporters.py:773
 msgid "Upload time"
@@ -33431,7 +33432,7 @@ msgid ""
 "transmitted directly to Stripe and never touches our servers."
 msgstr ""
 "Uw betaling zal worden verwerkt door Stripe, Inc. Uw creditcardgegevens "
-"zullen direct naar Stripe worden verzonden, en nooit op onze servers komen."
+"zullen direct naar Stripe worden verzonden en nooit op onze servers komen."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:13
 msgid "For a SEPA Debit payment, please turn on JavaScript."
@@ -35011,7 +35012,7 @@ msgstr "Leeg winkelwagen"
 #: pretix/presale/templates/pretixpresale/event/index.html:248
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:16
 msgid "Redeem a voucher"
-msgstr "Verzilver een voucher"
+msgstr "Voucher inwisselen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:71
 msgid "We're applying this voucher to your cart..."
@@ -36290,7 +36291,7 @@ msgstr "Nog niet in de verkoop"
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:57
 #, python-format
 msgid "Sale starts %(date)s"
-msgstr "Verkoop begint %(date)s"
+msgstr "Verkoop begint op %(date)s"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
 msgid "customer account"
