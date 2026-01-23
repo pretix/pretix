@@ -378,6 +378,8 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
         outgoing_mail.inflight_since = now()
         outgoing_mail.save(update_fields=["status", "inflight_since"])
 
+    headers = dict(outgoing_mail.headers)
+    headers.setdefault('X-PX-Correlation', str(outgoing_mail.guid))
     email = CustomEmail(
         subject=outgoing_mail.subject,
         body=outgoing_mail.body_plain,
