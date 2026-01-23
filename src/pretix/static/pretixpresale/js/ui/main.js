@@ -731,6 +731,10 @@ $(function () {
             $(countInput).trigger("change");
         });
     });
+
+    $("#customer-account-login-providers a").click(function () {
+        $(this).addClass("disabled");
+    });
 });
 
 function copy_answers(elements, answers) {

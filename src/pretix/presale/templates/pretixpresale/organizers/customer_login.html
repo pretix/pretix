@@ -60,7 +60,7 @@
             {% endif %}
 
             {% if providers %}
-                <ul class="list-inline text-center blank-after">
+                <ul id="customer-account-login-providers" class="list-inline text-center blank-after">
                 {% for provider in providers %}
                     <li>
                         <a href="{% eventurl request.organizer "presale:organizer.customer.login" provider=provider.pk %}?{{ request.META.QUERY_STRING }}"
