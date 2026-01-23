@@ -23,11 +23,12 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.management import call_command
+from django.db.models import Exists, OuterRef
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import CachedCombinedTicket, CachedTicket
+from pretix.base.models import CachedCombinedTicket, CachedTicket, OutgoingMail
 from pretix.base.models.customers import CustomerSSOGrant
 
 from ..models import CachedFile, CartPosition, InvoiceAddress
@@ -49,7 +50,18 @@ def clean_cart_positions(sender, **kwargs):
 @receiver(signal=periodic_task)
 @scopes_disabled()
 def clean_cached_files(sender, **kwargs):
-    for cf in CachedFile.objects.filter(expires__isnull=False, expires__lt=now()):
+    has_queued_email = Exists(
+        OutgoingMail.objects.filter(
+            should_attach_cached_files__pk=OuterRef("pk"),
+            status__in=(
+                OutgoingMail.STATUS_QUEUED,
+                OutgoingMail.STATUS_INFLIGHT,
+                OutgoingMail.STATUS_AWAWITING_RETRY,
+                OutgoingMail.STATUS_FAILED,
+            ),
+        )
+    )
+    for cf in CachedFile.objects.filter(expires__isnull=False, expires__lt=now()).exclude(has_queued_email):
         cf.delete()
 
 

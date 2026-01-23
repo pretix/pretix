@@ -128,11 +128,11 @@ class OutgoingMail(models.Model):
     should_attach_tickets = models.BooleanField(default=False)
     should_attach_ical = models.BooleanField(default=False)
 
-    # We need to make sure cached files are kept as l
+    # clean_cached_files makes sure not to delete these as long as the email is in a retryable state
     should_attach_cached_files = models.ManyToManyField(
         'pretixbase.CachedFile',
         related_name='outgoing_mails',
-    )  # todo: prevent deletion?
+    )
 
     # This is used to send files stored in settings. In most cases, these aren't short-lived and should still be there
     # if the email is sent. Otherwise, they will be skipped. We accept that risk.

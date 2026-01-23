@@ -51,7 +51,7 @@ from pretix.api.serializers.waitinglist import WaitingListSerializer
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, OrderPayment,
-    OrderPosition, OrderRefund, QuestionAnswer,
+    OrderPosition, OrderRefund, OutgoingMail, QuestionAnswer,
 )
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.signals import register_data_shredders
@@ -327,6 +327,10 @@ class EmailAddressShredder(BaseDataShredder):
             # take them really slowly to not overwhelm the database.
             batch_size=100,
             sleep_time=2,
+        )
+
+        slow_delete(
+            OutgoingMail.objects.filter(event=self.event)
         )
 
         for o in _progress_helper(qs_orders, progress_callback, qs_op_cnt, total):

@@ -54,11 +54,14 @@ from django.conf import settings
 from django.core.files.storage import default_storage
 from django.core.mail import EmailMultiAlternatives, SafeMIMEMultipart
 from django.core.mail.message import SafeMIMEText
-from django.db import transaction
+from django.db import connection, transaction
+from django.db.models import Q
+from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.timezone import now, override
 from django.utils.translation import gettext as _, pgettext
+from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 from text_unidecode import unidecode
 
@@ -72,7 +75,9 @@ from pretix.base.models.mail import OutgoingMail
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
-from pretix.base.signals import email_filter, global_email_filter
+from pretix.base.signals import (
+    email_filter, global_email_filter, periodic_task,
+)
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.format import SafeFormatter, format_map
@@ -910,3 +915,80 @@ def _format_error(e: Exception):
         return 'SMTP recipients refudes', '\n'.join(message)
     else:
         return 'Internal error', str(e)
+
+
+def _is_queue_long(queue_name="mail"):
+    """
+    Checks an estimate if there is currently a long celery queue for emails. If so,
+    there's no reason to retry stuck emails, because they are stuck because of the
+    queue and we don't need to add more oil to the fire.
+
+    This does not need to be perfect, as it is safe to run the same task twice, it just
+    wastes ressources.
+    """
+    if not settings.HAS_CELERY:
+        return False
+    if not settings.CELERY_BROKER_URL.startswith("redis://"):
+        return False  # check not supported
+    priority_steps = settings.CELERY_BROKER_TRANSPORT_OPTIONS.get("priority_steps", [0])
+    sep = settings.CELERY_BROKER_TRANSPORT_OPTIONS.get("sep", ":")
+    client = app.broker_connection().channel().client
+    queue_length = 0
+    for prio in priority_steps:
+        if prio:
+            qname = f"{queue_name}{sep}{prio}"
+        else:
+            qname = queue_name
+        queue_length += client.llen(qname)
+
+    return queue_length > 100
+
+
+@receiver(signal=periodic_task)
+@scopes_disabled()
+def retry_stuck_inflight_mails(sender, **kwargs):
+    """
+    Retry emails that are stuck in "inflight" state, e.g. their celery task just died.
+    """
+    with transaction.atomic():
+        for m in OutgoingMail.objects.filter(
+            status=OutgoingMail.STATUS_INFLIGHT,
+            inflight_since__lt=now() - timedelta(hours=1),
+        ).select_for_update(of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked):
+            m.status = OutgoingMail.STATUS_QUEUED
+            m.save()
+            mail_send_task.apply_async(kwargs={"outgoing_mail": m.pk})
+
+
+@receiver(signal=periodic_task)
+@scopes_disabled()
+def retry_stuck_queued_mails(sender, **kwargs):
+    """
+    Retry emails that are stuck in "queued" state, e.g. their celery task never started. We do this only
+    when there is currently almost no queue, to avoid many tasks being scheduled for the same mail if that
+    mail is still waiting in the queue (even if that would be safe, all tasks except the first one would be a no-op,
+    but it would create many more useless tasks in a high-load situation).
+    """
+    if _is_queue_long():
+        logger.info("Do not retry stuck mails as the queue is long.")
+        return
+
+    for m in OutgoingMail.objects.filter(
+        status=OutgoingMail.STATUS_QUEUED,
+        created__lt=now() - timedelta(hours=1),
+    ):
+        mail_send_task.apply_async(kwargs={"outgoing_mail": m.pk})
+
+
+@receiver(signal=periodic_task)
+@scopes_disabled()
+def delete_old_emails(sender, **kwargs):
+    """
+    OutgoingMail is currently not intended to be an archive, because it would be hard to do in a
+    privacy-first design, so we delete after some time.
+    """
+    cutoff = now() - timedelta(seconds=settings.OUTGOING_MAIL_RETENTION)
+    OutgoingMail.objects.filter(
+        Q(sent__lt=cutoff) |
+        Q(sent__isnull=True, created__lt=cutoff)
+    ).delete()
