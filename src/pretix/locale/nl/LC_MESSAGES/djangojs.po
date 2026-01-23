@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:13+0000\n"
-"PO-Revision-Date: 2026-01-22 19:00+0000\n"
+"PO-Revision-Date: 2026-01-23 15:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -310,7 +310,7 @@ msgstr "Bestelling geannuleerd"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Ticket code is ambiguous on list"
-msgstr "Ticket-code op de lijst is niet eenduidig"
+msgstr "Ticketcode op de lijst is niet eenduidig"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
