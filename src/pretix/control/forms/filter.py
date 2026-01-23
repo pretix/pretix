@@ -57,8 +57,9 @@ from pretix.base.forms.widgets import (
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
     Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
-    OrderRefund, Organizer, Question, QuestionAnswer, Quota, SalesChannel,
-    SubEvent, SubEventMetaValue, Team, TeamAPIToken, TeamInvite, Voucher,
+    OrderRefund, Organizer, OutgoingMail, Question, QuestionAnswer, Quota,
+    SalesChannel, SubEvent, SubEventMetaValue, Team, TeamAPIToken, TeamInvite,
+    Voucher,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.base.timeframes import (
@@ -2813,5 +2814,63 @@ class DeviceFilterForm(FilterForm):
             qs = qs.order_by(self.get_order_by())
         else:
             qs = qs.order_by('-device_id')
+
+        return qs
+
+
+class OutgoingMailFilterForm(FilterForm):
+    orders = {
+        'date': 'd',
+        '-date': '-d',
+    }
+    query = forms.CharField(
+        label=_('Search email address or subject'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search email address or subject'),
+        }),
+        required=False
+    )
+    event = forms.ModelChoiceField(
+        queryset=Event.objects.none(),
+        label=_('Event'),
+        empty_label=_('All events'),
+        required=False,
+    )
+    status = forms.ChoiceField(
+        label=_('Status'),
+        choices=[
+            ('', _('All')),
+            *OutgoingMail.STATUS_CHOICES,
+        ],
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+        self.fields['event'].queryset = request.organizer.events.all()
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(
+                Q(to__containsstring=query)
+                | Q(cc__containsstring=query)
+                | Q(bcc_containsstring=query)
+                | Q(subject__icontains=query)
+            )
+
+        if fdata.get('event'):
+            qs = qs.filter(event=fdata['event'])
+
+        if fdata.get('status'):
+            qs = qs.filter(status=fdata['status'])
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+        else:
+            qs = qs.order_by("-created", "-pk")
 
         return qs

@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import uuid
+
 import css_inline
 from django.conf import settings
 from django.template.loader import get_template
@@ -155,7 +157,9 @@ def send_notification_mail(notification: Notification, user: User):
     tpl_plain = get_template('pretixbase/email/notification.txt')
     body_plain = tpl_plain.render(ctx)
 
+    guid = uuid.uuid4()
     m = OutgoingMail.objects.create(
+        guid=guid,
         user=user,
         to=[user.email],
         subject='[{}] {}: {}'.format(
@@ -166,7 +170,12 @@ def send_notification_mail(notification: Notification, user: User):
         body_plain=body_plain,
         body_html=body_html,
         sender=settings.MAIL_FROM_NOTIFICATIONS,
-        headers={},
+        headers={
+            'X-Auto-Response-Suppress': 'OOF, NRN, AutoReply, RN',
+            'Auto-Submitted': 'auto-generated',
+            'X-Mailer': 'pretix',
+            'X-PX-Correlation': str(guid),
+        },
     )
     mail_send_task.apply_async(kwargs={
         'outgoing_mail': m.pk,

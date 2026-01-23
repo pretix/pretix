@@ -39,6 +39,7 @@ import mimetypes
 import os
 import re
 import smtplib
+import uuid
 import warnings
 from datetime import timedelta
 from email.mime.image import MIMEImage
@@ -213,10 +214,12 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     settings_holder = event or organizer
 
     headers = headers or {}
+    guid = uuid.uuid4()
     if auto_email:
         headers['X-Auto-Response-Suppress'] = 'OOF, NRN, AutoReply, RN'
         headers['Auto-Submitted'] = 'auto-generated'
     headers.setdefault('X-Mailer', 'pretix')
+    headers.setdefault('X-PX-Correlation', str(guid))
 
     bcc = list(bcc or [])
     if settings_holder and settings_holder.settings.mail_bcc:
@@ -301,9 +304,9 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             orderposition=position,
             customer=customer,
             user=user,
-            to=[email] if isinstance(email, str) else list(email),
-            cc=cc or [],
-            bcc=bcc or [],
+            to=[email.lower()] if isinstance(email, str) else [e.lower() for e in email],
+            cc=[e.lower() for e in cc] if cc else [],
+            bcc=[e.lower() for e in bcc] if bcc else [],
             subject=subject,
             body_plain=body_plain,
             body_html=body_html,
@@ -395,7 +398,6 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
 
     log_target, error_log_action_type = outgoing_mail.log_parameters()
     invoices_attached = []
-    actual_attachments = []
 
     with outgoing_mail.scope_manager():
         # Attach tickets
@@ -566,21 +568,21 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
 
                     outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
                     outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
-                    outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after"])
+                    outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after", "actual_attachments"])
                     self.retry(max_retries=max_retries, countdown=retry_after)  # throws RetryException, ends function flow
                 elif retry_strategy in ("microsoft_concurrency", "quick"):
                     max_retries = 5
                     retry_after = [10, 30, 60, 300, 900, 900][self.request.retries]
                     outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
                     outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
-                    outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after"])
+                    outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after", "actual_attachments"])
                     self.retry(max_retries=max_retries, countdown=retry_after)  # throws RetryException, ends function flow
 
                 elif retry_strategy == "slow":
                     retry_after = [60, 300, 600, 1200, 1800, 1800][self.request.retries]
                     outgoing_mail.status = OutgoingMail.STATUS_AWAWITING_RETRY
                     outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
-                    outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after"])
+                    outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after", "actual_attachments"])
                     self.retry(max_retries=5, countdown=retry_after)  # throws RetryException, ends function flow
 
             except MaxRetriesExceededError:
@@ -605,14 +607,14 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                 outgoing_mail.status = OutgoingMail.STATUS_FAILED
                 outgoing_mail.sent = now()
                 outgoing_mail.retry_after = None
-                outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after"])
+                outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after", "actual_attachments"])
                 return False
 
             # If we reach this, it's a non-retryable error
             outgoing_mail.status = OutgoingMail.STATUS_FAILED
             outgoing_mail.sent = now()
             outgoing_mail.retry_after = None
-            outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after"])
+            outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after", "actual_attachments"])
             for i in invoices_to_mark_transmitted:
                 i.set_transmission_failed(provider="email_pdf", data={
                     "reason": "exception",
@@ -634,7 +636,6 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
             outgoing_mail.status = OutgoingMail.STATUS_SENT
             outgoing_mail.error = None
             outgoing_mail.error_detail = None
-            outgoing_mail.actual_attachments = actual_attachments
             outgoing_mail.sent = now()
             outgoing_mail.retry_after = None
             outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "actual_attachments", "retry_after"])
@@ -974,8 +975,13 @@ def retry_stuck_queued_mails(sender, **kwargs):
         return
 
     for m in OutgoingMail.objects.filter(
-        status=OutgoingMail.STATUS_QUEUED,
-        created__lt=now() - timedelta(hours=1),
+        Q(
+            status=OutgoingMail.STATUS_QUEUED,
+            created__lt=now() - timedelta(hours=1),
+        ) | Q(
+            status=OutgoingMail.STATUS_AWAWITING_RETRY,
+            retry_after__lt=now() - timedelta(hours=1),
+        )
     ):
         mail_send_task.apply_async(kwargs={"outgoing_mail": m.pk})
 

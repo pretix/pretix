@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import uuid
+
 from django.core.mail import get_connection
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -44,14 +46,17 @@ class OutgoingMail(models.Model):
     STATUS_AWAWITING_RETRY = "awaiting_retry"
     STATUS_FAILED = "failed"
     STATUS_SENT = "sent"
+    STATUS_BOUNCED = "bounced"
     STATUS_CHOICES = (
         (STATUS_QUEUED, _("queued")),
         (STATUS_INFLIGHT, _("being sent")),
         (STATUS_AWAWITING_RETRY, _("awaiting retry")),
         (STATUS_FAILED, _("failed")),
         (STATUS_SENT, _("sent")),
+        (STATUS_BOUNCED, _("bounced")),
     )
 
+    guid = models.UUIDField(db_index=True, default=uuid.uuid4)
     status = models.CharField(max_length=200, choices=STATUS_CHOICES, default=STATUS_QUEUED)
     created = models.DateTimeField(auto_now_add=True)
     sent = models.DateTimeField(null=True, blank=True)
@@ -156,6 +161,10 @@ class OutgoingMail(models.Model):
             return scope(organizer=self.organizer)  # noqa
         else:
             return scopes_disabled()  # noqa
+
+    @property
+    def is_failed(self):
+        return self.status in (OutgoingMail.STATUS_FAILED, OutgoingMail.STATUS_AWAWITING_RETRY, OutgoingMail.STATUS_BOUNCED)
 
     def save(self, *args, **kwargs):
         if self.orderposition_id and not self.order_id:
