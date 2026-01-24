@@ -1,0 +1,64 @@
+{% load i18n %}
+
+<h4 class="alert-heading">{% trans "Login could not be completed" %}</h4>
+
+<p>
+    {% blocktrans %}
+        We couldn't complete your login because something interrupted the process.
+    {% endblocktrans %}
+</p>
+
+<h5 class="alert-heading"><b>{% trans "This can happen if:" %}</b></h5>
+
+<ul>
+    <li>
+        {% blocktrans %}
+            you start logging in from a link opened inside an app (such as Instagram
+            or an email app), and then continue the login in your main browser;
+        {% endblocktrans %}
+    </li>
+    <li>
+        {% blocktrans %}
+            you refresh the page or use the back button during login;
+        {% endblocktrans %}
+    </li>
+    <li>
+        {% blocktrans %}
+            the site is opened in more than one tab or window at the same time;
+        {% endblocktrans %}
+    </li>
+    <li>
+        {% blocktrans %}
+            there is a long delay between starting and completing the login process.
+        {% endblocktrans %}
+    </li>
+</ul>
+
+<h5 class="alert-heading font-weight-bold"><strong>{% trans "How to fix this:" %}</strong></h5>
+
+<ol>
+    <li>
+        {% trans "Close this page." %}
+    </li>
+    <li>
+        {% blocktrans %}
+            Open this website again directly in your main browser (for example
+            Safari or Chrome).
+        {% endblocktrans %}
+    </li>
+    <li>
+        {% blocktrans %}
+            Begin the checkout or login process again and complete it in the same
+            browser window, without refreshing the page, opening new tabs, or
+            switching apps part-way through.
+        {% endblocktrans %}
+    </li>
+</ol>
+
+<p>
+    {% blocktrans %}
+        If the problem continues, closing all browser windows and clearing cookies
+        before retrying can help. As a last step, try using a different browser or
+        another device (for example, a desktop or laptop computer).
+    {% endblocktrans %}
+</p>
