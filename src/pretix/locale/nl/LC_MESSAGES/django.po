@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-24 01:00+0000\n"
+"PO-Revision-Date: 2026-01-25 01:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -2738,7 +2738,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:959
 msgid "Converted from legacy version"
-msgstr "Vanuit oudere versie geconverteerd"
+msgstr "Geconverteerd vanuit oudere versie"
 
 #: pretix/base/exporters/orderlist.py:1021
 msgid "Payments and refunds"
@@ -2750,7 +2750,7 @@ msgstr "Download een spreadsheet met alle (terug)betalingen per bestelling."
 
 #: pretix/base/exporters/orderlist.py:1033
 msgid "Date range (payment date)"
-msgstr "Betalingstermijn (betaaldatum)"
+msgstr "Datumbereik (betalingsdatum)"
 
 #: pretix/base/exporters/orderlist.py:1036
 msgid ""
@@ -2766,11 +2766,11 @@ msgstr "Datumbereik (begin van de transactie)"
 
 #: pretix/base/exporters/orderlist.py:1046
 msgid "Payment states"
-msgstr "Betalingsstatus"
+msgstr "Betalingsstatussen"
 
 #: pretix/base/exporters/orderlist.py:1054
 msgid "Refund states"
-msgstr "Terugbetalingsstatus"
+msgstr "Terugbetalingsstatussen"
 
 #: pretix/base/exporters/orderlist.py:1097
 #: pretix/base/exporters/orderlist.py:1239
@@ -2863,7 +2863,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:1155
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
 msgid "Quota name"
-msgstr "Quotumnaam"
+msgstr "Naam quotum"
 
 #: pretix/base/exporters/orderlist.py:1155
 #: pretix/control/templates/pretixcontrol/items/quota.html:56
@@ -2890,7 +2890,7 @@ msgstr "Momenteel in winkelwagens"
 
 #: pretix/base/exporters/orderlist.py:1156
 msgid "Exited orders"
-msgstr "Verrichte orders"
+msgstr "Afgehandelde bestellingen"
 
 #: pretix/base/exporters/orderlist.py:1156
 msgid "Current availability"
@@ -2901,7 +2901,7 @@ msgstr "Huidige beschikbaarheid"
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
 #: pretix/control/views/item.py:985
 msgid "Infinite"
-msgstr "Oneindig"
+msgstr "Onbeperkt"
 
 #: pretix/base/exporters/orderlist.py:1202
 msgid "Gift card transactions"
@@ -2986,7 +2986,7 @@ msgstr "TESTMODUS"
 
 #: pretix/base/exporters/orderlist.py:1262
 msgid "Gift card redemptions"
-msgstr "Verzilveringen cadeaubonnen"
+msgstr "inwisselingen cadeaubonnen"
 
 #: pretix/base/exporters/orderlist.py:1264
 msgid ""
@@ -3079,7 +3079,7 @@ msgstr "Vervallen"
 
 #: pretix/base/exporters/orderlist.py:1379 pretix/base/models/giftcards.py:105
 msgid "Test mode card"
-msgstr "Testcadeaubon"
+msgstr "Testmoduskaart"
 
 #: pretix/base/exporters/orderlist.py:1381
 #: pretix/base/modelimport_orders.py:553 pretix/base/models/giftcards.py:109
@@ -3197,13 +3197,13 @@ msgstr "Voucher toegewezen"
 #: pretix/base/exporters/waitinglist.py:65
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:110
 msgid "Waiting for redemption"
-msgstr "Wachtend op verzilvering"
+msgstr "Wachtend op inwisseling"
 
 #: pretix/base/exporters/waitinglist.py:73
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:223
 #: pretix/control/views/waitinglist.py:329
 msgid "Voucher redeemed"
-msgstr "Voucher verzilverd"
+msgstr "Voucher ingewisseld"
 
 #: pretix/base/exporters/waitinglist.py:81
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:116
@@ -3326,7 +3326,7 @@ msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
-"Het bestand dat u uploadde is te groot. Het maximum is 10000 x 10000 pixels."
+"Het bestand dat u uploadde, is te groot. Het maximum is 10000 x 10000 pixels."
 
 #: pretix/base/forms/questions.py:510 pretix/helpers/images.py:75
 msgid ""
@@ -3352,7 +3352,7 @@ msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
-"Optioneel, maar afhankelijk van het land waarin u woont moeten we misschien "
+"Optioneel, maar afhankelijk van het land waarin u woont, moeten we misschien "
 "extra belasting rekenen als u dit niet invoert."
 
 #: pretix/base/forms/questions.py:1171
@@ -8133,7 +8133,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:1538
 #: pretix/control/templates/pretixcontrol/organizers/index.html:42
 msgid "Organizer name"
-msgstr "Naam van de organisator"
+msgstr "Naam organisator"
 
 #: pretix/base/pdf.py:384
 msgid "Event organizer company"
@@ -18930,7 +18930,7 @@ msgstr "Bevestigingsmodus"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
 msgctxt "terminal_zvt"
 msgid "Trace number"
-msgstr "Trace-nummer"
+msgstr "Traceernummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
 msgctxt "terminal_zvt"
@@ -18964,7 +18964,7 @@ msgstr "Onbekend"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:40
 msgctxt "terminal_zvt"
 msgid "Card expiration"
-msgstr "Verloopdatum kaart"
+msgstr "Vervaldatum kaart"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:46
 msgid "Transaction Code"
@@ -18978,7 +18978,7 @@ msgstr "Handelaarscode"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:80
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:110
 msgid "Card Entry Mode"
-msgstr "Soort kaartinvoer"
+msgstr "Kaartinvoermodus"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:58
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:82
@@ -18991,11 +18991,11 @@ msgstr "Kaartnummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65
 msgid "Client Transaction Code"
-msgstr "Client-transactiecode"
+msgstr "Transactiecode klant"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:68
 msgid "Server Transaction Code"
-msgstr "Server-transactiecode"
+msgstr "Transactiecode server"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:75
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
@@ -19004,7 +19004,7 @@ msgstr "Betalingsreferentie"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:78
 msgid "Payment Application"
-msgstr "Betalingsapplicatie"
+msgstr "Betaalapplicatie"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:86
 msgid "Authorization Code"
@@ -25265,7 +25265,7 @@ msgstr "U heeft nog geen apparaten verbonden."
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:24
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:56
 msgid "Connect a device"
-msgstr "Nieuw apparaat verbinden"
+msgstr "Apparaat verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:81
 msgid "Hardware model"
@@ -31769,7 +31769,7 @@ msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
 msgstr ""
-"Er trad een fout op tijdens het terugleiden van PayPal: aanvraagparameters "
+"Er is een fout opgetreden bij het terugkeren van PayPal: verzoekparameters "
 "ontbreken. Probeer het opnieuw."
 
 #: pretix/plugins/paypal2/views.py:260
@@ -31777,7 +31777,7 @@ msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
 msgstr ""
-"Er trad een fout op tijdens het terugleiden van PayPal: resultaatparameters "
+"Er is een fout opgetreden bij het terugkeren van PayPal: resultaatparameters "
 "ontbreken. Probeer het opnieuw."
 
 #: pretix/plugins/paypal2/views.py:265
@@ -31785,16 +31785,16 @@ msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
-"Er trad een fout op tijdens het terugleiden van PayPal: sessieparameters "
-"ontbreken. Probeer het opnieuw."
+"Er is een fout opgetreden bij het terugkeren van PayPal: sessieparameter "
+"komt niet overeen. Probeer het opnieuw."
 
 #: pretix/plugins/paypal2/views.py:270
 msgid ""
 "The email address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
-"Het e-mailadres van uw PayPal-account is nog niet geverifieerd. U zult dat "
-"eerst moeten doen vooraleer u betalingen kunt accepteren."
+"Het e-mailadres van uw PayPal-rekening is nog niet bevestigd. U moet dit "
+"doen voordat u betalingen kunt accepteren."
 
 #: pretix/plugins/paypal2/views.py:276
 msgid ""
