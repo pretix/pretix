@@ -2858,7 +2858,7 @@ class OutgoingMailFilterForm(FilterForm):
             qs = qs.filter(
                 Q(to__containsstring=query)
                 | Q(cc__containsstring=query)
-                | Q(bcc_containsstring=query)
+                | Q(bcc__containsstring=query)
                 | Q(subject__icontains=query)
             )
 
