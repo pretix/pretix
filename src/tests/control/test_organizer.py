@@ -485,10 +485,10 @@ class OrganizerTest(SoupTest):
         assert b"rightrecipient@example.com" not in resp.content
 
         if 'postgresql' in settings.DATABASES['default']['ENGINE']:
-            resp = self.client.get('/control/organizer/%s/outgoingmails?query=rightrecipient' % self.orga1.slug)
+            resp = self.client.get('/control/organizer/%s/outgoingmails?query=RIGHTrecipient@example.com' % self.orga1.slug)
             assert resp.status_code == 200
             assert b"rightrecipient@example.com" in resp.content
-            resp = self.client.get('/control/organizer/%s/outgoingmails?query=wrongrecipient' % self.orga1.slug)
+            resp = self.client.get('/control/organizer/%s/outgoingmails?query=wrongrecipient@example.com' % self.orga1.slug)
             assert resp.status_code == 200
             assert b"rightrecipient@example.com" not in resp.content
 
