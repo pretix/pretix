@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-25 20:00+0000\n"
+"PO-Revision-Date: 2026-01-26 06:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -10452,7 +10452,7 @@ msgstr "Automatisch voor alle aangemaakte bestellingen"
 
 #: pretix/base/settings.py:1141
 msgid "Automatically on payment or when required by payment method"
-msgstr "Automatisch na betaling of wanneer verplicht door de betalingsmethode"
+msgstr "Automatisch na betaling of wanneer verplicht door de betaalmethode"
 
 #: pretix/base/settings.py:1145
 msgid "Generate invoices"
@@ -10460,7 +10460,7 @@ msgstr "Genereer facturen"
 
 #: pretix/base/settings.py:1149
 msgid "Automatically after payment or when required by payment method"
-msgstr "Automatisch na betaling of wanneer verplicht door de betalingsmethode"
+msgstr "Automatisch na betaling of wanneer verplicht door de betaalmethode"
 
 #: pretix/base/settings.py:1150
 msgid "Automatically before payment for all created orders"
@@ -10468,7 +10468,9 @@ msgstr "Automatisch voor betaling voor alle aangemaakte bestellingen"
 
 #: pretix/base/settings.py:1155
 msgid "Invoices will never be automatically generated for free orders."
-msgstr "Facturen zullen nooit worden gegenereerd voor gratis bestellingen."
+msgstr ""
+"Facturen zullen nooit automatisch worden gegenereerd voor gratis "
+"bestellingen."
 
 #: pretix/base/settings.py:1165 pretix/base/settings.py:1176
 msgid ""
@@ -10476,7 +10478,7 @@ msgid ""
 "series date, or event date"
 msgstr ""
 "Automatisch op basis van ticket-specifieke geldigheid, geldigheid "
-"lidmaatschap, datum reeks evenement of datum evenement"
+"lidmaatschap, datum reeks evenementen of datum evenement"
 
 #: pretix/base/settings.py:1166 pretix/base/settings.py:1177
 msgid "Automatic, but prefer invoice date over event date"
@@ -10510,10 +10512,10 @@ msgid ""
 "will automatically be canceled and a new invoice will be issued. This "
 "setting does not affect changes made through the backend."
 msgstr ""
-"Met deze optie zal wanneer klanten hun factuuradres voor een bestaande "
-"bestelling wijzigen automatisch de bestaande factuur worden geannuleerd en "
-"zal er een nieuwe factuur worden uitgegeven. Deze instelling is niet van "
-"toepassing op wijzigingen die in de backend worden gemaakt."
+"Als klanten hun factuuradres wijzigen voor een bestaande bestelling, wordt "
+"de factuur automatisch geannuleerd en wordt er een nieuwe factuur "
+"aangemaakt. Deze instelling heeft geen invloed op wijzigingen die via de "
+"backend worden aangebracht."
 
 #: pretix/base/settings.py:1205
 msgid "Allow to update existing invoices"
@@ -10559,7 +10561,7 @@ msgstr "Introductietekst"
 
 #: pretix/base/settings.py:1328
 msgid "Will be printed on every invoice above the invoice rows."
-msgstr "Zal op elke factuur boven de bedragen worden geprint."
+msgstr "Zal op elke factuur boven de factuurregels geprint worden."
 
 #: pretix/base/settings.py:1341
 msgid ""
@@ -10587,7 +10589,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1361
 msgid "Footer"
-msgstr "Footer"
+msgstr "Voettekst"
 
 #: pretix/base/settings.py:1362
 msgid ""
@@ -10608,11 +10610,11 @@ msgid ""
 "on payment, they will be attached to the payment confirmation mail. If they "
 "are not automatically generated, they will not be attached to emails."
 msgstr ""
-"Als facturen automatisch worden gegenereerd voor alle bestellingen zullen ze "
-"worden bijgevoegd bij de bestellingsbevestiging. Als ze automatisch worden "
-"gegenereerd na betaling zullen ze worden bijgevoegd bij de "
-"betalingsbevestiging. Als ze niet automatisch worden gegenereerd zullen ze "
-"niet worden bijgevoegd bij mails."
+"Als facturen automatisch worden gegenereerd voor alle bestellingen, zullen "
+"ze worden bijgevoegd bij de bestellingsbevestiging. Als ze automatisch "
+"worden gegenereerd na betaling, zullen ze worden bijgevoegd bij de "
+"betalingsbevestiging. Als ze niet automatisch worden gegenereerd, zullen ze "
+"niet worden gevoegd bij mails."
 
 #: pretix/base/settings.py:1388
 msgid "Email address to receive a copy of each invoice"
@@ -10659,11 +10661,10 @@ msgid ""
 "less priority than the language and is therefore mostly relevant for "
 "languages used in different regions globally (like English)."
 msgstr ""
-"De hier ingestelde regio wordt gebruikt om de datum- en tijdnotatie in te "
-"stellen en wordt gebruikt als het standaardland voor adressen en "
-"telefoonnummers van klanten. Voor notatie heeft deze optie minder prioriteit "
-"dan de taal, deze optie is hiervoor vooral relevant voor talen die in "
-"verschillende landen gesproken worden (zoals Engels)."
+"Wordt gebruikt om de datum- en tijdnotatie en het standaardland voor "
+"klantadressen en telefoonnummers te bepalen. Voor de notatie heeft dit "
+"minder prioriteit dan de taal en is daarom vooral relevant voor talen die in "
+"verschillende regio's wereldwijd worden gebruikt (zoals Engels)."
 
 #: pretix/base/settings.py:1464
 msgid "This shop represents an event"
@@ -10691,7 +10692,7 @@ msgstr "Toon einddatum evenement"
 #: pretix/base/settings.py:1480
 msgid "If disabled, only event's start date will be displayed to the public."
 msgstr ""
-"Als dit is uitgeschakeld zal alleen de startdatum van het evenement worden "
+"Als dit is uitgeschakeld, zal alleen de startdatum van het evenement worden "
 "getoond aan het publiek."
 
 #: pretix/base/settings.py:1489
