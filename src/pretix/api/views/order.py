@@ -1099,10 +1099,22 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         else:
             qs = OrderPosition.objects
 
+        perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
+
         if hasattr(self.request, 'event'):
             qs = qs.filter(order__event=self.request.event)
-        if hasattr(self.request, 'organizer'):
-            qs = qs.filter(order__event__organizer=self.request.organizer)
+        else:
+            if isinstance(self.request.auth, (TeamAPIToken, Device)):
+                qs = qs.filter(
+                    order__event__organizer=self.request.organizer,
+                    order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
+                )
+            elif self.request.user.is_authenticated:
+                qs = qs.filter(
+                    order__event__organizer=self.request.organizer,
+                    order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
+                )
+
         if self.request.query_params.get('pdf_data', 'false').lower() == 'true':
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
