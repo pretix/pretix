@@ -806,6 +806,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_reissue_after_modify',
         'invoice_include_free',
         'invoice_generate',
+        'invoice_generate_only_business',
         'invoice_period',
         'invoice_numbers_consecutive',
         'invoice_numbers_prefix',

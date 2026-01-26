@@ -612,6 +612,25 @@ def test_sales_channels_qualify(env):
     assert invoice_qualified(order) is False
 
 
+@pytest.mark.django_db
+def test_business_only(env):
+    event, order = env
+    event.settings.set('invoice_generate', 'admin')
+    event.settings.set('invoice_generate_only_business', True)
+    order.total = Decimal('42.00')
+
+    ia = InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street', is_business=True,
+                                       zipcode='12345', city='London', country_old='England', country='', order=order)
+
+    assert invoice_qualified(order) is True
+
+    ia.is_business = False
+    ia.save()
+
+    # Order with default Sales Channel (web)
+    assert invoice_qualified(order) is False
+
+
 def test_addon_aware_groupby():
     def is_addon(item):
         is_addon, id, price = item
