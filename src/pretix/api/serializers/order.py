@@ -191,7 +191,7 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
                                     {"transmission_info": {r: "This field is required for the selected type of invoice transmission."}}
                                 )
                     break  # do not call else branch of for loop
-                elif t.exclusive(self.context["request"].event, data.get("country"), data.get("is_business")):
+                elif t.is_exclusive(self.context["request"].event, data.get("country"), data.get("is_business")):
                     if t.is_available(self.context["request"].event, data.get("country"), data.get("is_business")):
                         raise ValidationError({
                             "transmission_type": "The transmission type '%s' must be used for this country or address type." % (
