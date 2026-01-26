@@ -1,0 +1,185 @@
+[
+    {
+        "model": "pretixbase.taxrule",
+        "pk": 1,
+        "fields": {
+            "event": 1,
+            "internal_name": "Ontario Sales Tax",
+            "name": "{\"en\": \"HST\", \"fr\": \"HST\"}",
+            "rate": "13.00",
+            "price_includes_tax": false,
+            "keep_gross_if_rate_changes": false,
+            "eu_reverse_charge": false,
+            "home_country": "",
+            "custom_rules": "[]"
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 1,
+        "fields": {
+            "key": "region",
+            "value": "CA"
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 2,
+        "fields": {
+            "key": "footer_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}"
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 3,
+        "fields": {
+            "key": "footer_link",
+            "value": "{\"en\": \"\", \"fr\": \"\"}"
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 4,
+        "fields": {
+            "key": "banner_message",
+            "value": "{\"en\": \"\", \"fr\": \"\"}"
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 5,
+        "fields": {
+            "key": "banner_message_detail",
+            "value": "{\"en\": \"\", \"fr\": \"\"}"
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 6,
+        "fields": {
+            "key": "opencagedata_apikey",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 7,
+        "fields": {
+            "key": "mapquest_apikey",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 8,
+        "fields": {
+            "key": "leaflet_tiles",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 9,
+        "fields": {
+            "key": "leaflet_tiles_attribution",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 10,
+        "fields": {
+            "key": "payment_stripe_connect_client_id",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 11,
+        "fields": {
+            "key": "payment_stripe_connect_secret_key",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 12,
+        "fields": {
+            "key": "payment_stripe_connect_publishable_key",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 13,
+        "fields": {
+            "key": "payment_stripe_connect_test_secret_key",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 14,
+        "fields": {
+            "key": "payment_stripe_connect_test_publishable_key",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 15,
+        "fields": {
+            "key": "payment_paypal_connect_client_id",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 16,
+        "fields": {
+            "key": "payment_paypal_connect_secret_key",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 17,
+        "fields": {
+            "key": "payment_paypal_connect_partner_merchant_id",
+            "value": ""
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 18,
+        "fields": {
+            "key": "payment_paypal_connect_endpoint",
+            "value": "live"
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 19,
+        "fields": {
+            "key": "update_check_ack",
+            "value": "True"
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 20,
+        "fields": {
+            "key": "license_check_input",
+            "value": "{\"base_changes\": \"yes\", \"usage\": \"internally\", \"base_license\": \"agpl_addperm\", \"plugins_free\": true, \"plugins_copyleft\": false, \"plugins_own\": false, \"plugins_enterprise\": false, \"poweredby_name\": \"\", \"poweredby_url\": \"\", \"source_notice\": \"pretix (AGPLv3 with additional terms): https://github.com/pretix/pretix\\r\\npretix-regex-validation (\\r\\nCopyright 2021 pretix team\\r\\n\\r\\nLicensed under the Apache License, Version 2.0 (the \\\"License\\\");\\r\\nyou may not use this file except in compliance with the License.\\r\\nYou may obtain a copy of the License at\\r\\n\\r\\n    http://www.apache.org/licenses/LICENSE-2.0\\r\\n\\r\\nUnless required by applicable law or agreed to in writing, software\\r\\ndistributed under the License is distributed on an \\\"AS IS\\\" BASIS,\\r\\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\\r\\nSee the License for the specific language governing permissions and\\r\\nlimitations under the License.\\r\\n\\r\\n): None\"}"
+        }
+    },
+    {
+        "model": "pretixbase.globalsettingsobject_settingsstore",
+        "pk": 21,
+        "fields": {
+            "key": "license_check_completed",
+            "value": "2026-01-17T17:01:15.087882+00:00"
+        }
+    }
+]

@@ -1,0 +1,38 @@
+[
+    {
+        "model": "pretixbase.customer",
+        "pk": 1,
+        "fields": {
+            "organizer": 1,
+            "provider": null,
+            "identifier": "3RHBNNT",
+            "email": "aa@aa.aa",
+            "phone": null,
+            "password": "pbkdf2_sha256$600000$5xhXgKWtmP4VwrQUEgo9ue$lD5EoDoM/x0WK71a7EBn1fBsIHpizH71iHBJ1vKqhHI=",
+            "name_cached": "a",
+            "name_parts": {
+                "_scheme": "full",
+                "full_name": "a"
+            },
+            "is_active": true,
+            "is_verified": true,
+            "last_login": "2026-01-22T21:51:26.974Z",
+            "date_joined": "2026-01-09T01:03:08.472Z",
+            "locale": "en",
+            "last_modified": "2026-01-22T21:51:26.975Z",
+            "external_identifier": null,
+            "notes": null
+        }
+    },
+    {
+        "model": "pretixbase.notificationsetting",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "action_type": "pretix.event.order.refund.requested",
+            "event": null,
+            "method": "mail",
+            "enabled": true
+        }
+    }
+]
