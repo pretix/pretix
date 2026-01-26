@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-12 17:00+0000\n"
+"PO-Revision-Date: 2026-01-26 22:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -9583,17 +9583,13 @@ msgid "Ask for VAT ID"
 msgstr "詢問增值稅號"
 
 #: pretix/base/settings.py:645
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Only works if an invoice address is asked for. VAT ID is never required "
-#| "and only requested from business customers in the following countries: "
-#| "{countries}"
+#, python-brace-format
 msgid ""
 "Only works if an invoice address is asked for. VAT ID is only requested from "
 "business customers in the following countries: {countries}."
 msgstr ""
-"僅當要求提供發票位址時才有效。增值稅號從來都不是必需的，並且僅向以下國家/地區"
-"的企業客戶請求：{countries}"
+"僅當要求提供發票地址時才有效。 僅以下國家的企業客戶要求提供增值稅 ID："
+"{countries}。"
 
 #: pretix/base/settings.py:664
 #, fuzzy
@@ -26554,10 +26550,8 @@ msgid "Please try again."
 msgstr "請重試。"
 
 #: pretix/control/views/auth.py:544
-#, fuzzy
-#| msgid "Two-factor authentication is required to log in"
 msgid "A recovery code for two-factor authentification was used to log in."
-msgstr "登入需要兩步驟驗證"
+msgstr "用於雙因素身份驗證的恢復程式用於登入。"
 
 #: pretix/control/views/auth.py:560
 msgid "Invalid code, please try again."
