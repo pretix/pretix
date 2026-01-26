@@ -43,6 +43,60 @@ from ..forms.waitinglist import WaitingListForm
 from . import allow_frame_if_namespaced
 
 
+def get_waiting_list_ranks(event, customer_email):
+    """
+    Get waiting list ranks for a customer.
+    
+    Returns a list of product data dictionaries with rank information.
+    Each dictionary contains: item_id, item_name, variation_id, variation_name, rank, lottery_run, and optionally voucher_code.
+    """
+    entries = WaitingListEntry.objects.filter(
+        event=event,
+        email__iexact=customer_email
+    ).select_related('item', 'variation', 'voucher').order_by('item', 'variation', '-created', '-pk')
+    
+    # Group entries by product (item + variation combination)
+    products_data = []
+    seen_products = set()
+    
+    for entry in entries:
+        # Create a unique key for this product (item + variation)
+        product_key = (entry.item_id, entry.variation_id if entry.variation else None)
+        
+        # Only process the most recent entry for each product
+        if product_key in seen_products:
+            continue
+        
+        seen_products.add(product_key)
+        
+        rank = entry.get_rank()
+        
+        # Skip entries that are no longer active (rank is None)
+        if rank is None:
+            continue
+        
+        # Check if lottery has been run for this product
+        lottery_date = event.settings.get(f'lottery_date_for_item_{entry.item_id}')
+        lottery_run = bool(lottery_date)
+        
+        product_data = {
+            'item_id': entry.item_id,
+            'item_name': str(entry.item),
+            'variation_id': entry.variation_id,
+            'variation_name': str(entry.variation) if entry.variation else None,
+            'rank': rank,
+            'lottery_run': lottery_run
+        }
+        
+        # Include voucher code if rank is 0 (user has an unredeemed voucher)
+        if rank == 0 and entry.voucher:
+            product_data['voucher_code'] = entry.voucher.code
+        
+        products_data.append(product_data)
+    
+    return products_data
+
+
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 @method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class WaitingView(EventViewMixin, CustomerRequiredMixin, FormView):
@@ -191,37 +245,21 @@ class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         customer_email = request.customer.email
         
-        # Find the most recent waiting list entry for this customer/event
-        # For now, we assume one item per event, so we just get the most recent one
         try:
-            entry = WaitingListEntry.objects.filter(
-                event=request.event,
-                email__iexact=customer_email
-            ).order_by('-created', '-pk').first()
+            products_data = get_waiting_list_ranks(request.event, customer_email)
             
-            if not entry:
+            if not products_data:
                 return JsonResponse({
                     'error': _('You are not on the waiting list for this event.')
                 }, status=404)
             
-            rank = entry.get_rank()
-            
-            if rank is None:
-                return JsonResponse({
-                    'error': _('Your waiting list entry is no longer active.')
-                }, status=200)
-            
-            response_data = {
-                'rank': rank
-            }
-            
-            # Include voucher code if rank is 0 (user has an unredeemed voucher)
-            if rank == 0 and entry.voucher:
-                response_data['voucher_code'] = entry.voucher.code
-            
-            return JsonResponse(response_data)
+            return JsonResponse({
+                'products': products_data
+            })
             
         except Exception as e:
             return JsonResponse({
                 'error': _('An error occurred while checking your rank.')
             }, status=500)
+
+
