@@ -2223,7 +2223,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         if "schedule" in self.request.POST or self.scheduled or self.scheduled_copy_from:
             ctx['schedule_form'] = self.schedule_form
             ctx['rrule_form'] = self.rrule_form
-            ctx['scheduled_copy_from'] = self.scheduled_copy_fr
+            ctx['scheduled_copy_from'] = self.scheduled_copy_from
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:
