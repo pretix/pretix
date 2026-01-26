@@ -509,9 +509,10 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
+        ctx['invoice_qualified'] = invoice_qualified(self.order)
+        ctx['can_generate_invoice'] = ctx['invoice_qualified'] and (
             self.request.event.settings.invoice_generate in ('admin', 'user', 'paid', 'user_paid', 'True')
-        ) and self.order.status in (Order.STATUS_PAID, Order.STATUS_PENDING) and (
+        ) and (
             not self.order.invoices.exists()
             or self.order.invoices.filter(is_cancellation=True).count() >= self.order.invoices.filter(is_cancellation=False).count()
         )
@@ -1744,12 +1745,13 @@ class OrderInvoiceReissue(OrderView):
                     c = generate_cancellation(inv)
                     if invoice_qualified(order):
                         inv = generate_invoice(order)
+                        messages.success(self.request, _('The invoice has been reissued.'))
                     else:
                         inv = c
+                        messages.success(self.request, _('The invoice has been canceled.'))
                     order.log_action('pretix.event.order.invoice.reissued', user=self.request.user, data={
                         'invoice': inv.pk
                     })
-                    messages.success(self.request, _('The invoice has been reissued.'))
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):  # NOQA
