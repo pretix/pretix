@@ -638,7 +638,7 @@ class ConfirmChangeView(View):
                 customer.log_action('pretix.customer.changed', {
                     'email': data['email']
                 })
-                msg = _('Your email address has been changed to {email}.').format(email=customer.email)
+                msg = _('Your email address has been changed from {old_email} to {email}.').format(old_email=old_email, email=customer.email)
                 customer.send_security_notice(msg, email=old_email)
                 customer.send_security_notice(msg, email=customer.email)
         except IntegrityError:
