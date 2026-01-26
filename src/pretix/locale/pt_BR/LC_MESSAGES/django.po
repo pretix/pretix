@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 09:09+0000\n"
+"POT-Creation-Date: 2026-01-26 13:19+0000\n"
 "PO-Revision-Date: 2025-12-18 01:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
@@ -32007,12 +32007,19 @@ msgid "Orders by day"
 msgstr "Pedidos por dia"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:25
+#, fuzzy
+#| msgid ""
+#| "Only fully paid orders are counted. Orders paid in multiple payments are "
+#| "shown with the date of their last payment."
 msgid ""
 "Orders paid in multiple payments are shown with the date of their last "
-"payment. Placed orders include all orders (pending, paid, cancelled, and "
-"expired); paid orders include only paid orders and exclude all cancelled "
+"payment. Placed orders include all orders (pending, paid, canceled, and "
+"expired); paid orders include only paid orders and exclude all canceled "
 "orders."
 msgstr ""
+"Apenas pedidos completamente pagos são contabilizados. Pedidos pagos em "
+"múltiplos pagamentos serão exibidos considerando a data do seu último "
+"pagamento."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:36
 #, fuzzy
@@ -32023,12 +32030,12 @@ msgstr "Crachás de participante"
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:42
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:62
 msgid ""
-"Attendees in orders paid in multiple instalments are shown using the date of "
+"Attendees in orders paid in multiple payments are shown using the date of "
 "the final payment. Order dates reflect when the order was first placed; "
 "attendees added later via additional order positions still use the original "
 "order date. Attendees in placed orders include those from all order states "
-"(pending, paid, cancelled, and expired); attendees in paid orders include "
-"only those from paid orders and exclude those from cancelled orders."
+"(pending, paid, canceled, and expired); attendees in paid orders include "
+"only those from paid orders and exclude those from canceled orders."
 msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:56
@@ -32072,7 +32079,7 @@ msgstr ""
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment. Revenue includes all fees, "
-"including cancellation fees from cancelled orders."
+"including cancellation fees from canceled orders."
 msgstr ""
 "Apenas pedidos completamente pagos são contabilizados. Pedidos pagos em "
 "múltiplos pagamentos serão exibidos considerando a data do seu último "
@@ -32080,8 +32087,8 @@ msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:115
 msgid ""
-"Placed orders include all orders (pending, paid, cancelled, and expired); "
-"paid orders include only paid orders and exclude all cancelled orders."
+"Placed orders include all orders (pending, paid, canceled, and expired); "
+"paid orders include only paid orders and exclude all canceled orders."
 msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:126
