@@ -42,7 +42,11 @@
             <div class="form-group submit-group">
                 <button formaction="{{ request.get_full_path }}" name="schedule" value="save" type="submit"
                         class="btn btn-primary btn-save" data-no-asynctask>
-                    {% trans "Save" %}
+                    {% if scheduled_copy_from %}
+                        {% trans "Save copy" %}
+                    {% else %}
+                        {% trans "Save" %}
+                    {% endif %}
                 </button>
             </div>
         {% else %}
