@@ -286,12 +286,27 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_keep
             # e.g. 99.99 at 19% is impossible since 84.03 + 19% = 100.00 and 84.02 + 19% = 99.98
             target_gross_total = round_decimal((target_net_total * (1 + tax_rate / 100)), currency)
 
+            if target_net_total and target_gross_total > gross_total:
+                target_net_total -= min((target_gross_total - gross_total), len(lines) * minimum_unit)
+                try_target_gross_total = round_decimal((target_net_total * (1 + tax_rate / 100)), currency)
+                if try_target_gross_total <= gross_total:
+                    target_gross_total = try_target_gross_total
+
             diff_gross = target_gross_total - gross_total
             diff_net = target_net_total - net_total
             diff_gross_sgn = -1 if diff_gross < 0 else 1
             diff_net_sgn = -1 if diff_net < 0 else 1
             for l in lines:
-                if diff_gross:
+                if diff_gross and diff_net:
+                    apply_diff = diff_gross_sgn * minimum_unit
+                    l.price = l.gross_price_before_rounding + apply_diff
+                    l.price_includes_rounding_correction = apply_diff
+                    l.tax_value = l.tax_value_before_rounding
+                    l.tax_value_includes_rounding_correction = Decimal("0.00")
+                    changed.append(l)
+                    diff_gross -= apply_diff
+                    diff_net -= apply_diff
+                elif diff_gross:
                     apply_diff = diff_gross_sgn * minimum_unit
                     l.price = l.gross_price_before_rounding + apply_diff
                     l.price_includes_rounding_correction = apply_diff
@@ -313,6 +328,11 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_keep
                     l.tax_value = l.tax_value_before_rounding
                     l.tax_value_includes_rounding_correction = Decimal("0.00")
                     changed.append(l)
+
+            # Double-check that result is consistent in computing gross from net
+            new_net_total = sum(l.price - l.tax_value for l in lines)
+            new_gross_total = sum(l.price for l in lines)
+            assert new_gross_total == round_decimal((new_net_total * (1 + tax_rate / 100)), currency)
 
     elif rounding_mode == "line":
         for l in lines:

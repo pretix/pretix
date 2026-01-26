@@ -286,6 +286,11 @@ gross prices stay the same.
 
 **This is less confusing to consumers and the end result is still compliant to EN 16931, so we recommend this for e-invoicing when (primarily) consumers are involved.**
 
+Some gross prices **cannot** stay the same. For example, it is impossible to represent €15.00 incl. 19%, since a net
+price of €12.60 would lead to €14.99 gross and a net price of €12.61 would lead to €15.01 gross. Since this algorithm
+is supposed to be consumer-friendly, it has a bias for choosing €14.99 in this case, even if €15.01 would be a little
+less of a difference.
+
 The main downside is that it might be confusing when selling to business customers, since the prices of the identical tickets appear to be different.
 Full computation for the example above:
 
