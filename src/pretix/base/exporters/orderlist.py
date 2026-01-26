@@ -39,8 +39,8 @@ from zoneinfo import ZoneInfo
 from django import forms
 from django.conf import settings
 from django.db.models import (
-    Case, CharField, Count, DateTimeField, F, IntegerField, Max, Min, OuterRef,
-    Q, Subquery, Sum, When,
+    Case, CharField, Count, DateTimeField, Exists, F, IntegerField, Max, Min,
+    OuterRef, Q, Subquery, Sum, When,
 )
 from django.db.models.functions import Coalesce
 from django.dispatch import receiver
@@ -144,6 +144,18 @@ class OrderListExporter(MultiSheetListExporter):
         d = OrderedDict(d)
         if not self.is_multievent and not self.event.has_subevents:
             del d['event_date_range']
+        if not self.is_multievent:
+            d["items"] = forms.ModelMultipleChoiceField(
+                label=_("Products"),
+                queryset=self.event.items.all(),
+                widget=forms.CheckboxSelectMultiple(
+                    attrs={"class": "scrolling-multiple-choice"}
+                ),
+                help_text=_("If none are selected, all products are included. Orders are included if they contain "
+                            "at least one position of this product. The order totals etc. still include all products "
+                            "contained in the order."),
+                required=False,
+            )
         return d
 
     def _get_all_payment_methods(self, qs):
@@ -248,6 +260,14 @@ class OrderListExporter(MultiSheetListExporter):
             invoice_numbers=Subquery(i_numbers, output_field=CharField()),
             pcnt=Subquery(s, output_field=IntegerField())
         ).select_related('invoice_address', 'customer')
+
+        if form_data.get('items'):
+            qs = qs.filter(
+                Exists(OrderPosition.all.filter(
+                    order=OuterRef('pk'),
+                    item__in=form_data["items"]
+                ))
+            )
 
         qs = self._date_filter(qs, form_data, rel='')
 
@@ -440,6 +460,14 @@ class OrderListExporter(MultiSheetListExporter):
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
 
+        if form_data.get('items'):
+            qs = qs.filter(
+                Exists(OrderPosition.all.filter(
+                    order=OuterRef('order'),
+                    item__in=form_data["items"]
+                ))
+            )
+
         qs = self._date_filter(qs, form_data, rel='order__')
         return qs
 
@@ -534,6 +562,11 @@ class OrderListExporter(MultiSheetListExporter):
         )
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
+
+        if form_data.get('items'):
+            qs = qs.filter(
+                item__in=form_data["items"]
+            )
 
         qs = self._date_filter(qs, form_data, rel='order__')
         return qs
