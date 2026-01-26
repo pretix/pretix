@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-26 22:00+0000\n"
+"PO-Revision-Date: 2026-01-27 07:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -25006,7 +25006,7 @@ msgid ""
 "through. This is useful to unlock new revenue streams or to separate revenue "
 "between different sources for reporting purchases."
 msgstr ""
-"Op deze pagina kunt u de verschillende kanalen beheren waarlangs uw tickets "
+"Op deze pagina kunt u de verschillende kanalen beheren via welke uw tickets "
 "verkocht kunnen worden. Dit is handig voor het ontwikkelen van nieuwe "
 "inkomstenbronnen of het scheiden van inkomsten uit verschillende bronnen "
 "voor rapportage."
@@ -25034,8 +25034,7 @@ msgstr "Verstuur link voor wachtwoordherstel"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:80
 msgid "This includes all paid orders by this customer across all your events."
 msgstr ""
-"Dit omvat alle betaalde bestellingen door deze klant overheen alle "
-"evenementen."
+"Dit omvat alle betaalde bestellingen van deze klant voor al uw evenementen."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:81
 msgid "Lifetime spending"
@@ -25150,8 +25149,8 @@ msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"Typ om zeker te zijn dat u dit echt wilt de korte naam van de organisator "
-"(\"%(slug)s\") hier:"
+"Om te bevestigen dat u dit echt wilt, typt u hier de korte naam van de "
+"organisator (“%(slug)s”) in:"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
 msgid ""
@@ -25159,7 +25158,7 @@ msgid ""
 "invoices, or devices."
 msgstr ""
 "Deze organisator kan niet worden verwijderd, omdat de organisator al "
-"bestellingen, facturen, of apparaten bevat."
+"bestellingen, facturen of apparaten bevat."
 
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:6
 #, python-format
@@ -25204,8 +25203,8 @@ msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
 msgstr ""
-"Open de app die u wilt verbinden, en herstel indien gewenst de app terug in "
-"de originele staat."
+"Open de app die u wilt verbinden en herstel indien gewenst de app in de "
+"originele staat."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:20
 msgid "Scan the following configuration code:"
@@ -25216,7 +25215,7 @@ msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
 msgstr ""
-"Als uw apparaat geen ondersteuning biedt voor het scannen van een QR-code "
+"Als uw apparaat geen ondersteuning biedt voor het scannen van een QR-code, "
 "kunt u ook de volgende code invoeren:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:24
@@ -25275,7 +25274,7 @@ msgid ""
 "and has not been uploaded, you will no longer be able to upload it."
 msgstr ""
 "Als gegevens (bijv. POS-transacties of check-ins) zijn aangemaakt op dit "
-"apparaat en nog niet zijn geüpload zult u niet langer in staat zijn deze "
+"apparaat en nog niet zijn geüpload, zult u niet langer in staat zijn deze "
 "gegevens te uploaden."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:16
@@ -25287,21 +25286,21 @@ msgid ""
 msgstr ""
 "Als de software op het apparaat dit ondersteunt zullen persoonlijke "
 "gegevens, zoals bestellingen, bij de volgende synchronisatiepoging van het "
-"apparaat worden verwijderd. Niet-persoonlijke gegevens zoals "
-"evenementsmetadata en POS-transacties zullen bewaard blijven tot u ze "
-"handmatig verwijdert."
+"apparaat worden verwijderd. Niet-persoonlijke gegevens zoals evenement-"
+"metadata en POS-transacties zullen bewaard blijven tot u ze handmatig "
+"verwijdert."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:10
 msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
 msgstr ""
-"Dit menu staat u toe om hardware-apparaten (zoals kassa- of scanterminals) "
-"met uw account te verbinden."
+"Dit menu staat u toe om hardware (zoals kassa- of scanterminals) met uw "
+"account te verbinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:18
 msgid "You haven't connected any hardware devices yet."
-msgstr "U heeft nog geen apparaten verbonden."
+msgstr "U hebt nog geen apparaten verbonden."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:24
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:56
@@ -25345,7 +25344,7 @@ msgstr "Organisatorpagina"
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:68
 msgid "The links you configure here will also be shown on all of your events."
 msgstr ""
-"De links die hier ingesteld worden zullen getoond worden op al uw "
+"De links die hier ingesteld worden, zullen getoond worden op al uw "
 "evenementen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:143
@@ -25354,9 +25353,9 @@ msgid ""
 "default settings for all events in this account that do not have their own "
 "design settings."
 msgstr ""
-"Deze instellingen zullen worden gebruikt voor de organisatorpagina, en ook "
-"als standaardinstellingen voor alle evenementen in dit account die niet hun "
-"eigen ontwerpinstellingen hebben."
+"Deze instellingen worden gebruikt voor de organisatorpagina en als "
+"standaardinstellingen voor alle evenementen in dit account die geen eigen "
+"ontwerpinstellingen hebben."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:162
 msgid "Privacy"
@@ -25369,8 +25368,8 @@ msgid ""
 "tracking, payment, or similar purposes."
 msgstr ""
 "Bepaalde rechtsgebieden, zoals de Europese Unie, vereisen de toestemming van "
-"de gebruiker voordat je cookies of soortgelijke technologieën mag gebruiken "
-"voor analyses, tracking, betalingen of soortgelijke doeleinden."
+"de gebruiker voordat cookies of soortgelijke technologieën gebruikt mogen "
+"worden voor analyses, tracking, betalingen of soortgelijke doeleinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:173
 msgid ""
@@ -25390,9 +25389,10 @@ msgid ""
 "affect if you use <strong>plugins</strong> that require additional cookies "
 "<strong>and</strong> participate in our cookie consent mechanism."
 msgstr ""
-"De instellingen op deze pagina zijn daarom <strong>alleen</strong> van "
-"toepassing als u <strong>plug-ins</strong> gebruikt die extra cookies "
-"vereisen <strong>en</strong> deelneemt aan ons cookie-toestemmingsmechanisme."
+"Daarom hebben de instellingen op deze pagina <strong>alleen</strong> effect "
+"als u <strong>plug-ins</strong> gebruikt die aanvullende cookies vereisen "
+"<strong>en</strong> deelneemt aan ons mechanisme voor toestemming voor "
+"cookies."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:188
 msgid ""
