@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:09+0000\n"
-"PO-Revision-Date: 2026-01-06 14:46+0000\n"
-"Last-Translator: et15 <e.t.tst@live.de>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"PO-Revision-Date: 2026-01-26 10:24+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/_base_settings.py:87
@@ -2302,6 +2302,9 @@ msgid ""
 "contain at least one position of this product. The order totals etc. still "
 "include all products contained in the order."
 msgstr ""
+"Wenn keine ausgewählt sind, werden alle Produkte ausgegeben. Bestellungen "
+"sind enthalten, wenn sie mindestens eine Position mit dem Produkt enthalten. "
+"Die Bestellsumme etc. enthalten trotzdem alle Produkte aus der Bestellung."
 
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:478
@@ -2565,10 +2568,8 @@ msgid "Voucher"
 msgstr "Gutschein"
 
 #: pretix/base/exporters/orderlist.py:653
-#, fuzzy
-#| msgid "Voucher code used:"
 msgid "Voucher budget usage"
-msgstr "Verwendeter Gutscheincode:"
+msgstr "Verwendetes Gutscheinbudget"
 
 #: pretix/base/exporters/orderlist.py:654
 msgid "Pseudonymization ID"
@@ -5530,14 +5531,6 @@ msgid "Only show after sellout of"
 msgstr "Nicht anzeigen, wenn anderes Produkt verfügbar"
 
 #: pretix/base/models/items.py:596
-#, fuzzy
-#| msgid ""
-#| "If you select a product here, this product will only be shown when that "
-#| "product is sold out. If combined with the option to hide sold-out "
-#| "products, this allows you to swap out products for more expensive ones "
-#| "once the cheaper option is sold out. There might be a short period in "
-#| "which both products are visible while all tickets of the referenced "
-#| "product are reserved, but not yet sold."
 msgid ""
 "If you select a product here, this product will only be shown when that "
 "product is no longer available. This will happen either because the other "
@@ -5549,12 +5542,14 @@ msgid ""
 "reserved, but not yet sold."
 msgstr ""
 "Wenn Sie hier ein Produkt auswählen, wird dieses Produkt nur angezeigt wenn "
-"dieses andere Produkt ausverkauft ist. In Kombination mit der Möglichkeit, "
-"ausverkaufte Produkte anzuzeigen, erlaubt dies Ihnen, ein Produkt durch ein "
-"teureres auszutauschen, sobald es ausverkauft wurde. Es kann einen kurzen "
-"Zeitraum geben, in dem beide Produkte sichtbar sind, wenn alle Tickets des "
-"hier eingestellten Produktes reserviert sind, aber noch nicht verkauft "
-"wurden."
+"dieses andere Produkt nicht mehr verfügbar ist. Dies passiert entweder, weil "
+"das andere Produkt ausverkauft wurde, oder weil der Verkaufszeitraum für das "
+"andere Produkt noch nicht begonnen hat oder abgelaufen ist. In Kombination "
+"mit der Möglichkeit, ausverkaufte Produkte anzuzeigen, erlaubt dies Ihnen, "
+"ein Produkt durch ein teureres auszutauschen, sobald es ausverkauft wurde. "
+"Es kann einen kurzen Zeitraum geben, in dem beide Produkte sichtbar sind, "
+"wenn alle Tickets des hier eingestellten Produktes reserviert sind, aber "
+"noch nicht verkauft wurden."
 
 #: pretix/base/models/items.py:611
 msgid ""
@@ -9800,7 +9795,7 @@ msgstr ""
 
 #: pretix/base/settings.py:189
 msgid "Require login to access order confirmation pages"
-msgstr ""
+msgstr "Login ist erforderlich, um Bestellbestätigungen aufzurufen"
 
 #: pretix/base/settings.py:190
 msgid ""
@@ -9809,6 +9804,10 @@ msgid ""
 "placing an order, the restriction only becomes active after the customer "
 "account is activated."
 msgstr ""
+"Wenn diese Option aktiv ist, müssen sich Kunden, die zum Zeitpunkt des Kaufs "
+"angemeldet waren, immer anmelden, um ihre Bestellung einzusehen. Wenn ein "
+"Kundenkonto während des Kaufvorgangs erstellt wird, greift diese "
+"Beschränkung erst nachdem das Kundenkonto aktiviert wurde."
 
 #: pretix/base/settings.py:202
 msgid "Match orders based on email address"
@@ -10599,10 +10598,8 @@ msgstr ""
 "Rechnung erzeugt werden."
 
 #: pretix/base/settings.py:1234
-#, fuzzy
-#| msgid "Restrict to business customers"
 msgid "Only issue invoices to business customers"
-msgstr "Auf Firmenkunden einschränken"
+msgstr "Rechnungen nur an Firmenkunden ausstellen"
 
 #: pretix/base/settings.py:1243
 msgid "Address line"
@@ -24652,10 +24649,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:46
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:47
-#, fuzzy
-#| msgid "Sample company"
 msgid "Save copy"
-msgstr "Musterfirma GmbH"
+msgstr "Kopie speichern"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:56
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:57
@@ -28141,10 +28136,10 @@ msgid "Please try again."
 msgstr "Bitte erneut versuchen."
 
 #: pretix/control/views/auth.py:544
-#, fuzzy
-#| msgid "Two-factor authentication is required to log in"
 msgid "A recovery code for two-factor authentification was used to log in."
-msgstr "Zwei-Faktor-Authentifizierung ist zum Log-In nötig"
+msgstr ""
+"Ein Notfall-Token für die Zwei-Faktor-Authentifizierung wurde zum Login "
+"verwendet."
 
 #: pretix/control/views/auth.py:560
 msgid "Invalid code, please try again."
@@ -29170,10 +29165,8 @@ msgid "The invoice has been scheduled for retransmission."
 msgstr "Die Rechnung wurde zur erneuten Übermittlung eingeplant."
 
 #: pretix/control/views/orders.py:1751
-#, fuzzy
-#| msgid "The invoice has already been canceled."
 msgid "The invoice has been canceled."
-msgstr "Die Rechnung wurde bereits storniert."
+msgstr "Die Rechnung wurde storniert."
 
 #: pretix/control/views/orders.py:1794
 msgid "The email has been queued to be sent."
@@ -29880,6 +29873,9 @@ msgid ""
 "This will usually happen if you lost access to your two-factor credentials "
 "and requested a reset of the credentials."
 msgstr ""
+"Ein Zwei-Faktor-Notfall-Token wurde von einem Systemadministrator generiert. "
+"Dies passiert üblicherweise, wenn Sie den Zugriff auf Ihren zweiten Faktor "
+"verloren haben und ein Zurücksetzen der Zugangsdaten angefordert haben."
 
 #: pretix/control/views/users.py:174
 #, python-brace-format
@@ -30775,14 +30771,10 @@ msgid "Reference code (important):"
 msgstr "Verwendungszweck (wichtig):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:30
-#, fuzzy
-#| msgid ""
-#| "We will assign you a personal reference code to use after you completed "
-#| "the order."
 msgid "We will assign you a personal reference code in the next step."
 msgstr ""
-"Wir werden Ihnen nach Absenden der Bestellung einen persönlichen "
-"Verwendungszweck zuweisen."
+"Wir werden Ihnen im nächsten Schritt einen persönlichen Verwendungszweck "
+"zuweisen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
 msgid ""
@@ -32122,11 +32114,8 @@ msgid "#"
 msgstr "#"
 
 #: pretix/plugins/reports/exporters.py:483
-#, fuzzy
-#| msgctxt "skip-to-main-nav"
-#| msgid "Skip link"
 msgid "Skip empty lines"
-msgstr "Link überspringen"
+msgstr "Leere Zeilen überspringen"
 
 #: pretix/plugins/reports/exporters.py:492
 msgid "Tax split list (PDF)"
@@ -32754,12 +32743,14 @@ msgid ""
 "expired); paid orders include only paid orders and exclude all cancelled "
 "orders."
 msgstr ""
+"Bestellungen, die in mehreren Zahlungen bezahlt wurden, werden am Tag ihrer "
+"letzten Zahlung angezeigt. Getätigte Bestellungen enthält alle Bestellungen "
+"(ausstehend, bezahlt, storniert und abgelaufen); bezahlte Bestellungen "
+"enthält nur bezahlte Bestellungen und keine stornierten Bestellungen."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:36
-#, fuzzy
-#| msgid "Attendee badges"
 msgid "Attendees by day"
-msgstr "Teilnehmer-Badges"
+msgstr "Teilnehmer pro Tag"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:42
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:62
@@ -32771,12 +32762,17 @@ msgid ""
 "(pending, paid, cancelled, and expired); attendees in paid orders include "
 "only those from paid orders and exclude those from cancelled orders."
 msgstr ""
+"Teilnehmer aus Bestellungen, die in mehreren Zahlungen bezahlt wurden, "
+"werden am Tag ihrer letzten Zahlung angezeigt. Das Datum richtet sich "
+"danach, wann die Bestellung ursprünglich getätigt wurde und auch später "
+"hinzugefügte Positionen werden an diesem Datum angezeigt. Teilnehmer aus "
+"getätigten Bestellungen enthält alle Bestellungen (ausstehend, bezahlt, "
+"storniert und abgelaufen); bezahlte Bestellungen enthält nur bezahlte "
+"Bestellungen und keine stornierten Bestellungen."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:56
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendees by time"
-msgstr "Name Teilnehmer*in"
+msgstr "Teilnehmer im Zeitverlauf"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:76
 msgid "Revenue over time"
@@ -32792,24 +32788,17 @@ msgstr ""
 "nicht angezeigt, da nicht klar ist, welchem Termin sie zuzuordnen wären."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:91
-#, fuzzy
-#| msgid ""
-#| "Only fully paid orders are counted. Orders paid in multiple payments are "
-#| "shown with the date of their last payment."
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment. Revenue excludes all fees, "
 "including cancellation fees."
 msgstr ""
-"Nur vollständig bezahlte Bestellungen sind gezählt. Bestellungen, die in "
+"Nur vollständig bezahlte Bestellungen werden gezählt. Bestellungen, die in "
 "mehreren Zahlungen bezahlt wurden, werden mit dem Datum ihrer letzten "
-"Zahlung angezeigt."
+"Zahlung angezeigt. Alle Gebühren, inkl. Stornogebühren, sind nicht "
+"eingerechnet."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:97
-#, fuzzy
-#| msgid ""
-#| "Only fully paid orders are counted. Orders paid in multiple payments are "
-#| "shown with the date of their last payment."
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment. Revenue includes all fees, "
@@ -32817,13 +32806,16 @@ msgid ""
 msgstr ""
 "Nur vollständig bezahlte Bestellungen sind gezählt. Bestellungen, die in "
 "mehreren Zahlungen bezahlt wurden, werden mit dem Datum ihrer letzten "
-"Zahlung angezeigt."
+"Zahlung angezeigt. Alle Gebühren, inkl. Stornogebühren, sind eingerechnet."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:115
 msgid ""
 "Placed orders include all orders (pending, paid, cancelled, and expired); "
 "paid orders include only paid orders and exclude all cancelled orders."
 msgstr ""
+"Getätigte Bestellungen enthält alle Bestellungen (ausstehend, bezahlt, "
+"storniert und abgelaufen), bezahlte Bestellungen enthält nur bezahlte "
+"Bestellungen und keine stornierten Bestellungen."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:126
 msgid "Seating Overview"
