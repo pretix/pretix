@@ -1087,7 +1087,8 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        ctx['event'] = self.request.event
+        if hasattr(self.request, 'event'):
+            ctx['event'] = self.request.event
         ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
         return ctx
@@ -1098,7 +1099,10 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         else:
             qs = OrderPosition.objects
 
-        qs = qs.filter(order__event=self.request.event)
+        if hasattr(self.request, 'event'):
+            qs = qs.filter(order__event=self.request.event)
+        if hasattr(self.request, 'organizer'):
+            qs = qs.filter(order__event__organizer=self.request.organizer)
         if self.request.query_params.get('pdf_data', 'false').lower() == 'true':
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
