@@ -34,7 +34,7 @@ from stripe import error
 from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models import InvoiceAddress, Order, OrderPosition, Team
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 
 
@@ -178,6 +178,41 @@ def order2(event2, item2):
             positionid=1,
         )
         return o
+
+
+@pytest.fixture
+@scopes_disabled()
+def team2(organizer, event2):
+    team2 = Team.objects.create(
+        organizer=organizer,
+        name="Test-Team 2",
+        can_change_teams=True,
+        can_manage_gift_cards=True,
+        can_change_items=True,
+        can_create_events=True,
+        can_change_event_settings=True,
+        can_change_vouchers=True,
+        can_view_vouchers=True,
+        can_change_orders=True,
+        can_manage_customers=True,
+        can_manage_reusable_media=True,
+        can_change_organizer_settings=True,
+
+    )
+    team2.limit_events.add(event2)
+    team2.save()
+    return team2
+
+
+@pytest.fixture
+@scopes_disabled()
+def limited_token_client(client, team2):
+    team2.can_view_orders = True
+    team2.can_view_vouchers = True
+    team2.save()
+    t = team2.tokens.create(name='Foo')
+    client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+    return client
 
 
 TEST_ORDERPOSITION_RES = {
@@ -987,10 +1022,40 @@ def test_refund_cancel(token_client, organizer, event, order):
     assert resp.status_code == 400
 
 
+@pytest.mark.parametrize("endpoint_template, response_code", [('/api/v1/organizers/{}/events/{}/orderpositions/', 403),('/api/v1/organizers/{}/orderpositions/', 200)])
+@pytest.mark.django_db
+def test_orderposition_list_limited_read(endpoint_template, response_code, limited_token_client, organizer, device, event, order, item, subevent, subevent2, question):
+    endpoint =  endpoint_template.format(organizer.slug, event.slug)
+
+    i2 = copy.copy(item)
+    i2.pk = None
+    i2.save()
+    with scopes_disabled():
+        var = item.variations.create(value="Children")
+        var2 = item.variations.create(value="Children")
+        res = copy.copy(TEST_ORDERPOSITION_RES)
+        op = order.positions.first()
+        op.variation = var
+        op.save()
+        res["id"] = op.pk
+        res["item"] = item.pk
+        res["variation"] = var.pk
+        res["answers"][0]["question"] = question.pk
+        res["print_logs"][0]["id"] = op.print_logs.first().pk
+        res["print_logs"][0]["device_id"] = device.device_id
+
+    resp = limited_token_client.get(endpoint)
+    assert resp.status_code == response_code
+    if response_code == 200:
+        assert resp.json() == {'count': 0, 'next': None, 'previous': None, 'results': []}
+    else:
+        assert resp.json() == {'detail': 'You do not have permission to perform this action.'}
+
+
 @pytest.mark.parametrize("endpoint_template", [('/api/v1/organizers/{}/events/{}/orderpositions/'),('/api/v1/organizers/{}/orderpositions/')])
 @pytest.mark.django_db
 def test_orderposition_list(endpoint_template, token_client, organizer, device, event, order, item, subevent, subevent2, question, django_assert_num_queries):
-    endpoint =  '/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug)
+    endpoint =  endpoint_template.format(organizer.slug, event.slug)
 
     i2 = copy.copy(item)
     i2.pk = None
@@ -1080,8 +1145,12 @@ def test_orderposition_list(endpoint_template, token_client, organizer, device, 
         'gate': None,
         'type': 'entry'
     }]
-    with django_assert_num_queries(16):
-        resp = token_client.get(endpoint+'?has_checkin=true')
+    if '/events/' in endpoint:
+        with django_assert_num_queries(16):
+            resp = token_client.get(endpoint+'?has_checkin=true')
+    else:
+        with django_assert_num_queries(15):
+            resp = token_client.get(endpoint+'?has_checkin=true')
     assert [res] == resp.data['results']
 
     op.subevent = subevent
@@ -1189,6 +1258,23 @@ def test_orderposition_printlog(endpoint_template, token_client, team, organizer
         assert l.api_token.team == team
         assert l.datetime.isoformat() == "2023-09-04T10:23:45+00:00"
 
+@pytest.mark.parametrize("endpoint_template, response_code", [
+    ('/api/v1/organizers/{}/events/{}/orderpositions/', 403),
+    ('/api/v1/organizers/{}/orderpositions/', 404)])
+@pytest.mark.django_db
+def test_orderposition_printlog(endpoint_template, response_code, limited_token_client, team, organizer, event, order, item, question):
+    endpoint = endpoint_template.format(organizer.slug, event.slug)
+    with scopes_disabled():
+        op = order.positions.first()
+    resp = limited_token_client.post(endpoint+'{}/printlog/'.format(op.pk), data={
+        "datetime": "2023-09-04T12:23:45+02:00",
+        "source": "pretixscan",
+        "type": "badge",
+        "info": {
+            "cashier": 1234,
+        }
+    }, format='json')
+    assert resp.status_code == response_code
 
 @pytest.mark.django_db
 def test_order_mark_paid_pending(token_client, organizer, event, order):
