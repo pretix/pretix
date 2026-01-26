@@ -40,7 +40,7 @@ import logging
 import mimetypes
 import os
 import re
-from collections import OrderedDict, defaultdict
+from collections import Counter, OrderedDict, defaultdict
 from decimal import Decimal
 from urllib.parse import quote
 
@@ -1431,11 +1431,13 @@ class OrderChangeMixin:
                     'categories': []
                 }
                 current_addon_products = defaultdict(list)
+                current_addon_products_missing = Counter()
                 for a in p.addons.all():
                     if a.canceled:
                         continue
                     if not a.is_bundled:
                         current_addon_products[a.item_id, a.variation_id].append(a)
+                        current_addon_products_missing[a.item, a.variation] += 1
 
                 for iao in p.item.addons.all():
                     ckey = '{}-{}'.format(p.subevent.pk if p.subevent else 0, iao.addon_category.pk)
@@ -1473,6 +1475,7 @@ class OrderChangeMixin:
                         if i.has_variations:
                             for v in i.available_variations:
                                 v.initial = len(current_addon_products[i.pk, v.pk])
+                                current_addon_products_missing[i, v] = 0
                                 if v.initial and i.free_price:
                                     a = current_addon_products[i.pk, v.pk][0]
                                     v.initial_price = TaxedPrice(
@@ -1488,6 +1491,7 @@ class OrderChangeMixin:
                             i.expand = any(v.initial for v in i.available_variations)
                         else:
                             i.initial = len(current_addon_products[i.pk, None])
+                            current_addon_products_missing[i, None] = 0
                             if i.initial and i.free_price:
                                 a = current_addon_products[i.pk, None][0]
                                 i.initial_price = TaxedPrice(
@@ -1509,7 +1513,8 @@ class OrderChangeMixin:
                             'min_count': iao.min_count,
                             'max_count': iao.max_count,
                             'iao': iao,
-                            'items': [i for i in items if not i.require_voucher]
+                            'items': [i for i in items if not i.require_voucher],
+                            'items_missing': {k: v for k, v in current_addon_products_missing.items() if v},
                         })
 
         return positions
