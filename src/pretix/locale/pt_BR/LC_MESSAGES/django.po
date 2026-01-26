@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2025-12-18 01:00+0000\n"
+"PO-Revision-Date: 2026-01-26 22:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -4366,6 +4366,8 @@ msgid ""
 "to confirm changing your email address from {old_email}\n"
 "to {new_email}, use the following code:"
 msgstr ""
+"para confirmar a alteração do seu endereço de email de {old_email}\n"
+"para {new_email}, use o código a seguir:"
 
 #: pretix/base/models/auth.py:377
 #, python-brace-format
@@ -4373,6 +4375,8 @@ msgid ""
 "to confirm that your email address {email} belongs to your pretix account, "
 "use the following code:"
 msgstr ""
+"para confirmar que o seu endereço de email {email} pertence a sua conta do "
+"pretix, use o código a seguir:"
 
 #: pretix/base/models/auth.py:391
 msgid "pretix confirmation code"
@@ -8185,6 +8189,9 @@ msgid ""
 "2017-05-31 14:00 – 16:00\n"
 "2017-05-31 14:00 – 2017-06-01 14:00"
 msgstr ""
+"2017-05-31 10:00 – 12:00\n"
+"2017-05-31 14:00 – 16:00\n"
+"2017-05-31 14:00 – 2017-06-01 14:00"
 
 #: pretix/base/pdf.py:500
 msgid "Reusable Medium ID"
@@ -16267,7 +16274,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:1037
 msgid "I understand that this is not reversible and want to continue"
-msgstr ""
+msgstr "Eu entendo que esta ação não é reversível e eu quero continuar"
 
 #: pretix/control/forms/orders.py:1042
 msgid ""
@@ -27627,7 +27634,7 @@ msgstr "A lista selecionada foi apagada."
 
 #: pretix/control/views/dashboards.py:114
 msgid "Attendees (ordered)"
-msgstr "Participantes (com pedidos)"
+msgstr "Participantes (com pedido)"
 
 #: pretix/control/views/dashboards.py:124
 msgid "Attendees (paid)"
