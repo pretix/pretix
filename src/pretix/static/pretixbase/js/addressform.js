@@ -170,16 +170,18 @@ $(function () {
         if (dependents.vat_id && dependents.transmission_type && dependents.transmission_peppol_participant_id) {
             // In Belgium, the VAT ID is built from "BE" + the company ID. The Peppol ID also needs to be built
             // from the company ID with ID scheme 0208. We can save users some knowing and typing by filling this in!
-            let autofill_peppol_id = !!!dependents.transmission_peppol_participant_id.val();
-            const fill_peppol_id = function () {
-                const vatId = dependents.vat_id.val();
-                if (vatId && vatId.startsWith("BE") && dependents.transmission_type.val() === "peppol" && autofill_peppol_id) {
-                    dependents.transmission_peppol_participant_id.val("0201:" + vatId.substring(2))
+            if (!dependents.transmission_peppol_participant_id.val()) {
+                const fill_peppol_id = function () {
+                    const vatId = dependents.vat_id.val();
+                    if (vatId && vatId.startsWith("BE") && dependents.transmission_type.val() === "peppol" && autofill_peppol_id) {
+                        dependents.transmission_peppol_participant_id.val("0201:" + vatId.substring(2))
+                    }
                 }
+                dependents.vat_id.add(dependents.transmission_type).on("change", fill_peppol_id);
+                dependents.transmission_peppol_participant_id.one("change", () => {
+                    dependents.vat_id.add(dependents.transmission_type).unbind("change", fill_peppol_id)
+                });
             }
-            $(dependents.vat_id).on("change", fill_peppol_id);
-            $(dependents.transmission_type).on("change", fill_peppol_id);
-            $(dependents.transmission_peppol_participant_id).on("change", () => { autofill_peppol_id = false; });
         }
     });
 
