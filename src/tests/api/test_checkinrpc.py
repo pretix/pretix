@@ -738,6 +738,19 @@ def test_question_expand(token_client, organizer, clist, event, order, question)
 
 
 @pytest.mark.django_db
+def test_addons_expand(token_client, organizer, clist, event, order, question, other_item):
+    with scopes_disabled():
+        p = order.positions.first()
+        question[0].save()
+        p.answers.create(question=question[0], answer="3")
+
+    resp = _redeem(token_client, organizer, clist, p.secret, {"answers": {question[0].pk: ""}}, query="?expand=addons&expand=item")
+    assert resp.status_code == 201
+    assert resp.data["status"] == "ok"
+    assert resp.data["position"]["addons"][0]["item"]["id"] == other_item.pk
+
+
+@pytest.mark.django_db
 def test_store_failed(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()
