@@ -337,7 +337,8 @@ class OverviewReport(Report):
             date_until=d_end,
             subevent_date_from=sd_start,
             subevent_date_until=sd_end,
-            fees=True
+            fees=True,
+            skip_empty_lines=form_data.get("skip_empty_lines")
         )
 
     def _table_story(self, doc, form_data, net=False):
@@ -477,6 +478,10 @@ class OverviewReport(Report):
                 'This date filter might be removed in the future. '
                 'Use the "Accounting report" in the export section instead.'
             ))
+        )
+        f.fields['skip_empty_lines'] = forms.BooleanField(
+            label=_("Skip empty lines"),
+            required=False,
         )
         return f.fields
 

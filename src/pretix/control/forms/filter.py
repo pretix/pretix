@@ -1315,10 +1315,10 @@ class QuestionAnswerFilterForm(forms.Form):
 
         if date_range is not None:
             d_start, d_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), date_range, self.event.timezone)
-            opqs = opqs.filter(
-                subevent__date_from__gte=d_start,
-                subevent__date_from__lt=d_end
-            )
+            if d_start:
+                opqs = opqs.filter(subevent__date_from__gte=d_start)
+            if d_end:
+                opqs = opqs.filter(subevent__date_from__lt=d_end)
 
         s = fdata.get("status", Order.STATUS_PENDING + Order.STATUS_PAID)
         if s != "":

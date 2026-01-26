@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-16 09:22+0000\n"
-"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
+"PO-Revision-Date: 2026-01-16 22:00+0000\n"
+"Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -35839,9 +35839,11 @@ msgid "A payment of %(total)s is still pending for this order."
 msgstr "Tack för din bokning  på %(total)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:97
-#, fuzzy, python-format
+#, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr "Tack för din bokning!"
+msgstr ""
+"Om din betalning inte gick igenom, se till att uppdatera din "
+"betalningsinformation innan %(date)s via knappen nedan."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:108
 msgid "Re-try payment or choose another payment method"

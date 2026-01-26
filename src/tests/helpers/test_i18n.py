@@ -59,6 +59,7 @@ def test_get_locale():
         ("pt-pt", "PT", "pt-pt", "pt-pt", "pt_PT"),
         ("es", "MX", "es-mx", "es", "es_MX"),
         ("es-419", "MX", "es-419", "es-419", "es_MX"),
+        ("zh-hans", "US", "zh-hans", "zh-hans", "zh_Hans"),
         ("zh-hans", "CN", "zh-hans", "zh-hans", "zh_Hans_CN"),
         ("zh-hant", "TW", "zh-hant", "zh-hant", "zh_Hant_TW"),
     ],

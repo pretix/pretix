@@ -106,7 +106,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
             'variations', 'addons', 'bundles', 'meta_values', 'meta_values__property',
             'variations__meta_values', 'variations__meta_values__property',
             'require_membership_types', 'variations__require_membership_types',
-            'limit_sales_channels', 'variations__limit_sales_channels',
+            'limit_sales_channels', 'variations__limit_sales_channels', 'program_times'
         ).all()
 
     def perform_create(self, serializer):

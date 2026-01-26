@@ -92,6 +92,9 @@ a.searchresult, .check-result {
     word-break: break-word;
     color: $text-muted;
   }
+  .addons {
+    white-space: pre-line;
+  }
 }
 
 .check-result-status {

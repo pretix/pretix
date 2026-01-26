@@ -381,15 +381,21 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
     qs = qs.filter(reduce(operator.or_, lists_qs))
 
+    prefetch_related = [
+        Prefetch(
+            lookup='checkins',
+            queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists]).select_related('device')
+        ),
+        Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
+        'answers', 'answers__options', 'answers__question',
+    ]
+    select_related = [
+        'item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order', 'seat'
+    ]
+
     if pdf_data:
         qs = qs.prefetch_related(
-            Prefetch(
-                lookup='checkins',
-                queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists]).select_related('device')
-            ),
-            Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
-            'answers', 'answers__options', 'answers__question',
-            Prefetch('addons', OrderPosition.objects.select_related('item', 'variation')),
+            # Don't add to list, we don't want to propagate to addons
             Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
                 Prefetch(
                     'event',
@@ -404,32 +410,39 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
                     )
                 )
             ))
-        ).select_related(
-            'item', 'variation', 'item__category', 'addon_to', 'order', 'order__invoice_address', 'seat'
         )
-    else:
-        qs = qs.prefetch_related(
-            Prefetch(
-                lookup='checkins',
-                queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists]).select_related('device')
-            ),
-            Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
-            'answers', 'answers__options', 'answers__question',
-            Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
-        ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order', 'seat')
 
     if expand and 'subevent' in expand:
-        qs = qs.prefetch_related(
+        prefetch_related += [
             'subevent', 'subevent__event', 'subevent__subeventitem_set', 'subevent__subeventitemvariation_set',
             'subevent__seat_category_mappings', 'subevent__meta_values'
-        )
+        ]
 
     if expand and 'item' in expand:
-        qs = qs.prefetch_related('item', 'item__addons', 'item__bundles', 'item__meta_values',
-                                 'item__variations').select_related('item__tax_rule')
+        prefetch_related += [
+            'item', 'item__addons', 'item__bundles', 'item__meta_values',
+            'item__variations',
+        ]
+        select_related.append('item__tax_rule')
 
     if expand and 'variation' in expand:
-        qs = qs.prefetch_related('variation', 'variation__meta_values')
+        prefetch_related += [
+            'variation', 'variation__meta_values',
+        ]
+
+    if expand and 'addons' in expand:
+        prefetch_related += [
+            Prefetch('addons', OrderPosition.objects.prefetch_related(*prefetch_related).select_related(*select_related)),
+        ]
+    else:
+        prefetch_related += [
+            Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
+        ]
+
+    if pdf_data:
+        select_related.remove("order")  # Don't need it twice on this queryset
+
+    qs = qs.prefetch_related(*prefetch_related).select_related(*select_related)
 
     return qs
 
@@ -966,6 +979,7 @@ class CheckinRPCSearchView(ListAPIView):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['expand'] = self.request.query_params.getlist('expand')
+        ctx['organizer'] = self.request.organizer
         ctx['pdf_data'] = False
         return ctx
 

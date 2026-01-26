@@ -738,6 +738,19 @@ def test_question_expand(token_client, organizer, clist, event, order, question)
 
 
 @pytest.mark.django_db
+def test_addons_expand(token_client, organizer, clist, event, order, question, other_item):
+    with scopes_disabled():
+        p = order.positions.first()
+        question[0].save()
+        p.answers.create(question=question[0], answer="3")
+
+    resp = _redeem(token_client, organizer, clist, p.secret, {"answers": {question[0].pk: ""}}, query="?expand=addons&expand=item")
+    assert resp.status_code == 201
+    assert resp.data["status"] == "ok"
+    assert resp.data["position"]["addons"][0]["item"]["id"] == other_item.pk
+
+
+@pytest.mark.django_db
 def test_store_failed(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()
@@ -931,6 +944,12 @@ def test_search(token_client, organizer, event, clist, clist_all, item, other_it
             '/api/v1/organizers/{}/checkinrpc/search/?list={}&search=z3fsn8jyu'.format(organizer.slug, clist_all.pk))
     assert resp.status_code == 200
     assert [p1] == resp.data['results']
+
+    with django_assert_max_num_queries(25):
+        resp = token_client.get(
+            '/api/v1/organizers/{}/checkinrpc/search/?list={}&search=z3fsn8jyu&expand=item'.format(organizer.slug, clist_all.pk))
+    assert resp.status_code == 200
+    assert resp.data['results'][0]['item']['name']
 
 
 @pytest.mark.django_db

@@ -141,7 +141,7 @@ def get_babel_locale():
 
     for locale in try_locales:
         if localedata.exists(locale):
-            return locale
+            return localedata.normalize_locale(locale)
 
     return "en"
 

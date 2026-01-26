@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2025-05-17 18:00+0000\n"
-"Last-Translator: Patrick Chilton <chpatrick@gmail.com>\n"
+"PO-Revision-Date: 2026-01-23 15:00+0000\n"
+"Last-Translator: Vajda Tamás <vajda.tamas@szwg.hu>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
 "Language: hu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -37,11 +37,11 @@ msgstr "arab"
 
 #: pretix/_base_settings.py:91
 msgid "Basque"
-msgstr ""
+msgstr "Baszk"
 
 #: pretix/_base_settings.py:92
 msgid "Catalan"
-msgstr ""
+msgstr "Katalán"
 
 #: pretix/_base_settings.py:93
 msgid "Chinese (simplified)"
@@ -57,7 +57,7 @@ msgstr "cseh"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "Horvát"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -89,7 +89,7 @@ msgstr "görög"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "Héber"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -101,7 +101,7 @@ msgstr "olasz"
 
 #: pretix/_base_settings.py:107
 msgid "Japanese"
-msgstr ""
+msgstr "Japán"
 
 #: pretix/_base_settings.py:108
 msgid "Latvian"
@@ -133,11 +133,11 @@ msgstr "orosz"
 
 #: pretix/_base_settings.py:115
 msgid "Slovak"
-msgstr ""
+msgstr "Szlovák"
 
 #: pretix/_base_settings.py:116
 msgid "Swedish"
-msgstr ""
+msgstr "Svéd"
 
 #: pretix/_base_settings.py:117
 msgid "Spanish"
@@ -145,7 +145,7 @@ msgstr "spanyol"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "Spanyol (Latin-Amerikai változat)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -305,7 +305,7 @@ msgstr "A fizetés túl későn történt meg az elfogadáshoz."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2321
 msgid "The program end must not be before the program start."
-msgstr ""
+msgstr "A program vége időpont nem lehet a kezdő időpont előtt."
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2315
 #, fuzzy
@@ -369,12 +369,12 @@ msgstr "Ezt a fajta kérdést nem lehet megmutatni becsekkolás közben."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
-msgstr ""
+msgstr "Már létező médium (azonos azonosító és típus)."
 
 #: pretix/api/serializers/order.py:85
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr ""
+msgstr "\"{input}\" nem választható."
 
 #: pretix/api/serializers/order.py:1453 pretix/api/views/cart.py:224
 #: pretix/base/services/orders.py:1605
@@ -397,38 +397,38 @@ msgstr "Nem áll elegendő \"{}\" kvóta rendelkezésre a művelet végrehajtás
 #: pretix/api/serializers/organizer.py:145
 #: pretix/control/forms/organizer.py:925 pretix/presale/forms/customer.py:458
 msgid "An account with this email address is already registered."
-msgstr ""
+msgstr "Ezzel az email címmel már létezik regisztráció."
 
 #: pretix/api/serializers/organizer.py:278
 #: pretix/control/forms/organizer.py:761
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
-msgstr ""
+msgstr "Ezzel a titkos kulccsal már létezik ajándékkártya."
 
 #: pretix/api/serializers/organizer.py:369
 #: pretix/control/views/organizer.py:1042
 msgid "pretix account invitation"
-msgstr ""
+msgstr "pretix ügyfél meghívó"
 
 #: pretix/api/serializers/organizer.py:391
 #: pretix/control/views/organizer.py:1141
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Ez a felhasználó már meghívásra került ebbe a csoportba."
 
 #: pretix/api/serializers/organizer.py:407
 #: pretix/control/views/organizer.py:1158
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "A felhasználó már rendelkezik hozzáféréssel."
 
 #: pretix/api/views/cart.py:209
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr ""
+msgstr "A kupon elérte a felhasználhatóságának felső határát."
 
 #: pretix/api/views/checkin.py:627 pretix/api/views/checkin.py:634
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "A médium rendezvényhez csatlakoztatása megtörtént"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:764
 #, python-brace-format
@@ -436,21 +436,23 @@ msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
+"A(z) \"{application_name}\" applikáció mostantól eléréssel rendelkezik a "
+"fiókodhoz."
 
 #: pretix/api/views/order.py:609 pretix/control/views/orders.py:1608
 #: pretix/presale/views/order.py:736 pretix/presale/views/order.py:816
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Ehhez a megrendeléshez nem készíthető számla."
 
 #: pretix/api/views/order.py:614 pretix/control/views/orders.py:1610
 #: pretix/presale/views/order.py:738 pretix/presale/views/order.py:818
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "Ehhez a megrendeléshez már készült számla."
 
 #: pretix/api/views/order.py:640 pretix/control/views/orders.py:1788
 #: pretix/control/views/users.py:145
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "Az email küldése sikertelen. Kérjük, próbálja meg később."
 
 #: pretix/api/views/order.py:720 pretix/base/services/cart.py:223
 #: pretix/base/services/orders.py:190 pretix/presale/views/order.py:800
@@ -461,22 +463,22 @@ msgstr "\"{}\" termékhez nincs kvóta rendelve."
 
 #: pretix/api/webhooks.py:263 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr ""
+msgstr "Új megrendelés került rögzítésre"
 
 #: pretix/api/webhooks.py:267 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr ""
+msgstr "Az új megrendelés jóváhagyásra vár"
 
 #: pretix/api/webhooks.py:271 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr ""
+msgstr "A megrendelés fizetett státuszba került"
 
 #: pretix/api/webhooks.py:275 pretix/base/models/checkin.py:355
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1569
 msgid "Order canceled"
-msgstr ""
+msgstr "A megrendelés lemondásra került"
 
 #: pretix/api/webhooks.py:279 pretix/base/notifications.py:257
 msgid "Order reactivated"
@@ -614,29 +616,23 @@ msgstr ""
 
 #: pretix/api/webhooks.py:401
 msgid "Waiting list entry changed"
-msgstr ""
+msgstr "A várólista eleme megváltozott."
 
 #: pretix/api/webhooks.py:405
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "Waiting list entry deleted"
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr "A várólista eleme törlésre került."
 
 #: pretix/api/webhooks.py:409
 msgid "Waiting list entry received voucher"
-msgstr ""
+msgstr "A várólista eleme kupont kapott"
 
 #: pretix/api/webhooks.py:413
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "Kuponkód"
+msgstr "Kuponkód hozzáadásra került"
 
 #: pretix/api/webhooks.py:417
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher changed"
-msgstr "Kuponkód"
+msgstr "Kuponkód megváltozott"
 
 #: pretix/api/webhooks.py:418
 msgid ""
