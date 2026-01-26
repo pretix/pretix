@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2025-12-09 00:47+0000\n"
+"PO-Revision-Date: 2026-01-26 22:00+0000\n"
 "Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_BR/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -162,12 +162,12 @@ msgstr "Pedidos pagos"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (ordered)"
-msgstr ""
+msgstr "Participantes (com pedido)"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (paid)"
-msgstr ""
+msgstr "Participantes (pago)"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
 msgid "Total revenue"
