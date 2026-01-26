@@ -2892,6 +2892,7 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
             else:
                 ctx['schedule_form'] = self.schedule_form
                 ctx['rrule_form'] = self.rrule_form
+                ctx['scheduled_copy_from'] = self.scheduled_copy_from
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:
