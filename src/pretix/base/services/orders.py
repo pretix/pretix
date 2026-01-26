@@ -2114,8 +2114,8 @@ class OrderChangeManager:
                             or (a.variation and not a.variation.all_sales_channels and not a.variation.limit_sales_channels.contains(self.order.sales_channel))
                             or a.item.unavailability_reason(has_voucher=True, subevent=a.subevent)
                             or (
-                                not item.all_sales_channels and
-                                not item.limit_sales_channels.contains(self.order.sales_channel)
+                                not a.item.all_sales_channels and
+                                not a.item.limit_sales_channels.contains(self.order.sales_channel)
                             )
                         )
                         if is_unavailable:
