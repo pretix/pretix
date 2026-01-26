@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 09:03+0000\n"
+"POT-Creation-Date: 2026-01-05 12:13+0000\n"
 "PO-Revision-Date: 2025-10-10 17:00+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -155,26 +155,16 @@ msgid "Payment method unavailable"
 msgstr "Betalningsmetod ej tillgänglig"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
 msgstr "Lagda beställningar"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
 msgstr "Betalade beställningar"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
-msgid "Attendees (ordered)"
-msgstr ""
-
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
-msgid "Attendees (paid)"
-msgstr ""
-
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
 msgid "Total revenue"
 msgstr "Totalt"
 
