@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 12:12+0000\n"
-"PO-Revision-Date: 2026-01-26 06:00+0000\n"
+"PO-Revision-Date: 2026-01-26 09:02+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -10704,8 +10704,8 @@ msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
 msgstr ""
-"Als dit is uitgeschakeld zullen de start- en einddatum van het evenement "
-"zonder de tijd worden getoond."
+"Indien uitgeschakeld, worden de begin- en einddatum van het evenement "
+"weergegeven zonder de tijd."
 
 #: pretix/base/settings.py:1499
 msgid "Hide all products that are sold out"
@@ -10723,7 +10723,7 @@ msgstr "Vraag zoekmachines om deze ticketwinkel niet te indexeren"
 
 #: pretix/base/settings.py:1527
 msgid "Show variations of a product expanded by default"
-msgstr "Toon variaties van een product standaard uitgeklapt"
+msgstr "Toon varianten van een product standaard uitgeklapt"
 
 #: pretix/base/settings.py:1536
 msgid "Enable waiting list"
@@ -10736,10 +10736,10 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
-"Wanneer een ticket is uitverkocht kunnen mensen zich inschrijven voor een "
-"wachtlijst. Wanneer een ticket weer beschikbaar komt wordt het gereserveerd "
-"voor de eerste persoon op de wachtlijst, en ontvangt deze persoon een email "
-"met een voucher die kan worden gebruikt om een ticket te kopen."
+"Zodra een ticket uitverkocht is, kunnen klanten zich op een wachtlijst "
+"plaatsen. Zodra er weer een ticket beschikbaar komt, wordt dit gereserveerd "
+"voor de eerste persoon op de wachtlijst. Deze persoon ontvangt een e-"
+"mailbericht met een voucher waarmee hij of zij een ticket kan kopen."
 
 #: pretix/base/settings.py:1548
 msgid "Automatic waiting list assignments"
@@ -10753,15 +10753,16 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
-"Maak automatisch vouchers aan en verstuur ze naar mensen op de wachtlijst "
-"als tickets vrijkomen. Als dit niet actief is zullen mails niet automatisch "
-"verstuurd worden, maar kunt u ze wel handmatig versturen via de "
-"instellingen. Als u de wachtlijst uitschakelt, maar deze optie ingeschakeld "
-"houdt, zullen tickets alsnog worden verstuurd."
+"Als er tickets vrijkomen, maak dan automatisch een voucher aan en stuur deze "
+"naar de eerste persoon op de wachtlijst voor dat product. Als deze optie "
+"niet actief is, worden er geen e-mails automatisch verzonden, maar kunt u ze "
+"handmatig versturen via het configuratiescherm. Als u de wachtlijst "
+"uitschakelt maar deze optie ingeschakeld laat, worden er nog steeds tickets "
+"verzonden."
 
 #: pretix/base/settings.py:1565
 msgid "Waiting list response time"
-msgstr "Wachtlijstreactietijd"
+msgstr "Wachttijd voor reacties op de wachtlijst"
 
 #: pretix/base/settings.py:1568
 msgid ""
@@ -10769,8 +10770,8 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
-"Als een voucher is verstuurd naar een persoon op de wachtlijst moet hij "
-"binnen dit aantal uren worden gebruikt, anders wordt de voucher toegewezen "
+"Als een voucher is verstuurd naar een persoon op de wachtlijst, moet hij "
+"binnen dit aantal uren worden gebruikt. Anders wordt de voucher toegewezen "
 "aan de volgende persoon op de lijst."
 
 #: pretix/base/settings.py:1579
@@ -10786,10 +10787,10 @@ msgid ""
 "remain active."
 msgstr ""
 "De wachtlijst zal volledig worden uitgeschakeld na deze datum. Hierdoor kan "
-"niemand meer aan de wachtlijst worden toegevoegd en zullen kaartjes weer "
-"beschikbaar zijn voor verkoop als het quota dit toestaat, zelfs als er nog "
-"mensen op de wachtlijst staan. Waardebonnen die al verstuurd zijn zullen "
-"actief blijven."
+"niemand meer aan de wachtlijst worden toegevoegd en zullen tickets weer "
+"beschikbaar zijn voor verkoop als het quotum dit toestaat, zelfs als er nog "
+"mensen op de wachtlijst staan. Vouchers die al verstuurd zijn, blijven "
+"actief."
 
 #: pretix/base/settings.py:1592
 msgid "Ask for a name"
@@ -10806,7 +10807,7 @@ msgstr "Naam opgeven verplicht"
 #: pretix/base/settings.py:1603
 msgid "Require a name when signing up to the waiting list.."
 msgstr ""
-"Maakt het opgeven van een naam verplicht om in te schrijven voor de "
+"Maak het opgeven van een naam verplicht om in te schrijven voor de "
 "wachtlijst."
 
 #: pretix/base/settings.py:1613
@@ -10824,7 +10825,7 @@ msgstr "Telefoonnummer opgeven verplicht"
 #: pretix/base/settings.py:1624
 msgid "Require a phone number when signing up to the waiting list.."
 msgstr ""
-"Maakt het opgeven van een telefoonnummer verplicht bij het inschrijven voor "
+"Maak het opgeven van een telefoonnummer verplicht bij het inschrijven voor "
 "de wachtlijst."
 
 #: pretix/base/settings.py:1634
@@ -10836,7 +10837,7 @@ msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
-"Als u om een telefoonnummer vraagt kunt u in dit veld uitleggen waarom en "
+"Als u om een telefoonnummer vraagt, kunt u in dit veld uitleggen waarom en "
 "hoe u de verzamelde telefoonnummers zult gebruiken."
 
 #: pretix/base/settings.py:1649
@@ -10870,8 +10871,8 @@ msgid ""
 "failed scans will not be counted, and the user will not see the different "
 "check-in lists."
 msgstr ""
-"Indien ingeschakeld kunnen klanten zien hoeveel keer ze binnengegaan zijn op "
-"het evenement. Dit is not noodzakelijk maar dit kan handig zijn wanneer er "
+"Indien ingeschakeld, kunnen klanten zien hoeveel keer ze binnengegaan zijn "
+"op het evenement. Dat is niet noodzakelijk maar kan handig zijn wanneer er "
 "tickets verkocht worden die slechts een aantal keer geldig zijn. Zo kunnen "
 "klanten zien hoeveel keer ze het ticket nog kunnen gebruiken. Buitengaan of "
 "mislukte scans worden niet meegerekend. De gebruiker zal de verschillende "
@@ -10879,11 +10880,11 @@ msgstr ""
 
 #: pretix/base/settings.py:1679
 msgid "Allow users to download tickets"
-msgstr "Sta gebruikers toe om tickets te downloaden"
+msgstr "Gebruikers mogen tickets downloaden"
 
 #: pretix/base/settings.py:1680
 msgid "If this is off, nobody can download a ticket."
-msgstr "Als dit is uitgeschakeld kan niemand een ticket downloaden."
+msgstr "Als dit is uitgeschakeld, kan niemand een ticket downloaden."
 
 #: pretix/base/settings.py:1689
 msgid "Download date"
@@ -10897,8 +10898,8 @@ msgid ""
 msgstr ""
 "Tickets zullen kunnen worden gedownload na deze datum. Als u de "
 "evenementenreeksfunctie gebruikt en een bestelling tickets bevat voor "
-"meerdere datums zullen alle tickets downloadbaar zijn als ten minste één van "
-"de datums het toestaat."
+"meerdere datums, dan zullen alle tickets downloadbaar zijn als ten minste "
+"één van de datums het toestaat."
 
 #: pretix/base/settings.py:1701
 msgid "Generate tickets for add-on products and bundled products"
@@ -10910,10 +10911,9 @@ msgid ""
 "for add-on products or bundled products. With this option, a separate ticket "
 "is issued for every add-on product or bundled product as well."
 msgstr ""
-"Standaard worden tickets alleen gegenereerd voor individueel geselecteerde "
-"producten, en niet voor add-onproducten en gebundelde producten. Als deze "
-"optie is ingeschakeld wordt er ook een ticket gegenereerd voor elk add-"
-"onproduct en gebundeld product."
+"Standaard worden tickets alleen uitgegeven voor afzonderlijk geselecteerde "
+"producten, niet voor add-on of gebundelde producten. Met deze optie wordt "
+"ook voor elk add-on of gebundeld product een apart ticket uitgegeven."
 
 #: pretix/base/settings.py:1715
 msgid "Generate tickets for all products"
@@ -10925,10 +10925,10 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
-"Als deze optie is uitgeschakeld worden er alleen tickets gegenereerd voor "
-"producten die zijn aangemerkt als \"toegangsbewijs\" in de "
-"productinstellingen. U kunt het genereren van tickets ook voor een specifiek "
-"product uitschakelen."
+"Als deze optie is uitgeschakeld, worden alleen tickets uitgegeven voor "
+"producten die in de productinstellingen zijn gemarkeerd als ‘"
+"toegangsbewijs'. U kunt het uitgeven van tickets ook voor elk product "
+"afzonderlijk uitschakelen."
 
 #: pretix/base/settings.py:1728
 msgid "Generate tickets for pending orders"
@@ -10939,8 +10939,8 @@ msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
-"Als dit is uitgeschakeld is het alleen mogelijk om tickets te downloaden "
-"nadat een bestelling is betaald."
+"Als deze optie is uitgeschakeld, kunnen tickets alleen worden gedownload "
+"nadat een bestelling als betaald is gemarkeerd."
 
 #: pretix/base/settings.py:1740
 msgid "Do not issue ticket before email address is validated"
@@ -10974,12 +10974,12 @@ msgid ""
 msgstr ""
 "Als de beschikbaarheid van tickets onder dit percentage valt, zal het "
 "evenement (of de datum indien het een reeks is) gemarkeerd worden in de "
-"kalender als 'lage beschikbaarheid'. Als u deze optie leeg houdt zal lage "
+"kalender als 'lage beschikbaarheid'. Als u deze optie leeg houdt, zal lage "
 "beschikbaar niet publiek worden getoond."
 
 #: pretix/base/settings.py:1772
 msgid "Show availability in event overviews"
-msgstr "Toon beschikbaarheid in evenementsoverzichten"
+msgstr "Toon beschikbaarheid in evenementenoverzichten"
 
 #: pretix/base/settings.py:1773
 msgid ""
@@ -10987,10 +10987,10 @@ msgid ""
 "make for longer page loading times if you have lots of events and the shown "
 "status might be out of date for up to two minutes."
 msgstr ""
-"Als dit is ingeschakeld zal de lijst van evenementen aangeven of evenementen "
-"zijn uitverkocht. Als u veel evenementen heeft kan dit ervoor zorgen dat het "
-"laden van uw pagina langer duurt, en de getoonde status kan tot twee minuten "
-"achterlopen."
+"Als dit is ingeschakeld, zal de lijst van evenementen aangeven of "
+"evenementen zijn uitverkocht. Als u veel evenementen hebt, kan dit ervoor "
+"zorgen dat het laden van uw pagina langer duurt, en de getoonde status kan "
+"tot twee minuten achterlopen."
 
 #: pretix/base/settings.py:1786 pretix/base/settings.py:1794
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:8
@@ -11014,7 +11014,7 @@ msgid ""
 "If your event series has more than 50 dates in the future, only the month or "
 "week calendar can be used."
 msgstr ""
-"Als uw evenementenreeks meer dan 50 toekomstige datums heeft kan alleen de "
+"Als uw evenementenreeks meer dan 50 toekomstige datums heeft, kan alleen de "
 "maand- of weekkalender worden gebruikt."
 
 #: pretix/base/settings.py:1807
@@ -11051,7 +11051,7 @@ msgstr "Geen wijzigingen in bestaande bestellingen"
 
 #: pretix/base/settings.py:1841 pretix/base/settings.py:1850
 msgid "Only the person who ordered can make changes"
-msgstr "Alleen de persoon die de bestelling geplaatst heeft kan deze aanpassen"
+msgstr "Alleen de persoon die de bestelling geplaatst heeft, kan ze aanpassen"
 
 #: pretix/base/settings.py:1842 pretix/base/settings.py:1851
 msgid "Both the attendee and the person who ordered can make changes"
@@ -11086,8 +11086,8 @@ msgid ""
 "used."
 msgstr ""
 "De laatste datum waarop gebruikers de details van hun bestellingen kunnen "
-"aanpassen, zoals namen van gasten of antwoorden op vragen. Als u de "
-"evenementenreeks-functie gebruikt, en een bestelling tickets bevat voor "
+"aanpassen, zoals namen van deelnemers of antwoorden op vragen. Als u de "
+"evenementenreeksfunctie gebruikt en een bestelling tickets bevat voor "
 "meerdere evenementdatums, zal de eerste datum worden gebruikt."
 
 #: pretix/base/settings.py:1884
@@ -11104,8 +11104,8 @@ msgid ""
 "Only allow changes if the resulting price is higher or equal than the "
 "previous price."
 msgstr ""
-"Sta veranderingen alleen toe wanneer de nieuwe prijs gelijk aan of hoger is "
-"dan de vorige prijs."
+"Sta veranderingen alleen toe wanneer de nieuwe prijs gelijk is aan of hoger "
+"is dan de vorige prijs."
 
 #: pretix/base/settings.py:1904 pretix/base/settings.py:1915
 msgid ""
@@ -11126,15 +11126,13 @@ msgid ""
 "Allow changes regardless of price, as long as no refund is required (i.e. "
 "the resulting price is not lower than what has already been paid)."
 msgstr ""
-"Laat veranderingen toe onafhankelijk van de prijs, zo lang dat een "
-"terugbetaling niet verplicht is (bv. de uiteindelijke prijs is niet lager "
-"dan wat ze al betaald hebben)."
+"Sta wijzigingen toe ongeacht de prijs, zolang er geen terugbetaling nodig is "
+"(d.w.z. de uiteindelijke prijs is niet lager dan wat al betaald is)."
 
 #: pretix/base/settings.py:1908 pretix/base/settings.py:1919
 msgid "Allow changes regardless of price, even if this results in a refund."
 msgstr ""
-"Sta veranderingen onafhankelijk van de prijs toe, zelfs als een "
-"terugbetaling nodig is."
+"Sta wijzigingen toe ongeacht de prijs, zelfs als een terugbetaling nodig is."
 
 #: pretix/base/settings.py:1912
 msgid "Requirement for changed prices"
@@ -11146,7 +11144,7 @@ msgstr "Sta wijzigingen alleen toe tot"
 
 #: pretix/base/settings.py:1939
 msgid "Allow change even though the ticket has already been checked in"
-msgstr "Sta wijziging toe zelfs wanneer het ticket al ingecheckt is"
+msgstr "Sta wijzigingen toe zelfs wanneer het ticket al ingecheckt is"
 
 #: pretix/base/settings.py:1940
 msgid ""
@@ -11156,16 +11154,16 @@ msgid ""
 "in individually. Use with care, and preferably only in combination with a "
 "limitation on price changes above."
 msgstr ""
-"Standaard worden veranderingen aan een bestelling uitgeschakeld nadat een "
-"ticket gebruikt is bij check-in. Als u deze optie inschakelt worden "
-"veranderingen wel toegelaten. Het is niet mogelijk om add-on producten te "
-"verwijderen die al gebruikt zijn van check-in. Wees hier voorzichtig mee and "
-"gebruik het bij voorkeur enkel in combinatie met een beperking op "
-"prijsveranderingen (zie hierboven)."
+"Standaard zijn wijzigingen aan de bestelling uitgeschakeld nadat een ticket "
+"in de bestelling is ingecheckt. Als u dit vakje aanvinkt, wordt deze "
+"vereiste opgeheven. Het is nog steeds niet mogelijk om een add-on product te "
+"verwijderen dat al individueel is ingecheckt. Gebruik deze functie met zorg "
+"en bij voorkeur alleen in combinatie met een beperking op prijswijzigingen "
+"zoals hierboven beschreven."
 
 #: pretix/base/settings.py:1952
 msgid "Allow individual attendees to change their ticket"
-msgstr "Laat individuele aanwezigen toe om hun ticket te wijzigen"
+msgstr "Sta individuele deelnemers toe om hun ticket te wijzigen"
 
 #: pretix/base/settings.py:1953
 msgid ""
@@ -11175,10 +11173,12 @@ msgid ""
 "total price of the order. Such changes can always only be made by the main "
 "customer."
 msgstr ""
-"Standaard kan enkel besteller wijzigingen toebrengen aan de bestelling. Als "
-"u deze optie inschakelt kunnen individuele aanwezigen ook wijzigingen "
-"toebrengen maar enkel als de totaalprijs van de bestelling niet verandert. "
-"Zo'n wijziging kan enkel de besteller maken."
+"Standaard kan alleen de persoon die de tickets heeft besteld wijzigingen "
+"aanbrengen. Als u dit vakje aanvinkt, kunnen individuele deelnemers ook "
+"wijzigingen aanbrengen. Individuele deelnemers kunnen echter alleen "
+"wijzigingen aanbrengen die geen invloed hebben op de totale prijs van de "
+"bestelling. Dergelijke wijzigingen kunnen altijd alleen door de hoofdklant "
+"worden aangebracht."
 
 #: pretix/base/settings.py:1965
 msgid "Customers can cancel their unpaid orders"
@@ -11186,7 +11186,7 @@ msgstr "Klanten kunnen hun onbetaalde bestellingen annuleren"
 
 #: pretix/base/settings.py:1977
 msgid "Charge a fixed cancellation fee"
-msgstr "Reken een vast bedrag als annuleringskosten"
+msgstr "Reken een vast bedrag aan als annuleringskosten"
 
 #: pretix/base/settings.py:1978 pretix/base/settings.py:1989
 #: pretix/base/settings.py:2003
@@ -11195,13 +11195,14 @@ msgid ""
 "never charged. Note that it will be your responsibility to claim the "
 "cancellation fee from the user."
 msgstr ""
-"Enkel van toepassing op betalingen in afwachting. Voor gratis bestellingen "
-"wordt er nooit een annuleringskost aangerekend. Het is uw "
-"verantwoordelijkheid om de annuleringskost bij de gebruiker op te vragen."
+"Dit geldt alleen voor bestellingen waarvoor nog geen betaling is ontvangen. "
+"Voor gratis bestellingen worden nooit annuleringskosten in rekening "
+"gebracht. Houd er rekening mee dat het uw verantwoordelijkheid is om de "
+"annuleringskosten bij de gebruiker te claimen."
 
 #: pretix/base/settings.py:1988
 msgid "Charge payment, shipping and service fees"
-msgstr "Reken betalings-, verzend- en servicekosten"
+msgstr "Reken betalings-, verzend- en servicekosten aan"
 
 #: pretix/base/settings.py:2002
 msgid "Charge a percentual cancellation fee"
@@ -11220,9 +11221,9 @@ msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
-"Het betaalde geld zal automatisch worden terugbetaald als de "
-"betalingsmethode dit toestaat. Als dit niet zo is zal er een handmatige "
-"terugbetaling worden aangemaakt, die u zelf zult moeten verwerken."
+"Het betaalde geld zal automatisch worden terugbetaald als de betaalmethode "
+"dat toestaat. Als dat niet zo is, zal er een handmatige terugbetaling worden "
+"aangemaakt, die u zelf zult moeten verwerken."
 
 #: pretix/base/settings.py:2036 pretix/control/forms/orders.py:909
 msgid "Keep a fixed cancellation fee"
@@ -11245,7 +11246,7 @@ msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
 msgstr ""
-"Als deze optie is ingeschakeld krijgen uw klanten de keuze om een kleiner "
+"Als deze optie is ingeschakeld, krijgen uw klanten de keuze om een kleiner "
 "deel van hun bestelbedrag terugbetaald te krijgen, om u met het restbedrag "
 "te steunen."
 
@@ -11254,8 +11255,8 @@ msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
-"Als u dit wilt kunt u ons ook steunen door een kleinere terugbetaling aan te "
-"vragen met de schuifbalk hieronder. Dank u wel!"
+"Als u dat wilt, kunt u ons ook steunen door een kleinere terugbetaling aan "
+"te vragen met de schuifbalk hieronder. Dank u wel!"
 
 #: pretix/base/settings.py:2079
 msgid "Voluntary lower refund explanation"
@@ -11285,8 +11286,8 @@ msgid ""
 msgstr ""
 "Standaard kunnen klanten een willekeurig bedrag invoeren dat van de "
 "terugbetaling wordt afgetrokken. Als u deze waarde bijvoorbeeld op 10 "
-"instelt zullen klanten alleen bedragen kunnen kiezen die een meervoud van 10 "
-"zijn."
+"instelt, zullen klanten alleen bedragen kunnen kiezen die een meervoud van "
+"10 zijn."
 
 #: pretix/base/settings.py:2108
 msgid ""
