@@ -733,6 +733,7 @@ $(function () {
     });
 
     $("#customer-account-login-providers a").click(function () {
+        // Prevent double-submit, see also https://github.com/pretix/pretix/issues/5836
         $(this).addClass("disabled");
     });
 });
