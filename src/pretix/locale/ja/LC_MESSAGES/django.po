@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-12 17:00+0000\n"
+"PO-Revision-Date: 2026-01-26 22:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -27352,10 +27352,8 @@ msgid "Please try again."
 msgstr "もう一度お試しください。"
 
 #: pretix/control/views/auth.py:544
-#, fuzzy
-#| msgid "Two-factor authentication is required to log in"
 msgid "A recovery code for two-factor authentification was used to log in."
-msgstr "ログインするには、二要素認証が必要です"
+msgstr "二要素認証のリカバリーコードがログインに使用されました。"
 
 #: pretix/control/views/auth.py:560
 msgid "Invalid code, please try again."
