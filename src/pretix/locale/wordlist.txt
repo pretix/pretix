@@ -10,6 +10,7 @@ analytics
 anonymize
 anonymized
 Auth
+authentification
 authenticator
 automatical
 availabilities
