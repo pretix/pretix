@@ -301,15 +301,14 @@ Vue.component('availbox', {
             return this.avail[0] < 100 && this.$root.waiting_list_enabled && this.item.allow_waitinglist;
         },
         waiting_list_url: function () {
-            var u
+            var u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?locale=' + lang + '&item=' + this.item.id 
             if (this.item.has_variations) {
-                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&var=' + this.variation.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter;
-            } else {
-                u = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?item=' + this.item.id + '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter;
+                u += '&var=' + this.variation.id
             }
             if (this.$root.subevent) {
                 u += '&subevent=' + this.$root.subevent
             }
+            u += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json) + this.$root.consent_parameter
             return u
         }
     },
