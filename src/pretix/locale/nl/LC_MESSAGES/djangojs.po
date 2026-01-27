@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-01-24 01:00+0000\n"
+"PO-Revision-Date: 2026-01-27 14:51+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -161,12 +161,12 @@ msgstr "Betaalde bestellingen"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (ordered)"
-msgstr ""
+msgstr "Deelnemers (besteld)"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (paid)"
-msgstr ""
+msgstr "Deelnemers (betaald)"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
 msgid "Total revenue"
