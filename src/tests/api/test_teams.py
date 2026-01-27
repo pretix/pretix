@@ -140,6 +140,18 @@ def test_team_update(token_client, organizer, event, team, second_team):
     resp = token_client.patch(
         '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
         {
+            'all_organizer_permissions': False,
+            'limit_organizer_permissions': ["organizer.devices:write"],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert ("For permission group organizer.devices, the valid combinations of actions are '' or 'read' or "
+            "'read,write' but you tried to set 'write'.") in str(resp.data)
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
+        {
             'all_organizer_permissions': True,
             'limit_organizer_permissions': ["organizer.events:create"],
         },

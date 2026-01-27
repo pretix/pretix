@@ -398,12 +398,13 @@ class Team(LoggedModel):
         }
 
     def event_permission_set(self, include_legacy=True) -> set:
-        from ..permissions import get_all_event_permissions
+        from ..permissions import get_all_event_permission_groups
 
         result = set()
-        for permission in get_all_event_permissions().keys():
-            if self.all_event_permissions or self.limit_event_permissions.get(permission):
-                result.add(permission)
+        for pg in get_all_event_permission_groups().values():
+            for action in pg.actions:
+                if self.all_event_permissions or self.limit_event_permissions.get(f"{pg.name}:{action}"):
+                    result.add(f"{pg.name}:{action}")
 
         if include_legacy:
             # Add legacy permissions as well for plugin compatibility
@@ -414,12 +415,13 @@ class Team(LoggedModel):
         return result
 
     def organizer_permission_set(self, include_legacy=True) -> set:
-        from ..permissions import get_all_organizer_permissions
+        from ..permissions import get_all_organizer_permission_groups
 
         result = set()
-        for permission in get_all_organizer_permissions().keys():
-            if self.all_organizer_permissions or self.limit_organizer_permissions.get(permission):
-                result.add(permission)
+        for pg in get_all_organizer_permission_groups().values():
+            for action in pg.actions:
+                if self.all_organizer_permissions or self.limit_organizer_permissions.get(f"{pg.name}:{action}"):
+                    result.add(f"{pg.name}:{action}")
 
         if include_legacy:
             # Add legacy permissions as well for plugin compatibility

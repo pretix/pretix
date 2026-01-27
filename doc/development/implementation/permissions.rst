@@ -199,26 +199,49 @@ intended to help compliance with data protection rules as imposed e.g. by GDPR.
 Adding permissions
 ------------------
 
-Plugins can add permissions through the ``register_event_permissions`` and ``register_organizer_permission``.
+Plugins can add permissions through the ``register_event_permission_groups`` and ``register_organizer_permission_groups``.
 We recommend to use this only for very significant permissions, as the system will become less usable with too many
 permission levels, also because the team page will show all permission options, even those of disabled plugins.
-We recommend to prefix the permission string with the plugin name and follow the ``<module>.<thing>:<action>`` pattern.
+
+To register your permissions, you need to register a **permission group** (often representing an area of functionality
+or a key model). Below that group, there are **actions**, which represent the actual permissions. Permissions will be
+generated as ``<group_name>:<action>``. Then, you need to define **options** which are the valid combinations of the
+actions that should be possible to select for a team. This two-step mechanism exists to provide a better user experience
+and avoid useless combinations like "write but not read".
 
 Example::
 
-    @receiver(register_event_permissions)
-    def register_default_event_permissions(sender, **kwargs):
+    @receiver(register_event_permission_groups)
+    def register_plugin_event_permissions(sender, **kwargs):
         return [
-            Permission("pretix_myplugin.resource:read", _("Read resources"),
-                       "pretix_myplugin", _("Some helptext")),
+            PermissionGroup(
+                name="pretix_myplugin.resource",
+                label=_("Resources"),
+                actions=["read", "write"],
+                options=[
+                    PermissionOption(actions=tuple(), label=_("No access")),
+                    PermissionOption(actions=("read",), label=_("View")),
+                    PermissionOption(actions=("read", "write"), label=_("View and change")),
+                ],
+                help_text=_("Some help text")
+            ),
         ]
 
 
-    @receiver(register_organizer_permissions)
-    def register_default_organizer_permissions(sender, **kwargs):
+    @receiver(register_organizer_permission_groups)
+    def register_plugin_organizer_permissions(sender, **kwargs):
         return [
-            Permission("pretix_myplugin.resource:read", _("Read resources"),
-                       "pretix_myplugin", _("Some helptext")),
+            PermissionGroup(
+                name="pretix_myplugin.resource",
+                label=_("Resources"),
+                actions=["read", "write"],
+                options=[
+                    PermissionOption(actions=tuple(), label=_("No access")),
+                    PermissionOption(actions=("read",), label=_("View")),
+                    PermissionOption(actions=("read", "write"), label=_("View and change")),
+                ],
+                help_text=_("Some help text")
+            ),
         ]
 
 .. _configuring teams and permissions: https://docs.pretix.eu/guides/teams/
