@@ -394,7 +394,7 @@ class TeamSerializer(serializers.ModelSerializer):
                 raise ValidationError('Do not set both limit_organizer_permissions and all_organizer_permissions.')
 
         if old_data_set:
-            # Migrate with same logic as in migration 0297_plugable_permissions
+            # Migrate with same logic as in migration 0297_pluggable_permissions
             if all(full_data.get(k) is True for k in OLD_TO_NEW_EVENT_MIGRATION.keys() if k != "can_checkin_orders"):
                 data["all_event_permissions"] = True
                 data["limit_event_permissions"] = {}
