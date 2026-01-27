@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2025-11-18 17:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2026-01-28 00:00+0000\n"
+"Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -152,7 +152,7 @@ msgstr "支払い方法が利用できません"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
 msgid "Placed orders"
-msgstr "受注状況"
+msgstr "受注件数"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
@@ -191,7 +191,7 @@ msgstr "チェックインリストを選択してください"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr "アクティブなチェックインリストは見つかりません。"
+msgstr "有効なチェックインリストが見つかりません。"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
@@ -199,7 +199,7 @@ msgstr "チェックインリストを切り替え"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
 msgid "Search results"
-msgstr "結果を検索する"
+msgstr "検索結果"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
 msgid "No tickets found"
@@ -219,7 +219,7 @@ msgstr "方向転換"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
-msgstr "エントリー"
+msgstr "入場"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
@@ -281,7 +281,7 @@ msgstr "有効なチケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Exit recorded"
-msgstr "記録を保存"
+msgstr "退出を記録しました"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Ticket already used"
@@ -301,11 +301,11 @@ msgstr "この種類のチケットは使用できません"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Entry not allowed"
-msgstr "入力できません"
+msgstr "入場できません"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code revoked/changed"
-msgstr "チケットコードのブロック/変更"
+msgstr "チケットコードが取り消し/変更されました"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Ticket blocked"
@@ -325,7 +325,7 @@ msgstr "リストのチケットコードは曖昧です"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
-msgstr "承認されない注文"
+msgstr "未承認の注文"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Checked-in Tickets"
@@ -463,7 +463,7 @@ msgstr "製品"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
-msgstr "商品の種類"
+msgstr "製品バリエーション"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
@@ -479,47 +479,47 @@ msgstr "現在の曜日 (1 = 月曜日, 7 = 日曜日)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Current entry status"
-msgstr "現在の登録ステータス"
+msgstr "現在の入場状態"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
-msgstr "これまでの入力件数"
+msgstr "これまでの入場回数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
 msgid "Number of previous entries since midnight"
-msgstr "０時から現在までの入力件数"
+msgstr "０時から現在までの入場回数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
 msgid "Number of previous entries since"
-msgstr "この時点から今までの入力件数"
+msgstr "この時点から今までの入場回数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
 msgid "Number of previous entries before"
-msgstr "この時点より前に入力された件数"
+msgstr "この時点より前の入場回数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
 msgid "Number of days with a previous entry"
-msgstr "これまでの入力日数"
+msgstr "これまでの入場日数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
 msgid "Number of days with a previous entry since"
-msgstr "この時点より後に入力が行われた日数"
+msgstr "この時点より後に入場があった日数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
 msgid "Number of days with a previous entry before"
-msgstr "この時点より前に入力が行われた日数"
+msgstr "この時点より前に入場があった日数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
 msgid "Minutes since last entry (-1 on first entry)"
-msgstr "最後の登録からの経過分数（最初の登録は-1）"
+msgstr "最後の入場からの経過分数（最初の入場は-1）"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
 msgid "Minutes since first entry (-1 on first entry)"
-msgstr "最初のとうろくからの経過分数(最初の登録は-1)"
+msgstr "最初の入場からの経過分数（最初の入場は-1）"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
 msgid "All of the conditions below (AND)"
-msgstr "以下全ての条件（と）"
+msgstr "以下のすべての条件（AND）"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
 msgid "At least one of the conditions below (OR)"
@@ -539,11 +539,11 @@ msgstr "イベントの入場"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
 msgid "custom date and time"
-msgstr "日時確定"
+msgstr "カスタム日時"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
 msgid "custom time"
-msgstr "時刻確定"
+msgstr "カスタム時刻"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
 msgid "Tolerance (minutes)"
@@ -755,8 +755,8 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
 msgstr ""
-"カートに入っている商品はお取り置きできません。在庫があれば、このまま注文を進"
-"めることができます。"
+"カート内の商品の予約期限が切れました。在庫があれば、このまま注文を完了するこ"
+"とができます。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
@@ -843,7 +843,7 @@ msgstr "%sを選択"
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr "バリアント %sを選択"
+msgstr "バリエーション %sを選択"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
@@ -853,7 +853,7 @@ msgstr "売り切れ"
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Buy"
-msgstr "カート内"
+msgstr "購入"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 msgctxt "widget"
@@ -910,7 +910,7 @@ msgstr "現在%s使用可能"
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr "クーポンをお持ちの方のみ"
+msgstr "バウチャーをお持ちの方のみ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 #: pretix/static/pretixpresale/js/widget/widget.js:43
@@ -999,7 +999,7 @@ msgstr "チェックアウトを続行する"
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr "クーポンを使用する"
+msgstr "バウチャーを使用する"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgctxt "widget"
@@ -1009,7 +1009,7 @@ msgstr "使用する"
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgctxt "widget"
 msgid "Voucher code"
-msgstr "クーポンコード"
+msgstr "バウチャーコード"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgctxt "widget"
@@ -1095,7 +1095,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:76
 msgctxt "widget"
 msgid "Load more"
-msgstr "さらに読み込む"
+msgstr "もっと見る"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "Mo"
