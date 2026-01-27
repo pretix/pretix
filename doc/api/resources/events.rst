@@ -601,7 +601,7 @@ organizer level.
 
    Updates event settings. Note that ``PUT`` is not allowed here, only ``PATCH``.
 
-   Permission "Can change event settings" is always required. Some keys requrie additional permissions.
+   Permission "Can change event settings" is always required. Some keys require additional permissions.
 
     .. warning::
 
