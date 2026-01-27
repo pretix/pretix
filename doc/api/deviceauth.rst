@@ -208,20 +208,6 @@ Additionally, when creating a device through the user interface or API, a user c
 the device. These include an allow list of specific API calls that may be made by the device. pretix ships with security
 policies for official pretix apps like pretixSCAN and pretixPOS.
 
-Removing a device
------------------
-
-If you want implement a way to to deprovision a device in your software, you can call the ``revoke`` endpoint to
-invalidate your API key. There is no way to reverse this operation.
-
-.. sourcecode:: http
-
-   POST /api/v1/device/revoke HTTP/1.1
-   Host: pretix.eu
-   Authorization: Device 1kcsh572fonm3hawalrncam4l1gktr2rzx25a22l8g9hx108o9oi0rztpcvwnfnd
-
-This can also be done by the user through the web interface.
-
 Event selection
 ---------------
 
