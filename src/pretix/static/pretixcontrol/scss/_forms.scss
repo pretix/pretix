@@ -417,6 +417,30 @@ div.scrolling-multiple-choice, div.scrolling-choice {
     }
   }
 }
+.team-permission-groups {
+  border: 1px solid $input-border;
+  border-radius: $input-border-radius;
+  padding: 10px 15px;
+
+  .radio {
+    display: inline-block;
+    margin-right: 10px;
+    &:not(:has(.fa-fw)) {
+      // Visual adjustment between options with and without help text
+      &:after {
+        display: inline-block;
+        content: " ";
+        padding-right: 1.28571em;
+      }
+    }
+  }
+  .control-label {
+    text-align: left;
+  }
+  .form-group:last-child, .help-block {
+    margin-bottom: 0;
+  }
+}
 table td > .checkbox {
   margin: 0;
   position: static;

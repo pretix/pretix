@@ -15,7 +15,7 @@ Core
       item_copy_data, register_sales_channel_types, register_global_settings, quota_availability, global_email_filter,
       register_ticket_secret_generators, gift_card_transaction_display,
       register_text_placeholders, register_mail_placeholders, device_info_updated,
-      register_event_permissions, register_organizer_permissions
+      register_event_permission_groups, register_organizer_permission_groups
 
 Order events
 """"""""""""
