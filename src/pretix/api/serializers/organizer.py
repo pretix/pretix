@@ -423,17 +423,17 @@ class TeamSerializer(serializers.ModelSerializer):
                 a for a in pg.actions if self.instance and full_data["limit_event_permissions"].get(f"{pg.name}:{a}")
             ))
             if requested not in (",".join(sorted(opt.actions)) for opt in pg.options):
+                possible = '\' or \''.join(','.join(opt.actions) for opt in pg.options)
                 raise ValidationError(f"For permission group {pg.name}, the valid combinations of actions are "
-                                      f"'{'\' or \''.join(','.join(opt.actions) for opt in pg.options)}' but you tried to "
-                                      f"set '{requested}'.")
+                                      f"'{possible}' but you tried to set '{requested}'.")
         for pg in get_all_organizer_permission_groups().values():
             requested = ",".join(sorted(
                 a for a in pg.actions if self.instance and full_data["limit_organizer_permissions"].get(f"{pg.name}:{a}")
             ))
             if requested not in (",".join(sorted(opt.actions)) for opt in pg.options):
+                possible = '\' or \''.join(','.join(opt.actions) for opt in pg.options)
                 raise ValidationError(f"For permission group {pg.name}, the valid combinations of actions are "
-                                      f"'{'\' or \''.join(','.join(opt.actions) for opt in pg.options)}' but you tried to "
-                                      f"set '{requested}'.")
+                                      f"'{possible}' but you tried to set '{requested}'.")
 
         return data
 
