@@ -552,7 +552,7 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 class OrganizerSettingsSerializer(SettingsSerializer):
     default_write_permission = 'organizer.settings.general:write'
     default_fields = [
-        # These are readable for all users with access to the events, therefore secrets made in the settings store
+        # These are readable for all users with access to the events, therefore secrets stored in the settings store
         # should not be included!
         'customer_accounts',
         'customer_accounts_native',
