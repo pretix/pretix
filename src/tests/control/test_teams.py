@@ -229,12 +229,28 @@ def test_team_remove_last_admin(event, admin_user, admin_team, client):
 @pytest.mark.django_db
 def test_create_team(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/organizer/dummy/team/add', {
+    r = client.post('/control/organizer/dummy/team/add', {
         'name': 'Foo',
-        'limit_organizer_permissions': ['organizer.events:create'],
+        'organizer_organizer.events': "create",
+        'organizer_organizer.settings.general': "EMPTY",
+        'organizer_organizer.teams': "EMPTY",
+        'organizer_organizer.giftcards': "EMPTY",
+        'organizer_organizer.customers': "EMPTY",
+        'organizer_organizer.reusablemedia': "EMPTY",
+        'organizer_organizer.devices': "EMPTY",
+        'organizer_organizer.seatingplans': "EMPTY",
+        'event_event.settings.general': "write",
+        'event_event.settings.payment': "EMPTY",
+        'event_event.settings.tax': "EMPTY",
+        'event_event.settings.invoicing': "EMPTY",
+        'event_event.subevents': "EMPTY",
+        'event_event.items': "EMPTY",
+        'event_event.orders': "EMPTY",
+        'event_event.vouchers': "EMPTY",
+        'event_event': "EMPTY",
         'limit_events': str(event.pk),
-        'limit_event_permissions': ['event.settings.general:write']
     }, follow=True)
+    assert 'alert-success' in r.content.decode()
     with scopes_disabled():
         t = Team.objects.last()
         assert not t.all_event_permissions
@@ -248,13 +264,30 @@ def test_create_team(event, admin_user, admin_team, client):
 @pytest.mark.django_db
 def test_update_team(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/organizer/dummy/team/{}/edit'.format(admin_team.pk), {
+    r = client.post('/control/organizer/dummy/team/{}/edit'.format(admin_team.pk), {
         'name': 'Admin',
-        'limit_organizer_permissions': ['organizer.teams:write'],
         'limit_events': str(event.pk),
         'all_event_permissions': 'on',
         'all_organizer_permissions': '',
+        'organizer_organizer.events': "EMPTY",
+        'organizer_organizer.settings.general': "EMPTY",
+        'organizer_organizer.teams': "write",
+        'organizer_organizer.giftcards': "EMPTY",
+        'organizer_organizer.customers': "EMPTY",
+        'organizer_organizer.reusablemedia': "EMPTY",
+        'organizer_organizer.devices': "EMPTY",
+        'organizer_organizer.seatingplans': "EMPTY",
+        'event_event.settings.general': "write",
+        'event_event.settings.payment': "EMPTY",
+        'event_event.settings.tax': "EMPTY",
+        'event_event.settings.invoicing': "EMPTY",
+        'event_event.subevents': "EMPTY",
+        'event_event.items': "EMPTY",
+        'event_event.orders': "EMPTY",
+        'event_event.vouchers': "EMPTY",
+        'event_event': "EMPTY",
     }, follow=True)
+    assert 'alert-success' in r.content.decode()
     admin_team.refresh_from_db()
     assert admin_team.all_event_permissions
     assert admin_team.limit_event_permissions == {}
@@ -269,7 +302,23 @@ def test_update_last_team_to_be_no_admin(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.post('/control/organizer/dummy/team/{}/edit'.format(admin_team.pk), {
         'name': 'Admin',
-        'event.settings.general:write': 'on'
+        'organizer_organizer.events': "write",
+        'organizer_organizer.settings.general': "EMPTY",
+        'organizer_organizer.teams': "EMPTY",
+        'organizer_organizer.giftcards': "EMPTY",
+        'organizer_organizer.customers': "EMPTY",
+        'organizer_organizer.reusablemedia': "EMPTY",
+        'organizer_organizer.devices': "EMPTY",
+        'organizer_organizer.seatingplans': "EMPTY",
+        'event_event.settings.general': "write",
+        'event_event.settings.payment': "EMPTY",
+        'event_event.settings.tax': "EMPTY",
+        'event_event.settings.invoicing': "EMPTY",
+        'event_event.subevents': "EMPTY",
+        'event_event.items': "EMPTY",
+        'event_event.orders': "EMPTY",
+        'event_event.vouchers': "EMPTY",
+        'event_event': "EMPTY",
     }, follow=True)
     assert 'alert-danger' in resp.content.decode()
 

@@ -77,7 +77,7 @@ from pretix.base.models import (
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink, TeamQuerySet
 from pretix.base.permissions import (
-    get_all_event_permissions, get_all_organizer_permissions,
+    get_all_event_permission_groups, get_all_organizer_permission_groups,
 )
 from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_organizer_settings,
@@ -335,34 +335,62 @@ class TeamForm(forms.ModelForm):
         self.fields['limit_events'].queryset = organizer.events.all().order_by(
             '-has_subevents', '-date_from'
         )
-        self.fields['limit_event_permissions'] = PermissionMultipleChoiceField(
-            label=self.fields['limit_event_permissions'].label,
-            choices=[
-                (p.name, self._make_label(p)) for p in get_all_event_permissions().values()
-            ],
-            widget=forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '#id_all_event_permissions',
-                'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
-            }),
-            required=False,
-        )
-        self.fields['limit_organizer_permissions'] = PermissionMultipleChoiceField(
-            label=self.fields['limit_organizer_permissions'].label,
-            choices=[
-                (p.name, self._make_label(p)) for p in get_all_organizer_permissions().values()
-            ],
-            widget=forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '#id_all_organizer_permissions',
-                'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
-            }),
-            required=False,
-        )
+        self.event_field_names = []
+        for pg in get_all_event_permission_groups().values():
+            initial = ",".join(sorted(
+                a for a in pg.actions if self.instance and self.instance.limit_event_permissions.get(f"{pg.name}:{a}")
+            )) or "EMPTY"
+            self.fields[f'event_{pg.name}'] = forms.ChoiceField(
+                choices=[
+                    (
+                        ",".join(sorted(opt.actions)) or "EMPTY",
+                        format_html(
+                            '{label} '
+                            '<span class="fa fa-question-circle fa-fw text-muted" data-toggle="tooltip"'
+                            ' data-placement="right" title="{help_text}"></span>',
+                            label=opt.label,
+                            help_text=opt.help_text,
+                        ) if opt.help_text else opt.label,
+                    )
+                    for opt in pg.options
+                ],
+                label=pg.label,
+                help_text=pg.help_text,
+                initial=initial,
+                widget=forms.RadioSelect,
+            )
+            self.event_field_names.append(f'event_{pg.name}')
+        self.organizer_field_names = []
+        for pg in get_all_organizer_permission_groups().values():
+            initial = ",".join(sorted(
+                a for a in pg.actions if self.instance and self.instance.limit_organizer_permissions.get(f"{pg.name}:{a}")
+            )) or "EMPTY"
+            self.fields[f'organizer_{pg.name}'] = forms.ChoiceField(
+                choices=[
+                    (
+                        ",".join(sorted(opt.actions)) or "EMPTY",
+                        format_html(
+                            '{label} '
+                            '<span class="fa fa-question-circle fa-fw text-muted" data-toggle="tooltip"'
+                            ' data-placement="right" title="{help_text}"></span>',
+                            label=opt.label,
+                            help_text=opt.help_text,
+                        ) if opt.help_text else opt.label,
+                    )
+                    for opt in pg.options
+                ],
+                label=pg.label,
+                help_text=pg.help_text,
+                initial=initial,
+                widget=forms.RadioSelect,
+            )
+            self.organizer_field_names.append(f'organizer_{pg.name}')
 
     class Meta:
         model = Team
         fields = ['name', 'require_2fa', 'all_events', 'limit_events',
-                  'all_event_permissions', 'limit_event_permissions',
-                  'all_organizer_permissions', 'limit_organizer_permissions']
+                  'all_event_permissions',
+                  'all_organizer_permissions',]
         widgets = {
             'limit_events': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '#id_all_events',
@@ -375,6 +403,33 @@ class TeamForm(forms.ModelForm):
 
     def clean(self):
         data = super().clean()
+
+        data['limit_event_permissions'] = {}
+        if not data['all_event_permissions']:
+            for pg in get_all_event_permission_groups().values():
+                selected = data.get(f'event_{pg.name}', 'EMPTY')
+                if selected == "EMPTY":
+                    selected_actions = []
+                else:
+                    selected_actions = selected.split(',')
+                for action in pg.actions:
+                    if action in selected_actions:
+                        data['limit_event_permissions'][f"{pg.name}:{action}"] = True
+        self.instance.limit_event_permissions = data['limit_event_permissions']
+
+        data['limit_organizer_permissions'] = {}
+        if not data['all_organizer_permissions']:
+            for pg in get_all_organizer_permission_groups().values():
+                selected = data.get(f'organizer_{pg.name}', 'EMPTY')
+                if selected == "EMPTY":
+                    selected_actions = []
+                else:
+                    selected_actions = selected.split(',')
+                for action in pg.actions:
+                    if action in selected_actions:
+                        data['limit_organizer_permissions'][f"{pg.name}:{action}"] = True
+        self.instance.limit_organizer_permissions = data['limit_organizer_permissions']
+
         if self.instance.pk and not data['all_organizer_permissions'] and 'organizer.teams:write' not in data.get('limit_organizer_permissions', []):
             if not self.instance.organizer.teams.exclude(pk=self.instance.pk).filter(
                 TeamQuerySet.organizer_permission_q("organizer.teams:write"),
@@ -384,6 +439,20 @@ class TeamForm(forms.ModelForm):
                                         'the permission to change teams and permissions.'))
 
         return data
+
+    @property
+    def changed_data_for_log(self):
+        r = {}
+        for k in self.changed_data:
+            if k == "limit_events":
+                r[k] = [e.id for e in getattr(self.instance, k).all()]
+            elif k.startswith("event_"):
+                r["limit_event_permissions"] = self.instance.limit_event_permissions
+            elif k.startswith("organizer_"):
+                r["limit_organizer_permissions"] = self.instance.limit_organizer_permissions
+            else:
+                r[k] = getattr(self.instance, k)
+        return r
 
 
 class GateForm(forms.ModelForm):

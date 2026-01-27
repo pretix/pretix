@@ -46,7 +46,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.permissions import (
-    get_all_event_permissions, get_all_organizer_permissions,
+    get_all_event_permission_groups, get_all_organizer_permission_groups,
 )
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
@@ -355,8 +355,18 @@ class TeamSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['limit_event_permissions'].choices = [(p.name, p.name) for p in get_all_event_permissions().values()]
-        self.fields['limit_organizer_permissions'].choices = [(p.name, p.name) for p in get_all_organizer_permissions().values()]
+
+        event_perms_flattened = []
+        organizer_perms_flattened = []
+        for pg in get_all_event_permission_groups().values():
+            for action in pg.actions:
+                event_perms_flattened.append(f"{pg.name}:{action}")
+        for pg in get_all_organizer_permission_groups().values():
+            for action in pg.actions:
+                organizer_perms_flattened.append(f"{pg.name}:{action}")
+
+        self.fields['limit_event_permissions'].choices = [(p, p) for p in event_perms_flattened]
+        self.fields['limit_organizer_permissions'].choices = [(p, p) for p in organizer_perms_flattened]
 
     def to_representation(self, instance):
         r = super().to_representation(instance)
@@ -406,6 +416,25 @@ class TeamSerializer(serializers.ModelSerializer):
 
         if full_data.get('limit_events') and full_data.get('all_events'):
             raise ValidationError('Do not set both limit_events and all_events.')
+
+        full_data.update(data)
+        for pg in get_all_event_permission_groups().values():
+            requested = ",".join(sorted(
+                a for a in pg.actions if self.instance and full_data["limit_event_permissions"].get(f"{pg.name}:{a}")
+            ))
+            if requested not in (",".join(sorted(opt.actions)) for opt in pg.options):
+                raise ValidationError(f"For permission group {pg.name}, the valid combinations of actions are "
+                                      f"'{'\' or \''.join(','.join(opt.actions) for opt in pg.options)}' but you tried to "
+                                      f"set '{requested}'.")
+        for pg in get_all_organizer_permission_groups().values():
+            requested = ",".join(sorted(
+                a for a in pg.actions if self.instance and full_data["limit_organizer_permissions"].get(f"{pg.name}:{a}")
+            ))
+            if requested not in (",".join(sorted(opt.actions)) for opt in pg.options):
+                raise ValidationError(f"For permission group {pg.name}, the valid combinations of actions are "
+                                      f"'{'\' or \''.join(','.join(opt.actions) for opt in pg.options)}' but you tried to "
+                                      f"set '{requested}'.")
+
         return data
 
 

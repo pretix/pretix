@@ -903,10 +903,7 @@ class TeamCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         form.instance.organizer = self.request.organizer
         ret = super().form_valid(form)
         form.instance.members.add(self.request.user)
-        form.instance.log_action('pretix.team.created', user=self.request.user, data={
-            k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
-            for k in form.changed_data
-        })
+        form.instance.log_action('pretix.team.created', user=self.request.user, data=form.changed_data_for_log)
         return ret
 
     def form_invalid(self, form):
@@ -938,10 +935,7 @@ class TeamUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
-            self.object.log_action('pretix.team.changed', user=self.request.user, data={
-                k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
-                for k in form.changed_data
-            })
+            self.object.log_action('pretix.team.changed', user=self.request.user, data=form.changed_data_for_log)
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
