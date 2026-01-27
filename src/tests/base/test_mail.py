@@ -202,6 +202,7 @@ def test_placeholder_html_rendering_from_template(env):
     assert '**Meta**: *Beep*' in djmail.outbox[0].body
     assert 'Event website: [<strong>event & co. kg</strong>](https://example.org/dummy)' in djmail.outbox[0].body
     assert 'Other website: [<strong>event & co. kg</strong>](https://example.com)' in djmail.outbox[0].body
+    assert 'Escaping {{curly}} {braces}.' in djmail.outbox[0].body
     assert '&lt;' not in djmail.outbox[0].body
     assert '&amp;' not in djmail.outbox[0].body
     html = _extract_html(djmail.outbox[0])
@@ -218,6 +219,7 @@ def test_placeholder_html_rendering_from_template(env):
         r'Other website: <a href="https://example.com" rel="noopener" style="[^"]+" target="_blank">&lt;strong&gt;event &amp; co. kg&lt;/strong&gt;</a>',
         html
     )
+    assert 'Escaping {{curly}} {braces}.' in html
 
 
 @pytest.mark.django_db
@@ -230,6 +232,7 @@ def test_placeholder_html_rendering_from_string(env):
               "URL with text: <a href=\"{url}\">Test</a>\n\n"
               "URL with params: https://example.com/form?action=foo&eventid={event_slug}\n\n"
               "URL with params and text: [Link & Text](https://example.com/form?action=foo&eventid={event_slug})\n\n"
+              "Escaping {{{{curly}}}} {{braces}}.\n\n"
     })
     djmail.outbox = []
     event, user, organizer = env
@@ -253,6 +256,7 @@ def test_placeholder_html_rendering_from_string(env):
     assert 'URL with text: <a href="https://google.com">Test</a>' in djmail.outbox[0].body
     assert 'URL with params: https://example.com/form?action=foo&eventid=dummy' in djmail.outbox[0].body
     assert 'URL with params and text: [Link & Text](https://example.com/form?action=foo&eventid=dummy)' in djmail.outbox[0].body
+    assert 'Escaping {{curly}} {braces}.' in djmail.outbox[0].body
     assert '&lt;' not in djmail.outbox[0].body
     assert '&amp;' not in djmail.outbox[0].body
     html = _extract_html(djmail.outbox[0])
@@ -286,3 +290,4 @@ def test_placeholder_html_rendering_from_string(env):
         r'style="[^"]+" target="_blank">Link &amp; Text</a>',
         html
     )
+    assert 'Escaping {{curly}} {braces}.' in html

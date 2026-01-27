@@ -11,3 +11,4 @@ Payment info:
 
 Event website: [{event}](https://example.org/{event_slug})
 Other website: [{event}]({meta_Website})
+Escaping {{{{curly}}}} {{braces}}.
