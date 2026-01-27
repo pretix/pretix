@@ -709,7 +709,7 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
 class EventSettingsSerializer(SettingsSerializer):
     default_write_permission = 'event.settings.general:write'
     default_fields = [
-        # These are readable for all users with access to the events, therefore secrets made in the settings store
+        # These are readable for all users with access to the events, therefore secrets stored in the settings store
         # should not be included!
         'imprint_url',
         'checkout_email_helptext',
