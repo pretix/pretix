@@ -1,0 +1,984 @@
+[
+    {
+        "model": "pretixbase.checkinlist",
+        "pk": 1,
+        "fields": {
+            "event": 1,
+            "name": "Default",
+            "all_products": true,
+            "subevent": null,
+            "include_pending": false,
+            "addon_match": false,
+            "allow_entry_after_exit": true,
+            "allow_multiple_entries": false,
+            "exit_all_at": null,
+            "auto_checkin_sales_channels": "[]",
+            "rules": {},
+            "limit_products": [],
+            "gates": []
+        }
+    },
+    {
+        "model": "pretixbase.event",
+        "pk": 1,
+        "fields": {
+            "organizer": 1,
+            "testmode": true,
+            "name": "{\"en\": \"SideBurn Staging\", \"fr\": \"SideBurn Staging\"}",
+            "slug": "sideburn-staging",
+            "live": false,
+            "currency": "CAD",
+            "date_from": "2026-05-14T16:00:00Z",
+            "date_to": "2026-05-18T16:00:00Z",
+            "date_admission": null,
+            "is_public": true,
+            "presale_end": null,
+            "presale_start": null,
+            "location": "{\"en\": \"Stone Mills, ON\", \"fr\": \"Stone Mills, ON\"}",
+            "geo_lat": null,
+            "geo_lon": null,
+            "plugins": "pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin,pretix.plugins.ticketoutputpdf,pretix.plugins.manualpayment,pretix.plugins.stripe,pretix_regex_validation,pretix.plugins.reports",
+            "comment": null,
+            "has_subevents": false,
+            "seating_plan": null,
+            "last_modified": "2026-01-17T17:15:25.394Z",
+            "sales_channels": "['web']"
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 1,
+        "fields": {
+            "key": "invoice_renderer",
+            "value": "modern1",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 2,
+        "fields": {
+            "key": "invoice_include_expire_date",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 3,
+        "fields": {
+            "key": "invoice_renderer_highlight_order_code",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 4,
+        "fields": {
+            "key": "ticketoutput_pdf__enabled",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 5,
+        "fields": {
+            "key": "ticketoutput_passbook__enabled",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 6,
+        "fields": {
+            "key": "event_list_type",
+            "value": "calendar",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 7,
+        "fields": {
+            "key": "invoice_email_attachment",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 8,
+        "fields": {
+            "key": "name_scheme",
+            "value": "given_family",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 9,
+        "fields": {
+            "key": "payment_banktransfer_invoice_immediately",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 11,
+        "fields": {
+            "key": "timezone",
+            "value": "America/Toronto",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 12,
+        "fields": {
+            "key": "locale",
+            "value": "en",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 13,
+        "fields": {
+            "key": "locales",
+            "value": "[\"en\", \"fr\"]",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 14,
+        "fields": {
+            "key": "ticket_download",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 15,
+        "fields": {
+            "key": "show_quota_left",
+            "value": "False",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 16,
+        "fields": {
+            "key": "waiting_list_enabled",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 17,
+        "fields": {
+            "key": "attendee_names_required",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 18,
+        "fields": {
+            "key": "contact_mail",
+            "value": "tech@sideburn.ca",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 19,
+        "fields": {
+            "key": "imprint_url",
+            "value": "https://www.sideburn.ca",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 20,
+        "fields": {
+            "key": "payment_free__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 21,
+        "fields": {
+            "key": "payment_boxoffice__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 22,
+        "fields": {
+            "key": "payment_offsetting__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 23,
+        "fields": {
+            "key": "payment_manual__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 24,
+        "fields": {
+            "key": "payment_giftcard__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 25,
+        "fields": {
+            "key": "presale_has_ended_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 26,
+        "fields": {
+            "key": "voucher_explanation_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 27,
+        "fields": {
+            "key": "checkout_success_text",
+            "value": "{\"en\": \"Success! But remember, SideBurn is a volunteer-run, no-spectators event. So go to volunteer.sideburn.ca to sign up for a volunteer shift!\", \"fr\": \"Succ\\u00e8s! Mais rappelez-vous, SideBurn est un \\u00e9v\\u00e9nement g\\u00e9r\\u00e9 par des b\\u00e9n\\u00e9voles et sans spectateurs. Alors rendez-vous sur volunteer.sideburn.ca pour vous inscrire \\u00e0 un quart de b\\u00e9n\\u00e9volat!\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 28,
+        "fields": {
+            "key": "waiting_list_phones_explanation_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 29,
+        "fields": {
+            "key": "frontpage_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 30,
+        "fields": {
+            "key": "event_info_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 31,
+        "fields": {
+            "key": "attendee_data_explanation_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 32,
+        "fields": {
+            "key": "checkout_phone_helptext",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 33,
+        "fields": {
+            "key": "banner_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 34,
+        "fields": {
+            "key": "banner_text_bottom",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 35,
+        "fields": {
+            "key": "confirm_texts",
+            "value": "[]",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 36,
+        "fields": {
+            "key": "logo_image",
+            "value": "file://pub/sideburnstage/sideburn-staging/sideburn_fullcolour_vertical_rgbtransparent_1x.png.xLCF1YbU.png.8fHjS7b6.png",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 37,
+        "fields": {
+            "key": "presale_start_show_date",
+            "value": "False",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 38,
+        "fields": {
+            "key": "last_order_modification_date",
+            "value": "2026-05-14T12:00:00-04:00",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 39,
+        "fields": {
+            "key": "show_variations_expanded",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 40,
+        "fields": {
+            "key": "waiting_list_hours",
+            "value": "72",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 41,
+        "fields": {
+            "key": "waiting_list_auto",
+            "value": "False",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 42,
+        "fields": {
+            "key": "waiting_list_names_asked",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 43,
+        "fields": {
+            "key": "waiting_list_names_required",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 44,
+        "fields": {
+            "key": "payment_giftcard__hidden_seed",
+            "value": "Dp9p3VmGK0idqpUMT1VO2o4UQyBhsdP1nPaVhm09CnbFC9Afy91NYRavHpFi3iUa",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 45,
+        "fields": {
+            "key": "payment_term_days",
+            "value": "3",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 46,
+        "fields": {
+            "key": "payment_term_last",
+            "value": "RELDATE/0/-/date_from/",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 47,
+        "fields": {
+            "key": "payment_term_accept_late",
+            "value": "False",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 48,
+        "fields": {
+            "key": "payment_explanation",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 49,
+        "fields": {
+            "key": "tax_rate_default",
+            "value": "1",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 50,
+        "fields": {
+            "key": "presale_css_file",
+            "value": "pub/sideburnstage/sideburn-staging/presale.c65ab86e98da9201.css",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 51,
+        "fields": {
+            "key": "presale_css_checksum",
+            "value": "c65ab86e98da9201b67f71b78aad35a382baf4ce",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 52,
+        "fields": {
+            "key": "presale_widget_css_file",
+            "value": "pub/sideburnstage/sideburn-staging/widget.5671b7ff9e260bec.css",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 53,
+        "fields": {
+            "key": "presale_widget_css_checksum",
+            "value": "5671b7ff9e260becc3e1e79b97447ebcffb473cb",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 54,
+        "fields": {
+            "key": "ticket_download_addons",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 55,
+        "fields": {
+            "key": "ticket_download_require_validated_email",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 56,
+        "fields": {
+            "key": "mail_text_order_placed",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nwe successfully received your order for {event} with a total value\\r\\nof {total_with_currency}. Please complete your payment before {expire_date}.\\r\\n\\r\\n{payment_info}\\r\\n\\r\\nYou can change your order details and view the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour,\\r\\n\\r\\nnous avons re\\u00e7u avec succ\\u00e8s votre commande pour {event} avec une valeur totale.\\r\\nde {total_with_currency}. Veuillez compl\\u00e9ter votre paiement avant le {expire_date}.\\r\\n\\r\\n{payment_info}\\r\\n\\r\\nVous pouvez modifier les d\\u00e9tails de votre commande et consulter l'\\u00e9tat de votre commande \\u00e0 l'adresse suivante\\r\\n{url}\\r\\n\\r\\nMeilleures salutations,  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 57,
+        "fields": {
+            "key": "mail_text_order_paid",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nwe successfully received your payment for {event}. Thank you!\\r\\n\\r\\n{payment_info}\\r\\n\\r\\nYou can change your order details and view the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour,\\r\\n\\r\\nnous avons re\\u00e7u votre paiement pour {event}. Merci beaucoup !\\r\\n\\r\\n{payment_info}\\r\\n\\r\\nVous pouvez modifier les d\\u00e9tails de votre commande et consulter le statut de votre commande \\u00e0 l'adresse suivante\\r\\n{url}\\r\\n\\r\\nSinc\\u00e8res salutations,  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 58,
+        "fields": {
+            "key": "mail_text_order_free",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nyour order for {event} was successful. As you only ordered free products,\\r\\nno payment is required.\\r\\n\\r\\nYou can change your order details and view the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour\\r\\n\\r\\nvotre commande pour {event} a r\\u00e9ussi. Comme vous n\\u2019avez command\\u00e9 que des produits gratuits,\\r\\nAucun paiement n\\u2019est requis.\\r\\n\\r\\nVous pouvez modifier les d\\u00e9tails de votre commande et consulter l\\u2019\\u00e9tat de votre commande \\u00e0 l\\u2019adresse\\r\\n{url}\\r\\n\\r\\nSinceres salutations  \\r\\nVotre {event} \\u00e9quipe\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 59,
+        "fields": {
+            "key": "mail_text_order_changed",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nyour order for {event} has been changed.\\r\\n\\r\\nYou can view the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour,\\r\\n\\r\\nVotre commande pour {event} a \\u00e9t\\u00e9 modifi\\u00e9e.\\r\\n\\r\\nVous pouvez consulter le statut de votre commande \\u00e0 l'adresse suivante\\r\\n{url}\\r\\n\\r\\nSinc\\u00e8res salutations,  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 60,
+        "fields": {
+            "key": "mail_text_resend_link",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nyou receive this message because you asked us to send you the link\\r\\nto your order for {event}.\\r\\n\\r\\nYou can change your order details and view the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour,\\r\\n\\r\\nvous recevez ce message parce que vous nous avez demand\\u00e9 de vous envoyer le lien\\r\\nde votre commande pour {event}.\\r\\n\\r\\nVous pouvez modifier les d\\u00e9tails de votre commande et consulter le statut \\u00e0 l'adresse suivante\\r\\n{url}\\r\\n\\r\\nSinc\\u00e8res salutations,  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 61,
+        "fields": {
+            "key": "mail_text_resend_all_links",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nsomebody requested a list of your orders for {event}.\\r\\nThe list is as follows:\\r\\n\\r\\n{orders}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour,\\r\\n\\r\\nquelqu'un a demand\\u00e9 une liste de vos commandes pour {event}.\\r\\nLa liste est la suivante\\u202f:\\r\\n\\r\\n{orders}\\r\\n\\r\\nSinc\\u00e8res salutations,  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 62,
+        "fields": {
+            "key": "mail_text_order_expire_warning",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nwe did not yet receive a full payment for your order for {event}.\\r\\nPlease keep in mind that we only guarantee your order if we receive\\r\\nyour payment before {expire_date}.\\r\\n\\r\\nYou can view the payment information and the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour\\r\\n\\r\\nNous n\\u2019avons pas encore re\\u00e7u le paiement int\\u00e9gral de votre commande de {event}.\\r\\nVeuillez garder \\u00e0 l\\u2019esprit que nous ne garantissons votre commande que si nous recevons\\r\\nvotre paiement avant {expire_date}.\\r\\n\\r\\nVous pouvez consulter les informations de paiement et l\\u2019\\u00e9tat de votre commande \\u00e0 l\\u2019adresse\\r\\n{url}\\r\\n\\r\\nSinceres salutations  \\r\\nVotre {event} \\u00e9quipe\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 63,
+        "fields": {
+            "key": "mail_text_order_pending_warning",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nwe did not yet receive a full payment for your order for {event}.\\r\\nPlease keep in mind that you are required to pay before {expire_date}.\\r\\n\\r\\nYou can view the payment information and the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour\\r\\n\\r\\nNous n\\u2019avons pas encore re\\u00e7u le paiement int\\u00e9gral de votre commande de {event}.\\r\\nVeuillez garder \\u00e0 l\\u2019esprit que vous devez payer avant {expire_date}.\\r\\n\\r\\nVous pouvez consulter les informations de paiement et l\\u2019\\u00e9tat de votre commande \\u00e0 l\\u2019adresse\\r\\n{url}\\r\\n\\r\\nSinceres salutations  \\r\\nVotre {event} \\u00e9quipe\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 64,
+        "fields": {
+            "key": "mail_text_order_incomplete_payment",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nwe received a payment for your order for {event}.\\r\\n\\r\\nUnfortunately, the received amount is less than the full amount\\r\\nrequired. Your order is therefore still considered unpaid, as it is\\r\\nmissing additional payment of **{pending_sum}**.\\r\\n\\r\\nYou can view the payment information and the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour\\r\\n\\r\\nNous avons re\\u00e7u un paiement pour votre commande pour {event}.\\r\\n\\r\\nMalheureusement, le montant re\\u00e7u est inf\\u00e9rieur au montant total\\r\\nObligatoire. Votre commande est donc toujours consid\\u00e9r\\u00e9e comme impay\\u00e9e, car elle est\\r\\npaiement suppl\\u00e9mentaire manquant de **{pending_sum}**.\\r\\n\\r\\nVous pouvez consulter les informations de paiement et l\\u2019\\u00e9tat de votre commande \\u00e0 l\\u2019adresse\\r\\n{url}\\r\\n\\r\\nSinceres salutations  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 65,
+        "fields": {
+            "key": "mail_text_order_payment_failed",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nyour payment attempt for your order for {event} has failed.\\r\\n\\r\\nYour order is still valid and you can try to pay again using the same or a different payment method. Please complete your payment before {expire_date}.\\r\\n\\r\\nYou can retry the payment and view the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour\\r\\n\\r\\nVotre tentative de paiement pour votre commande pour {event} a \\u00e9chou\\u00e9.\\r\\n\\r\\nVotre commande est toujours valide et vous pouvez essayer de payer \\u00e0 nouveau en utilisant le m\\u00eame mode de paiement ou un mode de paiement diff\\u00e9rent. Veuillez effectuer votre paiement avant {expire_date}.\\r\\n\\r\\nVous pouvez r\\u00e9essayer le paiement et consulter l\\u2019\\u00e9tat de votre commande \\u00e0 l\\u2019adresse\\r\\n{url}\\r\\n\\r\\nSinceres salutations  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 66,
+        "fields": {
+            "key": "mail_text_waiting_list",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nYou've been selected in the ticket lottery for {event}!\\r\\n\\r\\nWe now have a ticket ready for you to buy! You can redeem it in our ticket shop within the next <b>{hours} hours</b> by entering the following voucher code:\\r\\n\\r\\n{code}\\r\\n\\r\\n<b>Click the URL below to directly access your ticket purchase link:</b>\\r\\n\\r\\n{url}\\r\\n\\r\\nThis voucher is just for you. Do not forward it to anyone else!\\r\\n\\r\\nPlease note that this link is only valid within the next <b>{hours} hours</b>! \\r\\n\\r\\nWe will reassign the ticket to the next person on the list if you do not redeem the voucher within that timeframe. If your voucher expires, you can rejoin the waiting list by logging into your account and clicking \\\"register for tickets\\\".\\r\\n\\r\\nDon't need a ticket anymore? Please clink this link and we'll send it on to the next person on the waiting list right away:\\r\\n\\r\\n{url_remove}\\r\\n\\r\\nBest regards,\\r\\n\\r\\nYour {event} Ticketing Team\", \"fr\": \"Bonjour,\\r\\n\\r\\nVous avez \\u00e9t\\u00e9 s\\u00e9lectionn\\u00e9 dans la loterie de billets pour {event}\\u00a0!\\r\\n\\r\\nNous avons maintenant un billet pr\\u00eat \\u00e0 \\u00eatre achet\\u00e9 ! Vous pouvez l'\\u00e9changer dans notre billetterie dans les <b>{hours}\\u00a0prochaines heures</b> en saisissant le code promotionnel suivant\\u00a0:\\r\\n\\r\\n{code}\\r\\n\\r\\n<b>Cliquez sur l'URL ci-dessous pour acc\\u00e9der directement \\u00e0 votre lien d'achat de billets :</b>\\r\\n\\r\\n{url}\\r\\n\\r\\nCe bon est juste pour vous. Ne le transmettez \\u00e0 personne d\\u2019autre !\\r\\n\\r\\nVeuillez noter que ce lien n'est valide que dans les <b>{hours}\\u00a0prochaines heures</b>\\u00a0!\\r\\n\\r\\nNous r\\u00e9attribuerons le billet \\u00e0 la personne suivante sur la liste si vous ne le faites pas. Utiliser le bon dans ce d\\u00e9lai. Si votre bon expire, vous pouvez r\\u00e9int\\u00e9grer la liste d'attente en vous connectant \\u00e0 votre compte et en cliquant sur \\u00ab s'inscrire pour les billets \\u00bb.\\r\\n\\r\\nVous n'avez plus besoin de billet ? Cliquez sur ce lien et nous le transmettrons imm\\u00e9diatement \\u00e0 la personne suivante sur la liste d'attente :\\r\\n\\r\\n{url_remove}\\r\\n\\r\\nCordialement,\\r\\n\\r\\nVotre \\u00e9quipe de billetterie {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 67,
+        "fields": {
+            "key": "mail_text_order_canceled",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nyour order {code} for {event} has been canceled.\\r\\n\\r\\n{comment}\\r\\n\\r\\nYou can view the details of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour,\\r\\n\\r\\nvotre commande {code} pour {event} a \\u00e9t\\u00e9 annul\\u00e9e.\\r\\n\\r\\n{comment}\\r\\n\\r\\nVous pouvez consulter les d\\u00e9tails de votre commande \\u00e0 l'adresse suivante\\r\\n{url}\\r\\n\\r\\nSinc\\u00e8res salutations,  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 68,
+        "fields": {
+            "key": "mail_text_order_custom_mail",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nYou can change your order details and view the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour,\\r\\n\\r\\nVous pouvez modifier les d\\u00e9tails de votre commande et consulter le statut de votre commande \\u00e0 l'adresse suivante\\r\\n{url}\\r\\n\\r\\nSinc\\u00e8res salutations,  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 69,
+        "fields": {
+            "key": "mail_text_download_reminder",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nyou bought a ticket for {event}.\\r\\n\\r\\nIf you did not do so already, you can download your ticket here:\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour,\\r\\n\\r\\nVous avez achet\\u00e9 un billet pour {event}.\\r\\n\\r\\nSi vous ne l'avez pas encore fait, vous pouvez t\\u00e9l\\u00e9charger votre ticket ici\\u202f:\\r\\n{url}\\r\\n\\r\\nSinc\\u00e8res salutations,  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 70,
+        "fields": {
+            "key": "mail_text_order_placed_require_approval",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nwe successfully received your order for {event}. Since you ordered\\r\\na product that requires approval by the event organizer, we ask you to\\r\\nbe patient and wait for our next email.\\r\\n\\r\\nYou can change your order details and view the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour\\r\\n\\r\\nNous avons re\\u00e7u avec succ\\u00e8s votre commande pour {event}. Depuis que vous avez command\\u00e9\\r\\nun produit qui n\\u00e9cessite l\\u2019approbation de l\\u2019organisateur de l\\u2019\\u00e9v\\u00e9nement, nous vous demandons de\\r\\nSoyez patient et attendez notre prochain e-mail.\\r\\n\\r\\nVous pouvez modifier les d\\u00e9tails de votre commande et consulter l\\u2019\\u00e9tat de votre commande \\u00e0 l\\u2019adresse\\r\\n{url}\\r\\n\\r\\nSinceres salutations  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 71,
+        "fields": {
+            "key": "mail_text_order_approved",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nwe approved your order for {event} and will be happy to welcome you\\r\\nat our event.\\r\\n\\r\\nPlease continue by paying for your order before {expire_date}.\\r\\n\\r\\nYou can select a payment method and perform the payment here:\\r\\n\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour\\r\\n\\r\\nNous avons approuv\\u00e9 votre commande pour {event} et serons heureux de vous accueillir\\r\\nlors de notre \\u00e9v\\u00e9nement.\\r\\n\\r\\nVeuillez continuer en payant votre commande avant {expire_date}.\\r\\n\\r\\nVous pouvez s\\u00e9lectionner un mode de paiement et effectuer le paiement ici\\u202f:\\r\\n\\r\\n{url}\\r\\n\\r\\nSinceres salutations  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 72,
+        "fields": {
+            "key": "mail_text_order_approved_free",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nwe approved your order for {event} and will be happy to welcome you\\r\\nat our event. As you only ordered free products, no payment is required.\\r\\n\\r\\nYou can change your order details and view the status of your order at\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour\\r\\n\\r\\nNous avons approuv\\u00e9 votre commande pour {event} et serons heureux de vous accueillir\\r\\nlors de notre \\u00e9v\\u00e9nement. Comme vous n\\u2019avez command\\u00e9 que des produits gratuits, aucun paiement n\\u2019est requis.\\r\\n\\r\\nVous pouvez modifier les d\\u00e9tails de votre commande et consulter l\\u2019\\u00e9tat de votre commande \\u00e0 l\\u2019adresse\\r\\n{url}\\r\\n\\r\\nSinceres salutations  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 73,
+        "fields": {
+            "key": "mail_text_order_denied",
+            "value": "{\"en\": \"Hello,\\r\\n\\r\\nunfortunately, we denied your order request for {event}.\\r\\n\\r\\n{comment}\\r\\n\\r\\nYou can view the details of your order here:\\r\\n\\r\\n{url}\\r\\n\\r\\nBest regards,  \\r\\nYour {event} team\", \"fr\": \"Bonjour\\r\\n\\r\\nMalheureusement, nous avons refus\\u00e9 votre demande de commande pour {event}.\\r\\n\\r\\n{comment}\\r\\n\\r\\nVous pouvez consulter les d\\u00e9tails de votre commande ici\\u202f:\\r\\n\\r\\n{url}\\r\\n\\r\\nSinceres salutations  \\r\\nVotre \\u00e9quipe {event}\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 74,
+        "fields": {
+            "key": "mail_prefix",
+            "value": "Sideburn Staging",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 75,
+        "fields": {
+            "key": "mail_attach_ical",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 76,
+        "fields": {
+            "key": "mail_attach_ical_description",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 77,
+        "fields": {
+            "key": "payment_stripe_settings__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 78,
+        "fields": {
+            "key": "payment_stripe__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 79,
+        "fields": {
+            "key": "payment_stripe_giropay__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 80,
+        "fields": {
+            "key": "payment_stripe_ideal__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 81,
+        "fields": {
+            "key": "payment_stripe_alipay__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 82,
+        "fields": {
+            "key": "payment_stripe_bancontact__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 83,
+        "fields": {
+            "key": "payment_stripe_sofort__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 84,
+        "fields": {
+            "key": "payment_stripe_eps__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 85,
+        "fields": {
+            "key": "payment_stripe_multibanco__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 86,
+        "fields": {
+            "key": "payment_stripe_przelewy24__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 87,
+        "fields": {
+            "key": "payment_stripe_wechatpay__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 88,
+        "fields": {
+            "key": "payment_stripe_sepa_debit__fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 89,
+        "fields": {
+            "key": "invoice_address_asked",
+            "value": "False",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 90,
+        "fields": {
+            "key": "invoice_address_custom_field",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 91,
+        "fields": {
+            "key": "invoice_address_explanation_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 92,
+        "fields": {
+            "key": "invoice_introductory_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 93,
+        "fields": {
+            "key": "invoice_additional_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 94,
+        "fields": {
+            "key": "invoice_footer_text",
+            "value": "{\"en\": \"\", \"fr\": \"\"}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 95,
+        "fields": {
+            "key": "cancel_allow_user_until",
+            "value": "2026-05-06T18:00:00-04:00",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 96,
+        "fields": {
+            "key": "cancel_allow_user_paid",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 97,
+        "fields": {
+            "key": "cancel_allow_user_paid_until",
+            "value": "2026-05-06T18:00:00-04:00",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 98,
+        "fields": {
+            "key": "change_allow_user_variation",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 99,
+        "fields": {
+            "key": "change_allow_user_price",
+            "value": "any",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 100,
+        "fields": {
+            "key": "change_allow_user_until",
+            "value": "2026-05-06T18:00:00-04:00",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 101,
+        "fields": {
+            "key": "change_allow_user_addons",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 102,
+        "fields": {
+            "key": "change_allow_user_if_checked_in",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 103,
+        "fields": {
+            "key": "change_allow_attendee",
+            "value": "True",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 104,
+        "fields": {
+            "key": "regex_validation_config",
+            "value": "{\"email\": \"\", \"email:message\": {\"en\": \"Please enter a valid value.\", \"fr\": \"Please enter a valid value.\"}, \"7MB9XQ7Z\": \"\", \"7MB9XQ7Z:message\": {\"en\": \"Please enter a valid value.\", \"fr\": \"Please enter a valid value.\"}, \"TTDREMBE\": \"\", \"TTDREMBE:message\": {\"en\": \"Please enter a valid value.\", \"fr\": \"Please enter a valid value.\"}, \"GPLGWFGE\": \"\\\\bbutthole\\\\b\", \"GPLGWFGE:message\": {\"en\": \"Please enter a valid value.\", \"fr\": \"Please enter a valid value.\"}, \"GDVCPABU\": \"\\\\barmpit\\\\b\", \"GDVCPABU:message\": {\"en\": \"Please enter a valid value.\", \"fr\": \"Please enter a valid value.\"}, \"V3R8KC8N\": \"\", \"V3R8KC8N:message\": {\"en\": \"Please enter a valid value.\", \"fr\": \"Please enter a valid value.\"}, \"YQQNUDCA\": \"\", \"YQQNUDCA:message\": {\"en\": \"Please enter a valid value.\", \"fr\": \"Please enter a valid value.\"}}",
+            "object": 1
+        }
+    },
+    {
+        "model": "pretixbase.event_settingsstore",
+        "pk": 105,
+        "fields": {
+            "key": "payment___fee_reverse_calc",
+            "value": "True",
+            "object": 1
+        }
+    }
+]

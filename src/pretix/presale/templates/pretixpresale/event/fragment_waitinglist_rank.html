@@ -1,18 +1,44 @@
 {% load i18n %}
-{% load eventurl %}
-{% load static %}
+{% load ordinal %}
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12">
-        <div id="rank-result" 
-             data-rank-url="{% eventurl event "presale:event.waitinglist.rank" %}"
-             data-loading-text="{% trans "Loading..." %}"
-             data-voucher-text="{% trans "You have a voucher waiting for redemption! Check your email for details." %}"
-             data-rank-label="{% trans "You are {ordinal} in line" %}"
-             data-error-text="{% trans "An error occurred. Please try again." %}">
-            {% trans "Loading..." %}
-        </div>
+        {% if waiting_list_ranks %}
+            <table class="table table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>{% trans "Product" %}</th>
+                        <th>{% trans "Status" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in waiting_list_ranks %}
+                        <tr>
+                            <td>
+                                {{ product.item_name }}{% if product.variation_name %} – {{ product.variation_name }}{% endif %}
+                            </td>
+                            <td>
+                                {% if product.rank == 0 %}
+                                    <span class="text-success">
+                                        {% trans "You have a voucher waiting for redemption! Check your email for details." %}
+                                    </span>
+                                {% elif not product.lottery_run %}
+                                    <span class="text-muted">
+                                        {% trans "You are on the waiting list for this event. The lottery hasn't yet been run." %}
+                                    </span>
+                                {% elif product.rank %}
+                                    {% blocktrans with ordinal=product.rank|ordinal %}You are {{ ordinal }} in line{% endblocktrans %}
+                                {% else %}
+                                    <span class="text-muted">{% trans "Unable to determine rank." %}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-muted">{% trans "You are not on the waiting list for this event." %}</p>
+        {% endif %}
     </div>
     <div class="clearfix"></div>
 </div>
-<script src="{% static "pretixpresale/js/ui/waitinglist_rank.js" %}"></script>
 

@@ -3,6 +3,7 @@
 {% load eventurl %}
 {% load money %}
 {% load urlreplace %}
+{% load static %}
 {% block title %}{% trans "Waiting list" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Waiting list" %}</h1>
@@ -81,7 +82,7 @@
     </div>
 
     <p>
-    <form class="form-inline helper-display-inline" action="" method="get">
+    <form class="form-inline helper-display-inline" action="" method="get" id="waitinglist-filter-form">
         <label for="email"> Email </label>
         <input type="email" title="enter 1 or more emails separated by comma" name="email" multiple>
         <label for="name"> Name </label>
@@ -128,13 +129,15 @@
         <a href="?{% url_replace request "download" "yes" %}"
                 class="btn btn-default"><i class="fa fa-download"></i>
             {% trans "Download list" %}</a>
-        <a href="?{% url_replace request "lottery" "run" %}"
-                class="btn btn-default"><i class="fa fa-download"></i>
-            {% trans "Run lottery" %}</a>
+        <button type="button" id="run-lottery-btn" class="btn btn-default">
+            <i class="fa fa-download"></i>
+            {% trans "Run lottery" %}
+        </button>
 
-        <a href="?{% url_replace request "lottery" "revert" %}"
-                class="btn btn-default"><i class="fa fa-download"></i>
-            {% trans "Revert list" %}</a>
+        <button type="button" id="revert-list-btn" class="btn btn-default">
+            <i class="fa fa-download"></i>
+            {% trans "Revert list" %}
+        </button>
 
     </form>
     </p>
@@ -305,4 +308,33 @@
         {% endif %}
     </form>
     {% include "pretixcontrol/pagination.html" %}
+
+    <!-- Confirmation Modal for Lottery and Reversion -->
+    <div class="modal fade" id="lottery-confirm-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{% trans "Close" %}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="lottery-modal-title">{% trans "Confirm Lottery Run" %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">
+                        <strong>{% trans "Warning!" %}</strong>
+                        <p id="lottery-modal-description"></p>
+                        <p id="lottery-product-container"><strong id="lottery-product-name"></strong></p>
+                        <p id="lottery-modal-warning"></p>
+                    </div>
+                    <p>{% trans "Are you sure you want to proceed?" %}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="button" class="btn btn-warning" id="lottery-confirm-btn">{% trans "Yes, run the lottery" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/waitinglist_lottery.js" %}"></script>
 {% endblock %}
