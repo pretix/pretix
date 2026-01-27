@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
 "PO-Revision-Date: 2026-01-28 00:00+0000\n"
-"Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -2289,6 +2289,9 @@ msgid ""
 "contain at least one position of this product. The order totals etc. still "
 "include all products contained in the order."
 msgstr ""
+"何も選択されていない場合、すべての製品が含まれます。注文は、この製品の"
+"ポジションを1つ以上含む場合に含まれます。注文合計などには、注文に含まれるすべ"
+"ての製品が引き続き含まれます。"
 
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:478
@@ -2552,10 +2555,8 @@ msgid "Voucher"
 msgstr "バウチャー"
 
 #: pretix/base/exporters/orderlist.py:653
-#, fuzzy
-#| msgid "Voucher code used:"
 msgid "Voucher budget usage"
-msgstr "使用するバウチャーコード:"
+msgstr "バウチャー予算の使用状況"
 
 #: pretix/base/exporters/orderlist.py:654
 msgid "Pseudonymization ID"
@@ -5464,14 +5465,6 @@ msgid "Only show after sellout of"
 msgstr "売り切れ後にのみ表示"
 
 #: pretix/base/models/items.py:596
-#, fuzzy
-#| msgid ""
-#| "If you select a product here, this product will only be shown when that "
-#| "product is sold out. If combined with the option to hide sold-out "
-#| "products, this allows you to swap out products for more expensive ones "
-#| "once the cheaper option is sold out. There might be a short period in "
-#| "which both products are visible while all tickets of the referenced "
-#| "product are reserved, but not yet sold."
 msgid ""
 "If you select a product here, this product will only be shown when that "
 "product is no longer available. This will happen either because the other "
@@ -5482,11 +5475,12 @@ msgid ""
 "products are visible while all tickets of the referenced product are "
 "reserved, but not yet sold."
 msgstr ""
-"ここで製品を選択すると、その製品は売り切れの場合にのみ表示されます。売り切れ"
-"の製品を非表示にするオプションと組み合わせると、安いオプションが売り切れた後"
-"により高価な製品に交換することができます。参照製品のすべてのチケットが予約さ"
-"れているがまだ売れていない短い期間があるかもしれませんが、その間に両方の製品"
-"が表示されます。"
+"ここで製品を選択すると、その製品が利用できなくなった場合にのみ、この製品が表"
+"示されます。これは、選択した製品が売り切れになった場合、または現在の時刻がそ"
+"の製品の販売期間外である場合に発生します。売り切れ製品を非表示にする"
+"オプションと組み合わせると、安価なオプションが売り切れた際に、より高価な製品"
+"に入れ替えることができます。参照先の製品のすべてのチケットが予約済みだがまだ"
+"販売されていない間、両方の製品が一時的に表示される場合があります。"
 
 #: pretix/base/models/items.py:611
 msgid ""
@@ -9558,7 +9552,7 @@ msgstr ""
 
 #: pretix/base/settings.py:189
 msgid "Require login to access order confirmation pages"
-msgstr ""
+msgstr "注文確認ページへのアクセスにログインを必須にする"
 
 #: pretix/base/settings.py:190
 msgid ""
@@ -9567,6 +9561,9 @@ msgid ""
 "placing an order, the restriction only becomes active after the customer "
 "account is activated."
 msgstr ""
+"有効にすると、購入時にログインしていたユーザーは、注文情報にアクセスする際に"
+"もログインが必要になります。注文時に顧客アカウントが作成された場合、この制限"
+"は顧客アカウントが有効化された後にのみ適用されます。"
 
 #: pretix/base/settings.py:202
 msgid "Match orders based on email address"
@@ -10314,10 +10311,8 @@ msgstr ""
 "することをお勧めします。"
 
 #: pretix/base/settings.py:1234
-#, fuzzy
-#| msgid "Restrict to business customers"
 msgid "Only issue invoices to business customers"
-msgstr "ビジネス顧客に制限"
+msgstr "法人顧客にのみ請求書を発行する"
 
 #: pretix/base/settings.py:1243
 msgid "Address line"
@@ -23964,10 +23959,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:46
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:47
-#, fuzzy
-#| msgid "Sample company"
 msgid "Save copy"
-msgstr "サンプル会社"
+msgstr "コピーを保存"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:56
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:57
@@ -28347,10 +28340,8 @@ msgid "The invoice has been scheduled for retransmission."
 msgstr "請求書の再送信が予定されました。"
 
 #: pretix/control/views/orders.py:1751
-#, fuzzy
-#| msgid "The invoice has already been canceled."
 msgid "The invoice has been canceled."
-msgstr "請求書はすでにキャンセルされています。"
+msgstr "請求書が取り消されました。"
 
 #: pretix/control/views/orders.py:1794
 msgid "The email has been queued to be sent."
@@ -29040,6 +29031,9 @@ msgid ""
 "This will usually happen if you lost access to your two-factor credentials "
 "and requested a reset of the credentials."
 msgstr ""
+"システム管理者によって二要素認証の緊急コードが生成されました。これは通常、二"
+"要素認証の資格情報にアクセスできなくなり、資格情報のリセットを依頼した場合に"
+"発生します。"
 
 #: pretix/control/views/users.py:174
 #, python-brace-format
@@ -29929,12 +29923,8 @@ msgid "Reference code (important):"
 msgstr "リファレンス・コード (重要):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:30
-#, fuzzy
-#| msgid ""
-#| "We will assign you a personal reference code to use after you completed "
-#| "the order."
 msgid "We will assign you a personal reference code in the next step."
-msgstr "ご注文完了後に、個人用の参照コードを割り当てます。"
+msgstr "次のステップで個人用の参照コードを割り当てます。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
 msgid ""
@@ -31235,11 +31225,8 @@ msgid "#"
 msgstr "＃"
 
 #: pretix/plugins/reports/exporters.py:483
-#, fuzzy
-#| msgctxt "skip-to-main-nav"
-#| msgid "Skip link"
 msgid "Skip empty lines"
-msgstr "リンクをスキップする"
+msgstr "空行をスキップ"
 
 #: pretix/plugins/reports/exporters.py:492
 msgid "Tax split list (PDF)"
@@ -31841,24 +31828,19 @@ msgid "Orders by day"
 msgstr "日別の注文"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:25
-#, fuzzy
-#| msgid ""
-#| "Only fully paid orders are counted. Orders paid in multiple payments are "
-#| "shown with the date of their last payment."
 msgid ""
 "Orders paid in multiple payments are shown with the date of their last "
 "payment. Placed orders include all orders (pending, paid, canceled, and "
 "expired); paid orders include only paid orders and exclude all canceled "
 "orders."
 msgstr ""
-"支払いが完了した注文のみがカウントされます。複数回の支払いで支払われた注文"
-"は、最後の支払い日付とともに表示されます。"
+"複数回の支払いで決済された注文は、最後の支払い日で表示されます。注文済みには"
+"すべての注文（保留中、支払い済み、取消し済み、期限切れ）が含まれます。支払い"
+"済みには支払い済みの注文のみが含まれ、取消し済みの注文はすべて除外されます。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:36
-#, fuzzy
-#| msgid "Attendee badges"
 msgid "Attendees by day"
-msgstr "参加者のバッジ"
+msgstr "日別参加者数"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:42
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:62
@@ -31870,12 +31852,16 @@ msgid ""
 "(pending, paid, canceled, and expired); attendees in paid orders include "
 "only those from paid orders and exclude those from canceled orders."
 msgstr ""
+"複数回の支払いで決済された注文の参加者は、最後の支払い日で表示されます。注文"
+"日は注文が最初に行われた日を反映します。後から追加の注文ポジションで追加され"
+"た参加者も、元の注文日が使用されます。注文済みの参加者には、すべての注文"
+"ステータス（保留中、支払い済み、取消し済み、期限切れ）の参加者が含まれます。"
+"支払い済みの参加者には支払い済みの注文の参加者のみが含まれ、取消し済みの注文"
+"の参加者は除外されます。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:56
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendees by time"
-msgstr "参加者の名前"
+msgstr "時間別参加者数"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:76
 msgid "Revenue over time"
@@ -31891,36 +31877,33 @@ msgstr ""
 "ここには表示されません。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:91
-#, fuzzy
-#| msgid ""
-#| "Only fully paid orders are counted. Orders paid in multiple payments are "
-#| "shown with the date of their last payment."
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment. Revenue excludes all fees, "
 "including cancellation fees."
 msgstr ""
-"支払いが完了した注文のみがカウントされます。複数回の支払いで支払われた注文"
-"は、最後の支払い日付とともに表示されます。"
+"完全に支払い済みの注文のみがカウントされます。複数回の支払いで決済された注文"
+"は、最後の支払い日で表示されます。収益にはキャンセル料を含むすべての手数料が"
+"除外されます。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:97
-#, fuzzy
-#| msgid ""
-#| "Only fully paid orders are counted. Orders paid in multiple payments are "
-#| "shown with the date of their last payment."
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment. Revenue includes all fees, "
 "including cancellation fees from canceled orders."
 msgstr ""
-"支払いが完了した注文のみがカウントされます。複数回の支払いで支払われた注文"
-"は、最後の支払い日付とともに表示されます。"
+"完全に支払い済みの注文のみがカウントされます。複数回の支払いで決済された注文"
+"は、最後の支払い日で表示されます。収益には、取消し済み注文のキャンセル料を含"
+"むすべての手数料が含まれます。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:115
 msgid ""
 "Placed orders include all orders (pending, paid, canceled, and expired); "
 "paid orders include only paid orders and exclude all canceled orders."
 msgstr ""
+"注文済みにはすべての注文（保留中、支払い済み、取消し済み、期限切れ）が含まれ"
+"ます。支払い済みには支払い済みの注文のみが含まれ、取消し済みの注文はすべて除"
+"外されます。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:126
 msgid "Seating Overview"
