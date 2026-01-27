@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2025-10-22 16:00+0000\n"
+"PO-Revision-Date: 2026-01-27 14:51+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -161,12 +161,12 @@ msgstr "Commandes payées"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (ordered)"
-msgstr ""
+msgstr "Participants (par ordre alphabétique)"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (paid)"
-msgstr ""
+msgstr "Participants (payants)"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
 msgid "Total revenue"
