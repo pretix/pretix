@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-27 14:51+0000\n"
+"PO-Revision-Date: 2026-01-28 00:00+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -1090,7 +1090,7 @@ msgstr "チケット価格"
 #: pretix/control/forms/filter.py:220 pretix/control/forms/filter.py:1242
 #: pretix/control/forms/modelimport.py:90
 msgid "Order status"
-msgstr "注文ステータス"
+msgstr "注文の状態"
 
 #: pretix/base/datasync/sourcefields.py:500
 msgid "Ticket status"
@@ -1304,7 +1304,7 @@ msgstr "SSOプロバイダー"
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:49
 msgid "External identifier"
-msgstr "外部アイデンティファイラー"
+msgstr "外部識別子"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:483
@@ -2194,7 +2194,7 @@ msgstr ""
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:502
 #: pretix/plugins/reports/exporters.py:685
 msgid "Filter by status"
-msgstr "ステータスによる絞り込み"
+msgstr "状態で絞り込み"
 
 #: pretix/base/exporters/orderlist.py:89
 msgid ""
@@ -2340,7 +2340,7 @@ msgstr "イベントのスラッグ"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:34
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:79
 msgid "Status"
-msgstr "ステータス"
+msgstr "状態"
 
 #: pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:484
@@ -2830,7 +2830,7 @@ msgstr "完了日"
 
 #: pretix/base/exporters/orderlist.py:1133
 msgid "Status code"
-msgstr "ステータスコード"
+msgstr "状態コード"
 
 #: pretix/base/exporters/orderlist.py:1133
 #: pretix/base/exporters/orderlist.py:1272
@@ -3278,7 +3278,7 @@ msgstr ""
 
 #: pretix/base/forms/auth.py:67 pretix/base/forms/auth.py:286
 msgid "This account is inactive."
-msgstr "このアカウントは非アクティブです。"
+msgstr "このアカウントは無効です。"
 
 #: pretix/base/forms/auth.py:156
 msgid ""
@@ -4048,7 +4048,7 @@ msgstr "複数の一致する製品が見つかりました。"
 #: pretix/base/modelimport_vouchers.py:205 pretix/base/models/items.py:1257
 #: pretix/base/models/vouchers.py:266 pretix/base/models/waitinglist.py:100
 msgid "Product variation"
-msgstr "製品のバリエーション"
+msgstr "製品バリエーション"
 
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
@@ -4296,7 +4296,7 @@ msgstr ""
 
 #: pretix/base/models/auth.py:251
 msgid "Is active"
-msgstr "アクティブです"
+msgstr "有効"
 
 #: pretix/base/models/auth.py:253
 msgid "Is site admin"
@@ -4470,7 +4470,7 @@ msgstr "自動的に誰もをチェックアウトします"
 
 #: pretix/base/models/checkin.py:336
 msgid "Entry"
-msgstr "エントリー"
+msgstr "入場"
 
 #: pretix/base/models/checkin.py:337
 msgid "Exit"
@@ -4490,7 +4490,7 @@ msgstr "慣習のルールによって禁止されています"
 
 #: pretix/base/models/checkin.py:359
 msgid "Ticket code revoked/changed"
-msgstr "チケットコードが取り消され/変更されました"
+msgstr "チケットコードが取り消し/変更されました"
 
 #: pretix/base/models/checkin.py:360
 msgid "Information required"
@@ -4518,7 +4518,7 @@ msgstr "チケットがブロックされました"
 
 #: pretix/base/models/checkin.py:366
 msgid "Order not approved"
-msgstr "注文が承認されませんでした"
+msgstr "未承認の注文"
 
 #: pretix/base/models/checkin.py:367
 msgid "Ticket not valid at this time"
@@ -4526,7 +4526,7 @@ msgstr "このチケットは現在有効ではありません"
 
 #: pretix/base/models/checkin.py:368
 msgid "Check-in annulled"
-msgstr "チェックイン取消"
+msgstr "チェックインキャンセル"
 
 #: pretix/base/models/customers.py:62
 msgid "Provider name"
@@ -5075,7 +5075,7 @@ msgstr ""
 #: pretix/base/models/event.py:1788 pretix/control/forms/organizer.py:269
 #: pretix/control/forms/organizer.py:273
 msgid "Public name"
-msgstr "公共の名前"
+msgstr "公開名"
 
 #: pretix/base/models/event.py:1792
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
@@ -5179,7 +5179,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr "特別なアイテムと条件"
+msgstr "特別な利用条件"
 
 #: pretix/base/models/giftcards.py:227 pretix/base/models/giftcards.py:231
 msgid "Manual transaction"
@@ -5204,7 +5204,7 @@ msgstr "失敗した"
 #: pretix/base/models/invoices.py:126
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:56
 msgid "unknown"
-msgstr "未知"
+msgstr "不明"
 
 #: pretix/base/models/invoices.py:127
 msgid "not transmitted due to test mode"
@@ -5315,7 +5315,7 @@ msgstr "この製品は指定された日付を過ぎた後には販売されま
 
 #: pretix/base/models/items.py:436
 msgid "Event validity (default)"
-msgstr "イベント開始日"
+msgstr "イベント有効期間（デフォルト）"
 
 #: pretix/base/models/items.py:437
 msgid "Fixed time frame"
@@ -5391,7 +5391,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:511 pretix/base/models/items.py:1176
 msgid "Suggested price"
-msgstr "正味金額"
+msgstr "参考価格"
 
 #: pretix/base/models/items.py:512 pretix/base/models/items.py:1177
 msgid ""
@@ -6840,7 +6840,7 @@ msgstr "税金免除（理由なし）"
 #: pretix/base/models/tax.py:176
 msgctxt "tax_code"
 msgid "Zero-rated goods"
-msgstr "ゼロ税率商品"
+msgstr "ゼロ税率製品"
 
 #: pretix/base/models/tax.py:179
 msgctxt "tax_code"
@@ -7861,7 +7861,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:198
 msgid "Attendee street"
-msgstr "参加者(丁目・番地)"
+msgstr "参加者の住所（番地）"
 
 #: pretix/base/pdf.py:203
 msgid "Attendee ZIP code"
@@ -7869,11 +7869,11 @@ msgstr "参加者の郵便番号"
 
 #: pretix/base/pdf.py:208
 msgid "Attendee city"
-msgstr "参加者(市区町村)"
+msgstr "参加者の都市"
 
 #: pretix/base/pdf.py:213
 msgid "Attendee state"
-msgstr "出席者(州・都道府県)"
+msgstr "参加者の州"
 
 #: pretix/base/pdf.py:218
 msgid "Attendee country"
@@ -8060,7 +8060,7 @@ msgstr "購入時間"
 
 #: pretix/base/pdf.py:446
 msgid "Validity start date"
-msgstr "イベント開始日"
+msgstr "有効期間開始日"
 
 #: pretix/base/pdf.py:454
 msgid "Validity start date and time"
@@ -9265,7 +9265,7 @@ msgstr "この操作を許可する定義されたクォータはありません
 
 #: pretix/base/services/orders.py:1596
 msgid "The selected product is not active or has no price set."
-msgstr "選択された製品はアクティブではないか、価格が設定されていません。"
+msgstr "選択された製品は有効ではないか、価格が設定されていません。"
 
 #: pretix/base/services/orders.py:1597
 msgid ""
@@ -9639,7 +9639,7 @@ msgstr ""
 
 #: pretix/base/settings.py:360
 msgid "Hide prices on attendee ticket page"
-msgstr "参加者のチケットページで価格を非表示にしてください"
+msgstr "参加者のチケットページで価格を非表示にする"
 
 #: pretix/base/settings.py:361
 msgid ""
@@ -9662,7 +9662,7 @@ msgstr "すべてのパーソナライズチケットで名前を尋ねる。"
 
 #: pretix/base/settings.py:389
 msgid "Require attendee names"
-msgstr "参加者の名前の要求"
+msgstr "参加者の名前を必須にする"
 
 #: pretix/base/settings.py:390
 msgid "Require customers to fill in the names of all attendees."
@@ -10014,7 +10014,7 @@ msgstr "製品がカートに追加された後、チェックアウトに直接
 
 #: pretix/base/settings.py:887
 msgid "End of presale text"
-msgstr "前売り終了"
+msgstr "前売り終了時のテキスト"
 
 #: pretix/base/settings.py:890
 msgid ""
@@ -10040,7 +10040,7 @@ msgstr ""
 
 #: pretix/base/settings.py:916 pretix/base/settings.py:925
 msgid "in days"
-msgstr "数日間"
+msgstr "日単位"
 
 #: pretix/base/settings.py:917 pretix/base/settings.py:926
 msgid "in minutes"
@@ -13231,7 +13231,7 @@ msgstr "四半期ごと"
 #: pretix/base/timeframes.py:193
 msgctxt "reporting_timeframe"
 msgid "Current quarter to date"
-msgstr "イベント開始日"
+msgstr "四半期初来"
 
 #: pretix/base/timeframes.py:202
 msgctxt "reporting_timeframe"
@@ -13257,7 +13257,7 @@ msgstr "年ごとに"
 #: pretix/base/timeframes.py:231
 msgctxt "reporting_timeframe"
 msgid "Current year to date"
-msgstr "イベント開始日"
+msgstr "年初来"
 
 #: pretix/base/timeframes.py:240
 msgctxt "reporting_timeframe"
@@ -13956,7 +13956,7 @@ msgstr ""
 #: pretix/control/forms/event.py:1186 pretix/control/forms/event.py:1344
 #: pretix/control/forms/event.py:1389 pretix/control/forms/event.py:1419
 msgid "Subject sent to attendees"
-msgstr "参加者への送信事項"
+msgstr "参加者への件名"
 
 #: pretix/control/forms/event.py:1137 pretix/control/forms/event.py:1164
 #: pretix/control/forms/event.py:1191 pretix/control/forms/event.py:1349
@@ -14317,7 +14317,7 @@ msgstr "キャンセル済み (全額)"
 
 #: pretix/control/forms/filter.py:231
 msgid "Canceled (fully or with paid fee)"
-msgstr "キャンセル（全額返金または手数料を支払って）"
+msgstr "キャンセル（全額払い戻しまたは手数料を支払って）"
 
 #: pretix/control/forms/filter.py:232
 msgid "Canceled (at least one position)"
@@ -14497,7 +14497,7 @@ msgstr "公開中かつ前売り実施中です"
 
 #: pretix/control/forms/filter.py:1361 pretix/control/forms/filter.py:2165
 msgid "Inactive"
-msgstr "非アクティブ"
+msgstr "無効"
 
 #: pretix/control/forms/filter.py:1362 pretix/control/forms/filter.py:1829
 #: pretix/control/templates/pretixcontrol/events/index.html:153
@@ -14800,7 +14800,7 @@ msgstr "デバイスの状態"
 
 #: pretix/control/forms/filter.py:2770
 msgid "Active devices"
-msgstr "アクティブなデバイス"
+msgstr "有効なデバイス"
 
 #: pretix/control/forms/filter.py:2771
 msgid "Revoked devices"
@@ -15297,7 +15297,7 @@ msgstr "バンドル製品"
 #: pretix/control/forms/item.py:1246 pretix/control/forms/orders.py:379
 #: pretix/control/forms/orders.py:568
 msgid "inactive"
-msgstr "非アクティブ"
+msgstr "無効"
 
 #: pretix/control/forms/item.py:1331
 msgid "Program times"
@@ -17663,7 +17663,7 @@ msgstr "この製品からバンドルされたアイテムが削除されまし
 
 #: pretix/control/logdisplay.py:893
 msgid "A bundled item has been changed on this product."
-msgstr "この製品のバンドル商品が変更されました。"
+msgstr "この製品のバンドル製品が変更されました。"
 
 #: pretix/control/logdisplay.py:894
 msgid "A program time has been added to this product."
@@ -20489,7 +20489,7 @@ msgstr "変更が保存されました。"
 #: pretix/control/templates/pretixcontrol/event/plugins.html:34
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:34
 msgid "Search results"
-msgstr "結果を検索する"
+msgstr "検索結果"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:56
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:56
@@ -21518,7 +21518,7 @@ msgstr "今すぐ更新を確認してください"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:26
 msgid "The last update check was not successful."
-msgstr "最後のアップデートチェックは成功しませんでした。"
+msgstr "最後の更新チェックは成功しませんでした。"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:28
 msgid "The pretix.eu server returned an error code."
@@ -24109,7 +24109,7 @@ msgstr "キャンセル済み（支払い済み手数料）"
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:4
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:6
 msgid "Import attendees"
-msgstr "参加者をインポートします"
+msgstr "参加者をインポート"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:13
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:13
@@ -25175,7 +25175,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:81
 msgid "Active (all events)"
-msgstr "アクティブ（全イベント）"
+msgstr "有効（全イベント）"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:86
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:95
@@ -27422,7 +27422,7 @@ msgstr "総収入 ({currency})"
 
 #: pretix/control/views/dashboards.py:147
 msgid "Active products"
-msgstr "アクティブな製品"
+msgstr "有効な製品"
 
 #: pretix/control/views/dashboards.py:212
 msgid "available to give to people on waiting list"
@@ -28279,7 +28279,7 @@ msgstr "支払いは正常に作成されました。"
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
-msgstr "注文はキャンセルされました。今、ユーザーに返金する方法を選択できます。"
+msgstr "注文はキャンセルされました。払い戻し方法を選択してください。"
 
 #: pretix/control/views/orders.py:1632 pretix/control/views/orders.py:1636
 msgid "No VAT ID specified."
@@ -31016,7 +31016,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:24
 msgid "Capture status"
-msgstr "ステータスによる絞り込み"
+msgstr "キャプチャの状態"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:27
 msgid ""
@@ -31435,7 +31435,7 @@ msgstr "支払いが遅れている保留中"
 #: pretix/plugins/sendmail/forms.py:242
 msgctxt "sendmail_form"
 msgid "Restrict to orders with status"
-msgstr "ステータスを備えた注文に限定"
+msgstr "注文の状態で限定"
 
 #: pretix/plugins/sendmail/forms.py:267 pretix/plugins/sendmail/forms.py:271
 msgctxt "sendmail_form"
@@ -31469,7 +31469,7 @@ msgstr "相対的、イベント終了後"
 #: pretix/plugins/sendmail/forms.py:395
 msgctxt "sendmail_from"
 msgid "Restrict to orders with status"
-msgstr "ステータスを備えた注文に限定"
+msgstr "注文の状態で限定"
 
 #: pretix/plugins/sendmail/forms.py:410
 msgid "Please specify the send date"
@@ -31517,11 +31517,11 @@ msgstr "製品を制限します"
 
 #: pretix/plugins/sendmail/models.py:255
 msgid "Restrict to orders with status"
-msgstr "ステータスを備えた注文に限定"
+msgstr "注文の状態で限定"
 
 #: pretix/plugins/sendmail/models.py:260
 msgid "Restrict to check-in status"
-msgstr "チェックインステータスに限定"
+msgstr "チェックインの状態で限定"
 
 #: pretix/plugins/sendmail/models.py:274
 msgid "Send date"
@@ -32653,7 +32653,7 @@ msgstr "紛争解決の手続きが更新されました。理由：{}"
 #: pretix/plugins/stripe/signals.py:111
 #, python-brace-format
 msgid "Dispute closed. Status: {}"
-msgstr "紛争解決手続きは終了しました。ステータス：{}"
+msgstr "紛争解決手続きは終了しました。状態：{}"
 
 #: pretix/plugins/stripe/signals.py:114
 #, python-brace-format
@@ -34164,7 +34164,7 @@ msgstr[0] "このチケットは%(count)s回使用されています。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:166
 msgid "No attendee name provided"
-msgstr "参加者の名前が提供されていません"
+msgstr "参加者の名前が入力されていません"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:219
 msgid "The image you previously uploaded"
@@ -34914,7 +34914,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/position.html:33
 msgid "Change ordered items"
-msgstr "注文した商品を変更"
+msgstr "注文した製品を変更"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:200
 #: pretix/presale/templates/pretixpresale/event/order.html:291
@@ -35846,7 +35846,7 @@ msgstr "本当にアカウントから次のプロフィールを削除します
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:11
 #: pretix/presale/views/customer.py:384
 msgid "Attendee profiles"
-msgstr "参加者のプロフィール"
+msgstr "参加者プロフィール"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:37
 msgid "You don’t have any attendee profiles in your account yet."
