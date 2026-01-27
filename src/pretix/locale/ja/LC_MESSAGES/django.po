@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-26 22:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2026-01-27 14:51+0000\n"
+"Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -4092,7 +4092,7 @@ msgstr "有効な州を入力してください。"
 
 #: pretix/base/modelimport_orders.py:359 pretix/control/forms/filter.py:687
 msgid "Attendee email address"
-msgstr "出席者のメールアドレス"
+msgstr "参加者のメールアドレス"
 
 #: pretix/base/modelimport_orders.py:375 pretix/base/modelimport_orders.py:386
 #: pretix/base/modelimport_orders.py:397 pretix/base/modelimport_orders.py:408
@@ -7861,7 +7861,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:198
 msgid "Attendee street"
-msgstr "出席者通"
+msgstr "参加者(丁目・番地)"
 
 #: pretix/base/pdf.py:203
 msgid "Attendee ZIP code"
@@ -7869,11 +7869,11 @@ msgstr "参加者の郵便番号"
 
 #: pretix/base/pdf.py:208
 msgid "Attendee city"
-msgstr "出席者の都市"
+msgstr "参加者(市区町村)"
 
 #: pretix/base/pdf.py:213
 msgid "Attendee state"
-msgstr "出席者の状態"
+msgstr "出席者(州・都道府県)"
 
 #: pretix/base/pdf.py:218
 msgid "Attendee country"
@@ -9639,7 +9639,7 @@ msgstr ""
 
 #: pretix/base/settings.py:360
 msgid "Hide prices on attendee ticket page"
-msgstr "出席者のチケットページで価格を非表示にしてください"
+msgstr "参加者のチケットページで価格を非表示にしてください"
 
 #: pretix/base/settings.py:361
 msgid ""
@@ -9654,7 +9654,7 @@ msgstr ""
 
 #: pretix/base/settings.py:379
 msgid "Ask for attendee names"
-msgstr "出席者の名前を尋ねる"
+msgstr "参加者の名前を尋ねる"
 
 #: pretix/base/settings.py:380
 msgid "Ask for a name for all personalized tickets."
@@ -9662,7 +9662,7 @@ msgstr "すべてのパーソナライズチケットで名前を尋ねる。"
 
 #: pretix/base/settings.py:389
 msgid "Require attendee names"
-msgstr "出席者の名前の要求"
+msgstr "参加者の名前の要求"
 
 #: pretix/base/settings.py:390
 msgid "Require customers to fill in the names of all attendees."
@@ -10846,9 +10846,9 @@ msgid ""
 "order contains tickets for multiple event dates, the earliest date will be "
 "used."
 msgstr ""
-"出席者の名前や質問への回答など、ユーザーが注文の詳細を変更できる最終日。イベ"
-"ントシリーズ機能を使用し、注文に複数のイベント日付のチケットが含まれている場"
-"合、最も早い日付が使用されます。"
+"参加者の名前や質問への回答など、ユーザーが注文の詳細を変更できる最終日。"
+"イベントシリーズ機能を使用し、注文に複数のイベント日付のチケットが含まれてい"
+"る場合、最も早い日付が使用されます。"
 
 #: pretix/base/settings.py:1906
 msgid "Customers can change the variation of the products they purchased"
@@ -12703,7 +12703,7 @@ msgstr ""
 
 #: pretix/base/shredder.py:421
 msgid "Attendee info"
-msgstr "出席者情報"
+msgstr "参加者情報"
 
 #: pretix/base/shredder.py:423
 msgid ""
@@ -13956,13 +13956,13 @@ msgstr ""
 #: pretix/control/forms/event.py:1186 pretix/control/forms/event.py:1344
 #: pretix/control/forms/event.py:1389 pretix/control/forms/event.py:1419
 msgid "Subject sent to attendees"
-msgstr "出席者への送信事項"
+msgstr "参加者への送信事項"
 
 #: pretix/control/forms/event.py:1137 pretix/control/forms/event.py:1164
 #: pretix/control/forms/event.py:1191 pretix/control/forms/event.py:1349
 #: pretix/control/forms/event.py:1394 pretix/control/forms/event.py:1424
 msgid "Text sent to attendees"
-msgstr "出席者へのテキスト"
+msgstr "参加者へのテキスト"
 
 #: pretix/control/forms/event.py:1202 pretix/control/forms/event.py:1276
 #: pretix/control/forms/event.py:1286 pretix/control/forms/event.py:1296
@@ -14601,7 +14601,7 @@ msgstr "過去の単一のイベント"
 
 #: pretix/control/forms/filter.py:2031 pretix/control/forms/filter.py:2033
 msgid "Search attendee…"
-msgstr "出席者を検索…"
+msgstr "参加者を検索…"
 
 #: pretix/control/forms/filter.py:2038
 #: pretix/plugins/checkinlists/exporters.py:106
@@ -14611,7 +14611,7 @@ msgstr "チェックインの状況"
 #: pretix/control/forms/filter.py:2040
 #: pretix/plugins/checkinlists/exporters.py:108
 msgid "All attendees"
-msgstr "すべての出席者"
+msgstr "すべての参加者"
 
 #: pretix/control/forms/filter.py:2041
 #: pretix/control/templates/pretixcontrol/checkin/index.html:183
@@ -16419,19 +16419,18 @@ msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
 "({new_price})."
 msgstr ""
-"座席番号 #{posid}: {old_item} ({old_price}) は、 {new_item} ({new_price})に変"
-"更。"
+"注文明細 #{posid}: {old_item} ({old_price}) は {new_item} ({new_price})に変更"
+"されました。"
 
 #: pretix/control/logdisplay.py:111
 #, python-brace-format
 msgid "Position #{posid}: Used membership changed."
-msgstr "座席番号 #{posid}：使用されたメンバーシップが変更されました。"
+msgstr "注文明細 #{posid}: 使用されたメンバーシップが変更されました。"
 
 #: pretix/control/logdisplay.py:117
 #, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
-msgstr ""
-"ポジション#{posid}：シート\"{old_seat}\"が\"{new_seat}\"に変更されました。"
+msgstr "ポジション #{posid}: シート\"{old_seat}\"が\"{new_seat}\"に変更されました。"
 
 #: pretix/control/logdisplay.py:127
 #, python-brace-format
@@ -16439,18 +16438,18 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
-"ポジション#{posid}：イベント日\"{old_event}\"（{old_price}）が\"{new_event}"
-"\"（{new_price}）に変更されました。"
+"注文明細 #{posid}: イベント日\"{old_event}\"({old_price})が\"{new_event}\"("
+"{new_price})に変更されました。"
 
 #: pretix/control/logdisplay.py:141
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr "ポジション#{posid}の価格が{old_price}から{new_price}に変更されました。"
+msgstr "注文明細#{posid}の価格が{old_price}から{new_price}に変更されました。"
 
 #: pretix/control/logdisplay.py:154
 #, python-brace-format
 msgid "Tax rule of position #{posid} changed from {old_rule} to {new_rule}."
-msgstr "ポジション#{posid}の税規則が{old_rule}から{new_rule}に変更されました。"
+msgstr "注文明細#{posid}の税規則が{old_rule}から{new_rule}に変更されました。"
 
 #: pretix/control/logdisplay.py:160
 #, python-brace-format
@@ -16474,7 +16473,7 @@ msgstr "料金{old_price}が削除されました。"
 #: pretix/control/logdisplay.py:202
 #, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr "座席番号 #{posid}（{old_item}、{old_price}）がキャンセルされました。"
+msgstr "注文明細 #{posid} ({old_item}、{old_price})がキャンセルされました。"
 
 #: pretix/control/logdisplay.py:219
 #, python-brace-format
@@ -16482,13 +16481,13 @@ msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
 msgstr ""
-"ポジション#{posid}が作成されました: {item} ({price})、ポジション#{addon_to}の"
-"アドオンとして。"
+"注文明細 #{posid} が作成されました: {item} ({price}) が注文明細 #{addon_to} "
+"のアドオンとして。"
 
 #: pretix/control/logdisplay.py:225
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr "座席番号 #{posid} が作成されました: {item} ({price})。"
+msgstr "注文明細 #{posid} が作成されました: {item} ({price})。"
 
 #: pretix/control/logdisplay.py:235
 #, python-brace-format
@@ -16499,13 +16498,13 @@ msgstr "座席番号#{posid}のために新しい秘密が生成されました�
 #, python-brace-format
 msgid ""
 "The validity start date for position #{posid} has been changed to {value}."
-msgstr "ポジション#{posid}の有効開始日が{value}に変更されました。"
+msgstr "注文明細#{posid}の有効開始日が{value}に変更されました。"
 
 #: pretix/control/logdisplay.py:255
 #, python-brace-format
 msgid ""
 "The validity end date for position #{posid} has been changed to {value}."
-msgstr "ポジション#{posid}の有効期限終了日が{value}に変更されました。"
+msgstr "注文明細#{posid}の有効期限終了日が{value}に変更されました。"
 
 #: pretix/control/logdisplay.py:264
 #, python-brace-format
@@ -22822,8 +22821,8 @@ msgid ""
 "change the price or item, the discount will still be calculated from the "
 "original price at the time of purchase."
 msgstr ""
-"このポジションは限られた予算のバウチャーで作成されました。価格やアイテムを変"
-"更しても、割引は購入時の通常価格から計算されます。"
+"この注文明細は限られた予算のバウチャーで作成されました。価格やアイテムを変更"
+"しても、割引は購入時の通常価格から計算されます。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:101
 #: pretix/control/templates/pretixcontrol/order/change.html:413
@@ -22846,9 +22845,9 @@ msgid ""
 "will not affect the membership. Memberships can be managed in the customer "
 "account."
 msgstr ""
-"このポジションの販売によりメンバーシップが作成されました。ここで製品を変更し"
-"てもメンバーシップには影響しません。メンバーシップは顧客アカウントで管理でき"
-"ます。"
+"この注文明細の販売によりメンバーシップが作成されました。ここで製品を変更して"
+"もメンバーシップには影響しません。メンバーシップは顧客アカウントで管理できま"
+"す。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:220
 msgid "Ticket block"
@@ -22894,9 +22893,9 @@ msgid ""
 "ticket here will not affect the membership. Memberships can be managed in "
 "the customer account."
 msgstr ""
-"このポジションの販売によってメンバーシップが作成されました。ここでチケットの"
-"有効期限を変更してもメンバーシップには影響しません。メンバーシップは顧客アカ"
-"ウントで管理することができます。"
+"この注文明細の販売によってメンバーシップが作成されました。ここでチケットの有"
+"効期限を変更してもメンバーシップには影響しません。メンバーシップは顧客"
+"アカウントで管理することができます。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:296
 msgid ""
@@ -24110,7 +24109,7 @@ msgstr "キャンセル済み（支払い済み手数料）"
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:4
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:6
 msgid "Import attendees"
-msgstr "出席者をインポートします"
+msgstr "参加者をインポートします"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:13
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:13
@@ -34165,7 +34164,7 @@ msgstr[0] "このチケットは%(count)s回使用されています。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:166
 msgid "No attendee name provided"
-msgstr "出席者の名前が提供されていません"
+msgstr "参加者の名前が提供されていません"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:219
 msgid "The image you previously uploaded"
@@ -35847,7 +35846,7 @@ msgstr "本当にアカウントから次のプロフィールを削除します
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:11
 #: pretix/presale/views/customer.py:384
 msgid "Attendee profiles"
-msgstr "出席者のプロフィール"
+msgstr "参加者のプロフィール"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profiles.html:37
 msgid "You don’t have any attendee profiles in your account yet."
