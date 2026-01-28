@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-28 00:00+0000\n"
+"PO-Revision-Date: 2026-01-28 09:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -8633,7 +8633,7 @@ msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
-"Een voucher toepassen op een volledig winkelmandje kan niet gecombineerd "
+"Een voucher toepassen op een volledige winkelwagen kan niet gecombineerd "
 "worden met andere handelingen."
 
 #: pretix/base/services/cart.py:186
@@ -22695,7 +22695,7 @@ msgid ""
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
 msgstr ""
-"Elk product in het winkelmandje kan slechts een enkele korting bevatten. "
+"Elk product in de winkelwagen kan slechts een enkele korting bevatten. "
 "Indien u overlappende kortingen hebt, zal de eerste uit de lijst hieronder "
 "toegepast worden."
 
@@ -27457,7 +27457,7 @@ msgstr "Aanmeldingsinstellingen"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:11
 msgid "Send password reset email"
-msgstr "Verstuur wachtwoordherstelmail"
+msgstr "Verstuur mail voor wachtwoordherstel"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:17
 msgid "Generate 2FA emergency token"
@@ -28116,7 +28116,7 @@ msgstr "totale wachtlijstlengte"
 #: pretix/control/views/dashboards.py:251
 #, python-brace-format
 msgid "{quota} left"
-msgstr "{quota} over"
+msgstr "beschikbaarheid - {quota}"
 
 #: pretix/control/views/dashboards.py:271
 msgid "Your ticket shop is"
@@ -36458,7 +36458,7 @@ msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
-"Functionele cookies (bijvoorbeeld voor het winkelmandje, login, betaling, "
+"Functionele cookies (bijvoorbeeld voor de winkelwagen, login, betaling, "
 "taalvoorkeur) en technische cookies (bijvoorbeeld voor beveiliging)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:106
