@@ -46,6 +46,7 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
@@ -1602,7 +1603,7 @@ class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet
         return Response(self.get_serializer_class()(instance=serializer.instance, context=self.get_serializer_context()).data)
 
 
-class PaymentViewSet(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
+class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderPaymentSerializer
     queryset = OrderPayment.objects.none()
     permission = 'can_view_orders'
@@ -1775,7 +1776,7 @@ class PaymentViewSet(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         return self.retrieve(request, [], **kwargs)
 
 
-class RefundViewSet(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
+class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderRefundSerializer
     queryset = OrderRefund.objects.none()
     permission = 'can_view_orders'
