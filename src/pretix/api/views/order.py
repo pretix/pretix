@@ -41,7 +41,7 @@ from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from PIL import Image
-from rest_framework import mixins, serializers, status, viewsets
+from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
@@ -1087,8 +1087,8 @@ class OrderPositionViewSetMixin:
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
         ctx['pdf_data'] = False
+        ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
         return ctx
 
     def get_queryset(self):
