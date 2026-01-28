@@ -1186,14 +1186,16 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
     res["id"] = op.pk
     res["item"] = item.pk
     res["answers"][0]["question"] = question.pk
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug, op.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
+                                                                                        op.pk))
     assert resp.status_code == 200
     assert res == resp.data
 
     order.status = 'p'
     order.save()
     event.settings.ticketoutput_pdf__enabled = True
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug, op.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
+                                                                                        op.pk))
     assert len(resp.data['downloads']) == 1
 
 
@@ -1201,9 +1203,11 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
 def test_orderposition_detail_canceled(token_client, organizer, event, order, item, question):
     with scopes_disabled():
         op = order.all_positions.filter(canceled=True).first()
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug, op.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug,
+                                                                                        op.pk))
     assert resp.status_code == 404
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/?include_canceled_positions=true'.format(organizer.slug, event.slug, op.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/?include_canceled_positions=true'.format(
+        organizer.slug, event.slug, op.pk))
     assert resp.status_code == 200
 
 
