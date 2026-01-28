@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-28 09:00+0000\n"
+"PO-Revision-Date: 2026-01-28 18:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -253,7 +253,7 @@ msgid ""
 "event before sales can go live."
 msgstr ""
 "Evenementen kunnen niet 'live' worden aangemaakt. Er moeten eerst quota en "
-"betalingsmethoden worden toegevoegd voor het evenement live kan gaan."
+"betaalmethoden worden toegevoegd voor het evenement live kan gaan."
 
 #: pretix/api/serializers/event.py:234 pretix/api/serializers/event.py:554
 #, python-brace-format
@@ -2874,7 +2874,7 @@ msgstr "Bedrag"
 #: pretix/plugins/reports/accountingreport.py:496
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:29
 msgid "Payment method"
-msgstr "Betalingsmethode"
+msgstr "Betaalmethode"
 
 #: pretix/base/exporters/orderlist.py:1133
 msgid "Matching ID"
@@ -7758,7 +7758,7 @@ msgid ""
 "expires if they have chosen this payment method."
 msgstr ""
 "Gebruikers zullen geen betaalherinnering krijgen voordat de bestelling "
-"verloopt, als ze deze betalingsmethode selecteren."
+"verloopt, als ze deze betaalmethode selecteren."
 
 #: pretix/base/payment.py:559
 msgctxt "invoice"
@@ -11348,14 +11348,14 @@ msgstr ""
 #: pretix/base/settings.py:2149 pretix/base/settings.py:2159
 msgid "All refunds are issued to the original payment method"
 msgstr ""
-"Alle terugbetalingen worden gedaan naar de oorspronkelijke betalingsmethode"
+"Alle terugbetalingen worden gedaan naar de oorspronkelijke betaalmethode"
 
 #: pretix/base/settings.py:2150 pretix/base/settings.py:2160
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
 msgstr ""
 "Klanten kunnen kiezen tussen een cadeaubon en een terugbetaling naar de "
-"oorspronkelijke betalingsmethode"
+"oorspronkelijke betaalmethode"
 
 #: pretix/base/settings.py:2151 pretix/base/settings.py:2161
 msgid "All refunds are issued as gift cards"
@@ -16157,7 +16157,7 @@ msgid ""
 "another payment method."
 msgstr ""
 "Markeer de bestelling als 'openstaand' en sta de gebruiker toe het "
-"openstaande bedrag met een andere betalingsmethode te betalen."
+"openstaande bedrag met een andere betaalmethode te betalen."
 
 #: pretix/control/forms/orders.py:809
 msgid "Do nothing and keep the order as it is."
@@ -16218,7 +16218,7 @@ msgid ""
 "method"
 msgstr ""
 "Geldbedrag als cadeaubon teruggeven, in plaats van een terugbetaling naar de "
-"oorspronkelijke betalingsmethode"
+"oorspronkelijke betaalmethode"
 
 #: pretix/control/forms/orders.py:895
 msgid "Gift card validity"
@@ -16281,10 +16281,10 @@ msgid ""
 msgstr ""
 "Geachte deelnemer,\n"
 "\n"
-"Met deze e-mail moeten wij u helaas mededelen dat {event} is geannuleerd.\n"
+"Met deze e-mail moeten wij u helaas mededelen dat {event} geannuleerd is.\n"
 "\n"
 "We zullen u {refund_amount} terugbetalen via uw oorspronkelijke "
-"betalingsmethode.\n"
+"betaalmethode.\n"
 "\n"
 "U kunt de status van uw bestelling hier bekijken:\n"
 "\n"
@@ -23496,7 +23496,7 @@ msgid ""
 msgstr ""
 "Het handmatig aanpassen van betalingstoeslagen wordt afgeraden, omdat deze "
 "kosten automatisch bijgewerkt kunnen worden na latere aanpassingen in de "
-"bestelling of wanneer een andere betalingsmethode wordt gekozen."
+"bestelling of wanneer een andere betaalmethode wordt gekozen."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:466
 #: pretix/control/templates/pretixcontrol/order/change.html:493
@@ -31503,7 +31503,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:150
 msgid "Alternative Payment Methods"
-msgstr "Alternatieve betalingsmethodes"
+msgstr "Alternatieve betaalmethodes"
 
 #: pretix/plugins/paypal2/payment.py:152
 msgid ""
@@ -31656,7 +31656,7 @@ msgstr "PayPal APM"
 
 #: pretix/plugins/paypal2/payment.py:1105
 msgid "PayPal Alternative Payment Methods"
-msgstr "PayPal Alternatieve Betalingsmethodes"
+msgstr "PayPal alternatieve betaalmethodes"
 
 #: pretix/plugins/paypal2/signals.py:58
 msgid "Payment completed."
@@ -32831,7 +32831,7 @@ msgstr ""
 "Stel een <a href=\"https://dashboard.stripe.com/account/webhooks\">Stripe "
 "Webhook</a> op het volgende eindpunt in om automatisch bestellingen te "
 "annuleren wanneer betalingen extern worden terugbetaald en om asynchrone "
-"betalingsmethoden zoals SOFORT te verwerken."
+"betaalmethodes zoals SOFORT te verwerken."
 
 #: pretix/plugins/stripe/payment.py:222
 msgid "Enable MOTO payments for resellers"
@@ -33346,7 +33346,7 @@ msgid ""
 "This payment method is available to users of the Revolut app. Please keep "
 "your login information available."
 msgstr ""
-"Deze betalingsmethode is beschikbaar voor de gebruikers van de Revolut-app. "
+"Deze betaalmethode is beschikbaar voor de gebruikers van de Revolut-app. "
 "Houd uw logingegevens bij de hand."
 
 #: pretix/plugins/stripe/payment.py:1835
@@ -34631,7 +34631,7 @@ msgstr "Openstaand bedrag"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:41
 msgid "Please select a payment method below."
-msgstr "Selecteer hieronder een betalingsmethode."
+msgstr "Selecteer hieronder een betaalmethode."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:54
 msgid "Please select how you want to pay the remaining balance:"
