@@ -41,12 +41,11 @@ from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from PIL import Image
-from rest_framework import serializers, status, viewsets
+from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
-from rest_framework.mixins import CreateModelMixin
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
@@ -1065,7 +1064,7 @@ with scopes_disabled():
             }
 
 
-class OrderPositionViewSet(viewsets.ModelViewSet):
+class OrderPositionViewSetMixin:
     serializer_class = OrderPositionSerializer
     queryset = OrderPosition.all.none()
     filter_backends = (DjangoFilterBackend, RichOrderingFilter)
@@ -1087,10 +1086,8 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        if hasattr(self.request, 'event'):
-            ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
+        ctx['pdf_data'] = False
         return ctx
 
     def get_queryset(self):
@@ -1098,22 +1095,6 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             qs = OrderPosition.all
         else:
             qs = OrderPosition.objects
-
-        perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
-
-        if hasattr(self.request, 'event'):
-            qs = qs.filter(order__event=self.request.event)
-        else:
-            if isinstance(self.request.auth, (TeamAPIToken, Device)):
-                qs = qs.filter(
-                    order__event__organizer=self.request.organizer,
-                    order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
-                )
-            elif self.request.user.is_authenticated:
-                qs = qs.filter(
-                    order__event__organizer=self.request.organizer,
-                    order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
-                )
 
         if self.request.query_params.get('pdf_data', 'false').lower() == 'true':
             prefetch_related_objects([self.request.organizer], 'meta_properties')
@@ -1183,6 +1164,40 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             if prov.identifier == identifier:
                 return prov
         raise NotFound('Unknown output provider.')
+
+
+class OrganizerPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
+
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            qs = qs.filter(
+                order__event__organizer=self.request.organizer,
+                order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
+            )
+        elif self.request.user.is_authenticated:
+            qs = qs.filter(
+                order__event__organizer=self.request.organizer,
+                order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
+            )
+
+        return qs
+
+
+class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet):
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        if hasattr(self.request, 'event'):
+            ctx['event'] = self.request.event
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
+        return ctx
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(order__event=self.request.event)
+        return qs
 
     @action(detail=True, methods=['POST'], url_name='price_calc')
     def price_calc(self, request, *args, **kwargs):
@@ -1587,7 +1602,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         return Response(self.get_serializer_class()(instance=serializer.instance, context=self.get_serializer_context()).data)
 
 
-class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
+class PaymentViewSet(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderPaymentSerializer
     queryset = OrderPayment.objects.none()
     permission = 'can_view_orders'
@@ -1760,7 +1775,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         return self.retrieve(request, [], **kwargs)
 
 
-class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
+class RefundViewSet(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderRefundSerializer
     queryset = OrderRefund.objects.none()
     permission = 'can_view_orders'

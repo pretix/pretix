@@ -1721,9 +1721,47 @@ List of all order positions
 
 .. http:get:: /api/v1/organizers/(organizer)/orderpositions/
 
-    Returns a list of all order positions.
-    It works in the same way as :http:get:`/api/v1/organizers/(organizer)/events/(event)/orderpositions/`
-    but does not make use of the event parameter, operating across all order positions of an organizer.
+   Returns a list of all order positions within all events of a given organizer (with sufficient access permissions).
+
+   Supported query parameters and output format of this endpoint are identical to the list endpoint within an event,
+   with the exception that the ``pdf_data`` parameter is not supported here.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/orderpositions/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+      X-Page-Generated: 2017-12-01T10:00:00Z
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id:": 23442
+            "code": "ABC12",
+            "event": "sampleconf",
+            ...
+          }
+        ]
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
 
 
 Fetching individual positions
@@ -1827,11 +1865,6 @@ Fetching individual positions
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position does not exist.
 
-.. http:get:: /api/v1/organizers/(organizer)/orderpositions/(id)/
-
-    Returns information on one order position, identified by its internal ID.
-    It works in the same way as :http:get:`/api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)`
-    but does not make use of the event parameter, operating across all order positions of an organizer.
 
 .. _`order-position-ticket-download`:
 
@@ -1884,12 +1917,6 @@ Order position ticket download
    :statuscode 404: The requested order position or download provider does not exist.
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.
-
-.. http:get:: /api/v1/organizers/(organizer)/orderpositions/(id)/download/(output)/
-
-    Download tickets for one order position, identified by its internal ID.
-    It works in the same way as :http:get:`/api/v1/organizers/(organizer)/orderpositions/(id)/download/(output)/`
-    but does not make use of the event parameter, operating across all order positions of an organizer.
 
 .. _rest-orderpositions-manipulate:
 
@@ -1983,12 +2010,6 @@ Manipulating individual positions
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order.
 
-.. http:patch:: /api/v1/organizers/(organizer)/orderpositions/(id)/
-
-    Updates specific fields of an order position.
-    It works in the same way as :http:patch:`/api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/`
-    but does not make use of the event parameter, operating across all order positions of an organizer.
-
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
 
    Adds a new position to an order. Currently, only the following fields are supported:
@@ -2068,11 +2089,6 @@ Manipulating individual positions
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this position.
 
-.. http:post:: /api/v1/organizers/(organizer)/orderpositions/
-
-    Adds a new position to an order.
-    It works in the same way as :http:post:`/api/v1/organizers/(organizer)/events/(event)/orderpositions/`
-    but does not make use of the event parameter, operating across all order positions of an organizer.
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
 
@@ -2102,11 +2118,6 @@ Manipulating individual positions
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position does not exist.
 
-.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
-
-    Cancels an order position, identified by its internal ID.
-    It works in the same way as :http:delete:`/api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/`
-    but does not make use of the event parameter, operating across all order positions of an organizer.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/add_block/
 
@@ -2146,11 +2157,6 @@ Manipulating individual positions
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order position.
 
-.. http:post:: /api/v1/organizers/(organizer)/orderpositions/(id)/add_block/
-
-    Blocks an order position from being used.
-    It works in the same way as :http:post:`/api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/add_block/`
-    but does not make use of the event parameter, operating across all order positions of an organizer.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/remove_block/
 
@@ -2189,12 +2195,6 @@ Manipulating individual positions
    :statuscode 400: The order position could not be updated due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order position.
-
-.. http:post:: /api/v1/organizers/(organizer)/orderpositions/(id)/remove_block/
-
-    Unblocks an order position from being used.
-    It works in the same way as :http:post:`/api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/remove_block/`
-    but does not make use of the event parameter, operating across all order positions of an organizer.
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/printlog/
 
@@ -2248,12 +2248,6 @@ Manipulating individual positions
    :statuscode 404: The requested order position or download provider does not exist.
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.
-
-.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/printlog/
-
-    Creates a print log, stating that this ticket has been printed.
-    It works in the same way as :http:post:`/api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/printlog/`
-    but does not make use of the event parameter, operating across all order positions of an organizer.
 
 
 Changing order contents
