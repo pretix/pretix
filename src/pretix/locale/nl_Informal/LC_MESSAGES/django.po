@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-20 20:00+0000\n"
+"PO-Revision-Date: 2026-01-28 09:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -456,8 +456,8 @@ msgstr "Er bestaat al een factuur voor deze bestelling."
 #: pretix/control/views/users.py:145
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
-"Er is een fout opgetreden bij het versturen van de e-mail. Probeer het later "
-"opnieuw."
+"Er is iets misgegaan bij het verzenden van de e-mail. Probeer het later nog "
+"eens."
 
 #: pretix/api/views/order.py:720 pretix/base/services/cart.py:223
 #: pretix/base/services/orders.py:190 pretix/presale/views/order.py:856
@@ -909,7 +909,7 @@ msgstr "Information over evenement of datum"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:50
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:36
 msgid "Attendee name"
-msgstr "Naam van gast"
+msgstr "Naam deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:187
 #: pretix/base/datasync/sourcefields.py:604
@@ -16070,7 +16070,7 @@ msgstr "Grootte"
 
 #: pretix/control/forms/item.py:456
 msgid "Number of tickets"
-msgstr "Aantal kaartjes"
+msgstr "Aantal tickets"
 
 #: pretix/control/forms/item.py:590
 msgid "Quota name is required."
@@ -17326,7 +17326,7 @@ msgstr "Het aantal keren dat ELKE van deze vouchers kan worden gebruikt."
 
 #: pretix/control/forms/vouchers.py:356
 msgid "Specific seat IDs"
-msgstr "Specifieke stoelnummers"
+msgstr "Specifieke stoel-ID's"
 
 #: pretix/control/forms/vouchers.py:373
 msgid "CSV input needs to contain a header row in the first line."
@@ -30315,7 +30315,7 @@ msgstr "De nieuwe organisator is aangemaakt."
 
 #: pretix/control/views/organizer.py:583
 msgid "Administrators"
-msgstr "Administrators"
+msgstr "Beheerders"
 
 #: pretix/control/views/organizer.py:804
 #, fuzzy
@@ -31293,11 +31293,9 @@ msgstr "Badges van gasten"
 
 #: pretix/plugins/badges/exporters.py:422
 #: pretix/plugins/ticketoutputpdf/exporters.py:69
-#, fuzzy
-#| msgid "All directions"
 msgctxt "export_category"
 msgid "PDF collections"
-msgstr "Alle richtingen"
+msgstr "PDF-verzamelingen"
 
 #: pretix/plugins/badges/exporters.py:423
 msgid "Download all attendee badges as one large PDF for printing."
