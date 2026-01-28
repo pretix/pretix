@@ -1865,7 +1865,6 @@ Fetching individual positions
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position does not exist.
 
-
 .. _`order-position-ticket-download`:
 
 Order position ticket download
@@ -2089,7 +2088,6 @@ Manipulating individual positions
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this position.
 
-
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
 
    Cancels an order position, identified by its internal ID.
@@ -2117,7 +2115,6 @@ Manipulating individual positions
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position does not exist.
-
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/add_block/
 
@@ -2156,7 +2153,6 @@ Manipulating individual positions
    :statuscode 400: The order position could not be updated due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order position.
-
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/remove_block/
 
@@ -2248,7 +2244,6 @@ Manipulating individual positions
    :statuscode 404: The requested order position or download provider does not exist.
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.
-
 
 Changing order contents
 -----------------------
