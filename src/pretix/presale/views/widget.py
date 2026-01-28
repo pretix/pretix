@@ -49,7 +49,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.gzip import gzip_page
 from django.views.decorators.http import condition
 from django.views.i18n import (
-    JavaScriptCatalog, get_formats, builtin_template_path,
+    JavaScriptCatalog, builtin_template_path, get_formats,
 )
 from lxml import html
 
