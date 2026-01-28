@@ -156,7 +156,7 @@ def safelink_callback(attrs, new=False):
     Makes sure that all links to a different domain are passed through a redirection handler
     to ensure there's no passing of referers with secrets inside them.
     """
-    url = attrs.get((None, 'href'), '/')
+    url = html.unescape(attrs.get((None, 'href'), '/'))
     if not url_has_allowed_host_and_scheme(url, allowed_hosts=None) and not url.startswith('mailto:') and not url.startswith('tel:'):
         signer = signing.Signer(salt='safe-redirect')
         attrs[None, 'href'] = reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
