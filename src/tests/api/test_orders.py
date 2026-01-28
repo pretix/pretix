@@ -1179,8 +1179,6 @@ def test_orderposition_list(endpoint_template, token_client, organizer, device, 
 
 @pytest.mark.django_db
 def test_orderposition_detail(token_client, organizer, event, order, item, question):
-    endpoint = '/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug)
-
     res = dict(TEST_ORDERPOSITION_RES)
     with scopes_disabled():
         op = order.positions.first()
@@ -1188,34 +1186,34 @@ def test_orderposition_detail(token_client, organizer, event, order, item, quest
     res["id"] = op.pk
     res["item"] = item.pk
     res["answers"][0]["question"] = question.pk
-    resp = token_client.get(endpoint + '{}/'.format(op.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug, op.pk))
     assert resp.status_code == 200
     assert res == resp.data
 
     order.status = 'p'
     order.save()
     event.settings.ticketoutput_pdf__enabled = True
-    resp = token_client.get(endpoint + '{}/'.format(op.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug, op.pk))
     assert len(resp.data['downloads']) == 1
 
 
 @pytest.mark.django_db
 def test_orderposition_detail_canceled(token_client, organizer, event, order, item, question):
-    endpoint = '/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug)
     with scopes_disabled():
         op = order.all_positions.filter(canceled=True).first()
-    resp = token_client.get(endpoint + '{}/'.format(op.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(organizer.slug, event.slug, op.pk))
     assert resp.status_code == 404
-    resp = token_client.get(endpoint + '{}/?include_canceled_positions=true'.format(op.pk))
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/?include_canceled_positions=true'.format(organizer.slug, event.slug, op.pk))
     assert resp.status_code == 200
 
 
 @pytest.mark.django_db
 def test_orderposition_delete(token_client, organizer, event, order, item, question):
-    endpoint = '/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug)
     with scopes_disabled():
         op = order.positions.first()
-    resp = token_client.delete(endpoint + '{}/'.format(op.pk))
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+        organizer.slug, event.slug, op.pk
+    ))
     assert resp.status_code == 400
     assert resp.data == ['This operation would leave the order empty. Please cancel the order itself instead.']
 
@@ -1234,7 +1232,9 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
         order.save()
         assert order.positions.count() == 2
 
-    resp = token_client.delete(endpoint + '{}/'.format(op2.pk))
+    resp = token_client.delete('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+        organizer.slug, event.slug, op2.pk
+    ))
     assert resp.status_code == 204
     with scopes_disabled():
         assert order.positions.count() == 1
@@ -1245,10 +1245,11 @@ def test_orderposition_delete(token_client, organizer, event, order, item, quest
 
 @pytest.mark.django_db
 def test_orderposition_printlog(token_client, team, organizer, event, order, item, question):
-    endpoint = '/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug)
     with scopes_disabled():
         op = order.positions.first()
-    resp = token_client.post(endpoint + '{}/printlog/'.format(op.pk), data={
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orderpositions/{}/printlog/'.format(
+        organizer.slug, event.slug, op.pk
+    ), data={
         "datetime": "2023-09-04T12:23:45+02:00",
         "source": "pretixscan",
         "type": "badge",
