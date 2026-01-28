@@ -1022,17 +1022,21 @@ def test_refund_cancel(token_client, organizer, event, order):
     assert resp.status_code == 400
 
 
-@pytest.mark.parametrize("endpoint_template, response_code", [('/api/v1/organizers/{}/events/{}/orderpositions/', 403),('/api/v1/organizers/{}/orderpositions/', 200)])
+@pytest.mark.parametrize(
+    "endpoint_template, response_code",
+    [('/api/v1/organizers/{}/events/{}/orderpositions/', 403), ('/api/v1/organizers/{}/orderpositions/', 200)]
+)
 @pytest.mark.django_db
-def test_orderposition_list_limited_read(endpoint_template, response_code, limited_token_client, organizer, device, event, order, item, subevent, subevent2, question):
-    endpoint =  endpoint_template.format(organizer.slug, event.slug)
+def test_orderposition_list_limited_read(
+        endpoint_template, response_code, limited_token_client, organizer, device, event, order, item, subevent, subevent2, question
+):
+    endpoint = endpoint_template.format(organizer.slug, event.slug)
 
     i2 = copy.copy(item)
     i2.pk = None
     i2.save()
     with scopes_disabled():
         var = item.variations.create(value="Children")
-        var2 = item.variations.create(value="Children")
         res = copy.copy(TEST_ORDERPOSITION_RES)
         op = order.positions.first()
         op.variation = var
@@ -1052,10 +1056,13 @@ def test_orderposition_list_limited_read(endpoint_template, response_code, limit
         assert resp.json() == {'detail': 'You do not have permission to perform this action.'}
 
 
-@pytest.mark.parametrize("endpoint_template", [('/api/v1/organizers/{}/events/{}/orderpositions/'),('/api/v1/organizers/{}/orderpositions/')])
+@pytest.mark.parametrize(
+    "endpoint_template",
+    [('/api/v1/organizers/{}/events/{}/orderpositions/'), ('/api/v1/organizers/{}/orderpositions/')]
+)
 @pytest.mark.django_db
 def test_orderposition_list(endpoint_template, token_client, organizer, device, event, order, item, subevent, subevent2, question, django_assert_num_queries):
-    endpoint =  endpoint_template.format(organizer.slug, event.slug)
+    endpoint = endpoint_template.format(organizer.slug, event.slug)
 
     i2 = copy.copy(item)
     i2.pk = None
@@ -1078,57 +1085,57 @@ def test_orderposition_list(endpoint_template, token_client, organizer, device, 
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?order__status=n')
+    resp = token_client.get(endpoint + '?order__status=n')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?order__status=p')
+    resp = token_client.get(endpoint + '?order__status=p')
     assert [] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?item={}'.format(item.pk))
+    resp = token_client.get(endpoint + '?item={}'.format(item.pk))
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?item__in={},{}'.format(item.pk, i2.pk))
+    resp = token_client.get(endpoint + '?item__in={},{}'.format(item.pk, i2.pk))
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?item={}'.format( i2.pk))
+    resp = token_client.get(endpoint + '?item={}'.format(i2.pk))
     assert [] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?variation={}'.format(var.pk))
+    resp = token_client.get(endpoint + '?variation={}'.format(var.pk))
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?variation={}'.format(var2.pk))
+    resp = token_client.get(endpoint + '?variation={}'.format(var2.pk))
     assert [] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?attendee_name=Peter')
+    resp = token_client.get(endpoint + '?attendee_name=Peter')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?attendee_name=peter')
+    resp = token_client.get(endpoint + '?attendee_name=peter')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?attendee_name=Mark')
+    resp = token_client.get(endpoint + '?attendee_name=Mark')
     assert [] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?secret=z3fsn8jyufm5kpk768q69gkbyr5f4h6w')
+    resp = token_client.get(endpoint + '?secret=z3fsn8jyufm5kpk768q69gkbyr5f4h6w')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?secret=abc123')
+    resp = token_client.get(endpoint + '?secret=abc123')
     assert [] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?pseudonymization_id=ABCDEFGHKL')
+    resp = token_client.get(endpoint + '?pseudonymization_id=ABCDEFGHKL')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?pseudonymization_id=FOO')
+    resp = token_client.get(endpoint + '?pseudonymization_id=FOO')
     assert [] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?search=FO')
+    resp = token_client.get(endpoint + '?search=FO')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?search=z3fsn8j')
+    resp = token_client.get(endpoint + '?search=z3fsn8j')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?search=Peter')
+    resp = token_client.get(endpoint + '?search=Peter')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?search=5f4h6w')
+    resp = token_client.get(endpoint + '?search=5f4h6w')
     assert [] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?order=FOO')
+    resp = token_client.get(endpoint + '?order=FOO')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?order=BAR')
+    resp = token_client.get(endpoint + '?order=BAR')
     assert [] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?has_checkin=false')
+    resp = token_client.get(endpoint + '?has_checkin=false')
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?has_checkin=true')
+    resp = token_client.get(endpoint + '?has_checkin=true')
     assert [] == resp.data['results']
 
     with scopes_disabled():
@@ -1147,32 +1154,32 @@ def test_orderposition_list(endpoint_template, token_client, organizer, device, 
     }]
     if '/events/' in endpoint:
         with django_assert_num_queries(16):
-            resp = token_client.get(endpoint+'?has_checkin=true')
+            resp = token_client.get(endpoint + '?has_checkin=true')
     else:
         with django_assert_num_queries(15):
-            resp = token_client.get(endpoint+'?has_checkin=true')
+            resp = token_client.get(endpoint + '?has_checkin=true')
     assert [res] == resp.data['results']
 
     op.subevent = subevent
     op.save()
     res['subevent'] = subevent.pk
 
-    resp = token_client.get(endpoint+'?subevent={}'.format(subevent.pk))
+    resp = token_client.get(endpoint + '?subevent={}'.format(subevent.pk))
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?subevent__in={},{}'.format(subevent.pk, subevent2.pk))
+    resp = token_client.get(endpoint + '?subevent__in={},{}'.format(subevent.pk, subevent2.pk))
     assert [res] == resp.data['results']
-    resp = token_client.get(endpoint+'?subevent={}'.format(subevent.pk + 1))
+    resp = token_client.get(endpoint + '?subevent={}'.format(subevent.pk + 1))
     assert [] == resp.data['results']
 
-    resp = token_client.get(endpoint+'?include_canceled_positions=false')
+    resp = token_client.get(endpoint + '?include_canceled_positions=false')
     assert len(resp.data['results']) == 1
-    resp = token_client.get(endpoint+'?include_canceled_positions=true')
+    resp = token_client.get(endpoint + '?include_canceled_positions=true')
     assert len(resp.data['results']) == 2
 
-@pytest.mark.parametrize("endpoint_template", [('/api/v1/organizers/{}/events/{}/orderpositions/'),('/api/v1/organizers/{}/orderpositions/')])
+
 @pytest.mark.django_db
-def test_orderposition_detail(endpoint_template, token_client, organizer, event, order, item, question):
-    endpoint = endpoint_template.format(organizer.slug, event.slug)
+def test_orderposition_detail(token_client, organizer, event, order, item, question):
+    endpoint = '/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug)
 
     res = dict(TEST_ORDERPOSITION_RES)
     with scopes_disabled():
@@ -1188,27 +1195,27 @@ def test_orderposition_detail(endpoint_template, token_client, organizer, event,
     order.status = 'p'
     order.save()
     event.settings.ticketoutput_pdf__enabled = True
-    resp = token_client.get(endpoint+'{}/'.format(op.pk))
+    resp = token_client.get(endpoint + '{}/'.format(op.pk))
     assert len(resp.data['downloads']) == 1
 
-@pytest.mark.parametrize("endpoint_template", [('/api/v1/organizers/{}/events/{}/orderpositions/'),('/api/v1/organizers/{}/orderpositions/')])
+
 @pytest.mark.django_db
-def test_orderposition_detail_canceled(endpoint_template, token_client, organizer, event, order, item, question):
-    endpoint = endpoint_template.format(organizer.slug, event.slug)
+def test_orderposition_detail_canceled(token_client, organizer, event, order, item, question):
+    endpoint = '/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug)
     with scopes_disabled():
         op = order.all_positions.filter(canceled=True).first()
-    resp = token_client.get(endpoint+'{}/'.format(op.pk))
+    resp = token_client.get(endpoint + '{}/'.format(op.pk))
     assert resp.status_code == 404
-    resp = token_client.get(endpoint+'{}/?include_canceled_positions=true'.format(op.pk))
+    resp = token_client.get(endpoint + '{}/?include_canceled_positions=true'.format(op.pk))
     assert resp.status_code == 200
 
-@pytest.mark.parametrize("endpoint_template", [('/api/v1/organizers/{}/events/{}/orderpositions/'),('/api/v1/organizers/{}/orderpositions/')])
+
 @pytest.mark.django_db
-def test_orderposition_delete(endpoint_template, token_client, organizer, event, order, item, question):
-    endpoint = endpoint_template.format(organizer.slug, event.slug)
+def test_orderposition_delete(token_client, organizer, event, order, item, question):
+    endpoint = '/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug)
     with scopes_disabled():
         op = order.positions.first()
-    resp = token_client.delete(endpoint+'{}/'.format(op.pk))
+    resp = token_client.delete(endpoint + '{}/'.format(op.pk))
     assert resp.status_code == 400
     assert resp.data == ['This operation would leave the order empty. Please cancel the order itself instead.']
 
@@ -1227,7 +1234,7 @@ def test_orderposition_delete(endpoint_template, token_client, organizer, event,
         order.save()
         assert order.positions.count() == 2
 
-    resp = token_client.delete(endpoint+'{}/'.format(op2.pk))
+    resp = token_client.delete(endpoint + '{}/'.format(op2.pk))
     assert resp.status_code == 204
     with scopes_disabled():
         assert order.positions.count() == 1
@@ -1235,13 +1242,13 @@ def test_orderposition_delete(endpoint_template, token_client, organizer, event,
     order.refresh_from_db()
     assert order.total == Decimal('23.25')
 
-@pytest.mark.parametrize("endpoint_template", [('/api/v1/organizers/{}/events/{}/orderpositions/'),('/api/v1/organizers/{}/orderpositions/')])
+
 @pytest.mark.django_db
-def test_orderposition_printlog(endpoint_template, token_client, team, organizer, event, order, item, question):
-    endpoint = endpoint_template.format(organizer.slug, event.slug)
+def test_orderposition_printlog(token_client, team, organizer, event, order, item, question):
+    endpoint = '/api/v1/organizers/{}/events/{}/orderpositions/'.format(organizer.slug, event.slug)
     with scopes_disabled():
         op = order.positions.first()
-    resp = token_client.post(endpoint+'{}/printlog/'.format(op.pk), data={
+    resp = token_client.post(endpoint + '{}/printlog/'.format(op.pk), data={
         "datetime": "2023-09-04T12:23:45+02:00",
         "source": "pretixscan",
         "type": "badge",
@@ -1258,23 +1265,6 @@ def test_orderposition_printlog(endpoint_template, token_client, team, organizer
         assert l.api_token.team == team
         assert l.datetime.isoformat() == "2023-09-04T10:23:45+00:00"
 
-@pytest.mark.parametrize("endpoint_template, response_code", [
-    ('/api/v1/organizers/{}/events/{}/orderpositions/', 403),
-    ('/api/v1/organizers/{}/orderpositions/', 404)])
-@pytest.mark.django_db
-def test_orderposition_printlog(endpoint_template, response_code, limited_token_client, team, organizer, event, order, item, question):
-    endpoint = endpoint_template.format(organizer.slug, event.slug)
-    with scopes_disabled():
-        op = order.positions.first()
-    resp = limited_token_client.post(endpoint+'{}/printlog/'.format(op.pk), data={
-        "datetime": "2023-09-04T12:23:45+02:00",
-        "source": "pretixscan",
-        "type": "badge",
-        "info": {
-            "cashier": 1234,
-        }
-    }, format='json')
-    assert resp.status_code == response_code
 
 @pytest.mark.django_db
 def test_order_mark_paid_pending(token_client, organizer, event, order):
