@@ -19,7 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import html
 import pytest
+import urllib.parse
+
+from django.core import signing
 
 from pretix.base.templatetags.rich_text import (
     ALLOWED_ATTRIBUTES, ALLOWED_TAGS, markdown_compile_email, rich_text,
@@ -42,6 +46,10 @@ from pretix.base.templatetags.rich_text import (
         (
             "[Foo](/foo)",
             '<a href="http://example.com/foo" rel="noopener" target="_blank">Foo</a>',
+        ),
+        (
+            "[Foo](/foo?bar&baz)",
+            '<a href="http://example.com/foo?bar&amp;baz" rel="noopener" target="_blank">Foo</a>',
         ),
         ("mail@example.org", '<a href="mailto:mail@example.org">mail@example.org</a>'),
         # Test truelink_callback
@@ -109,6 +117,40 @@ def test_linkify_abs(link):
     assert rich_text_snippet(input, safelinks=False) == output
     assert rich_text(input, safelinks=False) == f"<p>{output}</p>"
     assert markdown_compile_email(input) == f"<p>{output}</p>"
+
+
+signer = signing.Signer(salt='safe-redirect')
+
+
+@pytest.mark.parametrize(
+    "url,result",
+    [
+        ('http://example.com/foo', '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>'),
+        ('http://example.com/foo?bar&baz', '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>'),
+        ('http://example.com/foo?bar&baz>', '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>'),
+        (
+            'http://example.com/foo?bar&baz">',
+            '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>"&gt;'.format(
+                urllib.parse.quote(signer.sign('http://example.com/foo?bar&baz')),
+                html.escape('http://example.com/foo?bar&baz'),
+            )
+        ),
+        (
+            'http://example.com/foo?bar&baz\\">',
+            '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>\\"&gt;'.format(
+                urllib.parse.quote(signer.sign('http://example.com/foo?bar&baz')),
+                html.escape('http://example.com/foo?bar&baz'),
+            )
+        ),
+    ],
+)
+def test_linkify_safelinks(url, result):
+    output = result.format(
+        urllib.parse.quote(signer.sign(url)),
+        html.escape(url),
+    )
+    assert rich_text_snippet(url, safelinks=True) == output
+    assert rich_text(url, safelinks=True) == f"<p>{output}</p>"
 
 
 @pytest.mark.parametrize(
