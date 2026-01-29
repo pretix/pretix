@@ -25,6 +25,7 @@ import warnings
 from collections import OrderedDict
 from typing import Dict, List, NamedTuple, Set, Tuple
 
+from django.apps import apps
 from django.dispatch import receiver
 from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -38,6 +39,7 @@ _ALL_EVENT_PERMISSION_GROUPS = None
 _ALL_ORGANIZER_PERMISSION_GROUPS = None
 _ALL_EVENT_PERMISSIONS = None
 _ALL_ORGANIZER_PERMISSIONS = None
+_CACHE_TIME_APPS_READY = None  # hack: we need to clear the cache after plugins are loaded during startup
 
 
 class PermissionOption(NamedTuple):
@@ -55,9 +57,9 @@ class PermissionGroup(NamedTuple):
 
 
 def get_all_event_permission_groups() -> Dict[str, PermissionGroup]:
-    global _ALL_EVENT_PERMISSION_GROUPS
+    global _ALL_EVENT_PERMISSION_GROUPS, _CACHE_TIME_APPS_READY
 
-    if _ALL_EVENT_PERMISSION_GROUPS:
+    if _ALL_EVENT_PERMISSION_GROUPS and apps.ready == _CACHE_TIME_APPS_READY:
         return _ALL_EVENT_PERMISSION_GROUPS
 
     types = OrderedDict()
@@ -68,13 +70,14 @@ def get_all_event_permission_groups() -> Dict[str, PermissionGroup]:
         else:
             types[ret.name] = ret
     _ALL_EVENT_PERMISSION_GROUPS = types
+    _CACHE_TIME_APPS_READY = apps.ready
     return types
 
 
 def get_all_organizer_permission_groups() -> Dict[str, PermissionGroup]:
-    global _ALL_ORGANIZER_PERMISSION_GROUPS
+    global _ALL_ORGANIZER_PERMISSION_GROUPS, _CACHE_TIME_APPS_READY
 
-    if _ALL_ORGANIZER_PERMISSION_GROUPS:
+    if _ALL_ORGANIZER_PERMISSION_GROUPS and apps.ready == _CACHE_TIME_APPS_READY:
         return _ALL_ORGANIZER_PERMISSION_GROUPS
 
     types = OrderedDict()
@@ -85,14 +88,15 @@ def get_all_organizer_permission_groups() -> Dict[str, PermissionGroup]:
         else:
             types[ret.name] = ret
     _ALL_ORGANIZER_PERMISSION_GROUPS = types
+    _CACHE_TIME_APPS_READY = apps.ready
     return types
 
 
 def get_all_event_permissions() -> Set[str]:
     from pretix.helpers.permission_migration import OLD_TO_NEW_EVENT_COMPAT
-    global _ALL_EVENT_PERMISSIONS
+    global _ALL_EVENT_PERMISSIONS, _CACHE_TIME_APPS_READY
 
-    if _ALL_EVENT_PERMISSIONS:
+    if _ALL_EVENT_PERMISSIONS and apps.ready == _CACHE_TIME_APPS_READY:
         return _ALL_EVENT_PERMISSIONS
 
     res = set(OLD_TO_NEW_EVENT_COMPAT.keys())
@@ -101,14 +105,15 @@ def get_all_event_permissions() -> Set[str]:
             res.add(f"{pg.name}:{a}")
 
     _ALL_EVENT_PERMISSIONS = res
+    _CACHE_TIME_APPS_READY = apps.ready
     return res
 
 
 def get_all_organizer_permissions() -> Set[str]:
     from pretix.helpers.permission_migration import OLD_TO_NEW_ORGANIZER_COMPAT
-    global _ALL_ORGANIZER_PERMISSIONS
+    global _ALL_ORGANIZER_PERMISSIONS, _CACHE_TIME_APPS_READY
 
-    if _ALL_ORGANIZER_PERMISSIONS:
+    if _ALL_ORGANIZER_PERMISSIONS and apps.ready == _CACHE_TIME_APPS_READY:
         return _ALL_ORGANIZER_PERMISSIONS
 
     res = set(OLD_TO_NEW_ORGANIZER_COMPAT.keys())
@@ -117,10 +122,14 @@ def get_all_organizer_permissions() -> Set[str]:
             res.add(f"{pg.name}:{a}")
 
     _ALL_ORGANIZER_PERMISSIONS = res
+    _CACHE_TIME_APPS_READY = apps.ready
     return res
 
 
 def assert_valid_event_permission(permission, allow_legacy=True, allow_tuple=True):
+    if not apps.ready:
+        # can't really check yet
+        return
     if allow_legacy and permission == "can_change_settings":
         permission = "can_change_event_settings"
     if permission is None:
@@ -139,6 +148,9 @@ def assert_valid_event_permission(permission, allow_legacy=True, allow_tuple=Tru
 
 
 def assert_valid_organizer_permission(permission, allow_legacy=True, allow_tuple=True):
+    if not apps.ready:
+        # can't really check yet
+        return
     if permission is None:
         return
     if isinstance(permission, (list, tuple)) and allow_tuple:
