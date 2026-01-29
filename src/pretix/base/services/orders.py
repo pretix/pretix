@@ -2094,6 +2094,43 @@ class OrderChangeManager:
                     )
                     item_counts[item] += 1
 
+        # Detect removed add-ons and create RemoveOperations
+        for cp, al in list(current_addons.items()):
+            for k, v in al.items():
+                input_num = input_addons[cp.id].get(k, 0)
+                current_num = len(current_addons[cp].get(k, []))
+                if input_num < current_num:
+                    for a in current_addons[cp][k][:current_num - input_num]:
+                        if a.canceled:
+                            continue
+                        is_unavailable = (
+                            # If an item is no longer available due to time, it should usually also be no longer
+                            # user-removable, because e.g. the stock has already been ordered.
+                            # We always pass has_voucher=True because if a product now requires a voucher, it usually does
+                            # not mean it should be unremovable for others.
+                            # This also prevents accidental removal through the UI because a hidden product will no longer
+                            # be part of the input.
+                            (a.variation and a.variation.unavailability_reason(has_voucher=True, subevent=a.subevent))
+                            or (a.variation and not a.variation.all_sales_channels and not a.variation.limit_sales_channels.contains(self.order.sales_channel))
+                            or a.item.unavailability_reason(has_voucher=True, subevent=a.subevent)
+                            or (
+                                not a.item.all_sales_channels and
+                                not a.item.limit_sales_channels.contains(self.order.sales_channel)
+                            )
+                        )
+                        if is_unavailable:
+                            # "Re-select" add-on
+                            selected_addons[cp.id, a.item.category_id][a.item_id, a.variation_id] += 1
+                            continue
+                        if a.checkins.filter(list__consider_tickets_used=True).exists():
+                            raise OrderError(
+                                error_messages['addon_already_checked_in'] % {
+                                    'addon': str(a.item.name),
+                                }
+                            )
+                        self.cancel(a)
+                        item_counts[a.item] -= 1
+
         # Check constraints on the add-on combinations
         for op in toplevel_op:
             item = op.item
@@ -2125,41 +2162,6 @@ class OrderChangeManager:
                             'cat': str(iao.addon_category.name),
                         }
                     )
-
-        # Detect removed add-ons and create RemoveOperations
-        for cp, al in list(current_addons.items()):
-            for k, v in al.items():
-                input_num = input_addons[cp.id].get(k, 0)
-                current_num = len(current_addons[cp].get(k, []))
-                if input_num < current_num:
-                    for a in current_addons[cp][k][:current_num - input_num]:
-                        if a.canceled:
-                            continue
-                        is_unavailable = (
-                            # If an item is no longer available due to time, it should usually also be no longer
-                            # user-removable, because e.g. the stock has already been ordered.
-                            # We always pass has_voucher=True because if a product now requires a voucher, it usually does
-                            # not mean it should be unremovable for others.
-                            # This also prevents accidental removal through the UI because a hidden product will no longer
-                            # be part of the input.
-                            (a.variation and a.variation.unavailability_reason(has_voucher=True, subevent=a.subevent))
-                            or (a.variation and not a.variation.all_sales_channels and not a.variation.limit_sales_channels.contains(self.order.sales_channel))
-                            or a.item.unavailability_reason(has_voucher=True, subevent=a.subevent)
-                            or (
-                                not item.all_sales_channels and
-                                not item.limit_sales_channels.contains(self.order.sales_channel)
-                            )
-                        )
-                        if is_unavailable:
-                            continue
-                        if a.checkins.filter(list__consider_tickets_used=True).exists():
-                            raise OrderError(
-                                error_messages['addon_already_checked_in'] % {
-                                    'addon': str(a.item.name),
-                                }
-                            )
-                        self.cancel(a)
-                        item_counts[a.item] -= 1
 
         for item, count in item_counts.items():
             if count == 0:
