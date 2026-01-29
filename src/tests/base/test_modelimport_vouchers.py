@@ -27,6 +27,7 @@ import pytest
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from unittest import mock
 
 from pretix.base.models import CachedFile, Event, Item, Organizer, User
 from pretix.base.services.modelimport import DataImportError, import_vouchers
@@ -83,6 +84,62 @@ def inputfile_factory(multiplier=1):
     return c
 
 
+def inputfile_with_recipients():
+    d = [
+        {
+            'A': 'ABCDE123',
+            'B': 'Ticket',
+            'C': 'True',
+            'D': '2021-06-28 11:00:00',
+            'E': '2',
+            'F': '1',
+            'G': 'alice@example.org',
+            'H': 'Alice',
+        },
+        {
+            'A': 'GHIJK432',
+            'B': 'Ticket',
+            'C': 'False',
+            'D': '2021-05-28 11:00:00',
+            'E': '2',
+            'F': '1',
+            'G': 'bob@example.org',
+            'H': 'Bob',
+        },
+    ]
+    f = StringIO()
+    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], dialect=csv.excel)
+    w.writeheader()
+    w.writerows(d)
+    f.seek(0)
+    c = CachedFile.objects.create(type="text/csv", filename="input.csv")
+    c.file.save("input.csv", ContentFile(f.read()))
+    return c
+
+
+def inputfile_with_invalid_email():
+    d = [
+        {
+            'A': 'ABCDE123',
+            'B': 'Ticket',
+            'C': 'True',
+            'D': '2021-06-28 11:00:00',
+            'E': '2',
+            'F': '1',
+            'G': 'not-an-email',
+            'H': 'Alice',
+        },
+    ]
+    f = StringIO()
+    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], dialect=csv.excel)
+    w.writeheader()
+    w.writerows(d)
+    f.seek(0)
+    c = CachedFile.objects.create(type="text/csv", filename="input.csv")
+    c.file.save("input.csv", ContentFile(f.read()))
+    return c
+
+
 DEFAULT_SETTINGS = {
     'code': 'csv:A',
     'max_usages': 'static:1',
@@ -99,6 +156,7 @@ DEFAULT_SETTINGS = {
     'seat': 'empty',
     'tag': 'empty',
     'comment': 'empty',
+    'send': False,
     'show_hidden_items': 'static:true',
     'all_addons_included': 'csv:C',
     'all_bundles_included': 'static:false',
@@ -180,3 +238,85 @@ def test_price_mode_validation(event, item, user):
     v = event.vouchers.get(code="ABCDE123")
     assert v.price_mode == "percent"
     assert v.value == Decimal("1.00")
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_send_requires_email_column(event, item, user):
+    settings = dict(DEFAULT_SETTINGS)
+    settings.update({
+        'send': True,
+        'send_subject': 'Subject {event}',
+        'send_message': 'Message {voucher_list}',
+        'email': 'empty',
+        'name': 'csv:H',
+    })
+    with pytest.raises(DataImportError) as excinfo:
+        import_vouchers.apply(
+            args=(event.pk, inputfile_with_recipients().id, settings, 'en', user.pk)
+        ).get()
+    assert 'This field is required if you enable email sending.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_send_vouchers(event, item, user):
+    settings = dict(DEFAULT_SETTINGS)
+    settings.update({
+        'send': True,
+        'send_subject': 'Subject {event}',
+        'send_message': 'Message {voucher_list}',
+        'email': 'csv:G',
+        'name': 'csv:H',
+    })
+    with mock.patch('pretix.base.services.modelimport.vouchers_send') as send_mock:
+        import_vouchers.apply(
+            args=(event.pk, inputfile_with_recipients().id, settings, 'en', user.pk)
+        ).get()
+    assert event.vouchers.count() == 2
+    send_mock.assert_called_once()
+    kwargs = send_mock.call_args.kwargs
+    assert kwargs['subject'] == settings['send_subject']
+    assert kwargs['message'] == settings['send_message']
+    assert kwargs['user'] == user.pk
+    assert kwargs['recipients'] == [
+        {'email': 'alice@example.org', 'name': 'Alice', 'number': 1},
+        {'email': 'bob@example.org', 'name': 'Bob', 'number': 1},
+    ]
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_send_rejects_invalid_email(event, item, user):
+    settings = dict(DEFAULT_SETTINGS)
+    settings.update({
+        'send': True,
+        'send_subject': 'Subject {event}',
+        'send_message': 'Message {voucher_list}',
+        'email': 'csv:G',
+        'name': 'csv:H',
+    })
+    with pytest.raises(DataImportError) as excinfo:
+        import_vouchers.apply(
+            args=(event.pk, inputfile_with_invalid_email().id, settings, 'en', user.pk)
+        ).get()
+    assert 'Enter a valid email address.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_send_disabled_does_not_send(event, item, user):
+    settings = dict(DEFAULT_SETTINGS)
+    settings.update({
+        'send': False,
+        'send_subject': 'Subject {event}',
+        'send_message': 'Message {voucher_list}',
+        'email': 'csv:G',
+        'name': 'csv:H',
+    })
+    with mock.patch('pretix.base.services.modelimport.vouchers_send') as send_mock:
+        import_vouchers.apply(
+            args=(event.pk, inputfile_with_recipients().id, settings, 'en', user.pk)
+        ).get()
+    assert event.vouchers.count() == 2
+    send_mock.assert_not_called()
