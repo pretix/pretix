@@ -571,7 +571,7 @@ class TeamAPIToken(models.Model):
         to the organizer ``organizer``.
 
         :param organizer: The organizer to check
-        :param perm_name: The permission, e.g. ``organizer:events.create``
+        :param perm_name: The permission, e.g. ``organizer.events:create``
         :param request: This parameter is ignored and only defined for compatibility reasons.
         :return: bool
         """
