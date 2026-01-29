@@ -70,7 +70,7 @@ from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Customer, Event, Invoice, InvoiceAddress, Order, OrderPosition,
-    Organizer,
+    Organizer, User,
 )
 from pretix.base.models.mail import OutgoingMail
 from pretix.base.services.invoices import invoice_pdf_task
@@ -372,7 +372,18 @@ class CustomEmail(EmailMultiAlternatives):
 
 
 @app.task(base=TransactionAwareTask, bind=True, acks_late=True)
-def mail_send_task(self, *args, outgoing_mail: int) -> bool:
+def mail_send_task(self, **kwargs) -> bool:
+    if "outgoing_mail" in kwargs:
+        outgoing_mail = kwargs.get("outgoing_mail")
+    elif "to" in kwargs:
+        # May only occur while upgrading from pretix versions before OutgoingMail when celery tasks are still in-queue
+        # during the upgrade. Can be removed after 2026.2.x is released, and then the signature can be changed to
+        # mail_send_task(self, *, outgoing_mail)
+        mail_send(**kwargs)
+        return
+    else:
+        raise ValueError("Unknown arguments")
+
     with transaction.atomic():
         try:
             outgoing_mail = OutgoingMail.objects.select_for_update(of=OF_SELF).get(pk=outgoing_mail)
@@ -730,20 +741,20 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
 
 
 def mail_send(to: List[str], subject: str, body: str, html: Optional[str], sender: str,
-              event: int = None, position: int = None, headers: dict = None, cc: List[str] = None, bcc: List[str] = None,
-              invoices: List[int] = None, order: int = None, attach_tickets=False, user=None,
-              organizer=None, customer=None, attach_ical=False, attach_cached_files: List[int] = None,
-              attach_other_files: List[str] = None):
+              event: int | Event = None, position: int | OrderPosition = None, headers: dict = None,
+              cc: List[str] = None, bcc: List[str] = None, invoices: List[int | Invoice] = None, order: int | Order = None,
+              attach_tickets=False, user: int | User=None, organizer: int | Organizer=None, customer: int | Customer=None,
+              attach_ical=False, attach_cached_files: List[int | CachedFile] = None, attach_other_files: List[str] = None):
     """
     Low-level function to send mails, kept for backwards-compatibility. You should usually use mail() instead.
     """
     m = OutgoingMail.objects.create(
-        organizer=organizer,
-        event=event,
-        order=order,
-        orderposition=position,
-        customer=customer,
-        user=user,
+        organizer_id=organizer.pk if isinstance(organizer, Organizer) else None,
+        event_id=event.pk if isinstance(event, Event) else event,
+        order_id=order.pk if isinstance(order, Order) else order,
+        orderposition_id=position.pk if isinstance(position, OrderPosition) else position,
+        customer_id=customer.pk if isinstance(customer, Customer) else customer,
+        user_id=user.pk if isinstance(user, User) else user,
         to=[to.lower()] if isinstance(to, str) else [e.lower() for e in to],
         cc=[e.lower() for e in cc] if cc else [],
         bcc=[e.lower() for e in bcc] if bcc else [],
@@ -757,6 +768,8 @@ def mail_send(to: List[str], subject: str, body: str, html: Optional[str], sende
         should_attach_other_files=attach_other_files or [],
     )
     if invoices and not position:
+        if isinstance(invoices[0], int):
+            invoices = Invoice.objects.filter(pk__in=invoices)
         m.should_attach_invoices.add(*invoices)
     if attach_cached_files:
         for cf in attach_cached_files:
