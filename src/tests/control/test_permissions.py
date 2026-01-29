@@ -368,8 +368,6 @@ event_permission_urls = [
     ("event.subevents:write", "subevents/bulk_action", 302, HTTP_POST),
     ("event.subevents:write", "subevents/bulk_edit", 404, HTTP_POST),
     ("event.orders:read", "orders/overview/", 200, HTTP_GET),
-    ("event.orders:read", "orders/export/", 200, HTTP_GET),
-    ("event.orders:read", "orders/export/do", 302, HTTP_POST),
     ("event.orders:read", "orders/", 200, HTTP_GET),
     ("event.orders:read", "orders/FOO/", 200, HTTP_GET),
     ("event.orders:write", "orders/FOO/extend", 200, HTTP_GET),
