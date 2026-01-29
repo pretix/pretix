@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-28 18:00+0000\n"
+"PO-Revision-Date: 2026-01-29 19:42+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -2848,7 +2848,7 @@ msgstr "Stavy platby"
 
 #: pretix/base/exporters/orderlist.py:1089
 msgid "Refund states"
-msgstr "Stav vrácení peněz"
+msgstr "Stavy vrácení peněz"
 
 #: pretix/base/exporters/orderlist.py:1132
 #: pretix/base/exporters/orderlist.py:1274
@@ -14841,7 +14841,7 @@ msgstr "Jakýkoli produkt v kvótě \"{quota}\""
 
 #: pretix/control/forms/filter.py:2439
 msgid "Refund status"
-msgstr "Stav náhrady"
+msgstr "Stav vrácení peněz"
 
 #: pretix/control/forms/filter.py:2441
 msgid "All open refunds"
