@@ -29,7 +29,6 @@ from django_scopes import scope, scopes_disabled
 
 def CASCADE_IF_QUEUED(collector, field, sub_objs, using):
     # If the email is still queued and the thing it is related to vanishes, the email can vanish as well
-    print(sub_objs)
     cascade_objs = [
         o for o in sub_objs if o.status == OutgoingMail.STATUS_QUEUED
     ]
