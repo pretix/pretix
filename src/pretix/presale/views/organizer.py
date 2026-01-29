@@ -1350,8 +1350,9 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
                 'date_from'
             )[:limit]
         )
-        events.sort(key=lambda e: e.date_from)
-        events = events[:limit]
+        if len(events) > limit:
+            events.sort(key=lambda e: e.date_from)
+            events = events[:limit]
 
         if 'locale' in request.GET and request.GET.get('locale') in dict(settings.LANGUAGES):
             with language(request.GET.get('locale'), self.request.organizer.settings.region):
