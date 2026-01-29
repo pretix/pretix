@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-29 13:00+0000\n"
+"PO-Revision-Date: 2026-01-29 13:19+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -23776,6 +23776,11 @@ msgid ""
 "happen at different times than your event in general. This will not affect "
 "access control, but will affect calendar invites and ticket output."
 msgstr ""
+"Met programmatijden kun je specifieke datums en tijden voor dit product "
+"instellen. Dit is handig als dit product toegang biedt tot delen van je "
+"evenement die op andere tijdstippen plaatsvinden dan je evenement in het "
+"algemeen. Dit heeft geen invloed op de toegangscontrole, maar wel op agenda-"
+"uitnodigingen en ticketuitvoer."
 
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:25
 #: pretix/control/templates/pretixcontrol/item/include_program_times.html:51
@@ -23851,7 +23856,7 @@ msgstr "minuten"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:229
 msgid "hours"
-msgstr ""
+msgstr "uren"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:230
 #: pretix/control/templates/pretixcontrol/item/index.html:248
@@ -23882,6 +23887,11 @@ msgid ""
 "if you enter \"1 day\", the ticket will be valid until the end of the day it "
 "starts on."
 msgstr ""
+"Als je een duur in dagen, maanden of jaren selecteert, eindigt de geldigheid "
+"altijd aan het einde van een volledige dag (middernacht), plus het aantal "
+"minuten en uren dat hierboven is geselecteerd. De startdatum wordt "
+"meegenomen in de berekening, dus als je \"1 dag\" invoert, is het ticket "
+"geldig tot het einde van de dag waarop het begint."
 
 #: pretix/control/templates/pretixcontrol/item/index.html:254
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:619
@@ -23923,7 +23933,7 @@ msgstr "Categorienaam"
 #: pretix/control/templates/pretixcontrol/items/index.html:161
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:54
 msgid "Move up"
-msgstr ""
+msgstr "Omhoog"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:53
 #: pretix/control/templates/pretixcontrol/items/discounts.html:142
@@ -23942,6 +23952,8 @@ msgid ""
 "Click and drag this button to reorder. Double click to show buttons for "
 "reordering."
 msgstr ""
+"Klik en sleep deze knop om de volgorde te wijzigen. Dubbelklik om de knoppen "
+"voor het wijzigen van de volgorde weer te geven."
 
 #: pretix/control/templates/pretixcontrol/items/category.html:23
 msgid ""
@@ -23949,6 +23961,9 @@ msgid ""
 "feature and are not suitable for strictly ensuring that products are only "
 "available in certain combinations."
 msgstr ""
+"Houd er rekening mee dat cross-selling-categorieën bedoeld zijn als "
+"marketingfunctie en niet geschikt zijn om strikt te garanderen dat producten "
+"alleen in bepaalde combinaties beschikbaar zijn."
 
 #: pretix/control/templates/pretixcontrol/items/category.html:39
 msgid "Category history"
@@ -24057,6 +24072,10 @@ msgid ""
 "can create group discounts like \"get 20%% off if you buy 3 or more "
 "tickets\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
+"Met automatische kortingen kun je op basis van bepaalde voorwaarden "
+"automatisch een korting toepassen op aankopen van je klanten. Je kunt "
+"bijvoorbeeld groepskortingen instellen, zoals '20%% korting bij aankoop van "
+"3 of meer tickets' of 'koop 2 tickets, krijg er 1 gratis'."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:15
 msgid ""
@@ -24066,6 +24085,12 @@ msgid ""
 "purchases (\"buy a package of 10 you can turn into individual tickets "
 "later\"), you can use customer accounts and memberships instead."
 msgstr ""
+"Automatische kortingen zijn beschikbaar voor alle klanten, zolang ze actief "
+"zijn. Als je speciale prijzen alleen aan bepaalde klanten wilt aanbieden, "
+"kun je in plaats daarvan vouchers gebruiken. Als je kortingen wilt aanbieden "
+"op meerdere aankopen (\"koop een pakket van 10 dat je later kunt omzetten in "
+"individuele tickets\"), kun je in plaats daarvan klantaccounts en "
+"lidmaatschappen gebruiken."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:23
 msgid ""
@@ -24073,6 +24098,9 @@ msgid ""
 "are not applied if an existing order is changed through any of the available "
 "options."
 msgstr ""
+"Kortingen worden alleen automatisch toegepast bij een eerste aankoop. Ze "
+"worden niet toegepast als een bestaande bestelling wordt gewijzigd via een "
+"van de beschikbare opties."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:29
 msgid ""
@@ -24112,7 +24140,7 @@ msgstr "Staat"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:126
 msgid "Applies to:"
-msgstr ""
+msgstr "Van toepassing op:"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:3
 msgid "Closed"
@@ -24181,7 +24209,7 @@ msgstr "Is een toegangsbewijs"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:104
 msgid "Admission ticket without personalization"
-msgstr ""
+msgstr "Toegangsticket zonder personalisatie"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:112
 msgid "Product with variations"
@@ -24190,7 +24218,7 @@ msgstr "Product met varianten"
 #: pretix/control/templates/pretixcontrol/items/index.html:118
 msgctxt "subevent"
 msgid "Product assigned to seating plan for one or more dates"
-msgstr ""
+msgstr "Product toegewezen aan zitplan voor één of meerdere data"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:118
 #, fuzzy
@@ -24304,6 +24332,8 @@ msgid ""
 "If you want to keep the answers, <a href=\"%(url)s\">edit the question</a> "
 "and set it to hidden."
 msgstr ""
+"Als je de antwoorden wilt bewaren, <a href=\"%(url)s\">bewerk dan de vraag</"
+"a> en stel deze in op verborgen."
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:25
 #, fuzzy
@@ -24335,6 +24365,9 @@ msgid ""
 "statistical data on customers who previously selected this option, and when "
 "such customers edit their answers, they need to select a different option."
 msgstr ""
+"Als je een antwoordoptie verwijdert, kun je geen statistische gegevens meer "
+"zien over klanten die deze optie eerder hebben geselecteerd. Wanneer deze "
+"klanten hun antwoorden wijzigen, moeten ze een andere optie selecteren."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:72
 #, python-format
@@ -24524,6 +24557,10 @@ msgid ""
 "including most plugins. Even a low value might be enough if you only use "
 "specific features. Untranslated texts will show up in English."
 msgstr ""
+"Dit percentage van de teksten is vertaald in alle onderdelen van het "
+"systeem, inclusief de meeste plug-ins. Zelfs een lage waarde kan voldoende "
+"zijn als je alleen specifieke functies gebruikt. Niet-vertaalde teksten "
+"worden in het Engels weergegeven."
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:6
@@ -24675,6 +24712,9 @@ msgid ""
 "%(fee)s for this order, but for a cancellation performed by you, you need to "
 "set the cancellation fee here:"
 msgstr ""
+"De geconfigureerde annuleringskosten voor een annulering door de klant zelf "
+"bedragen %(fee)s voor deze bestelling. Voor een annulering door jou moet je "
+"hier de annuleringskosten instellen:"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:220
@@ -24808,6 +24848,8 @@ msgid ""
 "If you change this, it might cause a new ticket QR code to be generated and "
 "the old one to be invalidated."
 msgstr ""
+"Als je dit wijzigt, kan dit ertoe leiden dat er een nieuwe QR-code voor het "
+"ticket wordt gegenereerd en dat de oude ongeldig wordt."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:157
 msgid ""
@@ -24815,6 +24857,9 @@ msgid ""
 "will not affect the membership. Memberships can be managed in the customer "
 "account."
 msgstr ""
+"De verkoop van deze positie heeft een lidmaatschap gecreëerd. Het wijzigen "
+"van het product heeft geen invloed op het lidmaatschap. Lidmaatschappen "
+"kunnen worden beheerd in het klantenaccount."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:220
 #, fuzzy
@@ -24824,7 +24869,7 @@ msgstr "Kaartjeslay-out"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:226
 msgid "Blocked due to external constraints"
-msgstr ""
+msgstr "Geblokkeerd vanwege externe beperkingen"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:228
 #, fuzzy
@@ -24856,11 +24901,11 @@ msgstr "Deuren open: %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:260
 msgid "Unconstrained"
-msgstr ""
+msgstr "Onbeperkt"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:266
 msgid "–"
-msgstr ""
+msgstr "–"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:272
 msgid ""
@@ -24868,6 +24913,9 @@ msgid ""
 "ticket here will not affect the membership. Memberships can be managed in "
 "the customer account."
 msgstr ""
+"De verkoop van deze positie heeft een lidmaatschap gecreëerd. Het wijzigen "
+"van de geldigheid van het ticket heeft geen invloed op het lidmaatschap. "
+"Lidmaatschappen kunnen worden beheerd in het klantenaccount."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:296
 #, fuzzy
@@ -25065,6 +25113,9 @@ msgid ""
 "can choose to refund the money below or reactivate it by extending the "
 "payment deadline."
 msgstr ""
+"Deze bestelling is verlopen, ook al is er een bedrag van %(amount)s betaald. "
+"Je kunt ervoor kiezen om het geld hieronder terug te storten of de "
+"bestelling te reactiveren door de betalingstermijn te verlengen."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:143
 msgid "Cancellation request"
@@ -25093,11 +25144,15 @@ msgid ""
 "This order will not expire automatically since it is already confirmed and "
 "can be used."
 msgstr ""
+"Deze bestelling verloopt niet automatisch, aangezien deze al is bevestigd en "
+"kan worden gebruikt."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:211
 msgid ""
 "This order will not expire automatically as it has an open cancellation fee."
 msgstr ""
+"Deze bestelling verloopt niet automatisch, omdat er annuleringskosten aan "
+"verbonden zijn."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:230
 msgid "Contact email"
@@ -25116,6 +25171,8 @@ msgid ""
 "We don't know if this invoice was emailed to the customer since it was "
 "created before our system tracked this information"
 msgstr ""
+"We weten niet of deze factuur naar de klant is gemaild, omdat deze is "
+"aangemaakt voordat ons systeem deze informatie bijhield"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:283
 #, fuzzy
@@ -25257,6 +25314,9 @@ msgid ""
 "this product was part of the discount calculation for a different product in "
 "this order."
 msgstr ""
+"De prijs van dit product is verlaagd vanwege een automatische korting, of "
+"dit product maakte deel uit van de kortingsberekening voor een ander product "
+"in deze bestelling."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:496
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:103
@@ -25718,7 +25778,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/transactions.html:73
 #, python-format
 msgid "incl. %(amount)s rounding correction"
-msgstr ""
+msgstr "incl. %(amount)s afrondingscorrectie"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
@@ -25734,6 +25794,9 @@ msgid ""
 "<strong>%(allowed)s</strong> of the selected <strong>%(total)s</strong> "
 "orders."
 msgstr ""
+"De bewerking <strong>%(label)s</strong> kan worden toegepast op <strong>%"
+"(allowed)s</strong> van de geselecteerde <strong>%(total)s</strong> "
+"bestellingen."
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:71
 #, fuzzy
@@ -25848,30 +25911,34 @@ msgstr "Stuur de volgende code mee als je contact met ons opneemt:"
 #, python-format
 msgid "%(count)s order will be canceled fully"
 msgid_plural "%(count)s orders will be canceled fully"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s bestelling wordt volledig geannuleerd"
+msgstr[1] "%(count)s bestellingen worden volledig geannuleerd"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:26
 #, python-format
 msgid "%(count)s order will be canceled partially"
 msgid_plural "%(count)s orders will be canceled partially"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s bestelling wordt gedeeltelijk geannuleerd"
+msgstr[1] "%(count)s bestellingen worden gedeeltelijk geannuleerd"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:36
 #, python-format
 msgid "%(amount)s are eligible for refunds."
-msgstr ""
+msgstr "%(amount)s komt in aanmerking voor terugbetaling."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:40
 msgid ""
 "The system will attempt to refund the money automatically if supported by "
 "the payment method."
 msgstr ""
+"Het systeem zal automatisch proberen het geld terug te storten als dit door "
+"de betaalmethode wordt ondersteund."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:42
 msgid "The system will create manual refunds that you need to execute."
 msgstr ""
+"Het systeem zal handmatige terugbetalingen aanmaken die je zelf moet "
+"uitvoeren."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:44
 #, fuzzy
@@ -25887,13 +25954,15 @@ msgstr "Stuur informatie via e-mail"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:57
 msgid "Inform all waiting list contacts via email."
-msgstr ""
+msgstr "Informeer alle personen op de wachtlijst via e-mail."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:62
 msgid ""
 "These numbers are estimates and may change if the data in your event "
 "recently changed."
 msgstr ""
+"Deze cijfers zijn schattingen en kunnen veranderen als de gegevens in uw "
+"evenement recentelijk zijn gewijzigd."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:76
 #, fuzzy, python-format
@@ -25949,12 +26018,12 @@ msgstr "Terugbetalingen exporteren"
 #: pretix/control/templates/pretixcontrol/orders/export.html:42
 #: pretix/control/templates/pretixcontrol/organizers/export.html:42
 msgid "Disabled due to multiple failures"
-msgstr ""
+msgstr "Uitgeschakeld vanwege meerdere mislukkingen"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:47
 #: pretix/control/templates/pretixcontrol/organizers/export.html:47
 msgid "Failed recently"
-msgstr ""
+msgstr "Onlangs mislukt"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:64
 #, fuzzy
@@ -25968,6 +26037,8 @@ msgid ""
 "Run export and send via email now. This will not change the next scheduled "
 "execution."
 msgstr ""
+"Voer nu de export uit en verstuur deze via e-mail. Dit heeft geen invloed op "
+"de volgende geplande uitvoering."
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:76
 #: pretix/control/templates/pretixcontrol/organizers/export.html:76
@@ -26022,6 +26093,8 @@ msgid ""
 "Your generated Excel file will have <strong>multiple sheets</strong>. Some "
 "data you are looking for might not be on the first sheet."
 msgstr ""
+"Het gegenereerde Excel-bestand bevat <strong>meerdere werkbladen</strong>. "
+"Sommige gegevens die je zoekt, staan mogelijk niet op het eerste werkblad."
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:46
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:47
@@ -26110,6 +26183,8 @@ msgstr "Nooit"
 msgid ""
 "Every time your schedule is executed, the report will be sent via email."
 msgstr ""
+"Elke keer dat je planning wordt uitgevoerd, wordt het rapport per e-mail "
+"verzonden."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:111
 #, fuzzy
@@ -26123,12 +26198,17 @@ msgid ""
 "exports that output e.g. statistical data, not for reports that include "
 "sensitive personal data."
 msgstr ""
+"E-mail is geen sterk versleuteld medium. We raden aan om dit alleen te "
+"gebruiken voor exportbestanden die bijvoorbeeld statistische gegevens "
+"bevatten, en niet voor rapporten met gevoelige persoonsgegevens."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:117
 msgid ""
 "Email is not made for large files. If your export ends up to be larger than "
 "20 megabytes, it will not be sent."
 msgstr ""
+"E-mail is niet geschikt voor grote bestanden. Als je export groter is dan 20 "
+"megabyte, wordt deze niet verzonden."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:122
 msgid "Owner"
@@ -26139,22 +26219,28 @@ msgid ""
 "The export will be performed using the owner's permission level, i.e. if the "
 "owner loses access to the data, the report will stop."
 msgstr ""
+"De export wordt uitgevoerd met het machtigingsniveau van de eigenaar, d.w.z. "
+"als de eigenaar de toegang tot de gegevens verliest, wordt het rapport "
+"gestopt."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:129
 msgid "The owner will receive the result as well as any error messages."
-msgstr ""
+msgstr "De eigenaar ontvangt het resultaat en eventuele foutmeldingen."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:130
 msgid ""
 "The additional recipients you add below will only receive an email if the "
 "report was successful."
 msgstr ""
+"De extra ontvangers die je hieronder toevoegt, ontvangen alleen een e-mail "
+"als het rapport succesvol is verzonden."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:131
 msgid ""
 "All recipients of the export will be able to see who the owner of the report "
 "is."
 msgstr ""
+"Alle ontvangers van de export kunnen zien wie de eigenaar van het rapport is."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:13
 #, fuzzy
@@ -26349,6 +26435,8 @@ msgid ""
 "This sum includes canceled orders. For your ticket revenue, look at the "
 "\"order overview\"."
 msgstr ""
+"Dit bedrag is inclusief geannuleerde bestellingen. Voor je ticketinkomsten "
+"kun je het 'besteloverzicht' raadplegen."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:290
 #, fuzzy
@@ -26367,7 +26455,7 @@ msgstr "Betaal volledige betaalde bedrag terug"
 #: pretix/control/templates/pretixcontrol/orders/index.html:319
 #: pretix/control/views/orders.py:347
 msgid "Mark as expired if overdue"
-msgstr ""
+msgstr "Markeer als verlopen indien achterstallig"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:327
 #, fuzzy
@@ -26401,6 +26489,11 @@ msgid ""
 "be removed in the future. Use the \"Accounting report\" in the export "
 "section instead."
 msgstr ""
+"Het filteren van dit rapport op datum wordt niet aanbevolen, omdat dit tot "
+"misleidende informatie kan leiden. Dit rapport geeft namelijk alleen de "
+"huidige status van een bestelling weer, en geen eerdere wijzigingen in de "
+"bestelling. Dit datumfilter wordt mogelijk in de toekomst verwijderd. "
+"Gebruik in plaats daarvan het 'Boekhoudrapport' in het exportgedeelte."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:66
 msgctxt "subevent"
@@ -26480,6 +26573,10 @@ msgid ""
 "through. This is useful to unlock new revenue streams or to separate revenue "
 "between different sources for reporting purchases."
 msgstr ""
+"Op deze pagina kun je de verschillende kanalen beheren waarlangs je tickets "
+"kunnen worden verkocht. Dit is handig om nieuwe inkomstenbronnen aan te "
+"boren of om inkomsten uit verschillende bronnen te scheiden voor het "
+"rapporteren van aankopen."
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:15
 #, fuzzy
@@ -26511,6 +26608,7 @@ msgstr "Verstuur wachtwoordherstelmail"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:80
 msgid "This includes all paid orders by this customer across all your events."
 msgstr ""
+"Dit omvat alle betaalde bestellingen van deze klant voor al je evenementen."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:81
 #, fuzzy
@@ -26586,6 +26684,8 @@ msgid ""
 "The customer will no longer be able to log in and will lose access to any "
 "membership benefits."
 msgstr ""
+"De klant kan niet langer inloggen en verliest alle voordelen van het "
+"lidmaatschap."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:29
 #, fuzzy
@@ -26848,6 +26948,8 @@ msgstr "Organisatorpagina"
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:68
 msgid "The links you configure here will also be shown on all of your events."
 msgstr ""
+"De links die je hier configureert, worden ook bij al je evenementen "
+"weergegeven."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:143
 msgid ""
@@ -26880,6 +26982,10 @@ msgid ""
 "security. Therefore, cookies set by pretix itself do not require consent in "
 "all jurisdictions that we are aware of."
 msgstr ""
+"pretix zelf plaatst alleen cookies die nodig zijn om de door de gebruiker "
+"gevraagde dienst te leveren of om een passend beveiligingsniveau te "
+"handhaven. Daarom is voor cookies die door pretix zelf worden geplaatst in "
+"alle rechtsgebieden waarvan wij op de hoogte zijn geen toestemming vereist."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:181
 msgid ""
@@ -26887,6 +26993,10 @@ msgid ""
 "affect if you use <strong>plugins</strong> that require additional cookies "
 "<strong>and</strong> participate in our cookie consent mechanism."
 msgstr ""
+"Daarom hebben de instellingen op deze pagina <strong>alleen</strong> effect "
+"als je <strong>plug-ins</strong> gebruikt die aanvullende cookies vereisen "
+"<strong>en</strong> deelneemt aan ons mechanisme voor toestemming voor "
+"cookies."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:188
 msgid ""
@@ -26916,16 +27026,22 @@ msgid ""
 "template in <a href=\"https://docs.pretix.eu/trust/accessibility/\" "
 "target=\"_blank\">our documentation</a>."
 msgstr ""
+"In sommige rechtsgebieden, waaronder de Europese Unie, ben je verplicht om "
+"informatie over de toegankelijkheid van je ticketwinkel te publiceren. Je "
+"vindt een sjabloon in <a href=\"https://docs.pretix.eu/trust/accessibility/"
+"\" target=\"_blank\">onze documentatie</a>."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:217
 msgid ""
 "Instead of an URL, you can also configure a text that will be shown within "
 "pretix. This will be ignored if a URL is configured."
 msgstr ""
+"In plaats van een URL kun je ook een tekst configureren die binnen pretix "
+"wordt weergegeven. Deze wordt genegeerd als er een URL is geconfigureerd."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:229
 msgid "Barcode media"
-msgstr ""
+msgstr "Streepjescode-media"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:233
 msgid ""
@@ -26935,33 +27051,47 @@ msgid ""
 "layout that includes the \"Reusable Medium ID\" as a QR code. Later, the "
 "same barcode may be re-used during the sale of a different product."
 msgstr ""
+"Een 'streepjescode-medium' kan elke gedrukte of digitale weergave van een "
+"streepjescode zijn. Het medium wordt in eerste instantie gecreëerd door de "
+"verkoop van een product waarvoor een mediabeleid geldt dat een dergelijk "
+"medium vereist, evenals een ticket- of badge-indeling met de 'ID "
+"herbruikbaar medium' als QR-code. Later kan dezelfde streepjescode worden "
+"hergebruikt bij de verkoop van een ander product."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:240
 msgid "Barcode media can currently only be connected to tickets."
 msgstr ""
+"Streepjescode-media kunnen momenteel alleen aan tickets worden gekoppeld."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:243
 msgid ""
 "This subsequent reuse of the barcode is currently only supported during POS "
 "sales."
 msgstr ""
+"Dit hergebruik van de streepjescode wordt momenteel alleen ondersteund bij "
+"POS-verkopen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:260
 msgid ""
 "This medium type can work with almost any type of NFC chip. With this "
 "option, only the UID of the NFC chip is used for identification."
 msgstr ""
+"Dit type medium werkt met vrijwel elk type NFC-chip. Bij deze optie wordt "
+"alleen de UID van de NFC-chip gebruikt voor identificatie."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:264
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:296
 msgid "NFC media can currently only be connected to gift cards."
-msgstr ""
+msgstr "NFC-media kunnen momenteel alleen worden gekoppeld aan cadeaubonnen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:270
 msgid ""
 "This method does not provide a high level of protection against abuse since "
 "it is possible for malicious users to clone someone's chip with the same UID."
 msgstr ""
+"Deze methode biedt geen hoge mate van bescherming tegen misbruik, aangezien "
+"kwaadwillende gebruikers de chip van iemand anders met dezelfde UID kunnen "
+"klonen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:291
 msgid ""
@@ -26969,6 +27099,10 @@ msgid ""
 "made by NXP. This provides a higher level of security than other approaches, "
 "but requires all chips to be encoded prior to use."
 msgstr ""
+"Dit type medium werkt alleen met NFC-chips van het type Mifare Ultralight "
+"AES, geproduceerd door NXP. Dit biedt een hoger beveiligingsniveau dan "
+"andere benaderingen, maar vereist dat alle chips voorafgaand aan gebruik "
+"worden gecodeerd."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:318
 #, fuzzy
@@ -26987,6 +27121,8 @@ msgid ""
 "The domain needs to be configured on your webserver before it can be used "
 "here."
 msgstr ""
+"Het domein moet op je webserver worden geconfigureerd voordat het hier kan "
+"worden gebruikt."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:377
 #, fuzzy
@@ -26996,7 +27132,7 @@ msgstr "Adresregel"
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html:64
 msgid "Run export now and download result"
-msgstr ""
+msgstr "Voer nu de export uit en download het resultaat"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
 msgid "Delete gate:"
@@ -27238,6 +27374,8 @@ msgstr ""
 msgid ""
 "This can be used to enable products like year passes, tickets of ten, etc."
 msgstr ""
+"Dit kan worden gebruikt om producten zoals jaarpassen, tienbeurtenkaarten "
+"enz. mogelijk te maken."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
@@ -27608,6 +27746,9 @@ msgid ""
 "Webhooks scheduled to be retried in less than %(minutes)s minutes may not be "
 "listed here and can no longer be stopped or expedited."
 msgstr ""
+"Webhooks die binnen %(minutes)s minuten opnieuw worden geprobeerd, worden "
+"hier mogelijk niet weergegeven en kunnen niet meer worden gestopt of "
+"versneld."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:44
 msgid "This webhook was retried since it previously failed."
@@ -27735,7 +27876,7 @@ msgstr "Bestelcode"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:87
 msgid "Image"
-msgstr ""
+msgstr "Afbeelding"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:92
 msgid ""
@@ -27743,6 +27884,9 @@ msgid ""
 "generated by plugins. If you want to embed a logo or other images, use a "
 "custom background instead."
 msgstr ""
+"Je kunt dit gebruiken om door gebruikers geüploade afbeeldingen uit vragen "
+"of door plug-ins gegenereerde afbeeldingen toe te voegen. Als je een logo of "
+"andere afbeeldingen wilt insluiten, gebruik dan een aangepaste achtergrond."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:93
 msgid "Dynamic image"
@@ -27859,6 +28003,8 @@ msgid ""
 "You can upload a PDF to use as a custom background. The paper size will "
 "match the PDF."
 msgstr ""
+"Je kunt een PDF uploaden om als aangepaste achtergrond te gebruiken. Het "
+"papierformaat komt overeen met de PDF."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:277
 #, fuzzy
@@ -27877,6 +28023,8 @@ msgid ""
 "To manually change the paper size, you need to create a new, empty "
 "background."
 msgstr ""
+"Om het papierformaat handmatig te wijzigen, moet je een nieuwe, lege "
+"achtergrond maken."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:294
 #: pretix/control/templates/pretixcontrol/pdf/index.html:381
@@ -27930,7 +28078,7 @@ msgstr "Producteigenschap:"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:351
 msgid "Other… (multilingual)"
-msgstr ""
+msgstr "Overige… (meertalig)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:352
 msgid "Other…"
@@ -28003,6 +28151,7 @@ msgstr "Geld automatisch terugbetalen indien mogelijk"
 #: pretix/control/templates/pretixcontrol/pdf/index.html:542
 msgid "Allow long words to be split (preview is not accurate)"
 msgstr ""
+"Sta het splitsen van lange woorden toe (voorbeeldweergave is niet nauwkeurig)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:553
 #, python-format
