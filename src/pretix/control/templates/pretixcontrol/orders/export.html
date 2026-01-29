@@ -115,5 +115,9 @@
                 </a>
             {% endfor %}
         </div>
+    {% empty %}
+        <p class="empty-collection">
+            {% trans "There are no exporters available for you." %}
+        </p>
     {% endfor %}
 {% endblock %}

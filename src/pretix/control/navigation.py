@@ -273,6 +273,16 @@ def get_event_navigation(request: HttpRequest):
             'icon': 'shopping-cart',
             'children': children
         })
+    else:
+        nav.append({
+            'label': _('Export'),
+            'url': reverse('control:event.orders.export', kwargs={
+                'event': request.event.slug,
+                'organizer': request.event.organizer.slug,
+            }),
+            'active': 'event.orders.export' in url.url_name,
+            'icon': 'download',
+        })
 
     if 'event.vouchers:read' in request.eventpermset:
         nav.append({
