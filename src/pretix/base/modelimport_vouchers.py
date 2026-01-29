@@ -22,7 +22,7 @@
 from decimal import Decimal
 
 from django.core.exceptions import ValidationError
-from django.core.validators import MinLengthValidator
+from django.core.validators import EmailValidator, MinLengthValidator
 from django.utils.functional import cached_property
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
 
@@ -322,6 +322,24 @@ class CommentColumn(ImportColumn):
         voucher.comment = value or ''
 
 
+class RecipientEmailColumn(ImportColumn):
+    identifier = 'email'
+    verbose_name = gettext_lazy('Recipient email')
+
+    def clean(self, value, previous_values):
+        settings = getattr(self, 'import_settings', {})
+        if settings.get('send') and not value:
+            raise ValidationError(_('This field is required if you enable email sending.'))
+        if value:
+            EmailValidator()(value)
+        return value
+
+
+class RecipientNameColumn(ImportColumn):
+    identifier = 'name'
+    verbose_name = gettext_lazy('Recipient name')
+
+
 class ShowHiddenItemsColumn(BooleanColumnMixin, ImportColumn):
     identifier = 'show_hidden_items'
     verbose_name = gettext_lazy('Shows hidden products that match this voucher')
@@ -367,6 +385,8 @@ def get_voucher_import_columns(event):
         SeatColumn(event),
         TagColumn(event),
         CommentColumn(event),
+        RecipientEmailColumn(event),
+        RecipientNameColumn(event),
         ShowHiddenItemsColumn(event),
         AllAddonsIncludedColumn(event),
         AllBundlesIncludedColumn(event),

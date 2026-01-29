@@ -20,8 +20,12 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django import forms
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from pretix.base.email import get_available_placeholders
+from pretix.base.forms import PlaceholderValidator
+from pretix.base.forms.widgets import format_placeholders_help_text
 from pretix.base.modelimport_orders import get_order_import_columns
 from pretix.base.modelimport_vouchers import get_voucher_import_columns
 
@@ -104,7 +108,61 @@ class VouchersProcessForm(ProcessForm):
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
+        initital = kwargs.get('initial', {}) or {}
         super().__init__(*args, **kwargs)
+        self.fields['send'] = forms.BooleanField(
+            label=_("Send vouchers via email"),
+            required=False,
+            initial=initital.get('send', False)
+        )
+        self.fields['send_subject'] = forms.CharField(
+            label=_("Subject"),
+            required=False,
+            initial=initital.get('send_subject', _('Your voucher for {event}')),
+            widget=forms.TextInput(attrs={'data-display-dependency': '#id_send'}),
+        )
+        self.fields['send_message'] = forms.CharField(
+            label=_("Message"),
+            required=False,
+            initial=initital.get('send_message', _('Hello,\n\n'
+                                                  'with this email, we\'re sending you a voucher for {event}:\n\n'
+                                                  '{voucher_list}\n\n'
+                                                  'You can redeem it here in our ticket shop:\n\n{url}\n\n'
+                                                  'Best regards,  \n'
+                                                  'Your {event} team')),
+            widget=forms.Textarea(attrs={'data-display-dependency': '#id_send'}),
+        )
+        self._set_field_placeholders('send_subject', ['event', 'name'])
+        self._set_field_placeholders('send_message', ['event', 'voucher_list', 'name'])
+        if 'email' in self.fields:
+            self.fields['email'].widget.attrs['data-display-dependency'] = '#id_send'
+        if 'name' in self.fields:
+            self.fields['name'].widget.attrs['data-display-dependency'] = '#id_send'
+
+    def _set_field_placeholders(self, fn, base_parameters):
+        placeholders = get_available_placeholders(self.event, base_parameters)
+        ht = format_placeholders_help_text(placeholders, self.event)
+
+        if self.fields[fn].help_text:
+            self.fields[fn].help_text += ' ' + str(ht)
+        else:
+            self.fields[fn].help_text = ht
+        self.fields[fn].validators.append(
+            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
+        )
 
     def get_columns(self):
         return get_voucher_import_columns(self.event)
+
+    def clean(self):
+        data = super().clean()
+        if data.get('send'):
+            if not data.get('send_subject') or not data.get('send_message'):
+                raise ValidationError(
+                    _('If vouchers should be sent by email, subject and message need to be specified.')
+                )
+            if data.get('email') in (None, 'empty'):
+                raise ValidationError(
+                    _('Please select the CSV column for the recipient email address.')
+                )
+        return data

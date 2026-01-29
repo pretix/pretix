@@ -40,6 +40,7 @@ from pretix.base.models.orders import Transaction
 from pretix.base.services.invoices import generate_invoice, invoice_qualified
 from pretix.base.services.locking import lock_objects
 from pretix.base.services.tasks import ProfiledEventTask
+from pretix.base.services.vouchers import vouchers_send
 from pretix.base.signals import order_paid, order_placed
 from pretix.celery_app import app
 
@@ -55,6 +56,8 @@ def _validate(cf: CachedFile, charset: str, cols: List[ImportColumn], settings: 
             )
         )
     data = []
+    for c in cols:
+        c.import_settings = settings
     for i, record in enumerate(parsed):
         if not any(record.values()):
             continue
@@ -204,6 +207,8 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
         cols = get_voucher_import_columns(event)
         data = _validate(cf, charset, cols, settings)
 
+        send_enabled = settings.get('send')
+        recipients = []
         # Prepare model objects. Yes, this might consume lots of RAM, but allows us to make the actual SQL transaction
         # shorter. We'll see what works better in reality…
         vouchers = []
@@ -229,11 +234,19 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
 
                 if voucher.seat is not None:
                     lock_seats.append(voucher.seat)
+
+                if send_enabled:
+                    recipients.append({
+                        'email': record.get('email'),
+                        'name': record.get('name') or '',
+                        'number': 1,
+                    })
             except (ValidationError, ImportError) as e:
                 raise DataImportError(
                     _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
                 )
 
+        voucher_ids = []
         with transaction.atomic():
             # We don't support quotas here, so we only need to lock if seats are in use
             if lock_seats:
@@ -245,6 +258,7 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
 
             for v in vouchers:
                 v.save()
+                voucher_ids.append(v.pk)
                 v.log_action(
                     'pretix.voucher.added',
                     user=user,
@@ -252,4 +266,13 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
                 )
                 for c in cols:
                     c.save(v)
+        if send_enabled and recipients:
+            vouchers_send(
+                event=event,
+                vouchers=voucher_ids,
+                subject=settings.get('send_subject', ''),
+                message=settings.get('send_message', ''),
+                recipients=recipients,
+                user=user.pk,
+            )
     cf.delete()
