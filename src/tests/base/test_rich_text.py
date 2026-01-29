@@ -20,9 +20,9 @@
 # <https://www.gnu.org/licenses/>.
 #
 import html
-import pytest
 import urllib.parse
 
+import pytest
 from django.core import signing
 
 from pretix.base.templatetags.rich_text import (
