@@ -425,7 +425,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                             self.retry(max_retries=5, countdown=60)
                         except MaxRetriesExceededError:
                             # Well then, something is really wrong, let's send it without attachment before we
-                            # don't sent at all
+                            # don't send at all
                             logger.exception(f'Could not attach tickets to email {outgoing_mail.guid}')
                             pass
 
