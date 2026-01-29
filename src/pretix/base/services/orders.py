@@ -2484,7 +2484,7 @@ class OrderChangeManager:
                             auth=self.auth,
                             data={
                                 'value': -position.price,
-                                'acceptor_id': order.event.organizer.id
+                                'acceptor_id': self.order.event.organizer.id
                             }
                         )
 
@@ -2510,7 +2510,7 @@ class OrderChangeManager:
                                 auth=self.auth,
                                 data={
                                     'value': -opa.position.price,
-                                    'acceptor_id': order.event.organizer.id
+                                    'acceptor_id': self.order.event.organizer.id
                                 }
                             )
 
@@ -3454,13 +3454,10 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
                 )
                 gc.log_action(
                     action='pretix.giftcards.created',
-                    user=self.request.user,
-                    auth=self.request.auth,
                 )
                 trans = gc.transactions.create(value=p.price - issued, order=order, acceptor=sender.organizer)
                 gc.log_action(
                     action='pretix.giftcards.transaction.manual',
-                    user=user,
                     data={
                         'value': trans.value,
                         'acceptor_id': order.event.organizer.id,
