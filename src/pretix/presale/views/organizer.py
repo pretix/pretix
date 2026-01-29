@@ -1300,6 +1300,8 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 class OrganizerIcalDownload(OrganizerViewMixin, View):
     def get(self, request, *args, **kwargs):
         cutoff = now() - timedelta(days=31)
+        # generally limit to 1000 entries as this seems to be a limitation on ics-files for some calendar software
+        limit = 1000
         events = list(
             filter_qs_by_attr(
                 self.request.organizer.events.filter(
@@ -1318,7 +1320,7 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
                     'organizer',
                     queryset=Organizer.objects.prefetch_related('_settings_objects')
                 )
-            )
+            )[:limit]
         )
         events += list(
             filter_qs_by_attr(
@@ -1346,8 +1348,10 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
                 )
             ).order_by(
                 'date_from'
-            )
+            )[:limit]
         )
+        events.sort(key=lambda e: e.date_from)
+        events = events[:limit]
 
         if 'locale' in request.GET and request.GET.get('locale') in dict(settings.LANGUAGES):
             with language(request.GET.get('locale'), self.request.organizer.settings.region):
