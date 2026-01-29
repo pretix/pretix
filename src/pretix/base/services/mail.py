@@ -965,7 +965,7 @@ def _retry_strategy(e: Exception):
             # intervals scatter such that the email won't all be retried at the same time again and cause the
             # same problem.
             # See also https://docs.microsoft.com/en-us/exchange/troubleshoot/send-emails/smtp-submission-improvements
-            return "microsoft_concurrncy"
+            return "microsoft_concurrency"
 
         if e.smtp_code in (101, 111, 421, 422, 431, 432, 442, 447, 452):
             return "quick"
