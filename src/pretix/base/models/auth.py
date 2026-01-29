@@ -212,6 +212,28 @@ class SuperuserPermissionSet:
         return True
 
 
+class EventPermissionSet(set):
+    def __contains__(self, item):
+        from pretix.base.permissions import assert_valid_event_permission
+
+        if super().__contains__(item):
+            return True
+
+        assert_valid_event_permission(item, allow_tuple=False)
+        return False
+
+
+class OrganizerPermissionSet(set):
+    def __contains__(self, item):
+        from pretix.base.permissions import assert_valid_organizer_permission
+
+        if super().__contains__(item):
+            return True
+
+        assert_valid_organizer_permission(item, allow_tuple=False)
+        return False
+
+
 class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     """
     This is the user model used by pretix for authentication.

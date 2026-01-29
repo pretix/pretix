@@ -29,6 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.models import LoggedModel
+from pretix.base.permissions import assert_valid_event_permission
 
 
 @scopes_disabled()
@@ -276,6 +277,7 @@ class Device(LoggedModel):
         :param request: Ignored, for compatibility with User model
         :return: Iterable of Events
         """
+        assert_valid_event_permission(permission)
         if (
             isinstance(permission, (list, tuple)) and any(p in self._event_permission_set() for p in permission)
         ) or (isinstance(permission, str) and permission in self._event_permission_set()):

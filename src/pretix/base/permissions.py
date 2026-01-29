@@ -21,8 +21,9 @@
 #
 
 import logging
+import warnings
 from collections import OrderedDict
-from typing import Dict, List, NamedTuple, Tuple
+from typing import Dict, List, NamedTuple, Set, Tuple
 
 from django.dispatch import receiver
 from django.utils.functional import Promise
@@ -33,6 +34,8 @@ from pretix.base.signals import (
 )
 
 logger = logging.getLogger(__name__)
+_ALL_EVENT_PERMISSION_GROUPS = None
+_ALL_ORGANIZER_PERMISSION_GROUPS = None
 _ALL_EVENT_PERMISSIONS = None
 _ALL_ORGANIZER_PERMISSIONS = None
 
@@ -52,10 +55,10 @@ class PermissionGroup(NamedTuple):
 
 
 def get_all_event_permission_groups() -> Dict[str, PermissionGroup]:
-    global _ALL_EVENT_PERMISSIONS
+    global _ALL_EVENT_PERMISSION_GROUPS
 
-    if _ALL_EVENT_PERMISSIONS:
-        return _ALL_EVENT_PERMISSIONS
+    if _ALL_EVENT_PERMISSION_GROUPS:
+        return _ALL_EVENT_PERMISSION_GROUPS
 
     types = OrderedDict()
     for recv, ret in register_event_permission_groups.send(None):
@@ -64,15 +67,15 @@ def get_all_event_permission_groups() -> Dict[str, PermissionGroup]:
                 types[r.name] = r
         else:
             types[ret.name] = ret
-    _ALL_EVENT_PERMISSIONS = types
+    _ALL_EVENT_PERMISSION_GROUPS = types
     return types
 
 
 def get_all_organizer_permission_groups() -> Dict[str, PermissionGroup]:
-    global _ALL_ORGANIZER_PERMISSIONS
+    global _ALL_ORGANIZER_PERMISSION_GROUPS
 
-    if _ALL_ORGANIZER_PERMISSIONS:
-        return _ALL_ORGANIZER_PERMISSIONS
+    if _ALL_ORGANIZER_PERMISSION_GROUPS:
+        return _ALL_ORGANIZER_PERMISSION_GROUPS
 
     types = OrderedDict()
     for recv, ret in register_organizer_permission_groups.send(None):
@@ -81,8 +84,72 @@ def get_all_organizer_permission_groups() -> Dict[str, PermissionGroup]:
                 types[r.name] = r
         else:
             types[ret.name] = ret
-    _ALL_ORGANIZER_PERMISSIONS = types
+    _ALL_ORGANIZER_PERMISSION_GROUPS = types
     return types
+
+
+def get_all_event_permissions() -> Set[str]:
+    from pretix.helpers.permission_migration import OLD_TO_NEW_EVENT_COMPAT
+    global _ALL_EVENT_PERMISSIONS
+
+    if _ALL_EVENT_PERMISSIONS:
+        return _ALL_EVENT_PERMISSIONS
+
+    res = set(OLD_TO_NEW_EVENT_COMPAT.keys())
+    for pg in get_all_event_permission_groups().values():
+        for a in pg.actions:
+            res.add(f"{pg.name}:{a}")
+
+    _ALL_EVENT_PERMISSIONS = res
+    return res
+
+
+def get_all_organizer_permissions() -> Set[str]:
+    from pretix.helpers.permission_migration import OLD_TO_NEW_ORGANIZER_COMPAT
+    global _ALL_ORGANIZER_PERMISSIONS
+
+    if _ALL_ORGANIZER_PERMISSIONS:
+        return _ALL_ORGANIZER_PERMISSIONS
+
+    res = set(OLD_TO_NEW_ORGANIZER_COMPAT.keys())
+    for pg in get_all_organizer_permission_groups().values():
+        for a in pg.actions:
+            res.add(f"{pg.name}:{a}")
+
+    _ALL_ORGANIZER_PERMISSIONS = res
+    return res
+
+
+def assert_valid_event_permission(permission, allow_legacy=True, allow_tuple=True):
+    if permission is None:
+        return
+    if isinstance(permission, (list, tuple)) and allow_tuple:
+        for p in permission:
+            assert_valid_event_permission(p)
+        return
+    if not allow_legacy and ':' not in permission:
+        raise ValueError(f"Not allowed to use legacy permission '{permission}'")
+    all_permissions = get_all_event_permissions()
+    if permission not in all_permissions:
+        # Warning *and* exception because warning is silently caught when used in if statements in Django templates
+        warnings.warn(f"Use of undefined permission '{permission}'")
+        raise Exception(f"Undefined permission '{permission}'")
+
+
+def assert_valid_organizer_permission(permission, allow_legacy=True, allow_tuple=True):
+    if permission is None:
+        return
+    if isinstance(permission, (list, tuple)) and allow_tuple:
+        for p in permission:
+            assert_valid_organizer_permission(p)
+        return
+    if not allow_legacy and ':' not in permission:
+        raise ValueError(f"Not allowed to use legacy permission '{permission}'")
+    all_permissions = get_all_organizer_permissions()
+    if permission not in all_permissions:
+        # Warning *and* exception because warning is silently caught when used in if statements in Django templates
+        warnings.warn(f"Use of undefined permission '{permission}'")
+        raise Exception(f"Undefined permission '{permission}'")
 
 
 OPTS_ALL_READ = [

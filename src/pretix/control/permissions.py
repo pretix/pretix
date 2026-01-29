@@ -38,6 +38,9 @@ from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from pretix.base.permissions import (
+    assert_valid_event_permission, assert_valid_organizer_permission,
+)
 from pretix.helpers.http import redirect_to_url
 
 
@@ -56,6 +59,8 @@ def event_permission_required(permission):
     if permission == 'can_change_settings':
         # Legacy support
         permission = 'event.settings.general:write'
+
+    assert_valid_event_permission(permission)
 
     def decorator(function):
         def wrapper(request, *args, **kw):
@@ -79,7 +84,7 @@ class EventPermissionRequiredMixin:
     This mixin is equivalent to the event_permission_required view decorator but
     is in a form suitable for class-based views.
     """
-    permission = ''
+    permission = None  # None means "any permission"
 
     @classmethod
     def as_view(cls, **initkwargs):
@@ -92,9 +97,11 @@ def organizer_permission_required(permission):
     This view decorator rejects all requests with a 403 response which are not from
     users having the given permission for the event the request is associated with.
     """
-    if permission == 'event.settings.general:write':
+    if permission in ('event.settings.general:write', 'can_change_settings', 'can_change_event_settings'):
         # Legacy support
         permission = 'organizer.settings.general:write'
+
+    assert_valid_organizer_permission(permission)
 
     def decorator(function):
         def wrapper(request, *args, **kw):
@@ -116,7 +123,7 @@ class OrganizerPermissionRequiredMixin:
     This mixin is equivalent to the organizer_permission_required view decorator but
     is in a form suitable for class-based views.
     """
-    permission = ''
+    permission = None  # None means "any permission"
 
     @classmethod
     def as_view(cls, **initkwargs):

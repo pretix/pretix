@@ -317,8 +317,11 @@ def generate_api_token():
 class TeamQuerySet(models.QuerySet):
     @classmethod
     def event_permission_q(cls, perm_name):
+        from ..permissions import assert_valid_event_permission
+
         if perm_name.startswith('can_') and perm_name in OLD_TO_NEW_EVENT_COMPAT:  # legacy
             return reduce(operator.and_, [cls.event_permission_q(p) for p in OLD_TO_NEW_EVENT_COMPAT[perm_name]])
+        assert_valid_event_permission(perm_name, allow_legacy=False)
         return (
             Q(all_event_permissions=True) |
             Q(**{f'limit_event_permissions__{perm_name}': True})
@@ -326,8 +329,11 @@ class TeamQuerySet(models.QuerySet):
 
     @classmethod
     def organizer_permission_q(cls, perm_name):
+        from ..permissions import assert_valid_organizer_permission
+
         if perm_name.startswith('can_') and perm_name in OLD_TO_NEW_ORGANIZER_COMPAT:  # legacy
             return reduce(operator.and_, [cls.organizer_permission_q(p) for p in OLD_TO_NEW_ORGANIZER_COMPAT[perm_name]])
+        assert_valid_organizer_permission(perm_name, allow_legacy=False)
         return (
             Q(all_organizer_permissions=True) |
             Q(**{f'limit_organizer_permissions__{perm_name}': True})
@@ -436,13 +442,19 @@ class Team(LoggedModel):
         return self.can_change_event_settings
 
     def has_event_permission(self, perm_name):
+        from ..permissions import assert_valid_event_permission
+
         if perm_name.startswith('can_') and hasattr(self, perm_name):  # legacy
             return getattr(self, perm_name)
+        assert_valid_event_permission(perm_name, allow_legacy=False)
         return self.all_event_permissions or self.limit_event_permissions.get(perm_name, False)
 
     def has_organizer_permission(self, perm_name):
+        from ..permissions import assert_valid_organizer_permission
+
         if perm_name.startswith('can_') and hasattr(self, perm_name):  # legacy
             return getattr(self, perm_name)
+        assert_valid_organizer_permission(perm_name, allow_legacy=False)
         return self.all_organizer_permissions or self.limit_organizer_permissions.get(perm_name, False)
 
     def permission_for_event(self, event):
