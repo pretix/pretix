@@ -91,7 +91,7 @@ class OutgoingMail(models.Model):
     # e.g. the event or order is deleted, we want SET_NULL behavior. However, in that case, the email
     # would be an "orphan" forever and there's no way to remove the personal information.
     # We try to find a middle-ground with the following behaviour:
-    # - The email is always deleted if the entire organize or user is deleted
+    # - The email is always deleted if the entire organizer or user is deleted
     # - The email is always deleted if it has not yet been sent
     # - The email is kept in all other cases
     # This is only an acceptable trade-off since emails are stored for a short period only, and because
