@@ -36,7 +36,9 @@ from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 from pretix.api.models import OAuthAccessToken
 from pretix.base.models import Device, Event, User
-from pretix.base.models.auth import SuperuserPermissionSet
+from pretix.base.models.auth import (
+    EventPermissionSet, OrganizerPermissionSet, SuperuserPermissionSet,
+)
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.helpers.security import (
     Session2FASetupRequired, SessionInvalid, SessionPasswordChangeRequired,
@@ -85,7 +87,7 @@ class EventPermission(BasePermission):
             if isinstance(perm_holder, User) and perm_holder.has_active_staff_session(request.session.session_key):
                 request.eventpermset = SuperuserPermissionSet()
             else:
-                request.eventpermset = perm_holder.get_event_permission_set(request.organizer, request.event)
+                request.eventpermset = EventPermissionSet(perm_holder.get_event_permission_set(request.organizer, request.event))
 
             if isinstance(required_permission, (list, tuple)):
                 if not any(p in request.eventpermset for p in required_permission):
@@ -100,7 +102,7 @@ class EventPermission(BasePermission):
             if isinstance(perm_holder, User) and perm_holder.has_active_staff_session(request.session.session_key):
                 request.orgapermset = SuperuserPermissionSet()
             else:
-                request.orgapermset = perm_holder.get_organizer_permission_set(request.organizer)
+                request.orgapermset = OrganizerPermissionSet(perm_holder.get_organizer_permission_set(request.organizer))
 
             if isinstance(required_permission, (list, tuple)):
                 if not any(p in request.eventpermset for p in required_permission):
