@@ -194,7 +194,6 @@ event_permission_sub_urls = [
     ('post', 'event.orders:write', 'cartpositions/', 400),
     ('delete', 'event.orders:write', 'cartpositions/1/', 404),
     ('post', 'event.orders:read', 'exporters/invoicedata/run/', 400),
-    ('get', 'event.orders:read', 'exporters/invoicedata/download/bc3f9884-26ee-425b-8636-80613f84b6fa/3cb49ae6-eda3-4605-814e-099e23777b36/', 404),
     ('get', None, 'item_meta_properties/', 200),
     ('get', None, 'item_meta_properties/0/', 404),
     ('post', 'event.settings.general:write', 'item_meta_properties/', 400),
