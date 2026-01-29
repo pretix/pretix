@@ -103,7 +103,7 @@
                                     <br><small class="text-muted">{% trans "Cc" context "email" %}: {{ m.cc|join:", " }}</small>
                                 {% endif %}
                                 {% if m.bcc %}
-                                    <br><small class="text-muted">{% trans "Bcc" context "email" %} {{ m.bcc|join:", " }}</small>
+                                    <br><small class="text-muted">{% trans "Bcc" context "email" %}: {{ m.bcc|join:", " }}</small>
                                 {% endif %}
                             </td>
                             <td>
