@@ -55,11 +55,10 @@ class ExporterSerializer(serializers.Serializer):
 class JobRunSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         ex = kwargs.pop('exporter')
-        events = kwargs.pop('events', None)
         super().__init__(*args, **kwargs)
-        if events is not None and not isinstance(ex, OrganizerLevelExportMixin):
+        if ex.is_multievent and not isinstance(ex, OrganizerLevelExportMixin):
             self.fields["events"] = serializers.SlugRelatedField(
-                queryset=events,
+                queryset=ex.events,
                 required=False,
                 allow_empty=False,
                 slug_field='slug',

@@ -73,6 +73,9 @@ class BaseExporter:
             self.events = Event.objects.filter(pk=event.pk)
             self.timezone = event.timezone
 
+        if hasattr(self, 'organizer_required_permission'):
+            raise TypeError("Deprecated attribute organizer_required_permission no longer supported.")
+
     def __str__(self):
         return self.identifier
 
@@ -176,15 +179,27 @@ class BaseExporter:
         """
         return True
 
-
-class OrganizerLevelExportMixin:
-    @property
-    def organizer_required_permission(self) -> str:
+    @classmethod
+    def get_required_event_permission(cls) -> str:
         """
-        The permission level required to use this exporter. Only useful for organizer-level exports,
-        not for event-level exports.
+        The permission level required to use this exporter for events. For multi-event-exports, this will be used
+        to limit the selection of events. Will be ignored if the `OrganizerLevelExportMixin` mixin is used.
         """
         return 'event.orders:read'
+
+
+class OrganizerLevelExportMixin:
+    @classmethod
+    def required_event_permission(cls):
+        raise TypeError("required_event_permission may not be called on OrganizerLevelExportMixin")
+
+    @classmethod
+    def get_required_organizer_permission(cls) -> str:
+        """
+        The permission level required to use this exporter. Must be set for organizer-level exports. Set to `None` to
+        allow everyone with any access to the organizer.
+        """
+        raise NotImplementedError()
 
 
 class ListExporter(BaseExporter):

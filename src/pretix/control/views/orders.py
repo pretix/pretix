@@ -92,7 +92,9 @@ from pretix.base.payment import PaymentException
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.cancelevent import cancel_event
-from pretix.base.services.export import export, scheduled_event_export
+from pretix.base.services.export import (
+    export, init_event_exporters, scheduled_event_export,
+)
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
     invoice_qualified, regenerate_invoice, transmit_invoice,
@@ -109,9 +111,7 @@ from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, validate_vat_id,
 )
 from pretix.base.services.tickets import generate
-from pretix.base.signals import (
-    order_modified, register_data_exporters, register_ticket_outputs,
-)
+from pretix.base.signals import order_modified, register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.mixins import OrderQuestionsViewMixin
@@ -2641,12 +2641,7 @@ class OrderGo(EventPermissionRequiredMixin, View):
 class ExportMixin:
     @cached_property
     def exporters(self):
-        responses = register_data_exporters.send(self.request.event)
-        raw_exporters = [response(self.request.event, self.request.organizer) for r, response in responses if response]
-        raw_exporters = [
-            ex for ex in raw_exporters
-            if ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
-        ]
+        raw_exporters = list(init_event_exporters(self.request.event, user=self.request.user, request=self.request))
         return sorted(
             raw_exporters,
             key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
@@ -2718,7 +2713,7 @@ class ExportMixin:
 
 
 class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, TemplateView):
-    permission = 'event.orders:read'
+    permission = None
     known_errortypes = ['ExportError', 'ExportEmptyError']
     task = export
     template_name = 'pretixcontrol/orders/export_form.html'
@@ -2763,11 +2758,20 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, Templ
         cf.date = now()
         cf.expires = now() + timedelta(hours=24)
         cf.save()
-        return self.do(self.request.event.id, str(cf.id), self.exporter.identifier, data)
+        return self.do(
+            self.request.event.id,
+            user=self.request.user.id,
+            fileid=str(cf.id),
+            provider=self.exporter.identifier,
+            device=None,
+            token=None,
+            form_data=data,
+            staff_session=self.request.user.has_active_staff_session(self.request.session.session_key)
+        )
 
 
 class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
-    permission = 'event.orders:read'
+    permission = None
     paginate_by = 25
     context_object_name = 'scheduled'
 
@@ -2887,7 +2891,7 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
 
 
 class DeleteScheduledExportView(EventPermissionRequiredMixin, ExportMixin, CompatDeleteView):
-    permission = 'event.orders:read'
+    permission = None
     template_name = 'pretixcontrol/orders/export_delete.html'
     context_object_name = 'export'
 

@@ -104,9 +104,10 @@ from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
     PLUGIN_LEVEL_ORGANIZER,
 )
-from pretix.base.services.export import multiexport, scheduled_organizer_export
+from pretix.base.services.export import (
+    init_organizer_exporters, multiexport, scheduled_organizer_export,
+)
 from pretix.base.services.mail import mail, prefix_subject
-from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.exports import ScheduledOrganizerExportForm
@@ -2006,7 +2007,7 @@ class ExportMixin:
                      )),
                     ('events',
                      forms.ModelMultipleChoiceField(
-                         queryset=self.events,
+                         queryset=ex.events,
                          widget=forms.CheckboxSelectMultiple(
                              attrs={
                                  'class': 'scrolling-multiple-choice',
@@ -2020,28 +2021,8 @@ class ExportMixin:
             return ex
 
     @cached_property
-    def events(self):
-        return self.request.user.get_events_with_permission('event.orders:read', request=self.request).filter(
-            organizer=self.request.organizer
-        )
-
-    @cached_property
     def exporters(self):
-        responses = register_multievent_data_exporters.send(self.request.organizer)
-        raw_exporters = [
-            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else self.events,
-                     self.request.organizer)
-            for r, response in responses
-            if response
-        ]
-        raw_exporters = [
-            ex for ex in raw_exporters
-            if (
-                not isinstance(ex, OrganizerLevelExportMixin) or
-                self.request.user.has_organizer_permission(self.request.organizer, ex.organizer_required_permission,
-                                                           self.request)
-            ) and ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
-        ]
+        raw_exporters = list(init_organizer_exporters(self.request.organizer, user=self.request.user, request=self.request))
         return sorted(
             raw_exporters,
             key=lambda ex: (
@@ -2232,11 +2213,17 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         return self.get_scheduled_queryset()
 
     def has_permission(self):
-        if isinstance(self.exporter, OrganizerLevelExportMixin):
-            if not self.request.user.has_organizer_permission(self.request.organizer, self.exporter.organizer_required_permission):
+        # Check if permission exists even without staff session
+        if self.exporter:
+            if isinstance(self.exporter, OrganizerLevelExportMixin):
+                if not self.request.user.has_organizer_permission(self.request.organizer, self.exporter.get_required_organizer_permission()):
+                    return False
+            else:
+                permission_name = self.exporter.get_required_event_permission()
+                if not any(t.has_event_permission(permission_name) for t in self.request.user.teams.filter(organizer=self.request.organizer)):
+                    return False
+            if not self.exporter.available_for_user(self.request.user):
                 return False
-        if self.exporter and not self.exporter.available_for_user(self.request.user):
-            return False
         return True
 
     def get_context_data(self, **kwargs):

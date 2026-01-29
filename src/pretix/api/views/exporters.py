@@ -38,14 +38,12 @@ from pretix.api.serializers.exporters import (
     ExporterSerializer, JobRunSerializer, ScheduledEventExportSerializer,
     ScheduledOrganizerExportSerializer,
 )
-from pretix.base.exporter import OrganizerLevelExportMixin
 from pretix.base.models import (
-    CachedFile, Device, Event, ScheduledEventExport, ScheduledOrganizerExport,
+    CachedFile, Device, ScheduledEventExport, ScheduledOrganizerExport,
     TeamAPIToken,
 )
-from pretix.base.services.export import export, multiexport
-from pretix.base.signals import (
-    register_data_exporters, register_multievent_data_exporters,
+from pretix.base.services.export import (
+    export, init_event_exporters, init_organizer_exporters, multiexport,
 )
 from pretix.helpers.http import ChunkBasedFileResponse
 
@@ -111,7 +109,7 @@ class ExportersMixin:
     @action(detail=True, methods=['POST'])
     def run(self, *args, **kwargs):
         instance = self.get_object()
-        serializer = JobRunSerializer(exporter=instance, data=self.request.data, **self.get_serializer_kwargs())
+        serializer = JobRunSerializer(exporter=instance, data=self.request.data)
         serializer.is_valid(raise_exception=True)
 
         cf = CachedFile(web_download=True)
@@ -136,27 +134,34 @@ class ExportersMixin:
 
 
 class EventExportersViewSet(ExportersMixin, viewsets.ViewSet):
-    permission = 'event.orders:read'
-
-    def get_serializer_kwargs(self):
-        return {}
+    permission = None
 
     @cached_property
     def exporters(self):
+        raw_exporters = list(init_event_exporters(
+            event=self.request.event,
+            user=self.request.user if self.request.user and self.request.user.is_authenticated else None,
+            token=self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None,
+            device=self.request.auth if isinstance(self.request.auth, Device) else None,
+            request=self.request,
+        ))
         exporters = []
-        responses = register_data_exporters.send(self.request.event)
-        raw_exporters = [response(self.request.event, self.request.organizer) for r, response in responses if response]
-        raw_exporters = [
-            ex for ex in raw_exporters
-            if ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
-        ]
         for ex in sorted(raw_exporters, key=lambda ex: str(ex.verbose_name)):
             ex._serializer = JobRunSerializer(exporter=ex)
             exporters.append(ex)
         return exporters
 
     def do_export(self, cf, instance, data):
-        return export.apply_async(args=(self.request.event.id, str(cf.id), instance.identifier, data))
+        return export.apply_async(args=(
+            self.request.event.id,
+        ), kwargs={
+            'user': self.request.user.pk if self.request.user and self.request.user.is_authenticated else None,
+            'token': self.request.auth.pk if isinstance(self.request.auth, TeamAPIToken) else None,
+            'device': self.request.auth.pk if isinstance(self.request.auth, Device) else None,
+            'fileid': str(cf.id),
+            'provider': instance.identifier,
+            'form_data': data,
+        })
 
 
 class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
@@ -164,47 +169,23 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
 
     @cached_property
     def exporters(self):
+        raw_exporters = list(init_organizer_exporters(
+            organizer=self.request.organizer,
+            user=self.request.user if self.request.user and self.request.user.is_authenticated else None,
+            token=self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None,
+            device=self.request.auth if isinstance(self.request.auth, Device) else None,
+            request=self.request,
+        ))
         exporters = []
-        if isinstance(self.request.auth, (Device, TeamAPIToken)):
-            perm_holder = self.request.auth
-        else:
-            perm_holder = self.request.user
-        events = perm_holder.get_events_with_permission('event.orders:read', request=self.request).filter(
-            organizer=self.request.organizer
-        )
-        responses = register_multievent_data_exporters.send(self.request.organizer)
-        raw_exporters = [
-            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else events, self.request.organizer)
-            for r, response in responses
-            if response
-        ]
-        raw_exporters = [
-            ex for ex in raw_exporters
-            if (
-                not isinstance(ex, OrganizerLevelExportMixin) or
-                perm_holder.has_organizer_permission(self.request.organizer, ex.organizer_required_permission, self.request)
-            ) and ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
-        ]
         for ex in sorted(raw_exporters, key=lambda ex: str(ex.verbose_name)):
-            ex._serializer = JobRunSerializer(exporter=ex, events=events)
+            ex._serializer = JobRunSerializer(exporter=ex)
             exporters.append(ex)
         return exporters
-
-    def get_serializer_kwargs(self):
-        if isinstance(self.request.auth, (Device, TeamAPIToken)):
-            perm_holder = self.request.auth
-        else:
-            perm_holder = self.request.user
-        return {
-            'events': perm_holder.get_events_with_permission('event.orders:read', request=self.request).filter(
-                organizer=self.request.organizer
-            )
-        }
 
     def do_export(self, cf, instance, data):
         return multiexport.apply_async(kwargs={
             'organizer': self.request.organizer.id,
-            'user': self.request.user.id if self.request.user.is_authenticated else None,
+            'user': self.request.user.id if self.request.user and self.request.user.is_authenticated else None,
             'token': self.request.auth.pk if isinstance(self.request.auth, TeamAPIToken) else None,
             'device': self.request.auth.pk if isinstance(self.request.auth, Device) else None,
             'fileid': str(cf.id),
@@ -258,8 +239,13 @@ class ScheduledEventExportViewSet(ScheduledExportersViewSet):
 
     @cached_property
     def exporters(self):
-        responses = register_data_exporters.send(self.request.event)
-        exporters = [response(self.request.event, self.request.organizer) for r, response in responses if response]
+        exporters = list(init_event_exporters(
+            event=self.request.event,
+            user=self.request.user if self.request.user and self.request.user.is_authenticated else None,
+            token=self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None,
+            device=self.request.auth if isinstance(self.request.auth, Device) else None,
+            request=self.request,
+        ))
         return {e.identifier: e for e in exporters}
 
     def perform_update(self, serializer):
@@ -322,22 +308,14 @@ class ScheduledOrganizerExportViewSet(ScheduledExportersViewSet):
         return ctx
 
     @cached_property
-    def events(self):
-        if isinstance(self.request.auth, (TeamAPIToken, Device)):
-            return self.request.auth.get_events_with_permission('event.orders:read')
-        elif self.request.user.is_authenticated:
-            return self.request.user.get_events_with_permission('event.orders:read', self.request).filter(
-                organizer=self.request.organizer
-            )
-
-    @cached_property
     def exporters(self):
-        responses = register_multievent_data_exporters.send(self.request.organizer)
-        exporters = [
-            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else self.events,
-                     self.request.organizer)
-            for r, response in responses if response
-        ]
+        exporters = list(init_organizer_exporters(
+            organizer=self.request.organizer,
+            user=self.request.user if self.request.user and self.request.user.is_authenticated else None,
+            token=self.request.auth if isinstance(self.request.auth, TeamAPIToken) else None,
+            device=self.request.auth if isinstance(self.request.auth, Device) else None,
+            request=self.request,
+        ))
         return {e.identifier: e for e in exporters}
 
     def perform_update(self, serializer):
