@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-01-29 13:00+0000\n"
+"PO-Revision-Date: 2026-01-29 19:43+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/nl_Informal/>\n"
@@ -273,7 +273,7 @@ msgstr "Dit ticket is nog niet betaald. Wil je toch doorgaan?"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Additional information required"
-msgstr "Extra informatie nodig"
+msgstr "Aanvullende informatie vereist"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Valid ticket"
@@ -352,11 +352,8 @@ msgid "No"
 msgstr "Nee"
 
 #: pretix/static/lightbox/js/lightbox.js:96
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Close"
 msgid "close"
-msgstr "Sluiten"
+msgstr "sluiten"
 
 #: pretix/static/pretixbase/js/addressform.js:101
 #: pretix/static/pretixpresale/js/ui/main.js:529
@@ -493,32 +490,24 @@ msgid "Number of previous entries since midnight"
 msgstr "Aantal eerdere binnenkomsten sinds middernacht"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries since"
-msgstr "Aantal eerdere binnenkomsten"
+msgstr "Aantal eerdere binnenkomsten sinds"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries before"
-msgstr "Aantal eerdere binnenkomsten"
+msgstr "Aantal eerdere binnenkomsten vóór"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
 msgid "Number of days with a previous entry"
 msgstr "Aantal dagen met een eerdere binnenkomst"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry since"
-msgstr "Aantal dagen met een eerdere binnenkomst"
+msgstr "Aantal dagen met een eerdere binnenkomst sinds"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry before"
-msgstr "Aantal dagen met een eerdere binnenkomst"
+msgstr "Aantal dagen met een eerdere binnenkomst voor"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
 msgid "Minutes since last entry (-1 on first entry)"
@@ -604,16 +593,12 @@ msgid "Group of objects"
 msgstr "Groep van objecten"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:909
-#, fuzzy
-#| msgid "Text object"
 msgid "Text object (deprecated)"
-msgstr "Tekstobject"
+msgstr "Tekstobject (verouderd)"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:911
-#, fuzzy
-#| msgid "Text object"
 msgid "Text box"
-msgstr "Tekstobject"
+msgstr "Tekstveld"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Barcode area"
@@ -661,19 +646,18 @@ msgid "Unknown error."
 msgstr "Onbekende fout."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:309
-#, fuzzy
-#| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
-msgstr "Je kleur heeft een goed contrast, en is gemakkelijk te lezen!"
+msgstr ""
+"Je kleur heeft een groot contrast en zorgt voor een uitstekende "
+"toegankelijkheid."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:313
-#, fuzzy
-#| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr ""
-"Je kleur heeft een redelijk contrast, en is waarschijnlijk goed te lezen!"
+"Je kleur heeft een behoorlijk contrast en voldoet aan de minimale "
+"toegankelijkheidseisen."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
@@ -725,10 +709,8 @@ msgid "Calculating default price…"
 msgstr "Standaardprijs berekenen…"
 
 #: pretix/static/pretixcontrol/js/ui/plugins.js:69
-#, fuzzy
-#| msgid "Search results"
 msgid "No results"
-msgstr "Zoekresultaten"
+msgstr "Geen resultaten"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:41
 msgid "Others"
@@ -745,12 +727,12 @@ msgstr[0] "(één andere datum)"
 msgstr[1] "({num} andere datums)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:47
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "De items in je winkelwagen zijn niet meer voor je gereserveerd."
+msgstr ""
+"De artikelen in je winkelwagen zijn niet langer voor je gereserveerd. Je "
+"kunt je bestelling nog steeds voltooien zolang ze beschikbaar zijn."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:49
 msgid "Cart expired"
@@ -762,30 +744,23 @@ msgid "Your cart is about to expire."
 msgstr "Je winkelwagen verloopt bijna."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:62
-#, fuzzy
-#| msgid "The items in your cart are reserved for you for one minute."
-#| msgid_plural ""
-#| "The items in your cart are reserved for you for {num} minutes."
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-"De items in je winkelwagen zijn nog één minuut voor je gereserveerd."
+msgstr[0] "De artikelen in je winkelwagen worden één minuut voor je gereserveerd."
 msgstr[1] ""
-"De items in je winkelwagen zijn nog {num} minuten voor je gereserveerd."
+"De artikelen in je winkelwagen worden {num} minuten voor je gereserveerd."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
-#, fuzzy
-#| msgid "Cart expired"
 msgid "Your cart has expired."
-msgstr "Winkelwagen is verlopen"
+msgstr "Je winkelwagen is verlopen."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
-msgstr "De items in je winkelwagen zijn niet meer voor je gereserveerd."
+msgstr ""
+"De artikelen in je winkelwagen zijn niet langer voor je gereserveerd. Je "
+"kunt je bestelling nog steeds voltooien zolang ze beschikbaar zijn."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
@@ -858,26 +833,21 @@ msgid "New price: %s"
 msgstr "Nieuwe prijs: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
-#, fuzzy
-#| msgid "Selected only"
 msgctxt "widget"
 msgid "Select"
-msgstr "Alleen geselecteerde"
+msgstr "Selecteren"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
-#, fuzzy, javascript-format
-#| msgid "Selected only"
+#, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr "Alleen geselecteerde"
+msgstr "Selecteer %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
-#, fuzzy, javascript-format
-#| msgctxt "widget"
-#| msgid "See variations"
+#, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr "Zie variaties"
+msgstr "Selecteer variant %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 msgctxt "widget"
@@ -948,12 +918,9 @@ msgstr "Alleen beschikbaar met een voucher"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 #: pretix/static/pretixpresale/js/widget/widget.js:43
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Not yet available"
-msgstr "nu beschikbaar: %s"
+msgstr "Nog niet beschikbaar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
@@ -961,12 +928,9 @@ msgid "Not available anymore"
 msgstr "Niet meer beschikbaar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Currently not available"
-msgstr "nu beschikbaar: %s"
+msgstr "Momenteel niet beschikbaar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 #, javascript-format
@@ -999,12 +963,9 @@ msgid "Open ticket shop"
 msgstr "Open de kaartjeswinkel"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Checkout"
-msgstr "Doorgaan met afrekenen"
+msgstr "Afrekenen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
@@ -1063,12 +1024,9 @@ msgid "Close"
 msgstr "Sluiten"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Resume checkout"
 msgctxt "widget"
 msgid "Close checkout"
-msgstr "Doorgaan met afrekenen"
+msgstr "Afrekening afsluiten"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
@@ -1081,20 +1039,14 @@ msgid "Continue"
 msgstr "Ga verder"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Show variants"
-msgstr "Zie variaties"
+msgstr "Varianten weergeven"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Hide variants"
-msgstr "Zie variaties"
+msgstr "Varianten verbergen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgctxt "widget"
@@ -1218,7 +1170,7 @@ msgstr "februari"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:96
 msgid "March"
-msgstr "Maart"
+msgstr "maart"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:97
 msgid "April"
@@ -1226,7 +1178,7 @@ msgstr "april"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:98
 msgid "May"
-msgstr "Mei"
+msgstr "mei"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:99
 msgid "June"
@@ -1242,7 +1194,7 @@ msgstr "augustus"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:102
 msgid "September"
-msgstr "September"
+msgstr "september"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:103
 msgid "October"
@@ -1250,11 +1202,11 @@ msgstr "oktober"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:104
 msgid "November"
-msgstr "November"
+msgstr "november"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
-msgstr "December"
+msgstr "december"
 
 #~ msgid "Time zone:"
 #~ msgstr "Tijdzone:"
