@@ -171,13 +171,39 @@
                 <div role="tabpanel"
                      class="tab-pane {% if not mail.is_failed %}active{% endif %}"
                      id="tab-html">
-                    {{ data_url|json_script:"mail_body_html" }}
+                    {% if mail.sensitive %}
+                        <div class="empty-collection">
+                            <p>
+                                {% icon "eye-slash 4x" %}
+                            </p>
+                            <p>
+                                {% blocktrans trimmed %}
+                                    Sensitive content not shown for security reasons
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    {% else %}
+                        {{ data_url|json_script:"mail_body_html" }}
+                    {% endif %}
                 </div>
             {% endif %}
             <div role="tabpanel"
                  class="tab-pane {% if not mail.is_failed and not mail.body_html %}active{% endif %}"
                  id="tab-text">
-                <pre><code>{{ mail.body_plain }}</code></pre>
+                {% if mail.sensitive %}
+                    <div class="empty-collection">
+                        <p>
+                            {% icon "eye-slash 4x" %}
+                        </p>
+                        <p>
+                            {% blocktrans trimmed %}
+                                Sensitive content not shown for security reasons
+                            {% endblocktrans %}
+                        </p>
+                    </div>
+                {% else %}
+                    <pre><code>{{ mail.body_plain }}</code></pre>
+                {% endif %}
             </div>
             <div role="tabpanel"
                  class="tab-pane"

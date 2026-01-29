@@ -293,6 +293,7 @@ class Customer(LoggedModel):
             locale=self.locale,
             customer=self,
             organizer=self.organizer,
+            sensitive=True,
         )
 
     def usable_gift_cards(self, used_cards=[]):

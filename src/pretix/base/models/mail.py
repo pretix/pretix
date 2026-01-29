@@ -135,6 +135,7 @@ class OutgoingMail(models.Model):
         null=True, blank=True,
     )
 
+    sensitive = models.BooleanField(default=False)
     subject = models.TextField()
     body_plain = models.TextField()
     body_html = models.TextField(null=True)

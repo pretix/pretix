@@ -325,6 +325,7 @@ class ResetPasswordView(FormView):
             locale=customer.locale,
             customer=customer,
             organizer=self.request.organizer,
+            sensitive=True,
         )
         messages.success(
             self.request,

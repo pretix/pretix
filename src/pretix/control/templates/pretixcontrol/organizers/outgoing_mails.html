@@ -96,6 +96,9 @@
                                 <a href="{% url "control:organizer.outgoingmail" organizer=request.organizer.slug mail=m.id %}">
                                     {{ m.subject }}
                                 </a>
+                                {% if m.sensitive %}
+                                    <span class="text-muted">{% icon "eye-slash" %}</span>
+                                {% endif %}
                             </td>
                             <td>
                                 {{ m.to|join:", " }}

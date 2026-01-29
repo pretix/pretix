@@ -3011,6 +3011,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                 locale=self.customer.locale,
                 customer=self.customer,
                 organizer=self.request.organizer,
+                sensitive=True,
             )
             messages.success(
                 self.request,

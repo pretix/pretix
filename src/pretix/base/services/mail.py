@@ -152,7 +152,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
          position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
          customer: Customer = None, invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None,
          attach_ical=False, attach_cached_files: Sequence = None, attach_other_files: list=None,
-         plain_text_only=False, no_order_links=False, cc: Sequence[str]=None, bcc: Sequence[str]=None):
+         plain_text_only=False, no_order_links=False, cc: Sequence[str]=None, bcc: Sequence[str]=None,
+         sensitive: bool=False):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -208,6 +209,9 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                            only allowed to use together with ``plain_text_only`` since HTML renderers add their own
                            links.
 
+    :param sensitive: If set to ``True``, the email content will not be shown as part of log entries, used e.g. for
+                      password resets. Bcc will also not be used.
+
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
     """
@@ -228,7 +232,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     headers.setdefault('X-PX-Correlation', str(guid))
 
     bcc = list(bcc or [])
-    if settings_holder and settings_holder.settings.mail_bcc:
+    if settings_holder and settings_holder.settings.mail_bcc and not sensitive:
         for bcc_mail in settings_holder.settings.mail_bcc.split(','):
             bcc.append(bcc_mail.strip())
 
@@ -321,6 +325,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             should_attach_tickets=attach_tickets,
             should_attach_ical=attach_ical,
             should_attach_other_files=attach_other_files or [],
+            sensitive=sensitive,
         )
         if invoices and not position:
             m.should_attach_invoices.add(*invoices)
@@ -721,6 +726,7 @@ def mail_send_task(self, *args, outgoing_mail: int) -> bool:
                         },
                     }
                 )
+    return True
 
 
 def mail_send(to: List[str], subject: str, body: str, html: Optional[str], sender: str,
