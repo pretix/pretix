@@ -121,6 +121,8 @@ def get_all_organizer_permissions() -> Set[str]:
 
 
 def assert_valid_event_permission(permission, allow_legacy=True, allow_tuple=True):
+    if allow_legacy and permission == "can_change_settings":
+        permission = "can_change_event_settings"
     if permission is None:
         return
     if isinstance(permission, (list, tuple)) and allow_tuple:

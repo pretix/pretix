@@ -418,6 +418,9 @@ class Team(LoggedModel):
                 if self.all_event_permissions or all(self.limit_event_permissions.get(kk) for kk in v):
                     result.add(k)
 
+            if "can_change_event_settings" in result:
+                result.add("can_change_settings")
+
         return result
 
     def organizer_permission_set(self, include_legacy=True) -> set:
