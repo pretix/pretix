@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-28 18:00+0000\n"
+"PO-Revision-Date: 2026-01-30 22:00+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -2144,7 +2144,7 @@ msgstr "特別な注意が必要"
 #: pretix/base/models/items.py:1249 pretix/base/models/orders.py:289
 #: pretix/plugins/checkinlists/exporters.py:526
 msgid "Check-in text"
-msgstr "クライアントID"
+msgstr "チェックインテキスト"
 
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:668
 #: pretix/base/models/items.py:1169
@@ -2436,7 +2436,7 @@ msgstr "メールアドレスが確認されました"
 #: pretix/base/exporters/orderlist.py:503
 #: pretix/base/exporters/orderlist.py:703
 msgid "External customer ID"
-msgstr "内部コメント"
+msgstr "外部顧客ID"
 
 #: pretix/base/exporters/orderlist.py:316
 #, python-brace-format
@@ -4531,7 +4531,7 @@ msgstr "チェックインキャンセル"
 
 #: pretix/base/models/customers.py:62
 msgid "Provider name"
-msgstr "イベント名"
+msgstr "プロバイダー名"
 
 #: pretix/base/models/customers.py:67
 msgid "Login button label"
@@ -5645,11 +5645,11 @@ msgstr ""
 
 #: pretix/base/models/items.py:738 pretix/control/forms/item.py:739
 msgid "Start of validity"
-msgstr "先行販売開始"
+msgstr "有効期間の開始"
 
 #: pretix/base/models/items.py:739
 msgid "End of validity"
-msgstr "先行販売終了"
+msgstr "有効期間の終了"
 
 #: pretix/base/models/items.py:742
 msgid "Minutes"
@@ -6364,7 +6364,7 @@ msgstr "メタ情報"
 
 #: pretix/base/models/orders.py:305
 msgid "API meta information"
-msgstr "イベント開催地"
+msgstr "APIメタ情報"
 
 #: pretix/base/models/orders.py:419 pretix/plugins/sendmail/forms.py:236
 #: pretix/plugins/sendmail/forms.py:389 pretix/plugins/sendmail/views.py:269
@@ -6819,7 +6819,7 @@ msgstr "リバースチャージ"
 
 #: pretix/base/models/tax.py:167
 msgid "Tax free"
-msgstr "税率"
+msgstr "非課税"
 
 #: pretix/base/models/tax.py:170
 msgctxt "tax_code"
@@ -7184,7 +7184,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:351
 msgid "You cannot select a product that belongs to a different event."
-msgstr "この注文には請求書を発行することができません。"
+msgstr "別のイベントに属する商品を選択することはできません。"
 
 #: pretix/base/models/vouchers.py:353 pretix/base/models/vouchers.py:363
 msgid ""
@@ -7984,7 +7984,7 @@ msgstr "サンプルシティ"
 
 #: pretix/base/pdf.py:366
 msgid "Invoice address state"
-msgstr "請求日"
+msgstr "請求先住所の都道府県"
 
 #: pretix/base/pdf.py:367
 msgid "Sample State"
@@ -8784,7 +8784,7 @@ msgstr "このエクスポートを実行するための十分な権限があり
 
 #: pretix/base/services/export.py:198
 msgid "Export failed"
-msgstr "エクスポート形式"
+msgstr "エクスポートに失敗しました"
 
 #: pretix/base/services/export.py:215
 msgid "Permission denied."
@@ -9604,7 +9604,7 @@ msgstr ""
 
 #: pretix/base/settings.py:282 pretix/base/settings.py:313
 msgid "Gift card currency"
-msgstr "イベント通貨"
+msgstr "ギフトカードの通貨"
 
 #: pretix/base/settings.py:300
 msgid "Automatically create a new gift card if a new chip is encoded"
@@ -13174,7 +13174,7 @@ msgstr "週ごとに"
 #: pretix/base/timeframes.py:121
 msgctxt "reporting_timeframe"
 msgid "Current week to date"
-msgstr "一番初めの日付"
+msgstr "今週（現在まで）"
 
 #: pretix/base/timeframes.py:130
 msgctxt "reporting_timeframe"
@@ -13241,7 +13241,7 @@ msgstr "次の四半期"
 #: pretix/base/timeframes.py:222
 msgctxt "reporting_timeframe"
 msgid "Current year"
-msgstr "クライアントID"
+msgstr "今年"
 
 #: pretix/base/timeframes.py:226 pretix/base/timeframes.py:235
 #: pretix/base/timeframes.py:244 pretix/base/timeframes.py:253
@@ -13300,7 +13300,7 @@ msgstr "カスタム時間枠"
 #: pretix/base/timeframes.py:326
 msgctxt "reporting_timeframe"
 msgid "All time"
-msgstr "全ての請求書"
+msgstr "全期間"
 
 #: pretix/base/timeline.py:60
 msgctxt "timeline"
@@ -13565,7 +13565,7 @@ msgstr "チェックインの時間"
 
 #: pretix/control/forms/checkin.py:183
 msgid "Check-in type"
-msgstr "クライアントID"
+msgstr "チェックインタイプ"
 
 #: pretix/control/forms/checkin.py:187
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
@@ -13777,7 +13777,7 @@ msgstr "少なくとも一部を消費者に販売する場合に推奨されま
 
 #: pretix/control/forms/event.py:819
 msgid "Prices excluding tax"
-msgstr "税込価格"
+msgstr "税抜価格"
 
 #: pretix/control/forms/event.py:820
 msgid "Recommended only if you sell tickets primarily to business customers."
@@ -15945,7 +15945,7 @@ msgstr "このドメインはすでに別のイベントや主催者によって
 
 #: pretix/control/forms/organizer.py:185
 msgid "Do not choose an event for this mode."
-msgstr "この注文には請求書を発行することができません。"
+msgstr "このモードではイベントを選択しないでください。"
 
 #: pretix/control/forms/organizer.py:190
 msgid ""
@@ -16126,7 +16126,7 @@ msgstr "選択された主催者はすでに招待されています。"
 
 #: pretix/control/forms/organizer.py:1245
 msgid "A sales channel with the same identifier already exists."
-msgstr "同じコードの引換券が既にイベントカートにあります。"
+msgstr "同じ識別子の販売チャネルが既に存在します。"
 
 #: pretix/control/forms/organizer.py:1257
 msgid "Events with active plugin"
@@ -17170,11 +17170,11 @@ msgstr "新しいギフトカードの受け入れ業者が招待されました
 
 #: pretix/control/logdisplay.py:705
 msgid "A gift card acceptor has been removed."
-msgstr "このユーザーは既にチームへの招待を受け取っています。"
+msgstr "ギフトカードの受入先が削除されました。"
 
 #: pretix/control/logdisplay.py:706
 msgid "A gift card issuer has been removed or declined."
-msgstr "このユーザーは既にチームへの招待を受け取っています。"
+msgstr "ギフトカードの発行元が削除または辞退されました。"
 
 #: pretix/control/logdisplay.py:707
 msgid "A new gift card issuer has been accepted."
@@ -17537,7 +17537,7 @@ msgstr "このイベントにメタプロパティが追加されました。"
 
 #: pretix/control/logdisplay.py:825
 msgid "A meta property has been removed from this event."
-msgstr "このユーザーは既にチームへの招待を受け取っています。"
+msgstr "このイベントからメタプロパティが削除されました。"
 
 #: pretix/control/logdisplay.py:826
 msgid "A meta property has been changed on this event."
@@ -18065,7 +18065,7 @@ msgstr "SSOクライアント"
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:6
 msgid "SSO providers"
-msgstr "お支払方法"
+msgstr "SSOプロバイダー"
 
 #: pretix/control/navigation.py:638 pretix/control/navigation.py:645
 msgid "Devices"
@@ -19939,7 +19939,7 @@ msgstr "ショップのURL:"
 #: pretix/control/templates/pretixcontrol/event/index.html:27
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:57
 msgid "Create QR code"
-msgstr "注文番号"
+msgstr "QRコードを作成"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:36
 msgid ""
@@ -21003,7 +21003,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:45
 msgid "Custom rules"
-msgstr "国"
+msgstr "カスタムルール"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:47
 msgid ""
@@ -21902,7 +21902,7 @@ msgstr "チェックインと有効期間"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:226
 msgid "Duration"
-msgstr "概要"
+msgstr "期間"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:228
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
@@ -21975,7 +21975,7 @@ msgstr "新しいカテゴリを作成"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:34
 msgid "Category type"
-msgstr "クライアントID"
+msgstr "カテゴリータイプ"
 
 #: pretix/control/templates/pretixcontrol/items/categories.html:52
 #: pretix/control/templates/pretixcontrol/items/discounts.html:138
@@ -23613,7 +23613,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:48
 msgid "Cancel the order irrevocably."
-msgstr "撤回可能な方法で、注文を取り消す。"
+msgstr "注文を取消不可能な形でキャンセルする。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:20
 msgid "How much do you want to refund?"
@@ -24366,7 +24366,7 @@ msgstr "販売チャンネルを追加"
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:13
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:24
 msgid "Channel type"
-msgstr "クライアントID"
+msgstr "チャネルタイプ"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:5
 msgid "Delete sales channel:"
@@ -24955,7 +24955,7 @@ msgstr "招待状の主催者"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:8
 msgid "Gift cards acceptance"
-msgstr "イベント通貨"
+msgstr "ギフトカードの受け入れ"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:11
 msgid ""
@@ -25265,7 +25265,7 @@ msgstr "メディアの種類"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:42
 msgctxt "reusable_media"
 msgid "Connections"
-msgstr "イベント開催地"
+msgstr "関連付け"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:12
@@ -25596,7 +25596,7 @@ msgstr "リードスキャン用のQRコード"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:78
 msgid "Other QR code"
-msgstr "注文番号"
+msgstr "その他のQRコード"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:87
 msgid "Image"
@@ -25704,7 +25704,7 @@ msgstr "編集を開始します"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:240
 msgid "Layout name"
-msgstr "制御ルール"
+msgstr "レイアウト名"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:247
 msgid "Preferred language"
@@ -25816,7 +25816,7 @@ msgstr "QRコードの色"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:415
 msgid "Render without whitespace"
-msgstr "空白でレンダリング"
+msgstr "空白なしでレンダリング"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:417
 msgid ""
@@ -26496,9 +26496,7 @@ msgstr "あなたは、2要素認証の使用が必要な、1つ以上の主催�
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:47
 msgid "Please set up at least one device below."
-msgstr ""
-"申し訳ございませんが、私はデバイスを設定することはできません。しかし、デバイ"
-"スの設定方法についての質問があればお手伝いできます。"
+msgstr "以下で少なくとも1つのデバイスを設定してください。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:49
 msgid "Please activate two-factor authentication using the button below."
@@ -29318,7 +29316,7 @@ msgstr "自動チェックインルールを作成"
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
 msgid "Conditions"
-msgstr "イベント開催地"
+msgstr "条件"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
@@ -29332,7 +29330,7 @@ msgstr "自動チェックインルールを削除してもよろしいですか
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:6
 msgid "Auto check-in rule"
-msgstr "チケットのチェックインが取り消されました"
+msgstr "自動チェックインルール"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:5
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:7
@@ -29466,7 +29464,7 @@ msgstr "開始日"
 
 #: pretix/plugins/badges/exporters.py:482
 msgid "Only include tickets ordered on or after this date."
-msgstr "この日以前に作成された注文に限る。"
+msgstr "この日付以降に注文されたチケットのみを含めます。"
 
 #: pretix/plugins/badges/exporters.py:486
 msgid "End order date"
@@ -31123,7 +31121,7 @@ msgstr "テストモードの注文を無視します"
 
 #: pretix/plugins/reports/accountingreport.py:91
 msgid "Split event series by date"
-msgstr "イベント情報にデータが追加されました"
+msgstr "イベントシリーズを日程ごとに分割"
 
 #: pretix/plugins/reports/accountingreport.py:140
 msgid "Report includes test orders which may be deleted later!"
@@ -31281,7 +31279,7 @@ msgstr "国コード"
 #: pretix/plugins/returnurl/apps.py:30 pretix/plugins/returnurl/apps.py:33
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:5
 msgid "Redirection from order page"
-msgstr "注文ページへのリダイレクト"
+msgstr "注文ページからのリダイレクト"
 
 #: pretix/plugins/returnurl/apps.py:37
 msgid ""
@@ -32481,7 +32479,7 @@ msgstr "Stripe経由でEPS"
 
 #: pretix/plugins/stripe/payment.py:1727
 msgid "Multibanco via Stripe"
-msgstr "Multibanco 経由でStripe"
+msgstr "Stripe経由のMultibanco"
 
 #: pretix/plugins/stripe/payment.py:1731
 msgid ""
@@ -32806,7 +32804,7 @@ msgstr "切断します"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:6
 msgid "Payment instructions"
-msgstr "支払い割り当てのためのID"
+msgstr "お支払い手順"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
@@ -33178,9 +33176,7 @@ msgstr "あなたの名前を入力してください。"
 #: pretix/presale/checkoutflow.py:1084 pretix/presale/checkoutflow.py:1089
 #: pretix/presale/checkoutflow.py:1094
 msgid "Please fill in answers to all required questions."
-msgstr ""
-"Sure, I can help with that. Please provide the questions and I will fill in "
-"the answers for you."
+msgstr "すべての必須項目に回答してください。"
 
 #: pretix/presale/checkoutflow.py:1257
 msgctxt "checkoutflow"
@@ -34957,7 +34953,7 @@ msgstr "注文を変更"
 #: pretix/presale/templates/pretixpresale/event/order.html:386
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
 msgid "You can request to cancel this order."
-msgstr "この注文には請求書を発行することができません。"
+msgstr "この注文のキャンセルをリクエストできます。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:389
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
@@ -35717,7 +35713,7 @@ msgstr "アカウント情報を変更"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_base.html:41
 msgid "customer account information"
-msgstr "国"
+msgstr "顧客アカウント情報"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:28
 #, python-format
@@ -35732,7 +35728,7 @@ msgstr "%(date)s以降失効"
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:46
 #, python-format
 msgid "Valid until %(date)s"
-msgstr "%(date)s以降期限切れ"
+msgstr "%(date)sまで有効"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:66
 msgid "Remaining value:"
@@ -36054,7 +36050,7 @@ msgstr "もう一度やり直します。"
 
 #: pretix/presale/views/event.py:980
 msgid "Fake date time"
-msgstr "イベント開始時間"
+msgstr "テスト用の日時"
 
 #: pretix/presale/views/event.py:992
 msgid "You are not allowed to access time machine mode."
@@ -36062,7 +36058,7 @@ msgstr "あなたはタイムマシンモードにアクセスすることは許
 
 #: pretix/presale/views/event.py:994
 msgid "This feature is only available in test mode."
-msgstr "その日程に製品\"{}\"のお取り扱いはありません。"
+msgstr "この機能はテストモードでのみ利用可能です。"
 
 #: pretix/presale/views/event.py:1011
 msgid "Time machine disabled!"
@@ -36137,11 +36133,11 @@ msgstr "合計金額を減らすような変更はできません。"
 
 #: pretix/presale/views/order.py:1712
 msgid "You may only change your order in a way that increases the total price."
-msgstr "注文を変更する場合は、合計金額を増やすようにすることができます。"
+msgstr "注文の変更は、合計金額が増加する場合のみ可能です。"
 
 #: pretix/presale/views/order.py:1714
 msgid "You may not change your order in a way that changes the total price."
-msgstr "合計金額が変わらないように注文を変更することはできません。"
+msgstr "合計金額が変わるような注文の変更はできません。"
 
 #: pretix/presale/views/order.py:1716
 msgid "You may not change your order in a way that would require a refund."
