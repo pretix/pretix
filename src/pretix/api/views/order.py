@@ -1065,7 +1065,7 @@ with scopes_disabled():
             }
 
 
-class OrderPositionViewSet(viewsets.ModelViewSet):
+class OrderPositionViewSetMixin:
     serializer_class = OrderPositionSerializer
     queryset = OrderPosition.all.none()
     filter_backends = (DjangoFilterBackend, RichOrderingFilter)
@@ -1087,8 +1087,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
+        ctx['pdf_data'] = False
         ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
         return ctx
 
@@ -1098,7 +1097,6 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         else:
             qs = OrderPosition.objects
 
-        qs = qs.filter(order__event=self.request.event)
         if self.request.query_params.get('pdf_data', 'false').lower() == 'true':
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
@@ -1167,6 +1165,40 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             if prov.identifier == identifier:
                 return prov
         raise NotFound('Unknown output provider.')
+
+
+class OrganizerPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
+
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            qs = qs.filter(
+                order__event__organizer=self.request.organizer,
+                order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
+            )
+        elif self.request.user.is_authenticated:
+            qs = qs.filter(
+                order__event__organizer=self.request.organizer,
+                order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
+            )
+
+        return qs
+
+
+class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet):
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        if hasattr(self.request, 'event'):
+            ctx['event'] = self.request.event
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
+        return ctx
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(order__event=self.request.event)
+        return qs
 
     @action(detail=True, methods=['POST'], url_name='price_calc')
     def price_calc(self, request, *args, **kwargs):
