@@ -65,6 +65,9 @@
 
                     {% blocktrans asvar title_reset %}Customer account password reset{% endblocktrans %}
                     {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="reset" title=title_reset items="mail_subject_customer_reset,mail_text_customer_reset" %}
+
+                    {% blocktrans asvar title_security_notice %}Customer account security notification{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="security_notice" title=title_security_notice items="mail_subject_customer_security_notice,mail_text_customer_security_notice" %}
                 </div>
             </fieldset>
         </div>

@@ -2950,6 +2950,28 @@ Best regards,
 
 Your {organizer} team"""))  # noqa: W291
     },
+    'mail_subject_customer_security_notice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Changes to your account at {organizer}")),
+    },
+    'mail_text_customer_security_notice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
+
+the following change has been made to your account at {organizer}:
+
+{message}
+
+You can review and change your account settings here:
+
+{url}
+
+If this change was not performed by you, please contact us immediately.
+
+Best regards,  
+
+Your {organizer} team"""))  # noqa: W291
+    },
     'smtp_use_custom': {
         'default': 'False',
         'type': bool
