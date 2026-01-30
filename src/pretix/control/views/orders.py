@@ -98,9 +98,7 @@ from pretix.base.services.invoices import (
     invoice_qualified, regenerate_invoice, transmit_invoice,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import (
-    SendMailException, prefix_subject, render_mail,
-)
+from pretix.base.services.mail import prefix_subject, render_mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
     extend_order, mark_order_expired, mark_order_refunded,
@@ -1066,10 +1064,6 @@ class OrderPaymentConfirm(OrderView):
                 messages.error(self.request, str(e))
             except PaymentException as e:
                 messages.error(self.request, str(e))
-            except SendMailException:
-                messages.warning(self.request,
-                                 _('The payment has been marked as complete, but we were unable to send a '
-                                   'confirmation mail.'))
             else:
                 messages.success(self.request, _('The payment has been marked as complete.'))
         else:
@@ -1540,9 +1534,6 @@ class OrderTransition(OrderView):
                     'message': str(e)
                 })
                 messages.error(self.request, str(e))
-            except SendMailException:
-                messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a '
-                                                 'confirmation mail.'))
             else:
                 messages.success(self.request, _('The payment has been created successfully.'))
         elif self.order.cancel_allowed() and to == 'c':
@@ -1781,15 +1772,11 @@ class OrderResendLink(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        try:
-            if 'position' in kwargs:
-                p = get_object_or_404(self.order.positions, pk=kwargs['position'])
-                p.resend_link(user=self.request.user)
-            else:
-                self.order.resend_link(user=self.request.user)
-        except SendMailException:
-            messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
-            return redirect(self.get_order_url())
+        if 'position' in kwargs:
+            p = get_object_or_404(self.order.positions, pk=kwargs['position'])
+            p.resend_link(user=self.request.user)
+        else:
+            self.order.resend_link(user=self.request.user)
 
         messages.success(self.request, _('The email has been queued to be sent.'))
         return redirect(self.get_order_url())
@@ -2433,24 +2420,18 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
             }
             return self.get(self.request, *self.args, **self.kwargs)
         else:
-            try:
-                order.send_mail(
-                    form.cleaned_data['subject'], email_template,
-                    email_context, 'pretix.event.order.email.custom_sent',
-                    self.request.user, auto_email=False,
-                    attach_tickets=form.cleaned_data.get('attach_tickets', False),
-                    invoices=form.cleaned_data.get('attach_invoices', []),
-                    attach_other_files=[a for a in [
-                        self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-                    ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
-                )
-                messages.success(self.request,
-                                 _('Your message has been queued and will be sent to {}.'.format(order.email)))
-            except SendMailException:
-                messages.error(
-                    self.request,
-                    _('Failed to send mail to the following user: {}'.format(order.email))
-                )
+            order.send_mail(
+                form.cleaned_data['subject'], email_template,
+                email_context, 'pretix.event.order.email.custom_sent',
+                self.request.user, auto_email=False,
+                attach_tickets=form.cleaned_data.get('attach_tickets', False),
+                invoices=form.cleaned_data.get('attach_invoices', []),
+                attach_other_files=[a for a in [
+                    self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+                ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
+            )
+            messages.success(self.request,
+                             _('Your message has been queued and will be sent to {}.'.format(order.email)))
             return super(OrderSendMail, self).form_valid(form)
 
     def get_success_url(self):
@@ -2503,23 +2484,19 @@ class OrderPositionSendMail(OrderSendMail):
             }
             return self.get(self.request, *self.args, **self.kwargs)
         else:
-            try:
-                position.send_mail(
-                    form.cleaned_data['subject'],
-                    email_template,
-                    email_context,
-                    'pretix.event.order.position.email.custom_sent',
-                    self.request.user,
-                    attach_tickets=form.cleaned_data.get('attach_tickets', False),
-                    attach_other_files=[a for a in [
-                        self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-                    ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
-                )
-                messages.success(self.request,
-                                 _('Your message has been queued and will be sent to {}.'.format(position.attendee_email)))
-            except SendMailException:
-                messages.error(self.request,
-                               _('Failed to send mail to the following user: {}'.format(position.attendee_email)))
+            position.send_mail(
+                form.cleaned_data['subject'],
+                email_template,
+                email_context,
+                'pretix.event.order.position.email.custom_sent',
+                self.request.user,
+                attach_tickets=form.cleaned_data.get('attach_tickets', False),
+                attach_other_files=[a for a in [
+                    self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+                ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
+            )
+            messages.success(self.request,
+                             _('Your message has been queued and will be sent to {}.'.format(position.attendee_email)))
             return super(OrderSendMail, self).form_valid(form)
 
 

@@ -90,7 +90,6 @@ from pretix.base.services.invoices import (
 from pretix.base.services.locking import (
     LOCK_TRUST_WINDOW, LockTimeoutException, lock_objects,
 )
-from pretix.base.services.mail import SendMailException
 from pretix.base.services.memberships import (
     create_membership, validate_memberships_in_order,
 )
@@ -438,33 +437,27 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 email_attendee_subject = order.event.settings.mail_subject_order_approved_attendee
 
             email_context = get_email_context(event=order.event, order=order)
-            try:
-                order.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_approved', user,
-                    attach_tickets=True,
-                    attach_ical=order.event.settings.mail_attach_ical and (
-                        not order.event.settings.mail_attach_ical_paid_only or
-                        order.total == Decimal('0.00') or
-                        order.valid_if_pending
-                    ),
-                    invoices=[invoice] if invoice and transmit_invoice_mail else []
-                )
-            except SendMailException:
-                logger.exception('Order approved email could not be sent')
+            order.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.order_approved', user,
+                attach_tickets=True,
+                attach_ical=order.event.settings.mail_attach_ical and (
+                    not order.event.settings.mail_attach_ical_paid_only or
+                    order.total == Decimal('0.00') or
+                    order.valid_if_pending
+                ),
+                invoices=[invoice] if invoice and transmit_invoice_mail else []
+            )
 
             if email_attendees:
                 for p in order.positions.all():
                     if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
                         email_attendee_context = get_email_context(event=order.event, order=order, position=p)
-                        try:
-                            p.send_mail(
-                                email_attendee_subject, email_attendee_template, email_attendee_context,
-                                'pretix.event.order.email.order_approved', user,
-                                attach_tickets=True,
-                            )
-                        except SendMailException:
-                            logger.exception('Order approved email could not be sent to attendee')
+                        p.send_mail(
+                            email_attendee_subject, email_attendee_template, email_attendee_context,
+                            'pretix.event.order.email.order_approved', user,
+                            attach_tickets=True,
+                        )
 
     return order.pk
 
@@ -501,13 +494,10 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
             email_template = order.event.settings.mail_text_order_denied
             email_subject = order.event.settings.mail_subject_order_denied
             email_context = get_email_context(event=order.event, order=order, comment=comment)
-            try:
-                order.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_denied', user
-                )
-            except SendMailException:
-                logger.exception('Order denied email could not be sent')
+            order.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.order_denied', user
+            )
 
     return order.pk
 
@@ -660,14 +650,11 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 email_template = order.event.settings.mail_text_order_canceled
                 email_subject = order.event.settings.mail_subject_order_canceled
                 email_context = get_email_context(event=order.event, order=order, comment=comment or "")
-                try:
-                    order.send_mail(
-                        email_subject, email_template, email_context,
-                        'pretix.event.order.email.order_canceled', user,
-                        invoices=transmit_invoices_mail,
-                    )
-                except SendMailException:
-                    logger.exception('Order canceled email could not be sent')
+                order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.order_canceled', user,
+                    invoices=transmit_invoices_mail,
+                )
 
     for p in order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING)):
         try:
@@ -1108,46 +1095,40 @@ def _order_placed_email(event: Event, order: Order, email_template, subject_temp
                         log_entry: str, invoice, payments: List[OrderPayment], is_free=False):
     email_context = get_email_context(event=event, order=order, payments=payments)
 
-    try:
-        order.send_mail(
-            subject_template, email_template, email_context,
-            log_entry,
-            invoices=[invoice] if invoice else [],
-            attach_tickets=True,
-            attach_ical=event.settings.mail_attach_ical and (
-                not event.settings.mail_attach_ical_paid_only or
-                is_free or
-                order.valid_if_pending
-            ),
-            attach_other_files=[a for a in [
-                event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-            ] if a],
-        )
-    except SendMailException:
-        logger.exception('Order received email could not be sent')
+    order.send_mail(
+        subject_template, email_template, email_context,
+        log_entry,
+        invoices=[invoice] if invoice else [],
+        attach_tickets=True,
+        attach_ical=event.settings.mail_attach_ical and (
+            not event.settings.mail_attach_ical_paid_only or
+            is_free or
+            order.valid_if_pending
+        ),
+        attach_other_files=[a for a in [
+            event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+        ] if a],
+    )
 
 
 def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosition, email_template, subject_template,
                                  log_entry: str, is_free=False):
     email_context = get_email_context(event=event, order=order, position=position)
 
-    try:
-        position.send_mail(
-            subject_template, email_template, email_context,
-            log_entry,
-            invoices=[],
-            attach_tickets=True,
-            attach_ical=event.settings.mail_attach_ical and (
-                not event.settings.mail_attach_ical_paid_only or
-                is_free or
-                order.valid_if_pending
-            ),
-            attach_other_files=[a for a in [
-                event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-            ] if a],
-        )
-    except SendMailException:
-        logger.exception('Order received email could not be sent to attendee')
+    position.send_mail(
+        subject_template, email_template, email_context,
+        log_entry,
+        invoices=[],
+        attach_tickets=True,
+        attach_ical=event.settings.mail_attach_ical and (
+            not event.settings.mail_attach_ical_paid_only or
+            is_free or
+            order.valid_if_pending
+        ),
+        attach_other_files=[a for a in [
+            event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+        ] if a],
+    )
 
 
 def _perform_order(event: Event, payment_requests: List[dict], position_ids: List[str],
@@ -1476,13 +1457,10 @@ def send_expiry_warnings(sender, **kwargs):
                         email_template = settings.mail_text_order_pending_warning
                         email_subject = settings.mail_subject_order_pending_warning
 
-                    try:
-                        o.send_mail(
-                            email_subject, email_template, email_context,
-                            'pretix.event.order.email.expire_warning_sent'
-                        )
-                    except SendMailException:
-                        logger.exception('Reminder email could not be sent')
+                    o.send_mail(
+                        email_subject, email_template, email_context,
+                        'pretix.event.order.email.expire_warning_sent'
+                    )
 
 
 @receiver(signal=periodic_task)
@@ -1543,14 +1521,11 @@ def send_download_reminders(sender, **kwargs):
                 email_template = event.settings.mail_text_download_reminder
                 email_subject = event.settings.mail_subject_download_reminder
                 email_context = get_email_context(event=event, order=o)
-                try:
-                    o.send_mail(
-                        email_subject, email_template, email_context,
-                        'pretix.event.order.email.download_reminder_sent',
-                        attach_tickets=True
-                    )
-                except SendMailException:
-                    logger.exception('Reminder email could not be sent')
+                o.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.download_reminder_sent',
+                    attach_tickets=True
+                )
 
                 if event.settings.mail_send_download_reminder_attendee:
                     for p in positions:
@@ -1564,14 +1539,11 @@ def send_download_reminders(sender, **kwargs):
                             email_template = event.settings.mail_text_download_reminder_attendee
                             email_subject = event.settings.mail_subject_download_reminder_attendee
                             email_context = get_email_context(event=event, order=o, position=p)
-                            try:
-                                o.send_mail(
-                                    email_subject, email_template, email_context,
-                                    'pretix.event.order.email.download_reminder_sent',
-                                    attach_tickets=True, position=p
-                                )
-                            except SendMailException:
-                                logger.exception('Reminder email could not be sent to attendee')
+                            o.send_mail(
+                                email_subject, email_template, email_context,
+                                'pretix.event.order.email.download_reminder_sent',
+                                attach_tickets=True, position=p
+                            )
 
 
 def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
@@ -1579,13 +1551,10 @@ def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
         email_template = order.event.settings.mail_text_order_changed
         email_context = get_email_context(event=order.event, order=order)
         email_subject = order.event.settings.mail_subject_order_changed
-        try:
-            order.send_mail(
-                email_subject, email_template, email_context,
-                'pretix.event.order.email.order_changed', user, auth=auth, invoices=invoices, attach_tickets=True,
-            )
-        except SendMailException:
-            logger.exception('Order changed email could not be sent')
+        order.send_mail(
+            email_subject, email_template, email_context,
+            'pretix.event.order.email.order_changed', user, auth=auth, invoices=invoices, attach_tickets=True,
+        )
 
 
 class OrderChangeManager:

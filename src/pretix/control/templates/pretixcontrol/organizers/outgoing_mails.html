@@ -1,0 +1,185 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load urlreplace %}
+{% load icon %}
+{% block inner %}
+    <h1>
+        {% trans "Outgoing emails" %}
+    </h1>
+    <p>
+        {% blocktrans trimmed with days=days %}
+            This is an overview of all emails sent by your organizer account in the last {{ days }} days.
+        {% endblocktrans %}
+    </p>
+    {% if mails|length == 0 and not filter_form.filtered %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't sent any emails recently.
+                {% endblocktrans %}
+            </p>
+        </div>
+    {% else %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Filter" %}</h3>
+            </div>
+            <form class="panel-body filter-form" action="" method="get">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.query %}
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.status %}
+                    </div>
+                    <div class="col-md-5 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.event %}
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button class="btn btn-primary btn-lg" type="submit">
+                        <span class="fa fa-filter"></span>
+                        {% trans "Filter" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+        <form action="{% url "control:organizer.outgoingmails.bulk_action" organizer=request.organizer.slug %}" method="post">
+            {% csrf_token %}
+            {% for field in filter_form %}
+                {{ field.as_hidden }}
+            {% endfor %}
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover table-quotas">
+                    <thead>
+                    <tr>
+                        <th>
+                            <label aria-label="{% trans "select all rows for batch-operation" %}"
+                                   class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                        </th>
+                        <th>{% trans "Subject" %}</th>
+                        <th>{% trans "Recipients" %}</th>
+                        <th>{% trans "Context" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Date" %}
+                            <a href="?{% url_replace request 'ordering' '-date' %}"><i
+                                    class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'date' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th></th>
+                    </tr>
+                    {% if page_obj.paginator.num_pages > 1 %}
+                        <tr class="table-select-all warning hidden">
+                            <td>
+                                <input type="checkbox" name="__ALL" id="__all"
+                                       data-results-total="{{ page_obj.paginator.count }}">
+                            </td>
+                            <td colspan="7">
+                                <label for="__all">
+                                    {% trans "Select all results on other pages as well" %}
+                                </label>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    </thead>
+                    <tbody>
+                    {% for m in mails %}
+                        <tr>
+                            <td>
+                                <label aria-label="{% trans "select row for batch-operation" %}"
+                                       class="batch-select-label"><input type="checkbox" name="outgoingmail"
+                                                                         class="batch-select-checkbox"
+                                                                         value="{{ m.pk }}"/></label>
+                            </td>
+                            <td>
+                                <a href="{% url "control:organizer.outgoingmail" organizer=request.organizer.slug mail=m.id %}">
+                                    {{ m.subject }}
+                                </a>
+                                {% if m.sensitive %}
+                                    <span class="text-muted">{% icon "eye-slash" %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ m.to|join:", " }}
+                                {% if m.cc %}
+                                    <br><small class="text-muted">{% trans "Cc" context "email" %}: {{ m.cc|join:", " }}</small>
+                                {% endif %}
+                                {% if m.bcc %}
+                                    <br><small class="text-muted">{% trans "Bcc" context "email" %}: {{ m.bcc|join:", " }}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if m.event %}
+                                    <div>
+                                        {% icon "calendar fa-fw" %}
+                                        <a href="{% url "control:event.index" organizer=request.organizer.slug event=m.event.slug %}">
+                                            {{ m.event }}
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if m.order %}
+                                    <div>
+                                        {% icon "shopping-cart fa-fw" %}
+                                        <a href="{% url "control:event.order" organizer=request.organizer.slug event=m.event.slug code=m.order.code %}">
+                                            {{ m.order.code }}</a>{% if m.orderposition %}-{{ m.orderposition.positionid }}{% endif %}
+                                    </div>
+                                {% endif %}
+                                {% if m.customer %}
+                                    <div>
+                                        {% icon "user fa-fw" %}
+                                        <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=m.customer.identifier %}">
+                                            {{ m.customer }}
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if m.status == "queued" %}
+                                    <span class="label label-info">{% icon "clock-o" %} {% trans "queued" %}</span>
+                                {% elif m.status == "inflight" %}
+                                    <span class="label label-info">{% icon "send" %} {% trans "being sent" %}</span>
+                                {% elif m.status == "awaiting_retry" %}
+                                    <span class="label label-warning">{% icon "repeat" %} {% trans "will be retried" %}</span>
+                                {% elif m.status == "failed" %}
+                                    <span class="label label-danger">{% icon "warning" %} {% trans "failed" %}</span>
+                                {% elif m.status == "bounced" %}
+                                    <span class="label label-danger">{% icon "exclamation-circle" %} {% trans "bounced" %}</span>
+                                {% elif m.status == "withheld" %}
+                                    <span class="label label-warning">{% icon "ban" %} {% trans "withheld" %}</span>
+                                {% elif m.status == "aborted" %}
+                                    <span class="label label-danger">{% icon "ban" %} {% trans "aborted" %}</span>
+                                {% elif m.status == "sent" %}
+                                    <span class="label label-success">{% icon "check" %} {% trans "sent" %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ m.created|date:"SHORT_DATETIME_FORMAT" }}
+                                {% if m.sent %}
+                                    <br>
+                                    <small class="text-muted">{% trans "Sent:" %} {{ m.sent|date:"SHORT_DATETIME_FORMAT" }}</small>
+                                {% endif %}
+                            </td>
+                            <td class="text-right flip">
+                                <a href="{% url "control:organizer.outgoingmail" organizer=request.organizer.slug mail=m.id %}"
+                                   class="btn btn-default btn-sm">{% icon "eye" %}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="batch-select-actions">
+                <button type="submit" class="btn btn-primary btn-save" name="action" value="retry">
+                    {% icon "repeat" %}
+                    {% trans "Retry (if failed or withheld)" %}
+                </button>
+                <button type="submit" class="btn btn-danger btn-save" name="action" value="abort">
+                    {% icon "ban" %}
+                    {% trans "Abort (if queued, awaiting retry or withheld)" %}
+                </button>
+            </div>
+        </form>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}
