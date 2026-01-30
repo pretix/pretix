@@ -1744,7 +1744,7 @@ class ReusableMediaFilterForm(FilterForm):
                 Q(identifier__icontains=query)
                 | Q(customer__identifier__icontains=query)
                 | Q(customer__external_identifier__istartswith=query)
-                | Q(linked_orderposition__order__code__icontains=query)
+                | Q(linked_orderpositions__order__code__icontains=query)
                 | Q(linked_giftcard__secret__icontains=query)
             )
 
