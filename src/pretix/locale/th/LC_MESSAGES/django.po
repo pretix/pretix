@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-29 13:00+0000\n"
+"PO-Revision-Date: 2026-01-30 06:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -5682,7 +5682,7 @@ msgstr "สินค้ารูปแบบนี้จะไม่ถูกจ
 
 #: pretix/base/models/items.py:1225
 msgid "Sell on all sales channels the product is sold on"
-msgstr ""
+msgstr "ขายในทุกช่องทางการขายที่สินค้านี้วางจำหน่าย"
 
 #: pretix/base/models/items.py:1231
 msgid ""
@@ -5690,75 +5690,80 @@ msgid ""
 "if a sales channel is selected here but not on product level, the variation "
 "will not be available."
 msgstr ""
+"การเลือกช่องทางการขายในระดับสินค้าภาพรวมจะมีความสำคัญกว่า ดังนั้นหากมีการเลือกช่องทางการขาย"
+"ที่นี่ แต่ไม่ได้เลือกไว้ในระดับสินค้า สินค้ารูปแบบนี้จะไม่สามารถใช้งานได้"
 
 #: pretix/base/models/items.py:1236
 msgid "Show only if a matching voucher is redeemed."
-msgstr ""
+msgstr "แสดงเฉพาะเมื่อมีการใช้เวาเชอร์ที่ตรงกันเท่านั้น"
 
 #: pretix/base/models/items.py:1238
 msgid ""
 "This variation will be hidden from the event page until the user enters a "
 "voucher that unlocks this variation."
 msgstr ""
+"สินค้ารูปแบบนี้จะถูกซ่อนจากหน้ากิจกรรมจนกว่าผู้ใช้จะกรอกเวาเชอร์เพื่อปลดล็อก"
 
 #: pretix/base/models/items.py:1258
 #: pretix/control/templates/pretixcontrol/item/create.html:111
 msgid "Product variations"
-msgstr ""
+msgstr "รูปแบบสินค้า"
 
 #: pretix/base/models/items.py:1463
 msgid "Minimum number"
-msgstr ""
+msgstr "จำนวนขั้นต่ำ"
 
 #: pretix/base/models/items.py:1467
 msgid "Maximum number"
-msgstr ""
+msgstr "จำนวนสูงสุด"
 
 #: pretix/base/models/items.py:1471
 msgid "Add-Ons are included in the price"
-msgstr ""
+msgstr "รวมสินค้าเพิ่มเติม (Add-on) ในราคาแล้ว"
 
 #: pretix/base/models/items.py:1472
 msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
+"หากเลือกตัวเลือกนี้ การเพิ่มสินค้าเพิ่มเติม (Add-on) ในตั๋วใบนี้จะไม่มีค่าใช้จ่าย แม้ว่าโดยปกติสินค้าเห"
+"ล่านั้นจะมีราคาก็ตาม"
 
 #: pretix/base/models/items.py:1477
 msgid "Allow the same product to be selected multiple times"
-msgstr ""
+msgstr "อนุญาตให้เลือกสินค้าชนิดเดียวกันซ้ำได้หลายครั้ง"
 
 #: pretix/base/models/items.py:1496
 msgid "The add-on's category must belong to the same event as the item."
-msgstr ""
+msgstr "หมวดหมู่ของสินค้าเพิ่มเติมต้องอยู่ในกิจกรรมเดียวกันกับรายการนั้น"
 
 #: pretix/base/models/items.py:1501
 msgid "The item already has an add-on of this category."
-msgstr ""
+msgstr "รายการนี้มีสินค้าเพิ่มเติมในหมวดหมู่นี้อยู่แล้ว"
 
 #: pretix/base/models/items.py:1506
 msgid "The minimum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "จำนวนขั้นต่ำต้องมีค่าเท่ากับหรือมากกว่าศูนย์"
 
 #: pretix/base/models/items.py:1511
 msgid "The maximum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "จำนวนสูงสุดต้องมีค่าเท่ากับหรือมากกว่าศูนย์"
 
 #: pretix/base/models/items.py:1516
 msgid "The maximum count needs to be greater than the minimum count."
-msgstr ""
+msgstr "จำนวนสูงสุดต้องมีค่ามากกว่าจำนวนขั้นต่ำ"
 
 #: pretix/base/models/items.py:1543
 msgid "Bundled item"
-msgstr ""
+msgstr "รายการสินค้าในชุด (Bundle)"
 
 #: pretix/base/models/items.py:1549
 msgid "Bundled variation"
-msgstr ""
+msgstr "รูปแบบสินค้าในชุด (Bundle)"
 
 #: pretix/base/models/items.py:1560
 msgid "Designated price part"
-msgstr ""
+msgstr "ส่วนแบ่งราคาที่ระบุไว้"
 
 #: pretix/base/models/items.py:1561
 msgid ""
@@ -5767,59 +5772,62 @@ msgid ""
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
 msgstr ""
+"หากตั้งค่าไว้ ระบบจะแสดงว่ารายการสินค้าในชุดนี้มีมูลค่าตามที่ระบุจากราคารวม (Gross) ซึ่งอาจมีควา"
+"มสำคัญในกรณีที่มีการคำนวณภาษีแบบผสม แต่หากไม่ใช่กรณีดังกล่าวสามารถเว้นว่างไว้ได้ ค่านี้จะไม่ถูกนำไ"
+"ปบวกเพิ่มจากราคาสินค้าหลัก"
 
 #: pretix/base/models/items.py:1584
 msgid "The bundled item must belong to the same event as the item."
-msgstr ""
+msgstr "รายการสินค้าในชุดต้องอยู่ในกิจกรรมเดียวกันกับสินค้าหลัก"
 
 #: pretix/base/models/items.py:1586
 msgid "A variation needs to be set for this item."
-msgstr ""
+msgstr "ต้องกำหนดรูปแบบสำหรับสินค้านี้"
 
 #: pretix/base/models/items.py:1588
 msgid "The chosen variation does not belong to this item."
-msgstr ""
+msgstr "รูปแบบสินค้าที่เลือกไม่ได้เป็นของสินค้านี้"
 
 #: pretix/base/models/items.py:1593
 msgid "The count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "จำนวนต้องมีค่าเท่ากับหรือมากกว่าศูนย์"
 
 #: pretix/base/models/items.py:1648
 msgid "Number"
-msgstr ""
+msgstr "ตัวเลข"
 
 #: pretix/base/models/items.py:1649
 msgid "Text (one line)"
-msgstr ""
+msgstr "ข้อความ (บรรทัดเดียว)"
 
 #: pretix/base/models/items.py:1650
 msgid "Multiline text"
-msgstr ""
+msgstr "ข้อความหลายบรรทัด"
 
 #: pretix/base/models/items.py:1651
 msgid "Yes/No"
-msgstr ""
+msgstr "ใช่/ไม่ใช่"
 
 #: pretix/base/models/items.py:1652
 msgid "Choose one from a list"
-msgstr ""
+msgstr "เลือกหนึ่งรายการจากรายการที่กำหนด"
 
 #: pretix/base/models/items.py:1653
 msgid "Choose multiple from a list"
-msgstr ""
+msgstr "เลือกได้หลายรายการจากรายการที่กำหนด"
 
 #: pretix/base/models/items.py:1654
 msgid "File upload"
-msgstr ""
+msgstr "อัปโหลดไฟล์"
 
 #: pretix/base/models/items.py:1657
 #: pretix/control/templates/pretixcontrol/event/settings.html:240
 msgid "Date and time"
-msgstr ""
+msgstr "วันที่และเวลา"
 
 #: pretix/base/models/items.py:1658
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "รหัสประเทศ (ISO 3166-1 alpha-2)"
 
 #: pretix/base/models/items.py:1681 pretix/base/models/items.py:1957
 #: pretix/base/models/organizer.py:609
@@ -5827,135 +5835,140 @@ msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores."
 msgstr ""
+"ตัวระบุ (Identifier) สามารถประกอบด้วยตัวอักษร ตัวเลข จุด เครื่องหมายขีดกลาง และเครื่องหมา"
+"ยขีดล่างเท่านั้น"
 
 #: pretix/base/models/items.py:1686
 msgid "Help text"
-msgstr ""
+msgstr "ข้อความช่วยเหลือ"
 
 #: pretix/base/models/items.py:1687
 msgid "If the question needs to be explained or clarified, do it here!"
 msgstr ""
+"หากคำถามจำเป็นต้องมีคำอธิบายหรือคำชี้แจงเพิ่มเติม คุณสามารถระบุได้ที่นี่!"
 
 #: pretix/base/models/items.py:1693
 msgid "Question type"
-msgstr ""
+msgstr "ประเภทคำถาม"
 
 #: pretix/base/models/items.py:1697
 #: pretix/control/templates/pretixcontrol/items/questions.html:55
 msgid "Required question"
-msgstr ""
+msgstr "จำเป็นต้องตอบ"
 
 #: pretix/base/models/items.py:1704
 msgid "This question will be asked to buyers of the selected products"
-msgstr ""
+msgstr "คำถามนี้จะถามเฉพาะผู้ที่ซื้อสินค้าที่เลือกไว้เท่านั้น"
 
 #: pretix/base/models/items.py:1711
 msgid "Ask during check-in instead of in the ticket buying process"
-msgstr ""
+msgstr "ถามระหว่างการเช็กอิน แทนขั้นตอนการซื้อตั๋ว"
 
 #: pretix/base/models/items.py:1712 pretix/base/models/items.py:1717
 msgid "Not supported by all check-in apps for all question types."
-msgstr ""
+msgstr "แอปเช็กอินบางแอปอาจไม่รองรับฟีเจอร์นี้ในทุกประเภทคำถาม"
 
 #: pretix/base/models/items.py:1716
 msgid "Show answer during check-in"
-msgstr ""
+msgstr "แสดงคำตอบระหว่างการเช็กอิน"
 
 #: pretix/base/models/items.py:1721
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
 msgid "Hidden question"
-msgstr ""
+msgstr "ซ่อนคำถาม"
 
 #: pretix/base/models/items.py:1722
 msgid "This question will only show up in the backend."
-msgstr ""
+msgstr "คำถามนี้จะแสดงให้เห็นเฉพาะในระบบหลังบ้านเท่านั้น"
 
 #: pretix/base/models/items.py:1726
 msgid "Print answer on invoices"
-msgstr ""
+msgstr "พิมพ์คำตอบลงในใบแจ้งหนี้"
 
 #: pretix/base/models/items.py:1734 pretix/base/models/items.py:1740
 #: pretix/base/models/items.py:1746
 msgid "Minimum value"
-msgstr ""
+msgstr "ค่าต่ำสุด"
 
 #: pretix/base/models/items.py:1735 pretix/base/models/items.py:1738
 #: pretix/base/models/items.py:1741 pretix/base/models/items.py:1744
 #: pretix/base/models/items.py:1747 pretix/base/models/items.py:1750
 #: pretix/base/models/items.py:1754
 msgid "Currently not supported in our apps and during check-in"
-msgstr ""
+msgstr "ขณะนี้ยังไม่รองรับการใช้งานในแอปและระหว่างการเช็กอิน"
 
 #: pretix/base/models/items.py:1737 pretix/base/models/items.py:1743
 #: pretix/base/models/items.py:1749
 msgid "Maximum value"
-msgstr ""
+msgstr "ค่าสูงสุด"
 
 #: pretix/base/models/items.py:1752
 msgid "Maximum length"
-msgstr ""
+msgstr "ความยาวสูงสุด"
 
 #: pretix/base/models/items.py:1758
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "ตรวจสอบไฟล์ให้เป็นแนวตั้ง (Portrait)"
 
 #: pretix/base/models/items.py:1759
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"หากเลือกตัวเลือกนี้ ไฟล์ต้องเป็นรูปภาพที่มีอัตราส่วนภาพ 3:4 ซึ่งมักใช้สำหรับภาพถ่ายที่พิมพ์บนบัตรคล้องค"
+"อ (Badge)"
 
 #: pretix/base/models/items.py:1814
 msgid "An answer to this question is required to proceed."
-msgstr ""
+msgstr "จำเป็นต้องตอบคำถามนี้เพื่อดำเนินการต่อ"
 
 #: pretix/base/models/items.py:1824
 msgid "Invalid input type."
-msgstr ""
+msgstr "ประเภทข้อมูลที่กรอกไม่ถูกต้อง"
 
 #: pretix/base/models/items.py:1858
 msgid "The number is to low."
-msgstr ""
+msgstr "ตัวเลขต่ำเกินไป"
 
 #: pretix/base/models/items.py:1860
 msgid "The number is to high."
-msgstr ""
+msgstr "ตัวเลขสูงเกินไป"
 
 #: pretix/base/models/items.py:1863
 msgid "Invalid number input."
-msgstr ""
+msgstr "รูปแบบตัวเลขไม่ถูกต้อง"
 
 #: pretix/base/models/items.py:1870 pretix/base/models/items.py:1894
 msgid "Please choose a later date."
-msgstr ""
+msgstr "โปรดเลือกวันที่หลังจากนี้"
 
 #: pretix/base/models/items.py:1872 pretix/base/models/items.py:1896
 msgid "Please choose an earlier date."
-msgstr ""
+msgstr "โปรดเลือกวันที่ก่อนหน้านี้"
 
 #: pretix/base/models/items.py:1875
 msgid "Invalid date input."
-msgstr ""
+msgstr "รูปแบบวันที่ไม่ถูกต้อง"
 
 #: pretix/base/models/items.py:1882
 msgid "Invalid time input."
-msgstr ""
+msgstr "รูปแบบเวลาไม่ถูกต้อง"
 
 #: pretix/base/models/items.py:1891
 msgid "Invalid datetime input."
-msgstr ""
+msgstr "รูปแบบวันที่และเวลาไม่ถูกต้อง"
 
 #: pretix/base/models/items.py:1903
 msgid "Unknown country code."
-msgstr ""
+msgstr "ไม่พบรหัสประเทศนี้"
 
 #: pretix/base/models/items.py:1921 pretix/base/models/items.py:1923
 msgid "The maximum date must not be before the minimum value."
-msgstr ""
+msgstr "วันที่สูงสุดต้องไม่มาก่อนวันที่ต่ำสุด"
 
 #: pretix/base/models/items.py:1925
 msgid "The maximum value must not be lower than the minimum value."
-msgstr ""
+msgstr "ค่าสูงสุดต้องไม่ต่ำกว่าค่าต่ำสุด"
 
 #: pretix/base/models/items.py:1943
 msgid ""
@@ -5963,49 +5976,51 @@ msgid ""
 "with changing the type of question without data loss. Consider hiding this "
 "question and creating a new one instead."
 msgstr ""
+"ระบบมีการจัดเก็บคำตอบสำหรับคำถามนี้ไว้แล้ว ซึ่งไม่รองรับการเปลี่ยนประเภทคำถามโดยไม่ให้ข้อมูลสูญห"
+"าย แนะนำให้ซ่อนคำถามนี้และสร้างคำถามใหม่แทน"
 
 #: pretix/base/models/items.py:1961
 #: pretix/control/templates/pretixcontrol/items/question.html:75
 msgid "Answer"
-msgstr ""
+msgstr "คำตอบ"
 
 #: pretix/base/models/items.py:1985
 #, python-brace-format
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr ""
+msgstr "ตัวระบุ \"{}\" ถูกใช้งานโดยตัวเลือกอื่นแล้ว"
 
 #: pretix/base/models/items.py:1988
 msgid "Question option"
-msgstr ""
+msgstr "ตัวเลือกของคำถาม"
 
 #: pretix/base/models/items.py:1989
 msgid "Question options"
-msgstr ""
+msgstr "รายการตัวเลือกของคำถาม"
 
 #: pretix/base/models/items.py:2074 pretix/control/forms/event.py:1841
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
-msgstr ""
+msgstr "ความจุทั้งหมด"
 
 #: pretix/base/models/items.py:2076 pretix/control/forms/item.py:457
 msgid "Leave empty for an unlimited number of tickets."
-msgstr ""
+msgstr "เว้นว่างไว้หากไม่จำกัดจำนวนตั๋ว"
 
 #: pretix/base/models/items.py:2080 pretix/base/models/orders.py:1512
 #: pretix/base/models/orders.py:3077
 #: pretix/control/templates/pretixcontrol/checkin/index.html:97
 msgid "Item"
-msgstr ""
+msgstr "รายการ"
 
 #: pretix/base/models/items.py:2088 pretix/control/forms/item.py:918
 #: pretix/plugins/autocheckin/models.py:74
 msgid "Variations"
-msgstr ""
+msgstr "รูปแบบสินค้า"
 
 #: pretix/base/models/items.py:2092
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "ไม่ต้องนำโควตานี้มาคำนวณสถานะว่างของกิจกรรม"
 
 #: pretix/base/models/items.py:2093
 msgid ""
@@ -6014,10 +6029,13 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"หากเปิดใช้งาน โควตานี้จะไม่ถูกนำไปคำนวณเมื่อตรวจสอบว่ากิจกรรมว่างหรือไม่ในปฏิทินกิจกรรมของคุณ "
+"ตัวอย่างเช่น มีประโยชน์สำหรับสินค้าที่ระลึกที่เพิ่มไว้ในทุกกิจกรรม แต่ไม่ต้องการให้มีผลกับการแสดงสถาน"
+"ะ \"ขายหมดแล้ว\" ของกิจกรรมนั้น"
 
 #: pretix/base/models/items.py:2100
 msgid "Close this quota permanently once it is sold out"
-msgstr ""
+msgstr "ปิดโควตานี้อย่างถาวรเมื่อสินค้าขายหมดแล้ว"
 
 #: pretix/base/models/items.py:2101
 msgid ""
@@ -6025,10 +6043,12 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
+"หากเปิดใช้งาน เมื่อโควตาขายหมดลงแล้วครั้งหนึ่ง จะไม่มีการขายตั๋วเพิ่มอีก แม้ว่าจะมีตั๋วว่างกลับมาจาก"
+"การยกเลิกหรือคำสั่งซื้อที่หมดอายุก็ตาม อย่างไรก็ตาม คุณสามารถกลับมาเปิดโควตาด้วยตนเองได้เสมอ"
 
 #: pretix/base/models/items.py:2109
 msgid "Allow to sell more tickets once people have checked out"
-msgstr ""
+msgstr "อนุญาตให้ขายตั๋วเพิ่มได้เมื่อมีผู้เช็กเอาต์ออกแล้ว"
 
 #: pretix/base/models/items.py:2110
 msgid ""
@@ -6039,6 +6059,9 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
+"ด้วยตัวเลือกนี้ โควตาจะถูกคืนกลับมาทันทีที่มีคนสแกนออกจากกิจกรรมของคุณ ซึ่งจะเกิดขึ้นก็ต่อเมื่อมีการสแ"
+"กนทั้งขาเข้าและขาออก และการสแกนขาออกเป็นการสแกนล่าสุด ระบบจะไม่นำรายการเช็กอินที่ตั้งค่าให้ "
+"\"อนุญาตให้เข้าซ้ำหลังจากสแกนออก\" มาคำนวณ เพื่อป้องกันการจองเกินจำนวนโดยไม่ตั้งใจ"
 
 #: pretix/base/models/items.py:2122 pretix/control/navigation.py:156
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -6047,61 +6070,66 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:185
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:59
 msgid "Quotas"
-msgstr ""
+msgstr "โควตา"
 
 #: pretix/base/models/items.py:2195
 msgid "All variations must belong to an item contained in the items list."
-msgstr ""
+msgstr "รูปแบบสินค้าทั้งหมดต้องเป็นของรายการที่อยู่ในรายชื่อสินค้า"
 
 #: pretix/base/models/items.py:2206
 msgid ""
 "One or more items has variations but none of these are in the variations "
 "list."
 msgstr ""
+"มีรายการอย่างน้อยหนึ่งรายการที่มีรูปแบบสินค้า แต่ไม่มีรูปแบบเหล่านั้นอยู่ในรายการรูปแบบสินค้า"
 
 #: pretix/base/models/items.py:2212 pretix/base/models/waitinglist.py:315
 msgid "Subevent cannot be null for event series."
-msgstr ""
+msgstr "กิจกรรมย่อย (Subevent) ไม่สามารถเป็นค่าว่างได้สำหรับรอบกิจกรรม"
 
 #: pretix/base/models/items.py:2248
 msgid "Required for products"
-msgstr ""
+msgstr "จำเป็นสำหรับสินค้า"
 
 #: pretix/base/models/items.py:2249
 msgid ""
 "If checked, this property must be set in each product. Does not apply if a "
 "default value is set."
 msgstr ""
+"หากเลือกตัวเลือกนี้ ต้องมีการตั้งค่าคุณสมบัตินี้ในทุกสินค้า ทั้งนี้จะไม่รวมถึงกรณีที่มีการตั้งค่าเริ่มต้นไว้แล้ว"
 
 #: pretix/base/models/items.py:2254
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"หากเว้นว่างไว้ จะสามารถระบุค่าใดก็ได้ มิเช่นนั้น ให้ระบุค่าที่อนุญาตหนึ่งค่าต่อหนึ่งบรรทัด"
 
 #: pretix/base/models/items.py:2311
 msgid "Start"
-msgstr ""
+msgstr "เริ่มต้น"
 
 #: pretix/base/models/items.py:2312
 #: pretix/plugins/reports/accountingreport.py:129
 msgid "End"
-msgstr ""
+msgstr "สิ้นสุด"
 
 #: pretix/base/models/memberships.py:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:28
 msgid "Membership is transferable"
-msgstr ""
+msgstr "สมาชิกภาพสามารถโอนสิทธิ์ได้"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"หากเลือกตัวเลือกนี้ สมาชิกภาพจะสามารถใช้ซื้อตั๋วให้ผู้อื่นได้หลายคน มิเช่นนั้น ชื่อผู้เข้าร่วมจะต้องเป็นชื่อ"
+"เดียวกันเสมอ"
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "อนุญาตให้ใช้งานพร้อมกัน (Parallel)"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -6111,10 +6139,13 @@ msgid ""
 "overlap check will be performed if there is a product-level validity of the "
 "ticket."
 msgstr ""
+"หากเลือกตัวเลือกนี้ สมาชิกภาพจะสามารถใช้ซื้อตั๋วสำหรับกิจกรรมที่เกิดขึ้นในเวลาเดียวกันได้ โปรดทราบ"
+"ว่าระบบจะตรวจสอบเฉพาะเวลาเริ่มต้นของกิจกรรมที่ตรงกันเท่านั้น ไม่ได้ตรวจสอบช่วงเวลาที่ทับซ้อนกัน "
+"ทั้งนี้การตรวจสอบการทับซ้อนจะเกิดขึ้นหากมีการกำหนดอายุการใช้งานของตั๋วในระดับสินค้า"
 
 #: pretix/base/models/memberships.py:58
 msgid "Number of times this membership can be used in a purchase."
-msgstr ""
+msgstr "จำนวนครั้งที่สามารถใช้สมาชิกภาพนี้ในการสั่งซื้อได้"
 
 #: pretix/base/models/memberships.py:124 pretix/control/forms/filter.py:1236
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:41
@@ -6131,41 +6162,42 @@ msgstr "ยกเลิกแล้ว"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:117
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:28
 msgid "Membership type"
-msgstr ""
+msgstr "ประเภทสมาชิกภาพ"
 
 #: pretix/base/models/orders.py:202
 msgid "pending"
-msgstr ""
+msgstr "รอดำเนินการ"
 
 #: pretix/base/models/orders.py:203 pretix/base/payment.py:570
 #: pretix/base/services/invoices.py:592
 msgid "paid"
-msgstr ""
+msgstr "ชำระเงินแล้ว"
 
 #: pretix/base/models/orders.py:204 pretix/control/forms/filter.py:1729
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:37
 msgid "expired"
-msgstr ""
+msgstr "หมดอายุ"
 
 #: pretix/base/models/orders.py:254 pretix/control/forms/filter.py:596
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:65
 msgid "Locale"
-msgstr ""
+msgstr "ภาษาและภูมิภาค (Locale)"
 
 #: pretix/base/models/orders.py:269 pretix/control/forms/filter.py:607
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
-msgstr ""
+msgstr "ยอดรวมทั้งหมด"
 
 #: pretix/base/models/orders.py:273 pretix/base/models/vouchers.py:296
 msgid ""
 "The text entered in this field will not be visible to the user and is "
 "available for your convenience."
 msgstr ""
+"ข้อความที่ระบุในฟิลด์นี้จะไม่ปรากฏให้ผู้ใช้เห็น และมีไว้เพื่อความสะดวกในการใช้งานของคุณเท่านั้น"
 
 #: pretix/base/models/orders.py:278
 msgid "We'll show you this order to be due for a follow-up on this day."
-msgstr ""
+msgstr "เราจะแสดงรายการคำสั่งซื้อนี้เพื่อให้คุณติดตามผลในวันที่กำหนด"
 
 #: pretix/base/models/orders.py:284
 msgid ""
@@ -6174,143 +6206,148 @@ msgid ""
 "custom message, so you need to brief your check-in staff how to handle these "
 "cases."
 msgstr ""
+"หากคุณตั้งค่านี้ แอปเช็กอินจะแสดงคำเตือนว่าตั๋วในคำสั่งซื้อนี้ต้องได้รับการตรวจสอบเป็นพิเศษ ระบบจะไม่"
+"แสดงรายละเอียดหรือข้อความเพิ่มเติม ดังนั้นคุณต้องแจ้งเจ้าหน้าที่เช็กอินเกี่ยวกับวิธีรับมือกรณีเหล่านี้"
 
 #: pretix/base/models/orders.py:291
 msgid ""
 "This text will be shown by the check-in app if a ticket of this order is "
 "scanned."
-msgstr ""
+msgstr "ข้อความนี้จะแสดงบนแอปเช็กอินเมื่อมีการสแกนตั๋วจากคำสั่งซื้อนี้"
 
 #: pretix/base/models/orders.py:301 pretix/base/models/orders.py:1552
 msgid "Meta information"
-msgstr ""
+msgstr "ข้อมูลเสริม (Meta information)"
 
 #: pretix/base/models/orders.py:305
 msgid "API meta information"
-msgstr ""
+msgstr "ข้อมูลเสริมสำหรับ API"
 
 #: pretix/base/models/orders.py:419 pretix/plugins/sendmail/forms.py:236
 #: pretix/plugins/sendmail/forms.py:389 pretix/plugins/sendmail/views.py:269
 msgid "approval pending"
-msgstr ""
+msgstr "รอการอนุมัติ"
 
 #: pretix/base/models/orders.py:421
 msgctxt "order state"
 msgid "pending (confirmed)"
-msgstr ""
+msgstr "รอดำเนินการ (ยืนยันแล้ว)"
 
 #: pretix/base/models/orders.py:423
 msgid "canceled (paid fee)"
-msgstr ""
+msgstr "ยกเลิกแล้ว (ชำระค่าธรรมเนียมแล้ว)"
 
 #: pretix/base/models/orders.py:1036
 msgid ""
 "The payment can not be accepted as the last date of payments configured in "
 "the payment settings is over."
 msgstr ""
+"ไม่สามารถรับชำระเงินได้ เนื่องจากเลยกำหนดวันสุดท้ายของการชำระเงินที่ตั้งค่าไว้แล้ว"
 
 #: pretix/base/models/orders.py:1038
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
 msgstr ""
+"ไม่สามารถรับชำระเงินได้เนื่องจากคำสั่งซื้อหมดอายุ และคุณได้ตั้งค่าไม่รับการชำระเงินล่าช้าไว้ในส่วนกา"
+"รตั้งค่าการชำระเงิน"
 
 #: pretix/base/models/orders.py:1040
 msgid "This order is not yet approved by the event organizer."
-msgstr ""
+msgstr "คำสั่งซื้อนี้ยังไม่ได้รับการอนุมัติจากผู้จัดงาน"
 
 #: pretix/base/models/orders.py:1065
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
-msgstr ""
+msgstr "สินค้า \"{item}\" ที่สั่งซื้อไม่มีจำหน่ายแล้ว"
 
 #: pretix/base/models/orders.py:1066
 #, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr ""
+msgstr "ที่นั่ง \"{seat}\" ไม่สามารถจองได้แล้ว"
 
 #: pretix/base/models/orders.py:1067
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "เวาเชอร์ \"{voucher}\" มีวงเงินไม่เพียงพอแล้ว"
 
 #: pretix/base/models/orders.py:1068
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr ""
+msgstr "เวาเชอร์ \"{voucher}\" ถูกใช้งานไปแล้วก่อนหน้านี้"
 
 #: pretix/base/models/orders.py:1413
 msgid "<file>"
-msgstr ""
+msgstr "<ไฟล์>"
 
 #: pretix/base/models/orders.py:1532 pretix/base/models/orders.py:1540
 msgid "Empty, if this product is not an admission ticket"
-msgstr ""
+msgstr "เว้นว่างไว้ หากสินค้านี้ไม่ใช่ตั๋วเข้าชม"
 
 #: pretix/base/models/orders.py:1749
 msgctxt "payment_state"
 msgid "created"
-msgstr ""
+msgstr "สร้างรายการแล้ว"
 
 #: pretix/base/models/orders.py:1750
 msgctxt "payment_state"
 msgid "pending"
-msgstr ""
+msgstr "รอดำเนินการ"
 
 #: pretix/base/models/orders.py:1751
 msgctxt "payment_state"
 msgid "confirmed"
-msgstr ""
+msgstr "ยืนยันแล้ว"
 
 #: pretix/base/models/orders.py:1752
 msgctxt "payment_state"
 msgid "canceled"
-msgstr ""
+msgstr "ยกเลิกแล้ว"
 
 #: pretix/base/models/orders.py:1753
 msgctxt "payment_state"
 msgid "failed"
-msgstr ""
+msgstr "ล้มเหลว"
 
 #: pretix/base/models/orders.py:1754
 msgctxt "payment_state"
 msgid "refunded"
-msgstr ""
+msgstr "คืนเงินแล้ว"
 
 #: pretix/base/models/orders.py:1782 pretix/base/models/orders.py:2221
 #: pretix/base/shredder.py:633
 msgid "Payment information"
-msgstr ""
+msgstr "ข้อมูลการชำระเงิน"
 
 #: pretix/base/models/orders.py:2162
 msgctxt "refund_state"
 msgid "started externally"
-msgstr ""
+msgstr "เริ่มดำเนินการคืนเงินจากภายนอกระบบ"
 
 #: pretix/base/models/orders.py:2163
 msgctxt "refund_state"
 msgid "created"
-msgstr ""
+msgstr "สร้างรายการคืนเงินแล้ว"
 
 #: pretix/base/models/orders.py:2164
 msgctxt "refund_state"
 msgid "in transit"
-msgstr ""
+msgstr "อยู่ระหว่างดำเนินการ"
 
 #: pretix/base/models/orders.py:2165
 msgctxt "refund_state"
 msgid "done"
-msgstr ""
+msgstr "คืนเงินสำเร็จ"
 
 #: pretix/base/models/orders.py:2166
 msgctxt "refund_state"
 msgid "failed"
-msgstr ""
+msgstr "การคืนเงินล้มเหลว"
 
 #: pretix/base/models/orders.py:2168
 msgctxt "refund_state"
 msgid "canceled"
-msgstr ""
+msgstr "ยกเลิกการคืนเงินแล้ว"
 
 #: pretix/base/models/orders.py:2176
 msgctxt "refund_source"
@@ -6320,17 +6357,17 @@ msgstr "ผู้จัดงาน"
 #: pretix/base/models/orders.py:2177
 msgctxt "refund_source"
 msgid "Customer"
-msgstr ""
+msgstr "ลูกค้า"
 
 #: pretix/base/models/orders.py:2178
 msgctxt "refund_source"
 msgid "External"
-msgstr ""
+msgstr "ภายนอกระบบ"
 
 #: pretix/base/models/orders.py:2216
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:198
 msgid "Refund reason"
-msgstr ""
+msgstr "เหตุผลในการคืนเงิน"
 
 #: pretix/base/models/orders.py:2217
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:199
@@ -6338,35 +6375,36 @@ msgstr ""
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
+"ข้อความนี้อาจแสดงให้ผู้ใช้เห็น หรือใช้เป็นส่วนหนึ่งของข้อมูลอ้างอิงการชำระเงิน"
 
 #: pretix/base/models/orders.py:2337
 msgid "Service fee"
-msgstr ""
+msgstr "ค่าบริการ"
 
 #: pretix/base/models/orders.py:2338
 msgid "Payment fee"
-msgstr ""
+msgstr "ค่าธรรมเนียมการชำระเงิน"
 
 #: pretix/base/models/orders.py:2339
 msgid "Shipping fee"
-msgstr ""
+msgstr "ค่าจัดส่ง"
 
 #: pretix/base/models/orders.py:2340
 #: pretix/control/templates/pretixcontrol/order/index.html:157
 msgid "Cancellation fee"
-msgstr ""
+msgstr "ค่าธรรมเนียมการยกเลิก"
 
 #: pretix/base/models/orders.py:2341
 msgid "Insurance fee"
-msgstr ""
+msgstr "ค่าเบี้ยประกัน"
 
 #: pretix/base/models/orders.py:2342
 msgid "Late fee"
-msgstr ""
+msgstr "ค่าธรรมเนียมการชำระล่าช้า"
 
 #: pretix/base/models/orders.py:2343
 msgid "Other fees"
-msgstr ""
+msgstr "ค่าธรรมเนียมอื่นๆ"
 
 #: pretix/base/models/orders.py:2344 pretix/base/payment.py:1378
 #: pretix/base/payment.py:1454 pretix/base/settings.py:1062
@@ -6376,7 +6414,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:7
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:7
 msgid "Gift card"
-msgstr ""
+msgstr "บัตรของขวัญ"
 
 #: pretix/base/models/orders.py:2349
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:82
@@ -6384,60 +6422,60 @@ msgstr ""
 #: pretix/control/views/vouchers.py:120
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:8
 msgid "Value"
-msgstr ""
+msgstr "มูลค่า"
 
 #: pretix/base/models/orders.py:2630
 msgid "Order position"
-msgstr ""
+msgstr "ลำดับรายการในคำสั่งซื้อ"
 
 #: pretix/base/models/orders.py:3201
 msgid "Cart ID (e.g. session key)"
-msgstr ""
+msgstr "รหัสตะกร้าสินค้า (เช่น Session key)"
 
 #: pretix/base/models/orders.py:3212
 msgid "Limit for extending expiration date"
-msgstr ""
+msgstr "ขีดจำกัดในการขยายวันหมดอายุ"
 
 #: pretix/base/models/orders.py:3248
 msgid "Cart position"
-msgstr ""
+msgstr "ลำดับรายการในตะกร้า"
 
 #: pretix/base/models/orders.py:3249
 msgid "Cart positions"
-msgstr ""
+msgstr "ลำดับรายการในตะกร้า"
 
 #: pretix/base/models/orders.py:3391
 msgid "Business customer"
-msgstr ""
+msgstr "ลูกค้าธุรกิจ / นามนิติบุคคล"
 
 #: pretix/base/models/orders.py:3407
 msgid "This reference will be printed on your invoice for your convenience."
-msgstr ""
+msgstr "ข้อมูลอ้างอิงนี้จะถูกพิมพ์ลงในใบแจ้งหนี้เพื่อความสะดวกของคุณ"
 
 #: pretix/base/models/orders.py:3534
 msgid "Transmission type"
-msgstr ""
+msgstr "รูปแบบการส่งข้อมูล"
 
 #: pretix/base/models/orders.py:3632
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
 msgid "Badge"
-msgstr ""
+msgstr "บัตรคล้องคอ / ป้ายชื่อ"
 
 #: pretix/base/models/orders.py:3633 pretix/base/pdf.py:1140
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:114
 msgid "Ticket"
-msgstr ""
+msgstr "ตั๋ว"
 
 #: pretix/base/models/orders.py:3634
 msgid "Certificate"
-msgstr ""
+msgstr "ประกาศนียบัตร / วุฒิบัตร"
 
 #: pretix/base/models/orders.py:3635 pretix/control/views/event.py:392
 #: pretix/control/views/event.py:397 pretix/control/views/organizer.py:650
 #: pretix/control/views/organizer.py:655
 msgid "Other"
-msgstr ""
+msgstr "อื่นๆ"
 
 #: pretix/base/models/organizer.py:81
 msgid ""
@@ -22007,12 +22045,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:13
 msgctxt "order state"
 msgid "Pending (confirmed)"
-msgstr ""
+msgstr "รอดำเนินการ (ยืนยันแล้ว)"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:19
 msgid "Canceled (paid fee)"
-msgstr ""
+msgstr "ยกเลิกแล้ว (ชำระค่าธรรมเนียมแล้ว)"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:6
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:8
