@@ -340,11 +340,12 @@ var form_handlers = function (el) {
     }
 
     el.find("input[data-checkbox-dependency]").each(function () {
+        var initially_disabled = $(this).prop("disabled");
         var dependent = $(this),
             dependency = findDependency($(this).attr("data-checkbox-dependency"), this),
             update = function () {
                 var enabled = dependency.prop('checked');
-                dependent.prop('disabled', !enabled).closest('.form-group, .form-field-boundary').toggleClass('disabled', !enabled);
+                dependent.prop('disabled', !enabled || initially_disabled).closest('.form-group, .form-field-boundary').toggleClass('disabled', !enabled);
                 if (!enabled && !dependent.is('[data-checkbox-dependency-visual]')) {
                     dependent.prop('checked', false);
                     dependent.trigger('change')
@@ -366,11 +367,12 @@ var form_handlers = function (el) {
     });
 
     el.find("div[data-display-dependency], textarea[data-display-dependency], input[data-display-dependency], select[data-display-dependency], button[data-display-dependency]").each(function () {
+        var initially_disabled = $(this).prop("disabled");
         var dependent = $(this),
             dependency = findDependency($(this).attr("data-display-dependency"), this),
             update = function (ev) {
                 var enabled = dependency.toArray().some(function(d) {
-                    if (d.disabled) return false;
+                    if (d.disabled && !initially_disabled) return false;
                     if (d.type === 'checkbox' || d.type === 'radio') {
                         return d.checked;
                     } else if (d.type === 'select-one') {
@@ -391,7 +393,7 @@ var form_handlers = function (el) {
                 }
                 var $toggling = dependent;
                 if (dependent.is("[data-disable-dependent]")) {
-                    $toggling.attr('disabled', !enabled).trigger("change");
+                    $toggling.attr('disabled', !enabled || initially_disabled).trigger("change");
                 }
                 const tagName = dependent.get(0).tagName.toLowerCase()
                 if (tagName !== "div" && tagName !== "button") {

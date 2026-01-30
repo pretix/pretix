@@ -1386,14 +1386,13 @@ class Event(EventMixin, LoggedModel):
         from .auth import User
 
         if permission:
-            kwargs = {permission: True}
+            qs = Team.objects.with_event_permission(permission)
         else:
-            kwargs = {}
+            qs = Team.objects.all()
 
-        team_with_perm = Team.objects.filter(
+        team_with_perm = qs.filter(
             members__pk=OuterRef('pk'),
             organizer=self.organizer,
-            **kwargs
         ).filter(
             Q(all_events=True) | Q(limit_events__pk=self.pk)
         )

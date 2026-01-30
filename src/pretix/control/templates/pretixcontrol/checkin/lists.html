@@ -63,27 +63,27 @@
                 {% endif %}
             </p>
 
-            {% if "can_change_event_settings" in request.eventpermset %}
+            {% if "event.settings.general:write" in request.eventpermset %}
                 <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new check-in list" %}
                 </a>
             {% endif %}
-            {% if can_change_organizer_settings %}
+            {% if link_device_settings %}
                 <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}"
                    class="btn btn-default btn-lg"><i class="fa fa-tablet"></i> {% trans "Connected devices" %}</a>
             {% endif %}
         </div>
     {% else %}
         <p>
-            {% if "can_change_event_settings" in request.eventpermset %}
+            {% if "event.settings.general:write" in request.eventpermset %}
                 <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new check-in list" %}</a>
             {% endif %}
-            {% if can_change_organizer_settings %}
+            {% if link_device_settings %}
                 <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}"
                    class="btn btn-default"><i class="fa fa-tablet"></i> {% trans "Connected devices" %}</a>
             {% endif %}
-            {% if "can_change_orders" in request.eventpermset %}
+            {% if "event.settings.general:write" in request.eventpermset and "event.orders:write" in request.eventpermset %}
                 <a href="{% url "control:event.orders.checkinlists.reset" organizer=request.event.organizer.slug event=request.event.slug %}"
                    class="btn btn-default">
                     <span class="fa fa-repeat"></span>
@@ -100,7 +100,9 @@
                         <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a>
                     </th>
-                    <th>{% trans "Checked in" %}</th>
+                    {% if "event.orders:read" in request.eventpermset %}
+                        <th>{% trans "Checked in" %}</th>
+                    {% endif %}
                     {% if request.event.has_subevents %}
                         <th>
                             {% trans "Date" context "subevent" %}
@@ -119,18 +121,20 @@
                             <strong><a
                                     href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}">{{ cl.name }}</a></strong>
                         </td>
-                        <td>
-                            <div class="quotabox availability">
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-success progress-bar-{{ cl.percent }}">
+                        {% if "event.orders:read" in request.eventpermset %}
+                            <td>
+                                <div class="quotabox availability">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-success progress-bar-{{ cl.percent }}">
+                                        </div>
+                                    </div>
+                                    <div class="numbers">
+                                        {{ cl.checkin_count|default_if_none:"0" }} /
+                                        {{ cl.position_count|default_if_none:"0" }}
                                     </div>
                                 </div>
-                                <div class="numbers">
-                                    {{ cl.checkin_count|default_if_none:"0" }} /
-                                    {{ cl.position_count|default_if_none:"0" }}
-                                </div>
-                            </div>
-                        </td>
+                            </td>
+                        {% endif %}
                         {% if request.event.has_subevents %}
                             {% if cl.subevent %}
                                 <td>
@@ -156,16 +160,18 @@
                             {% endif %}
                         </td>
                         <td class="text-right flip">
-                            <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}"
-                               class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
-                            {% if "can_change_event_settings" in request.eventpermset %}
+                            {% if "event.orders:read" in request.eventpermset %}
+                                <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}"
+                                   class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{% url "control:event.orders.checkinlists.simulator" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}"
+                                   title="{% trans "Check-in simulator" %}" data-toggle="tooltip"
+                                   class="btn btn-default btn-sm"><i class="fa fa-flask"></i></a>
+                            {% endif %}
+                            {% if "event.settings.general:write" in request.eventpermset %}
                                 <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ cl.id }}"
                                    class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">
                                     <span class="fa fa-copy"></span>
                                 </a>
-                                <a href="{% url "control:event.orders.checkinlists.simulator" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}"
-                                   title="{% trans "Check-in simulator" %}" data-toggle="tooltip"
-                                   class="btn btn-default btn-sm"><i class="fa fa-flask"></i></a>
                                 <a href="{% url "control:event.orders.checkinlists.edit" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}"
                                    class="btn btn-default btn-sm"><i class="fa fa-wrench"></i></a>
                                 <a href="{% url "control:event.orders.checkinlists.delete" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}"

@@ -6,7 +6,7 @@
         {% blocktrans with name=request.organizer.name %}Organizer: {{ name }}{% endblocktrans %}
     </h1>
     {% if events|length == 0 and not filter_form.filtered %}
-        {% if "can_create_events" in request.orgapermset %}
+        {% if "organizer.events:create" in request.orgapermset %}
             <p>
                 <a href="{% url "control:events.add" %}?organizer={{ request.organizer.slug }}" class="btn btn-primary">
                     <span class="fa fa-plus"></span>
@@ -50,7 +50,7 @@
                 </div>
             </form>
         </div>
-        {% if "can_create_events" in request.orgapermset %}
+        {% if "organizer.events:create" in request.orgapermset %}
             <p>
                 <a href="{% url "control:events.add" %}?organizer={{ request.organizer.slug }}" class="btn btn-primary">
                     <span class="fa fa-plus"></span>
@@ -125,7 +125,7 @@
                                 data-toggle="tooltip">
                             <span class="fa fa-eye"></span>
                         </a>
-                        {% if "can_create_events" in request.orgapermset %}
+                        {% if "organizer.events:create" in request.orgapermset %}
                             <a href="{% url "control:events.add" %}?clone={{ e.pk }}" class="btn btn-sm btn-default"
                                     title="{% trans "Clone event" %}" data-toggle="tooltip">
                                 <span class="fa fa-copy"></span>

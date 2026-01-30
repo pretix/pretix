@@ -15,10 +15,11 @@
                     or you can manually issue gift cards.
                 {% endblocktrans %}
             </p>
-
-            <a href="{% url "control:organizer.giftcard.add" organizer=request.organizer.slug %}"
-                    class="btn btn-default btn-lg"><i class="fa fa-plus"></i> {% trans "Manually issue a gift card" %}
-            </a>
+            {% if "organizer.giftcards:write" in request.orgapermset %}
+                <a href="{% url "control:organizer.giftcard.add" organizer=request.organizer.slug %}"
+                        class="btn btn-default btn-lg"><i class="fa fa-plus"></i> {% trans "Manually issue a gift card" %}
+                </a>
+            {% endif %}
         </div>
     {% else %}
         <div class="panel panel-default">
@@ -45,10 +46,12 @@
                 </div>
             </form>
         </div>
-        <p>
-            <a href="{% url "control:organizer.giftcard.add" organizer=request.organizer.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Manually issue a gift card" %}</a>
-        </p>
+        {% if "organizer.giftcards:write" in request.orgapermset %}
+            <p>
+                <a href="{% url "control:organizer.giftcard.add" organizer=request.organizer.slug %}"
+                        class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Manually issue a gift card" %}</a>
+            </p>
+        {% endif %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
                 <thead>

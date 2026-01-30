@@ -1235,10 +1235,13 @@ class QuotaListExporter(ListExporter):
 class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
     identifier = 'giftcardtransactionlist'
     verbose_name = gettext_lazy('Gift card transactions')
-    organizer_required_permission = 'can_manage_gift_cards'
     category = pgettext_lazy('export_category', 'Gift cards')
     description = gettext_lazy('Download a spreadsheet of all gift card transactions.')
     repeatable_read = False
+
+    @classmethod
+    def get_required_organizer_permission(cls) -> str:
+        return 'organizer.giftcards:read'
 
     @property
     def additional_form_fields(self):
@@ -1342,9 +1345,12 @@ class GiftcardRedemptionListExporter(ListExporter):
 class GiftcardListExporter(OrganizerLevelExportMixin, ListExporter):
     identifier = 'giftcardlist'
     verbose_name = gettext_lazy('Gift cards')
-    organizer_required_permission = 'can_manage_gift_cards'
     category = pgettext_lazy('export_category', 'Gift cards')
     description = gettext_lazy('Download a spreadsheet of all gift cards including their current value.')
+
+    @classmethod
+    def get_required_organizer_permission(cls) -> str:
+        return 'organizer.giftcards:read'
 
     @property
     def additional_form_fields(self):

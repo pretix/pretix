@@ -43,7 +43,7 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(organizer=event.organizer, can_view_orders=True)
+    t = Team.objects.create(organizer=event.organizer, all_event_permissions=True)
     t.limit_events.add(event)
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23)
     tl = event.ticket_layouts.create(

@@ -212,6 +212,28 @@ class SuperuserPermissionSet:
         return True
 
 
+class EventPermissionSet(set):
+    def __contains__(self, item):
+        from pretix.base.permissions import assert_valid_event_permission
+
+        if super().__contains__(item):
+            return True
+
+        assert_valid_event_permission(item, allow_tuple=False)
+        return False
+
+
+class OrganizerPermissionSet(set):
+    def __contains__(self, item):
+        from pretix.base.permissions import assert_valid_organizer_permission
+
+        if super().__contains__(item):
+            return True
+
+        assert_valid_organizer_permission(item, allow_tuple=False)
+        return False
+
+
 class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     """
     This is the user model used by pretix for authentication.
@@ -472,7 +494,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         :return: set
         """
         teams = self._get_teams_for_event(organizer, event)
-        sets = [t.permission_set() for t in teams]
+        sets = [t.event_permission_set() for t in teams]
         if sets:
             return set.union(*sets)
         else:
@@ -486,7 +508,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         :return: set
         """
         teams = self._get_teams_for_organizer(organizer)
-        sets = [t.permission_set() for t in teams]
+        sets = [t.organizer_permission_set() for t in teams]
         if sets:
             return set.union(*sets)
         else:
@@ -501,7 +523,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
         :param organizer: The organizer of the event
         :param event: The event to check
-        :param perm_name: The permission, e.g. ``can_change_teams``
+        :param perm_name: The permission, e.g. ``event.orders:read``
         :param request: The current request (optional)
         :param session_key: The current session key (optional)
         :return: bool
@@ -513,8 +535,8 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         if teams:
             self._teamcache['e{}'.format(event.pk)] = teams
             if isinstance(perm_name, (tuple, list)):
-                return any([any(team.has_permission(p) for team in teams) for p in perm_name])
-            if not perm_name or any([team.has_permission(perm_name) for team in teams]):
+                return any([any(team.has_event_permission(p) for team in teams) for p in perm_name])
+            if not perm_name or any([team.has_event_permission(perm_name) for team in teams]):
                 return True
         return False
 
@@ -524,7 +546,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         to the organizer ``organizer``.
 
         :param organizer: The organizer to check
-        :param perm_name: The permission, e.g. ``can_change_teams``
+        :param perm_name: The permission, e.g. ``organizer.events:create``
         :param request: The current request (optional). Required to detect staff sessions properly.
         :return: bool
         """
@@ -533,8 +555,8 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         teams = self._get_teams_for_organizer(organizer)
         if teams:
             if isinstance(perm_name, (tuple, list)):
-                return any([any(team.has_permission(p) for team in teams) for p in perm_name])
-            if not perm_name or any([team.has_permission(perm_name) for team in teams]):
+                return any([any(team.has_organizer_permission(p) for team in teams) for p in perm_name])
+            if not perm_name or any([team.has_organizer_permission(perm_name) for team in teams]):
                 return True
         return False
 
@@ -565,14 +587,15 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         :return: Iterable of Events
         """
         from .event import Event
+        from .organizer import TeamQuerySet
 
         if request and self.has_active_staff_session(request.session.session_key):
             return Event.objects.all()
 
         if isinstance(permission, (tuple, list)):
-            q = reduce(operator.or_, [Q(**{p: True}) for p in permission])
+            q = reduce(operator.or_, [TeamQuerySet.event_permission_q(p) for p in permission])
         else:
-            q = Q(**{permission: True})
+            q = TeamQuerySet.event_permission_q(permission)
 
         return Event.objects.filter(
             Q(organizer_id__in=self.teams.filter(q, all_events=True).values_list('organizer', flat=True))
@@ -605,14 +628,13 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         :return: Iterable of Organizers
         """
         from .event import Organizer
+        from .organizer import TeamQuerySet
 
         if request and self.has_active_staff_session(request.session.session_key):
             return Organizer.objects.all()
 
-        kwargs = {permission: True}
-
         return Organizer.objects.filter(
-            id__in=self.teams.filter(**kwargs).values_list('organizer', flat=True)
+            id__in=self.teams.filter(TeamQuerySet.organizer_permission_q(permission)).values_list('organizer', flat=True)
         )
 
     def has_active_staff_session(self, session_key=None):

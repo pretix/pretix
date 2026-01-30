@@ -36,6 +36,10 @@ class ReusableMediaExporter(OrganizerLevelExportMixin, ListExporter):
     description = _('Download a spread sheet with the data of all reusable medias on your account.')
     repeatable_read = False
 
+    @classmethod
+    def get_required_organizer_permission(cls) -> str:
+        return "organizer.reusablemedia:read"
+
     def iterate_list(self, form_data):
         media = ReusableMedium.objects.filter(
             organizer=self.organizer,

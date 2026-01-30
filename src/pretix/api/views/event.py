@@ -341,7 +341,7 @@ class CloneEventViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     lookup_url_kwarg = 'event'
     http_method_names = ['post']
-    write_permission = 'can_create_events'
+    write_permission = 'event.settings.general:write'
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -350,6 +350,12 @@ class CloneEventViewSet(viewsets.ModelViewSet):
         return ctx
 
     def perform_create(self, serializer):
+        # Weird edge case: Requires settings permission on the event (to read) but also on the organizer (two write)
+        perm_holder = (self.request.auth if isinstance(self.request.auth, (Device, TeamAPIToken))
+                       else self.request.user)
+        if not perm_holder.has_organizer_permission(self.request.organizer, "organizer.events:create", request=self.request):
+            raise PermissionDenied("No permission to create events")
+
         serializer.save(organizer=self.request.organizer)
 
         serializer.instance.log_action(
@@ -426,7 +432,7 @@ with scopes_disabled():
 class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SubEventSerializer
     queryset = SubEvent.objects.none()
-    write_permission = 'can_change_event_settings'
+    write_permission = 'event.subevents:write'
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('date_from',)
     ordering_fields = ('id', 'date_from', 'last_modified')
@@ -546,7 +552,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
 class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = TaxRuleSerializer
     queryset = TaxRule.objects.none()
-    write_permission = 'can_change_event_settings'
+    write_permission = 'event.settings.tax:write'
 
     def get_queryset(self):
         return self.request.event.tax_rules.all()
@@ -589,7 +595,7 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
 class ItemMetaPropertiesViewSet(viewsets.ModelViewSet):
     serializer_class = ItemMetaPropertiesSerializer
     queryset = ItemMetaProperty.objects.none()
-    write_permission = 'can_change_event_settings'
+    write_permission = 'event.settings.general:write'
 
     def get_queryset(self):
         qs = self.request.event.item_meta_properties.all()
@@ -636,19 +642,18 @@ class ItemMetaPropertiesViewSet(viewsets.ModelViewSet):
 
 class EventSettingsView(views.APIView):
     permission = None
-    write_permission = 'can_change_event_settings'
+    write_permission = 'event.settings.general:write'
 
     def get(self, request, *args, **kwargs):
         if isinstance(request.auth, Device):
             s = DeviceEventSettingsSerializer(instance=request.event.settings, event=request.event, context={
-                'request': request
-            })
-        elif 'can_change_event_settings' in request.eventpermset:
-            s = EventSettingsSerializer(instance=request.event.settings, event=request.event, context={
-                'request': request
+                'request': request, 'permissions': request.eventpermset
             })
         else:
-            raise PermissionDenied()
+            s = EventSettingsSerializer(instance=request.event.settings, event=request.event, context={
+                'request': request, 'permissions': request.eventpermset,
+            })
+
         if 'explain' in request.GET:
             return Response({
                 fname: {
@@ -662,7 +667,7 @@ class EventSettingsView(views.APIView):
 
     def patch(self, request, *wargs, **kwargs):
         s = EventSettingsSerializer(instance=request.event.settings, data=request.data, partial=True,
-                                    event=request.event, context={'request': request})
+                                    event=request.event, context={'request': request, 'permissions': request.eventpermset})
         s.is_valid(raise_exception=True)
         with transaction.atomic():
             s.save()
@@ -674,7 +679,7 @@ class EventSettingsView(views.APIView):
                 )
         s = EventSettingsSerializer(
             instance=request.event.settings, event=request.event, context={
-                'request': request
+                'request': request, 'permissions': request.eventpermset
             })
         return Response(s.data)
 
@@ -701,7 +706,7 @@ class SeatFilter(FilterSet):
 class SeatViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SeatSerializer
     queryset = Seat.objects.none()
-    write_permission = 'can_change_event_settings'
+    write_permission = 'event.settings.general:write'
     filter_backends = (DjangoFilterBackend, )
     filterset_class = SeatFilter
 

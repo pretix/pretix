@@ -41,7 +41,7 @@ def env():
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)
+    t = Team.objects.create(organizer=event.organizer, all_event_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
     o1 = Order.objects.create(
@@ -274,7 +274,8 @@ def test_assign_order_organizer_no_permission(env, client):
                                            state=BankTransaction.STATE_NOMATCH,
                                            amount=23, date='unknown')
     team = env[1].teams.first()
-    team.can_change_orders = False
+    team.limit_event_permissions = {}
+    team.all_event_permissions = False
     team.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
     r = client.post('/control/organizer/{}/banktransfer/action/'.format(env[0].organizer.slug), {
@@ -290,7 +291,12 @@ def test_assign_order_organizer_no_permission_for_event(env, client):
                                            state=BankTransaction.STATE_NOMATCH,
                                            amount=23, date='unknown')
     team = env[1].teams.first()
-    team.limit_events.clear()
+    event2 = Event.objects.create(
+        organizer=env[0].organizer, name='Dummy2', slug='dummy2',
+        date_from=now(), plugins='pretix.plugins.banktransfer'
+    )
+    with scopes_disabled():
+        team.limit_events.set([event2])
     client.login(email='dummy@dummy.dummy', password='dummy')
     r = json.loads(client.post('/control/organizer/{}/banktransfer/action/'.format(env[0].organizer.slug), {
         'action_{}'.format(trans.pk): 'assign:{}-{}'.format(env[0].slug.upper(), env[2].code),

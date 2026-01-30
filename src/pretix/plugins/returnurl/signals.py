@@ -83,7 +83,7 @@ def check_against_prefix_list(u, allowlist):
 @receiver(nav_event_settings, dispatch_uid='returnurl_nav')
 def navbar_info(sender, request, **kwargs):
     url = resolve(request.path_info)
-    if not request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings',
+    if not request.user.has_event_permission(request.organizer, request.event, 'event.settings.general:write',
                                              request=request):
         return []
     return [{
