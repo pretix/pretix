@@ -749,7 +749,7 @@ def mail_send(to: List[str], subject: str, body: str, html: Optional[str], sende
     Low-level function to send mails, kept for backwards-compatibility. You should usually use mail() instead.
     """
     m = OutgoingMail.objects.create(
-        organizer_id=organizer.pk if isinstance(organizer, Organizer) else None,
+        organizer_id=organizer.pk if isinstance(organizer, Organizer) else organizer,
         event_id=event.pk if isinstance(event, Event) else event,
         order_id=order.pk if isinstance(order, Order) else order,
         orderposition_id=position.pk if isinstance(position, OrderPosition) else position,
