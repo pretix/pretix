@@ -34,7 +34,10 @@ def set_cookie_without_samesite(request, response, key, *args, **kwargs):
     if not is_secure:
         # https://www.chromestatus.com/feature/5633521622188032
         return
-    if should_send_same_site_none(request.headers.get('User-Agent', '')):
+
+    useragent = request.headers.get('User-Agent', '')
+
+    if should_send_same_site_none(useragent):
         # Chromium is rolling out SameSite=Lax as a default
         # https://www.chromestatus.com/feature/5088147346030592
         # This however breaks all pretix-in-an-iframe things, such as the pretix Widget.
@@ -44,8 +47,14 @@ def set_cookie_without_samesite(request, response, key, *args, **kwargs):
         # This will only work on secure cookies as well
         # https://www.chromestatus.com/feature/5633521622188032
         response.cookies[key]['secure'] = is_secure
-        # CHIPS
-        response.cookies[key]['Partitioned'] = True
+
+        if can_send_partitioned_cookie(useragent):
+            # CHIPS
+            response.cookies[key]['Partitioned'] = True
+
+
+def can_send_partitioned_cookie(useragent):
+    return not is_safari(useragent)
 
 
 # Based on https://www.chromium.org/updates/same-site/incompatible-clients
