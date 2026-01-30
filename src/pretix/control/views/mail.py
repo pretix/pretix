@@ -112,6 +112,9 @@ class OutgoingMailDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequir
             h = {}
         csps = {
             'frame-src': ['data:'],
+            # Unfortuantely, we can't avoid unsafe-inline for style here.
+            # See outgoingmail.js for the protection measures we take.
+            'style-src': ["'unsafe-inline'"],
         }
         _merge_csp(h, csps)
         response['Content-Security-Policy'] = _render_csp(h)

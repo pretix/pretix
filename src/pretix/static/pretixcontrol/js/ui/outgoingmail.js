@@ -6,7 +6,7 @@ function is_sandbox_supported() {
 function safe_render(url, parent) {
     // Estimate the height that prevents the user from having to scroll on two levels to see the full email
     const height = (
-        window.innerHeight - parent.parent().get(0).getBoundingClientRect().top - document.querySelector("footer").getBoundingClientRect().height - 20
+        Math.max(400, window.innerHeight - parent.parent().get(0).getBoundingClientRect().top - document.querySelector("footer").getBoundingClientRect().height - 20)
     ) + "px";
 
     const iframe = (
@@ -22,7 +22,7 @@ function safe_render(url, parent) {
             .attr("class", "html-email")
             .attr("src", url)
             .attr("sandbox", "allow-popups allow-popups-to-escape-sandbox")
-            .attr("csp", "script-src 'none'; font-src 'none'; connect-src 'none'; form-action 'none'")  // respected only by chrome
+            .attr("csp", "script-src 'none'; font-src 'none'; connect-src 'none'; form-action 'none'; style-src 'unsafe-inline'")  // respected only by chrome
             .prop("credentialless", true)  // respected only by chrome
     );
 
