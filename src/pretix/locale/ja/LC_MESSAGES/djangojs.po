@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-01-28 18:00+0000\n"
+"PO-Revision-Date: 2026-01-30 22:00+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
@@ -889,7 +889,7 @@ msgstr "%(rate)s% %(taxname)s込"
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr "%(rate)s% %(taxname)s抜"
+msgstr "別途%(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
@@ -899,7 +899,7 @@ msgstr "税込"
 #: pretix/static/pretixpresale/js/widget/widget.js:37
 msgctxt "widget"
 msgid "plus taxes"
-msgstr "税抜"
+msgstr "税別"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #, javascript-format
