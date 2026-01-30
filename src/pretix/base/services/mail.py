@@ -379,7 +379,8 @@ def mail_send_task(self, **kwargs) -> bool:
         # May only occur while upgrading from pretix versions before OutgoingMail when celery tasks are still in-queue
         # during the upgrade. Can be removed after 2026.2.x is released, and then the signature can be changed to
         # mail_send_task(self, *, outgoing_mail)
-        mail_send(**kwargs)
+        with scopes_disabled():
+            mail_send(**kwargs)
         return
     else:
         raise ValueError("Unknown arguments")
