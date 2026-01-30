@@ -40,6 +40,7 @@
                             </dd>
                         </dl>
                     {% else %}
+                        <div class="alert alert-danger hidden"></div>
                         <p>
                             {% blocktrans trimmed with org=request.organizer.name %}
                                 If you created a customer account at {{ org }} before, you can log in now and connect
