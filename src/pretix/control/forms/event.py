@@ -867,6 +867,11 @@ class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
                 "The gross price of some products may be changed to ensure correct rounding, while the net "
                 "prices will be kept as configured. This may cause the actual payment amount to differ."
             ),
+            "sum_by_net_only_business": _(
+                "Same as above, but only applied to business customers. Line-based rounding will be used for consumers. "
+                "Recommended when e-invoicing is only used for business customers and consumers do not receive "
+                "invoices. This can cause the payment amount to change when the invoice address is changed."
+            ),
             "sum_by_net_keep_gross": _(
                 "Recommended for e-invoicing when you primarily sell to consumers. "
                 "The gross or net price of some products may be changed automatically to ensure correct "

@@ -171,6 +171,12 @@ class OrderFeeAdded(OrderChangeLogEntryType):
 
 
 @log_entry_types.new()
+class OrderRecomputed(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.recomputed'
+    plain = _('Taxes and rounding have been recomputed')
+
+
+@log_entry_types.new()
 class OrderFeeChanged(OrderChangeLogEntryType):
     action_type = 'pretix.event.order.changed.feevalue'
 
