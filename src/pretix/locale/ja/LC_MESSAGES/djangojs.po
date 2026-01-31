@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-01-30 22:00+0000\n"
+"PO-Revision-Date: 2026-01-31 11:00+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
@@ -167,7 +167,7 @@ msgstr "参加者 (注文済み)"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (paid)"
-msgstr "参加者 (有料)"
+msgstr "参加者 (支払い済み)"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
 msgid "Total revenue"
@@ -223,7 +223,7 @@ msgstr "入場"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
-msgstr "退出"
+msgstr "退場"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
@@ -419,9 +419,8 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
-"リクエストがサーバへ送信されました。１分以上経っても応答がない場合は、イン"
-"ターネット接続を確認してください。確認完了後、ウェブページを再度読込み、再試"
-"行してください。"
+"現在リクエストをサーバへ送信中です。１分以上経っても応答がない場合は、"
+"インターネット接続を確認し、このページを再読み込みして再試行してください。"
 
 #: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
@@ -459,11 +458,11 @@ msgstr "="
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
-msgstr "製品"
+msgstr "商品"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
-msgstr "製品バリエーション"
+msgstr "商品バリエーション"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
@@ -573,7 +572,7 @@ msgstr "欠席"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
 msgid "Error: Product not found!"
-msgstr "エラー:製品が見つかりません!"
+msgstr "エラー:商品が見つかりません!"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
 msgid "Error: Variation not found!"
@@ -585,7 +584,7 @@ msgstr "チェックイン用QRコード"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:549
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr "以下の理由によりPDFファイルの読み込みに失敗しました："
+msgstr "以下の理由によりPDF背景ファイルの読み込みに失敗しました："
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:904
 msgid "Group of objects"
@@ -609,7 +608,7 @@ msgstr "画像エリア"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:917
 msgid "Powered by pretix"
-msgstr "Pretixのイベントチケット売り場"
+msgstr "Powered by pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:919
 msgid "Object"
@@ -677,7 +676,7 @@ msgstr "全て"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
-msgstr "ない"
+msgstr "なし"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
@@ -729,8 +728,8 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"カートに入っている商品は現在売り切れです。在庫があれば、このまま注文を完了す"
-"ることができます。"
+"カート内の商品の確保期限が切れました。在庫があれば、このまま注文を完了するこ"
+"とができます。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:49
 msgid "Cart expired"
@@ -744,7 +743,7 @@ msgstr "カートの有効期限が近づいています。"
 #: pretix/static/pretixpresale/js/ui/cart.js:62
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "カート内の商品の予約は {num} 分以内に完了します。"
+msgstr[0] "カート内の商品はあと {num} 分間確保されています。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
 msgid "Your cart has expired."
@@ -863,7 +862,7 @@ msgstr "登録"
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Reserved"
-msgstr "予約完了"
+msgstr "予約済み"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
@@ -937,7 +936,7 @@ msgstr "最小注文数量：%s"
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr "チケットショップ閉店"
+msgstr "チケットショップを閉じる"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
@@ -975,7 +974,7 @@ msgid ""
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
 "現在チケットショップが混雑しているため、お客様のカートを作ることができません"
-"でした。新しいタブを開き「次へ」をクリックしてください。"
+"でした。「続ける」をクリックして、新しいタブで再試行してください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgctxt "widget"
@@ -988,8 +987,8 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
-"お客様のカートはイベントの申し込みに有効です。商品を選択し、カートへ追加して"
-"ください。"
+"このイベントのカートに商品が入っています。商品を追加すると、既存のカートに追"
+"加されます。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
@@ -1079,7 +1078,7 @@ msgstr "前週"
 #: pretix/static/pretixpresale/js/widget/widget.js:74
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr "座席一覧を開く"
+msgstr "座席選択を開く"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:75
 msgctxt "widget"
