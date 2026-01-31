@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-01-31 11:00+0000\n"
+"PO-Revision-Date: 2026-01-31 23:00+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
@@ -215,7 +215,7 @@ msgstr "このチケットは特別な対応が必要です"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
 msgid "Switch direction"
-msgstr "方向転換"
+msgstr "向きを切り替え"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
@@ -358,7 +358,7 @@ msgstr "閉じる"
 #: pretix/static/pretixbase/js/addressform.js:101
 #: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
-msgstr "必要"
+msgstr "必須"
 
 #: pretix/static/pretixbase/js/asynctask.js:13
 msgid ""
@@ -747,7 +747,7 @@ msgstr[0] "カート内の商品はあと {num} 分間確保されています�
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
 msgid "Your cart has expired."
-msgstr "カートの保存期限が切れています。"
+msgstr "カートの有効期限が切れています。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
 msgid ""
@@ -878,7 +878,7 @@ msgstr "%(currency)s %(price)sから"
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
-msgstr "%sのイメージ"
+msgstr "%sの画像"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
