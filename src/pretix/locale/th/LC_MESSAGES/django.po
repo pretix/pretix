@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-30 06:00+0000\n"
+"PO-Revision-Date: 2026-01-31 11:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -6483,27 +6483,30 @@ msgid ""
 "Every slug can only be used once. This is being used in URLs to refer to "
 "your organizer accounts and your events."
 msgstr ""
+"ควรมีความสั้น และประกอบด้วยตัวอักษรภาษาอังกฤษตัวพิมพ์เล็ก ตัวเลข จุด และเครื่องหมายขีดกลางเท่า"
+"นั้น โดยแต่ละ Slug สามารถใช้ได้เพียงครั้งเดียว ข้อมูลนี้จะถูกนำไปใช้ใน URL เพื่ออ้างอิงถึงบัญชีผู้จัดง"
+"านและกิจกรรมของคุณ"
 
 #: pretix/base/models/organizer.py:103 pretix/control/navigation.py:350
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:19
 #: pretix/control/templates/pretixcontrol/organizers/index.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:8
 msgid "Organizers"
-msgstr ""
+msgstr "ผู้จัดงาน"
 
 #: pretix/base/models/organizer.py:350
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:35
 msgid "Team name"
-msgstr ""
+msgstr "ชื่อทีม"
 
 #: pretix/base/models/organizer.py:351
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:13
 msgid "Team members"
-msgstr ""
+msgstr "สมาชิกในทีม"
 
 #: pretix/base/models/organizer.py:355
 msgid "Require all members of this team to use two-factor authentication"
-msgstr ""
+msgstr "บังคับให้สมาชิกทุกคนในทีมใช้การยืนยันตัวตนแบบสองขั้นตอน (2FA)"
 
 #: pretix/base/models/organizer.py:356
 msgid ""
@@ -6511,56 +6514,60 @@ msgid ""
 "up two-factor authentication or leave the team. The setting may take a few "
 "minutes to become effective for all users."
 msgstr ""
+"หากเปิดใช้งาน สมาชิกทุกคนในทีมจะต้องตั้งค่าการยืนยันตัวตนแบบสองขั้นตอน มิเช่นนั้นจะต้องออกจากทีม "
+"ทั้งนี้ การตั้งค่าอาจใช้เวลาสักครู่เพื่อให้มีผลกับผู้ใช้ทุกคน"
 
 #: pretix/base/models/organizer.py:363
 msgid "Can create events"
-msgstr ""
+msgstr "สามารถสร้างกิจกรรมได้"
 
 #: pretix/base/models/organizer.py:367
 msgid "Can change teams and permissions"
-msgstr ""
+msgstr "สามารถแก้ไขทีมและสิทธิ์การใช้งานได้"
 
 #: pretix/base/models/organizer.py:371
 msgid "Can change organizer settings"
-msgstr ""
+msgstr "สามารถแก้ไขการตั้งค่าผู้จัดงานได้"
 
 #: pretix/base/models/organizer.py:372
 msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
 msgstr ""
+"ผู้ที่ได้รับสิทธิ์นี้จะสามารถเข้าถึงข้อมูลส่วนใหญ่ของทุกกิจกรรมได้ (เช่น ผ่านรายงานความเป็นส่วนตัว) โป"
+"รดใช้ความระมัดระวังในการเพิ่มสมาชิกในทีมนี้!"
 
 #: pretix/base/models/organizer.py:377
 msgid "Can manage customer accounts"
-msgstr ""
+msgstr "สามารถจัดการบัญชีลูกค้าได้"
 
 #: pretix/base/models/organizer.py:381
 msgid "Can manage reusable media"
-msgstr ""
+msgstr "สามารถจัดการสื่อแบบใช้ซ้ำได้"
 
 #: pretix/base/models/organizer.py:385
 msgid "Can manage gift cards"
-msgstr ""
+msgstr "สามารถจัดการบัตรของขวัญได้"
 
 #: pretix/base/models/organizer.py:389
 msgid "Can change event settings"
-msgstr ""
+msgstr "สามารถแก้ไขการตั้งค่ากิจกรรมได้"
 
 #: pretix/base/models/organizer.py:393
 msgid "Can change product settings"
-msgstr ""
+msgstr "สามารถแก้ไขการตั้งค่าสินค้าได้"
 
 #: pretix/base/models/organizer.py:397
 msgid "Can view orders"
-msgstr ""
+msgstr "สามารถดูคำสั่งซื้อได้"
 
 #: pretix/base/models/organizer.py:401
 msgid "Can change orders"
-msgstr ""
+msgstr "สามารถแก้ไขคำสั่งซื้อได้"
 
 #: pretix/base/models/organizer.py:405
 msgid "Can perform check-ins"
-msgstr ""
+msgstr "สามารถดำเนินการเช็กอินได้"
 
 #: pretix/base/models/organizer.py:406
 msgid ""
@@ -6568,34 +6575,36 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"สิทธิ์นี้รวมถึงการค้นหารายชื่อผู้เข้าร่วม ซึ่งอาจถูกใช้เพื่อเข้าถึงข้อมูลส่วนบุคคลได้ ทั้งนี้ ผู้ใช้ที่มีสิทธิ์ \"สา"
+"มารถแก้ไขคำสั่งซื้อได้\" จะสามารถดำเนินการเช็กอินได้ด้วยเช่นกัน"
 
 #: pretix/base/models/organizer.py:411
 msgid "Can view vouchers"
-msgstr ""
+msgstr "สามารถดูเวาเชอร์ได้"
 
 #: pretix/base/models/organizer.py:415
 msgid "Can change vouchers"
-msgstr ""
+msgstr "สามารถแก้ไขเวาเชอร์ได้"
 
 #: pretix/base/models/organizer.py:419
 #, python-format
 msgid "%(name)s on %(object)s"
-msgstr ""
+msgstr "%(name)s สำหรับ %(object)s"
 
 #: pretix/base/models/organizer.py:451
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:67
 msgid "Team"
-msgstr ""
+msgstr "ทีม"
 
 #: pretix/base/models/organizer.py:452 pretix/control/navigation.py:539
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:6
 msgid "Teams"
-msgstr ""
+msgstr "รายการทีม"
 
 #: pretix/base/models/organizer.py:472
 #, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
-msgstr ""
+msgstr "คำเชิญเข้าร่วมทีม '{team}' สำหรับ '{email}'"
 
 #: pretix/base/models/organizer.py:604
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
@@ -6606,119 +6615,120 @@ msgstr "รหัสระบุตัวตน"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:54
 #: pretix/control/templates/pretixcontrol/items/questions.html:22
 msgid "Type"
-msgstr ""
+msgstr "ประเภท"
 
 #: pretix/base/models/seating.py:46 pretix/base/models/tax.py:306
 #: pretix/base/pdf.py:1319
 msgid "Your layout file is not a valid JSON file."
-msgstr ""
+msgstr "ไฟล์เลย์เอาต์ของคุณไม่ใช่ไฟล์ JSON ที่ถูกต้อง"
 
 #: pretix/base/models/seating.py:55 pretix/base/models/seating.py:79
 #, python-brace-format
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr ""
+msgstr "ไฟล์เลย์เอาต์ของคุณไม่ใช่ผังที่นั่งที่ถูกต้อง ข้อความแสดงข้อผิดพลาด: {}"
 
 #: pretix/base/models/seating.py:64
 #, python-brace-format
 msgid "Seat with zone {zone}, row {row}, and number {number} has no seat ID."
 msgstr ""
+"ที่นั่งในโซน {zone} แถว {row} และหมายเลข {number} ไม่มีรหัสที่นั่ง (Seat ID)"
 
 #: pretix/base/models/seating.py:72
 #, python-brace-format
 msgid "Multiple seats have the same ID: {id}"
-msgstr ""
+msgstr "มีที่นั่งหลายที่ใช้รหัสเดียวกัน: {id}"
 
 #: pretix/base/models/seating.py:200
 #, python-brace-format
 msgid "Row {number}"
-msgstr ""
+msgstr "แถว {number}"
 
 #: pretix/base/models/seating.py:205
 #, python-brace-format
 msgid "Seat {number}"
-msgstr ""
+msgstr "ที่นั่ง {number}"
 
 #: pretix/base/models/tax.py:143
 msgid "Standard rates"
-msgstr ""
+msgstr "อัตรามาตรฐาน"
 
 #: pretix/base/models/tax.py:147
 msgctxt "tax_code"
 msgid "Standard rate"
-msgstr ""
+msgstr "อัตรามาตรฐาน"
 
 #: pretix/base/models/tax.py:151
 msgctxt "tax_code"
 msgid "Reduced rate"
-msgstr ""
+msgstr "อัตราลดหย่อน"
 
 #: pretix/base/models/tax.py:155
 msgctxt "tax_code"
 msgid ""
 "Averaged rate (other revenue in a agricultural and silvicultural business)"
-msgstr ""
+msgstr "อัตราเฉลี่ย (รายได้อื่นๆ ในธุรกิจเกษตรกรรมและวนวัฒนวิทยา)"
 
 #: pretix/base/models/tax.py:163
 msgctxt "tax_code"
 msgid "Reverse charge"
-msgstr ""
+msgstr "ภาระภาษีแบบย้อนกลับ (Reverse charge)"
 
 #: pretix/base/models/tax.py:167
 msgid "Tax free"
-msgstr ""
+msgstr "ปลอดภาษี"
 
 #: pretix/base/models/tax.py:170
 msgctxt "tax_code"
 msgid "Services outside of scope of tax"
-msgstr ""
+msgstr "บริการที่อยู่นอกขอบเขตภาษี"
 
 #: pretix/base/models/tax.py:173
 msgctxt "tax_code"
 msgid "Exempt from tax (no reason given)"
-msgstr ""
+msgstr "ได้รับการยกเว้นภาษี (ไม่ได้ระบุเหตุผล)"
 
 #: pretix/base/models/tax.py:176
 msgctxt "tax_code"
 msgid "Zero-rated goods"
-msgstr ""
+msgstr "สินค้าอัตราภาษีศูนย์เปอร์เซ็นต์"
 
 #: pretix/base/models/tax.py:179
 msgctxt "tax_code"
 msgid "Free export item, VAT not charged"
-msgstr ""
+msgstr "รายการส่งออกฟรี ไม่เรียกเก็บภาษีมูลค่าเพิ่ม (VAT)"
 
 #: pretix/base/models/tax.py:182
 msgctxt "tax_code"
 msgid "VAT exempt for EEA intra-community supply of goods and services"
-msgstr ""
+msgstr "ยกเว้น VAT สำหรับการจัดหาจัดจำหน่ายสินค้าและบริการภายในกลุ่ม EEA"
 
 #: pretix/base/models/tax.py:186
 msgid "Special cases"
-msgstr ""
+msgstr "กรณีพิเศษ"
 
 #: pretix/base/models/tax.py:188
 msgctxt "tax_code"
 msgid "Canary Islands general indirect tax"
-msgstr ""
+msgstr "ภาษีทางอ้อมทั่วไปของหมู่เกาะคะแนรี (IGIC)"
 
 #: pretix/base/models/tax.py:189
 msgctxt "tax_code"
 msgid "Tax for production, services and importation in Ceuta and Melilla"
-msgstr ""
+msgstr "ภาษีสำหรับการผลิต บริการ และการนำเข้าในเมืองเซวตาและเมลียา"
 
 #: pretix/base/models/tax.py:190
 msgctxt "tax_code"
 msgid "Transferred (VAT), only in Italy"
-msgstr ""
+msgstr "การโอนภาษีมูลค่าเพิ่ม (ใช้เฉพาะในอิตาลี)"
 
 #: pretix/base/models/tax.py:194
 msgid "Exempt with specific reason"
-msgstr ""
+msgstr "ยกเว้นภาษีโดยระบุเหตุผลเฉพาะ"
 
 #: pretix/base/models/tax.py:197
 msgctxt "tax_code"
 msgid "Exempt based on article 79, point c of Council Directive 2006/112/EC"
-msgstr ""
+msgstr "ยกเว้นภาษีตามมาตรา 79 ข้อ c ของข้อบังคับสภาสหภาพยุโรป 2006/112/EC"
 
 #: pretix/base/models/tax.py:204 pretix/base/models/tax.py:217
 #: pretix/base/models/tax.py:243
@@ -6728,6 +6738,8 @@ msgid ""
 "Exempt based on article {article}, section {section} ({letter}) of Council "
 "Directive 2006/112/EC"
 msgstr ""
+"ยกเว้นภาษีตามมาตรา {article} ส่วนที่ {section} ({letter}) ของข้อบังคับสภาสหภาพยุโรป "
+"2006/112/EC"
 
 #: pretix/base/models/tax.py:230
 #, python-brace-format
@@ -6736,36 +6748,38 @@ msgid ""
 "Exempt based on article {article}, section ({letter}) of Council Directive "
 "2006/112/EC"
 msgstr ""
+"ยกเว้นภาษีตามมาตรา {article} ส่วน ({letter}) ของข้อบังคับสภาสหภาพยุโรป 2006/112/EC"
 
 #: pretix/base/models/tax.py:251
 msgctxt "tax_code"
 msgid "Exempt based on article 309 of Council Directive 2006/112/EC"
-msgstr ""
+msgstr "ยกเว้นภาษีตามมาตรา 309 ของข้อบังคับสภาสหภาพยุโรป 2006/112/EC"
 
 #: pretix/base/models/tax.py:253
 msgctxt "tax_code"
 msgid "Intra-Community acquisition from second hand means of transport"
-msgstr ""
+msgstr "การจัดซื้อยานพาหนะใช้แล้วภายในประชาคมยุโรป"
 
 #: pretix/base/models/tax.py:255
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of second hand goods"
-msgstr ""
+msgstr "การจัดซื้อสินค้าใช้แล้วภายในประชาคมยุโรป"
 
 #: pretix/base/models/tax.py:257
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of works of art"
-msgstr ""
+msgstr "การจัดซื้อผลงานศิลปะภายในประชาคมยุโรป"
 
 #: pretix/base/models/tax.py:259
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of collectors items and antiques"
-msgstr ""
+msgstr "การจัดซื้อของสะสมและวัตถุโบราณภายในประชาคมยุโรป"
 
 #: pretix/base/models/tax.py:261
 msgctxt "tax_code"
 msgid "France domestic VAT franchise in base"
 msgstr ""
+"การยกเว้นภาษีมูลค่าเพิ่มฐานต่ำภายในประเทศฝรั่งเศส (VAT franchise in base)"
 
 #: pretix/base/models/tax.py:263
 msgctxt "tax_code"
@@ -6773,44 +6787,48 @@ msgid ""
 "France domestic Credit Notes without VAT, due to supplier forfeit of VAT for "
 "discount"
 msgstr ""
+"ใบลดหนี้ภายในประเทศฝรั่งเศสแบบไม่มี VAT เนื่องจากผู้ขายสละสิทธิ์ VAT สำหรับส่วนลด"
 
 #: pretix/base/models/tax.py:315
 #, python-brace-format
 msgid "Your set of rules is not valid. Error message: {}"
-msgstr ""
+msgstr "ชุดกฎของคุณไม่ถูกต้อง ข้อความแสดงข้อผิดพลาด: {}"
 
 #: pretix/base/models/tax.py:326
 msgid "Official name"
-msgstr ""
+msgstr "ชื่อทางการ"
 
 #: pretix/base/models/tax.py:327
 msgid "Should be short, e.g. \"VAT\""
-msgstr ""
+msgstr "ควรเป็นชื่อย่อ เช่น \"VAT\""
 
 #: pretix/base/models/tax.py:331 pretix/control/forms/event.py:1636
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 msgid "Tax code"
-msgstr ""
+msgstr "รหัสภาษี"
 
 #: pretix/base/models/tax.py:332
 msgid ""
 "If you help us understand what this tax rules legally is, we can use this "
 "information for eInvoices, exporting to accounting system, etc."
 msgstr ""
+"หากคุณระบุข้อมูลประเภทของกฎภาษีนี้ เราจะสามารถนำข้อมูลไปใช้สำหรับใบกำกับภาษีอิเล็กทรอนิกส์ "
+"(eInvoice), การส่งออกไปยังระบบบัญชี และอื่นๆ ได้"
 
 #: pretix/base/models/tax.py:352
 msgid "The configured product prices include the tax amount"
-msgstr ""
+msgstr "ราคาที่ตั้งไว้รวมภาษีแล้ว"
 
 #: pretix/base/models/tax.py:356
 msgid ""
 "Keep gross amount constant if the tax rate changes based on the invoice "
 "address"
 msgstr ""
+"คงราคาสุทธิ (Gross amount) ให้คงที่ หากอัตราภาษีมีการเปลี่ยนแปลงตามที่อยู่ในใบแจ้งหนี้"
 
 #: pretix/base/models/tax.py:360
 msgid "Use EU reverse charge taxation rules"
-msgstr ""
+msgstr "ใช้กฎการเรียกเก็บภาษีแบบย้อนกลับของสหภาพยุโรป (EU Reverse Charge)"
 
 #: pretix/base/models/tax.py:364
 msgid ""
@@ -6818,10 +6836,13 @@ msgid ""
 "business customers in other EU countries in a way that works for all "
 "organizers. Use custom rules instead."
 msgstr ""
+"ฟีเจอร์นี้จะถูกยกเลิกในอนาคต เนื่องจากไม่ครอบคลุมการจัดการ VAT สำหรับลูกค้าทั่วไป (Non-"
+"business) ในประเทศอื่นในยุโรปในรูปแบบที่เหมาะสมกับผู้จัดงานทุกคน แนะนำให้ใช้กฎแบบกำหนดเองแ"
+"ทน"
 
 #: pretix/base/models/tax.py:366
 msgid "DEPRECATED"
-msgstr ""
+msgstr "ไม่แนะนำให้ใช้งานแล้ว (Deprecated)"
 
 #: pretix/base/models/tax.py:367
 msgid ""
@@ -6832,45 +6853,53 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
+"ไม่แนะนำให้ใช้งาน กิจกรรมส่วนใหญ่ไม่เข้าข่ายการเรียกเก็บภาษีแบบย้อนกลับ (Reverse charge) เนื่"
+"องจากสถานที่จัดเก็บภาษีคือสถานที่จัดกิจกรรม ตัวเลือกนี้จะปิดการเรียกเก็บ VAT สำหรับลูกค้าที่อยู่นอกสห"
+"ภาพยุโรป และสำหรับลูกค้าธุรกิจในยุโรปที่ระบุรหัสประจำตัวผู้เสียภาษี (EU VAT ID) ที่ถูกต้อง ควรเปิด"
+"ใช้งานตัวเลือกนี้หลังจากปรึกษาที่ปรึกษาทางภาษีแล้วเท่านั้น ไม่มีการรับประกันความถูกต้องในการคำนวณภ"
+"าษี การใช้งานเป็นความเสี่ยงของคุณเอง"
 
 #: pretix/base/models/tax.py:375 pretix/plugins/stripe/payment.py:299
 msgid "Merchant country"
-msgstr ""
+msgstr "ประเทศของร้านค้า"
 
 #: pretix/base/models/tax.py:377
 msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
+"ประเทศที่คุณพำนักอาศัย นี่คือประเทศที่กฎการเรียกเก็บภาษีแบบย้อนกลับ (EU Reverse Charge) จะไม่"
+"มีผลบังคับใช้ หากมีการตั้งค่าไว้ด้านบน"
 
 #: pretix/base/models/tax.py:424
 msgid "You need to set your home country to use the reverse charge feature."
 msgstr ""
+"คุณต้องกำหนดประเทศต้นทางของคุณเพื่อใช้งานฟีเจอร์การเรียกเก็บภาษีแบบย้อนกลับ"
 
 #: pretix/base/models/tax.py:428 pretix/control/forms/event.py:1686
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
-msgstr ""
+msgstr "การใช้รหัสภาษีนี้ควบคู่กับอัตราภาษีที่ไม่ใช่ศูนย์นั้นไม่สมเหตุสมผล"
 
 #: pretix/base/models/tax.py:433 pretix/control/forms/event.py:1690
 msgid ""
 "A combination of this tax code with a zero tax rate does not make sense."
-msgstr ""
+msgstr "การใช้รหัสภาษีนี้ควบคู่กับอัตราภาษีที่เป็นศูนย์นั้นไม่สมเหตุสมผล"
 
 #: pretix/base/models/tax.py:438
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr ""
+msgstr "รวม {name} {rate}%"
 
 #: pretix/base/models/tax.py:440
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr ""
+msgstr "บวก {name} เพิ่ม {rate}%"
 
 #: pretix/base/models/tax.py:442
 #: pretix/control/templates/pretixcontrol/event/tax.html:82
 msgid "reverse charge enabled"
-msgstr ""
+msgstr "เปิดใช้งานการเรียกเก็บภาษีแบบย้อนกลับ"
 
 #: pretix/base/models/tax.py:580
 msgctxt "invoice"
@@ -6878,31 +6907,33 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
+"การเรียกเก็บภาษีแบบย้อนกลับ: ตามมาตรา 194, 196 ของข้อบังคับสภาสหภาพยุโรป 2006/112/EC ภ"
+"าระภาษีมูลค่าเพิ่มเป็นของผู้รับบริการ"
 
 #: pretix/base/models/tax.py:586
 msgctxt "invoice"
 msgid "VAT liability rests with the service recipient."
-msgstr ""
+msgstr "ภาระภาษีมูลค่าเพิ่มเป็นหน้าที่ของผู้รับบริการ"
 
 #: pretix/base/models/vouchers.py:171
 msgid "No effect"
-msgstr ""
+msgstr "ไม่มีผลการเปลี่ยนแปลง"
 
 #: pretix/base/models/vouchers.py:172
 msgid "Set product price to"
-msgstr ""
+msgstr "ตั้งราคาเป็น"
 
 #: pretix/base/models/vouchers.py:173
 msgid "Subtract from product price"
-msgstr ""
+msgstr "หักลบจากราคาสินค้า"
 
 #: pretix/base/models/vouchers.py:174
 msgid "Reduce product price by (%)"
-msgstr ""
+msgstr "ลดราคาสินค้าลง (%)"
 
 #: pretix/base/models/vouchers.py:200
 msgid "Number of times this voucher can be redeemed."
-msgstr ""
+msgstr "จำนวนครั้งที่สามารถใช้เวาเชอร์นี้ได้"
 
 #: pretix/base/models/vouchers.py:204 pretix/control/views/vouchers.py:120
 msgid "Redeemed"
