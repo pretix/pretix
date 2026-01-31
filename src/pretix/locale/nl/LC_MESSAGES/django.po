@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-30 22:00+0000\n"
+"PO-Revision-Date: 2026-01-31 11:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -934,28 +934,28 @@ msgstr "E-mailadres van deelnemer of bestelling"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:182
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:185
 msgid "Attendee company"
-msgstr "Bedrijf deelnemer"
+msgstr "Bedrijf van deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:241
 msgid "Attendee address street"
-msgstr "Adres deelnemer: straat"
+msgstr "Straat van deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:250
 msgid "Attendee address ZIP code"
-msgstr "Adres deelnemer: postcode"
+msgstr "Postcode van deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:259
 msgid "Attendee address city"
-msgstr "Adres deelnemer: woonplaats"
+msgstr "Woonplaats van deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:268
 msgid "Attendee address country"
-msgstr "Adres deelnemer: land"
+msgstr "Land van deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:279
 #: pretix/base/exporters/orderlist.py:687 pretix/base/pdf.py:346
 msgid "Invoice address company"
-msgstr "Factuuradres bedrijf"
+msgstr "Factuuradres: bedrijf"
 
 #: pretix/base/datasync/sourcefields.py:288
 #: pretix/base/exporters/orderlist.py:493
