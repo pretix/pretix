@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-01-31 23:00+0000\n"
+"PO-Revision-Date: 2026-02-01 11:00+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
@@ -297,7 +297,7 @@ msgstr "不明なチケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Ticket type not allowed here"
-msgstr "この種類のチケットは使用できません"
+msgstr "この種類のチケットはここでは使用できません"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Entry not allowed"
@@ -428,7 +428,7 @@ msgstr "数分以上かかる場合は、お問い合わせください。"
 
 #: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
-msgstr "閉じる"
+msgstr "メッセージを閉じる"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
@@ -522,7 +522,7 @@ msgstr "以下のすべての条件（AND）"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
 msgid "At least one of the conditions below (OR)"
-msgstr "以下の条件のうち、最低１つ（または）"
+msgstr "以下の条件のうち、最低１つ（OR）"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
 msgid "Event start"
@@ -779,7 +779,7 @@ msgstr "主催者が留保する料金を入力してください。"
 
 #: pretix/static/pretixpresale/js/ui/main.js:577
 msgid "Your local time:"
-msgstr "現地時間："
+msgstr "お使いの地域の時刻："
 
 #: pretix/static/pretixpresale/js/walletdetection.js:39
 msgid "Google Pay"
@@ -904,7 +904,7 @@ msgstr "税別"
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr "現在%s使用可能"
+msgstr "現在の残数: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
