@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-02-01 11:00+0000\n"
+"PO-Revision-Date: 2026-02-01 21:00+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
@@ -27,7 +27,7 @@ msgstr "支払い済み"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr "注釈:"
+msgstr "コメント:"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
 msgid "PayPal"
@@ -157,7 +157,7 @@ msgstr "受注件数"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
 msgid "Paid orders"
-msgstr "支払い済みの注文"
+msgstr "支払い済み件数"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -394,8 +394,7 @@ msgstr "{code} のエラーが発生しました。"
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
-msgstr ""
-"現在サーバへの接続ができませんが、接続試行中です。エラーコード： {code}"
+msgstr "現在サーバへの接続ができませんが、接続試行中です。最新のエラーコード: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:162
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
@@ -442,7 +441,7 @@ msgstr "Ctrl-Cを押してコピー！"
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
 msgid "is one of"
-msgstr "の一つです"
+msgstr "次のいずれか"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
 msgid "is before"
@@ -646,24 +645,24 @@ msgstr "不明なエラー。"
 #: pretix/static/pretixcontrol/js/ui/main.js:309
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr ""
-"あなたの色は素晴らしいコントラストを持ち、優れたアクセシビリティを提供しま"
-"す。"
+"選択した色は素晴らしいコントラストを持ち、優れたアクセシビリティを提供します"
+"。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr ""
-"あなたの色は適切なコントラストを持ち、最小限のアクセシビリティ要件に十分で"
-"す。"
+"選択した色は適切なコントラストを持ち、最小限のアクセシビリティ要件に十分です"
+"。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
-"あなたの色は白に対して十分なコントラストがありません。サイトのアクセシビリ"
-"ティに影響します。"
+"選択した色は白に対して十分なコントラストがありません。サイトの"
+"アクセシビリティに影響します。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:443
 #: pretix/static/pretixcontrol/js/ui/main.js:463
@@ -692,7 +691,7 @@ msgstr "無効なページ番号。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1000
 msgid "Use a different name internally"
-msgstr "内部で別の名前を使用してください"
+msgstr "内部で別の名前を使用する"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:1040
 msgid "Click to close"
@@ -721,7 +720,7 @@ msgstr "カウント"
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] "({num} 他の日程)"
+msgstr[0] "(他に{num}件の日程)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:47
 msgid ""
@@ -754,7 +753,7 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
 msgstr ""
-"カート内の商品の予約期限が切れました。在庫があれば、このまま注文を完了するこ"
+"カート内の商品の確保期限が切れました。在庫があれば、このまま注文を完了するこ"
 "とができます。"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
@@ -949,8 +948,8 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
-"現在チケットショップが混み合っています。新しいタブでチケットショップを開き続"
-"行してください。"
+"現在チケットショップが混み合っています。新しいタブでチケットショップを開いて"
+"続行してください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
