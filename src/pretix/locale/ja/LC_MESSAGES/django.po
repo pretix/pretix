@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-01 21:00+0000\n"
+"PO-Revision-Date: 2026-02-02 08:41+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -29,7 +29,7 @@ msgstr "ドイツ語"
 
 #: pretix/_base_settings.py:89
 msgid "German (informal)"
-msgstr "ドイツ語 (口語的)"
+msgstr "ドイツ語（カジュアル）"
 
 #: pretix/_base_settings.py:90
 msgid "Arabic"
@@ -69,7 +69,7 @@ msgstr "オランダ語"
 
 #: pretix/_base_settings.py:99
 msgid "Dutch (informal)"
-msgstr "オランダ語 (口語的)"
+msgstr "オランダ語（カジュアル）"
 
 #: pretix/_base_settings.py:100
 msgid "French"
@@ -109,7 +109,7 @@ msgstr "ラトビア語"
 
 #: pretix/_base_settings.py:109
 msgid "Norwegian Bokmål"
-msgstr "ノルウェー語 (ブークモール)"
+msgstr "ノルウェー語（ブークモール）"
 
 #: pretix/_base_settings.py:110
 msgid "Polish"
@@ -117,11 +117,11 @@ msgstr "ポーランド語"
 
 #: pretix/_base_settings.py:111
 msgid "Portuguese (Portugal)"
-msgstr "ポルトガル語 (ポルトガル)"
+msgstr "ポルトガル語（ポルトガル）"
 
 #: pretix/_base_settings.py:112
 msgid "Portuguese (Brazil)"
-msgstr "ポルトガル語 (ブラジル)"
+msgstr "ポルトガル語（ブラジル）"
 
 #: pretix/_base_settings.py:113
 msgid "Romanian"
@@ -145,7 +145,7 @@ msgstr "スペイン語"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr "スペイン語 (ラテンアメリカ)"
+msgstr "スペイン語（ラテンアメリカ）"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -443,7 +443,7 @@ msgstr "この注文の請求書は発行済です。"
 #: pretix/api/views/order.py:640 pretix/control/views/orders.py:1791
 #: pretix/control/views/users.py:145
 msgid "There was an error sending the mail. Please try again later."
-msgstr "メールの送信に失敗しました。再送信してください。"
+msgstr "メールの送信中にエラーが発生しました。後でもう一度お試しください。"
 
 #: pretix/api/views/order.py:720 pretix/base/services/cart.py:223
 #: pretix/base/services/orders.py:190 pretix/presale/views/order.py:856
@@ -1535,7 +1535,7 @@ msgstr ""
 #: pretix/base/models/organizer.py:93
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr "短い形式"
+msgstr "略称"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:613
 msgid "Shop is live"
@@ -1880,7 +1880,7 @@ msgstr "リバースチャージ"
 
 #: pretix/base/exporters/invoices.py:227
 msgid "Shown foreign currency"
-msgstr "表示される通貨"
+msgstr "表示する外貨"
 
 #: pretix/base/exporters/invoices.py:228
 msgid "Foreign currency rate"
@@ -2234,11 +2234,11 @@ msgstr "支払い済みの注文のみ"
 
 #: pretix/base/exporters/orderlist.py:118
 msgid "Include payment amounts"
-msgstr "支払った金額を表示"
+msgstr "支払い金額を含める"
 
 #: pretix/base/exporters/orderlist.py:124
 msgid "Show multiple choice answers grouped in one column"
-msgstr "多肢選択問題を1列にまとめる"
+msgstr "多肢選択の回答を1列にまとめて表示"
 
 #: pretix/base/exporters/orderlist.py:133
 #: pretix/plugins/reports/exporters.py:717
@@ -2560,7 +2560,7 @@ msgstr "バウチャー予算の使用状況"
 
 #: pretix/base/exporters/orderlist.py:654
 msgid "Pseudonymization ID"
-msgstr "疑似匿名化ID"
+msgstr "仮名化ID"
 
 #: pretix/base/exporters/orderlist.py:655 pretix/control/forms/filter.py:713
 #: pretix/control/templates/pretixcontrol/order/change.html:280
@@ -2911,7 +2911,7 @@ msgstr "現在のユーザーのカート"
 
 #: pretix/base/exporters/orderlist.py:1191
 msgid "Exited orders"
-msgstr "終了した注文"
+msgstr "退場済みの注文"
 
 #: pretix/base/exporters/orderlist.py:1191
 msgid "Current availability"
@@ -4270,7 +4270,7 @@ msgstr "座席指定のバウチャーは一度しか使用できません。"
 #: pretix/base/modelimport_vouchers.py:306 pretix/base/models/vouchers.py:522
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "このシートでは、製品 \"{prod}\" を選択しなければなりません。"
+msgstr "この座席では、製品 \"{prod}\" を選択しなければなりません。"
 
 #: pretix/base/modelimport_vouchers.py:318 pretix/base/models/vouchers.py:288
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:129
@@ -4690,7 +4690,7 @@ msgstr "ポジション"
 
 #: pretix/base/models/discount.py:72
 msgid "All supported sales channels"
-msgstr "サポートされる全ての販売チャンネル"
+msgstr "サポートされる全ての販売チャネル"
 
 #: pretix/base/models/discount.py:93
 msgid "Event series handling"
@@ -4698,11 +4698,11 @@ msgstr "イベントシリーズの取り扱い"
 
 #: pretix/base/models/discount.py:101
 msgid "Apply to all products (including newly created ones)"
-msgstr "すべての商品に適用（新しく作成された商品を含む）"
+msgstr "すべての製品に適用（新しく作成された製品を含む）"
 
 #: pretix/base/models/discount.py:105
 msgid "Apply to specific products"
-msgstr "特定の商品に適用"
+msgstr "特定の製品に適用"
 
 #: pretix/base/models/discount.py:110
 msgid "Count add-on products"
@@ -4926,7 +4926,7 @@ msgstr "座席表"
 
 #: pretix/base/models/event.py:683 pretix/base/models/items.py:675
 msgid "Sell on all sales channels"
-msgstr "全ての販売チャンネルで販売"
+msgstr "全ての販売チャネルで販売"
 
 #: pretix/base/models/event.py:688 pretix/base/models/items.py:680
 #: pretix/base/models/items.py:1230 pretix/base/payment.py:476
@@ -5021,8 +5021,7 @@ msgstr "イベントシリーズの日程"
 
 #: pretix/base/models/event.py:1730
 msgid "One or more variations do not belong to this event."
-msgstr ""
-"1つ以上のバリエーションがこのイベントには適していない可能性があります。"
+msgstr "1つ以上のバリエーションがこのイベントに属していません。"
 
 #: pretix/base/models/event.py:1760 pretix/base/models/items.py:2236
 msgid "Can not contain spaces or special characters except underscores"
@@ -5044,7 +5043,7 @@ msgstr "主催者レベルの管理者のみが変更できます"
 
 #: pretix/base/models/event.py:1774
 msgid "Required for events"
-msgstr "イベントに必要なもの"
+msgstr "イベントに対して必須"
 
 #: pretix/base/models/event.py:1775
 msgid ""
@@ -5062,7 +5061,7 @@ msgstr "有効な値"
 #: pretix/base/models/event.py:1784
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
 msgid "Show filter option to customers"
-msgstr "お客様にフィルターオプションを表示してください"
+msgstr "顧客にフィルターオプションを表示する"
 
 #: pretix/base/models/event.py:1785
 msgid ""
@@ -5406,7 +5405,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:526
 msgid "Whether or not buying this product allows a person to enter your event"
-msgstr "この商品を購入することで、イベントに入場できるかどうか"
+msgstr "この製品を購入することで、イベントに入場できるかどうか"
 
 #: pretix/base/models/items.py:531
 msgid "Is a personalized ticket"
@@ -5414,7 +5413,7 @@ msgstr "パーソナライズされたチケットです"
 
 #: pretix/base/models/items.py:533
 msgid "Whether or not buying this product allows to enter attendee information"
-msgstr "この商品を購入することで、参加者情報を入力できるかどうか"
+msgstr "この製品を購入することで、参加者情報を入力できるかどうか"
 
 #: pretix/base/models/items.py:542
 msgid "Show a waiting list for this ticket"
@@ -5802,7 +5801,7 @@ msgstr "このバリエーションは指定された日付以降に販売され
 
 #: pretix/base/models/items.py:1225
 msgid "Sell on all sales channels the product is sold on"
-msgstr "すべての販売チャンネルで製品を販売"
+msgstr "すべての販売チャネルで製品を販売"
 
 #: pretix/base/models/items.py:1231
 msgid ""
@@ -6221,7 +6220,7 @@ msgstr "サブイベントはイベントシリーズに対してnullであっ�
 
 #: pretix/base/models/items.py:2248
 msgid "Required for products"
-msgstr "製品に必要なもの"
+msgstr "製品に対して必須"
 
 #: pretix/base/models/items.py:2249
 msgid ""
@@ -6782,7 +6781,7 @@ msgstr "複数の座席が同じIDを持っています: {id}"
 #: pretix/base/models/seating.py:200
 #, python-brace-format
 msgid "Row {number}"
-msgstr "行{number}"
+msgstr "{number}列"
 
 #: pretix/base/models/seating.py:205
 #, python-brace-format
@@ -7181,7 +7180,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:351
 msgid "You cannot select a product that belongs to a different event."
-msgstr "別のイベントに属する商品を選択することはできません。"
+msgstr "別のイベントに属する製品を選択することはできません。"
 
 #: pretix/base/models/vouchers.py:353 pretix/base/models/vouchers.py:363
 msgid ""
@@ -7385,7 +7384,7 @@ msgstr "注文 {order.code} のチケット情報が変更されました。"
 #: pretix/base/notifications.py:276
 #, python-brace-format
 msgid "The contact address of order {order.code} has been changed."
-msgstr "注文{order.code}の連絡先住所が変更されました。"
+msgstr "注文{order.code}の連絡先が変更されました。"
 
 #: pretix/base/notifications.py:282
 #, python-brace-format
@@ -7531,7 +7530,7 @@ msgstr "追加料金"
 
 #: pretix/base/payment.py:429
 msgid "Absolute value"
-msgstr "絶対値"
+msgstr "固定額"
 
 #: pretix/base/payment.py:438
 msgid "Percentage of the order total."
@@ -7606,7 +7605,7 @@ msgstr "支払い方法を有効にするためのリンク"
 
 #: pretix/base/payment.py:506
 msgid "Share this link with customers who should use this payment method."
-msgstr "このリンクを使用すべき顧客と共有してください。"
+msgstr "この支払い方法を利用すべき顧客にこのリンクを共有してください。"
 
 #: pretix/base/payment.py:511
 msgid "Do not send a payment reminder mail"
@@ -8735,7 +8734,7 @@ msgstr "このチケットは{datetime}以前のみ有効でした。"
 #: pretix/base/services/checkin.py:1048
 msgid "This order position has an invalid product for this check-in list."
 msgstr ""
-"この注文明細には、このチェックインリストに対して無効な商品が設定されています"
+"この注文明細には、このチェックインリストに対して無効な製品が設定されています"
 "。"
 
 #: pretix/base/services/checkin.py:1057
@@ -10088,7 +10087,7 @@ msgstr ""
 
 #: pretix/base/settings.py:980
 msgid "Payment term in minutes"
-msgstr "支払期限は分で表示"
+msgstr "支払い期限（分単位）"
 
 #: pretix/base/settings.py:981
 msgid ""
@@ -10444,7 +10443,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1486
 msgid "This shop represents an event"
-msgstr "このショップは、イベントを代理しています"
+msgstr "このショップはイベントに対応しています"
 
 #: pretix/base/settings.py:1488
 msgid ""
@@ -10492,7 +10491,7 @@ msgstr "検索エンジンにチケットショップをインデックスしな
 
 #: pretix/base/settings.py:1549
 msgid "Show variations of a product expanded by default"
-msgstr "製品のデフォルトで展開されたバリエーションを表示"
+msgstr "製品のバリエーションをデフォルトで展開して表示する"
 
 #: pretix/base/settings.py:1558
 msgid "Enable waiting list"
@@ -10733,7 +10732,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1794
 msgid "Show availability in event overviews"
-msgstr "イベント概要に利用可能な日程を表示"
+msgstr "イベント概要に空き状況を表示"
 
 #: pretix/base/settings.py:1795
 msgid ""
@@ -10768,8 +10767,8 @@ msgid ""
 "If your event series has more than 50 dates in the future, only the month or "
 "week calendar can be used."
 msgstr ""
-"もしイベントシリーズが50以上の日付を持つ場合、月間カレンダーまたは週間カレン"
-"ダーのみを使用できます。"
+"イベントシリーズに今後50を超える日程がある場合、月間カレンダーまたは週間"
+"カレンダーのみを使用できます。"
 
 #: pretix/base/settings.py:1829
 msgid "Show filter options for calendar or list view"
@@ -12142,7 +12141,7 @@ msgstr "プライマリーカラー"
 
 #: pretix/base/settings.py:3013
 msgid "Accent color for success"
-msgstr "成功のためのアクセントカラー"
+msgstr "成功時のアクセントカラー"
 
 #: pretix/base/settings.py:3014
 msgid "We strongly suggest to use a shade of green."
@@ -12649,7 +12648,7 @@ msgstr "最終支払い日は前売りの終了日より前にすることはで
 #: pretix/base/settings.py:4080
 #, python-brace-format
 msgid "The value \"{identifier}\" is not a valid sales channel."
-msgstr "\"{identifier}\"の値は、有効な販売チャンネルではありません。"
+msgstr "\"{identifier}\"の値は、有効な販売チャネルではありません。"
 
 #: pretix/base/settings.py:4095
 msgid "This needs to be disabled if other NFC-based types are active."
@@ -12658,7 +12657,7 @@ msgstr ""
 
 #: pretix/base/shredder.py:74 pretix/base/shredder.py:77
 msgid "Your event needs to be over to use this feature."
-msgstr "あなたのイベントは終了している必要があります。"
+msgstr "この機能を使用するには、イベントが終了している必要があります。"
 
 #: pretix/base/shredder.py:79
 msgid "Your ticket shop needs to be offline to use this feature."
@@ -13330,7 +13329,7 @@ msgctxt "timeline"
 msgid ""
 "automatically because the event is over and no end of presale has been "
 "configured"
-msgstr "イベントが終了し、自動的に前売り期間の終期が設定されていないため"
+msgstr "イベントが終了し、前売りの終了日が設定されていなかったため自動的に終了"
 
 #: pretix/base/timeline.py:108
 msgctxt "timeline"
@@ -13726,15 +13725,15 @@ msgstr ""
 
 #: pretix/control/forms/event.py:536 pretix/control/forms/organizer.py:467
 msgid "Allowed titles"
-msgstr "許可されたタイトル"
+msgstr "選択可能な敬称"
 
 #: pretix/control/forms/event.py:537 pretix/control/forms/organizer.py:468
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
 msgstr ""
-"もし上記で定義した命名スキームがユーザーがタイトルを入力することを許可する場"
-"合、これを使用して選択可能なタイトルのセットを制限することができます。"
+"もし上記で定義した命名スキームがユーザーが敬称を入力することを許可する場合、"
+"これを使用して選択可能な敬称のセットを制限することができます。"
 
 #: pretix/control/forms/event.py:655 pretix/control/forms/organizer.py:543
 #, python-brace-format
@@ -13751,12 +13750,12 @@ msgstr "質問しない"
 
 #: pretix/control/forms/event.py:698
 msgid "Ask, but do not require input"
-msgstr "求めるが、必須ではない入力"
+msgstr "入力を求めるが、必須にしない"
 
 #: pretix/control/forms/event.py:699
 #: pretix/control/templates/pretixcontrol/event/settings.html:76
 msgid "Ask and require input"
-msgstr "質問して、入力を求めます"
+msgstr "入力を必須にする"
 
 #: pretix/control/forms/event.py:777
 #, python-brace-format
@@ -13824,7 +13823,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:972
 msgid "Generate invoices for Sales channels"
-msgstr "販売チャネルの請求書を作成"
+msgstr "請求書を生成する販売チャネル"
 
 #: pretix/control/forms/event.py:975
 msgid ""
@@ -14264,7 +14263,7 @@ msgstr "利用可能な数量"
 #: pretix/control/forms/exports.py:56 pretix/control/forms/exports.py:62
 #: pretix/control/forms/exports.py:68
 msgid "Please enter less than 25 recipients."
-msgstr "25人以下の受取人を入力してください。"
+msgstr "受取人は25人未満にしてください。"
 
 #: pretix/control/forms/filter.py:206 pretix/control/forms/filter.py:208
 #: pretix/control/forms/filter.py:1022 pretix/control/forms/filter.py:1024
@@ -14282,7 +14281,7 @@ msgstr "有効な注文"
 
 #: pretix/control/forms/filter.py:224
 msgid "Paid (or canceled with paid fee)"
-msgstr "支払い済み (または支払い済み手数料でキャンセルされた)"
+msgstr "支払い済み（またはキャンセル済みで手数料支払いあり）"
 
 #: pretix/control/forms/filter.py:225 pretix/control/forms/filter.py:1230
 msgid "Paid or confirmed"
@@ -14306,11 +14305,11 @@ msgstr "キャンセル"
 
 #: pretix/control/forms/filter.py:230
 msgid "Canceled (fully)"
-msgstr "キャンセル済み (全額)"
+msgstr "キャンセル済み（完全）"
 
 #: pretix/control/forms/filter.py:231
 msgid "Canceled (fully or with paid fee)"
-msgstr "キャンセル（全額払い戻しまたは手数料を支払って）"
+msgstr "キャンセル済み（完全または手数料を支払って）"
 
 #: pretix/control/forms/filter.py:232
 msgid "Canceled (at least one position)"
@@ -14322,7 +14321,7 @@ msgstr "キャンセル申請済み"
 
 #: pretix/control/forms/filter.py:234
 msgid "Fully canceled but invoice not canceled"
-msgstr "キャンセル済み(請求書は未キャンセル)"
+msgstr "キャンセル済み（請求書は未キャンセル）"
 
 #: pretix/control/forms/filter.py:236
 msgid "Payment process"
@@ -14338,7 +14337,7 @@ msgstr "保留中（期限切れ）"
 
 #: pretix/control/forms/filter.py:240
 msgid "Overpaid"
-msgstr "過払い済み"
+msgstr "過払い"
 
 #: pretix/control/forms/filter.py:241
 msgid "Partially paid"
@@ -14570,7 +14569,7 @@ msgstr "メンバーシップはありません"
 
 #: pretix/control/forms/filter.py:1666
 msgid "Has any membership"
-msgstr "メンバーシップの有無"
+msgstr "メンバーシップあり"
 
 #: pretix/control/forms/filter.py:1667
 msgid "Has valid membership"
@@ -14582,7 +14581,7 @@ msgstr "ショップが公開中"
 
 #: pretix/control/forms/filter.py:1828
 msgid "Shop not live"
-msgstr "ショップは稼働していません"
+msgstr "ショップが未公開"
 
 #: pretix/control/forms/filter.py:1831
 msgid "Single event running or in the future"
@@ -14693,7 +14692,7 @@ msgstr "バウチャーを検索"
 #: pretix/control/views/vouchers.py:132
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr "クォータ「{quota}」内のすべての製品"
+msgstr "クォータ「{quota}」内の任意の製品"
 
 #: pretix/control/forms/filter.py:2439
 msgid "Refund status"
@@ -14805,7 +14804,7 @@ msgstr "追加のフッターテキスト"
 
 #: pretix/control/forms/global_settings.py:63
 msgid "Will be included as additional text in the footer, site-wide."
-msgstr "サイト全体に追加のテキストとして含まれます。"
+msgstr "サイト全体のフッターに追加テキストとして含まれます。"
 
 #: pretix/control/forms/global_settings.py:68
 msgid "Additional footer link"
@@ -15197,7 +15196,7 @@ msgid ""
 "Gift card products should use a tax rule with a rate of 0 percent since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
-"ギフトカード商品には税率0%の税ルールを使用してください。消費税はギフトカード"
+"ギフトカード製品には税率0%の税ルールを使用してください。消費税はギフトカード"
 "が使用される際に課されます。"
 
 #: pretix/control/forms/item.py:776
@@ -15255,7 +15254,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:1004
 msgid "Use value from product"
-msgstr "商品の値を使用する"
+msgstr "製品の値を使用する"
 
 #: pretix/control/forms/item.py:1089
 msgid "Add-ons"
@@ -15479,7 +15478,7 @@ msgstr "顧客にメールで通知する"
 
 #: pretix/control/forms/orders.py:174
 msgid "Keep a cancellation fee of"
-msgstr "キャンセル料を預かる（対象）"
+msgstr "キャンセル料として差し引く金額"
 
 #: pretix/control/forms/orders.py:175
 msgid ""
@@ -15666,7 +15665,7 @@ msgstr "新しい注文に分割"
 
 #: pretix/control/forms/orders.py:582
 msgid "(No membership)"
-msgstr "（会員登録なし）"
+msgstr "（メンバーシップなし）"
 
 #: pretix/control/forms/orders.py:613
 msgid "Remove this fee"
@@ -15743,7 +15742,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:809
 msgid "Do nothing and keep the order as it is."
-msgstr "何もせず、注文どおりに保ちます。"
+msgstr "何もせず、注文を現状のまま維持します。"
 
 #: pretix/control/forms/orders.py:836
 #, python-brace-format
@@ -15802,7 +15801,7 @@ msgstr "ギフトカードの有効期限"
 
 #: pretix/control/forms/orders.py:914
 msgid "Keep a fixed cancellation fee per ticket"
-msgstr "チケットごとに固定のキャンセル料を設定してください"
+msgstr "チケットごとに固定のキャンセル料を差し引く"
 
 #: pretix/control/forms/orders.py:915
 msgid "Free tickets and add-on products are not counted"
@@ -15989,7 +15988,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:597
 msgid "This will be attached to every email."
-msgstr "この文章はすべてのメールに添付されます。"
+msgstr "これはすべてのメールの末尾に追記されます。"
 
 #: pretix/control/forms/organizer.py:689
 msgctxt "webhooks"
@@ -16032,12 +16031,12 @@ msgstr "クライアントシークレット"
 #: pretix/control/forms/organizer.py:1068
 msgctxt "sso_oidc"
 msgid "Scope"
-msgstr "範囲"
+msgstr "スコープ"
 
 #: pretix/control/forms/organizer.py:1069
 msgctxt "sso_oidc"
 msgid "Multiple scopes separated with spaces."
-msgstr "複数のスコープはスペースで区切られます。"
+msgstr "複数のスコープはスペースで区切ってください。"
 
 #: pretix/control/forms/organizer.py:1073
 msgctxt "sso_oidc"
@@ -16424,7 +16423,7 @@ msgstr "注文明細 #{posid}: 使用されたメンバーシップが変更さ�
 #: pretix/control/logdisplay.py:117
 #, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
-msgstr "ポジション #{posid}: シート\"{old_seat}\"が\"{new_seat}\"に変更されました。"
+msgstr "ポジション #{posid}: 座席\"{old_seat}\"が\"{new_seat}\"に変更されました。"
 
 #: pretix/control/logdisplay.py:127
 #, python-brace-format
@@ -17467,19 +17466,19 @@ msgstr "イベント日からクォータが削除されました。"
 
 #: pretix/control/logdisplay.py:787
 msgid "The device has been created."
-msgstr "その装置は作成されました。"
+msgstr "デバイスが作成されました。"
 
 #: pretix/control/logdisplay.py:788
 msgid "The device has been changed."
-msgstr "その装置は変更されました。"
+msgstr "デバイスが変更されました。"
 
 #: pretix/control/logdisplay.py:789
 msgid "Access of the device has been revoked."
-msgstr "デバイスへのアクセスが取り消されました。"
+msgstr "デバイスのアクセス権が取り消されました。"
 
 #: pretix/control/logdisplay.py:790
 msgid "The device has been initialized."
-msgstr "その装置は初期化されました。"
+msgstr "デバイスが初期化されました。"
 
 #: pretix/control/logdisplay.py:791
 msgid "The access token of the device has been regenerated."
@@ -17488,8 +17487,8 @@ msgstr "デバイスのアクセストークンが再生成されました。"
 #: pretix/control/logdisplay.py:792
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
-"そのデバイスは、ハードウェアまたはソフトウェアのアップデートをサーバーに通知"
-"しました。"
+"デバイスが、ハードウェアまたはソフトウェアのアップデートをサーバーに通知しま"
+"した。"
 
 #: pretix/control/logdisplay.py:793
 msgid "The gift card has been created."
@@ -17501,7 +17500,7 @@ msgstr "ギフトカードが変更されました。"
 
 #: pretix/control/logdisplay.py:795
 msgid "A manual transaction has been performed."
-msgstr "マニュアルトランザクションが実行されました。"
+msgstr "手動取引が実行されました。"
 
 #: pretix/control/logdisplay.py:796
 #, python-brace-format
@@ -17622,7 +17621,7 @@ msgstr "チェックイン・リスト{val}"
 
 #: pretix/control/logdisplay.py:884
 msgid "The product has been created."
-msgstr "その製品は作成されました。"
+msgstr "製品が作成されました。"
 
 #: pretix/control/logdisplay.py:885
 msgid "The product has been changed."
@@ -17630,11 +17629,11 @@ msgstr "製品が変更されました。"
 
 #: pretix/control/logdisplay.py:886
 msgid "The product has been reordered."
-msgstr "商品の並び順が変更されました。"
+msgstr "製品の並び順が変更されました。"
 
 #: pretix/control/logdisplay.py:887
 msgid "The product has been deleted."
-msgstr "その製品は削除されました。"
+msgstr "製品が削除されました。"
 
 #: pretix/control/logdisplay.py:888
 msgid "An add-on has been added to this product."
@@ -21015,8 +21014,8 @@ msgid ""
 msgstr ""
 "これらの設定は、非常に特定の課税状況を持つプロのユーザーを対象としています。"
 "ここでルールを作成すると、上記のリバースチャージ設定は無視されます。ルールは"
-"順番にチェックされ、最初のルールが一致した場合、それが使用され、それ以降の"
-"ルールは無視されます。ルールが一致しない場合は、税金が課されます。"
+"順番にチェックされ、最初のルールが注文に一致した場合、それが使用され、それ以"
+"降のルールは無視されます。ルールが一致しない場合は、税金が課されます。"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:53
 msgid "All of these rules will only apply if an invoice address is set."
@@ -21362,8 +21361,9 @@ msgid ""
 "You should have received a copy of pretix' license together with your copy "
 "of pretix. You can also view the current version of the license file here:"
 msgstr ""
-"あなたはpretixのコピーと一緒にpretixのライセンスのコピーを受け取るはずです。"
-"また、ライセンスファイルの現在のバージョンをこちらで確認することもできます："
+"あなたはpretixのコピーと一緒にpretixのライセンスのコピーを受け取っているはず"
+"です。また、ライセンスファイルの現在のバージョンをこちらで確認することもでき"
+"ます："
 
 #: pretix/control/templates/pretixcontrol/global_license.html:18
 msgid "Answers to common questions about the license can be found here:"
@@ -22545,8 +22545,8 @@ msgid ""
 "specific features. Untranslated texts will show up in English."
 msgstr ""
 "このパーセンテージのテキストは、システム全体およびほとんどのプラグインで翻訳"
-"されます。特定の機能のみを使用する場合は、低い値でも十分かもしれません。未翻"
-"訳のテキストは英語で表示されます。"
+"されています。特定の機能のみを使用する場合は、低い値でも十分かもしれません。"
+"未翻訳のテキストは英語で表示されます。"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:6
@@ -22786,7 +22786,7 @@ msgid ""
 "If you chose \"split into new order\" for multiple positions, they will be "
 "all split in one second order together, not multiple orders."
 msgstr ""
-"複数のポジションに「新しい注文に分割」を選択した場合、それらはすべて1つの2次"
+"複数のポジションに「新しい注文に分割」を選択した場合、それらはすべて1つの別の"
 "注文にまとめられます。複数の注文にはなりません。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:48
@@ -23034,7 +23034,7 @@ msgstr "メール履歴を表示"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:89
 msgid "View transaction history"
-msgstr "決済の履歴を見る"
+msgstr "取引履歴を表示"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:100
 msgid "Expire order"
@@ -23248,7 +23248,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:103
 #, python-format
 msgid "Valid %(datetime_range)s"
-msgstr "有効な%(datetime_range)s"
+msgstr "有効期間: %(datetime_range)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:542
 msgid "Ticket page"
@@ -23557,7 +23557,7 @@ msgstr "手動払い戻し"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:163
 msgid "Keep transfer as to do"
-msgstr "そのまま転送を続ける"
+msgstr "転送を未処理のまま保持する"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:167
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:5
@@ -23604,8 +23604,7 @@ msgstr "チケット注文については、どうすべきですか？"
 msgid ""
 "Mark the order as unpaid and allow the customer to pay again with another "
 "payment method."
-msgstr ""
-"注文を未払いにして、お客様が別の支払い方法で再度支払えるようにしてください。"
+msgstr "注文を未払いにし、お客様が別の支払い方法で再度支払えるようにします。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:48
 msgid "Cancel the order irrevocably."
@@ -24091,7 +24090,7 @@ msgstr "保留中（確認済み）"
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:19
 msgid "Canceled (paid fee)"
-msgstr "キャンセル済み（支払い済み手数料）"
+msgstr "キャンセル済み（手数料支払い済み）"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:6
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:8
@@ -24963,7 +24962,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:18
 msgid "Other organizers you accept gift cards from"
-msgstr "他の主催者から受け入れるギフトカード"
+msgstr "ギフトカードを受け入れている他の主催者"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:23
 msgid ""
@@ -25386,7 +25385,7 @@ msgstr "主催者の権限"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:33
 msgid "Event permissions"
-msgstr "イベントの許可"
+msgstr "イベントの権限"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:21
 msgid "Member"
@@ -25470,7 +25469,7 @@ msgstr[0] "%(count)s つのwebhookのリトライがスケジュールされま�
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:25
 msgid "Stop retrying"
-msgstr "停止してください"
+msgstr "再試行を停止"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:29
 #, python-format
@@ -25819,8 +25818,9 @@ msgid ""
 "Required for consistent size across platforms. Supported on Android starting "
 "with pretixPRINT 2.3.3 and on Desktop with pretixSCAN 1.9.3."
 msgstr ""
-"プラットフォーム間で一貫したサイズが必要です。AndroidではpretixPRINT 2.3.3か"
-"らサポートされ、デスクトップではpretixSCAN 1.9.3でサポートされています。"
+"プラットフォーム間で一貫したサイズにするために必要です。Androidでは"
+"pretixPRINT 2.3.3からサポートされ、デスクトップではpretixSCAN 1.9.3でサポート"
+"されています。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:428
 msgid "Rotation (°)"
@@ -26982,7 +26982,7 @@ msgstr "複数の新しいバウチャーを作成"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:98
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:141
 msgid "Download list"
-msgstr "ダウンロードリスト"
+msgstr "リストをダウンロード"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:119
 msgid "Redemptions"
@@ -26995,7 +26995,7 @@ msgstr "有効期限"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:183
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
-msgstr "クォータ内の製品 \"%(quota)s\""
+msgstr "クォータ「%(quota)s」内の任意の製品"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:197
 msgid "Use as a template for new vouchers"
@@ -28665,7 +28665,7 @@ msgstr "このデバイスは現在アクセスできません。"
 
 #: pretix/control/views/organizer.py:1518
 msgid "Access for this device has been revoked."
-msgstr "このデバイスへのアクセス権が取り消されました。"
+msgstr "このデバイスのアクセス権が取り消されました。"
 
 #: pretix/control/views/organizer.py:1639
 msgid ""
@@ -28784,7 +28784,7 @@ msgstr "顧客アカウントは匿名化されました。"
 
 #: pretix/control/views/organizer.py:3568
 msgid "This channel can not be deleted."
-msgstr "このチャンネルは削除できません。"
+msgstr "このチャネルは削除できません。"
 
 #: pretix/control/views/organizer.py:3573
 msgid "The selected sales channel has been deleted."
@@ -28795,8 +28795,8 @@ msgid ""
 "The channel could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it."
 msgstr ""
-"チャンネルは削除できませんでした。プラグインによって作成されたデータなど、い"
-"くつかの制約がそれを許可していませんでした。"
+"チャネルは削除できませんでした。プラグインによって作成されたデータなど、いく"
+"つかの制約がそれを許可していませんでした。"
 
 #: pretix/control/views/organizer.py:3600
 msgid "The order of sales channels has been updated."
@@ -28908,7 +28908,7 @@ msgstr "2要素認証デバイスがアカウントから削除されました�
 
 #: pretix/control/views/user.py:385
 msgid "The device has been removed."
-msgstr "その装置は取り外されました。"
+msgstr "デバイスが削除されました。"
 
 #: pretix/control/views/user.py:450
 msgid "This security device is already registered."
@@ -28929,7 +28929,7 @@ msgstr ""
 
 #: pretix/control/views/user.py:488 pretix/control/views/user.py:548
 msgid "The device has been verified and can now be used."
-msgstr "そのデバイスは確認され、今後使用できるようになりました。"
+msgstr "デバイスが確認され、今後使用できるようになりました。"
 
 #: pretix/control/views/user.py:491
 msgid "The registration could not be completed. Please try again."
@@ -29278,7 +29278,7 @@ msgstr ""
 
 #: pretix/plugins/autocheckin/models.py:59
 msgid "All sales channels"
-msgstr "すべての販売チャンネル"
+msgstr "すべての販売チャネル"
 
 #: pretix/plugins/autocheckin/models.py:69
 msgid "All products and variations"
@@ -29376,19 +29376,19 @@ msgstr "1ページに1つのバッジ"
 
 #: pretix/plugins/badges/exporters.py:97
 msgid "4 landscape A6 pages on one A4 page"
-msgstr "1枚のA4用紙に4つのA6用紙のレイアウトを配置"
+msgstr "1枚のA4用紙に4枚のA6横長ページを配置"
 
 #: pretix/plugins/badges/exporters.py:105
 msgid "4 portrait A6 pages on one A4 page"
-msgstr "1枚のA4用紙に4枚のA6ポートレートページを配置"
+msgstr "1枚のA4用紙に4枚のA6縦長ページを配置"
 
 #: pretix/plugins/badges/exporters.py:113
 msgid "8 landscape A7 pages on one A4 page"
-msgstr "1枚のA4用紙に8枚のA7用紙のレイアウトを配置"
+msgstr "1枚のA4用紙に8枚のA7横長ページを配置"
 
 #: pretix/plugins/badges/exporters.py:121
 msgid "8 portrait A7 pages on one A4 page"
-msgstr "1枚のA4用紙に8枚のA7ポートレートページを配置"
+msgstr "1枚のA4用紙に8枚のA7縦長ページを配置"
 
 #: pretix/plugins/badges/exporters.py:353
 msgid "None of the selected products is configured to print badges."
@@ -29625,8 +29625,8 @@ msgid ""
 "Accept payments from your customers using classical wire transfer methods "
 "with your own bank account."
 msgstr ""
-"お客様からの支払いを、あなた自身の銀行口座を使用して古典的な電信送金方法で受"
-"け付けることができます。"
+"お客様からの支払いを、あなた自身の銀行口座を使用して従来の銀行振込で受け付け"
+"ることができます。"
 
 #: pretix/plugins/banktransfer/apps.py:46
 #: pretix/plugins/banktransfer/signals.py:56
@@ -30645,7 +30645,7 @@ msgstr "最後の更新"
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:71
 msgid "Total value"
-msgstr "合計価値"
+msgstr "合計金額"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
@@ -30752,11 +30752,11 @@ msgid ""
 "nature of your event - you might want to disabled the option of SEPA Direct "
 "Debit payments in order to reduce the risk of costly chargebacks."
 msgstr ""
-"ほとんどの支払い方法は、顧客が商人との具体的なトラブルを明確に示さない限り、"
-"取り消すことができませんが、SEPA直接デビットはボタンを押すだけで取り消すこと"
-"ができます。そのため、イベントの性質に応じて、高額なチャージバックのリスクを"
-"減らすために、SEPA直接デビット支払いのオプションを無効にすることが望ましい場"
-"合があります。"
+"ほとんどの支払い方法は、顧客が加盟店との具体的なトラブルを明確に示さない限り"
+"、取り消すことができませんが、SEPA直接デビットはボタンを押すだけで取り消すこ"
+"とができます。そのため、イベントの性質に応じて、高額なチャージバックのリスク"
+"を減らすために、SEPA直接デビット支払いのオプションを無効にすることが望ましい"
+"場合があります。"
 
 #: pretix/plugins/paypal2/payment.py:183
 msgid "Enable Buy Now Pay Later"
@@ -30933,7 +30933,8 @@ msgid ""
 "This is not the BN-code, but rather the ID of the merchant account which "
 "holds branding information for ISU."
 msgstr ""
-"これはBNコードではなく、ISUのブランド情報を保持する商人アカウントのIDです。"
+"これはBNコードではなく、ISUのブランド情報を保持するマーチャントアカウントのID"
+"です。"
 
 #: pretix/plugins/paypal2/signals.py:95
 msgid "PayPal ISU/Connect Endpoint"
@@ -31860,8 +31861,8 @@ msgid ""
 "If you select a single date, payment method fees will not be listed here as "
 "it might not be clear which date they belong to."
 msgstr ""
-"単独の日程を選択した場合、どの日が含まれるのか明確でないことから、決済費用は"
-"ここには表示されません。"
+"単独の日程を選択した場合、手数料がどの日程に属するか明確でないため、決済費用"
+"はここには表示されません。"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:91
 msgid ""
@@ -31914,7 +31915,7 @@ msgstr "座席販売の潜在能力"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:161
 msgid "Unsold Seats"
-msgstr "未売りの席"
+msgstr "未販売の席"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:162
 msgid "Potential Profits"
@@ -32038,7 +32039,7 @@ msgstr ""
 "文/電話注文）としてフラグ付けすることができ、これにより強力な顧客認証（SCA）"
 "の要件が免除されます。ただし、この機能を有効にすると、年次のPCI-DSS自己評価"
 "フォーム（40ページのSAQ Dなど）の記入が必要になります。この件についての詳細に"
-"ついては、%sにご相談ください。"
+"ついては、%sをご参照ください。"
 
 #: pretix/plugins/stripe/payment.py:248 pretix/plugins/stripe/payment.py:253
 msgid "Stripe account"
@@ -32850,7 +32851,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:62
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr "支払いの処理は、次の理由で完了しません:"
+msgstr "支払いの処理は、次の理由で完了できませんでした:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:22
 #, python-format
@@ -33503,8 +33504,8 @@ msgid ""
 "Orders made through this sales channel cannot be deleted - even if the "
 "ticket shop is in test mode!"
 msgstr ""
-"この販売チャンネルを通じて行われた注文は、チケットショップがテストモードであ"
-"っても削除できません！"
+"この販売チャネルを通じて行われた注文は、チケットショップがテストモードであっ"
+"ても削除できません！"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:178
 msgctxt "alert-messages"
@@ -34241,15 +34242,15 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
 msgid "Renew reservation"
-msgstr "予約を更新"
+msgstr "確保を更新"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:526
 msgid "Reservation renewed"
-msgstr "予約が更新されました"
+msgstr "確保が更新されました"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:532
 msgid "Overview of your ordered products."
-msgstr "注文した商品の概要"
+msgstr "注文した製品の概要"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:50
 msgid "Continue with order process"
@@ -34932,8 +34933,7 @@ msgstr "注文をキャンセル"
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
-msgstr ""
-"購入した商品を変更したい場合は、注文を変更するボタンをクリックしてください。"
+msgstr "購入した製品を変更したい場合は、注文を変更するボタンをクリックしてください。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:374
 msgid "Change order"
@@ -35943,7 +35943,7 @@ msgstr "製品が正常にカートに追加されました。"
 #: pretix/presale/views/cart.py:612 pretix/presale/views/event.py:543
 #: pretix/presale/views/widget.py:398
 msgid "Tickets for this event cannot be purchased on this sales channel."
-msgstr "このイベントのチケットは、この販売チャンネルでは購入できません。"
+msgstr "このイベントのチケットは、この販売チャネルでは購入できません。"
 
 #: pretix/presale/views/cart.py:767
 msgid ""
