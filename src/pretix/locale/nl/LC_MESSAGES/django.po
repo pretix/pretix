@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-31 11:00+0000\n"
+"PO-Revision-Date: 2026-02-02 11:32+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -6857,7 +6857,7 @@ msgstr "Uitnodiging voor team '{team}' voor '{email}'"
 #: pretix/base/models/organizer.py:604
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:23
 msgid "Identifier"
-msgstr "Identificatiecode"
+msgstr "Identificator"
 
 #: pretix/base/models/organizer.py:614
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:54
@@ -21986,51 +21986,51 @@ msgstr "Eerste maand van de licentieperiode:"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:16
 msgid "January"
-msgstr "Januari"
+msgstr "januari"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:17
 msgid "February"
-msgstr "Februari"
+msgstr "februari"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:18
 msgid "March"
-msgstr "Maart"
+msgstr "maart"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:19
 msgid "April"
-msgstr "April"
+msgstr "april"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:20
 msgid "May"
-msgstr "Mei"
+msgstr "mei"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:21
 msgid "June"
-msgstr "Juni"
+msgstr "juni"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:22
 msgid "July"
-msgstr "Juli"
+msgstr "juli"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:23
 msgid "August"
-msgstr "Augustus"
+msgstr "augustus"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:24
 msgid "September"
-msgstr "September"
+msgstr "september"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:25
 msgid "October"
-msgstr "Oktober"
+msgstr "oktober"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:26
 msgid "November"
-msgstr "November"
+msgstr "november"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:27
 msgid "December"
-msgstr "December"
+msgstr "december"
 
 #: pretix/control/templates/pretixcontrol/global_sysreport.html:32
 msgid "Generate report"
@@ -31295,7 +31295,7 @@ msgstr "Klik hier voor instructies voor het verkrijgen van de nodige sleutels"
 #: pretix/plugins/paypal/payment.py:130 pretix/plugins/paypal2/payment.py:127
 #: pretix/plugins/stripe/payment.py:258
 msgid "Endpoint"
-msgstr "Eindpunt"
+msgstr "Endpoint"
 
 #: pretix/plugins/paypal/payment.py:142 pretix/plugins/paypal2/payment.py:201
 msgid "Reference prefix"
