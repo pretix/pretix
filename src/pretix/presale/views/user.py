@@ -97,7 +97,8 @@ class UnlockHashView(EventViewMixin, View):
 
     def get(self, request, *args, **kwargs):
         hashes = request.session.get('pretix_unlock_hashes', [])
-        hashes.append(kwargs.get('hash'))
+        if kwargs.get('hash') not in hashes:
+            hashes.append(kwargs.get('hash'))
         request.session['pretix_unlock_hashes'] = hashes
 
         if 'voucher' in request.GET:
