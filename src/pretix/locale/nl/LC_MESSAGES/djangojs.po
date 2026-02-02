@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-01-28 00:00+0000\n"
+"PO-Revision-Date: 2026-02-02 11:32+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -186,15 +186,15 @@ msgstr "Verbinding maken met uw bank …"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
-msgstr "Kies een inchecklijst"
+msgstr "Kies een check-in-lijst"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr "Geen actieve check-inlijsten gevonden."
+msgstr "Geen actieve check-in-lijsten gevonden."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
-msgstr "Andere inchecklijst kiezen"
+msgstr "Andere check-in-lijst kiezen"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
 msgid "Search results"
@@ -602,7 +602,7 @@ msgstr "Tekstvak"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Barcode area"
-msgstr "Barcode gebied"
+msgstr "Barcodegebied"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:915
 msgid "Image area"
@@ -941,7 +941,7 @@ msgstr "minimale hoeveelheid om te bestellen: %s"
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr "Sluit ticketverkoop"
+msgstr "Sluit ticketwinkel"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
@@ -1160,51 +1160,51 @@ msgstr "zondag"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:94
 msgid "January"
-msgstr "Januari"
+msgstr "januari"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:95
 msgid "February"
-msgstr "Februari"
+msgstr "februari"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:96
 msgid "March"
-msgstr "Maart"
+msgstr "maart"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:97
 msgid "April"
-msgstr "April"
+msgstr "april"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:98
 msgid "May"
-msgstr "Mei"
+msgstr "mei"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:99
 msgid "June"
-msgstr "Juni"
+msgstr "juni"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:100
 msgid "July"
-msgstr "Juli"
+msgstr "juli"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:101
 msgid "August"
-msgstr "Augustus"
+msgstr "augustus"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:102
 msgid "September"
-msgstr "September"
+msgstr "september"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:103
 msgid "October"
-msgstr "Oktober"
+msgstr "oktober"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:104
 msgid "November"
-msgstr "November"
+msgstr "november"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
-msgstr "December"
+msgstr "december"
 
 #~ msgid "Time zone:"
 #~ msgstr "Tijdzone:"
