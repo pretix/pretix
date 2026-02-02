@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-02-01 21:00+0000\n"
+"PO-Revision-Date: 2026-02-02 08:41+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
@@ -591,7 +591,7 @@ msgstr "オブジェクトグループ"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:909
 msgid "Text object (deprecated)"
-msgstr "テキストオブジェクト (廃止済)"
+msgstr "テキストオブジェクト（非推奨）"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:911
 msgid "Text box"
@@ -758,11 +758,11 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
-msgstr "予約の期間を更新しますか？"
+msgstr "確保期間を更新しますか？"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Renew reservation"
-msgstr "予約を更新"
+msgstr "確保を更新"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"
