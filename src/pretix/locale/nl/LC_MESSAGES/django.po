@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-02 11:32+0000\n"
+"PO-Revision-Date: 2026-02-02 21:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -176,7 +176,7 @@ msgstr "pretixSCAN (alleen online, geen ordersynchronisatie)"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:422
 msgid "Application name"
-msgstr "Applicatienaam"
+msgstr "Naam applicatie"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:445
 msgid "Redirection URIs"
@@ -211,7 +211,7 @@ msgstr "Doel-URL"
 #: pretix/api/models.py:118 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:352
 msgid "All events (including newly created ones)"
-msgstr "Alle evenementen (inclusief nieuw gemaakte)"
+msgstr "Alle evenementen (inclusief nieuw aangemaakte evenementen)"
 
 #: pretix/api/models.py:119 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:353
@@ -903,7 +903,7 @@ msgstr "Evenement- of datuminformatie"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:50
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:36
 msgid "Attendee name"
-msgstr "Naam van deelnemer"
+msgstr "Naam deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:187
 #: pretix/base/datasync/sourcefields.py:604
@@ -934,7 +934,7 @@ msgstr "E-mailadres van deelnemer of bestelling"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:182
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:185
 msgid "Attendee company"
-msgstr "Bedrijf van deelnemer"
+msgstr "Bedrijf deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:241
 msgid "Attendee address street"
@@ -942,15 +942,15 @@ msgstr "Straat van deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:250
 msgid "Attendee address ZIP code"
-msgstr "Postcode van deelnemer"
+msgstr "Postcode deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:259
 msgid "Attendee address city"
-msgstr "Woonplaats van deelnemer"
+msgstr "Woonplaats deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:268
 msgid "Attendee address country"
-msgstr "Land van deelnemer"
+msgstr "Land deelnemer"
 
 #: pretix/base/datasync/sourcefields.py:279
 #: pretix/base/exporters/orderlist.py:687 pretix/base/pdf.py:346
@@ -2497,7 +2497,7 @@ msgstr "geannuleerd"
 #: pretix/base/exporters/orderlist.py:942
 #: pretix/plugins/checkinlists/exporters.py:761
 msgid "Position ID"
-msgstr "Product-ID"
+msgstr "Positie-ID"
 
 #: pretix/base/exporters/orderlist.py:627
 #: pretix/base/exporters/orderlist.py:1195
@@ -4300,7 +4300,7 @@ msgstr ""
 #: pretix/base/modelimport_vouchers.py:306 pretix/base/models/vouchers.py:522
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "U dient het product \"{prod}\" te selecteren voor deze stoel."
+msgstr "U moet het product \"{prod}\" voor deze stoel kiezen."
 
 #: pretix/base/modelimport_vouchers.py:318 pretix/base/models/vouchers.py:288
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:129
@@ -4405,7 +4405,7 @@ msgstr "Wachtwoord herstellen"
 
 #: pretix/base/models/checkin.py:55
 msgid "All products (including newly created ones)"
-msgstr "Alle producten (inclusief nieuwe gemaakte)"
+msgstr "Alle producten (inclusief nieuw aangemaakte producten)"
 
 #: pretix/base/models/checkin.py:56 pretix/plugins/badges/exporters.py:436
 #: pretix/plugins/checkinlists/exporters.py:854
@@ -4966,7 +4966,7 @@ msgstr "Evenementenreeks"
 
 #: pretix/base/models/event.py:676 pretix/base/models/event.py:1574
 msgid "Seating plan"
-msgstr "Zitplan"
+msgstr "Zaalplan"
 
 #: pretix/base/models/event.py:683 pretix/base/models/items.py:675
 msgid "Sell on all sales channels"
@@ -6873,7 +6873,7 @@ msgstr "Uw lay-outbestand is geen geldig JSON-bestand."
 #: pretix/base/models/seating.py:55 pretix/base/models/seating.py:79
 #, python-brace-format
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr "Uw lay-outbestand is geen geldig zitplan. Foutmelding: {}"
+msgstr "Uw lay-outbestand is geen geldig zaalplan. Foutmelding: {}"
 
 #: pretix/base/models/seating.py:64
 #, python-brace-format
@@ -7809,7 +7809,7 @@ msgstr ""
 #: pretix/base/payment.py:1246 pretix/base/payment.py:1462
 #: pretix/plugins/banktransfer/payment.py:150
 msgid "Payment method name"
-msgstr "Naam van betaalmethode"
+msgstr "Naam betaalmethode"
 
 #: pretix/base/payment.py:1250
 msgid "Payment process description during checkout"
@@ -9585,8 +9585,8 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already sold."
 msgstr ""
-"U kunt het zitplan niet veranderen, omdat stoel \"%s\" niet aanwezig is in "
-"het nieuwe zitplan en deze stoel al verkocht is."
+"U kunt het zaalplan niet veranderen, omdat stoel \"%s\" niet aanwezig is in "
+"het nieuwe zaalplan en deze stoel al verkocht is."
 
 #: pretix/base/services/seating.py:131
 #, python-format
@@ -9594,8 +9594,8 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already used in a voucher."
 msgstr ""
-"U kunt het zitplan niet veranderen, omdat stoel \"%s\" niet aanwezig is in "
-"het nieuwe zitplan en deze stoel al gebruikt is voor een voucher."
+"U kunt het zaalplan niet veranderen, omdat stoel \"%s\" niet aanwezig is in "
+"het nieuwe zaalplan en deze stoel al gebruikt is voor een voucher."
 
 #: pretix/base/services/shredder.py:126 pretix/control/views/shredder.py:97
 msgid ""
@@ -15162,7 +15162,7 @@ msgstr "Alle inchecklijsten"
 #: pretix/plugins/checkinlists/exporters.py:758
 #: pretix/plugins/checkinlists/exporters.py:846
 msgid "Check-in list"
-msgstr "Check-inlijst"
+msgstr "Check-in-lijst"
 
 #: pretix/control/forms/filter.py:2760
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:82
@@ -15547,7 +15547,7 @@ msgstr "Kies een quotum."
 #: pretix/control/forms/item.py:617 pretix/plugins/badges/forms.py:85
 #: pretix/plugins/ticketoutputpdf/forms.py:55
 msgid "(Event default)"
-msgstr "(Evenement standaard)"
+msgstr "(Standaard voor evenement)"
 
 #: pretix/control/forms/item.py:627
 msgid "Choose automatically depending on event settings"
@@ -21367,7 +21367,7 @@ msgid ""
 "waiting list but still are unable to book a seat."
 msgstr ""
 "De wachtlijst bepaalt beschikbaarheid op basis van de ingestelde quota. Als "
-"u een zitplan gebruikt en het aantal beschikbare stoelen is minder dan het "
+"u een zaalplan gebruikt en het aantal beschikbare stoelen is minder dan het "
 "aantal producten in het quotum, kan het gebeuren dat klanten een e-mail van "
 "de wachtlijst krijgen, maar nog steeds geen zitplaats kunnen boeken."
 
@@ -21377,7 +21377,7 @@ msgid ""
 "the minimum distance feature of our seating plan module."
 msgstr ""
 "Dit betekent ook dat de wachtlijst niet te gebruiken is in combinatie met de "
-"minimumafstandseis in onze zitplanmodule."
+"minimumafstandseis in onze zaalplanmodule."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:398
 msgid "Waiting customers"
@@ -22791,11 +22791,11 @@ msgstr "Product met varianten"
 #: pretix/control/templates/pretixcontrol/items/index.html:118
 msgctxt "subevent"
 msgid "Product assigned to seating plan for one or more dates"
-msgstr "Product toegewezen tot een zitplan voor een of meerdere data"
+msgstr "Product toegewezen tot een zaalplan voor een of meerdere data"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:118
 msgid "Product assigned to seating plan"
-msgstr "Product toegewezen aan zitplan"
+msgstr "Product toegewezen aan zaalplan"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:126
 msgid "Only available as an add-on product"
@@ -25398,12 +25398,11 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
-"Het is uiteindelijk uw verantwoordelijkheid om ervoor te zorgen dat u "
-"voldoet aan alle relevante wetgeving. Wij bieden deze instellingen ter "
-"ondersteuning, maar kunnen geen aansprakelijkheid dragen, aangezien wij de "
-"exacte configuratie van uw gebruik van pretix, de juridische details in uw "
-"rechtsgebied, of de afspraken met derden zoals betalings- of "
-"trackingaanbieders niet kennen."
+"Het is uw verantwoordelijkheid om ervoor te zorgen dat u voldoet aan alle "
+"relevante wetgeving. Wij bieden deze instellingen ter ondersteuning, maar "
+"kunnen geen aansprakelijkheid dragen, aangezien wij de exacte configuratie "
+"van uw gebruik van pretix, de juridische details in uw rechtsgebied of de "
+"afspraken met derden zoals betalings- of trackingaanbieders niet kennen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:205
 msgid "Accessibility"
@@ -31131,7 +31130,7 @@ msgstr "Met deze plug-in kunt u check-inlijsten voor uw evenement genereren."
 #: pretix/plugins/checkinlists/exporters.py:92
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
 msgid "Only include tickets for dates within this range."
-msgstr "Neem alleen tickets op voor data binnen dit bereik."
+msgstr "Neem alleen tickets op voor datums binnen dit bereik."
 
 #: pretix/plugins/checkinlists/exporters.py:96
 msgid "Include QR-code secret"
@@ -31237,7 +31236,7 @@ msgstr "Datum upload"
 
 #: pretix/plugins/checkinlists/exporters.py:773
 msgid "Upload time"
-msgstr "Tijd upload"
+msgstr "Tijdstip van uploaden"
 
 #: pretix/plugins/checkinlists/exporters.py:830
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:523
@@ -31451,8 +31450,8 @@ msgstr "Het betalingsproces is begonnen in een nieuw venster."
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
-"Het venster voor het invoeren van uw betalingsgegevens werd niet geopend of "
-"werd gesloten?"
+"Het venster voor het invoeren van uw betalingsgegevens was niet open of werd "
+"gesloten?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
@@ -35577,7 +35576,7 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
-"Sommige categorieën in het bovenstaande zitplan zijn momenteel uitverkocht. "
+"Sommige categorieën in het bovenstaande zaalplan zijn momenteel uitverkocht. "
 "Als u wilt, kunt u zich op de wachtlijst laten plaatsen. Wij zullen u dan op "
 "de hoogte brengen wanneer er weer plaatsen beschikbaar zijn."
 
