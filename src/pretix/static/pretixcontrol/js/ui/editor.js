@@ -674,10 +674,11 @@ var editor = {
             $("#toolbox").find("button[data-action=middle]").toggleClass('active', o.verticalAlign === 'middle');
             $("#toolbox").find("button[data-action=bottom]").toggleClass('active', o.verticalAlign === 'bottom');
 
+            console.log("_update_toolbox_values", o.scaleY, o.scaleX)
             if (o.scaleY !== 1 || o.scaleX !== 1) {
                 o.set({
-                    height: o.height * o.scaleY,
-                    width: o.width * o.scaleX,
+                    height: Math.max(o.height * o.scaleY, editor._mm2px(10.01)),
+                    width: Math.max(o.width * o.scaleX, editor._mm2px(10.01)),
                     scaleX: 1,
                     scaleY: 1
                 });
