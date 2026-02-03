@@ -170,7 +170,6 @@ def test_queue_state_sent(env):
         subject='Test',
         body_plain='Test',
         sender='sender@example.com',
-        headers={},
     )
     assert m.status == OutgoingMail.STATUS_QUEUED
     mail_send_task.apply(kwargs={
@@ -188,7 +187,6 @@ def test_queue_state_permanent_failure(env):
         subject='Test',
         body_plain='Test',
         sender='sender@example.com',
-        headers={},
     )
     assert m.status == OutgoingMail.STATUS_QUEUED
     mail_send_task.apply(kwargs={
@@ -210,7 +208,6 @@ def test_queue_state_retry_failure(env, monkeypatch):
         subject='Test',
         body_plain='Test',
         sender='sender@example.com',
-        headers={},
     )
     assert m.status == OutgoingMail.STATUS_QUEUED
     mail_send_task.apply(kwargs={
@@ -236,7 +233,6 @@ def test_queue_state_foreign_key_handling():
         subject='Test',
         body_plain='Test',
         sender='sender@example.com',
-        headers={},
     )
     mail_sent = OutgoingMail.objects.create(
         organizer=o,
@@ -245,7 +241,6 @@ def test_queue_state_foreign_key_handling():
         subject='Test',
         body_plain='Test',
         sender='sender@example.com',
-        headers={},
         status=OutgoingMail.STATUS_SENT,
     )
 
