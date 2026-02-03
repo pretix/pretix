@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2025-08-27 22:00+0000\n"
+"PO-Revision-Date: 2026-02-03 17:12+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
+"da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -35175,30 +35175,31 @@ msgid "Yes, request cancellation"
 msgstr "Generér afbestilling"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:19
-#, fuzzy
 msgid "Please confirm the following changes to your order."
-msgstr "Kontroller venligst detaljerne nedenfor og bekræft din bestilling."
+msgstr "Bekræft venligst følgende ændringer i din ordre."
 
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:10
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:10
-#, fuzzy, python-format
+#, python-format
 msgid "Gift card: %(code)s"
-msgstr "Gavekort"
+msgstr "Gavekort: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
-msgstr "Rediger bestilling"
+msgstr "Redigér ordre"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:8
 #, python-format
 msgid "Modify order: %(code)s"
-msgstr ""
+msgstr "Rediger ordre: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:18
 msgid ""
 "Modifying your invoice address will not automatically generate a new "
 "invoice. Please contact us if you need a new invoice."
 msgstr ""
+"Ændring af din fakturaadresse vil ikke automatisk generere en ny faktura. "
+"Kontakt os venligst, hvis du har brug for en ny faktura."
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:88
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:49
@@ -35210,19 +35211,22 @@ msgid "Change payment method"
 msgstr "Skift betalingsmetode"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:13
-#, fuzzy, python-format
+#, python-format
 msgid "Choose payment method: %(code)s"
-msgstr "Skift betalingsmetode: %(code)s"
+msgstr "Vælg betalingsmetode: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:19
 msgid ""
 "Please note: If you change your payment method, your order total will change "
 "by the amount displayed to the right of each method."
 msgstr ""
+"Bemærk: Hvis du ændrer din betalingsmetode, ændres din ordres samlede beløb "
+"med det beløb, der vises til højre for hver metode."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:61
 msgid "There are no alternative payment providers available for this order."
 msgstr ""
+"Der er ingen alternative betalingsudbydere tilgængelige for denne ordre."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:16
 msgid "Please confirm the following payment details."
@@ -35231,7 +35235,7 @@ msgstr "Bekræft venligst følgende betalingsoplysninger."
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
 msgid "Total: %(total)s"
-msgstr ""
+msgstr "Total: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/payment_qr_codes.html:17
 msgid ""
@@ -35270,10 +35274,9 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/position.html:63
-#, fuzzy
 msgctxt "action"
 msgid "Change your ticket"
-msgstr "Ændr pris til"
+msgstr "Ændr din billet"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:68
 msgid ""
@@ -35356,30 +35359,36 @@ msgstr "Aktiver betalingsmetode"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:36
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:9
 msgid "Voucher redemption"
-msgstr ""
+msgstr "Indløsning af rabatkode"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:20
-#, fuzzy
 msgid "This voucher is valid only for the following specific date and time."
-msgstr "Voucheren er ikke gyldig for denne dato."
+msgstr "Rabatkoden er ikke gyldig for denne dato."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:43
 msgid ""
 "For the selected date, there are currently no products available that can be "
 "bought with this voucher. Please try a different date or a different voucher."
 msgstr ""
+"Der er i øjeblikket ingen produkter tilgængelige for den valgte dato, som "
+"kan købes med denne rabatkode. Prøv venligst en anden dato eller en anden "
+"rabatkode."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:47
 msgid ""
 "There are currently no products available that can be bought with this "
 "voucher."
 msgstr ""
+"Der er i øjeblikket ingen produkter tilgængelige, der kan købes med denne "
+"rabatkode."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:52
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
+"Du har indtastet en rabatkode, der giver dig mulighed for at købe et af "
+"følgende produkter til den angivne pris:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:112
 #, python-format
