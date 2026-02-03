@@ -280,11 +280,11 @@ class SecurityMiddleware(MiddlewareMixin):
 
         h = {
             'default-src': ["{static}"],
-            'script-src': ['{static}'],
+            'script-src': ["{static}", "http://localhost:5173", "ws://localhost:5173"] if settings.VITE_DEV_MODE else ["{static}"],
             'object-src': ["'none'"],
             'frame-src': ['{static}'],
             'style-src': ["{static}", "{media}"],
-            'connect-src': ["{dynamic}", "{media}"],
+            'connect-src': ["{dynamic}", "{media}", "ws://localhost:5173" if settings.VITE_DEV_MODE else ""],
             'img-src': ["{static}", "{media}", "data:"] + img_src,
             'font-src': ["{static}"] + list(font_src),
             'media-src': ["{static}", "data:"],
