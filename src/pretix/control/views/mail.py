@@ -21,6 +21,8 @@
 #
 import base64
 import logging
+from email.header import decode_header, make_header
+from email.utils import parseaddr
 
 from django.conf import settings
 from django.contrib import messages
@@ -124,6 +126,12 @@ class OutgoingMailDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequir
         ctx = super().get_context_data(**kwargs)
         if self.object.body_html:
             ctx['data_url'] = "data:text/html;charset=utf-8;base64," + base64.b64encode(self.object.body_html.encode()).decode()
+
+        from_name, from_email = parseaddr(self.object.sender)
+        if from_name:
+            from_name = make_header(decode_header(from_name))
+        ctx['sender'] = "{} <{}>".format(from_name, from_email) if from_name else from_email
+
         return ctx
 
 
