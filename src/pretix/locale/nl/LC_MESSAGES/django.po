@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-02 21:00+0000\n"
+"PO-Revision-Date: 2026-02-03 17:12+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -806,7 +806,7 @@ msgid ""
 "the email address in your customer account."
 msgstr ""
 "Het e-mailadres van uw account is nog niet gevalideerd. Valideer eerst het e-"
-"mailadres in uw klantaccount."
+"mailadres in uw klantenaccount."
 
 #: pretix/base/datasync/datasync.py:264
 #, python-brace-format
@@ -1092,7 +1092,7 @@ msgstr "Vouchercode"
 
 #: pretix/base/datasync/sourcefields.py:473 pretix/base/pdf.py:118
 msgid "Order code and position number"
-msgstr "Bestelcode en productnummer"
+msgstr "Bestelcode en positienummer"
 
 #: pretix/base/datasync/sourcefields.py:482
 msgid "Ticket price"
@@ -1314,7 +1314,7 @@ msgstr "SSO-aanbieder"
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:49
 msgid "External identifier"
-msgstr "Externe identificatiecode"
+msgstr "Externe identificator"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:483
@@ -1578,7 +1578,7 @@ msgstr "Eindtijd evenement"
 #: pretix/base/models/event.py:1536 pretix/control/forms/subevents.py:494
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr "Deuren open"
+msgstr "Toegangstijd"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:634
 #: pretix/base/models/event.py:1545 pretix/control/forms/subevents.py:93
@@ -7908,7 +7908,7 @@ msgstr "Productnummer"
 #: pretix/base/pdf.py:123 pretix/control/forms/event.py:1898
 #: pretix/control/templates/pretixcontrol/items/index.html:38
 msgid "Product name"
-msgstr "Productnaam"
+msgstr "Naam product"
 
 #: pretix/base/pdf.py:124 pretix/base/services/tickets.py:98
 #: pretix/control/views/event.py:914 pretix/control/views/pdf.py:96
@@ -7992,10 +7992,10 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
-"Piet Janssen\n"
-"Voorbeeld bedrijf\n"
+"Piet Peeters\n"
+"Voorbeeldbedrijf\n"
 "Sesamstraat 42\n"
-"1234 Ergens\n"
+"12345 Ergens\n"
 "Niemandsland"
 
 #: pretix/base/pdf.py:198
@@ -14343,7 +14343,7 @@ msgstr "Tekst"
 
 #: pretix/control/forms/event.py:1207
 msgid "Subject (sent by admin)"
-msgstr "Onderwerp (verstuurd door administrator)"
+msgstr "Onderwerp (verstuurd door beheerder)"
 
 #: pretix/control/forms/event.py:1212
 msgid "Subject (sent by admin to attendee)"
@@ -14351,7 +14351,7 @@ msgstr "Onderwerp (verstuurd van beheerder naar deelnemer)"
 
 #: pretix/control/forms/event.py:1217
 msgid "Text (sent by admin)"
-msgstr "Tekst (verstuurd door administrator)"
+msgstr "Tekst (verstuurd door beheerder)"
 
 #: pretix/control/forms/event.py:1222
 msgid "Subject (requested by user)"
@@ -14752,7 +14752,7 @@ msgstr "Goedgekeurd, wacht op betaling"
 #: pretix/plugins/reports/exporters.py:391
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgid "Approval pending"
-msgstr "Goedkeuring in afwachting"
+msgstr "Goedkeuring in behandeling"
 
 #: pretix/control/forms/filter.py:251
 msgid "Follow-up configured"
@@ -14912,7 +14912,7 @@ msgstr "Starttijd tot"
 #: pretix/control/forms/filter.py:1392 pretix/control/forms/rrule.py:112
 #: pretix/control/forms/rrule.py:151
 msgid "Weekday"
-msgstr "Weekdag"
+msgstr "Dag van de week"
 
 #: pretix/control/forms/filter.py:1593 pretix/control/forms/filter.py:1595
 #: pretix/control/forms/filter.py:1644 pretix/control/forms/filter.py:1646
@@ -15147,7 +15147,7 @@ msgstr "Einddatum"
 #: pretix/control/forms/filter.py:2605
 #: pretix/plugins/checkinlists/exporters.py:883
 msgid "All check-in lists"
-msgstr "Alle inchecklijsten"
+msgstr "Alle check-in-lijsten"
 
 #: pretix/control/forms/filter.py:2609
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
@@ -18947,7 +18947,7 @@ msgstr "Apparaat-ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:6
 msgid "Receipt ID"
-msgstr "Transactienummer"
+msgstr "Bon-ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
 msgid "ID"
@@ -24759,7 +24759,7 @@ msgstr "Importeer bestand"
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:25
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:25
 msgid "Character set"
-msgstr "Karakterset"
+msgstr "Tekenset"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:27
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:27
@@ -24931,7 +24931,7 @@ msgid ""
 msgstr ""
 "Dit rapport filteren op basis van datum wordt niet aangeraden aangezien dit "
 "kan leiden tot misleidende informatie. Het rapport houdt enkel rekening met "
-"de huidige staat van een bestelling en niet met aanpassingen die ervoor "
+"de huidige status van een bestelling en niet met aanpassingen die ervoor "
 "gebeurd zijn. Deze datumfilter kan in de toekomst verwijderd worden. Gebruik "
 "in de plaats in de export \"Accountinformatie\"."
 
@@ -35379,7 +35379,7 @@ msgstr "Toegang: %(time)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:52
 #, python-format
 msgid "Admission: %(datetime)s"
-msgstr "Toegang: %(datetime)s"
+msgstr "Toegangstijd: %(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:64
 msgid "Add to Calendar"
