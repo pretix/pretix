@@ -22,6 +22,7 @@
 from datetime import timedelta
 
 from django.core import mail as djmail
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.timezone import now
 from django_scopes import scope
@@ -130,6 +131,47 @@ class WaitingListTestCase(TestCase):
 
         assert 'foo@bar.com' in wle.voucher.comment
         assert 'Max' in wle.voucher.comment
+
+    @classscope(attr='o')
+    def test_duplicate_allows_expired_unredeemed_voucher(self):
+        v = Voucher.objects.create(
+            event=self.event, valid_until=now() - timedelta(days=1), redeemed=0
+        )
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='foo@bar.com', voucher=v
+        )
+        wle = WaitingListEntry(
+            event=self.event, item=self.item1, email='foo@bar.com'
+        )
+        wle.full_clean()
+
+    @classscope(attr='o')
+    def test_duplicate_blocks_redeemed_voucher(self):
+        v = Voucher.objects.create(
+            event=self.event, valid_until=now() - timedelta(days=1), redeemed=1
+        )
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='foo@bar.com', voucher=v
+        )
+        wle = WaitingListEntry(
+            event=self.event, item=self.item1, email='foo@bar.com'
+        )
+        with self.assertRaises(ValidationError):
+            wle.full_clean()
+
+    @classscope(attr='o')
+    def test_duplicate_blocks_valid_unredeemed_voucher(self):
+        v = Voucher.objects.create(
+            event=self.event, valid_until=now() + timedelta(days=1), redeemed=0
+        )
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='foo@bar.com', voucher=v
+        )
+        wle = WaitingListEntry(
+            event=self.event, item=self.item1, email='foo@bar.com'
+        )
+        with self.assertRaises(ValidationError):
+            wle.full_clean()
 
     def test_send_auto(self):
         with scope(organizer=self.o):
