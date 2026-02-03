@@ -67,7 +67,7 @@ orga_router.register(r'invoices', order.InvoiceViewSet)
 orga_router.register(r'scheduled_exports', exporters.ScheduledOrganizerExportViewSet)
 orga_router.register(r'exporters', exporters.OrganizerExportersViewSet, basename='exporters')
 orga_router.register(r'transactions', order.OrganizerTransactionViewSet)
-orga_router.register(r'orderpositions', order.OrganizerPositionViewSet, basename='orderpositions')
+orga_router.register(r'orderpositions', order.OrganizerOrderPositionViewSet, basename='orderpositions')
 
 team_router = routers.DefaultRouter()
 team_router.register(r'members', organizer.TeamMemberViewSet)

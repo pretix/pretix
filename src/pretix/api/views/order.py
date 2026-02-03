@@ -1096,8 +1096,8 @@ class OrderPositionViewSetMixin:
             qs = OrderPosition.all
         else:
             qs = OrderPosition.objects
-
-        if self.request.query_params.get('pdf_data', 'false').lower() == 'true':
+        qs = qs.filter(order__event__organizer=self.request.organizer)
+        if self.request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(request, 'event', None):
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [self.request.event],
@@ -1167,20 +1167,14 @@ class OrderPositionViewSetMixin:
         raise NotFound('Unknown output provider.')
 
 
-class OrganizerPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnlyModelViewSet):
+class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         qs = super().get_queryset()
 
         perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
 
-        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+        if isinstance(self.request.auth, (TeamAPIToken, Device)) or self.request.user.is_authenticated::
             qs = qs.filter(
-                order__event__organizer=self.request.organizer,
-                order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
-            )
-        elif self.request.user.is_authenticated:
-            qs = qs.filter(
-                order__event__organizer=self.request.organizer,
                 order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
             )
 
@@ -1190,8 +1184,7 @@ class OrganizerPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnlyModel
 class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        if hasattr(self.request, 'event'):
-            ctx['event'] = self.request.event
+        ctx['event'] = self.request.event
         ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         return ctx
 
