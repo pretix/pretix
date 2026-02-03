@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-03 17:12+0000\n"
+"PO-Revision-Date: 2026-02-04 07:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -13842,7 +13842,7 @@ msgstr "Btw-nummer / P.IVA"
 #: pretix/base/views/js_helpers.py:54
 msgctxt "tax_id_greece"
 msgid "VAT ID / TIN"
-msgstr "Btw-nummer"
+msgstr "Btw-nummer / TIN"
 
 #. Translators: Translate to only "NIF" in Spanish
 #: pretix/base/views/js_helpers.py:56
