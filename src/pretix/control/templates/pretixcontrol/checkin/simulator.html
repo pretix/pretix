@@ -5,6 +5,7 @@
 {% load getitem %}
 {% load static %}
 {% load compress %}
+{% load vite %}
 {% block title %}{% trans "Check-in simulator" %}{% endblock %}
 {% block inside %}
     <h1>
@@ -124,11 +125,9 @@
                 {% endif %}
                 {% if result.rule_graph %}
                     <div id="rules-editor" class="form-inline">
-                        <div role="tabpanel" class="tab-pane" id="rules-viz">
-                            <checkin-rules-visualization></checkin-rules-visualization>
-                        </div>
-                        <textarea id="id_rules" class="sr-only">{{ result.rule_graph|attr_escapejson_dumps }}</textarea>
+                        <!-- Vue app mount point -->
                     </div>
+                    <textarea id="id_rules" class="sr-only">{{ result.rule_graph|attr_escapejson_dumps }}</textarea>
                 {% endif %}
             </div>
         </div>
@@ -152,10 +151,6 @@
         <script type="text/javascript" src="{% static "d3/d3-drag.v2.js" %}"></script>
         <script type="text/javascript" src="{% static "d3/d3-zoom.v2.js" %}"></script>
     {% endcompress %}
-    {% compress js %}
-        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules/jsonlogic-boolalg.js" %}"></script>
-        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/viz-node.vue' %}"></script>
-        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rules-visualization.vue' %}"></script>
-        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules.js" %}"></script>
-    {% endcompress %}
+    {% vite_hmr %}
+    {% vite_asset "src/pretix/static/pretixcontrol/js/ui/checkinrules/" %}
 {% endblock %}

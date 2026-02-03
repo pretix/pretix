@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load static %}
 {% load compress %}
+{% load vite %}
 {% block title %}
     {% if checkinlist %}
         {% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}
@@ -74,45 +75,8 @@
                 {% bootstrap_field form.ignore_in_statistics layout="control" %}
 
                 <h3>{% trans "Custom check-in rule" %}</h3>
-                <div id="rules-editor" class="form-inline">
-                    <div>
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active">
-                                <a href="#rules-edit" role="tab" data-toggle="tab">
-                                    <span class="fa fa-edit"></span>
-                                    {% trans "Edit" %}
-                                </a>
-                            </li>
-                            <li role="presentation">
-                                <a href="#rules-viz" role="tab" data-toggle="tab">
-                                    <span class="fa fa-eye"></span>
-                                    {% trans "Visualize" %}
-                                </a>
-                            </li>
-                        </ul>
-
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="rules-edit">
-                                <checkin-rules-editor></checkin-rules-editor>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="rules-viz">
-                                <checkin-rules-visualization></checkin-rules-visualization>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="alert alert-info" v-if="missingItems.length">
-                        <p>
-                            {% trans "Your rule always filters by product or variation, but the following products or variations are not contained in any of your rule parts so people with these tickets will not get in:" %}
-                        </p>
-                        <ul>
-                            <li v-for="h in missingItems">{{ "{" }}{h}{{ "}" }}</li>
-                        </ul>
-                        <p>
-                            {% trans "Please double-check if this was intentional." %}
-                        </p>
-                    </div>
+                <div id="rules-editor">
+                    <!-- Vue app mount point -->
                 </div>
                 <div class="disabled-withoutjs sr-only">
                     {{ form.rules }}
@@ -127,11 +91,6 @@
     </form>
     {{ items|json_script:"items" }}
 
-    {% if DEBUG %}
-        <script type="text/javascript" src="{% static "vuejs/vue.js" %}"></script>
-    {% else %}
-        <script type="text/javascript" src="{% static "vuejs/vue.min.js" %}"></script>
-    {% endif %}
     {% compress js %}
         <script type="text/javascript" src="{% static "d3/d3.v6.js" %}"></script>
         <script type="text/javascript" src="{% static "d3/d3-color.v2.js" %}"></script>
@@ -144,15 +103,6 @@
         <script type="text/javascript" src="{% static "d3/d3-drag.v2.js" %}"></script>
         <script type="text/javascript" src="{% static "d3/d3-zoom.v2.js" %}"></script>
     {% endcompress %}
-    {% compress js %}
-        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules/jsonlogic-boolalg.js" %}"></script>
-        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/datetimefield.vue' %}"></script>
-        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/timefield.vue' %}"></script>
-        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/lookup-select2.vue' %}"></script>
-        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rule.vue' %}"></script>
-        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rules-editor.vue' %}"></script>
-        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/viz-node.vue' %}"></script>
-        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rules-visualization.vue' %}"></script>
-        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules.js" %}"></script>
-    {% endcompress %}
+    {% vite_hmr %}
+    {% vite_asset "src/pretix/static/pretixcontrol/js/ui/checkinrules/" %}
 {% endblock %}
