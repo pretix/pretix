@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from datetime import timedelta
+from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.contrib import messages
@@ -48,7 +49,8 @@ def get_waiting_list_ranks(event, customer_email):
     Get waiting list ranks for a customer.
     
     Returns a list of product data dictionaries with rank information.
-    Each dictionary contains: item_id, item_name, variation_id, variation_name, rank, lottery_run, and optionally voucher_code.
+    Each dictionary contains: item_id, item_name, variation_id, variation_name, rank, lottery_run, 
+    and optionally voucher_code, voucher_expired, and voucher_expired_date.
     """
     entries = WaitingListEntry.objects.filter(
         event=event,
@@ -71,8 +73,19 @@ def get_waiting_list_ranks(event, customer_email):
         
         rank = entry.get_rank()
         
-        # Skip entries that are no longer active (rank is None)
-        if rank is None:
+        # Check if this is an expired voucher (rank is None but voucher exists and is expired)
+        voucher_expired = False
+        voucher_expired_date = None
+        if rank is None and entry.voucher and not entry.voucher.is_active():
+            # Check if voucher expired (not just fully redeemed)
+            if entry.voucher.valid_until and entry.voucher.valid_until < now():
+                voucher_expired = True
+                # Convert to event timezone for display
+                tz = ZoneInfo(event.settings.timezone)
+                voucher_expired_date = entry.voucher.valid_until.astimezone(tz)
+        
+        # Skip entries that are no longer active (rank is None) unless they have expired vouchers
+        if rank is None and not voucher_expired:
             continue
         
         # Check if lottery has been run for this product
@@ -91,6 +104,11 @@ def get_waiting_list_ranks(event, customer_email):
         # Include voucher code if rank is 0 (user has an unredeemed voucher)
         if rank == 0 and entry.voucher:
             product_data['voucher_code'] = entry.voucher.code
+        
+        # Include expired voucher information
+        if voucher_expired:
+            product_data['voucher_expired'] = True
+            product_data['voucher_expired_date'] = voucher_expired_date
         
         products_data.append(product_data)
     

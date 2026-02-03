@@ -17,7 +17,11 @@
                                 {{ product.item_name }}{% if product.variation_name %} – {{ product.variation_name }}{% endif %}
                             </td>
                             <td>
-                                {% if product.rank == 0 %}
+                                {% if product.voucher_expired %}
+                                    <span class="text-warning">
+                                        {% blocktrans with day=product.voucher_expired_date|date:"DATE_FORMAT" time=product.voucher_expired_date|date:"TIME_FORMAT" %}Your voucher expired on {{ day }} at {{ time }}. Please feel free to re-enter the waiting list.{% endblocktrans %}
+                                    </span>
+                                {% elif product.rank == 0 %}
                                     <span class="text-success">
                                         {% trans "You have a voucher waiting for redemption! Check your email for details." %}
                                     </span>
