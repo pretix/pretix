@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-02 08:41+0000\n"
+"PO-Revision-Date: 2026-02-04 07:00+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -1528,8 +1528,8 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
-"この主催者アカウントのすべてのイベントの日程の情報が含まれるスプレッドシート"
-"をダウンロードします。"
+"この主催者アカウントのすべてのイベントの情報が含まれるスプレッドシートを"
+"ダウンロードします。"
 
 #: pretix/base/exporters/events.py:58 pretix/base/models/event.py:611
 #: pretix/base/models/organizer.py:93
@@ -1645,8 +1645,8 @@ msgstr "全ての請求書"
 #: pretix/base/exporters/invoices.py:127
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
-"システムが作成した全てのインボイスのPDFファイルのZIPファイルをダウンロードし"
-"ます。"
+"システムが作成した全ての請求書のPDFファイルのZIPファイルをダウンロードします"
+"。"
 
 #: pretix/base/exporters/invoices.py:179
 msgid "Invoice data"
@@ -1670,7 +1670,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:236
 #: pretix/presale/templates/pretixpresale/event/order.html:257
 msgid "Invoices"
-msgstr "インボイス"
+msgstr "請求書"
 
 #: pretix/base/exporters/invoices.py:194
 msgid "Invoice lines"
@@ -3077,7 +3077,7 @@ msgstr "公開中"
 #: pretix/base/exporters/orderlist.py:1373 pretix/control/forms/filter.py:1585
 #: pretix/control/templates/pretixcontrol/pdf/index.html:325
 msgid "Empty"
-msgstr "残高なし"
+msgstr "空"
 
 #: pretix/base/exporters/orderlist.py:1374 pretix/control/forms/filter.py:1586
 msgid "Valid and with value"
@@ -4451,7 +4451,7 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:90
 msgid "Allow re-entering after an exit scan"
-msgstr "出口スキャン後に再入場を許可します"
+msgstr "退場スキャン後に再入場を許可する"
 
 #: pretix/base/models/checkin.py:94
 msgid "Allow multiple entries per ticket"
@@ -4590,7 +4590,7 @@ msgstr "パブリック"
 #: pretix/base/models/customers.py:408
 msgctxt "openidconnect"
 msgid "Authorization code"
-msgstr "認証コード"
+msgstr "認可コード"
 
 #: pretix/base/models/customers.py:409
 msgctxt "openidconnect"
@@ -5322,7 +5322,7 @@ msgstr "固定された時間枠"
 
 #: pretix/base/models/items.py:438
 msgid "Dynamic validity"
-msgstr "動的な有効性"
+msgstr "動的な有効期間"
 
 #: pretix/base/models/items.py:444 pretix/control/forms/item.py:671
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
@@ -5619,7 +5619,7 @@ msgstr "会員期間（月単位）"
 
 #: pretix/base/models/items.py:728
 msgid "Validity"
-msgstr "有効性"
+msgstr "有効期間"
 
 #: pretix/base/models/items.py:730
 msgid ""
@@ -5692,11 +5692,12 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
-"この製品を再利用可能な物理メディアに保存する必要がある場合、物理メディアポリ"
-"シーを添付することができます。これは通常のチケットでは必要ありませんが、一度"
-"きりのバーコードを使用するものではなく、再生可能なシーズンチケットや再充電可"
-"能なギフトカードのリストバンドなどの製品にのみ必要です。これは、チケット販売"
-"と印刷設定の特定の構成も必要とする高度な機能です。"
+"この製品を再利用可能な物理メディアに保存する必要がある場合、物理"
+"メディアポリシーを添付することができます。これは通常のチケットでは必要ありま"
+"せんが、一度きりのバーコードを使用するものではなく、更新可能な"
+"シーズンチケットや再チャージ可能なギフトカードのリストバンドなどの製品にのみ"
+"必要です。これは、チケット販売と印刷設定の特定の構成も必要とする高度な機能で"
+"す。"
 
 #: pretix/base/models/items.py:782
 msgid "Reusable media type"
@@ -6185,11 +6186,11 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
-"このオプションを使用すると、イベントの退出時にスキャンされた時点で定員枠が解"
-"放されます。これは、エントリーと退出の両方でスキャンされ、かつ退出のスキャン"
-"がより新しい場合にのみ実行されます。どちらのスキャンがどのチェックインリスト"
-"で行われたかは関係ありませんが、誤った過剰予約を防ぐため、「退出スキャン後の"
-"再入場を許可」が設定されているチェックインリストは無視されます。"
+"このオプションを使用すると、イベントの退場時にスキャンされた時点で定員枠が解"
+"放されます。これは、入場と退場の両方でスキャンされ、かつ退場のスキャンがより"
+"新しい場合にのみ実行されます。どちらのスキャンがどのチェックインリストで行わ"
+"れたかは関係ありませんが、誤った過剰予約を防ぐため、「退場スキャン後に再入場"
+"を許可する」が設定されているチェックインリストは無視されます。"
 
 #: pretix/base/models/items.py:2122 pretix/control/navigation.py:156
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -6273,9 +6274,9 @@ msgid ""
 "ticket."
 msgstr ""
 "これが選択された場合、会員資格を使用して同時に開催されるイベントのチケットを"
-"購入することができます。イベントの開始時間が同じかどうかのみをチェックし、イ"
-"ベントの重複についてはチェックされません。チケットの製品レベルの有効性がある"
-"場合、重複チェックが実行されます。"
+"購入することができます。イベントの開始時間が同じかどうかのみをチェックし、"
+"イベントの重複についてはチェックされません。チケットの製品レベルの有効期間が"
+"ある場合、重複チェックが実行されます。"
 
 #: pretix/base/models/memberships.py:58
 msgid "Number of times this membership can be used in a purchase."
@@ -6622,9 +6623,9 @@ msgid ""
 "Every slug can only be used once. This is being used in URLs to refer to "
 "your organizer accounts and your events."
 msgstr ""
-"短く、小文字のみを含み、数字、ドット、ダッシュを含む必要があります。各スラッ"
-"グは一度だけ使用できます。これは、URLで使用され、主催者アカウントとイベントを"
-"参照するために使用されます。"
+"短く、小文字、数字、ドット、ダッシュのみを使用してください。各スラッグは一度"
+"だけ使用できます。これはURLで主催者アカウントとイベントを参照するために使用さ"
+"れます。"
 
 #: pretix/base/models/organizer.py:103 pretix/control/navigation.py:350
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:19
@@ -6944,7 +6945,7 @@ msgstr "公式の名前"
 
 #: pretix/base/models/tax.py:327
 msgid "Should be short, e.g. \"VAT\""
-msgstr "略称にすること、例えば \"VAT\""
+msgstr "短くすること、例えば \"VAT\""
 
 #: pretix/base/models/tax.py:331 pretix/control/forms/event.py:1636
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
@@ -8702,7 +8703,7 @@ msgstr "最大{variable}を超えました"
 #: pretix/base/services/checkin.py:372
 #, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr "{variable}が最小値を下回りました"
+msgstr "最小{variable}を下回りました"
 
 #: pretix/base/services/checkin.py:374
 #, python-brace-format
@@ -10573,7 +10574,7 @@ msgstr "空席待ちリストに登録する際には、名前の入力が必要
 
 #: pretix/base/settings.py:1635
 msgid "Ask for a phone number"
-msgstr "電話番号を要求"
+msgstr "電話番号を尋ねる"
 
 #: pretix/base/settings.py:1636
 msgid "Ask for a phone number when signing up to the waiting list."
@@ -10963,15 +10964,15 @@ msgstr ""
 
 #: pretix/base/settings.py:2058 pretix/control/forms/orders.py:909
 msgid "Keep a fixed cancellation fee"
-msgstr "固定のキャンセル料を設定"
+msgstr "固定のキャンセル料を差し引く"
 
 #: pretix/base/settings.py:2067
 msgid "Keep payment, shipping and service fees"
-msgstr "支払い、配送、およびサービス料金を維持"
+msgstr "支払い、配送、およびサービス手数料を返金額から差し引く"
 
 #: pretix/base/settings.py:2079 pretix/control/forms/orders.py:920
 msgid "Keep a percentual cancellation fee"
-msgstr "パーセンテージのキャンセル料を設定"
+msgstr "パーセンテージのキャンセル料を差し引く"
 
 #: pretix/base/settings.py:2088
 msgid "Allow customers to voluntarily choose a lower refund"
@@ -11193,11 +11194,11 @@ msgid ""
 "data as calendar entries are often shared with an unspecified number of "
 "people."
 msgstr ""
-"これを使用して、参加者と情報を共有できます。たとえば、旅行情報やデジタルイベ"
-"ントへのリンクなどです。空白のままにしておくと、イベントショップへのリンク、"
-"入場時間、および主催者名がそこに入ります。カレンダーエントリーはしばしば特定"
-"の人数と共有されるため、個人特定のデータをプレースホルダーとして使用すること"
-"は許可されていません。"
+"これを使用して、参加者と情報を共有できます。たとえば、旅行情報や"
+"デジタルイベントへのリンクなどです。空白のままにしておくと、イベントショップ"
+"へのリンク、入場時間、および主催者名がそこに入ります。カレンダーエントリーは"
+"しばしば不特定の人数と共有されるため、個人特定のデータをプレースホルダーとし"
+"て使用することは許可されていません。"
 
 #: pretix/base/settings.py:2333
 msgid "Subject prefix"
@@ -13906,8 +13907,7 @@ msgstr "署名"
 #: pretix/control/forms/event.py:1101
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
-msgstr ""
-"これはすべてのメールに添付されます。利用可能なプレースホルダー：{event}"
+msgstr "これはすべてのメールに追記されます。利用可能なプレースホルダー：{event}"
 
 #: pretix/control/forms/event.py:1106 pretix/control/forms/organizer.py:602
 msgid "e.g. your contact details"
@@ -14333,7 +14333,7 @@ msgstr "保留中または期限切れ"
 
 #: pretix/control/forms/filter.py:239 pretix/control/forms/filter.py:1233
 msgid "Pending (overdue)"
-msgstr "保留中（期限切れ）"
+msgstr "保留中（期限超過）"
 
 #: pretix/control/forms/filter.py:240
 msgid "Overpaid"
@@ -15205,9 +15205,9 @@ msgid ""
 "restrict the validity of the gift card. A validity of gift cards can be set "
 "in your organizer settings."
 msgstr ""
-"ギフトカード製品に特定の有効期限を設定しないでください。これにより、ギフト"
-"カードの有効期限が制限されることはありません。ギフトカードの有効期限は、組織"
-"者設定で設定することができます。"
+"ギフトカード製品に特定の有効期間を設定しないでください。設定しても"
+"ギフトカードの有効期限は制限されません。ギフトカードの有効期限は、主催者設定"
+"で設定できます。"
 
 #: pretix/control/forms/item.py:795 pretix/control/forms/item.py:1062
 msgid ""
@@ -15458,7 +15458,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:136
 msgid "Overbook quota and ignore late payment"
-msgstr "クォータの超過と支払いの遅延を無視します"
+msgstr "クォータを超過予約し、支払い遅延を無視する"
 
 #: pretix/control/forms/orders.py:137
 msgid ""
@@ -15637,11 +15637,11 @@ msgstr "チケットはブロックされています"
 
 #: pretix/control/forms/orders.py:489
 msgid "Validity start"
-msgstr "有効性開始"
+msgstr "有効期間開始"
 
 #: pretix/control/forms/orders.py:494
 msgid "Validity end"
-msgstr "有効期限終了"
+msgstr "有効期間終了"
 
 #: pretix/control/forms/orders.py:506
 msgid "Generate a new secret"
@@ -16628,19 +16628,18 @@ msgstr "注文明細 #{posid} は{datetime}にリスト「{list}」でチェッ�
 #: pretix/control/logdisplay.py:376
 #, python-brace-format
 msgid "Position #{posid} has been checked out for list \"{list}\"."
-msgstr "ポジション#{posid}はリスト「{list}」にチェックアウトされています。"
+msgstr "注文明細 #{posid} はリスト「{list}」でチェックアウトされました。"
 
 #: pretix/control/logdisplay.py:380
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
-msgstr ""
-"ポジション#{posid}は{datetime}にリスト\"{list}\"にチェックインされました。"
+msgstr "注文明細 #{posid} は{datetime}にリスト「{list}」でチェックインされました。"
 
 #: pretix/control/logdisplay.py:381
 #, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
-msgstr "ポジション#{posid}はリスト「{list}」にチェックインされました。"
+msgstr "注文明細 #{posid} はリスト「{list}」でチェックインされました。"
 
 #: pretix/control/logdisplay.py:385
 #, python-brace-format
@@ -16871,7 +16870,7 @@ msgstr "注文のフォローアップ日が更新されました。"
 
 #: pretix/control/logdisplay.py:535
 msgid "The order's flag to require attention at check-in has been toggled."
-msgstr "注文のフラグがチェックイン時に注意を要求するように切り替えられました。"
+msgstr "注文の「チェックイン時に注意を要する」フラグが切り替えられました。"
 
 #: pretix/control/logdisplay.py:537
 msgid "The order's check-in text has been changed."
@@ -16880,7 +16879,7 @@ msgstr "注文のチェックインテキストが変更されました。"
 #: pretix/control/logdisplay.py:538
 msgid ""
 "The order's flag to be considered valid even if unpaid has been toggled."
-msgstr "注文のフラグが未払いでも有効と見なされるように切り替えられました。"
+msgstr "注文の「未払いでも有効とみなす」フラグが切り替えられました。"
 
 #: pretix/control/logdisplay.py:540
 #, python-brace-format
@@ -16999,8 +16998,8 @@ msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
 msgstr ""
-"受信者が空席待ちリストから自分を削除したため、バウチャーの有効期限が設定され"
-"ました。"
+"受信者が空席待ちリストから自分を削除したため、バウチャーが失効するよう設定さ"
+"れました。"
 
 #: pretix/control/logdisplay.py:583
 msgid "The voucher has been changed."
@@ -23099,8 +23098,8 @@ msgid ""
 "This order will not expire automatically since it is already confirmed and "
 "can be used."
 msgstr ""
-"この注文はすでに確認されており、自動的に期限切れになることはありませんので、"
-"使用可能です。"
+"この注文はすでに確認済みで使用可能なため、自動的に期限切れになることはありま"
+"せん。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:211
 msgid ""
@@ -23218,12 +23217,12 @@ msgstr "スキャンは拒否されました: %(date)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:439
 #, python-format
 msgid "Exit scan: %(date)s"
-msgstr "終了スキャン: %(date)s"
+msgstr "退場スキャン: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:446
 #, python-format
 msgid "Entry scan: %(date)s"
-msgstr "エントリーのスキャン: %(date)s"
+msgstr "入場スキャン: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:465
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:55
@@ -24004,7 +24003,7 @@ msgstr "毎月同じ日に"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:218
 #, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr "%(setpos)sの%(weekday)s"
+msgstr "第%(setpos)s%(weekday)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:85
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:120
@@ -24196,7 +24195,7 @@ msgstr "フィルターを除去"
 #: pretix/control/templates/pretixcontrol/orders/index.html:145
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:208
 msgid "Order paid / total"
-msgstr "支払い済みの注文 / 合計"
+msgstr "支払額 / 合計"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:176
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:109
@@ -24640,8 +24639,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:14
 msgid "All data uploaded by this device will stay available online."
 msgstr ""
-"このデバイスにアップロードされたすべてのデータはオンラインで利用可能になりま"
-"す。"
+"このデバイスからアップロードされたすべてのデータはオンラインで引き続き利用可"
+"能です。"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:15
 msgid ""
@@ -25397,7 +25396,7 @@ msgstr "二要素認証が有効です"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:40
 msgid "Two-factor authentication disabled"
-msgstr "二要素認証が無効になりました"
+msgstr "二要素認証が無効です"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:57
 msgid "invited, pending response"
@@ -26123,13 +26122,13 @@ msgid ""
 "or even overlapping time slots, working with just one large check-in list "
 "will be easier."
 msgstr ""
-"あなたは、シリーズ内の各日付ごとに1つ以上のチェックインリストを追加するか、す"
-"べての日付に1つのチェックインリストを使用して、チェックインルールを通じて入場"
-"を制限することができます。どちらのアプローチが良いかは、シリーズ内の日付の数"
-"など、複数の要因に依存します。1日に1つ以下のイベント日付を持つシリーズの場"
-"合、個々のリストが通常よりも役立ちます。同じ日に多くの時間枠を表す日付を使用"
-"する場合、または重複する時間枠を使用する場合、1つの大きなチェックインリストを"
-"使用する方が簡単です。"
+"シリーズ内の各日付ごとに1つ以上のチェックインリストを追加するか、すべての日付"
+"に1つのチェックインリストを使用して、チェックインルールを通じて入場を制限する"
+"ことができます。どちらのアプローチが良いかは、シリーズ内の日付の数など、複数"
+"の要因に依存します。1日に1つ以下のイベント日付を持つシリーズの場合、通常は個"
+"々のリストがより役立ちます。同じ日に多くの時間枠を表す日付を使用する場合、ま"
+"たは重複する時間枠を使用する場合、1つの大きなチェックインリストを使用する方が"
+"簡単です。"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:602
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:359
@@ -26986,7 +26985,7 @@ msgstr "リストをダウンロード"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:119
 msgid "Redemptions"
-msgstr "支払いの充当（引き換え）"
+msgstr "引き換え回数"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:124
 msgid "Expiry"
@@ -27195,7 +27194,7 @@ msgstr "リストの最後に移動"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:272
 msgctxt "subevent"
 msgid "Transfer to other date"
-msgstr "他の日に変更します"
+msgstr "他の日付に転送する"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:6
@@ -27550,7 +27549,7 @@ msgstr "提供されたオブジェクトIDのうち、いくつかは無効で�
 
 #: pretix/control/views/discounts.py:263
 msgid "Not all discounts have been selected."
-msgstr "すべての割引が選択されていません。"
+msgstr "すべての割引が選択されているわけではありません。"
 
 #: pretix/control/views/event.py:453
 msgid ""
@@ -27823,7 +27822,7 @@ msgstr "カテゴリの順序が更新されました。"
 #: pretix/control/views/organizer.py:2574
 #: pretix/control/views/organizer.py:3634
 msgid "Not all objects have been selected."
-msgstr "すべてのオブジェクトが選択されていません。"
+msgstr "すべてのオブジェクトが選択されているわけではありません。"
 
 #: pretix/control/views/item.py:480
 msgid "Street"
@@ -27852,7 +27851,7 @@ msgstr "新しいクォータが作成されました。"
 
 #: pretix/control/views/item.py:966
 msgid "Exit scans"
-msgstr "終了スキャン"
+msgstr "退場スキャン"
 
 #: pretix/control/views/item.py:973
 msgid "Vouchers and waiting list reservations"
@@ -31017,7 +31016,7 @@ msgstr "注文の支払い"
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
 #, python-format
 msgid "Pay order: %(code)s"
-msgstr "支払い注文：%(code)s"
+msgstr "注文の支払い：%(code)s"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:26
 msgid "Please turn on JavaScript."
@@ -31931,7 +31930,7 @@ msgstr "販売中"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:195
 msgid "Not on Sale"
-msgstr "未販売"
+msgstr "販売対象外"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:205
 msgid "Seats not attributed to any specific product"
@@ -33346,7 +33345,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:198
 #: pretix/presale/templates/pretixpresale/event/voucher.html:353
 msgid "plus taxes"
-msgstr "税金を加算"
+msgstr "税別"
 
 #: pretix/presale/forms/order.py:133
 msgid "No other variation of this product is currently available for you."
@@ -33690,7 +33689,7 @@ msgstr "注文を確定"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:217
 msgid "Submit registration"
-msgstr "予約を送信する"
+msgstr "登録を送信する"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:19
 msgid "Log in with a customer account"
@@ -34356,7 +34355,7 @@ msgstr "支払いが必要になります"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:146
 msgid "You will be refunded"
-msgstr "払い戻しを受けることができます"
+msgstr "返金されます"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:150
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:109
@@ -35774,7 +35773,7 @@ msgstr "まだこのメンバーシップを使用していません。"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:48
 msgid "Expired since"
-msgstr "期限切れです"
+msgstr "失効日"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:103
 msgid "You don’t have any memberships in your account yet."
