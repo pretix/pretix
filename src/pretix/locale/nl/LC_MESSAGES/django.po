@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-04 07:00+0000\n"
+"PO-Revision-Date: 2026-02-04 16:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -2005,7 +2005,7 @@ msgstr "Interne naam"
 
 #: pretix/base/exporters/items.py:64 pretix/base/models/items.py:480
 msgid "Item name"
-msgstr "Itemnaam"
+msgstr "Naam item"
 
 #: pretix/base/exporters/items.py:68 pretix/base/exporters/orderlist.py:632
 #: pretix/base/exporters/orderlist.py:948
@@ -2125,7 +2125,7 @@ msgstr ""
 
 #: pretix/base/exporters/items.py:84 pretix/base/models/items.py:615
 msgid "Buying this product requires approval"
-msgstr "Het kopen van dit product vereist goedkeuring"
+msgstr "Voor de aankoop van dit product is goedkeuring vereist"
 
 #: pretix/base/exporters/items.py:85 pretix/base/models/items.py:628
 msgid "Only sell this product as part of a bundle"
@@ -2316,7 +2316,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:116 pretix/control/forms/event.py:1788
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
-msgstr "Slug (verkorte vorm) van evenement"
+msgstr "Slug van evenement"
 
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:481
@@ -2438,7 +2438,7 @@ msgstr "Datum voor opvolging"
 #: pretix/control/templates/pretixcontrol/orders/index.html:150
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:209
 msgid "Positions"
-msgstr "Producten (posities)"
+msgstr "Posities"
 
 #: pretix/base/exporters/orderlist.py:309
 #: pretix/base/exporters/orderlist.py:702 pretix/base/models/orders.py:321
@@ -2644,7 +2644,7 @@ msgstr "Opmerking bestelling"
 
 #: pretix/base/exporters/orderlist.py:666
 msgid "Add-on to position ID"
-msgstr "Add-on bij product-ID"
+msgstr "Add-on bij positie-ID"
 
 #: pretix/base/exporters/orderlist.py:696
 msgctxt "address"
@@ -2663,7 +2663,7 @@ msgstr "Check-in-lijsten"
 
 #: pretix/base/exporters/orderlist.py:706
 msgid "Position order link"
-msgstr "Bestel-link producten"
+msgstr "Bestel-link positie"
 
 #: pretix/base/exporters/orderlist.py:876
 msgid "Order transaction data"
@@ -2751,7 +2751,7 @@ msgstr "Datum-ID"
 
 #: pretix/base/exporters/orderlist.py:957
 msgid "Tax rule ID"
-msgstr "Belastingregel ID"
+msgstr "Belastingregel-ID"
 
 #: pretix/base/exporters/orderlist.py:960
 #: pretix/plugins/reports/accountingreport.py:320
@@ -3215,7 +3215,7 @@ msgstr "Download een spreadsheet met alle gegevens van de wachtlijst."
 #: pretix/base/exporters/waitinglist.py:50
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:102
 msgid "All entries"
-msgstr "Alle items"
+msgstr "Alle inschrijvingen"
 
 #: pretix/base/exporters/waitinglist.py:55
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:105
@@ -3361,7 +3361,8 @@ msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
-"Het bestand dat u uploadde, is te groot. Het maximum is 10000 x 10000 pixels."
+"Het bestand dat u uploadde, is te groot. Het maximum is 10.000 x 10.000 "
+"pixels."
 
 #: pretix/base/forms/questions.py:516 pretix/helpers/images.py:75
 msgid ""
@@ -3369,7 +3370,7 @@ msgid ""
 "corrupted image."
 msgstr ""
 "Upload een geldige afbeelding. Het bestand dat u uploadde, was geen "
-"afbeelding of was een corrupte afbeelding."
+"afbeelding of was een beschadigde afbeelding."
 
 #: pretix/base/forms/questions.py:659 pretix/base/forms/questions.py:668
 msgid ""
@@ -3396,7 +3397,7 @@ msgid ""
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
 "Optioneel, maar afhankelijk van het land waarin u woont en het land van de "
-"verkoper heeft u dit misschien nodig om belasting terug te kunnen vragen."
+"verkoper hebt u dit misschien nodig om belasting terug te kunnen vragen."
 
 #: pretix/base/forms/questions.py:1185
 msgid "No invoice requested"
@@ -3601,7 +3602,7 @@ msgstr "Adres voor gecertificeerde elektronische mail"
 #: pretix/base/invoicing/national.py:59
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr "Ontvangercode"
+msgstr "Code bon"
 
 #: pretix/base/invoicing/national.py:83
 msgctxt "italian_invoice"
@@ -4421,7 +4422,7 @@ msgstr ""
 "Als u \"alle data\" kiest, worden de tickets beschouwd als onderdeel van "
 "deze lijst en zijn ze geldig voor inchecken, ongeacht de datum waarvoor ze "
 "zijn gekocht. U kunt echter de geldigheid ervan beperken via de geavanceerde "
-"incheckregels."
+"check-in-regels."
 
 #: pretix/base/models/checkin.py:65
 msgctxt "checkin"
@@ -4459,7 +4460,7 @@ msgstr ""
 #: pretix/base/models/checkin.py:79
 msgid "Allow checking in add-on tickets by scanning the main ticket"
 msgstr ""
-"Toestaan dat add-on tickets worden ingecheckt door het hoofdticket te scannen"
+"Toestaan dat add-on-tickets worden ingecheckt door het hoofdticket te scannen"
 
 #: pretix/base/models/checkin.py:81
 msgid ""
@@ -4468,7 +4469,7 @@ msgid ""
 "rejected.."
 msgstr ""
 "Een scan is alleen mogelijk als de inchecklijst zodanig is geconfigureerd "
-"dat er altijd precies één overeenstemmend add-on ticket is. Dubbelzinnige "
+"dat er altijd precies één overeenstemmend add-on-ticket is. Dubbelzinnige "
 "scans worden geweigerd."
 
 #: pretix/base/models/checkin.py:85 pretix/control/navigation.py:652
@@ -4482,7 +4483,7 @@ msgid ""
 "automatic configuration of check-in devices."
 msgstr ""
 "Heeft geen effect op het controleren van tickets, alleen voor het "
-"automatisch instellen van incheckapparaten."
+"automatisch instellen van check-in-apparaten."
 
 #: pretix/base/models/checkin.py:90
 msgid "Allow re-entering after an exit scan"
@@ -4723,7 +4724,7 @@ msgstr "Elk overeenkomend product moet voor een andere datum zijn"
 #: pretix/base/models/items.py:1481 pretix/base/models/items.py:1708
 #: pretix/base/models/organizer.py:619
 msgid "Position"
-msgstr "Product"
+msgstr "Positie"
 
 #: pretix/base/models/discount.py:72
 msgid "All supported sales channels"
@@ -4743,7 +4744,7 @@ msgstr "Pas toe op specifieke producten"
 
 #: pretix/base/models/discount.py:110
 msgid "Count add-on products"
-msgstr "Add-on producten tellen"
+msgstr "Add-on-producten tellen"
 
 #: pretix/base/models/discount.py:111 pretix/base/models/discount.py:166
 msgid "Discounts never apply to bundled products"
@@ -4818,7 +4819,7 @@ msgstr ""
 
 #: pretix/base/models/discount.py:165
 msgid "Apply to add-on products"
-msgstr "Toepassen op add-on producten"
+msgstr "Toepassen op add-on-producten"
 
 #: pretix/base/models/discount.py:171
 msgid ""
@@ -5045,8 +5046,8 @@ msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
 msgstr ""
-"Alleen wanneer dit selectievak is ingeschakeld is deze datum zichtbaar voor "
-"gebruikers."
+"Alleen wanneer dit selectievakje is ingeschakeld, is deze datum zichtbaar "
+"voor gebruikers."
 
 #: pretix/base/models/event.py:1526
 msgid ""
@@ -5290,7 +5291,7 @@ msgstr "Categoriebeschrijving"
 
 #: pretix/base/models/items.py:108
 msgid "Products in this category are add-on products"
-msgstr "Producten in deze categorie zijn add-onproducten"
+msgstr "Producten in deze categorie zijn add-on-producten"
 
 #: pretix/base/models/items.py:109
 msgid ""
@@ -5300,7 +5301,7 @@ msgid ""
 msgstr ""
 "Indien geselecteerd zijn de producten in deze categorie niet los te koop. Ze "
 "kunnen alleen worden gekocht in combinatie met een product waarbij deze "
-"categorie is ingesteld als mogelijke add-on producten."
+"categorie is ingesteld als mogelijke add-on-producten."
 
 #: pretix/base/models/items.py:114 pretix/base/models/items.py:159
 #: pretix/control/forms/item.py:98
@@ -5309,7 +5310,7 @@ msgstr "Normale categorie"
 
 #: pretix/base/models/items.py:115 pretix/control/forms/item.py:111
 msgid "Normal + cross-selling category"
-msgstr "Normale en cross-sellingcategorie"
+msgstr "Normale en cross-selling-categorie"
 
 #: pretix/base/models/items.py:116 pretix/control/forms/item.py:106
 msgid "Cross-selling category"
@@ -5317,7 +5318,7 @@ msgstr "Cross-selling-categorie"
 
 #: pretix/base/models/items.py:124
 msgid "Always show in cross-selling step"
-msgstr "Altijd weergeven in de cross-sellingstap"
+msgstr "Altijd weergeven in de cross-selling-stap"
 
 #: pretix/base/models/items.py:125
 msgid ""
@@ -5327,7 +5328,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:126
 msgid "Only show if the cart contains one of the following products"
-msgstr "Alleen tonen als de winkelwagen één van de volgende producten bevat"
+msgstr "Alleen tonen als de winkelwagen een van de volgende producten bevat"
 
 #: pretix/base/models/items.py:129
 msgid "Cross-selling condition"
@@ -5335,7 +5336,7 @@ msgstr "Conditie voor cross-selling"
 
 #: pretix/base/models/items.py:137
 msgid "Cross-selling condition products"
-msgstr "Cross-selling-voorwaarden"
+msgstr "Cross-selling-producten"
 
 #: pretix/base/models/items.py:143
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
@@ -5566,7 +5567,7 @@ msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher that unlocks this product."
 msgstr ""
-"Dit product wordt verborgen van de evenementpagina totdat de gebruiker een "
+"Dit product wordt verborgen op de evenementpagina totdat de gebruiker een "
 "vouchercode invoert die dit product vrijgeeft."
 
 #: pretix/base/models/items.py:630
@@ -5706,8 +5707,8 @@ msgstr ""
 "Bij het opzetten van een gewoon evenement, of een reeks evenementen met "
 "tijdsloten, hoeft u deze waarde meestal NIET te veranderen. De "
 "standaardinstelling betekent dat de geldigheidsduur van tickets niet wordt "
-"bepaald door het product, maar door het evenement en de check-"
-"inconfiguratie. Gebruik de andere opties alleen als u ze nodig hebt om bijv. "
+"bepaald door het product, maar door het evenement en de check-in-"
+"configuratie. Gebruik de andere opties alleen als u ze nodig hebt om bijv. "
 "een boeking van een jaarkaart met een dynamische startdatum te realiseren. "
 "Indien de geldigheid wordt opgeslagen bij het ticket, dus als u de "
 "instellingen hier later wijzigt, zullen bestaande tickets niet worden "
@@ -5796,8 +5797,8 @@ msgid ""
 "If you select a reusable media policy, you also need to select a reusable "
 "media type."
 msgstr ""
-"Als u een herbruikbaarmediabeleid selecteert, moet u ook een "
-"herbruikbaarmediatype selecteren."
+"Als u een herbruikbaremediabeleid selecteert, moet u ook een "
+"herbruikbaremediatype selecteren."
 
 #: pretix/base/models/items.py:993
 msgid "The selected media type is not enabled in your organizer settings."
@@ -5910,7 +5911,7 @@ msgid ""
 "voucher that unlocks this variation."
 msgstr ""
 "Deze variant wordt verborgen van de evenementpagina totdat de gebruiker een "
-"vouchercode invoert die deze variant vrijgeeft."
+"vouchercode invoert die hem vrijgeeft."
 
 #: pretix/base/models/items.py:1258
 #: pretix/control/templates/pretixcontrol/item/create.html:111
@@ -6056,7 +6057,7 @@ msgstr "Helptekst"
 #: pretix/base/models/items.py:1687
 msgid "If the question needs to be explained or clarified, do it here!"
 msgstr ""
-"Als de vraag moet worden uitgelegd of verduidelijkt, kunt u dat hier doen."
+"Als de vraag moet worden uitgelegd of verduidelijkt, kunt u dat hier doen!"
 
 #: pretix/base/models/items.py:1693
 msgid "Question type"
@@ -6073,11 +6074,11 @@ msgstr "Deze vraag wordt aan kopers van de geselecteerde producten gesteld"
 
 #: pretix/base/models/items.py:1711
 msgid "Ask during check-in instead of in the ticket buying process"
-msgstr "Vraag bij inchecken in plaats van bij het kopen van een ticket"
+msgstr "Vraag bij het inchecken in plaats van bij het kopen van een ticket"
 
 #: pretix/base/models/items.py:1712 pretix/base/models/items.py:1717
 msgid "Not supported by all check-in apps for all question types."
-msgstr "Niet al onze incheckapps ondersteunen dit voor alle vraagsoorten."
+msgstr "Niet al onze check-in-apps ondersteunen dit voor alle vraagsoorten."
 
 #: pretix/base/models/items.py:1716
 msgid "Show answer during check-in"
@@ -6242,7 +6243,7 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
-"Als u deze optie inschakelt, wordt deze quota genegeerd bij het bepalen van "
+"Als u deze optie inschakelt, wordt dit quotum genegeerd bij het bepalen van "
 "de beschikbaarheid van evenementen in uw evenementenkalender. Dit is "
 "bijvoorbeeld handig voor merchandise die aan elk evenement wordt toegevoegd, "
 "maar die niet mag verhinderen dat het evenement als uitverkocht wordt "
@@ -6250,7 +6251,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:2100
 msgid "Close this quota permanently once it is sold out"
-msgstr "Sluit dit quotum permanent wanneer het is uitverkocht"
+msgstr "Sluit dit quotum permanent wanneer het uitverkocht is"
 
 #: pretix/base/models/items.py:2101
 msgid ""
@@ -6258,8 +6259,8 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
-"Als u dit inschakelt zullen er geen tickets meer worden verkocht als het "
-"quotum is uitverkocht, zelfs als er door annuleringen of verlopen "
+"Als u dit inschakelt, zullen er geen tickets meer worden verkocht als het "
+"quotum uitverkocht is, zelfs als er door annuleringen of verlopen "
 "bestellingen nieuwe tickets beschikbaar worden. U kunt natuurlijk altijd "
 "handmatig het quotum weer inschakelen."
 
@@ -6357,7 +6358,7 @@ msgstr ""
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr "Parallel gebruik is toegestaan"
+msgstr "Parallelgebruik is toegestaan"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -6369,7 +6370,7 @@ msgid ""
 msgstr ""
 "Als deze optie is ingeschakeld, kan het lidmaatschap worden gebruikt om "
 "tickets te kopen voor evenementen die tegelijk plaatsvinden. Merk op dat dit "
-"alleen controleert of de starttijd van de evenementen gelijk zijn, niet of "
+"alleen controleert of de starttijden van de evenementen gelijk zijn, niet of "
 "de evenementen overlappen. Een overlappingscontrole wordt uitgevoerd wanneer "
 "er een geldigheid op productniveau van het ticket is."
 
@@ -6439,7 +6440,7 @@ msgid ""
 "custom message, so you need to brief your check-in staff how to handle these "
 "cases."
 msgstr ""
-"Als u dit instelt, laat de incheck-app een zichtbare waarschuwing zien dat "
+"Als u dit instelt, laat de check-in-app een zichtbare waarschuwing zien dat "
 "tickets van deze bestelling speciale aandacht vereisen. Er worden geen extra "
 "gegevens of een aangepast bericht getoond, dus u moet uw personeel van "
 "tevoren informeren over hoe deze gevallen moeten worden afgehandeld."
@@ -6615,8 +6616,8 @@ msgstr "Reden voor terugbetaling"
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
-"Deze tekst kan aan de gebruiker getoond worden, bijvoorbeeld als deel van de "
-"betalingsinformatie."
+"Kan aan de eindgebruiker worden getoond of bijvoorbeeld worden gebruikt als "
+"onderdeel van een betalingsreferentie."
 
 #: pretix/base/models/orders.py:2337
 msgid "Service fee"
@@ -6920,7 +6921,7 @@ msgstr ""
 #: pretix/base/models/tax.py:163
 msgctxt "tax_code"
 msgid "Reverse charge"
-msgstr "Omgekeerde belastingheffing"
+msgstr "Btw verlegd"
 
 #: pretix/base/models/tax.py:167
 msgid "Tax free"
@@ -6929,7 +6930,7 @@ msgstr "Belastingvrij"
 #: pretix/base/models/tax.py:170
 msgctxt "tax_code"
 msgid "Services outside of scope of tax"
-msgstr "Niet belastbaar"
+msgstr "Niet-belastbare diensten"
 
 #: pretix/base/models/tax.py:173
 msgctxt "tax_code"
@@ -6939,7 +6940,7 @@ msgstr "Belastingvrij (geen reden opgegeven)"
 #: pretix/base/models/tax.py:176
 msgctxt "tax_code"
 msgid "Zero-rated goods"
-msgstr "Vrijgestelde producten"
+msgstr "Goederen met nultarief"
 
 #: pretix/base/models/tax.py:179
 msgctxt "tax_code"
@@ -7014,22 +7015,22 @@ msgstr ""
 #: pretix/base/models/tax.py:253
 msgctxt "tax_code"
 msgid "Intra-Community acquisition from second hand means of transport"
-msgstr "Intracommunautaire aankoop van tweedehands transportmogelijkheden"
+msgstr "Intracommunautaire verwerving van tweedehands vervoermiddelen"
 
 #: pretix/base/models/tax.py:255
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of second hand goods"
-msgstr "Intracommunautaire aankoop van tweedehands goederen"
+msgstr "Intracommunautaire verwerving van tweedehandsgoederen"
 
 #: pretix/base/models/tax.py:257
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of works of art"
-msgstr "Intracommunautaire aankoop van kunstwerken"
+msgstr "Intracommunautaire verwerving van kunstwerken"
 
 #: pretix/base/models/tax.py:259
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of collectors items and antiques"
-msgstr "Intracommunautaire aankoop van verzamelobjecten en antiek"
+msgstr "Intracommunautaire verwerving van verzamelobjecten en antiek"
 
 #: pretix/base/models/tax.py:261
 msgctxt "tax_code"
@@ -7084,7 +7085,7 @@ msgstr ""
 
 #: pretix/base/models/tax.py:360
 msgid "Use EU reverse charge taxation rules"
-msgstr "Gebruik de EU-regels voor verlegging van de belastingplicht"
+msgstr "Gebruik de EU-regels voor btw-verlegging"
 
 #: pretix/base/models/tax.py:364
 msgid ""
@@ -7299,9 +7300,9 @@ msgid ""
 "as part of a bundle, since vouchers cannot be applied to add-on products or "
 "bundled products."
 msgstr ""
-"U kunt niet een product selecteren dat alleen beschikbaar is als een add-on "
+"U kunt niet een product selecteren dat alleen beschikbaar is als een add-on-"
 "product of als onderdeel van een bundel, omdat vouchers niet toegepast "
-"kunnen worden op add-on producten of gebundelde producten."
+"kunnen worden op add-on-producten of gebundelde producten."
 
 #: pretix/base/models/vouchers.py:351
 msgid "You cannot select a product that belongs to a different event."
@@ -7684,7 +7685,7 @@ msgid ""
 "Don't forget to set the correct fees above!"
 msgstr ""
 "We raden aan om dit in te schakelen als u wilt dat uw gebruikers de "
-"betalingstoeslagen van uw betalingsprovider betalen. <a href=\"{docs_url}\" "
+"betaalkosten van uw betalingsprovider betalen. <a href=\"{docs_url}\" "
 "target=\"_blank\" rel=\"noopener\">Klik hier voor gedetailleerde informatie "
 "over wat dit doet.</a> Vergeet niet om hierboven de juiste toeslagen in te "
 "stellen!"
@@ -7703,7 +7704,7 @@ msgstr ""
 "Wordt afgedrukt net onder de betalingscijfers en boven de afsluitende tekst "
 "op facturen. Dit wordt alleen gebruikt als de factuur gegenereerd is voordat "
 "de bestelling is betaald. Als de factuur later wordt gegenereerd, wordt er "
-"een tekst weergegeven die aangeeft dat de bestelling al is betaald."
+"een tekst weergegeven die aangeeft dat de bestelling al betaald is."
 
 #: pretix/base/payment.py:463
 msgid "Restrict to countries"
@@ -7715,9 +7716,9 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
-"Sta alleen toe om deze betalingsprovider te kiezen voor factuuradressen in "
-"de gekozen landen. Alle landen zijn toegestaan als u geen landen selecteert. "
-"Dit is alleen mogelijk als het factuuradres verplicht is."
+"Sta alleen toe dat deze betalingsprovider wordt gekozen voor factuuradressen "
+"in de geselecteerde landen. Als u geen land selecteert, zijn alle landen "
+"toegestaan. Dit is alleen ingeschakeld als het factuuradres vereist is."
 
 #: pretix/base/payment.py:484
 msgid ""
@@ -7954,7 +7955,7 @@ msgstr "Ticket-categorie"
 
 #: pretix/base/pdf.py:161 pretix/base/pdf.py:166 pretix/base/pdf.py:175
 msgid "123.45 EUR"
-msgstr "€123,45"
+msgstr "€ 123,45"
 
 #: pretix/base/pdf.py:165
 msgid "Price including bundled products"
@@ -8044,7 +8045,7 @@ msgstr "Begindatum en -tijd van evenement"
 
 #: pretix/base/pdf.py:256
 msgid "2017-05-31 20:00"
-msgstr "31-05-2017 20:00"
+msgstr "31.05.2017 20:00"
 
 #: pretix/base/pdf.py:263
 msgid "Event begin date"
@@ -8054,7 +8055,7 @@ msgstr "Begindatum van evenement"
 #: pretix/base/pdf.py:423 pretix/base/pdf.py:447 pretix/base/pdf.py:471
 #: pretix/base/pdf.py:534 pretix/base/pdf.py:539
 msgid "2017-05-31"
-msgstr "31-05-2017"
+msgstr "31.05.2017"
 
 #: pretix/base/pdf.py:271
 msgid "Event begin time"
@@ -8079,7 +8080,7 @@ msgstr "Einddatum en -tijd van het evenement"
 
 #: pretix/base/pdf.py:282
 msgid "2017-05-31 22:00"
-msgstr "31-05-2017 22:00"
+msgstr "31.05.2017 22:00"
 
 #: pretix/base/pdf.py:298
 msgid "22:00"
@@ -8096,7 +8097,7 @@ msgstr "Toegangsdatum en -tijd van evenement"
 #: pretix/base/pdf.py:311 pretix/base/pdf.py:407 pretix/base/pdf.py:431
 #: pretix/base/pdf.py:455 pretix/base/pdf.py:479 pretix/base/pdf.py:528
 msgid "2017-05-31 19:00"
-msgstr "31-05-2017 19:00"
+msgstr "31.05.2017 19:00"
 
 #: pretix/base/pdf.py:318
 msgid "Event admission time"
@@ -8231,9 +8232,9 @@ msgid ""
 "2017-05-31 14:00 – 16:00\n"
 "2017-05-31 14:00 – 2017-06-01 14:00"
 msgstr ""
-"31-05-2017 10:00 – 12:00\n"
-"31-05-2017 14:00 – 16:00\n"
-"31-05-2017 14:00 – 01-06-2017 14:00"
+"31.05.2017 10:00 – 12:00\n"
+"31.05.2017 14:00 – 16:00\n"
+"31.05.2017 14:00 – 01.06.2017 14:00"
 
 #: pretix/base/pdf.py:500
 msgid "Reusable Medium ID"
@@ -8427,7 +8428,7 @@ msgstr "U hebt geen producten geselecteerd."
 
 #: pretix/base/services/cart.py:110
 msgid "Unknown cart position."
-msgstr "Onbekend winkelwagenproduct."
+msgstr "Onbekende positie in winkelwagen."
 
 #: pretix/base/services/cart.py:111
 msgctxt "subevent"
@@ -8503,8 +8504,8 @@ msgstr[1] "U kunt niet meer dan %(max)s items van product %(product)s kiezen."
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] "U moet ten minste %(min)s item van product %(product)s kiezen."
-msgstr[1] "U moet ten minste %(min)s items van product %(product)s kiezen."
+msgstr[0] "U moet minstens %(min)s item van product %(product)s kiezen."
+msgstr[1] "U moet minstens %(min)s items van product %(product)s kiezen."
 
 #: pretix/base/services/cart.py:148
 #, python-format
@@ -8917,11 +8918,12 @@ msgstr "Dit ticket was geldig vóór {datetime}."
 
 #: pretix/base/services/checkin.py:1048
 msgid "This order position has an invalid product for this check-in list."
-msgstr "Dit ticket heeft een ongeldig product voor deze inchecklijst."
+msgstr "Dit ticket heeft een ongeldig product voor deze check-in-lijst."
 
 #: pretix/base/services/checkin.py:1057
 msgid "This order position has an invalid date for this check-in list."
-msgstr "Dit bestelde product heeft een ongeldige datum voor deze inchecklijst."
+msgstr ""
+"Dit bestelde product heeft een ongeldige datum voor deze check-in-lijst."
 
 #: pretix/base/services/checkin.py:1068
 msgid "This order is not marked as paid."
@@ -8929,7 +8931,7 @@ msgstr "Deze bestelling is niet gemarkeerd als betaald."
 
 #: pretix/base/services/checkin.py:1080
 msgid "Evaluation of custom rules has failed."
-msgstr "De evaluatie van aangepaste regel is mislukt."
+msgstr "De evaluatie van de aangepaste regel is mislukt."
 
 #: pretix/base/services/checkin.py:1090
 #, python-brace-format
@@ -9062,8 +9064,7 @@ msgstr ""
 
 #: pretix/base/services/mail.py:127
 msgid "This prefix has been set in your event or organizer settings."
-msgstr ""
-"Deze voorlooptekst is ingesteld in uw evenement- of organisatorinstellingen."
+msgstr "Deze prefix is ingesteld in uw evenement- of organisatorinstellingen."
 
 #: pretix/base/services/mail.py:284
 #, python-brace-format
@@ -9486,7 +9487,7 @@ msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
 msgstr ""
-"Dit is een add-onproduct. Kies het basisproduct waaraan het moet worden "
+"Dit is een add-on-product. Kies het basisproduct waaraan het moet worden "
 "toegevoegd."
 
 #: pretix/base/services/orders.py:1603
@@ -9778,8 +9779,8 @@ msgid ""
 msgstr ""
 "Indien ingeschakeld, moeten gebruikers die op het moment van aankoop waren "
 "ingelogd, ook inloggen om toegang te krijgen tot hun bestelgegevens. Als er "
-"tijdens het plaatsen van een bestelling een klantaccount wordt aangemaakt, "
-"wordt de beperking pas actief nadat het klantaccount is geactiveerd."
+"tijdens het plaatsen van een bestelling een klantenaccount wordt aangemaakt, "
+"wordt de beperking pas actief nadat het klantenaccount is geactiveerd."
 
 #: pretix/base/settings.py:202
 msgid "Match orders based on email address"
@@ -9837,7 +9838,7 @@ msgstr "Maximumaantal items per bestelling"
 
 #: pretix/base/settings.py:339
 msgid "Add-on products will not be counted."
-msgstr "Add-onproducten zullen niet worden meegeteld."
+msgstr "Add-on-producten zullen niet worden meegeteld."
 
 #: pretix/base/settings.py:348
 msgid "Show net prices instead of gross prices in the product list"
@@ -9989,7 +9990,7 @@ msgstr "Toon naam van deelnemers op facturen"
 
 #: pretix/base/settings.py:550
 msgid "Show event location on invoices"
-msgstr "Toon evenementlocatie op facturen"
+msgstr "Toon de locatie van het evenement op facturen"
 
 #: pretix/base/settings.py:551
 msgid ""
@@ -10040,11 +10041,11 @@ msgstr "Dit zal gebruikers verplichten om een bedrijfsnaam in te voeren."
 
 #: pretix/base/settings.py:606
 msgid "Ask for beneficiary"
-msgstr "Vraag om ontvanger"
+msgstr "Vraag om begunstigde"
 
 #: pretix/base/settings.py:616
 msgid "Custom recipient field label"
-msgstr "Label van aangepast ontvanger-veld"
+msgstr "Label van aangepast veld begunstigde"
 
 #: pretix/base/settings.py:618
 msgid ""
@@ -10063,7 +10064,7 @@ msgstr ""
 
 #: pretix/base/settings.py:631
 msgid "Custom recipient field help text"
-msgstr "Hulptekst van aangepast ontvanger-veld"
+msgstr "Hulptekst van aangepast veld begunstigde"
 
 #: pretix/base/settings.py:633
 msgid ""
@@ -10071,9 +10072,9 @@ msgid ""
 "will be displayed underneath the field. It will not be displayed on the "
 "invoice."
 msgstr ""
-"Als u gebruik maakt van het extra ontvangerveld, kunt u hier een verklarende "
-"tekst invoeren die onder het veld wordt weergegeven. Het staat niet op de "
-"factuur."
+"Als u gebruik maakt van het extra begunstigdenveld, kunt u hier een "
+"verklarende tekst invoeren die onder het veld wordt weergegeven. Het staat "
+"niet op de factuur."
 
 #: pretix/base/settings.py:643
 msgid "Ask for VAT ID"
@@ -10121,7 +10122,7 @@ msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
 msgstr ""
-"Als een factuur al gedeeltelijk is betaald, zal deze optie het betaalde en "
+"Als een factuur al gedeeltelijk betaald is, zal deze optie het betaalde en "
 "openstaande bedrag op de factuur tonen."
 
 #: pretix/base/settings.py:708
@@ -10183,7 +10184,7 @@ msgid ""
 "can use %Y (with century) %y (without century) to insert the year of the "
 "invoice, or %m and %d for the day of month."
 msgstr ""
-"Dit zal voor factuurnummers worden gezet. Als u dit veld leeg laat; zal de "
+"Dit zal voor factuurnummers worden gezet. Als u dit veld leeg laat, zal de "
 "slug van uw evenement worden gebruikt, gevolgd door een streep. Let op: als "
 "meerdere evenementen binnen dezelfde organisatie dezelfde waarde in dit veld "
 "gebruiken, zullen ze een gedeelde nummerreeks gebruiken en zal ieder getal "
@@ -10313,7 +10314,7 @@ msgstr ""
 
 #: pretix/base/settings.py:963
 msgid "Only end payment terms on weekdays"
-msgstr "Laat betaaltermijnen alleen op weekdagen aflopen"
+msgstr "Laat betaaltermijnen alleen op doordeweekse dagen aflopen"
 
 #: pretix/base/settings.py:964
 msgid ""
@@ -10387,10 +10388,10 @@ msgid ""
 "enforced."
 msgstr ""
 "De bestelling vervalt na dit aantal dagen nadat de verloopdatum is gemeld "
-"aan de klant. Indien \"Laat betaaltermijnen alleen op weekdagen aflopen\" "
-"ingeschakeld is, zal hier rekening mee gehouden worden. Dit zal niet "
-"uitgesteld worden tot na \"Laatste datum van betalingen\" hierboven, want "
-"dat wordt altijd afgedwongen."
+"aan de klant. Indien \"Laat betaaltermijnen alleen op doordeweekse dagen "
+"aflopen\" ingeschakeld is, zal hier rekening mee gehouden worden. Dit zal "
+"niet uitgesteld worden tot na \"Laatste datum van betalingen\" hierboven, "
+"want dat wordt altijd afgedwongen."
 
 #: pretix/base/settings.py:1050
 msgid "Hide \"payment pending\" state on customer-facing pages"
@@ -28654,7 +28655,7 @@ msgid ""
 "the domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
-"We konden geen SPF-record vinden voor het domein dat u wilt gebruiken. Dit "
+"We konden geen SPF-record vinden voor het domein dat u wilt gebruiken. Dat "
 "betekent dat de kans zeer groot is dat de meeste e-mails worden geweigerd of "
 "als spam worden gemarkeerd. We raden u ten zeerste aan om een SPF-record in "
 "te stellen voor het domein. U kunt dit doen via de DNS-instellingen bij de "
@@ -28669,7 +28670,7 @@ msgid ""
 "record."
 msgstr ""
 "We hebben een SPF-record gevonden voor het domein dat u wilt gebruiken, maar "
-"dit bevat niet de e-mailserver van dit systeem. Dit betekent dat de kans "
+"dit bevat niet de e-mailserver van dit systeem. Dat betekent dat de kans "
 "zeer groot is dat de meeste e-mails worden geweigerd of als spam worden "
 "gemarkeerd. U moet de DNS-instellingen van uw domein bijwerken om dit "
 "systeem op te nemen in het SPF-record."
@@ -33120,7 +33121,7 @@ msgstr "U moet mogelijk JavaScript inschakelen voor Stripe-betalingen."
 #: pretix/plugins/stripe/payment.py:949 pretix/plugins/stripe/payment.py:1071
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr "Stripe meldde een fout met uw kaart: %s"
+msgstr "Stripe meldt een fout met uw kaart: %s"
 
 #: pretix/plugins/stripe/payment.py:967 pretix/plugins/stripe/payment.py:1083
 msgid ""
