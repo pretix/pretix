@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-04 07:00+0000\n"
+"PO-Revision-Date: 2026-02-04 16:00+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -7954,41 +7954,41 @@ msgstr "ที่นั่ง: แถว"
 
 #: pretix/base/pdf.py:522
 msgid "Seat: seat number"
-msgstr ""
+msgstr "ที่นั่ง: หมายเลขที่นั่ง"
 
 #: pretix/base/pdf.py:527
 msgid "Date and time of first scan"
-msgstr ""
+msgstr "วันและเวลาที่สแกนเข้างานครั้งแรก"
 
 #: pretix/base/pdf.py:533
 msgid "Gift card: Issuance date"
-msgstr ""
+msgstr "บัตรของขวัญ: วันที่ออกบัตร"
 
 #: pretix/base/pdf.py:538
 msgid "Gift card: Expiration date"
-msgstr ""
+msgstr "บัตรของขวัญ: วันหมดอายุ"
 
 #: pretix/base/pdf.py:579 pretix/base/pdf.py:617 pretix/base/pdf.py:623
 #: pretix/plugins/badges/exporters.py:504
 #: pretix/plugins/ticketoutputpdf/exporters.py:102
 #, python-brace-format
 msgid "Question: {question}"
-msgstr ""
+msgstr "คำถาม: {question}"
 
 #: pretix/base/pdf.py:618 pretix/base/pdf.py:624
 #, python-brace-format
 msgid "<Answer: {question}>"
-msgstr ""
+msgstr "<คำตอบสำหรับ: {question}>"
 
 #: pretix/base/pdf.py:665
 msgid "Attendee name for salutation"
-msgstr ""
+msgstr "ชื่อผู้เข้าร่วม (สำหรับคำขึ้นต้น)"
 
 #: pretix/base/pdf.py:666 pretix/base/pdf.py:689
 #: pretix/base/services/placeholders.py:730
 #: pretix/control/forms/organizer.py:665
 msgid "Mr Doe"
-msgstr ""
+msgstr "คุณสมชาย"
 
 #: pretix/base/pdf.py:672 pretix/base/pdf.py:679
 #: pretix/plugins/badges/exporters.py:501
@@ -7997,42 +7997,42 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/exporters.py:99
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr ""
+msgstr "ชื่อผู้เข้าร่วม: {part}"
 
 #: pretix/base/pdf.py:688
 msgid "Invoice address name for salutation"
-msgstr ""
+msgstr "ชื่อในที่อยู่ใบแจ้งหนี้ (สำหรับคำขึ้นต้น)"
 
 #: pretix/base/pdf.py:695
 #, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr ""
+msgstr "ชื่อในที่อยู่ใบแจ้งหนี้: {part}"
 
 #: pretix/base/pdf.py:1328
 #, python-brace-format
 msgid "Your layout file is not a valid layout. Error message: {}"
-msgstr ""
+msgstr "ไฟล์เลย์เอาต์ของคุณไม่ถูกต้อง ข้อความแสดงข้อผิดพลาด: {}"
 
 #: pretix/base/plugins.py:138
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 msgid "Features"
-msgstr ""
+msgstr "ฟีเจอร์ / คุณสมบัติการใช้งาน"
 
 #: pretix/base/plugins.py:140
 msgid "Integrations"
-msgstr ""
+msgstr "การเชื่อมต่อระบบภายนอก"
 
 #: pretix/base/plugins.py:141
 msgid "Customizations"
-msgstr ""
+msgstr "การปรับแต่ง"
 
 #: pretix/base/plugins.py:142
 msgid "Output and export formats"
-msgstr ""
+msgstr "รูปแบบการแสดงผลและการส่งออกข้อมูล"
 
 #: pretix/base/plugins.py:143
 msgid "API features"
-msgstr ""
+msgstr "คุณสมบัติการใช้งาน API"
 
 #: pretix/base/reldate.py:38
 msgid "Event start"
@@ -8048,54 +8048,56 @@ msgstr "เริ่มเปิดให้เข้างาน"
 
 #: pretix/base/reldate.py:41
 msgid "Presale start"
-msgstr ""
+msgstr "เริ่มการขายล่วงหน้า"
 
 #: pretix/base/reldate.py:42
 msgid "Presale end"
-msgstr ""
+msgstr "สิ้นสุดการขายล่วงหน้า"
 
 #: pretix/base/reldate.py:186
 msgid "before"
-msgstr ""
+msgstr "ก่อน"
 
 #: pretix/base/reldate.py:187
 msgid "after"
-msgstr ""
+msgstr "หลัง"
 
 #: pretix/base/reldate.py:308 pretix/base/reldate.py:472
 msgid "Fixed date:"
-msgstr ""
+msgstr "วันที่คงที่:"
 
 #: pretix/base/reldate.py:309 pretix/base/reldate.py:473
 msgid "Relative date:"
-msgstr ""
+msgstr "วันที่สัมพันธ์:"
 
 #: pretix/base/reldate.py:310
 msgid "Relative time:"
-msgstr ""
+msgstr "เวลาสัมพันธ์:"
 
 #: pretix/base/reldate.py:318 pretix/base/reldate.py:476
 msgid "Not set"
-msgstr ""
+msgstr "ไม่ได้ตั้งค่า"
 
 #: pretix/base/secrets.py:119
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "สุ่ม (ค่าเริ่มต้น, ใช้งานได้กับทุกแอป pretix)"
 
 #: pretix/base/secrets.py:150
 msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
+"รูปแบบลายเซ็น pretix 1 (สำหรับงานขนาดใหญ่มาก ซึ่งจะเปลี่ยนวิธีการสแกนแบบออฟไลน์ – โปรดอ่า"
+"นรายละเอียดจากคู่มือหรือฝ่ายสนับสนุน)"
 
 #: pretix/base/services/cancelevent.py:277
 #: pretix/base/services/cancelevent.py:363
 msgid "Event canceled"
-msgstr ""
+msgstr "กิจกรรมถูกยกเลิก"
 
 #: pretix/base/services/cancelevent.py:392
 msgid "Bulk-refund confirmation"
-msgstr ""
+msgstr "การยืนยันคืนเงินจำนวนมาก"
 
 #: pretix/base/services/cart.py:106 pretix/base/services/modelimport.py:247
 #: pretix/base/services/orders.py:162
@@ -8103,23 +8105,24 @@ msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
+"ไม่สามารถดำเนินการตามคำขอของคุณได้ทั้งหมดเนื่องจากเซิร์ฟเวอร์หนาแน่นเกินไป โปรดลองใหม่อีกครั้ง"
 
 #: pretix/base/services/cart.py:109 pretix/presale/views/cart.py:262
 msgid "You did not select any products."
-msgstr ""
+msgstr "คุณไม่ได้เลือกสินค้าใดๆ"
 
 #: pretix/base/services/cart.py:110
 msgid "Unknown cart position."
-msgstr ""
+msgstr "ไม่พบตำแหน่งในตะกร้าสินค้า"
 
 #: pretix/base/services/cart.py:111
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr ""
+msgstr "ไม่ได้ระบุวันที่"
 
 #: pretix/base/services/cart.py:112 pretix/base/services/orders.py:191
 msgid "You selected a product which is not available for sale."
-msgstr ""
+msgstr "คุณเลือกสินค้าที่ยังไม่เปิดจำหน่าย"
 
 #: pretix/base/services/cart.py:114 pretix/base/services/orders.py:134
 #, python-format
@@ -8127,18 +8130,20 @@ msgid ""
 "Some products can no longer be purchased and have been removed from your "
 "cart for the following reason: %s"
 msgstr ""
+"สินค้าบางรายการไม่สามารถซื้อได้อีกต่อไปและถูกลบออกจากตะกร้าของคุณด้วยเหตุผลดังนี้: %s"
 
 #: pretix/base/services/cart.py:117
 msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
-msgstr ""
+msgstr "สินค้าบางรายการที่คุณเลือกไม่มีจำหน่ายแล้ว โปรดดูรายละเอียดด้านล่าง"
 
 #: pretix/base/services/cart.py:121
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"สินค้าบางรายการที่คุณเลือกไม่มีในจำนวนที่ต้องการแล้ว โปรดดูรายละเอียดด้านล่าง"
 
 #: pretix/base/services/cart.py:125
 #, python-format
@@ -8146,6 +8151,8 @@ msgid ""
 "Some of the products you selected are no longer available. The following "
 "products are affected and have not been added to your cart: %s"
 msgstr ""
+"สินค้าบางรายการที่คุณเลือกไม่มีจำหน่ายแล้ว สินค้าที่ได้รับผลกระทบดังต่อไปนี้จึงไม่ได้ถูกเพิ่มลงในตะกร้"
+"า: %s"
 
 #: pretix/base/services/cart.py:129
 #, python-format
@@ -8154,6 +8161,8 @@ msgid ""
 "you selected. The following products are affected and have not been added to "
 "your cart: %s"
 msgstr ""
+"สินค้าบางรายการที่คุณเลือกไม่มีในจำนวนที่ต้องการแล้ว สินค้าที่ได้รับผลกระทบดังต่อไปนี้จึงไม่ได้ถูกเพิ่มลง"
+"ในตะกร้า: %s"
 
 #: pretix/base/services/cart.py:134 pretix/base/services/orders.py:153
 #, python-format
@@ -8193,41 +8202,45 @@ msgstr[1] ""
 #: pretix/presale/templates/pretixpresale/event/index.html:170
 #: pretix/presale/views/waiting.py:145 pretix/presale/views/widget.py:812
 msgid "The booking period for this event has not yet started."
-msgstr ""
+msgstr "ช่วงเวลาการจองสำหรับกิจกรรมนี้ยังไม่เริ่มต้น"
 
 #: pretix/base/services/cart.py:153
 msgid "The booking period for this event has ended."
-msgstr ""
+msgstr "ช่วงเวลาการจองสำหรับกิจกรรมนี้สิ้นสุดลงแล้ว"
 
 #: pretix/base/services/cart.py:154
 msgid ""
 "All payments for this event need to be confirmed already, so no new orders "
 "can be created."
 msgstr ""
+"การชำระเงินทั้งหมดสำหรับกิจกรรมนี้ต้องได้รับการยืนยันแล้วเท่านั้น จึงไม่สามารถสร้างคำสั่งซื้อใหม่ได้"
 
 #: pretix/base/services/cart.py:156
 msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"ช่วงเวลาการจองสำหรับกิจกรรมนี้ยังไม่เริ่มต้น รายการที่ได้รับผลกระทบถูกนำออกจากตะกร้าของคุณแล้ว"
 
 #: pretix/base/services/cart.py:159
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
+"ช่วงเวลาการจองสำหรับหนึ่งในกิจกรรมในตะกร้าของคุณสิ้นสุดลงแล้ว รายการที่ได้รับผลกระทบถูกนำออกจ"
+"ากตะกร้าของคุณแล้ว"
 
 #: pretix/base/services/cart.py:161
 msgid "The entered price is not a number."
-msgstr ""
+msgstr "ราคาที่ระบุไม่ใช่ตัวเลข"
 
 #: pretix/base/services/cart.py:162
 msgid "The entered price is to high."
-msgstr ""
+msgstr "ราคาที่ระบุสูงเกินไป"
 
 #: pretix/base/services/cart.py:163
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "ไม่พบรหัสเวาเชอร์นี้ในฐานข้อมูลของเรา"
 
 #: pretix/base/services/cart.py:165 pretix/base/services/orders.py:168
 #, python-format
@@ -8256,7 +8269,7 @@ msgstr[1] ""
 #: pretix/base/services/cart.py:176
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
+msgstr "รหัสเวาเชอร์นี้ถูกใช้งานครบตามจำนวนครั้งที่กำหนดแล้ว"
 
 #: pretix/base/services/cart.py:178
 #, python-format
@@ -8266,35 +8279,38 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"รหัสเวาเชอร์นี้ถูกล็อกชั่วคราวเนื่องจากอยู่ในตะกร้าสินค้าแล้ว อาจมีผู้ใช้รายอื่นกำลังใช้งานอยู่ หรือคุณเค"
+"ยลองใช้แต่ยังชำระเงินไม่สำเร็จ คุณสามารถลองใหม่ได้ในอีก %d นาที"
 
 #: pretix/base/services/cart.py:183
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "รหัสเวาเชอร์นี้สามารถใช้งานได้อีกเพียง %d ครั้งเท่านั้น"
 
 #: pretix/base/services/cart.py:184
 msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
-msgstr ""
+msgstr "การใช้เวาเชอร์กับสินค้าทั้งตะกร้าไม่ควรทำร่วมกับขั้นตอนอื่น"
 
 #: pretix/base/services/cart.py:186
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
+"คุณใช้รหัสเวาเชอร์นี้ไปแล้ว โปรดลบรายการที่เกี่ยวข้องออกจากตะกร้าหากต้องการใช้กับสินค้าอื่น"
 
 #: pretix/base/services/cart.py:189
 msgid "This voucher is expired."
-msgstr ""
+msgstr "เวาเชอร์นี้หมดอายุแล้ว"
 
 #: pretix/base/services/cart.py:190
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "เวาเชอร์นี้ไม่สามารถใช้กับสินค้านี้ได้"
 
 #: pretix/base/services/cart.py:191
 msgid "This voucher is not valid for this seat."
-msgstr ""
+msgstr "เวาเชอร์นี้ไม่สามารถใช้กับที่นั่งนี้ได้"
 
 #: pretix/base/services/cart.py:193
 msgid ""
@@ -8302,32 +8318,34 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
+"ไม่พบรายการในตะกร้าที่ใช้เวาเชอร์นี้ได้ หากต้องการเพิ่มสินค้าใหม่โดยใช้เวาเชอร์ โปรดใช้ตัวเลือกแล"
+"กเวาเชอร์ที่ด้านล่างของหน้า"
 
 #: pretix/base/services/cart.py:198
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr ""
+msgstr "เวาเชอร์ของคุณใช้ได้กับสินค้าที่ยังไม่เปิดจำหน่ายในขณะนี้"
 
 #: pretix/base/services/cart.py:199
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "เวาเชอร์นี้ไม่สามารถใช้กับวันที่จัดกิจกรรมนี้ได้"
 
 #: pretix/base/services/cart.py:200
 msgid "You need a valid voucher code to order this product."
-msgstr ""
+msgstr "คุณต้องใช้รหัสเวาเชอร์ที่ถูกต้องเพื่อสั่งซื้อสินค้านี้"
 
 #: pretix/base/services/cart.py:201
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "วันที่จัดกิจกรรมที่เลือกยังไม่เปิดให้ใช้งาน"
 
 #: pretix/base/services/cart.py:202 pretix/base/services/orders.py:192
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "คุณไม่สามารถเลือกสินค้าเพิ่มเติม (add-on) สำหรับสินค้าที่เลือกได้"
 
 #: pretix/base/services/cart.py:203 pretix/base/services/orders.py:193
 msgid "You can not select two variations of the same add-on product."
-msgstr ""
+msgstr "คุณไม่สามารถเลือกรูปแบบสินค้าเพิ่มเติมที่ซ้ำกันได้"
 
 #: pretix/base/services/cart.py:205 pretix/base/services/orders.py:195
 #, python-format
@@ -8357,111 +8375,118 @@ msgid ""
 "You can select every add-on from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
+"คุณสามารถเลือกสินค้าเพิ่มเติมจากหมวดหมู่ %(cat)s สำหรับสินค้า %(base)s ได้เพียงอย่างละหนึ่งครั้ง"
+"เท่านั้น"
 
 #: pretix/base/services/cart.py:215
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "product."
 msgstr ""
+"มีสินค้าบางรายการที่คุณเลือกซึ่งต้องซื้อเป็นสินค้าเพิ่มเติมควบคู่กับสินค้าอื่นเท่านั้น"
 
 #: pretix/base/services/cart.py:216
 msgid "One of the products you selected can only be bought part of a bundle."
 msgstr ""
+"มีสินค้าบางรายการที่คุณเลือกซึ่งต้องซื้อเป็นส่วนหนึ่งของสินค้าแพ็กเกจเท่านั้น"
 
 #: pretix/base/services/cart.py:218
 msgid "Please select a valid seat."
-msgstr ""
+msgstr "โปรดเลือกที่นั่งที่ถูกต้อง"
 
 #: pretix/base/services/cart.py:219
 msgid "You can not select a seat for this position."
-msgstr ""
+msgstr "คุณไม่สามารถเลือกที่นั่งสำหรับรายการนี้ได้"
 
 #: pretix/base/services/cart.py:221
 msgid "You can not select the same seat multiple times."
-msgstr ""
+msgstr "คุณไม่สามารถเลือกที่นั่งเดิมซ้ำหลายครั้งได้"
 
 #: pretix/base/services/cart.py:222
 msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
 msgstr ""
+"คุณระบุรหัสบัตรของขวัญแทนรหัสเวาเชอร์ โดยสามารถระบุบัตรของขวัญได้ในขั้นตอนการชำระเงิน"
 
 #: pretix/base/services/cart.py:224
 msgid ""
 "The configuration of this product requires mapping to a physical medium, "
 "which is currently not available online."
 msgstr ""
+"การตั้งค่าสินค้านี้จำเป็นต้องเชื่อมโยงกับสื่อบันทึกข้อมูล (เช่น บัตรแข็ง) ซึ่งยังไม่พร้อมใช้งานในระบบออน"
+"ไลน์ขณะนี้"
 
 #: pretix/base/services/checkin.py:217
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:69
 msgid "Unknown reason"
-msgstr ""
+msgstr "ไม่ทราบสาเหตุ"
 
 #: pretix/base/services/checkin.py:273
 #, python-brace-format
 msgid "Only allowed before {datetime}"
-msgstr ""
+msgstr "อนุญาตเฉพาะก่อนเวลา {datetime} เท่านั้น"
 
 #: pretix/base/services/checkin.py:275
 #, python-brace-format
 msgid "Only allowed after {datetime}"
-msgstr ""
+msgstr "อนุญาตเฉพาะหลังเวลา {datetime} เท่านั้น"
 
 #: pretix/base/services/checkin.py:279
 msgid "Attendee is checked out"
-msgstr ""
+msgstr "ผู้เข้าร่วมเช็คเอาต์ออกแล้ว"
 
 #: pretix/base/services/checkin.py:281
 msgid "Attendee is already checked in"
-msgstr ""
+msgstr "ผู้เข้าร่วมเช็คอินเข้างานเรียบร้อยแล้ว"
 
 #: pretix/base/services/checkin.py:286
 msgid "Ticket type not allowed"
-msgstr ""
+msgstr "ประเภทตั๋วนี้ไม่ได้รับอนุญาตให้เข้า"
 
 #: pretix/base/services/checkin.py:289
 msgid "Wrong entrance gate"
-msgstr ""
+msgstr "เข้าผิดประตูทางเข้า"
 
 #: pretix/base/services/checkin.py:313
 msgid "time since last entry"
-msgstr ""
+msgstr "เวลานับตั้งแต่การเข้าครั้งล่าสุด"
 
 #: pretix/base/services/checkin.py:314
 msgid "time since first entry"
-msgstr ""
+msgstr "เวลานับตั้งแต่การเข้าครั้งแรก"
 
 #: pretix/base/services/checkin.py:315
 msgid "number of days with an entry"
-msgstr ""
+msgstr "จำนวนวันที่มาเข้าร่วมงาน"
 
 #: pretix/base/services/checkin.py:316
 msgid "number of entries"
-msgstr ""
+msgstr "จำนวนครั้งที่เข้างาน"
 
 #: pretix/base/services/checkin.py:317
 msgid "number of entries today"
-msgstr ""
+msgstr "จำนวนครั้งที่เข้างานในวันนี้"
 
 #: pretix/base/services/checkin.py:318
 #, python-brace-format
 msgid "number of entries since {datetime}"
-msgstr ""
+msgstr "จำนวนครั้งที่เข้างานตั้งแต่ {datetime}"
 
 #: pretix/base/services/checkin.py:319
 #, python-brace-format
 msgid "number of entries before {datetime}"
-msgstr ""
+msgstr "จำนวนครั้งที่เข้างานก่อน {datetime}"
 
 #: pretix/base/services/checkin.py:320
 #, python-brace-format
 msgid "number of days with an entry since {datetime}"
-msgstr ""
+msgstr "จำนวนวันที่มาเข้าร่วมงานตั้งแต่ {datetime}"
 
 #: pretix/base/services/checkin.py:321
 #, python-brace-format
 msgid "number of days with an entry before {datetime}"
-msgstr ""
+msgstr "จำนวนวันที่มาเข้าร่วมงานก่อน {datetime}"
 
 #: pretix/base/services/checkin.py:322
 msgid "week day"
@@ -8646,16 +8671,16 @@ msgstr "012345"
 #: pretix/base/services/invoices.py:612
 #, python-brace-format
 msgid "Sample product {}"
-msgstr ""
+msgstr "ตัวอย่างสินค้า {}"
 
 #: pretix/base/services/invoices.py:622
 msgid "Sample product A"
-msgstr ""
+msgstr "ตัวอย่างสินค้า A"
 
 #: pretix/base/services/invoices.py:682
 #, python-brace-format
 msgid "New invoice: {number}"
-msgstr ""
+msgstr "ใบแจ้งหนี้ใหม่: {number}"
 
 #: pretix/base/services/invoices.py:684
 #, python-brace-format
@@ -8667,17 +8692,22 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"สวัสดี\n"
+"\n"
+"แจกแจ้งหนี้ใหม่สำหรับคำสั่งซื้อ {order} ที่ {event} ถูกสร้างขึ้นแล้ว \n"
+"\n"
+"โปรดดูเอกสารแนบ เราส่งอีเมลนี้เนื่องจากคุณได้ตั้งค่าไว้ในการตั้งค่ากิจกรรมของคุณ"
 
 #: pretix/base/services/mail.py:127
 msgid "This prefix has been set in your event or organizer settings."
-msgstr ""
+msgstr "คำนำหน้านี้ถูกตั้งค่าไว้ในการตั้งค่ากิจกรรมหรือผู้จัดงานของคุณ"
 
 #: pretix/base/services/mail.py:284
 #, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr ""
+msgstr "คุณได้รับอีเมลนี้เนื่องจากมีผู้ทำการสั่งซื้อ {event} ให้คุณ"
 
 #: pretix/base/services/mail.py:288 pretix/base/services/mail.py:304
 #, python-brace-format
@@ -8685,16 +8715,18 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
+"คุณสามารถดูรายละเอียดคำสั่งซื้อได้ที่ URL ดังนี้: \n"
+"{orderurl}"
 
 #: pretix/base/services/mail.py:300
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr ""
+msgstr "คุณได้รับอีเมลนี้เนื่องจากคุณได้ทำการสั่งซื้อสำหรับ {event}"
 
 #: pretix/base/services/mail.py:494
 msgctxt "attachment_filename"
 msgid "Calendar invite"
-msgstr ""
+msgstr "การเชิญทางปฏิทิน"
 
 #: pretix/base/services/memberships.py:108
 #, python-brace-format
@@ -8702,6 +8734,7 @@ msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
 msgstr ""
+"คุณเลือกการเป็นสมาชิกสำหรับสินค้า \"{product}\" ซึ่งไม่จำเป็นต้องใช้สมาชิก"
 
 #: pretix/base/services/memberships.py:116
 #, python-brace-format
@@ -8709,26 +8742,28 @@ msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
 msgstr ""
+"คุณเลือกสินค้า \"{product}\" ซึ่งจำเป็นต้องมีการเป็นสมาชิกที่ยังใช้งานได้อยู่จึงจะเลือกได้"
 
 #: pretix/base/services/memberships.py:149
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr ""
+msgstr "คุณเลือกการเป็นสมาชิกที่เชื่อมต่อกับบัญชีลูกค้าอื่น"
 
 #: pretix/base/services/memberships.py:154
 msgid "You selected membership that has been canceled."
-msgstr ""
+msgstr "คุณเลือกการเป็นสมาชิกที่ถูกยกเลิกไปแล้ว"
 
 #: pretix/base/services/memberships.py:159
 msgid ""
 "You can not use a test mode membership for tickets that are not in test mode."
-msgstr ""
+msgstr "คุณไม่สามารถใช้สมาชิกในโหมดทดสอบกับตั๋วที่ไม่ได้อยู่ในโหมดทดสอบได้"
 
 #: pretix/base/services/memberships.py:163
 msgid ""
 "You need to add a test mode membership to the customer account to use it in "
 "test mode."
 msgstr ""
+"คุณต้องเพิ่มการเป็นสมาชิกในโหมดทดสอบให้กับบัญชีลูกค้าเพื่อใช้งานในโหมดทดสอบ"
 
 #: pretix/base/services/memberships.py:179
 #, python-brace-format
@@ -8736,6 +8771,7 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "a ticket that starts to be valid on {date}."
 msgstr ""
+"คุณเลือกการเป็นสมาชิกที่ใช้งานได้ตั้งแต่ {start} ถึง {end} แต่เลือกตั๋วที่เริ่มใช้งานได้วันที่ {date}"
 
 #: pretix/base/services/memberships.py:188
 #, python-brace-format
@@ -8743,6 +8779,7 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
+"คุณเลือกการเป็นสมาชิกที่ใช้งานได้ตั้งแต่ {start} ถึง {end} แต่กิจกรรมที่คุณเลือกจัดขึ้นวันที่ {date}"
 
 #: pretix/base/services/memberships.py:203
 #, python-brace-format
@@ -8750,6 +8787,7 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
+"คุณเลือกประเภทสมาชิก \"{type}\" ซึ่งไม่สามารถใช้กับสินค้า \"{product}\" ได้"
 
 #: pretix/base/services/memberships.py:212
 #, python-brace-format
@@ -8757,6 +8795,7 @@ msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
+"คุณกำลังพยายามใช้ประเภทสมาชิก \"{type}\" เกิน {number} ครั้ง ซึ่งเป็นจำนวนสูงสุดที่อนุญาต"
 
 #: pretix/base/services/memberships.py:227
 #, python-brace-format
@@ -8766,16 +8805,19 @@ msgid ""
 "membership for a different ticket that overlaps with this time frame "
 "({conflict_from} – {conflict_until})."
 msgstr ""
+"คุณกำลังพยายามใช้ประเภทสมาชิก \"{type}\" สำหรับตั๋วที่ใช้งานได้ตั้งแต่ {valid_from} ถึง "
+"{valid_until} อย่างไรก็ตาม คุณได้ใช้สมาชิกนี้ไปแล้วกับตั๋วใบอื่นที่มีช่วงเวลาทับซ้อนกัน ("
+"{conflict_from} – {conflict_until})"
 
 #: pretix/base/services/memberships.py:231
 #: pretix/base/services/memberships.py:233
 msgid "start"
-msgstr ""
+msgstr "เริ่มต้น"
 
 #: pretix/base/services/memberships.py:232
 #: pretix/base/services/memberships.py:234
 msgid "open end"
-msgstr ""
+msgstr "ไม่ระบุวันสิ้นสุด"
 
 #: pretix/base/services/memberships.py:244
 #, python-brace-format
@@ -8784,11 +8826,13 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"คุณกำลังพยายามใช้ประเภทสมาชิก \"{type}\" สำหรับกิจกรรมที่จัดขึ้นวันที่ {date} อย่างไรก็ตาม คุณ"
+"ได้ใช้สมาชิกเดียวกันนี้กับตั๋วใบอื่นในเวลาเดียวกันไปแล้ว"
 
 #: pretix/base/services/modelimport.py:56
 #, python-brace-format
 msgid "Error decoding special characters in your file: {message}"
-msgstr ""
+msgstr "เกิดข้อผิดพลาดในการถอดรหัสอักขระพิเศษในไฟล์ของคุณ: {message}"
 
 #: pretix/base/services/modelimport.py:74
 #, python-brace-format
@@ -8796,12 +8840,14 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
+"เกิดข้อผิดพลาดขณะนำเข้าค่า \"{value}\" สำหรับคอลัมน์ \"{column}\" ในบรรทัดที่ \"{line}"
+"\": {message}"
 
 #: pretix/base/services/modelimport.py:92
 #: pretix/base/services/modelimport.py:140 pretix/base/services/orders.py:1623
 #, python-format
 msgid "Orders cannot have more than %(max)s positions."
-msgstr ""
+msgstr "คำสั่งซื้อไม่สามารถมีรายการสินค้าได้เกิน %(max)s รายการ"
 
 #: pretix/base/services/modelimport.py:116
 #, python-format
@@ -8809,6 +8855,7 @@ msgid ""
 "The grouping \"%(value)s\" occurs on non-consecutive lines (seen again on "
 "line %(row)s)."
 msgstr ""
+"การจัดกลุ่ม \"%(value)s\" ปรากฏในบรรทัดที่ไม่ต่อเนื่องกัน (พบอีกครั้งในบรรทัดที่ %(row)s)"
 
 #: pretix/base/services/modelimport.py:154
 #, python-brace-format
@@ -8816,48 +8863,54 @@ msgid ""
 "Inconsistent data in row {row}: Column {col} contains value \"{val_line}\", "
 "but for this order, the value has already been set to \"{val_order}\"."
 msgstr ""
+"ข้อมูลในแถว {row} ไม่สอดคล้องกัน: คอลัมน์ {col} มีค่า \"{val_line}\" แต่สำหรับคำสั่งซื้อนี้ ค่า"
+"ได้ถูกตั้งไว้เป็น \"{val_order}\" แล้ว"
 
 #: pretix/base/services/modelimport.py:168
 #: pretix/base/services/modelimport.py:289
 #, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr ""
+msgstr "ข้อมูลในแถว {row} ไม่ถูกต้อง: {message}"
 
 #: pretix/base/services/modelimport.py:270
 msgid "A voucher cannot be created without a code."
-msgstr ""
+msgstr "ไม่สามารถสร้างเวาเชอร์โดยไม่มีรหัสได้"
 
 #: pretix/base/services/orders.py:137
 msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
-msgstr ""
+msgstr "สินค้าบางรายการที่คุณเลือกไม่มีจำหน่ายแล้ว โปรดดูรายละเอียดด้านล่าง"
 
 #: pretix/base/services/orders.py:141
 msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
+"สินค้าบางรายการที่คุณเลือกไม่มีในจำนวนที่ต้องการแล้ว โปรดดูรายละเอียดด้านล่าง"
 
 #: pretix/base/services/orders.py:145
 msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
 msgstr ""
+"ราคาของสินค้าบางรายการในตะกร้าของคุณมีการเปลี่ยนแปลงในระหว่างนี้ โปรดดูรายละเอียดด้านล่าง"
 
 #: pretix/base/services/orders.py:148
 msgid "An internal error occurred, please try again."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดภายในระบบ โปรดลองใหม่อีกครั้ง"
 
 #: pretix/base/services/orders.py:149
 msgid ""
 "This order was changed by someone else simultaneously. Please check if your "
 "changes are still accurate and try again."
 msgstr ""
+"คำสั่งซื้อนี้ถูกแก้ไขโดยบุคคลอื่นในเวลาเดียวกัน โปรดตรวจสอบว่าการแก้ไขของคุณยังถูกต้องอยู่หรือไม่แล้ว"
+"ลองใหม่อีกครั้ง"
 
 #: pretix/base/services/orders.py:151
 msgid "Your cart is empty."
-msgstr ""
+msgstr "ตะกร้าสินค้าของคุณว่างเปล่า"
 
 #: pretix/base/services/orders.py:157
 #, python-format
@@ -8872,13 +8925,14 @@ msgstr[1] ""
 
 #: pretix/base/services/orders.py:166
 msgid "The booking period has ended."
-msgstr ""
+msgstr "ช่วงเวลาการจองสิ้นสุดลงแล้ว"
 
 #: pretix/base/services/orders.py:172
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
+"ไม่พบรหัสเวาเชอร์ที่ใช้สำหรับสินค้าบางรายการในตะกร้าของคุณในฐานข้อมูลของเรา"
 
 #: pretix/base/services/orders.py:174
 msgid ""
@@ -8886,68 +8940,78 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
+"รหัสเวาเชอร์ที่ใช้สำหรับสินค้าบางรายการในตะกร้าถูกใช้งานครบจำนวนครั้งที่กำหนดแล้ว เราได้นำรายก"
+"ารนี้ออกจากตะกร้าของคุณ"
 
 #: pretix/base/services/orders.py:178
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
+"รหัสเวาเชอร์ที่ใช้สำหรับสินค้าบางรายการในตะกร้าถูกใช้งานเกินจำนวนครั้งแล้ว เราได้ปรับราคาของสิน"
+"ค้าในตะกร้าของคุณ"
 
 #: pretix/base/services/orders.py:182
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
+"รหัสเวาเชอร์ที่ใช้สำหรับสินค้าบางรายการในตะกร้าหมดอายุแล้ว เราได้นำรายการนี้ออกจากตะกร้าของคุ"
+"ณ"
 
 #: pretix/base/services/orders.py:185
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
+"รหัสเวาเชอร์ที่ใช้สำหรับสินค้าบางรายการในตะกร้าไม่สามารถใช้กับสินค้าชิ้นนี้ได้ เราได้นำรายการนี้ออก"
+"จากตะกร้าของคุณ"
 
 #: pretix/base/services/orders.py:187
 msgid "You need a valid voucher code to order one of the products."
-msgstr ""
+msgstr "คุณต้องใช้รหัสเวาเชอร์ที่ถูกต้องเพื่อสั่งซื้อสินค้าชิ้นนี้"
 
 #: pretix/base/services/orders.py:188
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
 msgstr ""
+"มีที่นั่งหนึ่งในคำสั่งซื้อของคุณไม่ถูกต้อง เราได้นำรายการดังกล่าวออกจากตะกร้าของคุณ"
 
 #: pretix/base/services/orders.py:189
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
+"มีที่นั่งหนึ่งในคำสั่งซื้อของคุณมีผู้อื่นจองไปแล้วในระหว่างนี้ เราได้นำรายการดังกล่าวออกจากตะกร้าของคุณ"
 
 #: pretix/base/services/orders.py:205
 #, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
-msgstr ""
+msgstr "คุณไม่สามารถลบรายการ %(addon)s ได้ เนื่องจากมีการเช็คอินเรียบร้อยแล้ว"
 
 #: pretix/base/services/orders.py:206
 msgid "Paid products not supported without a valid currency."
-msgstr ""
+msgstr "ไม่รองรับการขายสินค้าหากไม่ได้ระบุสกุลเงินที่ถูกต้อง"
 
 #: pretix/base/services/orders.py:222
 msgid "The order was not canceled."
-msgstr ""
+msgstr "คำสั่งซื้อไม่ถูกยกเลิก"
 
 #: pretix/base/services/orders.py:282 pretix/control/forms/orders.py:126
 msgid "The new expiry date needs to be in the future."
-msgstr ""
+msgstr "วันหมดอายุใหม่ต้องเป็นวันที่ในอนาคต"
 
 #: pretix/base/services/orders.py:382 pretix/base/services/orders.py:480
 msgid "This order is not pending approval."
-msgstr ""
+msgstr "คำสั่งซื้อนี้ไม่ได้อยู่ในสถานะรอการอนุมัติ"
 
 #: pretix/base/services/orders.py:542 pretix/presale/views/order.py:1015
 #: pretix/presale/views/order.py:1062
 msgid "You cannot cancel this order."
-msgstr ""
+msgstr "คุณไม่สามารถยกเลิกคำสั่งซื้อนี้ได้"
 
 #: pretix/base/services/orders.py:554
 #, python-brace-format
@@ -8955,15 +9019,16 @@ msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"ไม่สามารถยกเลิกคำสั่งซื้อนี้ได้เนื่องจากบัตรของขวัญ {card} ที่ซื้อในคำสั่งซื้อนี้ถูกใช้งานไปแล้ว"
 
 #: pretix/base/services/orders.py:617 pretix/control/forms/orders.py:219
 msgid ""
 "The cancellation fee cannot be higher than the total amount of this order."
-msgstr ""
+msgstr "ค่าธรรมเนียมการยกเลิกไม่สามารถสูงกว่ายอดรวมของคำสั่งซื้อนี้ได้"
 
 #: pretix/base/services/orders.py:1011
 msgid "The selected payment methods do not cover the total balance."
-msgstr ""
+msgstr "วิธีการชำระเงินที่เลือกไม่ครอบคลุมยอดคงเหลือทั้งหมด"
 
 #: pretix/base/services/orders.py:1077
 msgid ""
@@ -8971,52 +9036,57 @@ msgid ""
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
+"ในระหว่างการสั่งซื้อ เราพบว่ายอดรวมคำสั่งซื้อมีการเปลี่ยนแปลง อาจเป็นเพราะราคามีการเปลี่ยน หรือ"
+"บัตรของขวัญถูกใช้งานไปแล้วในระหว่างนี้ โปรดตรวจสอบราคาด้านล่างแล้วลองใหม่อีกครั้ง"
 
 #: pretix/base/services/orders.py:1593
 msgid "You need to select a variation of the product."
-msgstr ""
+msgstr "คุณต้องเลือกรูปแบบย่อยของสินค้า"
 
 #: pretix/base/services/orders.py:1594
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
-msgstr ""
+msgstr "โควตา {name} มีจำนวนไม่เพียงพอต่อการดำเนินการนี้"
 
 #: pretix/base/services/orders.py:1595
 msgid "There is no quota defined that allows this operation."
-msgstr ""
+msgstr "ไม่มีการกำหนดโควตาที่อนุญาตให้ดำเนินการนี้ได้"
 
 #: pretix/base/services/orders.py:1596
 msgid "The selected product is not active or has no price set."
-msgstr ""
+msgstr "สินค้าที่เลือกยังไม่เปิดใช้งานหรือไม่ได้ตั้งราคาไว้"
 
 #: pretix/base/services/orders.py:1597
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
 msgstr ""
+"การดำเนินการนี้จะทำให้คำสั่งซื้อว่างเปล่า โปรดเปลี่ยนไปใช้วิธียกเลิกคำสั่งซื้อแทน"
 
 #: pretix/base/services/orders.py:1599
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
 msgstr ""
+"การดำเนินการนี้จะทำให้คำสั่งซื้อไม่มีค่าใช้จ่ายและถือว่าชำระเงินทันที แต่ขณะนี้ไม่มีโควตาว่าง"
 
 #: pretix/base/services/orders.py:1602
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
 msgstr ""
+"นี่คือสินค้าเพิ่มเติม (add-on) โปรดเลือกรายการหลักที่ต้องการเพิ่มสินค้านี้เข้าไป"
 
 #: pretix/base/services/orders.py:1603
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
-msgstr ""
+msgstr "รายการหลักที่เลือกไม่อนุญาตให้เพิ่มสินค้านี้เป็นสินค้าเพิ่มเติมได้"
 
 #: pretix/base/services/orders.py:1604
 msgid "You need to choose a subevent for the new position."
-msgstr ""
+msgstr "คุณต้องเลือกกิจกรรมย่อย (subevent) สำหรับรายการใหม่"
 
 #: pretix/base/services/orders.py:1607
 #, python-brace-format
@@ -9024,24 +9094,25 @@ msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
 msgstr ""
+"คุณเลือกที่นั่ง \"{seat}\" สำหรับวันที่ไม่ตรงกับวันที่ในตั๋วที่เลือก โปรดเลือกที่นั่งใหม่อีกครั้ง"
 
 #: pretix/base/services/orders.py:1609
 msgid "The selected product requires you to select a seat."
-msgstr ""
+msgstr "สินค้าที่เลือกจำเป็นต้องระบุที่นั่ง"
 
 #: pretix/base/services/orders.py:1610
 msgid "The selected product does not allow to select a seat."
-msgstr ""
+msgstr "สินค้าที่เลือกไม่สามารถระบุที่นั่งได้"
 
 #: pretix/base/services/orders.py:1611
 msgid "The selected country is blocked by your tax rule."
-msgstr ""
+msgstr "ประเทศที่เลือกถูกระงับโดยกฎภาษีของคุณ"
 
 #: pretix/base/services/orders.py:1612
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
-msgstr ""
+msgstr "คุณไม่สามารถเปลี่ยนราคาของรายการที่ใช้ในการออกบัตรของขวัญไปแล้วได้"
 
 #: pretix/base/services/orders.py:2458 pretix/base/services/orders.py:2475
 #, python-brace-format
@@ -9049,43 +9120,46 @@ msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"ไม่สามารถยกเลิกรายการนี้ได้เนื่องจากบัตรของขวัญ {card} ในคำสั่งซื้อนี้ถูกใช้งานไปแล้ว"
 
 #: pretix/base/services/orders.py:3223
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
 msgstr ""
+"เกิดข้อผิดพลาดขณะพยายามคืนเงินให้คุณ โปรดติดต่อผู้จัดงานสำหรับข้อมูลเพิ่มเติม"
 
 #: pretix/base/services/placeholders.py:500
 #: pretix/base/services/placeholders.py:509
 #: pretix/base/templates/pretixbase/email/order_details.html:49
 msgid "View registration details"
-msgstr ""
+msgstr "ดูรายละเอียดการลงทะเบียน"
 
 #: pretix/base/services/placeholders.py:606
 msgid "Sample Corporation"
-msgstr ""
+msgstr "ตัวอย่างบริษัท"
 
 #: pretix/base/services/placeholders.py:647
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "ตัวอย่างตั๋วเข้างาน"
 
 #: pretix/base/services/placeholders.py:691
 msgid "An individual text with a reason can be inserted here."
-msgstr ""
+msgstr "สามารถระบุข้อความเหตุผลเพิ่มเติมได้ที่นี่"
 
 #: pretix/base/services/placeholders.py:695
 msgid "The amount has been charged to your card."
-msgstr ""
+msgstr "ยอดเงินถูกเรียกเก็บจากบัตรของคุณเรียบร้อยแล้ว"
 
 #: pretix/base/services/placeholders.py:699
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "โปรดโอนเงินไปยังบัญชีธนาคารนี้: 9999-9999-9999-9999"
 
 #: pretix/base/services/placeholders.py:799
 #: pretix/control/views/organizer.py:349
 msgid "This value will be replaced based on dynamic parameters."
 msgstr ""
+"ค่านี้จะถูกแทนที่ตามพารามิเตอร์ที่เปลี่ยนไปตามบริบท (Dynamic parameters)"
 
 #: pretix/base/services/seating.py:61 pretix/base/services/seating.py:128
 #, python-format
@@ -9093,6 +9167,7 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already sold."
 msgstr ""
+"คุณไม่สามารถเปลี่ยนผังที่นั่งได้ เนื่องจากที่นั่ง \"%s\" ไม่มีอยู่ในผังใหม่และได้ถูกขายไปแล้ว"
 
 #: pretix/base/services/seating.py:131
 #, python-format
@@ -9100,32 +9175,34 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already used in a voucher."
 msgstr ""
+"คุณไม่สามารถเปลี่ยนผังที่นั่งได้ เนื่องจากที่นั่ง \"%s\" ไม่มีอยู่ในผังใหม่และได้ถูกผูกกับเวาเชอร์ไว้แล้ว"
 
 #: pretix/base/services/shredder.py:126 pretix/control/views/shredder.py:97
 msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
-msgstr ""
+msgstr "ไม่พบไฟล์สำหรับดาวน์โหลดบนเซิร์ฟเวอร์ โปรดลองเริ่มใหม่อีกครั้ง"
 
 #: pretix/base/services/shredder.py:130 pretix/control/views/shredder.py:105
 msgid "This file is from a different event."
-msgstr ""
+msgstr "ไฟล์นี้มาจากกิจกรรมอื่น"
 
 #: pretix/base/services/shredder.py:139
 msgid "The confirm code you entered was incorrect."
-msgstr ""
+msgstr "รหัสยืนยันที่คุณระบุไม่ถูกต้อง"
 
 #: pretix/base/services/shredder.py:141
 msgid "Something happened in your event after the export, please try again."
 msgstr ""
+"มีการเปลี่ยนแปลงข้อมูลในกิจกรรมหลังจากการส่งออกข้อมูล โปรดลองใหม่อีกครั้ง"
 
 #: pretix/base/services/shredder.py:177
 msgid "Data shredding completed"
-msgstr ""
+msgstr "การทำลายข้อมูล (Data shredding) เสร็จสมบูรณ์"
 
 #: pretix/base/services/stats.py:225
 msgid "Uncategorized"
-msgstr ""
+msgstr "ไม่ระบุหมวดหมู่"
 
 #: pretix/base/services/tax.py:43
 msgid ""
@@ -9133,15 +9210,19 @@ msgid ""
 "country is currently not available. We will therefore need to charge you the "
 "same tax rate as if you did not enter a VAT ID."
 msgstr ""
+"ไม่สามารถตรวจสอบหมายเลขประจำตัวผู้เสียภาษี (VAT ID) ของคุณได้ เนื่องจากบริการตรวจสอบของป"
+"ระเทศคุณไม่พร้อมใช้งานในขณะนี้ เราจึงจำเป็นต้องเรียกเก็บภาษีในอัตราเดียวกับกรณีที่คุณไม่ได้ระบุหมาย"
+"เลขประจำตัวผู้เสียภาษี"
 
 #: pretix/base/services/tax.py:47 pretix/base/services/tax.py:366
 #: pretix/base/services/tax.py:393
 msgid "This VAT ID is not valid. Please re-check your input."
 msgstr ""
+"หมายเลขประจำตัวผู้เสียภาษี (VAT ID) นี้ไม่ถูกต้อง โปรดตรวจสอบข้อมูลที่คุณระบุอีกครั้ง"
 
 #: pretix/base/services/tax.py:48
 msgid "Your VAT ID does not match the selected country."
-msgstr ""
+msgstr "หมายเลขประจำตัวผู้เสียภาษี (VAT ID) ของคุณไม่ตรงกับประเทศที่เลือก"
 
 #: pretix/base/services/tax.py:370 pretix/base/services/tax.py:378
 msgid ""
@@ -9149,6 +9230,9 @@ msgid ""
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
+"ไม่สามารถตรวจสอบหมายเลขประจำตัวผู้เสียภาษีของคุณได้ เนื่องจากบริการตรวจสอบของประเทศคุณส่งคื"
+"นผลลัพธ์ที่ไม่ถูกต้อง เราจึงจำเป็นต้องเรียกเก็บภาษีมูลค่าเพิ่มในใบแจ้งหนี้ของคุณ โปรดติดต่อฝ่ายสนับสนุน"
+"เพื่อแก้ไขปัญหาด้วยตนเอง"
 
 #: pretix/base/services/tax.py:386
 msgid ""
@@ -9157,14 +9241,17 @@ msgid ""
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
+"ไม่สามารถตรวจสอบหมายเลขประจำตัวผู้เสียภาษีของคุณได้ เนื่องจากบริการตรวจสอบของประเทศคุณไม่พ"
+"ร้อมใช้งานในขณะนี้ เราจึงจำเป็นต้องเรียกเก็บภาษีมูลค่าเพิ่มในใบแจ้งหนี้ของคุณ โดยคุณสามารถขอคืนเงิ"
+"นภาษีได้ผ่านกระบวนการขอคืนภาษีมูลค่าเพิ่ม"
 
 #: pretix/base/services/tickets.py:100 pretix/control/views/pdf.py:98
 msgid "Sample workshop"
-msgstr ""
+msgstr "ตัวอย่างเวิร์กชอป"
 
 #: pretix/base/services/update_check.py:113
 msgid "pretix update available"
-msgstr ""
+msgstr "มีการอัปเดต pretix พร้อมใช้งาน"
 
 #: pretix/base/services/update_check.py:116
 #, python-brace-format
@@ -9186,56 +9273,74 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"มีการอัปเดตสำหรับ pretix หรือปลั๊กอินที่คุณติดตั้งไว้ในระบบของคุณ โปรดคลิกที่ลิงก์ต่อไปนี้เพื่อดูข้อมูลเพิ่"
+"มเติม: \n"
+"\n"
+"{url}\n"
+"\n"
+"คุณสามารถดูข้อมูลเกี่ยวกับการอัปเดตล่าสุดได้เสมอที่บล็อก pretix.eu:\n"
+"\n"
+"https://pretix.eu/about/en/blog/\n"
+"\n"
+"ด้วยความเคารพ\n"
+"\n"
+"ทีมพัฒนา pretix"
 
 #: pretix/base/services/update_check.py:145
 #: pretix/base/services/update_check.py:147
 #, python-format
 msgid "Plugin: %s"
-msgstr ""
+msgstr "ปลั๊กอิน: %s"
 
 #: pretix/base/services/vouchers.py:56 pretix/control/logdisplay.py:580
 #, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr ""
+msgstr "เวาเชอร์ถูกส่งไปยัง {recipient} เรียบร้อยแล้ว"
 
 #: pretix/base/settings.py:82
 msgid "Compute taxes for every line individually"
-msgstr ""
+msgstr "คำนวณภาษีแยกตามแต่ละรายการสินค้า"
 
 #: pretix/base/settings.py:83
 msgid "Compute taxes based on net total"
-msgstr ""
+msgstr "คำนวณภาษีจากยอดรวมสุทธิ (Net Total)"
 
 #: pretix/base/settings.py:84
 msgid "Compute taxes based on net total with stable gross prices"
-msgstr ""
+msgstr "คำนวณภาษีจากยอดรวมสุทธิโดยคงราคาขายรวมภาษี (Gross Prices) ให้คงที่"
 
 #: pretix/base/settings.py:134
 msgid "Allow usage of restricted plugins"
-msgstr ""
+msgstr "อนุญาตให้ใช้งานปลั๊กอินที่ถูกจำกัดสิทธิ์"
 
 #: pretix/base/settings.py:167
 msgid "Allow customers to create accounts"
-msgstr ""
+msgstr "อนุญาตให้ลูกค้าสร้างบัญชีผู้ใช้"
 
 #: pretix/base/settings.py:168
 msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
+"ส่วนนี้จะอนุญาตให้ลูกค้าสมัครบัญชีในหน้าร้านจำหน่ายตั๋วของคุณ ซึ่งเป็นเงื่อนไขเบื้องต้นสำหรับการใช้งานฟี"
+"เจอร์ขั้นสูง เช่น ระบบสมาชิก"
 
 #: pretix/base/settings.py:178
 msgid "Allow customers to log in with email address and password"
-msgstr ""
+msgstr "อนุญาตให้ลูกค้าเข้าสู่ระบบด้วยอีเมลและรหัสผ่าน"
 
 #: pretix/base/settings.py:179
 msgid ""
 "If disabled, you will need to connect one or more single-sign-on providers."
 msgstr ""
+"หากปิดใช้งาน คุณจำเป็นต้องเชื่อมต่อกับผู้ให้บริการล็อกอินผ่านระบบอื่น (Single Sign-On) อย่างน้อยห"
+"นึ่งราย"
 
 #: pretix/base/settings.py:189
 msgid "Require login to access order confirmation pages"
-msgstr ""
+msgstr "กำหนดให้ต้องเข้าสู่ระบบเพื่อเข้าถึงหน้ายืนยันคำสั่งซื้อ"
 
 #: pretix/base/settings.py:190
 msgid ""
@@ -9244,20 +9349,24 @@ msgid ""
 "placing an order, the restriction only becomes active after the customer "
 "account is activated."
 msgstr ""
+"หากเปิดใช้งาน ผู้ใช้ที่เข้าสู่ระบบในขณะซื้อสินค้าจะต้องเข้าสู่ระบบเพื่อเข้าถึงข้อมูลคำสั่งซื้อ หากมีการสร้า"
+"งบัญชีขณะสั่งซื้อ ข้อจำกัดนี้จะมีผลหลังจากเปิดใช้งานบัญชีแล้วเท่านั้น"
 
 #: pretix/base/settings.py:202
 msgid "Match orders based on email address"
-msgstr ""
+msgstr "จับคู่คำสั่งซื้อตามที่อยู่อีเมล"
 
 #: pretix/base/settings.py:203
 msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
 msgstr ""
+"ส่วนนี้จะช่วยให้ลูกค้าที่ลงทะเบียนแล้วสามารถเข้าถึงคำสั่งซื้อที่ทำด้วยอีเมลเดียวกันได้ แม้ว่าจะไม่ได้เข้าสู่"
+"ระบบในขณะที่ทำการซื้อก็ตาม"
 
 #: pretix/base/settings.py:213
 msgid "Activate re-usable media"
-msgstr ""
+msgstr "เปิดใช้งานสื่อบันทึกข้อมูลที่ใช้ซ้ำได้"
 
 #: pretix/base/settings.py:214
 msgid ""
@@ -9265,49 +9374,52 @@ msgid ""
 "with physical media such as wristbands or chip cards that may be re-used for "
 "different tickets or gift cards later."
 msgstr ""
+"ฟีเจอร์สื่อบันทึกข้อมูลที่ใช้ซ้ำได้ช่วยให้คุณสามารถเชื่อมต่อตั๋วและบัตรของขวัญเข้ากับสื่อทางกายภาพ เช่น ส"
+"ายรัดข้อมือหรือบัตรชิปการ์ด ซึ่งสามารถนำกลับมาใช้ใหม่กับตั๋วใบอื่นได้ในภายหลัง"
 
 #: pretix/base/settings.py:240
 msgid "Length of barcodes"
-msgstr ""
+msgstr "ความยาวของบาร์โค้ด"
 
 #: pretix/base/settings.py:269
 msgid ""
 "Automatically create a new gift card if a previously unknown chip is seen"
-msgstr ""
+msgstr "สร้างบัตรของขวัญใหม่โดยอัตโนมัติหากตรวจพบชิปที่ไม่เคยรู้จักมาก่อน"
 
 #: pretix/base/settings.py:282 pretix/base/settings.py:313
 msgid "Gift card currency"
-msgstr ""
+msgstr "สกุลเงินของบัตรของขวัญ"
 
 #: pretix/base/settings.py:300
 msgid "Automatically create a new gift card if a new chip is encoded"
-msgstr ""
+msgstr "สร้างบัตรของขวัญใหม่โดยอัตโนมัติหากมีการเข้ารหัสชิปใหม่"
 
 #: pretix/base/settings.py:322
 msgid "Use UID protection feature of NFC chip"
-msgstr ""
+msgstr "ใช้ฟีเจอร์การป้องกัน UID ของชิป NFC"
 
 #: pretix/base/settings.py:338
 msgid "Maximum number of items per order"
-msgstr ""
+msgstr "จำนวนสินค้าสูงสุดต่อหนึ่งคำสั่งซื้อ"
 
 #: pretix/base/settings.py:339
 msgid "Add-on products will not be counted."
-msgstr ""
+msgstr "สินค้าเพิ่มเติม (Add-on) จะไม่ถูกนำมานับรวม"
 
 #: pretix/base/settings.py:348
 msgid "Show net prices instead of gross prices in the product list"
-msgstr ""
+msgstr "แสดงราคาสุทธิ (Net) แทนราคารวมภาษี (Gross) ในรายการสินค้า"
 
 #: pretix/base/settings.py:349
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
+"ไม่ว่าคุณจะเลือกแบบใด ตะกร้าสินค้าจะแสดงราคารวมภาษีเสมอ เนื่องจากเป็นยอดที่ต้องชำระจริง"
 
 #: pretix/base/settings.py:360
 msgid "Hide prices on attendee ticket page"
-msgstr ""
+msgstr "ซ่อนราคาในหน้าตั๋วของผู้เข้าร่วมงาน"
 
 #: pretix/base/settings.py:361
 msgid ""
@@ -9316,26 +9428,28 @@ msgid ""
 "page of the individual attendees. The ticket buyer will of course see the "
 "price."
 msgstr ""
+"หากมีการซื้อตั๋วหลายใบและคุณส่งอีเมลถึงผู้เข้าร่วมทุกคน ตัวเลือกนี้จะทำให้ไม่แสดงราคาบนหน้าตั๋วของผู้เ"
+"ข้าร่วมแต่ละราย แต่ผู้ซื้อตั๋วจะยังคงเห็นราคาตามปกติ"
 
 #: pretix/base/settings.py:379
 msgid "Ask for attendee names"
-msgstr ""
+msgstr "สอบถามชื่อผู้เข้าร่วมงาน"
 
 #: pretix/base/settings.py:380
 msgid "Ask for a name for all personalized tickets."
-msgstr ""
+msgstr "สอบถามชื่อสำหรับตั๋วที่ระบุตัวบุคคลทุกใบ"
 
 #: pretix/base/settings.py:389
 msgid "Require attendee names"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุชื่อผู้เข้าร่วมงาน"
 
 #: pretix/base/settings.py:390
 msgid "Require customers to fill in the names of all attendees."
-msgstr ""
+msgstr "บังคับให้ลูกค้าต้องกรอกชื่อของผู้เข้าร่วมงานทุกคน"
 
 #: pretix/base/settings.py:400
 msgid "Ask for email addresses per ticket"
-msgstr ""
+msgstr "สอบถามที่อยู่อีเมลแยกตามตั๋วแต่ละใบ"
 
 #: pretix/base/settings.py:401
 msgid ""
@@ -9348,10 +9462,15 @@ msgid ""
 "primary email address, not to the per-attendee addresses. You can however "
 "enable this in the email settings."
 msgstr ""
+"โดยปกติ pretix จะสอบถามอีเมลหนึ่งที่อยู่ต่อหนึ่งคำสั่งซื้อ และจะส่งการยืนยันไปยังอีเมลนั้นเท่านั้น หาก"
+"คุณเปิดใช้งานตัวเลือกนี้ ระบบจะสอบถามที่อยู่อีเมลแยกสำหรับตั๋วที่ระบุตัวบุคคลแต่ละใบเพิ่มเติม ซึ่งจะมีปร"
+"ะโยชน์หากคุณต้องการรวบรวมที่อยู่อีเมลของผู้เข้าร่วมงานทุกคนแม้จะเป็นการสั่งซื้อแบบกลุ่ม อย่างไรก็ตา"
+"ม โดยค่าเริ่มต้น pretix จะส่งการยืนยันคำสั่งซื้อไปยังอีเมลหลักเพียงที่เดียวเท่านั้น ไม่ได้ส่งไปยังอีเมล"
+"ของผู้เข้าร่วมแต่ละราย แต่คุณสามารถไปเปิดใช้งานส่วนนี้ได้ในการตั้งค่าอีเมล"
 
 #: pretix/base/settings.py:415
 msgid "Require email addresses per ticket"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุที่อยู่อีเมลแยกตามตั๋ว"
 
 #: pretix/base/settings.py:416
 msgid ""
@@ -9359,43 +9478,46 @@ msgid ""
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
+"บังคับให้ลูกค้าต้องกรอกที่อยู่อีเมลแยกสำหรับตั๋วที่ระบุตัวบุคคลทุกใบ โปรดดูรายละเอียดเพิ่มเติมจากตัวเลือ"
+"กด้านบน ทั้งนี้ระบบยังคงต้องใช้ที่อยู่อีเมลหลักหนึ่งที่อยู่สำหรับการยืนยันคำสั่งซื้อเสมอโดยไม่คำนึงถึงการตั้ง"
+"ค่านี้"
 
 #: pretix/base/settings.py:428
 msgid "Ask for company per ticket"
-msgstr ""
+msgstr "สอบถามชื่อบริษัทแยกตามตั๋ว"
 
 #: pretix/base/settings.py:437
 msgid "Require company per ticket"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุชื่อบริษัทแยกตามตั๋ว"
 
 #: pretix/base/settings.py:447
 msgid "Ask for postal addresses per ticket"
-msgstr ""
+msgstr "สอบถามที่อยู่จัดส่งไปรษณีย์แยกตามตั๋ว"
 
 #: pretix/base/settings.py:456
 msgid "Require postal addresses per ticket"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุที่อยู่จัดส่งไปรษณีย์แยกตามตั๋ว"
 
 #: pretix/base/settings.py:466
 msgid "Ask for the order email address twice"
-msgstr ""
+msgstr "สอบถามอีเมลสั่งซื้อสองครั้ง"
 
 #: pretix/base/settings.py:467
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
-msgstr ""
+msgstr "บังคับให้ลูกค้ากรอกที่อยู่อีเมลหลักสองครั้งเพื่อป้องกันความผิดพลาด"
 
 #: pretix/base/settings.py:476
 msgid "Ask for a phone number per order"
-msgstr ""
+msgstr "สอบถามหมายเลขโทรศัพท์ต่อหนึ่งคำสั่งซื้อ"
 
 #: pretix/base/settings.py:485
 msgid "Require a phone number per order"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุหมายเลขโทรศัพท์ต่อหนึ่งคำสั่งซื้อ"
 
 #: pretix/base/settings.py:495
 msgid "Rounding of taxes"
-msgstr ""
+msgstr "การปัดเศษภาษี"
 
 #: pretix/base/settings.py:499
 msgid ""
@@ -9403,26 +9525,29 @@ msgid ""
 "for tax reporting, you need to make sure to account for possible rounding "
 "differences if your external system rounds differently than pretix."
 msgstr ""
+"โปรดทราบว่าหากคุณโอนย้ายข้อมูลการขายจาก pretix ไปยังระบบภายนอกเพื่อรายงานภาษี คุณต้องตรว"
+"จสอบให้แน่ใจว่าได้พิจารณาผลต่างจากการปัดเศษที่อาจเกิดขึ้น หากระบบภายนอกของคุณมีการปัดเศษที่แตก"
+"ต่างจาก pretix"
 
 #: pretix/base/settings.py:514
 msgid "Ask for invoice address"
-msgstr ""
+msgstr "สอบถามที่อยู่สำหรับออกใบแจ้งหนี้"
 
 #: pretix/base/settings.py:523
 msgid "Do not ask for invoice address if an order is free"
-msgstr ""
+msgstr "ไม่ต้องสอบถามที่อยู่สำหรับออกใบแจ้งหนี้หากไม่มีค่าใช้จ่าย"
 
 #: pretix/base/settings.py:532
 msgid "Require customer name"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุชื่อลูกค้า"
 
 #: pretix/base/settings.py:541
 msgid "Show attendee names on invoices"
-msgstr ""
+msgstr "แสดงชื่อผู้เข้าร่วมงานในใบแจ้งหนี้"
 
 #: pretix/base/settings.py:550
 msgid "Show event location on invoices"
-msgstr ""
+msgstr "แสดงสถานที่จัดกิจกรรมในใบแจ้งหนี้"
 
 #: pretix/base/settings.py:551
 msgid ""
@@ -9430,47 +9555,52 @@ msgid ""
 "same for all lines. It will be shown on every line if there are different "
 "locations."
 msgstr ""
+"สถานที่จัดกิจกรรมจะแสดงอยู่ใต้รายการสินค้าหากเป็นสถานที่เดียวกันทั้งหมด แต่จะแสดงในทุกรายการหาก"
+"มีสถานที่ที่แตกต่างกัน"
 
 #: pretix/base/settings.py:561
 msgid "Show exchange rates"
-msgstr ""
+msgstr "แสดงอัตราแลกเปลี่ยน"
 
 #: pretix/base/settings.py:564 pretix/base/settings.py:572
 #: pretix/control/forms/item.py:629
 msgid "Never"
-msgstr ""
+msgstr "ไม่แสดง"
 
 #: pretix/base/settings.py:565 pretix/base/settings.py:573
 msgid ""
 "Based on European Central Bank daily rates, whenever the invoice recipient "
 "is in an EU country that uses a different currency."
 msgstr ""
+"อ้างอิงตามอัตราแลกเปลี่ยนรายวันของธนาคารกลางยุโรป เมื่อผู้รับใบแจ้งหนี้อยู่ในประเทศกลุ่ม EU ที่ใช้ส"
+"กุลเงินอื่น"
 
 #: pretix/base/settings.py:567 pretix/base/settings.py:575
 msgid ""
 "Based on Czech National Bank daily rates, whenever the invoice amount is not "
 "in CZK."
 msgstr ""
+"อ้างอิงตามอัตราแลกเปลี่ยนรายวันของธนาคารแห่งชาติเช็ก เมื่อยอดในใบแจ้งหนี้ไม่ใช่สกุลเงิน CZK"
 
 #: pretix/base/settings.py:585
 msgid "Require invoice address"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุที่อยู่สำหรับออกใบแจ้งหนี้"
 
 #: pretix/base/settings.py:595
 msgid "Require a business address"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุที่อยู่ธุรกิจ"
 
 #: pretix/base/settings.py:596
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "ส่วนนี้จะบังคับให้ผู้ใช้ต้องกรอกชื่อบริษัท"
 
 #: pretix/base/settings.py:606
 msgid "Ask for beneficiary"
-msgstr ""
+msgstr "สอบถามชื่อผู้รับผลประโยชน์"
 
 #: pretix/base/settings.py:616
 msgid "Custom recipient field label"
-msgstr ""
+msgstr "ชื่อเรียกฟิลด์ผู้รับแบบกำหนดเอง"
 
 #: pretix/base/settings.py:618
 msgid ""
@@ -9480,10 +9610,13 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
+"หากคุณต้องการเพิ่มฟิลด์ข้อความแบบกำหนดเอง (เช่น เลขทะเบียนเฉพาะของแต่ละประเทศ) ในแบบฟอร์"
+"มที่อยู่ใบแจ้งหนี้ โปรดระบุชื่อฟิลด์ที่นี่ โดยชื่อนี้จะใช้ทั้งในการสอบถามข้อมูลจากผู้ใช้และแสดงค่าในใบแจ้งห"
+"นี้ใต้หัวข้อหลัก ทั้งนี้ฟิลด์ดังกล่าวจะไม่ใช่ฟิลด์บังคับ"
 
 #: pretix/base/settings.py:631
 msgid "Custom recipient field help text"
-msgstr ""
+msgstr "ข้อความช่วยเหลือสำหรับฟิลด์ผู้รับแบบกำหนดเอง"
 
 #: pretix/base/settings.py:633
 msgid ""
@@ -9491,10 +9624,12 @@ msgid ""
 "will be displayed underneath the field. It will not be displayed on the "
 "invoice."
 msgstr ""
+"หากคุณใช้ฟิลด์ผู้รับแบบกำหนดเอง คุณสามารถระบุข้อความช่วยเหลือซึ่งจะแสดงอยู่ใต้ฟิลด์นั้น โดยข้อความนี้"
+"จะไม่แสดงในใบแจ้งหนี้"
 
 #: pretix/base/settings.py:643
 msgid "Ask for VAT ID"
-msgstr ""
+msgstr "สอบถามหมายเลขประจำตัวผู้เสียภาษี (VAT ID)"
 
 #: pretix/base/settings.py:645
 #, python-brace-format
@@ -9502,10 +9637,12 @@ msgid ""
 "Only works if an invoice address is asked for. VAT ID is only requested from "
 "business customers in the following countries: {countries}."
 msgstr ""
+"จะใช้งานได้ก็ต่อเมื่อมีการสอบถามที่อยู่ใบแจ้งหนี้เท่านั้น โดยระบบจะขอ VAT ID เฉพาะลูกค้าธุรกิจในปร"
+"ะเทศต่อไปนี้: {countries}"
 
 #: pretix/base/settings.py:664
 msgid "Require VAT ID in"
-msgstr ""
+msgstr "บังคับระบุ VAT ID ในประเทศ"
 
 #: pretix/base/settings.py:670
 msgid ""
@@ -9513,66 +9650,75 @@ msgid ""
 "ID in all countries. VAT ID will be required for all business addresses in "
 "the selected countries."
 msgstr ""
+"โดยปกติแล้วการระบุ VAT ID จะเป็นแบบไม่บังคับ เนื่องจากไม่ใช่ทุกธุรกิจในทุกประเทศจะมี VAT ID แ"
+"ต่ระบบจะบังคับให้ระบุ VAT ID สำหรับที่อยู่ธุรกิจทั้งหมดในประเทศที่เลือก"
 
 #: pretix/base/settings.py:685
 msgid "Invoice address explanation"
-msgstr ""
+msgstr "คำอธิบายเกี่ยวกับที่อยู่ใบแจ้งหนี้"
 
 #: pretix/base/settings.py:688
 msgid "This text will be shown above the invoice address form during checkout."
 msgstr ""
+"ข้อความนี้จะแสดงอยู่เหนือแบบฟอร์มที่อยู่ใบแจ้งหนี้ในระหว่างขั้นตอนการชำระเงิน"
 
 #: pretix/base/settings.py:697
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "แสดงยอดที่ชำระแล้วในใบแจ้งหนี้ที่ชำระเงินเพียงบางส่วน"
 
 #: pretix/base/settings.py:698
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
 msgstr ""
+"หากมีการชำระเงินในใบแจ้งหนี้มาแล้วบางส่วน ตัวเลือกนี้จะเพิ่มยอดที่ชำระแล้วและยอดที่ค้างชำระลงในใ"
+"บแจ้งหนี้"
 
 #: pretix/base/settings.py:708
 msgid "Show free products on invoices"
-msgstr ""
+msgstr "แสดงสินค้าที่ไม่มีค่าใช้จ่ายในใบแจ้งหนี้"
 
 #: pretix/base/settings.py:709
 msgid ""
 "Note that invoices will never be generated for orders that contain only free "
 "products."
 msgstr ""
+"โปรดทราบว่าระบบจะไม่ออกใบแจ้งหนี้สำหรับคำสั่งซื้อที่มีเพียงสินค้าไม่มีค่าใช้จ่ายเท่านั้น"
 
 #: pretix/base/settings.py:719
 msgid "Show expiration date of order"
-msgstr ""
+msgstr "แสดงวันหมดอายุของคำสั่งซื้อ"
 
 #: pretix/base/settings.py:720
 msgid ""
 "The expiration date will not be shown if the invoice is generated after the "
 "order is paid."
 msgstr ""
+"วันหมดอายุจะไม่แสดงหากใบแจ้งหนี้ถูกสร้างขึ้นหลังจากที่คำสั่งซื้อได้รับการชำระเงินแล้ว"
 
 #: pretix/base/settings.py:730
 msgid "Minimum length of invoice number after prefix"
-msgstr ""
+msgstr "ความยาวขั้นต่ำของเลขที่ใบแจ้งหนี้ต่อจากคำนำหน้า"
 
 #: pretix/base/settings.py:731
 msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
+"หมายเลขใบแจ้งหนี้ส่วนที่ต่อจากคำนำหน้าจะถูกเติมด้วยเลขศูนย์ข้างหน้าจนครบตามความยาวนี้ เช่น INV-"
+"001 หรือ INV-00001"
 
 #: pretix/base/settings.py:743
 msgid "Generate invoices with consecutive numbers"
-msgstr ""
+msgstr "ออกใบแจ้งหนี้ด้วยเลขที่แบบรันลำดับต่อเนื่อง"
 
 #: pretix/base/settings.py:744
 msgid "If deactivated, the order code will be used in the invoice number."
-msgstr ""
+msgstr "หากปิดใช้งาน รหัสคำสั่งซื้อจะถูกนำมาใช้เป็นเลขที่ใบแจ้งหนี้แทน"
 
 #: pretix/base/settings.py:753
 msgid "Invoice number prefix"
-msgstr ""
+msgstr "คำนำหน้าเลขที่ใบแจ้งหนี้"
 
 #: pretix/base/settings.py:754
 msgid ""
@@ -9584,15 +9730,19 @@ msgid ""
 "can use %Y (with century) %y (without century) to insert the year of the "
 "invoice, or %m and %d for the day of month."
 msgstr ""
+"ข้อความนี้จะถูกเพิ่มไว้ข้างหน้าเลขที่ใบแจ้งหนี้ หากเว้นว่างไว้ ระบบจะใช้ชื่อย่อกิจกรรม (Slug) ตามด้ว"
+"ยเครื่องหมายขีดกลาง ข้อควรระวัง: หากหลายกิจกรรมในองค์กรเดียวกันใช้ค่านี้เหมือนกัน จะมีการใช้เล"
+"ขลำดับร่วมกัน (หมายเลขจะไม่ซ้ำกันในทุกกิจกรรม) การตั้งค่านี้มีผลกับใบแจ้งหนี้ในอนาคตเท่านั้น คุณสาม"
+"ารถใช้ %Y หรือ %y สำหรับปี และ %m หรือ %d สำหรับวันและเดือนได้"
 
 #: pretix/base/settings.py:766 pretix/base/settings.py:789
 #, python-brace-format
 msgid "Please only use the characters {allowed} in this field."
-msgstr ""
+msgstr "โปรดใช้เฉพาะตัวอักษร {allowed} ในฟิลด์นี้เท่านั้น"
 
 #: pretix/base/settings.py:780
 msgid "Invoice number prefix for cancellations"
-msgstr ""
+msgstr "คำนำหน้าเลขที่ใบแจ้งหนี้สำหรับการยกเลิก"
 
 #: pretix/base/settings.py:781
 msgid ""
@@ -9600,41 +9750,43 @@ msgid ""
 "this field empty, the same numbering scheme will be used that you configured "
 "for regular invoices."
 msgstr ""
+"ข้อความนี้จะถูกเพิ่มไว้ข้างหน้าเลขที่ใบแจ้งหนี้สำหรับการยกเลิก หากเว้นว่างไว้ จะใช้รูปแบบเดียวกับใบแ"
+"จ้งหนี้ปกติที่คุณตั้งค่าไว้"
 
 #: pretix/base/settings.py:803
 msgid "Highlight order code to make it stand out visibly"
-msgstr ""
+msgstr "เน้นรหัสคำสั่งซื้อให้เห็นเด่นชัด"
 
 #: pretix/base/settings.py:804 pretix/base/settings.py:815
 msgid "Only respected by some invoice renderers."
-msgstr ""
+msgstr "รองรับเฉพาะรูปแบบการแสดงผลใบแจ้งหนี้บางประเภทเท่านั้น"
 
 #: pretix/base/settings.py:814 pretix/base/settings.py:3091
 #: pretix/control/templates/pretixcontrol/pdf/index.html:436
 msgid "Font"
-msgstr ""
+msgstr "แบบอักษร (Font)"
 
 #: pretix/base/settings.py:840
 msgid "Length of ticket codes"
-msgstr ""
+msgstr "ความยาวของรหัสตั๋ว"
 
 #: pretix/base/settings.py:867
 msgid "Reservation period"
-msgstr ""
+msgstr "ระยะเวลาการจองสินค้าในตะกร้า"
 
 #: pretix/base/settings.py:869
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
-msgstr ""
+msgstr "จำนวนนาทีที่สินค้าในตะกร้าจะถูกจองไว้สำหรับผู้ใช้รายนี้"
 
 #: pretix/base/settings.py:878
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
-msgstr ""
+msgstr "นำไปยังหน้าชำระเงินทันทีหลังจากเพิ่มสินค้าลงในตะกร้า"
 
 #: pretix/base/settings.py:887
 msgid "End of presale text"
-msgstr ""
+msgstr "ข้อความเมื่อสิ้นสุดการขายล่วงหน้า"
 
 #: pretix/base/settings.py:890
 msgid ""
@@ -9642,38 +9794,43 @@ msgid ""
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
+"ข้อความนี้จะแสดงที่ด้านบนของร้านจำหน่ายตั๋วเมื่อสิ้นสุดช่วงเวลาการจำหน่ายที่กำหนดไว้ คุณสามารถใช้เพื่"
+"อแนะนำช่องทางอื่นในการซื้อตั๋ว เช่น จุดจำหน่ายบัตรหน้างาน"
 
 #: pretix/base/settings.py:904
 msgid "Guidance text"
-msgstr ""
+msgstr "ข้อความแนะนำ"
 
 #: pretix/base/settings.py:905
 msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
 msgstr ""
+"ข้อความนี้จะแสดงอยู่เหนือตัวเลือกการชำระเงิน คุณสามารถอธิบายตัวเลือกต่าง ๆ ให้ผู้ใช้ทราบได้ที่นี่"
 
 #: pretix/base/settings.py:916 pretix/base/settings.py:925
 msgid "in days"
-msgstr ""
+msgstr "เป็นจำนวนวัน"
 
 #: pretix/base/settings.py:917 pretix/base/settings.py:926
 msgid "in minutes"
-msgstr ""
+msgstr "เป็นนาที"
 
 #: pretix/base/settings.py:921
 msgid "Set payment term"
-msgstr ""
+msgstr "ตั้งค่าระยะเวลาชำระเงิน"
 
 #: pretix/base/settings.py:928
 msgid ""
 "If using days, the order will expire at the end of the last day. Using "
 "minutes is more exact, but should only be used for real-time payment methods."
 msgstr ""
+"หากระบุเป็นวัน คำสั่งซื้อจะหมดอายุเมื่อสิ้นสุดวันสุดท้าย การระบุเป็นนาทีจะมีความแม่นยำกว่า แต่ควรใช้กั"
+"บวิธีการชำระเงินแบบเรียลไทม์เท่านั้น"
 
 #: pretix/base/settings.py:938
 msgid "Payment term in days"
-msgstr ""
+msgstr "ระยะเวลาชำระเงิน (วัน)"
 
 #: pretix/base/settings.py:945
 msgid ""
@@ -9682,10 +9839,13 @@ msgid ""
 "recommend 14 days. If you only use real-time payment methods, we recommend "
 "still setting two or three days to allow people to retry failed payments."
 msgstr ""
+"จำนวนวันที่ผู้ใช้ต้องชำระเงินหลังจากสั่งซื้อเพื่อรักษาการจองไว้ หากคุณใช้วิธีที่ล่าช้าเช่นการโอนเงินผ่านธ"
+"นาคาร แนะนำให้ตั้งไว้ 14 วัน หากใช้เฉพาะวิธีเรียลไทม์ แนะนำให้ตั้งไว้ 2-3 วันเพื่อให้โอกาสผู้ใช้ลอ"
+"งใหม่หากชำระเงินล้มเหลว"
 
 #: pretix/base/settings.py:963
 msgid "Only end payment terms on weekdays"
-msgstr ""
+msgstr "สิ้นสุดระยะเวลาชำระเงินเฉพาะวันทำการเท่านั้น"
 
 #: pretix/base/settings.py:964
 msgid ""
@@ -9694,10 +9854,13 @@ msgid ""
 "some countries by civil law. This will not effect the last date of payments "
 "configured below."
 msgstr ""
+"หากเปิดใช้งานและระยะเวลาชำระเงินสิ้นสุดในวันเสาร์หรืออาทิตย์ ระบบจะเลื่อนไปสิ้นสุดในวันจันทร์ถัดไ"
+"ปแทน ซึ่งเป็นข้อกำหนดตามกฎหมายแพ่งในบางประเทศ โดยจะไม่มีผลกับ \"วันสุดท้ายที่รับชำระเงิน\" ที่"
+"ตั้งค่าไว้ด้านล่าง"
 
 #: pretix/base/settings.py:980
 msgid "Payment term in minutes"
-msgstr ""
+msgstr "ระยะเวลาชำระเงิน (นาที)"
 
 #: pretix/base/settings.py:981
 msgid ""
@@ -9706,10 +9869,13 @@ msgid ""
 "methods. Please note that for technical reasons, the actual time frame might "
 "be a few minutes longer before the order is marked as expired."
 msgstr ""
+"จำนวนนาทีหลังจากสั่งซื้อที่ผู้ใช้ต้องชำระเงินเพื่อรักษาการจองไว้ ควรใช้เฉพาะเมื่อคุณให้บริการชำระเงิน"
+"แบบเรียลไทม์เท่านั้น โปรดทราบว่าด้วยเหตุผลทางเทคนิค ระยะเวลาจริงอาจนานกว่าที่ตั้งไว้ไม่กี่นาทีก่อน"
+"ที่คำสั่งซื้อจะถูกเปลี่ยนสถานะเป็นหมดอายุ"
 
 #: pretix/base/settings.py:1004
 msgid "Last date of payments"
-msgstr ""
+msgstr "วันสุดท้ายที่รับชำระเงิน"
 
 #: pretix/base/settings.py:1005
 msgid ""
@@ -9717,10 +9883,12 @@ msgid ""
 "configured above. If you use the event series feature and an order contains "
 "tickets for multiple dates, the earliest date will be used."
 msgstr ""
+"วันสุดท้ายที่จะยอมรับการชำระเงินใด ๆ โดยค่านี้จะมีความสำคัญเหนือกว่าระยะเวลาที่ตั้งค่าไว้ด้านบน หา"
+"กเป็นกิจกรรมแบบซีรีส์และมีตั๋วหลายวันในคำสั่งซื้อเดียว จะอ้างอิงตามวันที่จัดงานที่เร็วที่สุด"
 
 #: pretix/base/settings.py:1016
 msgid "Automatically expire unpaid orders"
-msgstr ""
+msgstr "ยกเลิกคำสั่งซื้อที่ยังไม่ชำระเงินโดยอัตโนมัติ"
 
 #: pretix/base/settings.py:1017
 msgid ""
@@ -9728,10 +9896,13 @@ msgid ""
 "'expired' after the end of their payment deadline. This means that those "
 "tickets go back to the pool and can be ordered by other people."
 msgstr ""
+"หากเลือกไว้ คำสั่งซื้อที่ยังไม่ชำระเงินทั้งหมดจะเปลี่ยนสถานะจาก 'รอดำเนินการ' เป็น 'หมดอายุ' โด"
+"ยอัตโนมัติเมื่อสิ้นสุดกำหนดชำระ ซึ่งหมายความว่าตั๋วเหล่านั้นจะถูกส่งกลับเข้าสู่ระบบเพื่อให้ผู้อื่นสามารถสั่ง"
+"ซื้อได้"
 
 #: pretix/base/settings.py:1028
 msgid "Expiration delay"
-msgstr ""
+msgstr "ระยะเวลาผ่อนผันการหมดอายุ"
 
 #: pretix/base/settings.py:1029
 msgid ""
@@ -9741,10 +9912,13 @@ msgid ""
 "beyond the \"last date of payments\" configured above, which is always "
 "enforced."
 msgstr ""
+"คำสั่งซื้อจะหมดอายุจริงหลังจากวันที่แจ้งลูกค้าไปแล้วตามจำนวนวันที่ระบุนี้ หากคุณเลือก \"สิ้นสุดระยะเวล"
+"าชำระเงินเฉพาะวันทำการเท่านั้น\" ระบบจะยึดตามนั้นด้วย อย่างไรก็ตาม จะไม่มีการผ่อนผันเกิน \"วัน"
+"สุดท้ายที่รับชำระเงิน\" ที่ตั้งค่าไว้"
 
 #: pretix/base/settings.py:1050
 msgid "Hide \"payment pending\" state on customer-facing pages"
-msgstr ""
+msgstr "ซ่อนสถานะ \"รอชำระเงิน\" ในหน้าสำหรับลูกค้า"
 
 #: pretix/base/settings.py:1051
 msgid ""
@@ -9752,6 +9926,8 @@ msgid ""
 "but no indication of missing payment will be visible on the ticket pages of "
 "attendees who did not buy the ticket themselves."
 msgstr ""
+"แผงคำแนะนำการชำระเงินจะยังคงแสดงให้ผู้ซื้อหลักเห็น แต่จะไม่มีการแสดงสถานะว่ายังไม่ได้ชำระเงินใ"
+"นหน้าตั๋วของผู้เข้าร่วมที่ไม่ได้เป็นคนซื้อตั๋วเอง"
 
 #: pretix/base/settings.py:1067
 msgid ""
@@ -9760,10 +9936,12 @@ msgid ""
 "shown this page again and you can either redeem another gift card or select "
 "a different payment method for the difference."
 msgstr ""
+"หากคุณมีบัตรของขวัญ โปรดกรอกรหัสที่นี่ หากยอดเงินในบัตรไม่เพียงพอสำหรับคำสั่งซื้อทั้งหมด ระบบจะแส"
+"ดงหน้านี้อีกครั้งเพื่อให้คุณใช้บัตรใบอื่นหรือเลือกวิธีชำระเงินอื่นสำหรับส่วนต่าง"
 
 #: pretix/base/settings.py:1083
 msgid "Accept late payments"
-msgstr ""
+msgstr "ยอมรับการชำระเงินล่าช้า"
 
 #: pretix/base/settings.py:1084
 msgid ""
@@ -9771,104 +9949,111 @@ msgid ""
 "enough capacity is available. No payments will ever be accepted after the "
 "'Last date of payments' configured above."
 msgstr ""
+"ยอมรับการชำระเงินสำหรับคำสั่งซื้อแม้จะมีสถานะ 'หมดอายุ' แล้ว ตราบใดที่ยังมีโควตาว่างเพียงพอ ทั้ง"
+"นี้จะไม่มีการรับชำระเงินหลังจาก \"วันสุดท้ายที่รับชำระเงิน\" ที่ตั้งค่าไว้"
 
 #: pretix/base/settings.py:1095
 msgid "Show start date"
-msgstr ""
+msgstr "แสดงวันที่เริ่มจำหน่าย"
 
 #: pretix/base/settings.py:1096
 msgid "Show the presale start date before presale has started."
-msgstr ""
+msgstr "แสดงวันที่เริ่มจำหน่ายล่วงหน้าก่อนที่การขายจะเริ่มต้นขึ้น"
 
 #: pretix/base/settings.py:1107 pretix/base/settings.py:1115
 #: pretix/base/settings.py:1129 pretix/base/settings.py:1138
 msgid "Use default tax rate"
-msgstr ""
+msgstr "ใช้อัตราภาษีเริ่มต้น"
 
 #: pretix/base/settings.py:1108 pretix/base/settings.py:1116
 #: pretix/base/settings.py:1127 pretix/base/settings.py:1136
 msgid "Charge no taxes"
-msgstr ""
+msgstr "ไม่เรียกเก็บภาษี"
 
 #: pretix/base/settings.py:1112
 msgid "Tax handling on payment fees"
-msgstr ""
+msgstr "การจัดการภาษีสำหรับค่าธรรมเนียมการชำระเงิน"
 
 #: pretix/base/settings.py:1128 pretix/base/settings.py:1137
 msgid "Use same taxes as order positions (split according to net prices)"
-msgstr ""
+msgstr "ใช้ภาษีเดียวกับรายการสินค้า (แบ่งตามสัดส่วนราคาสุทธิ)"
 
 #: pretix/base/settings.py:1133
 msgid "Tax handling on cancellation fees"
-msgstr ""
+msgstr "การจัดการภาษีสำหรับค่าธรรมเนียมการยกเลิก"
 
 #: pretix/base/settings.py:1149 pretix/base/settings.py:1161
 msgid "Do not generate invoices"
-msgstr ""
+msgstr "ไม่ต้องออกใบแจ้งหนี้"
 
 #: pretix/base/settings.py:1150 pretix/base/settings.py:1166
 msgid "Only manually in admin panel"
-msgstr ""
+msgstr "ออกใบแจ้งหนี้ด้วยตนเองผ่านแผงควบคุมหลักเท่านั้น"
 
 #: pretix/base/settings.py:1151 pretix/base/settings.py:1164
 msgid "Automatically on user request"
-msgstr ""
+msgstr "ออกอัตโนมัติเมื่อผู้ใช้ร้องขอ"
 
 #: pretix/base/settings.py:1152 pretix/base/settings.py:1165
 msgid "Automatically on user request for paid orders"
-msgstr ""
+msgstr "ออกอัตโนมัติเมื่อผู้ใช้ร้องขอสำหรับรายการที่ชำระเงินแล้ว"
 
 #: pretix/base/settings.py:1153
 msgid "Automatically for all created orders"
-msgstr ""
+msgstr "ออกอัตโนมัติสำหรับทุกคำสั่งซื้อที่สร้างขึ้น"
 
 #: pretix/base/settings.py:1154
 msgid "Automatically on payment or when required by payment method"
-msgstr ""
+msgstr "ออกอัตโนมัติเมื่อชำระเงินหรือเมื่อวิธีชำระเงินกำหนดให้ต้องออก"
 
 #: pretix/base/settings.py:1158
 msgid "Generate invoices"
-msgstr ""
+msgstr "ออกใบแจ้งหนี้"
 
 #: pretix/base/settings.py:1162
 msgid "Automatically after payment or when required by payment method"
-msgstr ""
+msgstr "ออกอัตโนมัติหลังการชำระเงินหรือเมื่อวิธีชำระเงินกำหนด"
 
 #: pretix/base/settings.py:1163
 msgid "Automatically before payment for all created orders"
-msgstr ""
+msgstr "ออกอัตโนมัติก่อนการชำระเงินสำหรับทุกคำสั่งซื้อที่สร้างขึ้น"
 
 #: pretix/base/settings.py:1168
 msgid "Invoices will never be automatically generated for free orders."
 msgstr ""
+"ระบบจะไม่ระบุการออกใบแจ้งหนี้อัตโนมัติสำหรับคำสั่งซื้อที่ไม่มีค่าใช้จ่าย"
 
 #: pretix/base/settings.py:1178 pretix/base/settings.py:1189
 msgid ""
 "Automatic based on ticket-specific validity, membership validity, event "
 "series date, or event date"
 msgstr ""
+"อัตโนมัติโดยอิงตามอายุการใช้งานของตั๋ว, อายุการเป็นสมาชิก, วันที่ของกิจกรรมซีรีส์ หรือวันที่จัดกิจกรร"
+"ม"
 
 #: pretix/base/settings.py:1179 pretix/base/settings.py:1190
 msgid "Automatic, but prefer invoice date over event date"
-msgstr ""
+msgstr "อัตโนมัติ โดยเลือกใช้วันที่ออกใบแจ้งหนี้แทนวันที่จัดกิจกรรม"
 
 #: pretix/base/settings.py:1182 pretix/base/settings.py:1193
 msgid "Invoice date"
-msgstr ""
+msgstr "วันที่ออกใบแจ้งหนี้"
 
 #: pretix/base/settings.py:1186
 msgid "Date of service"
-msgstr ""
+msgstr "วันที่ให้บริการ"
 
 #: pretix/base/settings.py:1195
 msgid ""
 "This controls what dates are shown on the invoice, but is especially "
 "important for electronic invoicing."
 msgstr ""
+"ส่วนนี้จะควบคุมวันที่ที่จะแสดงในใบแจ้งหนี้ ซึ่งมีความสำคัญอย่างยิ่งสำหรับระบบใบแจ้งหนี้อิเล็กทรอนิกส์ "
+"(e-Invoicing)"
 
 #: pretix/base/settings.py:1206
 msgid "Automatically cancel and reissue invoice on address changes"
-msgstr ""
+msgstr "ยกเลิกและออกใบแจ้งหนี้ใหม่โดยอัตโนมัติเมื่อมีการเปลี่ยนที่อยู่"
 
 #: pretix/base/settings.py:1207
 msgid ""
@@ -9876,10 +10061,12 @@ msgid ""
 "will automatically be canceled and a new invoice will be issued. This "
 "setting does not affect changes made through the backend."
 msgstr ""
+"หากลูกค้าเปลี่ยนที่อยู่ใบแจ้งหนี้ในคำสั่งซื้อที่มีอยู่ ใบแจ้งหนี้เดิมจะถูกยกเลิกและใบแจ้งหนี้ใหม่จะถูกออกโดย"
+"อัตโนมัติ การตั้งค่านี้ไม่มีผลกับการแก้ไขผ่านระบบหลังบ้าน"
 
 #: pretix/base/settings.py:1218
 msgid "Allow to update existing invoices"
-msgstr ""
+msgstr "อนุญาตให้แก้ไขใบแจ้งหนี้ที่มีอยู่เดิม"
 
 #: pretix/base/settings.py:1219
 msgid ""
@@ -9887,76 +10074,82 @@ msgid ""
 "most countries, we recommend to leave this option turned off and always "
 "issue a new invoice if a change needs to be made."
 msgstr ""
+"โดยค่าเริ่มต้น ใบแจ้งหนี้จะไม่สามารถแก้ไขได้อีกหลังจากออกแล้ว ในประเทศส่วนใหญ่ เราแนะนำให้ปิดตั"
+"วเลือกนี้ไว้และใช้วิธีออกใบแจ้งหนี้ใบใหม่หากต้องการเปลี่ยนแปลงข้อมูล"
 
 #: pretix/base/settings.py:1234
 msgid "Only issue invoices to business customers"
-msgstr ""
+msgstr "ออกใบแจ้งหนี้ให้กับลูกค้าธุรกิจเท่านั้น"
 
 #: pretix/base/settings.py:1243
 msgid "Address line"
-msgstr ""
+msgstr "ที่อยู่"
 
 #: pretix/base/settings.py:1247
 msgid "Albert Einstein Road 52"
-msgstr ""
+msgstr "ถนนอัลเบิร์ต ไอน์สไตน์ เลขที่ 52"
 
 #: pretix/base/settings.py:1321
 msgid "Domestic tax ID"
-msgstr ""
+msgstr "หมายเลขประจำตัวผู้เสียภาษีภายในประเทศ"
 
 #: pretix/base/settings.py:1322
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "เช่น หมายเลขภาษีในเยอรมนี, ABN ในออสเตรเลีย เป็นต้น"
 
 #: pretix/base/settings.py:1332
 msgid "EU VAT ID"
-msgstr ""
+msgstr "หมายเลขประจำตัวผู้เสียภาษีของสหภาพยุโรป (EU VAT ID)"
 
 #: pretix/base/settings.py:1346
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
 msgstr ""
+"เช่น เราได้ส่งใบแจ้งหนี้สำหรับการสั่งซื้อตั๋วของคุณมาพร้อมกับเอกสารฉบับนี้"
 
 #: pretix/base/settings.py:1349
 msgid "Introductory text"
-msgstr ""
+msgstr "ข้อความเกริ่นนำ"
 
 #: pretix/base/settings.py:1350
 msgid "Will be printed on every invoice above the invoice rows."
-msgstr ""
+msgstr "จะถูกพิมพ์ในใบแจ้งหนี้ทุกใบ โดยอยู่เหนือรายการสินค้า"
 
 #: pretix/base/settings.py:1363
 msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
 msgstr ""
+"เช่น ขอบคุณที่ใช้บริการ! คุณสามารถดูข้อมูลเพิ่มเติมเกี่ยวกับกิจกรรมได้ที่..."
 
 #: pretix/base/settings.py:1366
 msgid "Additional text"
-msgstr ""
+msgstr "ข้อความเพิ่มเติม"
 
 #: pretix/base/settings.py:1367
 msgid "Will be printed on every invoice below the invoice total."
-msgstr ""
+msgstr "จะถูกพิมพ์ในใบแจ้งหนี้ทุกใบ โดยอยู่ใต้ยอดรวมสุทธิ"
 
 #: pretix/base/settings.py:1380
 msgid ""
 "e.g. your bank details, legal details like your VAT ID, registration "
 "numbers, etc."
 msgstr ""
+"เช่น รายละเอียดธนาคาร, ข้อมูลทางกฎหมาย เช่น VAT ID, เลขทะเบียนนิติบุคคล เป็นต้น"
 
 #: pretix/base/settings.py:1383
 msgid "Footer"
-msgstr ""
+msgstr "ส่วนท้ายกระดาษ (Footer)"
 
 #: pretix/base/settings.py:1384
 msgid ""
 "Will be printed centered and in a smaller font at the end of every invoice "
 "page."
 msgstr ""
+"จะถูกพิมพ์ไว้ตรงกลางด้วยตัวอักษรขนาดเล็กที่ส่วนท้ายของทุกหน้าในใบแจ้งหนี้"
 
 #: pretix/base/settings.py:1397
 msgid "Attach invoices to emails"
-msgstr ""
+msgstr "แนบใบแจ้งหนี้ไปกับอีเมล"
 
 #: pretix/base/settings.py:1398
 msgid ""
@@ -9965,10 +10158,13 @@ msgid ""
 "on payment, they will be attached to the payment confirmation mail. If they "
 "are not automatically generated, they will not be attached to emails."
 msgstr ""
+"หากมีการออกใบแจ้งหนี้โดยอัตโนมัติสำหรับทุกคำสั่งซื้อ ไฟล์จะถูกแนบไปกับอีเมลยืนยันคำสั่งซื้อ หากออกโด"
+"ยอัตโนมัติเมื่อชำระเงิน จะแนบไปกับอีเมลยืนยันการชำระเงิน แต่หากไม่มีการออกโดยอัตโนมัติ จะไม่มีกา"
+"รแนบไฟล์ไปกับอีเมล"
 
 #: pretix/base/settings.py:1410
 msgid "Email address to receive a copy of each invoice"
-msgstr ""
+msgstr "ที่อยู่อีเมลสำหรับรับสำเนาใบแจ้งหนี้ทุกใบ"
 
 #: pretix/base/settings.py:1411
 msgid ""
@@ -9976,27 +10172,30 @@ msgid ""
 "creation. You can use this for an automated import of invoices to your "
 "accounting system. The invoice will be the only attachment of the email."
 msgstr ""
+"ใบแจ้งหนี้ที่ถูกสร้างขึ้นใหม่แต่ละใบจะถูกส่งไปยังอีเมลนี้ในเวลาไม่นานหลังการสร้าง คุณสามารถใช้ส่วนนี้ส"
+"ำหรับการนำเข้าใบแจ้งหนี้เข้าสู่ระบบบัญชีของคุณโดยอัตโนมัติ โดยใบแจ้งหนี้จะเป็นไฟล์แนบเพียงไฟล์เดียว"
+"ในอีเมล"
 
 #: pretix/base/settings.py:1426
 msgid "Show items outside presale period"
-msgstr ""
+msgstr "แสดงสินค้าที่อยู่นอกช่วงเวลาการจำหน่ายล่วงหน้า"
 
 #: pretix/base/settings.py:1427
 msgid ""
 "Show item details before presale has started and after presale has ended"
-msgstr ""
+msgstr "แสดงรายละเอียดสินค้าก่อนเริ่มการจำหน่ายและหลังสิ้นสุดการจำหน่าย"
 
 #: pretix/base/settings.py:1447
 msgid "Available languages"
-msgstr ""
+msgstr "ภาษาที่เปิดใช้งาน"
 
 #: pretix/base/settings.py:1463 pretix/control/forms/event.py:139
 msgid "Default language"
-msgstr ""
+msgstr "ภาษาหลัก"
 
 #: pretix/base/settings.py:1473
 msgid "Region"
-msgstr ""
+msgstr "ภูมิภาค"
 
 #: pretix/base/settings.py:1474
 msgid ""
@@ -10005,10 +10204,13 @@ msgid ""
 "less priority than the language and is therefore mostly relevant for "
 "languages used in different regions globally (like English)."
 msgstr ""
+"จะถูกใช้เพื่อกำหนดรูปแบบวันที่และเวลา รวมถึงประเทศเริ่มต้นสำหรับที่อยู่และหมายเลขโทรศัพท์ของลูกค้"
+"า ทั้งนี้รูปแบบจะให้ความสำคัญกับภาษามากกว่า ดังนั้นส่วนนี้จึงเกี่ยวข้องกับภาษาที่มีการใช้งานในหลายภูมิภ"
+"าคทั่วโลก (เช่น ภาษาอังกฤษ)"
 
 #: pretix/base/settings.py:1486
 msgid "This shop represents an event"
-msgstr ""
+msgstr "ร้านค้านี้จัดทำขึ้นสำหรับกิจกรรมที่มีกำหนดการแน่นอน"
 
 #: pretix/base/settings.py:1488
 msgid ""
@@ -10018,44 +10220,47 @@ msgid ""
 "page. Note that pretix still is a system built around events and the date "
 "may still show up in other places."
 msgstr ""
+"ยกเลิกการเลือกช่องนี้หากคุณขายสินค้าที่ไม่มีวันที่ระบุแน่นอน เช่น บัตรของขวัญ หรือตั๋วที่ใช้งานเมื่อใดก็ไ"
+"ด้ ระบบจะหยุดแสดงวันที่จัดกิจกรรมในบางส่วน เช่น หน้าแรกของกิจกรรม โปรดทราบว่า pretix ยังคง"
+"เป็นระบบที่ออกแบบมาสำหรับกิจกรรมเป็นหลัก วันที่อาจยังปรากฏในส่วนอื่น ๆ บ้าง"
 
 #: pretix/base/settings.py:1501
 msgid "Show event end date"
-msgstr ""
+msgstr "แสดงวันที่สิ้นสุดกิจกรรม"
 
 #: pretix/base/settings.py:1502
 msgid "If disabled, only event's start date will be displayed to the public."
-msgstr ""
+msgstr "หากปิดใช้งาน จะแสดงเฉพาะวันที่เริ่มกิจกรรมให้บุคคลทั่วไปเห็นเท่านั้น"
 
 #: pretix/base/settings.py:1511
 msgid "Show dates with time"
-msgstr ""
+msgstr "แสดงวันที่พร้อมเวลา"
 
 #: pretix/base/settings.py:1512
 msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
-msgstr ""
+msgstr "หากปิดใช้งาน จะแสดงวันที่เริ่มและสิ้นสุดกิจกรรมโดยไม่มีเวลาประกอบ"
 
 #: pretix/base/settings.py:1521
 msgid "Hide all products that are sold out"
-msgstr ""
+msgstr "ซ่อนสินค้าทั้งหมดที่ขายหมดแล้ว"
 
 #: pretix/base/settings.py:1531 pretix/control/forms/event.py:1808
 msgid "Publicly show how many tickets of a certain type are still available."
-msgstr ""
+msgstr "แสดงจำนวนตั๋วคงเหลือของแต่ละประเภทให้บุคคลทั่วไปเห็น"
 
 #: pretix/base/settings.py:1540
 msgid "Ask search engines not to index the ticket shop"
-msgstr ""
+msgstr "ขอให้โปรแกรมค้นหา (Search Engine) ไม่ทำดัชนีข้อมูลร้านจำหน่ายตั๋ว"
 
 #: pretix/base/settings.py:1549
 msgid "Show variations of a product expanded by default"
-msgstr ""
+msgstr "แสดงตัวเลือกย่อยของสินค้าแบบขยายออกโดยค่าเริ่มต้น"
 
 #: pretix/base/settings.py:1558
 msgid "Enable waiting list"
-msgstr ""
+msgstr "เปิดใช้งานรายการรอ (Waiting list)"
 
 #: pretix/base/settings.py:1559 pretix/control/forms/event.py:1813
 msgid ""
@@ -10064,10 +10269,12 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
+"เมื่อตั๋วขายหมด ผู้สนใจสามารถลงชื่อในรายการรอได้ ทันทีที่มีตั๋วว่างอีกครั้ง ระบบจะจองตั๋วให้บุคคลแรกใ"
+"นรายการรอ และบุคคลนั้นจะได้รับอีเมลแจ้งเตือนพร้อมเวาเชอร์สำหรับใช้ซื้อตั๋ว"
 
 #: pretix/base/settings.py:1570
 msgid "Automatic waiting list assignments"
-msgstr ""
+msgstr "การจัดสรรรายการรอโดยอัตโนมัติ"
 
 #: pretix/base/settings.py:1571
 msgid ""
@@ -10077,10 +10284,13 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
+"หากมีโควตาตั๋วว่าง ระบบจะสร้างเวาเชอร์และส่งไปยังบุคคลแรกในรายการรอสำหรับสินค้านั้นโดยอัตโนมั"
+"ติ หากปิดส่วนนี้ไว้ ระบบจะไม่ส่งอีเมลอัตโนมัติแต่คุณสามารถส่งเองได้ผ่านแผงควบคุม หากคุณปิดรายการร"
+"อแต่ยังเปิดตัวเลือกนี้ไว้ ระบบจะยังคงส่งตั๋วออกไปตามปกติ"
 
 #: pretix/base/settings.py:1587
 msgid "Waiting list response time"
-msgstr ""
+msgstr "ระยะเวลาตอบกลับสำหรับรายการรอ"
 
 #: pretix/base/settings.py:1590
 msgid ""
@@ -10088,10 +10298,12 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
+"เมื่อส่งเวาเชอร์ตั๋วให้บุคคลในรายการรอแล้ว จะต้องนำมาใช้ภายในจำนวนชั่วโมงที่กำหนดนี้ มิเช่นนั้นเวา"
+"เชอร์จะหมดอายุและสิทธิ์จะถูกโอนไปยังบุคคลถัดไปในรายการ"
 
 #: pretix/base/settings.py:1601
 msgid "Disable waiting list"
-msgstr ""
+msgstr "ปิดการใช้งานรายการรอ"
 
 #: pretix/base/settings.py:1602
 msgid ""
@@ -10101,52 +10313,57 @@ msgid ""
 "still people on the waiting list. Vouchers that have already been sent "
 "remain active."
 msgstr ""
+"รายการรอจะถูกปิดใช้งานอย่างสมบูรณ์หลังจากวันที่นี้ ซึ่งหมายความว่าจะไม่มีใครสามารถลงชื่อในรายการ"
+"รอได้อีก และตั๋วจะถูกเปิดขายตามปกติหากมีโควตาว่างแม้จะมีคนค้างอยู่ในรายการรอ ทั้งนี้เวาเชอร์ที่ส่งไ"
+"ปแล้วจะยังคงใช้งานได้"
 
 #: pretix/base/settings.py:1614
 msgid "Ask for a name"
-msgstr ""
+msgstr "สอบถามชื่อ"
 
 #: pretix/base/settings.py:1615
 msgid "Ask for a name when signing up to the waiting list."
-msgstr ""
+msgstr "สอบถามชื่อเมื่อมีการลงชื่อในรายการรอ"
 
 #: pretix/base/settings.py:1624
 msgid "Require name"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุชื่อ"
 
 #: pretix/base/settings.py:1625
 msgid "Require a name when signing up to the waiting list.."
-msgstr ""
+msgstr "บังคับให้ระบุชื่อเมื่อมีการลงชื่อในรายการรอ"
 
 #: pretix/base/settings.py:1635
 msgid "Ask for a phone number"
-msgstr ""
+msgstr "สอบถามหมายเลขโทรศัพท์"
 
 #: pretix/base/settings.py:1636
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr ""
+msgstr "สอบถามหมายเลขโทรศัพท์เมื่อมีการลงชื่อในรายการรอ"
 
 #: pretix/base/settings.py:1645
 msgid "Require phone number"
-msgstr ""
+msgstr "กำหนดให้ต้องระบุหมายเลขโทรศัพท์"
 
 #: pretix/base/settings.py:1646
 msgid "Require a phone number when signing up to the waiting list.."
-msgstr ""
+msgstr "บังคับให้ระบุหมายเลขโทรศัพท์เมื่อมีการลงชื่อในรายการรอ"
 
 #: pretix/base/settings.py:1656
 msgid "Phone number explanation"
-msgstr ""
+msgstr "คำอธิบายการขอหมายเลขโทรศัพท์"
 
 #: pretix/base/settings.py:1659
 msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
+"หากคุณมีการขอหมายเลขโทรศัพท์ โปรดอธิบายเหตุผลและวัตถุประสงค์ในการนำหมายเลขโทรศัพท์ไปใช้งา"
+"น"
 
 #: pretix/base/settings.py:1671
 msgid "Maximum number of entries per email address for the same product"
-msgstr ""
+msgstr "จำนวนการลงชื่อสูงสุดต่อหนึ่งอีเมลสำหรับสินค้าชนิดเดียวกัน"
 
 #: pretix/base/settings.py:1675
 msgid ""
@@ -10156,10 +10373,13 @@ msgid ""
 "if they want more than one ticket, as every entry only grants one single "
 "ticket at a time."
 msgstr ""
+"หากเพิ่มขีดจำกัดนี้ ลูกค้าจะสามารถขอตั๋วมากกว่าหนึ่งใบสำหรับสินค้าชนิดเดียวกันโดยใช้อีเมลเดิมได้ อย่า"
+"งไรก็ตาม ไม่ว่าการตั้งค่าจะเป็นอย่างไร ลูกค้าจำเป็นต้องกรอกแบบฟอร์มรายการรอหลายครั้งหากต้องกา"
+"รตั๋วมากกว่าหนึ่งใบ เนื่องจากหนึ่งการลงชื่อจะได้รับสิทธิ์ตั๋วเพียงหนึ่งใบต่อครั้งเท่านั้น"
 
 #: pretix/base/settings.py:1687
 msgid "Show number of check-ins to customer"
-msgstr ""
+msgstr "แสดงจำนวนครั้งที่เช็คอินให้ลูกค้าเห็น"
 
 #: pretix/base/settings.py:1688
 msgid ""
@@ -10170,18 +10390,21 @@ msgid ""
 "failed scans will not be counted, and the user will not see the different "
 "check-in lists."
 msgstr ""
+"หากเปิดใช้งานตัวเลือกนี้ ลูกค้าจะสามารถดูได้ว่าพวกเขาเข้างานไปแล้วกี่ครั้ง ปกติแล้วส่วนนี้ไม่จำเป็น แ"
+"ต่อาจมีประโยชน์สำหรับตั๋วที่จำกัดจำนวนครั้งการใช้งาน เพื่อให้ลูกค้าตรวจสอบได้ว่าใช้ไปกี่ครั้งแล้ว ทั้งนี้จ"
+"ะไม่นับรวมการบันทึกขาออกหรือการสแกนที่ล้มเหลว และผู้ใช้จะไม่เห็นรายชื่อการเช็คอินที่แตกต่างกัน"
 
 #: pretix/base/settings.py:1701
 msgid "Allow users to download tickets"
-msgstr ""
+msgstr "อนุญาตให้ผู้ใช้ดาวน์โหลดตั๋ว"
 
 #: pretix/base/settings.py:1702
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "หากปิดส่วนนี้ จะไม่มีใครสามารถดาวน์โหลดตั๋วได้"
 
 #: pretix/base/settings.py:1711
 msgid "Download date"
-msgstr ""
+msgstr "วันที่เปิดให้ดาวน์โหลด"
 
 #: pretix/base/settings.py:1712
 msgid ""
@@ -10189,10 +10412,12 @@ msgid ""
 "feature and an order contains tickets for multiple event dates, download of "
 "all tickets will be available if at least one of the event dates allows it."
 msgstr ""
+"ระบบจะเปิดให้ดาวน์โหลดตั๋วหลังจากวันที่นี้ หากคุณใช้ฟีเจอร์กิจกรรมแบบซีรีส์และคำสั่งซื้อมีตั๋วสำหรับหลาย"
+"วัน การดาวน์โหลดตั๋วทั้งหมดจะสามารถทำได้หากมีอย่างน้อยหนึ่งวันในกิจกรรมที่อนุญาตให้ดาวน์โหลด"
 
 #: pretix/base/settings.py:1723
 msgid "Generate tickets for add-on products and bundled products"
-msgstr ""
+msgstr "ออกตั๋วสำหรับสินค้าเพิ่มเติมและสินค้าแบบแพ็กเกจ"
 
 #: pretix/base/settings.py:1724
 msgid ""
@@ -10200,10 +10425,13 @@ msgid ""
 "for add-on products or bundled products. With this option, a separate ticket "
 "is issued for every add-on product or bundled product as well."
 msgstr ""
+"โดยค่าเริ่มต้น ระบบจะออกตั๋วเฉพาะสินค้าที่เลือกแยกรายการเท่านั้น ไม่รวมถึงสินค้าเพิ่มเติม (Add-"
+"on) หรือสินค้าแบบแพ็กเกจ (Bundled) หากเปิดตัวเลือกนี้ ระบบจะออกตั๋วแยกสำหรับทุกสินค้าเพิ่มเติมห"
+"รือสินค้าแพ็กเกจด้วย"
 
 #: pretix/base/settings.py:1737
 msgid "Generate tickets for all products"
-msgstr ""
+msgstr "ออกตั๋วสำหรับสินค้าทุกชนิด"
 
 #: pretix/base/settings.py:1738
 msgid ""
@@ -10211,20 +10439,24 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
+"หากปิดส่วนนี้ ระบบจะออกตั๋วเฉพาะสินค้าที่ทำเครื่องหมายว่าเป็น \"ตั๋วเข้างาน\" ในการตั้งค่าสินค้าเท่า"
+"นั้น นอกจากนี้คุณยังสามารถปิดการออกตั๋วในแต่ละสินค้าแยกต่างหากได้ด้วย"
 
 #: pretix/base/settings.py:1750
 msgid "Generate tickets for pending orders"
-msgstr ""
+msgstr "ออกตั๋วสำหรับคำสั่งซื้อที่รอดำเนินการ"
 
 #: pretix/base/settings.py:1751
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
+"หากปิดส่วนนี้ จะสามารถดาวน์โหลดตั๋วได้หลังจากที่คำสั่งซื้อได้รับการเปลี่ยนสถานะเป็นชำระเงินแล้วเท่านั้"
+"น"
 
 #: pretix/base/settings.py:1762
 msgid "Do not issue ticket before email address is validated"
-msgstr ""
+msgstr "ไม่ออกตั๋วจนกว่าจะมีการยืนยันที่อยู่อีเมล"
 
 #: pretix/base/settings.py:1763
 msgid ""
@@ -10234,10 +10466,13 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
+"หากเปิดใช้งาน ระบบจะไม่เปิดให้ดาวน์โหลดตั๋วทันทีหลังการซื้อ แต่จะแนบไปกับอีเมลยืนยันการชำระเงิน "
+"(หากไฟล์ไม่ใหญ่เกินไป) และลูกค้าจะดาวน์โหลดได้จากหน้าเว็บหลังจากคลิกลิงก์ในอีเมลแล้วเท่านั้น ทั้งนี้"
+"ไม่มีผลกับคำสั่งซื้อผ่านช่องทางจำหน่ายอื่น"
 
 #: pretix/base/settings.py:1779
 msgid "Low availability threshold"
-msgstr ""
+msgstr "เกณฑ์การแสดงสถานะจำนวนตั๋วเหลือน้อย"
 
 #: pretix/base/settings.py:1780
 msgid ""
@@ -10246,10 +10481,12 @@ msgid ""
 "in the event list or calendar. If you keep this option empty, low "
 "availability will not be shown publicly."
 msgstr ""
+"หากจำนวนตั๋วที่เหลืออยู่ลดลงต่ำกว่าเปอร์เซ็นต์ที่กำหนด กิจกรรมนั้นจะถูกเน้นด้วยสถานะ \"ตั๋วเหลือน้อ"
+"ย\" ในรายการหรือปฏิทิน หากเว้นว่างไว้ จะไม่มีการแสดงสถานะนี้ต่อบุคคลทั่วไป"
 
 #: pretix/base/settings.py:1794
 msgid "Show availability in event overviews"
-msgstr ""
+msgstr "แสดงสถานะการว่างของตั๋วในหน้าภาพรวมกิจกรรม"
 
 #: pretix/base/settings.py:1795
 msgid ""
@@ -10257,83 +10494,90 @@ msgid ""
 "make for longer page loading times if you have lots of events and the shown "
 "status might be out of date for up to two minutes."
 msgstr ""
+"หากเลือกไว้ รายการกิจกรรมจะแสดงสถานะหากตั๋วขายหมดแล้ว การเปิดส่วนนี้อาจทำให้หน้าเว็บโหลดช้า"
+"ลงหากคุณมีกิจกรรมจำนวนมาก และสถานะที่แสดงอาจล่าช้ากว่าความเป็นจริงได้สูงสุด 2 นาที"
 
 #: pretix/base/settings.py:1808 pretix/base/settings.py:1816
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:8
 msgid "List"
-msgstr ""
+msgstr "รายการ"
 
 #: pretix/base/settings.py:1809 pretix/base/settings.py:1817
 msgid "Week calendar"
-msgstr ""
+msgstr "ปฏิทินรายสัปดาห์"
 
 #: pretix/base/settings.py:1810 pretix/base/settings.py:1818
 msgid "Month calendar"
-msgstr ""
+msgstr "ปฏิทินรายเดือน"
 
 #: pretix/base/settings.py:1814
 msgid "Default overview style"
-msgstr ""
+msgstr "รูปแบบการแสดงผลภาพรวมเริ่มต้น"
 
 #: pretix/base/settings.py:1820
 msgid ""
 "If your event series has more than 50 dates in the future, only the month or "
 "week calendar can be used."
 msgstr ""
+"หากกิจกรรมแบบซีรีส์ของคุณมีมากกว่า 50 วันในอนาคต จะสามารถเลือกใช้ได้เฉพาะปฏิทินรายเดือนหรือร"
+"ายสัปดาห์เท่านั้น"
 
 #: pretix/base/settings.py:1829
 msgid "Show filter options for calendar or list view"
-msgstr ""
+msgstr "แสดงตัวเลือกการกรองสำหรับมุมมองปฏิทินหรือรายการ"
 
 #: pretix/base/settings.py:1830
 msgid ""
 "You can set up possible filters as meta properties in your organizer "
 "settings."
 msgstr ""
+"คุณสามารถตั้งค่าตัวกรองต่าง ๆ ได้ที่ \"คุณสมบัติเมตา\" (Meta properties) ในการตั้งค่าผู้จัดงาน"
 
 #: pretix/base/settings.py:1839
 msgid "Hide all unavailable dates from calendar or list views"
-msgstr ""
+msgstr "ซ่อนวันที่ไม่พร้อมใช้งานทั้งหมดจากมุมมองปฏิทินหรือรายการ"
 
 #: pretix/base/settings.py:1840 pretix/base/settings.py:1851
 msgid ""
 "This option currently only affects the calendar of this event series, not "
 "the organizer-wide calendar."
 msgstr ""
+"ตัวเลือกนี้มีผลเฉพาะกับปฏิทินของกิจกรรมแบบซีรีส์นี้เท่านั้น ไม่มีผลกับปฏิทินรวมของผู้จัดงาน"
 
 #: pretix/base/settings.py:1850
 msgid "Hide all past dates from calendar"
-msgstr ""
+msgstr "ซ่อนวันที่ที่ผ่านมาแล้วทั้งหมดจากปฏิทิน"
 
 #: pretix/base/settings.py:1862 pretix/base/settings.py:1871
 msgid "No modifications after order was submitted"
-msgstr ""
+msgstr "ไม่อนุญาตให้แก้ไขหลังจากส่งคำสั่งซื้อแล้ว"
 
 #: pretix/base/settings.py:1863 pretix/base/settings.py:1872
 msgid "Only the person who ordered can make changes"
-msgstr ""
+msgstr "เฉพาะผู้สั่งซื้อเท่านั้นที่สามารถแก้ไขข้อมูลได้"
 
 #: pretix/base/settings.py:1864 pretix/base/settings.py:1873
 msgid "Both the attendee and the person who ordered can make changes"
-msgstr ""
+msgstr "ทั้งผู้เข้างานและผู้สั่งซื้อสามารถแก้ไขข้อมูลได้"
 
 #: pretix/base/settings.py:1868
 msgid "Allow customers to modify their information"
-msgstr ""
+msgstr "อนุญาตให้ลูกค้าแก้ไขข้อมูลของตนเอง"
 
 #: pretix/base/settings.py:1883
 msgid "Allow customers to modify their information after they checked in."
-msgstr ""
+msgstr "อนุญาตให้ลูกค้าแก้ไขข้อมูลของตนเองได้หลังจากเช็คอินแล้ว"
 
 #: pretix/base/settings.py:1884
 msgid ""
 "By default, no more modifications are possible for an order as soon as one "
 "of the tickets in the order has been checked in."
 msgstr ""
+"โดยค่าเริ่มต้น จะไม่สามารถแก้ไขคำสั่งซื้อได้อีกทันทีที่มีตั๋วใบใดใบหนึ่งในคำสั่งซื้อนั้นถูกเช็คอินแล้ว"
 
 #: pretix/base/settings.py:1894
 msgid "Last date of modifications"
-msgstr ""
+msgstr "วันสุดท้ายที่อนุญาตให้แก้ไขข้อมูล"
 
 #: pretix/base/settings.py:1895
 msgid ""
@@ -10342,44 +10586,48 @@ msgid ""
 "order contains tickets for multiple event dates, the earliest date will be "
 "used."
 msgstr ""
+"วันสุดท้ายที่ผู้ใช้สามารถแก้ไขรายละเอียดคำสั่งซื้อ เช่น ชื่อผู้เข้างานหรือคำตอบของคำถามต่าง ๆ หากเป็"
+"นกิจกรรมแบบซีรีส์จะยึดตามวันที่จัดกิจกรรมที่เร็วที่สุด"
 
 #: pretix/base/settings.py:1906
 msgid "Customers can change the variation of the products they purchased"
-msgstr ""
+msgstr "ลูกค้าสามารถเปลี่ยนรูปแบบย่อยของสินค้าที่ซื้อไปแล้วได้"
 
 #: pretix/base/settings.py:1915
 msgid "Customers can change their selected add-on products"
-msgstr ""
+msgstr "ลูกค้าสามารถเปลี่ยนสินค้าเพิ่มเติม (Add-on) ที่เลือกไว้ได้"
 
 #: pretix/base/settings.py:1925 pretix/base/settings.py:1936
 msgid ""
 "Only allow changes if the resulting price is higher or equal than the "
 "previous price."
-msgstr ""
+msgstr "อนุญาตให้เปลี่ยนได้เฉพาะเมื่อราคาใหม่สูงกว่าหรือเท่ากับราคาเดิมเท่านั้น"
 
 #: pretix/base/settings.py:1926 pretix/base/settings.py:1937
 msgid ""
 "Only allow changes if the resulting price is higher than the previous price."
-msgstr ""
+msgstr "อนุญาตให้เปลี่ยนได้เฉพาะเมื่อราคาใหม่สูงกว่าราคาเดิมเท่านั้น"
 
 #: pretix/base/settings.py:1927 pretix/base/settings.py:1938
 msgid ""
 "Only allow changes if the resulting price is equal to the previous price."
-msgstr ""
+msgstr "อนุญาตให้เปลี่ยนได้เฉพาะเมื่อราคาใหม่เท่ากับราคาเดิมเท่านั้น"
 
 #: pretix/base/settings.py:1928 pretix/base/settings.py:1939
 msgid ""
 "Allow changes regardless of price, as long as no refund is required (i.e. "
 "the resulting price is not lower than what has already been paid)."
 msgstr ""
+"อนุญาตให้เปลี่ยนได้โดยไม่คำนึงถึงราคา ตราบใดที่ไม่ต้องมีการคืนเงิน (เช่น ราคาใหม่ไม่ต่ำกว่ายอดที่ชำ"
+"ระมาแล้ว)"
 
 #: pretix/base/settings.py:1930 pretix/base/settings.py:1941
 msgid "Allow changes regardless of price, even if this results in a refund."
-msgstr ""
+msgstr "อนุญาตให้เปลี่ยนได้โดยไม่คำนึงถึงราคา แม้ว่าจะต้องมีการคืนเงินก็ตาม"
 
 #: pretix/base/settings.py:1934
 msgid "Requirement for changed prices"
-msgstr ""
+msgstr "เงื่อนไขสำหรับราคาที่เปลี่ยนแปลง"
 
 #: pretix/base/settings.py:1952
 msgid "Do not allow changes after"
