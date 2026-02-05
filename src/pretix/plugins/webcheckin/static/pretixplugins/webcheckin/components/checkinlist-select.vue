@@ -26,6 +26,8 @@ async function load () {
 				loading.value = false
 				if (data.id) {
 					emit('selected', data)
+				} else {
+					location.hash = ''
 					load()
 				}
 			} catch {
