@@ -4,6 +4,7 @@
 {% load statici18n %}
 {% load eventurl %}
 {% load escapejson %}
+{% load vite %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,11 +24,7 @@
 <body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}"
       data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}"
       data-pretixlocale="{{ request.LANGUAGE_CODE }}" data-timezone="{{ request.event.settings.timezone }}">
-<div
-        data-api-lists="{% url "api-v1:checkinlist-list" event=request.event.slug organizer=request.organizer.slug %}"
-        data-api-questions="{% url "api-v1:question-list" event=request.event.slug organizer=request.organizer.slug %}"
-        data-event-name="{{ request.event.name }}"
-        id="app"></div>
+<div id="app" data-event-name="{{ request.event.name }}"></div>
 {% compress js %}
     <script type="text/javascript" src="{% static "pretixbase/js/i18nstring.js" %}"></script>
     <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}"></script>
@@ -35,22 +32,17 @@
     <script type="text/javascript" src="{% static "jquery/js/jquery-3.6.4.min.js" %}"></script>
     <script type="text/javascript" src="{% static "datetimepicker/bootstrap-datetimepicker.js" %}"></script>
 {% endcompress %}
-{% if DEBUG %}
-    <script type="text/javascript" src="{% static "vuejs/vue.js" %}"></script>
-{% else %}
-    <script type="text/javascript" src="{% static "vuejs/vue.min.js" %}"></script>
-{% endif %}
-{% compress js %}
-    <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/checkinlist-item.vue' %}"></script>
-    <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/checkinlist-select.vue' %}"></script>
-    <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/searchresult-item.vue' %}"></script>
-    <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/datetimefield.vue' %}"></script>
-    <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/datefield.vue' %}"></script>
-    <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/timefield.vue' %}"></script>
-    <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/app.vue' %}"></script>
-    <script type="text/javascript" src="{% static "pretixplugins/webcheckin/main.js" %}"></script>
-{% endcompress %}
 <script type="application/json" id="countries">{{ countries|escapejson_dumps }}</script>
+<script type="application/json" id="api-settings">
+{
+    "urls": {
+        "lists": "{% url "api-v1:checkinlist-list" event=request.event.slug organizer=request.organizer.slug %}",
+        "questions": "{% url "api-v1:question-list" event=request.event.slug organizer=request.organizer.slug %}"
+    }
+}
+</script>
+{% vite_hmr %}
+{% vite_asset "src/pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.ts" %}
 {% csrf_token %}
 </body>
 </html>
