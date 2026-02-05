@@ -61,7 +61,10 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ('identifier', 'type', 'organizer'),
                 'unique_together': {('identifier', 'type', 'organizer')},
-                'index_together': {('identifier', 'type', 'organizer'), ('updated', 'id')},
+                'indexes': [
+                    models.Index(fields=('identifier', 'type', 'organizer'), name='reusable_medium_organizer_index'),
+                    models.Index(fields=('updated', 'id'), name="pretixbase__updated_093277_idx")
+                ],
             },
             bases=(models.Model, pretix.base.models.base.LoggingMixin),
         ),

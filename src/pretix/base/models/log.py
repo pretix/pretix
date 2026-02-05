@@ -88,7 +88,7 @@ class LogEntry(models.Model):
 
     class Meta:
         ordering = ('-datetime', '-id')
-        indexes = [models.Index(fields=["datetime", "id"])]
+        indexes = [models.Index(fields=["datetime", "id"], name="pretixbase__datetim_b1fe5a_idx")]
 
     def display(self):
         from pretix.base.logentrytype_registry import log_entry_types
