@@ -1510,7 +1510,10 @@ class OrderChangeMixin:
                             'max_count': iao.max_count,
                             'iao': iao,
                             'items': [i for i in items if not i.require_voucher],
-                            'items_missing': {k: v for k, v in current_addon_products_missing.items() if v},
+                            'items_missing': {
+                                k: v for k, v in current_addon_products_missing.items()
+                                if v and k[0].category_id == iao.addon_category_id
+                            },
                         })
 
         return positions
