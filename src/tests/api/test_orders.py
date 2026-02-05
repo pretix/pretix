@@ -1057,11 +1057,27 @@ def test_orderposition_list_limited_read(
 
 
 @pytest.mark.parametrize(
-    "endpoint_template",
-    [('/api/v1/organizers/{}/events/{}/orderpositions/'), ('/api/v1/organizers/{}/orderpositions/')]
+    ("endpoint_template", "endpoint_type"),
+    [
+        ('/api/v1/organizers/{}/events/{}/orderpositions/', "event"),
+        ('/api/v1/organizers/{}/orderpositions/', "organizer")
+    ],
 )
 @pytest.mark.django_db
-def test_orderposition_list(endpoint_template, token_client, organizer, device, event, order, item, subevent, subevent2, question, django_assert_num_queries):
+def test_orderposition_list(
+        endpoint_template,
+        endpoint_type,
+        token_client,
+        organizer,
+        device,
+        event,
+        order,
+        item,
+        subevent,
+        subevent2,
+        question,
+        django_assert_num_queries
+):
     endpoint = endpoint_template.format(organizer.slug, event.slug)
 
     i2 = copy.copy(item)
@@ -1080,6 +1096,8 @@ def test_orderposition_list(endpoint_template, token_client, organizer, device, 
         res["answers"][0]["question"] = question.pk
         res["print_logs"][0]["id"] = op.print_logs.first().pk
         res["print_logs"][0]["device_id"] = device.device_id
+        if endpoint_type == "organizer":
+            res["event"] = event.slug
 
     resp = token_client.get(endpoint)
     assert resp.status_code == 200
