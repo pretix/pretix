@@ -1750,8 +1750,11 @@ List of all order positions
         "results": [
           {
             "id:": 23442
-            "code": "ABC12",
             "event": "sampleconf",
+            "order": "ABC12",
+            "positionid": 1,
+            "canceled": false,
+            "item": 1345,
             ...
           }
         ]

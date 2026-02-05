@@ -57,9 +57,10 @@ from pretix.api.serializers.order import (
     BlockedTicketSecretSerializer, InvoiceSerializer, OrderCreateSerializer,
     OrderPaymentCreateSerializer, OrderPaymentSerializer,
     OrderPositionSerializer, OrderRefundCreateSerializer,
-    OrderRefundSerializer, OrderSerializer, OrganizerTransactionSerializer,
-    PriceCalcSerializer, PrintLogSerializer, RevokedTicketSecretSerializer,
-    SimulatedOrderSerializer, TransactionSerializer,
+    OrderRefundSerializer, OrderSerializer, OrganizerOrderPositionSerializer,
+    OrganizerTransactionSerializer, PriceCalcSerializer, PrintLogSerializer,
+    RevokedTicketSecretSerializer, SimulatedOrderSerializer,
+    TransactionSerializer,
 )
 from pretix.api.serializers.orderchange import (
     BlockNameSerializer, OrderChangeOperationSerializer,
@@ -1066,7 +1067,6 @@ with scopes_disabled():
 
 
 class OrderPositionViewSetMixin:
-    serializer_class = OrderPositionSerializer
     queryset = OrderPosition.all.none()
     filter_backends = (DjangoFilterBackend, RichOrderingFilter)
     ordering = ('order__datetime', 'positionid')
@@ -1097,7 +1097,7 @@ class OrderPositionViewSetMixin:
         else:
             qs = OrderPosition.objects
         qs = qs.filter(order__event__organizer=self.request.organizer)
-        if self.request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(request, 'event', None):
+        if self.request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(self.request, 'event', None):
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [self.request.event],
@@ -1168,12 +1168,14 @@ class OrderPositionViewSetMixin:
 
 
 class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    serializer_class = OrganizerOrderPositionSerializer
+
     def get_queryset(self):
         qs = super().get_queryset()
 
         perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
 
-        if isinstance(self.request.auth, (TeamAPIToken, Device)) or self.request.user.is_authenticated::
+        if isinstance(self.request.auth, (TeamAPIToken, Device)) or self.request.user.is_authenticated:
             qs = qs.filter(
                 order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
             )
@@ -1182,6 +1184,8 @@ class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnly
 
 
 class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet):
+    serializer_class = OrderPositionSerializer
+
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
