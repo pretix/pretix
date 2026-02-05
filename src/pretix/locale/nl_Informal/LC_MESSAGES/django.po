@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-01-30 06:00+0000\n"
+"PO-Revision-Date: 2026-02-05 23:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -766,7 +766,7 @@ msgstr "<a {a_attr}>mogelijk gemaakt door {name} gebaseerd op pretix</a>"
 #: pretix/base/context.py:55
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr "<a %(a_attr)s>kaartverkoop mogelijk gemaakt door pretix</a>"
+msgstr "<a %(a_attr)s>ticketverkoop mogelijk gemaakt door pretix</a>"
 
 #: pretix/base/context.py:64
 msgid "source code"
@@ -7963,7 +7963,7 @@ msgstr "Ticketcategorie"
 
 #: pretix/base/pdf.py:161 pretix/base/pdf.py:166 pretix/base/pdf.py:175
 msgid "123.45 EUR"
-msgstr "123,45 EUR"
+msgstr "123,45 euro"
 
 #: pretix/base/pdf.py:165
 msgid "Price including bundled products"
@@ -8053,7 +8053,7 @@ msgstr "Begindatum en tijd van evenement"
 
 #: pretix/base/pdf.py:256
 msgid "2017-05-31 20:00"
-msgstr "31-05-2017 20:00"
+msgstr "05.02.2026 20:00"
 
 #: pretix/base/pdf.py:263
 msgid "Event begin date"
@@ -8063,7 +8063,7 @@ msgstr "Begindatum van evenement"
 #: pretix/base/pdf.py:423 pretix/base/pdf.py:447 pretix/base/pdf.py:471
 #: pretix/base/pdf.py:534 pretix/base/pdf.py:539
 msgid "2017-05-31"
-msgstr "31-05-2017"
+msgstr "05.02.2026"
 
 #: pretix/base/pdf.py:271
 msgid "Event begin time"
@@ -8088,7 +8088,7 @@ msgstr "Einddatum en -tijd van het evenement"
 
 #: pretix/base/pdf.py:282
 msgid "2017-05-31 22:00"
-msgstr "31-05-2017 22:00"
+msgstr "05.02.2026 22:00"
 
 #: pretix/base/pdf.py:298
 msgid "22:00"
@@ -8105,7 +8105,7 @@ msgstr "Toegangsdatum en tijd van evenement"
 #: pretix/base/pdf.py:311 pretix/base/pdf.py:407 pretix/base/pdf.py:431
 #: pretix/base/pdf.py:455 pretix/base/pdf.py:479 pretix/base/pdf.py:528
 msgid "2017-05-31 19:00"
-msgstr "31-05-2017 19:00"
+msgstr "05.02.2026 19:00"
 
 #: pretix/base/pdf.py:318
 msgid "Event admission time"
@@ -8240,9 +8240,9 @@ msgid ""
 "2017-05-31 14:00 – 16:00\n"
 "2017-05-31 14:00 – 2017-06-01 14:00"
 msgstr ""
-"2017-05-31 10:00 – 12:00\n"
-"2017-05-31 14:00 – 16:00\n"
-"2017-05-31 14:00 – 2017-06-01 14:00"
+"05.02-2026 10:00 – 12:00\n"
+"05.02.2026 14:00 – 16:00\n"
+"05.02.2026 14:00 – 06.02.2026 14:00"
 
 #: pretix/base/pdf.py:500
 msgid "Reusable Medium ID"
@@ -9757,7 +9757,7 @@ msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
-"Hierdoor kunnen klanten zich aanmelden voor een account in je ticketwinkel. "
+"Hierdoor kunnen klanten zich aanmelden voor een account in je ticketshop. "
 "Dit is een vereiste voor sommige geavanceerde functies, zoals "
 "lidmaatschappen."
 
@@ -10267,10 +10267,9 @@ msgid ""
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
-"Deze tekst wordt boven de ticketwinkel weergegeven wanneer de aangewezen "
-"verkoopperiode voor dit evenement is afgelopen. Je kan de tekst gebruiken om "
-"andere opties om tickets te kopen te beschrijven, bijvoorbeeld een "
-"ticketbureau."
+"Deze tekst wordt boven de ticketshop weergegeven zodra de verkoopperiode "
+"voor dit evenement is afgelopen. Je kunt de tekst gebruiken om andere opties "
+"om tickets te kopen te beschrijven, bijvoorbeeld een ticketbureau."
 
 #: pretix/base/settings.py:904
 msgid "Guidance text"
@@ -10443,10 +10442,9 @@ msgid ""
 "enough capacity is available. No payments will ever be accepted after the "
 "'Last date of payments' configured above."
 msgstr ""
-"Accepteer betalingen voor bestellingen zelfs wanneer ze in de 'verlopen'-"
-"staat zijn, zolang er genoeg capaciteit beschikbaar is. Er zullen nooit "
-"betalingen worden geaccepteerd na de 'Laatste datum van betalingen' (zie "
-"boven)."
+"Accepteer betalingen voor bestellingen als ze verlopen zijn, zolang er "
+"genoeg capaciteit beschikbaar is. Er zullen nooit betalingen worden "
+"geaccepteerd na de 'Laatste betaaldatum' (zie boven)."
 
 #: pretix/base/settings.py:1095
 msgid "Show start date"
@@ -11446,8 +11444,7 @@ msgid ""
 "data gathered in your ticket shop."
 msgstr ""
 "Dit moet bijvoorbeeld verwijzen naar een deel van je website waarop wordt "
-"uitgelegd hoe je de gegevens gebruikt die in je ticketwinkel worden "
-"verzameld."
+"uitgelegd hoe je de gegevens gebruikt die in je ticketshop verzameld worden."
 
 #: pretix/base/settings.py:2241
 msgid "Accessibility information URL"
@@ -11459,7 +11456,7 @@ msgid ""
 "ticket shop complies with accessibility regulation."
 msgstr ""
 "Dit moet bijvoorbeeld verwijzen naar een deel van je website waarop wordt "
-"uitgelegd hoe je ticketwinkel voldoet aan de toegankelijkheidsvoorschriften."
+"uitgelegd hoe je ticketshop voldoet aan de toegankelijkheidsvoorschriften."
 
 #: pretix/base/settings.py:2249
 #: pretix/presale/templates/pretixpresale/event/base.html:228
@@ -13202,7 +13199,7 @@ msgid ""
 "If you just configured this as a domain for your ticket shop, you now need "
 "to set this up as a \"custom domain\" in your organizer account."
 msgstr ""
-"Als je dit zojuist hebt geconfigureerd als domein voor je ticketwinkel, moet "
+"Als je dit zojuist hebt geconfigureerd als domein voor je ticketshop, moet "
 "je dit nu instellen als een \"aangepast domein\" in je organisatoraccount."
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
@@ -16745,7 +16742,7 @@ msgstr ""
 "\n"
 "{voucher_list}\n"
 "\n"
-"Je kunt ze hier in onze ticketwinkel inwisselen:\n"
+"Je kunt ze hier in onze ticketshop inwisselen:\n"
 "\n"
 "{url}\n"
 "\n"
@@ -16964,12 +16961,12 @@ msgstr ""
 #: pretix/control/logdisplay.py:264
 #, python-brace-format
 msgid "A block has been added for position #{posid}."
-msgstr "Er is een blok toegevoegd voor positie #{posid}."
+msgstr "Er is een block gezet op positie #{posid}."
 
 #: pretix/control/logdisplay.py:270
 #, python-brace-format
 msgid "A block has been removed for position #{posid}."
-msgstr "Er is een blok verwijderd voor positie #{posid}."
+msgstr "De block voor positie #{posid} is verwijderd."
 
 #: pretix/control/logdisplay.py:287
 #, python-brace-format
@@ -18148,7 +18145,7 @@ msgstr "Een add-on van dit product is gewijzigd."
 
 #: pretix/control/logdisplay.py:891
 msgid "A bundled item has been added to this product."
-msgstr "Een gebundeld product is aan dit product toegevoegd."
+msgstr "Er is een gebundeld product toegevoegd aan dit product."
 
 #: pretix/control/logdisplay.py:892
 msgid "A bundled item has been removed from this product."
@@ -18549,7 +18546,7 @@ msgstr "Webhooks"
 
 #: pretix/control/navigation.py:560
 msgid "Acceptance"
-msgstr "Aanvaarding"
+msgstr "Acceptering"
 
 #: pretix/control/navigation.py:581
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
@@ -21378,8 +21375,8 @@ msgid ""
 "privacy policy will be linked automatically (if you configured them), so you "
 "do not need to add them here."
 msgstr ""
-"Deze links worden weergegeven in de voettekst van je ticketwinkel. Je kunt "
-"hier bijvoorbeeld je servicevoorwaarden koppelen. Je contactadres, impressum "
+"Deze links worden weergegeven in de voettekst van je ticketshop. Je kunt "
+"hier bijvoorbeeld je servicevoorwaarden koppelen. Je contactadres, colofon "
 "en privacybeleid worden automatisch gekoppeld (als je deze hebt "
 "geconfigureerd), dus die hoef je hier niet toe te voegen."
 
@@ -24922,7 +24919,7 @@ msgstr "Som over alle pagina's"
 #, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] "Een bestelling"
+msgstr[0] "1 bestelling"
 msgstr[1] "%(s)s bestellingen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:263
@@ -25466,7 +25463,7 @@ msgid ""
 "target=\"_blank\">our documentation</a>."
 msgstr ""
 "In sommige rechtsgebieden, waaronder de Europese Unie, ben je verplicht om "
-"informatie over de toegankelijkheid van je ticketwinkel te publiceren. Je "
+"informatie over de toegankelijkheid van je ticketshop te publiceren. Je "
 "vindt een sjabloon in <a href=\"https://docs.pretix.eu/trust/accessibility/"
 "\" target=\"_blank\">onze documentatie</a>."
 
@@ -25490,12 +25487,12 @@ msgid ""
 "layout that includes the \"Reusable Medium ID\" as a QR code. Later, the "
 "same barcode may be re-used during the sale of a different product."
 msgstr ""
-"Een 'streepjescode-medium' kan elke gedrukte of digitale weergave van een "
-"streepjescode zijn. Het medium wordt in eerste instantie gecreëerd door de "
-"verkoop van een product waarvoor een mediabeleid geldt dat een dergelijk "
-"medium vereist, evenals een ticket- of badge-indeling met de 'ID "
-"herbruikbaar medium' als QR-code. Later kan dezelfde streepjescode worden "
-"hergebruikt bij de verkoop van een ander product."
+"Een 'barcodemedium' kan elke gedrukte of digitale weergave van een barcode "
+"zijn. Het medium wordt in eerste instantie gecreëerd door de verkoop van een "
+"product waarvoor een mediabeleid geldt dat een dergelijk medium vereist, "
+"evenals een ticket- of badge-indeling met de 'Reusable Medium ID' als QR-"
+"code. Later kan dezelfde barcode worden hergebruikt bij de verkoop van een "
+"ander product."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:240
 msgid "Barcode media can currently only be connected to tickets."
@@ -25735,8 +25732,8 @@ msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
-"Je hebt nog geen cadeaubonnen uitgegeven. Je kan een product toevoegen in "
-"een ticketwinkel om cadeaubonnen uit te geven, of je kan handmatig "
+"Je hebt nog geen cadeaubonnen uitgegeven. Je kunt een product toevoegen in "
+"een ticketshop om cadeaubonnen uit te geven, of je kunt handmatig "
 "cadeaubonnen aanmaken."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:20
@@ -32490,8 +32487,7 @@ msgstr "E-mailregel aanmaken"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
 msgid "Scheduled emails are not sent as long as your ticket shop is offline."
-msgstr ""
-"Geplande e-mails worden niet verzonden zolang je ticketwinkel offline is."
+msgstr "Geplande e-mails worden niet verzonden zolang je ticketshop offline is."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:63
@@ -34361,7 +34357,7 @@ msgstr "Waarschuwing"
 #: pretix/presale/templates/pretixpresale/event/base.html:131
 #: pretix/presale/templates/pretixpresale/event/base.html:205
 msgid "This ticket shop is currently in test mode."
-msgstr "Deze ticketwinkel bevindt zich momenteel in de testmodus."
+msgstr "Deze ticketshop staat in de testmodus."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:134
 #: pretix/presale/templates/pretixpresale/event/base.html:208
@@ -34378,8 +34374,8 @@ msgid ""
 "You are currently using the time machine. The ticket shop is rendered as if "
 "it were %(datetime)s."
 msgstr ""
-"Je gebruikt momenteel de tijdmachine. De ticketwinkel wordt weergegeven "
-"alsof het %(datetime)s is."
+"Je gebruikt momenteel de tijdmachine. De ticketshop wordt weergegeven alsof "
+"het %(datetime)s is."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:146
 #: pretix/presale/templates/pretixpresale/event/base.html:156
@@ -35674,7 +35670,7 @@ msgstr "Offline winkelen"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
 msgid "This ticket shop is currently turned off."
-msgstr "Deze ticketwinkel is momenteel uitgeschakeld."
+msgstr "Deze ticketshop is momenteel uitgeschakeld."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:10
 msgid "It is only accessible to authenticated team members."
@@ -37179,7 +37175,7 @@ msgid ""
 "ticket shop instead."
 msgstr ""
 "Er zijn geen ticketsoorten beschikbaar voor de wachtlijst. Neem in plaats "
-"daarvan een kijkje in de ticketwinkel."
+"daarvan een kijkje in de ticketshop."
 
 #: pretix/presale/views/waiting.py:137 pretix/presale/views/waiting.py:161
 msgid "Waiting lists are disabled for this event."
