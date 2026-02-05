@@ -122,7 +122,7 @@ class ReusableMedium(LoggedModel):
     class Meta:
         unique_together = (("identifier", "type", "organizer"),)
         indexes = [
-            models.Index(fields=("updated", "id")),
+            models.Index(fields=("updated", "id"), name="pretixbase__updated_093277_idx"),
         ]
         ordering = "identifier", "type", "organizer"
 

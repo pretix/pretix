@@ -9,31 +9,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameIndex(
-            model_name="logentry",
-            new_name="pretixbase__datetim_b1fe5a_idx",
-            old_fields=("datetime", "id"),
-        ),
-        migrations.RenameIndex(
-            model_name="order",
-            new_name="pretixbase__datetim_66aff0_idx",
-            old_fields=("datetime", "id"),
-        ),
-        migrations.RenameIndex(
-            model_name="order",
-            new_name="pretixbase__last_mo_4ebf8b_idx",
-            old_fields=("last_modified", "id"),
-        ),
-        migrations.RenameIndex(
-            model_name="reusablemedium",
-            new_name="pretixbase__updated_093277_idx",
-            old_fields=("updated", "id"),
-        ),
-        migrations.RenameIndex(
-            model_name="transaction",
-            new_name="pretixbase__datetim_b20405_idx",
-            old_fields=("datetime", "id"),
-        ),
         migrations.AlterField(
             model_name="attendeeprofile",
             name="id",

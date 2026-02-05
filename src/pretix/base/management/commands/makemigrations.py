@@ -36,8 +36,9 @@ from django.core.management.commands.makemigrations import Command as Parent
 
 from ._migrations import monkeypatch_migrations
 
-monkeypatch_migrations()
-
 
 class Command(Parent):
-    pass
+
+    def handle(self, *args, **kwargs):
+        monkeypatch_migrations()
+        return super().handle(*args, **kwargs)
