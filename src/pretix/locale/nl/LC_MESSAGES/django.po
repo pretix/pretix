@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-05 14:34+0000\n"
+"PO-Revision-Date: 2026-02-05 23:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -31004,7 +31004,7 @@ msgstr "Ongeldig voor deze bestelling"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:102
 msgid "Error while processing"
-msgstr "Fout tijdens verwerken"
+msgstr "Fout tijdens verwerking"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:104
 msgid "The order is already marked as paid"
@@ -31115,11 +31115,11 @@ msgstr "Er zijn geen geldige bestellingen gevonden."
 
 #: pretix/plugins/checkinlists/apps.py:47
 msgid "Check-in list exporter"
-msgstr "Exporteur van check-inlijsten"
+msgstr "Exporteur van check-in-lijsten"
 
 #: pretix/plugins/checkinlists/apps.py:51
 msgid "This plugin allows you to generate check-in lists for your conference."
-msgstr "Met deze plug-in kunt u check-inlijsten voor uw evenement genereren."
+msgstr "Met deze plug-in kunt u check-in-lijsten voor uw evenement genereren."
 
 #: pretix/plugins/checkinlists/exporters.py:92
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
@@ -31140,7 +31140,7 @@ msgstr "Inclusief vragen"
 
 #: pretix/plugins/checkinlists/exporters.py:304
 msgid "Check-in list (PDF)"
-msgstr "Check-inlijst (PDF)"
+msgstr "Check-in-lijst (PDF)"
 
 #: pretix/plugins/checkinlists/exporters.py:305
 #: pretix/plugins/checkinlists/exporters.py:476
@@ -31155,7 +31155,7 @@ msgid ""
 "Download a PDF version of a check-in list that can be used to check people "
 "in at the event without digital methods."
 msgstr ""
-"Download een PDF-versie van de check-inlijst die gebruikt kan worden om "
+"Download een PDF-versie van de check-in-lijst die gebruikt kan worden om "
 "mensen in te checken zonder digitale systemen."
 
 #. Translators: maximum 5 characters
@@ -31168,7 +31168,7 @@ msgstr "betld"
 msgid ""
 "Download a spreadsheet with all attendees that are included in a check-in "
 "list."
-msgstr "Download een spreadsheet met alle deelnemers op een check-inlijst."
+msgstr "Download een spreadsheet met alle deelnemers op een check-in-lijst."
 
 #: pretix/plugins/checkinlists/exporters.py:501
 msgid "Checked out"
@@ -31208,8 +31208,8 @@ msgid ""
 "Download a spreadsheet with one line for every scan that happened at your "
 "check-in stations."
 msgstr ""
-"Download een spreadsheet met één regel voor elke scan die bij uw check-"
-"instations heeft plaatsgevonden."
+"Download een spreadsheet met één regel voor elke scan die bij uw check-in-"
+"stations heeft plaatsgevonden."
 
 #: pretix/plugins/checkinlists/exporters.py:766
 msgid "Offline"
@@ -31226,11 +31226,11 @@ msgstr "Foutmelding"
 
 #: pretix/plugins/checkinlists/exporters.py:772
 msgid "Upload date"
-msgstr "Datum upload"
+msgstr "Datum van upload"
 
 #: pretix/plugins/checkinlists/exporters.py:773
 msgid "Upload time"
-msgstr "Tijdstip van uploaden"
+msgstr "Tijdstip van upload"
 
 #: pretix/plugins/checkinlists/exporters.py:830
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:523
@@ -31292,7 +31292,7 @@ msgstr "Endpoint"
 
 #: pretix/plugins/paypal/payment.py:142 pretix/plugins/paypal2/payment.py:201
 msgid "Reference prefix"
-msgstr "Voorvoegsel betalingskenmerk"
+msgstr "Prefix betalingskenmerk"
 
 #: pretix/plugins/paypal/payment.py:143 pretix/plugins/paypal2/payment.py:202
 msgid ""
@@ -31329,7 +31329,7 @@ msgstr "Verbinding met PayPal verbreken"
 #: pretix/plugins/paypal2/payment.py:1031
 #: pretix/plugins/paypal2/payment.py:1127
 msgid "We had trouble communicating with PayPal"
-msgstr "De communicatie met PayPal is mislukt"
+msgstr "We hadden problemen met de communicatie met PayPal"
 
 #: pretix/plugins/paypal/payment.py:375 pretix/plugins/paypal/payment.py:384
 #: pretix/plugins/paypal/payment.py:458 pretix/plugins/paypal2/payment.py:652
@@ -31574,7 +31574,7 @@ msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
-"Stel een PayPal-webhook naar het volgende eindpunt in om bestellingen "
+"Stel een PayPal-webhook naar het volgende endpoint in om bestellingen "
 "automatisch te annuleren wanneer betalingen extern worden terugbetaald."
 
 #: pretix/plugins/paypal2/payment.py:277
@@ -31605,8 +31605,8 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:335 pretix/plugins/paypal2/views.py:251
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr ""
-"Er vond een fout plaats tijdens het verbinden met PayPal. Gelieve opnieuw te "
-"proberen."
+"Er is een fout opgetreden tijdens het verbinden met PayPal. Probeer het "
+"opnieuw."
 
 #: pretix/plugins/paypal2/payment.py:467 pretix/plugins/paypal2/payment.py:599
 #: pretix/plugins/paypal2/payment.py:673 pretix/plugins/paypal2/payment.py:736
@@ -31717,7 +31717,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/signals.py:95
 msgid "PayPal ISU/Connect Endpoint"
-msgstr "PayPal ISU/Connect-eindpunt"
+msgstr "PayPal ISU/Connect-endpoint"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:9
 msgid "Almost done …"
@@ -31938,7 +31938,7 @@ msgstr "Open items"
 
 #: pretix/plugins/reports/apps.py:44 pretix/plugins/reports/apps.py:47
 msgid "Report exporter"
-msgstr "Rapport-exporteerder"
+msgstr "Rapport-exporter"
 
 #: pretix/plugins/reports/apps.py:51
 msgid "Generate printable reports about your sales."
@@ -32148,12 +32148,12 @@ msgstr "Filteren op incheckstatus"
 #: pretix/plugins/sendmail/forms.py:168
 msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in on any list"
-msgstr "Beperk tot ontvangers die niet op een lijst staan"
+msgstr "Beperk tot ontvangers die niet op een check-in-lijst staan"
 
 #: pretix/plugins/sendmail/forms.py:187
 msgctxt "sendmail_form"
 msgid "Restrict to orders created at or after"
-msgstr "Beperk tot bestellingen aangemaakt vanaf"
+msgstr "Beperk tot bestellingen aangemaakt op of na"
 
 #: pretix/plugins/sendmail/forms.py:192
 msgctxt "sendmail_form"
@@ -32211,7 +32211,7 @@ msgstr "Beperk tot ontvangers die al op een lijst ingecheckt zijn"
 
 #: pretix/plugins/sendmail/forms.py:371
 msgid "Type of schedule time"
-msgstr "Type schema-tijd"
+msgstr "Type planningtijd"
 
 #: pretix/plugins/sendmail/forms.py:374
 msgid "Absolute"
@@ -32288,7 +32288,7 @@ msgstr "Beperk tot bestellingen met status"
 
 #: pretix/plugins/sendmail/models.py:260
 msgid "Restrict to check-in status"
-msgstr "Beperk tot check-instatus"
+msgstr "Beperk tot check-in-status"
 
 #: pretix/plugins/sendmail/models.py:274
 msgid "Send date"
@@ -32348,23 +32348,23 @@ msgstr "Geplande e-mails"
 
 #: pretix/plugins/sendmail/signals.py:122
 msgid "Mass email was sent to customers or attendees."
-msgstr "Massa-e-mail verzonden naar klanten of deelnemers."
+msgstr "Bulk-e-mail verzonden naar klanten of deelnemers."
 
 #: pretix/plugins/sendmail/signals.py:123
 msgid "Mass email was sent to waiting list entries."
-msgstr "Er is een e-mail verstuurd naar degenen op de wachtlijst."
+msgstr "Er is een bulkmail verstuurd naar degenen op de wachtlijst."
 
 #: pretix/plugins/sendmail/signals.py:128
 msgid "The order received a mass email."
-msgstr "De bestelling ontving een massamail."
+msgstr "De bestelling ontving een bulkmail."
 
 #: pretix/plugins/sendmail/signals.py:129
 msgid "A ticket holder of this order received a mass email."
-msgstr "Een tickethouder van deze bestelling ontving een massamail."
+msgstr "Een tickethouder van deze bestelling ontving een bulkmail."
 
 #: pretix/plugins/sendmail/signals.py:134
 msgid "The person on the waiting list received a mass email."
-msgstr "De persoon op de wachtlijst ontving een massamail."
+msgstr "De persoon op de wachtlijst ontving een bulkmail."
 
 #: pretix/plugins/sendmail/signals.py:139
 msgid "An email rule was created"
@@ -32396,8 +32396,8 @@ msgid ""
 "This page shows you all mass emails you sent out manually. It does not "
 "include emails sent out automatically."
 msgstr ""
-"Deze pagina toont alle massamails die u handmatig hebt verzonden. "
-"Automatisch verzonden e-mails staan hier niet."
+"Deze pagina toont alle bulkmails die u handmatig hebt verzonden. Automatisch "
+"verzonden e-mails staan hier niet."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:35
 msgid "Send a new email based on this"
@@ -32486,7 +32486,7 @@ msgstr "Laatst uitgevoerd"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
 msgid "Scheduled email rules"
-msgstr "Automatische e-mailregels"
+msgstr "Instellingen voor geplande e-mails"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
 msgid ""
@@ -32582,7 +32582,7 @@ msgid ""
 "purchased for, or a combination of both."
 msgstr ""
 "Verstuur een e-mail naar elke klant, of naar elke persoon waarvoor een "
-"ticket is aangekocht, of naar een combinatie van beiden."
+"ticket is aangekocht, of naar een combinatie van beide."
 
 #: pretix/plugins/sendmail/views.py:417
 #, python-format
@@ -32603,8 +32603,8 @@ msgstr ""
 #, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] "%(number)s regel op de wachtlijst"
-msgstr[1] "%(number)s regels op de wachtlijst"
+msgstr[0] "%(number)s inschrijving op de wachtlijst"
+msgstr[1] "%(number)s inschrijvingen op de wachtlijst"
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/apps.py:39 pretix/plugins/statistics/signals.py:37
@@ -32684,8 +32684,7 @@ msgid ""
 msgstr ""
 "Alleen volledig betaalde bestellingen worden meegeteld. Bestellingen die in "
 "meerdere termijnen zijn betaald, worden weergegeven met de datum van de "
-"laatste betaling. De omzet is exclusief alle kosten, inclusief "
-"annuleringskosten."
+"laatste betaling. De omzet is exclusief alle kosten, ook annuleringskosten."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:97
 msgid ""
@@ -32703,7 +32702,7 @@ msgid ""
 "Placed orders include all orders (pending, paid, canceled, and expired); "
 "paid orders include only paid orders and exclude all canceled orders."
 msgstr ""
-"Geplaatst orders omvatten alle orders (in behandeling, betaald, geannuleerd "
+"Geplaatste orders omvatten alle orders (in behandeling, betaald, geannuleerd "
 "en verlopen); betaalde orders omvatten alleen betaalde orders en sluiten "
 "alle geannuleerde orders uit."
 
@@ -32772,7 +32771,7 @@ msgid ""
 msgstr ""
 "Accepteer betalingen via Stripe, een wereldwijd populaire "
 "betalingsdienstaanbieder. Stripe ondersteunt betalingen via creditcards en "
-"vele lokale betaalmethoden, zoals iDEAL, Alipay en nog veel meer."
+"vele lokale betaalmethoden, zoals iDEAL, Bancontact, Alipay en nog veel meer."
 
 #: pretix/plugins/stripe/forms.py:40
 #, python-format
@@ -32821,7 +32820,7 @@ msgid ""
 "process asynchronous payment methods like SOFORT."
 msgstr ""
 "Stel een <a href=\"https://dashboard.stripe.com/account/webhooks\">Stripe "
-"Webhook</a> op het volgende eindpunt in om automatisch bestellingen te "
+"Webhook</a> op het volgende endpoint in om automatisch bestellingen te "
 "annuleren wanneer betalingen extern worden terugbetaald en om asynchrone "
 "betaalmethodes zoals SOFORT te verwerken."
 
@@ -32838,7 +32837,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:232
 msgid "Stripe Integration security guide"
-msgstr "Stripe Integration Security Guide"
+msgstr "Beveiligingsgids voor Stripe-integratie"
 
 #: pretix/plugins/stripe/payment.py:226
 #, python-format
@@ -33026,7 +33025,7 @@ msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:417 pretix/plugins/stripe/payment.py:1836
 msgid "Pay by bank"
-msgstr "Betalen via bank"
+msgstr "Pay by bank"
 
 #: pretix/plugins/stripe/payment.py:422
 msgid ""
@@ -33046,7 +33045,7 @@ msgstr "Swish"
 
 #: pretix/plugins/stripe/payment.py:469 pretix/plugins/stripe/payment.py:1338
 msgid "Affirm"
-msgstr "Bevestigen"
+msgstr "Affirm"
 
 #: pretix/plugins/stripe/payment.py:474
 msgid "Only available for payments between $50 and $30,000."
@@ -33156,11 +33155,11 @@ msgstr "vervalt {month}/{year}"
 
 #: pretix/plugins/stripe/payment.py:1211
 msgid "SEPA Debit via Stripe"
-msgstr "SEPA Debit via Stripe"
+msgstr "SEPA-debit via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1212
 msgid "SEPA Debit"
-msgstr "SEPA Debit"
+msgstr "SEPA-debit"
 
 #: pretix/plugins/stripe/payment.py:1252
 msgid "Account Holder Name"
@@ -33753,7 +33752,7 @@ msgstr "Sorry, er is iets misgegaan in het betalingsproces."
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
 msgid "PDF ticket output"
-msgstr "PDF-ticketsuitvoer"
+msgstr "PDF-ticketuitvoer"
 
 #: pretix/plugins/ticketoutputpdf/apps.py:52
 msgid ""
@@ -33930,7 +33929,7 @@ msgstr "Stap"
 #: pretix/presale/checkoutflow.py:249
 msgctxt "checkoutflow"
 msgid "Customer account"
-msgstr "Klantaccount"
+msgstr "Klantenaccount"
 
 #: pretix/presale/checkoutflow.py:336
 msgid "We failed to process your authentication request, please try again."
@@ -34072,11 +34071,11 @@ msgstr "Nieuw adres aanmaken"
 
 #: pretix/presale/forms/checkout.py:129
 msgid "Save address in my customer account for future purchases"
-msgstr "Sla adres op in mijn klantaccount voor toekomstige aankopen"
+msgstr "Sla adres op in mijn klantenaccount voor toekomstige aankopen"
 
 #: pretix/presale/forms/checkout.py:159
 msgid "Save answers to my customer profiles for future purchases"
-msgstr "Sla antwoorden op in mijn klantenprofiel voor toekomstige aankopen"
+msgstr "Sla antwoorden op in mijn klantenprofielen voor toekomstige aankopen"
 
 #: pretix/presale/forms/checkout.py:166
 msgid "Save to profile"
@@ -34101,7 +34100,7 @@ msgstr "U moet een wachtwoord invullen."
 #: pretix/presale/forms/customer.py:72
 msgid "We have not found an account with this email address and password."
 msgstr ""
-"We kunnen geen klantaccount met deze combinatie van e-mailadres en "
+"We kunnen geen klantenaccount met deze combinatie van e-mailadres en "
 "wachtwoord vinden."
 
 #: pretix/presale/forms/customer.py:74
@@ -34144,12 +34143,12 @@ msgid ""
 "in or reset your password instead."
 msgstr ""
 "Er is al een account met dit e-mailadres geregistreerd. Probeer in te loggen "
-"of reset je wachtwoord."
+"of reset uw wachtwoord."
 
 #: pretix/presale/forms/customer.py:202
 #, python-brace-format
 msgid "What is the result of {num1} + {num2}?"
-msgstr "Wat is het resultaat van {num1} + {num2}?"
+msgstr "Wat is de som van {num1} + {num2}?"
 
 #: pretix/presale/forms/customer.py:248
 msgid "Please enter the correct result."
@@ -34163,7 +34162,7 @@ msgstr ""
 
 #: pretix/presale/forms/customer.py:341
 msgid "A user with this email address is not known in our system."
-msgstr "Er bestaat geen klantaccount met dit e-mailadres."
+msgstr "Er bestaat geen klantenaccount met dit e-mailadres."
 
 #: pretix/presale/forms/customer.py:463
 msgid "Only required if you change your email address"
@@ -34175,7 +34174,7 @@ msgid ""
 "To change your email address, change it in your {provider} account and then "
 "log out and log in again."
 msgstr ""
-"Om uw e-mailadres te wijzigen, wijzigt u dit in uw {provider} account en "
+"Om uw e-mailadres te wijzigen, wijzigt u dit in uw {provider}-account en "
 "logt u vervolgens uit en weer in."
 
 #: pretix/presale/forms/order.py:113 pretix/presale/forms/order.py:121
@@ -34373,7 +34372,7 @@ msgstr "Cookie-instellingen"
 #: pretix/presale/templates/pretixpresale/event/base.html:242
 #: pretix/presale/templates/pretixpresale/organizers/base.html:120
 msgid "Imprint"
-msgstr "Impressum"
+msgstr "Colofon"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:12
 msgid ""
@@ -34440,7 +34439,7 @@ msgstr "Uw winkelwagen"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:27
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
-msgstr "Winkelwagen is verlopen"
+msgstr "Winkelwagen verlopen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
 msgid "Show full cart"
@@ -34502,9 +34501,9 @@ msgid ""
 "approval by the event organizer before it can be confirmed and forms a valid "
 "contract."
 msgstr ""
-"Nadat u uw bestelling via de onderstaande knop hebt verzonden, moet deze "
-"door de organisator van het evenement worden goedgekeurd voordat deze kan "
-"worden bevestigd en een geldig contract vormt."
+"Nadat u uw bestelling via de onderstaande knop hebt verzonden, moet ze door "
+"de organisator van het evenement worden goedgekeurd, voordat ze kan worden "
+"bevestigd en een geldig contract vormt."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:192
 msgid ""
@@ -34539,7 +34538,7 @@ msgstr "Verstuur aanmelding"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:19
 msgid "Log in with a customer account"
-msgstr "Inloggen met een klantaccount"
+msgstr "Inloggen met een klantenaccount"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:26
 msgid "You are currently logged in with the following credentials."
@@ -34552,13 +34551,13 @@ msgid ""
 "connect your order to your account. This will allow you to see all your "
 "orders in one place and access them at any time."
 msgstr ""
-"Als u eerder een klantaccount hebt aangemaakt bij %(org)s, kunt u nu "
+"Als u eerder een klantenaccount hebt aangemaakt bij %(org)s, kunt u nu "
 "inloggen en uw bestelling aan uw account koppelen. Zo kunt u al uw "
 "bestellingen op één plek bekijken en er op elk moment toegang toe krijgen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:77
 msgid "Create a new customer account"
-msgstr "Maak een nieuw klantaccount aan"
+msgstr "Maak een nieuw klantenaccount aan"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:84
 #, python-format
@@ -34605,7 +34604,7 @@ msgid ""
 "product."
 msgstr ""
 "Dit product kan alleen worden gekocht als u bent ingelogd met een "
-"klantaccount dat een geldig lidmaatschap of autorisatie voor dit type "
+"klantenaccount dat een geldig lidmaatschap of autorisatie voor dit type "
 "product bevat."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:13
@@ -34686,7 +34685,7 @@ msgstr "Kopieer de antwoorden van hierboven"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:150
 msgid "Auto-fill with profile"
-msgstr "Automatisch profiel invullen"
+msgstr "Automatisch invullen met profiel"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
@@ -34756,7 +34755,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:293
 #, python-format
 msgid "minimum amount to order: %(num)s"
-msgstr "minimumhoeveelheid om te bestellen: %(num)s"
+msgstr "minimale bestelhoeveelheid: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:160
@@ -35122,7 +35121,7 @@ msgstr "Afrekenen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:63
 msgid "Empty cart"
-msgstr "Leeg winkelwagen"
+msgstr "Winkelwagen leegmaken"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:68
 #: pretix/presale/templates/pretixpresale/event/index.html:248
@@ -35940,8 +35939,8 @@ msgid ""
 msgstr ""
 "Op deze pagina kunt u de annulering van uw bestelling aanvragen. De "
 "organisator van het evenement zal vervolgens een beslissing nemen over uw "
-"verzoek. Als zij uw verzoek goedkeuren, wordt uw bestelling geannuleerd en "
-"worden alle tickets ongeldig verklaard."
+"verzoek. Als uw verzoek wordt goedgekeurd, wordt uw bestelling geannuleerd "
+"en worden alle tickets ongeldig verklaard."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:46
 msgid ""
@@ -36229,7 +36228,7 @@ msgstr "vanaf %(minprice)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:428
 #, python-format
 msgid "You need to select at least %(number)s products."
-msgstr "U moet ten minste %(number)s producten kiezen."
+msgstr "U moet minstens %(number)s producten kiezen."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
@@ -36406,12 +36405,12 @@ msgstr "Verkoop begint op %(date)s"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
 msgid "customer account"
-msgstr "klantaccount"
+msgstr "klantenaccount"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:8
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:9
 msgid "View customer account"
-msgstr "Klantaccount bekijken"
+msgstr "Klantenaccount bekijken"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "We've started the requested process in a new window."
@@ -36435,7 +36434,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:62
 msgid "Close"
-msgstr "Gesloten"
+msgstr "Sluiten"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:83
 msgid "Adjust settings in detail"
@@ -36502,7 +36501,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/giftcard/checkout.html:10
 msgid "The following gift cards are available in your customer account:"
-msgstr "De volgende cadeaubonnen zijn beschikbaar in uw klantaccount:"
+msgstr "De volgende cadeaubonnen zijn beschikbaar in uw klantenaccount:"
 
 #: pretix/presale/templates/pretixpresale/giftcard/checkout.html:24
 msgid "Use gift card"
@@ -36590,7 +36589,7 @@ msgstr "Adres verwijderen"
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:15
 msgid "Do you really want to delete the following address from your account?"
 msgstr ""
-"Weet u zeker dat u het volgende adres uit uw klantaccount wilt verwijderen?"
+"Weet u zeker dat u het volgende adres uit uw klantenaccount wilt verwijderen?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_addresses.html:5
 #: pretix/presale/templates/pretixpresale/organizers/customer_addresses.html:11
@@ -36613,7 +36612,7 @@ msgstr "Accountgegevens bewerken"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_base.html:41
 msgid "customer account information"
-msgstr "klantaccountgegevens"
+msgstr "klantenaccountgegevens"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:28
 #, python-format
@@ -36659,7 +36658,7 @@ msgstr "Accountinformatie bijwerken"
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:56
 #, python-format
 msgid "Sign in to your account at %(org)s"
-msgstr "Log in bij uw klantaccount voor %(org)s"
+msgstr "Log in bij uw account voor %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:30
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:47
@@ -36925,8 +36924,8 @@ msgid ""
 "Your email address has not been updated since the address is already in use "
 "for another customer account."
 msgstr ""
-"Uw e-mailadres is niet bijgewerkt omdat het reeds in gebruik is voor een "
-"ander klantaccount."
+"Uw e-mailadres is niet bijgewerkt omdat het al in gebruik is voor een ander "
+"klantenaccount."
 
 #: pretix/presale/views/customer.py:642
 msgid "Your email address has been updated."
@@ -37055,24 +37054,19 @@ msgstr ""
 
 #: pretix/presale/views/order.py:1714
 msgid "You may not change your order in a way that changes the total price."
-msgstr ""
-"U mag uw bestelling niet wijzigen op een manier die de totale prijs "
-"verandert."
+msgstr "U mag uw bestelling niet zo wijzigen dat de totale prijs verandert."
 
 #: pretix/presale/views/order.py:1716
 msgid "You may not change your order in a way that would require a refund."
-msgstr ""
-"U mag uw bestelling niet wijzigen op een manier die een terugbetaling "
-"vereist."
+msgstr "U mag uw bestelling niet zo wijzigen dat een terugbetaling vereist is."
 
 #: pretix/presale/views/order.py:1724
 msgid ""
 "You may not change your order in a way that increases the total price since "
 "payments are no longer being accepted for this event."
 msgstr ""
-"U kunt uw bestelling niet wijzigen op een manier die de totale prijs "
-"verhoogt, aangezien er voor dit evenement geen betalingen meer worden "
-"geaccepteerd."
+"U kunt uw bestelling niet zo wijzigen dat de totale prijs hoger wordt, "
+"aangezien er voor dit evenement geen betalingen meer worden geaccepteerd."
 
 #: pretix/presale/views/order.py:1730
 msgid ""
