@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-04 16:00+0000\n"
+"PO-Revision-Date: 2026-02-05 14:34+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -10631,11 +10631,11 @@ msgstr "เงื่อนไขสำหรับราคาที่เปล
 
 #: pretix/base/settings.py:1952
 msgid "Do not allow changes after"
-msgstr ""
+msgstr "ไม่อนุญาตให้แก้ไขหลังจากวันที่"
 
 #: pretix/base/settings.py:1961
 msgid "Allow change even though the ticket has already been checked in"
-msgstr ""
+msgstr "อนุญาตให้แก้ไขได้แม้ว่าตั๋วจะถูกเช็คอินไปแล้วก็ตาม"
 
 #: pretix/base/settings.py:1962
 msgid ""
@@ -10645,10 +10645,14 @@ msgid ""
 "in individually. Use with care, and preferably only in combination with a "
 "limitation on price changes above."
 msgstr ""
+"โดยค่าเริ่มต้น จะไม่สามารถแก้ไขคำสั่งซื้อได้หลังจากมีการเช็คอินตั๋วใบใดใบหนึ่งไปแล้ว หากคุณเลือกช่อง"
+"นี้ ข้อจำกัดดังกล่าวจะถูกยกเลิก อย่างไรก็ตาม คุณยังไม่สามารถนำสินค้าเพิ่มเติม (Add-on) ที่ถูกเช็คอิน"
+"แยกรายการไปแล้วออกได้ โปรดใช้ความระมัดระวัง และควรใช้ร่วมกับข้อจำกัดการเปลี่ยนราคาด้านบนเท่"
+"านั้น"
 
 #: pretix/base/settings.py:1974
 msgid "Allow individual attendees to change their ticket"
-msgstr ""
+msgstr "อนุญาตให้ผู้เข้างานแต่ละคนแก้ไขตั๋วของตนเองได้"
 
 #: pretix/base/settings.py:1975
 msgid ""
@@ -10658,14 +10662,17 @@ msgid ""
 "total price of the order. Such changes can always only be made by the main "
 "customer."
 msgstr ""
+"โดยค่าเริ่มต้น เฉพาะผู้สั่งซื้อเท่านั้นที่สามารถแก้ไขข้อมูลได้ หากคุณเลือกช่องนี้ ผู้เข้างานแต่ละคนจะสามา"
+"รถแก้ไขข้อมูลได้เช่นกัน อย่างไรก็ตาม ผู้เข้างานจะแก้ไขได้เฉพาะรายการที่ไม่ทำให้ยอดรวมของคำสั่งซื้อ"
+"เปลี่ยนแปลงเท่านั้น การแก้ไขที่ส่งผลต่อยอดรวมจะต้องทำโดยผู้ซื้อหลักเสมอ"
 
 #: pretix/base/settings.py:1987
 msgid "Customers can cancel their unpaid orders"
-msgstr ""
+msgstr "ลูกค้าสามารถยกเลิกคำสั่งซื้อที่ยังไม่ชำระเงินได้"
 
 #: pretix/base/settings.py:1999
 msgid "Charge a fixed cancellation fee"
-msgstr ""
+msgstr "เรียกเก็บค่าธรรมเนียมการยกเลิกแบบคงที่"
 
 #: pretix/base/settings.py:2000 pretix/base/settings.py:2011
 #: pretix/base/settings.py:2025
@@ -10674,60 +10681,68 @@ msgid ""
 "never charged. Note that it will be your responsibility to claim the "
 "cancellation fee from the user."
 msgstr ""
+"มีผลเฉพาะกับคำสั่งซื้อที่รอการชำระเงินเท่านั้น และจะไม่เรียกเก็บค่าธรรมเนียมการยกเลิกสำหรับรายกา"
+"รที่ไม่มีค่าใช้จ่าย โปรดทราบว่าการเรียกเก็บค่าธรรมเนียมการยกเลิกจากผู้ใช้ถือเป็นความรับผิดชอบของคุ"
+"ณเอง"
 
 #: pretix/base/settings.py:2010
 msgid "Charge payment, shipping and service fees"
-msgstr ""
+msgstr "เรียกเก็บค่าธรรมเนียมการชำระเงิน ค่าจัดส่ง และค่าบริการ"
 
 #: pretix/base/settings.py:2024
 msgid "Charge a percentual cancellation fee"
-msgstr ""
+msgstr "เรียกเก็บค่าธรรมเนียมการยกเลิกเป็นเปอร์เซ็นต์"
 
 #: pretix/base/settings.py:2035 pretix/base/settings.py:2174
 msgid "Do not allow cancellations after"
-msgstr ""
+msgstr "ไม่อนุญาตให้ยกเลิกหลังจากวันที่"
 
 #: pretix/base/settings.py:2044
 msgid "Customers can cancel their paid orders"
-msgstr ""
+msgstr "ลูกค้าสามารถยกเลิกคำสั่งซื้อที่ชำระเงินแล้วได้"
 
 #: pretix/base/settings.py:2045
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
+"ระบบจะคืนเงินให้อัตโนมัติหากวิธีชำระเงินนั้นรองรับ มิเช่นนั้น ระบบจะสร้างรายการคืนเงินด้วยตนเองเพื่"
+"อให้คุณดำเนินการต่อในภายหลัง"
 
 #: pretix/base/settings.py:2058 pretix/control/forms/orders.py:909
 msgid "Keep a fixed cancellation fee"
-msgstr ""
+msgstr "หักค่าธรรมเนียมการยกเลิกแบบคงที่"
 
 #: pretix/base/settings.py:2067
 msgid "Keep payment, shipping and service fees"
-msgstr ""
+msgstr "หักค่าธรรมเนียมการชำระเงิน ค่าจัดส่ง และค่าบริการ"
 
 #: pretix/base/settings.py:2079 pretix/control/forms/orders.py:920
 msgid "Keep a percentual cancellation fee"
-msgstr ""
+msgstr "หักค่าธรรมเนียมการยกเลิกเป็นเปอร์เซ็นต์"
 
 #: pretix/base/settings.py:2088
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr ""
+msgstr "อนุญาตให้ลูกค้าเลือกรับเงินคืนในจำนวนที่น้อยลงตามความสมัครใจ"
 
 #: pretix/base/settings.py:2089
 msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
 msgstr ""
+"เมื่อเปิดใช้งานตัวเลือกนี้ ลูกค้าของคุณสามารถเลือกรับเงินคืนน้อยลงเพื่อเป็นการสนับสนุนคุณ"
 
 #: pretix/base/settings.py:2094
 msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
+"อย่างไรก็ตาม หากคุณต้องการสนับสนุนการดำเนินงานของเรา โปรดพิจารณาใช้แถบเลื่อนด้านล่างเพื่อขอรั"
+"บเงินคืนในจำนวนที่น้อยลง ขอบคุณ!"
 
 #: pretix/base/settings.py:2101
 msgid "Voluntary lower refund explanation"
-msgstr ""
+msgstr "คำอธิบายสำหรับการขอรับเงินคืนน้อยลงตามความสมัครใจ"
 
 #: pretix/base/settings.py:2104
 msgid ""
@@ -10736,10 +10751,12 @@ msgid ""
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organization."
 msgstr ""
+"ข้อความนี้จะแสดงอยู่ระหว่างคำอธิบายขั้นตอนการคืนเงินและแถบเลื่อนที่ลูกค้าใช้เลือกจำนวนเงินที่ต้องการ"
+"รับคืน คุณสามารถใช้เพื่ออธิบายว่าการรับเงินคืนน้อยลงจะช่วยสนับสนุนองค์กรของคุณได้อย่างไร"
 
 #: pretix/base/settings.py:2119
 msgid "Step size for reduction amount"
-msgstr ""
+msgstr "ขั้นบันไดของจำนวนเงินที่ลดลง"
 
 #: pretix/base/settings.py:2120
 msgid ""
@@ -10747,43 +10764,48 @@ msgid ""
 "set this to e.g. 10, they will only be able to choose values in increments "
 "of 10."
 msgstr ""
+"โดยค่าเริ่มต้น ลูกค้าสามารถระบุจำนวนเงินที่จะให้คุณเก็บไว้ได้ตามต้องการ หากคุณตั้งค่าเป็น 10 ลูกค้าจ"
+"ะเลือกได้เฉพาะค่าที่เพิ่มขึ้นทีละ 10 เท่านั้น"
 
 #: pretix/base/settings.py:2130
 msgid ""
 "Customers can only request a cancellation that needs to be approved by the "
 "event organizer before the order is canceled and a refund is issued."
 msgstr ""
+"ลูกค้าทำได้เพียงส่งคำขอแจ้งยกเลิก ซึ่งต้องได้รับการอนุมัติจากผู้จัดงานก่อนที่คำสั่งซื้อจะถูกยกเลิกและทำก"
+"ารคืนเงิน"
 
 #: pretix/base/settings.py:2140
 msgid ""
 "Do not show the cancellation fee to users when they request cancellation."
-msgstr ""
+msgstr "ไม่แสดงค่าธรรมเนียมการยกเลิกให้ผู้ใช้เห็นเมื่อมีการส่งคำขอเลิก"
 
 #: pretix/base/settings.py:2149 pretix/base/settings.py:2159
 msgid "All refunds are issued to the original payment method"
-msgstr ""
+msgstr "คืนเงินทั้งหมดผ่านช่องทางการชำระเงินเดิม"
 
 #: pretix/base/settings.py:2150 pretix/base/settings.py:2160
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
 msgstr ""
+"ลูกค้าสามารถเลือกรับเงินคืนเป็นบัตรของขวัญหรือคืนผ่านช่องทางการชำระเงินเดิมได้"
 
 #: pretix/base/settings.py:2151 pretix/base/settings.py:2161
 msgid "All refunds are issued as gift cards"
-msgstr ""
+msgstr "คืนเงินทั้งหมดเป็นรูปแบบบัตรของขวัญ"
 
 #: pretix/base/settings.py:2152 pretix/base/settings.py:2162
 msgid "Do not handle refunds automatically at all"
-msgstr ""
+msgstr "ไม่ต้องดำเนินการคืนเงินโดยอัตโนมัติในทุกกรณี"
 
 #: pretix/base/settings.py:2157
 #: pretix/control/templates/pretixcontrol/order/index.html:149
 msgid "Refund method"
-msgstr ""
+msgstr "วิธีการคืนเงิน"
 
 #: pretix/base/settings.py:2183 pretix/base/settings.py:2196
 msgid "Terms of cancellation"
-msgstr ""
+msgstr "ข้อกำหนดการยกเลิก"
 
 #: pretix/base/settings.py:2186
 msgid ""
@@ -10791,6 +10813,8 @@ msgid ""
 "empty if you want pretix to automatically generate the terms of cancellation "
 "based on your settings."
 msgstr ""
+"ข้อความนี้จะแสดงเมื่ออนุญาตให้ยกเลิกคำสั่งซื้อที่ชำระเงินแล้วได้ หากเว้นว่างไว้ ระบบ pretix จะสร้า"
+"งข้อกำหนดการยกเลิกให้โดยอัตโนมัติจากค่าที่คุณตั้งไว้"
 
 #: pretix/base/settings.py:2199
 msgid ""
@@ -10798,44 +10822,50 @@ msgid ""
 "order. Leave empty if you want pretix to automatically generate the terms of "
 "cancellation based on your settings."
 msgstr ""
+"ข้อความนี้จะแสดงเมื่ออนุญาตให้ยกเลิกคำสั่งซื้อที่ยังไม่ได้ชำระเงินหรือไม่มีค่าใช้จ่าย หากเว้นว่างไว้ ระบ"
+"บ pretix จะสร้างข้อกำหนดการยกเลิกให้โดยอัตโนมัติอ้างอิงตามการตั้งค่าของคุณ"
 
 #: pretix/base/settings.py:2209 pretix/control/forms/event.py:1836
 msgid "Contact address"
-msgstr ""
+msgstr "ข้อมูลติดต่อ"
 
 #: pretix/base/settings.py:2210 pretix/control/forms/event.py:1838
 msgid "We'll show this publicly to allow attendees to contact you."
-msgstr ""
+msgstr "เราจะแสดงข้อมูลนี้ต่อสาธารณะเพื่อให้ผู้เข้างานสามารถติดต่อคุณได้"
 
 #: pretix/base/settings.py:2218 pretix/control/forms/event.py:1830
 msgid "Imprint URL"
-msgstr ""
+msgstr "URL ข้อมูลทางกฎหมายและผู้จัดงาน (Imprint)"
 
 #: pretix/base/settings.py:2219 pretix/control/forms/event.py:1831
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
 msgstr ""
+"ส่วนนี้ควรลิงก์ไปยังหน้าเว็บไซต์ของคุณที่มีรายละเอียดการติดต่อและข้อมูลทางกฎหมาย"
 
 #: pretix/base/settings.py:2229
 msgid "Privacy Policy URL"
-msgstr ""
+msgstr "URL นโยบายความเป็นส่วนตัว"
 
 #: pretix/base/settings.py:2230
 msgid ""
 "This should point e.g. to a part of your website that explains how you use "
 "data gathered in your ticket shop."
 msgstr ""
+"ส่วนนี้ควรลิงก์ไปยังหน้าเว็บไซต์ของคุณที่อธิบายวิธีการใช้ข้อมูลที่รวบรวมได้จากร้านจำหน่ายตั๋วนี้"
 
 #: pretix/base/settings.py:2241
 msgid "Accessibility information URL"
-msgstr ""
+msgstr "URL ข้อมูลสิ่งอำนวยความสะดวก (Accessibility)"
 
 #: pretix/base/settings.py:2242
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
 msgstr ""
+"ส่วนนี้ควรลิงก์ไปยังหน้าเว็บไซต์ของคุณที่อธิบายว่าร้านจำหน่ายตั๋วนี้เป็นไปตามกฎระเบียบด้านสิ่งอำนวยควา"
+"มสะดวกอย่างไร"
 
 #: pretix/base/settings.py:2249
 #: pretix/presale/templates/pretixpresale/event/base.html:228
@@ -10844,19 +10874,19 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/base.html:106
 #: pretix/presale/templates/pretixpresale/organizers/base.html:111
 msgid "Accessibility information"
-msgstr ""
+msgstr "ข้อมูลสิ่งอำนวยความสะดวกสำหรับผู้พิการ"
 
 #: pretix/base/settings.py:2253
 msgid "Accessibility information title"
-msgstr ""
+msgstr "หัวข้อข้อมูลสิ่งอำนวยความสะดวก"
 
 #: pretix/base/settings.py:2263
 msgid "Accessibility information text"
-msgstr ""
+msgstr "รายละเอียดข้อมูลสิ่งอำนวยความสะดวก"
 
 #: pretix/base/settings.py:2284
 msgid "Attach ticket files"
-msgstr ""
+msgstr "แนบไฟล์ตั๋ว"
 
 #: pretix/base/settings.py:2286
 #, python-brace-format
@@ -10864,32 +10894,35 @@ msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
 msgstr ""
+"ระบบจะไม่แนบไฟล์ตั๋วหากมีขนาดใหญ่กว่า {size} เพื่อหลีกเลี่ยงปัญหาในการนำส่งอีเมล"
 
 #: pretix/base/settings.py:2297 pretix/plugins/sendmail/forms.py:201
 #: pretix/plugins/sendmail/models.py:270
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:66
 msgid "Attach calendar files"
-msgstr ""
+msgstr "แนบไฟล์ปฏิทิน"
 
 #: pretix/base/settings.py:2298
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
-msgstr ""
+msgstr "หากเปิดใช้งาน เราจะแนบไฟล์ปฏิทิน .ics ไปกับอีเมลยืนยันการสั่งซื้อ"
 
 #: pretix/base/settings.py:2307
 msgid "Attach calendar files only after order has been paid"
-msgstr ""
+msgstr "แนบไฟล์ปฏิทินหลังจากชำระเงินเรียบร้อยแล้วเท่านั้น"
 
 #: pretix/base/settings.py:2308
 msgid ""
 "Use this if you e.g. put a private access link into the calendar file to "
 "make sure people only receive it after their payment was confirmed."
 msgstr ""
+"ใช้ตัวเลือกนี้ในกรณีที่คุณใส่ลิงก์เข้าชมแบบส่วนตัวไว้ในไฟล์ปฏิทิน เพื่อให้แน่ใจว่าผู้เข้าร่วมจะได้รับข้อมูลหลั"
+"งจากยืนยันการชำระเงินแล้วเท่านั้น"
 
 #: pretix/base/settings.py:2317
 msgid "Event description"
-msgstr ""
+msgstr "รายละเอียดกิจกรรม"
 
 #: pretix/base/settings.py:2320
 msgid ""
@@ -10900,51 +10933,57 @@ msgid ""
 "data as calendar entries are often shared with an unspecified number of "
 "people."
 msgstr ""
+"คุณสามารถใช้ส่วนนี้เพื่อแชร์ข้อมูลกับผู้เข้างาน เช่น ข้อมูลการเดินทาง หรือลิงก์ไปยังกิจกรรมออนไลน์ หา"
+"กเว้นว่างไว้ ระบบจะใส่ลิงก์ไปยังร้านค้า, เวลาเปิดให้เข้างาน และชื่อผู้จัดงานลงไปแทน ทั้งนี้ระบบไม่อ"
+"นุญาตให้ใช้ตัวแปร (Placeholders) ที่มีข้อมูลส่วนบุคคลเนื่องจากรายการปฏิทินมักถูกแชร์ต่อได้"
 
 #: pretix/base/settings.py:2333
 msgid "Subject prefix"
-msgstr ""
+msgstr "คำนำหน้าชื่อเรื่องอีเมล"
 
 #: pretix/base/settings.py:2334
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
 msgstr ""
+"ข้อความนี้จะถูกเพิ่มไว้ข้างหน้าชื่อเรื่องของอีเมลที่ส่งออกทั้งหมด โดยจะแสดงในรูปแบบ [คำนำหน้า] ตัวอ"
+"ย่างเช่น คุณอาจระบุเป็นชื่อย่อของกิจกรรมของคุณ"
 
 #: pretix/base/settings.py:2348 pretix/control/forms/mailsetup.py:37
 #: pretix/control/forms/mailsetup.py:119
 #: pretix/control/templates/pretixcontrol/event/mail.html:39
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:40
 msgid "Sender address"
-msgstr ""
+msgstr "ที่อยู่อีเมลผู้ส่ง"
 
 #: pretix/base/settings.py:2349 pretix/control/forms/mailsetup.py:38
 #: pretix/control/forms/mailsetup.py:120
 msgid "Sender address for outgoing emails"
-msgstr ""
+msgstr "ที่อยู่อีเมลสำหรับใช้ส่งอีเมลขาออก"
 
 #: pretix/base/settings.py:2358
 msgid "Sender name"
-msgstr ""
+msgstr "ชื่อผู้ส่ง"
 
 #: pretix/base/settings.py:2359
 msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
 msgstr ""
+"ชื่อผู้ส่งที่ใช้ร่วมกับที่อยู่อีเมลสำหรับอีเมลขาออก โดยค่าเริ่มต้นจะใช้เป็นชื่อกิจกรรมของคุณ"
 
 #: pretix/base/settings.py:2377 pretix/base/settings.py:2434
 #: pretix/base/settings.py:2451 pretix/base/settings.py:2469
 #, python-brace-format
 msgid "Your order: {code}"
-msgstr ""
+msgstr "คำสั่งซื้อของคุณ: {code}"
 
 #: pretix/base/settings.py:2381 pretix/base/settings.py:2414
 #: pretix/base/settings.py:2519 pretix/base/settings.py:2752
 #: pretix/base/settings.py:2789
 #, python-brace-format
 msgid "Your event registration: {code}"
-msgstr ""
+msgstr "การลงทะเบียนกิจกรรมของคุณ: {code}"
 
 #: pretix/base/settings.py:2385
 #, python-brace-format
@@ -10960,11 +10999,21 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"คุณได้รับข้อความนี้เนื่องจากคุณได้ขอให้เราส่งลิงก์สำหรับคำสั่งซื้อกิจกรรม \n"
+"{event} ให้แก่คุณ\n"
+"\n"
+"คุณสามารถแก้ไขรายละเอียดและตรวจสอบสถานะคำสั่งซื้อของคุณได้ที่\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ \n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2398
 #, python-brace-format
 msgid "Your orders for {event}"
-msgstr ""
+msgstr "รายการคำสั่งซื้อของคุณสำหรับ {event}"
 
 #: pretix/base/settings.py:2402
 #, python-brace-format
@@ -10979,6 +11028,15 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"มีผู้ส่งคำขอรายการคำสั่งซื้อของคุณสำหรับกิจกรรม {event}\n"
+"โดยมีรายการดังต่อไปนี้: \n"
+"\n"
+"{orders}\n"
+"\n"
+"ด้วยความเคารพ \n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2418
 #, python-brace-format
@@ -10993,6 +11051,15 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดีคุณ {attendee_name}\n"
+"\n"
+"คุณได้รับการลงทะเบียนสำหรับกิจกรรม {event} เรียบร้อยแล้ว\n"
+"\n"
+"คุณสามารถตรวจสอบรายละเอียดและสถานะตั๋วของคุณได้ที่นี่: \n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2438
 #, python-brace-format
@@ -11008,6 +11075,16 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"การสั่งซื้อของคุณสำหรับกิจกรรม {event} เสร็จสมบูรณ์แล้ว\n"
+"เนื่องจากคุณสั่งซื้อเฉพาะ สินค้าที่ไม่มีค่าใช้จ่าย จึงไม่จำเป็นต้องชำระเงิน\n"
+"\n"
+"คุณสามารถแก้ไขรายละเอียดและตรวจสอบสถานะคำสั่งซื้อของคุณได้ที่ \n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2455
 #, python-brace-format
@@ -11024,6 +11101,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราได้รับคำสั่งซื้อของคุณสำหรับกิจกรรม {event}\n"
+"เรียบร้อยแล้ว เนื่องจากคุณได้สั่งซื้อ สินค้าที่ต้องรอการอนุมัติจากผู้จัดงาน\n"
+"เราจึงขอให้คุณโปรดรอสักครู่ และติดตามอีเมลฉบับถัดไปจากเรา\n"
+"\n"
+"คุณสามารถแก้ไขรายละเอียดและตรวจสอบสถานะคำสั่งซื้อของคุณได้ที่\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2473
 #, python-brace-format
@@ -11042,10 +11130,23 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราได้รับคำสั่งซื้อของคุณสำหรับกิจกรรม {event} เรียบร้อยแล้ว โดยมียอดรวมทั้งสิ้น "
+"{total_with_currency} \n"
+"โปรดดำเนินการชำระเงินให้เสร็จสิ้นก่อนวันที่ {expire_date}\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"คุณสามารถแก้ไขรายละเอียดและตรวจสอบสถานะคำสั่งซื้อของคุณได้ที่ \n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2491
 msgid "Attachment for new orders"
-msgstr ""
+msgstr "ไฟล์แนบสำหรับคำสั่งซื้อใหม่"
 
 #: pretix/base/settings.py:2496
 #, python-brace-format
@@ -11058,6 +11159,12 @@ msgid ""
 "sent before payment is confirmed or the order is approved. To avoid this "
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
+"ไฟล์นี้จะถูกแนบไปกับอีเมลฉบับแรกที่เราส่งสำหรับทุกคำสั่งซื้อใหม่ ดังนั้นไฟล์นี้จะถูกส่งไปพร้อมกับข้อความ "
+"\"สั่งซื้อสินค้าแล้ว\", \"รายการสั่งซื้อฟรี\" หรือ \"ได้รับคำสั่งซื้อแล้ว\" ด้านบน โดยจะส่งให้ทั้งผู้ติดต่"
+"อสั่งซื้อและผู้เข้างาน คุณสามารถใช้ส่วนนี้เพื่อส่งข้อกำหนดการให้บริการเป็นต้น โปรดอย่าใช้ส่วนนี้เพื่อส่งข้"
+"อมูลที่ไม่เป็นสาธารณะ เนื่องจากไฟล์อาจถูกส่งก่อนที่การชำระเงินจะได้รับการยืนยันหรือก่อนที่คำสั่งซื้อจะไ"
+"ด้รับการอนุมัติ เพื่อหลีกเลี่ยงไม่ให้อีเมลสำคัญนี้ถูกจัดเป็นสแปม คุณสามารถอัปโหลดได้เฉพาะไฟล์ PDF ขน"
+"าดไม่เกิน {size} MB เท่านั้น"
 
 #: pretix/base/settings.py:2523
 #, python-brace-format
@@ -11072,11 +11179,20 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดีคุณ {attendee_name}\n"
+"\n"
+"มีการสั่งซื้อตั๋วสำหรับกิจกรรม {event} ให้แก่คุณ\n"
+"\n"
+"คุณสามารถตรวจสอบรายละเอียดและสถานะตั๋วของคุณได้ที่นี่:\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2535
 #, python-brace-format
 msgid "Your order has been changed: {code}"
-msgstr ""
+msgstr "คำสั่งซื้อของคุณมีการเปลี่ยนแปลง: {code}"
 
 #: pretix/base/settings.py:2539
 #, python-brace-format
@@ -11091,11 +11207,20 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"คำสั่งซื้อของคุณสำหรับกิจกรรม {event} มีการเปลี่ยนแปลง\n"
+"\n"
+"คุณสามารถตรวจสอบสถานะคำสั่งซื้อของคุณได้ที่\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2551
 #, python-brace-format
 msgid "Payment received for your order: {code}"
-msgstr ""
+msgstr "ได้รับชำระเงินสำหรับคำสั่งซื้อของคุณแล้ว: {code}"
 
 #: pretix/base/settings.py:2555
 #, python-brace-format
@@ -11112,11 +11237,22 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เราได้รับชำระเงินสำหรับกิจกรรม {event} เรียบร้อยแล้ว ขอบคุณ!\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"คุณสามารถแก้ไขรายละเอียดและตรวจสอบสถานะคำสั่งซื้อของคุณได้ที่\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2573
 #, python-brace-format
 msgid "Event registration confirmed: {code}"
-msgstr ""
+msgstr "ยืนยันการลงทะเบียนกิจกรรมเรียบร้อยแล้ว: {code}"
 
 #: pretix/base/settings.py:2577
 #, python-brace-format
@@ -11131,22 +11267,33 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดีคุณ {attendee_name}\n"
+"\n"
+"ตั๋วสำหรับกิจกรรม {event} ที่มีการสั่งซื้อให้คุณ ได้รับการชำระเงินเรียบร้อยแล้ว\n"
+"\n"
+"คุณสามารถตรวจสอบรายละเอียดและสถานะตั๋วของคุณได้ที่นี่:\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2594 pretix/control/forms/event.py:1232
 #: pretix/control/forms/event.py:1354 pretix/plugins/sendmail/models.py:275
 msgid "Number of days"
-msgstr ""
+msgstr "จำนวนวัน"
 
 #: pretix/base/settings.py:2596 pretix/control/forms/event.py:1235
 msgid ""
 "This email will be sent out this many days before the order expires. If the "
 "value is 0, the mail will never be sent."
 msgstr ""
+"อีเมลนี้จะถูกส่งออกล่วงหน้าเป็นเวลาตามจำนวนวันที่ระบุไว้ก่อนที่คำสั่งซื้อจะหมดอายุ หากตั้งค่าเป็น 0 จะ"
+"ไม่มีการส่งอีเมลนี้"
 
 #: pretix/base/settings.py:2604
 #, python-brace-format
 msgid "Your order is about to expire: {code}"
-msgstr ""
+msgstr "คำสั่งซื้อของคุณใกล้จะหมดอายุ: {code}"
 
 #: pretix/base/settings.py:2608
 #, python-brace-format
@@ -11163,11 +11310,22 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เรายังไม่ได้รับชำระเงินเต็มจำนวนสำหรับคำสั่งซื้อกิจกรรม {event} ของคุณ\n"
+"โปรดทราบว่าเราจะรับประกันคำสั่งซื้อของคุณก็ต่อเมื่อเราได้รับ\n"
+"การชำระเงินของคุณก่อนวันที่ {expire_date} เท่านั้น\n"
+"\n"
+"คุณสามารถดูข้อมูลการชำระเงินและสถานะคำสั่งซื้อของคุณได้ที่\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2622
 #, python-brace-format
 msgid "Your order is pending payment: {code}"
-msgstr ""
+msgstr "คำสั่งซื้อของคุณอยู่ระหว่างรอการชำระเงิน: {code}"
 
 #: pretix/base/settings.py:2626
 #, python-brace-format
@@ -11183,11 +11341,21 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"สวัสดี\n"
+"\n"
+"เรายังไม่ได้รับชำระเงินเต็มจำนวนสำหรับคำสั่งซื้อกิจกรรม {event} ของคุณ\n"
+"โปรดทราบว่าคุณจำเป็นต้องชำระเงินก่อนวันที่ {expire_date}\n"
+"\n"
+"คุณสามารถดูข้อมูลการชำระเงินและสถานะคำสั่งซื้อของคุณได้ที่\n"
+"{url}\n"
+"\n"
+"ด้วยความเคารพ\n"
+"ทีมงาน {event} ของคุณ"
 
 #: pretix/base/settings.py:2639
 #, python-brace-format
 msgid "Incomplete payment received: {code}"
-msgstr ""
+msgstr "ได้รับชำระเงินไม่ครบจำนวน: {code}"
 
 #: pretix/base/settings.py:2643
 #, python-brace-format
@@ -11509,50 +11677,52 @@ msgstr ""
 #: pretix/base/settings.py:3031 pretix/base/settings.py:3039
 #: pretix/base/settings.py:3053 pretix/base/settings.py:3060
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
-msgstr ""
+msgstr "โปรดระบุรหัสสีฐานสิบหก (Hexadecimal) เช่น #990000"
 
 #: pretix/base/settings.py:2992
 msgid "Primary color"
-msgstr ""
+msgstr "สีหลัก"
 
 #: pretix/base/settings.py:3013
 msgid "Accent color for success"
-msgstr ""
+msgstr "สีเน้นสำหรับสถานะสำเร็จ"
 
 #: pretix/base/settings.py:3014
 msgid "We strongly suggest to use a shade of green."
-msgstr ""
+msgstr "เราขอแนะนำเป็นอย่างยิ่งให้ใช้โทนสีเขียว"
 
 #: pretix/base/settings.py:3035
 msgid "Accent color for errors"
-msgstr ""
+msgstr "สีเน้นสำหรับข้อผิดพลาด"
 
 #: pretix/base/settings.py:3036
 msgid "We strongly suggest to use a shade of red."
-msgstr ""
+msgstr "เราขอแนะนำเป็นอย่างยิ่งให้ใช้โทนสีแดง"
 
 #: pretix/base/settings.py:3057
 msgid "Page background color"
-msgstr ""
+msgstr "สีพื้นหลังของหน้า"
 
 #: pretix/base/settings.py:3072
 msgid "Use round edges"
-msgstr ""
+msgstr "ใช้ขอบมน"
 
 #: pretix/base/settings.py:3081
 msgid ""
 "Use native spinners in the widget instead of custom ones for numeric inputs "
 "such as quantity."
 msgstr ""
+"ใช้ตัวเลือกตัวเลข (Spinners) พื้นฐานของระบบในวิดเจ็ต แทนแบบกำหนดเองสำหรับช่องกรอกตัวเลข "
+"เช่น จำนวน"
 
 #: pretix/base/settings.py:3092
 msgid "Only respected by modern browsers."
-msgstr ""
+msgstr "รองรับเฉพาะเบราว์เซอร์ที่ทันสมัยเท่านั้น"
 
 #: pretix/base/settings.py:3103 pretix/base/settings.py:3147
 #: pretix/control/forms/organizer.py:524
 msgid "Header image"
-msgstr ""
+msgstr "รูปภาพส่วนหัว"
 
 #: pretix/base/settings.py:3106
 msgid ""
@@ -11562,18 +11732,22 @@ msgid ""
 "pixels. You can increase the size with the setting below. We recommend not "
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
+"หากคุณระบุรูปภาพโลโก้ โดยค่าเริ่มต้นเราจะไม่แสดงชื่อและวันที่ของกิจกรรมในส่วนหัวของหน้า หากคุณใช้"
+"พื้นหลังสีขาว เราจะแสดงโลโก้ของคุณด้วยขนาดสูงสุด 1140x120 พิกเซล มิฉะนั้นขนาดสูงสุดจะเป็น "
+"1120x120 พิกเซล คุณสามารถเพิ่มขนาดได้ด้วยการตั้งค่าด้านล่าง เราขอแนะนำว่าไม่ควรใช้รูปภาพที่มีรา"
+"ยละเอียดเล็กเกินไป เนื่องจากรูปภาพจะถูกปรับขนาดตามหน้าจอที่มีขนาดเล็กลง"
 
 #: pretix/base/settings.py:3127 pretix/base/settings.py:3170
 msgid "Use header image in its full size"
-msgstr ""
+msgstr "ใช้รูปภาพส่วนหัวในขนาดเต็ม"
 
 #: pretix/base/settings.py:3128 pretix/base/settings.py:3171
 msgid "We recommend to upload a picture at least 1170 pixels wide."
-msgstr ""
+msgstr "เราขอแนะนำให้อัปโหลดรูปภาพที่มีความกว้างอย่างน้อย 1170 พิกเซล"
 
 #: pretix/base/settings.py:3137
 msgid "Show event title even if a header image is present"
-msgstr ""
+msgstr "แสดงชื่อกิจกรรมแม้ว่าจะมีรูปภาพส่วนหัวอยู่ด้วย"
 
 #: pretix/base/settings.py:3138
 msgid ""
@@ -11581,6 +11755,8 @@ msgid ""
 "uploaded for the event, but the header image from the organizer profile is "
 "used, this option will be ignored and the event title will always be shown."
 msgstr ""
+"ชื่อกิจกรรมจะแสดงบนหน้าหลักของกิจกรรมเท่านั้น หากไม่ได้อัปโหลดรูปภาพส่วนหัวสำหรับกิจกรรมนั้นๆ แต่"
+"มีการใช้รูปภาพส่วนหัวจากโปรไฟล์ผู้จัดงาน ตัวเลือกนี้จะถูกข้ามไปและชื่อกิจกรรมจะถูกแสดงเสมอ"
 
 #: pretix/base/settings.py:3150 pretix/control/forms/organizer.py:528
 msgid ""
@@ -11590,24 +11766,30 @@ msgid ""
 "pixels. You can increase the size with the setting below. We recommend not "
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
+"หากคุณระบุรูปภาพโลโก้ โดยค่าเริ่มต้นเราจะไม่แสดงชื่อองค์กรของคุณในส่วนหัวของหน้า หากคุณใช้พื้นหลัง"
+"สีขาว เราจะแสดงโลโก้ของคุณด้วยขนาดสูงสุด 1140x120 พิกเซล มิฉะนั้นขนาดสูงสุดจะเป็น "
+"1120x120 พิกเซล คุณสามารถเพิ่มขนาดได้ด้วยการตั้งค่าด้านล่าง เราขอแนะนำว่าไม่ควรใช้รูปภาพที่มีรา"
+"ยละเอียดเล็กเกินไป เนื่องจากรูปภาพจะถูกปรับขนาดตามหน้าจอที่มีขนาดเล็กลง"
 
 #: pretix/base/settings.py:3180
 msgid "Use header image also for events without an individually uploaded logo"
-msgstr ""
+msgstr "ใช้รูปภาพส่วนหัวสำหรับกิจกรรมที่ไม่ได้อัปโหลดโลโก้แยกไว้ด้วย"
 
 #: pretix/base/settings.py:3188
 msgid "Favicon"
-msgstr ""
+msgstr "ฟาวิคอน (Favicon)"
 
 #: pretix/base/settings.py:3191
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
 "icon. We recommend a size of at least 200x200px to accommodate most devices."
 msgstr ""
+"หากคุณระบุฟาวิคอน เราจะแสดงผลรูปนั้นแทนไอคอนมาตรฐานของ pretix เราขอแนะนำให้ใช้ขนาดอย่า"
+"งน้อย 200x200 พิกเซล เพื่อให้รองรับกับอุปกรณ์ส่วนใหญ่"
 
 #: pretix/base/settings.py:3207
 msgid "Social media image"
-msgstr ""
+msgstr "รูปภาพสำหรับโซเชียลมีเดีย"
 
 #: pretix/base/settings.py:3210
 msgid ""
@@ -11617,28 +11799,34 @@ msgid ""
 "preview, so we recommend to make sure it still looks good if only the center "
 "square is shown. If you do not fill this, we will use the logo given above."
 msgstr ""
+"รูปภาพนี้จะถูกใช้เป็นภาพตัวอย่างเมื่อคุณโพสต์ลิงก์ร้านจำหน่ายตั๋วของคุณบนโซเชียลมีเดีย ทาง "
+"Facebook แนะนำให้ใช้ขนาดรูปภาพ 1200 x 630 พิกเซล อย่างไรก็ตาม บางแพลตฟอร์มเช่น "
+"WhatsApp และ Reddit จะแสดงตัวอย่างเป็นรูปทรงจัตุรัสเท่านั้น ดังนั้นเราขอแนะนำให้ตรวจสอบว่ารูป"
+"ภาพยังดูดีแม้จะแสดงผลเฉพาะพื้นที่ตรงกลาง หากคุณไม่ได้กรอกส่วนนี้ เราจะใช้โลโก้ที่ระบุไว้ด้านบนแทน"
 
 #: pretix/base/settings.py:3228
 msgid "Logo image"
-msgstr ""
+msgstr "รูปภาพโลโก้"
 
 #: pretix/base/settings.py:3232
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
-msgstr ""
+msgstr "เราจะแสดงโลโก้ของคุณโดยมีความกว้างและความสูงสูงสุดไม่เกิน 2.5 ซม."
 
 #: pretix/base/settings.py:3258 pretix/base/settings.py:3364
 msgid "Info text"
-msgstr ""
+msgstr "ข้อความข้อมูล"
 
 #: pretix/base/settings.py:3261 pretix/base/settings.py:3366
 msgid ""
 "Not displayed anywhere by default, but if you want to, you can use this e.g. "
 "in ticket templates."
 msgstr ""
+"ตามปกติแล้วข้อความนี้จะไม่แสดงที่ใด แต่หากต้องการ คุณสามารถนำไปใช้ได้ เช่น ในเทมเพลตตั๋ว เป็นต้"
+"น"
 
 #: pretix/base/settings.py:3270
 msgid "Banner text (top)"
-msgstr ""
+msgstr "ข้อความแบนเนอร์ (ด้านบน)"
 
 #: pretix/base/settings.py:3273
 msgid ""
