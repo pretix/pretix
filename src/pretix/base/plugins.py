@@ -65,7 +65,7 @@ def get_all_plugins(*, event=None, organizer=None) -> List[type]:
             if app.name in settings.PRETIX_PLUGINS_EXCLUDE:
                 continue
 
-            level = getattr(app, "level", PLUGIN_LEVEL_EVENT)
+            level = getattr(meta, "level", PLUGIN_LEVEL_EVENT)
             if level == PLUGIN_LEVEL_EVENT:
                 if event and hasattr(app, 'is_available'):
                     if not app.is_available(event):
