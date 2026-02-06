@@ -130,6 +130,8 @@ class LoggingMixin:
             organizer_id = self.event.organizer_id
         elif hasattr(self, 'organizer_id'):
             organizer_id = self.organizer_id
+        elif hasattr(self, 'issuer_id'):
+            organizer_id = self.issuer_id
 
         if user and not user.is_authenticated:
             user = None

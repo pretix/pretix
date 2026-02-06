@@ -801,6 +801,8 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.giftcards.created': _('The gift card has been created.'),
     'pretix.giftcards.modified': _('The gift card has been changed.'),
     'pretix.giftcards.transaction.manual': _('A manual transaction has been performed.'),
+    'pretix.giftcards.transaction.payment': _('A payment has been performed.'),
+    'pretix.giftcards.transaction.refund': _('A refund has been performed. '),
     'pretix.team.token.created': _('The token "{name}" has been created.'),
     'pretix.team.token.deleted': _('The token "{name}" has been revoked.'),
     'pretix.event.checkin.reset': _('The check-in and print log state has been reset.')
