@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-02-04 07:00+0000\n"
+"PO-Revision-Date: 2026-02-06 07:41+0000\n"
 "Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
@@ -321,7 +321,7 @@ msgstr "注文がキャンセルされました"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Ticket code is ambiguous on list"
-msgstr "リストのチケットコードは曖昧です"
+msgstr "リスト上でチケットコードが一意に特定できません"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Order not approved"
@@ -370,8 +370,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:17
 msgid "Your request has been queued on the server and will soon be processed."
-msgstr ""
-"サーバへ送信されたリクエスト順にお応えしています。今しばらくお待ちください。"
+msgstr "お客様のリクエストはサーバーで受け付けられました。まもなく処理されます。"
 
 #: pretix/static/pretixbase/js/asynctask.js:21
 msgid ""
@@ -919,7 +918,7 @@ msgstr "提供開始前"
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr "今後の提供不可"
+msgstr "提供終了"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
@@ -973,7 +972,7 @@ msgid ""
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
 "現在チケットショップが混雑しているため、お客様のカートを作ることができません"
-"でした。「続ける」をクリックして、新しいタブで再試行してください。"
+"でした。\"続ける\"をクリックして、新しいタブで再試行してください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgctxt "widget"
