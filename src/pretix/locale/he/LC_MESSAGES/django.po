@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: HE PRETIX\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2025-05-21 10:46+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: Hebrew <https://translate.pretix.eu/projects/pretix/pretix/he/"
-">\n"
+"PO-Revision-Date: 2026-02-08 16:30+0000\n"
+"Last-Translator: roi belotsercovsky <rbelotsercovsky@gmail.com>\n"
+"Language-Team: Hebrew <https://translate.pretix.eu/projects/pretix/pretix/"
+"he/>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.11.4\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -84,7 +84,7 @@ msgstr "יוונית"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "עברית"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -140,7 +140,7 @@ msgstr "ספרדית"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "ספרדית (אמריקה הלטינית)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -285,28 +285,20 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "הפריט המצורף לא יכול להחזיק חבילות בעצמו."
 
 #: pretix/api/serializers/item.py:235
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "התשלום התקבל מאוחר מדי."
+msgstr "תחילת התוכנית לא יכולה להיות ריקה."
 
 #: pretix/api/serializers/item.py:239
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "התשלום התקבל מאוחר מדי."
+msgstr "סוף התוכנית לא יכול להיות ריק."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2322
-#, fuzzy
-#| msgid "The maximum date must not be before the minimum value."
 msgid "The program end must not be before the program start."
-msgstr "התאריך המרבי לא יכול להיות לפני הערך המינימלי."
+msgstr "סוף התוכנית לא יכול להיות לפני תחילת התוכנית."
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2316
-#, fuzzy
-#| msgid "You can not select a subevent if your event is not an event series."
 msgid "You cannot use program times on an event series."
-msgstr "לא ניתן לבחור תת-אירוע אם האירוע שלך אינו סדרת אירועים."
+msgstr "לא ניתן לבחור שעות תוכניות בסדרת אירועים."
 
 #: pretix/api/serializers/item.py:337
 #, fuzzy
@@ -569,22 +561,15 @@ msgid "Event series date deleted"
 msgstr "תאריך סדרת אירועים נמחק"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "שם המוצר"
+msgstr "המוצר השתנה"
 
 #: pretix/api/webhooks.py:376
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
-"המוצר שונה (כולל הוספה או מחיקה של מוצר ושינויים לאובייקטים מקוננים כמו "
-"וריאציות או חבילות)"
+"זה כולל מוצר שהוסף או נמחק ושונה ל‌אובייקטים מקוננים כמו וריאציות או באנדלים"
 
 #: pretix/api/webhooks.py:381
 msgid "Shop taken live"
@@ -619,28 +604,22 @@ msgid "Waiting list entry received voucher"
 msgstr "רשומת רשימת המתנה קיבלה שובר"
 
 #: pretix/api/webhooks.py:413
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "קוד שובר"
+msgstr "קוד שובר הוסף"
 
 #: pretix/api/webhooks.py:417
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "שובר הוקצה"
+msgstr "שובר שונה"
 
 #: pretix/api/webhooks.py:418
 msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
-msgstr ""
+msgstr "כולל רק שינויים מפורשים לשובר, לא למשל העלאת מספר המימושים."
 
 #: pretix/api/webhooks.py:422
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "שובר מומש"
+msgstr "שובר נמחק"
 
 #: pretix/api/webhooks.py:426
 msgid "Customer account created"
@@ -811,7 +790,7 @@ msgstr ""
 msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
-msgstr ""
+msgstr "שדה \"{field_name}\" לא קיים. נא לבדוק את הגדרות  {provider_name}."
 
 #: pretix/base/datasync/datasync.py:271
 #, python-brace-format
@@ -819,13 +798,15 @@ msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
+"שדה  \"{field_name}\" דורש {required_input}, אבל קיבל רק  {available_inputs}"
+". נא לבדוק הגדרות {provider_name}."
 
 #: pretix/base/datasync/datasync.py:282
 #, python-brace-format
 msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
-msgstr ""
+msgstr "נא לעדכן מיפוי ערכים לשדה \"{field_name}\" - אפשרות \"{val}\" לא מוקצה"
 
 #: pretix/base/datasync/sourcefields.py:128
 #, fuzzy
@@ -834,10 +815,8 @@ msgid "Order position details"
 msgstr "פריטי הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:129
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "דוא\"ל משתתף"
+msgstr "פרטי משתתף"
 
 #: pretix/base/datasync/sourcefields.py:130 pretix/base/exporters/answers.py:66
 #: pretix/base/models/items.py:1767 pretix/control/navigation.py:172
@@ -847,10 +826,8 @@ msgid "Questions"
 msgstr "שאלות"
 
 #: pretix/base/datasync/sourcefields.py:131
-#, fuzzy
-#| msgid "Product data"
 msgid "Product details"
-msgstr "נתוני מוצר"
+msgstr "פרטי מוצר"
 
 #: pretix/base/datasync/sourcefields.py:132
 #: pretix/control/templates/pretixcontrol/event/settings.html:279
@@ -875,17 +852,13 @@ msgid "Invoice address"
 msgstr "כתובת לחשבונית"
 
 #: pretix/base/datasync/sourcefields.py:134
-#, fuzzy
-#| msgid "Meta information"
 msgid "Event information"
-msgstr "מידע מטא"
+msgstr "מידע על האירוע"
 
 #: pretix/base/datasync/sourcefields.py:135
-#, fuzzy
-#| msgid "Send recovery information"
 msgctxt "subevent"
 msgid "Event or date information"
-msgstr "שלח פרטי שחזור"
+msgstr "מידע על האירוע או התאריך"
 
 #: pretix/base/datasync/sourcefields.py:175
 #: pretix/base/exporters/orderlist.py:638
@@ -910,10 +883,8 @@ msgstr "שם משתתף"
 #: pretix/base/datasync/sourcefields.py:187
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:628
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee"
-msgstr "שם משתתף"
+msgstr "משתתף"
 
 #: pretix/base/datasync/sourcefields.py:207
 #: pretix/base/exporters/orderlist.py:645 pretix/base/forms/questions.py:693
@@ -927,10 +898,8 @@ msgid "Attendee email"
 msgstr "דוא\"ל משתתף"
 
 #: pretix/base/datasync/sourcefields.py:219
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee or order email"
-msgstr "דוא\"ל משתתף"
+msgstr "דוא\"ל משתתף או הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:232
 #: pretix/base/exporters/orderlist.py:646 pretix/base/pdf.py:188
@@ -943,10 +912,8 @@ msgid "Attendee company"
 msgstr "חברת המשתתף"
 
 #: pretix/base/datasync/sourcefields.py:241
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address street"
-msgstr "כתובת המשתתף"
+msgstr "רחוב המשתתף"
 
 #: pretix/base/datasync/sourcefields.py:250
 #, fuzzy
@@ -955,16 +922,12 @@ msgid "Attendee address ZIP code"
 msgstr "מיקוד המשתתף"
 
 #: pretix/base/datasync/sourcefields.py:259
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address city"
-msgstr "כתובת המשתתף"
+msgstr "עיר המשתתף"
 
 #: pretix/base/datasync/sourcefields.py:268
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address country"
-msgstr "כתובת המשתתף"
+msgstr "מדינת המשתתף"
 
 #: pretix/base/datasync/sourcefields.py:279
 #: pretix/base/exporters/orderlist.py:687 pretix/base/pdf.py:346
@@ -1000,16 +963,12 @@ msgid "Invoice address country"
 msgstr "מדינת כתובת לחשבונית"
 
 #: pretix/base/datasync/sourcefields.py:353
-#, fuzzy
-#| msgid "Order details"
 msgid "Order email"
-msgstr "פרטי הזמנה"
+msgstr "דוא\"ל הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:362
-#, fuzzy
-#| msgid "Organizer domain"
 msgid "Order email domain"
-msgstr "דומיין מארגן"
+msgstr "דומיין מייל הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:371
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:332
@@ -1041,10 +1000,8 @@ msgid "Order code"
 msgstr "קוד הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:380
-#, fuzzy
-#| msgid "End order date"
 msgid "Event and order code"
-msgstr "תאריך סיום הזמנה"
+msgstr "אירוע וקוד הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:389
 #: pretix/base/exporters/orderlist.py:283 pretix/base/notifications.py:201
@@ -1069,16 +1026,12 @@ msgid "Product ID"
 msgstr "מזהה מוצר"
 
 #: pretix/base/datasync/sourcefields.py:419
-#, fuzzy
-#| msgid "Non-admission product"
 msgid "Product is admission product"
-msgstr "מוצר שאינו עבור כניסה"
+msgstr "מוצר שהינו כרטיס כניסה"
 
 #: pretix/base/datasync/sourcefields.py:428
-#, fuzzy
-#| msgid "Event short name"
 msgid "Event short form"
-msgstr "שם האירוע המקוצר"
+msgstr "טופס האירוע המקוצר"
 
 #: pretix/base/datasync/sourcefields.py:437 pretix/base/exporters/events.py:57
 #: pretix/base/exporters/orderlist.py:283
@@ -1121,10 +1074,8 @@ msgid "Order code and position number"
 msgstr "קוד הזמנה ומספר פריט"
 
 #: pretix/base/datasync/sourcefields.py:482
-#, fuzzy
-#| msgid "Ticket page"
 msgid "Ticket price"
-msgstr "דף כרטיס"
+msgstr "מחיר כרטיס"
 
 #: pretix/base/datasync/sourcefields.py:491 pretix/base/notifications.py:204
 #: pretix/control/forms/filter.py:220 pretix/control/forms/filter.py:1242
@@ -1133,22 +1084,16 @@ msgid "Order status"
 msgstr "סטטוס הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:500
-#, fuzzy
-#| msgid "Device status"
 msgid "Ticket status"
-msgstr "סטטוס מכשיר"
+msgstr "סטטוס כרטיס"
 
 #: pretix/base/datasync/sourcefields.py:509
-#, fuzzy
-#| msgid "Purchase date and time"
 msgid "Order date and time"
-msgstr "תאריך ושעת הקנייה"
+msgstr "תאריך ושעת ההזמנה"
 
 #: pretix/base/datasync/sourcefields.py:518
-#, fuzzy
-#| msgid "Printing date and time"
 msgid "Payment date and time"
-msgstr "תאריך ושעת ההדפסה"
+msgstr "תאריך ושעת התשלום"
 
 #: pretix/base/datasync/sourcefields.py:527
 #: pretix/base/exporters/orderlist.py:292
@@ -1159,35 +1104,27 @@ msgid "Order locale"
 msgstr "שפת הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:536
-#, fuzzy
-#| msgid "Order position"
 msgid "Order position ID"
-msgstr "עמדת הזמנה"
+msgstr "מספר עמדת הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:545
 #: pretix/base/exporters/orderlist.py:312
-#, fuzzy
-#| msgid "Order time"
 msgid "Order link"
-msgstr "שעת הזמנה"
+msgstr "קישור הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:560
-#, fuzzy
-#| msgid "Ticket block"
 msgid "Ticket link"
-msgstr "חסימת כרטיס"
+msgstr "קישור כרטיס"
 
 #: pretix/base/datasync/sourcefields.py:578
-#, fuzzy, python-brace-format
-#| msgid "Check-in list {val}"
+#, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "רשימת הצ'ק-אין {val}"
+msgstr "צ'ק-אין בתאריך-זמן ברשימה {}"
 
 #: pretix/base/datasync/sourcefields.py:590
-#, fuzzy, python-brace-format
-#| msgid "Question: %(name)s"
+#, python-brace-format
 msgid "Question: {name}"
-msgstr "שאלה: %(name)s"
+msgstr "שאלה: {name}"
 
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:614 pretix/base/settings.py:3691
@@ -2328,6 +2265,8 @@ msgid ""
 "contain at least one position of this product. The order totals etc. still "
 "include all products contained in the order."
 msgstr ""
+"אם אף אחד מהם לא נבחר, כל המוצרים כלולים. הפקודות נכללות אם הן כוללות לפחות "
+"עמדה אחת של המוצר. סך ההזמנות וכו'. עדיין כולל את כל המוצרים הכלולים בהזמנה."
 
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:478
@@ -2591,10 +2530,8 @@ msgid "Voucher"
 msgstr "שובר"
 
 #: pretix/base/exporters/orderlist.py:653
-#, fuzzy
-#| msgid "Voucher code used:"
 msgid "Voucher budget usage"
-msgstr "השתמש בקוד שובר:"
+msgstr "שימוש בתקציב השוברים"
 
 #: pretix/base/exporters/orderlist.py:654
 msgid "Pseudonymization ID"
@@ -2686,10 +2623,8 @@ msgid "Check-in lists"
 msgstr "רשימות צ'ק-אין"
 
 #: pretix/base/exporters/orderlist.py:706
-#, fuzzy
-#| msgid "Resend order link"
 msgid "Position order link"
-msgstr "שלח את קישור ההזמנה שוב"
+msgstr "עמדת קישור הזמנה"
 
 #: pretix/base/exporters/orderlist.py:876
 msgid "Order transaction data"
@@ -3326,10 +3261,8 @@ msgid "Repeat password"
 msgstr "חזור על הסיסמה"
 
 #: pretix/base/forms/auth.py:220 pretix/base/forms/user.py:99
-#, fuzzy
-#| msgid "Email address"
 msgid "Your email address"
-msgstr "כתובת דוא\"ל"
+msgstr "כתובת הדוא\"ל שלך"
 
 #: pretix/base/forms/auth.py:327 pretix/control/forms/orders.py:1041
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
@@ -3410,14 +3343,12 @@ msgstr ""
 "למדינתך ומדינת המוכר."
 
 #: pretix/base/forms/questions.py:1185
-#, fuzzy
-#| msgid "Cancellation requested"
 msgid "No invoice requested"
-msgstr "בקשת ביטול"
+msgstr "לא התבקשה חשבונית"
 
 #: pretix/base/forms/questions.py:1187
 msgid "Invoice transmission method"
-msgstr ""
+msgstr "שיטת שידור חשבונית"
 
 #: pretix/base/forms/questions.py:1333
 msgid "You need to provide a company name."
@@ -3431,25 +3362,24 @@ msgstr "עליך לספק את שמך."
 msgid ""
 "If you enter an invoice address, you also need to select an invoice "
 "transmission method."
-msgstr ""
+msgstr "אם אתה מזין כתובת לחשבונית, עליך גם לבחור שיטת שידור חשבונית."
 
 #: pretix/base/forms/questions.py:1403
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid ""
 "The selected transmission type is not available in your country or for your "
 "type of address."
-msgstr "סוג המדיה שנבחר אינו מופעל בהגדרות הארגון שלכם."
+msgstr "סוג השידור שנבחר אינו זמין במדינתך או בסוג הכתובת שבחרת."
 
 #: pretix/base/forms/questions.py:1412
 msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
 msgstr ""
+"סוג שידור החשבונית שנבחר דורש שדה שאינו זמין כרגע, נא ליצור קשר עם המארגן."
 
 #: pretix/base/forms/questions.py:1416
 msgid "This field is required for the selected type of invoice transmission."
-msgstr ""
+msgstr "שדה זה הינו חובה לסוג שידור החשבונית שנבחר."
 
 #: pretix/base/forms/user.py:54 pretix/control/forms/organizer.py:458
 #: pretix/control/forms/users.py:58
@@ -3465,10 +3395,8 @@ msgstr ""
 "באזור הזמן של האירוע עצמו."
 
 #: pretix/base/forms/user.py:77
-#, fuzzy
-#| msgid "Attendee email address"
 msgid "Change email address"
-msgstr "כתובת דוא\"ל של המשתתף"
+msgstr "שינוי כתובת דוא\"ל"
 
 #: pretix/base/forms/user.py:83
 msgid "Device name"
@@ -3516,16 +3444,12 @@ msgid ""
 msgstr "כבר קיים חשבון הקשור לכתובת האימייל הזו. אנא בחר כתובת אחרת."
 
 #: pretix/base/forms/user.py:179
-#, fuzzy
-#| msgid "Email address"
 msgid "Old email address"
-msgstr "כתובת דוא\"ל"
+msgstr "כתובת דוא\"ל ישנה"
 
 #: pretix/base/forms/user.py:180
-#, fuzzy
-#| msgid "Email address"
 msgid "New email address"
-msgstr "כתובת דוא\"ל"
+msgstr "כתובת דוא\"ל חדשה"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -3569,60 +3493,47 @@ msgid "Individual customer"
 msgstr "לקוח פרטי"
 
 #: pretix/base/invoicing/email.py:50
-#, fuzzy
-#| msgid ""
-#| "Please additionally send my invoice directly to our accounting department"
 msgid "Email invoice directly to accounting department"
-msgstr "אנא שלח בנוסף את החשבונית ישירות למחלקת הנהלת החשבונות שלנו"
+msgstr "שלח חשבונית בדוא\"ל ישירות למחלקת הנהלת חשבונות."
 
 #: pretix/base/invoicing/email.py:51
-#, fuzzy
-#| msgid "The invoice was sent to the designated email address."
 msgid ""
 "If not selected, the invoice will be sent to you using the email address "
 "listed above."
-msgstr "החשבונית נשלחה לכתובת הדוא\"ל שהוגדרה."
+msgstr "אם לא ייבחר, בחשבונית תישלח לכתובת הדוא\"ל המצויינת מעלה."
 
 #: pretix/base/invoicing/email.py:55
-#, fuzzy
-#| msgid "Email address verified"
 msgid "Email address for invoice"
-msgstr "כתובת דוא\"ל מאומתת"
+msgstr "כתובת דוא\"ל לחשבונית"
 
 #: pretix/base/invoicing/email.py:91
-#, fuzzy
-#| msgid "Preview email"
 msgid "PDF via email"
-msgstr "הצג תצוגה מקדימה של המייל"
+msgstr "PDF באמצעות דוא\"ל"
 
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr ""
+msgstr "מערכת ההחלפה האיטלקית (SdI)"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
 msgid "Exchange System (SdI)"
-msgstr ""
+msgstr "מערכת ההחלפה (SdI)"
 
 #: pretix/base/invoicing/national.py:51
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "italian_invoice"
 msgid "Fiscal code"
-msgstr "קוד כרטיס מתנה"
+msgstr "קוד פיסקלי"
 
 #: pretix/base/invoicing/national.py:55
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
-msgstr ""
+msgstr "כתובת לדואר אלקטרוני מאושר."
 
 #: pretix/base/invoicing/national.py:59
-#, fuzzy
-#| msgid "Recipient"
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr "נמען"
+msgstr "קוד נמען"
 
 #: pretix/base/invoicing/national.py:83
 msgctxt "italian_invoice"
@@ -3632,6 +3543,9 @@ msgid ""
 "in accordance with the procedures and terms set forth in No. 89757/2018 of "
 "April 30, 2018, issued by the Director of the Revenue Agency."
 msgstr ""
+"קובץ PDF זה הוא העתק ויזואלי של החשבונית ואינו מהווה חשבונית לצרכי מע\"מ. "
+"החשבונית מונפקת בפורמט XML, ומשודרת בהתאם לנהלים ולתנאים המפורטים בתקנה "
+"89757/2018 מה30 באפריל, 2016 שפורסמה על ידי מנהל סוכנות ההכנסות."
 
 #: pretix/base/invoicing/pdf.py:142
 #, python-format
@@ -3812,12 +3726,10 @@ msgid "Remaining amount"
 msgstr "הסכום שנותר"
 
 #: pretix/base/invoicing/pdf.py:1008
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Event date: {date_range}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "תאריך אירוע: {date_range}"
+msgstr "תקופת החשבונית: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:1039
 msgctxt "invoice"
@@ -3880,7 +3792,7 @@ msgstr "תאריך אירוע: {date_range}"
 #: pretix/base/invoicing/peppol.py:136
 msgid ""
 "A Peppol participant ID always starts with a prefix, followed by a colon (:)."
-msgstr ""
+msgstr "מזהה משתתף של פפול תמיד מתחיל בתחילית ואחריה נקודתיים(:)."
 
 #: pretix/base/invoicing/peppol.py:140
 #, python-format
@@ -3888,6 +3800,8 @@ msgid ""
 "The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"תחילית מזהה המשתתף של פפול  %(number)s אינה מוכרת למערכת. צור עימנו קשר אם "
+"אתה בטוח שזהו המזהה הנכון."
 
 #: pretix/base/invoicing/peppol.py:144
 #, python-format
@@ -3895,21 +3809,21 @@ msgid ""
 "The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"מזהה המשתתף של פפול אינו תואם לחוקי הולידציה של התחילית %(number)s. צור "
+"עימנו קשר אם אתה בטוח שהמזהה נכון."
 
 #: pretix/base/invoicing/peppol.py:166
 msgid "The Peppol participant ID is not registered on the Peppol network."
-msgstr ""
+msgstr "מזהה המשתתף של פפול אינו רשום ברשת פפול."
 
 #: pretix/base/invoicing/peppol.py:192
 msgid "Peppol participant ID"
-msgstr ""
+msgstr "מזהה משתתף פפול"
 
 #: pretix/base/invoicing/peppol.py:208
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "peppol_invoice"
 msgid "Visual copy"
-msgstr "קוד כרטיס מתנה"
+msgstr "עותק ויזואלי"
 
 #: pretix/base/invoicing/peppol.py:213
 msgctxt "peppol_invoice"
@@ -3918,6 +3832,8 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
+"קובץ PDF זה הינו העתק ויזואלי של החשבונית ואינו מהווה חשבונית לצרכי מע\"מ. "
+"החשבונית המקורית מופקת בפורמט XML ומשודרת דרך רשת פפול."
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
@@ -4030,7 +3946,7 @@ msgstr "נמצאו מספר תאריכים תואמים."
 
 #: pretix/base/modelimport_orders.py:73
 msgid "Grouping"
-msgstr ""
+msgstr "קיבוץ"
 
 #: pretix/base/modelimport_orders.py:75
 msgid ""
@@ -4038,6 +3954,8 @@ msgid ""
 "together...\". Lines with the same grouping value will be put in the same "
 "order, but MUST be consecutive lines of the input file."
 msgstr ""
+"ישים רק כש\"מצב יבוא\" מוגדר ל\"קיבוץ מספר שורות יחד...\". שורות עם אותו ערך "
+"קיבוץ יוצבו באותו סדר, אך חייבים להיות שורות רציפות של קובץ הקלט."
 
 #: pretix/base/modelimport_orders.py:101
 msgid "Enter a valid phone number."
