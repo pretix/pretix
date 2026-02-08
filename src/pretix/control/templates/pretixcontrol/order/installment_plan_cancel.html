@@ -1,0 +1,43 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% trans "Cancel installment plan" %}
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Cancel installment plan" %}
+    </h1>
+    <p>{% blocktrans trimmed %}
+        Do you really want to cancel this installment plan? This will revoke the payment token and cancel all pending installments.
+    {% endblocktrans %}</p>
+
+    <form method="post" href="">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="cancel_order">
+                    {% trans "Also cancel the order" %}
+                </label>
+                <p class="help-block">
+                    {% trans "If checked, the order will also be canceled." %}
+                </p>
+            </div>
+        </div>
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                    {% trans "No, take me back" %}
+                </a>
+            </div>
+            <div class="col-md-6 col-md-offset-2">
+                <button class="btn btn-block btn-danger btn-lg" type="submit">
+                    {% trans "Yes, cancel installment plan" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}
