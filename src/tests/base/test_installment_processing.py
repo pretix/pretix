@@ -36,6 +36,7 @@ from pretix.base.services.installments import (
     process_due_installments, process_expired_plans,
     send_grace_period_warnings, send_installment_reminders,
 )
+from pretix.base.services.orders import cancel_order
 
 
 @pytest.fixture
@@ -210,6 +211,49 @@ class TestProcessExpiredPlans:
 
         assert len(mail.outbox) == 1
         assert order.code in mail.outbox[0].subject
+
+
+@pytest.mark.django_db
+class TestOrderCancellation:
+
+    def test_cancels_plan_and_installments(self, event, order, plan):
+        for num in [2, 3]:
+            ScheduledInstallment.objects.create(
+                plan=plan, installment_number=num, amount=Decimal('100.00'),
+                due_date=now() + timedelta(days=30 * num),
+                state=ScheduledInstallment.STATE_PENDING,
+            )
+        provider = _mock_provider()
+
+        with _patch_providers(provider):
+            with scope(organizer=event.organizer):
+                cancel_order(order)
+
+        plan.refresh_from_db()
+        assert plan.status == InstallmentPlan.STATUS_CANCELLED
+        assert plan.installments.filter(state=ScheduledInstallment.STATE_PENDING).count() == 0
+        assert plan.installments.filter(state=ScheduledInstallment.STATE_CANCELLED).count() == 2
+        provider.revoke_payment_token.assert_called_with(plan)
+
+    def test_paid_order_cancellation(self, event, order, plan):
+        for num in [2, 3]:
+            ScheduledInstallment.objects.create(
+                plan=plan, installment_number=num, amount=Decimal('100.00'),
+                due_date=now() + timedelta(days=30 * num),
+                state=ScheduledInstallment.STATE_PENDING,
+            )
+        order.status = Order.STATUS_PAID
+        order.save()
+        provider = _mock_provider()
+
+        with _patch_providers(provider):
+            with scope(organizer=event.organizer):
+                cancel_order(order)
+
+        plan.refresh_from_db()
+        assert plan.status == InstallmentPlan.STATUS_CANCELLED
+        assert plan.installments.filter(state=ScheduledInstallment.STATE_CANCELLED).count() == 2
+        provider.revoke_payment_token.assert_called_with(plan)
 
 
 @pytest.mark.django_db

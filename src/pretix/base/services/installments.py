@@ -35,7 +35,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     InstallmentPlan, Order, OrderFee, OrderPayment, ScheduledInstallment,
 )
-from pretix.base.signals import periodic_task
+from pretix.base.signals import order_canceled, periodic_task
 from pretix.helpers.periodic import minimum_interval
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -403,6 +403,67 @@ def send_grace_period_warnings():
                     "Failed to send grace period warning for plan %s, order %s",
                     plan.pk, order.code,
                 )
+
+
+@transaction.atomic
+def cancel_installment_plan(plan: InstallmentPlan, cancel_order: bool = False, user=None, log: bool = True, send_mail: bool = True):
+    """
+    Cancels an installment plan.
+
+    :param plan: The InstallmentPlan to cancel
+    :param cancel_order: Whether to also cancel the order
+    :param user: The user performing the action (for logging)
+    :param log: Whether to log the cancellation action (default True)
+    :param send_mail: Whether to send order cancellation email (only used if cancel_order=True)
+    """
+    if plan.status == InstallmentPlan.STATUS_CANCELLED:
+        return
+
+    order = plan.order
+    event = order.event
+
+    provider = event.get_payment_providers().get(plan.payment_provider)
+    if provider:
+        try:
+            provider.revoke_payment_token(plan)
+        except Exception:
+            logger.warning(
+                "Failed to revoke payment token for cancelled plan %s", plan.pk,
+            )
+
+    plan.status = InstallmentPlan.STATUS_CANCELLED
+    plan.payment_token = {}
+    plan.save(update_fields=['status', 'payment_token'])
+
+    ScheduledInstallment.objects.filter(
+        plan=plan,
+        state__in=[ScheduledInstallment.STATE_PENDING, ScheduledInstallment.STATE_FAILED]
+    ).update(state=ScheduledInstallment.STATE_CANCELLED)
+
+    if log:
+        order.log_action(
+            'pretix.event.order.installment_plan.canceled',
+            data={'installment_plan_id': plan.pk},
+            user=user
+        )
+
+    if cancel_order:
+        from pretix.base.services.orders import (
+            cancel_order as cancel_order_service,
+        )
+        cancel_order_service(order.pk, user=user.pk if user else None, send_mail=send_mail)
+
+
+@receiver(signal=order_canceled)
+def handle_order_cancellation(sender, **kwargs):
+    order = kwargs.get('order')
+
+    try:
+        plan = order.installment_plan
+    except InstallmentPlan.DoesNotExist:
+        return
+
+    cancel_installment_plan(plan, cancel_order=False, user=None, log=False)
 
 
 @receiver(signal=periodic_task)
