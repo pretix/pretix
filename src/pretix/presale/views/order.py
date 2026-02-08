@@ -68,8 +68,8 @@ from pretix.base.models import (
     TaxRule,
 )
 from pretix.base.models.orders import (
-    CachedCombinedTicket, InvoiceAddress, OrderFee, OrderPayment, OrderRefund,
-    QuestionAnswer,
+    CachedCombinedTicket, InstallmentPlan, InvoiceAddress, OrderFee,
+    OrderPayment, OrderRefund, QuestionAnswer, ScheduledInstallment,
 )
 from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import PaymentException
@@ -368,6 +368,22 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             if r.provider == 'giftcard':
                 gc = GiftCard.objects.get(pk=r.info_data.get('gift_card'))
                 r.giftcard = gc
+
+        try:
+            installment_plan = self.order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            pass
+        else:
+            ctx['installment_plan'] = installment_plan
+            ctx['next_installment'] = installment_plan.installments.filter(
+                state=ScheduledInstallment.STATE_PENDING
+            ).order_by('due_date').first()
+            ctx['failed_installment'] = installment_plan.installments.filter(
+                state=ScheduledInstallment.STATE_FAILED
+            ).order_by('due_date').first()
+            ctx['installment_history'] = installment_plan.installments.filter(
+                state=ScheduledInstallment.STATE_PAID
+            ).order_by('installment_number')
 
         return ctx
 
