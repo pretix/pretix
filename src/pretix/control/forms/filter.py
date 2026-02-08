@@ -56,10 +56,10 @@ from pretix.base.forms.widgets import (
 )
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
-    Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
-    OrderRefund, Organizer, OutgoingMail, Question, QuestionAnswer, Quota,
-    SalesChannel, SubEvent, SubEventMetaValue, Team, TeamAPIToken, TeamInvite,
-    Voucher,
+    Gate, InstallmentPlan, Invoice, InvoiceAddress, Item, Order, OrderPayment,
+    OrderPosition, OrderRefund, Organizer, OutgoingMail, Question,
+    QuestionAnswer, Quota, SalesChannel, SubEvent, SubEventMetaValue, Team,
+    TeamAPIToken, TeamInvite, Voucher,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.base.timeframes import (
@@ -455,6 +455,17 @@ class EventOrderFilterForm(OrderFilterForm):
     answer = forms.CharField(
         required=False
     )
+    installment_status = forms.ChoiceField(
+        label=_('Installment plan status'),
+        choices=[
+            ('', _('All orders')),
+            ('none', _('Without installment plan')),
+            ('active', _('Active installment plan')),
+            ('completed', _('Completed installment plan')),
+            ('failed', _('Failed/Grace period')),
+        ],
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
@@ -545,6 +556,32 @@ class EventOrderFilterForm(OrderFilterForm):
                     answer__exact=fdata.get('answer')
                 )
                 qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
+
+        installment_status = fdata.get('installment_status')
+        if installment_status:
+            if installment_status == 'none':
+                qs = qs.exclude(Exists(InstallmentPlan.objects.filter(order=OuterRef('pk'))))
+            elif installment_status == 'active':
+                qs = qs.filter(Exists(InstallmentPlan.objects.filter(
+                    order=OuterRef('pk'),
+                    status=InstallmentPlan.STATUS_ACTIVE
+                )))
+            elif installment_status == 'completed':
+                qs = qs.filter(Exists(InstallmentPlan.objects.filter(
+                    order=OuterRef('pk'),
+                    status=InstallmentPlan.STATUS_COMPLETED
+                )))
+            elif installment_status == 'failed':
+                qs = qs.filter(
+                    Exists(InstallmentPlan.objects.filter(
+                        order=OuterRef('pk'),
+                        status__in=[InstallmentPlan.STATUS_FAILED, InstallmentPlan.STATUS_CANCELLED]
+                    )) | Exists(InstallmentPlan.objects.filter(
+                        order=OuterRef('pk'),
+                        status=InstallmentPlan.STATUS_ACTIVE,
+                        grace_period_end__isnull=False
+                    ))
+                )
 
         return qs
 

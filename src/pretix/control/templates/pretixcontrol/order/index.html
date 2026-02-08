@@ -1004,6 +1004,92 @@
                             </div>
                         </div>
                     {% endif %}
+                    {% if installment_plan %}
+                        <div class="panel panel-{% if installment_plan.grace_period_end %}danger{% elif installment_plan.status == 'completed' %}success{% else %}default{% endif %} items">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    {% trans "Installment Plan" %}
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <dl class="dl-horizontal">
+                                    <dt>{% trans "Status" %}</dt>
+                                    <dd>
+                                        <span class="label label-{% if installment_plan.status == 'active' %}info{% elif installment_plan.status == 'completed' %}success{% else %}danger{% endif %}">
+                                            {{ installment_plan.get_status_display }}
+                                        </span>
+                                        {% if installment_plan.grace_period_end %}
+                                            <span class="label label-danger">
+                                                {% trans "Grace period expires:" %} {{ installment_plan.grace_period_end|date:"SHORT_DATETIME_FORMAT" }}
+                                            </span>
+                                        {% endif %}
+                                    </dd>
+                                    <dt>{% trans "Total installments" %}</dt>
+                                    <dd>{{ installment_plan.total_installments }}</dd>
+                                    <dt>{% trans "Paid installments" %}</dt>
+                                    <dd>{{ installment_plan.installments_paid }} / {{ installment_plan.total_installments }}</dd>
+                                    <dt>{% trans "Amount per installment" %}</dt>
+                                    <dd>{{ installment_plan.amount_per_installment|money:request.event.currency }}</dd>
+                                    <dt>{% trans "Payment provider" %}</dt>
+                                    <dd>{{ installment_plan.payment_provider }}</dd>
+                                </dl>
+                                <div class="table-responsive">
+                                    <table class="table table-condensed table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>{% trans "Installment" %}</th>
+                                            <th>{% trans "Amount" %}</th>
+                                            <th>{% trans "Due date" %}</th>
+                                            <th>{% trans "State" %}</th>
+                                            <th>{% trans "Processed" %}</th>
+                                            <th>{% trans "Payment" %}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for inst in installments %}
+                                            <tr>
+                                                <td>{{ inst.installment_number }}</td>
+                                                <td>{{ inst.amount|money:request.event.currency }}</td>
+                                                <td>{{ inst.due_date|date:"SHORT_DATE_FORMAT" }}</td>
+                                                <td>
+                                                    <span class="label label-{% if inst.state == 'paid' %}success{% elif inst.state == 'failed' %}danger{% elif inst.state == 'cancelled' %}default{% else %}warning{% endif %}">
+                                                        {{ inst.get_state_display }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ inst.processed_at|date:"SHORT_DATETIME_FORMAT"|default:"—" }}</td>
+                                                <td>
+                                                    {% if inst.payment %}
+                                                        {{ inst.payment.full_id }}
+                                                    {% else %}
+                                                        —
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% if 'can_change_orders' in request.eventpermset and installment_plan.status == 'active' %}
+                                    <div class="panel-footer">
+                                        <div class="btn-group" role="group">
+                                            <a href="{% url "control:event.order.installment_plan.cancel" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
+                                               class="btn btn-danger">
+                                                <span class="fa fa-ban"></span>
+                                                {% trans "Cancel installment plan" %}
+                                            </a>
+                                            {% if has_failed_installments %}
+                                                <a href="{% url "control:event.order.installment_plan.retry" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}"
+                                                   class="btn btn-warning">
+                                                    <span class="fa fa-repeat"></span>
+                                                    {% trans "Retry failed installment" %}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="row">
