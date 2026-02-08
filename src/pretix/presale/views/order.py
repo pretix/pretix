@@ -1817,3 +1817,105 @@ class OrderPositionChange(OrderChangeMixin, EventViewMixin, OrderPositionDetailM
 
     def get_hide_prices(self):
         return self.request.event.settings.hide_prices_from_attendees
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderInstallmentRecovery(EventViewMixin, OrderDetailMixin, TemplateView):
+    template_name = 'pretixpresale/event/order_installment_recovery.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+
+        resp = self.verify_order_access()
+        if resp:
+            return resp
+
+        try:
+            self.installment_plan = self.order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            raise Http404(_('This order does not have an installment plan.'))
+
+        self.failed_installment = self.installment_plan.installments.filter(
+            state=ScheduledInstallment.STATE_FAILED
+        ).order_by('due_date').first()
+
+        if not self.failed_installment:
+            raise Http404(_('This order does not have any failed installments requiring recovery.'))
+
+        return super().dispatch(request, *args, **kwargs)
+
+    @cached_property
+    def provider(self):
+        return self.request.event.get_payment_providers().get(self.installment_plan.payment_provider)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['order'] = self.order
+        ctx['installment_plan'] = self.installment_plan
+        ctx['failed_installment'] = self.failed_installment
+
+        if self.provider and self.provider.installments_supported:
+            try:
+                ctx['payment_form_html'] = self.provider.payment_form_render(
+                    self.request,
+                    self.failed_installment.amount,
+                    order=self.order
+                )
+            except Exception as e:
+                logger.exception('Error rendering payment form')
+                ctx['payment_form_error'] = str(e)
+        else:
+            ctx['payment_form_error'] = _('Payment provider not available')
+
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        if not self.provider or not self.provider.installments_supported:
+            messages.error(request, _('The payment provider for this order is not available.'))
+            return redirect(self.get_order_url())
+
+        try:
+            cart = {'total': self.failed_installment.amount}
+            resp = self.provider.checkout_prepare(request, cart)
+            if resp is False:
+                messages.error(request, _('Please check your payment information and try again.'))
+                return self.get(request, *args, **kwargs)
+            elif isinstance(resp, str):
+                return redirect(resp)
+
+            payment = OrderPayment.objects.create(
+                order=self.order,
+                provider=self.installment_plan.payment_provider,
+                amount=self.failed_installment.amount,
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                installment_plan=self.installment_plan,
+            )
+
+            self.failed_installment.payment = payment
+            self.failed_installment.save(update_fields=['payment'])
+
+            try:
+                result = self.provider.execute_payment(request, payment)
+            except PaymentException as e:
+                logger.warning('Payment execution failed during recovery: %s', str(e))
+                messages.warning(
+                    request,
+                    _('Your payment method was updated, but the payment could not be processed immediately. '
+                      'We will retry automatically.')
+                )
+                payment.state = OrderPayment.PAYMENT_STATE_FAILED
+                payment.save(update_fields=['state'])
+                return redirect(self.get_order_url())
+
+            if result:
+                return redirect(result)
+
+            payment.confirm()
+
+            messages.success(request, _('Your payment method has been updated and payment processed successfully.'))
+            return redirect(self.get_order_url())
+
+        except Exception:
+            logger.exception('Unexpected error in installment recovery')
+            messages.error(request, _('There was an error processing your request. Please try again.'))
+            return self.get(request, *args, **kwargs)
