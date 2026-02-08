@@ -116,6 +116,28 @@
                                     </div>
                                 {% endif %}
                             {% endif %}
+                            {% if p.installments_available %}
+                                <div style="margin-bottom: 15px;">
+                                    <label for="installments_count_{{ p.provider.identifier }}">
+                                        <strong>{% trans "Payment plan" %}</strong>
+                                    </label>
+                                    <select name="installments_count_{{ p.provider.identifier }}"
+                                            id="installments_count_{{ p.provider.identifier }}"
+                                            class="form-control"
+                                            style="max-width: 400px;">
+                                        <option value="0" {% if p.selected_installments == 0 %}selected{% endif %}>
+                                            {% trans "Pay in full" %}
+                                        </option>
+                                        {% for option in p.installment_options %}
+                                            <option value="{{ option.count }}" {% if p.selected_installments == option.count %}selected{% endif %}>
+                                                {% blocktrans with count=option.count amount=option.amount|money:request.event.currency %}
+                                                    {{ count }} monthly installments of approx. {{ amount }}
+                                                {% endblocktrans %}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endif %}
                             {{ p.form }}
                         </div>
                     </fieldset>
