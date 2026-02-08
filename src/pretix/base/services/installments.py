@@ -19,18 +19,27 @@
 # <https://www.gnu.org/licenses/>.
 
 import json
+import logging
+from datetime import timedelta
 from decimal import ROUND_FLOOR, Decimal
 from typing import List
 
 from dateutil.relativedelta import relativedelta
 from django.db import models, transaction
+from django.dispatch import receiver
 from django.utils.timezone import now
+from django_scopes import scopes_disabled
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
     InstallmentPlan, Order, OrderFee, OrderPayment, ScheduledInstallment,
 )
+from pretix.base.signals import periodic_task
+from pretix.helpers.periodic import minimum_interval
+from pretix.multidomain.urlreverse import build_absolute_uri
+
+logger = logging.getLogger(__name__)
 
 
 def calculate_installment_amounts(total_amount: Decimal, count: int) -> List[Decimal]:
@@ -149,3 +158,130 @@ def create_installment_plan(
         )
 
     return plan
+
+
+@transaction.atomic
+def process_single_installment(installment: ScheduledInstallment, send_mail: bool = False) -> bool:
+    """
+    Processes a single installment payment.
+
+    :param installment: The ScheduledInstallment to process
+    :param send_mail: Whether to send a failure notification email (default False)
+    :return: True if successful, False otherwise
+    """
+    plan = installment.plan
+    order = plan.order
+    event = order.event
+
+    provider = event.get_payment_providers().get(plan.payment_provider)
+    if not provider:
+        return False
+
+    if not plan.payment_token or plan.payment_token == {}:
+        logger.error(
+            "Cannot process installment %s for order %s: no payment token available.",
+            installment.pk, order.code,
+        )
+        installment.state = ScheduledInstallment.STATE_FAILED
+        installment.failure_reason = "No payment token available"
+        installment.processed_at = now()
+        installment.save(update_fields=['state', 'failure_reason', 'processed_at'])
+        return False
+
+    success = False
+    try:
+        success = provider.execute_installment(plan, installment)
+    except Exception:
+        logger.exception(
+            "Failed to execute installment %s for order %s",
+            installment.pk, order.code,
+        )
+
+    if success:
+        payment = OrderPayment.objects.create(
+            order=order,
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=installment.amount,
+            payment_date=now(),
+            provider=plan.payment_provider,
+            installment_plan=plan
+        )
+
+        installment.state = ScheduledInstallment.STATE_PAID
+        installment.payment = payment
+        installment.processed_at = now()
+        installment.save(update_fields=['state', 'payment', 'processed_at'])
+
+        completed = plan.record_successful_payment()
+
+        if completed:
+            try:
+                provider.revoke_payment_token(plan)
+            except Exception:
+                logger.warning(
+                    "Failed to revoke payment token for completed plan %s",
+                    plan.pk,
+                )
+            plan.payment_token = {}
+            plan.save(update_fields=['payment_token'])
+
+    else:
+        installment.state = ScheduledInstallment.STATE_FAILED
+        installment.save(update_fields=['state'])
+
+        if not plan.grace_period_end:
+            days = provider.settings.get('installments_grace_period_days', as_type=int, default=7)
+            plan.grace_period_end = now() + timedelta(days=days)
+            plan.save(update_fields=['grace_period_end'])
+
+        if send_mail:
+            with language(order.locale, event.settings.region):
+                context = get_email_context(event=event, order=order)
+                context.update({
+                    'failure_reason': installment.failure_reason or '',
+                    'expire_date': plan.grace_period_end,
+                    'url': build_absolute_uri(
+                        event, 'presale:event.order.installment.recovery',
+                        kwargs={'order': order.code, 'secret': order.secret}
+                    ),
+                })
+                try:
+                    order.send_mail(
+                        event.settings.mail_subject_installment_failed,
+                        event.settings.mail_text_installment_failed,
+                        context,
+                        'pretix.event.order.installment.failed',
+                    )
+                except Exception:
+                    logger.warning(
+                        "Failed to send installment failure email for order %s",
+                        order.code,
+                    )
+
+    return success
+
+
+def process_due_installments():
+    """
+    Processes all scheduled installments that are due and pending.
+    """
+    qs = ScheduledInstallment.objects.filter(
+        state=ScheduledInstallment.STATE_PENDING,
+        due_date__lte=now()
+    ).select_related('plan', 'plan__order', 'plan__order__event')
+
+    for installment in qs:
+        try:
+            process_single_installment(installment, send_mail=True)
+        except Exception:
+            logger.exception(
+                "Error processing installment %s for order %s",
+                installment.pk, installment.plan.order.code,
+            )
+
+
+@receiver(signal=periodic_task)
+@scopes_disabled()
+@minimum_interval(minutes_after_success=10, minutes_after_error=2)
+def run_installment_processing(sender, **kwargs):
+    process_due_installments()

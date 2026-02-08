@@ -2484,6 +2484,26 @@ You can change your order details and view the status of your order at
 Best regards,  
 Your {event} team"""))  # noqa: W291
     },
+    'mail_text_installment_failed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+unfortunately, your recent installment payment for {event} failed.
+Please update your payment method or retry the payment by {expire_date}
+to avoid cancellation of your order.
+
+Reason: {failure_reason}
+
+You can update your payment method at:
+{url}
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_installment_failed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Payment failed: {code}")),
+    },
     'mail_attachment_new_order': {
         'default': None,
         'type': File,
