@@ -2504,6 +2504,23 @@ Your {event} team"""))  # noqa: W291
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Payment failed: {code}")),
     },
+    'mail_text_installment_reminder': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+this is a reminder for your upcoming installment payment for {event}.
+Your payment of {amount} is due on {date}.
+
+You can view the details and status of your installment plan at
+{url}
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_installment_reminder': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Payment reminder: {code}")),
+    },
     'mail_text_installment_grace_warning': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,

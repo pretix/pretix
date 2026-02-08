@@ -34,7 +34,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import InstallmentPlan, ScheduledInstallment
 from pretix.base.services.installments import (
     process_due_installments, process_expired_plans,
-    send_grace_period_warnings
+    send_grace_period_warnings, send_installment_reminders,
 )
 
 
@@ -210,6 +210,50 @@ class TestProcessExpiredPlans:
 
         assert len(mail.outbox) == 1
         assert order.code in mail.outbox[0].subject
+
+
+@pytest.mark.django_db
+class TestInstallmentReminders:
+
+    def test_sends_reminder(self, event, order, plan):
+        ScheduledInstallment.objects.create(
+            plan=plan, installment_number=2, amount=Decimal('100.00'),
+            due_date=now() + timedelta(days=3), state=ScheduledInstallment.STATE_PENDING,
+        )
+        mail.outbox = []
+
+        with _patch_providers(_mock_provider(reminder_days=3)):
+            with scope(organizer=event.organizer):
+                send_installment_reminders()
+
+        assert len(mail.outbox) == 1
+
+    def test_no_reminder_when_too_early(self, event, order, plan):
+        ScheduledInstallment.objects.create(
+            plan=plan, installment_number=2, amount=Decimal('100.00'),
+            due_date=now() + timedelta(days=10), state=ScheduledInstallment.STATE_PENDING,
+        )
+        mail.outbox = []
+
+        with _patch_providers(_mock_provider(reminder_days=3)):
+            with scope(organizer=event.organizer):
+                send_installment_reminders()
+
+        assert len(mail.outbox) == 0
+
+    def test_no_duplicate_reminder(self, event, order, plan):
+        ScheduledInstallment.objects.create(
+            plan=plan, installment_number=2, amount=Decimal('100.00'),
+            due_date=now() + timedelta(days=3), state=ScheduledInstallment.STATE_PENDING,
+            reminder_sent=True,
+        )
+        mail.outbox = []
+
+        with _patch_providers(_mock_provider(reminder_days=3)):
+            with scope(organizer=event.organizer):
+                send_installment_reminders()
+
+        assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db

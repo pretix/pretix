@@ -319,6 +319,53 @@ def process_expired_plans():
             )
 
 
+def send_installment_reminders():
+    """
+    Sends reminder emails for upcoming installments.
+    """
+    qs = ScheduledInstallment.objects.filter(
+        state=ScheduledInstallment.STATE_PENDING,
+        reminder_sent=False,
+        due_date__gte=now(),
+        due_date__lte=now() + timedelta(days=30)
+    ).select_related('plan', 'plan__order', 'plan__order__event')
+
+    for installment in qs:
+        order = installment.plan.order
+        event = order.event
+
+        provider = event.get_payment_providers().get(installment.plan.payment_provider)
+        if not provider:
+            continue
+
+        days = provider.settings.get('installments_reminder_days', as_type=int, default=3)
+
+        if now() >= installment.due_date - timedelta(days=days):
+            with language(order.locale, event.settings.region):
+                email_subject = event.settings.mail_subject_installment_reminder
+                email_template = event.settings.mail_text_installment_reminder
+
+                context = get_email_context(event=event, order=order)
+                context.update({
+                    'amount': installment.amount,
+                    'date': installment.due_date,
+                    'installment_number': installment.installment_number,
+                })
+
+                try:
+                    order.send_mail(
+                        email_subject, email_template, context,
+                        'pretix.event.order.installment.reminder'
+                    )
+                    installment.reminder_sent = True
+                    installment.save(update_fields=['reminder_sent'])
+                except Exception:
+                    logger.warning(
+                        "Failed to send reminder email for installment %s, order %s",
+                        installment.pk, order.code,
+                    )
+
+
 def send_grace_period_warnings():
     """
     Sends warnings for installment plans where the grace period is about to expire.
@@ -364,4 +411,5 @@ def send_grace_period_warnings():
 def run_installment_processing(sender, **kwargs):
     process_due_installments()
     process_expired_plans()
+    send_installment_reminders()
     send_grace_period_warnings()
