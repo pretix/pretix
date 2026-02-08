@@ -280,8 +280,48 @@ def process_due_installments():
             )
 
 
+def process_expired_plans():
+    """
+    Processes all installment plans where the grace period has expired.
+    Cancels the order and sends notification emails.
+    """
+    qs = InstallmentPlan.objects.filter(
+        status=InstallmentPlan.STATUS_ACTIVE,
+        grace_period_end__lt=now()
+    ).select_related('order', 'order__event')
+
+    for plan in qs:
+        try:
+            order = plan.order
+            event = order.event
+
+            cancel_installment_plan(plan, cancel_order=True, user=None, log=True, send_mail=False)
+
+            with language(order.locale, event.settings.region):
+                email_subject = event.settings.mail_subject_installment_cancelled
+                email_template = event.settings.mail_text_installment_cancelled
+
+                context = get_email_context(event=event, order=order)
+
+                try:
+                    order.send_mail(
+                        email_subject, email_template, context,
+                        'pretix.event.order.installment.cancelled'
+                    )
+                except Exception:
+                    logger.exception(
+                        "Failed to send cancellation email for order %s", order.code,
+                    )
+        except Exception:
+            logger.exception(
+                "Error processing expired plan %s for order %s",
+                plan.pk, plan.order.code,
+            )
+
+
 @receiver(signal=periodic_task)
 @scopes_disabled()
 @minimum_interval(minutes_after_success=10, minutes_after_error=2)
 def run_installment_processing(sender, **kwargs):
     process_due_installments()
+    process_expired_plans()

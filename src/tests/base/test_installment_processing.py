@@ -24,6 +24,7 @@ from decimal import Decimal
 from unittest.mock import MagicMock, patch
 
 import pytest
+from django.core import mail
 from django.utils.timezone import now
 from django_scopes import scope
 
@@ -31,7 +32,9 @@ from pretix.base.models import (
     Event, Item, Order, OrderPayment, OrderPosition, Organizer,
 )
 from pretix.base.models.orders import InstallmentPlan, ScheduledInstallment
-from pretix.base.services.installments import process_due_installments
+from pretix.base.services.installments import (
+    process_due_installments, process_expired_plans
+)
 
 
 @pytest.fixture
@@ -169,3 +172,40 @@ class TestProcessDueInstallments:
         assert plan.status == InstallmentPlan.STATUS_COMPLETED
         assert plan.installments_paid == 2
         provider.revoke_payment_token.assert_called_with(plan)
+
+
+@pytest.mark.django_db
+class TestProcessExpiredPlans:
+
+    def test_cancels_order_and_plan(self, event, order, plan):
+        plan.grace_period_end = now() - timedelta(days=1)
+        plan.save()
+        inst = ScheduledInstallment.objects.create(
+            plan=plan, installment_number=2, amount=Decimal('100.00'),
+            due_date=now() - timedelta(days=5), state=ScheduledInstallment.STATE_PENDING,
+        )
+        provider = _mock_provider()
+
+        with _patch_providers(provider):
+            with scope(organizer=event.organizer):
+                process_expired_plans()
+
+        order.refresh_from_db()
+        plan.refresh_from_db()
+        inst.refresh_from_db()
+        assert order.status == Order.STATUS_CANCELED
+        assert plan.status == InstallmentPlan.STATUS_CANCELLED
+        assert inst.state == ScheduledInstallment.STATE_CANCELLED
+        provider.revoke_payment_token.assert_called_with(plan)
+
+    def test_sends_cancellation_email(self, event, order, plan):
+        plan.grace_period_end = now() - timedelta(days=1)
+        plan.save()
+        mail.outbox = []
+
+        with _patch_providers(_mock_provider()):
+            with scope(organizer=event.organizer):
+                process_expired_plans()
+
+        assert len(mail.outbox) == 1
+        assert order.code in mail.outbox[0].subject

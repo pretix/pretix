@@ -2504,6 +2504,22 @@ Your {event} team"""))  # noqa: W291
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Payment failed: {code}")),
     },
+    'mail_text_installment_cancelled': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+your order for {event} has been cancelled because we did not receive payment
+for your overdue installment within the grace period.
+
+Any installments already paid will be refunded according to our terms.
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_installment_cancelled': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Order cancelled: {code}")),
+    },
     'mail_attachment_new_order': {
         'default': None,
         'type': File,
