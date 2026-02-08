@@ -2504,6 +2504,23 @@ Your {event} team"""))  # noqa: W291
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Payment failed: {code}")),
     },
+    'mail_text_installment_grace_warning': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+this is a final warning regarding your failed installment payment for {event}.
+If we do not receive payment by {expire_date}, your order will be cancelled.
+
+You can resolve this immediately at:
+{url}
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_installment_grace_warning': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Urgent: Payment required for {code}")),
+    },
     'mail_text_installment_cancelled': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,

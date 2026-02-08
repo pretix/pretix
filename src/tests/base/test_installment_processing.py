@@ -33,7 +33,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import InstallmentPlan, ScheduledInstallment
 from pretix.base.services.installments import (
-    process_due_installments, process_expired_plans
+    process_due_installments, process_expired_plans,
+    send_grace_period_warnings
 )
 
 
@@ -209,3 +210,40 @@ class TestProcessExpiredPlans:
 
         assert len(mail.outbox) == 1
         assert order.code in mail.outbox[0].subject
+
+
+@pytest.mark.django_db
+class TestGracePeriodWarnings:
+
+    def test_sends_warning(self, event, order, plan):
+        plan.grace_period_end = now() + timedelta(hours=23)
+        plan.save()
+        mail.outbox = []
+
+        with scope(organizer=event.organizer):
+            send_grace_period_warnings()
+
+        assert len(mail.outbox) == 1
+        plan.refresh_from_db()
+        assert plan.grace_warning_sent is True
+
+    def test_no_warning_when_too_early(self, event, order, plan):
+        plan.grace_period_end = now() + timedelta(days=2)
+        plan.save()
+        mail.outbox = []
+
+        with scope(organizer=event.organizer):
+            send_grace_period_warnings()
+
+        assert len(mail.outbox) == 0
+
+    def test_no_duplicate_warning(self, event, order, plan):
+        plan.grace_period_end = now() + timedelta(hours=23)
+        plan.grace_warning_sent = True
+        plan.save()
+        mail.outbox = []
+
+        with scope(organizer=event.organizer):
+            send_grace_period_warnings()
+
+        assert len(mail.outbox) == 0

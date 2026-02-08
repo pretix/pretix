@@ -319,9 +319,49 @@ def process_expired_plans():
             )
 
 
+def send_grace_period_warnings():
+    """
+    Sends warnings for installment plans where the grace period is about to expire.
+    """
+    qs = InstallmentPlan.objects.filter(
+        status=InstallmentPlan.STATUS_ACTIVE,
+        grace_period_end__isnull=False,
+        grace_period_end__lte=now() + timedelta(hours=24),
+        grace_period_end__gt=now(),
+        grace_warning_sent=False
+    ).select_related('order', 'order__event')
+
+    for plan in qs:
+        order = plan.order
+        event = order.event
+
+        with language(order.locale, event.settings.region):
+            email_subject = event.settings.mail_subject_installment_grace_warning
+            email_template = event.settings.mail_text_installment_grace_warning
+
+            context = get_email_context(event=event, order=order)
+            context.update({
+                'expire_date': plan.grace_period_end,
+            })
+
+            try:
+                order.send_mail(
+                    email_subject, email_template, context,
+                    'pretix.event.order.installment.grace_warning'
+                )
+                plan.grace_warning_sent = True
+                plan.save(update_fields=['grace_warning_sent'])
+            except Exception:
+                logger.warning(
+                    "Failed to send grace period warning for plan %s, order %s",
+                    plan.pk, order.code,
+                )
+
+
 @receiver(signal=periodic_task)
 @scopes_disabled()
 @minimum_interval(minutes_after_success=10, minutes_after_error=2)
 def run_installment_processing(sender, **kwargs):
     process_due_installments()
     process_expired_plans()
+    send_grace_period_warnings()
