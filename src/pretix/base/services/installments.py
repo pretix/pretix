@@ -35,7 +35,6 @@ from pretix.base.models import (
 )
 
 
-
 def calculate_installment_amounts(total_amount: Decimal, count: int) -> List[Decimal]:
     """
     Calculates the amounts for each installment payment.
