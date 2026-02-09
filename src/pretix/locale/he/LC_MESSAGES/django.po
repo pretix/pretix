@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: HE PRETIX\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-08 16:30+0000\n"
+"PO-Revision-Date: 2026-02-09 21:00+0000\n"
 "Last-Translator: roi belotsercovsky <rbelotsercovsky@gmail.com>\n"
 "Language-Team: Hebrew <https://translate.pretix.eu/projects/pretix/pretix/"
 "he/>\n"
@@ -809,10 +809,8 @@ msgid ""
 msgstr "נא לעדכן מיפוי ערכים לשדה \"{field_name}\" - אפשרות \"{val}\" לא מוקצה"
 
 #: pretix/base/datasync/sourcefields.py:128
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "פריטי הזמנה"
+msgstr "פרטי מצב הזמנה"
 
 #: pretix/base/datasync/sourcefields.py:129
 msgid "Attendee details"
@@ -3967,6 +3965,8 @@ msgid ""
 "The date can be specified through its full name, full date and time, or "
 "internal ID, provided only one date in the system matches the input."
 msgstr ""
+"התאריך ניתן לציון דרך השם המלא, התאריך והשעה המלאים, או מזהה פנימי בתנאי "
+"שהמזהה תואם רק תאריך אחד."
 
 #: pretix/base/modelimport_orders.py:120 pretix/presale/views/waiting.py:157
 msgctxt "subevent"
@@ -3976,7 +3976,7 @@ msgstr "עליך לבחור תאריך."
 #: pretix/base/modelimport_orders.py:131
 msgid ""
 "The product can be specified by its internal ID, full name or internal name."
-msgstr ""
+msgstr "המוצר ניתן לציון ע\"י מזהה פנימי, שם מלא או שם פנימי."
 
 #: pretix/base/modelimport_orders.py:149
 #: pretix/base/modelimport_vouchers.py:194
@@ -3996,7 +3996,7 @@ msgstr "וריאציית מוצר"
 
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
-msgstr ""
+msgstr "הוריאציה ניתנת לציון לפי מזהה פנימי או שם מלא."
 
 #: pretix/base/modelimport_orders.py:181
 #: pretix/base/modelimport_vouchers.py:225
@@ -4015,10 +4015,8 @@ msgid "You need to select a variation for this product."
 msgstr "עליך לבחור וריאציה למוצר זה."
 
 #: pretix/base/modelimport_orders.py:265 pretix/base/modelimport_orders.py:417
-#, fuzzy
-#| msgid "The count needs to be equal to or greater than zero."
 msgid "The country needs to be specified using a two-letter country code."
-msgstr "הכמות צריכה להיות שווה או גדולה מאפס."
+msgstr "המדינה נדרשת להזנה לפי קוד מדינה בין 2 אותיות."
 
 #: pretix/base/modelimport_orders.py:281 pretix/base/modelimport_orders.py:432
 msgid "Please enter a valid country code."
@@ -4026,7 +4024,7 @@ msgstr "נא להזין קוד ארץ תקין."
 
 #: pretix/base/modelimport_orders.py:290 pretix/base/modelimport_orders.py:441
 msgid "The state can be specified by its short form or full name."
-msgstr ""
+msgstr "המדינה ניתנת להזנה ע\"י שימוש בקיצור או בשמה המלא."
 
 #: pretix/base/modelimport_orders.py:300 pretix/base/modelimport_orders.py:450
 msgid "States are not supported for this country."
@@ -4082,17 +4080,15 @@ msgstr "אנא הזן קוד שפה תקין."
 msgid ""
 "The sales channel can be specified by it's internal identifier or its full "
 "name."
-msgstr ""
+msgstr "ערוץ המכירה ניתן להזנה ע\"י מזהה פנימי או שם מלא."
 
 #: pretix/base/modelimport_orders.py:599 pretix/base/modelimport_orders.py:601
 msgid "Please enter a valid sales channel."
 msgstr "אנא הזן ערוץ מכירות תקין."
 
 #: pretix/base/modelimport_orders.py:611
-#, fuzzy
-#| msgid "The refund amount needs to be positive and less than {}."
 msgid "The seat needs to be specified by its internal ID."
-msgstr "סכום ההחזר חייב להיות חיובי ופחות מ-{}."
+msgstr "המושב חייב להיות מצויין לפי המזהה הפנימי."
 
 #: pretix/base/modelimport_orders.py:626
 #: pretix/base/modelimport_vouchers.py:291
@@ -4294,17 +4290,17 @@ msgid ""
 "to confirm changing your email address from {old_email}\n"
 "to {new_email}, use the following code:"
 msgstr ""
+"לאימות שינוי כתובת הדוא\"ל מ{old_email} \n"
+"ל {new_email}, השתמש בקוד הבא:"
 
 #: pretix/base/models/auth.py:377
 #, python-brace-format
 msgid ""
 "to confirm that your email address {email} belongs to your pretix account, "
 "use the following code:"
-msgstr ""
+msgstr "לאימות שכתובת הדוא\"ל {email} שייכת לחשבונך, השתמש בקוד הבא:"
 
 #: pretix/base/models/auth.py:391
-#, fuzzy
-#| msgid "Confirmation code"
 msgid "pretix confirmation code"
 msgstr "קוד אישור"
 
@@ -4564,21 +4560,19 @@ msgstr "הפרד בין ערכים מרובים באמצעות רווחים"
 
 #: pretix/base/models/datasync.py:53
 msgid "Temporary error, auto-retry limit exceeded"
-msgstr ""
+msgstr "שגיאה זמנית, מכסת הניסיונות מחדש האוטומטיים נחרגה"
 
 #: pretix/base/models/datasync.py:54
-#, fuzzy
-#| msgid "Stripe reported an error: %s"
 msgid "Provider reported a permanent error"
-msgstr "Stripe דיווח על שגיאה: %s"
+msgstr "הספק דיווח על שגיאה קבועה"
 
 #: pretix/base/models/datasync.py:55
 msgid "Misconfiguration, please check provider settings"
-msgstr ""
+msgstr "שגיאת הגדרה, בדוק את הגדרות הספק"
 
 #: pretix/base/models/datasync.py:56 pretix/base/models/datasync.py:57
 msgid "System error, needs manual intervention"
-msgstr ""
+msgstr "תקלת מערכת, נדרשת התערבות ידנית"
 
 #: pretix/base/models/devices.py:70 pretix/base/models/items.py:1675
 msgid "Internal identifier"
@@ -4826,13 +4820,15 @@ msgstr "לא חובה. לא יימכרו מוצרים לפני תאריך זה."
 
 #: pretix/base/models/event.py:644
 msgid "This event is remote or partially remote."
-msgstr ""
+msgstr "אירוע זה הינו אירוע וירטואלי או חלקית וירטואלי."
 
 #: pretix/base/models/event.py:645
 msgid ""
 "This will be used to let users know if the event is in a different timezone "
 "and let’s us calculate users’ local times."
 msgstr ""
+"זה ישמש לעדכן את המשתמשים לדעת אם השעה המצויינת הינה באזור זמן שונה ויאפשר "
+"לנו לחשב את השעה בהתאם לשעון המקומי של המשתמשים."
 
 #: pretix/base/models/event.py:665 pretix/base/models/organizer.py:97
 #: pretix/control/navigation.py:65 pretix/control/navigation.py:499
@@ -5109,7 +5105,7 @@ msgstr "יתרה ממתינה"
 
 #: pretix/base/models/invoices.py:123
 msgid "currently being transmitted"
-msgstr ""
+msgstr "משודר כרגע"
 
 #: pretix/base/models/invoices.py:124
 #, fuzzy
@@ -6004,6 +6000,8 @@ msgid ""
 "with changing the type of question without data loss. Consider hiding this "
 "question and creating a new one instead."
 msgstr ""
+"המערכת כבר כוללת תשובות לשאלה זו שאינם מאפשרות שינוי סוג השאלה מבלי לאבד "
+"מידע. מומלץ לשקול להסתיר את שאלה זו וליצור חדשה במקום."
 
 #: pretix/base/models/items.py:1961
 #: pretix/control/templates/pretixcontrol/items/question.html:75
@@ -7944,6 +7942,9 @@ msgid ""
 "2017-05-31 14:00 – 16:00\n"
 "2017-05-31 14:00 – 2017-06-01 14:00"
 msgstr ""
+"2017-05-31 10:00 – 12:00\n"
+"2017-05-31 14:00 – 16:00\n"
+"2017-05-31 14:00 – 2017-06-01 14:00"
 
 #: pretix/base/pdf.py:500
 msgid "Reusable Medium ID"
@@ -8152,7 +8153,7 @@ msgstr "בחרת מוצר שאינו זמין למכירה."
 msgid ""
 "Some products can no longer be purchased and have been removed from your "
 "cart for the following reason: %s"
-msgstr ""
+msgstr "חלק מהמוצרים לא ניתנים לרכישה יותר והוסרו מעגלת הקניות מהסיבה הבאה: %s"
 
 #: pretix/base/services/cart.py:117
 msgid ""
@@ -8902,7 +8903,7 @@ msgstr "ההזמנה אינה יכולה להכיל יותר מ־%(max)s עמד�
 msgid ""
 "The grouping \"%(value)s\" occurs on non-consecutive lines (seen again on "
 "line %(row)s)."
-msgstr ""
+msgstr "הקיבוץ  \"%(value)s\" מתקיים בשורות לא רציפות (נראה שוב בשורה %(row)s)."
 
 #: pretix/base/services/modelimport.py:154
 #, python-brace-format
@@ -8910,6 +8911,8 @@ msgid ""
 "Inconsistent data in row {row}: Column {col} contains value \"{val_line}\", "
 "but for this order, the value has already been set to \"{val_order}\"."
 msgstr ""
+"מידע לא רציף בשורה {row}: טור {col} מכיל ערך \"{val_line}\", אך להזמנה זו, "
+"הערך כבר הוגדר ל \"{val_order}\"."
 
 #: pretix/base/services/modelimport.py:168
 #: pretix/base/services/modelimport.py:289
@@ -9351,15 +9354,15 @@ msgstr "השובר נשלח ל-{recipient}."
 
 #: pretix/base/settings.py:82
 msgid "Compute taxes for every line individually"
-msgstr ""
+msgstr "חשב מיסים לכל שורה בנפרד"
 
 #: pretix/base/settings.py:83
 msgid "Compute taxes based on net total"
-msgstr ""
+msgstr "חשב מיסים תוך ביסוס על סה\"כ נטו"
 
 #: pretix/base/settings.py:84
 msgid "Compute taxes based on net total with stable gross prices"
-msgstr ""
+msgstr "חשב מיסים על סה\"כ נטו עם ברוטו יציב"
 
 #: pretix/base/settings.py:134
 msgid "Allow usage of restricted plugins"
@@ -9388,7 +9391,7 @@ msgstr "אם אפשרות זו מושבתת, תצטרך לחבר ספקי זיה
 
 #: pretix/base/settings.py:189
 msgid "Require login to access order confirmation pages"
-msgstr ""
+msgstr "דרוש כניסה למשתמש על מנת לגשת לדפי אישור הזמנה"
 
 #: pretix/base/settings.py:190
 msgid ""
@@ -9397,6 +9400,9 @@ msgid ""
 "placing an order, the restriction only becomes active after the customer "
 "account is activated."
 msgstr ""
+"אם מופעל, משתמשים שהיו מחוברים לאתר בזמן רכישה יצטרכו להתחבר לחשבונם באתר על "
+"מנת לגשת לפרטי ההזמנה שלהם. אם החשבון נוצר במהלך הרכישה, ההגבלה נכנסת לתוקף "
+"רק לאחר הפעלת החשבון."
 
 #: pretix/base/settings.py:202
 msgid "Match orders based on email address"
@@ -9576,6 +9582,8 @@ msgid ""
 "for tax reporting, you need to make sure to account for possible rounding "
 "differences if your external system rounds differently than pretix."
 msgstr ""
+"שים לב- במידה ותייצא את נתוני המכירות שלך למערכת חיצונית לדיווח מס, עלייך "
+"לקחת בחשבון כי ייתכנו פערים אם המערכת החיצונית מבצעת עיגול בצורה שונה."
 
 #: pretix/base/settings.py:514
 msgid "Ask for invoice address"
@@ -9704,6 +9712,8 @@ msgid ""
 "ID in all countries. VAT ID will be required for all business addresses in "
 "the selected countries."
 msgstr ""
+"מספר עסק מגדר כרשות כברירת מחדל מאחר ובחלק מהמדינות ישנם עסקים שלא מוקצה להם "
+"מספר עסק. מספר עסק יוגדר כחובה בכל המדינות הנבחרות."
 
 #: pretix/base/settings.py:685
 msgid "Invoice address explanation"
@@ -10090,10 +10100,12 @@ msgid ""
 "Automatic based on ticket-specific validity, membership validity, event "
 "series date, or event date"
 msgstr ""
+"אוטומטי בהתאם לזמינות הכרטיס הספציפי, זמינות המנוי, תאריכי סדרת האירועים או "
+"תאריך האירוע"
 
 #: pretix/base/settings.py:1179 pretix/base/settings.py:1190
 msgid "Automatic, but prefer invoice date over event date"
-msgstr ""
+msgstr "אוטומטי, אבל העדף תאריך חשבונית על תאריך אירוע"
 
 #: pretix/base/settings.py:1182 pretix/base/settings.py:1193
 #, fuzzy
@@ -10114,6 +10126,7 @@ msgid ""
 "This controls what dates are shown on the invoice, but is especially "
 "important for electronic invoicing."
 msgstr ""
+"זה שולט על איזה תאריכים מוצגים על החשבונית, ובמיוחד חשוב לחשבוניות דיגיטליות."
 
 #: pretix/base/settings.py:1206
 msgid "Automatically cancel and reissue invoice on address changes"
@@ -12685,7 +12698,7 @@ msgstr "אם זה לוקח יותר מכמה דקות, רענן את הדף או
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:2
 msgid ""
 "You have requested us to cancel an event which includes a larger bulk-refund:"
-msgstr ""
+msgstr "ביקשת מאיתנו לבטל אירוע שכולל החזר כספי גדול יותר:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:6
 #, fuzzy
@@ -12698,6 +12711,7 @@ msgid ""
 "Please confirm that you want to proceed by coping the following confirmation "
 "code into the cancellation form:"
 msgstr ""
+"נא לאשר שברצונך להמשיך באמצעות העתקה של קוד האימות הבא לתוך טופס הביטול:"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -13375,7 +13389,7 @@ msgstr "כל השערים"
 
 #: pretix/control/forms/checkin.py:222
 msgid "I am sure that the check-in state of the entire event should be reset."
-msgstr ""
+msgstr "אני בטוח שמצב הצ'ק אין של האירוע צריך לעבור איפוס."
 
 #: pretix/control/forms/event.py:91
 msgid "Use languages"
@@ -13474,7 +13488,7 @@ msgstr "ברירת מחדל ({value})"
 
 #: pretix/control/forms/event.py:381
 msgid "The currency cannot be changed because orders already exist."
-msgstr ""
+msgstr "לא ניתן לבצע שינוי בסוג המטבע מאחר והזמנות כבר קיימות."
 
 #: pretix/control/forms/event.py:392 pretix/control/forms/event.py:405
 msgid "Domain"
@@ -13562,7 +13576,7 @@ msgstr "כולל כל המיסים"
 
 #: pretix/control/forms/event.py:815
 msgid "Recommended if you sell tickets at least partly to consumers."
-msgstr ""
+msgstr "מומלץ אם תמכור כרטיסים לפחות חלקית ללקוחות."
 
 #: pretix/control/forms/event.py:819
 #, fuzzy
@@ -13573,7 +13587,7 @@ msgstr "כל העתיד (לא כולל היום)"
 
 #: pretix/control/forms/event.py:820
 msgid "Recommended only if you sell tickets primarily to business customers."
-msgstr ""
+msgstr "מומלץ רק אם תמכור כרטיסים בעיקר ללקוחות עסקיים."
 
 #: pretix/control/forms/event.py:856
 #, fuzzy
@@ -13803,6 +13817,7 @@ msgid ""
 "This will only be used if the invoice is sent to a different email address "
 "or at a different time than the order confirmation."
 msgstr ""
+"זה ישומש רק אם החשבונית תישלח לכתובת מייל אחרת או בזמן אחר מאישור ההזמנה."
 
 #: pretix/control/forms/event.py:1321
 msgid ""
@@ -14253,7 +14268,7 @@ msgstr "שולם"
 #: pretix/control/forms/filter.py:1304
 msgctxt "subevent"
 msgid "Date doesn't start in selected date range."
-msgstr ""
+msgstr "תאריך לא מתחיל בטווח התאריכים שנבחר."
 
 #: pretix/control/forms/filter.py:1360 pretix/control/forms/filter.py:1827
 msgid "Shop live and presale running"
