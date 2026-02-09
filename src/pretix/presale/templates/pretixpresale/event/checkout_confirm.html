@@ -111,7 +111,7 @@
                                     <dt>{% trans "Internal reference" %}</dt>
                                     <dd>{{ addr.internal_reference }}</dd>
                                 {% endif %}
-                                {% for k, v in transmission_fields %}
+                                {% for k, v in addr.describe_transmission %}
                                     <dt>{{ k }}</dt>
                                     <dd>{{ v }}</dd>
                                 {% endfor %}

@@ -1545,8 +1545,6 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['invoice_address_asked'] = self.address_asked
         ctx['customer'] = self.cart_customer
 
-        ctx['transmission_fields'] = self.invoice_address.describe_transmission(self.event)
-
         self.cart_session['shown_total'] = str(ctx['cart']['total'])
 
         email = self.cart_session.get('contact_form_data', {}).get('email')
