@@ -286,6 +286,7 @@ class SetPasswordView(FormView):
             self.customer.is_verified = True
             self.customer.save()
             self.customer.log_action('pretix.customer.password.set', {})
+        self.customer.send_security_notice(_("Your password has been changed."))
         messages.success(
             self.request,
             _('Your new password has been set! You can now use it to log in.'),
@@ -541,6 +542,7 @@ class ChangePasswordView(CustomerAccountBaseMixin, FormView):
         customer.set_password(form.cleaned_data['password'])
         customer.save()
         messages.success(self.request, _('Your changes have been saved.'))
+        customer.send_security_notice(_("Your password has been changed."))
         update_customer_session_auth_hash(self.request, customer)
         return HttpResponseRedirect(self.get_success_url())
 
@@ -631,11 +633,15 @@ class ConfirmChangeView(View):
 
         try:
             with transaction.atomic():
+                old_email = customer.email
                 customer.email = data['email']
                 customer.save()
                 customer.log_action('pretix.customer.changed', {
                     'email': data['email']
                 })
+                msg = _('Your email address has been changed from {old_email} to {email}.').format(old_email=old_email, email=customer.email)
+                customer.send_security_notice(msg, email=old_email)
+                customer.send_security_notice(msg, email=customer.email)
         except IntegrityError:
             messages.success(request, _('Your email address has not been updated since the address is already in use '
                                         'for another customer account.'))
