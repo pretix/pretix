@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pycountry
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext, pgettext, pgettext_lazy
@@ -29,6 +30,7 @@ from django_scopes import scope
 from pretix.base.addressvalidation import (
     COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED,
 )
+from pretix.base.i18n import language
 from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import Organizer
 from pretix.base.models.tax import VAT_ID_COUNTRIES
@@ -89,7 +91,7 @@ def _info(cc):
     }
 
 
-def address_form(request):
+def _address_form(request):
     cc = request.GET.get("country", "DE")
     info = _info(cc)
 
@@ -156,5 +158,16 @@ def address_form(request):
             if info["vat_id"]["required"]:
                 # The help text explains that it is optional, so we want to hide that if it is required
                 info["vat_id"]["helptext_visible"] = False
+
+    return info
+
+
+def address_form(request):
+    locale = request.GET.get('locale')
+    if locale in dict(settings.LANGUAGES):
+        with language(locale):
+            info = _address_form(request)
+    else:
+        info = _address_form(request)
 
     return JsonResponse(info)
