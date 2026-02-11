@@ -519,6 +519,7 @@ def mail_send_task(self, **kwargs) -> bool:
                             )
                         except InvoiceAddress.DoesNotExist:
                             pass
+                        expected_recipients = {e.lower() for e in expected_recipients if e}
                         if any(t in expected_recipients for t in outgoing_mail.to):
                             invoices_to_mark_transmitted.append(inv)
 
