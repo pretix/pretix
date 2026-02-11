@@ -2820,8 +2820,8 @@ class DeviceFilterForm(FilterForm):
 
 class OutgoingMailFilterForm(FilterForm):
     orders = {
-        'date': 'd',
-        '-date': '-d',
+        'date': 'created',
+        '-date': '-created',
     }
     query = forms.CharField(
         label=_('Search email address or subject'),
