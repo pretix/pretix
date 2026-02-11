@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pycountry
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext, pgettext, pgettext_lazy
@@ -29,6 +30,7 @@ from django_scopes import scope
 from pretix.base.addressvalidation import (
     COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED,
 )
+from pretix.base.i18n import language
 from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import Organizer
 from pretix.base.models.tax import VAT_ID_COUNTRIES
@@ -91,7 +93,21 @@ def _info(cc):
 
 def address_form(request):
     cc = request.GET.get("country", "DE")
-    info = _info(cc)
+    locale = request.GET.get('locale')
+    allowed_languages = dict(settings.LANGUAGES)
+    if locale and locale not in allowed_languages and '-' in locale:
+        locale = locale.split('-')[0]
+        if locale not in allowed_languages:
+            for lang in allowed_languages:
+                if lang.startswith(locale + '-'):
+                    locale = lang
+                    break
+
+    if locale in allowed_languages:
+        with language(locale):
+            info = _info(cc)
+    else:
+        info = _info(cc)
 
     if request.GET.get("invoice") == "true":
         # Do not consider live=True, as this does not expose sensitive information and we also want it accessible
