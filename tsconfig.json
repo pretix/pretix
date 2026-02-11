@@ -1,9 +1,13 @@
 {
-	"include": ["src/pretix/static/**/*", "src/pretix/static/**/*.vue"],
+	"include": [
+		"src/pretix/static/**/*",
+		"src/pretix/static/**/*.vue",
+		"src/pretix/plugins/webcheckin/**/*",
+		"src/pretix/plugins/webcheckin/**/*.vue"
+	],
 	"compilerOptions": {
 		"baseUrl": ".",
-		"paths": {
-		},
+		"paths": {},
 		"strict": false,
 		"allowJs": true,
 		"checkJs": true,
@@ -15,5 +19,8 @@
 		"noImplicitThis": true,
 		"isolatedModules": true,
 		"types": ["node", "events"]
+	},
+	"vueCompilerOptions": {
+		"plugins": ["@vue/language-plugin-pug"]
 	}
 }
