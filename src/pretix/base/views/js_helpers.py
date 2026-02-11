@@ -91,23 +91,9 @@ def _info(cc):
     }
 
 
-def address_form(request):
+def _address_form(request):
     cc = request.GET.get("country", "DE")
-    locale = request.GET.get('locale')
-    allowed_languages = dict(settings.LANGUAGES)
-    if locale and locale not in allowed_languages and '-' in locale:
-        locale = locale.split('-')[0]
-        if locale not in allowed_languages:
-            for lang in allowed_languages:
-                if lang.startswith(locale + '-'):
-                    locale = lang
-                    break
-
-    if locale in allowed_languages:
-        with language(locale):
-            info = _info(cc)
-    else:
-        info = _info(cc)
+    info = _info(cc)
 
     if request.GET.get("invoice") == "true":
         # Do not consider live=True, as this does not expose sensitive information and we also want it accessible
@@ -172,5 +158,25 @@ def address_form(request):
             if info["vat_id"]["required"]:
                 # The help text explains that it is optional, so we want to hide that if it is required
                 info["vat_id"]["helptext_visible"] = False
+
+    return info
+
+
+def address_form(request):
+    locale = request.GET.get('locale')
+    allowed_languages = dict(settings.LANGUAGES)
+    if locale and locale not in allowed_languages and '-' in locale:
+        locale = locale.split('-')[0]
+        if locale not in allowed_languages:
+            for lang in allowed_languages:
+                if lang.startswith(locale + '-'):
+                    locale = lang
+                    break
+
+    if locale in allowed_languages:
+        with language(locale):
+            info = _address_form(request)
+    else:
+        info = _address_form(request)
 
     return JsonResponse(info)
