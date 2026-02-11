@@ -247,6 +247,15 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
                 for gc in position.issued_gift_cards.all():
                     gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
                     gc.transactions.create(value=position.price, order=order, acceptor=order.event.organizer)
+                    gc.log_action(
+                        action='pretix.giftcards.transaction.manual',
+                        user=user,
+                        auth=auth,
+                        data={
+                            'value': position.price,
+                            'acceptor_id': order.event.organizer.id
+                        }
+                    )
                     break
 
                 for m in position.granted_memberships.all():
@@ -548,6 +557,14 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                     )
                 else:
                     gc.transactions.create(value=-position.price, order=order, acceptor=order.event.organizer)
+                    gc.log_action(
+                        action='pretix.giftcards.transaction.manual',
+                        user=user,
+                        data={
+                            'value': -position.price,
+                            'acceptor_id': order.event.organizer.id,
+                        }
+                    )
 
             for m in position.granted_memberships.all():
                 m.canceled = True
@@ -2434,6 +2451,15 @@ class OrderChangeManager:
                         ))
                     else:
                         gc.transactions.create(value=-position.price, order=self.order, acceptor=self.order.event.organizer)
+                        gc.log_action(
+                            action='pretix.giftcards.transaction.manual',
+                            user=self.user,
+                            auth=self.auth,
+                            data={
+                                'value': -position.price,
+                                'acceptor_id': self.order.event.organizer.id
+                            }
+                        )
 
                 for m in position.granted_memberships.with_usages().all():
                     m.canceled = True
@@ -2451,6 +2477,15 @@ class OrderChangeManager:
                             ))
                         else:
                             gc.transactions.create(value=-opa.position.price, order=self.order, acceptor=self.order.event.organizer)
+                            gc.log_action(
+                                action='pretix.giftcards.transaction.manual',
+                                user=self.user,
+                                auth=self.auth,
+                                data={
+                                    'value': -opa.position.price,
+                                    'acceptor_id': self.order.event.organizer.id
+                                }
+                            )
 
                     for m in opa.granted_memberships.with_usages().all():
                         m.canceled = True
@@ -3119,7 +3154,10 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
                 customer=order.customer,
                 testmode=order.testmode
             )
-            giftcard.log_action('pretix.giftcards.created', data={})
+            giftcard.log_action(
+                action='pretix.giftcards.created',
+                data={}
+            )
             r = order.refunds.create(
                 order=order,
                 payment=None,
@@ -3406,7 +3444,17 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
                     currency=sender.currency, issued_in=p, testmode=order.testmode,
                     expires=sender.organizer.default_gift_card_expiry,
                 )
-                gc.transactions.create(value=p.price - issued, order=order, acceptor=sender.organizer)
+                gc.log_action(
+                    action='pretix.giftcards.created',
+                )
+                trans = gc.transactions.create(value=p.price - issued, order=order, acceptor=sender.organizer)
+                gc.log_action(
+                    action='pretix.giftcards.transaction.manual',
+                    data={
+                        'value': trans.value,
+                        'acceptor_id': order.event.organizer.id,
+                    }
+                )
                 any_giftcards = True
                 p.secret = gc.secret
                 p.save(update_fields=['secret'])
