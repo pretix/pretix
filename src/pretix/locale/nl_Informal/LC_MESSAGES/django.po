@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-05 23:00+0000\n"
+"PO-Revision-Date: 2026-02-12 00:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -8002,9 +8002,9 @@ msgid ""
 "Atlantis"
 msgstr ""
 "Piet Janssen\n"
-"Voorbeeld bedrijf\n"
+"Voorbeeldbedrijf\n"
 "Sesamstraat 42\n"
-"1234AB Amsterdam\n"
+"1234 AB  Amsterdam\n"
 "Nederland"
 
 #: pretix/base/pdf.py:198
@@ -21786,9 +21786,9 @@ msgid ""
 "copy all products, categories, quotas, and questions as well as general "
 "event settings."
 msgstr ""
-"Wil je de instellingen van een ander evenement kopiëren? We zullen alle "
-"producten, categorieën, quota en vragen overnemen, samen met de algemene "
-"evenementsinstellingen."
+"Wil je de configuratie van een ander evenement kopiëren? We kopiëren alle "
+"producten, categorieën, quota en vragen, evenals de algemene "
+"evenementinstellingen."
 
 #: pretix/control/templates/pretixcontrol/events/create_copy.html:13
 msgid ""
@@ -21796,25 +21796,25 @@ msgid ""
 "need to change some settings manually, e.g. date and time settings and texts "
 "that contain the event name."
 msgstr ""
-"Controleer alle instellingen! Je moet waarschijnlijk nog steeds wat "
-"instellingen handmatig aanpassen, bijvoorbeeld datum- en tijdsinstellingen, "
-"en teksten die de evenementsnaam bevatten."
+"Controleer alle instellingen zorgvuldig. Waarschijnlijk moet je nog enkele "
+"instellingen handmatig wijzigen, bijvoorbeeld de datum- en tijdinstellingen "
+"en teksten die de naam van het evenement bevatten."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:7
 msgid "Event type"
-msgstr "Evenementssoort"
+msgstr "Type evenement"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
-msgstr "Enkel evenement of winkel die niet voor een evenement is"
+msgstr "Eenmalig evenement of geen evenement"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:15
 msgid ""
 "An event with individual configuration. If you create more events later, you "
 "can copy the event to save yourself some work."
 msgstr ""
-"Een evenement met eigen instellingen. Als je later meer evenementen aanmaakt "
-"kan je de instellingen van dit evenement kopiëren."
+"Een evenement met eigen instellingen. Als je later meer evenementen "
+"aanmaakt, kan je de instellingen van dit evenement kopiëren."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:21
 msgid ""
@@ -21834,8 +21834,8 @@ msgid ""
 "A series of events that share the same configuration. They can still be "
 "different in their dates, locations, prices, and capacities."
 msgstr ""
-"Een reeks evenementen die dezelfde instellingen delen. De evenementen in de "
-"reeks kunnen verschillen in hun datums, prijzen en capaciteiten."
+"Een reeks evenementen met dezelfde configuratie. Ze kunnen nog steeds "
+"verschillen qua data, locaties, prijzen en capaciteiten."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:40
 msgid ""
@@ -21861,9 +21861,8 @@ msgid ""
 "The list below shows all events you have administrative access to. Click on "
 "the event name to access event details."
 msgstr ""
-"De lijst hieronder toont alle evenementen waar je administratieve toegang "
-"toe hebt. Klik op de evenementsnaam om de details van het evenement te "
-"openen."
+"De onderstaande lijst toont alle evenementen waar je beheerderstoegang toe "
+"hebt. Klik op de naam van het evenement om de details ervan te bekijken."
 
 #: pretix/control/templates/pretixcontrol/events/index.html:12
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:18
@@ -21923,7 +21922,7 @@ msgstr "Aantallen bijgewerkt op %(date)s"
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
 #, python-format
 msgid "Currently available: %(num)s"
-msgstr "Op dit moment beschikbaar: %(num)s"
+msgstr "Nu beschikbaar: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:8
 msgid ""
@@ -21973,7 +21972,7 @@ msgstr "Installatiegegevens"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:34
 msgid "Installed plugins"
-msgstr "Geïnstalleerde plugins"
+msgstr "Geïnstalleerde plug-ins"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:40
 msgid "Public information"
