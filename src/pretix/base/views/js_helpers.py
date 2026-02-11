@@ -164,16 +164,7 @@ def _address_form(request):
 
 def address_form(request):
     locale = request.GET.get('locale')
-    allowed_languages = dict(settings.LANGUAGES)
-    if locale and locale not in allowed_languages and '-' in locale:
-        locale = locale.split('-')[0]
-        if locale not in allowed_languages:
-            for lang in allowed_languages:
-                if lang.startswith(locale + '-'):
-                    locale = lang
-                    break
-
-    if locale in allowed_languages:
+    if locale in dict(settings.LANGUAGES):
         with language(locale):
             info = _address_form(request)
     else:
