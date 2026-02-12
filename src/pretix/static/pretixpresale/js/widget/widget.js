@@ -252,7 +252,7 @@ Vue.component('availbox', {
         variation: Object
     },
     mounted: function() {
-        if (this.$root.itemnum === 1 && (!this.$root.categories[0].items[0].has_variations || this.$root.categories[0].items[0].variations.length < 2) && !this.$root.has_seating_plan ? 1 : 0) {
+        if (!this.$root.cart_exists && this.$root.itemnum === 1 && (!this.$root.categories[0].items[0].has_variations || this.$root.categories[0].items[0].variations.length < 2) && !this.$root.has_seating_plan ? 1 : 0) {
             this.$refs.quantity.value = 1;    
             if (this.order_max === 1) {
                 this.$refs.quantity.checked = true;
