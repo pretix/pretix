@@ -221,8 +221,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                     'invoice_company': ''
                 })
         renderer = ClassicMailRenderer(None, organizer)
-        body_plain = render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN)
-        subject = str(subject).format_map(TolerantDict(context))
+        content_plain = render_mail(template, context, placeholder_mode=None)
+        subject = format_map(subject, context)
         sender = (
             sender or
             (event.settings.get('mail_from') if event else None) or
@@ -254,6 +254,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         else:
             timezone = ZoneInfo(settings.TIME_ZONE)
 
+        body_plain = render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN)
         if settings_holder:
             if settings_holder.settings.mail_bcc:
                 for bcc_mail in settings_holder.settings.mail_bcc.split(','):
@@ -269,7 +270,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
             signature = str(settings_holder.settings.get('mail_text_signature'))
             if signature:
-                signature = signature.format(event=event.name if event else '')
+                signature = format_map(signature, {"event": event.name if event else ''})
                 body_plain += signature
                 body_plain += "\r\n\r\n-- \r\n"
 
@@ -287,7 +288,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                 body_plain += _(
                     "You can view your order details at the following URL:\n{orderurl}."
                 ).replace("\n", "\r\n").format(
-                    event=event.name, orderurl=build_absolute_uri(
+                    orderurl=build_absolute_uri(
                         order.event, 'presale:event.order.position', kwargs={
                             'order': order.code,
                             'secret': position.web_secret,
@@ -303,7 +304,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                 body_plain += _(
                     "You can view your order details at the following URL:\n{orderurl}."
                 ).replace("\n", "\r\n").format(
-                    event=event.name, orderurl=build_absolute_uri(
+                    orderurl=build_absolute_uri(
                         order.event, 'presale:event.order.open', kwargs={
                             'order': order.code,
                             'secret': order.secret,
@@ -315,7 +316,6 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
         with override(timezone):
             try:
-                content_plain = render_mail(template, context, placeholder_mode=None)
                 if plain_text_only:
                     body_html = None
                 elif 'context' in inspect.signature(renderer.render).parameters:
@@ -335,8 +335,6 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             except:
                 logger.exception('Could not render HTML body')
                 body_html = None
-
-        body_plain = format_map(body_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
 
         send_task = mail_send_task.si(
             to=[email] if isinstance(email, str) else list(email),
