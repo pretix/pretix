@@ -32,8 +32,10 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import datetime
 import os
 import re
+from decimal import Decimal
 from email.mime.text import MIMEText
 
 import pytest
@@ -41,11 +43,11 @@ from django.conf import settings
 from django.core import mail as djmail
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from django_scopes import scope
+from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
-from pretix.base.models import Event, Organizer, User
+from pretix.base.models import Event, InvoiceAddress, Order, Organizer, User
 from pretix.base.services.mail import mail
 
 
@@ -65,6 +67,45 @@ def env():
     user.save()
     with scope(organizer=o):
         yield event, user, o
+
+
+@pytest.fixture
+@scopes_disabled()
+def item(env):
+    return env[0].items.create(name="Budget Ticket", default_price=23)
+
+
+@pytest.fixture
+@scopes_disabled()
+def order(env, item):
+    event, _, _ = env
+    o = Order.objects.create(
+        code="FOO",
+        event=event,
+        email="dummy@dummy.test",
+        status=Order.STATUS_PENDING,
+        secret="k24fiuwvu8kxz3y1",
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+        datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.UTC),
+        expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.UTC),
+        total=23,
+        locale="en",
+    )
+    o.positions.create(
+        order=o,
+        item=item,
+        variation=None,
+        price=Decimal("23"),
+        attendee_email="peter@example.org",
+        attendee_name_parts={"given_name": "Peter", "family_name": "Miller"},
+        secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
+        pseudonymization_id="ABCDEFGHKL",
+    )
+    InvoiceAddress.objects.create(
+        order=o,
+        name_parts={"given_name": "Peter", "family_name": "Miller"},
+    )
+    return o
 
 
 @pytest.mark.django_db
@@ -272,3 +313,141 @@ def test_placeholder_html_rendering_from_string(env):
         r'URL with text: <a href="https://google.com" rel="noopener" style="[^"]+" target="_blank">Test</a>',
         html
     )
+
+
+@pytest.mark.django_db
+def test_nested_placeholder_inclusion_full_process(env, order):
+    # Test that it is not possible to sneak in a placeholder like {url_cancel} inside a user-controlled
+    # placeholder value like {invoice_company}
+    event, user, organizer = env
+    position = order.positions.get()
+    order.invoice_address.company = "{url_cancel} Corp"
+    order.invoice_address.save()
+    event.settings.mail_text_resend_link = LazyI18nString({"en": "Ticket for {invoice_company}"})
+    event.settings.mail_subject_resend_link_attendee = LazyI18nString({"en": "Ticket for {invoice_company}"})
+
+    djmail.outbox = []
+    position.resend_link()
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [position.attendee_email]
+    assert "Ticket for {url_cancel} Corp" == djmail.outbox[0].subject
+    assert "/cancel" not in djmail.outbox[0].body
+    assert "/order" not in djmail.outbox[0].body
+    html, plain = _extract_html(djmail.outbox[0]), djmail.outbox[0].body
+    for part in (html, plain):
+        assert "Ticket for {url_cancel} Corp" in part
+        assert "/order/" not in part
+        assert "/cancel" not in part
+
+
+@pytest.mark.django_db
+def test_nested_placeholder_inclusion_mail_service(env):
+    # test that it is not possible to have placeholders within the values of placeholders when
+    # the mail() function is called directly
+    template = LazyI18nString("Event name: {event}")
+    djmail.outbox = []
+    event, user, organizer = env
+    event.name = "event & {currency} co. kg"
+    event.slug = "event-co-ag-slug"
+    event.save()
+
+    mail(
+        "dummy@dummy.dummy",
+        "{event} Test subject",
+        template,
+        get_email_context(
+            event=event,
+            payment_info="**IBAN**: 123  \n**BIC**: 456 {event}",
+        ),
+        event,
+    )
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [user.email]
+    html, plain = _extract_html(djmail.outbox[0]), djmail.outbox[0].body
+    for part in (html, plain, djmail.outbox[0].subject):
+        assert "event & {currency} co. kg" in part or "event &amp; {currency} co. kg" in part
+        assert "EUR" not in part
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("tpl", [
+    "Event: {event.__class__}",
+    "Event: {{event.__class__}}",
+    "Event: {{{event.__class__}}}",
+])
+def test_variable_inclusion_from_string_full_process(env, tpl, order):
+    # Test that it is not possible to use placeholders that leak system information in templates
+    # when run through system processes
+    event, user, organizer = env
+    event.name = "event & co. kg"
+    event.save()
+    position = order.positions.get()
+    event.settings.mail_text_resend_link = LazyI18nString({"en": tpl})
+    event.settings.mail_subject_resend_link_attendee = LazyI18nString({"en": tpl})
+
+    position.resend_link()
+    assert len(djmail.outbox) == 1
+    html, plain = _extract_html(djmail.outbox[0]), djmail.outbox[0].body
+    for part in (html, plain, djmail.outbox[0].subject):
+        assert "{event.__class__}" in part
+        assert "LazyI18nString" not in part
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("tpl", [
+    "Event: {event.__class__}",
+    "Event: {{event.__class__}}",
+    "Event: {{{event.__class__}}}",
+])
+def test_variable_inclusion_from_string_mail_service(env, tpl):
+    # Test that it is not possible to use placeholders that leak system information in templates
+    # when run through mail() directly
+    event, user, organizer = env
+    event.name = "event & co. kg"
+    event.save()
+
+    djmail.outbox = []
+    mail(
+        "dummy@dummy.dummy",
+        tpl,
+        LazyI18nString(tpl),
+        get_email_context(
+            event=event,
+            payment_info="**IBAN**: 123  \n**BIC**: 456\n" + tpl,
+        ),
+        event,
+    )
+    assert len(djmail.outbox) == 1
+    html, plain = _extract_html(djmail.outbox[0]), djmail.outbox[0].body
+    for part in (html, plain, djmail.outbox[0].subject):
+        assert "{event.__class__}" in part
+        assert "LazyI18nString" not in part
+
+
+@pytest.mark.django_db
+def test_escaped_braces_mail_services(env):
+    # Test that braces can be escaped by doubling
+    template = LazyI18nString("Event name: -{{currency}}-")
+    djmail.outbox = []
+    event, user, organizer = env
+    event.name = "event & co. kg"
+    event.save()
+
+    mail(
+        "dummy@dummy.dummy",
+        "-{{currency}}- Test subject",
+        template,
+        get_email_context(
+            event=event,
+            payment_info="**IBAN**: 123  \n**BIC**: 456 {event}",
+        ),
+        event,
+    )
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [user.email]
+    html, plain = _extract_html(djmail.outbox[0]), djmail.outbox[0].body
+    for part in (html, plain, djmail.outbox[0].subject):
+        assert "EUR" not in part
+        assert "-{currency}-" in part
