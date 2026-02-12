@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-06 07:41+0000\n"
-"Last-Translator: Ryo Tagami <rtagami@airstrip.jp>\n"
+"PO-Revision-Date: 2026-02-12 20:00+0000\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -2544,7 +2544,7 @@ msgstr "終了日"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:12
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:91
 msgid "Product"
-msgstr "商品"
+msgstr "製品"
 
 #: pretix/base/exporters/orderlist.py:652 pretix/base/models/vouchers.py:315
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -4048,7 +4048,7 @@ msgstr "複数の一致する製品が見つかりました。"
 #: pretix/base/modelimport_vouchers.py:205 pretix/base/models/items.py:1257
 #: pretix/base/models/vouchers.py:266 pretix/base/models/waitinglist.py:100
 msgid "Product variation"
-msgstr "商品バリエーション"
+msgstr "製品バリエーション"
 
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
@@ -9144,8 +9144,8 @@ msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"カートの商品の一つに使用されているバウチャーコードは既に使用回数を超えていま"
-"す。カート内の商品価格を調整しました。"
+"カート内のアイテムに使用されたバウチャーコードは、すでに使用回数の上限に達し"
+"ています。カート内のアイテムの価格を調整しました。"
 
 #: pretix/base/services/orders.py:182
 msgid ""
@@ -24181,7 +24181,7 @@ msgstr "高度な検索"
 #: pretix/control/templates/pretixcontrol/orders/index.html:102
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr "質問 \"%(question)s\" への回答で絞り込まれたリスト"
+msgstr "質問「%(question)s」への回答で絞り込まれたリストです。"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:107
 msgid "Remove filter"
@@ -34229,8 +34229,8 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"カート内の商品の確保期限が切れました。在庫があれば、このまま注文を完了するこ"
-"とができます。"
+"カート内のアイテムの予約が解除されました。在庫がある限り、引き続き注文を完了"
+"できます。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:514
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
@@ -34243,7 +34243,7 @@ msgstr "確保が更新されました"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:532
 msgid "Overview of your ordered products."
-msgstr "注文した製品の概要"
+msgstr "注文した製品の概要。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:50
 msgid "Continue with order process"
