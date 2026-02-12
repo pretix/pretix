@@ -256,7 +256,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             _autoextend_context(context, order)
 
         # Build raw content
-        body_plain = render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN)
+        body_plain = render_mail(template, context, placeholder_mode=None)
         if settings_holder:
             signature = str(settings_holder.settings.get('mail_text_signature'))
         else:
@@ -267,7 +267,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         body_plain = format_map(body_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
 
         # Build subject
-        subject = str(subject).format_map(TolerantDict(context))
+        subject = format_map(subject, context)
+
         subject = raw_subject = subject.replace('\n', ' ').replace('\r', '')[:900]
         if settings_holder:
             subject = prefix_subject(settings_holder, subject)
