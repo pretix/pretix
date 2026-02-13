@@ -75,7 +75,7 @@ from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
 from pretix.base.signals import email_filter, global_email_filter
 from pretix.celery_app import app
-from pretix.helpers.format import SafeFormatter, format_map
+from pretix.helpers.format import FormattedString, SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.ical import get_private_icals
@@ -199,6 +199,9 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     if email == INVALID_ADDRESS:
         return
 
+    if isinstance(template, FormattedString):
+        raise TypeError("Cannot pass an already formatted body template")
+
     if no_order_links and not plain_text_only:
         raise ValueError('If you set no_order_links, you also need to set plain_text_only.')
 
@@ -222,7 +225,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                 })
         renderer = ClassicMailRenderer(None, organizer)
         content_plain = render_mail(template, context, placeholder_mode=None)
-        subject = format_map(subject, context)
+        if not isinstance(subject, FormattedString):
+            subject = format_map(subject, context)
         sender = (
             sender or
             (event.settings.get('mail_from') if event else None) or
@@ -254,7 +258,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         else:
             timezone = ZoneInfo(settings.TIME_ZONE)
 
-        body_plain = render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN)
+        body_plain = format_map(content_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
         if settings_holder:
             if settings_holder.settings.mail_bcc:
                 for bcc_mail in settings_holder.settings.mail_bcc.split(','):
