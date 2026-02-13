@@ -34,12 +34,6 @@ password                              string                     Can only be set
                                                                  not be included in any responses.
 ===================================== ========================== =======================================================
 
-.. versionadded:: 4.0
-
-.. versionchanged:: 4.3
-
-   Passwords can now be set through the API during customer creation.
-
 .. versionchanged:: 2024.3
 
    The attribute ``phone`` has been added.

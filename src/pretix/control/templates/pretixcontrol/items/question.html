@@ -20,35 +20,20 @@
         </div>
         <form class="panel-body filter-form" action="" method="get">
             <div class="row">
-                <div class="col-lg-2 col-sm-6 col-xs-6">
-                    <select name="status" class="form-control">
-                        <option value="" {% if request.GET.status == "" %}selected="selected"{% endif %}>{% trans "All orders" %}</option>
-                        <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
-                        <option value="pv" {% if request.GET.status == "pv" %}selected="selected"{% endif %}>{% trans "Paid or confirmed" %}</option>
-                        <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
-                        <option value="np" {% if request.GET.status == "np" or "status" not in request.GET %}selected="selected"{% endif %}>{% trans "Pending or paid" %}</option>
-                        <option value="o" {% if request.GET.status == "o" %}selected="selected"{% endif %}>{% trans "Pending (overdue)" %}</option>
-                        <option value="e" {% if request.GET.status == "e" %}selected="selected"{% endif %}>{% trans "Expired" %}</option>
-                        <option value="ne" {% if request.GET.status == "ne" %}selected="selected"{% endif %}>{% trans "Pending or expired" %}</option>
-                        <option value="c" {% if request.GET.status == "c" %}selected="selected"{% endif %}>{% trans "Canceled" %}</option>
-                    </select>
+                 <div class="col-md-2 col-xs-6">
+                     {% bootstrap_field form.status %}
+                 </div>
+                 <div class="col-md-3 col-xs-6">
+                     {% bootstrap_field form.item %}
+                 </div>
+            {% if has_subevents %}
+                <div class="col-md-3 col-xs-6">
+                    {% bootstrap_field form.subevent %}
                 </div>
-                <div class="col-lg-5 col-sm-6 col-xs-6">
-                    <select name="item" class="form-control">
-                        <option value="">{% trans "All products" %}</option>
-                        {% for item in items %}
-                            <option value="{{ item.id }}"
-                                    {% if request.GET.item|add:0 == item.id %}selected="selected"{% endif %}>
-                                {{ item.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
+                <div class="col-md-4 col-xs-6">
+                    {% bootstrap_field form.date_range %}
                 </div>
-                {% if request.event.has_subevents %}
-                    <div class="col-lg-5 col-sm-6 col-xs-6">
-                        {% include "pretixcontrol/event/fragment_subevent_choice_simple.html" %}
-                    </div>
-                {% endif %}
+            {% endif %}
             </div>
             <div class="text-right">
                 <button class="btn btn-primary btn-lg" type="submit">
@@ -59,7 +44,7 @@
         </form>
     </div>
 
-    <div class="row" id="question-stats">
+    <div class="row">
         {% if not stats %}
             <div class="empty-collection col-md-10 col-xs-12">
                 <p>
@@ -81,7 +66,7 @@
                 <div class="chart" id="question_chart" data-type="{{ question.type }}">
 
                 </div>
-                <script type="application/json" id="question-chart-data">{{ stats_json|escapejson }}</script>
+                {{ stats|json_script:"question-chart-data" }}
             </div>
             <div class="col-md-5 col-xs-12">
                 <table class="table table-bordered table-hover">
@@ -89,7 +74,8 @@
                     <tr>
                         <th>{% trans "Answer" %}</th>
                         <th class="text-right">{% trans "Count" %}</th>
-                        <th class="text-right">{% trans "Percentage" %}</th>
+                        <th class="text-right">{% trans "% of answers" %}</th>
+                        <th class="text-right">{% trans "% of tickets" %}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -102,6 +88,7 @@
                             </td>
                             <td class="text-right">{{ stat.count }}</td>
                             <td class="text-right">{{ stat.percentage|floatformat:1 }} %</td>
+                            <td class="text-right">{{ stat.percentage_attendees|floatformat:1 }} %</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -109,6 +96,7 @@
                         <tr>
                             <td><strong>{% trans "Sum" %}</strong></td>
                             <td class="text-right"><strong>{{ total }}</strong></td>
+                            <td></td>
                             <td></td>
                         </tr>
                     </tfoot>

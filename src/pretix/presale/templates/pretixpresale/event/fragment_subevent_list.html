@@ -2,54 +2,32 @@
 {% load icon %}
 {% load eventurl %}
 
-{% if 'bundle_series_events' in event.meta_data and event.meta_data.bundle_series_events == "true" %}
-    {% if "voucher" in request.GET %}
-        <div class="cart-icon-details">
-            <dt><span class="fa fa-tags fa-fw" aria-hidden="true"></span> {% trans "Voucher code used:" %}</dt>
-            <dd>{{ request.GET.voucher|urlencode }}</dd>
-            <input type="hidden" name="_voucher_code" value="{{ request.GET.voucher|urlencode }}">
-        </div>
-    {% endif %}
-{% endif %}
-
-<dl class="full-width-list alternating-rows">
+<div class="event-list full-width-list alternating-rows">
 {% for subev in subevent_list.subevent_list %}
-    <div class="row">
-        <dt class="col-md-4 col-xs-12">
-            {% if 'bundle_series_events' in subev.meta_data and subev.meta_data.bundle_series_events == "true" %}
+    <article class="row" aria-labelledby="subevent-{{ subev.pk }}-label" aria-describedby="subevent-{{ subev.pk }}-desc">
+        <h3 class="col-md-4 col-xs-12">
+            <a id="subevent-{{ subev.pk }}-label" href="{% if request.GET.voucher %}{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}?voucher={{ request.GET.voucher|urlencode }}&amp;subevent={{ subev.pk }}{% else %}{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}{% endif %}">
                 {{ subev.name }}
-            {% else %}
-                <a href="{% if request.GET.voucher %}{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}?voucher={{ request.GET.voucher|urlencode }}&amp;subevent={{ subev.pk }}{% else %}{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}{% endif %}">
-                    {{ subev.name }}
-                </a>
-            {% endif %}
-        </dt>
-        <dd class="col-md-3 col-xs-12">
+            </a>
+        </h3>
+        <p class="col-md-3 col-xs-12" id="subevent-{{ subev.pk }}-desc">
             {{ subev.get_date_range_display_as_html }}
             {% if event.settings.show_times %}
                 <br>
                 <span class="event-time event-time-start" data-time="{{ subev.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-tzstr="{{ subev.tzstr }}" data-time>
                     <br>
                     {% icon "clock-o" %}
-                    <time datetime="{{ subev.date_from.isoformat }}">{{ subev.date_from|date:"TIME_FORMAT" }} {{ subev.tzstr }}</time>
+                    <span class="sr-only">{% trans "Time of day" %}</span>
+                    <time datetime="{{ subev.date_from.isoformat }}">{{ subev.date_from|date:"TIME_FORMAT" }}</time>
                 </span>
             {% endif %}
-        </dd>
-        <dd class="col-md-3 col-xs-6">
+        </p>
+        <p class="col-md-3 col-xs-6">
             <small>
                 {% include "pretixpresale/fragment_event_list_status.html" with event=subev %}
             </small>
-        </dd>
-        <dd class="col-md-2 col-xs-6 text-right flip">
-        {% if 'bundle_series_events' in subev.meta_data and subev.meta_data.bundle_series_events == "true" %}
-            {% icon "info" %} <i>Bundled Event</i>
-
-            <!-- event.items.all|first -->
-            {% with event.items.first as item %}
-                <input type="hidden" name="bundled-subevent-item_" value="{{ item.id }}_{{ subev.id }}">
-            {% endwith %}
-
-        {% else %}
+        </p>
+        <p class="col-md-2 col-xs-6 text-right flip">
             <a class="btn btn-primary btn-block" href="{% if request.GET.voucher %}{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}?voucher={{ request.GET.voucher|urlencode }}&amp;subevent={{ subev.pk }}{% else %}{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}{% endif %}">
                 {% if subev.presale_is_running and subev.best_availability_state == 100 %}
                     {% icon "ticket" %} {% trans "Tickets" %}
@@ -57,8 +35,7 @@
                     {% icon "info" %} {% trans "More info" %}
                 {% endif %}
             </a>
-        {% endif %}
-        </dd>
-    </div>
+        </p>
+    </article>
 {% endfor %}
-</dl>
+</div>

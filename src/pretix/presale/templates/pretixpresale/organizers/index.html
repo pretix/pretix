@@ -19,28 +19,24 @@
     <meta property="og:url" content="{% abseventurl organizer "presale:organizer.index" %}"/>
 {% endblock %}
 {% block content %}
-    <div>
-        {% if organizer_homepage_text %}
+    {% if organizer_homepage_text %}
+        <div class="blank-after">
             {{ organizer_homepage_text | rich_text }}
-        {% endif %}
-    </div>
-    <div id="monthselform">
-        <div class="row">
-            <div class="col-md-12">
-                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="list" %}
-            </div>
         </div>
+    {% endif %}
+    <div class="blank-after text-left flip">
+        {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="list" %}
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h2 class="panel-title">
-                <b>
+                <strong>
                 {% if "old" in request.GET %}
                     {% trans "Past events" %}
                 {% else %}
                     {% trans "Upcoming events" %}
                 {% endif %}
-                </b>
+                </strong>
             </h2>
         </div>
     {% if filter_form.fields %}
@@ -50,11 +46,11 @@
     {% endif %}
         {% if events %}
             <div class="panel-body">
-                <dl class="full-width-list alternating-rows">
+                <div class="event-list full-width-list alternating-rows">
                 {% for e in events %}{% eventurl e "presale:event.index" as url %}
-                    <div class="row">
-                        <dt class="col-md-4 col-xs-12"><a href="{{ url }}">{{ e.name }}</a></dt>
-                        <dd class="col-md-3 col-xs-12">
+                    <article class="row" aria-labelledby="event-{{ e.pk }}-label" aria-describedby="event-{{ e.pk }}-desc">
+                        <h3 class="col-md-4 col-xs-12"><a href="{{ url }}" id="event-{{ e.pk }}-label" class="no-underline">{{ e.name }}</a></h3>
+                        <p class="col-md-3 col-xs-12{% if e.is_remote%} event-is-remote{% endif %}" id="event-{{ e.pk }}-desc">
                         {% if e.settings.show_dates_on_frontpage %}
                             {% if e.has_subevents %}
                                 {% icon "calendar" %} {% trans "Multiple dates" context "subevent" %}
@@ -70,6 +66,7 @@
                                         <span class="text-muted" data-time="{{ e.date_from.isoformat }}" data-timezone="{{ e.timezone }}" data-tzstr="{{ e.tzstr }}">
                                             <br>
                                             {% icon "clock-o" %}
+                                            <span class="sr-only">{% trans "Time of day" %}</span>
                                             <time datetime="{{ e.date_from|date_fast:"H:i" }}">{{ e.date_from|date:"TIME_FORMAT" }}</time>
                                             {% if e.settings.show_date_to and e.date_to and e.date_to.date == e.date_from.date %}
                                                 <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span>
@@ -83,13 +80,13 @@
                         {% else %}
                             &nbsp;
                         {% endif %}
-                        </dd>
-                        <dd class="col-md-3 col-xs-6">
+                        </p>
+                        <p class="col-md-3 col-xs-6">
                             <small>
                                 {% include "pretixpresale/fragment_event_list_status.html" with event=e %}
                             </small>
-                        </dd>
-                        <dd class="col-md-2 col-xs-6 text-right flip">
+                        </p>
+                        <p class="col-md-2 col-xs-6 text-right flip">
                             <a class="btn btn-primary btn-block" href="{{ url }}{% if e.has_subevents and e.match_by_subevents %}{{ filterquery }}{% endif %}">
                                 {% if e.has_subevents %}{% icon "ticket" %} {% trans "Tickets" %}
                                 {% elif e.presale_is_running and e.best_availability_state == 100 %}
@@ -98,10 +95,10 @@
                                     {% icon "info" %} {% trans "More info" %}
                                 {% endif %}
                             </a>
-                        </dd>
-                    </div>
+                        </p>
+                    </article>
                 {% endfor %}
-                </dl>
+                </div>
             </div>
             <hr>
         {% endif %}

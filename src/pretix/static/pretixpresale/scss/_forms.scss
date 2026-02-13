@@ -23,6 +23,10 @@ a.btn, button.btn {
     }
 }
 
+.input-group:has(.input-group-btn:last-child) *:not(last-child) {
+  border-right: 0;
+}
+
 .panel-title .radio {
   margin-left: 20px;
 }
@@ -49,6 +53,15 @@ a.btn, button.btn {
     }
   }
 }
+.checkbox + .help-block {
+  padding-left: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  p {
+    margin-bottom: 0;
+  }
+}
+
 output {
   padding-top: $padding-base-vertical;
 }
@@ -141,14 +154,36 @@ output {
   }
 }
 
-.required-legend span {
-  color: $brand-primary;
-  font-weight: bold;
+.label-required {
+  color: $text-muted;
+  display: inline;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 85%;
 }
-.form-group.required .control-label:after {
-  content: '*';
-  color: $brand-primary;
+.has-error .label-required {
+  color: inherit;
 }
+.label-required {
+  &:before {
+    content: " (";
+  }
+  &:after {
+    content: ")";
+  }
+}
+@media (min-width: $screen-md-min) {
+  .form-group:not(:has(.checkbox)), .form-group:has(.checkbox + .checkbox) {
+    .label-required {
+      display: block;
+    }
+    .label-required:before,
+    .label-required:after {
+      content: "";
+    }
+  }
+}
+
 .form-control-text {
   padding-top: 7px;
 }
@@ -252,6 +287,7 @@ details {
     input:not(:last-child), select:not(:last-child) {
       border-bottom-right-radius: 0;
       border-bottom-left-radius: 0;
+      border-bottom: none;
     }
   }
 }
@@ -271,6 +307,7 @@ details {
     input:not(:last-child), select:not(:last-child)  {
       border-bottom-right-radius: 0;
       border-top-right-radius: 0;
+      border-right: none;
     }
     [data-size="1"] {
       flex-grow: 1;

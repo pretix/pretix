@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -28,6 +28,9 @@ from dateutil import parser
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.formats import get_format
+from django.utils.functional import lazy
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -206,14 +209,27 @@ class RelativeDateTimeWidget(forms.MultiWidget):
     def __init__(self, *args, **kwargs):
         self.status_choices = kwargs.pop('status_choices')
         base_choices = kwargs.pop('base_choices')
+
+        def placeholder_datetime_format():
+            df = get_format('DATETIME_INPUT_FORMATS')[0]
+            return now().replace(
+                year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
+            ).strftime(df)
+
+        def placeholder_time_format():
+            tf = get_format('TIME_INPUT_FORMATS')[0]
+            return datetime.time(8, 30, 0).strftime(tf)
+
         widgets = reldatetimeparts(
             status=forms.RadioSelect(choices=self.status_choices),
             absolute=forms.DateTimeInput(
-                attrs={'class': 'datetimepicker'}
+                attrs={'placeholder': lazy(placeholder_datetime_format, str), 'class': 'datetimepicker'}
             ),
             rel_days_number=forms.NumberInput(),
             rel_mins_relationto=forms.Select(choices=base_choices),
-            rel_days_timeofday=forms.TimeInput(attrs={'placeholder': _('Time'), 'class': 'timepickerfield'}),
+            rel_days_timeofday=forms.TimeInput(
+                attrs={'placeholder': lazy(placeholder_time_format, str), 'class': 'timepickerfield'}
+            ),
             rel_mins_number=forms.NumberInput(),
             rel_days_relationto=forms.Select(choices=base_choices),
             rel_mins_relation=forms.Select(choices=BEFORE_AFTER_CHOICE),

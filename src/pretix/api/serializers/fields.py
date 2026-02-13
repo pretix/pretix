@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -109,3 +109,19 @@ class UploadedFileField(serializers.Field):
             return None
         request = self.context['request']
         return request.build_absolute_uri(url)
+
+
+class PluginsField(serializers.Field):
+
+    def to_representation(self, obj):
+        from pretix.base.plugins import get_all_plugins
+
+        return sorted([
+            p.module for p in get_all_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in obj.get_plugins()
+        ])
+
+    def to_internal_value(self, data):
+        return {
+            'plugins': data
+        }

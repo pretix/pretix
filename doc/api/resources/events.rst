@@ -61,25 +61,6 @@ public_url                            string                     The public, cus
 Endpoints
 ---------
 
-.. versionchanged:: 4.0
-
-    The ``clone_from`` parameter has been added to the event creation endpoint.
-
-.. versionchanged:: 4.1
-
-    The ``with_availability_for`` parameter has been added.
-
-    The ``search`` query parameter has been added to filter events by their slug, name, or location in any language.
-
-.. versionchanged:: 4.17
-
-    The ``public_url`` field has been added.
-
-.. versionchanged:: 5.0
-
-    The ``date_from_before``, ``date_from_after``, ``date_to_before``, and ``date_to_after`` query parameters have been
-    added.
-
 .. http:get:: /api/v1/organizers/(organizer)/events/
 
    Returns a list of all events within a given organizer the authenticated user/token has access to.
@@ -443,9 +424,9 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer of the event to create.
    :param event: The ``slug`` field of the event to copy settings and items from.
    :statuscode 201: no error
-   :statuscode 400: The event could not be created due to invalid submitted data.
+   :statuscode 400: The event could not be updated due to invalid submitted data.
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to create this resource.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to update this resource.
 
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/
@@ -629,10 +610,6 @@ organizer level.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
-
-   .. versionchanged:: 4.18
-
-       The ``readonly`` flag has been added.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/settings/
 

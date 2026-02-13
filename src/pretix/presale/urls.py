@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -32,7 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.urls import include, re_path
+from django.urls import include, path, re_path
 from django.views.decorators.csrf import csrf_exempt
 
 import pretix.presale.views.cart
@@ -56,6 +56,7 @@ frame_wrapped_urls = [
     re_path(r'^cart/remove$', pretix.presale.views.cart.CartRemove.as_view(), name='event.cart.remove'),
     re_path(r'^cart/voucher$', pretix.presale.views.cart.CartApplyVoucher.as_view(), name='event.cart.voucher'),
     re_path(r'^cart/clear$', pretix.presale.views.cart.CartClear.as_view(), name='event.cart.clear'),
+    re_path(r'^cart/extend$', pretix.presale.views.cart.CartExtendReservation.as_view(), name='event.cart.extend'),
     re_path(r'^cart/answer/(?P<answer>[^/]+)/$',
             pretix.presale.views.cart.AnswerDownload.as_view(),
             name='event.cart.download.answer'),
@@ -175,7 +176,7 @@ event_patterns = [
 
     re_path(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
-    re_path(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='event.widget.css'),
+    path('widget/v<int:version>.css', pretix.presale.views.widget.widget_css, name='event.widget.css'),
     re_path(r'^(?P<subevent>\d+)/widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
 
@@ -198,9 +199,10 @@ organizer_patterns = [
 
     re_path(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='organizer.widget.productlist'),
-    re_path(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
+    path('widget/v<int:version>.css', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
 
     re_path(r'^theme.css$', pretix.presale.views.theme.theme_css, name='organizer.theme.css'),
+    re_path(r'^accessibility$', pretix.presale.views.organizer.AccessibilityView.as_view(), name='organizer.accessibility'),
 
     re_path(r'^account/login/(?P<provider>[0-9]+)/$', pretix.presale.views.customer.SSOLoginView.as_view(), name='organizer.customer.login'),
     re_path(r'^account/login/(?P<provider>[0-9]+)/return$', pretix.presale.views.customer.SSOLoginReturnView.as_view(), name='organizer.customer.login.return'),
@@ -215,6 +217,8 @@ organizer_patterns = [
     re_path(r'^account/confirmchange$', pretix.presale.views.customer.ConfirmChangeView.as_view(), name='organizer.customer.change.confirm'),
     re_path(r'^account/memberships$', pretix.presale.views.customer.MembershipView.as_view(), name='organizer.customer.memberships'),
     re_path(r'^account/memberships/(?P<id>\d+)/$', pretix.presale.views.customer.MembershipUsageView.as_view(), name='organizer.customer.membership'),
+    re_path(r'^account/giftcards$', pretix.presale.views.customer.GiftcardView.as_view(),
+            name='organizer.customer.giftcards'),
     re_path(r'^account/addresses$', pretix.presale.views.customer.AddressView.as_view(), name='organizer.customer.addresses'),
     re_path(r'^account/addresses/(?P<id>\d+)/delete$', pretix.presale.views.customer.AddressDeleteView.as_view(), name='organizer.customer.address.delete'),
     re_path(r'^account/profiles$', pretix.presale.views.customer.ProfileView.as_view(), name='organizer.customer.profiles'),
@@ -236,7 +240,5 @@ organizer_patterns = [
 locale_patterns = [
     re_path(r'^locale/set$', pretix.presale.views.locale.LocaleSet.as_view(), name='locale.set'),
     re_path(r'^robots.txt$', pretix.presale.views.robots.robots_txt, name='robots.txt'),
-    re_path(r'^browserconfig.xml$', pretix.presale.views.theme.browserconfig_xml, name='browserconfig.xml'),
-    re_path(r'^site.webmanifest$', pretix.presale.views.theme.webmanifest, name='site.webmanifest'),
-    re_path(r'^widget/v1\.(?P<lang>[a-zA-Z0-9_\-]+)\.js$', pretix.presale.views.widget.widget_js, name='widget.js'),
+    path('widget/v<int:version>.<slug:lang>.js', pretix.presale.views.widget.widget_js, name='widget.js'),
 ]

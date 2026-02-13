@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -48,7 +48,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix.base.i18n import language
 from pretix.base.models import CachedFile, Event, User, cachedfile_name
-from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.mail import mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.shredder import ShredError
 from pretix.celery_app import app
@@ -171,21 +171,18 @@ def shred(self, event: Event, fileid: str, confirm_code: str, user: int=None, lo
 
     if user:
         with language(user.locale):
-            try:
-                mail(
-                    user.email,
-                    _('Data shredding completed'),
-                    'pretixbase/email/shred_completed.txt',
-                    {
-                        'user': user,
-                        'organizer': event.organizer.name,
-                        'event': str(event.name),
-                        'start_time': date_format(parse(indexdata['time']).astimezone(event.timezone), 'SHORT_DATETIME_FORMAT'),
-                        'shredders': ', '.join([str(s.verbose_name) for s in shredders])
-                    },
-                    event=None,
-                    user=user,
-                    locale=user.locale,
-                )
-            except SendMailException:
-                pass  # Already logged
+            mail(
+                user.email,
+                _('Data shredding completed'),
+                'pretixbase/email/shred_completed.txt',
+                {
+                    'user': user,
+                    'organizer': event.organizer.name,
+                    'event': str(event.name),
+                    'start_time': date_format(parse(indexdata['time']).astimezone(event.timezone), 'SHORT_DATETIME_FORMAT'),
+                    'shredders': ', '.join([str(s.verbose_name) for s in shredders])
+                },
+                event=None,
+                user=user,
+                locale=user.locale,
+            )

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -32,11 +32,15 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import copy
 import json
+import logging
 import re
+from collections import Counter
 from datetime import time, timedelta
 from decimal import Decimal
 from hashlib import sha1
+from itertools import groupby
 from json import JSONDecodeError
 
 import bleach
@@ -59,9 +63,11 @@ from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
@@ -69,6 +75,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import (
     CreateView, DetailView, FormView, ListView, TemplateView, UpdateView,
 )
+from django.views.generic.detail import SingleObjectMixin
 
 from pretix.api.models import ApiCall, WebHook
 from pretix.api.webhooks import manually_retry_all_calls
@@ -91,8 +98,12 @@ from pretix.base.models.giftcards import (
 from pretix.base.models.orders import CancellationRequest
 from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.payment import PaymentException
+from pretix.base.plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+    PLUGIN_LEVEL_ORGANIZER,
+)
 from pretix.base.services.export import multiexport, scheduled_organizer_export
-from pretix.base.services.mail import SendMailException, mail, prefix_subject
+from pretix.base.services.mail import mail, prefix_subject
 from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
@@ -108,9 +119,9 @@ from pretix.control.forms.organizer import (
     GiftCardAcceptanceInviteForm, GiftCardCreateForm, GiftCardUpdateForm,
     KnownDomainFormset, MailSettingsForm, MembershipTypeForm,
     MembershipUpdateForm, OrganizerDeleteForm, OrganizerFooterLinkFormset,
-    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm,
-    ReusableMediumCreateForm, ReusableMediumUpdateForm, SalesChannelForm,
-    SSOClientForm, SSOProviderForm, TeamForm, WebHookForm,
+    OrganizerForm, OrganizerPluginEventsForm, OrganizerSettingsForm,
+    OrganizerUpdateForm, ReusableMediumCreateForm, ReusableMediumUpdateForm,
+    SalesChannelForm, SSOClientForm, SSOProviderForm, TeamForm, WebHookForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
@@ -128,6 +139,8 @@ from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.forms.customer import TokenGenerator
+
+logger = logging.getLogger(__name__)
 
 
 class OrganizerList(PaginationMixin, ListView):
@@ -582,6 +595,263 @@ class OrganizerCreate(CreateView):
         })
 
 
+class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, TemplateView, SingleObjectMixin):
+    model = Organizer
+    context_object_name = 'organizer'
+    permission = 'can_change_organizer_settings'
+    template_name = 'pretixcontrol/organizers/plugins.html'
+
+    def get_object(self, queryset=None) -> Organizer:
+        return self.request.organizer
+
+    def available_plugins(self, organizer):
+        from pretix.base.plugins import get_all_plugins
+
+        return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
+                and getattr(p, 'visible', True))
+
+    def prepare_links(self, pluginmeta, key):
+        links = getattr(pluginmeta, key, [])
+        try:
+            result = []
+            for linktext, urlname, kwargs in links:
+                try:
+                    result.append((
+                        reverse(urlname, kwargs={"organizer": self.request.organizer.slug}),
+                        " > ".join(map(str, linktext)) if isinstance(linktext, tuple) else linktext,
+                    ))
+                except NoReverseMatch:
+                    if pluginmeta.level != PLUGIN_LEVEL_ORGANIZER:
+                        # Ignore, link might be for another level
+                        pass
+                    else:
+                        raise
+            return result
+        except:
+            logger.exception('Failed to resolve settings links.')
+            return []
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        from pretix.base.plugins import CATEGORY_LABELS, CATEGORY_ORDER
+
+        context = super().get_context_data(*args, **kwargs)
+        plugins = list(self.available_plugins(self.object))
+
+        active_counter = Counter()
+        events_total = 0
+        for e in self.object.events.only("plugins").iterator():
+            events_total += 1
+            for p in e.get_plugins():
+                active_counter[p] += 1
+        plugins_grouped = groupby(
+            sorted(
+                plugins,
+                key=lambda p: (
+                    str(getattr(p, 'category', _('Other'))),
+                    (0 if getattr(p, 'featured', False) else 1),
+                    str(p.name).lower().replace('pretix ', '')
+                ),
+            ),
+            lambda p: str(getattr(p, 'category', _('Other')))
+        )
+        plugins_grouped = [(c, list(plist)) for c, plist in plugins_grouped]
+
+        active_plugins = self.object.get_plugins()
+
+        def plugin_details(plugin):
+            is_active = plugin.module in active_plugins
+            events_counter = active_counter[plugin.module]
+            settings_links = self.prepare_links(plugin, 'settings_links') if is_active else None
+            navigation_links = self.prepare_links(plugin, 'navigation_links') if is_active else None
+            return plugin, is_active, settings_links, navigation_links, events_counter
+
+        context['plugins'] = sorted([
+            (c, CATEGORY_LABELS.get(c, c), map(plugin_details, plist), any(getattr(p, 'picture', None) for p in plist))
+            for c, plist
+            in plugins_grouped
+        ], key=lambda c: (CATEGORY_ORDER.index(c[0]), c[1]) if c[0] in CATEGORY_ORDER else (999, str(c[1])))
+        context['show_meta'] = settings.PRETIX_PLUGINS_SHOW_META
+        context['events_total'] = events_total
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        plugins_available = {
+            p.module: p for p in self.available_plugins(self.object)
+        }
+        choose_events_next = False
+        with transaction.atomic():
+            for key, value in request.POST.items():
+                if key.startswith("plugin:"):
+                    module = key.split(":")[1]
+                    if value == "enable" and module in plugins_available:
+                        pluginmeta = plugins_available[module]
+                        if getattr(pluginmeta, 'restricted', False):
+                            if module not in request.organizer.settings.allowed_restricted_plugins:
+                                continue
+
+                        level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
+                        if level not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+                            continue
+
+                        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                            choose_events_next = module
+
+                        self.object.log_action('pretix.organizer.plugins.enabled', user=self.request.user,
+                                               data={'plugin': module})
+                        self.object.enable_plugin(module, allow_restricted=request.organizer.settings.allowed_restricted_plugins)
+
+                        links = self.prepare_links(pluginmeta, 'settings_links')
+                        if links:
+                            info = [
+                                '<p>',
+                                format_html(_('The plugin {} is now active, you can configure it here:'),
+                                            format_html("<strong>{}</strong>", pluginmeta.name)),
+                                '</p><p>',
+                            ] + [
+                                format_html('<a href="{}" class="btn btn-default">{}</a> ', url, text)
+                                for url, text in links
+                            ] + ['</p>']
+                        else:
+                            info = [
+                                format_html(_('The plugin {} is now active.'),
+                                            format_html("<strong>{}</strong>", pluginmeta.name)),
+                            ]
+                        messages.success(self.request, mark_safe("".join(info)))
+                    elif value == "disable" and module in plugins_available:
+                        pluginmeta = plugins_available[module]
+                        level = getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT)
+                        if level not in (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+                            continue
+
+                        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                            events_to_disable = set(self.request.organizer.events.filter(
+                                plugins__regex='(^|,)' + module + '(,|$)'
+                            ).values_list("pk", flat=True))
+                            logentries_to_save = []
+                            events_to_save = []
+
+                            for e in self.request.organizer.events.filter(pk__in=events_to_disable):
+                                logentries_to_save.append(
+                                    e.log_action('pretix.event.plugins.disabled', user=self.request.user,
+                                                 data={'plugin': module}, save=False)
+                                )
+                                e.disable_plugin(module)
+                                events_to_save.append(e)
+
+                            Event.objects.bulk_update(events_to_save, fields=["plugins"])
+                            LogEntry.objects.bulk_create(logentries_to_save)
+
+                        self.object.log_action('pretix.organizer.plugins.disabled', user=self.request.user,
+                                               data={'plugin': module})
+                        self.object.disable_plugin(module)
+                        messages.success(self.request, _('The plugin has been disabled.'))
+            self.object.save()
+        if choose_events_next:
+            return redirect(reverse('control:organizer.settings.plugin-events', kwargs={
+                'organizer': self.request.organizer.slug,
+                'plugin': choose_events_next,
+            }))
+        else:
+            return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:organizer.settings.plugins', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+
+class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
+    model = Organizer
+    context_object_name = 'organizer'
+    permission = 'can_change_organizer_settings'
+    template_name = 'pretixcontrol/organizers/plugin_events.html'
+    form_class = OrganizerPluginEventsForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["events"] = self.request.user.get_events_with_permission(
+            "can_change_event_settings", request=self.request
+        ).filter(organizer=self.request.organizer)
+        kwargs["initial"] = {
+            "events": self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)')
+        }
+        return kwargs
+
+    def available_plugins(self, organizer):
+        from pretix.base.plugins import get_all_plugins
+
+        return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
+                and getattr(p, 'visible', True))
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            plugin=self.plugin,
+            **kwargs
+        )
+
+    def dispatch(self, request, *args, **kwargs):
+        plugins_available = {
+            p.module: p for p in self.available_plugins(self.request.organizer)
+        }
+        if kwargs["plugin"] not in plugins_available:
+            raise Http404(_("Unknown plugin."))
+        self.plugin = plugins_available[kwargs["plugin"]]
+        level = getattr(self.plugin, "level", PLUGIN_LEVEL_EVENT)
+        if level == PLUGIN_LEVEL_ORGANIZER:
+            raise Http404(_("This plugin can only be enabled for the entire organizer account."))
+        if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID and self.plugin.module not in self.request.organizer.get_plugins():
+            raise Http404(_("This plugin is currently not active on the organizer account."))
+
+        if getattr(self.plugin, 'restricted', False):
+            if self.plugin.module not in request.organizer.settings.allowed_restricted_plugins:
+                raise Http404(_("This plugin is currently not allowed for this organizer account."))
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self) -> str:
+        return reverse('control:organizer.settings.plugins', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        enabled_events_before = set(
+            self.request.organizer.events.filter(plugins__regex='(^|,)' + self.plugin.module + '(,|$)').values_list("pk", flat=True)
+        )
+        enabled_events_now = {e.pk for e in form.cleaned_data["events"]}
+
+        events_to_enable = enabled_events_now - enabled_events_before
+        events_to_disable = enabled_events_before - enabled_events_now
+        events_to_save = []
+        logentries_to_save = []
+
+        for e in self.request.organizer.events.filter(pk__in=events_to_enable):
+            logentries_to_save.append(
+                e.log_action('pretix.event.plugins.enabled', user=self.request.user, data={'plugin': self.plugin.module}, save=False)
+            )
+            e.enable_plugin(self.plugin.module, allow_restricted=self.request.organizer.settings.allowed_restricted_plugins)
+            events_to_save.append(e)
+
+        for e in self.request.organizer.events.filter(pk__in=events_to_disable):
+            logentries_to_save.append(
+                e.log_action('pretix.event.plugins.disabled', user=self.request.user, data={'plugin': self.plugin.module}, save=False)
+            )
+            e.disable_plugin(self.plugin.module)
+            events_to_save.append(e)
+
+        Event.objects.bulk_update(events_to_save, fields=["plugins"])
+        LogEntry.objects.bulk_create(logentries_to_save)
+        messages.success(self.request, _("Your changes have been saved."))
+        return super().form_valid(form)
+
+
 class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     model = Team
     template_name = 'pretixcontrol/organizers/teams.html'
@@ -767,24 +1037,21 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         return ctx
 
     def _send_invite(self, instance):
-        try:
-            mail(
-                instance.email,
-                _('pretix account invitation'),
-                'pretixcontrol/email/invitation.txt',
-                {
-                    'user': self,
-                    'organizer': self.request.organizer.name,
-                    'team': instance.team.name,
-                    'url': build_global_uri('control:auth.invite', kwargs={
-                        'token': instance.token
-                    })
-                },
-                event=None,
-                locale=self.request.LANGUAGE_CODE
-            )
-        except SendMailException:
-            pass  # Already logged
+        mail(
+            instance.email,
+            _('pretix account invitation'),
+            'pretixcontrol/email/invitation.txt',
+            {
+                'user': self,
+                'organizer': self.request.organizer.name,
+                'team': instance.team.name,
+                'url': build_global_uri('control:auth.invite', kwargs={
+                    'token': instance.token
+                })
+            },
+            event=None,
+            locale=self.request.LANGUAGE_CODE
+        )
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -1400,9 +1667,12 @@ class GiftCardAcceptanceInviteView(OrganizerDetailViewMixin, OrganizerPermission
             active=False,
         )
         self.request.organizer.log_action(
-            'pretix.giftcards.acceptance.acceptor.invited',
-            data={'acceptor': form.cleaned_data['acceptor'].slug,
-                  'reusable_media': form.cleaned_data['reusable_media']},
+            action='pretix.giftcards.acceptance.acceptor.invited',
+            data={
+                'acceptor': form.cleaned_data['acceptor'].slug,
+                'issuer': self.request.organizer.slug,
+                'reusable_media': form.cleaned_data['reusable_media']
+            },
             user=self.request.user
         )
         messages.success(self.request, _('The selected organizer has been invited.'))
@@ -1438,8 +1708,11 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
             ).delete()
             if done:
                 self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.acceptor.removed',
-                    data={'acceptor': request.POST.get("delete_acceptor")},
+                    action='pretix.giftcards.acceptance.acceptor.removed',
+                    data={
+                        'acceptor': request.POST.get("delete_acceptor"),
+                        'issuer': self.request.organizer.slug
+                    },
                     user=request.user
                 )
             messages.success(self.request, _('The selected connection has been removed.'))
@@ -1449,8 +1722,11 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
             ).delete()
             if done:
                 self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.issuer.removed',
-                    data={'issuer': request.POST.get("delete_acceptor")},
+                    action='pretix.giftcards.acceptance.issuer.removed',
+                    data={
+                        'issuer': request.POST.get("delete_acceptor"),
+                        'acceptor': self.request.organizer.slug
+                    },
                     user=request.user
                 )
             messages.success(self.request, _('The selected connection has been removed.'))
@@ -1460,8 +1736,11 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
             ).update(active=True)
             if done:
                 self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.issuer.accepted',
-                    data={'issuer': request.POST.get("accept_issuer")},
+                    action='pretix.giftcards.acceptance.issuer.accepted',
+                    data={
+                        'issuer': request.POST.get("accept_issuer"),
+                        'acceptor': self.request.organizer.slug
+                    },
                     user=request.user
                 )
             messages.success(self.request, _('The selected connection has been accepted.'))
@@ -1567,10 +1846,11 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                         acceptor=request.organizer,
                     )
                     self.object.log_action(
-                        'pretix.giftcards.transaction.manual',
+                        action='pretix.giftcards.transaction.manual',
                         data={
                             'value': value,
-                            'text': request.POST.get('text')
+                            'text': request.POST.get('text'),
+                            'acceptor_id': self.request.organizer.id
                         },
                         user=self.request.user,
                     )
@@ -1619,15 +1899,23 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         messages.success(self.request, _('The gift card has been created and can now be used.'))
         form.instance.issuer = self.request.organizer
         super().form_valid(form)
-        form.instance.transactions.create(
-            acceptor=self.request.organizer,
-            value=form.cleaned_data['value']
+        form.instance.log_action(
+            action='pretix.giftcards.created',
+            user=self.request.user,
         )
-        form.instance.log_action('pretix.giftcards.created', user=self.request.user, data={})
         if form.cleaned_data['value']:
-            form.instance.log_action('pretix.giftcards.transaction.manual', user=self.request.user, data={
-                'value': form.cleaned_data['value']
-            })
+            form.instance.transactions.create(
+                acceptor=self.request.organizer,
+                value=form.cleaned_data['value']
+            )
+            form.instance.log_action(
+                action='pretix.giftcards.transaction.manual',
+                user=self.request.user,
+                data={
+                    'value': form.cleaned_data['value'],
+                    'acceptor_id': self.request.organizer.id
+                }
+            )
         return redirect(reverse(
             'control:organizer.giftcard',
             kwargs={
@@ -1655,7 +1943,11 @@ class GiftCardUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
     def form_valid(self, form):
         messages.success(self.request, _('The gift card has been changed.'))
         super().form_valid(form)
-        form.instance.log_action('pretix.giftcards.modified', user=self.request.user, data=dict(form.cleaned_data))
+        form.instance.log_action(
+            action='pretix.giftcards.modified',
+            user=self.request.user,
+            data=dict(form.cleaned_data)
+        )
         return redirect(reverse(
             'control:organizer.giftcard',
             kwargs={
@@ -1674,8 +1966,8 @@ class ExportMixin:
         for ex in self.exporters:
             if id != ex.identifier:
                 continue
-            if self.scheduled:
-                initial = dict(self.scheduled.export_form_data)
+            if self.scheduled or self.scheduled_copy_from:
+                initial = dict((self.scheduled or self.scheduled_copy_from).export_form_data)
 
                 test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
                 test_form.fields = ex.export_form_fields
@@ -1778,6 +2070,11 @@ class ExportMixin:
         elif "scheduled" in self.request.GET:
             return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled"))
 
+    @cached_property
+    def scheduled_copy_from(self):
+        if "scheduled_copy_from" in self.request.GET:
+            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled_copy_from"))
+
 
 class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, TemplateView):
     known_errortypes = ['ExportError', 'ExportEmptyError']
@@ -1844,7 +2141,16 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
         if request.POST.get("schedule") == "save":
-            if self.exporter.form.is_valid() and self.rrule_form.is_valid() and self.schedule_form.is_valid():
+            if not self.has_permission():
+                messages.error(
+                    self.request,
+                    _(
+                        "Your user account does not have sufficient permission to run this report, therefore "
+                        "you cannot schedule it."
+                    )
+                )
+                return super().get(request, *args, **kwargs)
+            elif self.exporter.form.is_valid() and self.rrule_form.is_valid() and self.schedule_form.is_valid():
                 self.schedule_form.instance.export_identifier = self.exporter.identifier
                 self.schedule_form.instance.export_form_data = self.exporter.form.cleaned_data
                 self.schedule_form.instance.schedule_rrule = str(self.rrule_form.to_rrule())
@@ -1882,6 +2188,8 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
     def rrule_form(self):
         if self.scheduled:
             initial = RRuleForm.initial_from_rrule(self.scheduled.schedule_rrule)
+        elif self.scheduled_copy_from:
+            initial = RRuleForm.initial_from_rrule(self.scheduled_copy_from.schedule_rrule)
         else:
             initial = {}
         return RRuleForm(
@@ -1893,11 +2201,15 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
 
     @cached_property
     def schedule_form(self):
-        instance = self.scheduled or ScheduledOrganizerExport(
-            organizer=self.request.organizer,
-            owner=self.request.user,
-            timezone=str(get_current_timezone()),
-        )
+        if self.scheduled_copy_from:
+            instance = copy.copy(self.scheduled_copy_from)
+            instance.pk = None
+        else:
+            instance = self.scheduled or ScheduledOrganizerExport(
+                organizer=self.request.organizer,
+                owner=self.request.user,
+                timezone=str(get_current_timezone()),
+            )
         if not self.scheduled:
             initial = {
                 "mail_subject": gettext("Export: {title}").format(title=self.exporter.verbose_name),
@@ -1920,11 +2232,20 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
     def get_queryset(self):
         return self.get_scheduled_queryset()
 
+    def has_permission(self):
+        if isinstance(self.exporter, OrganizerLevelExportMixin):
+            if not self.request.user.has_organizer_permission(self.request.organizer, self.exporter.organizer_required_permission):
+                return False
+        if self.exporter and not self.exporter.available_for_user(self.request.user):
+            return False
+        return True
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        if "schedule" in self.request.POST or self.scheduled:
+        if "schedule" in self.request.POST or self.scheduled or self.scheduled_copy_from:
             ctx['schedule_form'] = self.schedule_form
             ctx['rrule_form'] = self.rrule_form
+            ctx['scheduled_copy_from'] = self.scheduled_copy_from
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:
@@ -2297,7 +2618,7 @@ class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     def get_queryset(self):
         # technically, we'd also need to sort by pk since this is a paginated list, but in this case we just can't
         # bear the performance cost
-        qs = self.request.organizer.all_logentries().select_related(
+        qs = self.request.organizer.logentry_set.filter(event=None).select_related(
             'user', 'content_type', 'api_token', 'oauth_application', 'device'
         ).order_by('-datetime')
         qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
@@ -2728,6 +3049,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                 locale=self.customer.locale,
                 customer=self.customer,
                 organizer=self.request.organizer,
+                sensitive=True,
             )
             messages.success(
                 self.request,
@@ -2798,6 +3120,8 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             .order_by("currency")
             .annotate(spending=Sum("total"))
         )
+
+        ctx["gift_cards"] = self.customer.customer_gift_cards.all()
 
         return ctx
 

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -24,7 +24,7 @@ import responses
 from requests import Timeout
 
 from pretix.base.services.tax import (
-    VATIDFinalError, VATIDTemporaryError, validate_vat_id,
+    VATIDFinalError, VATIDTemporaryError, normalize_vat_id, validate_vat_id,
 )
 
 
@@ -49,6 +49,18 @@ def test_eu_no_prefix():
 def test_eu_country_mismatch():
     with pytest.raises(VATIDFinalError):
         validate_vat_id('AT12345', 'DE')
+
+
+@responses.activate
+def test_normalize():
+    assert normalize_vat_id('AT U 12345678', 'AT') == 'ATU12345678'
+    assert normalize_vat_id('U12345678', 'AT') == 'ATU12345678'
+    assert normalize_vat_id('IT.123.456.789.00', 'IT') == 'IT12345678900'
+    assert normalize_vat_id('12345678900', 'IT') == 'IT12345678900'
+    assert normalize_vat_id('123456789MVA', 'NO') == "NO123456789MVA"
+    assert normalize_vat_id('CHE 123456789 MWST', 'CH') == "CHE123456789"
+    # Bad combination is left for validation
+    assert normalize_vat_id('ATU12345678', 'IT') == 'ATU12345678'
 
 
 @responses.activate
@@ -194,5 +206,28 @@ def test_NO_id_valid():
     )
 
     assert validate_vat_id('NO974760673 MVA', 'NO') == 'NO974760673MVA'
+
+
+@responses.activate
+def test_NO_id_valid_without_prefix():
+    responses.add(
+        responses.GET,
+        'https://data.brreg.no/enhetsregisteret/api/enheter/974760673',
+        body='{"organisasjonsnummer":"974760673","navn":"REGISTERENHETEN I BRØNNØYSUND","organisasjonsform":{"kode":'
+             '"ORGL","beskrivelse":"Organisasjonsledd","_links":{"self":{"href":"https://data.brreg.no/enhetsregisteret/api/'
+             'organisasjonsformer/ORGL"}}},"hjemmeside":"www.brreg.no","postadresse":{"land":"Norge","landkode":"NO","postn'
+             'ummer":"8910","poststed":"BRØNNØYSUND","adresse":["Postboks 900"],"kommune":"BRØNNØY","kommunenummer":"1813"}'
+             ',"registreringsdatoEnhetsregisteret":"1995-08-09","registrertIMvaregisteret":false,"naeringskode1":{"beskrivels'
+             'e":"Generell offentlig administrasjon","kode":"84.110"},"antallAnsatte":455,"overordnetEnhet":"912660680","for'
+             'retningsadresse":{"land":"Norge","landkode":"NO","postnummer":"8900","poststed":"BRØNNØYSUND","adresse":["Havn'
+             'egata 48"],"kommune":"BRØNNØY","kommunenummer":"1813"},"institusjonellSektorkode":{"kode":"6100","beskrivelse'
+             '":"Statsforvaltningen"},"registrertIForetaksregisteret":false,"registrertIStiftelsesregisteret":false,"registr'
+             'ertIFrivillighetsregisteret":false,"konkurs":false,"underAvvikling":false,"underTvangsavviklingEllerTvangsopp'
+             'losning":false,"maalform":"Bokmål","_links":{"self":{"href":"https://data.brreg.no/enhetsregisteret/api/enheter'
+             '/974760673"},"overordnetEnhet":{"href":"https://data.brreg.no/enhetsregisteret/api/enheter/912660680"}}}',
+        status=200
+    )
+
+    assert validate_vat_id('974 760 673 MVA', 'NO') == 'NO974760673MVA'
 
 # No tests for CH currently since it's harder to mock Zeep

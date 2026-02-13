@@ -13,7 +13,7 @@
 {% endblock %}
 {% block content %}
 <aside aria-label="{% trans "Your cart" %}">
-    <details class="panel panel-default cart{% if "open_cart" not in request.GET %} sneak-peek{% endif %}" {% if "open_cart" in request.GET %}open{% endif %}>
+    <details class="panel panel-default cart sneak-peek-container" open>
         <summary class="panel-heading">
             <h2 class="panel-title">
                 <span>
@@ -33,11 +33,15 @@
         </summary>
         {% if "open_cart" not in request.GET %}
         <p class="sneak-peek-trigger">
-            <button type="button" class="btn btn-default">{% trans "Show full cart" %}</button>
+            <button type="button" class="btn btn-default" aria-controls="cart-foldable-container">{% trans "Show full cart" %}</button>
         </p>
         {% endif %}
         <div>
+            {% if "open_cart" not in request.GET %}
+            <div class="panel-body sneak-peek-content" id="cart-foldable-container">
+            {% else %}
             <div class="panel-body">
+            {% endif %}
                 {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event %}
             </div>
         </div>
@@ -49,10 +53,8 @@
         </a>
     {% endif %}
 </aside>
-<main aria-label="{% trans "Checkout" %}">
     <h2>{% trans "Checkout" %}</h2>
     {% include "pretixpresale/event/fragment_checkoutflow.html" %}
     {% block inner %}
     {% endblock %}
-</main>
 {% endblock %}

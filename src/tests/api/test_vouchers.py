@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -81,6 +81,8 @@ TEST_VOUCHER_RES = {
     'all_bundles_included': False,
     'subevent': None,
     'seat': None,
+    'budget': None,
+    'budget_used': "0.00",
 }
 
 
@@ -89,6 +91,7 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota, sube
     res = dict(TEST_VOUCHER_RES)
     res['item'] = item.pk
     res['id'] = voucher.pk
+    res['created'] = voucher.created.isoformat().replace('+00:00', 'Z')
     res['code'] = voucher.code
     q2 = copy.copy(quota)
     q2.pk = None
@@ -262,6 +265,7 @@ def test_voucher_detail(token_client, organizer, event, voucher, item):
     res['item'] = item.pk
     res['id'] = voucher.pk
     res['code'] = voucher.code
+    res['created'] = voucher.created.isoformat().replace('+00:00', 'Z')
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/vouchers/{}/'.format(organizer.slug, event.slug,
                                                                                   voucher.pk))

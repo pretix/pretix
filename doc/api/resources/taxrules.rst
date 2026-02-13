@@ -26,6 +26,8 @@ rate                                  decimal (string)           Tax rate in per
 code                                  string                     Codified reason for tax rate (or ``null``), see :ref:`rest-taxcodes`.
 price_includes_tax                    boolean                    If ``true`` (default), tax is assumed to be included in
                                                                  the specified product price
+default                               boolean                    If ``true`` (default), this is the default tax rate for this event
+                                                                 (there can only be one per event).
 eu_reverse_charge                     boolean                    **DEPRECATED**. If ``true``, EU reverse charge rules
                                                                  are applied. Will be ignored if custom rules are set.
                                                                  Use custom rules instead.
@@ -40,10 +42,6 @@ custom_rules                          object                     Dynamic rules s
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 4.6
-
-    The ``internal_name`` and ``keep_gross_if_rate_changes`` attributes have been added.
-
 .. versionchanged:: 2023.6
 
     The ``custom_rules`` attribute has been added.
@@ -51,6 +49,10 @@ custom_rules                          object                     Dynamic rules s
 .. versionchanged:: 2023.8
 
     The ``code`` attribute has been added.
+
+.. versionchanged:: 2025.4
+
+    The ``default`` attribute has been added.
 
 .. _rest-taxcodes:
 
@@ -115,6 +117,7 @@ Endpoints
           {
             "id": 1,
             "name": {"en": "VAT"},
+            "default": true,
             "internal_name": "VAT",
             "code": "S/standard",
             "rate": "19.00",
@@ -157,6 +160,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "VAT"},
+            "default": true,
         "internal_name": "VAT",
         "code": "S/standard",
         "rate": "19.00",
@@ -207,6 +211,7 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "VAT"},
+        "default": false,
         "internal_name": "VAT",
         "code": "S/standard",
         "rate": "19.00",

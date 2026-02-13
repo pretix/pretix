@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -22,7 +22,6 @@
 import logging
 from urllib.parse import urlsplit
 
-import stripe
 from django.conf import settings
 
 from pretix.base.services.tasks import EventTask
@@ -50,7 +49,10 @@ def get_stripe_account_key(prov):
 
 @app.task(base=EventTask, max_retries=5, default_retry_delay=1)
 def stripe_verify_domain(event, domain):
+    import stripe
+
     from pretix.plugins.stripe.payment import StripeCC
+
     prov = StripeCC(event)
     account = get_stripe_account_key(prov)
 

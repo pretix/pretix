@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -42,6 +42,7 @@ from rest_framework.reverse import reverse
 
 from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
+from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
     InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
@@ -49,23 +50,28 @@ from pretix.api.serializers.item import (
 from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
+from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import (
-    CachedFile, Checkin, Customer, Invoice, InvoiceAddress, InvoiceLine, Item,
-    ItemVariation, Order, OrderPosition, Question, QuestionAnswer,
-    ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule, Voucher,
+    CachedFile, Checkin, Customer, Device, Invoice, InvoiceAddress,
+    InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
+    QuestionAnswer, ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule,
+    Voucher,
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
-    PrintLog, RevokedTicketSecret,
+    PrintLog, RevokedTicketSecret, Transaction,
 )
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
 from pretix.base.services.locking import LOCK_TRUST_WINDOW, lock_objects
 from pretix.base.services.pricing import (
-    apply_discounts, get_line_price, get_listed_price, is_included_for_free,
+    apply_discounts, apply_rounding, get_line_price, get_listed_price,
+    is_included_for_free,
 )
 from pretix.base.services.quotas import QuotaAvailability
-from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
+from pretix.base.settings import (
+    COUNTRIES_WITH_STATE_IN_ADDRESS, ROUNDING_MODES,
+)
 from pretix.base.signals import register_ticket_outputs
 from pretix.helpers.countries import CachedCountries
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -102,6 +108,13 @@ class CountryField(serializers.Field):
         return str(src) if src else None
 
 
+class TransmissionInfoSerializer(serializers.Serializer):
+    def __init__(self, *args, transmission_type, **kwargs):
+        super().__init__(*args, **kwargs)
+        for k, v in transmission_type.invoice_address_form_fields.items():
+            self.fields[k] = form_field_to_serializer_field(v)
+
+
 class InvoiceAddressSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
     name = serializers.CharField(required=False)
@@ -109,7 +122,8 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
     class Meta:
         model = InvoiceAddress
         fields = ('last_modified', 'is_business', 'company', 'name', 'name_parts', 'street', 'zipcode', 'city', 'country',
-                  'state', 'vat_id', 'vat_id_validated', 'custom_field', 'internal_reference')
+                  'state', 'vat_id', 'vat_id_validated', 'custom_field', 'internal_reference', 'transmission_type',
+                  'transmission_info')
         read_only_fields = ('last_modified',)
 
     def __init__(self, *args, **kwargs):
@@ -145,6 +159,48 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
             if not pycountry.subdivisions.get(code=cc + '-' + data.get('state')):
                 raise ValidationError(
                     {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
+                )
+
+        if data.get("transmission_type"):
+            for t in get_transmission_types():
+                if data.get("transmission_type") == t.identifier:
+                    if not t.is_available(self.context["request"].event, data.get("country"), data.get("is_business")):
+                        raise ValidationError({
+                            "transmission_type": "The selected transmission type is not available for this country or address type."
+                        })
+
+                    ts = TransmissionInfoSerializer(transmission_type=t, data=data.get("transmission_info", {}))
+                    try:
+                        ts.is_valid(raise_exception=True)
+                    except ValidationError as e:
+                        raise ValidationError(
+                            {"transmission_info": e.detail}
+                        )
+                    data["transmission_info"] = ts.validated_data
+
+                    required_fields = t.invoice_address_form_fields_required(data.get("country"), data.get("is_business"))
+                    for r in required_fields:
+                        if r in self.fields:
+                            if not data.get(r):
+                                raise ValidationError(
+                                    {r: "This field is required for the selected type of invoice transmission."}
+                                )
+                        else:
+                            if not ts.validated_data.get(r):
+                                raise ValidationError(
+                                    {"transmission_info": {r: "This field is required for the selected type of invoice transmission."}}
+                                )
+                    break  # do not call else branch of for loop
+                elif t.is_exclusive(self.context["request"].event, data.get("country"), data.get("is_business")):
+                    if t.is_available(self.context["request"].event, data.get("country"), data.get("is_business")):
+                        raise ValidationError({
+                            "transmission_type": "The transmission type '%s' must be used for this country or address type." % (
+                                t.identifier,
+                            )
+                        })
+            else:
+                raise ValidationError(
+                    {"transmission_type": "Unknown transmission type."}
                 )
 
         return data
@@ -273,7 +329,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
         return data
 
 
-class CheckinSerializer(I18nAwareModelSerializer):
+class InlineCheckinSerializer(I18nAwareModelSerializer):
     device_id = serializers.SlugRelatedField(
         source='device',
         slug_field='device_id',
@@ -283,6 +339,21 @@ class CheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
         fields = ('id', 'datetime', 'list', 'auto_checked_in', 'gate', 'device', 'device_id', 'type')
+
+
+class CheckinSerializer(I18nAwareModelSerializer):
+    device_id = serializers.SlugRelatedField(
+        source='device',
+        slug_field='device_id',
+        read_only=True,
+    )
+
+    class Meta:
+        model = Checkin
+        fields = (
+            'id', 'successful', 'error_reason', 'error_explanation', 'position', 'datetime', 'list', 'created',
+            'auto_checked_in', 'gate', 'device', 'device_id', 'type'
+        )
 
 
 class PrintLogSerializer(serializers.ModelSerializer):
@@ -508,7 +579,7 @@ class OrderPositionPluginDataField(serializers.Field):
 
 
 class OrderPositionSerializer(I18nAwareModelSerializer):
-    checkins = CheckinSerializer(many=True, read_only=True)
+    checkins = InlineCheckinSerializer(many=True, read_only=True)
     print_logs = PrintLogSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True)
     downloads = PositionDownloadsField(source='*', read_only=True)
@@ -632,6 +703,16 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
 
         if 'answers.question' in self.context['expand']:
             self.fields['answers'].child.fields['question'] = QuestionSerializer(read_only=True)
+
+        if 'addons' in self.context['expand']:
+            # Experimental feature, undocumented on purpose for now in case we need to remove it again
+            # for performance reasons
+            subl = CheckinListOrderPositionSerializer(read_only=True, many=True, context={
+                **self.context,
+                'expand': [v for v in self.context['expand'] if v != 'addons'],
+                'pdf_data': False,
+            })
+            self.fields['addons'] = subl
 
 
 class OrderPaymentTypeField(serializers.Field):
@@ -781,14 +862,15 @@ class OrderSerializer(I18nAwareModelSerializer):
         list_serializer_class = OrderListSerializer
         fields = (
             'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
-            'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
-            'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
-            'url', 'customer', 'valid_if_pending', 'api_meta', 'cancellation_date', 'plugin_data',
+            'payment_provider', 'fees', 'total', 'tax_rounding_mode', 'comment', 'custom_followup_at', 'invoice_address',
+            'positions', 'downloads', 'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds',
+            'require_approval', 'sales_channel', 'url', 'customer', 'valid_if_pending', 'api_meta', 'cancellation_date',
+            'plugin_data',
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
-            'payment_provider', 'fees', 'total', 'positions', 'downloads', 'customer',
-            'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel', 'cancellation_date'
+            'payment_provider', 'fees', 'total', 'tax_rounding_mode', 'positions', 'downloads', 'customer',
+            'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel', 'cancellation_date',
         )
 
     def __init__(self, *args, **kwargs):
@@ -953,7 +1035,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
                   'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until',
-                  'requested_valid_from', 'use_reusable_medium')
+                  'requested_valid_from', 'use_reusable_medium', 'discount')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1049,6 +1131,10 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                     {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
                 )
 
+        if data.get('price') is None and data.get('discount'):
+            raise ValidationError(
+                {'discount': ['You can only specify a discount if you do the price computation, but price is not set.']}
+            )
         return data
 
 
@@ -1103,11 +1189,13 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         queryset=SalesChannel.objects.none(),
         required=False,
     )
+    tax_rounding_mode = serializers.ChoiceField(choices=ROUNDING_MODES, allow_null=True, required=False,)
     locale = serializers.ChoiceField(choices=[], required=False, allow_null=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['positions'].child.fields['voucher'].queryset = self.context['event'].vouchers.all()
+        self.fields['positions'].child.fields['discount'].queryset = self.context['event'].discounts.all()
         self.fields['customer'].queryset = self.context['event'].organizer.customers.all()
         self.fields['expires'].required = False
         self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
@@ -1118,7 +1206,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'checkin_text', 'payment_info', 'payment_date',
                   'consume_carts', 'force', 'send_email', 'simulate', 'customer', 'custom_followup_at',
-                  'require_approval', 'valid_if_pending', 'expires', 'api_meta')
+                  'require_approval', 'valid_if_pending', 'expires', 'api_meta', 'tax_rounding_mode')
 
     def validate_payment_provider(self, pp):
         if pp is None:
@@ -1515,19 +1603,22 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
 
         order_positions = [pos_data['__instance'] for pos_data in positions_data]
-        discount_results = apply_discounts(
-            self.context['event'],
-            order.sales_channel,
-            [
-                (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.price,
-                 bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
-                for cp in order_positions
-            ]
-        )
-        for cp, (new_price, discount) in zip(order_positions, discount_results):
-            if new_price != pos.price and pos._auto_generated_price:
-                pos.price = new_price
-            pos.discount = discount
+        if not any([p.get("discount") for p in positions_data]):
+            # If any discount is set by the client (i.e. pretixPOS), we do not recalculate but believe the client
+            # to avoid differences in end results.
+            discount_results = apply_discounts(
+                self.context['event'],
+                order.sales_channel,
+                [
+                    (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.price,
+                     cp.addon_to, cp.is_bundled, pos._voucher_discount)
+                    for cp in order_positions
+                ]
+            )
+            for cp, (new_price, discount) in zip(order_positions, discount_results):
+                if new_price != pos.price and pos._auto_generated_price:
+                    pos.price = new_price
+                pos.discount = discount
 
         # Save instances
         for pos_data in positions_data:
@@ -1600,7 +1691,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                                                   self.context['event'].currency)
             is_split_taxes = fee_data.pop('_split_taxes_like_products', False)
 
-            if is_split_taxes:
+            if is_split_taxes and order.total:
                 d = defaultdict(lambda: Decimal('0.00'))
                 trz = TaxRule.zero()
                 for p in pos_map.values():
@@ -1641,7 +1732,32 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 else:
                     f.save()
 
-        order.total += sum([f.value for f in fees])
+        rounding_mode = validated_data.get("tax_rounding_mode")
+        if not rounding_mode:
+            if isinstance(self.context.get("auth"), Device):
+                # Safety fallback to avoid differences in tax reporting
+                brand = self.context.get("auth").software_brand or ""
+                if "pretixPOS" in brand or "pretixKIOSK" in brand:
+                    rounding_mode = "line"
+        if not rounding_mode:
+            rounding_mode = self.context["event"].settings.tax_rounding
+        changed = apply_rounding(
+            rounding_mode,
+            ia,
+            self.context["event"].currency,
+            [*pos_map.values(), *fees]
+        )
+        for line in changed:
+            if isinstance(line, OrderPosition):
+                line.save(update_fields=[
+                    "price", "price_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+                ])
+            elif isinstance(line, OrderFee):
+                line.save(update_fields=[
+                    "value", "value_includes_rounding_correction", "tax_value", "tax_value_includes_rounding_correction"
+                ])
+
+        order.total = sum([c.price for c in pos_map.values()]) + sum([f.value for f in fees])
         if simulate:
             order.fees = fees
             order.positions = pos_map.values()
@@ -1705,12 +1821,14 @@ class LinePositionField(serializers.IntegerField):
 
 class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
     position = LinePositionField(read_only=True)
+    event_date_from = serializers.DateTimeField(read_only=True, source="period_start")
+    event_date_to = serializers.DateTimeField(read_only=True, source="period_end")
 
     class Meta:
         model = InvoiceLine
         fields = ('position', 'description', 'item', 'variation', 'subevent', 'attendee_name', 'event_date_from',
-                  'event_date_to', 'gross_value', 'tax_value', 'tax_rate', 'tax_code', 'tax_name', 'fee_type',
-                  'fee_internal_type', 'event_location')
+                  'event_date_to', 'period_start', 'period_end', 'gross_value', 'tax_value', 'tax_rate', 'tax_code',
+                  'tax_name', 'fee_type', 'fee_internal_type', 'event_location')
 
 
 class InvoiceSerializer(I18nAwareModelSerializer):
@@ -1724,13 +1842,14 @@ class InvoiceSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Invoice
         fields = ('event', 'order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
-                  'invoice_from_city', 'invoice_from_country', 'invoice_from_tax_id', 'invoice_from_vat_id',
-                  'invoice_to', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street', 'invoice_to_zipcode',
-                  'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id', 'invoice_to_beneficiary',
-                  'custom_field', 'date', 'refers', 'locale',
+                  'invoice_from_city', 'invoice_from_state', 'invoice_from_country', 'invoice_from_tax_id', 'invoice_from_vat_id',
+                  'invoice_to', 'invoice_to_is_business', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street',
+                  'invoice_to_zipcode', 'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id',
+                  'invoice_to_beneficiary', 'invoice_to_transmission_info', 'custom_field', 'date', 'refers', 'locale',
                   'introductory_text', 'additional_text', 'payment_provider_text', 'payment_provider_stamp',
                   'footer_text', 'lines', 'foreign_currency_display', 'foreign_currency_rate',
-                  'foreign_currency_rate_date', 'internal_reference')
+                  'foreign_currency_rate_date', 'internal_reference', 'transmission_type', 'transmission_provider',
+                  'transmission_status', 'transmission_date')
 
 
 class OrderPaymentCreateSerializer(I18nAwareModelSerializer):
@@ -1783,3 +1902,23 @@ class BlockedTicketSecretSerializer(I18nAwareModelSerializer):
     class Meta:
         model = BlockedTicketSecret
         fields = ('id', 'secret', 'updated', 'blocked')
+
+
+class TransactionSerializer(I18nAwareModelSerializer):
+    order = serializers.SlugRelatedField(slug_field="code", read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = (
+            "id", "order", "created", "datetime", "positionid", "count", "item", "variation",
+            "subevent", "price", "tax_rate", "tax_rule", "tax_code", "tax_value", "fee_type",
+            "internal_type"
+        )
+
+
+class OrganizerTransactionSerializer(TransactionSerializer):
+    event = serializers.SlugRelatedField(source="order.event", slug_field="slug", read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = TransactionSerializer.Meta.fields + ("event",)

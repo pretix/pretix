@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -37,7 +37,7 @@ import json
 import logging
 import operator
 import re
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
@@ -54,21 +54,21 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
-from django.db.models import ProtectedError
+from django.db.models import Count, ProtectedError
 from django.forms import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseNotAllowed,
     JsonResponse,
 )
 from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 from django.utils.functional import cached_property
 from django.utils.html import conditional_escape, format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
-from django.views.generic import FormView, ListView
+from django.views.generic import DetailView, FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
@@ -76,6 +76,9 @@ from i18nfield.utils import I18nJSONEncoder
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import PlaceholderValidator
+from pretix.base.invoicing.transmission import (
+    get_transmission_types, transmission_providers,
+)
 from pretix.base.models import Event, LogEntry, Order, TaxRule, Voucher
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
@@ -87,7 +90,7 @@ from pretix.control.forms.event import (
     EventFooterLinkFormset, EventMetaValueForm, EventSettingsForm,
     EventUpdateForm, InvoiceSettingsForm, ItemMetaPropertyForm,
     MailSettingsForm, PaymentSettingsForm, ProviderForm, QuickSetupForm,
-    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet,
+    QuickSetupProductFormSet, TaxRuleForm, TaxRuleLineFormSet, TaxSettingsForm,
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -95,11 +98,17 @@ from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
 from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
-from pretix.plugins.stripe.payment import StripeSettingsHolder
+from pretix.presale.views.widget import (
+    version_default as widget_version_default,
+)
 
 from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
+)
+from ...base.plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+    PLUGIN_LEVEL_ORGANIZER,
 )
 from ...base.services.mail import prefix_subject
 from ...base.services.placeholders import get_sample_context
@@ -346,42 +355,35 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
     def available_plugins(self, event):
         from pretix.base.plugins import get_all_plugins
 
-        return (p for p in get_all_plugins(event) if not p.name.startswith('.')
+        return (p for p in get_all_plugins(event=event) if not p.name.startswith('.')
                 and getattr(p, 'visible', True))
 
     def prepare_links(self, pluginmeta, key):
         links = getattr(pluginmeta, key, [])
         try:
-            return [
-                (
-                    reverse(urlname, kwargs={"organizer": self.request.organizer.slug, "event": self.request.event.slug, **kwargs}),
-                    " > ".join(map(str, linktext)) if isinstance(linktext, tuple) else linktext,
-                ) for linktext, urlname, kwargs in links
-            ]
+            result = []
+            for linktext, urlname, kwargs in links:
+                try:
+                    result.append((
+                        reverse(urlname, kwargs={"organizer": self.request.organizer.slug, "event": self.request.event.slug, **kwargs}),
+                        " > ".join(map(str, linktext)) if isinstance(linktext, tuple) else linktext,
+                    ))
+                except NoReverseMatch:
+                    if pluginmeta.level != PLUGIN_LEVEL_EVENT:
+                        # Ignore, link might be for another level
+                        pass
+                    else:
+                        raise
+            return result
         except:
             logger.exception('Failed to resolve settings links.')
             return []
 
     def get_context_data(self, *args, **kwargs) -> dict:
+        from pretix.base.plugins import CATEGORY_LABELS, CATEGORY_ORDER
+
         context = super().get_context_data(*args, **kwargs)
         plugins = list(self.available_plugins(self.object))
-
-        order = [
-            'FEATURE',
-            'PAYMENT',
-            'INTEGRATION',
-            'CUSTOMIZATION',
-            'FORMAT',
-            'API',
-        ]
-        labels = {
-            'FEATURE': _('Features'),
-            'PAYMENT': _('Payment providers'),
-            'INTEGRATION': _('Integrations'),
-            'CUSTOMIZATION': _('Customizations'),
-            'FORMAT': _('Output and export formats'),
-            'API': _('API features'),
-        }
 
         plugins_grouped = groupby(
             sorted(
@@ -397,17 +399,24 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         plugins_grouped = [(c, list(plist)) for c, plist in plugins_grouped]
 
         active_plugins = self.object.get_plugins()
+        organizer_active_plugins = self.request.organizer.get_plugins()
 
         def plugin_details(plugin):
             is_active = plugin.module in active_plugins
+            if getattr(plugin, "level", PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_ORGANIZER:
+                is_active = plugin.module in organizer_active_plugins
+            if getattr(plugin, "level", PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                is_active = is_active and plugin.module in organizer_active_plugins
+
             settings_links = self.prepare_links(plugin, 'settings_links') if is_active else None
             navigation_links = self.prepare_links(plugin, 'navigation_links') if is_active else None
-            return (plugin, is_active, settings_links, navigation_links)
+            return plugin, is_active, settings_links, navigation_links
+
         context['plugins'] = sorted([
-            (c, labels.get(c, c), map(plugin_details, plist), any(getattr(p, 'picture', None) for p in plist))
+            (c, CATEGORY_LABELS.get(c, c), map(plugin_details, plist), any(getattr(p, 'picture', None) for p in plist))
             for c, plist
             in plugins_grouped
-        ], key=lambda c: (order.index(c[0]), c[1]) if c[0] in order else (999, str(c[1])))
+        ], key=lambda c: (CATEGORY_ORDER.index(c[0]), c[1]) if c[0] in CATEGORY_ORDER else (999, str(c[1])))
         context['show_meta'] = settings.PRETIX_PLUGINS_SHOW_META
         return context
 
@@ -424,6 +433,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         }
 
         with transaction.atomic():
+            save_organizer = False
             for key, value in request.POST.items():
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
@@ -433,8 +443,26 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                             if module not in request.event.settings.allowed_restricted_plugins:
                                 continue
 
-                        self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
-                                                      data={'plugin': module})
+                        if getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT) not in (PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID):
+                            continue
+
+                        if getattr(pluginmeta, 'level', PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+                            if not request.user.has_organizer_permission(request.organizer, "can_change_organizer_settings", request):
+                                messages.error(
+                                    request,
+                                    _("You do not have sufficient permission to enable plugins that need to be enabled "
+                                      "for the entire organizer account.")
+                                )
+                                continue
+
+                            if module not in self.object.organizer.get_plugins():
+                                self.object.organizer.log_action('pretix.organizer.plugins.enabled', user=self.request.user,
+                                                                 data={'plugin': module})
+                                self.object.organizer.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
+                                save_organizer = True
+
+                        self.object.log_action('pretix.event.plugins.enabled', user=self.request.user,
+                                               data={'plugin': module})
                         self.object.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
 
                         links = self.prepare_links(pluginmeta, 'settings_links')
@@ -460,12 +488,14 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                         self.object.disable_plugin(module)
                         messages.success(self.request, _('The plugin has been disabled.'))
             self.object.save()
+            if save_organizer:
+                self.object.organizer.save()
         return redirect(self.get_success_url())
 
     def get_success_url(self) -> str:
         return reverse('control:event.settings.plugins', kwargs={
-            'organizer': self.get_object().organizer.slug,
-            'event': self.get_object().slug,
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
         })
 
 
@@ -617,11 +647,46 @@ class PaymentSettings(EventSettingsViewMixin, EventSettingsFormView):
         return context
 
 
+class TaxSettings(EventSettingsViewMixin, EventSettingsFormView):
+    template_name = 'pretixcontrol/event/tax.html'
+    form_class = TaxSettingsForm
+    permission = 'can_change_event_settings'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tax', kwargs={
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['taxrules'] = self.request.event.tax_rules.annotate(
+            c_items=Count("item")
+        ).all()
+        return context
+
+
 class InvoiceSettings(EventSettingsViewMixin, EventSettingsFormView):
     model = Event
     form_class = InvoiceSettingsForm
     template_name = 'pretixcontrol/event/invoicing.html'
     permission = 'can_change_event_settings'
+
+    def get_context_data(self, **kwargs):
+        types = get_transmission_types()
+        providers = defaultdict(list)
+        ready = defaultdict(lambda: False)
+        for p, __ in transmission_providers.filter(active_in=self.request.event):
+            is_ready_result = p.is_ready(self.request.event)
+            providers[p.type].append((p, is_ready_result, p.settings_url(self.request.event)))
+            ready[p.type] = ready[p.type] or is_ready_result
+        for k, v in providers.items():
+            v.sort(key=lambda p: (-p[0].priority, p[0].identifier))
+        return super().get_context_data(
+            transmission_providers=providers,
+            transmission_types=types,
+            ready=ready,
+        )
 
     def get_success_url(self) -> str:
         if 'preview' in self.request.POST:
@@ -764,8 +829,8 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         return locales
 
     # get all supported placeholders with dummy values
-    def placeholders(self, item):
-        return get_sample_context(self.request.event, MailSettingsForm.base_context[item])
+    def placeholders(self, item, rich=True):
+        return get_sample_context(self.request.event, MailSettingsForm.base_context[item], rich=rich)
 
     def post(self, request, *args, **kwargs):
         preview_item = request.POST.get('item', '')
@@ -786,6 +851,14 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                                 msgs[self.supported_locale[idx]] = prefix_subject(self.request.event, format_map(
                                     bleach.clean(v), self.placeholders(preview_item), raise_on_missing=True
                                 ), highlight=True)
+                            elif preview_item in MailSettingsForm.plain_rendering:
+                                msgs[self.supported_locale[idx]] = mark_safe(
+                                    format_map(
+                                        conditional_escape(v),
+                                        self.placeholders(preview_item, rich=False),
+                                        raise_on_missing=True
+                                    ).replace("\n", "<br />")
+                                )
                             else:
                                 placeholders = self.placeholders(preview_item)
                                 msgs[self.supported_locale[idx]] = format_map(
@@ -1216,16 +1289,6 @@ class EventComment(EventPermissionRequiredMixin, View):
         })
 
 
-class TaxList(EventSettingsViewMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):
-    model = TaxRule
-    context_object_name = 'taxrules'
-    template_name = 'pretixcontrol/event/tax_index.html'
-    permission = 'can_change_event_settings'
-
-    def get_queryset(self):
-        return self.request.event.tax_rules.all()
-
-
 class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView):
     model = TaxRule
     form_class = TaxRuleForm
@@ -1271,6 +1334,8 @@ class TaxCreate(EventSettingsViewMixin, EventPermissionRequiredMixin, CreateView
 
     @transaction.atomic
     def form_valid(self, form):
+        if not self.request.event.tax_rules.exists():
+            form.instance.default = True
         form.instance.event = self.request.event
         form.instance.custom_rules = json.dumps([
             f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
@@ -1351,6 +1416,50 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
         return super().form_invalid(form)
 
 
+class TaxDefault(EventSettingsViewMixin, EventPermissionRequiredMixin, DetailView):
+    model = TaxRule
+    permission = 'can_change_event_settings'
+
+    def get_object(self, queryset=None) -> TaxRule:
+        try:
+            return self.request.event.tax_rules.get(
+                id=self.kwargs['rule']
+            )
+        except TaxRule.DoesNotExist:
+            raise Http404(_("The requested tax rule does not exist."))
+
+    def get(self, request, *args, **kwargs):
+        return self.http_method_not_allowed(request, *args, **kwargs)
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        messages.success(self.request, _('Your changes have been saved.'))
+        obj = self.get_object()
+        if not obj.default:
+            for tr in self.request.event.tax_rules.filter(default=True):
+                tr.log_action(
+                    'pretix.event.taxrule.changed', user=self.request.user, data={
+                        'default': False,
+                    }
+                )
+                tr.default = False
+                tr.save(update_fields=['default'])
+            obj.log_action(
+                'pretix.event.taxrule.changed', user=self.request.user, data={
+                    'default': True,
+                }
+            )
+            obj.default = True
+            obj.save(update_fields=['default'])
+        return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.tax', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+
 class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, CompatDeleteView):
     model = TaxRule
     template_name = 'pretixcontrol/event/tax_delete.html'
@@ -1408,6 +1517,7 @@ class WidgetSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['urlprefix'] = settings.SITE_URL
+        ctx['widget_version_default'] = widget_version_default
         domain = get_event_domain(self.request.event, fallback=True)
         if domain:
             siteurlsplit = urlsplit(settings.SITE_URL)
@@ -1563,6 +1673,8 @@ class QuickSetupView(FormView):
                                          'or take your event live to start selling!'))
 
         if form.cleaned_data.get('payment_stripe__enabled', False):
+            from pretix.plugins.stripe.payment import StripeSettingsHolder
+
             self.request.session['payment_stripe_oauth_enable'] = True
             return redirect(StripeSettingsHolder(self.request.event).get_connect_url(self.request))
 

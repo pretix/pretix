@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -113,6 +113,11 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 
         lock_objects(quotas, shared_lock_objects=[event])
         for wle in qs:
+            # add this event to wle.item as it is not yet cached and is needed in check_quotas
+            wle.item.event = event
+            if wle.variation:
+                wle.variation.item = wle.item
+
             if (wle.item_id, wle.variation_id, wle.subevent_id) in gone:
                 continue
             ev = (wle.subevent or event)

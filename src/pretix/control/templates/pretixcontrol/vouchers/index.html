@@ -165,7 +165,7 @@
                                 {% if v.budget|default_if_none:"NONE" != "NONE" %}
                                     <br>
                                     <small class="text-muted">
-                                        {{ v.budget_used_orders|money:request.event.currency }} / {{ v.budget|money:request.event.currency }}
+                                        {{ v.budget_used|money:request.event.currency }} / {{ v.budget|money:request.event.currency }}
                                     </small>
                                 {% endif %}
                             </td>

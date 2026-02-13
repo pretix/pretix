@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/settings_base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load getitem %}
 {% block inside %}
     <h1>{% trans "Invoice settings" %}</h1>
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
@@ -11,9 +12,23 @@
                 <legend>{% trans "Invoice generation" %}</legend>
                 {% bootstrap_field form.invoice_generate layout="control" %}
                 {% bootstrap_field form.invoice_generate_sales_channels layout="control" %}
+                {% bootstrap_field form.invoice_generate_only_business layout="control" %}
                 {% bootstrap_field form.invoice_email_attachment layout="control" %}
                 {% bootstrap_field form.invoice_email_organizer layout="control" %}
                 {% bootstrap_field form.invoice_language layout="control" %}
+                {% bootstrap_field form.invoice_period layout="control" %}
+
+                {% if not request.event.settings.show_dates_on_frontpage %}
+                    <div data-display-dependency="input[name=invoice_period][value=auto],input[name=invoice_period][value=event_date]">
+                        <div class="alert alert-warning dynamic">
+                            {% blocktrans trimmed %}
+                                You configured that your shop is not an event and the event date should not be shown.
+                                Therefore, we recommend that you set the date of service to a different option.
+                            {% endblocktrans %}
+                        </div>
+                    </div>
+                {% endif %}
+
                 {% bootstrap_field form.invoice_include_free layout="control" %}
                 {% bootstrap_field form.invoice_show_payments layout="control" %}
                 {% bootstrap_field form.invoice_reissue_after_modify layout="control" %}
@@ -29,19 +44,21 @@
                 {% bootstrap_field form.invoice_name_required layout="control" %}
                 {% bootstrap_field form.invoice_address_company_required layout="control" %}
                 {% bootstrap_field form.invoice_address_vatid layout="control" %}
+                {% bootstrap_field form.invoice_address_vatid_required_countries layout="control" %}
                 {% bootstrap_field form.invoice_address_beneficiary layout="control" %}
                 {% bootstrap_field form.invoice_address_not_asked_free layout="control" %}
                 {% bootstrap_field form.invoice_address_custom_field layout="control" %}
                 {% bootstrap_field form.invoice_address_custom_field_helptext layout="control" %}
                 {% bootstrap_field form.invoice_address_explanation_text layout="control" %}
             </fieldset>
-            <fieldset>
+            <fieldset data-address-information-url="{% url "js_helpers.address_form" %}">
                 <legend>{% trans "Issuer details" %}</legend>
                 {% bootstrap_field form.invoice_address_from_name layout="control" %}
                 {% bootstrap_field form.invoice_address_from layout="control" %}
                 {% bootstrap_field form.invoice_address_from_zipcode layout="control" %}
                 {% bootstrap_field form.invoice_address_from_city layout="control" %}
                 {% bootstrap_field form.invoice_address_from_country layout="control" %}
+                {% bootstrap_field form.invoice_address_from_state layout="control" %}
                 {% bootstrap_field form.invoice_address_from_tax_id layout="control" %}
                 {% bootstrap_field form.invoice_address_from_vat_id layout="control" %}
             </fieldset>
@@ -58,6 +75,94 @@
                 {% bootstrap_field form.invoice_renderer_font layout="control" %}
                 {% bootstrap_field form.invoice_renderer_highlight_order_code layout="control" %}
                 {% bootstrap_field form.invoice_eu_currencies layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Invoice transmission" %}</legend>
+                <p>
+                    {% blocktrans trimmed %}
+                        pretix can transmit invoices using different transmission methods. Different transmission methods
+                        might be required depending on country and industry. By default, sending invoices as PDF files
+                        via email is always available. Other types of transmission can be added by plugins.
+                    {% endblocktrans %}
+                </p>
+                <p>
+                    {% blocktrans trimmed %}
+                        Whether a transmission method listed here is actually selectable for customers may depend on
+                        the country of the customer or whether the customer is entering a business address.
+                    {% endblocktrans %}
+                </p>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>{% trans "Transmission method" %}</th>
+                            <th>{% trans "Status" %}</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        {% for t in transmission_types %}
+                            {% if transmission_providers|getitem:t.identifier %}
+                                <tbody>
+                                <tr>
+                                    <th scope="colgroup" class="text-muted">
+                                        {{ t.verbose_name }}
+                                    </th>
+                                    <th>
+                                        {% if ready|getitem:t.identifier %}
+                                            <span class="text-success">
+                                                <span class="fa fa-check fa-fw"></span>
+                                                {% trans "Available" %}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-muted">
+                                                <span class="fa fa-ban fa-fw"></span>
+                                                {% trans "Unavailable" %}
+                                            </span>
+                                        {% endif %}
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                {% for p, is_ready, settings_url in transmission_providers|getitem:t.identifier %}
+                                    <tr>
+                                        <td>
+                                            {{ p.verbose_name }}
+                                        </td>
+                                        <td>
+                                            {% if is_ready %}
+                                                <span class="text-success">
+                                                    <span class="fa fa-check fa-fw"></span>
+                                                    {% trans "Available" %}
+                                                </span>
+                                            {% else %}
+                                                <span class="text-muted">
+                                                    <span class="fa fa-ban fa-fw"></span>
+                                                    {% trans "Not configured" %}
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="text-right">
+                                            {% if settings_url %}
+                                                <a href="{{ settings_url }}" class="btn btn-default">
+                                                    <span class="fa fa-cog" aria-hidden="true"></span>
+                                                    {% trans "Settings" %}
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+                <p>
+                    {% url "control:event.settings.plugins" event=request.event.slug organizer=request.organizer.slug as plugin_settings_url %}
+                    <a href="{{ plugin_settings_url }}" class="btn btn-default">
+                        <i class="fa fa-plus"></i> {% trans "Enable additional invoice transmission plugins" %}
+                    </a>
+                </p>
             </fieldset>
         </div>
         <div class="form-group submit-group">

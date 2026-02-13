@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -33,16 +33,23 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import warnings
-from typing import Any, Callable, List, Tuple
+from typing import Any, Callable, Generic, List, Tuple, TypeVar
 
 import django.dispatch
 from django.apps import apps
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.dispatch.dispatcher import NO_RECEIVERS
 
-from .models import Event
+from .models.event import Event
+from .models.organizer import Organizer
+from .plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+    PLUGIN_LEVEL_ORGANIZER,
+)
 
 app_cache = {}
+T = TypeVar('T')
 
 
 def _populate_app_cache():
@@ -55,6 +62,9 @@ def get_defining_app(o):
     # If sentry packed this in a wrapper, unpack that
     if "sentry" in o.__module__:
         o = o.__wrapped__
+
+    if hasattr(o, "__mocked_app"):
+        return o.__mocked_app
 
     # Find the Django application this belongs to
     searchpath = o.__module__
@@ -74,43 +84,71 @@ def get_defining_app(o):
     return app
 
 
-def is_app_active(sender, app):
+def is_app_active(sender, app, allow_legacy_plugins=False):
     if app == 'CORE':
         return True
 
     excluded = settings.PRETIX_PLUGINS_EXCLUDE
-    if sender and app and app.name in sender.get_plugins() and app.name not in excluded:
+    if not sender or not app or app.name in excluded:
+        return False
+
+    level = getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT)
+    if level == PLUGIN_LEVEL_EVENT:
+        if isinstance(sender, Event):
+            enabled = app.name in sender.get_plugins()
+        elif isinstance(sender, Organizer) and allow_legacy_plugins:
+            # Deprecated behaviour: Event plugins that are registered on organizer level are considered active for
+            # all organizers in the context of signals that used to be global signals before the introduction of
+            # organizer plugins. A deprecation warning is emitted at .connect() time.
+            enabled = True
+        else:
+            raise ImproperlyConfigured(f"Cannot check if event plugin is active on {type(sender)}")
+    elif level == PLUGIN_LEVEL_ORGANIZER:
+        if isinstance(sender, Organizer):
+            enabled = app.name in sender.get_plugins()
+        elif isinstance(sender, Event):
+            enabled = app.name in sender.organizer.get_plugins()
+        else:
+            raise ImproperlyConfigured(f"Cannot check if organizer plugin is active on {type(sender)}")
+    elif level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID:
+        if isinstance(sender, Organizer):
+            enabled = app.name in sender.get_plugins()
+        elif isinstance(sender, Event):
+            enabled = app.name in sender.get_plugins() and app.name in sender.organizer.get_plugins()
+        else:
+            raise ImproperlyConfigured(f"Cannot check if hybrid event/organizer plugin is active on {type(sender)}")
+    else:
+        raise ImproperlyConfigured("Unknown plugin level")
+
+    if enabled:
         if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
             return True
     return False
 
 
-def is_receiver_active(sender, receiver):
+def is_receiver_active(sender, receiver, allow_legacy_plugins=False):
     if sender is None:
         # Send to all events!
         return True
 
     app = get_defining_app(receiver)
 
-    return is_app_active(sender, app)
+    return is_app_active(sender, app, allow_legacy_plugins)
 
 
-class EventPluginSignal(django.dispatch.Signal):
-    """
-    This is an extension to Django's built-in signals which differs in a way that it sends
-    out it's events only to receivers which belong to plugins that are enabled for the given
-    Event.
-    """
+class PluginSignal(Generic[T], django.dispatch.Signal):
+    type = None
 
-    def send(self, sender: Event, **named) -> List[Tuple[Callable, Any]]:
+    def _is_receiver_active(self, sender, receiver):
+        return is_receiver_active(sender, receiver)
+
+    def send(self, sender: T, **named) -> List[Tuple[Callable, Any]]:
         """
         Send signal from sender to all connected receivers that belong to
-        plugins enabled for the given Event.
-
-        sender is required to be an instance of ``pretix.base.models.Event``.
+        plugins enabled for the given event / organizer.
         """
-        if sender and not isinstance(sender, Event):
-            raise ValueError("Sender needs to be an event.")
+        if sender and not isinstance(sender, self.type):
+            raise ValueError(f"Sender needs to be of type {self.type}.")
 
         responses = []
         if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
@@ -120,21 +158,19 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._sorted_receivers(sender):
-            if is_receiver_active(sender, receiver):
+            if self._is_receiver_active(sender, receiver):
                 response = receiver(signal=self, sender=sender, **named)
                 responses.append((receiver, response))
         return responses
 
-    def send_chained(self, sender: Event, chain_kwarg_name, **named) -> List[Tuple[Callable, Any]]:
+    def send_chained(self, sender: T, chain_kwarg_name, **named) -> List[Tuple[Callable, Any]]:
         """
         Send signal from sender to all connected receivers. The return value of the first receiver
         will be used as the keyword argument specified by ``chain_kwarg_name`` in the input to the
         second receiver and so on. The return value of the last receiver is returned by this method.
-
-        sender is required to be an instance of ``pretix.base.models.Event``.
         """
-        if sender and not isinstance(sender, Event):
-            raise ValueError("Sender needs to be an event.")
+        if sender and not isinstance(sender, self.type):
+            raise ValueError(f"Sender needs to be of type {self.type}.")
 
         response = named.get(chain_kwarg_name)
         if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
@@ -144,21 +180,19 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._sorted_receivers(sender):
-            if is_receiver_active(sender, receiver):
+            if self._is_receiver_active(sender, receiver):
                 named[chain_kwarg_name] = response
                 response = receiver(signal=self, sender=sender, **named)
         return response
 
-    def send_robust(self, sender: Event, **named) -> List[Tuple[Callable, Any]]:
+    def send_robust(self, sender: T, **named) -> List[Tuple[Callable, Any]]:
         """
         Send signal from sender to all connected receivers. If a receiver raises an exception
         instead of returning a value, the exception is included as the result instead of
         stopping the response chain at the offending receiver.
-
-        sender is required to be an instance of ``pretix.base.models.Event``.
         """
-        if sender and not isinstance(sender, Event):
-            raise ValueError("Sender needs to be an event.")
+        if sender and not isinstance(sender, self.type):
+            raise ValueError(f"Sender needs to be of type {self.type}.")
 
         responses = []
         if (
@@ -171,7 +205,7 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._sorted_receivers(sender):
-            if is_receiver_active(sender, receiver):
+            if self._is_receiver_active(sender, receiver):
                 try:
                     response = receiver(signal=self, sender=sender, **named)
                 except Exception as err:
@@ -193,6 +227,67 @@ class EventPluginSignal(django.dispatch.Signal):
         return sorted_list
 
 
+class EventPluginSignal(PluginSignal[Event]):
+    """
+    This is an extension to Django's built-in signals which differs in a way that it sends
+    out its events only to receivers which belong to plugins that are enabled for the given
+    Event.
+    """
+    type = Event
+
+    def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
+        app = get_defining_app(receiver)
+        if app != "CORE":
+            if not hasattr(app, "PretixPluginMeta"):
+                raise ImproperlyConfigured(
+                    f"{app} uses an EventPluginSignal but is not a pretix plugin"
+                )
+            allowed_levels = (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID, PLUGIN_LEVEL_EVENT)
+            if getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT) not in allowed_levels:
+                # This check is redundant for now, but will be useful if we ever add other levels
+                raise ImproperlyConfigured(
+                    f"{app} uses an EventPluginSignal but is not a plugin that can be active on event or organizer level"
+                )
+        return super().connect(receiver, sender, weak, dispatch_uid)
+
+
+class OrganizerPluginSignal(PluginSignal[Organizer]):
+    """
+    This is an extension to Django's built-in signals which differs in a way that it sends
+    out its events only to receivers which belong to plugins that are enabled for the given
+    Organizer.
+    """
+    type = Organizer
+
+    def __init__(self, allow_legacy_plugins=False):
+        self.allow_legacy_plugins = allow_legacy_plugins
+        super().__init__()
+
+    def _is_receiver_active(self, sender, receiver):
+        return is_receiver_active(sender, receiver, allow_legacy_plugins=self.allow_legacy_plugins)
+
+    def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
+        app = get_defining_app(receiver)
+        if app != "CORE":
+            if not hasattr(app, "PretixPluginMeta"):
+                raise ImproperlyConfigured(
+                    f"{app} uses an OrganizerPluginSignal but is not a pretix plugin"
+                )
+            allowed_levels = (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
+            if getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT) not in allowed_levels:
+                if getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT) == PLUGIN_LEVEL_EVENT and self.allow_legacy_plugins:
+                    warnings.warn(
+                        'This signal will soon be only available for plugins that declare to be organizer-level',
+                        stacklevel=3,
+                        category=DeprecationWarning,
+                    )
+                else:
+                    raise ImproperlyConfigured(
+                        f"{app} uses an OrganizerPluginSignal but is not a plugin that can be active on organizer level"
+                    )
+        return super().connect(receiver, sender, weak, dispatch_uid)
+
+
 class GlobalSignal(django.dispatch.Signal):
     def send_chained(self, sender: Event, chain_kwarg_name, **named) -> List[Tuple[Callable, Any]]:
         """
@@ -211,10 +306,14 @@ class GlobalSignal(django.dispatch.Signal):
         return response
 
 
-class DeprecatedSignal(django.dispatch.Signal):
+class DeprecatedSignal(GlobalSignal):
 
     def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
-        warnings.warn('This signal is deprecated and will soon be removed', stacklevel=3)
+        warnings.warn(
+            'This signal is deprecated and will soon be removed',
+            stacklevel=3,
+            category=DeprecationWarning,
+        )
         super().connect(receiver, sender=None, weak=True, dispatch_uid=None)
 
 
@@ -257,8 +356,14 @@ class Registry:
                      When a new entry is registered, all accessor functions are called with the new entry as parameter.
                      Their return value is stored as the metadata value for that key.
         """
-        self.registered_entries = dict()
         self.keys = keys
+        self.clear()
+
+    def clear(self):
+        """
+        Removes all entries from the registry.
+        """
+        self.registered_entries = dict()
         self.by_key = {key: {} for key in self.keys.keys()}
 
     def register(self, *objs):
@@ -318,20 +423,59 @@ class Registry:
         )
 
 
-class EventPluginRegistry(Registry):
+class PluginAwareRegistry(Registry):
     """
     A Registry which automatically annotates entries with a "plugin" key, specifying which plugin
     the entry is defined in. This allows the consumer of entries to determine whether an entry is
-    enabled for a given event, or filter only for entries defined by enabled plugins.
+    enabled for a given event or organizer, or filter only for entries defined by enabled plugins.
 
     .. code-block:: python
 
         logtype, meta = my_registry.find(action_type="foo.bar.baz")
         # meta["plugin"] contains the django app name of the defining plugin
     """
+    allowed_levels = [
+        PLUGIN_LEVEL_EVENT,
+        PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+        PLUGIN_LEVEL_ORGANIZER,
+    ]
 
     def __init__(self, keys):
-        super().__init__({"plugin": lambda o: get_defining_app(o), **keys})
+        def get_plugin(o):
+            app = get_defining_app(o)
+            if app != "CORE":
+                if not hasattr(app, "PretixPluginMeta"):
+                    raise ImproperlyConfigured(
+                        f"{app} uses an PluginAwareRegistry but is not a pretix plugin"
+                    )
+                level = getattr(app.PretixPluginMeta, "level", PLUGIN_LEVEL_EVENT)
+                if level not in self.allowed_levels:
+                    raise ImproperlyConfigured(
+                        f"{app} has level {level} but should have one of {self.allowed_levels} to use this registry"
+                    )
+            return app
+
+        super().__init__({"plugin": get_plugin, **keys})
+
+    def filter(self, active_in=None, **kwargs):
+        result = super().filter(**kwargs)
+        if active_in is not None:
+            result = (
+                (entry, meta)
+                for entry, meta in result
+                if is_app_active(active_in, meta['plugin'])
+            )
+        return result
+
+    def get(self, active_in=None, **kwargs):
+        item, meta = super().get(**kwargs)
+        if meta and active_in is not None:
+            if not is_app_active(active_in, meta['plugin']):
+                return None, None
+        return item, meta
+
+
+EventPluginRegistry = PluginAwareRegistry  # for backwards compatibility
 
 
 event_live_issues = EventPluginSignal()
@@ -426,7 +570,7 @@ This signal is sent out when a notification is sent.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_sales_channel_types = django.dispatch.Signal()
+register_sales_channel_types = GlobalSignal()
 """
 This signal is sent out to get all known sales channels types. Receivers should return an
 instance of a subclass of ``pretix.base.channels.SalesChannelType`` or a list of such
@@ -444,14 +588,24 @@ subclass of pretix.base.exporter.BaseExporter
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_multievent_data_exporters = django.dispatch.Signal()
+register_multievent_data_exporters = OrganizerPluginSignal(allow_legacy_plugins=True)
 """
-Arguments: ``event``
-
 This signal is sent out to get all known data exporters, which support exporting data for
 multiple events. Receivers should return a subclass of pretix.base.exporter.BaseExporter
 
 The ``sender`` keyword argument will contain an organizer.
+"""
+
+build_invoice_data = EventPluginSignal()
+"""
+Arguments: ``invoice``
+
+This signal is sent out every time an invoice is built, after the invoice model was created
+and filled and before the PDF generation task is started. You can use this to make changes
+to the invoice, but we recommend to mostly use it to add content to ``Invoice.plugin_data``.
+You are responsible for saving any changes to the database.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
 validate_order = EventPluginSignal()
@@ -511,12 +665,13 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 
 order_placed = EventPluginSignal()
 """
-Arguments: ``order``
+Arguments: ``order``, ``bulk``
 
 This signal is sent out every time an order is placed. The order object is given
-as the first argument. This signal is *not* sent out if an order is created through
-splitting an existing order, so you can not expect to see all orders by listening
-to this signal.
+as the first argument. The ``bulk`` argument specifies whether the order was placed
+as part of a bulk action, e.g. an import from a file.
+This signal is *not* sent out if an order is created through splitting an existing order,
+so you can not expect to see all orders by listening to this signal.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -645,6 +800,16 @@ For backwards compatibility reasons, this signal is only sent when a **successfu
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+checkin_annulled = EventPluginSignal()
+"""
+Arguments: ``checkin``
+
+This signal is sent out every time a check-in is annulled (i.e. changed to unsuccessful after it
+already was successful).
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 logentry_display = EventPluginSignal()
 """
 Arguments: ``logentry``
@@ -709,7 +874,7 @@ The ``sender`` keyword argument will contain the event. The ``target`` will cont
 copy to, the ``source`` keyword argument will contain the product to **copy from**.
 """
 
-periodic_task = django.dispatch.Signal()
+periodic_task = GlobalSignal()
 """
 This is a regular django signal (no pretix event signal) that we send out every
 time the periodic task cronjob runs. This interval is not sharply defined, it can
@@ -718,13 +883,13 @@ idempotent, i.e. it should not make a difference if this is sent out more often
 than expected.
 """
 
-register_global_settings = django.dispatch.Signal()
+register_global_settings = GlobalSignal()
 """
 All plugins that are installed may send fields for the global settings form, as
 an OrderedDict of (setting name, form field).
 """
 
-gift_card_transaction_display = django.dispatch.Signal()
+gift_card_transaction_display = GlobalSignal()  # todo: replace with OrganizerPluginSignal?
 """
 Arguments: ``transaction``, ``customer_facing``
 
@@ -746,7 +911,7 @@ This signals allows you to add fees to an order while it is being created. You a
 return a list of ``OrderFee`` objects that are not yet saved to the database
 (because there is no order yet).
 
-As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``positions``
+As with all event plugin signals, the ``sender`` keyword argument will contain the event. A ``positions``
 argument will contain the cart positions and ``invoice_address`` the invoice address (useful for
 tax calculation). The argument ``meta_info`` contains the order's meta dictionary. The ``total``
 keyword argument will contain the total cart sum without any fees. You should not rely on this
@@ -764,7 +929,7 @@ This signals allows you to return a human-readable description for a fee type ba
 and ``internal_type`` attributes of the ``OrderFee`` model that you get as keyword arguments. You are
 expected to return a string or None, if you don't know about this fee.
 
-As with all plugin signals, the ``sender`` keyword argument will contain the event.
+As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
 allow_ticket_download = EventPluginSignal()
@@ -779,32 +944,40 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 
 email_filter = EventPluginSignal()
 """
-Arguments: ``message``, ``order``, ``user``
+Arguments: ``message``, ``order``, ``user``, ``outgoing_mail``
 
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
 return a (possibly modified) copy of the message object passed to you.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
+The ``outgoing_mail`` argument will contain the ``OutgoingMail`` model instance. Note that the ``message`` object
+might have newer information if a previous plugin already modified the email.
 If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
 it will be ``None``.
 If the email is associated with a specific user, e.g. a notification email, the ``user`` argument will be passed as
 well, otherwise it will be ``None``.
+
+You can raise ``WithholdMailException`` to prevent the email from being sent, e.g. when implementing rate limiting.
 """
 
 global_email_filter = GlobalSignal()
 """
-Arguments: ``message``, ``order``, ``user``, ``customer``, ``organizer``
+Arguments: ``message``, ``order``, ``user``, ``customer``, ``organizer``, ``outgoing_mail``
 
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
 return a (possibly modified) copy of the message object passed to you.
 
 This signal is called on all events and even if there is no known event. ``sender`` is an event or None.
 The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
+The ``outgoing_mail`` argument will contain the ``OutgoingMail`` model instance. Note that the ``message`` object
+might have newer information if a previous plugin already modified the email.
 If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
 it will be ``None``.
 If the email is associated with a specific user, e.g. a notification email, the ``user`` argument will be passed as
 well, otherwise it will be ``None``.
+
+You can raise ``WithholdMailException`` to prevent the email from being sent, e.g. when implementing rate limiting.
 """
 
 
@@ -936,7 +1109,7 @@ return a dictionary mapping names of attributes in the settings store to DRF ser
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-customer_created = GlobalSignal()
+customer_created = OrganizerPluginSignal(allow_legacy_plugins=True)
 """
 Arguments: ``customer``
 
@@ -946,7 +1119,7 @@ object is given as the first argument.
 The ``sender`` keyword argument will contain the organizer.
 """
 
-customer_signed_in = GlobalSignal()
+customer_signed_in = OrganizerPluginSignal(allow_legacy_plugins=True)
 """
 Arguments: ``customer``
 
@@ -956,7 +1129,7 @@ is given as the first argument.
 The ``sender`` keyword argument will contain the organizer.
 """
 
-device_info_updated = django.dispatch.Signal()
+device_info_updated = GlobalSignal()  # todo: replace with OrganizerPluginSignal?
 """
 Arguments: ``old_device``, ``new_device``
 

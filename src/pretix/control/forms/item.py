@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -47,9 +47,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import (
-    gettext as __, gettext_lazy as _, pgettext_lazy,
-)
+from django.utils.translation import gettext as __, gettext_lazy as _
 from django_scopes.forms import (
     SafeModelChoiceField, SafeModelMultipleChoiceField,
 )
@@ -58,7 +56,8 @@ from i18nfield.forms import I18nFormField, I18nTextarea
 from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
-    Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
+    Item, ItemCategory, ItemProgramTime, ItemVariation, Question,
+    QuestionOption, Quota,
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
@@ -201,6 +200,12 @@ class QuestionForm(I18nModelForm):
 
         return val
 
+    def clean_type(self):
+        val = self.cleaned_data.get('type')
+        if self.instance:
+            self.instance.clean_type_change(self.instance.type, val)
+        return val
+
     def clean_identifier(self):
         val = self.cleaned_data.get('identifier')
         Question._clean_identifier(self.instance.event, val, self.instance)
@@ -324,7 +329,6 @@ class QuotaForm(I18nModelForm):
                         'event': self.event.slug,
                         'organizer': self.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
@@ -345,6 +349,9 @@ class QuotaForm(I18nModelForm):
         ]
         field_classes = {
             'subevent': SafeModelChoiceField,
+        }
+        widgets = {
+            'size': forms.NumberInput(attrs={'placeholder': _('Unlimited')})
         }
 
     def save(self, *args, **kwargs):
@@ -400,7 +407,6 @@ class ItemCreateForm(I18nModelForm):
 
         self.fields['tax_rule'].queryset = self.instance.event.tax_rules.all()
         change_decimal_field(self.fields['default_price'], self.instance.event.currency)
-        self.fields['tax_rule'].empty_label = _('No taxation')
         self.fields['copy_from'] = forms.ModelChoiceField(
             label=_("Copy product information"),
             queryset=self.event.items.all(),
@@ -410,6 +416,8 @@ class ItemCreateForm(I18nModelForm):
         )
         if self.event.tax_rules.exists():
             self.fields['tax_rule'].required = True
+        else:
+            self.fields['tax_rule'].empty_label = _('No taxation')
 
         if not self.event.has_subevents:
             choices = [
@@ -565,6 +573,8 @@ class ItemCreateForm(I18nModelForm):
             for b in self.cleaned_data['copy_from'].bundles.all():
                 instance.bundles.create(bundled_item=b.bundled_item, bundled_variation=b.bundled_variation,
                                         count=b.count, designated_price=b.designated_price)
+            for pt in self.cleaned_data['copy_from'].program_times.all():
+                instance.program_times.create(start=pt.start, end=pt.end)
 
             item_copy_data.send(sender=self.event, source=self.cleaned_data['copy_from'], target=instance)
 
@@ -1313,4 +1323,50 @@ class ItemMetaValueForm(forms.ModelForm):
         fields = ['value']
         widgets = {
             'value': forms.TextInput()
+        }
+
+
+class ItemProgramTimeFormSet(I18nFormSet):
+    template = "pretixcontrol/item/include_program_times.html"
+    title = _('Program times')
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        self.is_valid()
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            use_required_attribute=False,
+            locales=self.locales,
+            event=self.event
+        )
+        self.add_fields(form, None)
+        return form
+
+
+class ItemProgramTimeForm(I18nModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['end'].widget.attrs['data-date-after'] = '#id_{prefix}-start_0'.format(prefix=self.prefix)
+
+    class Meta:
+        model = ItemProgramTime
+        localized_fields = '__all__'
+        fields = [
+            'start',
+            'end',
+        ]
+        field_classes = {
+            'start': forms.SplitDateTimeField,
+            'end': forms.SplitDateTimeField,
+        }
+        widgets = {
+            'start': SplitDateTimePickerWidget(),
+            'end': SplitDateTimePickerWidget(),
         }

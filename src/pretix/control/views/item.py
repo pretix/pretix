@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -60,23 +60,26 @@ from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
 
 from pretix.api.serializers.item import (
-    ItemAddOnSerializer, ItemBundleSerializer, ItemVariationSerializer,
+    ItemAddOnSerializer, ItemBundleSerializer, ItemProgramTimeSerializer,
+    ItemVariationSerializer,
 )
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CartPosition, Item, ItemCategory, ItemVariation, Order, Question,
-    QuestionAnswer, QuestionOption, Quota, Voucher,
+    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation,
+    OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
+    SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
+from pretix.control.forms.filter import QuestionAnswerFilterForm
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
-    ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemUpdateForm,
-    ItemVariationForm, ItemVariationsFormSet, QuestionForm, QuestionOptionForm,
-    QuotaForm,
+    ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
+    ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
+    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -101,10 +104,16 @@ class ItemList(ListView):
     template_name = 'pretixcontrol/items/index.html'
 
     def get_queryset(self):
+        requires_seat = Exists(
+            SeatCategoryMapping.objects.filter(
+                product_id=OuterRef('pk'),
+            )
+        )
         return Item.objects.filter(
             event=self.request.event
         ).select_related("tax_rule").annotate(
-            var_count=Count('variations')
+            var_count=Count('variations'),
+            requires_seat=requires_seat,
         ).prefetch_related("category", "limit_sales_channels").order_by(
             F('category__position').asc(nulls_first=True),
             'category', 'position'
@@ -652,43 +661,28 @@ class QuestionMixin:
         return ctx
 
 
-class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingView, DetailView):
+class QuestionView(EventPermissionRequiredMixin, ChartContainingView, DetailView):
     model = Question
     template_name = 'pretixcontrol/items/question.html'
     permission = 'can_change_items'
     template_name_field = 'question'
 
+    @cached_property
+    def filter_form(self):
+        return QuestionAnswerFilterForm(event=self.request.event, data=self.request.GET)
+
     def get_answer_statistics(self):
+        opqs = OrderPosition.objects.filter(
+            order__event=self.request.event,
+        )
+        if self.filter_form.is_valid():
+            opqs = self.filter_form.filter_qs(opqs)
+
         qs = QuestionAnswer.objects.filter(
             question=self.object, orderposition__isnull=False,
-            orderposition__order__event=self.request.event
         )
-
-        if self.request.GET.get("subevent", "") != "":
-            qs = qs.filter(orderposition__subevent=self.request.GET["subevent"])
-
-        s = self.request.GET.get("status", "np")
-        if s != "":
-            if s == 'o':
-                qs = qs.filter(orderposition__order__status=Order.STATUS_PENDING,
-                               orderposition__order__expires__lt=now().replace(hour=0, minute=0, second=0))
-            elif s == 'np':
-                qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
-            elif s == 'pv':
-                qs = qs.filter(
-                    Q(orderposition__order__status=Order.STATUS_PAID) |
-                    Q(orderposition__order__status=Order.STATUS_PENDING, orderposition__order__valid_if_pending=True)
-                )
-            elif s == 'ne':
-                qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
-            else:
-                qs = qs.filter(orderposition__order__status=s)
-
-        if s not in (Order.STATUS_CANCELED, ""):
-            qs = qs.filter(orderposition__canceled=False)
-        if self.request.GET.get("item", "") != "":
-            i = self.request.GET.get("item", "")
-            qs = qs.filter(orderposition__item_id__in=(i,))
+        qs = qs.filter(orderposition__in=opqs)
+        op_cnt = opqs.filter(item__in=self.object.items.all()).count()
 
         if self.object.type == Question.TYPE_FILE:
             qs = [
@@ -728,14 +722,16 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
         total = sum(a['count'] for a in r)
         for a in r:
             a['percentage'] = (a['count'] / total * 100.) if total else 0
+            a['percentage_attendees'] = (a['count'] / op_cnt * 100.) if op_cnt else 0
         return r, total
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
-        ctx['items'] = self.object.items.all()
+        ctx['items'] = self.object.items.exists()
+        ctx['has_subevents'] = self.request.event.has_subevents
         stats = self.get_answer_statistics()
         ctx['stats'], ctx['total'] = stats
-        ctx['stats_json'] = json.dumps(stats)
+        ctx['form'] = self.filter_form
         return ctx
 
     def get_object(self, queryset=None) -> Question:
@@ -1419,7 +1415,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 form.instance.position = i
             setattr(form.instance, attr, self.get_object())
             created = not form.instance.pk
-            form.save()
+            if form.has_changed():
+                form.save()
             if form.has_changed() and any(a for a in form.changed_data if a != 'ORDER'):
                 change_data = {k: form.cleaned_data.get(k) for k in form.changed_data}
                 if key == 'variations':
@@ -1485,6 +1482,16 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                     'bundles', 'bundles', 'base_item', order=False,
                     serializer=ItemBundleSerializer
                 )
+            elif k == 'program_times':
+                self.save_formset(
+                    'program_times', 'program_times', order=False,
+                    serializer=ItemProgramTimeSerializer
+                )
+                if not change_data:
+                    for f in v.forms:
+                        if (f in v.deleted_forms and f.instance.pk) or f.has_changed():
+                            invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'item': self.object.pk})
+                            break
             else:
                 v.save()
 
@@ -1547,9 +1554,20 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 queryset=ItemBundle.objects.filter(base_item=self.get_object()),
                 event=self.request.event, item=self.item, prefix="bundles"
             )),
+            ('program_times', inlineformset_factory(
+                Item, ItemProgramTime,
+                form=ItemProgramTimeForm, formset=ItemProgramTimeFormSet,
+                can_order=False, can_delete=True, extra=0
+            )(
+                self.request.POST if self.request.method == "POST" else None,
+                queryset=ItemProgramTime.objects.filter(item=self.get_object()),
+                event=self.request.event, prefix="program_times"
+            )),
         ])
         if not self.object.has_variations:
             del f['variations']
+        if self.item.event.has_subevents:
+            del f['program_times']
 
         i = 0
         for rec, resp in item_formsets.send(sender=self.request.event, item=self.item, request=self.request):

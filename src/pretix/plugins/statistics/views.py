@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -103,7 +103,10 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 day = o['datetime'].astimezone(tz).date()
                 ordered_by_day[day] = ordered_by_day.get(day, 0) + 1
             paid_by_day = {}
-            for o in oqs.filter(event=self.request.event, payment_date__isnull=False).values('payment_date'):
+            for o in oqs.filter(
+                event=self.request.event, payment_date__isnull=False,
+                status=Order.STATUS_PAID, all_positions__canceled=False
+            ).distinct().values('payment_date'):
                 day = o['payment_date'].astimezone(tz).date()
                 paid_by_day[day] = paid_by_day.get(day, 0) + 1
 
@@ -125,10 +128,56 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             ctx['obd_data'] = json.dumps(data)
             cache.set('statistics_obd_data' + ckey, ctx['obd_data'])
 
+        # Attendees by day/time
+        ctx['abd_data'] = cache.get('statistics_abd_data' + ckey)
+        ctx['abt_data'] = cache.get('statistics_abt_data' + ckey)
+        if not ctx['abd_data'] or not ctx['abt_data']:
+            opqs = OrderPosition.all.filter(order__event=self.request.event, item__admission=True).annotate(
+                payment_date=Subquery(op_date, output_field=DateTimeField())
+            )
+            if subevent:
+                opqs = opqs.filter(subevent=subevent)
+
+            ordered_by_day = {}
+            for p in opqs.values('order__datetime'):
+                day = p['order__datetime'].astimezone(tz).date()
+                ordered_by_day[day] = ordered_by_day.get(day, 0) + 1
+
+            paid_by_day = {}
+            for p in opqs.filter(payment_date__isnull=False, canceled=False, order__status=Order.STATUS_PAID).values('payment_date'):
+                day = p['payment_date'].astimezone(tz).date()
+                paid_by_day[day] = paid_by_day.get(day, 0) + 1
+
+            day_data = []
+            time_data = []
+            for d in dateutil.rrule.rrule(
+                    dateutil.rrule.DAILY,
+                    dtstart=min(ordered_by_day.keys()) if ordered_by_day else datetime.date.today(),
+                    until=max(
+                        max(ordered_by_day.keys() if paid_by_day else [datetime.date.today()]),
+                        max(paid_by_day.keys() if paid_by_day else [datetime.date(1970, 1, 1)])
+                    )):
+                d = d.date()
+                day_data.append({
+                    'date': d.strftime('%Y-%m-%d'),
+                    'ordered': ordered_by_day.get(d, 0),
+                    'paid': paid_by_day.get(d, 0)
+                })
+                time_data.append({
+                    'date': d.strftime('%Y-%m-%d'),
+                    'ordered': (time_data[-1]["ordered"] if time_data else 0) + ordered_by_day.get(d, 0),
+                    'paid': (time_data[-1]["paid"] if time_data else 0) + paid_by_day.get(d, 0)
+                })
+
+            ctx['abd_data'] = json.dumps(day_data)
+            ctx['abt_data'] = json.dumps(time_data)
+            cache.set('statistics_abd_data' + ckey, ctx['abd_data'])
+            cache.set('statistics_abt_data' + ckey, ctx['abt_data'])
+
         # Orders by product
         ctx['obp_data'] = cache.get('statistics_obp_data' + ckey)
         if not ctx['obp_data']:
-            opqs = OrderPosition.objects
+            opqs = OrderPosition.all
             if subevent:
                 opqs = opqs.filter(subevent=subevent)
             num_ordered = {
@@ -141,7 +190,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             num_paid = {
                 p['item']: p['cnt']
                 for p in (opqs
-                          .filter(order__event=self.request.event, order__status=Order.STATUS_PAID)
+                          .filter(order__event=self.request.event, order__status=Order.STATUS_PAID, canceled=False)
                           .values('item')
                           .annotate(cnt=Count('id')).order_by())
             }

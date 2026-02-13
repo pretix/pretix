@@ -8,6 +8,7 @@
     {% include "pretixpresale/event/fragment_walletdetection_head.html" %}
 {% endblock %}
 {% block inner %}
+    <h3 class="sr-only">{% trans "Payment" %}</h3>
     {% if current_payments %}
         <p>{% trans "You already selected the following payment methods:" %}</p>
         <form method="post">
@@ -16,16 +17,17 @@
                 {% for p in current_payments %}
                     <div class="list-group-item">
                         <div class="row">
-                            <div class="col-xs-9">
-                                {{ p.provider_name }}
+                            <div class="col-md-7 col-sm-6 col-xs-8">
+                                <strong id="payment-label-{{ forloop.counter }}">{{ p.provider_name }}</strong>
                             </div>
-                            <div class="col-xs-2 text-right">
+                            <div class="col-md-2 col-sm-2 col-xs-4 text-right">
                                 {{ p.payment_amount|money:request.event.currency }}
                             </div>
-                            <div class="col-xs-1 text-right">
-                                <button name="remove_payment" value="{{ p.id }}" title="{% trans "Remove payment" %}"
-                                    class="btn btn-link btn-xs">
-                                    <span class="fa fa-trash text-danger"></span>
+                            <div class="col-md-3 col-sm-4 col-xs-12 text-right">
+                                <button name="remove_payment" value="{{ p.id }}" aria-describedby="payment-label-{{ forloop.counter }}"
+                                    class="btn btn-danger">
+                                    <span class="fa fa-trash"></span>
+                                    {% trans "Remove payment" %}
                                 </button>
                             </div>
                         </div>
@@ -34,11 +36,11 @@
                 {% if remaining %}
                     <div class="list-group-item">
                         <div class="row">
-                            <div class="col-xs-9">
+                            <div class="col-md-7 col-sm-6 col-xs-8">
                                 <strong>{% trans "Remaining balance" %}</strong><br>
                                 <span class="text-muted">{% trans "Please select a payment method below." %}</span>
                             </div>
-                            <div class="col-xs-2 text-right">
+                            <div class="col-md-2 col-sm-2 col-xs-4 text-right">
                                 <strong>
                                     {{ remaining|money:request.event.currency }}
                                 </strong>
@@ -75,6 +77,15 @@
                                            aria-controls="payment_{{ p.provider.identifier }}"
                                            data-wallets="{{ p.provider.walletqueries|join:"|" }}" />
                                     <strong class="accordion-label-text">{{ p.provider.public_name }}</strong>
+                                    {% if p.provider.identifier == 'giftcard' and p.provider.customer_gift_cards %}
+                                        <small>
+                                            {% blocktrans trimmed count count=p.provider.customer_gift_cards|length %}
+                                                ({{ count }} available)
+                                            {% plural %}
+                                                ({{ count }} available)
+                                            {% endblocktrans %}
+                                        </small>
+                                    {% endif %}
                                 </span>
                             </label>
                         </legend>

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -19,11 +19,20 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
+
 from arabic_reshaper import ArabicReshaper
 from django.conf import settings
 from django.utils.functional import SimpleLazyObject
 from PIL import Image
+from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.utils import ImageReader
+from reportlab.pdfbase import pdfmetrics
+from reportlab.platypus import Paragraph
+
+from pretix.presale.style import get_fonts
+
+logger = logging.getLogger(__name__)
 
 
 class ThumbnailingImageReader(ImageReader):
@@ -59,3 +68,43 @@ reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
     'delete_harakat': True,
     'support_ligatures': False,
 }))
+
+
+class FontFallbackParagraph(Paragraph):
+    def __init__(self, text, style=None, *args, **kwargs):
+        if style is None:
+            style = ParagraphStyle(name='paragraphImplicitDefaultStyle')
+
+        if not self._font_supports_text(text, style.fontName):
+            newFont = self._find_font(text, style.fontName)
+            if newFont:
+                logger.debug(f"replacing {style.fontName} with {newFont} for {text!r}")
+                style = style.clone(name=style.name + '_' + newFont, fontName=newFont)
+
+        super().__init__(text, style, *args, **kwargs)
+
+    def _font_supports_text(self, text, font_name):
+        if not text:
+            return True
+        font = pdfmetrics.getFont(font_name)
+        return all(
+            ord(c) in font.face.charToGlyph or not c.isprintable()
+            for c in text
+        )
+
+    def _find_font(self, text, original_font):
+        for family, styles in get_fonts(pdf_support_required=True).items():
+            if self._font_supports_text(text, family):
+                if (original_font.endswith("It") or original_font.endswith(" I")) and "italic" in styles:
+                    return family + " I"
+                if (original_font.endswith("Bd") or original_font.endswith(" B")) and "bold" in styles:
+                    return family + " B"
+                return family
+
+
+def register_ttf_font_if_new(name, path):
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+
+    if name not in pdfmetrics.getRegisteredFontNames():
+        pdfmetrics.registerFont(TTFont(name, path))

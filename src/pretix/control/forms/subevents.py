@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -133,16 +133,12 @@ class SubEventBulkEditForm(I18nModelForm):
             # i18n fields
             if k in self.mixed_values:
                 self.fields[k].widget.attrs['placeholder'] = '[{}]'.format(_('Selection contains various values'))
-            else:
-                self.fields[k].widget.attrs['placeholder'] = ''
             self.fields[k].one_required = False
 
         for k in ('geo_lat', 'geo_lon', 'comment'):
             # scalar fields
             if k in self.mixed_values:
                 self.fields[k].widget.attrs['placeholder'] = '[{}]'.format(_('Selection contains various values'))
-            else:
-                self.fields[k].widget.attrs['placeholder'] = ''
             self.fields[k].widget.is_required = False
             self.fields[k].required = False
 
@@ -177,6 +173,13 @@ class SubEventBulkEditForm(I18nModelForm):
         }
         widgets = {
         }
+
+    def clean(self):
+        data = super().clean()
+        if self.prefix + "name" in self.data.getlist('_bulk'):
+            if not data.get("name"):
+                self.add_error("name", _("This field is required."))
+        return data
 
     def save(self, commit=True):
         objs = list(self.queryset)
@@ -387,7 +390,8 @@ class QuotaFormSet(I18nInlineFormSet):
             use_required_attribute=False,
             locales=self.locales,
             event=self.event,
-            items=self.items
+            items=self.items,
+            searchable_selection=self.searchable_selection,
         )
         self.add_fields(form, None)
         return form

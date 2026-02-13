@@ -456,18 +456,16 @@ $s2bs-form-control-transition: border-color ease-in-out .15s, box-shadow ease-in
     min-height: $s2bs-input-height-base;
     padding: 0;
     height: auto;
+    padding-bottom: 4px;
 
     .select2-selection__rendered {
       box-sizing: border-box;
-      display: block;
       line-height: $s2bs-line-height-base;
       list-style: none;
       margin: 0;
-      overflow: hidden;
       padding: 0;
       width: 100%;
       text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .select2-selection__placeholder {
@@ -486,7 +484,7 @@ $s2bs-form-control-transition: border-color ease-in-out .15s, box-shadow ease-in
       border: 1px solid $s2bs-btn-default-border;
       border-radius: $s2bs-selection-choice-border-radius;
       cursor: default;
-      float: left;
+      display: inline-block;
       margin: ($s2bs-padding-base-vertical - 1) 0 0 $s2bs-padding-base-horizontal/2;
       padding: 0 $s2bs-padding-base-vertical;
     }
@@ -512,6 +510,8 @@ $s2bs-form-control-transition: border-color ease-in-out .15s, box-shadow ease-in
       display: inline-block;
       font-weight: bold;
       margin-right: $s2bs-padding-base-vertical / 2;
+      border: none;
+      background: none;
 
       &:hover {
         color: $s2bs-remove-choice-hover-color;

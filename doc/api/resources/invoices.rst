@@ -1,3 +1,5 @@
+.. _rest-invoices:
+
 Invoices
 ========
 
@@ -20,10 +22,13 @@ invoice_from_name                     string                     Sender address:
 invoice_from                          string                     Sender address: Address lines
 invoice_from_zipcode                  string                     Sender address: ZIP code
 invoice_from_city                     string                     Sender address: City
+invoice_from_state                    string                     Sender address: State (only used in some countries)
 invoice_from_country                  string                     Sender address: Country code
 invoice_from_tax_id                   string                     Sender address: Local Tax ID
 invoice_from_vat_id                   string                     Sender address: EU VAT ID
 invoice_to                            string                     Full recipient address
+invoice_to_is_business                boolean                    Recipient address: Business vs individual (``null`` for
+                                                                 invoices created before pretix 2025.6).
 invoice_to_company                    string                     Recipient address: Company name
 invoice_to_name                       string                     Recipient address: Person name
 invoice_to_street                     string                     Recipient address: Address lines
@@ -33,6 +38,7 @@ invoice_to_state                      string                     Recipient addre
 invoice_to_country                    string                     Recipient address: Country code
 invoice_to_vat_id                     string                     Recipient address: EU VAT ID
 invoice_to_beneficiary                string                     Invoice beneficiary
+invoice_to_transmission_info          object                     Additional transmission info (see :ref:`rest-transmission-types`)
 custom_field                          string                     Custom invoice address field
 date                                  date                       Invoice date
 refers                                string                     Invoice number of an invoice this invoice refers to
@@ -75,17 +81,12 @@ lines                                 list of objects            The actual invo
                                                                  for all invoice lines
                                                                  created before this field was introduced as well as for
                                                                  all lines not created by a fee (e.g. a product).
-├ event_date_from                     datetime                   Start date of the (sub)event this line was created for as it
-                                                                 was set during invoice creation. Can be ``null`` for all invoice
-                                                                 lines created before this was introduced as well as for lines in
-                                                                 an event series not created by a product (e.g. shipping or
-                                                                 cancellation fees).
-├ event_date_to                       datetime                   End date of the (sub)event this line was created for as it
-                                                                 was set during invoice creation. Can be ``null`` for all invoice
-                                                                 lines created before this was introduced as well as for lines in
-                                                                 an event series not created by a product (e.g. shipping or
-                                                                 cancellation fees) as well as whenever the respective (sub)event
-                                                                 has no end date set.
+├ period_start                        datetime                   Start date of the service or delivery period of the invoice line.
+                                                                 Can be ``null`` if not known.
+├ period_end                          datetime                   End date of the service or delivery period of the invoice line.
+                                                                 Can be ``null`` if not known.
+├ event_date_from                     datetime                   Deprecated alias of ``period_start``.
+├ event_date_to                       datetime                   Deprecated alias of ``period_end``.
 ├ event_location                      string                     Location of the (sub)event this line was created for as it
                                                                  was set during invoice creation. Can be ``null`` for all invoice
                                                                  lines created before this was introduced as well as for lines in
@@ -108,20 +109,14 @@ foreign_currency_rate                 decimal (string)           If ``foreign_cu
 foreign_currency_rate_date            date                       If ``foreign_currency_rate`` is set, this signifies the
                                                                  date at which the currency rate was obtained.
 internal_reference                    string                     Customer's reference to be printed on the invoice.
+transmission_type                     string                     Requested transmission channel (see :ref:`rest-transmission-types`)
+transmission_provider                 string                     Selected transmission provider (depends on installed
+                                                                 plugins). ``null`` if not yet chosen.
+transmission_status                   string                     Transmission status, one of ``unknown`` (pre-2025.6),
+                                                                 ``pending``, ``inflight``, ``failed``, and ``completed``.
+transmission_date                     datetime                   Time of last change in transmission status (may be ``null``).
 ===================================== ========================== =======================================================
 
-
-.. versionchanged:: 4.1
-
-   The attributes ``fee_type`` and ``fee_internal_type`` have been added.
-
-.. versionchanged:: 4.1
-
-   The attribute ``lines.event_location`` has been added.
-
-.. versionchanged:: 4.6
-
-   The attribute ``lines.subevent`` has been added.
 
 .. versionchanged:: 2023.8
 
@@ -131,6 +126,76 @@ internal_reference                    string                     Customer's refe
 
    The ``tax_code`` attribute has been added.
 
+.. versionchanged:: 2025.6
+
+   The attributes ``invoice_to_is_business``, ``invoice_to_transmission_info``, ``transmission_type``,
+   ``transmission_provider``, ``transmission_status``, and ``transmission_date`` have been added.
+
+
+.. _`rest-transmission-types`:
+
+Transmission types
+------------------
+
+pretix supports multiple ways to transmit an invoice from the organizer to the invoice recipient.
+For each transmission type, different fields are supported in the ``transmission_info`` object of the
+invoice address. Currently, pretix supports the following transmission types:
+
+Email
+"""""
+
+The identifier ``"email"`` represents the transmission of PDF invoices through email.
+This is the default transmission type in pretix and has some special behavior for backwards compatibility.
+Transmission is always executed through the provider ``"email_pdf"``.
+The ``transmission_info`` object may contain the following properties:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+transmission_email_address            string                     Optional. An email address other than the order address
+                                                                 that the invoice should be sent to.
+                                                                 Business customers only.
+===================================== ========================== =======================================================
+
+Peppol
+""""""
+
+The identifier ``"peppol"`` represents the transmission of XML invoices through the `Peppol`_ network.
+This is only available for business addresses.
+This is not supported by pretix out of the box and requires the use of a suitable plugin.
+The ``transmission_info`` object may contain the following properties:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+transmission_peppol_participant_id    string                     Required. The Peppol participant ID of the recipient.
+===================================== ========================== =======================================================
+
+Italian Exchange System
+"""""""""""""""""""""""
+
+The identifier ``"it_sdi"`` represents the transmission of XML invoices through the `Sistema di Interscambio`_ network used in Italy.
+This is only available for addresses with country ``"IT"``.
+This is not supported by pretix out of the box and requires the use of a suitable plugin.
+The ``transmission_info`` object may contain the following properties:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+transmission_it_sdi_codice_fiscale    string                     Required for non-business address. Fiscal code of the
+                                                                 recipient.
+transmission_it_sdi_pec               string                     Required for business addresses. Address for certified
+                                                                 electronic mail.
+transmission_it_sdi_recipient_code    string                     Required for businesses. SdI recipient code.
+===================================== ========================== =======================================================
+
+If this type is selected, ``vat_id`` is required for business addresses.
 
 List of all invoices
 --------------------
@@ -169,11 +234,13 @@ List of all invoices
             "invoice_from": "Demo street 12",
             "invoice_from_zipcode":"",
             "invoice_from_city":"Demo town",
+            "invoice_from_state":"CA",
             "invoice_from_country":"US",
             "invoice_from_tax_id":"",
             "invoice_from_vat_id":"",
             "invoice_to": "Sample company\nJohn Doe\nTest street 12\n12345 Testington\nTestikistan\nVAT-ID: EU123456789",
             "invoice_to_company": "Sample company",
+            "invoice_to_is_business": true,
             "invoice_to_name": "John Doe",
             "invoice_to_street": "Test street 12",
             "invoice_to_zipcode": "12345",
@@ -182,6 +249,7 @@ List of all invoices
             "invoice_to_country": "TE",
             "invoice_to_vat_id": "EU123456789",
             "invoice_to_beneficiary": "",
+            "invoice_to_transmission_info": {},
             "custom_field": null,
             "date": "2017-12-01",
             "refers": null,
@@ -203,6 +271,8 @@ List of all invoices
                 "fee_internal_type": null,
                 "event_date_from": "2017-12-27T10:00:00Z",
                 "event_date_to": null,
+                "period_start": "2017-12-27T10:00:00Z",
+                "period_end": "2017-12-27T10:00:00Z",
                 "event_location": "Heidelberg",
                 "attendee_name": null,
                 "gross_value": "23.00",
@@ -214,7 +284,11 @@ List of all invoices
             ],
             "foreign_currency_display": "PLN",
             "foreign_currency_rate": "4.2408",
-            "foreign_currency_rate_date": "2017-07-24"
+            "foreign_currency_rate_date": "2017-07-24",
+            "transmission_type": "email",
+            "transmission_provider": "email_pdf",
+            "transmission_status": "completed",
+            "transmission_date": "2017-07-24T10:00:00Z"
           }
         ]
       }
@@ -309,11 +383,13 @@ Fetching individual invoices
         "invoice_from": "Demo street 12",
         "invoice_from_zipcode":"",
         "invoice_from_city":"Demo town",
+        "invoice_from_state":"CA",
         "invoice_from_country":"US",
         "invoice_from_tax_id":"",
         "invoice_from_vat_id":"",
         "invoice_to": "Sample company\nJohn Doe\nTest street 12\n12345 Testington\nTestikistan\nVAT-ID: EU123456789",
         "invoice_to_company": "Sample company",
+        "invoice_to_is_business": true,
         "invoice_to_name": "John Doe",
         "invoice_to_street": "Test street 12",
         "invoice_to_zipcode": "12345",
@@ -322,6 +398,7 @@ Fetching individual invoices
         "invoice_to_country": "TE",
         "invoice_to_vat_id": "EU123456789",
         "invoice_to_beneficiary": "",
+        "invoice_to_transmission_info": {},
         "custom_field": null,
         "date": "2017-12-01",
         "refers": null,
@@ -343,6 +420,8 @@ Fetching individual invoices
             "fee_internal_type": null,
             "event_date_from": "2017-12-27T10:00:00Z",
             "event_date_to": null,
+            "period_start": "2017-12-27T10:00:00Z",
+            "period_end": "2017-12-27T10:00:00Z",
             "event_location": "Heidelberg",
             "attendee_name": null,
             "gross_value": "23.00",
@@ -354,7 +433,11 @@ Fetching individual invoices
         ],
         "foreign_currency_display": "PLN",
         "foreign_currency_rate": "4.2408",
-        "foreign_currency_rate_date": "2017-07-24"
+        "foreign_currency_rate_date": "2017-07-24",
+        "transmission_type": "email",
+        "transmission_provider": "email_pdf",
+        "transmission_status": "completed",
+        "transmission_date": "2017-07-24T10:00:00Z"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -459,3 +542,70 @@ Invoices cannot be edited directly, but the following actions can be triggered:
    :statuscode 400: The invoice has already been canceled
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
+
+
+Transmitting invoices
+---------------------
+
+Invoices are transmitted automatically when created during order creation or payment receipt,
+but in other cases transmission may need to be triggered manually.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/invoices/(number)/transmit/
+
+   Transmits the invoice to the recipient, but only if it is in ``pending`` state.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/invoices/00001/transmit/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/pdf
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param number: The ``number`` field of the invoice to transmit
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to transmit this invoice **or** the invoice may not be transmitted
+   :statuscode 409: The invoice is currently in transmission
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/invoices/(number)/retransmit/
+
+   Transmits the invoice to the recipient even if transmission was already attempted previously.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/invoices/00001/retransmit/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+      Content-Type: application/pdf
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param number: The ``number`` field of the invoice to transmit
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to transmit this invoice **or** the invoice may not be transmitted
+   :statuscode 409: The invoice is currently in transmission
+
+
+.. _Peppol: https://en.wikipedia.org/wiki/PEPPOL
+.. _Sistema di Interscambio: https://it.wikipedia.org/wiki/Fattura_elettronica_in_Italia

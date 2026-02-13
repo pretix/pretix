@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -59,9 +59,10 @@ Anke,Müller,anke@example.net
     r = client.post('/control/event/dummy/dummy/orders/import/', {
         'file': file
     }, follow=True)
+    print(r.content)
     doc = BeautifulSoup(r.content, "lxml")
-    assert doc.select("select[name=orders]")
-    assert doc.select("select[name=status]")
+    assert doc.select("input[name=orders]")
+    assert doc.select("input[name=status]")
     assert doc.select("select[name=attendee_email]")
     assert b"Dieter" in r.content
     assert b"daniel@example.org" in r.content

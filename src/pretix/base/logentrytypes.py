@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -26,7 +26,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import (
     Discount, Item, ItemCategory, Order, Question, Quota, SubEvent, TaxRule,
-    Voucher,
+    Voucher, WaitingListEntry,
 )
 
 from .logentrytype_registry import (  # noqa
@@ -145,3 +145,15 @@ class TaxRuleLogEntryType(EventLogEntryType):
     object_link_viewname = 'control:event.settings.tax.edit'
     object_link_argname = 'rule'
     content_type = TaxRule
+
+
+class WaitingListEntryLogEntryType(EventLogEntryType):
+    object_link_wrapper = '{val}'
+    object_link_viewname = 'control:event.orders.waitinglist'
+    content_type = WaitingListEntry
+
+    def get_object_link_info(self, logentry) -> Optional[dict]:
+        info = super().get_object_link_info(logentry)
+        if info and 'href' in info:
+            info['href'] += '?status=a&entry=' + str(logentry.content_object.pk)
+        return info

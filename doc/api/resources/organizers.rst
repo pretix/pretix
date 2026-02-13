@@ -19,15 +19,16 @@ name                                  string                     The organizer's
 slug                                  string                     A short form of the name, used e.g. in URLs.
 public_url                            string                     The public, customer-facing URL of the organizer, where
                                                                  the list of all events can be found (read-only).
+plugins                               list                       A list of package names of the enabled plugins for this
+                                                                 organizer. Note that most plugins are enabled on the
+                                                                 event level (or both levels). If you remove a plugin
+                                                                 that is also enabled on some events, it will
+                                                                 automatically be removed from all events as well.
 ===================================== ========================== =======================================================
 
 
 Endpoints
 ---------
-
-.. versionchanged:: 4.17
-
-    The ``public_url`` field has been added.
 
 .. http:get:: /api/v1/organizers/
 
@@ -57,7 +58,10 @@ Endpoints
           {
             "name": "Big Events LLC",
             "slug": "Big Events",
-            "public_url": "https://pretix.eu/bigevents/"
+            "public_url": "https://pretix.eu/bigevents/",
+            "plugins": [
+              "pretix_datev"
+            ]
           }
         ]
       }
@@ -91,13 +95,60 @@ Endpoints
       {
         "name": "Big Events LLC",
         "slug": "Big Events",
-        "public_url": "https://pretix.eu/bigevents/"
+        "public_url": "https://pretix.eu/bigevents/",
+        "plugins": [
+          "pretix_datev"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+
+.. http:patch:: /api/v1/organizers/(organizer)/
+
+   Updates an organizer. Currently only the ``plugins`` field may be updated.
+
+   Permission required: "Can change organizer settings"
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+        "plugins": [
+          "pretix_seating"
+        ]
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "name": "Big Events LLC",
+        "slug": "Big Events",
+        "public_url": "https://pretix.eu/bigevents/",
+        "plugins": [
+          "pretix_seating"
+        ]
+      }
+
+   :param organizer: The ``slug`` field of the organizer to update
+   :statuscode 200: no error
+   :statuscode 400: The organizer could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to update this resource.
 
 Organizer settings
 ------------------

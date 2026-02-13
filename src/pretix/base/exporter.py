@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -104,6 +104,18 @@ class BaseExporter:
         If ``True``, this exporter will be highlighted.
         """
         return False
+
+    @property
+    def repeatable_read(self) -> bool:
+        """
+        If ``True``, this exporter will be run in a REPEATABLE READ transaction. This ensures consistent results for
+        all queries performed by the exporter, but creates a performance burden on the database server. We recommend to
+        disable this for exporters that take very long to run and do not rely on this behavior, such as export of lists
+        to CSV files.
+
+        Defaults to ``True`` for now, but default may change in future versions.
+        """
+        return True
 
     @property
     def identifier(self) -> str:

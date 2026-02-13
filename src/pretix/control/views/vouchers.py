@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -87,7 +87,7 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
 
     @scopes_disabled()  # we have an event check here, and we can save some performance on subqueries
     def get_queryset(self):
-        qs = Voucher.annotate_budget_used_orders(self.request.event.vouchers.exclude(
+        qs = Voucher.annotate_budget_used(self.request.event.vouchers.exclude(
             Exists(WaitingListEntry.objects.filter(voucher_id=OuterRef('pk')))
         ).select_related(
             'item', 'variation', 'seat'
@@ -380,7 +380,7 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
         messages.success(self.request, mark_safe(_('The new voucher has been created: {code}').format(
             code=format_html('<a href="{url}">{code}</a>', url=url, code=self.object.code)
         )))
-        form.instance.log_action('pretix.voucher.added', data=dict(form.cleaned_data), user=self.request.user)
+        form.instance.log_action('pretix.voucher.added', data={**dict(form.cleaned_data), "source": "control"}, user=self.request.user)
         return ret
 
     @transaction.atomic
@@ -475,7 +475,7 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, AsyncFormView):
                 data['bulk'] = True
                 del data['codes']
                 log_entries.append(
-                    v.log_action('pretix.voucher.added', data=data, user=self.request.user, save=False)
+                    v.log_action('pretix.voucher.added', data={**data, "source": "control_bulk"}, user=self.request.user, save=False)
                 )
             LogEntry.bulk_create_and_postprocess(log_entries)
             form.post_bulk_save(batch_vouchers)

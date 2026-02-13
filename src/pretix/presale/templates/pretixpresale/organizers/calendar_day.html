@@ -1,68 +1,106 @@
 {% extends "pretixpresale/organizers/base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load rich_text %}
 {% load eventurl %}
 {% load urlreplace %}
-{% block title %}{% trans "Event overview" %}{% endblock %}
+{% block title %}
+    {% blocktrans trimmed with day=date|date:"DATE_FORMAT" %}
+        Events on {{ day }}
+    {% endblocktrans %}
+{% endblock %}
 {% block content %}
     {% if organizer_homepage_text %}
-        <div>
+        <div class="blank-after">
             {{ organizer_homepage_text | rich_text }}
         </div>
     {% endif %}
-    <h3>{{ date|date:"DATE_FORMAT" }}</h3>
-    <form class="form-inline" method="get" id="monthselform"
-          action="{% eventurl request.organizer "presale:organizer.index" %}">
-        {% for f, v in request.GET.items %}
-            {% if f != "date" %}
-                <input type="hidden" name="{{ f }}" value="{{ v }}">
-            {% endif %}
-        {% endfor %}
-        <div class="row">
-            <div class="col-md-5 col-sm-6 col-xs-12 text-left flip">
-                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="day" %}
+    <div class="blank-after text-left flip">
+        {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="day" %}
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">
+                <strong>
+                {% blocktrans trimmed with day=date|date:"DATE_FORMAT" %}
+                    Events on {{ day }}
+                {% endblocktrans %}
+                </strong>
+            </h2>
+        </div>
+        {% if filter_form.fields %}
+            <div class="panel-subhead">
+                {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
             </div>
-            <div class="col-md-2 col-sm-4 col-xs-8 text-center">
-                <input class="datepickerfield form-control" value="{{ date|date:"SHORT_DATE_FORMAT" }}" name="date">
-                <button type="submit" class="js-hidden btn btn-default">
-                    {% trans "Go" %}
-                </button>
-            </div>
-            <div class="col-md-5 col-sm-2 col-xs-4 text-right flip">
+        {% endif %}
+        <div class="panel-body">
+            <nav aria-label="{% trans "calendar navigation" %}">
+                <ul class="row calendar-nav">
+                    <li class="text-left flip">
+                        {% if has_before %}
+                            <a href="?{% url_replace request "date" before.date.isoformat %}"
+                               class="btn btn-default" data-save-scrollpos aria-label="{{ before|date:"SHORT_DATE_FORMAT" }}">
+                                {% icon "arrow-left" %}
+                                <span class="hidden-xs">{{ before|date:"SHORT_DATE_FORMAT" }}</span>
+                            </a>
+                        {% endif %}
+                    </li>
+                    <li class="text-center">
+                        <form class="form-inline" method="get" id="monthselform" action="{% eventurl request.organizer "presale:organizer.index" %}">
+                            {% for f, v in request_get_items %}
+                                {% if f != "date" %}
+                                    <input type="hidden" name="{{ f }}" value="{{ v }}">
+                                {% endif %}
+                            {% endfor %}
+                            <fieldset>
+                                <legend class="sr-only">{% trans "Select a date to display" %}</legend>
+                                <div>
+                                    <label for="calendar-input-date">{% trans "Date" %}</label>
+                                </div>
+                                <div class="input-group">
+                                    <input class="datepickerfield form-control" id="calendar-input-date" value="{{ date|date:"SHORT_DATE_FORMAT" }}" name="date">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-default" aria-label="{% trans "Show date" %}">
+                                            {% icon "chevron-right" %}
+                                        </button>
+                                    </span>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </li>
+                    <li class="text-right flip">
+                        {% if has_after %}
+                            <a href="?{% url_replace request "date" after.date.isoformat %}"
+                               class="btn btn-default" data-save-scrollpos aria-label="{{ after|date:"SHORT_DATE_FORMAT" }}">
+                                <span class="hidden-xs">{{ after|date:"SHORT_DATE_FORMAT" }}</span>
+                                {% icon "arrow-right" %}
+                            </a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+            {% include "pretixpresale/fragment_day_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
+            <div class="row visible-xs">
                 {% if has_before %}
+                <div class="col-xs-6 text-left flip">
                     <a href="?{% url_replace request "date" before.date.isoformat %}"
-                       class="btn btn-default" data-save-scrollpos aria-label="{{ before|date:"SHORT_DATE_FORMAT" }}">
+                       class="btn btn-default">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                        <span class="hidden-sm hidden-xs">{{ before|date:"SHORT_DATE_FORMAT" }}</span>
+                        <span class="hidden-xs">{{ before|date:"SHORT_DATE_FORMAT" }}</span>
                     </a>
+                </div>
                 {% endif %}
                 {% if has_after %}
+                <div class="col-xs-6 text-right flip{% if not has_before %} col-xs-offset-6{% endif %}">
                     <a href="?{% url_replace request "date" after.date.isoformat %}"
-                       class="btn btn-default" data-save-scrollpos aria-label="{{ after|date:"SHORT_DATE_FORMAT" }}">
-                        <span class="hidden-sm hidden-xs">{{ after|date:"SHORT_DATE_FORMAT" }}</span>
+                       class="btn btn-default">
+                        <span class="hidden-xs">{{ after|date:"SHORT_DATE_FORMAT" }}</span>
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
                     </a>
+                </div>
                 {% endif %}
             </div>
         </div>
-    </form>
-    {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
-    {% include "pretixpresale/fragment_day_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
-    <div class="col-sm-4 visible-xs text-center">
-        {% if has_before %}
-            <a href="?{% url_replace request "date" before.date.isoformat %}"
-               class="btn btn-default">
-                <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                {{ before|date:"SHORT_DATE_FORMAT" }}
-            </a>
-        {% endif %}
-        {% if has_after %}
-            <a href="?{% url_replace request "date" after.date.isoformat %}"
-               class="btn btn-default">
-                {{ after|date:"SHORT_DATE_FORMAT" }}
-                <span class="fa fa-arrow-right" aria-hidden="true"></span>
-            </a>
-        {% endif %}
     </div>
 
     {% if multiple_timezones %}

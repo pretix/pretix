@@ -59,7 +59,6 @@
                 action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ cart_redirect|urlencode }}{% if "iframe" in request.GET and not new_tab %}&iframe={{ request.GET.iframe }}{% endif %}{% if "take_cart_id" in request.GET and new_tab %}&take_cart_id={{ request.GET.take_cart_id }}{% endif %}" {% if new_tab %}target="_blank"{% else %}
                 data-asynctask
                 data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"
-                class="{% if voucher.seating_available %}has-seating{% endif %}"
                 data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
             {% endif %}>
             {% csrf_token %}
@@ -98,11 +97,11 @@
                                             </a>
                                         {% endif %}
                                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                            <h4>
+                                            <h4 id="item-{{ item.pk }}-legend">
                                                 {{ item.name }}
                                             </h4>
                                             {% if item.description %}
-                                                <div class="product-description">
+                                                <div id="item-{{ item.pk }}-description" class="product-description">
                                                     {{ item.description|localize|rich_text }}
                                                 </div>
                                             {% endif %}
@@ -225,22 +224,22 @@
                                                                         id="variation_{{ item.id }}_{{ var.id }}"
                                                                         name="variation_{{ item.id }}_{{ var.id }}"
                                                                         {% if options == 1 %}checked{% endif %}
-                                                                        aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
+                                                                        aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend item-{{ item.pk }}-legend"
                                                                         {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                                 {% trans "Select" context "checkbox" %}
                                                             </label>
                                                         {% else %}
                                                             <fieldset class="input-item-count-group">
-                                                                <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}</legend>
-                                                                <button type="button" data-step="-1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                                <legend class="sr-only">{% trans "Quantity" %}</legend>
+                                                                <button type="button" data-step="-1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}, {{ var }}: {% trans "Decrease quantity" %}">-</button>
                                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                                     max="{{ var.order_max }}"
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
                                                                     name="variation_{{ item.id }}_{{ var.id }}"
                                                                     {% if options == 1 %}value="1"{% endif %}
-                                                                    aria-label="{% trans "Quantity" %}">
-                                                                <button type="button" data-step="1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                                                    aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend item-{{ item.pk }}-legend">
+                                                                <button type="button" data-step="1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}">+</button>
                                                             </fieldset>
                                                         {% endif %}
                                                     {% else %}
@@ -249,7 +248,7 @@
                                                                     {% if options == 1 %}checked="checked"{% endif %}
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
                                                                     value="variation_{{ item.id }}_{{ var.id }}"
-                                                                    aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
+                                                                    aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend"
                                                                     {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                         </label>
                                                     {% endif %}
@@ -318,8 +317,8 @@
                                         <p>
                                     {% endif %}
                                     {% if item.free_price %}
+                                        <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=item.name currency=event.currency %}Set price in {{ currency }} for {{ item }}{% endblocktrans %}</label>
                                         <div class="input-group input-group-price">
-                                            <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=item.name currency=event.currency %}Set price in {{ currency }} for {{ item }}{% endblocktrans %}</label>
                                             <span class="input-group-addon">{{ event.currency }}</span>
                                             <input type="number" class="form-control input-item-price" placeholder="0"
                                                     min="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
@@ -380,23 +379,23 @@
                                                            id="item_{{ item.id }}"
                                                            name="item_{{ item.id }}"
                                                            {% if options == 1 %}checked{% endif %}
-                                                           aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
+                                                           aria-labelledby="item-{{ item.pk }}-legend"
                                                            {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
                                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                     {% trans "Select" context "checkbox" %}
                                                 </label>
                                             {% else %}
                                                 <fieldset class="input-item-count-group">
-                                                    <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}</legend>
-                                                    <button type="button" data-step="-1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                    <legend class="sr-only">{% trans "Quantity" %}</legend>
+                                                    <button type="button" data-step="-1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}: {% trans "Decrease quantity" %}">-</button>
                                                     <input type="number" class="form-control input-item-count"
                                                        placeholder="0" min="0"
                                                        max="{{ item.order_max }}"
                                                        id="item_{{ item.id }}"
                                                        name="item_{{ item.id }}"
                                                        {% if options == 1 %}value="1"{% endif %}
-                                                       aria-label="{% trans "Quantity" %}">
-                                                    <button type="button" data-step="1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                                       aria-labelledby="item-{{ item.pk }}-legend">
+                                                    <button type="button" data-step="1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}: {% trans "Increase quantity" %}">+</button>
                                                 </fieldset>
                                             {% endif %}
                                         {% else %}
@@ -405,7 +404,7 @@
                                                        {% if options == 1 %}checked="checked"{% endif %}
                                                        id="item_{{ item.id }}"
                                                        value="item_{{ item.id }}"
-                                                       aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
+                                                       aria-labelledby="item-{{ item.pk }}-legend"
                                                        {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
                                             </label>
                                         {% endif %}

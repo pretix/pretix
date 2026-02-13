@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -44,6 +44,7 @@ from pretix.base.forms.questions import (
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
 from pretix.helpers.http import get_client_ip
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 
 class TokenGenerator(PasswordResetTokenGenerator):
@@ -54,7 +55,7 @@ class AuthenticationForm(forms.Form):
     required_css_class = 'required'
     email = forms.EmailField(
         label=_("Email"),
-        widget=forms.EmailInput(attrs={'autofocus': True})
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'})
     )
     password = forms.CharField(
         label=_("Password"),
@@ -65,19 +66,29 @@ class AuthenticationForm(forms.Form):
 
     error_messages = {
         'incomplete': _('You need to fill out all fields.'),
+        'empty_email': _('You need to enter an email address.'),
+        'empty_password': _('You need to enter a password.'),
         'invalid_login': _(
             "We have not found an account with this email address and password."
         ),
+        'invalid_login_email': _('Please verify that you entered the correct email address.'),
+        'invalid_login_password': _('Please enter the correct password.'),
         'inactive': _("This account is disabled."),
         'unverified': _("You have not yet activated your account and set a password. Please click the link in the "
-                        "email we sent you. Click \"Reset password\" to receive a new email in case you cannot find "
-                        "it again."),
+                        "email we sent you. In case you cannot find it, click \"Forgot your password?\" to receive "
+                        "a new email."),
     }
 
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
         self.customer_cache = None
         super().__init__(*args, **kwargs)
+        self.fields['password'].help_text = "<a href='{}'>{}</a>".format(
+            build_absolute_uri(False, 'presale:organizer.customer.resetpw', kwargs={
+                'organizer': request.organizer.slug,
+            }),
+            _('Forgot your password?')
+        )
 
     def clean(self):
         email = self.cleaned_data.get('email')
@@ -94,6 +105,8 @@ class AuthenticationForm(forms.Form):
                 if u.check_password(password):
                     self.customer_cache = u
             if self.customer_cache is None:
+                self.add_error("email", self.error_messages['invalid_login_email'])
+                self.add_error("password", self.error_messages['invalid_login_password'])
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],
                     code='invalid_login',
@@ -101,6 +114,10 @@ class AuthenticationForm(forms.Form):
             else:
                 self.confirm_login_allowed(self.customer_cache)
         else:
+            if not email:
+                self.add_error("email", self.error_messages['empty_email'])
+            if not password:
+                self.add_error("password", self.error_messages['empty_password'])
             raise forms.ValidationError(
                 self.error_messages['incomplete'],
                 code='incomplete'
@@ -110,15 +127,9 @@ class AuthenticationForm(forms.Form):
 
     def confirm_login_allowed(self, user):
         if not user.is_active:
-            raise forms.ValidationError(
-                self.error_messages['inactive'],
-                code='inactive',
-            )
-        if not user.is_verified:
-            raise forms.ValidationError(
-                self.error_messages['unverified'],
-                code='unverified',
-            )
+            self.add_error("email", self.error_messages['inactive'])
+        elif not user.is_verified:
+            self.add_error("password", self.error_messages['unverified'])
 
     def get_customer(self):
         return self.customer_cache
@@ -129,6 +140,7 @@ class RegistrationForm(forms.Form):
     name_parts = forms.CharField()
     email = forms.EmailField(
         label=_("Email"),
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'})
     )
 
     error_messages = {
@@ -330,6 +342,7 @@ class ResetPasswordForm(forms.Form):
     }
     email = forms.EmailField(
         label=_('Email'),
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'}),
     )
 
     def __init__(self, request=None, *args, **kwargs):
@@ -377,12 +390,12 @@ class ChangePasswordForm(forms.Form):
     )
     password_current = forms.CharField(
         label=_('Your current password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}),
         required=True
     )
     password = forms.CharField(
         label=_('New password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
         max_length=4096,
         required=True
     )
@@ -446,7 +459,7 @@ class ChangeInfoForm(forms.ModelForm):
     }
     password_current = forms.CharField(
         label=_('Your current password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}),
         help_text=_('Only required if you change your email address'),
         max_length=4096,
         required=False
@@ -459,6 +472,8 @@ class ChangeInfoForm(forms.ModelForm):
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
         super().__init__(*args, **kwargs)
+
+        self.fields['email'].widget.attrs['autocomplete'] = 'email'
 
         self.fields['name_parts'] = NamePartsFormField(
             max_length=255,

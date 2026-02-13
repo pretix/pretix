@@ -271,24 +271,70 @@
                                     <a href="{% url "control:event.invoice.download" invoice=i.pk event=request.event.slug organizer=request.event.organizer.slug %}" target="_blank">
                                         {% if i.is_cancellation %}{% trans "Cancellation" context "invoice" %}{% else %}{% trans "Invoice" %}{% endif %}
                                         {{ i.number }}</a>
-                                    ({{ i.date|date:"SHORT_DATE_FORMAT" }})
-                                    {% if i.sent_to_customer.year == 1970 %}
-                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "We don't know if this invoice was emailed to the customer since it was created before our system tracked this information" %}">
+                                    ({{ i.date|date:"SHORT_DATE_FORMAT" }}, {{ i.transmission_type_instance.verbose_name }})
+                                    {% if i.transmission_status == "unknown" %}
+                                        {# Legacy invoice, before the introduction of transmission status #}
+                                        {% if i.transmission_date.year == 1970 %}
+                                            <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "We don't know if this invoice was emailed to the customer since it was created before our system tracked this information" %}">
+                                                <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                                <span class="fa fa-question fa-stack-1x fa-stack-shifted"></span>
+                                            </span>
+                                        {% elif i.transmission_date %}
+                                            <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice was emailed to customer" %}">
+                                                <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                                <span class="fa fa-check text-success fa-stack-1x fa-stack-shifted"></span>
+                                            </span>
+                                        {% else %}
+                                            <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice was not yet emailed to customer" %}">
+                                                <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                            </span>
+                                        {% endif %}
+                                    {% elif i.transmission_status == "pending" %}
+                                        {% if i.transmission_type_instance.enforce_transmission %}
+                                            <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice is scheduled to be transmitted" %}">
+                                                <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                                <span class="fa fa-clock-o text-success fa-stack-1x fa-stack-shifted"></span>
+                                            </span>
+                                        {% else %}
+                                            <span class="fa fa-envelope fa-background text-muted" data-toggle="tooltip" title="{% trans "Invoice is not yet transmitted" %}"></span>
+                                        {% endif %}
+                                    {% elif i.transmission_status == "inflight" %}
+                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice is currently in transmission" %}">
                                             <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
-                                            <span class="fa fa-question fa-stack-1x fa-stack-shifted"></span>
+                                            <span class="fa fa-send text-success fa-stack-1x fa-stack-shifted"></span>
                                         </span>
-                                    {% elif i.sent_to_customer %}
-                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice was emailed to customer" %}">
+                                    {% elif i.transmission_status == "testmode_ignored" %}
+                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice not transmitted in test mode" %}">
+                                            <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                            <span class="fa fa-ban text-warning fa-stack-1x fa-stack-shifted"></span>
+                                        </span>
+                                    {% elif i.transmission_status == "failed" %}
+                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice transmission failed" %}">
+                                            <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                            <span class="fa fa-exclamation-circle text-danger fa-stack-1x fa-stack-shifted"></span>
+                                        </span>
+                                    {% elif i.transmission_status == "completed" %}
+                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice has been transmitted" %}">
                                             <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
                                             <span class="fa fa-check text-success fa-stack-1x fa-stack-shifted"></span>
                                         </span>
-                                    {% else %}
-                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice was not yet emailed to customer" %}">
-                                            <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
-                                        </span>
+                                    {% endif %}
+                                    {% if i.transmission_status != "inflight" %}
+                                        <form class="form-inline helper-display-inline" method="post"
+                                              action="{% url "control:event.order.retransmitinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
+                                            {% csrf_token %}
+                                            <button class="btn btn-default btn-xs" data-toggle="tooltip"
+                                                title="{{ i.transmission_type_instance.verbose_name }}">
+                                                {% if i.transmission_status == "pending" %}
+                                                    {% trans "Transmit" %}
+                                                {% else %}
+                                                    {% trans "Retransmit" %}
+                                                {% endif %}
+                                            </button>
+                                        </form>
                                     {% endif %}
                                     {% if not i.canceled %}
-                                        {% if request.event.settings.invoice_regenerate_allowed %}
+                                        {% if i.regenerate_allowed %}
                                             <form class="form-inline helper-display-inline" method="post"
                                                     action="{% url "control:event.order.regeninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
                                                 {% csrf_token %}
@@ -307,7 +353,7 @@
                                                             data-toggle="tooltip"
                                                             title="{% trans 'Generate a cancellation document for this invoice and create a new invoice with a new invoice number.' %}"
                                                         {% endif %}>
-                                                    {% if order.status == "c" %}
+                                                    {% if order.status == "c" or not invoice_qualified %}
                                                         {% trans "Generate cancellation" %}
                                                     {% else %}
                                                         {% trans "Cancel and reissue" %}
@@ -316,16 +362,15 @@
                                             </form>
                                         {% endif %}
                                     {% endif %}
+                                    {% if staff_session %}
+                                        <a class="btn btn-default btn-xs admin-only" href="{% url "control:event.order.inspect" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
+                                            {% trans "Inspect" %}
+                                        </a>
+                                    {% endif %}
                                     {% if forloop.revcounter0 > 0 %}
                                         <br/>
                                     {% endif %}
                                 {% endfor %}
-                                {% if invoices_send_link %}
-                                    <br/>
-                                    <a class="btn btn-default btn-xs" href="{{ invoices_send_link }}">
-                                        {% trans "Email invoices" %}
-                                    </a>
-                                {% endif %}
                                 {% if can_generate_invoice and 'can_change_orders' in request.eventpermset %}
                                     <br/>
                                     <form class="form-inline helper-display-inline" method="post"
@@ -413,10 +458,7 @@
                                 {% endif %}
                                 {% if line.seat %}
                                     <br />
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 4.7624999 3.7041668" class="svg-icon">
-                                        <path
-                                                d="m 1.9592032,1.8522629e-4 c -0.21468,0 -0.38861,0.17394000371 -0.38861,0.38861000371 0,0.21466 0.17393,0.38861 0.38861,0.38861 0.21468,0 0.3886001,-0.17395 0.3886001,-0.38861 0,-0.21467 -0.1739201,-0.38861000371 -0.3886001,-0.38861000371 z m 0.1049,0.84543000371 c -0.20823,-0.0326 -0.44367,0.12499 -0.39998,0.40462997 l 0.20361,1.01854 c 0.0306,0.15316 0.15301,0.28732 0.3483,0.28732 h 0.8376701 v 0.92708 c 0,0.29313 0.41187,0.29447 0.41187,0.005 v -1.19115 c 0,-0.14168 -0.0995,-0.29507 -0.29094,-0.29507 l -0.65578,-10e-4 -0.1757,-0.87644 C 2.3042533,0.95300523 2.1890432,0.86500523 2.0641032,0.84547523 Z m -0.58549,0.44906997 c -0.0946,-0.0134 -0.20202,0.0625 -0.17829,0.19172 l 0.18759,0.91054 c 0.0763,0.33956 0.36802,0.55914 0.66042,0.55914 h 0.6015201 c 0.21356,0 0.21448,-0.32143 -0.003,-0.32143 H 2.1954632 c -0.19911,0 -0.36364,-0.11898 -0.41341,-0.34107 l -0.17777,-0.87126 c -0.0165,-0.0794 -0.0688,-0.11963 -0.12557,-0.12764 z"/>
-                                    </svg>
+                                    {% include "icons/seat.svg" with cls="svg-icon" %}
                                     {{ line.seat }}
                                 {% endif %}
                                 {% if line.voucher %}
@@ -501,6 +543,18 @@
                                             </a>
                                         {% endif %}
                                         {% eventsignal event "pretix.control.signals.order_position_buttons" order=order position=line request=request %}
+                                    </div>
+                                {% endif %}
+                                {% if staff_session %}
+                                    <div class="admin-only print-logs">
+                                        {% for pl in line.print_logs.all %}
+                                            <span class="fa fa-print"></span>
+                                            {{ pl.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                                            {{ pl.get_type_display }}
+                                            ({{ pl.source }}{% if pl.device %}, #{{ pl.device.device_id }}{% endif %})
+                                            {% if not pl.successful %}<span class="fa fa-warning fa-fw"></span>{% endif %}
+                                            <br>
+                                        {% endfor %}
                                     </div>
                                 {% endif %}
                                 {% if line.issued_gift_cards %}
@@ -632,6 +686,16 @@
                                         </small>
                                     {% endif %}
                                 {% endif %}
+                                {% if django_settings.DEBUG %}
+                                    <br/>
+                                    <small class="admin-only">
+                                        price = {{ line.price|floatformat:2 }}<br>
+                                        rounding_correction = {{ line.price_includes_rounding_correction|floatformat:2 }}<br>
+                                        tax_value = {{ line.tax_value|floatformat:2 }}<br>
+                                        tax_value_rounding_correction = {{ line.tax_value_includes_rounding_correction|floatformat:2 }}<br>
+                                        voucher_budget_use = {{ line.voucher_budget_use|floatformat:2 }}
+                                    </small>
+                                {% endif %}
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -672,6 +736,16 @@
                                         </small>
                                     {% endif %}
                                 {% endif %}
+                                {% if django_settings.DEBUG %}
+                                    <br/>
+                                    <small class="admin-only">
+                                        price = {{ fee.value|floatformat:2 }}<br>
+                                        rounding_correction = {{ fee.value_includes_rounding_correction|floatformat:2 }}<br>
+                                        tax_value = {{ fee.tax_value|floatformat:2 }}<br>
+                                        tax_value_rounding_correction = {{ fee.tax_value_includes_rounding_correction|floatformat:2 }}<br>
+                                        voucher_budget_use = {{ fee.voucher_budget_use|floatformat:2 }}
+                                    </small>
+                                {% endif %}
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -700,6 +774,12 @@
                         </div>
                         <div class="col-md-3 col-xs-6 col-md-offset-5 price">
                             <strong>{{ items.total|money:event.currency }}</strong>
+                            {% if django_settings.DEBUG %}
+                                <br/>
+                                <small class="admin-only">
+                                    tax_rounding_mode = {{ order.tax_rounding_mode }}
+                                </small>
+                            {% endif %}
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -791,7 +871,7 @@
                                                     {{ p.html_info|safe }}
                                                     {% if staff_session %}
                                                         <p>
-                                                            <a href="" class="btn btn-default btn-xs" data-expandpayment data-id="{{ p.pk }}">
+                                                            <a href="" class="btn btn-default btn-xs admin-only" data-expandpayment data-id="{{ p.pk }}">
                                                                 <span class="fa-eye fa fa-fw"></span>
                                                                 {% trans "Inspect" %}
                                                             </a>
@@ -803,7 +883,7 @@
                                             <tr>
                                                 <td colspan="1"></td>
                                                 <td colspan="5">
-                                                    <a href="" class="btn btn-default btn-xs" data-expandpayment data-id="{{ p.pk }}">
+                                                    <a href="" class="btn btn-default btn-xs admin-only" data-expandpayment data-id="{{ p.pk }}">
                                                         <span class="fa-eye fa fa-fw"></span>
                                                         {% trans "Inspect" %}
                                                     </a>
@@ -907,7 +987,7 @@
                                                         {% endif %}
                                                         {% if staff_session %}
                                                             <p>
-                                                                <a href="" class="btn btn-default btn-xs" data-expandrefund
+                                                                <a href="" class="btn btn-default btn-xs admin-only" data-expandrefund
                                                                    data-id="{{ r.pk }}">
                                                                     <span class="fa-eye fa fa-fw"></span>
                                                                     {% trans "Inspect" %}
@@ -980,8 +1060,14 @@
                                         <dt>{{ request.event.settings.invoice_address_custom_field }}</dt>
                                         <dd>{{ order.invoice_address.custom_field }}</dd>
                                     {% endif %}
-                                    <dt>{% trans "Internal reference" %}</dt>
-                                    <dd>{{ order.invoice_address.internal_reference }}</dd>
+                                    {% if order.invoice_address.internal_reference %}
+                                        <dt>{% trans "Internal reference" %}</dt>
+                                        <dd>{{ order.invoice_address.internal_reference }}</dd>
+                                    {% endif %}
+                                    {% for k, v in order.invoice_address.describe_transmission %}
+                                        <dt>{{ k }}</dt>
+                                        <dd>{{ v }}</dd>
+                                    {% endfor %}
                                 </dl>
                             </div>
                         </div>

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -58,7 +58,7 @@ def timeline_for_event(event, subevent=None):
         event=event, subevent=subevent,
         datetime=ev.date_from,
         description=pgettext_lazy('timeline', 'Your event starts'),
-        edit_url=ev_edit_url
+        edit_url=ev_edit_url + '#id_date_from_0'
     ))
 
     if ev.date_to:
@@ -66,7 +66,7 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=ev.date_to,
             description=pgettext_lazy('timeline', 'Your event ends'),
-            edit_url=ev_edit_url
+            edit_url=ev_edit_url + '#id_date_to_0'
         ))
 
     if ev.date_admission:
@@ -74,7 +74,7 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=ev.date_admission,
             description=pgettext_lazy('timeline', 'Admissions for your event start'),
-            edit_url=ev_edit_url
+            edit_url=ev_edit_url + '#id_date_admission_0'
         ))
 
     if ev.presale_start:
@@ -82,7 +82,7 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=ev.presale_start,
             description=pgettext_lazy('timeline', 'Start of ticket sales'),
-            edit_url=ev_edit_url
+            edit_url=ev_edit_url + '#id_presale_start_0'
         ))
 
     tl.append(TimelineEvent(
@@ -93,9 +93,11 @@ def timeline_for_event(event, subevent=None):
         description=format_lazy(
             '{} ({})',
             pgettext_lazy('timeline', 'End of ticket sales'),
-            pgettext_lazy('timeline', 'automatically because the event is over and no end of presale has been configured') if not ev.presale_end else ""
+            pgettext_lazy('timeline', 'automatically because the event is over and no end of presale has been configured')
+        ) if not ev.presale_end else (
+            pgettext_lazy('timeline', 'End of ticket sales')
         ),
-        edit_url=ev_edit_url
+        edit_url=ev_edit_url + '#id_presale_end_0'
     ))
 
     rd = event.settings.get('last_order_modification_date', as_type=RelativeDateWrapper)
@@ -104,7 +106,7 @@ def timeline_for_event(event, subevent=None):
             event=event, subevent=subevent,
             datetime=rd.datetime(ev),
             description=pgettext_lazy('timeline', 'Customers can no longer modify their order information'),
-            edit_url=ev_edit_url
+            edit_url=ev_edit_url + '#id_settings-last_order_modification_date_0_0'
         ))
 
     rd = event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
@@ -281,7 +283,7 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'item': p.pk,
-                })
+                }) + '#id_available_from_0'
             ))
         if p.available_until:
             tl.append(TimelineEvent(
@@ -292,7 +294,7 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'item': p.pk,
-                })
+                }) + '#id_available_until_0'
             ))
 
     for v in ItemVariation.objects.filter(
@@ -311,7 +313,7 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'item': v.item.pk,
-                })
+                }) + '#tab-0-3-open'
             ))
         if v.available_until:
             tl.append(TimelineEvent(
@@ -325,7 +327,7 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'item': v.item.pk,
-                })
+                }) + '#tab-0-3-open'
             ))
 
     pprovs = event.get_payment_providers()
@@ -339,6 +341,24 @@ def timeline_for_event(event, subevent=None):
                 continue
         except:
             pass
+        availability_start = pprov.settings.get('_availability_start', as_type=RelativeDateWrapper)
+        if availability_start:
+            d = make_aware(datetime.combine(
+                availability_start.date(ev),
+                time(hour=0, minute=0, second=0)
+            ), event.timezone)
+            tl.append(TimelineEvent(
+                event=event, subevent=subevent,
+                datetime=d,
+                description=pgettext_lazy('timeline', 'Payment provider "{name}" becomes active').format(
+                    name=str(pprov.verbose_name)
+                ),
+                edit_url=reverse('control:event.settings.payment.provider', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug,
+                    'provider': pprov.identifier,
+                })
+            ))
         availability_date = pprov.settings.get('_availability_date', as_type=RelativeDateWrapper)
         if availability_date:
             d = make_aware(datetime.combine(

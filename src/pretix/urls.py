@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -43,6 +43,7 @@ from pretix.base.views import applepay, js_helpers
 
 from .base.views import (
     cachedfiles, csp, health, js_catalog, metrics, redirect, source,
+    webmanifest,
 )
 
 base_patterns = [
@@ -51,12 +52,17 @@ base_patterns = [
     re_path(r'^healthcheck/$', health.healthcheck,
             name='healthcheck'),
     re_path(r'^redirect/$', redirect.redir_view, name='redirect'),
-    re_path(r'^jsi18n/(?P<lang>[a-zA-Z-_]+)/$', js_catalog.js_catalog, name='javascript-catalog'),
+    re_path(r'^site.webmanifest$', webmanifest.webmanifest, name='site.webmanifest'),
+    re_path(r'^jsi18n/(?P<lang>[a-zA-Z0-9_-]+)/$', js_catalog.js_catalog, name='javascript-catalog'),
     re_path(r'^metrics$', metrics.serve_metrics,
             name='metrics'),
     re_path(r'^csp_report/$', csp.csp_report, name='csp.report'),
     re_path(r'^agpl_source$', source.get_source, name='source'),
-    re_path(r'^js_helpers/states/$', js_helpers.states, name='js_helpers.states'),
+
+    re_path(r'^js_helpers/address_form/$', js_helpers.address_form, name='js_helpers.address_form'),
+    # deprecated name, keep for compatibility with old plugins
+    re_path(r'^js_helpers/states/$', js_helpers.address_form, name='js_helpers.states'),
+
     re_path(r'^api/v1/', include(('pretix.api.urls', 'pretixapi'), namespace='api-v1')),
     re_path(r'^api/$', RedirectView.as_view(url='/api/v1/'), name='redirect-api-version'),
     re_path(r'^.well-known/apple-developer-merchantid-domain-association$',

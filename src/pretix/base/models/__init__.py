@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -36,10 +36,12 @@ from .giftcards import GiftCard, GiftCardAcceptance, GiftCardTransaction
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaProperty, ItemMetaValue,
-    ItemVariation, ItemVariationMetaValue, Question, QuestionOption, Quota,
-    SubEventItem, SubEventItemVariation, itempicture_upload_to,
+    ItemProgramTime, ItemVariation, ItemVariationMetaValue, Question,
+    QuestionOption, Quota, SubEventItem, SubEventItemVariation,
+    itempicture_upload_to,
 )
 from .log import LogEntry
+from .mail import OutgoingMail
 from .media import ReusableMedium
 from .memberships import Membership, MembershipType
 from .notifications import NotificationSetting

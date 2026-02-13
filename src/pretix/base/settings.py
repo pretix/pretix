@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -40,6 +40,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
+import pycountry
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -66,15 +67,24 @@ from pretix.api.serializers.fields import (
 )
 from pretix.api.serializers.i18n import I18nURLField
 from pretix.base.forms import I18nMarkdownTextarea, I18nURLFormField
-from pretix.base.models.tax import VAT_ID_COUNTRIES, TaxRule
+from pretix.base.models.tax import VAT_ID_COUNTRIES
 from pretix.base.reldate import (
     RelativeDateField, RelativeDateTimeField, RelativeDateWrapper,
     SerializerRelativeDateField, SerializerRelativeDateTimeField,
 )
+from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
 )
-from pretix.helpers.countries import CachedCountries
+from pretix.helpers.countries import CachedCountries, pycountry_add
+
+ROUNDING_MODES = (
+    ('line', _('Compute taxes for every line individually')),
+    ('sum_by_net', _('Compute taxes based on net total')),
+    ('sum_by_net_only_business', _('For business customers, compute taxes based on net total. For individuals, use line-based rounding')),
+    ('sum_by_net_keep_gross', _('Compute taxes based on net total with stable gross prices')),
+    # We could also have sum_by_gross, but we're not aware of any use-cases for it
+)
 
 
 def country_choice_kwargs():
@@ -113,7 +123,7 @@ def restricted_plugin_kwargs():
     from pretix.base.plugins import get_all_plugins
 
     plugins_available = [
-        (p.module, p.name) for p in get_all_plugins(None)
+        (p.module, p.name) for p in get_all_plugins()
         if (
             not p.name.startswith('.') and
             getattr(p, 'restricted', False) and
@@ -168,6 +178,19 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Allow customers to log in with email address and password"),
             help_text=_("If disabled, you will need to connect one or more single-sign-on providers."),
+            widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
+        )
+    },
+    'customer_accounts_require_login_for_order_access': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Require login to access order confirmation pages"),
+            help_text=_("If enabled, users who were logged in at the time of purchase must also log in to access their order information. "
+                        "If a customer account is created while placing an order, the restriction only becomes active after the customer "
+                        "account is activated."),
             widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
         )
     },
@@ -323,7 +346,7 @@ DEFAULTS = {
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
-            label=_("Show net prices instead of gross prices in the product list (not recommended!)"),
+            label=_("Show net prices instead of gross prices in the product list"),
             help_text=_("Independent of your choice, the cart will show gross prices as this is the price that needs to be "
                         "paid."),
 
@@ -464,6 +487,25 @@ DEFAULTS = {
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-order_phone_asked'}),
         )
     },
+    'tax_rounding': {
+        'default': 'line',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'form_kwargs': dict(
+            label=_("Rounding of taxes"),
+            widget=forms.RadioSelect,
+            choices=ROUNDING_MODES,
+            help_text=_(
+                "Note that if you transfer your sales data from pretix to an external system for tax reporting, you "
+                "need to make sure to account for possible rounding differences if your external system rounds "
+                "differently than pretix."
+            )
+        ),
+        'serializer_kwargs': dict(
+            choices=ROUNDING_MODES,
+        ),
+    },
     'invoice_address_asked': {
         'default': 'True',
         'type': bool,
@@ -601,11 +643,38 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Ask for VAT ID"),
             help_text=format_lazy(
-                _("Only works if an invoice address is asked for. VAT ID is never required and only requested from "
-                  "business customers in the following countries: {countries}"),
+                _("Only works if an invoice address is asked for. VAT ID is only requested from business customers "
+                  "in the following countries: {countries}."),
                 countries=lazy(lambda *args: ', '.join(sorted(gettext(Country(cc).name) for cc in VAT_ID_COUNTRIES)), str)()
             ),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
+        )
+    },
+    'invoice_address_vatid_required_countries': {
+        'default': ['IT', 'GR'],
+        'type': list,
+        'form_class': forms.MultipleChoiceField,
+        'serializer_class': serializers.MultipleChoiceField,
+        'serializer_kwargs': dict(
+            choices=lazy(
+                lambda *args: sorted([(cc, gettext(Country(cc).name)) for cc in VAT_ID_COUNTRIES], key=lambda c: c[1]),
+                list
+            )(),
+        ),
+        'form_kwargs': dict(
+            label=_("Require VAT ID in"),
+            choices=lazy(
+                lambda *args: sorted([(cc, gettext(Country(cc).name)) for cc in VAT_ID_COUNTRIES], key=lambda c: c[1]),
+                list
+            )(),
+            help_text=format_lazy(
+                _("VAT ID is optional by default, because not all businesses are assigned a VAT ID in all countries. "
+                  "VAT ID will be required for all business addresses in the selected countries."),
+            ),
+            widget=forms.CheckboxSelectMultiple(attrs={
+                "class": "scrolling-multiple-choice",
+                'data-display-dependency': '#id_invoice_address_vatid'
+            }),
         )
     },
     'invoice_address_explanation_text': {
@@ -662,6 +731,7 @@ DEFAULTS = {
             label=_("Minimum length of invoice number after prefix"),
             help_text=_("The part of your invoice number after your prefix will be filled up with leading zeros up to this length, e.g. INV-001 or INV-00001."),
             max_value=12,
+            min_value=1,
             required=True,
         )
     },
@@ -697,8 +767,9 @@ DEFAULTS = {
                     message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
                         allowed='A-Z, a-z, 0-9, -./:#'
                     ), str)()
-                )
+                ),
             ],
+            max_length=155,
         )
     },
     'invoice_numbers_prefix_cancellations': {
@@ -719,8 +790,9 @@ DEFAULTS = {
                     message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
                         allowed='A-Z, a-z, 0-9, -./:#'
                     ), str)()
-                )
+                ),
             ],
+            max_length=155,
         )
     },
     'invoice_renderer_highlight_order_code': {
@@ -1026,9 +1098,47 @@ DEFAULTS = {
             widget=forms.CheckboxInput,
         )
     },
-    'tax_rate_default': {
-        'default': None,
-        'type': TaxRule
+    'tax_rule_payment': {
+        'default': 'default',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('default', _('Use default tax rate')),
+                ('none', _('Charge no taxes')),
+            ),
+        ),
+        'form_kwargs': dict(
+            label=_("Tax handling on payment fees"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('default', _('Use default tax rate')),
+                ('none', _('Charge no taxes')),
+            ),
+        )
+    },
+    'tax_rule_cancellation': {
+        'default': 'none',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('none', _('Charge no taxes')),
+                ('split', _('Use same taxes as order positions (split according to net prices)')),
+                ('default', _('Use default tax rate')),
+            ),
+        ),
+        'form_kwargs': dict(
+            label=_("Tax handling on cancellation fees"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('none', _('Charge no taxes')),
+                ('split', _('Use same taxes as order positions (split according to net prices)')),
+                ('default', _('Use default tax rate')),
+            ),
+        )
     },
     'invoice_generate': {
         'default': 'False',
@@ -1059,6 +1169,35 @@ DEFAULTS = {
             help_text=_("Invoices will never be automatically generated for free orders.")
         )
     },
+    'invoice_period': {
+        'default': 'auto',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date')),
+                ('auto_no_event', _('Automatic, but prefer invoice date over event date')),
+                ('event_date', _('Event date')),
+                ('order_date', _('Order date')),
+                ('invoice_date', _('Invoice date')),
+            ),
+        ),
+        'form_kwargs': dict(
+            label=_("Date of service"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('auto', _('Automatic based on ticket-specific validity, membership validity, event series date, or event date')),
+                ('auto_no_event', _('Automatic, but prefer invoice date over event date')),
+                ('event_date', _('Event date')),
+                ('order_date', _('Order date')),
+                ('invoice_date', _('Invoice date')),
+            ),
+            help_text=_("This controls what dates are shown on the invoice, but is especially important for "
+                        "electronic invoicing."),
+            required=True,
+        )
+    },
     'invoice_reissue_after_modify': {
         'default': 'False',
         'type': bool,
@@ -1087,6 +1226,15 @@ DEFAULTS = {
         'default': json.dumps(['web']),
         'type': list
     },
+    'invoice_generate_only_business': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Only issue invoices to business customers"),
+        )
+    },
     'invoice_address_from': {
         'default': '',
         'type': str,
@@ -1108,6 +1256,7 @@ DEFAULTS = {
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
+            max_length=190,
             label=_("Company name"),
         )
     },
@@ -1121,6 +1270,7 @@ DEFAULTS = {
                 'placeholder': '12345'
             }),
             label=_("ZIP code"),
+            max_length=190,
         )
     },
     'invoice_address_from_city': {
@@ -1133,7 +1283,21 @@ DEFAULTS = {
                 'placeholder': _('Random City')
             }),
             label=_("City"),
+            max_length=190,
         )
+    },
+    'invoice_address_from_state': {
+        'default': '',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': {
+            'choices': [('', '')],
+        },
+        'form_kwargs': {
+            "label": pgettext_lazy('address', 'State'),
+            'choices': [('', '')],
+        },
     },
     'invoice_address_from_country': {
         'default': '',
@@ -1141,7 +1305,13 @@ DEFAULTS = {
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
         'serializer_kwargs': lambda: dict(**country_choice_kwargs()),
-        'form_kwargs': lambda: dict(label=_('Country'), **country_choice_kwargs()),
+        'form_kwargs': lambda: dict(
+            label=_('Country'),
+            widget=forms.Select(attrs={
+                'data-trigger-address-info': 'on',
+            }),
+            **country_choice_kwargs()
+        ),
     },
     'invoice_address_from_tax_id': {
         'default': '',
@@ -1150,7 +1320,8 @@ DEFAULTS = {
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("Domestic tax ID"),
-            help_text=_("e.g. tax number in Germany, ABN in Australia, …")
+            help_text=_("e.g. tax number in Germany, ABN in Australia, …"),
+            max_length=190,
         )
     },
     'invoice_address_from_vat_id': {
@@ -1160,6 +1331,7 @@ DEFAULTS = {
         'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("EU VAT ID"),
+            max_length=190,
         )
     },
     'invoice_introductory_text': {
@@ -1233,14 +1405,18 @@ DEFAULTS = {
     'invoice_email_organizer': {
         'default': '',
         'type': str,
-        'form_class': forms.EmailField,
-        'serializer_class': serializers.EmailField,
+        'form_class': forms.CharField,
+        'serializer_class': serializers.CharField,
         'form_kwargs': dict(
             label=_("Email address to receive a copy of each invoice"),
             help_text=_("Each newly created invoice will be sent to this email address shortly after creation. You can "
                         "use this for an automated import of invoices to your accounting system. The invoice will be "
                         "the only attachment of the email."),
-        )
+            validators=[multimail_validate],
+        ),
+        'serializer_kwargs': dict(
+            validators=[multimail_validate],
+        ),
     },
     'show_items_outside_presale_period': {
         'default': 'True',
@@ -2058,6 +2234,38 @@ DEFAULTS = {
         ),
         'serializer_class': I18nURLField,
     },
+    'accessibility_url': {
+        'default': None,
+        'type': LazyI18nString,
+        'form_class': I18nURLFormField,
+        'form_kwargs': dict(
+            label=_("Accessibility information URL"),
+            help_text=_("This should point e.g. to a part of your website that explains how your ticket shop complies "
+                        "with accessibility regulation."),
+            widget=I18nTextInput,
+        ),
+        'serializer_class': I18nURLField,
+    },
+    'accessibility_title': {
+        'default': LazyI18nString.from_gettext(gettext_noop("Accessibility information")),
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Accessibility information title"),
+            widget=I18nTextInput,
+        ),
+        'serializer_class': I18nURLField,
+    },
+    'accessibility_text': {
+        'default': None,
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Accessibility information text"),
+            widget=I18nMarkdownTextarea,
+        ),
+        'serializer_class': I18nURLField,
+    },
     'confirm_texts': {
         'default': LazyI18nStringList(),
         'type': LazyI18nStringList,
@@ -2622,6 +2830,20 @@ You can change your order details and view the status of your order at
 Best regards,  
 Your {event} team"""))  # noqa: W291
     },
+    'mail_subject_order_invoice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Invoice {invoice_number}")),
+    },
+    'mail_text_order_invoice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+please find attached a new invoice for order {code} for {event}. This order has been placed by {order_email}.
+
+Best regards,  
+
+Your {event} team"""))  # noqa: W291
+    },
     'mail_days_download_reminder': {
         'type': int,
         'default': None
@@ -2728,6 +2950,28 @@ Best regards,
 
 Your {organizer} team"""))  # noqa: W291
     },
+    'mail_subject_customer_security_notice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Changes to your account at {organizer}")),
+    },
+    'mail_text_customer_security_notice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
+
+the following change has been made to your account at {organizer}:
+
+{message}
+
+You can review and change your account settings here:
+
+{url}
+
+If this change was not performed by you, please contact us immediately.
+
+Best regards,  
+
+Your {organizer} team"""))  # noqa: W291
+    },
     'smtp_use_custom': {
         'default': 'False',
         'type': bool
@@ -2778,7 +3022,7 @@ Your {organizer} team"""))  # noqa: W291
         ),
     },
     'theme_color_success': {
-        'default': '#50a167',
+        'default': '#408252',
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
@@ -3712,10 +3956,10 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     # 'CN': (['Province', 'Autonomous region', 'Munincipality'], 'long'),
     'JP': (['Prefecture'], 'long'),
     'MY': (['State', 'Federal territory'], 'long'),
-    'MX': (['State', 'Federal district'], 'short'),
+    'MX': (['State', 'Federal district', 'Federal entity'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
     'IT': (['Province', 'Free municipal consortium', 'Metropolitan city', 'Autonomous province',
-            'Free municipal consortium', 'Decentralized regional entity'], 'short'),
+            'Decentralized regional entity'], 'short'),
 }
 COUNTRY_STATE_LABEL = {
     # Countries in which the "State" field should not be called "State"
@@ -3723,6 +3967,8 @@ COUNTRY_STATE_LABEL = {
     'JP': pgettext_lazy('address', 'Prefecture'),
     'IT': pgettext_lazy('address', 'Province'),
 }
+# Workaround for https://github.com/pretix/pretix/issues/5796
+pycountry_add(pycountry.subdivisions, code="IT-AO", country_code="IT", name="Valle d'Aosta", parent="23", parent_code="IT-23", type="Province")
 
 settings_hierarkey = Hierarkey(attribute_name='settings')
 
@@ -3827,6 +4073,20 @@ def validate_event_settings(event, settings_dict):
         raise ValidationError({
             'invoice_address_company_required': _('You have to require invoice addresses to require for company names.')
         })
+    if settings_dict.get('invoice_address_from_state') and settings_dict.get('invoice_address_from_country'):
+        cc = str(settings_dict.get('invoice_address_from_country'))
+        if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            raise ValidationError(
+                {'invoice_address_from_state': ['States are not supported in country "{}".'.format(cc)]}
+            )
+        if not pycountry.subdivisions.get(code=cc + '-' + settings_dict.get('invoice_address_from_state')):
+            raise ValidationError(
+                {'invoice_address_from_state': [
+                    '"{}" is not a known subdivision of the country "{}".'.format(
+                        settings_dict.get('invoice_address_from_state'), cc
+                    )
+                ]}
+            )
 
     payment_term_last = settings_dict.get('payment_term_last')
     if payment_term_last and event.presale_end:

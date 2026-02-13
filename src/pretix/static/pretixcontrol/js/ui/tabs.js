@@ -20,7 +20,7 @@ $(function () {
                 .attr("href", "#" + tid)
                 .text($fieldset.find("legend").text())
                 .appendTo($tabli);
-            if ($fieldset.find(".has-error, .alert-danger").length > 0) {
+            if ($fieldset.find(".has-error, .alert-danger:not(.dynamic)").length > 0) {
                 $tablink.append(" ");
                 $tablink.append($("<span>").addClass("fa fa-warning text-danger"));
                 if (preselect === null) {

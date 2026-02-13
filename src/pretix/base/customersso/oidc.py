@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -112,23 +112,6 @@ def oidc_validate_and_complete_config(config):
                 scope="openid",
             ))
 
-    for scope in config["scope"].split(" "):
-        if scope not in provider_config.get("scopes_supported", []):
-            raise ValidationError(_('You are requesting scope "{scope}" but provider only supports these: {scopes}.').format(
-                scope=scope,
-                scopes=", ".join(provider_config.get("scopes_supported", []))
-            ))
-
-    if "claims_supported" in provider_config:
-        claims_supported = provider_config.get("claims_supported", [])
-        for k, v in config.items():
-            if k.endswith('_field') and v:
-                if v not in claims_supported:  # https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
-                    raise ValidationError(_('You are requesting field "{field}" but provider only supports these: {fields}.').format(
-                        field=v,
-                        fields=", ".join(provider_config.get("claims_supported", []))
-                    ))
-
     if "token_endpoint_auth_methods_supported" in provider_config:
         token_endpoint_auth_methods_supported = provider_config.get("token_endpoint_auth_methods_supported",
                                                                     ["client_secret_basic"])
@@ -199,6 +182,7 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         params['client_id'] = provider.configuration['client_id']
         params['client_secret'] = provider.configuration['client_secret']
 
+    resp = None
     try:
         resp = requests.post(
             endpoint,
@@ -214,7 +198,10 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         resp.raise_for_status()
         data = resp.json()
     except RequestException:
-        logger.exception('Could not retrieve authorization token')
+        if resp:
+            logger.exception(f'Could not retrieve authorization token. Response: {resp.text}')
+        else:
+            logger.exception('Could not retrieve authorization token')
         raise ValidationError(
             _('Login was not successful. Error message: "{error}".').format(
                 error='could not reach login provider',
@@ -222,6 +209,7 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         )
 
     if 'access_token' not in data:
+        logger.error(f'Could not find access token. Response: {data}')
         raise ValidationError(
             _('Login was not successful. Error message: "{error}".').format(
                 error='access token missing',
@@ -229,6 +217,7 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         )
 
     endpoint = provider.configuration['provider_config']['userinfo_endpoint']
+    resp = None
     try:
         # https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
         resp = requests.get(
@@ -240,7 +229,10 @@ def oidc_validate_authorization(provider, code, redirect_uri, pkce_code_verifier
         resp.raise_for_status()
         userinfo = resp.json()
     except RequestException:
-        logger.exception('Could not retrieve user info')
+        if resp:
+            logger.exception(f'Could not retrieve user info. Response: {resp.text}')
+        else:
+            logger.exception('Could not retrieve user info')
         raise ValidationError(
             _('Login was not successful. Error message: "{error}".').format(
                 error='could not fetch user info',

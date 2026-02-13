@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -423,7 +423,7 @@ def test_use_token_for_access_one_organizer(client, admin_user, organizer, appli
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     assert data == {'count': 1, 'next': None, 'previous': None, 'results': [
-        {'name': 'Dummy', 'slug': 'dummy', 'public_url': 'http://example.com/dummy/'}
+        {'name': 'Dummy', 'slug': 'dummy', 'public_url': 'http://example.com/dummy/', 'plugins': []}
     ]}
     resp = client.get('/api/v1/organizers/dummy/events/', HTTP_AUTHORIZATION='Bearer %s' % access_token)
     assert resp.status_code == 200
@@ -470,8 +470,8 @@ def test_use_token_for_access_two_organizers(client, admin_user, organizer, appl
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     assert data == {'count': 2, 'next': None, 'previous': None, 'results': [
-        {'name': 'A', 'slug': 'a', 'public_url': 'http://example.com/a/'},
-        {'name': 'Dummy', 'slug': 'dummy', 'public_url': 'http://example.com/dummy/'},
+        {'name': 'A', 'slug': 'a', 'public_url': 'http://example.com/a/', 'plugins': []},
+        {'name': 'Dummy', 'slug': 'dummy', 'public_url': 'http://example.com/dummy/', 'plugins': []},
     ]}
     resp = client.get('/api/v1/organizers/dummy/events/', HTTP_AUTHORIZATION='Bearer %s' % access_token)
     assert resp.status_code == 200

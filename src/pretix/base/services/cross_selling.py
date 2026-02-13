@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -121,7 +121,7 @@ class CrossSellingService:
             self.sales_channel,
             [
                 (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.line_price_gross,
-                 bool(cp.addon_to), cp.is_bundled,
+                 cp.addon_to, cp.is_bundled,
                  cp.listed_price - cp.price_after_voucher)
                 for cp in self.cartpositions
             ],

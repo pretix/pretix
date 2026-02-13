@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -35,19 +35,22 @@ def get_powered_by(request, safelink=True):
     d = gs.settings.license_check_input
     if d.get('poweredby_name'):
         if d.get('poweredby_url'):
-            n = '<a href="{}" target="_blank" rel="noopener">{}</a>'.format(
-                sl(d['poweredby_url']) if safelink else d['poweredby_url'],
-                d['poweredby_name']
+            msg = gettext('<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>').format(
+                name=d['poweredby_name'],
+                a_name_attr='href="{}" target="_blank" rel="noopener"'.format(
+                    sl(d['poweredby_url']) if safelink else d['poweredby_url'],
+                ),
+                a_attr='href="{}" target="_blank" rel="noopener"'.format(
+                    sl('https://pretix.eu') if safelink else 'https://pretix.eu',
+                )
             )
         else:
-            n = d['poweredby_name']
-
-        msg = gettext('powered by {name} based on <a {a_attr}>pretix</a>').format(
-            name=n,
-            a_attr='href="{}" target="_blank" rel="noopener"'.format(
-                sl('https://pretix.eu') if safelink else 'https://pretix.eu',
+            msg = gettext('<a {a_attr}>powered by {name} based on pretix</a>').format(
+                name=d['poweredby_name'],
+                a_attr='href="{}" target="_blank" rel="noopener"'.format(
+                    sl('https://pretix.eu') if safelink else 'https://pretix.eu',
+                )
             )
-        )
     else:
         msg = gettext('<a %(a_attr)s>ticketing powered by pretix</a>') % {
             'a_attr': 'href="{}" target="_blank" rel="noopener"'.format(
@@ -71,7 +74,7 @@ def contextprocessor(request):
     try:
         ctx['poweredby'] = get_powered_by(request, safelink=True)
     except Exception:
-        ctx['poweredby'] = 'powered by <a href="https://pretix.eu/" target="_blank" rel="noopener">pretix</a>'
+        ctx['poweredby'] = '<a href="https://pretix.eu/" target="_blank" rel="noopener">powered by pretix</a>'
     if settings.DEBUG and 'runserver' not in sys.argv:
         ctx['debug_warning'] = True
     elif 'runserver' in sys.argv:

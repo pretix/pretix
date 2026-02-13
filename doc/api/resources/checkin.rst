@@ -9,14 +9,6 @@ This page describes special APIs built for ticket scanning apps. For managing ch
 please also see :ref:`rest-checkinlists`. The check-in list API also contains endpoints to obtain statistics or log
 failed scans.
 
-.. versionchanged:: 4.12
-
-    The endpoints listed on this page have been added.
-
-.. versionchanged:: 4.18
-
-    The ``source_type`` parameter has been added.
-
 .. _`rest-checkin-redeem`:
 
 Checking a ticket in
@@ -367,3 +359,156 @@ Performing a ticket search
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or check-in list does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested check-in list does not exist.
+
+.. _`rest-checkin-annul`:
+
+Annulment of a check-in
+-----------------------
+
+.. http:post:: /api/v1/organizers/(organizer)/checkinrpc/annul/
+
+   If a check-in was made in error and the person was not let in, it can be annulled. We do not recommend this to be used
+   in case of manual check-ins or user interfaces because it is too prone for human errors. It is mostly intended for
+   automated entry systems like a turnstile or automated door, where the check-in is first created, then the door is
+   opened, and then the check-in may be annulled if the system knows that the turnstile did not turn or was out of
+   order.
+
+   This endpoint supports passing multiple check-in lists for the context of a multi-event scan. However, each
+   check-in list passed needs to be from a distinct event.
+
+   Check-ins created by a device can only be annulled by the same device. The datetime of annulment may not be more than
+   15 minutes after the datetime of check-in (value subject to change).
+
+   A status code of 404 is returned if no check-in was found for the given nonce. A status code of 400 is returned when
+   multiple check-ins match the nonce, the input is invalid in another way, the annulment is made from the wrong device,
+   the check-in is already in an annulled or failed state, or the datetime constraint is not valid.
+
+   :<json string nonce: ``nonce`` value of the original check-in.
+   :<json array lists: List of check-in list IDs to search on. No two check-in lists may be from the same event.
+   :<json datetime datetime: Specifies the client-side datetime of the annulment. If not supplied, the current time will be used.
+   :<json string error_explanation: A human-readable description of why the check-in was annulled (optional).
+   :>json string status: ``"ok"``
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/checkinrpc/annul/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+      {
+        "lists": [1],
+        "nonce": "Pvrk50vUzQd0DhdpNRL4I4OcXsvg70uA",
+        "error_explanation": "Turnstile did not turn"
+      }
+
+   **Example successful response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "status": "ok",
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :statuscode 200: no error
+   :statuscode 400: Invalid or incomplete request, see above
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested nonce does not exist.
+
+
+Check-in history
+----------------
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID of the check-in
+successful                            boolean                    Whether the check-in was successful
+error_reason                          string                     Category of reason why the check-in was unsuccessful. Currently
+                                                                 ``"canceled"``, ``"invalid"``, ``"unpaid"`` ``"product"``,
+                                                                 ``"rules"``, ``"revoked"``, ``"incomplete"``, ``"already_redeemed"``,
+                                                                 ``"ambiguous"``, ``"error"``, ``"blocked"``, ``"unapproved"``,
+                                                                 ``"invalid_time"``, ``"annulled"`` or ``null``
+error_explanation                     string                     Additional, human-readable reason for the check-in to be unsuccessful (or ``null``)
+position                              integer                    Internal ID of the order position (or ``null`` for unknown scans)
+datetime                              datetime                   Logical time when the check-in happened
+created                               datetime                   Time when the check-in appeared on the server
+list                                  integer                    Internal ID of the check-in list
+auto_checked_in                       boolean                    Whether the check-in was performed by the system automatically
+gate                                  integer                    Internal ID of the gate (or ``null``)
+device                                integer                    Internal ID of the device (or ``null``)
+device_id                             integer                    Organizer-internal ID of the device (or ``null``)
+type                                  string                     Type of check-in, currently ``"entry"`` or ``"exit"``
+===================================== ========================== =======================================================
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/checkins/
+
+   Returns a list of all check-in events within a given event.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/checkins/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "successful": true,
+            "error_reason": null,
+            "error_explanation": null,
+            "position": 1234,
+            "datetime": "2017-12-25T12:45:23Z",
+            "created": "2017-12-25T12:45:23Z",
+            "list": 2,
+            "auto_checked_in": false,
+            "gate": null,
+            "device": null,
+            "device_id": null,
+            "type": "entry",
+          }
+        ]
+      }
+
+   :query integer page: The page number in case of a multi-page result set, default is 1
+   :query datetime created_since: Only return check-ins that have been created since the given date (inclusive).
+   :query datetime created_before: Only return check-ins that have been created before the given date (exclusive).
+   :query datetime datetime_since: Only return check-ins that have happened since the given date (inclusive).
+   :query datetime datetime_before: Only return check-ins that have happened before the given date (exclusive).
+   :query boolean successful: Only return check-ins that have (not) been successful.
+   :query boolean error_reason: Only return check-ins with a specific error reason.
+   :query integer list: Only return check-ins from a specific list.
+   :query string type: Only return check-ins of a specific type.
+   :query integer gate: Only return check-ins from a specific gate.
+   :query integer device: Only return check-ins from a specific device.
+   :query boolean auto_checked_in: Only return check-ins that are (not) auto-checked in.
+   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``datetime``, ``created``,
+                           and ``id``.
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.

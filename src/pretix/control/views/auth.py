@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -57,6 +57,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django_otp import match_token
+from django_otp.plugins.otp_static.models import StaticDevice
 from webauthn.helpers import generate_challenge
 
 from pretix.base.auth import get_auth_backends
@@ -65,7 +66,6 @@ from pretix.base.forms.auth import (
 )
 from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
-from pretix.base.services.mail import SendMailException
 from pretix.helpers.http import get_client_ip, redirect_to_url
 from pretix.helpers.security import handle_login_source
 
@@ -254,6 +254,9 @@ def invite(request, token):
             return redirect('control:index')
         else:
             with transaction.atomic():
+                if request.user.email.lower() == inv.email.lower():
+                    request.user.is_verified = True
+                    request.user.save(update_fields=['is_verified'])
                 inv.team.members.add(request.user)
                 inv.team.log_action(
                     'pretix.team.member.joined', data={
@@ -274,7 +277,8 @@ def invite(request, token):
                 user = User.objects.create_user(
                     form.cleaned_data['email'], form.cleaned_data['password'],
                     locale=request.LANGUAGE_CODE,
-                    timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE
+                    timezone=request.timezone if hasattr(request, 'timezone') else settings.TIME_ZONE,
+                    is_verified=form.cleaned_data['email'].lower() == inv.email.lower()
                 )
                 user = authenticate(request=request, email=user.email, password=form.cleaned_data['password'])
                 user.log_action('pretix.control.auth.user.created', user=user)
@@ -342,9 +346,6 @@ class Forgot(TemplateView):
             except User.DoesNotExist:
                 logger.warning('Backend password reset for unregistered e-mail \"' + email + '\" requested.')
 
-            except SendMailException:
-                logger.exception('Sending password reset email to \"' + email + '\" failed.')
-
             except RepeatedResetDenied:
                 pass
 
@@ -359,7 +360,7 @@ class Forgot(TemplateView):
                 else:
                     messages.info(request, _('If the address is registered to valid account, then we have sent you an email containing further instructions.'))
 
-                return redirect('control:auth.forgot')
+            return redirect('control:auth.forgot')
         else:
             return self.get(request, *args, **kwargs)
 
@@ -534,6 +535,10 @@ class Login2FAView(TemplateView):
                     break
         else:
             valid = match_token(self.user, token)
+            if isinstance(valid, StaticDevice):
+                self.user.send_security_notice([
+                    _("A recovery code for two-factor authentification was used to log in.")
+                ])
 
         if valid:
             logger.info(f"Backend login successful for user {self.user.pk} with 2FA.")

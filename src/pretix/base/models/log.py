@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -35,13 +35,13 @@
 import json
 import logging
 
+from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import connections, models
 from django.utils.functional import cached_property
 
-from pretix.base.logentrytype_registry import log_entry_types, make_link
-from pretix.base.signals import is_app_active, logentry_object_link
+from pretix.helpers.celery import get_task_priority
 
 
 class VisibleOnlyManager(models.Manager):
@@ -69,7 +69,7 @@ class LogEntry(models.Model):
     :type data: str
     """
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField(db_index=True)
+    object_id = models.PositiveBigIntegerField(db_index=True)
     content_object = GenericForeignKey('content_type', 'object_id')
     datetime = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT)
@@ -91,6 +91,8 @@ class LogEntry(models.Model):
         indexes = [models.Index(fields=["datetime", "id"])]
 
     def display(self):
+        from pretix.base.logentrytype_registry import log_entry_types
+
         log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
         if log_entry_type:
             return log_entry_type.display(self, self.parsed_data)
@@ -128,14 +130,20 @@ class LogEntry(models.Model):
 
     @cached_property
     def display_object(self):
+        from pretix.base.logentrytype_registry import (
+            log_entry_types, make_link,
+        )
+        from pretix.base.signals import is_app_active, logentry_object_link
+
         from . import (
             Discount, Event, Item, Order, Question, Quota, SubEvent, Voucher,
         )
 
         log_entry_type, meta = log_entry_types.get(action_type=self.action_type)
         if log_entry_type:
+            sender = self.event if self.event else self.organizer
             link_info = log_entry_type.get_object_link_info(self)
-            if is_app_active(self.event, meta['plugin']):
+            if is_app_active(sender, meta['plugin']):
                 return make_link(link_info, log_entry_type.object_link_wrapper)
             else:
                 return make_link(link_info, log_entry_type.object_link_wrapper, is_active=False,
@@ -182,7 +190,19 @@ class LogEntry(models.Model):
 
         to_notify = [o.id for o in objects if o.notification_type]
         if to_notify:
-            notify.apply_async(args=(to_notify,))
+            organizer_ids = set(o.organizer_id for o in objects if o.notification_type)
+            notify.apply_async(
+                args=(to_notify,),
+                priority=settings.PRIORITY_CELERY_HIGHEST_FUNC(
+                    get_task_priority("notifications", oid) for oid in organizer_ids
+                ),
+            )
         to_wh = [o.id for o in objects if o.webhook_type]
         if to_wh:
-            notify_webhooks.apply_async(args=(to_wh,))
+            organizer_ids = set(o.organizer_id for o in objects if o.webhook_type)
+            notify_webhooks.apply_async(
+                args=(to_wh,),
+                priority=settings.PRIORITY_CELERY_HIGHEST_FUNC(
+                    get_task_priority("notifications", oid) for oid in organizer_ids
+                ),
+            )

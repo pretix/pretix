@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -52,7 +52,7 @@ def client():
 @pytest.fixture
 @scopes_disabled()
 def organizer():
-    return Organizer.objects.create(name='Dummy', slug='dummy')
+    return Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
 
 
 @pytest.fixture
@@ -67,7 +67,7 @@ def event(organizer, meta_prop):
     e = Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',
         date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc),
-        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf',
+        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf,tests.testdummy',
         is_public=True
     )
     e.meta_values.create(property=meta_prop, value="Conference")
@@ -192,7 +192,7 @@ def subevent2(event2, meta_prop):
 @pytest.fixture
 @scopes_disabled()
 def taxrule(event):
-    return event.tax_rules.create(name="VAT", rate=19, code="S/standard")
+    return event.tax_rules.create(name="VAT", rate=19, code="S/standard", default=True)
 
 
 @pytest.fixture

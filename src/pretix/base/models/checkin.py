@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -350,6 +350,7 @@ class Checkin(models.Model):
     REASON_BLOCKED = 'blocked'
     REASON_UNAPPROVED = 'unapproved'
     REASON_INVALID_TIME = 'invalid_time'
+    REASON_ANNULLED = 'annulled'
     REASONS = (
         (REASON_CANCELED, _('Order canceled')),
         (REASON_INVALID, _('Unknown ticket')),
@@ -364,6 +365,7 @@ class Checkin(models.Model):
         (REASON_BLOCKED, _('Ticket blocked')),
         (REASON_UNAPPROVED, _('Order not approved')),
         (REASON_INVALID_TIME, _('Ticket not valid at this time')),
+        (REASON_ANNULLED, _('Check-in annulled')),
     )
 
     successful = models.BooleanField(

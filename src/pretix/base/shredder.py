@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -51,7 +51,7 @@ from pretix.api.serializers.waitinglist import WaitingListSerializer
 from pretix.base.i18n import LazyLocaleException
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, OrderPayment,
-    OrderPosition, OrderRefund, QuestionAnswer,
+    OrderPosition, OrderRefund, OutgoingMail, QuestionAnswer,
 )
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.signals import register_data_shredders
@@ -329,6 +329,10 @@ class EmailAddressShredder(BaseDataShredder):
             sleep_time=2,
         )
 
+        slow_delete(
+            OutgoingMail.objects.filter(event=self.event)
+        )
+
         for o in _progress_helper(qs_orders, progress_callback, qs_op_cnt, total):
             changed = bool(o.email) or bool(o.customer)
             o.email = None
@@ -524,8 +528,11 @@ class InvoiceAddressShredder(BaseDataShredder):
             d = le.parsed_data
             if 'invoice_data' in d and not isinstance(d['invoice_data'], bool):
                 for field in d['invoice_data']:
-                    if d['invoice_data'][field]:
-                        d['invoice_data'][field] = '█'
+                    if d['invoice_data'][field] and field != "transmission_type":
+                        if field == "transmission_info":
+                            d['invoice_data'][field] = {"_shredded": True}
+                        else:
+                            d['invoice_data'][field] = '█'
                 le.data = json.dumps(d)
                 le.shredded = True
                 le.save(update_fields=['data', 'shredded'])
@@ -600,6 +607,7 @@ class InvoiceShredder(BaseDataShredder):
                 i.additional_text = "█"
                 i.invoice_to = "█"
                 i.payment_provider_text = "█"
+                i.transmission_info = {"_shredded": True}
                 i.save()
                 i.lines.update(description="█")
 

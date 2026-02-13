@@ -94,10 +94,11 @@
                 </a>
             {% else %}
                 <h1>
-                    <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">{{ event.name }}</a>
+                    <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}" class="no-underline">{{ event.name }}
                     {% if request.event.settings.show_dates_on_frontpage and not event.has_subevents %}
-                        <small>{{ event.get_date_range_display_as_html }}</small>
+                        <small class="text-muted">{{ event.get_date_range_display_as_html }}</small>
                     {% endif %}
+                    </a>
                 </h1>
             {% endif %}
         </div>
@@ -218,10 +219,21 @@
 {% endblock %}
 {% block footernav %}
     {% if request.event.settings.contact_mail %}
-        <li><a href="mailto:{{ request.event.settings.contact_mail }}" target="_blank" rel="noopener">{% trans "Contact event organizer" %}</a></li>
+        <li><a href="mailto:{{ request.event.settings.contact_mail }}" target="_blank" rel="noopener">{% trans "Contact" %}</a></li>
     {% endif %}
     {% if request.event.settings.privacy_url %}
         <li><a href="{% safelink request.event.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a></li>
+    {% endif %}
+    {% if request.event.settings.accessibility_url %}
+        {% trans "Accessibility information" as accessibility_title %}
+        <li><a href="{% safelink request.event.settings.accessibility_url %}" target="_blank" rel="noopener">
+            {{ request.event.settings.accessibility_title|default:accessibility_title }}
+        </a></li>
+    {% elif request.event.settings.accessibility_text %}
+        {% trans "Accessibility information" as accessibility_title %}
+        <li><a href="{% abseventurl request.organizer "presale:organizer.accessibility" %}" target="_blank" rel="noopener">
+            {{ request.event.settings.accessibility_title|default:accessibility_title }}
+        </a></li>
     {% endif %}
     {% if request.event.settings.cookie_consent and cookie_providers %}
         <li><button type="button" class="btn btn-link" id="cookie-consent-reopen">{% trans "Cookie settings" %}</button></li>

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -26,7 +26,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.signals import EventPluginRegistry
+from pretix.base.signals import PluginAwareRegistry
 
 
 def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
@@ -55,7 +55,7 @@ def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
         return format_html(wrapper, **a_map)
 
 
-class LogEntryTypeRegistry(EventPluginRegistry):
+class LogEntryTypeRegistry(PluginAwareRegistry):
     def __init__(self):
         super().__init__({'action_type': lambda o: getattr(o, 'action_type')})
 

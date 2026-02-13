@@ -62,6 +62,9 @@
     &.step-done .checkout-step-label a {
       color: $brand-primary;
     }
+    &.step-done a .fa:first-child {
+      margin-right: 0;
+    }
 
     &.step-current .checkout-step-icon {
       border: 1px solid $brand-primary;

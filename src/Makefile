@@ -25,8 +25,8 @@ coverage:
 	coverage run -m py.test
 
 npminstall:
-	# keep this in sync with setup.py!
+	# keep this in sync with pretix/_build.py!
 	mkdir -p pretix/static.dist/node_prefix/
 	cp -r pretix/static/npm_dir/* pretix/static.dist/node_prefix/
-	npm install --prefix=pretix/static.dist/node_prefix
+	npm ci --prefix=pretix/static.dist/node_prefix
 

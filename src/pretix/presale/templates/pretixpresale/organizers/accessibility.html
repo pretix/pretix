@@ -1,0 +1,9 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load rich_text %}
+{% block title %}{{ request.organizer.settings.accessibility_title }}{% endblock %}
+{% block content %}
+    {% trans "Accessibility information" as accessibility_title %}
+    <h2>{{ request.organizer.settings.accessibility_title|default:accessibility_title }}</h2>
+    {{ request.organizer.settings.accessibility_text|rich_text }}
+{% endblock %}

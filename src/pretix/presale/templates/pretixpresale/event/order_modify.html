@@ -35,14 +35,15 @@
                             </strong>
                         </h4>
                     </summary>
-                    <div id="invoice" class="panel-collapse">
+                    <div id="invoice" class="panel-collapse"
+                         data-address-information-url="{% url "js_helpers.address_form" %}?invoice=true&amp;organizer={{ event.organizer.slug|urlencode }}&amp;event={{ event.slug|urlencode }}&amp;locale={{ request.LANGUAGE_CODE }}">
                         <div class="panel-body">
                             {% if event.settings.invoice_address_explanation_text %}
                                 <div>
                                     {{ event.settings.invoice_address_explanation_text|rich_text }}
                                 </div>
                             {% endif %}
-                            {% bootstrap_form invoice_form layout="horizontal" %}
+                            {% bootstrap_form invoice_form layout="checkout" %}
                         </div>
                     </div>
                 </details>

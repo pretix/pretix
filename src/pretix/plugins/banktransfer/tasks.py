@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -34,8 +34,10 @@
 
 import json
 import logging
+import operator
 import re
 from decimal import Decimal
+from functools import reduce
 
 import dateutil.parser
 from celery.exceptions import MaxRetriesExceededError
@@ -54,7 +56,6 @@ from pretix.base.models import (
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import change_payment_provider
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.celery_app import app
@@ -70,13 +71,10 @@ def notify_incomplete_payment(o: Order):
         email_context = get_email_context(event=o.event, order=o, pending_sum=o.pending_sum)
         email_subject = o.event.settings.mail_subject_order_incomplete_payment
 
-        try:
-            o.send_mail(
-                email_subject, email_template, email_context,
-                'pretix.event.order.email.expire_warning_sent'
-            )
-        except SendMailException:
-            logger.exception('Reminder email could not be sent')
+        o.send_mail(
+            email_subject, email_template, email_context,
+            'pretix.event.order.email.expire_warning_sent'
+        )
 
 
 def cancel_old_payments(order):
@@ -117,20 +115,26 @@ def _find_order_for_code(base_qs, code):
             pass
 
 
-def _find_order_for_invoice_id(base_qs, prefix, number):
+def _find_order_for_invoice_id(base_qs, prefixes, number):
     try:
         # Working with __iregex here is an experiment, if this turns out to be too slow in production
         # we might need to switch to a different approach.
+        r = [
+            Q(
+                prefix__istartswith=prefix,  # redundant, but hopefully makes it a little faster
+                full_invoice_no__iregex=prefix + r'[\- ]*0*' + number
+            )
+            for prefix in set(prefixes)
+        ]
         return base_qs.select_related('order').get(
-            prefix__istartswith=prefix,  # redundant, but hopefully makes it a little faster
-            full_invoice_no__iregex=prefix + r'[\- ]*0*' + number
+            reduce(operator.or_, r)
         ).order
     except (Invoice.DoesNotExist, Invoice.MultipleObjectsReturned):
         pass
 
 
 @transaction.atomic
-def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = None, organizer: Organizer = None):
+def _handle_transaction(trans: BankTransaction, matches: tuple, regex_match_to_slug, event: Event = None, organizer: Organizer = None):
     orders = []
     if event:
         for slug, code in matches:
@@ -139,18 +143,19 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
                 if order.code not in {o.code for o in orders}:
                     orders.append(order)
             else:
-                order = _find_order_for_invoice_id(Invoice.objects.filter(event=event), slug, code)
+                order = _find_order_for_invoice_id(Invoice.objects.filter(event=event), (slug, regex_match_to_slug.get(slug, slug)), code)
                 if order and order.code not in {o.code for o in orders}:
                     orders.append(order)
     else:
         qs = Order.objects.filter(event__organizer=organizer)
         for slug, code in matches:
-            order = _find_order_for_code(qs.filter(event__slug__iexact=slug), code)
+            original_slug = regex_match_to_slug.get(slug, slug)
+            order = _find_order_for_code(qs.filter(Q(event__slug__iexact=slug) | Q(event__slug__iexact=original_slug)), code)
             if order:
                 if order.code not in {o.code for o in orders}:
                     orders.append(order)
             else:
-                order = _find_order_for_invoice_id(Invoice.objects.filter(event__organizer=organizer), slug, code)
+                order = _find_order_for_invoice_id(Invoice.objects.filter(event__organizer=organizer), (slug, original_slug), code)
                 if order and order.code not in {o.code for o in orders}:
                     orders.append(order)
 
@@ -279,9 +284,6 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
         except Quota.QuotaExceededException:
             # payment confirmed but order status could not be set, no longer problem of this plugin
             cancel_old_payments(order)
-        except SendMailException:
-            # payment confirmed but order status could not be set, no longer problem of this plugin
-            cancel_old_payments(order)
         else:
             cancel_old_payments(order)
 
@@ -366,22 +368,37 @@ def process_banktransfers(self, job: int, data: list) -> None:
                 transactions = _get_unknown_transactions(job, data, **job.owner_kwargs)
 
                 # Match order codes
+                regex_match_to_slug = {}
                 code_len_agg = Order.objects.filter(event__organizer=job.organizer).annotate(
                     clen=Length('code')
                 ).aggregate(min=Min('clen'), max=Max('clen'))
                 if job.event:
-                    prefixes = {job.event.slug.upper()}
+                    prefixes = {job.event.slug.upper(), job.event.slug.upper().replace("-", "")}
+                    if "-" in job.event.slug:
+                        regex_match_to_slug[job.event.slug.upper().replace("-", "")] = job.event.slug
                 else:
-                    prefixes = {e.slug.upper() for e in job.organizer.events.all()}
+                    prefixes = set()
+                    for e in job.organizer.events.all():
+                        prefixes.add(e.slug.upper())
+                        if "-" in e.slug:
+                            prefixes.add(e.slug.upper().replace("-", ""))
+                            regex_match_to_slug[e.slug.upper().replace("-", "")] = e.slug
 
                 # Match invoice numbers
                 inr_len_agg = Invoice.objects.filter(event__organizer=job.organizer).annotate(
                     clen=Length('invoice_no')
                 ).aggregate(min=Min('clen'), max=Max('clen'))
                 if job.event:
-                    prefixes |= {p.rstrip(' -') for p in Invoice.objects.filter(event=job.event).distinct().values_list('prefix', flat=True)}
+                    invoice_prefixes = Invoice.objects.filter(event=job.event)
                 else:
-                    prefixes |= {p.rstrip(' -') for p in Invoice.objects.filter(event__organizer=job.organizer).distinct().values_list('prefix', flat=True)}
+                    invoice_prefixes = Invoice.objects.filter(event__organizer=job.organizer)
+                for p in invoice_prefixes.order_by().distinct().values_list('prefix', flat=True):
+                    prefix = p.rstrip(" -")
+                    prefixes.add(prefix)
+                    if "-" in prefix:
+                        prefix_nodash = prefix.replace("-", "")
+                        prefixes.add(prefix_nodash)
+                        regex_match_to_slug[prefix_nodash] = prefix
 
                 pattern = re.compile(
                     "(%s)[ \\-_]*([A-Z0-9]{%s,%s})" % (
@@ -395,6 +412,11 @@ def process_banktransfers(self, job: int, data: list) -> None:
                 )
 
                 for trans in transactions:
+                    if trans.amount == Decimal("0.00"):
+                        # Ignore all zero-valued transactions
+                        trans.state = BankTransaction.STATE_DISCARDED
+                        trans.save()
+                        continue
                     # Whitespace in references is unreliable since linebreaks and spaces can occur almost anywhere, e.g.
                     # DEMOCON-123\n45 should be matched to DEMOCON-12345. However, sometimes whitespace is important,
                     # e.g. when there are two references. "DEMOCON-12345 DEMOCON-45678" would otherwise be parsed as
@@ -409,9 +431,9 @@ def process_banktransfers(self, job: int, data: list) -> None:
 
                     if matches:
                         if job.event:
-                            _handle_transaction(trans, matches, event=job.event)
+                            _handle_transaction(trans, matches, regex_match_to_slug, event=job.event)
                         else:
-                            _handle_transaction(trans, matches, organizer=job.organizer)
+                            _handle_transaction(trans, matches, regex_match_to_slug, organizer=job.organizer)
                     else:
                         trans.state = BankTransaction.STATE_NOMATCH
                         trans.save()

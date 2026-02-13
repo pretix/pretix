@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -20,12 +20,13 @@
 # <https://www.gnu.org/licenses/>.
 #
 import operator
+from datetime import timedelta
 from functools import reduce
 
 import django_filters
 from django.conf import settings
 from django.core.exceptions import ValidationError as BaseValidationError
-from django.db import transaction
+from django.db import connection, transaction
 from django.db.models import (
     Count, Exists, F, Max, OrderBy, OuterRef, Prefetch, Q, Subquery,
     prefetch_related_objects,
@@ -39,21 +40,24 @@ from django.utils.translation import gettext
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from packaging.version import parse
-from rest_framework import views, viewsets
+from rest_framework import status, views, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import (
+    NotFound, PermissionDenied, ValidationError,
+)
 from rest_framework.fields import DateTimeField
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
 from pretix.api.serializers.checkin import (
-    CheckinListSerializer, CheckinRPCRedeemInputSerializer,
-    MiniCheckinListSerializer,
+    CheckinListSerializer, CheckinRPCAnnulInputSerializer,
+    CheckinRPCRedeemInputSerializer, MiniCheckinListSerializer,
 )
 from pretix.api.serializers.item import QuestionSerializer
 from pretix.api.serializers.order import (
-    CheckinListOrderPositionSerializer, FailedCheckinSerializer,
+    CheckinListOrderPositionSerializer, CheckinSerializer,
+    FailedCheckinSerializer,
 )
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
@@ -66,6 +70,8 @@ from pretix.base.models.orders import PrintLog
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
 )
+from pretix.base.signals import checkin_annulled
+from pretix.helpers import OF_SELF
 
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
@@ -90,6 +96,16 @@ with scopes_disabled():
                 )
             )
             return queryset.filter(expr)
+
+    class CheckinFilter(FilterSet):
+        created_since = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='gte')
+        created_before = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='lt')
+        datetime_since = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='gte')
+        datetime_before = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='lt')
+
+        class Meta:
+            model = Checkin
+            fields = ['successful', 'error_reason', 'list', 'type', 'gate', 'device', 'auto_checked_in']
 
 
 class CheckinListViewSet(viewsets.ModelViewSet):
@@ -365,15 +381,21 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
     qs = qs.filter(reduce(operator.or_, lists_qs))
 
+    prefetch_related = [
+        Prefetch(
+            lookup='checkins',
+            queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists]).select_related('device')
+        ),
+        Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
+        'answers', 'answers__options', 'answers__question',
+    ]
+    select_related = [
+        'item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order', 'seat'
+    ]
+
     if pdf_data:
         qs = qs.prefetch_related(
-            Prefetch(
-                lookup='checkins',
-                queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists]).select_related('device')
-            ),
-            Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
-            'answers', 'answers__options', 'answers__question',
-            Prefetch('addons', OrderPosition.objects.select_related('item', 'variation')),
+            # Don't add to list, we don't want to propagate to addons
             Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
                 Prefetch(
                     'event',
@@ -388,32 +410,39 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
                     )
                 )
             ))
-        ).select_related(
-            'item', 'variation', 'item__category', 'addon_to', 'order', 'order__invoice_address', 'seat'
         )
-    else:
-        qs = qs.prefetch_related(
-            Prefetch(
-                lookup='checkins',
-                queryset=Checkin.objects.filter(list_id__in=[cl.pk for cl in checkinlists]).select_related('device')
-            ),
-            Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
-            'answers', 'answers__options', 'answers__question',
-            Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
-        ).select_related('item', 'variation', 'order', 'addon_to', 'order__invoice_address', 'order', 'seat')
 
     if expand and 'subevent' in expand:
-        qs = qs.prefetch_related(
+        prefetch_related += [
             'subevent', 'subevent__event', 'subevent__subeventitem_set', 'subevent__subeventitemvariation_set',
             'subevent__seat_category_mappings', 'subevent__meta_values'
-        )
+        ]
 
     if expand and 'item' in expand:
-        qs = qs.prefetch_related('item', 'item__addons', 'item__bundles', 'item__meta_values',
-                                 'item__variations').select_related('item__tax_rule')
+        prefetch_related += [
+            'item', 'item__addons', 'item__bundles', 'item__meta_values',
+            'item__variations',
+        ]
+        select_related.append('item__tax_rule')
 
     if expand and 'variation' in expand:
-        qs = qs.prefetch_related('variation', 'variation__meta_values')
+        prefetch_related += [
+            'variation', 'variation__meta_values',
+        ]
+
+    if expand and 'addons' in expand:
+        prefetch_related += [
+            Prefetch('addons', OrderPosition.objects.prefetch_related(*prefetch_related).select_related(*select_related)),
+        ]
+    else:
+        prefetch_related += [
+            Prefetch('addons', OrderPosition.objects.select_related('item', 'variation'))
+        ]
+
+    if pdf_data:
+        select_related.remove("order")  # Don't need it twice on this queryset
+
+    qs = qs.prefetch_related(*prefetch_related).select_related(*select_related)
 
     return qs
 
@@ -813,7 +842,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
         ctx['expand'] = self.request.query_params.getlist('expand')
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         return ctx
 
     def get_filterset_kwargs(self):
@@ -832,9 +861,9 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self, ignore_status=False, ignore_products=False):
         qs = _checkin_list_position_queryset(
             [self.checkinlist],
-            ignore_status=self.request.query_params.get('ignore_status', 'false') == 'true' or ignore_status,
+            ignore_status=self.request.query_params.get('ignore_status', 'false').lower() == 'true' or ignore_status,
             ignore_products=ignore_products,
-            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             expand=self.request.query_params.getlist('expand'),
         )
 
@@ -876,7 +905,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             user=self.request.user,
             auth=self.request.auth,
             expand=self.request.query_params.getlist('expand'),
-            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             questions_supported=self.request.data.get('questions_supported', True),
             canceled_supported=self.request.data.get('canceled_supported', False),
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
@@ -911,7 +940,7 @@ class CheckinRPCRedeemView(views.APIView):
             user=self.request.user,
             auth=self.request.auth,
             expand=self.request.query_params.getlist('expand'),
-            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             questions_supported=s.validated_data['questions_supported'],
             use_order_locale=s.validated_data['use_order_locale'],
             canceled_supported=True,
@@ -950,6 +979,7 @@ class CheckinRPCSearchView(ListAPIView):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['expand'] = self.request.query_params.getlist('expand')
+        ctx['organizer'] = self.request.organizer
         ctx['pdf_data'] = False
         return ctx
 
@@ -989,9 +1019,9 @@ class CheckinRPCSearchView(ListAPIView):
     def get_queryset(self, ignore_status=False, ignore_products=False):
         qs = _checkin_list_position_queryset(
             self.lists,
-            ignore_status=self.request.query_params.get('ignore_status', 'false') == 'true' or ignore_status,
+            ignore_status=self.request.query_params.get('ignore_status', 'false').lower() == 'true' or ignore_status,
             ignore_products=ignore_products,
-            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             expand=self.request.query_params.getlist('expand'),
         )
 
@@ -999,3 +1029,101 @@ class CheckinRPCSearchView(ListAPIView):
             qs = qs.none()
 
         return qs
+
+
+class CheckinRPCAnnulView(views.APIView):
+    def post(self, request, *args, **kwargs):
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            events = self.request.auth.get_events_with_permission(('can_change_orders', 'can_checkin_orders'))
+        elif self.request.user.is_authenticated:
+            events = self.request.user.get_events_with_permission(('can_change_orders', 'can_checkin_orders'), self.request).filter(
+                organizer=self.request.organizer
+            )
+        else:
+            raise ValueError("unknown authentication method")
+
+        s = CheckinRPCAnnulInputSerializer(data=request.data, context={'events': events})
+        s.is_valid(raise_exception=True)
+
+        with transaction.atomic():
+            try:
+                qs = Checkin.all.all()
+                if isinstance(request.auth, Device):
+                    qs = qs.filter(device=request.auth)
+                ci = qs.select_for_update(
+                    of=OF_SELF,
+                ).select_related("position", "position__order", "position__order__event").get(
+                    list__in=s.validated_data['lists'],
+                    nonce=s.validated_data['nonce'],
+                )
+                if connection.features.has_select_for_update_of and ci.position_id:
+                    # Lock position as well, can't do it with of= above because relation is nullable
+                    OrderPosition.objects.select_for_update(of=OF_SELF).get(pk=ci.position_id)
+
+                if not ci.successful or not ci.position:
+                    raise ValidationError("Cannot annul an unsuccessful checkin")
+            except Checkin.DoesNotExist:
+                raise NotFound("No check-in found based on nonce")
+            except Checkin.MultipleObjectsReturned:
+                raise ValidationError("Multiple check-ins found based on nonce")
+
+            annulment_time = s.validated_data.get("datetime") or now()
+
+            if annulment_time - ci.datetime > timedelta(minutes=15):
+                # Compare to sent datetime, which makes this cheatable, but allows offline annulment of checkins
+                ci.position.order.log_action('pretix.event.checkin.annulment.ignored', data={
+                    'checkin': ci.pk,
+                    'position': ci.position.id,
+                    'positionid': ci.position.positionid,
+                    'datetime': annulment_time,
+                    'error_explanation': s.validated_data.get("error_explanation"),
+                    'type': ci.type,
+                    'list': ci.list_id,
+                }, user=request.user, auth=request.auth)
+                return Response({
+                    "non_field_errors": ["Annulment is not allowed more than 15 minutes after check-in"]
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            if ci.device and ci.device != request.auth:
+                return Response({
+                    "non_field_errors": ["Annulment is only allowed from the same device"]
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+            ci.successful = False
+            ci.error_reason = Checkin.REASON_ANNULLED
+            ci.error_explanation = s.validated_data.get("error_explanation")
+            ci.save(update_fields=["successful", "error_reason", "error_explanation"])
+            ci.position.order.log_action('pretix.event.checkin.annulled', data={
+                'checkin': ci.pk,
+                'position': ci.position.id,
+                'positionid': ci.position.positionid,
+                'datetime': annulment_time,
+                'error_explanation': s.validated_data.get("error_explanation"),
+                'type': ci.type,
+                'list': ci.list_id,
+            }, user=request.user, auth=request.auth)
+            checkin_annulled.send(ci.position.order.event, checkin=ci)
+
+        return Response({"status": "ok"}, status=status.HTTP_200_OK)
+
+
+class CheckinViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CheckinSerializer
+    queryset = Checkin.all.none()
+    filter_backends = (DjangoFilterBackend, RichOrderingFilter)
+    filterset_class = CheckinFilter
+    ordering = ('created', 'id')
+    ordering_fields = ('created', 'datetime', 'id',)
+    permission = 'can_view_orders'
+
+    def get_queryset(self):
+        qs = Checkin.all.filter().select_related(
+            "position",
+            "device",
+        )
+        return qs
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx

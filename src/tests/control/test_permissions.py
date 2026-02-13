@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -104,6 +104,7 @@ event_urls = [
     "settings/tax/add",
     "settings/tax/1/",
     "settings/tax/1/delete",
+    "settings/tax/1/default",
     "items/",
     "items/add",
     "items/1/",
@@ -182,6 +183,8 @@ event_urls = [
 organizer_urls = [
     'organizer/abc/edit',
     'organizer/abc/',
+    'organizer/abc/settings/plugins',
+    'organizer/abc/settings/plugins/pretix.plugins.sendmail/events',
     'organizer/abc/settings/email',
     'organizer/abc/settings/email/setup',
     'organizer/abc/teams',
@@ -189,6 +192,9 @@ organizer_urls = [
     'organizer/abc/team/1/edit',
     'organizer/abc/team/1/delete',
     'organizer/abc/team/add',
+    'organizer/abc/outgoingmails',
+    'organizer/abc/outgoingmail/bulk_action',
+    'organizer/abc/outgoingmail/1/',
     'organizer/abc/devices',
     'organizer/abc/device/add',
     'organizer/abc/device/bulk_edit',
@@ -286,7 +292,7 @@ def test_wrong_event(perf_patch, client, env, url):
         organizer=env[2], name='Dummy', slug='dummy2',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(organizer=env[2], can_change_event_settings=True)
+    t = Team.objects.create(pk=2, organizer=env[2], can_change_event_settings=True)
     t.members.add(env[1])
     t.limit_events.add(event2)
 
@@ -318,6 +324,7 @@ event_permission_urls = [
     ("can_change_event_settings", "settings/tax/1/", 404, HTTP_GET),
     ("can_change_event_settings", "settings/tax/add", 200, HTTP_GET),
     ("can_change_event_settings", "settings/tax/1/delete", 404, HTTP_GET),
+    ("can_change_event_settings", "settings/tax/1/default", 404, HTTP_POST),
     ("can_change_event_settings", "comment/", 405, HTTP_GET),
     # Lists are currently not access-controlled
     # ("can_change_items", "items/", 200),
@@ -416,7 +423,7 @@ event_permission_urls = [
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_wrong_event_permission(perf_patch, client, env, perm, url, code, http_method):
     t = Team(
-        organizer=env[2], all_events=True
+        pk=2, organizer=env[2], all_events=True
     )
     setattr(t, perm, False)
     t.save()
@@ -436,7 +443,7 @@ def test_limited_event_permission_for_other_event(perf_patch, client, env, perm,
         organizer=env[2], name='Dummy', slug='dummy2',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(organizer=env[2], can_change_event_settings=True)
+    t = Team.objects.create(pk=2, organizer=env[2], can_change_event_settings=True)
     t.members.add(env[1])
     t.limit_events.add(event2)
 
@@ -451,7 +458,7 @@ def test_limited_event_permission_for_other_event(perf_patch, client, env, perm,
 @pytest.mark.django_db
 def test_current_permission(client, env):
     t = Team(
-        organizer=env[2], all_events=True
+        pk=2, organizer=env[2], all_events=True
     )
     setattr(t, 'can_change_event_settings', True)
     t.save()
@@ -469,7 +476,7 @@ def test_current_permission(client, env):
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_correct_event_permission_all_events(perf_patch, client, env, perm, url, code, http_method):
-    t = Team(organizer=env[2], all_events=True)
+    t = Team(pk=2, organizer=env[2], all_events=True)
     setattr(t, perm, True)
     t.save()
     t.members.add(env[1])
@@ -487,7 +494,7 @@ def test_correct_event_permission_all_events(perf_patch, client, env, perm, url,
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_correct_event_permission_limited(perf_patch, client, env, perm, url, code, http_method):
-    t = Team(organizer=env[2])
+    t = Team(pk=2, organizer=env[2])
     setattr(t, perm, True)
     t.save()
     t.members.add(env[1])
@@ -520,8 +527,13 @@ organizer_permission_urls = [
     ("can_change_teams", "organizer/dummy/team/1/edit", 200),
     ("can_change_teams", "organizer/dummy/team/1/delete", 200),
     ("can_change_organizer_settings", "organizer/dummy/edit", 200),
+    ("can_change_organizer_settings", "organizer/dummy/settings/plugins", 200),
+    ("can_change_organizer_settings", "organizer/dummy/settings/plugins/pretix.plugins.sendmail/events", 200),
     ("can_change_organizer_settings", "organizer/dummy/settings/email", 200),
     ("can_change_organizer_settings", "organizer/dummy/settings/email/setup", 200),
+    ("can_change_organizer_settings", "organizer/dummy/outgoingmails", 200),
+    ("can_change_organizer_settings", "organizer/dummy/outgoingmail/1/", 404),
+    ("can_change_organizer_settings", "organizer/dummy/outgoingmail/bulk_action", 405),
     ("can_change_organizer_settings", "organizer/dummy/devices", 200),
     ("can_change_organizer_settings", "organizer/dummy/devices/select2", 200),
     ("can_change_organizer_settings", "organizer/dummy/device/add", 200),
@@ -578,7 +590,7 @@ organizer_permission_urls = [
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
 def test_wrong_organizer_permission(perf_patch, client, env, perm, url, code):
-    t = Team(organizer=env[2])
+    t = Team(pk=2, organizer=env[2])
     setattr(t, perm, False)
     t.save()
     t.members.add(env[1])
@@ -590,7 +602,7 @@ def test_wrong_organizer_permission(perf_patch, client, env, perm, url, code):
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
 def test_correct_organizer_permission(perf_patch, client, env, perm, url, code):
-    t = Team(organizer=env[2])
+    t = Team(pk=2, organizer=env[2])
     setattr(t, perm, True)
     t.save()
     t.members.add(env[1])

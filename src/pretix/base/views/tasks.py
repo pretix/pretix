@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -68,7 +68,7 @@ class AsyncMixin:
     def get_check_url(self, task_id, ajax):
         return self.request.path + '?async_id=%s' % task_id + ('&ajax=1' if ajax else '')
 
-    def _ajax_response_data(self):
+    def _ajax_response_data(self, value):
         return {}
 
     def _return_ajax_result(self, res, timeout=.5):
@@ -85,7 +85,7 @@ class AsyncMixin:
                 logger.warning('Ignored ResponseError in AsyncResult.get()')
             except ConnectionError:
                 # Redis probably just restarted, let's just report not ready and retry next time
-                data = self._ajax_response_data()
+                data = self._ajax_response_data(None)
                 data.update({
                     'async_id': res.id,
                     'ready': False
@@ -93,7 +93,7 @@ class AsyncMixin:
                 return data
 
         state, info = res.state, res.info
-        data = self._ajax_response_data()
+        data = self._ajax_response_data(info)
         data.update({
             'async_id': res.id,
             'ready': ready,
@@ -102,23 +102,21 @@ class AsyncMixin:
         if ready:
             if state == states.SUCCESS and not isinstance(info, Exception):
                 smes = self.get_success_message(info)
-                if smes:
+                if smes and 'ajax_dont_redirect' not in self.request.GET and 'ajax_dont_redirect' not in self.request.POST:
                     messages.success(self.request, smes)
-                # TODO: Do not store message if the ajax client states that it will not redirect
-                # but handle the message itself
                 data.update({
                     'redirect': self.get_success_url(info),
                     'success': True,
-                    'message': str(self.get_success_message(info))
+                    'message': str(smes)
                 })
             else:
-                messages.error(self.request, self.get_error_message(info))
-                # TODO: Do not store message if the ajax client states that it will not redirect
-                # but handle the message itself
+                smes = self.get_error_message(info)
+                if smes and 'ajax_dont_redirect' not in self.request.GET and 'ajax_dont_redirect' not in self.request.POST:
+                    messages.error(self.request, smes)
                 data.update({
                     'redirect': self.get_error_url(),
                     'success': False,
-                    'message': str(self.get_error_message(info))
+                    'message': str(smes)
                 })
         elif state == 'PROGRESS':
             data.update({

@@ -1,16 +1,12 @@
 {% extends "pretixpresale/event/checkout_base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load bootstrap3 %}
 {% load rich_text %}
 {% load lists %}
 {% load escapejson %}
 {% block inner %}
     <p>{% trans "Before we continue, we need you to answer some questions." %}</p>
-    <p class="required-legend" aria-hidden="true">
-        {% blocktrans trimmed %}
-            You need to fill all fields that are marked with <span>*</span> to continue.
-        {% endblocktrans %}
-    </p>
     {% if profiles_data %}
         {{ profiles_data|json_script:"profiles_json" }}
     {% endif %}
@@ -44,7 +40,9 @@
                     {% if addresses_data %}
                         {{ addresses_data|json_script:"addresses_json" }}
                     {% endif %}
-                    <div id="invoice" class="profile-scope" data-profiles-id="addresses_json">
+                    <div id="invoice" class="profile-scope"
+                         data-profiles-id="addresses_json"
+                         data-address-information-url="{% url "js_helpers.address_form" %}?invoice=true&amp;organizer={{ event.organizer.slug|urlencode }}&amp;event={{ event.slug|urlencode }}&amp;locale={{ request.LANGUAGE_CODE }}">
                         <div class="panel-body">
                             {% if addresses_data %}
                                 <div class="form-group profile-select-container js-do-not-copy-answers">
@@ -79,40 +77,40 @@
                             {% if pos.variation %}
                                 – {{ pos.variation }}
                             {% endif %}</strong>
-                            {% if forloop.counter > 1 %}
-                                <span class="text-right flip">
-                                    {% if event.settings.checkout_show_copy_answers_button %}
-                                        <button type="button" data-id="{{ forloop.counter0 }}" name="copy"
-                                                class="js-copy-answers btn btn-default btn-xs">{% trans "Copy answers from above" %}</button>
-                                    {% endif %}
-                                </span>
-                            {% endif %}
                         </h3>
                     </summary>
                     <div>
-                        <div class="panel-body questions-form">
+                        <div class="panel-body questions-form" data-address-information-url="{% url "js_helpers.address_form" %}">
                             {% if event.settings.attendee_data_explanation_text and pos.item.ask_attendee_data %}
                                 {{ event.settings.attendee_data_explanation_text|rich_text }}
                             {% endif %}
+                            {% if forloop.counter > 1 and event.settings.checkout_show_copy_answers_button %}
+                                <div class="form-group">
+                                    <div class="col-md-9 col-md-offset-3">
+                                        <button type="button" data-id="{{ forloop.counter0 }}" name="copy"
+                                            class="js-copy-answers btn btn-default btn-sm">
+                                                {% icon "files-o" %}
+                                                {% trans "Copy answers from above" %}
+                                            </button>
+                                    </div>
+                                </div>
+                            {% endif %}
                             {% if pos.seat %}
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">
-                                        {% trans "Seat" %}
-                                    </label>
+                                    <div class="col-md-3 control-label">
+                                        <strong role="heading" aria-level="4">{% trans "Seat" %}</strong>
+                                    </div>
                                     <div class="col-md-9 form-control-text">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 4.7624999 3.7041668" class="svg-icon">
-                                            <path
-                                                    d="m 1.9592032,1.8522629e-4 c -0.21468,0 -0.38861,0.17394000371 -0.38861,0.38861000371 0,0.21466 0.17393,0.38861 0.38861,0.38861 0.21468,0 0.3886001,-0.17395 0.3886001,-0.38861 0,-0.21467 -0.1739201,-0.38861000371 -0.3886001,-0.38861000371 z m 0.1049,0.84543000371 c -0.20823,-0.0326 -0.44367,0.12499 -0.39998,0.40462997 l 0.20361,1.01854 c 0.0306,0.15316 0.15301,0.28732 0.3483,0.28732 h 0.8376701 v 0.92708 c 0,0.29313 0.41187,0.29447 0.41187,0.005 v -1.19115 c 0,-0.14168 -0.0995,-0.29507 -0.29094,-0.29507 l -0.65578,-10e-4 -0.1757,-0.87644 C 2.3042533,0.95300523 2.1890432,0.86500523 2.0641032,0.84547523 Z m -0.58549,0.44906997 c -0.0946,-0.0134 -0.20202,0.0625 -0.17829,0.19172 l 0.18759,0.91054 c 0.0763,0.33956 0.36802,0.55914 0.66042,0.55914 h 0.6015201 c 0.21356,0 0.21448,-0.32143 -0.003,-0.32143 H 2.1954632 c -0.19911,0 -0.36364,-0.11898 -0.41341,-0.34107 l -0.17777,-0.87126 c -0.0165,-0.0794 -0.0688,-0.11963 -0.12557,-0.12764 z"/>
-                                        </svg>
+                                        {% include "icons/seat.svg" with cls="svg-icon" %}
                                         {{ pos.seat }}
                                     </div>
                                 </div>
                             {% endif %}
                             {% if pos.addons_without_bundled %}
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">
-                                        {% trans "Selected add-ons" %}
-                                    </label>
+                                    <div class="col-md-3 control-label">
+                                        <strong role="heading" aria-level="4">{% trans "Selected add-ons" %}</strong>
+                                    </div>
                                     <div class="col-md-9 form-control-text">
                                         <ul class="addon-list">
                                             {% regroup pos.addons_without_bundled by item_and_variation as addons_by_itemvar %}
@@ -125,9 +123,9 @@
                             {% endif %}
                             {% if pos.subevent %}
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">
-                                        {% trans "Date" context "subevent" %}
-                                    </label>
+                                    <div class="col-md-3 control-label">
+                                        <strong role="heading" aria-level="4">{% trans "Date" context "subevent" %}</strong>
+                                    </div>
                                     <div class="col-md-9 form-control-text">
                                         <ul class="addon-list">
                                             {{ pos.subevent.name }} &middot; <!-- {{ pos.subevent.get_date_range_display_with_times_as_html }} -->
@@ -161,15 +159,14 @@
                                     </div>
                                 </div>
                             {% endif %}
+                            <fieldset>
+                                <legend class="sr-only">{{ pos.item.name }}{% if pos.variation %} – {{ pos.variation }}{% endif %}</legend>
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
+                                </fieldset>
+                                <fieldset>
                                     {# Add-Ons #}
                                     <legend{% if profiles_data %} class="profile-add-on-legend"{% endif %}>
-                                        {% if form.show_copy_answers_to_addon_button and event.settings.checkout_show_copy_answers_button %}
-                                            <span class="pull-right flip">
-                                                <button type="button" data-id="{{ forloop.parentloop.counter0 }}" data-addonid="{{ forloop.counter0 }}" name="copy" class="js-copy-answers-addon btn btn-default btn-xs">{% trans "Copy answers" %}</button>
-                                            </span>
-                                        {% endif %}
                                         + {{ form.pos.item.name }}{% if form.pos.variation %} – {{ form.pos.variation.value }}{% endif %}
                                     </legend>
                                 {% endif %}
@@ -191,8 +188,20 @@
                                     </div>
                                     {% endif %}
 
+                                    {% if form.show_copy_answers_to_addon_button and event.settings.checkout_show_copy_answers_button %}
+                                    <div class="form-group">
+                                        <div class="col-md-9 col-md-offset-3">
+                                            <button type="button" data-id="{{ forloop.parentloop.counter0 }}" data-addonid="{{ forloop.counter0 }}" name="copy" class="js-copy-answers-addon btn btn-default btn-sm">
+                                                {% icon "files-o" %}
+                                                {% trans "Copy answers from above" %}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
                                     {% bootstrap_form form layout="checkout" %}
                                 </div>
+                            </fieldset>
                             {% endfor %}
                         </div>
                     </div>

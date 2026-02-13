@@ -13,7 +13,7 @@ $font-size-h4:            ($font-size-base * 1.25) !default;
 $font-size-h5:            $font-size-base !default;
 $font-size-h6:            ($font-size-base * .85) !default;
 
-$line-height-base:        1.428571429 !default;
+$line-height-base:        1.43 !default;
 $line-height-computed:    ($font-size-base * $line-height-base) !default;
 $line-height-large:       1.3333333 !default; // extra decimals for Win 8.1 Chrome
 $line-height-small:       1.5 !default;
@@ -30,16 +30,20 @@ $padding-xs-horizontal:     0.3571428571rem !default;/* 5px / 14px */
 $navbar-height:             3.5714285714rem !default;/* 50px / 14px */
 
 
-$input-height-base:              ($line-height-computed + ($padding-base-vertical * 2) + 0.1428571429rem) !default; /* 2px@14px = 0.1428571429rem */
-$input-height-large:             ($font-size-large * $line-height-large) + ($padding-large-vertical * 2) + 0.1428571429rem !default;
-$input-height-small:             ($font-size-small * $line-height-small) + ($padding-small-vertical * 2) + 0.1428571429rem !default;
+$input-height-base:              ($line-height-computed + ($padding-base-vertical * 2)) !default;
+$input-height-large:             ($font-size-large * $line-height-large) + ($padding-large-vertical * 2) !default;
+$input-height-small:             ($font-size-small * $line-height-small) + ($padding-small-vertical * 2) !default;
 
 
 /* imports */
 @import "../../pretixbase/scss/_theme_variables.scss";
 @import "../../pretixbase/scss/bootstrap_vars.scss";
+
+$headings-small-color: $text-muted;
+
 @import "../../bootstrap/scss/_bootstrap_reduced.scss";
 @import "../../pretixbase/scss/_theme.scss";
+@import "../../pretixbase/scss/_dialogs.scss";
 @import "../../lightbox/css/lightbox.scss";
 @import "../../cropper/cropper.scss";
 @import "../../datetimepicker/_bootstrap-datetimepicker.scss";
@@ -58,6 +62,38 @@ html {
     font-size: 1em;
 }
 
+@media (max-width: $screen-xs-max) {
+    /* scale everything to 1rem so older/smaller iPhones do not zoom inputs on focus */
+    .form-control {
+        font-size: 1rem;
+    }
+}
+
+.on-focus-visible:focus, .on-focus-visible:focus-within {
+    height: auto;
+    width: auto;
+    overflow: auto;
+    clip: auto;
+}
+#skip-to-main {
+    z-index: 9999;
+    /* padding is needed to make focus-outline visible */
+    padding: 8px;
+    background-color: inherit;
+    p {
+        margin: 0;
+    }
+    a {
+        padding: .125em .5em;
+        display: inline-block;
+        color: var(--pretix-link-contrast-color);
+        outline-color: inherit;
+    }
+    a:active, a:hover, a:focus {
+        color: var(--pretix-link-hover-contrast-color);
+    }
+}
+
 /* fixe for bootstrap using px-values for fontsize */
 .panel-title {
     font-size: ($font-size-base * 1.125);
@@ -73,7 +109,22 @@ pre {
     font-size: $font-size-base;
 }
 
+/* make all links in textflow underlined */
+h1, h2, h3, h4, h5, h6, p, li {
+    a:not(.btn) {
+        text-decoration: underline;
+    }
+}
 
+a.no-underline:link, nav li a:link {
+    text-decoration: none;
+}
+a.no-underline:hover, nav li a:hover {
+    text-decoration: underline;
+}
+.help-block a {
+    color: inherit;
+}
 
 
 /* See https://github.com/pretix/pretix/pull/761 */
@@ -101,11 +152,31 @@ a, .btn-link {
 */
 /* bootstrap sets outline-offset with :active:focus so we need to match specifity of selector */
 /* see line 26, pretix/static/bootstrap/scss/bootstrap/_buttons.scss */
-button:focus, a:focus, .btn:focus, summary:focus,
+button:focus, a:focus, .btn:focus, summary:focus, div:focus,
 /*button:active, a:active, .btn:active, summary:active,*/
-button:active:focus, a:active:focus, .btn:active:focus, summary:active:focus {
+button:active:focus, a:active:focus, .btn:active:focus, summary:active:focus, div:active:focus,
+button.active:focus, a.active:focus, .btn.active:focus,
+input:focus, .form-control:focus, .btn-checkbox:has(input:focus),
+input[type="file"]:focus, input[type="radio"]:focus, input[type="checkbox"]:focus,
+.input-item-count-group:has(input:focus), .input-group-price:has(input:focus) {
     outline: 2px solid $link-hover-color;
     outline-offset: 2px;
+}
+input:focus, .form-control:focus {
+    border-color: $input-border;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.btn-checkbox input:focus, .input-item-count-group input:focus, .input-group-price input:focus {
+    outline: none;
+}
+/* bootstrap sets dark background for active elements with hover/focus, we need to match specifity of selector */
+.btn-default:active:hover, .btn-default:active:focus, .btn-default:active.focus, .btn-default.active:hover, .btn-default.active:focus, .btn-default.active.focus, .open > .btn-default.dropdown-toggle:hover, .open > .btn-default.dropdown-toggle:focus, .open > .btn-default.dropdown-toggle.focus {
+    background-color: inherit;
+}
+/* border-radius on these containers is needed for correctly rounded focus-outlines */
+.input-item-count-group, .input-group-price {
+    border-radius: var(--pretix-border-radius-base);
 }
 
 footer {
@@ -210,118 +281,11 @@ a:hover .panel-primary > .panel-heading {
   margin-right: auto;
 }
 
-body.loading .container {
-    -webkit-filter: blur(2px);
-    -moz-filter: blur(2px);
-    -ms-filter: blur(2px);
-    -o-filter: blur(2px);
-    filter: blur(2px);
-}
-
 .big-rotating-icon {
     -webkit-animation: fa-spin 8s infinite linear;
     animation: fa-spin 8s infinite linear;
     font-size: 120px;
     color: $brand-primary;
-}
-#loadingmodal, #ajaxerr, #cookie-consent-modal, #popupmodal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, .7);
-    opacity: 0;
-    z-index: 900000;
-    visibility: hidden;
-    padding: 10px;
-
-    .big-icon {
-        margin-top: 50px;
-        font-size: 200px;
-        color: $brand-primary;
-    }
-    &#popupmodal .big-icon {
-        margin-top: 10px;
-        font-size: 100px;
-        color: $brand-primary;
-    }
-
-    .modal-card {
-        margin: 50px auto 0;
-        width: 90%;
-        max-width: 600px;
-        max-height: calc(100vh - 100px);
-        overflow-y: auto;
-        background: white;
-        border-radius: $border-radius-large;
-        box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
-        padding: 20px;
-        min-height: 160px;
-
-        .modal-card-icon {
-            float: left;
-            width: 150px;
-            text-align: center;
-        }
-        .modal-card-content {
-            margin-left: 160px;
-            text-align: left;
-            h3 {
-                margin-top: 0;
-            }
-        }
-    }
-
-    &#cookie-consent-modal {
-        background: rgba(255, 255, 255, .5);
-        opacity: 1;
-        visibility: visible;
-        display: none;
-        .modal-card-content {
-            margin-left: 0;
-        }
-        details {
-            & > summary {
-                list-style: none;
-            }
-            & > summary::-webkit-details-marker,
-            & > summary::marker {
-                display: none;
-            }
-            margin-bottom: 10px;
-        }
-    }
-}
-@media (max-width: 700px) {
-    #loadingmodal, #ajaxerr, #cookie-consent-modal, #popupmodal {
-        .modal-card {
-            margin: 25px auto 0;
-            max-height: calc(100vh - 50px - 20px);
-            .modal-card-icon {
-                float: none;
-                width: 100%;
-            }
-            .modal-card-content {
-                text-align: center;
-                margin-left: 0;
-                margin-right: 0;
-                margin-top: 10px;
-            }
-        }
-    }
-}
-
-#ajaxerr {
-    background: rgba(236, 236, 236, .9);
-}
-
-.loading #loadingmodal, .ajaxerr #ajaxerr, .has-popup #popupmodal {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity .5s ease-in-out;
-    -moz-transition: opacity .5s ease-in-out;
-    -webkit-transition: opacity .5s ease-in-out;
 }
 
 .typo-alert span[data-typosuggest] {
@@ -330,26 +294,28 @@ body.loading .container {
 }
 
 .info-row {
-    & > .fa {
-        font-size: 26px;
-        color: $brand-primary;
-        float: left;
-        margin-top: 3px;
-    }
+    position: relative;
+    min-height: 30px;
+    margin-bottom: 10px;
+
+    .info-row-icon,
     & > img {
+        position: absolute;
+        top: -6px;
+        left: 3px;
+        font-size: 26px;
+        text-align: center;
+        color: $brand-primary;
+        margin-top: 3px;
         width: 26px;
         height: auto;
-        float: left;
-        margin-top: 3px;
-        position: relative;
-        left: 3.71423px;  /* Position analog to what fa-fw does */
+    }
+    .info-row-icon .fa {
+        vertical-align: top;
+        width: auto;
     }
     p {
-        min-height: 30px;
         margin-left: 40px;
-    }
-    p:first-child {
-        margin-top: 0;
     }
 }
 
@@ -495,11 +461,16 @@ details summary {
     transform: rotate(-90deg);
 }
 
-details.sneak-peek {
+.sneak-peek-container {
     position: relative;
-    height: 11em;
+}
+.sneak-peek-content {
+    height: 8em;
     overflow: hidden;
     transition: height .5s;
+}
+.nojs .sneak-peek-content {
+    height: auto;
 }
 .sneak-peek-trigger {
     display: grid;
@@ -514,6 +485,14 @@ details.sneak-peek {
     bottom: 0;
     left: 0;
     z-index: 10;
+    opacity: 1;
+    transition: opacity .5s;
+}
+.nojs .sneak-peek-trigger {
+    display: none;
+}
+.sneak-peek-trigger:has(button[aria-expanded="true"]) {
+    opacity: 0;
 }
 
 form.download-btn-form {
@@ -530,22 +509,18 @@ h2 .label {
     display: none !important;
 }
 
-.event-list {
-    margin-bottom: 15px;
-    border-top: 1px solid $table-border-color;
-
-    .row {
-        margin-left: 0;
-        margin-right: 0;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        border-bottom: 1px solid $table-border-color;
-        border-left: 1px solid $table-border-color;
-        border-right: 1px solid $table-border-color;
+.event-list.full-width-list {
+    h3, h4, p {
+        margin-top: 0;
+        margin-bottom: 0;
     }
-    .row > div {
-        padding-top: 5px;
-        padding-bottom: 5px;
+    h3, h4 {
+        font-size: 1em;
+        line-height: 1.25rem;
+        font-weight: bold;
+    }
+    h4 small {
+        font-size: 85%;
     }
 }
 
@@ -599,6 +574,7 @@ h2 .label {
 
 
 .textbubble-success, .textbubble-success-warning, .textbubble-info, .textbubble-warning, .textbubble-danger {
+  display: inline-block;
   padding: 0 .4em;
   border-radius: $border-radius-base;
   font-weight: bold;

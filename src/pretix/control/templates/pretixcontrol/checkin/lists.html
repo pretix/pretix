@@ -83,6 +83,13 @@
                 <a href="{% url "control:organizer.devices" organizer=request.organizer.slug %}"
                    class="btn btn-default"><i class="fa fa-tablet"></i> {% trans "Connected devices" %}</a>
             {% endif %}
+            {% if "can_change_orders" in request.eventpermset %}
+                <a href="{% url "control:event.orders.checkinlists.reset" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default">
+                    <span class="fa fa-repeat"></span>
+                    {% trans "Reset check-in" %}
+                </a>
+            {% endif %}
         </p>
         <div class="table-responsive">
             <table class="table table-hover table-quotas">

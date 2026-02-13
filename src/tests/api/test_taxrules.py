@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -31,6 +31,7 @@ TEST_TAXRULE_RES = {
     'keep_gross_if_rate_changes': False,
     'name': {'en': 'VAT'},
     'rate': '19.00',
+    'default': True,
     'code': 'S/standard',
     'price_includes_tax': True,
     'eu_reverse_charge': False,
@@ -78,6 +79,45 @@ def test_rule_create(token_client, organizer, event):
     assert rule.price_includes_tax is True
     assert rule.eu_reverse_charge is False
     assert str(rule.home_country) == "DE"
+
+
+@pytest.mark.django_db
+def test_rule_create_auto_default(token_client, organizer, event):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/taxrules/'.format(organizer.slug, event.slug),
+        {
+            "name": {"en": "VAT", "de": "MwSt"},
+            "rate": "19.00",
+            "price_includes_tax": True,
+            "eu_reverse_charge": False,
+            "home_country": "DE",
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    rule = TaxRule.objects.get(pk=resp.data['id'])
+    assert rule.default
+
+
+@pytest.mark.django_db
+def test_rule_create_only_one_default(token_client, taxrule, organizer, event):
+    assert taxrule.default
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/taxrules/'.format(organizer.slug, event.slug),
+        {
+            "name": {"en": "VAT", "de": "MwSt"},
+            "rate": "19.00",
+            "price_includes_tax": True,
+            "eu_reverse_charge": False,
+            "home_country": "DE",
+            "default": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+
+    taxrule.refresh_from_db()
+    assert not taxrule.default
 
 
 @pytest.mark.django_db

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -174,8 +174,7 @@ class CancelForm(forms.Form):
         label=_('Keep a cancellation fee of'),
         help_text=_('If you keep a fee, all positions within this order will be canceled and the order will be reduced '
                     'to a cancellation fee. Payment and shipping fees will be canceled as well, so include them '
-                    'in your cancellation fee if you want to keep them. Please always enter a gross value, '
-                    'tax will be calculated automatically.'),
+                    'in your cancellation fee if you want to keep them.'),
     )
     cancel_invoice = forms.BooleanField(
         label=_('Generate cancellation for invoice'),
@@ -200,6 +199,19 @@ class CancelForm(forms.Form):
         self.fields['cancellation_fee'].max_value = self.instance.total
         if not self.instance.invoices.exists():
             del self.fields['cancel_invoice']
+        if self.instance.event.settings.tax_rule_cancellation == 'split':
+            self.fields['cancellation_fee'].help_text = str(self.fields['cancellation_fee'].help_text) + ' ' + _(
+                'Please enter a gross amount. As per your event settings, the taxes will be split the same way as the '
+                'order positions.'
+            )
+        elif self.instance.event.settings.tax_rule_cancellation == 'default':
+            self.fields['cancellation_fee'].help_text = str(self.fields['cancellation_fee'].help_text) + ' ' + _(
+                'Please enter a gross amount. As per your event settings, the default tax rate will be charged.'
+            )
+        elif self.instance.event.settings.tax_rule_cancellation == 'none':
+            self.fields['cancellation_fee'].help_text = str(self.fields['cancellation_fee'].help_text) + ' ' + _(
+                'As per your event settings, no tax will be charged.'
+            )
 
     def clean_cancellation_fee(self):
         val = self.cleaned_data['cancellation_fee'] or Decimal('0.00')
@@ -397,7 +409,6 @@ class OrderPositionAddForm(forms.Form):
                         'event': order.event.slug,
                         'organizer': order.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
@@ -693,7 +704,6 @@ class OrderContactForm(forms.ModelForm):
                     'data-select2-url': reverse('control:organizer.customers.select2', kwargs={
                         'organizer': self.instance.event.organizer.slug,
                     }),
-                    'data-placeholder': _('Customer')
                 }
             )
             self.fields['customer'].widget.choices = self.fields['customer'].choices
@@ -964,7 +974,7 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
         self._set_field_placeholders('send_subject', ['event_or_subevent', 'refund_amount', 'position_or_address',
                                                       'order', 'event'])
         self._set_field_placeholders('send_message', ['event_or_subevent', 'refund_amount', 'position_or_address',
-                                                      'order', 'event'])
+                                                      'order', 'event'], rich=True)
         self.fields['send_waitinglist_subject'] = I18nFormField(
             label=_("Subject"),
             required=True,
@@ -988,7 +998,7 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
             ))
         )
         self._set_field_placeholders('send_waitinglist_subject', ['event_or_subevent', 'event'])
-        self._set_field_placeholders('send_waitinglist_message', ['event_or_subevent', 'event'])
+        self._set_field_placeholders('send_waitinglist_message', ['event_or_subevent', 'event'], rich=True)
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
@@ -1020,3 +1030,27 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
         if self.event.has_subevents and not d['subevent'] and not d['all_subevents'] and not d.get('subevents_from'):
             raise ValidationError(_('Please confirm that you want to cancel ALL dates in this event series.'))
         return d
+
+
+class EventCancelConfirmForm(forms.Form):
+    confirm = forms.BooleanField(
+        label=_("I understand that this is not reversible and want to continue"),
+        required=True,
+    )
+    confirmation_code = forms.CharField(
+        label=_("Confirmation code"),
+        help_text=_("We have just emailed you a confirmation code to enter to confirm this action"),
+        required=True,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.code = kwargs.pop("confirmation_code")
+        super().__init__(*args, **kwargs)
+        if not self.code:
+            del self.fields["confirmation_code"]
+
+    def clean_confirmation_code(self):
+        val = self.cleaned_data['confirmation_code']
+        if val != self.code:
+            raise ValidationError(_('The confirmation code is incorrect.'))
+        return val

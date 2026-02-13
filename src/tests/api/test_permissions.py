@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -54,6 +54,7 @@ event_urls = [
     (None, 'taxrules/'),
     ('can_view_orders', 'waitinglistentries/'),
     ('can_view_orders', 'checkinlists/'),
+    ('can_view_orders', 'checkins/'),
     (None, 'seats/'),
 ]
 
@@ -64,6 +65,8 @@ event_permission_sub_urls = [
     ('get', 'can_view_orders', 'revokedsecrets/1/', 404),
     ('get', 'can_view_orders', 'blockedsecrets/', 200),
     ('get', 'can_view_orders', 'blockedsecrets/1/', 404),
+    ('get', 'can_view_orders', 'transactions/', 200),
+    ('get', 'can_view_orders', 'transactions/1/', 404),
     ('get', 'can_view_orders', 'orders/', 200),
     ('get', 'can_view_orders', 'orderpositions/', 200),
     ('delete', 'can_change_orders', 'orderpositions/1/', 404),
@@ -73,6 +76,7 @@ event_permission_sub_urls = [
     ('get', 'can_view_orders', 'invoices/1/', 404),
     ('post', 'can_change_orders', 'invoices/1/regenerate/', 404),
     ('post', 'can_change_orders', 'invoices/1/reissue/', 404),
+    ('post', 'can_change_orders', 'invoices/1/retransmit/', 404),
     ('get', 'can_view_orders', 'waitinglistentries/', 200),
     ('get', 'can_view_orders', 'waitinglistentries/1/', 404),
     ('post', 'can_change_orders', 'waitinglistentries/', 400),
@@ -173,6 +177,8 @@ event_permission_sub_urls = [
     ('post', 'can_change_orders', 'orders/ABC12/refunds/1/done/', 404),
     ('get', 'can_view_orders', 'checkinlists/', 200),
     ('post', 'can_change_orders', 'checkinlists/1/failed_checkins/', 400),
+    ('get', 'can_view_orders', 'checkins/', 200),
+    ('get', 'can_view_orders', 'checkins/1/', 404),
     ('post', 'can_change_event_settings', 'checkinlists/', 400),
     ('put', 'can_change_event_settings', 'checkinlists/1/', 404),
     ('patch', 'can_change_event_settings', 'checkinlists/1/', 404),
@@ -201,7 +207,7 @@ event_permission_sub_urls = [
 ]
 
 org_permission_sub_urls = [
-    ('get', 'can_change_organizer_settings', 'settings/', 200),
+    ('patch', 'can_change_organizer_settings', '', 200),
     ('patch', 'can_change_organizer_settings', 'settings/', 200),
     ('get', 'can_change_organizer_settings', 'webhooks/', 200),
     ('post', 'can_change_organizer_settings', 'webhooks/', 400),

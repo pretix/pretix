@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -74,6 +74,11 @@ class ExportersMixin:
     @action(detail=True, methods=['GET'], url_name='download', url_path='download/(?P<asyncid>[^/]+)/(?P<cfid>[^/]+)')
     def download(self, *args, **kwargs):
         cf = get_object_or_404(CachedFile, id=kwargs['cfid'])
+        if not cf.allowed_for_session(self.request, "exporters-api"):
+            return Response(
+                {'status': 'failed', 'message': 'Unknown file ID or export failed'},
+                status=status.HTTP_410_GONE
+            )
         if cf.file:
             resp = ChunkBasedFileResponse(cf.file.file, content_type=cf.type)
             resp['Content-Disposition'] = 'attachment; filename="{}"'.format(cf.filename).encode("ascii", "ignore")
@@ -109,7 +114,8 @@ class ExportersMixin:
         serializer = JobRunSerializer(exporter=instance, data=self.request.data, **self.get_serializer_kwargs())
         serializer.is_valid(raise_exception=True)
 
-        cf = CachedFile(web_download=False)
+        cf = CachedFile(web_download=True)
+        cf.bind_to_session(self.request, "exporters-api")
         cf.date = now()
         cf.expires = now() + timedelta(hours=24)
         cf.save()

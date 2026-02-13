@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -505,8 +505,7 @@ class Item(LoggedModel):
         verbose_name=_("Free price input"),
         help_text=_("If this option is active, your users can choose the price themselves. The price configured above "
                     "is then interpreted as the minimum price a user has to enter. You could use this e.g. to collect "
-                    "additional donations for your event. This is currently not supported for products that are "
-                    "bought as an add-on to other products.")
+                    "additional donations for your event.")
     )
     free_price_suggestion = models.DecimalField(
         verbose_name=_("Suggested price"),
@@ -595,10 +594,11 @@ class Item(LoggedModel):
         on_delete=models.SET_NULL,
         verbose_name=_("Only show after sellout of"),
         help_text=_("If you select a product here, this product will only be shown when that product is "
-                    "sold out. If combined with the option to hide sold-out products, this allows you to "
-                    "swap out products for more expensive ones once the cheaper option is sold out. There might "
-                    "be a short period in which both products are visible while all tickets of the referenced "
-                    "product are reserved, but not yet sold.")
+                    "no longer available. This will happen either because the other product has sold out or because "
+                    "the time is outside of the sales window for the other product. If combined with the option "
+                    "to hide sold-out products, this allows you to swap out products for more expensive ones once "
+                    "the cheaper option is sold out. There might be a short period in which both products are visible "
+                    "while all tickets of the referenced product are reserved, but not yet sold.")
     )
     hidden_if_item_available_mode = models.CharField(
         choices=UNAVAIL_MODES,
@@ -793,7 +793,7 @@ class Item(LoggedModel):
     class Meta:
         verbose_name = _("Product")
         verbose_name_plural = _("Products")
-        ordering = ("category__position", "category", "position")
+        ordering = ("category__position", "category", "position", "pk")
 
     def __str__(self):
         return str(self.internal_name or self.name)
@@ -821,7 +821,8 @@ class Item(LoggedModel):
     def ask_attendee_data(self):
         return self.admission and self.personalized
 
-    def tax(self, price=None, base_price_is='auto', currency=None, invoice_address=None, override_tax_rate=None, include_bundled=False):
+    def tax(self, price=None, base_price_is='auto', currency=None, invoice_address=None, override_tax_rate=None,
+            include_bundled=False, force_fixed_gross_price=False):
         price = price if price is not None else self.default_price
 
         bundled_sum = Decimal('0.00')
@@ -850,7 +851,7 @@ class Item(LoggedModel):
         else:
             t = self.tax_rule.tax(price, base_price_is=base_price_is, invoice_address=invoice_address,
                                   override_tax_rate=override_tax_rate, currency=currency or self.event.currency,
-                                  subtract_from_gross=bundled_sum)
+                                  subtract_from_gross=bundled_sum, force_fixed_gross_price=force_fixed_gross_price)
 
         if bundled_sum:
             t.name = "MIXED!"
@@ -1924,6 +1925,25 @@ class Question(LoggedModel):
             raise ValidationError(_("The maximum value must not be lower than the minimum value."))
         super().clean()
 
+    def clean_type_change(self, old_type, new_type):
+        if old_type == new_type:
+            return True
+        if not self.pk or not self.answers.exists():
+            return True
+        if new_type == self.TYPE_TEXT and old_type != self.TYPE_FILE:
+            # All types can be converted to text except file
+            return True
+        if new_type == self.TYPE_STRING and old_type not in (self.TYPE_TEXT, self.TYPE_FILE):
+            # All types can be converted to string except text or file
+            return True
+        if new_type == self.TYPE_CHOICE_MULTIPLE and old_type == self.TYPE_CHOICE:
+            # Single-choice can be converted to multiple choice without loss
+            return True
+        raise ValidationError(
+            _("The system already contains answers to this question that are not compatible with changing the "
+              "type of question without data loss. Consider hiding this question and creating a new one instead.")
+        )
+
 
 class QuestionOption(models.Model):
     question = models.ForeignKey('Question', related_name='options', on_delete=models.CASCADE)
@@ -2274,3 +2294,29 @@ class ItemVariationMetaValue(LoggedModel):
 
     class Meta:
         unique_together = ('variation', 'property')
+
+
+class ItemProgramTime(models.Model):
+    """
+    This model can be used to add a program time to an item.
+
+    :param item: The item the program time applies to
+    :type item: Item
+    :param start: The date and time this program time starts
+    :type start: datetime
+    :param end: The date and time this program time ends
+    :type end: datetime
+    """
+    item = models.ForeignKey('Item', related_name='program_times', on_delete=models.CASCADE)
+    start = models.DateTimeField(verbose_name=_("Start"))
+    end = models.DateTimeField(verbose_name=_("End"))
+
+    def clean(self):
+        if hasattr(self, 'item') and self.item and self.item.event.has_subevents:
+            raise ValidationError(_("You cannot use program times on an event series."))
+        self.clean_start_end(start=self.start, end=self.end)
+        super().clean()
+
+    def clean_start_end(self, start: datetime = None, end: datetime = None):
+        if start and end and start > end:
+            raise ValidationError(_("The program end must not be before the program start."))

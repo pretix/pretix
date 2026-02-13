@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -79,6 +79,13 @@ class GiftCard(LoggedModel):
         on_delete=models.PROTECT,
         null=True, blank=True,
         verbose_name=_('Owned by ticket holder')
+    )
+    customer = models.ForeignKey(
+        'Customer',
+        related_name='customer_gift_cards',
+        on_delete=models.PROTECT,
+        null=True, blank=True,
+        verbose_name=_('Owned by customer account')
     )
     issuance = models.DateTimeField(
         auto_now_add=True,
@@ -195,20 +202,21 @@ class GiftCardTransaction(models.Model):
                 return response
 
         if self.order_id:
-            if not self.text:
-                if not customer_facing:
-                    return format_html(
-                        '<a href="{}">{}</a>',
-                        reverse(
-                            "control:event.order",
-                            kwargs={
-                                "event": self.order.event.slug,
-                                "organizer": self.order.event.organizer.slug,
-                                "code": self.order.code,
-                            }
-                        ),
-                        self.order.full_code
-                    )
+            if not customer_facing:
+                return format_html(
+                    '<a href="{}">{}</a> {}',
+                    reverse(
+                        "control:event.order",
+                        kwargs={
+                            "event": self.order.event.slug,
+                            "organizer": self.order.event.organizer.slug,
+                            "code": self.order.code,
+                        }
+                    ),
+                    self.order.full_code,
+                    self.text or "",
+                )
+            elif not self.text:
                 return self.order.full_code
             else:
                 return self.text

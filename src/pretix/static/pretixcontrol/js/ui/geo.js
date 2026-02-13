@@ -4,6 +4,26 @@ $(document).on("pretix:bind-forms", function () {
     function cleanup(l) {
         return $.trim(l.replace(/\n/g, ", "));
     }
+    function combine($sel) {
+        var parts = [
+            $sel.filter("[name*=street]").val(),
+            $sel.filter("[name*=zipcode]").val(),
+            $sel.filter("[name*=city]").val(),
+            $sel.filter("[name*=state]").val(),
+            $sel.filter("[name*=country]").find("option:selected").text(),
+            $sel.filter("[name*=location]").val(),
+        ]
+        var res = "";
+        for (var val of parts) {
+            if (val) {
+                if (res) {
+                    res += ", "
+                }
+                res += val
+            }
+        }
+        return cleanup(res)
+    }
     $(".geodata-section").each(function () {
         // Geocoding
         // detach notifications and append them to first label (should be from location)
@@ -13,8 +33,26 @@ $(document).on("pretix:bind-forms", function () {
         var lat;
         var lon;
         var $updateButton = $("[data-action=update]", this);
-        var $location = $("textarea[lang=en], input[lang=en]", this).first();
-        if (!$location.length) $location = $("textarea, input[type=text]", this).first();
+
+        var $location;
+        // The .geodata-section is expected to include either...
+        // ... an English "location" field
+        if ($("textarea[lang=en], input[lang=en]", this).length) {
+            $location = $("textarea[lang=en], input[lang=en], select", this).not("[name*=geo_]");
+        }
+
+        // ... a "location" field in any other language
+        if (!$location || !$location.length) {
+            var lang = $("textarea, input[type=text]", this).not("[name*=geo_]").first().attr("lang");
+            if (lang) {
+                $location = $("textarea[lang=" + lang + "], input[lang=" + lang + "], select", this);
+            }
+        }
+
+        // ... or a set of fields like a full address form
+        if (!$location || !$location.length) {
+            $location = $("textarea, input, select", this).not("[name*=geo_]");
+        }
 
         if (!$lat.length || !$lon.length || !$location.length) {
             return;
@@ -23,7 +61,7 @@ $(document).on("pretix:bind-forms", function () {
         var debounceLoad, debounceLatLonChange, delayUpdateDismissal;
         var touched = $lat.val() !== "";
         var xhr;
-        var lastLocation = cleanup($location.val());
+        var lastLocation = combine($location);
 
         function load() {
             window.clearTimeout(debounceLoad);
@@ -32,7 +70,7 @@ $(document).on("pretix:bind-forms", function () {
                 xhr = null;
             }
 
-            var q = cleanup($location.val());
+            var q = combine($location);
             if (q === "" || q === lastLocation) return;
 
             lastLocation = q;

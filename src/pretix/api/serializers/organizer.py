@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -24,6 +24,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
@@ -32,6 +33,7 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.auth.devicesecurity import get_all_security_profiles
 from pretix.api.serializers import AsymmetricField
+from pretix.api.serializers.fields import PluginsField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 from pretix.api.serializers.settings import SettingsSerializer
@@ -43,7 +45,11 @@ from pretix.base.models import (
     SalesChannel, SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
-from pretix.base.services.mail import SendMailException, mail
+from pretix.base.plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+    PLUGIN_LEVEL_ORGANIZER,
+)
+from pretix.base.services.mail import mail
 from pretix.base.settings import validate_organizer_settings
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -53,13 +59,47 @@ logger = logging.getLogger(__name__)
 
 class OrganizerSerializer(I18nAwareModelSerializer):
     public_url = serializers.SerializerMethodField('get_organizer_url', read_only=True)
+    plugins = PluginsField(required=False, source='*')
+    name = serializers.CharField(read_only=True)
+    slug = serializers.CharField(read_only=True)
 
     def get_organizer_url(self, organizer):
         return build_absolute_uri(organizer, 'presale:organizer.index')
 
     class Meta:
         model = Organizer
-        fields = ('name', 'slug', 'public_url')
+        fields = ('name', 'slug', 'public_url', 'plugins')
+
+    def validate_plugins(self, value):
+        from pretix.base.plugins import get_all_plugins
+
+        plugins_available = {
+            p.module: p for p in get_all_plugins(organizer=self.instance)
+            if not p.name.startswith('.') and getattr(p, 'visible', True)
+        }
+        settings_holder = self.instance
+
+        allowed_levels = (PLUGIN_LEVEL_ORGANIZER, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
+        for plugin in value.get('plugins'):
+            if plugin not in plugins_available:
+                raise ValidationError(_('Unknown plugin: \'{name}\'.').format(name=plugin))
+            if getattr(plugins_available[plugin], 'restricted', False):
+                if plugin not in settings_holder.settings.allowed_restricted_plugins:
+                    raise ValidationError(_('Restricted plugin: \'{name}\'.').format(name=plugin))
+            if getattr(plugins_available[plugin], 'level', PLUGIN_LEVEL_EVENT) not in allowed_levels:
+                raise ValidationError('Plugin cannot be enabled on this level: \'{name}\'.'.format(name=plugin))
+
+        return value
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        plugins = validated_data.pop('plugins', None)
+        organizer = super().update(instance, validated_data)
+        # Plugins
+        if plugins is not None:
+            organizer.set_active_plugins(plugins)
+            organizer.save()
+        return organizer
 
 
 class SeatingPlanSerializer(I18nAwareModelSerializer):
@@ -323,24 +363,21 @@ class TeamInviteSerializer(serializers.ModelSerializer):
         )
 
     def _send_invite(self, instance):
-        try:
-            mail(
-                instance.email,
-                _('pretix account invitation'),
-                'pretixcontrol/email/invitation.txt',
-                {
-                    'user': self,
-                    'organizer': self.context['organizer'].name,
-                    'team': instance.team.name,
-                    'url': build_global_uri('control:auth.invite', kwargs={
-                        'token': instance.token
-                    })
-                },
-                event=None,
-                locale=get_language_without_region()  # TODO: expose?
-            )
-        except SendMailException:
-            pass  # Already logged
+        mail(
+            instance.email,
+            _('pretix account invitation'),
+            'pretixcontrol/email/invitation.txt',
+            {
+                'user': self,
+                'organizer': self.context['organizer'].name,
+                'team': instance.team.name,
+                'url': build_global_uri('control:auth.invite', kwargs={
+                    'token': instance.token
+                })
+            },
+            event=None,
+            locale=get_language_without_region()  # TODO: expose?
+        )
 
     def create(self, validated_data):
         if 'email' in validated_data:
@@ -403,6 +440,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'customer_accounts',
         'customer_accounts_native',
         'customer_accounts_link_by_email',
+        'customer_accounts_require_login_for_order_access',
         'invoice_regenerate_allowed',
         'contact_mail',
         'imprint_url',
@@ -426,6 +464,9 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'organizer_logo_image_inherit',
         'organizer_logo_image',
         'privacy_url',
+        'accessibility_url',
+        'accessibility_title',
+        'accessibility_text',
         'cookie_consent',
         'cookie_consent_dialog_title',
         'cookie_consent_dialog_text',
@@ -441,6 +482,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'reusable_media_type_nfc_mf0aes',
         'reusable_media_type_nfc_mf0aes_autocreate_giftcard',
         'reusable_media_type_nfc_mf0aes_autocreate_giftcard_currency',
+        'reusable_media_type_nfc_mf0aes_random_uid',
     ]
 
     def __init__(self, *args, **kwargs):

@@ -18,7 +18,7 @@
         <input class="form-control" id="webauthn-response" name="webauthn"
                 type="hidden">
         {% if jsondata %}
-            <div class="sr-only alert alert-danger" id="webauthn-error">
+            <div class="alert alert-danger hidden" id="webauthn-error">
                 {% trans "WebAuthn failed. Check that the correct authentication device is correctly plugged in." %}
             </div>
             <p><small>

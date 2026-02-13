@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -29,17 +29,18 @@ import pytest
 from django.conf import settings
 from django.core import mail as djmail
 from django.db.models import F, Sum
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
 from django_scopes import scope
 from freezegun import freeze_time
+from i18nfield.strings import LazyI18nString
 from tests.testdummy.signals import FoobazSalesChannel
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, GiftCard, InvoiceAddress, Item, Order, OrderPosition,
-    Organizer, SeatingPlan,
+    CartPosition, Event, GiftCard, Invoice, InvoiceAddress, Item, Order,
+    OrderPosition, Organizer, SeatingPlan,
 )
 from pretix.base.models.items import SubEventItem
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
@@ -48,7 +49,9 @@ from pretix.base.payment import (
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.secrets import assign_ticket_secret
-from pretix.base.services.invoices import generate_invoice
+from pretix.base.services.invoices import (
+    generate_cancellation, generate_invoice,
+)
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, approve_order, cancel_order,
     deny_order, expire_orders, reactivate_order, send_download_reminders,
@@ -61,7 +64,7 @@ from pretix.testutils.scope import classscope
 
 @pytest.fixture(scope='function')
 def event():
-    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(),
@@ -574,6 +577,83 @@ def test_approve_send_to_attendees(event):
 
 
 @pytest.mark.django_db
+def test_approve_mail_invoice_attached(event):
+    djmail.outbox = []
+    event.settings.invoice_address_asked = True
+    event.settings.invoice_address_required = True
+    event.settings.invoice_generate = "True"
+    event.settings.invoice_email_attachment = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, require_approval=True, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"},
+        positionid=1
+    )
+    InvoiceAddress.objects.create(
+        order=o1,
+        is_business=True,
+        country=Country('AT'),
+        transmission_type="email",
+        transmission_info={}
+    )
+    o1.create_transactions()
+    assert o1.transactions.count() == 0
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert len(djmail.outbox) == 1
+    assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+
+
+@pytest.mark.django_db(transaction=True)
+def test_approve_mail_invoice_sent_somewhere_else(event):
+    djmail.outbox = []
+    event.settings.invoice_address_asked = True
+    event.settings.invoice_address_required = True
+    event.settings.invoice_generate = "True"
+    event.settings.invoice_email_attachment = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, require_approval=True, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"},
+        positionid=1
+    )
+    InvoiceAddress.objects.create(
+        order=o1,
+        is_business=True,
+        country=Country('AT'),
+        transmission_type="email",
+        transmission_info={
+            "transmission_email_address": "invoice@example.org",
+        }
+    )
+    o1.create_transactions()
+    assert o1.transactions.count() == 0
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert len(djmail.outbox) == 2
+    assert ["invoice@example.org"] == djmail.outbox[0].to
+    assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+    assert ["dummy@dummy.test"] == djmail.outbox[1].to
+    assert not any(["Invoice_" in a[0] for a in djmail.outbox[1].attachments])
+
+
+@pytest.mark.django_db
 def test_approve_free(event):
     djmail.outbox = []
     event.settings.invoice_generate = True
@@ -668,6 +748,118 @@ def test_deny(event):
     assert o1.invoices.count() == 2
     assert len(djmail.outbox) == 1
     assert 'denied' in djmail.outbox[0].subject
+
+
+@pytest.mark.django_db(transaction=True)
+def test_mark_invoices_as_sent(event):
+    djmail.outbox = []
+    event.settings.invoice_address_asked = True
+    event.settings.invoice_address_required = True
+    event.settings.invoice_generate = "True"
+    event.settings.invoice_email_attachment = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"},
+        positionid=1
+    )
+    ia = InvoiceAddress.objects.create(
+        order=o1,
+        is_business=True,
+        country=Country('AT'),
+        transmission_type="email",
+        transmission_info={
+            "transmission_email_address": "invoice@example.org",
+        }
+    )
+    o1.create_transactions()
+    i = generate_invoice(o1)
+    assert i.transmission_type == "email"
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
+    assert not i.transmission_provider
+
+    # Not marked as sent because it is not the right address
+    o1.send_mail(
+        subject=LazyI18nString({"en": "Hey"}),
+        template=LazyI18nString({"en": "Just wanted to send this invoice"}),
+        context={},
+        invoices=[i]
+    )
+    i.refresh_from_db()
+    assert i.transmission_type == "email"
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
+
+    # If no other address is there, order address will be accepted
+    ia.transmission_info = {}
+    ia.save()
+    o1.send_mail(
+        subject=LazyI18nString({"en": "Hey"}),
+        template=LazyI18nString({"en": "Just wanted to send this invoice"}),
+        context={},
+        invoices=[i]
+    )
+    i.refresh_from_db()
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_COMPLETED
+    assert i.transmission_provider == "email_pdf"
+
+
+@pytest.mark.django_db(transaction=True)
+@override_settings(EMAIL_BACKEND='pretix.testutils.mail.FailingEmailBackend')
+def test_mark_invoices_as_failed(event):
+    djmail.outbox = []
+    event.settings.invoice_address_asked = True
+    event.settings.invoice_address_required = True
+    event.settings.invoice_generate = "True"
+    event.settings.invoice_email_attachment = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"},
+        positionid=1
+    )
+    ia = InvoiceAddress.objects.create(
+        order=o1,
+        is_business=True,
+        country=Country('AT'),
+        transmission_type="email",
+        transmission_info={
+            "transmission_email_address": "invoice@example.org",
+        }
+    )
+    o1.create_transactions()
+    i = generate_invoice(o1)
+    assert i.transmission_type == "email"
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_PENDING
+    assert not i.transmission_provider
+
+    # If no other address is there, order address will be accepted
+    ia.transmission_info = {}
+    ia.save()
+    o1.send_mail(
+        subject=LazyI18nString({"en": "Hey"}),
+        template=LazyI18nString({"en": "Just wanted to send this invoice"}),
+        context={},
+        invoices=[i]
+    )
+    i.refresh_from_db()
+    assert i.transmission_status == Invoice.TRANSMISSION_STATUS_FAILED
+    assert i.transmission_provider == "email_pdf"
 
 
 class PaymentReminderTests(TestCase):
@@ -1033,6 +1225,12 @@ class DownloadReminderTests(TestCase):
         assert len(djmail.outbox) == 0
 
 
+@pytest.fixture
+def class_monkeypatch(request, monkeypatch):
+    request.cls.monkeypatch = monkeypatch
+
+
+@pytest.mark.usefixtures("class_monkeypatch")
 class OrderCancelTests(TestCase):
     def setUp(self):
         super().setUp()
@@ -1060,6 +1258,7 @@ class OrderCancelTests(TestCase):
             self.order.create_transactions()
             generate_invoice(self.order)
             djmail.outbox = []
+        self.monkeypatch.setattr("django.db.transaction.on_commit", lambda t: t())
 
     @classscope(attr='o')
     def test_cancel_canceled(self):
@@ -1112,12 +1311,62 @@ class OrderCancelTests(TestCase):
         assert self.order.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] == Decimal('0.00')
 
     @classscope(attr='o')
+    def test_cancel_mail_invoice_attached(self):
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+        InvoiceAddress.objects.update_or_create(
+            order=self.order,
+            defaults=dict(
+                is_business=True,
+                country=Country('AT'),
+                transmission_type="email",
+                transmission_info={}
+            )
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        djmail.outbox = []
+        cancel_order(self.order.pk, send_mail=True)
+        assert len(djmail.outbox) == 1
+        assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+
+    @classscope(attr='o')
+    def test_cancel_mail_invoice_sent_somewhere_else(self):
+        self.event.settings.invoice_generate = "True"
+        self.event.settings.invoice_email_attachment = True
+        InvoiceAddress.objects.update_or_create(
+            order=self.order,
+            defaults=dict(
+                is_business=True,
+                country=Country('AT'),
+                transmission_type="email",
+                transmission_info={
+                    "transmission_email_address": "invoice@example.org",
+                }
+            )
+        )
+        # Recreate invoice because otherwise it will be sent where the original was sent
+        generate_cancellation(self.order.invoices.get())
+        generate_invoice(self.order)
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        djmail.outbox = []
+        cancel_order(self.order.pk, send_mail=True)
+        print([s.subject for s in djmail.outbox])
+        print([s.to for s in djmail.outbox])
+        assert len(djmail.outbox) == 2
+        assert ["invoice@example.org"] == djmail.outbox[0].to
+        assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+        assert ["dummy@dummy.test"] == djmail.outbox[1].to
+        assert not any(["Invoice_" in a[0] for a in djmail.outbox[1].attachments])
+
+    @classscope(attr='o')
     def test_cancel_paid_with_too_high_fee(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
         self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
         with pytest.raises(OrderError):
-            cancel_order(self.order.pk, cancellation_fee=50)
+            cancel_order(self.order.pk, cancellation_fee=Decimal("50.00"))
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         assert self.order.total == 46
@@ -1131,7 +1380,7 @@ class OrderCancelTests(TestCase):
         self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
         self.op1.voucher = self.event.vouchers.create(item=self.ticket, redeemed=1)
         self.op1.save()
-        cancel_order(self.order.pk, cancellation_fee=2.5)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.50"))
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         self.op1.refresh_from_db()
@@ -1158,7 +1407,7 @@ class OrderCancelTests(TestCase):
         self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
         self.op1.voucher = self.event.vouchers.create(item=self.ticket, redeemed=1)
         self.op1.save()
-        cancel_order(self.order.pk, cancellation_fee=2.5)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.50"))
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PAID
         self.op1.refresh_from_db()
@@ -1172,7 +1421,7 @@ class OrderCancelTests(TestCase):
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
             provider='testdummy_partialrefund'
         )
-        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.amount == Decimal('44.00')
@@ -1190,7 +1439,7 @@ class OrderCancelTests(TestCase):
             provider='giftcard',
             info='{"gift_card": %d}' % gc.pk
         )
-        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.amount == Decimal('44.00')
@@ -1209,7 +1458,7 @@ class OrderCancelTests(TestCase):
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
             provider='testdummy_partialrefund'
         )
-        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         r = self.order.refunds.get()
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert gc.value == Decimal('0.00')
@@ -1224,7 +1473,7 @@ class OrderCancelTests(TestCase):
             provider='testdummy_partialrefund'
         )
         with pytest.raises(OrderError):
-            cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+            cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         assert gc.value == Decimal('20.00')
 
     @classscope(attr='o')
@@ -1234,19 +1483,21 @@ class OrderCancelTests(TestCase):
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
             provider='testdummy_fullrefund'
         )
-        cancel_order(self.order.pk, cancellation_fee=2, try_auto_refund=True)
+        cancel_order(self.order.pk, cancellation_fee=Decimal("2.00"), try_auto_refund=True)
         assert not self.order.refunds.exists()
         assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
 
 
+@pytest.mark.usefixtures("class_monkeypatch")
 class OrderChangeManagerTests(TestCase):
     def setUp(self):
         super().setUp()
-        self.o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
         with scope(organizer=self.o):
             self.event = Event.objects.create(organizer=self.o, name='Dummy', slug='dummy', date_from=now(),
                                               plugins='pretix.plugins.banktransfer')
             self.event.settings.invoice_generate = "True"
+            self.event.settings.invoice_email_attachment = True
             self.order = Order.objects.create(
                 code='FOO', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING, locale='en',
@@ -1258,7 +1509,7 @@ class OrderChangeManagerTests(TestCase):
                 provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CREATED, amount=self.order.total
             )
             self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
-            self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
+            self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'), default=True)
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket', tax_rule=self.tr7,
                                               default_price=Decimal('23.00'), admission=True)
             self.ticket2 = Item.objects.create(event=self.event, name='Other ticket', tax_rule=self.tr7,
@@ -1301,6 +1552,7 @@ class OrderChangeManagerTests(TestCase):
             self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.stalls, seat_guid="A1")
             self.seat_a2 = self.event.seats.create(seat_number="A2", product=self.stalls, seat_guid="A2")
             self.seat_a3 = self.event.seats.create(seat_number="A3", product=self.stalls, seat_guid="A3")
+        self.monkeypatch.setattr("django.db.transaction.on_commit", lambda t: t())
 
     def _enable_reverse_charge(self):
         self.tr7.eu_reverse_charge = True
@@ -1569,6 +1821,63 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == self.op1.price + self.op2.price
 
     @classscope(attr='o')
+    def test_change_price_with_rounding_change_impossible(self):
+        # Order starts with 2*100€ tickets, but rounding corrects it to 199€. Then, the user tries to force both prices
+        # to 100€. No luck.
+        self.order.status = Order.STATUS_PAID
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.op1.price = Decimal("100.00")
+        self.op1._calculate_tax(tax_rule=self.tr19)
+        self.op1.save()
+        self.op2.price = Decimal("100.00")
+        self.op2._calculate_tax(tax_rule=self.tr19)
+        self.op2.save()
+        self.order.refresh_from_db()
+        self.ocm.regenerate_secret(self.op1)
+        self.ocm.commit()  # Force re-rounding
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+        assert self.order.total == Decimal("199.99")
+
+        self.ocm.change_price(self.op1, Decimal('100.00'))
+        self.ocm.change_price(self.op2, Decimal('100.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.op2.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal("199.99")
+        assert self.op1.price == Decimal('99.99')
+        assert self.op2.price == Decimal('100.00')
+
+    @classscope(attr='o')
+    def test_change_price_with_rounding_change_autocorrected(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.op1.price = Decimal("0.00")
+        self.op1._calculate_tax(tax_rule=self.tr19)
+        self.op1.save()
+        self.op2.price = Decimal("100.00")
+        self.op2._calculate_tax(tax_rule=self.tr19)
+        self.op2.save()
+        self.order.refresh_from_db()
+        self.ocm.regenerate_secret(self.op1)
+        self.ocm.commit()  # Force re-rounding
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+        assert self.order.total == Decimal("100.00")
+
+        self.ocm.change_price(self.op1, Decimal('100.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.op2.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal("199.99")
+        assert self.op1.price == Decimal('99.99')
+        assert self.op2.price == Decimal('100.00')
+
+    @classscope(attr='o')
     def test_change_price_net_success(self):
         self.tr7.price_includes_tax = False
         self.tr7.save()
@@ -1579,6 +1888,27 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.item == self.ticket
         assert self.op1.price == Decimal('10.70')
         assert round_decimal(self.op1.price * (1 - 100 / (100 + self.op1.tax_rate))) == self.op1.tax_value
+        assert self.order.total == self.op1.price + self.op2.price
+
+    @classscope(attr='o')
+    def test_change_price_reverse_charge_success(self):
+        self._enable_reverse_charge()
+        self.op1.tax_rate = Decimal("0.00")
+        self.op1.tax_value = Decimal("0.00")
+        self.op1.tax_code = "AE"
+        self.op1.save()
+        self.op2.tax_rate = Decimal("0.00")
+        self.op2.tax_value = Decimal("0.00")
+        self.op2.tax_code = "AE"
+        self.op2.save()
+        self.ocm.change_price(self.op1, Decimal('1000.00'))
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.item == self.ticket
+        assert self.op1.price == Decimal('1000.00')
+        assert self.op1.tax_value == Decimal('0.00')
+        assert self.op1.tax_rate == Decimal('0.00')
         assert self.order.total == self.op1.price + self.op2.price
 
     @classscope(attr='o')
@@ -1714,12 +2044,43 @@ class OrderChangeManagerTests(TestCase):
             self.ocm.change_price(self.op1, 25)
 
     @classscope(attr='o')
+    def test_cancel_and_change_addon(self):
+        se1 = self.event.subevents.create(name="Foo", date_from=now())
+        se2 = self.event.subevents.create(name="Bar", date_from=now())
+        self.op1.subevent = se1
+        self.op1.save()
+        self.op2.subevent = se1
+        self.op2.save()
+        self.quota.subevent = se2
+        self.quota.save()
+        op3 = OrderPosition.objects.create(
+            order=self.order, item=self.ticket, variation=None, addon_to=self.op1,
+            price=Decimal("0.00"), positionid=3, subevent=se1,
+        )
+
+        self.ocm.cancel(self.op1)
+        self.ocm.change_subevent(op3, se2)
+        self.ocm.commit()
+        # Expected: the addon is also canceled
+        # Bug we had: the addon is not canceled
+        op3.refresh_from_db()
+        assert op3.canceled
+
+    @classscope(attr='o')
     def test_cancel_all_in_order(self):
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        self.ticket.addons.create(addon_category=self.shirt.category)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), addon_to=self.op1)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+
+        assert self.order.positions.count() == 3
         self.ocm.cancel(self.op1)
         self.ocm.cancel(self.op2)
         with self.assertRaises(OrderError):
             self.ocm.commit()
-        assert self.order.positions.count() == 2
+        assert self.order.positions.count() == 3
 
     @classscope(attr='o')
     def test_empty(self):
@@ -1816,7 +2177,6 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_payment_fee_calculation(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
         self.ocm.change_price(self.op1, Decimal('24.00'))
@@ -1830,7 +2190,6 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_pending_free_order_stays_pending(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         self.ocm.change_price(self.op1, Decimal('0.00'))
         self.ocm.change_price(self.op2, Decimal('0.00'))
         self.ocm.commit()
@@ -1995,6 +2354,22 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.transactions.filter(item=self.shirt).last().tax_code == "AE"
 
     @classscope(attr='o')
+    def test_add_item_with_price_reverse_charge(self):
+        self._enable_reverse_charge()
+        self.ocm.add_position(self.shirt, None, Decimal("1.00"), None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.price == Decimal('1.00')
+        assert nop.tax_rate == Decimal('0.00')
+        assert nop.tax_value == Decimal('0.00')
+        assert self.order.total == self.op1.price + self.op2.price + nop.price
+        assert nop.positionid == 3
+        assert self.order.transactions.filter(item=self.shirt).last().tax_code == "AE"
+
+    @classscope(attr='o')
     def test_add_item_custom_price(self):
         self.ocm.add_position(self.shirt, None, Decimal('13.00'), None)
         self.ocm.commit()
@@ -2089,6 +2464,34 @@ class OrderChangeManagerTests(TestCase):
         assert nop.item == self.ticket
         assert nop.price == Decimal('12.00')
         assert nop.subevent == se1
+
+    @classscope(attr='o')
+    def test_add_item_result_value(self):
+        res_shirt = self.ocm.add_position(self.shirt, None, None, None)
+        res_ticket2 = self.ocm.add_position(self.ticket2, None, None, None)
+        with self.assertRaises(RuntimeError):
+            _ = res_ticket2.position
+        self.ocm.commit()
+        assert res_shirt.position.item == self.shirt
+        assert res_ticket2.position.item == self.ticket2
+
+    @classscope(attr='o')
+    def test_add_item_with_rounding(self):
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.ocm.add_position(self.ticket, None, None, None)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        op1, op2, op3 = self.order.positions.all()
+        assert op1.price == Decimal("23.01")
+        assert op1.price_includes_rounding_correction == Decimal("0.01")
+        assert op2.price == Decimal("23.01")
+        assert op2.price_includes_rounding_correction == Decimal("0.01")
+        assert op3.price == Decimal("23.00")
+        assert op3.price_includes_rounding_correction == Decimal("0.00")
+        assert self.order.total == Decimal("69.02")
+        assert self.order.transactions.count() == 7
 
     @classscope(attr='o')
     def test_reissue_invoice(self):
@@ -2202,10 +2605,9 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_recalculate_country_rate(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
-        self.ocm._recalculate_total_and_payment_fee()
+        self.ocm._recalculate_rounding_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -2235,10 +2637,9 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_recalculate_country_rate_keep_gross(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
-        self.ocm._recalculate_total_and_payment_fee()
+        self.ocm._recalculate_rounding_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -2266,10 +2667,9 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_recalculate_reverse_charge(self):
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_abs', Decimal('0.30'))
-        self.ocm._recalculate_total_and_payment_fee()
+        self.ocm._recalculate_rounding_total_and_payment_fee()
 
         assert self.order.total == Decimal('46.30')
         fee = self.order.fees.get(fee_type=OrderFee.FEE_TYPE_PAYMENT)
@@ -2425,7 +2825,6 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_split_pending_payment_fees(self):
         # Set payment fees
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_percent', Decimal('2.00'))
         prov.settings.set('_fee_abs', Decimal('1.00'))
@@ -2499,6 +2898,61 @@ class OrderChangeManagerTests(TestCase):
         p = o2.payments.last()
         assert p.provider == 'offsetting'
         assert p.amount == Decimal('23.00')
+        assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+
+    @classscope(attr='o')
+    def test_split_with_rounding_change(self):
+        # Order starts with 2*100€ tickets, but rounding corrects it to 199€. Then, it gets split, so its now 100 + 100
+        # and 1€ is pending. Nasty, but we didn't choose the EN16931 rounding method…
+        self.order.status = Order.STATUS_PAID
+        self.order.tax_rounding_mode = "sum_by_net"
+        self.order.save()
+        self.op1.price = Decimal("100.00")
+        self.op1._calculate_tax(tax_rule=self.tr19)
+        self.op1.save()
+        self.op2.price = Decimal("100.00")
+        self.op2._calculate_tax(tax_rule=self.tr19)
+        self.op2.save()
+        self.order.refresh_from_db()
+        self.ocm.regenerate_secret(self.op1)
+        self.ocm.commit()  # Force re-rounding
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+
+        assert self.order.total == Decimal("199.99")
+        self.order.payments.create(
+            provider='manual',
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            amount=self.order.total,
+        )
+
+        # Split
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.op2.refresh_from_db()
+
+        # First order
+        assert self.order.total == Decimal('100.00')
+        assert not self.order.fees.exists()
+        assert self.order.pending_sum == Decimal('0.01')
+        assert self.order.status == Order.STATUS_PENDING
+        r = self.order.refunds.last()
+        assert r.provider == 'offsetting'
+        assert r.amount == Decimal('100.00')
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+
+        # New order
+        assert self.op2.order != self.order
+        o2 = self.op2.order
+        assert o2.total == Decimal('100.00')
+        assert o2.status == Order.STATUS_PAID
+        assert o2.positions.count() == 1
+        assert o2.fees.count() == 0
+        assert o2.pending_sum == Decimal('0.00')
+        p = o2.payments.last()
+        assert p.provider == 'offsetting'
+        assert p.amount == Decimal('100.00')
         assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
 
     @classscope(attr='o')
@@ -2629,7 +3083,6 @@ class OrderChangeManagerTests(TestCase):
         ia = self._enable_reverse_charge()
 
         # Set payment fees
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_percent', Decimal('2.00'))
         prov.settings.set('_fee_reverse_calc', False)
@@ -2723,7 +3176,6 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_split_paid_payment_fees(self):
         # Set payment fees
-        self.event.settings.set('tax_rate_default', self.tr19.pk)
         prov = self.ocm._get_payment_provider()
         prov.settings.set('_fee_percent', Decimal('2.00'))
         prov.settings.set('_fee_abs', Decimal('1.00'))
@@ -3464,6 +3916,79 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.valid_from is None
         assert self.op1.valid_until is None
+
+    @classscope(attr='o')
+    def test_new_invoice_attached(self):
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+        djmail.outbox = []
+        self.ocm.add_position(self.ticket, None, Decimal('0.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
+        assert len(djmail.outbox) == 1
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[0].attachments]) == 2
+
+    @classscope(attr='o')
+    def test_new_invoice_send_somewhere_else(self):
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+
+        InvoiceAddress.objects.update_or_create(
+            order=self.order,
+            defaults=dict(
+                is_business=True,
+                country=Country('AT'),
+                transmission_type="email",
+                transmission_info={
+                    "transmission_email_address": "invoice@example.org",
+                }
+            )
+        )
+
+        djmail.outbox = []
+        self.ocm.add_position(self.ticket, None, Decimal('0.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
+
+        # Cancellation is still sent to old method!
+        assert len(djmail.outbox) == 2
+        assert ["dummy@dummy.test"] == djmail.outbox[0].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[0].attachments]) == 1
+        assert ["invoice@example.org"] == djmail.outbox[1].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[1].attachments]) == 1
+
+    @classscope(attr='o')
+    def test_new_invoice_split_send_somewhere_else(self):
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+
+        InvoiceAddress.objects.update_or_create(
+            order=self.order,
+            defaults=dict(
+                is_business=True,
+                country=Country('AT'),
+                transmission_type="email",
+                transmission_info={
+                    "transmission_email_address": "invoice@example.org",
+                }
+            )
+        )
+
+        djmail.outbox = []
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
+
+        # Cancellation is still sent to old method!
+        assert len(djmail.outbox) == 4
+        assert ["dummy@dummy.test"] == djmail.outbox[0].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[0].attachments]) == 1
+        assert ["dummy@dummy.test"] == djmail.outbox[1].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[1].attachments]) == 0
+        assert ["invoice@example.org"] == djmail.outbox[2].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[2].attachments]) == 1
+        assert ["invoice@example.org"] == djmail.outbox[3].to
+        assert len(["Invoice_" in a[0] for a in djmail.outbox[3].attachments]) == 1
 
 
 @pytest.mark.django_db

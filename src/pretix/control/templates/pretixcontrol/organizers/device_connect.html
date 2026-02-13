@@ -21,8 +21,17 @@
                 <script type="text/json" data-replace-with-qr>{{ qrdata|safe }}</script><br>
                 {% trans "If your app/device does not support scanning a QR code, you can also enter the following information:" %}
                 <br>
-                <strong>{% trans "System URL:" %}</strong> <code>{{ settings.SITE_URL }}</code><br>
-                <strong>{% trans "Token:" %}</strong> <code>{{ device.initialization_token }}</code>
+                <strong>{% trans "System URL:" %}</strong> <code id="system_url">{{ settings.SITE_URL }}</code>
+                <button type="button" class="btn btn-default btn-xs btn-clipboard js-only" data-clipboard-target="#system_url">
+                    <i class="fa fa-clipboard" aria-hidden="true"></i>
+                    <span class="sr-only">{% trans "Copy to clipboard" %}</span>
+                </button>
+                <br>
+                <strong>{% trans "Token:" %}</strong> <code id="init_token">{{ device.initialization_token }}</code>
+                <button type="button" class="btn btn-default btn-xs btn-clipboard js-only" data-clipboard-target="#init_token">
+                    <i class="fa fa-clipboard" aria-hidden="true"></i>
+                    <span class="sr-only">{% trans "Copy to clipboard" %}</span>
+                </button>
             </li>
         </ol>
     </div>

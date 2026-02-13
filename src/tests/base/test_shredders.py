@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -31,7 +31,7 @@ from django_scopes import scope
 
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Event, InvoiceAddress, Order,
-    OrderPayment, OrderPosition, Organizer, QuestionAnswer,
+    OrderPayment, OrderPosition, Organizer, OutgoingMail, QuestionAnswer,
 )
 from pretix.base.services.invoices import generate_invoice, invoice_pdf_task
 from pretix.base.services.tickets import generate
@@ -45,7 +45,7 @@ from pretix.base.shredder import (
 
 @pytest.fixture
 def event():
-    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
@@ -111,6 +111,15 @@ def test_email_shredder(event, order):
             'new_email': 'foo@bar.com',
         }
     )
+    m = OutgoingMail.objects.create(
+        event=event,
+        order=order,
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+        headers={},
+    )
 
     s = EmailAddressShredder(event)
     f = list(s.generate_files())
@@ -129,6 +138,7 @@ def test_email_shredder(event, order):
     assert 'Foo' not in l1.data
     l2.refresh_from_db()
     assert '@' not in l2.data
+    assert not OutgoingMail.objects.filter(pk=m.pk).exists()
 
 
 @pytest.mark.django_db
@@ -140,7 +150,7 @@ def test_waitinglist_shredder(event, item):
     )
     wle.send_voucher()
     assert '@' in wle.voucher.comment
-    assert '@' in wle.voucher.all_logentries().last().data
+    assert '@' in wle.voucher.all_logentries().get(action_type="pretix.voucher.added.waitinglist").data
     s = WaitingListShredder(event)
     f = list(s.generate_files())
     assert json.loads(f[0][2]) == [
@@ -166,7 +176,7 @@ def test_waitinglist_shredder(event, item):
     assert '@' not in wle.email
     assert '+49' not in str(wle.phone)
     assert '@' not in wle.voucher.comment
-    assert '@' not in wle.voucher.all_logentries().last().data
+    assert '@' not in wle.voucher.all_logentries().get(action_type="pretix.voucher.added.waitinglist").data
 
 
 @pytest.mark.django_db
@@ -208,14 +218,20 @@ def test_invoice_address_shredder(event, order):
         'pretix.event.order.modified',
         data={
             "data": [{"attendee_name": "Hans", "question_1": "Test"}],
-            "invoice_data": {"name": "Peter", "country": "DE", "is_business": False, "internal_reference": "",
-                             "state": "",
-                             "company": "ACME", "street": "Sesam Street", "city": "Sample City", "zipcode": "12345"}
+            "invoice_data": {
+                "name": "Peter", "country": "DE", "is_business": False, "internal_reference": "",
+                "state": "", "company": "ACME", "street": "Sesam Street", "city": "Sample City", "zipcode": "12345",
+                "transmission_type": "email", "transmission_info": {"transmission_email_address": "other@example.org"}
+            }
         }
     )
-    ia = InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street',
-                                       zipcode='12345', city='London', country='UK',
-                                       order=order)
+    ia = InvoiceAddress.objects.create(
+        company='Acme Company', street='221B Baker Street',
+        zipcode='12345', city='London', country='UK',
+        order=order, transmission_type="email", transmission_info={
+            "transmission_email_address": "other@example.org"
+        }
+    )
     s = InvoiceAddressShredder(event)
     f = list(s.generate_files())
     assert json.loads(f[0][2]) == {
@@ -233,7 +249,9 @@ def test_invoice_address_shredder(event, order):
             'street': '221B Baker Street',
             'vat_id': '',
             'vat_id_validated': False,
-            'zipcode': '12345'
+            'zipcode': '12345',
+            "transmission_type": "email",
+            "transmission_info": {"transmission_email_address": "other@example.org"}
         }
     }
     s.shred_data()
@@ -243,7 +261,9 @@ def test_invoice_address_shredder(event, order):
     assert l1.parsed_data == {
         "data": [{"attendee_name": "Hans", "question_1": "Test"}],
         "invoice_data": {"name": "█", "country": "█", "is_business": False, "internal_reference": "", "company": "█",
-                         "street": "█", "city": "█", "zipcode": "█", "state": ""}
+                         "street": "█", "city": "█", "zipcode": "█", "state": "",
+                         "transmission_type": "email",
+                         "transmission_info": {"_shredded": True}}
     }
 
 

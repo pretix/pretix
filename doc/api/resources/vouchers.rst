@@ -14,6 +14,7 @@ The voucher resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the voucher
+created                               datetime                   The creation date of the voucher. For vouchers created before pretix 2025.7.0, this is guessed retroactively and might not be accurate.
 code                                  string                     The voucher code that is required to redeem the voucher
 max_usages                            integer                    The maximum number of times this voucher can be
                                                                  redeemed (default: 1).
@@ -49,7 +50,13 @@ subevent                              integer                    ID of the date 
 show_hidden_items                     boolean                    Only if set to ``true``, this voucher allows to buy products with the property ``hide_without_voucher``. Defaults to ``true``.
 all_addons_included                   boolean                    If set to ``true``, all add-on products for the product purchased with this voucher are included in the base price.
 all_bundles_included                  boolean                    If set to ``true``, all bundled products for the product purchased with this voucher are added without their designated price.
+budget                                money (string)             The budget a voucher is allowed to consume before being used up (or ``null``)
+budget_used                           money (string)             The amount of budget the voucher has already used up.
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 2025.7
+
+    The attributes ``created``, ``budget``, and ``budget_used`` have been added.
 
 
 Endpoints
@@ -82,6 +89,7 @@ Endpoints
         "results": [
           {
             "id": 1,
+            "created": "2020-09-18T14:17:40.971519Z",
             "code": "43K6LKM37FBVR2YG",
             "max_usages": 1,
             "redeemed": 0,
@@ -99,7 +107,9 @@ Endpoints
             "subevent": null,
             "show_hidden_items": false,
             "all_addons_included": false,
-            "all_bundles_included": false
+            "all_bundles_included": false,
+            "budget": None,
+            "budget_used": "0.00"
           }
         ]
       }
@@ -152,6 +162,7 @@ Endpoints
 
       {
         "id": 1,
+        "created": "2020-09-18T14:17:40.971519Z",
         "code": "43K6LKM37FBVR2YG",
         "max_usages": 1,
         "redeemed": 0,
@@ -169,7 +180,9 @@ Endpoints
         "subevent": null,
         "show_hidden_items": false,
         "all_addons_included": false,
-        "all_bundles_included": false
+        "all_bundles_included": false,
+        "budget": None,
+        "budget_used": "0.00"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -222,6 +235,7 @@ Endpoints
 
       {
         "id": 1,
+        "created": "2020-09-18T14:17:40.971519Z",
         "code": "43K6LKM37FBVR2YG",
         "max_usages": 1,
         "redeemed": 0,
@@ -239,7 +253,9 @@ Endpoints
         "subevent": null,
         "show_hidden_items": false,
         "all_addons_included": false,
-        "all_bundles_included": false
+        "all_bundles_included": false,
+        "budget": None,
+        "budget_used": "0.00"
       }
 
    :param organizer: The ``slug`` field of the organizer to create a voucher for
@@ -313,6 +329,7 @@ Endpoints
       [
         {
           "id": 1,
+          "created": "2020-09-18T14:17:40.971519Z",
           "code": "43K6LKM37FBVR2YG",
           …
         }, …
@@ -359,6 +376,7 @@ Endpoints
 
       {
         "id": 1,
+        "created": "2020-09-18T14:17:40.971519Z",
         "code": "43K6LKM37FBVR2YG",
         "max_usages": 1,
         "redeemed": 0,
@@ -376,7 +394,9 @@ Endpoints
         "subevent": null,
         "show_hidden_items": false,
         "all_addons_included": false,
-        "all_bundles_included": false
+        "all_bundles_included": false,
+        "budget": None,
+        "budget_used": "0.00"
       }
 
    :param organizer: The ``slug`` field of the organizer to modify

@@ -1,0 +1,86 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h2>{% trans "Sync problems" %}</h2>
+    <p>
+        {% blocktrans trimmed %}
+            On this page, we provide a list of orders where data synchronization to an external system has failed.
+            You can start another attempt to sync them manually.
+        {% endblocktrans %}
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        {% if queue_items %}
+                            <label aria-label="{% trans "select all rows for batch-operation" %}"
+                               class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                        {% endif %}
+                    </th>
+                    <th>{% trans "Order" %}</th>
+                    <th>{% trans "Sync provider" %}</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Failure mode" %}</th>
+                    {% if staff_session %}
+                        <th>in_flight</th><th>retry</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in queue_items %}
+                    <tr>
+                        <td><input type="checkbox" name="idlist" value="{{ item.pk }}"></td>
+                        <td>
+                            {% if staff_session %}{{ item.order.event.organizer.slug }} -{% endif %}
+                            <a href="{% url "control:event.order" event=item.order.event.slug organizer=item.order.event.organizer.slug code=item.order.code %}">
+                                {{ item.order.full_code }}
+                            </a>
+                        </td>
+                        <td>{{ item.provider_display_name }}</td>
+                        <td>
+                            {{ item.triggered }}
+                            {% if staff_session %}({{ item.triggered_by }}){% endif %}
+                        </td>
+                        <td>
+                            {% if item.need_manual_retry %}
+                                {{ item.get_need_manual_retry_display }}
+                            {% else %}
+                                {% blocktrans trimmed with datetime=item.not_before|date:"SHORT_DATETIME_FORMAT" %}
+                                Temporary error, will retry after {{ datetime }}
+                                {% endblocktrans %}
+                            {% endif %}
+                            {% if staff_session %}({{ item.need_manual_retry }}){% endif %}
+                        </td>
+                        {% if staff_session %}
+                            <td>{{ item.in_flight }} ({{ item.in_flight_since }})</td><td>{{ item.failed_attempts }} / {{ item.max_retry_attempts }} ({{ item.not_before }})</td>
+                        {% endif %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">{% trans "No problems." %}</td>
+                        {% if staff_session %}
+                            <td></td><td></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% if queue_items %}
+            <tfoot>
+                <tr>
+                    <td colspan="5">
+                        <button type="submit" name="action" value="retry" class="btn btn-primary"><i class="fa fa-refresh"></i> {% trans "Retry selected" %}</button>
+                        <button type="submit" name="action" value="cancel" class="btn btn-danger"><i class="fa fa-times"></i> {% trans "Cancel selected" %}</button>
+                    </td>
+                    {% if staff_session %}
+                        <td></td><td></td>
+                    {% endif %}
+                </tr>
+            </tfoot>
+        {% endif %}
+        </table>
+    </form>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

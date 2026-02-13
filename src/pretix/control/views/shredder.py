@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -38,7 +38,8 @@ from collections import OrderedDict
 from zipfile import ZipFile
 
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect
+from django.http import Http404
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import get_language, gettext_lazy as _
@@ -94,6 +95,8 @@ class ShredDownloadView(RecentAuthenticationRequiredMixin, EventPermissionRequir
             cf = CachedFile.objects.get(pk=kwargs['file'])
         except CachedFile.DoesNotExist:
             raise ShredError(_("The download file could no longer be found on the server, please try to start again."))
+        if not cf.allowed_for_session(self.request):
+            raise Http404()
 
         with ZipFile(cf.file.file, 'r') as zipfile:
             indexdata = json.loads(zipfile.read('index.json').decode())
@@ -111,7 +114,7 @@ class ShredDownloadView(RecentAuthenticationRequiredMixin, EventPermissionRequir
         ctx = super().get_context_data(**kwargs)
         ctx['shredders'] = self.shredders
         ctx['download_on_shred'] = any(shredder.require_download_confirmation for shredder in shredders)
-        ctx['file'] = get_object_or_404(CachedFile, pk=kwargs.get("file"))
+        ctx['file'] = cf
         return ctx
 
 

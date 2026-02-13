@@ -3,13 +3,16 @@
 @import "../../bootstrap/scss/bootstrap/variables";
 @import "../../bootstrap/scss/bootstrap/mixins";
 
+// Equivalent of our usual #f9f9f9, but in a way that works on other background colors
+$table-bg-accent: rgba(128, 128, 128, 0.05);
+
 .pretix-widget-hidden {
   display: none;
 }
 .pretix-widget, .pretix-widget-alert-box {
   a {
     color: $link-color;
-    text-decoration: none;
+    text-decoration: underline;
 
     &:hover,
     &:focus {
@@ -17,9 +20,9 @@
       text-decoration: $link-hover-decoration;
     }
     &:focus {
-      outline: thin dotted;
-      outline: 5px auto -webkit-focus-ring-color;
-      outline-offset: -2px;
+      outline: 2px solid $brand-primary;
+      outline-offset: 2px;
+      z-index: 999;
     }
   }
   img {
@@ -57,6 +60,9 @@
       &.focus {
         text-decoration: none;
         @include tab-focus;
+        outline: 2px solid $brand-primary;
+        outline-offset: 2px;
+        z-index: 999;
       }
     }
     &.disabled,
@@ -72,6 +78,7 @@
   }
   label.pretix-widget-btn-checkbox {
     @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border, darken($btn-default-bg, 10%), darken($btn-default-border, 25%), darken($btn-default-border, 12%));
+    border-radius: $input-border-radius;
     border-width: 1px;
     border-style: solid;
     position: relative;
@@ -87,6 +94,11 @@
     &:has(input:checked) {
       background-color: #e6e6e6;
       border-color: #adadad;
+    }
+    &:focus-within {
+      outline: 2px solid $brand-primary;
+      outline-offset: 2px;
+      z-index: 999;
     }
   }
   .pretix-widget-icon-cart {
@@ -104,7 +116,7 @@
     line-height: normal;
     border: 1px solid $input-border;
     border-radius: $input-border-radius;
-    height: $input-height-base;
+    min-height: $input-height-base;
     padding: $padding-base-vertical $padding-base-horizontal;
     color: $input-color;
     background-color: $input-bg;
@@ -114,9 +126,9 @@
     $color-rgba: rgba(red($input-border-focus), green($input-border-focus), blue($input-border-focus), .6);
 
     &:focus {
-      border-color: $input-border-focus;
-      outline: 0;
-      @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px $color-rgba);
+      outline: 2px solid $brand-primary;
+      outline-offset: 2px;
+      z-index: 999;
     }
   }
   input[type=number] {
@@ -151,7 +163,6 @@
   border-radius: $input-border-radius;
 
   .pretix-widget-resume-button {
-    float: right;
     margin-left: 10px;
   }
 
@@ -160,13 +171,25 @@
   }
 
   .pretix-widget-info-message {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     padding: 10px;
     text-align: left;
     margin: 10px 0;
     background-color: white;
     border: 2px solid $brand-info;
-    color: $brand-info;
+    color: $state-info-text;
     border-radius: $alert-border-radius;
+  }
+  &.pretix-widget-mobile {
+    .pretix-widget-info-message {
+      flex-direction: column;
+    }
+    .pretix-widget-resume-button {
+      margin-top: 10px;
+      margin-left: 0;
+    }
   }
 
   .pretix-widget-error-message {
@@ -175,7 +198,7 @@
     margin: 10px 0;
     background-color: white;
     border: 2px solid $brand-danger;
-    color: $brand-danger;
+    color: $state-danger-text;
     border-radius: $alert-border-radius;
   }
 
@@ -352,11 +375,14 @@
     font-size: 12px;
   }
 
-  .pretix-widget-item-picture {
+  .pretix-widget-item-picture-link {
     width: 60px;
     height: 60px;
     margin-right: 10px;
     float: left;
+  }
+  .pretix-widget-item-picture {
+    max-width: 100%;
   }
 
   .pretix-widget-action {
@@ -430,6 +456,17 @@
 
   .pretix-widget-item-availability-col {
     text-align: center;
+
+    .pretix-widget-collapse-indicator {
+      width: 100%;
+
+      border: 1px solid $input-border;
+      border-radius: $input-border-radius;
+      height: $input-height-base;
+      padding: $padding-base-vertical $padding-base-horizontal;
+      color: $input-color;
+      background-color: $input-bg;
+    }
 
     .pretix-widget-collapse-indicator::before {
       content: "";
@@ -514,6 +551,10 @@
     flex-wrap: wrap;
     color: $text-color;
 
+    &:has(.pretix-widget-event-list-entry-availability) {
+      text-decoration: none;
+    }
+
     &:hover, &:active, &:focus {
       background: $gray-lighter;
       text-decoration: none;
@@ -540,41 +581,59 @@
       padding: 7px 5px 3px;
       box-sizing: border-box;
       span {
+        position: relative;
         display: inline;
-        padding: 2px 6px 3px;
+        padding: 6px 6px 4px 17px;
         font-size: 75%;
         font-weight: bold;
         line-height: 1;
-        color: #fff;
+        color: var(--status-text-color, #000);
+        background-color: var(--status-bg-color, #fff);
+        border: 1px solid var(--status-border-color, #000);
         text-align: center;
         white-space: nowrap;
         vertical-align: baseline;
         border-radius: 4px;
       }
+      span:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 11px;
+        height: 100%;
+        background: var(--status-border-color, #000);
+      }
     }
   }
 
-  .pretix-widget-event-availability-orange .pretix-widget-event-list-entry-availability span,
-  .pretix-widget-event-availability-orange.pretix-widget-event-calendar-event {
-    background-color: $brand-warning;
+  .pretix-widget-event-availability-orange,
+  .pretix-widget-day-availability-orange {
+    --status-bg-color: #{$alert-warning-bg};
+    --status-text-color: #{$alert-warning-text};
+    --status-border-color: #{$alert-warning-border};
   }
-  .pretix-widget-event-availability-none .pretix-widget-event-list-entry-availability span,
-  .pretix-widget-event-availability-none.pretix-widget-event-calendar-event {
-    background-color: $brand-primary;
+  .pretix-widget-event-availability-none,
+  .pretix-widget-day-availability-none {
+    --status-bg-color: #{$alert-primary-bg};
+    --status-text-color: #{$alert-primary-text};
+    --status-border-color: #{$alert-primary-border};
   }
-  .pretix-widget-event-availability-green .pretix-widget-event-list-entry-availability span,
-  .pretix-widget-event-availability-green.pretix-widget-event-calendar-event {
-    background-color: $brand-success;
+  .pretix-widget-event-availability-green,
+  .pretix-widget-day-availability-green {
+    --status-bg-color: #{$alert-success-bg};
+    --status-text-color: #{$alert-success-text};
+    --status-border-color: #{$alert-success-border};
   }
-  .pretix-widget-event-availability-red .pretix-widget-event-list-entry-availability span,
-  .pretix-widget-event-availability-red.pretix-widget-event-calendar-event {
-    background-color: $brand-danger;
+  .pretix-widget-event-availability-red,
+  .pretix-widget-day-availability-red {
+    --status-bg-color: #{$alert-danger-bg};
+    --status-text-color: #{$alert-danger-text};
+    --status-border-color: #{$alert-danger-border};
   }
-  .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span {
-    border-left: 10px solid $brand-warning;
-  }
-  .pretix-widget-event-availability-low.pretix-widget-event-calendar-event {
-    border-right: 10px solid $brand-warning;
+  .pretix-widget-event-list .pretix-widget-event-availability-low .pretix-widget-event-list-entry-availability span:before,
+  .pretix-widget-event-calendar .pretix-widget-event-availability-low.pretix-widget-event-calendar-event:before {
+    background: linear-gradient(to bottom, var(--pretix-brand-warning) 1em, var(--status-border-color) 2.5em);
   }
 
   .pretix-widget-event-calendar {
@@ -587,13 +646,19 @@
 
       .pretix-widget-event-week-col {
         flex: 1;
-        margin: 0 5px;
+        margin: 0;
 
         &:first-child {
           margin-left: 0;
         }
         &:last-child {
           margin-right: 0;
+        }
+        &:nth-child(even) {
+          background-color: $table-bg-accent;
+        }
+        .pretix-widget-event-calendar-events {
+          margin: 4px;
         }
       }
     }
@@ -616,31 +681,62 @@
       }
     }
     .pretix-widget-event-calendar-event {
+      position: relative;
       display: block;
       border-radius: 4px;
+      border: 1px solid var(--status-border-color, #000);
+      background-color: var(--status-bg-color, #fff);
+      color: var(--status-text-color, #000);
       padding: 5px;
-      color: white;
+      padding-left: 17px;
       cursor: pointer;
       margin-bottom: 5px;
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 11px;
+        height: 100%;
+        background: var(--status-border-color, #000);
+      }
+
       &:last-child {
         margin-bottom: 0;
       }
-      &:hover {
-        text-decoration: none;
-      }
+      text-decoration: none;
     }
 
     .pretix-widget-event-calendar-table {
       width: 100%;
+      border-spacing: 0;
 
       th, td {
         width: 14.285714285714286%;
         vertical-align: top;
-        padding: 10px 5px;
+        padding: 4px;
+        border-bottom: 1px solid $table-border-color;
+      }
+      th {
+        border-bottom-width: 2px;
+        color: $text-muted;
+      }
+      td:has(.pretix-widget-event-calendar-day):nth-child(even) {
+        background: $table-bg-accent;
       }
     }
     .pretix-widget-event-calendar-day {
       font-weight: bold;
+      font-size: 86%;
+      padding: 5px 5px 1em;
+    }
+    .pretix-widget-event-week-table .pretix-widget-event-calendar-day {
+      padding-bottom: 5px;
+      background-color: #fff;
+      border-bottom: 2px solid $table-border-color;
+      color: $text-muted;
+      font-size: 100%;
     }
   }
 
@@ -656,9 +752,24 @@
 
 
 .pretix-widget-event-list-filter-form {
-  display: flex;
-  flex-direction: row;
-  align-items: end;
+  .pretix-widget-event-list-filter-fieldset {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    border: none;
+    padding: 0;
+    margin: 0;
+    > legend {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  }
   margin-bottom: 15px;
 
   .pretix-widget-event-list-filter-field {
@@ -667,7 +778,7 @@
     margin: 0 15px 0 0;
 
     label {
-      display: inline-block;
+      display: block;
       font-weight: bold;
       margin-bottom: 5px;
     }
@@ -682,7 +793,9 @@
   }
 }
 .pretix-widget.pretix-widget-mobile .pretix-widget-event-list-filter-form {
-  display: block;
+  .pretix-widget-event-list-filter-fieldset {
+    display: block;
+  }
 
   .pretix-widget-event-list-filter-field {
     display: block;
@@ -701,24 +814,124 @@
     transform: scale(1);
   }
 }
-.pretix-widget-alert-holder {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 16777271;
+
+.pretix-widget-visibility-hidden {
   visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.5s;  /* do not animate visibility or we'll have a flashing thing on load */
+}
+.pretix-widget-shake-once {
+  animation: pretix-widget-shake .2s;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
 
-  &.pretix-widget-alert-shown {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.5s, visibility 0.5s;
+@keyframes pretix-widget-shake {
+  0% { transform: skewX(0deg); }
+  20% { transform: skewX(-5deg); }
+  40% { transform: skewX(5deg); }
+  60% { transform: skewX(-5deg); }
+  80% { transform: skewX(5deg); }
+  100% { transform: skewX(0deg); }
+}
+
+
+.pretix-widget-alert-holder,
+.pretix-widget-frame-holder,
+.pretix-widget-lightbox-holder {
+  margin: auto;
+  border: none;
+  background: transparent;
+  overflow: visible;
+  &::backdrop {
+    background: rgba(255, 255, 255, 0.8);
   }
+  &:focus {
+    outline: 2px solid $brand-primary;
+    outline-offset: 2px;
+  }
+  &:not([open]) {
+    display: none;
+  }
+}
+.pretix-widget-frame-isloading:focus {
+  outline: none;
+  svg {
+    outline: 2px solid $brand-primary;
+    border-radius: 100%;
+  }
+}
+.pretix-widget-frame-loading p,
+.pretix-widget-lightbox-loading p {
+  text-align: center;
+  width: 256px;
+  margin: 0 auto;
+  color: $brand-danger;
+}
+.pretix-widget-frame-loading svg,
+.pretix-widget-lightbox-loading svg {
+  margin: 40px;
+  -webkit-animation: pretix-widget-spin 6s linear infinite;
+  -moz-animation: pretix-widget-spin 6s linear infinite;
+  animation: pretix-widget-spin 6s linear infinite;
+}
 
+.pretix-widget-frame-close,
+.pretix-widget-lightbox-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  z-index: 2;
+}
+
+.pretix-widget-frame-close button,
+.pretix-widget-lightbox-close button {
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-decoration: none;
+  padding: 4px 0;
+  display: inline-block;
+  line-height: 16px;
+  border: none;
+  background: none;
+  width: 24px;
+  height: 24px;
+  background: $brand-primary;
+  border-radius: 12px;
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
+  text-align: center;
+
+  &:focus {
+    outline: 2px solid $brand-primary;
+    outline-offset: 2px;
+  }
+}
+
+.pretix-widget-frame-close svg,
+.pretix-widget-lightbox-close svg {
+  display: inline-block;
+  border: none;
+}
+
+.pretix-widget-frame-inner,
+.pretix-widget-lightbox-inner,
+.pretix-widget-alert-box {
+  position: relative;
+  background: white;
+  border-radius: 5px 5px 5px 5px;
+  -moz-border-radius: 5px 5px 5px 5px;
+  -webkit-border-radius: 5px 5px 5px 5px;
+  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+  -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+  -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+
+
+.pretix-widget-alert-holder {
   .bounce-enter-active {
     animation: pretix-widget-bounce-in .5s;
   }
@@ -727,19 +940,6 @@
   }
 
   .pretix-widget-alert-box {
-    position: fixed;
-    left: 50%;
-    width: 600px;
-    margin-left: -300px;
-    top: 100px;
-    background: white;
-    border-radius: 5px 5px 5px 5px;
-    -moz-border-radius: 5px 5px 5px 5px;
-    -webkit-border-radius: 5px 5px 5px 5px;
-    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    box-sizing: border-box;
     padding: 42px 20px 20px 20px;
     text-align: center;
     font-size: 20px;
@@ -752,197 +952,48 @@
     }
   }
   .pretix-widget-alert-icon {
-    position: fixed;
+    position: absolute;
     left: 50%;
     width: 64px;
     margin-left: -32px;
-    top: 68px;
+    top: -20px;
   }
 }
-.pretix-widget-frame-holder {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 16777271;
+
+
+
+.pretix-widget-frame-inner {
+  width: 80vw;
+  max-width: 1080px;
+  height: 80vh;
+}
+.pretix-widget-frame-inner iframe {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+
+.pretix-widget-lightbox-inner {
+  max-width: 90vw;
+  max-height: 90vh;
+}
+.pretix-widget-lightbox-isloading .pretix-widget-lightbox-inner {
   visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.5s, visibility 0.5s;
-
-  .pretix-widget-frame-loading {
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-  }
-
-  .pretix-widget-frame-loading svg {
-    margin: 40px;
-    -webkit-animation: pretix-widget-spin 6s linear infinite;
-    -moz-animation: pretix-widget-spin 6s linear infinite;
-    animation: pretix-widget-spin 6s linear infinite;
-  }
-
-  &.pretix-widget-frame-shown {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.5s, visibility 0.5s;
-  }
-
-  .pretix-widget-frame-inner {
-    position: fixed;
-    left: 10%;
-    width: 80%;
-    height: 80%;
-    top: 10%;
-    background: white;
-    border-radius: 5px 5px 5px 5px;
-    -moz-border-radius: 5px 5px 5px 5px;
-    -webkit-border-radius: 5px 5px 5px 5px;
-    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    box-sizing: border-box;
-    padding: 10px;
-  }
-
-  .pretix-widget-frame-close {
-    position: fixed;
-    right: 10%;
-    top: 10%;
-    width: 24px;
-    height: 24px;
-    background: $brand-primary;
-    margin: -12px -12px 0 0;
-    border-radius: 12px;
-    -moz-border-radius: 12px;
-    -webkit-border-radius: 12px;
-    text-align: center;
-  }
-
-  .pretix-widget-frame-close a {
-    color: white;
-    font-weight: bold;
-    font-family: sans-serif;
-    text-decoration: none;
-    padding: 4px 0;
-    display: inline-block;
-    line-height: 16px;
-  }
-
-  .pretix-widget-frame-close svg {
-    display: inline-block;
-    border: none;
-  }
-
-  .pretix-widget-frame-inner iframe {
-    width: 100% !important;
-    height: 100% !important;
-  }
+}
+.pretix-widget-lightbox-image {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.pretix-widget-lightbox-image img {
+  max-width: 80vw;
+  max-height: 80vh;
+  object-fit: scale-down;
+}
+.pretix-widget-lightbox-image figcaption {
+  margin: 0.5em 0 0;
 }
 
-.pretix-widget-lightbox-holder {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  z-index: 16777271;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.5s, visibility 0.5s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .pretix-widget-lightbox-loading svg {
-    margin: 40px;
-    -webkit-animation: pretix-widget-spin 6s linear infinite;
-    -moz-animation: pretix-widget-spin 6s linear infinite;
-    animation: pretix-widget-spin 6s linear infinite;
-  }
-
-  &.pretix-widget-lightbox-shown {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.5s, visibility 0.5s;
-  }
-
-  .pretix-widget-lightbox-inner {
-    position: relative;
-    background: white;
-    border-radius: 5px 5px 5px 5px;
-    -moz-border-radius: 5px 5px 5px 5px;
-    -webkit-border-radius: 5px 5px 5px 5px;
-    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
-    box-sizing: border-box;
-    padding: 10px;
-    max-width: 90%;
-    max-height: 90%;
-  }
-  &.pretix-widget-lightbox-isloading .pretix-widget-lightbox-inner {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    border: 0;
-  }
-
-  .pretix-widget-lightbox-image {
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
-  .pretix-widget-lightbox-image img {
-    max-width: 80vw;
-    max-height: 80vh;
-    object-fit: scale-down;
-  }
-  .pretix-widget-lightbox-image figcaption {
-    margin: 0.5em 0 0;
-  }
-
-  .pretix-widget-lightbox-close {
-    position: absolute;
-    right: -12px;
-    top: -12px;
-    width: 24px;
-    height: 24px;
-    background: $brand-primary;
-    margin: 0;
-    border: none;
-    border-radius: 12px;
-    -moz-border-radius: 12px;
-    -webkit-border-radius: 12px;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-    font-family: sans-serif;
-    text-decoration: none;
-    padding: 4px 0;
-    display: inline-block;
-    line-height: 16px;
-    cursor: pointer;
-  }
-
-  .pretix-widget-lightbox-close svg {
-    display: inline-block;
-    border: none;
-  }
-}
 
 .pretix-widget-primary-color {
   /* in SVG */
@@ -1015,22 +1066,14 @@
         display: block;
       }
     }
-    td.pretix-widget-has-events {
-      background: $brand-primary;
-      color: white;
+    td.pretix-widget-has-events .pretix-widget-event-calendar-day {
+      background: var(--status-bg-color, #fff);
+      color: var(--status-text-color, #000);
+      border: 1px solid var(--status-border-color, inherit);
+      border-top-width: 11px;
+      padding-bottom: 5px;
+      border-radius: $input-border-radius;
       cursor: pointer;
-      &.pretix-widget-day-availability-red {
-        background: $brand-danger;
-      }
-      &.pretix-widget-day-availability-green {
-        background: $brand-success;
-      }
-      &.pretix-widget-day-availability-low {
-        border-right: 5px solid $brand-warning;
-      }
-      &.pretix-widget-day-availability-orange {
-        background: $brand-warning;
-      }
     }
 
     .pretix-widget-event-calendar-head {
@@ -1048,41 +1091,49 @@
   }
 }
 
-@media (min-width: 1200px) {
-  .pretix-widget-frame-holder {
-    .pretix-widget-frame-inner {
-      left: 50%;
-      margin-left: -540px;
-      width: 1080px;
-    }
-    .pretix-widget-frame-close {
-      left: 50%;
-      margin-left: 528px;
-    }
+@media (max-width: 800px) {
+  .pretix-widget-frame-inner {
+    width: calc(100vw - 50px);
+    height: calc(100vh - 50px);
   }
 }
-
-@media (max-width: 800px) {
-  .pretix-widget-frame-holder .pretix-widget-frame-inner {
-    left: 0;
+@media (max-width: 480px) {
+  .pretix-widget-alert-holder,
+  .pretix-widget-frame-holder:not(.pretix-widget-frame-isloading),
+  .pretix-widget-lightbox-holder:not(.pretix-widget-lightbox-isloading) {
+    margin: 0;
+    padding: 0;
     width: 100%;
-    height: 100%;
-    top: 0;
-    background: $brand-primary;
+    max-width: 100vw;
+  }
+  .pretix-widget-frame-inner,
+  .pretix-widget-lightbox-inner,
+  .pretix-widget-alert-box {
+    width: 100%;
+    height: 100vh;
     border-radius: 0;
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     box-shadow: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
-    padding: 40px 0 0 0;
+    box-sizing: border-box;
+    padding: 40px 0 0;
+    background: var(--pretix-brand-primary);
   }
-  .pretix-widget-frame-holder .pretix-widget-frame-close {
-    right: 20px;
-    top: 20px;
-    background: white;
-    svg path {
-      fill: $brand-primary;
+  .pretix-widget-frame-close,
+  .pretix-widget-lightbox-close {
+    top: 8px;
+    right: 12px;
+
+    button {
+      background-color: #fff;
+      path {
+        fill: var(--pretix-brand-primary) !important;
+      }
+      &:focus {
+        outline-color: #fff;
+      }
     }
   }
 }

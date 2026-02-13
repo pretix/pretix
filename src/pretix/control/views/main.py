@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -181,8 +181,9 @@ class EventWizard(SafeSessionWizardView):
                 initial['location'] = self.clone_from.location
                 initial['timezone'] = self.clone_from.settings.timezone
                 initial['locale'] = self.clone_from.settings.locale
-                if self.clone_from.settings.tax_rate_default:
-                    initial['tax_rate'] = self.clone_from.settings.tax_rate_default.rate
+                tax_rule = self.clone_from.cached_default_tax_rule
+                if tax_rule:
+                    initial['tax_rate'] = tax_rule.rate
         if 'organizer' in self.request.GET:
             if step == 'foundation':
                 try:
@@ -325,10 +326,17 @@ class EventWizard(SafeSessionWizardView):
                 event.set_defaults()
 
             if basics_data['tax_rate'] is not None:
-                if not event.settings.tax_rate_default or event.settings.tax_rate_default.rate != basics_data['tax_rate']:
-                    event.settings.tax_rate_default = event.tax_rules.create(
+                if self.clone_from:
+                    default_tax_rule = self.clone_from.cached_default_tax_rule
+                elif copy_data and copy_data['copy_from_event']:
+                    default_tax_rule = from_event.cached_default_tax_rule
+                else:
+                    default_tax_rule = None
+                if not default_tax_rule or default_tax_rule.rate != basics_data['tax_rate']:
+                    event.tax_rules.create(
                         name=LazyI18nString.from_gettext(gettext('VAT')),
-                        rate=basics_data['tax_rate']
+                        rate=basics_data['tax_rate'],
+                        default=not default_tax_rule,
                     )
 
             event.settings.set('timezone', basics_data['timezone'])

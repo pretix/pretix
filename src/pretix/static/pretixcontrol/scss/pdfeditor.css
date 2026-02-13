@@ -21,8 +21,7 @@ body {
 #toolbox .text,
 #toolbox .textarea,
 #toolbox .textcontainer,
-#toolbox .imagecontent,
-#toolbox .object-buttons {
+#toolbox .imagecontent {
     display: none;
 }
 #toolbox[data-type] .position,
@@ -37,8 +36,7 @@ body {
 #toolbox[data-type=textcontainer] .textcontainer,
 #toolbox[data-type=textcontainer] .rectsize,
 #toolbox[data-type=textarea] .text,
-#toolbox[data-type=textarea] .textarea,
-#toolbox[data-type] .object-buttons {
+#toolbox[data-type=textarea] .textarea {
     display: block;
 }
 #toolbox[data-type=text] .btn-group-justified > .btn-group.text,
@@ -91,4 +89,17 @@ body {
 .panel-pdf-editor .panel-body .nav-pills {
     padding: 15px;
     background: #eee;
+}
+.panel-pdf-editor .panel-heading {
+    padding: 4px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.panel-pdf-editor .panel-heading [disabled] {
+    box-shadow: 0px 0px 0px 1px #cccccc inset;
+}
+.panel-pdf-editor .panel-heading > .btn-group,
+.panel-pdf-editor .panel-heading form > .btn-group {
+    margin-right: 1em;
 }

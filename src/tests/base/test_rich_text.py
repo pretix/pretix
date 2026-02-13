@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -19,7 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import html
+import urllib.parse
+
 import pytest
+from django.core import signing
 
 from pretix.base.templatetags.rich_text import (
     ALLOWED_ATTRIBUTES, ALLOWED_TAGS, markdown_compile_email, rich_text,
@@ -42,6 +46,10 @@ from pretix.base.templatetags.rich_text import (
         (
             "[Foo](/foo)",
             '<a href="http://example.com/foo" rel="noopener" target="_blank">Foo</a>',
+        ),
+        (
+            "[Foo](/foo?bar&baz)",
+            '<a href="http://example.com/foo?bar&amp;baz" rel="noopener" target="_blank">Foo</a>',
         ),
         ("mail@example.org", '<a href="mailto:mail@example.org">mail@example.org</a>'),
         # Test truelink_callback
@@ -74,8 +82,32 @@ from pretix.base.templatetags.rich_text import (
             '<a href="https://goodsite.com.evilsite.com" rel="noopener" target="_blank">https://goodsite.com.evilsite.com</a>',
         ),
         (
+            '<a href="https://evilsite.com/deep/path">evilsite.com/bad/path/</a>',
+            '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">https://evilsite.com/deep/path</a>',
+        ),
+        (
+            '<a href="https://evilsite.com/deep/path">evilsite.com/deep</a>',
+            '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">evilsite.com/deep</a>',
+        ),
+        (
             '<a href="https://evilsite.com/deep/path">evilsite.com</a>',
             '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">evilsite.com</a>',
+        ),
+        (
+            '<a href="https://user:pass@evilsite.com/deep/path">evilsite.com</a>',
+            '<a href="https://user:pass@evilsite.com/deep/path" rel="noopener" target="_blank">evilsite.com</a>',
+        ),
+        (
+            '<a href="https://foo:bar@evilsite.com/deep/path">https://foo:bar@goodsite.com</a>',
+            '<a href="https://foo:bar@evilsite.com/deep/path" rel="noopener" target="_blank">https://foo:bar@evilsite.com/deep/path</a>',
+        ),
+        (
+            '<a href="https://pretix.social/@pretix">@pretix@pretix.social</a>',
+            '<a href="https://pretix.social/@pretix" rel="noopener" target="_blank">@pretix@pretix.social</a>',
+        ),
+        (
+            '<a href="https://evilsite.social/@pretix">@pretix@pretix.social</a>',
+            '<a href="https://evilsite.social/@pretix" rel="noopener" target="_blank">https://evilsite.social/@pretix</a>',
         ),
         ("<a>broken</a>", "<a>broken</a>"),
     ],
@@ -85,6 +117,40 @@ def test_linkify_abs(link):
     assert rich_text_snippet(input, safelinks=False) == output
     assert rich_text(input, safelinks=False) == f"<p>{output}</p>"
     assert markdown_compile_email(input) == f"<p>{output}</p>"
+
+
+signer = signing.Signer(salt='safe-redirect')
+
+
+@pytest.mark.parametrize(
+    "url,result",
+    [
+        ('http://example.com/foo', '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>'),
+        ('http://example.com/foo?bar&baz', '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>'),
+        ('http://example.com/foo?bar&baz>', '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>'),
+        (
+            'http://example.com/foo?bar&baz">',
+            '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>"&gt;'.format(
+                urllib.parse.quote(signer.sign('http://example.com/foo?bar&baz')),
+                html.escape('http://example.com/foo?bar&baz'),
+            )
+        ),
+        (
+            'http://example.com/foo?bar&baz\\">',
+            '<a href="/redirect/?url={}" rel="noopener" target="_blank">{}</a>\\"&gt;'.format(
+                urllib.parse.quote(signer.sign('http://example.com/foo?bar&baz')),
+                html.escape('http://example.com/foo?bar&baz'),
+            )
+        ),
+    ],
+)
+def test_linkify_safelinks(url, result):
+    output = result.format(
+        urllib.parse.quote(signer.sign(url)),
+        html.escape(url),
+    )
+    assert rich_text_snippet(url, safelinks=True) == output
+    assert rich_text(url, safelinks=True) == f"<p>{output}</p>"
 
 
 @pytest.mark.parametrize(

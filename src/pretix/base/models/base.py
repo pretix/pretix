@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -31,6 +31,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 
+from pretix.helpers.celery import get_task_priority
 from pretix.helpers.json import CustomJSONEncoder
 
 
@@ -57,6 +58,37 @@ class CachedFile(models.Model):
     file = models.FileField(null=True, blank=True, upload_to=_cachedfile_name, max_length=255)
     web_download = models.BooleanField(default=True)  # allow web download, True for backwards compatibility in plugins
     session_key = models.TextField(null=True, blank=True)  # only allow download in this session
+
+    def session_key_for_request(self, request, salt=None):
+        from ...api.models import OAuthAccessToken, OAuthApplication
+        from .devices import Device
+        from .organizer import TeamAPIToken
+
+        if hasattr(request, "auth") and isinstance(request.auth, OAuthAccessToken):
+            k = f'app:{request.auth.application.pk}'
+        elif hasattr(request, "auth") and isinstance(request.auth, OAuthApplication):
+            k = f'app:{request.auth.pk}'
+        elif hasattr(request, "auth") and isinstance(request.auth, TeamAPIToken):
+            k = f'token:{request.auth.pk}'
+        elif hasattr(request, "auth") and isinstance(request.auth, Device):
+            k = f'device:{request.auth.pk}'
+        elif request.session.session_key:
+            k = request.session.session_key
+        else:
+            raise ValueError("No auth method found to bind to")
+
+        if salt:
+            k = f"{k}!{salt}"
+        return k
+
+    def allowed_for_session(self, request, salt=None):
+        return (
+            not self.session_key or
+            self.session_key_for_request(request, salt) == self.session_key
+        )
+
+    def bind_to_session(self, request, salt=None):
+        self.session_key = self.session_key_for_request(request, salt)
 
 
 @receiver(post_delete, sender=CachedFile)
@@ -98,6 +130,8 @@ class LoggingMixin:
             organizer_id = self.event.organizer_id
         elif hasattr(self, 'organizer_id'):
             organizer_id = self.organizer_id
+        elif hasattr(self, 'issuer_id'):
+            organizer_id = self.issuer_id
 
         if user and not user.is_authenticated:
             user = None
@@ -131,9 +165,15 @@ class LoggingMixin:
             logentry.save()
 
             if logentry.notification_type:
-                notify.apply_async(args=(logentry.pk,))
+                notify.apply_async(
+                    args=(logentry.pk,),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
+                )
             if logentry.webhook_type:
-                notify_webhooks.apply_async(args=(logentry.pk,))
+                notify_webhooks.apply_async(
+                    args=(logentry.pk,),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
+                )
 
         return logentry
 

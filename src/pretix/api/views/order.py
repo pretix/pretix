@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -57,9 +57,9 @@ from pretix.api.serializers.order import (
     BlockedTicketSecretSerializer, InvoiceSerializer, OrderCreateSerializer,
     OrderPaymentCreateSerializer, OrderPaymentSerializer,
     OrderPositionSerializer, OrderRefundCreateSerializer,
-    OrderRefundSerializer, OrderSerializer, PriceCalcSerializer,
-    PrintLogSerializer, RevokedTicketSecretSerializer,
-    SimulatedOrderSerializer,
+    OrderRefundSerializer, OrderSerializer, OrganizerTransactionSerializer,
+    PriceCalcSerializer, PrintLogSerializer, RevokedTicketSecretSerializer,
+    SimulatedOrderSerializer, TransactionSerializer,
 )
 from pretix.api.serializers.orderchange import (
     BlockNameSerializer, OrderChangeOperationSerializer,
@@ -80,6 +80,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, PrintLog, QuestionAnswer, RevokedTicketSecret,
+    Transaction,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.pdf import get_images
@@ -87,9 +88,8 @@ from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
-    regenerate_invoice,
+    regenerate_invoice, transmit_invoice,
 )
-from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _order_placed_email,
     _order_placed_email_attendee, approve_order, cancel_order, deny_order,
@@ -227,7 +227,7 @@ class OrderViewSetMixin:
     def get_queryset(self):
         qs = self.get_base_queryset()
         if 'fees' not in self.request.GET.getlist('exclude'):
-            if self.request.query_params.get('include_canceled_fees', 'false') == 'true':
+            if self.request.query_params.get('include_canceled_fees', 'false').lower() == 'true':
                 fqs = OrderFee.all
             else:
                 fqs = OrderFee.objects
@@ -245,11 +245,11 @@ class OrderViewSetMixin:
         return qs
 
     def _positions_prefetch(self, request):
-        if request.query_params.get('include_canceled_positions', 'false') == 'true':
+        if request.query_params.get('include_canceled_positions', 'false').lower() == 'true':
             opq = OrderPosition.all
         else:
             opq = OrderPosition.objects
-        if request.query_params.get('pdf_data', 'false') == 'true' and getattr(request, 'event', None):
+        if request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(request, 'event', None):
             prefetch_related_objects([request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [request.event],
@@ -343,7 +343,8 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['auth'] = self.request.auth
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
         return ctx
 
     def get_base_queryset(self):
@@ -437,8 +438,6 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                 return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
             except PaymentException as e:
                 return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-            except SendMailException:
-                pass
 
             return self.retrieve(request, [], **kwargs)
         return Response(
@@ -632,10 +631,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
         order = self.get_object()
         if not order.email:
             return Response({'detail': 'There is no email address associated with this order.'}, status=status.HTTP_400_BAD_REQUEST)
-        try:
-            order.resend_link(user=self.request.user, auth=self.request.auth)
-        except SendMailException:
-            return Response({'detail': _('There was an error sending the mail. Please try again later.')}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+        order.resend_link(user=self.request.user, auth=self.request.auth)
 
         return Response(
             status=status.HTTP_204_NO_CONTENT
@@ -742,7 +738,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                     user=request.user if request.user.is_authenticated else None,
                     auth=request.auth,
                 )
-            order_placed.send(self.request.event, order=order)
+            order_placed.send(self.request.event, order=order, bulk=False)
             if order.status == Order.STATUS_PAID:
                 order_paid.send(self.request.event, order=order)
                 order.log_action(
@@ -763,7 +759,13 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             ) and not order.invoices.last()
             invoice = None
             if gen_invoice:
-                invoice = generate_invoice(order, trigger_pdf=True)
+                try:
+                    invoice = generate_invoice(order, trigger_pdf=True)
+                except Exception as e:
+                    logger.exception("Could not generate invoice.")
+                    order.log_action("pretix.event.order.invoice.failed", data={
+                        "exception": str(e)
+                    })
 
             # Refresh serializer only after running signals
             prefetch_related_objects([order], self._positions_prefetch(request))
@@ -942,6 +944,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'])
     def change(self, request, **kwargs):
         order = self.get_object()
+        check_quotas = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
 
         serializer = OrderChangeOperationSerializer(
             context={'order': order, **self.get_serializer_context()},
@@ -1007,7 +1010,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             elif serializer.validated_data.get('recalculate_taxes') == 'keep_gross':
                 ocm.recalculate_taxes(keep='gross')
 
-            ocm.commit()
+            ocm.commit(check_quotas=check_quotas)
         except OrderError as e:
             raise ValidationError(str(e))
 
@@ -1085,17 +1088,18 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
+        ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
         return ctx
 
     def get_queryset(self):
-        if self.request.query_params.get('include_canceled_positions', 'false') == 'true':
+        if self.request.query_params.get('include_canceled_positions', 'false').lower() == 'true':
             qs = OrderPosition.all
         else:
             qs = OrderPosition.objects
 
         qs = qs.filter(order__event=self.request.event)
-        if self.request.query_params.get('pdf_data', 'false') == 'true':
+        if self.request.query_params.get('pdf_data', 'false').lower() == 'true':
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [self.request.event],
@@ -1606,8 +1610,6 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                     )
                 except Quota.QuotaExceededException:
                     pass
-                except SendMailException:
-                    pass
 
             serializer = OrderPaymentSerializer(r, context=serializer.context)
 
@@ -1645,8 +1647,6 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except PaymentException as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        except SendMailException:
-            pass
         return self.retrieve(request, [], **kwargs)
 
     @action(detail=True, methods=['POST'])
@@ -1659,6 +1659,9 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             mark_refunded = request.data.get('mark_refunded', False)
         else:
             mark_refunded = request.data.get('mark_canceled', False)
+
+        if not isinstance(request.data.get("comment", ""), str):
+            return Response({'comment': 'Invalid type.'}, status=status.HTTP_400_BAD_REQUEST)
 
         if payment.state != OrderPayment.PAYMENT_STATE_CONFIRMED:
             return Response({'detail': 'Invalid state of payment.'}, status=status.HTTP_400_BAD_REQUEST)
@@ -1686,6 +1689,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             amount=amount,
             provider=payment.provider,
             info='{}',
+            comment=request.data.get("comment"),
         )
         payment.order.log_action('pretix.event.order.refund.created', {
             'local_id': r.local_id,
@@ -1888,6 +1892,12 @@ class RetryException(APIException):
     default_code = 'retry_later'
 
 
+class CurrentlyInflightException(APIException):
+    status_code = 409
+    default_detail = 'The requested action is already in progress.'
+    default_code = 'currently_inflight'
+
+
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = InvoiceSerializer
     queryset = Invoice.objects.none()
@@ -1937,12 +1947,51 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         return resp
 
     @action(detail=True, methods=['POST'])
+    def transmit(self, request, **kwargs):
+        invoice = self.get_object()
+        if invoice.shredded:
+            raise PermissionDenied('The invoice file is no longer stored on the server.')
+
+        if invoice.transmission_status != Invoice.TRANSMISSION_STATUS_PENDING:
+            raise PermissionDenied('The invoice is not in pending state.')
+
+        transmit_invoice.apply_async(args=(self.request.event.pk, invoice.pk, False))
+        return Response(status=204)
+
+    @action(detail=True, methods=['POST'])
+    def retransmit(self, request, **kwargs):
+        invoice = self.get_object()
+        if invoice.shredded:
+            raise PermissionDenied('The invoice file is no longer stored on the server.')
+
+        with transaction.atomic(durable=True):
+            invoice = Invoice.objects.select_for_update(of=OF_SELF).get(pk=invoice.pk)
+
+            if invoice.transmission_status == Invoice.TRANSMISSION_STATUS_INFLIGHT:
+                raise CurrentlyInflightException()
+
+            invoice.transmission_status = Invoice.TRANSMISSION_STATUS_PENDING
+            invoice.transmission_date = now()
+            invoice.save(update_fields=["transmission_status", "transmission_date"])
+            invoice.order.log_action(
+                'pretix.event.order.invoice.retransmitted',
+                user=self.request.user,
+                auth=self.request.auth,
+                data={
+                    'invoice': invoice.pk,
+                    'full_invoice_no': invoice.full_invoice_no,
+                }
+            )
+        transmit_invoice.apply_async(args=(self.request.event.pk, invoice.pk, True))
+        return Response(status=204)
+
+    @action(detail=True, methods=['POST'])
     def regenerate(self, request, **kwargs):
         inv = self.get_object()
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')
-        if not inv.event.settings.invoice_regenerate_allowed:
-            raise PermissionDenied('Invoices may not be changed after they are created.')
+        if not inv.regenerate_allowed:
+            raise PermissionDenied('Invoice may not be regenerated.')
         elif inv.shredded:
             raise PermissionDenied('The invoice file is no longer stored on the server.')
         elif inv.sent_to_organizer:
@@ -1972,7 +2021,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             order = Order.objects.select_for_update(of=OF_SELF).get(pk=inv.order_id)
             c = generate_cancellation(inv)
-            if inv.order.status != Order.STATUS_CANCELED:
+            if invoice_qualified(order):
                 inv = generate_invoice(order)
             else:
                 inv = c
@@ -2030,3 +2079,61 @@ class BlockedSecretViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return BlockedTicketSecret.objects.filter(event=self.request.event)
+
+
+with scopes_disabled():
+    class TransactionFilter(FilterSet):
+        order = django_filters.CharFilter(field_name='order', lookup_expr='code__iexact')
+        event = django_filters.CharFilter(field_name='order__event', lookup_expr='slug__iexact')
+        datetime_since = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='gte')
+        datetime_before = django_filters.IsoDateTimeFilter(field_name='datetime', lookup_expr='lt')
+        created_since = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='gte')
+        created_before = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='lt')
+
+        class Meta:
+            model = Transaction
+            fields = {
+                'item': ['exact', 'in'],
+                'variation': ['exact', 'in'],
+                'subevent': ['exact', 'in'],
+                'tax_rule': ['exact', 'in'],
+                'tax_code': ['exact', 'in'],
+                'tax_rate': ['exact', 'in'],
+                'fee_type': ['exact', 'in'],
+            }
+
+
+class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TransactionSerializer
+    queryset = Transaction.objects.none()
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
+    ordering = ('datetime', 'pk')
+    ordering_fields = ('datetime', 'created', 'id',)
+    filterset_class = TransactionFilter
+    permission = 'can_view_orders'
+
+    def get_queryset(self):
+        return Transaction.objects.filter(order__event=self.request.event).select_related("order")
+
+
+class OrganizerTransactionViewSet(TransactionViewSet):
+    serializer_class = OrganizerTransactionSerializer
+    permission = None
+
+    def get_queryset(self):
+        qs = Transaction.objects.filter(
+            order__event__organizer=self.request.organizer
+        ).select_related("order", "order__event")
+
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            qs = qs.filter(
+                order__event__in=self.request.auth.get_events_with_permission("can_view_orders"),
+            )
+        elif self.request.user.is_authenticated:
+            qs = qs.filter(
+                order__event__in=self.request.user.get_events_with_permission("can_view_orders", request=self.request)
+            )
+        else:
+            raise PermissionDenied("Unknown authentication scheme")
+
+        return qs

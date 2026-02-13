@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -64,6 +64,7 @@ from pretix.base.models.items import (
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.orders import OrderError, cancel_order, perform_order
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.helpers import repeatable_reads_transaction
 from pretix.testutils.scope import classscope
 
 
@@ -97,6 +98,29 @@ class BaseQuotaTestCase(TestCase):
         self.var1 = ItemVariation.objects.create(item=self.item2, value='S')
         self.var2 = ItemVariation.objects.create(item=self.item2, value='M')
         self.var3 = ItemVariation.objects.create(item=self.item3, value='Fancy')
+
+
+@pytest.mark.django_db(transaction=True)
+@scopes_disabled()
+def test_verify_repeatable_read_check():
+    if 'sqlite' in settings.DATABASES['default']['ENGINE']:
+        pytest.skip('Not supported on SQLite')
+
+    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=o, name='Dummy', slug='dummy',
+        date_from=now(), plugins='tests.testdummy'
+    )
+    quota = Quota.objects.create(name="Test", size=2, event=event)
+
+    with repeatable_reads_transaction():
+        with pytest.raises(ValueError):
+            qa = QuotaAvailability(full_results=True)
+            qa.queue(quota)
+            qa.compute()
+        qa = QuotaAvailability(full_results=True, allow_repeatable_read=True)
+        qa.queue(quota)
+        qa.compute()
 
 
 @pytest.mark.usefixtures("fakeredis_client")
@@ -2215,7 +2239,7 @@ class EventTest(TestCase):
             is_public=True,
         )
         event1.meta_values.create(property=prop, value="DE")
-        tr7 = event1.tax_rules.create(rate=Decimal('7.00'))
+        tr7 = event1.tax_rules.create(rate=Decimal('7.00'), default=True)
         c1 = event1.categories.create(name='Tickets')
         c2 = event1.categories.create(name='Workshops')
         i1 = event1.items.create(name='Foo', default_price=Decimal('13.00'), tax_rule=tr7,
@@ -2228,7 +2252,6 @@ class EventTest(TestCase):
         que1 = event1.questions.create(question="Age", type="N")
         que1.items.add(i1)
         event1.settings.foo_setting = 23
-        event1.settings.tax_rate_default = tr7
         cl1 = event1.checkin_lists.create(
             name="All", all_products=False,
             rules={
@@ -2271,7 +2294,7 @@ class EventTest(TestCase):
         assert que1new.type == que1.type
         assert que1new.items.get(pk=i1new.pk)
         assert event2.settings.foo_setting == '23'
-        assert event2.settings.tax_rate_default == trnew
+        assert event2.cached_default_tax_rule == trnew
         assert event2.checkin_lists.count() == 1
         clnew = event2.checkin_lists.first()
         assert [i.pk for i in clnew.limit_products.all()] == [i1new.pk]
@@ -2466,44 +2489,44 @@ class EventTest(TestCase):
             (
                 datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
                 datetime.datetime(2025, 3, 9, 22, 0, 0, tzinfo=tz),
-                'Sun, March 9th, 2025',
-                '<time datetime="2025-03-09">Sun, March 9th, 2025</time>',
-                'Sun, March 9th, 2025 20:00–21:00',
-                '<time datetime="2025-03-09">Sun, March 9th, 2025</time> '
+                'Sun, March 9, 2025',
+                '<time datetime="2025-03-09">Sun, March 9, 2025</time>',
+                'Sun, March 9, 2025 20:00–21:00',
+                '<time datetime="2025-03-09">Sun, March 9, 2025</time> '
                 '<time datetime="2025-03-09T21:00:00+01:00" data-timezone="UTC" data-time-short>20:00–21:00</time>'
             ),
             (
                 datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
                 datetime.datetime(2025, 3, 10, 3, 0, 0, tzinfo=tz),
-                'March 9th – 10th, 2025',
-                '<time datetime="2025-03-09">March 9th</time> '
+                'March 9 – 10, 2025',
+                '<time datetime="2025-03-09">March 9</time> '
                 '<span aria-hidden="true">–</span><span class="sr-only"> until </span> '
-                '<time datetime="2025-03-10">10th, 2025</time>',
-                'March 9th – 10th, 2025 20:00–02:00',
-                '<time datetime="2025-03-09">March 9th</time> '
+                '<time datetime="2025-03-10">10, 2025</time>',
+                'March 9 – 10, 2025 20:00–02:00',
+                '<time datetime="2025-03-09">March 9</time> '
                 '<span aria-hidden="true">–</span><span class="sr-only"> until </span> '
-                '<time datetime="2025-03-10">10th, 2025</time> '
+                '<time datetime="2025-03-10">10, 2025</time> '
                 '<time datetime="2025-03-09T21:00:00+01:00" data-timezone="UTC" data-time-short>20:00–02:00</time>'
             ),
             (
                 datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
                 datetime.datetime(2025, 3, 12, 14, 0, 0, tzinfo=tz),
-                'March 9th – 12th, 2025',
-                '<time datetime="2025-03-09">March 9th</time> '
+                'March 9 – 12, 2025',
+                '<time datetime="2025-03-09">March 9</time> '
                 '<span aria-hidden="true">–</span><span class="sr-only"> until </span> '
-                '<time datetime="2025-03-12">12th, 2025</time>',
-                'March 9th – 12th, 2025',
-                '<time datetime="2025-03-09">March 9th</time> '
+                '<time datetime="2025-03-12">12, 2025</time>',
+                'March 9 – 12, 2025',
+                '<time datetime="2025-03-09">March 9</time> '
                 '<span aria-hidden="true">–</span><span class="sr-only"> until </span> '
-                '<time datetime="2025-03-12">12th, 2025</time>',
+                '<time datetime="2025-03-12">12, 2025</time>',
             ),
             (
                 datetime.datetime(2025, 3, 9, 21, 0, 0, tzinfo=tz),
                 None,
-                'Sun, March 9th, 2025',
-                '<time datetime="2025-03-09">Sun, March 9th, 2025</time>',
-                'Sun, March 9th, 2025 20:00',
-                '<time datetime="2025-03-09">Sun, March 9th, 2025</time> '
+                'Sun, March 9, 2025',
+                '<time datetime="2025-03-09">Sun, March 9, 2025</time>',
+                'Sun, March 9, 2025 20:00',
+                '<time datetime="2025-03-09">Sun, March 9, 2025</time> '
                 '<time datetime="2025-03-09T21:00:00+01:00" data-timezone="UTC" data-time-short>20:00</time>'
             ),
         )
@@ -2604,7 +2627,7 @@ class SubEventTest(TestCase):
         q.items.add(item)
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 1
-        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1)
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1, True)
 
         # 2 quotas - 1 item. Lowest quota wins.
         q2 = Quota.objects.create(event=self.event, name='Quota 2', size=2,
@@ -2612,14 +2635,21 @@ class SubEventTest(TestCase):
         q2.items.add(item)
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 2
-        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1)
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1, True)
+
+        # Same, but waiting list not allowed
+        item.allow_waitinglist = False
+        item.save()
+        obj = SubEvent.annotated(SubEvent.objects, 'web').first()
+        assert len(obj.active_quotas) == 2
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1, False)
 
         # 2 quotas - 2 items. Higher quota wins since second item is only connected to second quota.
         item2 = Item.objects.create(event=self.event, name='Regular ticket', default_price=10, active=True)
         q2.items.add(item2)
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 2
-        assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 2)
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 2, True)
         assert obj.best_availability_is_low
 
         # 1 quota - 2 items. Quota is not counted twice!
@@ -2628,14 +2658,14 @@ class SubEventTest(TestCase):
         q2.delete()
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
         assert len(obj.active_quotas) == 1
-        assert obj.best_availability == (Quota.AVAILABILITY_OK, 9, 10)
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, 9, 10, False)
         assert not obj.best_availability_is_low
 
-        # Unlimited quota
+        # Unlimited quota, but no waiting list
         q.size = None
         q.save()
         obj = SubEvent.annotated(SubEvent.objects, 'web').first()
-        assert obj.best_availability == (Quota.AVAILABILITY_OK, None, None)
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, None, None, False)
         assert not obj.best_availability_is_low
 
 

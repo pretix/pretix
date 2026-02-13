@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -19,14 +19,19 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import zoneinfo
+from datetime import datetime
+
 import pytest
 from django.core.files.base import ContentFile
+from django_scopes import scopes_disabled
 from tests.const import SAMPLE_PNG
 
 TEST_ORGANIZER_RES = {
     "name": "Dummy",
     "slug": "dummy",
-    "public_url": "http://example.com/dummy/"
+    "public_url": "http://example.com/dummy/",
+    "plugins": ["pretix.plugins.banktransfer"],
 }
 
 
@@ -45,24 +50,57 @@ def test_organizer_detail(token_client, organizer):
 
 
 @pytest.mark.django_db
-def test_get_settings(token_client, organizer):
-    organizer.settings.event_list_type = "week"
-    resp = token_client.get(
-        '/api/v1/organizers/{}/settings/'.format(organizer.slug,),
+def test_organizer_patch(token_client, organizer):
+    with scopes_disabled():
+        # An event needs to exist for the backwards-compatibility mechanism in get_all_plugins to trigger
+        event = organizer.events.create(
+            name="Event", slug="e2", live=True,
+            date_from=datetime(2020, 1, 10, 16, 0, tzinfo=zoneinfo.ZoneInfo("UTC")),
+            date_to=datetime(2020, 1, 10, 17, 0, tzinfo=zoneinfo.ZoneInfo("UTC")),
+        )
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/'.format(organizer.slug),
+        {
+            'slug': 'willbeignored',
+            'name': 'Willbeignored',
+            'plugins': ['tests.testdummyorga', 'tests.testdummyhybrid']
+        },
+        format='json',
     )
     assert resp.status_code == 200
-    assert resp.data['event_list_type'] == "week"
+    assert resp.data['slug'] == 'dummy'
+    assert resp.data['name'] == 'Dummy'
+    assert set(resp.data['plugins']) == {'tests.testdummyorga', 'tests.testdummyhybrid'}
 
-    resp = token_client.get(
-        '/api/v1/organizers/{}/settings/?explain=true'.format(organizer.slug),
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/'.format(organizer.slug),
+        {
+            'slug': 'willbeignored',
+            'name': 'Willbeignored',
+            'plugins': ['pretix.plugins.statistics']
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        "plugins": ["Plugin cannot be enabled on this level: 'pretix.plugins.statistics'."]
+    }
+
+    event.plugins = "tests.testdummyhybrid,tests.testdummy"
+    event.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/'.format(organizer.slug),
+        {
+            'slug': 'willbeignored',
+            'name': 'Willbeignored',
+            'plugins': ['tests.testdummyorga']
+        },
+        format='json',
     )
     assert resp.status_code == 200
-    assert resp.data['event_list_type'] == {
-        "value": "week",
-        "label": "Default overview style",
-        "help_text": "If your event series has more than 50 dates in the future, only the month or week calendar can be used.",
-        "readonly": False,
-    }
+
+    event.refresh_from_db()
+    assert event.plugins == "tests.testdummy"
 
 
 @pytest.mark.django_db

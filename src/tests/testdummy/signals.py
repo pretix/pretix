@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -22,6 +22,10 @@
 from django.dispatch import receiver
 
 from pretix.base.channels import SalesChannelType
+from pretix.base.invoicing.transmission import (
+    TransmissionProvider, transmission_providers,
+)
+from pretix.base.models import Invoice
 from pretix.base.signals import (
     register_payment_providers, register_sales_channel_types,
     register_ticket_outputs,
@@ -70,3 +74,37 @@ def html_head_presale(sender, request=None, **kwargs):
         # No tracking scripts on PCI DSS relevant payment pages
         return ""
     return "<script>alert('BAD TRACKING SCRIPT')</script>"
+
+
+@transmission_providers.new()
+class TestSdiTransmissionProvider(TransmissionProvider):
+    identifier = "fatturapa_test"
+    type = "it_sdi"
+    verbose_name = "FatturaPA Test"
+
+    def is_ready(self, event) -> bool:
+        return True
+
+    def is_available(self, event, country, is_business: bool) -> bool:
+        return str(country) == "IT"
+
+    def transmit(self, invoice):
+        invoice.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
+        invoice.save()
+
+
+@transmission_providers.new()
+class TestPeppolTransmissionProvider(TransmissionProvider):
+    identifier = "peppol_test"
+    type = "peppol"
+    verbose_name = "Peppol Test"
+
+    def is_ready(self, event) -> bool:
+        return True
+
+    def is_available(self, event, country, is_business: bool) -> bool:
+        return is_business
+
+    def transmit(self, invoice):
+        invoice.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
+        invoice.save()

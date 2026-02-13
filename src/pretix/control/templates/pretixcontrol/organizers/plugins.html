@@ -1,0 +1,195 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load bootstrap3 %}
+{% block content %}
+    <h1>{% trans "Available plugins" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            On this page, you can choose plugins you want to enable for your organizer account. Plugins might bring additional
+            software functionality, connect your events to third-party services, or apply other forms of customizations.
+        {% endblocktrans %}
+    </p>
+    {% if "success" in request.GET %}
+        <div class="alert alert-success">
+            {% trans "Your changes have been saved." %}
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-lg-10">
+            <p><input type="search" id="plugin_search_input" class="form-control" placeholder="{% trans "Search" %}"></p>
+        </div>
+        <div class="col-lg-2 text-right">
+            <p class="btn-group btn-group-flex" data-toggle="buttons">
+                <label class="btn btn-primary-if-active active"><input type="radio" name="plugin_state_filter" value="all" checked> {% trans "All" %}</label>
+                <label class="btn btn-primary-if-active"><input type="radio" name="plugin_state_filter" value="active"> {% trans "Active" %}</label>
+            </p>
+        </div>
+    </div>
+    <form action="" method="post" class="form-horizontal form-plugins">
+        {% csrf_token %}
+        <div id="plugin_search_results" class="panel panel-default collapse">
+            <div class="panel-heading">
+                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+                {% trans "Search results" %}
+            </div>
+            <div class="panel-body">
+                <div class="plugin-list"></div>
+            </div>
+        </div>
+        <div id="plugin_tabs"><div class="tabbed-form">
+            {% for cat, catlabel, plist, has_pictures in plugins %}
+                <fieldset data-plugin-category="{{ cat }}" data-plugin-category-label="{{ catlabel }}">
+                    <legend>{{ catlabel }}</legend>
+                    <div class="plugin-list">
+                        {% for plugin, is_active, settings_links, navigation_links, events_counter in plist %}
+                            <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}" id="plugin_{{ plugin.module }}" data-plugin-module="{{ plugin.module }}" data-plugin-name="{{ plugin.name }}">
+                            {% if plugin.featured %}
+                               <div class="panel panel-default">
+                                    <div class="panel-body">
+                            {% endif %}
+                                        <div class="plugin-text">
+                                        {% if plugin.featured or plugin.experimental %}
+                                            <p class="text-muted">
+                                            {% if plugin.featured %}
+                                                <span class="fa fa-thumbs-up" aria-hidden="true"></span>
+                                                {% trans "Top recommendation" %}
+                                            {% endif %}
+                                            {% if plugin.experimental %}
+                                                <span class="fa fa-flask" aria-hidden="true"></span>
+                                                {% trans "Experimental feature" %}
+                                            {% endif %}
+                                            </p>
+                                        {% endif %}
+                                        {% if plugin.picture %}
+                                            <p><img src="{% static plugin.picture %}" class="plugin-picture"></p>
+                                        {% endif %}
+                                            <h4>
+                                                {{ plugin.name }}
+                                                {% if show_meta %}
+                                                    <span class="text-muted text-sm">{{ plugin.version }}</span>
+                                                {% endif %}
+                                                {% if is_active or plugin.level == "event" %}
+                                                    {% if plugin.level == "organizer" %}
+                                                        <span class="label label-success" data-is-active>
+                                                            <span class="fa fa-check" aria-hidden="true"></span>
+                                                            {% trans "Active" %}
+                                                        </span>
+                                                    {% elif events_total and events_counter == events_total %}
+                                                        <span class="label label-success" data-is-active>
+                                                            <span class="fa fa-check" aria-hidden="true"></span>
+                                                            {% trans "Active (all events)" %}
+                                                        </span>
+                                                    {% elif events_counter %}
+                                                        <span class="label label-info" data-is-active>
+                                                            <span class="fa fa-check" aria-hidden="true"></span>
+                                                            {% blocktrans trimmed count count=events_counter %}
+                                                                Active ({{ count }} event)
+                                                            {% plural %}
+                                                                Active ({{ count }} events)
+                                                            {% endblocktrans %}
+                                                        </span>
+                                                    {% elif level == "event_organizer" %}
+                                                        <span class="label label-info" data-is-active>
+                                                            <span class="fa fa-check" aria-hidden="true"></span>
+                                                            {% blocktrans trimmed count count=0 %}
+                                                                Active ({{ count }} event)
+                                                            {% plural %}
+                                                                Active ({{ count }} events)
+                                                            {% endblocktrans %}
+                                                        </span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </h4>
+                                            {% include "pretixcontrol/event/fragment_plugin_description.html" with plugin=plugin %}
+                                        </div>
+                                        {% if plugin.app.compatibility_errors %}
+                                            <div class="plugin-action">
+                                                <span class="text-muted">{% trans "Incompatible" %}</span>
+                                            </div>
+                                        {% elif plugin.restricted and plugin.module not in request.organizer.settings.allowed_restricted_plugins %}
+                                            <div class="plugin-action">
+                                                <span class="text-muted">{% trans "Not available" %}</span>
+                                            </div>
+                                        {% elif is_active %}
+                                            {% if plugin.level == "event_organizer" %}
+                                                <p class="text-muted">
+                                                    <span class="fa fa-calendar" aria-hidden="true"></span>
+                                                    {% trans "Parts of this plugin can be enabled or disabled for events individually." %}
+                                                </p>
+                                            {% endif %}
+                                            <div class="plugin-action flip">
+                                                {% if navigation_links %}
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-default dropdown-toggle{% if plugin.featured %} btn-lg{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{% trans "Open plugin settings" %}">
+                                                            <span class="fa fa-compass"></span> {% trans "Go to" %} <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            {% for link in navigation_links %}
+                                                                <li><a href="{{ link.0 }}">{{ link.1 }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                {% endif %}
+                                                {% if settings_links %}
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-default dropdown-toggle{% if plugin.featured %} btn-lg{% endif %}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{% trans "Open plugin settings" %}">
+                                                            <span class="fa fa-cog"></span> {% trans "Settings" %} <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            {% for link in settings_links %}
+                                                                <li><a href="{{ link.0 }}">{{ link.1 }}</a></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                {% endif %}
+                                                <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
+                                                        value="disable">{% trans "Disable" %}</button>
+                                                {% if plugin.level == "event_organizer" %}
+                                                    <a class="btn btn-default {% if plugin.featured %} btn-lg{% endif %}"
+                                                        href="{% url "control:organizer.settings.plugin-events" organizer=request.organizer.slug plugin=plugin.module %}">
+                                                        {% trans "Manage events" %}
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            {% if plugin.level == "organizer" %}
+                                                <div class="plugin-action flip">
+                                                    <button class="btn btn-primary{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
+                                                            value="enable">{% trans "Enable" %}</button>
+                                                </div>
+                                            {% elif not plugin.level or plugin.level == "event" %}
+                                                <p class="text-muted">
+                                                    <span class="fa fa-calendar" aria-hidden="true"></span>
+                                                    {% trans "This plugin can be enabled or disabled for events individually." %}
+                                                </p>
+                                                <div class="plugin-action flip">
+                                                    <a class="btn btn-default {% if plugin.featured %} btn-lg{% endif %}"
+                                                        href="{% url "control:organizer.settings.plugin-events" organizer=request.organizer.slug plugin=plugin.module %}">
+                                                        {% trans "Manage events" %}
+                                                    </a>
+                                                </div>
+                                            {% elif plugin.level == "event_organizer" %}
+                                                <p class="text-muted">
+                                                    <span class="fa fa-calendar" aria-hidden="true"></span>
+                                                    {% trans "Parts of this plugin can be enabled or disabled for events individually." %}
+                                                </p>
+                                                <div class="plugin-action flip">
+                                                    <button class="btn btn-primary{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
+                                                            value="enable">{% trans "Enable" %}</button>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                            {% if plugin.featured %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </fieldset>
+            {% endfor %}
+        </div></div>
+    </form>
+    <script type="text/javascript" src="{% static "pretixcontrol/js/ui/plugins.js" %}"></script>
+{% endblock %}

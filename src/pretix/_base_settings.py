@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -101,6 +101,7 @@ ALL_LANGUAGES = [
     ('fi', _('Finnish')),
     ('gl', _('Galician')),
     ('el', _('Greek')),
+    ('he', _('Hebrew')),
     ('id', _('Indonesian')),
     ('it', _('Italian')),
     ('ja', _('Japanese')),
@@ -114,6 +115,7 @@ ALL_LANGUAGES = [
     ('sk', _('Slovak')),
     ('sv', _('Swedish')),
     ('es', _('Spanish')),
+    ('es-419', _('Spanish (Latin America)')),
     ('tr', _('Turkish')),
     ('uk', _('Ukrainian')),
 ]
@@ -121,7 +123,8 @@ LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_RTL = {
-    'ar', 'hw'
+    # When adding more right-to-left languages, also update pretix/static/pretixbase/scss/_rtl.scss
+    'ar', 'he'
 }
 LANGUAGES_INCUBATING = {
     'pt-br', 'gl',
@@ -169,6 +172,12 @@ EXTRA_LANG_INFO = {
         'code': 'nb-no',
         'name': 'Norwegian Bokmal',
         'name_local': 'norsk (bokmål)',
+    },
+    'es-419': {
+        'bidi': False,
+        'code': 'es-419',
+        'name': 'Spanish (Latin America)',
+        'name_local': 'Español',
     },
 }
 

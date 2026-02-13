@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -26,7 +26,8 @@ from babel.numbers import format_currency
 from django import template
 from django.conf import settings
 from django.template.defaultfilters import floatformat
-from django.utils import translation
+
+from pretix.base.i18n import get_babel_locale
 
 register = template.Library()
 
@@ -59,13 +60,10 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
     if hide_currency:
         return floatformat(value, f"{places}g")
 
-    locale_parts = translation.get_language().split("-", 1)
-    locale = locale_parts[0]
-    if len(locale_parts) > 1 and len(locale_parts[1]) == 2:
-        try:
-            locale = Locale(locale_parts[0], locale_parts[1].upper())
-        except UnknownLocaleError:
-            pass
+    try:
+        locale = Locale(get_babel_locale())
+    except UnknownLocaleError:
+        locale = "en"
 
     try:
         return format_currency(value, arg, locale=locale)

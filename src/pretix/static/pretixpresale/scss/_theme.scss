@@ -1,8 +1,16 @@
 h1, .h1,
 h2, .h2,
 h3, .h3 {
-  margin-top: 2.25 * $line-height-computed;
+  margin-top: 0.75 * $line-height-computed;
   margin-bottom: 0.75 * $line-height-computed;
+}
+
+.front-page, .item-category {
+  h1, .h1,
+  h2, .h2,
+  h3, .h3 {
+    margin-top: 2.25 * $line-height-computed;
+  }
 }
 
 .page-header {
@@ -35,8 +43,9 @@ h3, .h3 {
 .page-header-links > div.header-part {
   padding-top: 15px;
 
-  a:link, a:visited {
+  a {
     color: var(--pretix-link-contrast-color);
+    outline-color: inherit;
   }
   a:active, a:hover, a:focus {
     color: var(--pretix-link-hover-contrast-color);

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -42,8 +42,10 @@ from django.contrib.auth.tokens import (
 )
 from django.core import mail as djmail
 from django.test import RequestFactory, TestCase, override_settings
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django_otp.oath import TOTP
+from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from webauthn.authentication.verify_authentication_response import (
     VerifiedAuthentication,
@@ -491,6 +493,20 @@ class Login2FAFormTest(TestCase):
         self.assertIn('/control/', response['Location'])
 
         m.undo()
+
+    def test_recovery_code_valid(self):
+        djmail.outbox = []
+        d, __ = StaticDevice.objects.get_or_create(user=self.user, name='emergency')
+        token = d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
+
+        response = self.client.get('/control/login/2fa')
+        assert 'token' in response.content.decode()
+        response = self.client.post('/control/login/2fa', {
+            'token': token.token,
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/', response['Location'])
+        assert "recovery code" in djmail.outbox[0].body
 
 
 class FakeRedis(object):
@@ -1134,7 +1150,7 @@ class PasswordChangeRequiredTest(TestCase):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
 
-    def test_redirect_to_settings(self):
+    def test_redirect_to_password_change(self):
         self.user.needs_password_change = True
         self.user.save()
         self.client.login(email='dummy@dummy.dummy', password='dummy')
@@ -1143,9 +1159,9 @@ class PasswordChangeRequiredTest(TestCase):
 
         self.assertEqual(response.status_code, 302)
         assert self.user.needs_password_change is True
-        self.assertIn('/control/settings?next=/control/events/', response['Location'])
+        self.assertIn('/control/settings/password/change?next=/control/events/', response['Location'])
 
-    def test_redirect_to_2fa_to_settings(self):
+    def test_redirect_to_2fa_to_password_change(self):
         self.user.require_2fa = True
         self.user.needs_password_change = True
         self.user.save()
@@ -1168,4 +1184,4 @@ class PasswordChangeRequiredTest(TestCase):
         response = self.client.get('/control/events/')
 
         self.assertEqual(response.status_code, 302)
-        self.assertIn('/control/settings?next=/control/events/', response['Location'])
+        self.assertIn('/control/settings/password/change?next=/control/events/', response['Location'])

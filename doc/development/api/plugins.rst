@@ -56,6 +56,20 @@ restricted         boolean (optional)   ``False`` by default, restricts a plugin
                                         for an event by system administrators / superusers.
 experimental       boolean (optional)   ``False`` by default, marks a plugin as an experimental feature in the plugins list.
 compatibility      string               Specifier for compatible pretix versions.
+level              string               System level the plugin can be activated at.
+                                        Set to ``pretix.base.plugins.PLUGIN_LEVEL_EVENT`` for plugins that can be activated
+                                        at event level and then be active for that event only.
+                                        Set to ``pretix.base.plugins.PLUGIN_LEVEL_ORGANIZER`` for plugins that can be
+                                        activated only for the organizer as a whole and are active for any event within
+                                        that organizer.
+                                        Set to ``pretix.base.plugins.PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID`` for plugins that
+                                        can be activated at organizer level but are considered active only within events
+                                        for which they have also been specifically activated.
+                                        More levels, e.g. user-level plugins, might be invented in the future.
+settings_links     list                 List of ``((menu name, submenu name, …), urlname, url_kwargs)`` tuples that point
+                                        to the plugin's settings.
+navigation_links   list                 List of ``((menu name, submenu name, …), urlname, url_kwargs)`` tuples that point
+                                        to the plugin's system pages.
 ================== ==================== ===========================================================
 
 A working example would be:
@@ -63,9 +77,9 @@ A working example would be:
 .. code-block:: python
 
     try:
-        from pretix.base.plugins import PluginConfig
+        from pretix.base.plugins import PluginConfig, PLUGIN_LEVEL_EVENT
     except ImportError:
-        raise RuntimeError("Please use pretix 2.7 or above to run this plugin!")
+        raise RuntimeError("Please use pretix 2025.7 or above to run this plugin!")
     from django.utils.translation import gettext_lazy as _
 
 
@@ -79,6 +93,7 @@ A working example would be:
             version = '1.0.0'
             category = 'PAYMENT'
             picture = 'pretix_paypal/paypal_logo.svg'
+            level = PLUGIN_LEVEL_EVENT
             visible = True
             featured = False
             restricted = False
@@ -142,14 +157,14 @@ method to make your receivers available:
             from . import signals  # NOQA
 
 You can optionally specify code that is executed when your plugin is activated for an event
-in the ``installed`` method:
+or organizer in the ``installed`` method:
 
 .. code-block:: python
 
     class PaypalApp(AppConfig):
         …
 
-        def installed(self, event):
+        def installed(self, event_or_organizer):
             pass  # Your code here
 
 

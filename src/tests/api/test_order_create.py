@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -420,6 +420,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
             }
         ],
         'total': '21.75',
+        'tax_rounding_mode': 'line',
         'comment': '',
         'api_meta': {},
         "custom_followup_at": None,
@@ -436,7 +437,9 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
             'vat_id': '',
             'vat_id_validated': False,
             'internal_reference': '',
-            'custom_field': None
+            'custom_field': None,
+            'transmission_type': 'email',
+            'transmission_info': None,
         },
         'positions': [
             {
@@ -588,6 +591,39 @@ def test_order_create_invoice_address_optional(token_client, organizer, event, i
         o = Order.objects.get(code=resp.data['code'])
         with pytest.raises(InvoiceAddress.DoesNotExist):
             o.invoice_address
+
+
+@pytest.mark.django_db
+def test_order_create_invoice_address_transmission_type_validation(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['invoice_address'] = {
+        "is_business": True,
+        "company": "This is my company name",
+        "name": "John Doe",
+        "name_parts": {},
+        "street": "",
+        "zipcode": "",
+        "city": "Test",
+        "country": "FR",
+        "internal_reference": "",
+        "vat_id": "",
+        "transmission_type": "it_sdi",
+        "transmission_info": {
+            "transmission_it_sdi_pec": "foobar@pec.it",
+            "transmission_it_sdi_recipient_code": "1234567",
+        },
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"invoice_address": {
+        "transmission_type": ["The selected transmission type is not available for this country or address type."]
+    }}
 
 
 @pytest.mark.django_db
@@ -959,6 +995,42 @@ def test_order_create_fee_as_percentage(token_client, organizer, event, item, qu
         fee = o.fees.first()
         assert fee.value == Decimal('2.30')
         assert o.total == Decimal('25.30')
+
+
+@pytest.mark.django_db
+def test_order_create_fee_as_percentage_with_zero(token_client, organizer, event, item, quota, question):
+    with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=Decimal("0.00"))
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['_treat_value_as_percentage'] = True
+    res['fees'][0]['_split_taxes_like_products'] = True
+    res['fees'][0]['value'] = '10.00'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['voucher'] = voucher.code
+    del res['positions'][0]['price']
+
+    res['simulate'] = True
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data["total"] == "0.00"
+
+    res['simulate'] = False
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        fee = o.fees.first()
+        assert fee.value == Decimal('0.00')
+        assert o.total == Decimal('0.00')
 
 
 @pytest.mark.django_db
@@ -3063,3 +3135,204 @@ def test_order_create_create_medium(token_client, organizer, event, item, quota,
         m = organizer.reusable_media.get(identifier=i)
         assert m.linked_orderposition == o.positions.first()
         assert m.type == "barcode"
+
+
+@pytest.mark.django_db
+def test_order_create_auto_pricing_discount(token_client, organizer, event, item, quota, question, taxrule):
+    with scopes_disabled():
+        event.discounts.create(
+            condition_min_count=2,
+            benefit_discount_matching_percent=50,
+            benefit_only_apply_to_cheapest_n_matches=1,
+        )
+
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['positionid']
+    del res['positions'][0]['price']
+    res['positions'].append(dict(res['positions'][0]))
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p1 = o.positions.first()
+        p2 = o.positions.last()
+    assert p1.price == Decimal('23')
+    assert p2.price == Decimal('11.50')
+    assert o.total == Decimal('34.75')
+
+
+@pytest.mark.django_db
+def test_order_create_auto_pricing_do_not_discount_if_price_explcitly_set(token_client, organizer, event, item, quota, question, taxrule):
+    with scopes_disabled():
+        event.discounts.create(
+            condition_min_count=2,
+            benefit_discount_matching_percent=50,
+            benefit_only_apply_to_cheapest_n_matches=1,
+        )
+
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['positionid']
+    res['positions'].append(dict(res['positions'][0]))
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p1 = o.positions.first()
+        p2 = o.positions.last()
+    assert p1.price == Decimal('23.00')
+    assert p2.price == Decimal('23.00')
+    assert o.total == Decimal('46.25')
+
+
+@pytest.mark.django_db
+def test_order_create_auto_pricing_believe_wrong_discounts_by_client(token_client, organizer, event, item, quota, question, taxrule):
+    with scopes_disabled():
+        discount = event.discounts.create(
+            condition_min_count=2,
+            benefit_discount_matching_percent=50,
+            benefit_only_apply_to_cheapest_n_matches=1,
+        )
+
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['positionid']
+    res['positions'].append(dict(res['positions'][0]))
+    res['positions'][0]['price'] = Decimal("10.00")
+    res['positions'][1]['price'] = Decimal("7.00")
+    res['positions'][1]['discount'] = discount.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p1 = o.positions.first()
+        p2 = o.positions.last()
+    assert p1.price == Decimal('10.00')
+    assert p1.discount is None
+    assert p2.price == Decimal('7.00')
+    assert p2.discount == discount
+    assert o.total == Decimal('17.25')
+
+
+@pytest.mark.django_db
+def test_order_create_auto_pricing_explicit_discount_not_allowed(token_client, organizer, event, item, quota, question, taxrule):
+    with scopes_disabled():
+        discount = event.discounts.create(
+            condition_min_count=2,
+            benefit_discount_matching_percent=50,
+            benefit_only_apply_to_cheapest_n_matches=1,
+        )
+
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['positionid']
+    del res['positions'][0]['price']
+    res['positions'].append(dict(res['positions'][0]))
+    res['positions'][1]['discount'] = discount.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        "positions": [
+            {},
+            {
+                "discount": ["You can only specify a discount if you do the price computation, but price is not set."]
+            }
+        ]
+    }
+
+
+@pytest.mark.django_db
+def test_order_create_rounding_mode(token_client, organizer, event, item, quota, question, taxrule):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res["tax_rounding_mode"] = "sum_by_net"
+    res['fees'][0]['_split_taxes_like_products'] = True
+    res['fees'][0]['value'] = Decimal("100.00")
+    res['positions'] = [
+        {
+            "item": item.pk,
+            "price": "100.00",
+        }
+    ] * 4
+
+    for simulate in (True, False):
+        res["simulate"] = simulate
+        resp = token_client.post(
+            '/api/v1/organizers/{}/events/{}/orders/'.format(
+                organizer.slug, event.slug
+            ), format='json', data=res
+        )
+        assert resp.status_code == 201
+        assert resp.data["total"] == "499.98"
+        assert resp.data["positions"][0]["price"] == "99.99"
+        assert resp.data["positions"][-1]["price"] == "100.00"
+
+    res["tax_rounding_mode"] = "sum_by_net_keep_gross"
+    for simulate in (True, False):
+        res["simulate"] = simulate
+        resp = token_client.post(
+            '/api/v1/organizers/{}/events/{}/orders/'.format(
+                organizer.slug, event.slug
+            ), format='json', data=res
+        )
+        assert resp.status_code == 201
+        assert resp.data["total"] == "500.00"
+        assert resp.data["positions"][0]["tax_value"] == "15.96"
+        assert resp.data["positions"][-1]["tax_value"] == "15.97"
+
+
+@pytest.mark.django_db
+def test_order_create_rounding_default_pretixpos_fallback(device, device_client, organizer, event, item, quota, question, taxrule):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'][0]['_split_taxes_like_products'] = True
+    res['fees'][0]['value'] = Decimal("100.00")
+    res['positions'] = [
+        {
+            "item": item.pk,
+            "price": "100.00",
+        }
+    ] * 4
+
+    event.settings.tax_rounding = "sum_by_net"
+
+    resp = device_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data["total"] == "499.98"
+    assert resp.data["positions"][0]["price"] == "99.99"
+    assert resp.data["positions"][-1]["price"] == "100.00"
+
+    device.software_brand = "pretixPOS Android"
+    device.save()
+    resp = device_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data["total"] == "500.00"
+    assert resp.data["positions"][0]["price"] == "100.00"
+    assert resp.data["positions"][-1]["price"] == "100.00"

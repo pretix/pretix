@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -23,6 +23,7 @@ import inspect
 import os
 
 import pytest
+from django.core.cache import cache
 from django.test import override_settings
 from django.utils import translation
 from django_scopes import scopes_disabled
@@ -115,6 +116,7 @@ def fakeredis_client(monkeypatch):
             },
         }
     ):
+        cache.clear()
         redis = get_redis_connection("default", True)
         redis.flushall()
         monkeypatch.setattr('django_redis.get_redis_connection', get_redis_connection, raising=False)

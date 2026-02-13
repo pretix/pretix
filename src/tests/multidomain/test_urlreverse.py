@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -23,11 +23,11 @@ import pytest
 from django.test import override_settings
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
-from tests import assert_num_queries
 
 from pretix.base.models import Event, Organizer
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.testutils.queries import assert_num_queries
 
 
 @pytest.fixture
@@ -45,6 +45,8 @@ def env():
 def test_event_main_domain_front_page(env):
     assert eventreverse(env[1], 'presale:event.index') == '/mrmcd/2015/'
     assert eventreverse(env[0], 'presale:organizer.index') == '/mrmcd/'
+    assert eventreverse(env[1], 'plugins:testdummy:view') == '/mrmcd/2015/testdummy'
+    assert eventreverse(env[0], 'plugins:testdummy:view') == '/mrmcd/testdummy'
 
 
 @pytest.mark.django_db
@@ -52,12 +54,16 @@ def test_event_custom_domain_kwargs(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1])
     assert eventreverse(env[1], 'presale:event.checkout', {'step': 'payment'}) == 'http://barfoo/checkout/payment/'
+    assert eventreverse(env[0], 'plugins:testdummy:view') == 'http://foobar/testdummy'
+    assert eventreverse(env[1], 'plugins:testdummy:view') == 'http://barfoo/testdummy'
 
 
 @pytest.mark.django_db
 def test_event_org_domain_kwargs(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     assert eventreverse(env[1], 'presale:event.checkout', {'step': 'payment'}) == 'http://foobar/2015/checkout/payment/'
+    assert eventreverse(env[0], 'plugins:testdummy:view') == 'http://foobar/testdummy'
+    assert eventreverse(env[1], 'plugins:testdummy:view') == 'http://foobar/2015/testdummy'
 
 
 @pytest.mark.django_db
@@ -65,9 +71,13 @@ def test_event_org_alt_domain_kwargs(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     d = KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
     assert eventreverse(env[1], 'presale:event.checkout', {'step': 'payment'}) == 'http://foobar/2015/checkout/payment/'
+    assert eventreverse(env[1], 'plugins:testdummy:view') == 'http://foobar/2015/testdummy'
     d.event_assignments.create(event=env[1])
     with scopes_disabled():
-        assert eventreverse(Event.objects.get(pk=env[1].pk), 'presale:event.checkout', {'step': 'payment'}) == 'http://altfoo/2015/checkout/payment/'
+        event = Event.objects.get(pk=env[1].pk)
+    assert eventreverse(event, 'presale:event.checkout', {'step': 'payment'}) == 'http://altfoo/2015/checkout/payment/'
+    assert eventreverse(env[0], 'plugins:testdummy:view') == 'http://foobar/testdummy'
+    assert eventreverse(event, 'plugins:testdummy:view') == 'http://altfoo/2015/testdummy'
 
 
 @pytest.mark.django_db

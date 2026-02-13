@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -49,7 +49,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.formats import get_format
 from django.utils.functional import cached_property
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
 from django.views.generic import CreateView, FormView, ListView, UpdateView
@@ -174,21 +174,38 @@ class SubEventDelete(EventPermissionRequiredMixin, CompatDeleteView):
             return HttpResponseRedirect(self.get_success_url())
         return super().get(request, *args, **kwargs)
 
-    @transaction.atomic
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
 
-        if not self.object.allow_delete():
-            messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
-                                                              'placed.'))
-            return HttpResponseRedirect(self.get_success_url())
+        try:
+            with transaction.atomic():
+                if not self.object.allow_delete():
+                    messages.error(request, pgettext_lazy('subevent', 'A date can not be deleted if orders already have been '
+                                                                      'placed.'))
+                    return HttpResponseRedirect(success_url)
+                self.object.log_action('pretix.subevent.deleted', user=self.request.user)
+                CartPosition.objects.filter(addon_to__subevent=self.object).delete()
+                self.object.cartposition_set.all().delete()
+                self.object.delete()
+        except ProtectedError:
+            if self.object.active:
+                with transaction.atomic():
+                    self.object.log_action(
+                        'pretix.subevent.changed', user=self.request.user, data={
+                            'active': False
+                        },
+                    )
+                self.object.active = False
+                self.object.save(update_fields=['active'])
+            messages.error(self.request, pgettext_lazy(
+                'subevent',
+                'The date could not be deleted as some constraints (e.g. data created by plug-ins) did not allow '
+                'it. The date was disabled instead.'
+            ))
         else:
-            self.object.log_action('pretix.subevent.deleted', user=self.request.user)
-            CartPosition.objects.filter(addon_to__subevent=self.object).delete()
-            self.object.cartposition_set.all().delete()
-            self.object.delete()
             messages.success(request, pgettext_lazy('subevent', 'The selected date has been deleted.'))
+
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self) -> str:
@@ -768,8 +785,15 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
         ctx['time_formset'] = self.time_formset
 
         tf = get_format('TIME_INPUT_FORMATS')[0]
+        ctx['time_admission_sample'] = time(8, 30, 0).strftime(tf)
         ctx['time_begin_sample'] = time(9, 0, 0).strftime(tf)
         ctx['time_end_sample'] = time(18, 0, 0).strftime(tf)
+
+        df = get_format('DATETIME_INPUT_FORMATS')[0]
+        ctx['datetime_sample'] = now().replace(
+            year=2000, month=12, day=31, hour=18, minute=0, second=0, microsecond=0
+        ).strftime(df)
+
         return ctx
 
     @cached_property

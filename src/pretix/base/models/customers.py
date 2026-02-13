@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from decimal import Decimal
+
 import pycountry
 from django.conf import settings
 from django.contrib.auth.hashers import (
@@ -27,15 +29,21 @@ from django.contrib.auth.hashers import (
 from django.core.validators import RegexValidator, URLValidator
 from django.db import models
 from django.db.models import F, Q
+from django.db.models.aggregates import Sum
+from django.db.models.expressions import OuterRef, Subquery
+from django.db.models.functions.comparison import Coalesce
 from django.utils.crypto import get_random_string, salted_hmac
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from pretix.base.banlist import banned
+from pretix.base.i18n import language
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
+from pretix.base.models.giftcards import GiftCardTransaction
 from pretix.base.models.organizer import Organizer
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.helpers.countries import FastCountryField
@@ -156,6 +164,28 @@ class Customer(LoggedModel):
         self.memberships.all().update(attendee_name_parts=None)
         self.attendee_profiles.all().delete()
         self.invoice_addresses.all().delete()
+
+    def send_security_notice(self, message, email=None):
+        from pretix.base.services.mail import SendMailException, mail
+        from pretix.multidomain.urlreverse import build_absolute_uri
+
+        try:
+            with language(self.locale):
+                mail(
+                    email or self.email,
+                    self.organizer.settings.mail_subject_customer_security_notice,
+                    self.organizer.settings.mail_text_customer_security_notice,
+                    {
+                        **self.get_email_context(),
+                        'message': str(message),
+                        'url': build_absolute_uri(self.organizer, 'presale:organizer.customer.index')
+                    },
+                    customer=self,
+                    organizer=self.organizer,
+                    locale=self.locale
+                )
+        except SendMailException:
+            pass  # Already logged
 
     @scopes_disabled()
     def assign_identifier(self):
@@ -286,7 +316,21 @@ class Customer(LoggedModel):
             locale=self.locale,
             customer=self,
             organizer=self.organizer,
+            sensitive=True,
         )
+
+    def usable_gift_cards(self, used_cards=[]):
+        s = GiftCardTransaction.objects.filter(
+            card=OuterRef('pk')
+        ).order_by().values('card').annotate(s=Sum('value')).values('s')
+        qs = self.customer_gift_cards.annotate(
+            cached_value=Coalesce(Subquery(s), Decimal('0.00')),
+        )
+        ne_qs = qs.filter(
+            Q(expires__isnull=True) | Q(expires__gte=now()),
+        )
+        ex_qs = ne_qs.exclude(id__in=used_cards)
+        return ex_qs.filter(cached_value__gt=0)
 
 
 class AttendeeProfile(models.Model):
@@ -329,7 +373,7 @@ class AttendeeProfile(models.Model):
     def state_name(self):
         sd = pycountry.subdivisions.get(code='{}-{}'.format(self.country, self.state))
         if sd:
-            return sd.name
+            return _(sd.name)
         return self.state
 
     @property

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -50,6 +50,7 @@ from rest_framework.relations import SlugRelatedField
 from pretix.api.serializers import (
     CompatibleJSONField, SalesChannelMigrationMixin,
 )
+from pretix.api.serializers.fields import PluginsField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import (
@@ -61,6 +62,9 @@ from pretix.base.models.items import (
     ItemMetaProperty, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.models.tax import CustomRulesValidator
+from pretix.base.plugins import (
+    PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
+)
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
@@ -123,22 +127,6 @@ class SeatCategoryMappingField(Field):
             raise ValidationError('seat_category_mapping needs to be an object (str -> int).')
         return {
             'seat_category_mapping': data or {}
-        }
-
-
-class PluginsField(Field):
-
-    def to_representation(self, obj):
-        from pretix.base.plugins import get_all_plugins
-
-        return sorted([
-            p.module for p in get_all_plugins()
-            if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in obj.get_plugins()
-        ])
-
-    def to_internal_value(self, data):
-        return {
-            'plugins': data
         }
 
 
@@ -283,17 +271,28 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
         from pretix.base.plugins import get_all_plugins
 
         plugins_available = {
-            p.module: p for p in get_all_plugins(self.instance)
+            p.module: p for p in get_all_plugins(event=self.instance)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
+        current_plugins = self.instance.get_plugins() if self.instance and self.instance.pk else []
         settings_holder = self.instance if self.instance and self.instance.pk else self.context['organizer']
 
+        allowed_levels = (PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID)
         for plugin in value.get('plugins'):
             if plugin not in plugins_available:
                 raise ValidationError(_('Unknown plugin: \'{name}\'.').format(name=plugin))
             if getattr(plugins_available[plugin], 'restricted', False):
                 if plugin not in settings_holder.settings.allowed_restricted_plugins:
                     raise ValidationError(_('Restricted plugin: \'{name}\'.').format(name=plugin))
+            level = getattr(plugins_available[plugin], 'level', PLUGIN_LEVEL_EVENT)
+            if level not in allowed_levels:
+                raise ValidationError('Plugin cannot be enabled on this level: \'{name}\'.'.format(name=plugin))
+
+            if level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID and plugin not in self.context['organizer'].get_plugins():
+                if plugin not in current_plugins:
+                    # Technically, this is allowed, but consumers might be confused if the API call doesn't do anything
+                    # so we prevent this change.
+                    raise ValidationError('Plugin should be enabled on organizer level first: \'{name}\'.'.format(name=plugin))
 
         return value
 
@@ -378,6 +377,8 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
                     if prop.name not in meta_data:
                         current_object.delete()
 
+            instance._prefetched_objects_cache.clear()
+
         # Item Meta properties
         if item_meta_properties is not None:
             current = list(event.item_meta_properties.all())
@@ -397,6 +398,8 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
             for prop in current:
                 if prop.name not in list(item_meta_properties.keys()):
                     prop.delete()
+
+            instance._prefetched_objects_cache.clear()
 
         # Seats
         if seat_category_mapping is not None or ('seating_plan' in validated_data and validated_data['seating_plan'] is None):
@@ -681,8 +684,26 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
 
     class Meta:
         model = TaxRule
-        fields = ('id', 'name', 'rate', 'code', 'price_includes_tax', 'eu_reverse_charge', 'home_country',
-                  'internal_name', 'keep_gross_if_rate_changes', 'custom_rules')
+        fields = ('id', 'name', 'default', 'rate', 'code', 'price_includes_tax', 'eu_reverse_charge', 'home_country',
+                  'internal_name', 'keep_gross_if_rate_changes', 'custom_rules', 'default')
+
+    def create(self, validated_data):
+        if "default" not in validated_data and not self.context["event"].tax_rules.exists():
+            validated_data["default"] = True
+        return super().create(validated_data)
+
+    def save(self, **kwargs):
+        if self.validated_data.get("default"):
+            if self.instance and self.instance.pk:
+                self.context["event"].tax_rules.exclude(pk=self.instance.pk).update(default=False)
+            else:
+                self.context["event"].tax_rules.update(default=False)
+        return super().save(**kwargs)
+
+    def validate_default(self, value):
+        if not value and self.instance.default:
+            raise ValidationError("You can't remove the default property, instead set it on another tax rule.")
+        return value
 
 
 class EventSettingsSerializer(SettingsSerializer):
@@ -708,6 +729,8 @@ class EventSettingsSerializer(SettingsSerializer):
         'allow_modifications_after_checkin',
         'last_order_modification_date',
         'show_quota_left',
+        'tax_rule_payment',
+        'tax_rule_cancellation',
         'waiting_list_enabled',
         'waiting_list_auto_disable',
         'waiting_list_hours',
@@ -772,6 +795,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_address_asked',
         'invoice_address_required',
         'invoice_address_vatid',
+        'invoice_address_vatid_required_countries',
         'invoice_address_company_required',
         'invoice_address_beneficiary',
         'invoice_address_custom_field',
@@ -782,6 +806,8 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_reissue_after_modify',
         'invoice_include_free',
         'invoice_generate',
+        'invoice_generate_only_business',
+        'invoice_period',
         'invoice_numbers_consecutive',
         'invoice_numbers_prefix',
         'invoice_numbers_prefix_cancellations',
@@ -796,6 +822,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_address_from',
         'invoice_address_from_zipcode',
         'invoice_address_from_city',
+        'invoice_address_from_state',
         'invoice_address_from_country',
         'invoice_address_from_tax_id',
         'invoice_address_from_vat_id',
@@ -805,6 +832,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_eu_currencies',
         'invoice_logo_image',
         'invoice_renderer_highlight_order_code',
+        'tax_rounding',
         'cancel_allow_user',
         'cancel_allow_user_until',
         'cancel_allow_user_unpaid_keep',
@@ -917,6 +945,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'invoice_address_asked',
         'invoice_address_required',
         'invoice_address_vatid',
+        'invoice_address_vatid_required_countries',
         'invoice_address_company_required',
         'invoice_address_beneficiary',
         'invoice_address_custom_field',
@@ -927,6 +956,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'invoice_address_from',
         'invoice_address_from_zipcode',
         'invoice_address_from_city',
+        'invoice_address_from_state',
         'invoice_address_from_country',
         'invoice_address_from_tax_id',
         'invoice_address_from_vat_id',
@@ -938,6 +968,8 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'reusable_media_type_nfc_mf0aes',
         'reusable_media_type_nfc_mf0aes_random_uid',
         'system_question_order',
+        'tax_rule_payment',
+        'tax_rule_cancellation',
     ]
 
     def __init__(self, *args, **kwargs):

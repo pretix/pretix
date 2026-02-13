@@ -10,14 +10,15 @@ Contents:
    exporter
    ticketoutput
    payment
-   payment_2.0
    email
    placeholder
    invoice
+   invoicetransmission
    shredder
    import
    customview
    cookieconsent
    auth
+   datasync
    general
    quality

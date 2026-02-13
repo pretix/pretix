@@ -3,8 +3,26 @@
 {% load bootstrap3 %}
 {% block title %}{% trans "Account settings" %}{% endblock %}
 {% block content %}
+{% if not user.is_verified %}
+    <div class="alert alert-info">
+        <p>
+            {% blocktrans trimmed %}
+            Your email address is not confirmed yet. To secure your account, please confirm your email address using
+            a confirmation code we will send to your email address.
+            {% endblocktrans %}
+        </p>
+        <p>
+            <form action="{% url "control:user.settings.email.send_verification_code" %}" method="post" class="form-horizontal">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">
+                    {% trans "Send confirmation email" %}
+                </button>
+            </form>
+        </p>
+    </div>
+{% endif %}
 <h1>{% trans "Account settings" %}</h1>
-<form action="" method="post" class="form-horizontal">
+<form action="" method="post" class="form-horizontal" data-testid="usersettingsform">
     {% csrf_token %}
     {% bootstrap_form_errors form %}
     <fieldset>
@@ -13,7 +31,7 @@
         {% bootstrap_field form.locale layout='horizontal' %}
         {% bootstrap_field form.timezone layout='horizontal' %}
         <div class="form-group">
-            <label class="col-md-3 control-label" for="id_new_pw_repeat">{% trans "Notifications" %}</label>
+            <label class="col-md-3 control-label">{% trans "Notifications" %}</label>
             <div class="col-md-9 static-form-row">
                 {% if request.user.notifications_send and request.user.notification_settings.exists %}
                     <span class="label label-success">
@@ -41,8 +59,18 @@
             {% bootstrap_field form.new_pw layout='horizontal' %}
             {% bootstrap_field form.new_pw_repeat layout='horizontal' %}
         {% endif %}
+        {% if user.auth_backend == 'native' %}
+            <div class="form-group">
+                <label class="col-md-3 control-label">{% trans "Password" %}</label>
+                <div class="col-md-9 static-form-row">
+                    <a href="{% url "control:user.settings.password.change" %}">
+                        <span class="fa fa-edit"></span> {% trans "Change password" %}
+                    </a>
+                </div>
+            </div>
+        {% endif %}
         <div class="form-group">
-            <label class="col-md-3 control-label" for="id_new_pw_repeat">{% trans "Two-factor authentication" %}</label>
+            <label class="col-md-3 control-label">{% trans "Two-factor authentication" %}</label>
             <div class="col-md-9 static-form-row">
                 {% if user.require_2fa %}
                     <span class="label label-success">{% trans "Enabled" %}</span> &nbsp;
@@ -58,7 +86,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-3 control-label" for="">{% trans "Authorized applications" %}</label>
+            <label class="col-md-3 control-label">{% trans "Authorized applications" %}</label>
             <div class="col-md-9 static-form-row">
                 <a href="{% url "control:user.settings.oauth.list" %}">
                     <span class="fa fa-plug"></span>
@@ -67,7 +95,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-3 control-label" for="">{% trans "Account history" %}</label>
+            <label class="col-md-3 control-label">{% trans "Account history" %}</label>
             <div class="col-md-9 static-form-row">
                 <a href="{% url "control:user.settings.history" %}">
                     <span class="fa fa-history"></span>

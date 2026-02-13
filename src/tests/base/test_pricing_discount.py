@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -778,6 +778,39 @@ testcases_single_rule = [
             Decimal('100.00'),
             Decimal('100.00'),
             Decimal('100.00'),
+        )
+    ),
+
+    # Distribute discounts somewhat equally over addon groups
+    (
+        (
+            Discount(
+                condition_min_count=3,
+                benefit_discount_matching_percent=20,
+                condition_apply_to_addons=True,
+                benefit_only_apply_to_cheapest_n_matches=1,
+                condition_ignore_voucher_discounted=True,
+            ),
+        ),
+        (
+            (2, 1, now(), Decimal('0.00'), None, False, Decimal('10.00')),  # Main product
+            (1, 1, now(), Decimal('100.00'), 1, False, Decimal('0.00')),
+            (1, 1, now(), Decimal('100.00'), 1, False, Decimal('0.00')),
+            (1, 1, now(), Decimal('100.00'), 1, False, Decimal('0.00')),
+            (2, 1, now(), Decimal('0.00'), None, False, Decimal('10.00')),  # Main product
+            (1, 1, now(), Decimal('100.00'), 2, False, Decimal('0.00')),
+            (1, 1, now(), Decimal('100.00'), 2, False, Decimal('0.00')),
+            (1, 1, now(), Decimal('100.00'), 2, False, Decimal('0.00')),
+        ),
+        (
+            Decimal('0.00'),
+            Decimal('100.00'),
+            Decimal('100.00'),
+            Decimal('80.00'),
+            Decimal('0.00'),
+            Decimal('100.00'),
+            Decimal('100.00'),
+            Decimal('80.00'),
         )
     ),
 

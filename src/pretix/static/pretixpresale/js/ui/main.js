@@ -1,26 +1,4 @@
-/*global $ */
-
-function gettext(msgid) {
-    if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
-        return django.gettext(msgid);
-    }
-    return msgid;
-}
-
-function ngettext(singular, plural, count) {
-    if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
-        return django.ngettext(singular, plural, count);
-    }
-    return plural;
-}
-
-function interpolate(fmt, object, named) {
-    if (named) {
-        return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
-    } else {
-        return fmt.replace(/%s/g, function(match){return String(obj.shift())});
-    }
-}
+/*global $, gettext, ngettext, interpolate */
 
 var form_handlers = function (el) {
     el.find('input, select, textarea').on('invalid', function (e) {
@@ -60,6 +38,7 @@ var form_handlers = function (el) {
             locale: $("body").attr("data-datetimelocale"),
             useCurrent: false,
             showClear: !$(this).prop("required"),
+            keepInvalid: true,
             icons: {
                 time: 'fa fa-clock-o',
                 date: 'fa fa-calendar',
@@ -243,9 +222,25 @@ var form_handlers = function (el) {
             }
         });
     }
+
+    el.find('.use_giftcard').on("click", function () {
+        var value = $(this).data('value');
+        $('#id_payment_giftcard-code').val(value)
+    })
+
 };
 
 function setup_basics(el) {
+    el.find("form").attr("novalidate", true).on("submit", function (e) {
+        if (!this.checkValidity()) {
+            var input = this.querySelector(":invalid:not(fieldset)");
+            (input.labels[0] || input).scrollIntoView();
+            // only use reportValidity, which usually sets focus on element
+            // input.focus() opens dropdowns, which is not what we want
+            input.reportValidity();
+            e.preventDefault();
+        }
+    });
     el.find("input[data-toggle=radiocollapse]").change(function () {
         $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
         $($(this).attr("data-target")).collapse('show');
@@ -302,8 +297,6 @@ function setup_basics(el) {
         e.preventDefault();
     });
 
-    el.find('[data-toggle="tooltip"]').tooltip();
-
     // AddOns
     el.find('.addon-variation-description').hide();
     el.find('.toggle-variation-description').click(function () {
@@ -313,6 +306,49 @@ function setup_basics(el) {
         if ($(this).prop("checked")) {
             $(this).parent().parent().find('.addon-variation-description').stop().slideDown();
         }
+    });
+
+    // tabs - see https://www.w3.org/WAI/ARIA/apg/patterns/tabs/examples/tabs-automatic/ for reference
+    el.find('.tabcontainer').each(function() {
+        var currentTab;
+        function setCurrentTab(tab) {
+            if (tab == currentTab) return;
+            if (currentTab) {
+                currentTab.setAttribute('aria-selected', 'false');
+                currentTab.tabIndex = -1;
+                currentTab.classList.remove('active');
+                document.getElementById(currentTab.getAttribute('aria-controls')).setAttribute('hidden', 'hidden');
+            }
+            tab.setAttribute('aria-selected', 'true');
+            tab.removeAttribute('tabindex');
+            tab.classList.add('active');
+            document.getElementById(tab.getAttribute('aria-controls')).removeAttribute('hidden');
+            currentTab = tab;
+        }
+        var tabs = $('button[role=tab]').on('keydown', function(event) {
+            if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].indexOf(event.key) == -1) {
+                return;
+            }
+            event.stopPropagation();
+            event.preventDefault();
+
+            if (event.key == 'ArrowLeft') {
+                setCurrentTab(currentTab.previousElementSibling || lastTab);
+            } else if (event.key == 'ArrowRight') {
+                setCurrentTab(currentTab.nextElementSibling || firstTab);
+            } else if (event.key == 'Home') {
+                setCurrentTab(firstTab);
+            } else if (event.key == 'End') {
+                setCurrentTab(lastTab);
+            }
+            currentTab.focus();
+        }).on('click', function (event) {
+            setCurrentTab(this);
+        });
+
+        var firstTab = tabs.first().get(0);
+        var lastTab = tabs.last().get(0);
+        setCurrentTab(tabs.filter('[aria-selected=true]').get(0));
     });
 }
 
@@ -430,8 +466,6 @@ $(function () {
         $("#voucher-toggle").slideUp();
     });
 
-    $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
-
     // Handlers for "Copy answers from above" buttons
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
@@ -497,45 +531,25 @@ $(function () {
         $("[data-save-scrollpos]").on("click submit", function () {
             sessionStorage.setItem('scrollpos', window.scrollY);
         });
+        $("#monthselform").on("submit", function () {
+            sessionStorage.setItem('scrollpos', window.scrollY);
+        });
     }
-    $("#monthselform select").change(function () {
-        if (sessionStorage) sessionStorage.setItem('scrollpos', window.scrollY);
-        this.form.submit();
-    });
-    $("#monthselform input").on("dp.change", function () {
-        if ($(this).data("DateTimePicker")) {  // prevent submit after dp init
-            if (sessionStorage) sessionStorage.setItem('scrollpos', window.scrollY);
-            this.form.submit();
+    $("form:has(#btn-add-to-cart)").on("submit", function(e) {
+        if (
+            this.querySelector("pretix-seating-checkout-button button") ||
+            this.querySelector("input[type=checkbox]:checked, input[type=radio]:checked") ||
+            [...this.querySelectorAll(".input-item-count:not([type=hidden])")].some(input => input.value && input.value !== "0") // TODO: seating adds a hidden seating-dummy-item-count, which is not useful and should at some point be removed
+        ) {
+            // okay, let the submit-event bubble to async-task
+            return;
         }
-    });
-    var update_cart_form = function () {
-        var $pageDetails = $('head');
-        var bundle = $pageDetails.find('meta[property="og:bundle_series_events"]').attr("content");
 
-        var is_enabled = $(".product-row input[type=checkbox]:checked, .variations input[type=checkbox]:checked, .product-row input[type=radio]:checked, .variations input[type=radio]:checked").length;
-        if (!is_enabled) {
-            $(".input-item-count").each(function () {
-                if ($(this).val() && $(this).val() !== "0") {
-                    is_enabled = true;
-                }
-            });
-            $(".input-seat-selection option").each(function() {
-                if ($(this).val() && $(this).val() !== "" && $(this).prop('selected')) {
-                    is_enabled = true;
-                }
-            });
-        }
-        if (!bundle && !is_enabled && (!$(".has-seating").length || $("#seating-dummy-item-count").length)) {
-            $("#btn-add-to-cart").prop("disabled", !is_enabled).popover({
-                'content': function () { return gettext("Please enter a quantity for one of the ticket types.") },
-                'placement': 'top',
-                'trigger': 'hover focus'
-            });
-        }
-    };
-    update_cart_form();
-    $(".product-row input[type=checkbox], .variations input[type=checkbox], .product-row input[type=radio], .variations input[type=radio], .input-item-count, .input-seat-selection")
-        .on("change mouseup keyup", update_cart_form);
+        e.preventDefault();
+        e.stopPropagation();
+
+        document.querySelector("#dialog-nothing-to-add").showModal();
+    });
 
     $(".table-calendar td.has-events").click(function () {
         var $grid = $(this).closest("[role='grid']");
@@ -569,23 +583,30 @@ $(function () {
     $("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {
         var dependent = $(this),
             dependentLabel = $("label[for="+this.id+"]"),
-            dependency = $($(this).attr("data-required-if")),
+            dependencies = $($(this).attr("data-required-if")),
             update = function (ev) {
-                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                var enabled = true;
+                dependencies.each(function () {
+                    var dependency = $(this);
+                    var e = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                    enabled = enabled && e;
+                });
                 if (!dependent.is("[data-no-required-attr]")) {
                     dependent.prop('required', enabled);
                 }
-                dependent.closest('.form-group').toggleClass('required', enabled);
                 if (enabled) {
-                    dependentLabel.append('<i class="sr-only label-required">, ' + gettext('required') + '</i>');
+                    dependentLabel.append('<i class="label-required">' + gettext('required') + '</i>');
                 }
                 else {
                     dependentLabel.find(".label-required").remove();
                 }
             };
         update();
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        dependencies.each(function () {
+            var dependency = $(this);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        });
     });
 
     $("input[data-display-dependency], div[data-display-dependency], select[data-display-dependency], textarea[data-display-dependency]").each(function () {
@@ -758,12 +779,32 @@ $(function () {
     });
 
     // Lightbox
-    lightbox.init();
+    (function() {
+        var dialog = document.getElementById("lightbox-dialog");
+        var img = dialog.querySelector("img");
+        var caption = dialog.querySelector("figcaption");
+        $(dialog).on("mousedown", function (e) {
+            if (e.target == this) {
+                // dialog has no padding, so click triggers only on backdrop
+                this.close();
+            }
+        });
+        $("a[data-lightbox]").on("click", function (e) {
+            e.preventDefault();
+            var label = this.querySelector("img").alt;
+            img.src = this.href;
+            img.alt = label;
+            caption.textContent = label;
+            dialog.showModal();
+        });
+    })();
+
+
 
     // free-range price input auto-check checkbox/set count-input to 1 if 0
     $("[data-checked-onchange]").each(function() {
         var countInput = this;
-        $("#" + this.getAttribute("data-checked-onchange")).on("change", function() {
+        $("#" + this.getAttribute("data-checked-onchange")).on("input", function() {
             if (countInput.type === "checkbox") {
                 if (countInput.checked) return;
                 countInput.checked = true;
@@ -777,6 +818,11 @@ $(function () {
             // in case of a change, trigger event
             $(countInput).trigger("change");
         });
+    });
+
+    $("#customer-account-login-providers a").click(function () {
+        // Prevent double-submit, see also https://github.com/pretix/pretix/issues/5836
+        $(this).addClass("disabled");
     });
 });
 

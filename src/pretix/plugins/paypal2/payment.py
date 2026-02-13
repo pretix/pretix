@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -50,10 +50,10 @@ from paypalcheckoutsdk.payments import CapturesRefundRequest, RefundsGetRequest
 from paypalhttp import HttpError
 
 from pretix.base.decimal import round_decimal
+from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
-from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
@@ -116,7 +116,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                      )
                  )),
                 ('secret',
-                 forms.CharField(
+                 SecretKeySettingsField(
                      label=_('Secret'),
                      max_length=80,
                      min_length=80,
@@ -564,7 +564,7 @@ class PaypalMethod(BasePaymentProvider):
             )
             request.session['payment_paypal_payment'] = None
         else:
-            pass
+            return None
 
         try:
             paymentreq = OrdersCreateRequest()
@@ -625,8 +625,22 @@ class PaypalMethod(BasePaymentProvider):
         }
         return template.render(ctx)
 
-    @transaction.atomic
+    # We are wrapping the actual _execute_payment() here, since PaymentExceptions
+    # within the atomic transaction would rollback any changes to the payment-object,
+    # this throwing away any logentries and payment.fail()
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        ex = None
+        with transaction.atomic():
+            try:
+                return self._execute_payment(request, payment)
+            except PaymentException as e:
+                ex = e
+        if ex:
+            raise ex
+
+        return False
+
+    def _execute_payment(self, request: HttpRequest, payment: OrderPayment):
         payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
         if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
             logger.warning('payment is already confirmed; possible return-view/webhook race-condition')
@@ -696,7 +710,7 @@ class PaypalMethod(BasePaymentProvider):
                         description = '{prefix}{orderstring}{postfix}'.format(
                             prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
                             orderstring=__('Order {order} for {event}').format(
-                                event=request.event.name,
+                                event=self.event.name,
                                 order=payment.order.code
                             ),
                             postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
@@ -806,9 +820,6 @@ class PaypalMethod(BasePaymentProvider):
                 payment.confirm()
             except Quota.QuotaExceededException as e:
                 raise PaymentException(str(e))
-
-            except SendMailException:
-                messages.warning(request, _('There was an error sending the confirmation mail.'))
         finally:
             if 'payment_paypal_oid' in request.session:
                 del request.session['payment_paypal_oid']

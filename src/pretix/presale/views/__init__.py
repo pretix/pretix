@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -32,7 +32,8 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 import copy
-from collections import defaultdict
+import warnings
+from collections import Counter, defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
 from functools import wraps
@@ -47,13 +48,14 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scopes_disabled
 
-from pretix.base.i18n import get_language_without_region
+from pretix.base.i18n import get_language_without_region, set_region
 from pretix.base.middleware import get_supported_language
 from pretix.base.models import (
-    CartPosition, Customer, InvoiceAddress, ItemAddOn, Question,
+    CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderFee, Question,
     QuestionAnswer, QuestionOption, TaxRule,
 )
 from pretix.base.services.cart import get_fees
+from pretix.base.services.pricing import apply_rounding
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.cookies import set_cookie_without_samesite
 from pretix.multidomain.urlreverse import eventreverse
@@ -147,6 +149,30 @@ class CartMixin:
                             'question': value.label
                         })
 
+        if order:
+            fees = order.fees.all()
+        elif lcp:
+            try:
+                fees = get_fees(
+                    event=self.request.event,
+                    request=self.request,
+                    invoice_address=self.invoice_address,
+                    payments=payments if payments is not None else self.cart_session.get('payments', []),
+                    positions=cartpos,
+                )
+            except TaxRule.SaleNotAllowed:
+                # ignore for now, will fail on order creation
+                fees = []
+        else:
+            fees = []
+
+        if not order:
+            apply_rounding(self.request.event.settings.tax_rounding, self.invoice_address, self.request.event.currency, [*lcp, *fees])
+
+        total = sum([c.price for c in lcp]) + sum([f.value for f in fees])
+        net_total = sum(p.price - p.tax_value for p in lcp) + sum([f.net_value for f in fees])
+        tax_total = sum(p.tax_value for p in lcp) + sum([f.tax_value for f in fees])
+
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
@@ -177,12 +203,14 @@ class CartMixin:
                     pos.subevent_id,
                     pos.item_id,
                     pos.variation_id,
-                    pos.price,
+                    pos.net_price if self.request.event.settings.display_net_prices else pos.price,
                     (pos.voucher_id or 0),
                     (pos.seat_id or 0),
                     pos.valid_from,
                     pos.valid_until,
                     pos.used_membership_id,
+                    pos.gross_price_before_rounding,
+                    pos.tax_value_before_rounding,
                 )
 
         positions = []
@@ -196,52 +224,34 @@ class CartMixin:
             if not hasattr(group, 'tax_rule'):
                 group.tax_rule = group.item.tax_rule
 
-            group.bundle_sum = group.price + sum(a.price for a in has_addons[group.pk])
-            group.bundle_sum_net = group.net_price + sum(a.net_price for a in has_addons[group.pk])
+            group.price_for_input = group.gross_price_before_rounding + sum(a.gross_price_before_rounding for a in has_addons[group.pk])
+            group.price_for_input_net = group.net_price_before_rounding + sum(a.net_price_before_rounding for a in has_addons[group.pk])
 
             if answers:
                 group.cache_answers(all=False)
                 group.additional_answers = pos_additional_fields.get(group.pk)
             positions.append(group)
 
-        total = sum(p.total for p in positions)
-        net_total = sum(p.net_total for p in positions)
-        tax_total = sum(p.total - p.net_total for p in positions)
-
-        if order:
-            fees = order.fees.all()
-        elif positions:
-            try:
-                fees = get_fees(
-                    self.request.event, self.request, total, self.invoice_address,
-                    payments if payments is not None else self.cart_session.get('payments', []),
-                    cartpos
-                )
-            except TaxRule.SaleNotAllowed:
-                # ignore for now, will fail on order creation
-                fees = []
-        else:
-            fees = []
-
-        total += sum([f.value for f in fees])
-        net_total += sum([f.net_value for f in fees])
-        tax_total += sum([f.tax_value for f in fees])
-
         try:
             first_expiry = min(p.expires for p in positions) if positions else now()
+            max_expiry_extend = min((p.max_extend for p in positions if p.max_extend), default=None)
             total_seconds_left = max(first_expiry - now(), timedelta()).total_seconds()
             minutes_left = int(total_seconds_left // 60)
             seconds_left = int(total_seconds_left % 60)
         except AttributeError:
             first_expiry = None
+            max_expiry_extend = None
             minutes_left = None
             seconds_left = None
+
+        itemvarsums = Counter()
+        for p in cartpos:
+            itemvarsums[p.variation or p.item] += 1
 
         return {
             'positions': positions,
             'invoice_address': self.invoice_address,
             'all_with_voucher': all(p.voucher_id for p in positions),
-            'bundled_series': self.request.event.meta_data.get('bundle_series_events'),
             'raw': cartpos,
             'total': total,
             'net_total': net_total,
@@ -251,22 +261,37 @@ class CartMixin:
             'minutes_left': minutes_left,
             'seconds_left': seconds_left,
             'first_expiry': first_expiry,
+            'max_expiry_extend': max_expiry_extend,
             'is_ordered': bool(order),
             'itemcount': sum(c.count for c in positions if not c.addon_to),
-            'current_selected_payments': [p for p in self.current_selected_payments(total) if p.get('multi_use_supported')]
+            'show_rounding_info': (
+                self.request.event.settings.tax_rounding == "sum_by_net_only_business" and
+                not self.request.event.settings.display_net_prices and
+                sum(c.price_includes_rounding_correction for c in positions) + sum(f.price_includes_rounding_correction for f in fees)
+            ),
+            'itemvarsums': itemvarsums,
+            'current_selected_payments': [
+                p for p in self.current_selected_payments(lcp, fees, self.invoice_address)
+                if p.get('multi_use_supported')
+            ]
         }
 
-    def current_selected_payments(self, total, warn=False, total_includes_payment_fees=False):
+    def current_selected_payments(self, positions, fees, invoice_address, *, warn=False):
         raw_payments = copy.deepcopy(self.cart_session.get('payments', []))
+        fees = [f for f in fees if f.fee_type != OrderFee.FEE_TYPE_PAYMENT]  # we re-compute these here
+
+        apply_rounding(self.request.event.settings.tax_rounding, invoice_address, self.request.event.currency, [*positions, *fees])
+        total = sum([c.price for c in positions]) + sum([f.value for f in fees])
+
         payments = []
-        total_remaining = total
+        payments_assigned = Decimal("0.00")
         for p in raw_payments:
             # This algorithm of treating min/max values and fees needs to stay in sync between the following
             # places in the code base:
             # - pretix.base.services.cart.get_fees
             # - pretix.base.services.orders._get_fees
             # - pretix.presale.views.CartMixin.current_selected_payments
-            if p.get('min_value') and total_remaining < Decimal(p['min_value']):
+            if p.get('min_value') and total - payments_assigned < Decimal(p['min_value']):
                 if warn:
                     messages.warning(
                         self.request,
@@ -277,7 +302,7 @@ class CartMixin:
                 self._remove_payment(p['id'])
                 continue
 
-            to_pay = total_remaining
+            to_pay = max(total - payments_assigned, Decimal("0.00"))
             if p.get('max_value') and to_pay > Decimal(p['max_value']):
                 to_pay = min(to_pay, Decimal(p['max_value']))
 
@@ -286,12 +311,36 @@ class CartMixin:
                 self._remove_payment(p['id'])
                 continue
 
-            if not total_includes_payment_fees:
-                fee = pprov.calculate_fee(to_pay)
-                total_remaining += fee
-                to_pay += fee
-            else:
-                fee = Decimal('0.00')
+            payment_fee = pprov.calculate_fee(to_pay)
+            if payment_fee:
+                if self.request.event.settings.tax_rule_payment == "default":
+                    payment_fee_tax_rule = self.request.event.cached_default_tax_rule or TaxRule.zero()
+                else:
+                    payment_fee_tax_rule = TaxRule.zero()
+                try:
+                    payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross', invoice_address=invoice_address)
+                except TaxRule.SaleNotAllowed:
+                    # Replicate behavior from elsewhere, will fail later at the order stage
+                    payment_fee = Decimal("0.00")
+                    payment_fee_tax = TaxRule.zero().tax(payment_fee)
+                pf = OrderFee(
+                    fee_type=OrderFee.FEE_TYPE_PAYMENT,
+                    value=payment_fee,
+                    tax_rate=payment_fee_tax.rate,
+                    tax_value=payment_fee_tax.tax,
+                    tax_code=payment_fee_tax.code,
+                    tax_rule=payment_fee_tax_rule
+                )
+                fees.append(pf)
+
+                # Re-apply rounding as grand total has changed
+                apply_rounding(self.request.event.settings.tax_rounding, invoice_address, self.request.event.currency, [*positions, *fees])
+                total = sum([c.price for c in positions]) + sum([f.value for f in fees])
+
+                # Re-calculate to_pay as grand total has changed
+                to_pay = max(total - payments_assigned, Decimal("0.00"))
+                if p.get('max_value') and to_pay > Decimal(p['max_value']):
+                    to_pay = min(to_pay, Decimal(p['max_value']))
 
             if p.get('max_value') and to_pay > Decimal(p['max_value']):
                 to_pay = min(to_pay, Decimal(p['max_value']))
@@ -299,8 +348,8 @@ class CartMixin:
             p['payment_amount'] = to_pay
             p['provider_name'] = pprov.public_name
             p['pprov'] = pprov
-            p['fee'] = fee
-            total_remaining -= to_pay
+            p['fee'] = payment_fee
+            payments_assigned += to_pay
             payments.append(p)
         return payments
 
@@ -371,6 +420,21 @@ def get_cart(request):
 
 
 def get_cart_total(request):
+    """
+    Use the following pattern instead::
+
+        cart = get_cart(request)
+        fees = get_fees(
+            event=request.event,
+            request=request,
+            invoice_address=cached_invoice_address(request),
+            payments=None,
+            positions=cart,
+        )
+        total = sum([c.price for c in cart]) + sum([f.value for f in fees])
+    """
+    warnings.warn('get_cart_total is deprecated and will be removed in a future release',
+                  DeprecationWarning)
     from pretix.presale.views.cart import get_or_create_cart_id
 
     if not hasattr(request, '_cart_total_cache'):
@@ -407,13 +471,14 @@ def get_cart_is_free(request):
         cs = cart_session(request)
         pos = get_cart(request)
         ia = get_cart_invoice_address(request)
-        total = get_cart_total(request)
         try:
-            fees = get_fees(request.event, request, total, ia, cs.get('payments', []), pos)
+            fees = get_fees(event=request.event, request=request, invoice_address=ia,
+                            payments=cs.get('payments', []), positions=pos)
         except TaxRule.SaleNotAllowed:
             # ignore for now, will fail on order creation
             fees = []
-        request._cart_free_cache = total + sum(f.value for f in fees) == Decimal('0.00')
+
+        request._cart_free_cache = sum(p.price for p in pos) + sum(f.value for f in fees) == Decimal('0.00')
     return request._cart_free_cache
 
 
@@ -484,6 +549,7 @@ def iframe_entry_view_wrapper(view_func):
                 region = request.event.settings.region
                 if '-' not in lng and region:
                     lng += '-' + region.lower()
+                set_region(region)
 
             # with language() is not good enough here – we really need to take the role of LocaleMiddleware and modify
             # global state, because template rendering might be happening lazily.

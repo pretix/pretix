@@ -41,19 +41,21 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .btn-default {
-  box-shadow: 0px 0px 0px 1px #cccccc inset;
+  box-shadow: 0px 0px 0px 1px $input-border inset;
   box-sizing: border-box;
 }
 
 .btn-default:hover, .btn-default:focus {
-  box-shadow: 0px 0px 0px 1px #cccccc inset, inset 0 1px 3px 0 #BFBFBF;
+  box-shadow: 0px 0px 0px 1px $input-border inset, inset 0 1px 3px 0 #BFBFBF;
   background: $btn-default-bg;
 }
 
 .btn-default:active, .btn-default:active:hover, .btn-default:active:focus {
-  box-shadow: 0px 0px 0px 1px #cccccc inset, inset 0 1px 8px 0 #BFBFBF;
   background: $btn-default-bg;
   outline: 0;
+}
+.btn-default.active, .btn-default.active:hover, .btn-default.active:focus {
+  box-shadow: 0px 0px 0px 1px $input-border inset, inset 0 1px 8px 0 #BFBFBF;  
 }
 
 .btn-primary:hover, .btn-primary:focus {
@@ -225,6 +227,10 @@ svg.svg-icon {
   top: 2px;
 }
 
+.text-muted path {
+  fill: $text-muted;
+}
+
 .link-muted a, a.link-muted {
   color: $text-muted;
 }
@@ -256,3 +262,12 @@ svg.svg-icon {
 @include table-row-variant('info', var(--pretix-brand-info-success-lighten-30), var(--pretix-brand-info-success-lighten-25));
 @include table-row-variant('warning', var(--pretix-brand-warning-lighten-40), var(--pretix-brand-warning-lighten-35));
 @include table-row-variant('danger', var(--pretix-brand-danger-lighten-30), var(--pretix-brand-danger-lighten-25));
+
+.confirmation-code-input {
+  font-size: 200%;
+  font-family: monospace;
+  font-stretch: expanded;
+  text-align: center;
+  height: 50px;
+  margin: 10px 0;
+}

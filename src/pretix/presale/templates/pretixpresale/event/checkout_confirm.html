@@ -7,35 +7,34 @@
 {% load getitem %}
 {% block title %}{% trans "Review order" %}{% endblock %}
 {% block content %}
-<main aria-label="{% trans "Review order" %}">
     <h2>{% trans "Review order" %}</h2>
     {% include "pretixpresale/event/fragment_checkoutflow.html" %}
     <p>{% trans "Please review the details below and confirm your order." %}</p>
+    <div class="panel panel-primary cart">
+        <div class="panel-heading panel-heading-flex">
+            <h3 class="panel-title">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                {% trans "Your cart" %}
+                <a href="{% eventurl request.event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}" class="h6">
+                    <span class="fa fa-edit" aria-hidden="true"></span>{% trans "Add or remove tickets" %}
+                </a>
+            </h3>
+            <span class="panel-heading-flex-gap"></span>
+            <strong class="helper-display-block" id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                    {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
+                {% else %}
+                    {% trans "Cart expired" %}
+                {% endif %}
+            </strong>
+        </div>
+        <div class="panel-body">
+            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
+        </div>
+    </div>
     <form method="post" data-asynctask
             data-asynctask-headline="{% trans "Please hang tight, we're finalizing your order!" %}">
         {% csrf_token %}
-        <div class="panel panel-primary cart">
-            <div class="panel-heading panel-heading-flex">
-                <h3 class="panel-title">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                    {% trans "Your cart" %}
-                    <a href="{% eventurl request.event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}" class="h6">
-                        <span class="fa fa-edit" aria-hidden="true"></span>{% trans "Add or remove tickets" %}
-                    </a>
-                </h3>
-                <span class="panel-heading-flex-gap"></span>
-                <strong class="helper-display-block" id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
-                    {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
-                        {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
-                    {% else %}
-                        {% trans "Cart expired" %}
-                    {% endif %}
-                </strong>
-            </div>
-            <div class="panel-body">
-                {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
-            </div>
-        </div>
         {% if payments %}
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -112,6 +111,10 @@
                                     <dt>{% trans "Internal reference" %}</dt>
                                     <dd>{{ addr.internal_reference }}</dd>
                                 {% endif %}
+                                {% for k, v in addr.describe_transmission %}
+                                    <dt>{{ k }}</dt>
+                                    <dd>{{ v }}</dd>
+                                {% endfor %}
                             </dl>
                         </div>
                     </div>
@@ -183,7 +186,11 @@
         {% if require_approval %}
             <div class="alert alert-warning">
                 <strong>
-                    {% trans "After you submitted your order using the button below, it will require approval by the event organizer before it can be confirmed and forms a valid contract." %}
+                    {% if cart.total > 0 %}
+                        {% trans "After you submitted your order using the button below, it will require approval by the event organizer before it can be confirmed and forms a valid contract." %}
+                    {% else %}
+                        {% trans "After you submitted your order using the button below, it will require approval by the event organizer." %}
+                    {% endif %}
                 </strong>
                 {% blocktrans trimmed %}
                     We will send you an email as soon as the event organizer approved or rejected your order.
@@ -214,5 +221,4 @@
             <div class="clearfix"></div>
         </div>
     </form>
-</main>
 {% endblock %}

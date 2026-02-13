@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -50,15 +50,16 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
 from pretix.base.media import MEDIA_TYPES
-from pretix.base.models import Checkin, Order, OrderPosition
+from pretix.base.models import Checkin, LogEntry, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
+from pretix.base.models.orders import PrintLog
 from pretix.base.services.checkin import (
     LazyRuleVars, _logic_annotate_for_graphic_explain,
 )
 from pretix.base.signals import checkin_created
-from pretix.base.views.tasks import AsyncPostView
+from pretix.base.views.tasks import AsyncFormView, AsyncPostView
 from pretix.control.forms.checkin import (
-    CheckinListForm, CheckinListSimulatorForm,
+    CheckinListForm, CheckinListSimulatorForm, CheckinResetForm,
 )
 from pretix.control.forms.filter import (
     CheckinFilterForm, CheckinListAttendeeFilterForm, CheckinListFilterForm,
@@ -570,3 +571,55 @@ class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
             for q in self.result["questions"]:
                 q["question"] = LazyI18nString(q["question"])
         return self.get(self.request, self.args, self.kwargs)
+
+
+class CheckInResetView(CheckInListQueryMixin, EventPermissionRequiredMixin, AsyncFormView):
+    form_class = CheckinResetForm
+    permission = "can_change_orders"
+    template_name = "pretixcontrol/checkin/reset.html"
+
+    def get_error_url(self, *args):
+        return reverse(
+            "control:event.orders.checkinlists",
+            kwargs={
+                "event": self.request.event.slug,
+                "organizer": self.request.organizer.slug,
+            },
+        )
+
+    def get_success_url(self, *args):
+        return reverse(
+            "control:event.orders.checkinlists",
+            kwargs={
+                "event": self.request.event.slug,
+                "organizer": self.request.organizer.slug,
+            },
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['checkins'] = Checkin.all.filter(list__event=self.request.event).count()
+        ctx['printlogs'] = PrintLog.objects.filter(position__order__event=self.request.event).count()
+        return ctx
+
+    def async_form_valid(self, task, form):
+        with transaction.atomic():
+            qs = Checkin.all.filter(list__event=self.request.event).select_related("position", "position__order")
+            logentries = []
+            for ci in qs:
+                if ci.position:
+                    logentries.append(ci.position.order.log_action('pretix.event.checkin.reverted', data={
+                        'position': ci.position.id,
+                        'positionid': ci.position.positionid,
+                        'list': ci.list_id,
+                        'web': True
+                    }, user=self.request.user, save=False))
+
+            Order.objects.filter(pk__in=qs.values_list("position__order_id", flat=True)).update(last_modified=now())
+            qs.delete()
+            LogEntry.objects.bulk_create(logentries)
+
+            pl = PrintLog.objects.filter(position__order__event=self.request.event)
+            pl.delete()
+            self.request.event.log_action('pretix.event.checkin.reset', user=self.request.user)
+            self.request.event.cache.clear()

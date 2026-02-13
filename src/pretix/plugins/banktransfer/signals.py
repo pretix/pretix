@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -22,8 +22,7 @@
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.urls import resolve, reverse
-from django.utils.translation import gettext_lazy as _, gettext_noop
-from i18nfield.strings import LazyI18nString
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.signals import register_payment_providers
 from pretix.control.signals import html_head, nav_event, nav_organizer
@@ -31,7 +30,6 @@ from pretix.control.signals import html_head, nav_event, nav_organizer
 from ...base.logentrytypes import (
     ClearDataShredderMixin, OrderLogEntryType, log_entry_types,
 )
-from ...base.settings import settings_hierarkey
 from .payment import BankTransfer
 
 
@@ -80,8 +78,6 @@ def control_nav_orga_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
     if not request.user.has_organizer_permission(request.organizer, 'can_change_orders', request=request):
         return []
-    if not request.organizer.events.filter(plugins__icontains='pretix.plugins.banktransfer'):
-        return []
     return [
         {
             'label': _("Bank transfer"),
@@ -122,23 +118,6 @@ def html_head_presale(sender, request=None, **kwargs):
 
 @log_entry_types.new()
 class BanktransferOrderEmailInvoiceLogEntryType(OrderLogEntryType, ClearDataShredderMixin):
+    # For backwards-compatibility only
     action_type = 'pretix.plugins.banktransfer.order.email.invoice'
     plain = _('The invoice was sent to the designated email address.')
-
-
-settings_hierarkey.add_default(
-    'payment_banktransfer_invoice_email_subject',
-    default_type=LazyI18nString,
-    value=LazyI18nString.from_gettext(gettext_noop("Invoice {invoice_number}"))
-)
-settings_hierarkey.add_default(
-    'payment_banktransfer_invoice_email_text',
-    default_type=LazyI18nString,
-    value=LazyI18nString.from_gettext(gettext_noop("""Hello,
-
-you receive this message because an order for {event} was placed by {order_email} and we have been asked to forward the invoice to you.
-
-Best regards,  
-
-Your {event} team"""))  # noqa: W291
-)

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -47,7 +47,8 @@ from django.utils.translation import gettext_lazy as _
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.logentrytypes import (
-    EventLogEntryType, OrderLogEntryType, log_entry_types,
+    EventLogEntryType, OrderLogEntryType, WaitingListEntryLogEntryType,
+    log_entry_types,
 )
 from pretix.base.models import SubEvent
 from pretix.base.signals import (
@@ -127,6 +128,11 @@ class SendmailPluginLogEntryType(EventLogEntryType):
 @log_entry_types.new('pretix.plugins.sendmail.order.email.sent', _('The order received a mass email.'))
 @log_entry_types.new('pretix.plugins.sendmail.order.email.sent.attendee', _('A ticket holder of this order received a mass email.'))
 class SendmailPluginOrderLogEntryType(OrderLogEntryType):
+    pass
+
+
+@log_entry_types.new('pretix.plugins.sendmail.waitinglist.email.sent', _('The person on the waiting list received a mass email.'))
+class SendmailPluginWaitingListLogEntryType(WaitingListEntryLogEntryType):
     pass
 
 
@@ -241,7 +247,7 @@ sendmail_view_classes = EventPluginSignal()
 This signal allows you to register subclasses of ``pretix.plugins.sendmail.views.BaseSenderView`` that should be
 discovered by this plugin.
 
-As with all plugin signals, the ``sender`` keyword will contain the event.
+As with all event plugin signals, the ``sender`` keyword will contain the event.
 """
 
 

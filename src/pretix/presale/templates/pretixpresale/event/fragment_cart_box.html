@@ -4,7 +4,7 @@
 {% load rich_text %}
 {% load money %}
 <details class="panel {% if open %}panel-primary{% else %}panel-default{% endif %} cart" {% if open %}open{% endif %}>
-    <summary class="panel-heading">
+    <summary class="panel-heading" aria-describedby="cart-deadline">
         <h2 class="panel-title">
             <span>
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
@@ -62,7 +62,7 @@
                         <p><button class="btn btn-default" type="submit">
                             <i class="fa fa-close" aria-hidden="true"></i> {% trans "Empty cart" %}</button></p>
                     </form>
-                {% if vouchers_exist and not cart.all_with_voucher and not cart.bundled_series %}
+                {% if vouchers_exist and not cart.all_with_voucher %}
                     <div class="toggle-container">
                         <p class="toggle-summary"><button class="js-only toggle toggle-remove btn btn-default" aria-expanded="false">
                             <span class="fa fa-tag" aria-hidden="true"></span> {% trans "Redeem a voucher" %}

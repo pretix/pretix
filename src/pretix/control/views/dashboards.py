@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -60,7 +60,6 @@ from pretix.base.models import (
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.timeline import timeline_for_event
-from pretix.control.forms.event import CommentForm
 from pretix.control.signals import (
     event_dashboard_widgets, user_dashboard_widgets,
 )
@@ -98,12 +97,8 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
             order__status=Order.STATUS_PAID,
         )
 
-        if ('bundle_series_events' in sender.meta_data and sender.meta_data['bundle_series_events'] == "true"):
-            tickc = tickc.values('order__customer').distinct().count()
-            paidc = paidc.values('order__customer').distinct().count()
-        else:
-            tickc = tickc.count()
-            paidc = paidc.count()
+        tickc = tickc.count()
+        paidc = paidc.count()
 
         if subevent:
             rev = opqs.filter(
@@ -348,6 +343,8 @@ def welcome_wizard_widget(sender, **kwargs):
 
 
 def event_index(request, organizer, event):
+    from pretix.control.forms.event import CommentForm
+
     subevent = None
     if request.GET.get("subevent", "") != "" and request.event.has_subevents:
         i = request.GET.get("subevent", "")
@@ -389,6 +386,10 @@ def event_index(request, organizer, event):
     ).exists()
     ctx['has_cancellation_requests'] = can_view_orders and CancellationRequest.objects.filter(
         order__event=request.event
+    ).exists()
+    ctx['has_sync_problems'] = can_change_event_settings and request.event.queued_sync_jobs.filter(
+        Q(need_manual_retry__isnull=False)
+        | Q(failed_attempts__gt=0)
     ).exists()
 
     ctx['timeline'] = [

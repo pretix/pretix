@@ -79,6 +79,15 @@
                     class="btn btn-primary">{% trans "Show affected orders" %}</a>
         </div>
     {% endif %}
+    {% if has_sync_problems %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+                Orders in this event could not be <strong>synced to an external system</strong> as configured.
+            {% endblocktrans %}
+            <a href="{% url "control:event.datasync.failedjobs" event=request.event.slug organizer=request.event.organizer.slug %}"
+                    class="btn btn-primary">{% trans "Show sync problems" %}</a>
+        </div>
+    {% endif %}
     {% eventsignal request.event "pretix.control.signals.event_dashboard_top" request=request %}
 
     {% if request.event.has_subevents %}

@@ -1,44 +1,55 @@
 {% load i18n %}
 {% load eventurl %}
+{% load icon %}
 {% load urlreplace %}
 <nav aria-label="{% trans "calendar navigation" %}">
     <ul class="row calendar-nav">
-        <li class="col-sm-4 col-xs-2 text-left flip">
+        <li class="text-left flip">
             {% if subevent_list.has_before %}
                 <a href="?{% url_replace request "date" subevent_list.before|date:"Y-m" %}"
                         class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with month=subevent_list.before|date:"F Y" %}Show previous month, {{ month }}{% endblocktrans %}">
-                    <span class="fa fa-arrow-left" aria-hidden="true"></span>
+                    {% icon "arrow-left" %}
                     <span class="hidden-xs">{{ subevent_list.before|date:"F Y" }}</span>
                 </a>
             {% endif %}
         </li>
-        <li class="col-sm-4 col-xs-8 text-center">
+        <li class="text-center">
             <form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" cart_namespace=cart_namespace %}">
-                {% for f, v in request.GET.items %}
+                {% for f, v in request_get_items %}
                     {% if f != "date" %}
                         <input type="hidden" name="{{ f }}" value="{{ v }}">
                     {% endif %}
                 {% endfor %}
-                <select name="date" class="form-control" aria-label="{% trans "Select month to show" %}">
-                {% for y in subevent_list.years %}
-                    <optgroup label="{{ y }}">
-                    {% for m in subevent_list.months %}
-                        <option value="{{ y }}-{{ m|date:"m" }}" {% if m.month == subevent_list.date.month and y == subevent_list.date.year %}selected{% endif %}>{{ m|date:"F" }} {{ y }}</option>
-                    {% endfor %}
-                    </optgroup>
-                {% endfor %}
-                </select>
-                <button type="submit" class="js-hidden btn btn-default">
-                    {% trans "Go" %}
-                </button>
+                <fieldset>
+                    <legend class="sr-only">{% trans "Select a month to display" %}</legend>
+                    <div>
+                        <label for="calendar-input-date">{% trans "Month" %}</label>
+                    </div>
+                    <div class="input-group">
+                        <select name="date" class="form-control" id="calendar-input-date">
+                        {% for y in subevent_list.years %}
+                            <optgroup label="{{ y }}">
+                            {% for m in subevent_list.months %}
+                                <option value="{{ y }}-{{ m|date:"m" }}" {% if m.month == subevent_list.date.month and y == subevent_list.date.year %}selected{% endif %}>{{ m|date:"F" }} {{ y }}</option>
+                            {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                        </select>
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default" aria-label="{% trans "Show month" %}">
+                                {% icon "chevron-right" %}
+                            </button>
+                        </span>
+                    </div>
+                </fieldset>
             </form>
         </li>
-        <li class="col-sm-4 col-xs-2 text-right flip">
+        <li class="text-right flip">
             {% if subevent_list.has_after %}
                 <a href="?{% url_replace request "date" subevent_list.after|date:"Y-m" %}"
                     class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with month=subevent_list.after|date:"F Y" %}Show next month, {{ month }}{% endblocktrans %}">
                     <span class="hidden-xs">{{ subevent_list.after|date:"F Y" }}</span>
-                    <span class="fa fa-arrow-right" aria-hidden="true"></span>
+                    {% icon "arrow-right" %}
                 </a>
             {% endif %}
         </li>

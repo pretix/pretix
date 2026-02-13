@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -56,9 +56,22 @@ class TaxRateFormTest(SoupTest):
         assert doc.select(".alert-success")
         self.assertIn("VAT", doc.select("#page-wrapper table")[0].text)
         with scopes_disabled():
-            assert self.event1.tax_rules.get(
+            tr = self.event1.tax_rules.get(
                 rate=19, price_includes_tax=True, eu_reverse_charge=False
             )
+            assert tr.default
+
+    def test_set_default(self):
+        with scopes_disabled():
+            tr = self.event1.tax_rules.create(rate=19, name="VAT")
+            tr2 = self.event1.tax_rules.create(rate=7, name="VAT", default=True)
+        doc = self.post_doc('/control/event/%s/%s/settings/tax/%s/default' % (self.orga1.slug, self.event1.slug, tr.id),
+                            {})
+        assert doc.select(".alert-success")
+        tr.refresh_from_db()
+        assert tr.default
+        tr2.refresh_from_db()
+        assert not tr2.default
 
     def test_update(self):
         with scopes_disabled():
@@ -98,8 +111,8 @@ class TaxRateFormTest(SoupTest):
 
     def test_delete_default_rule(self):
         with scopes_disabled():
-            tr = self.event1.tax_rules.create(rate=19, name="VAT")
-        self.event1.settings.tax_rate_default = tr
+            tr = self.event1.tax_rules.create(rate=19, name="VAT", default=True)
+            self.event1.tax_rules.create(rate=7, name="V2")
         doc = self.get_doc('/control/event/%s/%s/settings/tax/%s/delete' % (self.orga1.slug, self.event1.slug, tr.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         doc = self.post_doc('/control/event/%s/%s/settings/tax/%s/delete' % (self.orga1.slug, self.event1.slug, tr.id),

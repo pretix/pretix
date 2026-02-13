@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -110,7 +110,18 @@ class MessageView(TemplateView):
 class LogDetailView(AdministratorPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         le = get_object_or_404(LogEntry, pk=request.GET.get('pk'))
-        return JsonResponse({'action_type': le.action_type, 'content_type': str(le.content_type), 'object_id': le.object_id, 'data': le.parsed_data})
+        try:
+            object_repr = repr(le.content_object)
+        except Exception as e:
+            object_repr = 'Error: ' + str(e)
+        return JsonResponse({
+            'datetime': le.datetime.isoformat(),
+            'action_type': le.action_type,
+            'content_type': str(le.content_type),
+            'object_id': le.object_id,
+            'object_repr': object_repr,
+            'data': le.parsed_data,
+        })
 
 
 class PaymentDetailView(AdministratorPermissionRequiredMixin, View):
@@ -177,6 +188,8 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
             return None, None
         try:
             for k, v in pkg.metadata.items():
+                if k == "License-Expression":
+                    license = v
                 if k == "License":
                     license = v
                 if k == "Home-page":

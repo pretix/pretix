@@ -117,7 +117,7 @@ List-level conditional fetching
 If modification checks are not possible with this granularity, you can instead check for the full list.
 In this case, the list of objects may contain a regular HTTP header ``Last-Modified`` with the date of the
 last modification to any item of that resource. You can then pass this date back in your next request in the
-``If-Modified-Since`` header. If the any object has changed in the meantime, you will receive back a full list
+``If-Modified-Since`` header. If any object has changed in the meantime, you will receive back a full list
 (if something it missing, this means the object has been deleted). If nothing happened, we'll send back a
 ``304 Not Modified`` return code.
 

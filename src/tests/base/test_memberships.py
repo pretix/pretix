@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -47,7 +47,7 @@ TZ = ZoneInfo('Europe/Berlin')
 
 @pytest.fixture(scope='function')
 def event():
-    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     o.settings.customer_accounts = True
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
@@ -745,6 +745,8 @@ def test_use_membership(event, customer, membership, requiring_ticket):
         item=requiring_ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123",
         used_membership=membership
     )
+    q = event.quotas.create(size=None, name="foo")
+    q.items.add(requiring_ticket)
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=now(),
                           sales_channel=event.organizer.sales_channels.get(identifier="web"),
@@ -767,6 +769,8 @@ def test_use_membership_invalid(event, customer, membership, requiring_ticket):
     membership.date_start -= timedelta(days=100)
     membership.date_end -= timedelta(days=100)
     membership.save()
+    q = event.quotas.create(size=None, name="foo")
+    q.items.add(requiring_ticket)
     cp1 = CartPosition.objects.create(
         item=requiring_ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123",
         used_membership=membership

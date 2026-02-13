@@ -1,0 +1,45 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}
+    {% blocktrans trimmed with name=plugin.name %}
+        Events with plugin {{ name }}
+    {% endblocktrans %}
+{% endblock %}
+{% block inner %}
+    <h1>
+        {% blocktrans trimmed with name=plugin.name %}
+            Events with plugin {{ name }}
+        {% endblocktrans %}
+    </h1>
+    {% if plugin.level == "event" %}
+        <p>
+            {% blocktrans trimmed with name=plugin.name %}
+                The plugin "{{ name }}" can be enabled or disabled for every event individually.
+            {% endblocktrans %}
+        </p>
+    {% elif plugin.level == "event_organizer" %}
+        <p>
+            {% blocktrans trimmed with name=plugin.name %}
+                The plugin "{{ name }}" is enabled for your organizer account, but also needs to be enabled for the
+                specific events you want to use it with.
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+    <p>
+        {% blocktrans trimmed %}
+            Using this form, you can quickly enable or disable it for many events. Note that it might still
+            be necessary to configure the plugin for each event individually.
+        {% endblocktrans %}
+    </p>
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form layout="control" %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

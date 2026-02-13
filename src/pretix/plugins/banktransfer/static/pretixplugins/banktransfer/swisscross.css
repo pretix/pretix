@@ -1,8 +1,7 @@
 .banktransfer-swiss-cross-overlay {
     position: relative;
     width: 150px;
-    height: 150px;
-    margin: 0 auto 10px;
+    margin: 0 auto;
 }
 .banktransfer-swiss-cross {
     position: absolute;

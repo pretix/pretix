@@ -1,0 +1,44 @@
+{% load i18n %}
+{% load static %}
+
+{% if payment_qr_codes %}
+    <div class="tabcontainer col-md-6 col-sm-6 hidden-xs text-center js-only blank-after">
+        <div id="banktransfer_qrcodes_tabs_content" class="tabpanels blank-after">
+            {% for code_info in payment_qr_codes %}
+                <div id="banktransfer_qrcodes_{{ code_info.id }}"
+                    role="tabpanel"
+                    tabindex="0"
+                    {% if not forloop.first %}hidden{% endif %}
+                    aria-labelledby="banktransfer_qrcodes_{{ code_info.id }}_tab"
+                >
+                    {% if code_info.link %}<a aria-label="{{ code_info.link_aria_label }}" href="{{ code_info.link }}">{% endif %}
+                    <div class="{{ code_info.css_class }}" role="figure" aria-labelledby="banktransfer_qrcodes_{{ code_info.id }}_tab banktransfer_qrcodes_label">
+                        {{ code_info.html_prefix }}
+                        <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">{{ code_info.qr_data }}</script>
+                    </div>
+                    {% if code_info.link %}</a>{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div id="banktransfer_qrcodes_tabs" role="tablist" aria-labelledby="banktransfer_qrcodes_label" class="blank-after btn-group">
+            {% for code_info in payment_qr_codes %}
+                <button
+                    class="btn btn-default"
+                    id="banktransfer_qrcodes_{{ code_info.id }}_tab"
+                    type="button"
+                    role="tab"
+                    aria-controls="banktransfer_qrcodes_{{ code_info.id }}"
+                    aria-selected="{{ forloop.first|yesno:"true,false" }}"
+                    tabindex="-1">{{ code_info.label }}</button>
+            {% endfor %}
+        </div>
+        <p class="text-muted" id="banktransfer_qrcodes_label">
+            {% trans "Scan the QR code with your banking app" %}
+        </p>
+    </div>
+    {% for code_info in payment_qr_codes %}
+        {% if code_info.id == "qrbill" %}
+            <link rel="stylesheet" href="{% static "pretixplugins/banktransfer/swisscross.css" %}">
+        {% endif %}
+    {% endfor %}
+{% endif %}

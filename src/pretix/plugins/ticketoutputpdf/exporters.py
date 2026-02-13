@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -223,7 +223,7 @@ class AllTicketsPDF(BaseExporter):
 
                 with language(op.order.locale, o.event.settings.region):
                     layout = o.layout_map.get(
-                        (op.item_id, op.order.sales_channel_id),
+                        (op.item_id, op.order.sales_channel.identifier),
                         o.layout_map.get(
                             (op.item_id, 'web'),
                             o.default_layout

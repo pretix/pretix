@@ -18,7 +18,7 @@
     {% include "pretixpresale/fragment_js.html" %}
     <meta name="referrer" content="origin">
     {{ html_head|safe }}
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block custom_header %}{% endblock %}
     {% if settings.favicon %}
         <link rel="icon" href="{{ settings.favicon|thumb:'16x16^' }}">
@@ -37,13 +37,13 @@
         <link rel="icon" type="image/png" sizes="192x192" href="{% static "pretixbase/img/icons/android-chrome-192x192.png" %}">
         <link rel="apple-touch-icon" sizes="180x180" href="{% static "pretixbase/img/icons/apple-touch-icon.png" %}">
     {% endif %}
-    <link rel="manifest" href="{% url "presale:site.webmanifest" %}">
-    <meta name="msapplication-TileColor" content="{{ settings.primary_color|default:"#3b1c4a" }}">
-    <meta name="msapplication-config" content="{% url "presale:browserconfig.xml" %}">
     <meta name="theme-color" content="{{ settings.primary_color|default:"#3b1c4a" }}">
 </head>
 <body class="nojs" data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}" data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-currency="{{ request.event.currency }}">
 {{ html_page_header|safe }}
+<nav id="skip-to-main" role="navigation" aria-label="{% trans "Skip link" context "skip-to-main-nav" %}" class="sr-only on-focus-visible">
+  <p><a href="#content">{% trans "Skip to main content" %}</a></p>
+</nav>
 <header>
 {% if ie_deprecation_warning %}
     <div class="old-browser-warning">
@@ -65,8 +65,10 @@
 {% endblock %}
 </header>
 <div class="container main-box">
+    <main id="content">
     {% block page %}
     {% endblock %}
+    </main>
     <footer>
         {% block footer %}
         {% endblock %}

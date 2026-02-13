@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -41,6 +41,7 @@ class WaitingListExporter(ListExporter):
     verbose_name = _('Waiting list')
     category = pgettext_lazy('export_category', 'Waiting list')
     description = _('Download a spread sheet with all your waiting list data.')
+    repeatable_read = False
 
     # map selected status to label and queryset-filter
     status_filters = [
@@ -108,8 +109,10 @@ class WaitingListExporter(ListExporter):
             _('Name'),
             _('Email'),
             _('Phone number'),
-            _('Product name'),
+            _('Product'),
+            _('Product ID'),
             _('Variation'),
+            _('Variation ID'),
             _('Event slug'),
             _('Event name'),
             pgettext_lazy('subevents', 'Date'),  # Name of subevent
@@ -146,7 +149,9 @@ class WaitingListExporter(ListExporter):
                 entry.email,
                 entry.phone,
                 str(entry.item) if entry.item else "",
+                str(entry.item.pk) if entry.item else "",
                 str(entry.variation) if entry.variation else "",
+                str(entry.variation.pk) if entry.variation else "",
                 entry.event.slug,
                 entry.event.name,
                 entry.subevent.name if entry.subevent else "",

@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -122,7 +122,7 @@ class LoginView(RedirectBackMixin, FormView):
     def get_context_data(self, **kwargs):
         return super().get_context_data(
             **kwargs,
-            providers=self.request.organizer.sso_providers.all()
+            providers=self.request.organizer.sso_providers.filter(is_active=True)
         )
 
     def get_form_kwargs(self):
@@ -286,6 +286,7 @@ class SetPasswordView(FormView):
             self.customer.is_verified = True
             self.customer.save()
             self.customer.log_action('pretix.customer.password.set', {})
+        self.customer.send_security_notice(_("Your password has been changed."))
         messages.success(
             self.request,
             _('Your new password has been set! You can now use it to log in.'),
@@ -325,6 +326,7 @@ class ResetPasswordView(FormView):
             locale=customer.locale,
             customer=customer,
             organizer=self.request.organizer,
+            sensitive=True,
         )
         messages.success(
             self.request,
@@ -367,6 +369,12 @@ class CustomerAccountBaseMixin(CustomerRequiredMixin):
                 'url': eventreverse(self.request.organizer, 'presale:organizer.customer.memberships', kwargs={}),
                 'active': url_name.startswith('organizer.customer.membership'),
                 'icon': 'id-badge',
+            },
+            {
+                'label': _('Gift cards'),
+                'url': eventreverse(self.request.organizer, 'presale:organizer.customer.giftcards', kwargs={}),
+                'active': url_name.startswith('organizer.customer.giftcard'),
+                'icon': 'gift',
             },
             {
                 'label': _('Addresses'),
@@ -461,6 +469,15 @@ class MembershipUsageView(CustomerAccountBaseMixin, ListView):
         return ctx
 
 
+class GiftcardView(CustomerAccountBaseMixin, ListView):
+    template_name = 'pretixpresale/organizers/customer_giftcards.html'
+    context_object_name = 'gift_cards'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return self.request.customer.customer_gift_cards.all()
+
+
 class AddressView(CustomerAccountBaseMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_addresses.html'
     context_object_name = 'invoice_addresses'
@@ -525,6 +542,7 @@ class ChangePasswordView(CustomerAccountBaseMixin, FormView):
         customer.set_password(form.cleaned_data['password'])
         customer.save()
         messages.success(self.request, _('Your changes have been saved.'))
+        customer.send_security_notice(_("Your password has been changed."))
         update_customer_session_auth_hash(self.request, customer)
         return HttpResponseRedirect(self.get_success_url())
 
@@ -615,11 +633,15 @@ class ConfirmChangeView(View):
 
         try:
             with transaction.atomic():
+                old_email = customer.email
                 customer.email = data['email']
                 customer.save()
                 customer.log_action('pretix.customer.changed', {
                     'email': data['email']
                 })
+                msg = _('Your email address has been changed from {old_email} to {email}.').format(old_email=old_email, email=customer.email)
+                customer.send_security_notice(msg, email=old_email)
+                customer.send_security_notice(msg, email=customer.email)
         except IntegrityError:
             messages.success(request, _('Your email address has not been updated since the address is already in use '
                                         'for another customer account.'))

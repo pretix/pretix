@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -279,7 +279,6 @@ class OrderMailForm(BaseMailForm):
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
@@ -360,7 +359,6 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
                         'event': self.event.slug,
                         'organizer': self.event.organizer.slug,
                     }),
-                    'data-placeholder': pgettext_lazy('subevent', 'Date')
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
@@ -391,7 +389,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
         choices.insert(0, ('n__pending_approval', _('approval pending')))
         if not self.event.settings.get('payment_term_expire_automatically', as_type=bool):
             choices.append(
-                ('p__overdue', _('pending with payment overdue'))
+                ('n__pending_overdue', _('pending with payment overdue'))
             )
         self.fields['restrict_to_status'] = forms.MultipleChoiceField(
             label=pgettext_lazy('sendmail_from', 'Restrict to orders with status'),

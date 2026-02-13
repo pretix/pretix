@@ -41,6 +41,7 @@ expires                               datetime                   The order will 
 payment_date                          date                       **DEPRECATED AND INACCURATE** Date of payment receipt
 payment_provider                      string                     **DEPRECATED AND INACCURATE** Payment provider used for this order
 total                                 money (string)             Total value of this order
+tax_rounding_mode                     string                     Tax rounding mode, see :ref:`algorithms-rounding`
 comment                               string                     Internal comment on this order
 api_meta                              object                     Meta data for that order. Only available through API, no guarantees
                                                                  on the content structure. You can use this to save references to your system.
@@ -65,11 +66,16 @@ invoice_address                       object                     Invoice address
 ├ state                               string                     Customer state (ISO 3166-2 code). Only supported in
                                                                  AU, BR, CA, CN, MY, MX, and US.
 ├ internal_reference                  string                     Customer's internal reference to be printed on the invoice
+
 ├ custom_field                        string                     Custom invoice address field
 ├ vat_id                              string                     Customer VAT ID
-└ vat_id_validated                    string                     ``true``, if the VAT ID has been validated against the
+├ vat_id_validated                    string                     ``true``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
                                                                  happens in rare cases.
+├ transmission_type                   string                     Transmission channel for invoice (see also :ref:`rest-transmission-types`).
+                                                                 Defaults to ``email``.
+└ transmission_info                   object                     Transmission-channel specific information (or ``null``).
+                                                                 See also :ref:`rest-transmission-types`.
 positions                             list of objects            List of order positions (see below). By default, only
                                                                  non-canceled positions are included.
 fees                                  list of objects            List of fees included in the order total. By default, only
@@ -114,34 +120,6 @@ plugin_data                           object                     Additional data
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 4.0
-
-   The ``customer`` attribute has been added.
-
-.. versionchanged:: 4.1
-
-   The ``custom_followup_at`` attribute has been added.
-
-.. versionchanged:: 4.4
-
-   The ``item`` and ``variation`` query parameters have been added.
-
-.. versionchanged:: 4.6
-
-   The ``subevent`` query parameters has been added.
-
-.. versionchanged:: 4.8
-
-   The ``order.fees.id`` attribute has been added.
-
-.. versionchanged:: 4.15
-
-   The ``include`` query parameter has been added.
-
-.. versionchanged:: 4.16
-
-   The ``valid_if_pending`` attribute has been added.
-
 .. versionchanged:: 2023.8
 
    The ``event`` attribute has been added. The organizer-level endpoint has been added.
@@ -169,6 +147,14 @@ plugin_data                           object                     Additional data
 .. versionchanged:: 2025.2
 
    The ``plugin_data`` attribute has been added.
+
+.. versionchanged:: 2025.6
+
+   The ``invoice_address.transmission_type`` and ``invoice_address.transmission_info`` attributes have been added.
+
+.. versionchanged:: 2025.10
+
+   The ``tax_rounding_mode`` attribute has been added.
 
 .. _order-position-resource:
 
@@ -259,10 +245,6 @@ pdf_data                              object                     Data object req
                                                                  ``pdf_data=true`` query parameter to your request.
 plugin_data                           object                     Additional data added by plugins.
 ===================================== ========================== =======================================================
-
-.. versionchanged:: 4.16
-
-   The attributes ``blocked``, ``valid_from`` and ``valid_until`` have been added.
 
 .. versionchanged:: 2024.9
 
@@ -381,6 +363,7 @@ List of all orders
             "payment_provider": "banktransfer",
             "fees": [],
             "total": "23.00",
+            "tax_rounding_mode": "line",
             "comment": "",
             "custom_followup_at": null,
             "checkin_attention": false,
@@ -400,7 +383,9 @@ List of all orders
                 "state": "",
                 "internal_reference": "",
                 "vat_id": "EU123456789",
-                "vat_id_validated": false
+                "vat_id_validated": false,
+                "transmission_type": "email",
+                "transmission_info": {}
             },
             "positions": [
               {
@@ -439,6 +424,7 @@ List of all orders
                 "seat": null,
                 "checkins": [
                   {
+                    "id": 1337,
                     "list": 44,
                     "type": "entry",
                     "gate": null,
@@ -622,6 +608,7 @@ Fetching individual orders
         "payment_provider": "banktransfer",
         "fees": [],
         "total": "23.00",
+        "tax_rounding_mode": "line",
         "comment": "",
         "api_meta": {},
         "custom_followup_at": null,
@@ -642,7 +629,9 @@ Fetching individual orders
             "state": "",
             "internal_reference": "",
             "vat_id": "EU123456789",
-            "vat_id_validated": false
+            "vat_id_validated": false,
+            "transmission_type": "email",
+            "transmission_info": {}
         },
         "positions": [
           {
@@ -681,6 +670,7 @@ Fetching individual orders
             "seat": null,
             "checkins": [
               {
+                "id": 1337,
                 "list": 44,
                 "type": "entry",
                 "gate": null,
@@ -755,10 +745,6 @@ Fetching individual orders
 
 Order ticket download
 ---------------------
-
-.. versionchanged:: 4.10
-
-   The API now supports ticket downloads for pending orders if allowed by the event settings.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/download/(output)/
 
@@ -1032,6 +1018,7 @@ Creating orders
      provider will not be called to do anything about this (i.e. if you pass a bank account to a debit provider, *no*
      charge will be created), this is just informative in case you *handled the payment already*.
    * ``payment_date`` (optional) – Date and time of the completion of the payment.
+   * ``tax_rounding_mode`` (optional)
    * ``comment`` (optional)
    * ``custom_followup_at`` (optional)
    * ``checkin_attention`` (optional)
@@ -1051,8 +1038,10 @@ Creating orders
       * ``internal_reference``
       * ``vat_id``
       * ``vat_id_validated`` (optional) – If you need support for reverse charge (rarely the case), you need to check
-         yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
-         trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
+        yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
+        trigger reverse charge taxation. Don't forget to set ``is_business`` as well!
+     * ``transmission_type`` (optional, defaults to ``email``)
+     * ``transmission_info`` (optional, see also :ref:`rest-transmission-types`)
 
    * ``positions``
 
@@ -1077,6 +1066,7 @@ Creating orders
       * ``valid_until`` (optional, if both ``valid_from`` and ``valid_until`` are **missing** (not ``null``) the availability will be computed from the given product)
       * ``requested_valid_from`` (optional, can be set **instead** of ``valid_from`` and ``valid_until`` to signal a user choice for the start time that may or may not be respected)
       * ``use_reusable_medium`` (optional, causes the new ticket to take over the given reusable medium, identified by its ID)
+      * ``discount`` (optional, only possible if ``price`` is set; attention: if this is set to not-``null`` on any position, automatic calculation of discounts will not run)
       * ``answers``
 
         * ``question``
@@ -1095,9 +1085,10 @@ Creating orders
         prices. Note that this will not include other fees and is calculated once during order generation and will not
         be respected automatically when the order changes later.)
       * ``_split_taxes_like_products`` (Optional convenience flag. If set to ``true``, your ``tax_rule`` will be ignored
-        and the fee will be taxed like the products in the order. If the products have multiple tax rates, multiple fees
-        will be generated with weights adjusted to the net price of the products. Note that this will be calculated once
-        during order generation and is not respected automatically when the order changes later.)
+        and the fee will be taxed like the products in the order *unless* the total amount of the positions is zero.
+        If the products have multiple tax rates, multiple fees will be generated with weights adjusted to the net price
+        of the products. Note that this will be calculated once during order generation and is not respected automatically
+        when the order changes later.)
 
    * ``force`` (optional). If set to ``true``, quotas will be ignored.
    * ``send_email`` (optional). If set to ``true``, the same emails will be sent as for a regular order, regardless of
@@ -1652,6 +1643,7 @@ List of all order positions
             "blocked": null,
             "checkins": [
               {
+                "id": 1337,
                 "list": 44,
                 "type": "entry",
                 "gate": null,
@@ -1780,6 +1772,7 @@ Fetching individual positions
         "seat": null,
         "checkins": [
           {
+            "id": 1337,
             "list": 44,
             "type": "entry",
             "gate": null,
@@ -1832,10 +1825,6 @@ Fetching individual positions
 Order position ticket download
 ------------------------------
 
-.. versionchanged:: 4.10
-
-   The API now supports ticket downloads for pending orders if allowed by the event settings.
-
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/download/(output)/
 
    Download tickets for one order position, identified by its internal ID.
@@ -1887,15 +1876,6 @@ Order position ticket download
 
 Manipulating individual positions
 ---------------------------------
-
-.. versionchanged:: 4.8
-
-   The ``PATCH`` method now supports changing items, variations, subevents, seats, prices, and tax rules.
-   The ``POST`` endpoint to add individual positions has been added.
-
-.. versionadded:: 4.16
-
-   The endpoints to manage blocks have been added.
 
 .. versionchanged:: 2024.9
 
@@ -1974,6 +1954,7 @@ Manipulating individual positions
 
       (Full order position resource, see above.)
 
+   :query boolean check_quotas: Whether to check quotas before committing item changes, default is ``true``
    :param organizer: The ``slug`` field of the organizer of the event
    :param event: The ``slug`` field of the event
    :param id: The ``id`` field of the order position to update
@@ -2053,6 +2034,7 @@ Manipulating individual positions
 
       (Full order position resource, see above.)
 
+   :query boolean check_quotas: Whether to check quotas before creating the new position, default is ``true``
    :param organizer: The ``slug`` field of the organizer of the event
    :param event: The ``slug`` field of the event
 
@@ -2226,10 +2208,6 @@ multiple changes to an order at once within one transaction. This makes it possi
 attendees in an order without running into conflicts. This interface also offers some possibilities not available
 otherwise, such as splitting an order or changing fees.
 
-.. versionchanged:: 4.8
-
-   This endpoint has been added to the system.
-
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/change/
 
    Performs a change operation on an order. You can supply the following fields:
@@ -2343,6 +2321,7 @@ otherwise, such as splitting an order or changing fees.
 
       (Full order position resource, see above.)
 
+   :query boolean check_quotas: Whether to check quotas before patching or creating positions, default is ``true``
    :param organizer: The ``slug`` field of the organizer of the event
    :param event: The ``slug`` field of the event
    :param code: The ``code`` field of the order to update
@@ -2538,6 +2517,7 @@ Order payment endpoints
 
       {
         "amount": "23.00",
+        "comment": "Overpayment",
         "mark_canceled": false
       }
 

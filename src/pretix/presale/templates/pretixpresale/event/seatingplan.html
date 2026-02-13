@@ -16,7 +16,7 @@
     {{ seatingframe_html_head|safe }}
     {% include "pretixpresale/fragment_js.html" %}
     <meta name="referrer" content="origin">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body class="full-screen-seating" data-locale="{{ request.LANGUAGE_CODE }}">
 <form method="post" data-asynctask
@@ -25,6 +25,7 @@
       action="{% eventurl request.event "presale:event.cart.add" cart_namespace=cart_namespace %}?next={{ cart_redirect|urlencode }}">
     {% csrf_token %}
     <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}"/>
+    <input type="hidden" name="_voucher_code" value="{{ voucher.code|default_if_none:"" }}">
     {% if event.has_subevents %}
         {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request subevent=subevent voucher=voucher %}
     {% else %}

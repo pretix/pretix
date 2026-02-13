@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -57,6 +57,7 @@ from pretix.base.signals import order_import_columns
 class EmailColumn(ImportColumn):
     identifier = 'email'
     verbose_name = gettext_lazy('Email address')
+    order_level = True
 
     def clean(self, value, previous_values):
         if value:
@@ -67,9 +68,24 @@ class EmailColumn(ImportColumn):
         order.email = value
 
 
+class GroupingColumn(ImportColumn):
+    identifier = 'grouping'
+    verbose_name = gettext_lazy('Grouping')
+    help_text = gettext_lazy(
+        'Only applicable when "Import mode" is set to "Group multiple lines together...". Lines with the same grouping '
+        'value will be put in the same order, but MUST be consecutive lines of the input file.'
+    )
+    order_level = True
+    default_label = "---"
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        pass
+
+
 class PhoneColumn(ImportColumn):
     identifier = 'phone'
     verbose_name = gettext_lazy('Phone number')
+    order_level = True
 
     def clean(self, value, previous_values):
         if value:
@@ -94,6 +110,10 @@ class SubeventColumn(SubeventColumnMixin, ImportColumn):
     identifier = 'subevent'
     verbose_name = pgettext_lazy('subevents', 'Date')
     default_value = None
+    help_text = pgettext_lazy(
+        'subevents', 'The date can be specified through its full name, full date and time, or internal ID, provided '
+                     'only one date in the system matches the input.'
+    )
 
     def clean(self, value, previous_values):
         if not value:
@@ -108,6 +128,7 @@ class ItemColumn(ImportColumn):
     identifier = 'item'
     verbose_name = gettext_lazy('Product')
     default_value = None
+    help_text = gettext_lazy('The product can be specified by its internal ID, full name or internal name.')
 
     @cached_property
     def items(self):
@@ -137,6 +158,7 @@ class ItemColumn(ImportColumn):
 class Variation(ImportColumn):
     identifier = 'variation'
     verbose_name = gettext_lazy('Product variation')
+    help_text = gettext_lazy('The variation can be specified by its internal ID or full name.')
 
     @cached_property
     def items(self):
@@ -153,7 +175,7 @@ class Variation(ImportColumn):
         if value:
             matches = [
                 p for p in self.items
-                if str(p.pk) == value or any((v and v == value) for v in i18n_flat(p.value)) and p.item_id == previous_values['item'].pk
+                if (str(p.pk) == value or any((v and v == value) for v in i18n_flat(p.value))) and p.item_id == previous_values['item'].pk
             ]
             if len(matches) == 0:
                 raise ValidationError(_("No matching variation was found."))
@@ -170,6 +192,7 @@ class Variation(ImportColumn):
 
 class InvoiceAddressCompany(ImportColumn):
     identifier = 'invoice_address_company'
+    order_level = True
 
     @property
     def verbose_name(self):
@@ -181,6 +204,8 @@ class InvoiceAddressCompany(ImportColumn):
 
 
 class InvoiceAddressNamePart(ImportColumn):
+    order_level = True
+
     def __init__(self, event, key, label):
         self.key = key
         self.label = label
@@ -200,6 +225,7 @@ class InvoiceAddressNamePart(ImportColumn):
 
 class InvoiceAddressStreet(ImportColumn):
     identifier = 'invoice_address_street'
+    order_level = True
 
     @property
     def verbose_name(self):
@@ -211,6 +237,7 @@ class InvoiceAddressStreet(ImportColumn):
 
 class InvoiceAddressZip(ImportColumn):
     identifier = 'invoice_address_zipcode'
+    order_level = True
 
     @property
     def verbose_name(self):
@@ -222,6 +249,7 @@ class InvoiceAddressZip(ImportColumn):
 
 class InvoiceAddressCity(ImportColumn):
     identifier = 'invoice_address_city'
+    order_level = True
 
     @property
     def verbose_name(self):
@@ -234,6 +262,8 @@ class InvoiceAddressCity(ImportColumn):
 class InvoiceAddressCountry(ImportColumn):
     identifier = 'invoice_address_country'
     default_value = None
+    help_text = gettext_lazy('The country needs to be specified using a two-letter country code.')
+    order_level = True
 
     @property
     def initial(self):
@@ -257,6 +287,8 @@ class InvoiceAddressCountry(ImportColumn):
 
 class InvoiceAddressState(ImportColumn):
     identifier = 'invoice_address_state'
+    help_text = gettext_lazy('The state can be specified by its short form or full name.')
+    order_level = True
 
     @property
     def verbose_name(self):
@@ -282,6 +314,7 @@ class InvoiceAddressState(ImportColumn):
 
 class InvoiceAddressVATID(ImportColumn):
     identifier = 'invoice_address_vat_id'
+    order_level = True
 
     @property
     def verbose_name(self):
@@ -293,6 +326,7 @@ class InvoiceAddressVATID(ImportColumn):
 
 class InvoiceAddressReference(ImportColumn):
     identifier = 'invoice_address_internal_reference'
+    order_level = True
 
     @property
     def verbose_name(self):
@@ -380,6 +414,7 @@ class AttendeeCity(ImportColumn):
 class AttendeeCountry(ImportColumn):
     identifier = 'attendee_country'
     default_value = None
+    help_text = gettext_lazy('The country needs to be specified using a two-letter country code.')
 
     @property
     def initial(self):
@@ -403,6 +438,7 @@ class AttendeeCountry(ImportColumn):
 
 class AttendeeState(ImportColumn):
     identifier = 'attendee_state'
+    help_text = gettext_lazy('The state can be specified by its short form or full name.')
 
     @property
     def verbose_name(self):
@@ -471,6 +507,7 @@ class Locale(ImportColumn):
     identifier = 'locale'
     verbose_name = gettext_lazy('Order locale')
     default_value = None
+    order_level = True
 
     @property
     def initial(self):
@@ -514,6 +551,7 @@ class ValidUntil(DatetimeColumnMixin, ImportColumn):
 class Expires(DatetimeColumnMixin, ImportColumn):
     identifier = 'expires'
     verbose_name = gettext_lazy('Expiry date')
+    order_level = True
 
     def clean(self, value, previous_values):
         if not value:
@@ -540,6 +578,8 @@ class Saleschannel(ImportColumn):
     verbose_name = gettext_lazy('Sales channel')
     default_value = None
     initial = 'static:web'
+    help_text = gettext_lazy('The sales channel can be specified by it\'s internal identifier or its full name.')
+    order_level = True
 
     @cached_property
     def channels(self):
@@ -568,6 +608,7 @@ class Saleschannel(ImportColumn):
 class SeatColumn(ImportColumn):
     identifier = 'seat'
     verbose_name = gettext_lazy('Seat ID')
+    help_text = gettext_lazy('The seat needs to be specified by its internal ID.')
 
     def __init__(self, *args):
         self._cached = set()
@@ -599,7 +640,8 @@ class SeatColumn(ImportColumn):
 
 class Comment(ImportColumn):
     identifier = 'comment'
-    verbose_name = gettext_lazy('Comment')
+    verbose_name = gettext_lazy('Order comment')
+    order_level = True
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         order.comment = value or ''
@@ -608,6 +650,7 @@ class Comment(ImportColumn):
 class CheckinAttentionColumn(BooleanColumnMixin, ImportColumn):
     identifier = 'checkin_attention'
     verbose_name = gettext_lazy('Requires special attention')
+    order_level = True
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         order.checkin_attention = value
@@ -616,6 +659,7 @@ class CheckinAttentionColumn(BooleanColumnMixin, ImportColumn):
 class CheckinTextColumn(ImportColumn):
     identifier = 'checkin_text'
     verbose_name = gettext_lazy('Check-in text')
+    order_level = True
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         order.checkin_text = value
@@ -696,6 +740,7 @@ class QuestionColumn(ImportColumn):
 class CustomerColumn(ImportColumn):
     identifier = 'customer'
     verbose_name = gettext_lazy('Customer')
+    order_level = True
 
     def clean(self, value, previous_values):
         if value:
@@ -720,6 +765,7 @@ def get_order_import_columns(event):
     if event.has_subevents:
         default.append(SubeventColumn(event))
     default += [
+        GroupingColumn(event),
         EmailColumn(event),
         PhoneColumn(event),
         ItemColumn(event),

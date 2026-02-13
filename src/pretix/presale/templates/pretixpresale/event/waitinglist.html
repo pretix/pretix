@@ -34,13 +34,13 @@
                             {% endblocktrans %}
                         {% endif %}
                     </p>
-                    <p class="help-block">
+                    <p class="help-block" id="add-to-list-description">
                         {% blocktrans trimmed %}
                             You will <strong>not</strong> receive a confirmation email after you have been added to the waiting list. We will only contact you once a spot opens up.
                         {% endblocktrans %}
                     </p>
                     <p>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary" aria-describedby="add-to-list-description">
                             {% trans "Add me to the list" %}
                         </button>
                     </p>

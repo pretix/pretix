@@ -29,7 +29,7 @@
     </div>
     {% if staff_session %}
         <p>
-            <a href="{% url "control:organizers.add" %}" class="btn btn-default">
+            <a href="{% url "control:organizers.add" %}" class="btn btn-default admin-only">
                 <span class="fa fa-plus"></span>
                 {% trans "Create a new organizer" %}
             </a>

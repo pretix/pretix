@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -179,6 +179,7 @@ def _default_context(request):
     ctx['html_page_header'] = "".join(h for h in _html_page_header if h)
     ctx['footer'] = _footer
     ctx['site_url'] = settings.SITE_URL
+    ctx['request_get_items'] = request.GET.items()
 
     ctx['js_datetime_format'] = get_javascript_format_without_seconds('DATETIME_INPUT_FORMATS')
     ctx['js_date_format'] = get_javascript_format_without_seconds('DATE_INPUT_FORMATS')

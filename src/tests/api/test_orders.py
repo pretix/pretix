@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -50,7 +50,7 @@ def item2(event2):
 
 @pytest.fixture
 def taxrule(event):
-    return event.tax_rules.create(rate=Decimal('19.00'), code="S/standard")
+    return event.tax_rules.create(rate=Decimal('19.00'), code="S/standard", default=True)
 
 
 @pytest.fixture
@@ -306,6 +306,7 @@ TEST_ORDER_RES = {
     "url": "http://example.com/dummy/dummy/order/FOO/k24fiuwvu8kxz3y1/",
     "payment_provider": "banktransfer",
     "total": "23.00",
+    "tax_rounding_mode": "line",
     "comment": "",
     "api_meta": {},
     "custom_followup_at": None,
@@ -325,7 +326,9 @@ TEST_ORDER_RES = {
         "internal_reference": "",
         "custom_field": "Custom info",
         "vat_id": "DE123",
-        "vat_id_validated": True
+        "vat_id_validated": True,
+        "transmission_type": "email",
+        "transmission_info": None,
     },
     "require_approval": False,
     "valid_if_pending": False,
@@ -843,6 +846,7 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         organizer.slug, event.slug, order.code, p1.local_id
     ), format='json', data={
         'amount': '23.00',
+        'comment': 'Foo',
         'mark_canceled': False,
     })
     assert resp.status_code == 200
@@ -851,6 +855,7 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
         assert r.provider == "stripe"
         assert r.state == OrderRefund.REFUND_STATE_DONE
         assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+        assert r.comment == "Foo"
 
 
 @pytest.mark.django_db
@@ -1351,7 +1356,7 @@ def test_order_mark_canceled_pending(token_client, organizer, event, order):
 @pytest.mark.django_db
 def test_order_mark_canceled_pending_fee_with_tax(token_client, organizer, event, order, taxrule):
     djmail.outbox = []
-    event.settings.tax_rate_default = taxrule
+    event.settings.tax_rule_cancellation = "default"
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
             organizer.slug, event.slug, order.code
@@ -1991,7 +1996,7 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     assert not resp.data['positions'][0].get('pdf_data')
 
     # order list
-    with django_assert_max_num_queries(32):
+    with django_assert_max_num_queries(33):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))

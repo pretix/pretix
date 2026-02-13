@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -35,7 +35,7 @@ from django.utils.translation.trans_real import (
     parse_accept_lang_header,
 )
 
-from pretix.base.i18n import get_language_without_region
+from pretix.base.i18n import get_language_without_region, set_region
 from pretix.base.settings import global_settings_object
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
@@ -92,10 +92,14 @@ class LocaleMiddleware(MiddlewareMixin):
                 )
                 if '-' not in language and settings_holder.settings.region:
                     language += '-' + settings_holder.settings.region
+                if settings_holder.settings.region:
+                    set_region(settings_holder.settings.region)
         else:
             gs = global_settings_object(request)
             if '-' not in language and gs.settings.region:
                 language += '-' + gs.settings.region
+            if gs.settings.region:
+                set_region(gs.settings.region)
 
         translation.activate(language)
         request.LANGUAGE_CODE = get_language_without_region()

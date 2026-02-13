@@ -1,136 +1,86 @@
-{#
-    basic/layout.html
-    ~~~~~~~~~~~~~~~~~
-
-    Master layout template for Sphinx themes.
-
-    :copyright: Copyright 2007-2013 by the Sphinx team, see AUTHORS.
-    :license: BSD, see LICENSE for details.
-#}
-{%- block doctype -%}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-{%- endblock %}
-{%- set reldelim1 = reldelim1 is not defined and ' &raquo;' or reldelim1 %}
-{%- set reldelim2 = reldelim2 is not defined and ' |' or reldelim2 %}
-{%- set render_sidebar = (not embedded) and (not theme_nosidebar|tobool) and
-                         (sidebars != []) %}
+{# TEMPLATE VAR SETTINGS #}
 {%- set url_root = pathto('', 1) %}
-{# XXX necessary? #}
 {%- if url_root == '#' %}{% set url_root = '' %}{% endif %}
 {%- if not embedded and docstitle %}
   {%- set titlesuffix = " &mdash; "|safe + docstitle|e %}
 {%- else %}
   {%- set titlesuffix = "" %}
 {%- endif %}
+{%- set lang_attr = 'en' if language == None else (language | replace('_', '-')) %}
 
-{%- macro relbar() %}
-    <div class="related">
-      <h3>{{ _('Navigation') }}</h3>
-      <ul>
-        {%- for rellink in rellinks %}
-        <li class="right" {% if loop.first %}style="margin-right: 10px"{% endif %}>
-          <a href="{{ pathto(rellink[0]) }}" title="{{ rellink[1]|striptags|e }}"
-             {{ accesskey(rellink[2]) }}>{{ rellink[3] }}</a>
-          {%- if not loop.first %}{{ reldelim2 }}{% endif %}</li>
-        {%- endfor %}
-        {%- block rootrellink %}
-        <li><a href="{{ pathto(master_doc) }}">{{ shorttitle|e }}</a>{{ reldelim1 }}</li>
-        {%- endblock %}
-        {%- for parent in parents %}
-          <li><a href="{{ parent.link|e }}" {% if loop.last %}{{ accesskey("U") }}{% endif %}>{{ parent.title }}</a>{{ reldelim1 }}</li>
-        {%- endfor %}
-        {%- block relbaritems %} {% endblock %}
-      </ul>
-    </div>
-{%- endmacro %}
+{# Build sphinx_version_info tuple from sphinx_version string in pure Jinja #}
+{%- set (_ver_major, _ver_minor) = (sphinx_version.split('.') | list)[:2] | map('int') -%}
+{%- set sphinx_version_info = (_ver_major, _ver_minor, -1) -%}
 
-{%- macro sidebar() %}
-      {%- if render_sidebar %}
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-          {%- block sidebarlogo %}
-          {%- if logo %}
-            <p class="logo"><a href="{{ pathto(master_doc) }}">
-              <img class="logo" src="{{ pathto('_static/' + logo, 1) }}" alt="Logo"/>
-            </a></p>
-          {%- endif %}
-          {%- endblock %}
-          {%- if sidebars != None %}
-            {#- new style sidebar: explicitly include/exclude templates #}
-            {%- for sidebartemplate in sidebars %}
-            {%- include sidebartemplate %}
-            {%- endfor %}
-          {%- else %}
-            {#- old style sidebars: using blocks -- should be deprecated #}
-            {%- block sidebartoc %}
-            {%- include "localtoc.html" %}
-            {%- endblock %}
-            {%- block sidebarrel %}
-            {%- include "relations.html" %}
-            {%- endblock %}
-            {%- block sidebarsourcelink %}
-            {%- include "sourcelink.html" %}
-            {%- endblock %}
-            {%- if customsidebar %}
-            {%- include customsidebar %}
-            {%- endif %}
-            {%- block sidebarsearch %}
-            {%- include "searchbox.html" %}
-            {%- endblock %}
-          {%- endif %}
-        </div>
-      </div>
-      {%- endif %}
-{%- endmacro %}
+<!DOCTYPE html>
+<html class="writer-html5" lang="{{ lang_attr }}"{% if sphinx_version_info >= (7, 2) %} data-content_root="{{ content_root }}"{% endif %}>
+<head>
+  <meta charset="utf-8" />
+  {%- if READTHEDOCS and not embedded %}
+  <meta name="readthedocs-addons-api-version" content="1">
+  {%- endif %}
+  {{- metatags }}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {%- block htmltitle %}
+  <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
+  {%- endblock -%}
 
-{%- macro script() %}
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '{{ url_root }}',
-        VERSION:     '{{ release|e }}',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '{{ '' if no_search_suffix else file_suffix }}',
-        HAS_SOURCE:  {{ has_source|lower }},
-        SOURCELINK_SUFFIX: '{{ sourcelink_suffix }}'
-      };
-    </script>
+  {#- CSS #}
+  {%- for css_file in css_files %}
+    {%- if css_file|attr("filename") %}
+      {{ css_tag(css_file) }}
+    {%- else %}
+      <link rel="stylesheet" href="{{ pathto(css_file, 1)|escape }}" type="text/css" />
+    {%- endif %}
+  {%- endfor %}
+
+  {#
+      "extra_css_files" is an undocumented Read the Docs theme specific option.
+      There is no need to check for ``|attr("filename")`` here because it's always a string.
+      Note that this option should be removed in favor of regular ``html_css_files``:
+      https://www.sphinx-doc.org/en/master/usage/configuration.html#confval-html_css_files
+  #}
+  {%- for css_file in extra_css_files %}
+    <link rel="stylesheet" href="{{ pathto(css_file, 1)|escape }}" type="text/css" />
+  {%- endfor -%}
+
+  {#- FAVICON #}
+  {%- if favicon_url %}
+    <link rel="shortcut icon" href="{{ favicon_url }}"/>
+  {%- endif %}
+
+  {#- CANONICAL URL (deprecated) #}
+  {%- if theme_canonical_url and not pageurl %}
+    <link rel="canonical" href="{{ theme_canonical_url }}{{ pagename }}.html"/>
+  {%- endif -%}
+
+  {#- CANONICAL URL #}
+  {%- if pageurl %}
+    <link rel="canonical" href="{{ pageurl|e }}" />
+  {%- endif -%}
+
+  {#- JAVASCRIPTS #}
+  {%- block scripts %}
+  {%- if not embedded %}
     {%- for scriptfile in script_files %}
-    <script type="text/javascript" src="{{ pathto(scriptfile, 1) }}"></script>
+      {{ js_tag(scriptfile) }}
     {%- endfor %}
-{%- endmacro %}
+    <script src="{{ pathto('_static/js/theme.js', 1) }}"></script>
 
-{%- macro css() %}
-    <link rel="stylesheet" href="{{ pathto('_static/' + style, 1) }}" type="text/css" />
-    <link rel="stylesheet" href="{{ pathto('_static/pygments.css', 1) }}" type="text/css" />
-    {%- for cssfile in css_files %}
-    <link rel="stylesheet" href="{{ pathto(cssfile, 1) }}" type="text/css" />
-    {%- endfor %}
-{%- endmacro %}
+    {%- if READTHEDOCS or DEBUG %}
+    <script src="{{ pathto('_static/js/versions.js', 1) }}"></script>
+    {%- endif %}
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset={{ encoding }}" />
-    {{ metatags }}
-    {%- block htmltitle %}
-    <title>{{ title|striptags|e }}{{ titlesuffix }}</title>
-    {%- endblock %}
-    {{ css() }}
-    {%- if not embedded %}
-    {{ script() }}
+    {#- OPENSEARCH #}
     {%- if use_opensearch %}
     <link rel="search" type="application/opensearchdescription+xml"
           title="{% trans docstitle=docstitle|e %}Search within {{ docstitle }}{% endtrans %}"
           href="{{ pathto('_static/opensearch.xml', 1) }}"/>
     {%- endif %}
-    {%- if favicon %}
-    <link rel="shortcut icon" href="{{ pathto('_static/' + favicon, 1) }}"/>
-    {%- endif %}
-    {%- if theme_canonical_url %}
-    <link rel="canonical" href="{{ theme_canonical_url }}{{ pagename }}.html"/>
-    {%- endif %}
-    {%- endif %}
-{%- block linktags %}
+  {%- endif %}
+  {%- endblock %}
+
+  {%- block linktags %}
     {%- if hasdoc('about') %}
     <link rel="author" title="{{ _('About these documents') }}" href="{{ pathto('about') }}" />
     {%- endif %}
@@ -143,67 +93,135 @@
     {%- if hasdoc('copyright') %}
     <link rel="copyright" title="{{ _('Copyright') }}" href="{{ pathto('copyright') }}" />
     {%- endif %}
-    <link rel="top" title="{{ docstitle|e }}" href="{{ pathto('index') }}" />
-    {%- if parents %}
-    <link rel="up" title="{{ parents[-1].title|striptags|e }}" href="{{ parents[-1].link|e }}" />
-    {%- endif %}
     {%- if next %}
     <link rel="next" title="{{ next.title|striptags|e }}" href="{{ next.link|e }}" />
     {%- endif %}
     {%- if prev %}
     <link rel="prev" title="{{ prev.title|striptags|e }}" href="{{ prev.link|e }}" />
     {%- endif %}
-{%- endblock %}
-{%- block extrahead %} {% endblock %}
-  </head>
-  <body>
-{%- block header %}{% endblock %}
-
-{%- block relbar1 %}{{ relbar() }}{% endblock %}
-
-{%- block content %}
-  {%- block sidebar1 %} {# possible location for sidebar #} {% endblock %}
-
-    <div class="document">
-  {%- block document %}
-      <div class="documentwrapper">
-      {%- if render_sidebar %}
-        <div class="bodywrapper">
-      {%- endif %}
-          <div class="body">
-            {% block body %} {% endblock %}
-          </div>
-      {%- if render_sidebar %}
-        </div>
-      {%- endif %}
-      </div>
   {%- endblock %}
+  {%- block extrahead %} {% endblock %}
+</head>
 
-  {%- block sidebar2 %}{{ sidebar() }}{% endblock %}
-      <div class="clearer"></div>
-    </div>
-{%- endblock %}
+<body class="wy-body-for-nav">
 
-{%- block relbar2 %}{{ relbar() }}{% endblock %}
+  {%- block extrabody %} {% endblock %}
+  <div class="wy-grid-for-nav">
+    {#- SIDE NAV, TOGGLES ON MOBILE #}
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" {% if theme_style_nav_header_background %} style="background: {{theme_style_nav_header_background}}" {% endif %}>
+          {%- block sidebartitle %}
 
-{%- block footer %}
-    <div class="footer">
-    {%- if show_copyright %}
-      {%- if hasdoc('copyright') %}
-        {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
-      {%- else %}
-        {% trans copyright=copyright|e %}&copy; Copyright {{ copyright }}.{% endtrans %}
-      {%- endif %}
+          {# the logo helper function was removed in Sphinx 6 and deprecated since Sphinx 4 #}
+          {# the master_doc variable was renamed to root_doc in Sphinx 4 (master_doc still exists in later Sphinx versions) #}
+          {%- set _logo_url = logo_url|default(pathto('_static/' + (logo or ""), 1)) %}
+          {%- set _root_doc = root_doc|default(master_doc) %}
+          <a href="{{ pathto(_root_doc) }}"{% if not theme_logo_only %} class="icon icon-home"{% endif %}>
+            {% if not theme_logo_only %}{{ project }}{% endif %}
+            {%- if logo or logo_url %}
+              <img src="{{ _logo_url }}" class="logo" alt="{{ _('Logo') }}"/>
+            {%- endif %}
+          </a>
+
+          {%- if READTHEDOCS or DEBUG %}
+            {%- if theme_version_selector or theme_language_selector %}
+              <div class="switch-menus">
+                <div class="version-switch"></div>
+                <div class="language-switch"></div>
+              </div>
+            {%- endif %}
+          {%- endif %}
+
+          {%- include "searchbox.html" %}
+
+          {%- endblock %}
+        </div>
+
+        {%- block navigation %}
+        {#- Translators: This is an ARIA section label for the main navigation menu -#}
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="{{ _('Navigation menu') }}">
+          {%- block menu %}
+            {%- set toctree = toctree(maxdepth=theme_navigation_depth|int,
+                                      collapse=theme_collapse_navigation|tobool,
+                                      includehidden=theme_includehidden|tobool,
+                                      titles_only=theme_titles_only|tobool) %}
+            {%- if toctree %}
+              {{ toctree }}
+            {%- else %}
+              <!-- Local TOC -->
+              <div class="local-toc">{{ toc }}</div>
+            {%- endif %}
+          {%- endblock %}
+        </div>
+        {%- endblock %}
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      {#- MOBILE NAV, TRIGGLES SIDE NAV ON TOGGLE #}
+      {#- Translators: This is an ARIA section label for the navigation menu that is visible when viewing the page on mobile devices -#}
+      <nav class="wy-nav-top" aria-label="{{ _('Mobile navigation menu') }}" {% if theme_style_nav_header_background %} style="background: {{theme_style_nav_header_background}}" {% endif %}>
+        {%- block mobile_nav %}
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="{{ pathto(master_doc) }}">{{ project }}</a>
+        {%- endblock %}
+      </nav>
+
+      <div class="wy-nav-content">
+      {%- block content %}
+        {%- if theme_style_external_links|tobool %}
+        <div class="rst-content style-external-links">
+        {%- else %}
+        <div class="rst-content">
+        {%- endif %}
+          {% include "breadcrumbs.html" %}
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+          {%- block document %}
+           <div itemprop="articleBody">
+             {% block body %}{% endblock %}
+           </div>
+           {%- if self.comments()|trim %}
+             <div class="articleComments">
+               {%- block comments %}{% endblock %}
+             </div>
+           {%- endif%}
+          </div>
+          {%- endblock %}
+          {% include "footer.html" %}
+        </div>
+      {%- endblock %}
+      </div>
+    </section>
+  </div>
+  {% include "versions.html" -%}
+
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable({{ 'true' if theme_sticky_navigation|tobool else 'false' }});
+      });
+  </script>
+
+  {#- Do not conflict with RTD insertion of analytics script #}
+  {%- if not READTHEDOCS %}
+    {%- if theme_analytics_id %}
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ theme_analytics_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', '{{ theme_analytics_id }}', {
+          'anonymize_ip': {{ 'true' if theme_analytics_anonymize_ip|tobool else 'false' }},
+      });
+    </script>
+
     {%- endif %}
-    {%- if last_updated %}
-      {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
-    {%- endif %}
-    {%- if show_sphinx %}
-      {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx-doc.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
-    {%- endif %}
-    </div>
-    <p>asdf asdf asdf asdf 22</p>
-{%- endblock %}
-  </body>
+  {%- endif %}
+
+  {%- block footer %} {% endblock %}
+
+</body>
 </html>
-

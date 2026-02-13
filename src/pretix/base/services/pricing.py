@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -23,15 +23,17 @@ import re
 from collections import defaultdict
 from datetime import datetime
 from decimal import Decimal
-from typing import List, Optional, Tuple, Union
+from itertools import groupby
+from typing import List, Literal, Optional, Tuple, Union
 
 from django import forms
+from django.conf import settings
 from django.db.models import Q
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation,
-    SalesChannel, Voucher,
+    AbstractPosition, CartPosition, InvoiceAddress, Item, ItemAddOn,
+    ItemVariation, OrderFee, OrderPosition, SalesChannel, Voucher,
 )
 from pretix.base.models.discount import Discount, PositionInfo
 from pretix.base.models.event import Event, SubEvent
@@ -136,7 +138,8 @@ def get_listed_price(item: Item, variation: ItemVariation = None, subevent: SubE
 
 
 def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, custom_price_input_is_net: bool,
-                   tax_rule: TaxRule, invoice_address: InvoiceAddress, bundled_sum: Decimal, is_bundled=False) -> TaxedPrice:
+                   tax_rule: TaxRule, invoice_address: InvoiceAddress, bundled_sum: Decimal,
+                   is_bundled=False) -> TaxedPrice:
     if not tax_rule:
         tax_rule = TaxRule(
             name='',
@@ -152,7 +155,8 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
                                  override_tax_code=price.code, invoice_address=invoice_address,
                                  subtract_from_gross=bundled_sum)
         else:
-            price = tax_rule.tax(max(custom_price_input, price.gross), base_price_is='gross', override_tax_rate=price.rate,
+            price = tax_rule.tax(max(custom_price_input, price.gross), base_price_is='gross',
+                                 override_tax_rate=price.rate,
                                  override_tax_code=price.code, invoice_address=invoice_address,
                                  subtract_from_gross=bundled_sum)
     else:
@@ -164,13 +168,15 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
 
 def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
                     positions: List[Tuple[int, Optional[int], Optional[datetime], Decimal, bool, bool, Decimal]],
-                    collect_potential_discounts: Optional[defaultdict]=None) -> List[Tuple[Decimal, Optional[Discount]]]:
+                    collect_potential_discounts: Optional[defaultdict] = None) -> List[Tuple[Decimal, Optional[Discount]]]:
     """
     Applies any dynamic discounts to a cart
 
     :param event: Event the cart belongs to
     :param sales_channel: Sales channel the cart was created with
-    :param positions: Tuple of the form ``(item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, is_bundled, voucher_discount)``
+    :param positions: Tuple of the form ``(item_id, subevent_id, subevent_date_from, line_price_gross, addon_to_id, is_bundled, voucher_discount)``
+                      ``addon_to_id`` does not have to be the proper ID, any identifier is okay, even ``True``/``False`` are accepted, but
+                      a better result may be given if addons to the same main product have the same distinct value.
     :param collect_potential_discounts: If a `defaultdict(list)` is supplied, all discounts that could be applied to the cart
     based on the "consumed" items, but lack matching "benefitting" items will be collected therein.
     The dict will contain a mapping from index in the `positions` list of the item that could be consumed, to a list
@@ -192,9 +198,9 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
     ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')
     for discount in discount_qs:
         result = discount.apply({
-            idx: PositionInfo(item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, voucher_discount)
+            idx: PositionInfo(item_id, subevent_id, subevent_date_from, line_price_gross, addon_to, voucher_discount)
             for
-            idx, (item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, is_bundled, voucher_discount)
+            idx, (item_id, subevent_id, subevent_date_from, line_price_gross, addon_to, is_bundled, voucher_discount)
             in enumerate(positions)
             if not is_bundled and idx not in new_prices
         }, collect_potential_discounts)
@@ -203,3 +209,128 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
         new_prices.update(result)
 
     return [new_prices.get(idx, (p[3], None)) for idx, p in enumerate(positions)]
+
+
+def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_only_business", "sum_by_net_keep_gross"],
+                   invoice_address: Optional[InvoiceAddress], currency: str,
+                   lines: List[Union[OrderPosition, CartPosition, OrderFee]]) -> list:
+    """
+    Given a list of order positions / cart positions / order fees (may be mixed), applies the given rounding mode
+    and mutates the ``price``, ``price_includes_rounding_correction``, ``tax_value``, and
+    ``tax_value_includes_rounding_correction`` attributes.
+
+    When rounding mode is set to ``"line"``, the tax will be computed and rounded individually for every line.
+
+    When rounding mode is set to ``"sum_by_net_keep_gross"``, the tax values of the individual lines will be adjusted
+    such that the per-taxrate/taxcode subtotal is rounded correctly. The gross prices will stay constant.
+
+    When rounding mode is set to ``"sum_by_net"``, the gross prices and tax values of the individual lines will be
+    adjusted such that the per-taxrate/taxcode subtotal is rounded correctly. The net prices will stay constant.
+
+    :param rounding_mode: One of ``"line"``, ``"sum_by_net"``, ``"sum_by_net_only_business"``, or ``"sum_by_net_keep_gross"``.
+    :param invoice_address: The invoice address, or ``None``
+    :param currency: Currency that will be used to determine rounding precision
+    :param lines: List of order/cart contents
+    :return: Collection of ``lines`` members that have been changed and may need to be persisted to the database.
+    """
+    if rounding_mode == "sum_by_net_only_business":
+        if invoice_address and invoice_address.is_business:
+            rounding_mode = "sum_by_net"
+        else:
+            rounding_mode = "line"
+
+    def _key(line):
+        return (line.tax_rate, line.tax_code or "")
+
+    places = settings.CURRENCY_PLACES.get(currency, 2)
+    minimum_unit = Decimal('1') / 10 ** places
+    changed = []
+
+    if rounding_mode == "sum_by_net":
+        for (tax_rate, tax_code), lines in groupby(sorted(lines, key=_key), key=_key):
+            lines = list(sorted(lines, key=lambda l: -l.gross_price_before_rounding))
+
+            # Compute the net and gross total of the line-based computation method
+            net_total = sum(l.net_price_before_rounding for l in lines)
+            gross_total = sum(l.gross_price_before_rounding for l in lines)
+
+            # Compute the gross total we need to achieve based on the net total
+            target_gross_total = round_decimal((net_total * (1 + tax_rate / 100)), currency)
+
+            # Add/subtract the smallest possible from both gross prices and tax values (so net values stay the same)
+            # until the values align
+            diff = target_gross_total - gross_total
+            diff_sgn = -1 if diff < 0 else 1
+            for l in lines:
+                if diff:
+                    apply_diff = diff_sgn * minimum_unit
+                    l.price = l.gross_price_before_rounding + apply_diff
+                    l.price_includes_rounding_correction = apply_diff
+                    l.tax_value = l.tax_value_before_rounding + apply_diff
+                    l.tax_value_includes_rounding_correction = apply_diff
+                    diff -= apply_diff
+                    changed.append(l)
+                elif l.price_includes_rounding_correction or l.tax_value_includes_rounding_correction:
+                    l.price = l.gross_price_before_rounding
+                    l.price_includes_rounding_correction = Decimal("0.00")
+                    l.tax_value = l.tax_value_before_rounding
+                    l.tax_value_includes_rounding_correction = Decimal("0.00")
+                    changed.append(l)
+
+    elif rounding_mode == "sum_by_net_keep_gross":
+        for (tax_rate, tax_code), lines in groupby(sorted(lines, key=_key), key=_key):
+            lines = list(sorted(lines, key=lambda l: -l.gross_price_before_rounding))
+
+            # Compute the net and gross total of the line-based computation method
+            net_total = sum(l.net_price_before_rounding for l in lines)
+            gross_total = sum(l.gross_price_before_rounding for l in lines)
+
+            # Compute the net total that would yield the correct gross total (if possible)
+            target_net_total = round_decimal(gross_total - (gross_total * (1 - 100 / (100 + tax_rate))), currency)
+
+            # Compute the gross total that would be computed from that net total – this will be different than
+            # gross_total when there is no possible net value for the gross total
+            # e.g. 99.99 at 19% is impossible since 84.03 + 19% = 100.00 and 84.02 + 19% = 99.98
+            target_gross_total = round_decimal((target_net_total * (1 + tax_rate / 100)), currency)
+
+            diff_gross = target_gross_total - gross_total
+            diff_net = target_net_total - net_total
+            diff_gross_sgn = -1 if diff_gross < 0 else 1
+            diff_net_sgn = -1 if diff_net < 0 else 1
+            for l in lines:
+                if diff_gross:
+                    apply_diff = diff_gross_sgn * minimum_unit
+                    l.price = l.gross_price_before_rounding + apply_diff
+                    l.price_includes_rounding_correction = apply_diff
+                    l.tax_value = l.tax_value_before_rounding + apply_diff
+                    l.tax_value_includes_rounding_correction = apply_diff
+                    changed.append(l)
+                    diff_gross -= apply_diff
+                elif diff_net:
+                    apply_diff = diff_net_sgn * minimum_unit
+                    l.price = l.gross_price_before_rounding
+                    l.price_includes_rounding_correction = Decimal("0.00")
+                    l.tax_value = l.tax_value_before_rounding - apply_diff
+                    l.tax_value_includes_rounding_correction = -apply_diff
+                    changed.append(l)
+                    diff_net -= apply_diff
+                elif l.price_includes_rounding_correction or l.tax_value_includes_rounding_correction:
+                    l.price = l.gross_price_before_rounding
+                    l.price_includes_rounding_correction = Decimal("0.00")
+                    l.tax_value = l.tax_value_before_rounding
+                    l.tax_value_includes_rounding_correction = Decimal("0.00")
+                    changed.append(l)
+
+    elif rounding_mode == "line":
+        for l in lines:
+            if l.price_includes_rounding_correction or l.tax_value_includes_rounding_correction:
+                l.price = l.gross_price_before_rounding
+                l.price_includes_rounding_correction = Decimal("0.00")
+                l.tax_value = l.tax_value_before_rounding
+                l.tax_value_includes_rounding_correction = Decimal("0.00")
+                changed.append(l)
+
+    else:
+        raise ValueError("Unknown rounding_mode")
+
+    return changed

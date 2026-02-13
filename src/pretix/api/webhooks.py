@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -43,6 +43,7 @@ from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
+from pretix.helpers.celery import get_task_priority
 
 logger = logging.getLogger(__name__)
 _ALL_EVENTS = None
@@ -78,6 +79,13 @@ class WebhookEvent:
         """
         raise NotImplementedError()  # NOQA
 
+    @property
+    def help_text(self) -> str:
+        """
+        A human-readable description
+        """
+        return ""
+
 
 def get_all_webhook_events():
     global _ALL_EVENTS
@@ -97,9 +105,10 @@ def get_all_webhook_events():
 
 
 class ParametrizedWebhookEvent(WebhookEvent):
-    def __init__(self, action_type, verbose_name):
+    def __init__(self, action_type, verbose_name, help_text=""):
         self._action_type = action_type
         self._verbose_name = verbose_name
+        self._help_text = help_text
         super().__init__()
 
     @property
@@ -109,6 +118,10 @@ class ParametrizedWebhookEvent(WebhookEvent):
     @property
     def verbose_name(self):
         return self._verbose_name
+
+    @property
+    def help_text(self):
+        return self._help_text
 
 
 class ParametrizedOrderWebhookEvent(ParametrizedWebhookEvent):
@@ -157,6 +170,48 @@ class ParametrizedEventWebhookEvent(ParametrizedWebhookEvent):
             'notification_id': logentry.pk,
             'organizer': event.organizer.slug,
             'event': event.slug,
+            'action': logentry.action_type,
+        }
+
+
+class ParametrizedGiftcardWebhookEvent(ParametrizedWebhookEvent):
+    def build_payload(self, logentry: LogEntry):
+        giftcard = logentry.content_object
+        if not giftcard:
+            return None
+
+        return {
+            'notification_id': logentry.pk,
+            'issuer_id': logentry.organizer_id,
+            'giftcard': giftcard.pk,
+            'action': logentry.action_type,
+        }
+
+
+class ParametrizedGiftcardTransactionWebhookEvent(ParametrizedWebhookEvent):
+    def build_payload(self, logentry: LogEntry):
+        giftcard = logentry.content_object
+        if not giftcard:
+            return None
+
+        return {
+            'notification_id': logentry.pk,
+            'issuer_id': logentry.organizer_id,
+            'acceptor_id': logentry.parsed_data.get('acceptor_id'),
+            'giftcard': giftcard.pk,
+            'action': logentry.action_type,
+        }
+
+
+class ParametrizedVoucherWebhookEvent(ParametrizedWebhookEvent):
+
+    def build_payload(self, logentry: LogEntry):
+        # do not use content_object, this is also called in deletion
+        return {
+            'notification_id': logentry.pk,
+            'organizer': logentry.event.organizer.slug,
+            'event': logentry.event.slug,
+            'voucher': logentry.object_id,
             'action': logentry.action_type,
         }
 
@@ -346,8 +401,9 @@ def register_default_webhook_events(sender, **kwargs):
         ),
         ParametrizedItemWebhookEvent(
             'pretix.event.item.*',
-            _('Product changed (including product added or deleted and including changes to nested objects like '
-              'variations or bundles)'),
+            _('Product changed'),
+            _('This includes product added or deleted and changes to nested objects like '
+              'variations or bundles.'),
         ),
         ParametrizedEventWebhookEvent(
             'pretix.event.live.activated',
@@ -381,6 +437,19 @@ def register_default_webhook_events(sender, **kwargs):
             'pretix.event.orders.waitinglist.voucher_assigned',
             _('Waiting list entry received voucher'),
         ),
+        ParametrizedVoucherWebhookEvent(
+            'pretix.voucher.added',
+            _('Voucher added'),
+        ),
+        ParametrizedVoucherWebhookEvent(
+            'pretix.voucher.changed',
+            _('Voucher changed'),
+            _('Only includes explicit changes to the voucher, not e.g. an increase of the number of redemptions.')
+        ),
+        ParametrizedVoucherWebhookEvent(
+            'pretix.voucher.deleted',
+            _('Voucher deleted'),
+        ),
         ParametrizedCustomerWebhookEvent(
             'pretix.customer.created',
             _('Customer account created'),
@@ -393,6 +462,18 @@ def register_default_webhook_events(sender, **kwargs):
             'pretix.customer.anonymized',
             _('Customer account anonymized'),
         ),
+        ParametrizedGiftcardWebhookEvent(
+            'pretix.giftcards.created',
+            _('Gift card added'),
+        ),
+        ParametrizedGiftcardWebhookEvent(
+            'pretix.giftcards.modified',
+            _('Gift card modified'),
+        ),
+        ParametrizedGiftcardTransactionWebhookEvent(
+            'pretix.giftcards.transaction.*',
+            _('Gift card used in transcation'),
+        )
     )
 
 
@@ -400,8 +481,12 @@ def register_default_webhook_events(sender, **kwargs):
 def notify_webhooks(logentry_ids: list):
     if not isinstance(logentry_ids, list):
         logentry_ids = [logentry_ids]
-    qs = LogEntry.all.select_related('event', 'event__organizer', 'organizer').filter(id__in=logentry_ids)
-    _org, _at, webhooks = None, None, None
+    qs = LogEntry.all.select_related(
+        'event', 'event__organizer', 'organizer'
+    ).order_by(
+        'action_type', 'organizer_id', 'event_id',
+    ).filter(id__in=logentry_ids)
+    _org, _at, _ev, webhooks = None, None, None, None
     for logentry in qs:
         if not logentry.organizer:
             break  # We need to know the organizer
@@ -411,7 +496,7 @@ def notify_webhooks(logentry_ids: list):
         if not notification_type:
             break  # Ignore, no webhooks for this event type
 
-        if _org != logentry.organizer or _at != logentry.action_type or webhooks is None:
+        if _org != logentry.organizer or _at != logentry.action_type or _ev != logentry.event_id or webhooks is None:
             _org = logentry.organizer
             _at = logentry.action_type
 
@@ -431,7 +516,10 @@ def notify_webhooks(logentry_ids: list):
                 )
 
         for wh in webhooks:
-            send_webhook.apply_async(args=(logentry.id, notification_type.action_type, wh.pk))
+            send_webhook.apply_async(
+                args=(logentry.id, notification_type.action_type, wh.pk),
+                priority=get_task_priority("notifications", logentry.organizer_id),
+            )
 
 
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=60, acks_late=True, autoretry_for=(DatabaseError,),)
@@ -476,7 +564,7 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int, retr
         300,  # + 5 minutes
         1200,  # + 20 minutes
         3600,  # + 60 minutes
-        1440,  # + 4 hours
+        14400,  # + 4 hours
         21600,  # + 6 hours
         43200,  # + 12 hours
         43200,  # + 24 hours
@@ -527,8 +615,10 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int, retr
                 if retry_count >= len(retry_intervals):
                     return 'retry-given-up'
                 elif retry_intervals[retry_count] < retry_celery_cutoff:
-                    send_webhook.apply_async(args=(logentry_id, action_type, webhook_id, retry_count + 1),
-                                             countdown=retry_intervals[retry_count])
+                    send_webhook.apply_async(
+                        args=(logentry_id, action_type, webhook_id, retry_count + 1),
+                        countdown=retry_intervals[retry_count]
+                    )
                     return 'retry-via-celery'
                 else:
                     webhook.retries.update_or_create(
@@ -555,7 +645,10 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int, retr
             if retry_count >= len(retry_intervals):
                 return 'retry-given-up'
             elif retry_intervals[retry_count] < retry_celery_cutoff:
-                send_webhook.apply_async(args=(logentry_id, action_type, webhook_id, retry_count + 1))
+                send_webhook.apply_async(
+                    args=(logentry_id, action_type, webhook_id, retry_count + 1),
+                    countdown=retry_intervals[retry_count]
+                )
                 return 'retry-via-celery'
             else:
                 webhook.retries.update_or_create(

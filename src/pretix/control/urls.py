@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -37,9 +37,10 @@ from django.urls import include, re_path
 from django.views.generic.base import RedirectView
 
 from pretix.control.views import (
-    auth, checkin, dashboards, discounts, event, geo, global_settings, item,
-    main, modelimport, oauth, orders, organizer, pdf, search, shredder,
-    subevents, typeahead, user, users, vouchers, waitinglist,
+    auth, checkin, dashboards, datasync, discounts, event, geo,
+    global_settings, item, mail, main, modelimport, oauth, orders, organizer,
+    pdf, search, shredder, subevents, typeahead, user, users, vouchers,
+    waitinglist,
 )
 
 urlpatterns = [
@@ -58,6 +59,7 @@ urlpatterns = [
     re_path(r'^global/license/$', global_settings.LicenseCheckView.as_view(), name='global.license'),
     re_path(r'^global/sysreport/$', global_settings.SysReportView.as_view(), name='global.sysreport'),
     re_path(r'^global/message/$', global_settings.MessageView.as_view(), name='global.message'),
+    re_path(r'^global/datasync/failedjobs/$', datasync.GlobalFailedSyncJobsView.as_view(), name='global.datasync.failedjobs'),
     re_path(r'^logdetail/$', global_settings.LogDetailView.as_view(), name='global.logdetail'),
     re_path(r'^logdetail/payment/$', global_settings.PaymentDetailView.as_view(), name='global.paymentdetail'),
     re_path(r'^logdetail/refund/$', global_settings.RefundDetailView.as_view(), name='global.refunddetail'),
@@ -109,11 +111,19 @@ urlpatterns = [
             name='user.settings.2fa.confirm.webauthn'),
     re_path(r'^settings/2fa/(?P<devicetype>[^/]+)/(?P<device>[0-9]+)/delete', user.User2FADeviceDeleteView.as_view(),
             name='user.settings.2fa.delete'),
+    re_path(r'^settings/email/confirm$', user.UserEmailConfirmView.as_view(), name='user.settings.email.confirm'),
+    re_path(r'^settings/email/change$', user.UserEmailChangeView.as_view(), name='user.settings.email.change'),
+    re_path(r'^settings/email/verify', user.UserEmailVerifyView.as_view(), name='user.settings.email.send_verification_code'),
+    re_path(r'^settings/password/change$', user.UserPasswordChangeView.as_view(), name='user.settings.password.change'),
     re_path(r'^organizers/$', organizer.OrganizerList.as_view(), name='organizers'),
     re_path(r'^organizers/add$', organizer.OrganizerCreate.as_view(), name='organizers.add'),
     re_path(r'^organizers/select2$', typeahead.organizer_select2, name='organizers.select2'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/$', organizer.OrganizerDetail.as_view(), name='organizer'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/edit$', organizer.OrganizerUpdate.as_view(), name='organizer.edit'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/settings/plugins$',
+            organizer.OrganizerPlugins.as_view(), name='organizer.settings.plugins'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/settings/plugins/(?P<plugin>[^/]+)/events$',
+            organizer.OrganizerPluginEvents.as_view(), name='organizer.settings.plugin-events'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/settings/email$',
             organizer.OrganizerMailSettings.as_view(), name='organizer.settings.mail'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/settings/email/setup$',
@@ -231,6 +241,9 @@ urlpatterns = [
             name='organizer.gate.edit'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/gate/(?P<gate>[^/]+)/delete$', organizer.GateDeleteView.as_view(),
             name='organizer.gate.delete'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/outgoingmails$', mail.OutgoingMailListView.as_view(), name='organizer.outgoingmails'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/outgoingmail/bulk_action$', mail.OutgoingMailBulkAction.as_view(), name='organizer.outgoingmails.bulk_action'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/outgoingmail/(?P<mail>[0-9]+)/$', mail.OutgoingMailDetailView.as_view(), name='organizer.outgoingmail'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/teams$', organizer.TeamListView.as_view(), name='organizer.teams'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/team/add$', organizer.TeamCreateView.as_view(), name='organizer.team.add'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/team/(?P<team>[^/]+)/$', organizer.TeamMemberView.as_view(),
@@ -248,6 +261,7 @@ urlpatterns = [
     re_path(r'^organizer/(?P<organizer>[^/]+)/export/(?P<pk>[^/]+)/delete$', organizer.DeleteScheduledExportView.as_view(),
             name='organizer.export.scheduled.delete'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/ticket_select2$', typeahead.ticket_select2, name='organizer.ticket_select2'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/datasync/failedjobs/$', datasync.OrganizerFailedSyncJobsView.as_view(), name='organizer.datasync.failedjobs'),
     re_path(r'^nav/typeahead/$', typeahead.nav_context_list, name='nav.typeahead'),
     re_path(r'^events/$', main.EventList.as_view(), name='events'),
     re_path(r'^events/add$', main.EventWizard.as_view(), name='events.add'),
@@ -284,10 +298,11 @@ urlpatterns = [
         re_path(r'^settings/invoice$', event.InvoiceSettings.as_view(), name='event.settings.invoice'),
         re_path(r'^settings/invoice/preview$', event.InvoicePreview.as_view(), name='event.settings.invoice.preview'),
         re_path(r'^settings/display', event.DisplaySettings.as_view(), name='event.settings.display'),
-        re_path(r'^settings/tax/$', event.TaxList.as_view(), name='event.settings.tax'),
+        re_path(r'^settings/tax/$', event.TaxSettings.as_view(), name='event.settings.tax'),
         re_path(r'^settings/tax/(?P<rule>\d+)/$', event.TaxUpdate.as_view(), name='event.settings.tax.edit'),
         re_path(r'^settings/tax/add$', event.TaxCreate.as_view(), name='event.settings.tax.add'),
         re_path(r'^settings/tax/(?P<rule>\d+)/delete$', event.TaxDelete.as_view(), name='event.settings.tax.delete'),
+        re_path(r'^settings/tax/(?P<rule>\d+)/default$', event.TaxDefault.as_view(), name='event.settings.tax.default'),
         re_path(r'^settings/widget$', event.WidgetSettings.as_view(), name='event.settings.widget'),
         re_path(r'^pdf/editor/webfonts.css', pdf.FontsCSSView.as_view(), name='pdf.css'),
         re_path(r'^pdf/editor/(?P<filename>[^/]+).pdf$', pdf.PdfView.as_view(), name='pdf.background'),
@@ -376,8 +391,12 @@ urlpatterns = [
                 name='event.order.geninvoice'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/regenerate$', orders.OrderInvoiceRegenerate.as_view(),
                 name='event.order.regeninvoice'),
+        re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/retransmit$', orders.OrderInvoiceRetransmit.as_view(),
+                name='event.order.retransmitinvoice'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/reissue$', orders.OrderInvoiceReissue.as_view(),
                 name='event.order.reissueinvoice'),
+        re_path(r'^orders/(?P<code>[0-9A-Z]+)/invoices/(?P<id>\d+)/inspect$', orders.OrderInvoiceInspect.as_view(),
+                name='event.order.inspect'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/download/(?P<position>\d+)/(?P<output>[^/]+)/$',
                 orders.OrderDownload.as_view(),
                 name='event.order.download.ticket'),
@@ -427,6 +446,8 @@ urlpatterns = [
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/cancellationrequests/(?P<req>\d+)/delete$',
                 orders.OrderCancellationRequestDelete.as_view(),
                 name='event.order.cancellationrequests.delete'),
+        re_path(r'^orders/(?P<code>[0-9A-Z]+)/sync_job/(?P<provider>[^/]+)/$', datasync.ControlSyncJob.as_view(),
+                name='event.order.sync_job'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/transactions/$', orders.OrderTransactions.as_view(), name='event.order.transactions'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/$', orders.OrderDetail.as_view(), name='event.order'),
         re_path(r'^invoice/(?P<invoice>[^/]+)$', orders.InvoiceDownload.as_view(),
@@ -449,6 +470,7 @@ urlpatterns = [
         re_path(r'^orders/search$', orders.OrderSearch.as_view(), name='event.orders.search'),
         re_path(r'^dangerzone/$', event.DangerZone.as_view(), name='event.dangerzone'),
         re_path(r'^cancel/$', orders.EventCancel.as_view(), name='event.cancel'),
+        re_path(r'^cancel/(?P<task>[^/]+)/$', orders.EventCancelConfirm.as_view(), name='event.cancel.confirm'),
         re_path(r'^shredder/$', shredder.StartShredView.as_view(), name='event.shredder.start'),
         re_path(r'^shredder/export$', shredder.ShredExportView.as_view(), name='event.shredder.export'),
         re_path(r'^shredder/download/(?P<file>[^/]+)/$', shredder.ShredDownloadView.as_view(), name='event.shredder.download'),
@@ -463,6 +485,7 @@ urlpatterns = [
         re_path(r'^checkins/$', checkin.CheckinListView.as_view(), name='event.orders.checkins'),
         re_path(r'^checkinlists/$', checkin.CheckinListList.as_view(), name='event.orders.checkinlists'),
         re_path(r'^checkinlists/add$', checkin.CheckinListCreate.as_view(), name='event.orders.checkinlists.add'),
+        re_path(r'^checkinlists/reset$', checkin.CheckInResetView.as_view(), name='event.orders.checkinlists.reset'),
         re_path(r'^checkinlists/select2$', typeahead.checkinlist_select2, name='event.orders.checkinlists.select2'),
         re_path(r'^checkinlists/(?P<list>\d+)/$', checkin.CheckInListShow.as_view(), name='event.orders.checkinlists.show'),
         re_path(r'^checkinlists/(?P<list>\d+)/simulator$', checkin.CheckInListSimulator.as_view(), name='event.orders.checkinlists.simulator'),
@@ -472,6 +495,7 @@ urlpatterns = [
                 name='event.orders.checkinlists.edit'),
         re_path(r'^checkinlists/(?P<list>\d+)/delete$', checkin.CheckinListDelete.as_view(),
                 name='event.orders.checkinlists.delete'),
+        re_path(r'^datasync/failedjobs/$', datasync.EventFailedSyncJobsView.as_view(), name='event.datasync.failedjobs'),
     ])),
     re_path(r'^event/(?P<organizer>[^/]+)/$', RedirectView.as_view(pattern_name='control:organizer'), name='event.organizerredirect'),
 ]

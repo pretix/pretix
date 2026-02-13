@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import uuid
+
 import css_inline
 from django.conf import settings
 from django.template.loader import get_template
@@ -26,12 +28,15 @@ from django.utils.timezone import override
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.i18n import language
-from pretix.base.models import LogEntry, NotificationSetting, User
+from pretix.base.models import (
+    LogEntry, NotificationSetting, OutgoingMail, User,
+)
 from pretix.base.notifications import Notification, get_all_notification_types
 from pretix.base.services.mail import mail_send_task
 from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
 from pretix.base.signals import notification
 from pretix.celery_app import app
+from pretix.helpers.celery import get_task_priority
 from pretix.helpers.urls import build_absolute_uri
 
 
@@ -41,7 +46,11 @@ def notify(logentry_ids: list):
     if not isinstance(logentry_ids, list):
         logentry_ids = [logentry_ids]
 
-    qs = LogEntry.all.select_related('event', 'event__organizer').filter(id__in=logentry_ids)
+    qs = LogEntry.all.select_related(
+        'event', 'event__organizer'
+    ).order_by(
+        'action_type', 'event_id',
+    ).filter(id__in=logentry_ids)
 
     _event, _at, notify_specific, notify_global = None, None, None, None
     for logentry in qs:
@@ -84,12 +93,18 @@ def notify(logentry_ids: list):
         for um, enabled in notify_specific.items():
             user, method = um
             if enabled:
-                send_notification.apply_async(args=(logentry.id, notification_type.action_type, user.pk, method))
+                send_notification.apply_async(
+                    args=(logentry.id, notification_type.action_type, user.pk, method),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
+                )
 
         for um, enabled in notify_global.items():
             user, method = um
             if enabled and um not in notify_specific:
-                send_notification.apply_async(args=(logentry.id, notification_type.action_type, user.pk, method))
+                send_notification.apply_async(
+                    args=(logentry.id, notification_type.action_type, user.pk, method),
+                    priority=get_task_priority("notifications", logentry.organizer_id),
+                )
 
         notification.send(logentry.event, logentry_id=logentry.id, notification_type=notification_type.action_type)
 
@@ -142,16 +157,26 @@ def send_notification_mail(notification: Notification, user: User):
     tpl_plain = get_template('pretixbase/email/notification.txt')
     body_plain = tpl_plain.render(ctx)
 
-    mail_send_task.apply_async(kwargs={
-        'to': [user.email],
-        'subject': '[{}] {}: {}'.format(
+    guid = uuid.uuid4()
+    m = OutgoingMail.objects.create(
+        guid=guid,
+        user=user,
+        to=[user.email],
+        subject='[{}] {}: {}'.format(
             settings.PRETIX_INSTANCE_NAME,
             notification.event.settings.mail_prefix or notification.event.slug.upper(),
             notification.title
         ),
-        'body': body_plain,
-        'html': body_html,
-        'sender': settings.MAIL_FROM_NOTIFICATIONS,
-        'headers': {},
-        'user': user.pk
+        body_plain=body_plain,
+        body_html=body_html,
+        sender=settings.MAIL_FROM_NOTIFICATIONS,
+        headers={
+            'X-Auto-Response-Suppress': 'OOF, NRN, AutoReply, RN',
+            'Auto-Submitted': 'auto-generated',
+            'X-Mailer': 'pretix',
+            'X-PX-Correlation': str(guid),
+        },
+    )
+    mail_send_task.apply_async(kwargs={
+        'outgoing_mail': m.pk,
     })

@@ -3,6 +3,7 @@
 @import "../../bootstrap/scss/_bootstrap.scss";
 @import "../../fontawesome/scss/font-awesome.scss";
 @import "../../pretixbase/scss/_theme.scss";
+@import "../../pretixbase/scss/_dialogs.scss";
 @import "../../typeahead/typeahead.scss";
 @import "../../charts/morris.scss";
 @import "../../cropper/cropper.scss";
@@ -35,10 +36,21 @@ nav.navbar {
     margin: 0;
     border: 0;
 }
+.navbar-brand {
+  position: relative;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+.navbar-brand span {
+  padding: 4px 8px 6px; // Optical alignment next to logo
+  display: inline-block;
+}
 .navbar-brand img {
-    height: 100%;
     width: auto;
-    display: inline;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
 }
 
 #side-menu img.fa-img {
@@ -47,7 +59,7 @@ nav.navbar {
 }
 
 nav.navbar .danger, nav.navbar .danger:hover, nav.navbar .danger:active {
-    background: $brand-danger !important;
+    background-color: $brand-danger !important;
 }
 
 .navbar-header .navbar-events {
@@ -232,91 +244,6 @@ p.bigger {
     &> li {
         margin-bottom: 15px;
     }
-}
-
-body.loading #wrapper {
-    -webkit-filter: blur(2px);
-    -moz-filter: blur(2px);
-    -ms-filter: blur(2px);
-    -o-filter: blur(2px);
-    filter: blur(2px);
-}
-
-#loadingmodal, #ajaxerr {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, .7);
-    opacity: 0;
-    z-index: 900000;
-    visibility: hidden;
-    padding: 10px;
-
-    .big-icon {
-        margin-top: 50px;
-        font-size: 200px;
-        color: $brand-primary;
-    }
-
-    .modal-card {
-        margin: 50px auto 0;
-        top: 50px;
-        width: 90%;
-        max-width: 600px;
-        background: white;
-        border-radius: $border-radius-large;
-        box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
-        padding: 20px;
-        min-height: 160px;
-
-        .modal-card-icon {
-            float: left;
-            width: 150px;
-            text-align: center;
-
-            .big-rotating-icon {
-                font-size: 120px;
-                margin: 0;
-            }
-        }
-        .modal-card-content {
-            margin-left: 160px;
-            text-align: left;
-            h3 {
-                margin-top: 0;
-            }
-        }
-    }
-}
-@media (max-width: 700px) {
-    #loadingmodal, #ajaxerr {
-        .modal-card {
-            .modal-card-icon {
-                float: none;
-                width: 100%;
-            }
-            .modal-card-content {
-                text-align: center;
-                margin-left: 0;
-                margin-right: 0;
-                margin-top: 10px;
-            }
-        }
-    }
-}
-
-#ajaxerr {
-    background: rgba(236, 236, 236, .9);
-}
-
-.loading #loadingmodal, .ajaxerr #ajaxerr {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity .5s ease-in-out;
-    -moz-transition: opacity .5s ease-in-out;
-    -webkit-transition: opacity .5s ease-in-out;
 }
 
 .big-rotating-icon {
@@ -538,7 +465,8 @@ details.details-open .panel-title::before {
 td > p:last-child,
 .panel-body > dl:last-child,
 .panel-body > .table:last-child,
-.panel-body > .table-responsive:last-child > .table:last-child {
+.panel-body > .table-responsive:last-child > .table:last-child,
+table td ul:last-child {
     margin-bottom: 0;
 }
 .alert > p + p, .alert > p + ul, .alert > ul + p {
@@ -572,6 +500,28 @@ td > p:last-child,
         margin: 0 0 0 250px;
         padding: 15px 47px;/* 45px + 2px optical compensation */
     }
+}
+
+.admin-only,
+.panel-default > .panel-heading.admin-only,
+.panel-default > legend > .panel-heading.admin-only {
+    background-color: #f9ece1;
+    background-image: repeating-linear-gradient(135deg, 
+        rgba(255, 255, 255, .5),
+        rgba(255, 255, 255, .5) 10px,
+        transparent 12px,
+        transparent 22px, 
+        rgba(255, 255, 255, .5) 24px);
+}
+
+
+.danger.admin-only {
+    background-image: repeating-linear-gradient(135deg, 
+        rgba(0, 0, 0, .1),
+        rgba(0, 0, 0, .1) 10px,
+        transparent 12px,
+        transparent 22px, 
+        rgba(0, 0, 0, .1) 24px);
 }
 
 .quotabox {
@@ -719,6 +669,10 @@ details summary {
 }
 .position-buttons {
     padding-left: 20px;
+}
+.print-logs {
+    padding-left: 20px;
+    font-size: $font-size-small;
 }
 
 .pos-canceled * {

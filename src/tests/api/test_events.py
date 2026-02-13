@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -43,13 +43,13 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scope, scopes_disabled
-from tests import assert_num_queries
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderPosition, Organizer, SeatingPlan,
 )
 from pretix.base.models.orders import OrderFee
+from pretix.testutils.queries import assert_num_queries
 
 
 @pytest.fixture
@@ -734,6 +734,9 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
         format='json'
     )
     assert resp.status_code == 200
+    assert resp.data["meta_data"] == {
+        meta_prop.name: "Workshop"
+    }
     with scopes_disabled():
         assert organizer.events.get(slug=resp.data['slug']).meta_values.filter(
             property__name=meta_prop.name, value="Workshop"
@@ -847,6 +850,39 @@ def test_event_update_plugins_validation(token_client, organizer, event, item, m
         '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
         {
             "plugins": ["pretix.plugins.paypal2", "tests.testdummyrestricted"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": ["tests.testdummyorga"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"plugins": ["Plugin cannot be enabled on this level: 'tests.testdummyorga'."]}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": ["tests.testdummyhybrid"]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"plugins": ["Plugin should be enabled on organizer level first: 'tests.testdummyhybrid'."]}
+
+    with scopes_disabled():
+        organizer.enable_plugin("tests.testdummyhybrid")
+        organizer.save()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "plugins": ["tests.testdummyhybrid"]
         },
         format='json'
     )
@@ -1747,7 +1783,7 @@ def test_event_expand_seat_filter_and_querycount(token_client, organizer, event,
     with scope(organizer=organizer):
         v0 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-0'))
 
-    with assert_num_queries(13):
+    with assert_num_queries(14):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
                                 '?expand=orderposition&expand=cartposition&expand=voucher&is_available=false'
                                 .format(organizer.slug, event.slug))
@@ -1766,7 +1802,7 @@ def test_event_expand_seat_filter_and_querycount(token_client, organizer, event,
         v1 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-1'))
         v2 = event.vouchers.create(item=item, seat=event.seats.get(seat_guid='0-2'))
 
-    with assert_num_queries(13):
+    with assert_num_queries(16):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/seats/'
                                 '?expand=orderposition&expand=cartposition&expand=voucher&is_available=false'
                                 .format(organizer.slug, event.slug))

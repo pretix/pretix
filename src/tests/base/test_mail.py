@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -33,25 +33,34 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import os
+import re
+from email.mime.text import MIMEText
 
 import pytest
 from django.conf import settings
 from django.core import mail as djmail
+from django.test import override_settings
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scope
+from i18nfield.strings import LazyI18nString
 
-from pretix.base.models import Event, Organizer, User
-from pretix.base.services.mail import mail
+from pretix.base.email import get_email_context
+from pretix.base.models import Event, Organizer, OutgoingMail, User
+from pretix.base.services.mail import mail, mail_send_task
 
 
 @pytest.fixture
 def env():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
+    prop1 = o.meta_properties.get_or_create(name="Test")[0]
+    prop2 = o.meta_properties.get_or_create(name="Website")[0]
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
         date_from=now()
     )
+    event.meta_values.update_or_create(property=prop1, defaults={'value': "*Beep*"})
+    event.meta_values.update_or_create(property=prop2, defaults={'value': "https://example.com"})
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     user.email = 'dummy@dummy.dummy'
     user.save()
@@ -155,11 +164,216 @@ def test_send_mail_with_user_locale(env):
 
 
 @pytest.mark.django_db
+def test_queue_state_sent(env):
+    m = OutgoingMail.objects.create(
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+    )
+    assert m.status == OutgoingMail.STATUS_QUEUED
+    mail_send_task.apply(kwargs={
+        'outgoing_mail': m.pk,
+    }, max_retries=0)
+    m.refresh_from_db()
+    assert m.status == OutgoingMail.STATUS_SENT
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_BACKEND='pretix.testutils.mail.PermanentlyFailingEmailBackend')
+def test_queue_state_permanent_failure(env):
+    m = OutgoingMail.objects.create(
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+    )
+    assert m.status == OutgoingMail.STATUS_QUEUED
+    mail_send_task.apply(kwargs={
+        'outgoing_mail': m.pk,
+    }, max_retries=0)
+    m.refresh_from_db()
+    assert m.status == OutgoingMail.STATUS_FAILED
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_BACKEND='pretix.testutils.mail.FailingEmailBackend')
+def test_queue_state_retry_failure(env, monkeypatch):
+    def retry(*args, **kwargs):
+        raise Exception()
+
+    monkeypatch.setattr('celery.app.task.Task.retry', retry, raising=True)
+    m = OutgoingMail.objects.create(
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+    )
+    assert m.status == OutgoingMail.STATUS_QUEUED
+    mail_send_task.apply(kwargs={
+        'outgoing_mail': m.pk,
+    }, max_retries=0)
+    m.refresh_from_db()
+    assert m.status == OutgoingMail.STATUS_AWAITING_RETRY
+    assert m.retry_after > now()
+
+
+@pytest.mark.django_db
+def test_queue_state_foreign_key_handling():
+    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    event = Event.objects.create(
+        organizer=o, name='Dummy', slug='dummy',
+        date_from=now()
+    )
+
+    mail_queued = OutgoingMail.objects.create(
+        organizer=o,
+        event=event,
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+    )
+    mail_sent = OutgoingMail.objects.create(
+        organizer=o,
+        event=event,
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+        status=OutgoingMail.STATUS_SENT,
+    )
+
+    event.delete()
+
+    assert not OutgoingMail.objects.filter(pk=mail_queued.pk).exists()
+    assert OutgoingMail.objects.get(pk=mail_sent.pk).event is None
+
+    o.delete()
+    assert not OutgoingMail.objects.filter(pk=mail_sent.pk).exists()
+
+
+@pytest.mark.django_db
 def test_sendmail_placeholder(env):
     djmail.outbox = []
     event, user, organizer = env
-    mail('dummy@dummy.dummy', '{event} Test subject', 'mailtest.txt', {"event": event}, event)
+    mail('dummy@dummy.dummy', '{event} Test subject', 'mailtest.txt', {"event": event.name}, event)
 
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [user.email]
     assert djmail.outbox[0].subject == 'Dummy Test subject'
+
+
+def _extract_html(mail):
+    for content, mimetype in mail.alternatives:
+        if "multipart/related" in mimetype:
+            for sp in content._payload:
+                if isinstance(sp, MIMEText):
+                    return sp._payload
+                    break
+        elif "text/html" in mimetype:
+            return content
+
+
+@pytest.mark.django_db
+def test_placeholder_html_rendering_from_template(env):
+    djmail.outbox = []
+    event, user, organizer = env
+    event.name = "<strong>event & co. kg</strong>"
+    event.save()
+    mail('dummy@dummy.dummy', '{event} Test subject', 'mailtest.txt', get_email_context(
+        event=event,
+        payment_info="**IBAN**: 123  \n**BIC**: 456",
+    ), event)
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [user.email]
+    assert 'Event name: <strong>event & co. kg</strong>' in djmail.outbox[0].body
+    assert '**IBAN**: 123  \n**BIC**: 456' in djmail.outbox[0].body
+    assert '**Meta**: *Beep*' in djmail.outbox[0].body
+    assert 'Event website: [<strong>event & co. kg</strong>](https://example.org/dummy)' in djmail.outbox[0].body
+    assert 'Other website: [<strong>event & co. kg</strong>](https://example.com)' in djmail.outbox[0].body
+    assert '&lt;' not in djmail.outbox[0].body
+    assert '&amp;' not in djmail.outbox[0].body
+    html = _extract_html(djmail.outbox[0])
+
+    assert '<strong>event' not in html
+    assert 'Event name: &lt;strong&gt;event &amp; co. kg&lt;/strong&gt;' in html
+    assert '<strong>IBAN</strong>: 123<br/>\n<strong>BIC</strong>: 456' in html
+    assert '<strong>Meta</strong>: <em>Beep</em>' in html
+    assert re.search(
+        r'Event website: <a href="https://example.org/dummy" rel="noopener" style="[^"]+" target="_blank">&lt;strong&gt;event &amp; co. kg&lt;/strong&gt;</a>',
+        html
+    )
+    assert re.search(
+        r'Other website: <a href="https://example.com" rel="noopener" style="[^"]+" target="_blank">&lt;strong&gt;event &amp; co. kg&lt;/strong&gt;</a>',
+        html
+    )
+
+
+@pytest.mark.django_db
+def test_placeholder_html_rendering_from_string(env):
+    template = LazyI18nString({
+        "en": "Event name: {event}\n\nPayment info:\n{payment_info}\n\n**Meta**: {meta_Test}\n\n"
+              "Event website: [{event}](https://example.org/{event_slug})\n\n"
+              "Other website: [{event}]({meta_Website})\n\n"
+              "URL: {url}\n\n"
+              "URL with text: <a href=\"{url}\">Test</a>\n\n"
+              "URL with params: https://example.com/form?action=foo&eventid={event_slug}\n\n"
+              "URL with params and text: [Link & Text](https://example.com/form?action=foo&eventid={event_slug})\n\n"
+    })
+    djmail.outbox = []
+    event, user, organizer = env
+    event.name = "<strong>event & co. kg</strong>"
+    event.save()
+    ctx = get_email_context(
+        event=event,
+        payment_info="**IBAN**: 123  \n**BIC**: 456",
+    )
+    ctx["url"] = "https://google.com"
+    mail('dummy@dummy.dummy', '{event} Test subject', template, ctx, event)
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [user.email]
+    assert 'Event name: <strong>event & co. kg</strong>' in djmail.outbox[0].body
+    assert 'Event website: [<strong>event & co. kg</strong>](https://example.org/dummy)' in djmail.outbox[0].body
+    assert 'Other website: [<strong>event & co. kg</strong>](https://example.com)' in djmail.outbox[0].body
+    assert '**IBAN**: 123  \n**BIC**: 456' in djmail.outbox[0].body
+    assert '**Meta**: *Beep*' in djmail.outbox[0].body
+    assert 'URL: https://google.com' in djmail.outbox[0].body
+    assert 'URL with text: <a href="https://google.com">Test</a>' in djmail.outbox[0].body
+    assert 'URL with params: https://example.com/form?action=foo&eventid=dummy' in djmail.outbox[0].body
+    assert 'URL with params and text: [Link & Text](https://example.com/form?action=foo&eventid=dummy)' in djmail.outbox[0].body
+    assert '&lt;' not in djmail.outbox[0].body
+    assert '&amp;' not in djmail.outbox[0].body
+    html = _extract_html(djmail.outbox[0])
+    assert '<strong>event' not in html
+    assert 'Event name: &lt;strong&gt;event &amp; co. kg&lt;/strong&gt;' in html
+    assert '<strong>IBAN</strong>: 123<br/>\n<strong>BIC</strong>: 456' in html
+    assert '<strong>Meta</strong>: <em>Beep</em>' in html
+    assert re.search(
+        r'Event website: <a href="https://example.org/dummy" rel="noopener" style="[^"]+" target="_blank">&lt;strong&gt;event &amp; co. kg&lt;/strong&gt;</a>',
+        html
+    )
+    assert re.search(
+        r'Other website: <a href="https://example.com" rel="noopener" style="[^"]+" target="_blank">&lt;strong&gt;event &amp; co. kg&lt;/strong&gt;</a>',
+        html
+    )
+    assert re.search(
+        r'URL: <a href="https://google.com" rel="noopener" style="[^"]+" target="_blank">https://google.com</a>',
+        html
+    )
+    assert re.search(
+        r'URL with text: <a href="https://google.com" rel="noopener" style="[^"]+" target="_blank">Test</a>',
+        html
+    )
+    assert re.search(
+        r'URL with params: <a href="https://example.com/form\?action=foo&amp;eventid=dummy" rel="noopener" '
+        r'style="[^"]+" target="_blank">https://example.com/form\?action=foo&amp;eventid=dummy</a>',
+        html
+    )
+    assert re.search(
+        r'URL with params and text: <a href="https://example.com/form\?action=foo&amp;eventid=dummy" rel="noopener" '
+        r'style="[^"]+" target="_blank">Link &amp; Text</a>',
+        html
+    )

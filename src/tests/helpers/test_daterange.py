@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -50,8 +50,8 @@ def test_same_day_german():
 def test_same_day_english():
     with translation.override('en'):
         df = date(2003, 2, 1)
-        assert daterange(df, df) == "Sat, Feb. 1st, 2003"
-        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">Sat, Feb. 1st, 2003</time>'
+        assert daterange(df, df) == "Sat, Feb. 1, 2003"
+        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">Sat, Feb. 1, 2003</time>'
 
 
 def test_same_day_spanish():
@@ -82,10 +82,10 @@ def test_same_month_english():
     with translation.override('en'):
         df = date(2003, 2, 1)
         dt = date(2003, 2, 3)
-        assert daterange(df, dt) == "Feb. 1st – 3rd, 2003"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1st</time> ' \
+        assert daterange(df, dt) == "Feb. 1 – 3, 2003"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1</time> ' \
                                                   '<span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
-                                                  '<time datetime="2003-02-03">3rd, 2003</time>'
+                                                  '<time datetime="2003-02-03">3, 2003</time>'
 
 
 def test_same_month_spanish():
@@ -112,10 +112,10 @@ def test_same_year_english():
     with translation.override('en'):
         df = date(2003, 2, 1)
         dt = date(2003, 4, 3)
-        assert daterange(df, dt) == "Feb. 1st – April 3rd, 2003"
-        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1st</time> ' \
+        assert daterange(df, dt) == "Feb. 1 – April 3, 2003"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1</time> ' \
                                                   '<span aria-hidden="true">–</span><span class="sr-only"> until </span> ' \
-                                                  '<time datetime="2003-04-03">April 3rd, 2003</time>'
+                                                  '<time datetime="2003-04-03">April 3, 2003</time>'
 
 
 def test_same_year_spanish():

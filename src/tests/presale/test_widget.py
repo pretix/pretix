@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -169,7 +169,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "target_url": "http://example.com/ccc/30c3/",
             "subevent": None,
             "name": "30C3",
-            "date_range": f"{self.event.date_from.strftime('%a')}, Dec. 26th, {self.event.date_from.year} 00:00",
+            "date_range": f"{self.event.date_from.strftime('%a')}, Dec. 26, {self.event.date_from.year} 00:00",
             "frontpage_text": "",
             "location": "",
             "currency": "EUR",
@@ -367,7 +367,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
     def test_product_list_view_with_voucher(self):
         with scopes_disabled():
-            self.event.vouchers.create(item=self.ticket, code="ABCDE")
+            self.event.vouchers.create(item=self.ticket, code="ABCDE", max_usages=1)
         response = self.client.get('/%s/%s/widget/product_list?voucher=ABCDE' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
@@ -375,7 +375,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "target_url": "http://example.com/ccc/30c3/",
             "subevent": None,
             "name": "30C3",
-            "date_range": f"{self.event.date_from.strftime('%a')}, Dec. 26th, {self.event.date_from.year} 00:00",
+            "date_range": f"{self.event.date_from.strftime('%a')}, Dec. 26, {self.event.date_from.year} 00:00",
             "frontpage_text": "",
             "location": "",
             "currency": "EUR",
@@ -410,7 +410,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "free_price": False,
                             "original_price": None,
                             "name": "Early-bird ticket",
-                            "order_max": 4
+                            "order_max": 1
                         },
                     ],
                     "description": None,
@@ -426,7 +426,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
     def test_product_list_view_with_voucher_variation_through_quota(self):
         with scopes_disabled():
-            self.event.vouchers.create(quota=self.quota_shirts, code="ABCDE")
+            self.event.vouchers.create(quota=self.quota_shirts, code="ABCDE", max_usages=1)
             self.quota_shirts.variations.remove(self.shirt_blue)
         response = self.client.get('/%s/%s/widget/product_list?voucher=ABCDE' % (self.orga.slug, self.event.slug))
         assert response['Access-Control-Allow-Origin'] == '*'
@@ -435,7 +435,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "target_url": "http://example.com/ccc/30c3/",
             "subevent": None,
             "name": "30C3",
-            "date_range": f"{self.event.date_from.strftime('%a')}, Dec. 26th, {self.event.date_from.year} 00:00",
+            "date_range": f"{self.event.date_from.strftime('%a')}, Dec. 26, {self.event.date_from.year} 00:00",
             "frontpage_text": "",
             "location": "",
             "currency": "EUR",
@@ -474,7 +474,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                 {
                                     'id': self.shirt_red.pk,
                                     'value': 'Red',
-                                    'order_max': 2,
+                                    'order_max': 1,
                                     'description': None,
                                     'original_price': None,
                                     'price': {
@@ -520,7 +520,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "target_url": "http://example.com/ccc/30c3/",
             "subevent": None,
             "name": "30C3",
-            "date_range": f"{self.event.date_from.strftime('%a')}, Dec. 26th, {self.event.date_from.year} 00:00",
+            "date_range": f"{self.event.date_from.strftime('%a')}, Dec. 26, {self.event.date_from.year} 00:00",
             "frontpage_text": "",
             "location": "",
             "currency": "EUR",
@@ -542,7 +542,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
     @override_settings(COMPRESS_PRECOMPILERS=settings.COMPRESS_PRECOMPILERS_ORIGINAL)
     def test_css_customized(self):
-        response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
+        response = self.client.get('/%s/%s/widget/v2.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
         assert '#8E44B3' in c
         assert '#33c33c' not in c
@@ -550,7 +550,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
         self.orga.settings.primary_color = "#33c33c"
         self.orga.cache.clear()
-        response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
+        response = self.client.get('/%s/%s/widget/v2.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
         assert '#8E44B3' not in c
         assert '#33c33c' in c
@@ -558,18 +558,18 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
         self.event.settings.primary_color = "#34c34c"
         self.event.cache.clear()
-        response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
+        response = self.client.get('/%s/%s/widget/v2.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
         assert '#8E44B3' not in c
         assert '#33c33c' not in c
         assert '#34c34c' in c
 
     def test_js_localized(self):
-        response = self.client.get('/widget/v1.en.js')
+        response = self.client.get('/widget/v2.en.js')
         c = response.content.decode()
         assert '%m/%d/%Y' in c
         assert '%d.%m.%Y' not in c
-        response = self.client.get('/widget/v1.de.js')
+        response = self.client.get('/widget/v2.de.js')
         c = response.content.decode()
         assert '%m/%d/%Y' not in c
         assert '%d.%m.%Y' in c
@@ -627,9 +627,9 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
                 'has_more_events': False,
                 'events': [
-                    {'name': 'Present', 'date_range': 'Tue, Jan. 1st, 2019 11:00', 'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
+                    {'name': 'Present', 'date_range': 'Tue, Jan. 1, 2019 11:00', 'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                      'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk, 'location': ''},
-                    {'name': 'Future', 'date_range': 'Fri, Jan. 4th, 2019 11:00', 'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
+                    {'name': 'Future', 'date_range': 'Fri, Jan. 4, 2019 11:00', 'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                      'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk, 'location': ''}
                 ]
             }
@@ -659,14 +659,14 @@ class WidgetCartTest(CartTestMixin, TestCase):
                     [
                         None,
                         {'day': 1, 'date': '2019-01-01', 'events': [
-                            {'name': 'Present', 'time': '11:00', 'continued': False, 'date_range': 'Tue, Jan. 1st, 2019 11:00',
+                            {'name': 'Present', 'time': '11:00', 'continued': False, 'date_range': 'Tue, Jan. 1, 2019 11:00',
                              'location': '',
                              'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                              'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk}]},
                         {'day': 2, 'date': '2019-01-02', 'events': []},
                         {'day': 3, 'date': '2019-01-03', 'events': []},
                         {'day': 4, 'date': '2019-01-04', 'events': [
-                            {'name': 'Future', 'time': '11:00', 'continued': False, 'date_range': 'Fri, Jan. 4th, 2019 11:00',
+                            {'name': 'Future', 'time': '11:00', 'continued': False, 'date_range': 'Fri, Jan. 4, 2019 11:00',
                              'location': '',
                              'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                              'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}]},
@@ -732,21 +732,21 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 'week': [2019, 1],
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
                 'days': [
-                    {'day_formatted': 'Mon, Dec 31st', 'date': '2018-12-31', 'events': [], 'today': False},
-                    {'day_formatted': 'Tue, Jan 1st', 'date': '2019-01-01', 'events': [
-                        {'name': 'Present', 'time': '11:00', 'continued': False, 'date_range': 'Tue, Jan. 1st, 2019 11:00',
+                    {'day_formatted': 'Mon, Dec 31', 'date': '2018-12-31', 'events': [], 'today': False},
+                    {'day_formatted': 'Tue, Jan 1', 'date': '2019-01-01', 'events': [
+                        {'name': 'Present', 'time': '11:00', 'continued': False, 'date_range': 'Tue, Jan. 1, 2019 11:00',
                          'location': '',
                          'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                          'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk}], 'today': True},
-                    {'day_formatted': 'Wed, Jan 2nd', 'date': '2019-01-02', 'events': [], 'today': False},
-                    {'day_formatted': 'Thu, Jan 3rd', 'date': '2019-01-03', 'events': [], 'today': False},
-                    {'day_formatted': 'Fri, Jan 4th', 'date': '2019-01-04', 'events': [
-                        {'name': 'Future', 'time': '11:00', 'continued': False, 'date_range': 'Fri, Jan. 4th, 2019 11:00',
+                    {'day_formatted': 'Wed, Jan 2', 'date': '2019-01-02', 'events': [], 'today': False},
+                    {'day_formatted': 'Thu, Jan 3', 'date': '2019-01-03', 'events': [], 'today': False},
+                    {'day_formatted': 'Fri, Jan 4', 'date': '2019-01-04', 'events': [
+                        {'name': 'Future', 'time': '11:00', 'continued': False, 'date_range': 'Fri, Jan. 4, 2019 11:00',
                          'location': '',
                          'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                          'event_url': 'http://example.com/ccc/30c3/', 'subevent': se2.pk}], 'today': False},
-                    {'day_formatted': 'Sat, Jan 5th', 'date': '2019-01-05', 'events': [], 'today': False},
-                    {'day_formatted': 'Sun, Jan 6th', 'date': '2019-01-06', 'events': [], 'today': False}
+                    {'day_formatted': 'Sat, Jan 5', 'date': '2019-01-05', 'events': [], 'today': False},
+                    {'day_formatted': 'Sun, Jan 6', 'date': '2019-01-06', 'events': [], 'today': False}
                 ],
             }
 
@@ -773,17 +773,17 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
                 'events': [
                     {'availability': {'color': 'none', 'text': 'Event series'},
-                     'date_range': 'Jan. 1st – 4th, 2019',
+                     'date_range': 'Jan. 1 – 4, 2019',
                      'event_url': 'http://example.com/ccc/30c3/',
                      'location': '',
                      'name': '30C3'},
                     {'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
-                     'date_range': 'Tue, Jan. 1st, 2019 10:00',
+                     'date_range': 'Tue, Jan. 1, 2019 10:00',
                      'location': '',
                      'event_url': 'http://example.com/ccc/present/',
                      'name': 'Present'},
                     {'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
-                     'date_range': 'Fri, Jan. 4th, 2019 10:00',
+                     'date_range': 'Fri, Jan. 4, 2019 10:00',
                      'location': '',
                      'event_url': 'http://example.com/ccc/future/',
                      'name': 'Future'}
@@ -884,7 +884,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                       'day': 1,
                       'events': [{'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                                   'continued': False,
-                                  'date_range': 'Tue, Jan. 1st, 2019 10:00',
+                                  'date_range': 'Tue, Jan. 1, 2019 10:00',
                                   'event_url': 'http://example.com/ccc/present/',
                                   'name': 'Present',
                                   'location': '',
@@ -892,7 +892,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                   'time': '10:00'},
                                  {'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                                   'continued': False,
-                                  'date_range': 'Tue, Jan. 1st, 2019 11:00',
+                                  'date_range': 'Tue, Jan. 1, 2019 11:00',
                                   'event_url': 'http://example.com/ccc/30c3/',
                                   'name': 'Present',
                                   'location': '',
@@ -904,7 +904,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                       'day': 4,
                       'events': [{'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                                   'continued': False,
-                                  'date_range': 'Fri, Jan. 4th, 2019 10:00',
+                                  'date_range': 'Fri, Jan. 4, 2019 10:00',
                                   'event_url': 'http://example.com/ccc/future/',
                                   'name': 'Future',
                                   'location': '',
@@ -912,7 +912,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                   'time': '10:00'},
                                  {'availability': {'color': 'none', 'text': 'More info', 'reason': 'unknown'},
                                   'continued': False,
-                                  'date_range': 'Fri, Jan. 4th, 2019 11:00',
+                                  'date_range': 'Fri, Jan. 4, 2019 11:00',
                                   'event_url': 'http://example.com/ccc/30c3/',
                                   'name': 'Future',
                                   'location': '',

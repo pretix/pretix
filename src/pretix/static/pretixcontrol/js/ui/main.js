@@ -1,18 +1,4 @@
-/*global $,gettext*/
-
-function gettext(msgid) {
-    if (typeof django !== 'undefined' && typeof django.gettext !== 'undefined') {
-        return django.gettext(msgid);
-    }
-    return msgid;
-}
-
-function ngettext(singular, plural, count) {
-    if (typeof django !== 'undefined' && typeof django.ngettext !== 'undefined') {
-        return django.ngettext(singular, plural, count);
-    }
-    return plural;
-}
+/*global $, gettext, ngettext, interpolate */
 
 function formatPrice(price, currency, locale) {
     if (!window.Intl || !Intl.NumberFormat) return price;
@@ -51,32 +37,6 @@ function formatPrice(price, currency, locale) {
     }
 }
 
-var waitingDialog = {
-    show: function (message) {
-        "use strict";
-        $("#loadingmodal").find("h1").html(message);
-        $("body").addClass("loading");
-    },
-    hide: function () {
-        "use strict";
-        $("body").removeClass("loading");
-    }
-};
-
-var ajaxErrDialog = {
-    show: function (c) {
-        "use strict";
-        $("#ajaxerr").html(c);
-        $("#ajaxerr .links").html("<a class='btn btn-default ajaxerr-close'>"
-            + gettext("Close message") + "</a>");
-        $("body").addClass("ajaxerr");
-    },
-    hide: function () {
-        "use strict";
-        $("body").removeClass("ajaxerr");
-    }
-};
-
 var apiGET = function (url, callback) {
     $.getJSON(url, function (data) {
         callback(data);
@@ -100,7 +60,7 @@ var i18nToString = function (i18nstring) {
 $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     waitingDialog.hide();
     var c = $(jqXHR.responseText).filter('.container');
-    if (jqXHR.responseText.indexOf("<!-- pretix-login-marker -->") !== -1) {
+    if (jqXHR.responseText && jqXHR.responseText.indexOf("<!-- pretix-login-marker -->") !== -1) {
         location.href = '/control/login?next=' + encodeURIComponent(location.pathname + location.search + location.hash)
     } else if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
@@ -119,6 +79,23 @@ var form_handlers = function (el) {
     );
     el.find("[data-formset]").on("formAdded", "div", function (event) {
         form_handlers($(event.target));
+    });
+    el.find("[data-formset] [data-formset-sort]").on("click", function (event) {
+        // Sort forms alphabetically by their first field
+        var $formset = $(this).closest("[data-formset]");
+        var $forms = $formset.find("[data-formset-form]").not("[data-formset-form-deleted]")
+        var compareForms = function(form_a, form_b) {
+            var a = $(form_a).find('input:not([name*=-ORDER]):not([name*=-DELETE]):not([name*=-id])').val();
+            var b = $(form_b).find('input:not([name*=-ORDER]):not([name*=-DELETE]):not([name*=-id])').val();
+            return a.localeCompare(b);
+        }
+        $forms = $forms.sort(compareForms);
+        $forms.each(function(i, form) {
+            var $order = $(form).find('[name*=-ORDER]');
+            $order.val(i + 1);
+        });
+        // Trigger visual reorder
+        $formset.find("[name*=-ORDER]").first().trigger("change");
     });
 
     // Vouchers
@@ -277,7 +254,8 @@ var form_handlers = function (el) {
         fill_field.on("dp.show", show);
     });
 
-    function luminanace(r, g, b) {
+    function luminance(r, g, b) {
+        // Algorithm defined as https://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
         var a = [r, g, b].map(function (v) {
             v /= 255;
             return v <= 0.03928
@@ -287,8 +265,9 @@ var form_handlers = function (el) {
         return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
     }
     function contrast(rgb1, rgb2) {
-        var l1 = luminanace(rgb1[0], rgb1[1], rgb1[2]) + 0.05,
-             l2 = luminanace(rgb2[0], rgb2[1], rgb2[2]) + 0.05,
+        // Algorithm defined at https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
+        var l1 = luminance(rgb1[0], rgb1[1], rgb1[2]) + 0.05,
+             l2 = luminance(rgb2[0], rgb2[1], rgb2[2]) + 0.05,
              ratio = l1/l2
         if (l2 > l1) {ratio = 1/ratio}
         return ratio.toFixed(1)
@@ -327,15 +306,15 @@ var form_handlers = function (el) {
         var icon, text, cls;
         if (c > 7) {
             icon = "fa-check-circle";
-            text = gettext('Your color has great contrast and is very easy to read!');
+            text = gettext('Your color has great contrast and will provide excellent accessibility.');
             cls = "text-success";
-        } else if (c > 2.5) {
+        } else if (c > 4.5) {
             icon = "fa-info-circle";
-            text = gettext('Your color has decent contrast and is probably good-enough to read!');
+            text = gettext('Your color has decent contrast and is sufficient for minimum accessibility requirements.');
             cls = "";
         } else {
             icon = "fa-warning";
-            text = gettext('Your color has bad contrast for text on white background, please choose a darker shade.');
+            text = gettext('Your color has insufficient contrast to white. Accessibility of your site will be impacted.');
             cls = "text-danger";
         }
         if ($icon.length === 0) {
@@ -368,6 +347,7 @@ var form_handlers = function (el) {
                 dependent.prop('disabled', !enabled).closest('.form-group, .form-field-boundary').toggleClass('disabled', !enabled);
                 if (!enabled && !dependent.is('[data-checkbox-dependency-visual]')) {
                     dependent.prop('checked', false);
+                    dependent.trigger('change')
                 }
             };
         update();
@@ -385,7 +365,7 @@ var form_handlers = function (el) {
         dependency.on("change", update);
     });
 
-    el.find("div[data-display-dependency], textarea[data-display-dependency], input[data-display-dependency], select[data-display-dependency]").each(function () {
+    el.find("div[data-display-dependency], textarea[data-display-dependency], input[data-display-dependency], select[data-display-dependency], button[data-display-dependency]").each(function () {
         var dependent = $(this),
             dependency = findDependency($(this).attr("data-display-dependency"), this),
             update = function (ev) {
@@ -410,10 +390,11 @@ var form_handlers = function (el) {
                     enabled = !enabled;
                 }
                 var $toggling = dependent;
-                if (dependent.attr("data-disable-dependent")) {
+                if (dependent.is("[data-disable-dependent]")) {
                     $toggling.attr('disabled', !enabled).trigger("change");
                 }
-                if (dependent.get(0).tagName.toLowerCase() !== "div") {
+                const tagName = dependent.get(0).tagName.toLowerCase()
+                if (tagName !== "div" && tagName !== "button") {
                     $toggling = dependent.closest('.form-group');
                 }
                 if (ev) {
@@ -434,16 +415,24 @@ var form_handlers = function (el) {
 
     el.find("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {
         var dependent = $(this),
-            dependency = $($(this).attr("data-required-if")),
+            dependencies = $($(this).attr("data-required-if")),
             update = function (ev) {
-                var enabled = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                var enabled = true;
+                dependencies.each(function () {
+                    var dependency = $(this);
+                    var e = (dependency.attr("type") === 'checkbox' || dependency.attr("type") === 'radio') ? dependency.prop('checked') : !!dependency.val();
+                    enabled = enabled && e;
+                });
                 dependent.prop('required', enabled).closest('.form-group').toggleClass('required', enabled).find('.optional').stop().animate({
                     'opacity': enabled ? 0 : 1
                 }, ev ? 500 : 1);
             };
         update();
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
-        dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        dependencies.each(function () {
+            var dependency = $(this);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+            dependency.closest('.form-group').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        });
     });
 
     el.find("div.scrolling-choice:not(.no-search)").each(function () {
@@ -522,6 +511,7 @@ var form_handlers = function (el) {
             theme: "bootstrap",
             language: $("body").attr("data-select2-locale"),
             data: JSON.parse($(this.getAttribute('data-select2-src')).text()),
+            width: '100%',
         }).val(selectedValue).trigger('change');
     });
 
@@ -570,7 +560,7 @@ var form_handlers = function (el) {
             allowClear: !$s.prop("required"),
             width: '100%',
             language: $("body").attr("data-select2-locale"),
-            placeholder: $(this).attr("data-placeholder"),
+            placeholder: $(this).attr("data-placeholder") || "",
             ajax: {
                 url: $(this).attr('data-select2-url'),
                 data: function (params) {
@@ -631,7 +621,7 @@ var form_handlers = function (el) {
                     }
                 }
             },
-            placeholder: $(this).attr("data-placeholder"),
+            placeholder: $(this).attr("data-placeholder") || "",
             templateResult: function (res) {
                 if (!res.id) {
                     return res.text;
@@ -686,18 +676,47 @@ var form_handlers = function (el) {
         var $checkbox = $(this).find("input[type=checkbox][name=_bulk]");
         var $content = $(this).find(".field-content");
         var $fields = $content.find("input, select, textarea, button");
+        var $dialog = $(this).attr("data-confirm-dialog") ? $($(this).attr("data-confirm-dialog")) : null;
+        var warningShown = false;
+
+        if ($dialog) {
+            $dialog.on("close", function () {
+                if ($dialog.get(0).returnValue === "yes") {
+                    $checkbox.prop("checked", true);
+                } else {
+                    $checkbox.prop("checked", false);
+                    warningShown = false;
+                }
+                update();
+            });
+        }
 
         var update = function () {
             var isChecked = $checkbox.prop("checked");
+
             $content.toggleClass("enabled", isChecked);
             $fields.attr("tabIndex", isChecked ? 0 : -1);
         }
         $content.on("focusin change click", function () {
             if ($checkbox.prop("checked")) return;
-            $checkbox.prop("checked", true);
-            update();
+            if ($dialog && !warningShown) {
+                warningShown = true;
+                $dialog.get(0).showModal();
+            } else {
+                $checkbox.prop("checked", true);
+                update();
+            }
         });
-        $checkbox.on('change', update)
+        $checkbox.on('change', function () {
+            var isChecked = $checkbox.prop("checked");
+            if (isChecked && $dialog && !warningShown) {
+                warningShown = true;
+                $dialog.get(0).showModal();
+            } else if (!isChecked) {
+                warningShown = false;
+            }
+            update();
+        })
         update();
     });
 

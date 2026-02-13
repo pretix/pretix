@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load static %}
 {% load compress %}
 {% block title %}{% trans "PDF Editor" %}{% endblock %}
@@ -25,27 +26,102 @@
         <div class="col-md-9">
             <div class="panel panel-default panel-pdf-editor">
                 <div class="panel-heading">
-                    <div class="pull-right flip">
+                    <form method="post" action="" id="preview-form" target="_blank" class="pull-right flip">
+                        {% csrf_token %}
+                        <input type="hidden" value="" name="data">
+                        <input type="hidden" value="" name="background">
+                        <input type="hidden" value="true" name="preview">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-source"
+                            <button type="button" class="btn btn-default" id="toolbox-source"
                                     title="{% trans "Code" %}">
-                                <span class="fa fa-code"></span>
+                                {% icon "code" %}
                             </button>
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-paste"
-                                    title="{% trans "Paste" %}">
-                                <span class="fa fa-paste"></span>
-                            </button>
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-undo"
-                                    title="{% trans "Undo" %}">
-                                <span class="fa fa-undo"></span>
-                            </button>
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-redo"
-                                    title="{% trans "Redo" %}">
-                                <span class="fa fa-repeat"></span>
+                            <button type="submit" class="btn btn-default" id="editor-preview">
+                                {% icon "eye" %}
+                                {% trans "Preview" %}
                             </button>
                         </div>
+                        <button type="submit" class="btn btn-primary btn-save" id="editor-save">
+                            {% icon "save" %}
+                            {% trans "Save" %}
+                        </button>
+                    </form>
+                    <div class="btn-group add-buttons">
+                        <button class="btn btn-default" id="editor-add-textcontainer" disabled>
+                            {% icon "font" %}
+                            {% trans "Text box" %}
+                        </button>
+                        <div class="btn-group dropdown">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                {% icon "qrcode" %}
+                                {% trans "QR Code" %}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <button class="btn" id="editor-add-qrcode" data-content="secret" disabled>
+                                        {% trans "QR code for Check-In" %}
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="btn" id="editor-add-qrcode-lead"
+                                            data-content="pseudonymization_id"
+                                            disabled>
+                                        {% trans "QR code for Lead Scanning" %}
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="btn" id="editor-add-qrcode-other"
+                                            data-content="other"
+                                            disabled>
+                                        {% trans "Other QR code" %}
+                                    </button>
+                                </li>
+                        </div>
+                        <div class="btn-group dropdown">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                {% icon "image" %}
+                                {% trans "Image" %}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <button class="btn" id="editor-add-image" disabled
+                                        data-toggle="tooltip" title="{% trans "You can use this to add user-uploaded pictures from questions or pictures generated by plugins. If you want to embed a logo or other images, use a custom background instead." %}">
+                                        {% trans "Dynamic image" %}
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="btn" id="editor-add-poweredby"
+                                            data-content="dark"
+                                            disabled>
+                                        {% trans "pretix Logo" %}
+                                    </button>
+                                </li>
+                        </div>
                     </div>
-                    {% trans "Editor" %}
+                    <div class="btn-group object-buttons">
+                        <button type="button" class="btn btn-default" id="toolbox-duplicate"
+                                title="{% trans "Duplicate" %}">
+                            {% icon "copy" %}
+                        </button>
+                        <button type="button" class="btn btn-default" id="toolbox-delete"
+                                title="{% trans "Delete" %}">
+                            {% icon "trash" class="text-danger" %}
+                        </button>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" id="toolbox-undo"
+                                title="{% trans "Undo" %}">
+                            {% icon "undo" %}
+                        </button>
+                        <button type="button" class="btn btn-default" id="toolbox-redo"
+                                title="{% trans "Redo" %}">
+                            {% icon "repeat" %}
+                        </button>
+                    </div>
                 </div>
                 <div class="panel-body">
                     <ul class="nav nav-pills" id="page_nav">
@@ -153,22 +229,6 @@
         <div class="col-md-3" id="editor-toolbox-area">
             <div class="panel panel-default" id="toolbox">
                 <div class="panel-heading">
-                    <div class="pull-right object-buttons flip">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-cut"
-                                    title="{% trans "Cut" %}">
-                                <span class="fa fa-cut"></span>
-                            </button>
-                            <button type="button" class="btn btn-default btn-xs" id="toolbox-copy"
-                                    title="{% trans "Copy" %}">
-                                <span class="fa fa-copy"></span>
-                            </button>
-                            <button type="button" class="btn btn-danger btn-xs" id="toolbox-delete"
-                                    title="{% trans "Delete" %}">
-                                <span class="fa fa-trash"></span>
-                            </button>
-                        </div>
-                    </div>
                     <span id="toolbox-heading">
                         {% trans "Loading…" %}
                     </span>
@@ -178,7 +238,7 @@
                         <div class="row control-group pdf-info">
                             <div class="col-sm-12">
                                 <label for="pdf-info-name">{% trans "Layout name" %}</label><br>
-                                <input type="text" id="pdf-info-name" class="input-block-level form-control" name="name" value="{{ name }}">
+                                <input type="text" id="pdf-info-name" class="input-block-level form-control" name="name" value="{{ name }}" maxlength="190">
                             </div>
                         </div>
                     {% endif %}
@@ -488,63 +548,6 @@
                     </div>
                 </div>
             </div>
-            <div class="editor-toolbox-text panel panel-default">
-                <div class="panel-heading">
-                    {% trans "Add a new object" %}
-                </div>
-                <div class="panel-body add-buttons">
-                    <button class="btn btn-default btn-block" id="editor-add-textcontainer" disabled>
-                        <span class="fa fa-font"></span>
-                        {% trans "Text box" %}
-                    </button>
-                    <button class="btn btn-default btn-block" id="editor-add-text" disabled>
-                        <span class="fa fa-font"></span>
-                        {% trans "Text (deprecated)" %}
-                    </button>
-                    <button class="btn btn-default btn-block" id="editor-add-qrcode" data-content="secret" disabled>
-                        <span class="fa fa-qrcode"></span>
-                        {% trans "QR code for Check-In" %}
-                    </button>
-                    <button class="btn btn-default btn-block" id="editor-add-qrcode-lead"
-                            data-content="pseudonymization_id"
-                            disabled>
-                        <span class="fa fa-qrcode"></span>
-                        {% trans "QR code for Lead Scanning" %}
-                    </button>
-                    <button class="btn btn-default btn-block" id="editor-add-qrcode-other"
-                            data-content="secret"
-                            disabled>
-                        <span class="fa fa-qrcode"></span>
-                        {% trans "Other QR code" %}
-                    </button>
-                    <button class="btn btn-default btn-block" id="editor-add-poweredby"
-                            data-content="dark"
-                            disabled>
-                        <span class="fa fa-image"></span>
-                        {% trans "pretix Logo" %}
-                    </button>
-                    <button class="btn btn-default btn-block" id="editor-add-image" disabled
-                        data-toggle="tooltip" title="{% trans "You can use this to add user-uploaded pictures from questions or pictures generated by plugins. If you want to embed a logo or other images, use a custom background instead." %}">
-                        <span class="fa fa-image"></span>
-                        {% trans "Dynamic image" %}
-                    </button>
-                </div>
-            </div>
-            <form method="post" action="" id="preview-form" target="_blank">
-                <div class="form-group submit-group">
-                    {% csrf_token %}
-                    <input type="hidden" value="" name="data">
-                    <input type="hidden" value="" name="background">
-                    <input type="hidden" value="true" name="preview">
-                    <button type="submit" class="btn btn-default btn-lg" id="editor-preview">
-                        {% trans "Preview" %}
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-save" id="editor-save">
-                        <span class="fa fa-fw fa-save"></span>
-                        {% trans "Save" %}
-                    </button>
-                </div>
-            </form>
             <p>&nbsp;</p>
             <div class="alert alert-info" id="version-notice">
                 {% blocktrans trimmed with print_version="2.18" scan_version="1.22" %}

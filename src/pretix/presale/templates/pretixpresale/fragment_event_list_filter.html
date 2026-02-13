@@ -7,7 +7,7 @@
 {% if filter_form.fields %}
     <form class="event-list-filter-form" method="get" data-save-scrollpos>
         <input type="hidden" name="filtered" value="1">
-        {% for f, v in request.GET.items %}
+        {% for f, v in request_get_items %}
             {% if f not in filter_form.fields and f != "page" %}
                 <input type="hidden" name="{{ f }}" value="{{ v }}">
             {% endif %}
@@ -16,6 +16,7 @@
             {% for f in filter_form.fields %}
                 {% bootstrap_field filter_form|getitem:f %}
             {% endfor %}
+            <div class="visible-xs">&nbsp;</div>
             <button type="submit" class="btn btn-primary">
                 <span class="fa fa-filter" aria-hidden="true"></span>
                 {% trans "Filter" %}

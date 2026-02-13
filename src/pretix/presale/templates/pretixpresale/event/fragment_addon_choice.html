@@ -24,7 +24,7 @@
         {% elif c.min_count == 0 %}
             <p class="addon-count-desc" id="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                 {% blocktrans trimmed count max_count=c.max_count %}
-                    You can choose {{ max_count }} option from this category.
+                    You can choose one option from this category.
                 {% plural %}
                     You can choose up to {{ max_count }} options from this category.
                 {% endblocktrans %}
@@ -96,8 +96,8 @@
                             {% if not event.settings.show_variations_expanded %}
                                 <button type="button" data-toggle="variations" class="btn btn-default btn-block js-only"
                                         data-label-alt="{% trans "Hide variants" %}"
-                                        aria-expanded="false"
-                                        aria-label="{% blocktrans trimmed with item=item.name count=item.available_variations|length %}Show {{count}} variants of {{item}}{% endblocktrans %}">
+                                        aria-expanded="false" aria-controls="cp-{{ form.pos.pk }}-item-{{ item.pk }}-variations"
+                                        aria-describedby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend">
                                     <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                                     <span>{% trans "Show variants" %}</span>
                                 </button>
@@ -105,7 +105,7 @@
                         </div>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}">
+                    <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}" id="cp-{{ form.pos.pk }}-item-{{ item.pk }}-variations">
                         {% for var in item.available_variations %}
                             <article aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend"{% if var.description %} aria-describedby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-description"{% endif %} class="row-fluid product-row variation"
                             {% if not item.free_price %}
@@ -186,7 +186,7 @@
                                     {% endif %}
                                     {% endif %}
                                 </div>
-                                {% if var.cached_availability.0 == 100 or var.initial %}
+                                {% if not item.current_unavailability_reason and not var.current_unavailability_reason and var.cached_availability.0 == 100 or var.initial %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
                                         {% if c.max_count == 1 or not c.multi_allowed %}
                                             <label class="btn btn-default btn-checkbox">
@@ -197,15 +197,15 @@
                                                         {% endif %}
                                                         id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
-                                                        aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
+                                                        aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend"
                                                         aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
                                             </label>
                                         {% else %}
                                             <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
-                                                <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}</legend>
-                                                <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                <legend class="sr-only">{% trans "Quantity" %}</legend>
+                                                <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}, {{ var }}: {% trans "Decrease quantity" %}">-</button>
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                     {% if var.initial %}value="{{ var.initial }}"{% endif %}
                                                     {% if item.free_price %}
@@ -214,8 +214,8 @@
                                                     max="{{ c.max_count }}"
                                                     id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
-                                                    aria-label="{% trans "Quantity" %}">
-                                                <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                                    aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-{{ var.pk }}-legend cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend">
+                                                <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}, {{ var }}: {% trans "Increase quantity" %}">+</button>
                                             </fieldset>
                                         {% endif %}
                                     </div>
@@ -327,7 +327,7 @@
                             {% endif %}
                         </p>
                     </div>
-                    {% if item.cached_availability.0 == 100 or item.initial %}
+                    {% if not item.current_unavailability_reason and item.cached_availability.0 == 100 or item.initial %}
                         <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
                             {% if c.max_count == 1 or not c.multi_allowed %}
                                 <label class="btn btn-default btn-checkbox">
@@ -343,15 +343,15 @@
                                             {% endif %}
                                             name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
-                                            aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
+                                            aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend"
                                             aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc">
                                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                             {% trans "Select" context "checkbox" %}
                                 </label>
                             {% else %}
                                 <fieldset class="input-item-count-group" aria-describedby="c-{{ form.pos.pk }}-{{ category_idx }}-addon-count-desc cp-{{ form.pos.pk }}-item-{{ item.pk }}-min-order">
-                                    <legend class="sr-only">{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}</legend>
-                                    <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                    <legend class="sr-only">{% trans "Quantity" %}</legend>
+                                    <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="- {{ item }}: {% trans "Decrease quantity" %}">-</button>
                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                         {% if item.free_price %}
                                            data-checked-onchange="price-item-{{ form.pos.pk }}-{{ item.pk }}"
@@ -360,8 +360,8 @@
                                         {% if item.initial %}value="{{ item.initial }}"{% endif %}
                                         name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                         id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
-                                        aria-label="{% trans "Quantity" %}">
-                                    <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                        aria-labelledby="cp-{{ form.pos.pk }}-item-{{ item.pk }}-legend">
+                                    <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="+ {{ item }}: {% trans "Increase quantity" %}">+</button>
                                 </fieldset>
                             {% endif %}
                         </div>
@@ -372,6 +372,19 @@
                 </article>
             {% endif %}
         {% endfor %}
+
+        {% if c.items_missing %}
+            <div class="product-appendix-row">
+                <p class="text-muted">
+                    {% trans "There are products selected in this add-on category that currently cannot be changed because they are not on sale:" %}
+                </p>
+                <ul class="text-muted">
+                    {% for itemvar, count in c.items_missing.items %}
+                        <li>{{ count }}x {{ itemvar.0 }}{% if itemvar.1 %} – {{ itemvar.1 }}{% endif %}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </fieldset>
     {% endwith %}
 {% empty %}

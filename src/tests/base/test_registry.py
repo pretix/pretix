@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -22,10 +22,12 @@
 from unittest import mock
 
 import pytest
+from django.apps import apps
 
 from pretix.base.logentrytypes import (
     ItemLogEntryType, LogEntryType, LogEntryTypeRegistry,
 )
+from pretix.base.models import Event
 from pretix.base.signals import Registry
 
 
@@ -140,28 +142,37 @@ def test_logentrytype_registry():
     reg = LogEntryTypeRegistry()
 
     with mock.patch('pretix.base.signals.get_defining_app') as mock_get_defining_app:
-        mock_get_defining_app.return_value = 'my_plugin'
+        mock_get_defining_app.return_value = apps.get_app_config("testdummy")
 
         @reg.new("foo.mytype")
         class MyType(LogEntryType):
             pass
 
-    @reg.new("foo.myothertype")
-    class MyOtherType(LogEntryType):
-        pass
+    with mock.patch('pretix.base.signals.get_defining_app') as mock_get_defining_app:
+        mock_get_defining_app.return_value = "CORE"
+
+        @reg.new("foo.myothertype")
+        class MyOtherType(LogEntryType):
+            pass
 
     typ, meta = reg.get(action_type="foo.mytype")
     assert isinstance(typ, MyType)
     assert meta['action_type'] == "foo.mytype"
-    assert meta['plugin'] == 'my_plugin'
+    assert meta['plugin'] == apps.get_app_config("testdummy")
 
     typ, meta = reg.get(action_type="foo.myothertype")
     assert isinstance(typ, MyOtherType)
     assert meta['action_type'] == "foo.myothertype"
-    assert meta['plugin'] is None
+    assert meta['plugin'] == "CORE"
 
-    by_my_plugin = reg.filter(plugin='my_plugin')
+    by_my_plugin = reg.filter(plugin=apps.get_app_config("testdummy"))
     assert set(type(typ) for typ, meta in by_my_plugin) == {MyType}
+
+    by_active_plugin = reg.filter(active_in=Event(plugins=""))
+    assert set(type(typ) for typ, meta in by_active_plugin) == {MyOtherType}
+
+    by_active_plugin = reg.filter(active_in=Event(plugins="tests.testdummy"))
+    assert set(type(typ) for typ, meta in by_active_plugin) == {MyType, MyOtherType}
 
 
 def test_logentrytype_registry_validation():

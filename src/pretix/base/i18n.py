@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -34,13 +34,12 @@
 
 from contextlib import contextmanager
 
+from asgiref.local import Local
 from babel import localedata
 from django.conf import settings
 from django.utils import translation
 from django.utils.formats import date_format, number_format
 from django.utils.translation import gettext
-
-from pretix.base.templatetags.money import money_filter
 
 from i18nfield.fields import (  # noqa
     I18nCharField, I18nTextarea, I18nTextField, I18nTextInput,
@@ -49,6 +48,9 @@ from i18nfield.forms import I18nFormField  # noqa
 # Compatibility imports
 from i18nfield.strings import LazyI18nString  # noqa
 from i18nfield.utils import I18nJSONEncoder  # noqa
+
+
+_active_region = Local()
 
 
 class LazyDate:
@@ -86,6 +88,8 @@ class LazyCurrencyNumber:
         return self.__str__()
 
     def __str__(self):
+        from pretix.base.templatetags.money import money_filter
+
         return money_filter(self.value, self.currency)
 
 
@@ -105,14 +109,41 @@ ALLOWED_LANGUAGES = dict(settings.LANGUAGES)
 
 
 def get_babel_locale():
-    babel_locale = 'en'
-    # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal
-    if translation.get_language():
-        if localedata.exists(translation.get_language()):
-            babel_locale = translation.get_language()
-        elif localedata.exists(translation.get_language()[:2]):
-            babel_locale = translation.get_language()[:2]
-    return babel_locale
+    # Babel, and therefore also django-phonenumberfield, do not support our custom locales such das de_Informal
+    # Also, this returns best-effort region information for number formatting etc
+    current_language = translation.get_language()
+    current_region = getattr(_active_region, "value", None)
+
+    # Babel only accepts locales that exist on the system. We try combinations in the following order:
+    # language-languageversion-region
+    # language-region
+    # language-languageversion
+    # language
+    # fallback to system default
+    # fallback to english
+
+    try_locales = []
+    if current_language:
+        if "-" in current_language:
+            lng_parts = current_language.split("-")
+            if current_region:
+                try_locales.append(f"{lng_parts[0]}_{lng_parts[1].title()}_{current_region.upper()}")
+                try_locales.append(f"{lng_parts[0]}_{current_region.upper()}")
+            try_locales.append(f"{lng_parts[0]}_{lng_parts[1].upper()}")
+            try_locales.append(f"{lng_parts[0]}_{lng_parts[1].title()}")
+            try_locales.append(f"{lng_parts[0]}")
+        else:
+            if current_region:
+                try_locales.append(f"{current_language}_{current_region.upper()}")
+            try_locales.append(f"{current_language}")
+
+    try_locales.append(settings.LANGUAGE_CODE)
+
+    for locale in try_locales:
+        if localedata.exists(locale):
+            return localedata.normalize_locale(locale)
+
+    return "en"
 
 
 def get_language_without_region(lng=None):
@@ -132,6 +163,10 @@ def get_language_without_region(lng=None):
     return lng
 
 
+def set_region(region):
+    _active_region.value = region
+
+
 @contextmanager
 def language(lng, region=None):
     """
@@ -143,15 +178,18 @@ def language(lng, region=None):
     formatting. If you pass a ``lng`` that already contains a region, e.g. ``pt-br``, the ``region``
     attribute will be ignored.
     """
-    _lng = translation.get_language()
+    lng_before = translation.get_language()
+    region_before = getattr(_active_region, "value", None)
     lng = lng or settings.LANGUAGE_CODE
     if '-' not in lng and region:
         lng += '-' + region.lower()
     translation.activate(lng)
+    _active_region.value = region
     try:
         yield
     finally:
-        translation.activate(_lng)
+        translation.activate(lng_before)
+        _active_region.value = region_before
 
 
 class LazyLocaleException(Exception):

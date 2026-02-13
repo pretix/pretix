@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -21,10 +21,11 @@
 #
 import contextlib
 
-from django.core.exceptions import FieldDoesNotExist
+from django.conf import settings
+from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured
 from django.db import connection, transaction
 from django.db.models import (
-    Aggregate, Expression, F, Field, Lookup, OrderBy, Value,
+    Aggregate, Expression, F, Field, JSONField, Lookup, OrderBy, Value,
 )
 from django.utils.functional import lazy
 
@@ -60,6 +61,43 @@ def casual_reads():
     Kept for backwards compatibility.
     """
     yield
+
+
+@contextlib.contextmanager
+def repeatable_reads_transaction():
+    """
+    pretix, and Django, operate in the transaction isolation level READ COMMITTED by default. This is not a strong level
+    of isolation, but we NEED to use it: Otherwise e.g. our quota logic breaks, because we need to be able to get the
+    *current* number of tickets sold at any time in a transaction, not the number of tickets sold *before* our transaction
+    started.
+
+    However, this isolation mode has drawbacks, for example during reporting. When a user retrieves a report from the
+    system, it should return numbers that are consistent with each other. However, if the report makes multiple SQL
+    queries in READ COMMITTED mode, the results might be different for each query, causing numbers to be inconsistent
+    with each other.
+
+    This context manager creates a transaction that is running in REPEATABLE READ mode to avoid this problem.
+
+    **You should only make read-only queries during this transaction and not rely on quota calculations.**
+    """
+    is_under_test = 'tests.testdummy' in settings.INSTALLED_APPS
+    try:
+        with transaction.atomic(durable=not is_under_test):
+            if not is_under_test:
+                # We're not running this in tests, where we can basically not use this since the test runner does its
+                # own transaction logic for efficiency
+                with connection.cursor() as cursor:
+                    if 'postgresql' in settings.DATABASES['default']['ENGINE']:
+                        cursor.execute('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;')
+                    elif 'sqlite' in settings.DATABASES['default']['ENGINE']:
+                        pass  # noop
+                    else:
+                        raise ImproperlyConfigured("Cannot set transaction isolation mode on this database backend")
+
+            connection.tx_in_repeatable_read = True
+            yield
+    finally:
+        connection.tx_in_repeatable_read = False
 
 
 class GroupConcat(Aggregate):
@@ -114,6 +152,19 @@ class NotEqual(Lookup):
         rhs, rhs_params = self.process_rhs(compiler, connection)
         params = lhs_params + rhs_params
         return '%s <> %s' % (lhs, rhs), params
+
+
+@JSONField.register_lookup
+class ContainsString(Lookup):
+    lookup_name = 'containsstring'
+
+    def as_sql(self, compiler, connection):
+        if connection.vendor != "postgresql":
+            raise NotImplementedError("Lookup in JSON Array not supported on this database")
+        lhs, lhs_params = self.process_lhs(compiler, connection)
+        rhs, rhs_params = self.process_rhs(compiler, connection)
+        params = lhs_params + rhs_params
+        return '%s ? %s' % (lhs, rhs), params
 
 
 class PostgresWindowFrame(Expression):

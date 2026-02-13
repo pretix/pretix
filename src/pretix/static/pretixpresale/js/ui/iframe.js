@@ -7,4 +7,12 @@ var inIframe = function () {
 };
 if (inIframe()) {
     document.documentElement.classList.add('in-iframe');
+    try {
+        window.parent.postMessage({
+            type: "pretix:widget:title",
+            title: document.title,
+        }, "*");
+    } catch (e) {
+        console.error("Could not post message to parent.", e);
+    }
 }

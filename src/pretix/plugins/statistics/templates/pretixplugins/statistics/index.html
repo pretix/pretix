@@ -24,6 +24,48 @@
                     <small>
                         {% blocktrans trimmed %}
                             Orders paid in multiple payments are shown with the date of their last payment.
+                            Placed orders include all orders (pending, paid, canceled, and expired);
+                            paid orders include only paid orders and exclude all canceled orders.
+                        {% endblocktrans %}
+                    </small>
+                </p>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Attendees by day" %}</h3>
+            </div>
+            <div class="panel-body">
+                <div id="abd_chart" class="chart"></div>
+                <p class="help-block">
+                    <small>
+                        {% blocktrans trimmed %}
+                            Attendees in orders paid in multiple payments are shown using the date of the
+                            final payment. Order dates reflect when the order was first placed; attendees added
+                            later via additional order positions still use the original order date. Attendees in
+                            placed orders include those from all order states (pending, paid, canceled, and
+                            expired); attendees in paid orders include only those from paid orders and exclude
+                            those from canceled orders.
+                        {% endblocktrans %}
+                    </small>
+                </p>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Attendees by time" %}</h3>
+            </div>
+            <div class="panel-body">
+                <div id="abt_chart" class="chart"></div>
+                <p class="help-block">
+                    <small>
+                        {% blocktrans trimmed %}
+                            Attendees in orders paid in multiple payments are shown using the date of the
+                            final payment. Order dates reflect when the order was first placed; attendees added
+                            later via additional order positions still use the original order date. Attendees in
+                            placed orders include those from all order states (pending, paid, canceled, and
+                            expired); attendees in paid orders include only those from paid orders and exclude
+                            those from canceled orders.
                         {% endblocktrans %}
                     </small>
                 </p>
@@ -45,10 +87,19 @@
                 {% endif %}
                 <p class="help-block">
                     <small>
-                        {% blocktrans trimmed %}
-                            Only fully paid orders are counted.
-                            Orders paid in multiple payments are shown with the date of their last payment.
-                        {% endblocktrans %}
+                        {% if request.GET.subevent %}
+                            {% blocktrans trimmed %}
+                                Only fully paid orders are counted.
+                                Orders paid in multiple payments are shown with the date of their last payment.
+                                Revenue excludes all fees, including cancellation fees.
+                            {% endblocktrans %}
+                        {% else %}
+                            {% blocktrans trimmed %}
+                                Only fully paid orders are counted.
+                                Orders paid in multiple payments are shown with the date of their last payment.
+                                Revenue includes all fees, including cancellation fees from canceled orders.
+                            {% endblocktrans %}
+                        {% endif %}
                     </small>
                 </p>
             </div>
@@ -59,6 +110,14 @@
             </div>
             <div class="panel-body">
                 <div id="obp_chart" class="chart"></div>
+                <p class="help-block">
+                    <small>
+                        {% blocktrans trimmed %}
+                            Placed orders include all orders (pending, paid, canceled, and expired);
+                            paid orders include only paid orders and exclude all canceled orders.
+                        {% endblocktrans %}
+                    </small>
+                </p>
             </div>
         </div>
         {% if seats %}
@@ -158,6 +217,8 @@
             </div>
         {% endif %}
         <script type="application/json" id="obd-data">{{ obd_data|escapejson }}</script>
+        <script type="application/json" id="abd-data">{{ abd_data|escapejson }}</script>
+        <script type="application/json" id="abt-data">{{ abt_data|escapejson }}</script>
         <script type="application/json" id="rev-data">{{ rev_data|escapejson }}</script>
         <script type="application/json" id="obp-data">{{ obp_data|escapejson }}</script>
         <script type="application/text" id="currency">{{ request.event.currency }}</script>

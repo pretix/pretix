@@ -121,7 +121,7 @@ function questions_init_profiles(el) {
 
     There are two types of profiles:
     1. profiles for answers and 
-    2. profiles for invoice addesses
+    2. profiles for invoice addresses
 
     Both are handled the same way.
 
@@ -168,7 +168,7 @@ function questions_init_profiles(el) {
         for (var p of profiles) {
             data = {};
             for (var key of Object.keys(p)) {
-                if (key.startsWith("_")) {
+                if (key.startsWith("_") || p[key] === null) {
                     continue;
                 }
                 matched_field = getMatchingInput(key, p[key], scope);
@@ -230,6 +230,7 @@ function questions_init_profiles(el) {
         // _0 and _1 are e.g. for phone-fields. name-fields have their parts/keys already split
         var $fields = $('[name$="' + key + '"], [name$="' + key + '_0"], [name$="' + key + '_1"]', scope).not(":disabled");
         if ($fields.length) return $fields;
+        if (!answer) return null;
 
         if (answer.identifier) {
             $label = $('[data-identifier="' + answer.identifier + '"]', scope);

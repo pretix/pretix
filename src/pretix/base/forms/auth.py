@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -214,21 +214,38 @@ class PasswordRecoverForm(forms.Form):
     error_messages = {
         'pw_mismatch': _("Please enter the same password twice"),
     }
+    email = forms.EmailField(
+        max_length=255,
+        disabled=True,
+        label=_("Your email address"),
+        widget=forms.EmailInput(
+            attrs={'autocomplete': 'username'},
+        ),
+    )
     password = forms.CharField(
         label=_('Password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={
+            'autocomplete': 'new-password',
+        }),
         max_length=4096,
         required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={
+            'autocomplete': 'new-password',
+        }),
         max_length=4096,
     )
 
     def __init__(self, user_id=None, *args, **kwargs):
-        self.user_id = user_id
-        super().__init__(*args, **kwargs)
+        initial = kwargs.pop('initial', {})
+        try:
+            self.user = User.objects.get(id=user_id)
+            initial['email'] = self.user.email
+        except User.DoesNotExist:
+            self.user = None
+        super().__init__(*args, initial=initial, **kwargs)
 
     def clean(self):
         password1 = self.cleaned_data.get('password', '')
@@ -243,11 +260,7 @@ class PasswordRecoverForm(forms.Form):
 
     def clean_password(self):
         password1 = self.cleaned_data.get('password', '')
-        try:
-            user = User.objects.get(id=self.user_id)
-        except User.DoesNotExist:
-            user = None
-        if validate_password(password1, user=user) is not None:
+        if validate_password(password1, user=self.user) is not None:
             raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
         return password1
 
@@ -307,3 +320,10 @@ class ReauthForm(forms.Form):
                 self.error_messages['inactive'],
                 code='inactive',
             )
+
+
+class ConfirmationCodeForm(forms.Form):
+    code = forms.IntegerField(
+        label=_('Confirmation code'),
+        widget=forms.NumberInput(attrs={'class': 'confirmation-code-input', 'inputmode': 'numeric', 'type': 'text'}),
+    )

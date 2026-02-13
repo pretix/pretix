@@ -4,6 +4,8 @@
 {% load statici18n %}
 {% load eventsignal %}
 {% load eventurl %}
+{% load dialog %}
+{% load icon %}
 <!DOCTYPE html>
 <html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
 	<head>
@@ -33,6 +35,7 @@
             <script type="text/javascript" src="{% static "clipboard/clipboard.js" %}"></script>
             <script type="text/javascript" src="{% static "cropper/cropper.js" %}"></script>
             <script type="text/javascript" src="{% static "rrule/rrule.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/gettextstub.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixpresale/js/ui/questions.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/jquery.qrcode.min.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixcontrol/js/clipboard.js" %}"></script>
@@ -76,10 +79,8 @@
         {% endif %}
         <link rel="apple-touch-icon" sizes="180x180" href="{% static "pretixbase/img/icons/apple-touch-icon.png" %}">
         <link rel="icon" type="image/png" sizes="192x192" href="{% static "pretixbase/img/icons/android-chrome-192x192.png" %}">
-        <link rel="manifest" href="{% url "presale:site.webmanifest" %}">
+        <link rel="manifest" href="{% url "site.webmanifest" %}">
         <link rel="mask-icon" href="{% static "pretixbase/img/icons/safari-pinned-tab.svg" %}" color="#3b1c4a">
-        <meta name="msapplication-TileColor" content="#3b1c4a">
-        <meta name="msapplication-config" content="{% url "presale:browserconfig.xml" %}">
         <meta name="theme-color" content="#3b1c4a">
         <meta name="referrer" content="origin">
 
@@ -125,7 +126,9 @@
                     {% endif %}
                     <a class="navbar-brand" href="{% url "control:index" %}">
                         <img src="{% static "pretixbase/img/pretix-icon-white-mini.svg" %}" />
-                        {{ settings.PRETIX_INSTANCE_NAME }}
+                        <span>
+                            {{ settings.PRETIX_INSTANCE_NAME }}
+                        </span>
                     </a>
                 </div>
                 <ul class="nav navbar-nav navbar-top-links navbar-left flip hidden-xs">
@@ -197,7 +200,7 @@
                         </li>
                     {% elif request.user.is_staff and staff_session %}
                         <li>
-                            <a href="{% url 'control:user.sudo.stop' %}" class="danger">
+                            <a href="{% url 'control:user.sudo.stop' %}" class="danger admin-only">
                                 <i class="fa fa-id-card"></i> {% trans "End admin session" %}
                             </a>
                         </li>
@@ -463,25 +466,16 @@
                 </div>
             </div>
         </div>
-        <div id="ajaxerr">
+        <div id="ajaxerr" class="modal-wrapper" hidden>
         </div>
-        <div id="loadingmodal">
-            <div class="modal-card">
-                <div class="modal-card-icon">
-                    <i class="fa fa-cog big-rotating-icon"></i>
-                </div>
-                <div class="modal-card-content">
-                    <h3></h3>
-                    <p class="text"></p>
-                    <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-success">
-                        </div>
-                    </div>
-                    <div class="steps">
-                    </div>
+        {% dialog "loadingmodal" "" "" icon="cog rotating" %}
+            <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success">
                 </div>
             </div>
-        </div>
+            <div class="steps">
+            </div>
+        {% enddialog %}
 	</body>
 </html>

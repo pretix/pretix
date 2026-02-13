@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -174,12 +174,6 @@ def test_incompatible():
     with pytest.raises(ValidationError) as e:
         oidc_validate_and_complete_config(config)
     assert "not requesting" in str(e.value)
-
-    config["scope"] = "openid foo"
-
-    with pytest.raises(ValidationError) as e:
-        oidc_validate_and_complete_config(config)
-    assert "requesting scope" in str(e.value)
 
 
 @responses.activate

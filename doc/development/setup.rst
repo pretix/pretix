@@ -5,7 +5,7 @@ Development setup
 
 This tutorial helps you to get started hacking with pretix on your own computer. You need this to
 be able to contribute to pretix, but it might also be helpful if you want to write your own plugins.
-If you want to install pretix on a server for actual usage, go to the [administrator documentation](https://docs.pretix.eu/self-hosting/) instead.
+If you want to install pretix on a server for actual usage, go to the `administrator documentation`_ instead.
 
 Obtain a copy of the source code
 --------------------------------
@@ -221,3 +221,4 @@ your virtual environment.::
 
 .. _Django's documentation: https://docs.djangoproject.com/en/1.11/ref/django-admin/#runserver
 .. _pretixdroid: https://github.com/pretix/pretixdroid
+.. _administrator documentation: https://docs.pretix.eu/self-hosting/

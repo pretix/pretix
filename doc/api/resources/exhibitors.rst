@@ -349,6 +349,45 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or event or exhibitor does not exist **or** you have no permission to view it.
 
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(id)/vouchers/bulk_attach/
+
+   Attaches many **existing** vouchers to an exhibitor. You need to send either the ``id`` **or** the ``code`` field of
+   the voucher, but you need to send the same field for all entries.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/exhibitors/1/vouchers/bulk_attach/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+     [
+       {
+         "id": 15,
+         "exhibitor_comment": "Free ticket"
+       },
+       ..
+     ]
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {}
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the event to use
+   :param id: The ``id`` field of the exhibitor to use
+   :statuscode 200: no error
+   :statuscode 400: Invalid data sent, e.g. voucher does not exist
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or event or exhibitor does not exist **or** you have no permission to view it.
+
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/
 
    Create a new exhibitor.

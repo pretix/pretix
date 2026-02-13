@@ -1,8 +1,8 @@
 #
 # This file is part of pretix (Community Edition).
 #
-# Copyright (C) 2014-2020 Raphael Michel and contributors
-# Copyright (C) 2020-2021 rami.io GmbH and contributors
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
 #
 # This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
 # Public License as published by the Free Software Foundation in version 3 of the License.
@@ -19,45 +19,16 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django import forms
 from django.conf import settings
 from django.http import QueryDict
 from pytz import common_timezones
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.base.exporter import OrganizerLevelExportMixin
 from pretix.base.models import ScheduledEventExport, ScheduledOrganizerExport
-from pretix.base.timeframes import DateFrameField, SerializerDateFrameField
-
-
-class FormFieldWrapperField(serializers.Field):
-    def __init__(self, *args, **kwargs):
-        self.form_field = kwargs.pop('form_field')
-        super().__init__(*args, **kwargs)
-
-    def to_representation(self, value):
-        return self.form_field.widget.format_value(value)
-
-    def to_internal_value(self, data):
-        d = self.form_field.widget.value_from_datadict({'name': data}, {}, 'name')
-        d = self.form_field.clean(d)
-        return d
-
-
-simple_mappings = (
-    (forms.DateField, serializers.DateField, ()),
-    (forms.TimeField, serializers.TimeField, ()),
-    (forms.SplitDateTimeField, serializers.DateTimeField, ()),
-    (forms.DateTimeField, serializers.DateTimeField, ()),
-    (forms.DecimalField, serializers.DecimalField, ('max_digits', 'decimal_places', 'min_value', 'max_value')),
-    (forms.FloatField, serializers.FloatField, ()),
-    (forms.IntegerField, serializers.IntegerField, ()),
-    (forms.EmailField, serializers.EmailField, ()),
-    (forms.UUIDField, serializers.UUIDField, ()),
-    (forms.URLField, serializers.URLField, ()),
-    (forms.BooleanField, serializers.BooleanField, ()),
-)
+from pretix.base.timeframes import SerializerDateFrameField
 
 
 class SerializerDescriptionField(serializers.Field):
@@ -81,13 +52,6 @@ class ExporterSerializer(serializers.Serializer):
     input_parameters = SerializerDescriptionField(source='_serializer')
 
 
-class PrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
-    def to_representation(self, value):
-        if isinstance(value, int):
-            return value
-        return super().to_representation(value)
-
-
 class JobRunSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
         ex = kwargs.pop('exporter')
@@ -102,59 +66,7 @@ class JobRunSerializer(serializers.Serializer):
                 many=True
             )
         for k, v in ex.export_form_fields.items():
-            for m_from, m_to, m_kwargs in simple_mappings:
-                if isinstance(v, m_from):
-                    self.fields[k] = m_to(
-                        required=v.required,
-                        allow_null=not v.required,
-                        validators=v.validators,
-                        **{kwarg: getattr(v, kwargs, None) for kwarg in m_kwargs}
-                    )
-                    break
-
-            if isinstance(v, forms.NullBooleanField):
-                self.fields[k] = serializers.BooleanField(
-                    required=v.required,
-                    allow_null=True,
-                    validators=v.validators,
-                )
-            if isinstance(v, forms.ModelMultipleChoiceField):
-                self.fields[k] = PrimaryKeyRelatedField(
-                    queryset=v.queryset,
-                    required=v.required,
-                    allow_empty=not v.required,
-                    validators=v.validators,
-                    many=True
-                )
-            elif isinstance(v, forms.ModelChoiceField):
-                self.fields[k] = PrimaryKeyRelatedField(
-                    queryset=v.queryset,
-                    required=v.required,
-                    allow_null=not v.required,
-                    validators=v.validators,
-                )
-            elif isinstance(v, forms.MultipleChoiceField):
-                self.fields[k] = serializers.MultipleChoiceField(
-                    choices=v.choices,
-                    required=v.required,
-                    allow_empty=not v.required,
-                    validators=v.validators,
-                )
-            elif isinstance(v, forms.ChoiceField):
-                self.fields[k] = serializers.ChoiceField(
-                    choices=v.choices,
-                    required=v.required,
-                    allow_null=not v.required,
-                    validators=v.validators,
-                )
-            elif isinstance(v, DateFrameField):
-                self.fields[k] = SerializerDateFrameField(
-                    required=v.required,
-                    allow_null=not v.required,
-                    validators=v.validators,
-                )
-            else:
-                self.fields[k] = FormFieldWrapperField(form_field=v, required=v.required, allow_null=not v.required)
+            self.fields[k] = form_field_to_serializer_field(v)
 
     def to_internal_value(self, data):
         if isinstance(data, QueryDict):

@@ -47,11 +47,6 @@ acceptor                              string                     Organizer slug 
                                                                  this field was added.)
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 4.20
-
-    The ``owner_ticket`` and ``issuer`` attributes of the gift card and the ``info`` and ``acceptor`` attributes of the
-    gift card transaction resource have been added.
-
 Endpoints
 ---------
 

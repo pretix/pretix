@@ -23,7 +23,7 @@
         text-align: center;
 
         &.gone, .gone {
-            color: $alert-danger-text;
+            color: $brand-danger;
         }
         &.unavailable, .unavailable {
             color: $alert-warning-text;
@@ -96,6 +96,15 @@
         &::before {
             border-top: 1px solid $table-border-color;
         }
+    }
+}
+
+.product-appendix-row {
+    border-top: 1px solid $table-border-color;
+    border-bottom: 1px solid $table-border-color;
+    padding: 1.25*$line-height-computed 0;
+    & > :last-child {
+        margin-bottom: 0;
     }
 }
 
@@ -240,14 +249,26 @@ div.front-page {
     }
 }
 
-.calendar-nav, .calendar-nav li {
+.calendar-nav, .calendar-nav > li {
     list-style: none;
     margin: 0;
     padding: 0
 }
-.calendar-nav li {
-    padding: 10px 0;
+.calendar-nav > li {
+    padding: 0 0 10px;
 }
+.calendar-nav {
+    display: flex;
+    align-items: end;
+}
+.calendar-nav > li {
+    width: 60%;
+}
+.calendar-nav > li:first-child,
+.calendar-nav > li:last-child {
+    width: 20%;
+}
+
 
 .subevent-toggle {
     display: none;

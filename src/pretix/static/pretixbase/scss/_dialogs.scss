@@ -1,0 +1,190 @@
+dialog.inline-dialog {
+  position: static;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+/* Modal dialogs using HTML5 dialog tags for accessibility */
+dialog.modal-card {
+  border: none;
+  width: 80%;
+  max-width: 43em;
+  padding: 0;
+  margin-top: 60px;
+  box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+  background: white;
+  border-radius: $border-radius-large;
+}
+.modal-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-content: stretch;
+}
+dialog.modal-card .modal-card-icon {
+  background: $brand-primary;
+  font-size: 2em;
+  color: white;
+  text-align: center;
+  padding: 3px;
+  .rotating {
+      -webkit-animation: fa-spin 8s infinite linear;
+      animation: fa-spin 8s infinite linear;
+  }
+}
+dialog.modal-card .modal-card-content {
+  padding: 1.5em;
+  flex-grow: 1;
+}
+.modal-card-content>*:last-child {
+  margin-bottom: 0;
+}
+.modal-card-content>*:first-child {
+  margin-top: 0;
+}
+
+.modal-card-confirm {
+  margin-top: 2em;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1em;
+  align-items: center;
+}
+.modal-card-confirm-spread {
+  justify-content: space-between;
+}
+
+dialog::backdrop {
+  background-color: rgba(255, 255, 255, .5);
+  backdrop-filter: blur(2px);
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  dialog.modal-card:has(.modal-card-icon) .modal-card-inner {
+    flex-direction: row;
+  }
+  dialog.modal-card .modal-card-content {
+    padding: 2em;
+  }
+  dialog.modal-card .modal-card-icon {
+    font-size: 4em;
+    padding: 6px 16px;
+  }
+}
+
+.shake-once {
+  animation: shake .2s;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+@keyframes shake {
+  0% { transform: skewX(0deg); }
+  20% { transform: skewX(-5deg); }
+  40% { transform: skewX(5deg); }
+  60% { transform: skewX(-5deg); }
+  80% { transform: skewX(5deg); }
+  100% { transform: skewX(0deg); }
+}
+
+
+
+/* Legacy dialogs (still used for #ajaxerr and #popupmodal) */
+body.has-modal-dialog .container, body.has-modal-dialog #wrapper {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -ms-filter: blur(2px);
+    -o-filter: blur(2px);
+    filter: blur(2px);
+}
+
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, .7);
+    z-index: 900000;
+    padding: 10px;
+  .modal-card {
+      margin: 50px auto 0;
+      width: 90%;
+      max-width: 600px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      background: white;
+      border-radius: $border-radius-large;
+      box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
+      padding: 20px;
+      min-height: 160px;
+      border: 0;
+
+      .modal-card-icon {
+          float: left;
+          width: 150px;
+          text-align: center;
+          .big-icon {
+              margin-top: 10px;
+              font-size: 100px;
+              color: $brand-primary;
+          }
+      }
+      .modal-card-content {
+          margin-left: 160px;
+          text-align: left;
+          h3 {
+              margin-top: 0;
+          }
+      }
+  }
+}
+
+@media (max-width: 700px) {
+    .modal-wrapper .modal-card {
+        margin: 25px auto 0;
+        max-height: calc(100vh - 50px - 20px);
+        .modal-card-icon {
+            float: none;
+            width: 100%;
+        }
+        .modal-card-content {
+            text-align: center;
+            margin-left: 0;
+            margin-right: 0;
+            margin-top: 10px;
+        }
+    }
+}
+
+#ajaxerr {
+    background: rgba(236, 236, 236, .9);
+
+    .big-icon {
+        margin-top: 50px;
+        font-size: 200px;
+        color: $brand-primary;
+    }
+}
+
+#lightbox-dialog {
+  width: fit-content;
+  max-width: 80%;
+  min-width: 24em;
+  .modal-card-content {
+    padding: 2.5em;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  button {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+  }
+  figcaption {
+    margin-top: 1em;
+  }
+}
