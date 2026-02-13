@@ -81,7 +81,7 @@ from pretix.base.signals import (
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
-from pretix.helpers.format import SafeFormatter, format_map
+from pretix.helpers.format import FormattedString, SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.ical import get_private_icals
@@ -218,6 +218,9 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     if email == INVALID_ADDRESS:
         return
 
+    if isinstance(template, FormattedString):
+        raise TypeError("Cannot pass an already formatted body template")
+
     if no_order_links and not plain_text_only:
         raise ValueError('If you set no_order_links, you also need to set plain_text_only.')
 
@@ -267,7 +270,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         body_plain = format_map(body_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
 
         # Build subject
-        subject = format_map(subject, context)
+        if not isinstance(subject, FormattedString):
+            subject = format_map(subject, context)
 
         subject = raw_subject = subject.replace('\n', ' ').replace('\r', '')[:900]
         if settings_holder:
