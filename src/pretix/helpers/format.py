@@ -22,6 +22,7 @@
 import logging
 from string import Formatter
 
+from django.core.exceptions import SuspiciousOperation
 from django.utils.html import conditional_escape
 
 logger = logging.getLogger(__name__)
@@ -35,6 +36,17 @@ class PlainHtmlAlternativeString:
 
     def __repr__(self):
         return f"PlainHtmlAlternativeString('{self.plain}', '{self.html}')"
+
+
+class FormattedString(str):
+    """
+    A str subclass that has been specifically marked as "already formatted" for email rendering
+    purposes to avoid duplicate formatting.
+    """
+    __slots__ = ()
+
+    def __str__(self):
+        return self
 
 
 class SafeFormatter(Formatter):
@@ -78,7 +90,11 @@ class SafeFormatter(Formatter):
         return super().format_field(self._prepare_value(value), '')
 
 
-def format_map(template, context, raise_on_missing=False, mode=SafeFormatter.MODE_RICH_TO_PLAIN, linkifier=None):
+def format_map(template, context, raise_on_missing=False, mode=SafeFormatter.MODE_RICH_TO_PLAIN, linkifier=None) -> FormattedString:
+    if isinstance(template, FormattedString):
+        raise SuspiciousOperation("Calling format_map() on an already formatted string is likely unsafe.")
     if not isinstance(template, str):
         template = str(template)
-    return SafeFormatter(context, raise_on_missing, mode=mode, linkifier=linkifier).format(template)
+    return FormattedString(
+        SafeFormatter(context, raise_on_missing, mode=mode, linkifier=linkifier).format(template)
+    )
