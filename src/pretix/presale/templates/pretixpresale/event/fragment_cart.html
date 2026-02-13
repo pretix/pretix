@@ -308,6 +308,7 @@
                 {% endif %}
             {% else %}
                 <div role="cell" class="count">
+                    {% if editable %}
                     <form action="{% eventurl event "presale:event.cart.remove" cart_namespace=cart_namespace|default_if_none:"" %}"
                             data-asynctask-headline="{% trans "Okay, we're removing that…" %}"
                             method="post" data-asynctask>
@@ -325,7 +326,9 @@
                             </button>
                         {% endif %}
                     </form>
+                    {% endif %}
                     {{ line.count }}
+                    {% if editable %}
                     <form action="{% eventurl event "presale:event.cart.add" cart_namespace=cart_namespace|default_if_none:"" %}"
                             data-asynctask-headline="{% trans "We're trying to reserve another one for you!" %}"
                             data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
@@ -352,6 +355,7 @@
                             <span class="sr-only">{% blocktrans with item=line.item.name count=line.count %}Add one more {{item}} to your cart. You currently have {{ count }} in your cart.{% endblocktrans %}</span>
                         </button>
                     </form>
+                    {% endif %}
                 </div>
                 {% if not hide_prices %}
                     <div role="cell" class="singleprice price">
