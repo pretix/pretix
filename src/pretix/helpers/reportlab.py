@@ -24,7 +24,7 @@ import logging
 from arabic_reshaper import ArabicReshaper
 from django.conf import settings
 from django.utils.functional import SimpleLazyObject
-from PIL import Image
+from PIL import Image, ImageOps
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
@@ -61,7 +61,9 @@ class ThumbnailingImageReader(ImageReader):
         return None
 
     def _read_image(self, fp):
-        return Image.open(fp, formats=settings.PILLOW_FORMATS_IMAGE)
+        img = Image.open(fp, formats=settings.PILLOW_FORMATS_IMAGE)
+        ImageOps.exif_transpose(img, in_place=True)
+        return img
 
 
 reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
