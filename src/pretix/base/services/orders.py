@@ -1999,7 +1999,7 @@ class OrderChangeManager:
             # If they are not, the user supplied item IDs which either do not exist or belong to
             # a different event
             if a['item'] not in _items_cache or (a['variation'] and a['variation'] not in _variations_cache):
-                raise OrderError(f"L1923: {error_messages['not_for_sale']}")
+                raise OrderError(f"L2002: {error_messages['not_for_sale']}")
 
             # Only attach addons to things that are actually in this user's cart
             if a['addon_to'] not in opcache:
@@ -2037,17 +2037,17 @@ class OrderChangeManager:
                     raise OrderError(error_messages['unavailable'])
 
             if subevent and item.pk in subevent.item_overrides and not subevent.item_overrides[item.pk].is_available():
-                raise OrderError(f"L1961: {error_messages['not_for_sale']}")
+                raise OrderError(f"L2040: {error_messages['not_for_sale']}")
 
             if subevent and variation and variation.pk in subevent.var_overrides and \
                     not subevent.var_overrides[variation.pk].is_available():
-                raise OrderError(f"L1965: {error_messages['not_for_sale']}")
+                raise OrderError(f"L2044: {error_messages['not_for_sale']}")
 
             if item.has_variations and not variation:
-                raise OrderError(f"L1968: {error_messages['not_for_sale']}")
+                raise OrderError(f"L2047: {error_messages['not_for_sale']}")
 
             if variation and variation.item_id != item.pk:
-                raise OrderError(f"L1971: {error_messages['not_for_sale']}")
+                raise OrderError(f"L2050: {error_messages['not_for_sale']}")
 
             if subevent and subevent.presale_start and now() < subevent.presale_start:
                 raise OrderError(error_messages['not_started'])
