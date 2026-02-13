@@ -76,7 +76,9 @@ from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
 from pretix.base.signals import email_filter, global_email_filter
 from pretix.celery_app import app
-from pretix.helpers.format import FormattedString, SafeFormatter, format_map
+from pretix.helpers.format import (
+    FormattedString, PlainHtmlAlternativeString, SafeFormatter, format_map,
+)
 from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.ical import get_private_icals
@@ -259,7 +261,10 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         else:
             timezone = ZoneInfo(settings.TIME_ZONE)
 
-        body_plain = format_map(content_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
+        if not isinstance(content_plain, FormattedString):
+            body_plain = format_map(content_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
+        else:
+            body_plain = content_plain
         if settings_holder:
             if settings_holder.settings.mail_bcc:
                 for bcc_mail in settings_holder.settings.mail_bcc.split(','):
@@ -761,7 +766,12 @@ def render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_P
             body = format_map(body, context, mode=placeholder_mode)
     else:
         tpl = get_template(template)
-        body = tpl.render(context)
+        context = {
+            # Known bug, should behave differently for plain and HTML but we'll fix after security release
+            k: v.html if isinstance(v, PlainHtmlAlternativeString) else v
+            for k, v in context.items()
+        }
+        body = FormattedString(tpl.render(context))
     return body
 
 
