@@ -1,0 +1,5 @@
+recursive-include pretix_twilio_sms/static *
+recursive-include pretix_twilio_sms/templates *
+recursive-include pretix_twilio_sms/locale *
+include LICENSE
+exclude .gitlab-ci.yml
