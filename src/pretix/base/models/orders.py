@@ -87,7 +87,7 @@ from pretix.base.timemachine import time_machine_now
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
-from ...helpers.format import format_map
+from ...helpers.format import FormattedString, format_map
 from ...helpers.names import build_name
 from ...testutils.middleware import debugflags_var
 from ._transactions import (
@@ -1181,7 +1181,8 @@ class Order(LockModel, LoggedModel):
 
             try:
                 email_content = render_mail(template, context)
-                subject = format_map(subject, context)
+                if not isinstance(subject, FormattedString):
+                    subject = format_map(subject, context)
                 mail(
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers=headers, sender=sender,
@@ -2926,7 +2927,8 @@ class OrderPosition(AbstractPosition):
             recipient = self.attendee_email
             try:
                 email_content = render_mail(template, context)
-                subject = format_map(subject, context)
+                if not isinstance(subject, FormattedString):
+                    subject = format_map(subject, context)
                 mail(
                     recipient, subject, template, context,
                     self.event, self.order.locale, order=self.order, headers=headers, sender=sender,
