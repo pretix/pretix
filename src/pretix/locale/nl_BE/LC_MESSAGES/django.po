@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2026-02-13 22:00+0000\n"
+"Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
+"Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
+"pretix/nl_BE/>\n"
 "Language: nl_BE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -974,7 +976,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:900
 #: pretix/plugins/ticketoutputpdf/exporters.py:96
 msgid "Order code"
-msgstr ""
+msgstr "Bestelcode"
 
 #: pretix/base/datasync/sourcefields.py:380
 msgid "Event and order code"
@@ -1018,7 +1020,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:68
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 msgid "Event name"
-msgstr ""
+msgstr "Naam evenement"
 
 #: pretix/base/datasync/sourcefields.py:446
 #: pretix/base/exporters/invoices.py:330
@@ -1175,7 +1177,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:666
 msgctxt "export_category"
 msgid "Order data"
-msgstr ""
+msgstr "Bestelgegevens"
 
 #: pretix/base/exporters/answers.py:56
 msgid ""
@@ -1617,7 +1619,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:236
 #: pretix/presale/templates/pretixpresale/event/order.html:257
 msgid "Invoices"
-msgstr ""
+msgstr "Facturen"
 
 #: pretix/base/exporters/invoices.py:194
 msgid "Invoice lines"
@@ -2235,7 +2237,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:116 pretix/control/forms/event.py:1788
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
-msgstr ""
+msgstr "Slug van evenement"
 
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:481
@@ -2299,7 +2301,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:707
 #: pretix/plugins/reports/exporters.py:900
 msgid "Order date"
-msgstr ""
+msgstr "Besteldatum"
 
 #: pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:485
@@ -3414,7 +3416,7 @@ msgstr ""
 #: pretix/base/forms/widgets.py:71
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr ""
+msgstr "Beschikbare placeholders: {list}"
 
 #: pretix/base/forms/widgets.py:214 pretix/base/models/items.py:1656
 #: pretix/plugins/checkinlists/exporters.py:757
@@ -14037,7 +14039,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:248
 msgid "Payment amount"
-msgstr ""
+msgstr "Te betalen bedrag"
 
 #: pretix/control/forms/orders.py:252
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:24
@@ -26946,7 +26948,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/new_refund_control_form.html:6
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:107
 #: pretix/plugins/banktransfer/payment.py:303
@@ -26954,7 +26956,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:26
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py:117
 msgid "Name of bank"
@@ -27052,7 +27054,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:32
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:35
 msgid "Account holder"
-msgstr ""
+msgstr "Rekeninghouder"
 
 #: pretix/plugins/banktransfer/payment.py:304
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:20
@@ -27359,7 +27361,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:55
 msgid "Export date"
-msgstr ""
+msgstr "Exportdatum"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:56
 msgid "Number of orders"
