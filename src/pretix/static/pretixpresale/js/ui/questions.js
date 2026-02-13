@@ -79,7 +79,7 @@ function questions_init_photos(el) {
         return
     }
 
-    el.find("input[data-portrait-photo]").each(function () {
+    el.find("input[data-crop-ratio]").each(function () {
         var $inp = $(this)
         var $container = $inp.parent().parent()
 
@@ -91,8 +91,19 @@ function questions_init_photos(el) {
             $inp.click();
         })
 
+        var ratio = NaN;
+        var r = $inp.attr("data-crop-ratio");
+        if (r) {
+             var parts = r.split(':');
+             if (parts.length === 2) {
+                 ratio = parseFloat(parts[0]) / parseFloat(parts[1]);
+             } else {
+                 ratio = parseFloat(r);
+             }
+        }
+
         var cropper = new Cropper($container.find(".photo-preview img").get(0), {
-            aspectRatio: 3 / 4,
+            aspectRatio: ratio,
             viewMode: 1,
             zoomable: false,
             crop: function (event) {
