@@ -35,6 +35,7 @@ from django.views.generic import FormView, TemplateView, View
 from pretix.base.models import Quota, SubEvent
 from pretix.base.templatetags.urlreplace import url_replace
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.presale.signals import waitinglist_form_class
 from pretix.presale.views import EventViewMixin, iframe_entry_view_wrapper
 from pretix.presale.views.customer import CustomerRequiredMixin
 
@@ -120,6 +121,14 @@ def get_waiting_list_ranks(event, customer_email):
 class WaitingView(EventViewMixin, CustomerRequiredMixin, FormView):
     template_name = 'pretixpresale/event/waitinglist.html'
     form_class = WaitingListForm
+
+    def get_form_class(self):
+        form_class = WaitingListForm
+        for receiver, response in waitinglist_form_class.send(self.request.event):
+            if response is not None:
+                form_class = response
+                break
+        return form_class
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

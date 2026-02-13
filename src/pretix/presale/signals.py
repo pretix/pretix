@@ -412,3 +412,14 @@ consent state. Receivers should return a list of ``pretix.presale.cookies.Cookie
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+waitinglist_form_class = EventPluginSignal()
+"""
+Arguments: (none)
+
+This signal is sent when the waiting list form class is resolved. Receivers may return a form class
+(subclass of ``pretix.presale.forms.waitinglist.WaitingListForm``) to use instead of the default.
+The first non-None response is used.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
