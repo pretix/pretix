@@ -81,7 +81,9 @@ from pretix.base.signals import (
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
-from pretix.helpers.format import FormattedString, SafeFormatter, format_map
+from pretix.helpers.format import (
+    FormattedString, PlainHtmlAlternativeString, SafeFormatter, format_map,
+)
 from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.ical import get_private_icals
@@ -266,7 +268,10 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             signature = ""
 
         # Build full plain-text body
-        body_plain = format_map(content_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
+        if not isinstance(content_plain, FormattedString):
+            body_plain = format_map(content_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
+        else:
+            body_plain = content_plain
         body_plain = _wrap_plain_body(body_plain, signature, event, order, position, no_order_links)
 
         # Build subject
@@ -793,7 +798,12 @@ def render_mail(template, context, placeholder_mode: Optional[int]=SafeFormatter
             body = format_map(body, context, mode=placeholder_mode)
     else:
         tpl = get_template(template)
-        body = tpl.render(context)
+        context = {
+            # Known bug, should behave differently for plain and HTML but we'll fix after security release
+            k: v.html if isinstance(v, PlainHtmlAlternativeString) else v
+            for k, v in context.items()
+        }
+        body = FormattedString(tpl.render(context))
     return body
 
 
