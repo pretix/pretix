@@ -89,6 +89,13 @@ class SafeFormatter(Formatter):
         # Ignore format_spec
         return super().format_field(self._prepare_value(value), '')
 
+    def convert_field(self, value, conversion):
+        # Ignore any conversions
+        if conversion is None:
+            return value
+        else:
+            return str(value)
+
 
 def format_map(template, context, raise_on_missing=False, mode=SafeFormatter.MODE_RICH_TO_PLAIN, linkifier=None) -> FormattedString:
     if isinstance(template, FormattedString):
