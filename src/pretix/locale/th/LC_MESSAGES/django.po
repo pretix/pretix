@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-05 14:34+0000\n"
+"PO-Revision-Date: 2026-02-14 02:15+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -11567,7 +11567,7 @@ msgstr ""
 #: pretix/base/settings.py:2856 pretix/base/settings.py:2872
 #, python-brace-format
 msgid "Your ticket is ready for download: {code}"
-msgstr ""
+msgstr "ตั๋วของคุณพร้อมสำหรับการดาวน์โหลดแล้ว: {code}"
 
 #: pretix/base/settings.py:2860
 #, python-brace-format
@@ -12477,7 +12477,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:222
 #: pretix/presale/templates/pretixpresale/organizers/base.html:100
 msgid "Contact"
-msgstr ""
+msgstr "ติดต่อ"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt:2
 #, python-format
@@ -12548,21 +12548,23 @@ msgstr ""
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
 msgid "Source code"
-msgstr ""
+msgstr "ซอร์สโค้ด (Source code)"
 
 #: pretix/base/templates/source.html:10
 msgid ""
 "This site is powered by free software. If you want to read the license terms "
 "or obtain the source code, follow these links or instructions:"
 msgstr ""
+"เว็บไซต์นี้ขับเคลื่อนโดยซอฟต์แวร์เสรี หากคุณต้องการอ่านเงื่อนไขการอนุญาตใช้งานหรือรับซอร์สโค้ด โปร"
+"ดไปที่ลิงก์หรือคำแนะนำต่อไปนี้:"
 
 #: pretix/base/ticketoutput.py:182
 msgid "Enable ticket format"
-msgstr ""
+msgstr "เปิดใช้งานรูปแบบตั๋ว"
 
 #: pretix/base/ticketoutput.py:200
 msgid "Download ticket"
-msgstr ""
+msgstr "ดาวน์โหลดตั๋ว"
 
 #: pretix/base/timeframes.py:49
 msgctxt "reporting_timeframe"
@@ -19827,7 +19829,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:7
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:40
 msgid "Ticket download"
-msgstr ""
+msgstr "ดาวน์โหลดตั๋ว"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:11
 msgid "Download settings"
@@ -21760,27 +21762,27 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:410
 msgid "Change products"
-msgstr ""
+msgstr "เปลี่ยนรายการสินค้า"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:415
 #: pretix/presale/templates/pretixpresale/event/order.html:197
 msgid "Ordered items"
-msgstr ""
+msgstr "รายการสินค้าที่สั่งซื้อ"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:434
 #, python-format
 msgid "Denied scan: %(date)s"
-msgstr ""
+msgstr "การสแกนถูกปฏิเสธ: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:439
 #, python-format
 msgid "Exit scan: %(date)s"
-msgstr ""
+msgstr "สแกนขาออก: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:446
 #, python-format
 msgid "Entry scan: %(date)s"
-msgstr ""
+msgstr "สแกนขาเข้า: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:465
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:55
@@ -21922,7 +21924,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:90
 #: pretix/presale/templates/pretixpresale/event/order.html:318
 msgid "ZIP code and city"
-msgstr ""
+msgstr "รหัสไปรษณีย์ และชื่อเมือง"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:1047
 msgid "Valid EU VAT ID"
@@ -30726,46 +30728,46 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:65
 msgid "Download tickets (PDF)"
-msgstr ""
+msgstr "ดาวน์โหลดตั๋ว (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:66
 msgid "Download ticket (PDF)"
-msgstr ""
+msgstr "ดาวน์โหลดตั๋ว (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:62
 msgid "Default ticket layout"
-msgstr ""
+msgstr "รูปแบบตั๋วมาตรฐาน"
 
 #: pretix/plugins/ticketoutputpdf/views.py:119
 msgid "The new ticket layout has been created."
-msgstr ""
+msgstr "สร้างรูปแบบตั๋วใหม่เรียบร้อยแล้ว"
 
 #: pretix/plugins/ticketoutputpdf/views.py:168
 #: pretix/plugins/ticketoutputpdf/views.py:198
 #: pretix/plugins/ticketoutputpdf/views.py:246
 msgid "The requested layout does not exist."
-msgstr ""
+msgstr "ไม่พบรูปแบบตั๋วที่ร้องขอ"
 
 #: pretix/plugins/ticketoutputpdf/views.py:210
 msgid "The selected ticket layout been deleted."
-msgstr ""
+msgstr "รูปแบบตั๋วที่เลือกถูกลบออกแล้ว"
 
 #: pretix/plugins/ticketoutputpdf/views.py:250
 #, python-brace-format
 msgid "Ticket PDF layout: {}"
-msgstr ""
+msgstr "รูปแบบไฟล์ PDF ของตั๋ว: {}"
 
 #: pretix/plugins/webcheckin/apps.py:30 pretix/plugins/webcheckin/apps.py:33
 msgid "Web-based check-in"
-msgstr ""
+msgstr "การเช็คอินผ่านเว็บ"
 
 #: pretix/plugins/webcheckin/apps.py:38
 msgid "Turn your browser into a check-in device to perform access control."
-msgstr ""
+msgstr "เปลี่ยนเบราว์เซอร์ของคุณให้เป็นอุปกรณ์เช็คอินเพื่อควบคุมการเข้างาน"
 
 #: pretix/plugins/webcheckin/apps.py:40 pretix/plugins/webcheckin/signals.py:36
 msgid "Web Check-in"
-msgstr ""
+msgstr "เว็บเช็คอิน (Web Check-in)"
 
 #: pretix/presale/checkoutflow.py:117
 msgctxt "checkoutflow"
@@ -31188,7 +31190,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:242
 #: pretix/presale/templates/pretixpresale/organizers/base.html:120
 msgid "Imprint"
-msgstr ""
+msgstr "ข้อมูลทางกฎหมาย (Imprint)"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:12
 msgid ""
@@ -32075,24 +32077,25 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:82
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
+msgstr "โปรดเตรียมตั๋วของคุณให้พร้อมเมื่อเข้าสู่งาน"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:85
 msgid "Download your tickets using the buttons below."
-msgstr ""
+msgstr "ดาวน์โหลดตั๋วของคุณโดยใช้ปุ่มด้านล่างนี้"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:94
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr ""
+"คุณจะสามารถดาวน์โหลดตั๋วของคุณได้ที่นี่ ตั้งแต่วันที่ %(date)s เป็นต้นไป"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:7
 msgid "Where does the event happen?"
-msgstr ""
+msgstr "กิจกรรมจัดขึ้นที่ไหน?"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:17
 msgid "When does the event happen?"
-msgstr ""
+msgstr "กิจกรรมจัดขึ้นเมื่อไหร่?"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:26
 #, python-format
@@ -32491,7 +32494,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:287
 msgid "Your information"
-msgstr ""
+msgstr "ข้อมูลของคุณ"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 msgid "Change your information"
