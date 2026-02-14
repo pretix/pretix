@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-14 02:15+0000\n"
+"PO-Revision-Date: 2026-02-14 06:10+0000\n"
 "Last-Translator: Nate Horst <nate@agcthailand.org>\n"
 "Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
 "\n"
@@ -1000,7 +1000,7 @@ msgstr "โดเมนอีเมลที่ใช้สั่งซื้อ
 #: pretix/plugins/reports/exporters.py:900
 #: pretix/plugins/ticketoutputpdf/exporters.py:96
 msgid "Order code"
-msgstr "รหัสการสั่งซื้อ"
+msgstr "รหัสการลงทะเบียน"
 
 #: pretix/base/datasync/sourcefields.py:380
 msgid "Event and order code"
@@ -7190,7 +7190,7 @@ msgstr "สินค้าที่ซื้อแล้ว"
 #: pretix/base/services/placeholders.py:424
 #: pretix/base/templates/pretixbase/email/order_details.html:151
 msgid "View order details"
-msgstr "ดูรายละเอียดคำสั่งซื้อ"
+msgstr "ดูรายละเอียดการลงทะเบียน"
 
 #: pretix/base/notifications.py:234
 #, python-brace-format
