@@ -54,34 +54,68 @@ def get_public_ical(events):
                 'subevent': ev.pk
             })
 
-        vevent = cal.add('vevent')
-        vevent.add('summary').value = str(ev.name)
-        vevent.add('dtstamp').value = creation_time
-        if ev.location:
-            vevent.add('location').value = ", ".join(l.strip() for l in str(ev.location).splitlines() if l.strip())
-        vevent.add('uid').value = 'pretix-{}-{}-{}@{}'.format(
-            event.organizer.slug, event.slug,
-            ev.pk if not isinstance(ev, Event) else '0',
-            urlparse(url).netloc
-        )
+        if isinstance(ev, Event):
+            vevent = cal.add('vevent')
+            vevent.add('summary').value = str(ev.name)
+            vevent.add('dtstamp').value = creation_time
+            if ev.location:
+                vevent.add('location').value = ", ".join(l.strip() for l in str(ev.location).splitlines() if l.strip())
+            vevent.add('uid').value = 'pretix-{}-{}-{}@{}'.format(
+                event.organizer.slug, event.slug,
+                ev.pk if not isinstance(ev, Event) else '0',
+                urlparse(url).netloc
+            )
+            if event.settings.show_times:
+                vevent.add('dtstart').value = ev.date_from.astimezone(tz)
+            else:
+                vevent.add('dtstart').value = ev.date_from.astimezone(tz).date()
 
-        if event.settings.show_times:
-            vevent.add('dtstart').value = ev.date_from.astimezone(tz)
+            # always add dtend as calendar apps otherwise have display issues
+            use_date_to = event.settings.show_date_to and ev.date_to
+            dtend = (ev.date_to if use_date_to else ev.date_from).astimezone(tz)
+
+            if not event.settings.show_times:
+                # with full-day events date_to in pretix is included (e.g. last day)
+                # whereas dtend in vcalendar is non-inclusive => add one day for export
+                dtend = dtend.date() + datetime.timedelta(days=1)
+            elif not use_date_to:
+                # date_from used as end-date => add 1h as a default duration
+                dtend = dtend + datetime.timedelta(hours=1)
+            vevent.add('dtend').value = dtend
         else:
-            vevent.add('dtstart').value = ev.date_from.astimezone(tz).date()
-
-        # always add dtend as calendar apps otherwise have display issues
-        use_date_to = event.settings.show_date_to and ev.date_to
-        dtend = (ev.date_to if use_date_to else ev.date_from).astimezone(tz)
-
-        if not event.settings.show_times:
-            # with full-day events date_to in pretix is included (e.g. last day)
-            # whereas dtend in vcalendar is non-inclusive => add one day for export
-            dtend = dtend.date() + datetime.timedelta(days=1)
-        elif not use_date_to:
-            # date_from used as end-date => add 1h as a default duration
-            dtend = dtend + datetime.timedelta(hours=1)
-        vevent.add('dtend').value = dtend
+            session_blocks = ev.session_blocks.all()
+            if not session_blocks:
+                vevent = cal.add('vevent')
+                vevent.add('summary').value = str(ev.name)
+                vevent.add('dtstamp').value = creation_time
+                if ev.location:
+                    vevent.add('location').value = ", ".join(l.strip() for l in str(ev.location).splitlines() if l.strip())
+                vevent.add('uid').value = 'pretix-{}-{}-{}@{}'.format(
+                    event.organizer.slug, event.slug,
+                    ev.pk if not isinstance(ev, Event) else '0',
+                    urlparse(url).netloc
+                )
+                vevent.add('dtstart').value = ev.date_from.astimezone(tz)
+                vevent.add('dtend').value = ev.date_to.astimezone(tz)
+            else:
+                # subevent session blocks
+                for i, sesb in enumerate(session_blocks):
+                    vevent = cal.add('vevent')
+                    vevent.add('summary').value = '{}: Session {}'.format(
+                        str(ev.name), i + 1
+                    )
+                    vevent.add('dtstamp').value = creation_time
+                    if sesb.location:
+                        vevent.add('location').value = sesb.location
+                    else:
+                        vevent.add('location').value = ", ".join(l.strip() for l in str(ev.location).splitlines() if l.strip())
+                    vevent.add('uid').value = 'pretix-{}-{}-{}-{}@{}'.format(
+                        event.organizer.slug, event.slug, sesb.pk,
+                        ev.pk if not isinstance(ev, Event) else '0',
+                        urlparse(url).netloc
+                    )
+                    vevent.add('dtstart').value = sesb.date_from.astimezone(tz)
+                    vevent.add('dtend').value = sesb.date_to.astimezone(tz)
 
         descr = []
         descr.append(_('Tickets: {url}').format(url=url))

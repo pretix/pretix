@@ -100,6 +100,28 @@
                             {% endif %}
                         {% endif %}
                         </dd>
+                        {% if subevent.has_session_blocks %}
+                            <div class="session-blocks">
+                                <h4>{% trans "Sessions" %}</h4>
+                                {% for block in subevent.session_blocks.all %}
+                                    <div class="session-block">
+                                        <strong>Session {{ block.id }}:</strong>
+                                        {% with time_human=block.date_from|date:"TIME_FORMAT" time_24=block.date_from|time:"H:i" %}
+                                            {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                                Session Begin: {{ time }}
+                                            {% endblocktrans %}
+                                            {{ event.tzstr }}
+                                        {% endwith %}
+                                        {% with time_human=block.date_to|date:"TIME_FORMAT" time_24=block.date_to|time:"H:i" %}
+                                            {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                                Session End: {{ time }}
+                                            {% endblocktrans %}
+                                            {{ event.tzstr }}
+                                        {% endwith %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                     {% if line.subevent.location %}
                     {% if not line.addon_to or line.addon_to.subevent_id != line.subevent_id %}

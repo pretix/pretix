@@ -56,7 +56,7 @@ from django.views.generic import CreateView, FormView, ListView, UpdateView
 
 from pretix.base.models import CartPosition, LogEntry
 from pretix.base.models.checkin import CheckinList
-from pretix.base.models.event import SubEvent, SubEventMetaValue
+from pretix.base.models.event import SubEvent, SubEventMetaValue, SubEventSessionBlock
 from pretix.base.models.items import (
     ItemVariation, Quota, SubEventItem, SubEventItemVariation,
 )
@@ -71,7 +71,7 @@ from pretix.control.forms.subevents import (
     BulkSubEventItemForm, BulkSubEventItemVariationForm, CheckinListFormSet,
     QuotaFormSet, RRuleFormSet, SubEventBulkEditForm, SubEventBulkForm,
     SubEventForm, SubEventItemForm, SubEventItemVariationForm,
-    SubEventMetaValueForm, TimeFormSet,
+    SubEventMetaValueForm, SubEventSessionBlockForm, SubEventSessionBlockFormSet, TimeFormSet,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms
@@ -327,6 +327,45 @@ class SubEventEditorMixin(MetaDataEditorMixin):
             event=self.request.event, **kwargs
         )
 
+    @cached_property
+    def session_block_formset(self):
+        extra = 0
+        kwargs = {}
+
+        if self.copy_from and self.request.method != "POST":
+            # Copy session blocks from the source subevent
+            kwargs['initial'] = [
+                {
+                    'date_from': block.date_from,
+                    'date_to': block.date_to,
+                    'location': block.location,
+                } for block in self.copy_from.session_blocks.all()
+            ]
+            extra = len(kwargs['initial'])
+        elif not self.object and self.request.method != "POST":
+            # No initial blocks for new subevents
+            extra = 1
+
+        formsetclass = inlineformset_factory(
+            SubEvent,
+            SubEventSessionBlock,
+            form=SubEventSessionBlockForm,
+            formset=SubEventSessionBlockFormSet,
+            can_order=False,
+            can_delete=True,
+            extra=extra,
+        )
+
+        if self.object and self.object.pk:
+            kwargs['queryset'] = self.object.session_blocks.all()
+
+        return formsetclass(
+            self.request.POST if self.request.method == "POST" else None,
+            instance=self.object,
+            event=self.request.event,
+            **kwargs
+        )
+
     def save_cl_formset(self, obj):
         for form in self.cl_formset.initial_forms:
             if form in self.cl_formset.deleted_forms:
@@ -400,6 +439,11 @@ class SubEventEditorMixin(MetaDataEditorMixin):
             form.instance.log_action(action='pretix.event.quota.added', user=self.request.user, data=change_data)
             obj.log_action('pretix.subevent.quota.added', user=self.request.user, data=change_data)
 
+    def save_session_block_formset(self, instance):
+        """Save session blocks"""
+        self.session_block_formset.instance = instance
+        self.session_block_formset.save()
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['formset'] = self.formset
@@ -407,6 +451,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
         ctx['itemvar_forms'] = self.itemvar_forms
         ctx['meta_forms'] = self.meta_forms
         ctx['plugin_forms'] = self.plugin_forms
+        ctx['session_block_formset'] = self.session_block_formset
         return ctx
 
     @cached_property
@@ -501,7 +546,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
 
     def is_valid(self, form):
         return form.is_valid() and all([f.is_valid() for f in self.itemvar_forms]) and self.formset.is_valid() and (
-            all([f.is_valid() for f in self.meta_forms])
+            all([f.is_valid() for f in self.meta_forms]) and self.session_block_formset.is_valid()
         ) and self.cl_formset.is_valid() and all(f.is_valid() for f in self.plugin_forms)
 
 
@@ -538,6 +583,8 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
         for f in self.itemvar_forms:
             f.save()
             # TODO: LogEntry?
+
+        self.save_session_block_formset(self.object)
 
         messages.success(self.request, _('Your changes have been saved.'))
         if form.has_changed() or any(f.has_changed() for f in self.plugin_forms):
@@ -641,6 +688,8 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
         for f in self.plugin_forms:
             f.subevent = form.instance
             f.save()
+        self.save_session_block_formset(form.instance)
+
         return ret
 
     def form_invalid(self, form):

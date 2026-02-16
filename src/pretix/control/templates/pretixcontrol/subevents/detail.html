@@ -51,6 +51,92 @@
                     {% endif %}
                 </fieldset>
                 <fieldset>
+                    <legend>{% trans "Session blocks" %}</legend>
+                    <p class="help-block">
+                        {% trans "Define multiple session blocks if this event spans multiple non-contiguous time periods (e.g., a 3-day training with sessions on separate days)." %}
+                    </p>
+                    <div class="formset" data-formset data-formset-prefix="{{ session_block_formset.prefix }}">
+                        {{ session_block_formset.management_form }}
+                        {% bootstrap_formset_errors session_block_formset %}
+                        <div data-formset-body>
+                            {% for form in session_block_formset %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ form.id }}
+                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <span class="fa fa-calendar"></span>
+                                                    {% if form.instance.pk %}
+                                                        {{ form.instance.date_from|date:"SHORT_DATETIME_FORMAT" }}
+                                                        {% if form.instance.date_to %}
+                                                            - {{ form.instance.date_to|date:"SHORT_DATETIME_FORMAT" }}
+                                                        {% endif %}
+                                                        {% if form.instance.location %}
+                                                            ({{ form.instance.location }})
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% trans "New session block" %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_form_errors form %}
+                                        {% bootstrap_field form.date_from layout="control" %}
+                                        {% bootstrap_field form.date_to layout="control" %}
+                                        {% bootstrap_field form.location layout="control" %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <script type="form-template" data-formset-empty-form>
+                            {% escapescript %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ session_block_formset.empty_form.id }}
+                                        {% bootstrap_field session_block_formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <span class="fa fa-calendar"></span>
+                                                    {% trans "New session block" %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_field session_block_formset.empty_form.date_from layout="control" %}
+                                        {% bootstrap_field session_block_formset.empty_form.date_to layout="control" %}
+                                        {% bootstrap_field session_block_formset.empty_form.location layout="control" %}
+                                    </div>
+                                </div>
+                            {% endescapescript %}
+                        </script>
+                        <p>
+                            <button type="button" class="btn btn-default" data-formset-add>
+                                <i class="fa fa-plus"></i> {% trans "Add a new session block" %}
+                            </button>
+                        </p>
+                    </div>
+                </fieldset>
+                <fieldset>
                     <legend>{% trans "Timeline" %}</legend>
                     {% bootstrap_field form.presale_start layout="control" %}
                     {% bootstrap_field form.presale_end layout="control" %}

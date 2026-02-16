@@ -57,7 +57,7 @@ from pretix.base.models import (
     CartPosition, Device, Event, OrderPosition, SalesChannel, Seat, TaxRule,
     TeamAPIToken, Voucher,
 )
-from pretix.base.models.event import SubEvent
+from pretix.base.models.event import SubEvent, SubEventSessionBlock
 from pretix.base.models.items import (
     ItemMetaProperty, SubEventItem, SubEventItemVariation,
 )
@@ -482,6 +482,12 @@ class SubEventItemVariationSerializer(I18nAwareModelSerializer):
         fields = ('variation', 'price', 'disabled', 'available_from', 'available_until')
 
 
+class SubEventSessionBlockSerializer(I18nAwareModelSerializer):
+    class Meta:
+        model = SubEventSessionBlock
+        fields = ['id', 'date_from', 'date_to', 'location']
+
+
 class SubEventSerializer(I18nAwareModelSerializer):
     item_price_overrides = SubEventItemSerializer(source='subeventitem_set', many=True, required=False)
     variation_price_overrides = SubEventItemVariationSerializer(source='subeventitemvariation_set', many=True, required=False)
@@ -489,6 +495,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
     event = SlugRelatedField(slug_field='slug', read_only=True)
     meta_data = MetaDataField(source='*')
     best_availability_state = serializers.IntegerField(allow_null=True, read_only=True)
+    session_blocks = SubEventSessionBlockSerializer(allow_null=True, many=True, read_only=False, required=False)
 
     class Meta:
         model = SubEvent
@@ -496,7 +503,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
                   'presale_start', 'presale_end', 'location', 'geo_lat', 'geo_lon', 'event', 'is_public',
                   'frontpage_text', 'seating_plan', 'item_price_overrides', 'variation_price_overrides',
                   'meta_data', 'seat_category_mapping', 'last_modified', 'best_availability_state',
-                  'comment')
+                  'comment', 'session_blocks')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -515,6 +522,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
 
         SubEvent.clean_items(event, [item['item'] for item in full_data.get('subeventitem_set', [])])
         SubEvent.clean_variations(event, [item['variation'] for item in full_data.get('subeventitemvariation_set', [])])
+        SubEvent.clean_session_blocks(event, [block for block in full_data.get('session_blocks', [])])
         return data
 
     def validate_item_price_overrides(self, data):
@@ -522,6 +530,26 @@ class SubEventSerializer(I18nAwareModelSerializer):
 
     def validate_variation_price_overrides(self, data):
         return list(filter(lambda i: 'variation' in i, data))
+
+    def validate_session_blocks(self, data):
+        sorted_blocks = sorted(data, key=lambda x: x.get('date_from'))
+
+        for i, block in enumerate(sorted_blocks):
+            # Check that date_to is after date_from
+            if block.get('date_to') and block['date_from'] >= block['date_to']:
+                raise serializers.ValidationError(
+                    "Session end time must be after start time"
+                )
+
+            # Check for overlaps with next block
+            if i < len(sorted_blocks) - 1:
+                next_block = sorted_blocks[i + 1]
+                if block.get('date_to') and block['date_to'] > next_block['date_from']:
+                    raise serializers.ValidationError(
+                        "Session blocks cannot overlap"
+                    )
+
+        return data
 
     def validate_seating_plan(self, value):
         if value and value.organizer != self.context['request'].organizer:
@@ -571,12 +599,16 @@ class SubEventSerializer(I18nAwareModelSerializer):
         variation_price_overrides_data = validated_data.pop('subeventitemvariation_set') if 'subeventitemvariation_set' in validated_data else {}
         meta_data = validated_data.pop('meta_data', None)
         seat_category_mapping = validated_data.pop('seat_category_mapping', None)
+        session_blocks_data = validated_data.pop('session_blocks') if 'session_blocks' in validated_data else []
+
         subevent = super().create(validated_data)
 
         for item_price_override_data in item_price_overrides_data:
             SubEventItem.objects.create(subevent=subevent, **item_price_override_data)
         for variation_price_override_data in variation_price_overrides_data:
             SubEventItemVariation.objects.create(subevent=subevent, **variation_price_override_data)
+        for block_data in session_blocks_data:
+            SubEventSessionBlock.objects.create(subevent=subevent, **block_data)
 
         # Meta data
         if meta_data is not None:
@@ -607,6 +639,8 @@ class SubEventSerializer(I18nAwareModelSerializer):
         variation_price_overrides_data = validated_data.pop('subeventitemvariation_set', None)
         meta_data = validated_data.pop('meta_data', None)
         seat_category_mapping = validated_data.pop('seat_category_mapping', None)
+        session_blocks_data = validated_data.pop('session_blocks', None)
+
         subevent = super().update(instance, validated_data)
 
         if item_price_overrides_data is not None:
@@ -626,6 +660,15 @@ class SubEventSerializer(I18nAwareModelSerializer):
                 SubEventItemVariation(id=id, subevent=subevent, **variation_price_override_data).save()
 
             SubEventItemVariation.objects.filter(id__in=existing_variation_overrides.values()).delete()
+
+        if session_blocks_data is not None:
+            existing_session_blocks = {block: block.id for block in SubEventSessionBlock.objects.filter(subevent=subevent)}
+
+            for session_block_data in session_blocks_data:
+                id = existing_session_blocks.pop(session_block_data['id'], None)
+                SubEventSessionBlock(id=id, subevent=subevent, **session_block_data).save()
+
+            SubEventSessionBlock.objects.filter(id__in=existing_session_blocks.values()).delete()
 
         # Meta data
         if meta_data is not None:

@@ -33,13 +33,111 @@ from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget, TimePickerWidget
-from pretix.base.models.event import SubEvent, SubEventMetaValue
+from pretix.base.models.event import SubEvent, SubEventMetaValue, SubEventSessionBlock
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.reldate import RelativeDateTimeField, RelativeDateWrapper
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.rrule import RRuleForm
 from pretix.helpers.money import change_decimal_field
+
+class SubEventSessionBlockForm(I18nModelForm): #forms.ModelForm):
+    """Form for individual session blocks"""
+
+    class Meta:
+        model = SubEventSessionBlock
+        fields = ['date_from', 'date_to', 'location']
+        widgets = {
+            'date_from': forms.DateTimeInput(
+                attrs={
+                    'class': 'datetimepicker',
+                    'data-date-format': 'YYYY-MM-DD HH:mm:ss',
+                }
+            ),
+            'date_to': forms.DateTimeInput(
+                attrs={
+                    'class': 'datetimepicker',
+                    'data-date-format': 'YYYY-MM-DD HH:mm:ss',
+                }
+            ),
+            'location': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'rows': 2,
+                    'placeholder': _('Optional location for this session')
+                }
+            ),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        date_from = cleaned_data.get('date_from')
+        date_to = cleaned_data.get('date_to')
+
+        if date_from and date_to and date_from >= date_to:
+            raise forms.ValidationError(
+                _("Session end time must be after start time.")
+            )
+
+        return cleaned_data
+
+class SubEventSessionBlockFormSet(I18nInlineFormSet): # forms.BaseInlineFormSet):
+    """Custom formset for session blocks with additional validation"""
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event', None)
+        if self.event:
+            kwargs['locales'] = self.event.settings.get('locales')
+        super().__init__(*args, **kwargs)
+
+    def _construct_form(self, i, **kwargs):
+        kwargs['locales'] = self.locales
+        kwargs['event'] = self.event
+        return super()._construct_form(i, **kwargs)
+
+    @property
+    def empty_form(self):
+        form = self.form(
+            auto_id=self.auto_id,
+            prefix=self.add_prefix('__prefix__'),
+            empty_permitted=True,
+            use_required_attribute=False,
+            event=self.event,
+        )
+        self.add_fields(form, None)
+        return form
+
+    def clean(self):
+        """Check for overlapping session blocks"""
+        if any(self.errors):
+            return
+
+        blocks = []
+        for form in self.forms:
+            if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
+                date_from = form.cleaned_data.get('date_from')
+                date_to = form.cleaned_data.get('date_to')
+                location = form.cleaned_data.get('location')
+                if date_from:
+                    blocks.append({
+                        'date_from': date_from,
+                        'date_to': date_to,
+                        'location': location,
+                        'form': form
+                    })
+
+        # Sort by date_from
+        blocks.sort(key=lambda x: x['date_from'])
+
+        # Check for overlaps
+        for i in range(len(blocks) - 1):
+            current = blocks[i]
+            next_block = blocks[i + 1]
+
+            if current['date_to'] and current['date_to'] > next_block['date_from']:
+                raise forms.ValidationError(
+                    _("Session blocks cannot overlap. Please check the times.")
+                )
 
 
 class SubEventForm(I18nModelForm):

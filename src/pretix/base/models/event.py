@@ -1539,9 +1539,6 @@ class SubEvent(EventMixin, LoggedModel):
     date_to = models.DateTimeField(null=True, blank=True,
                                    verbose_name=_("Event end time"))
 
-    # session_date_blocks = models.ForeignKey('SubeventSessions', on_delete=models.PROTECT, null=True, blank=True,
-    #                                         related_name='subevent_blocks', verbose_name=_('Subevent Blocks'))
-
     date_admission = models.DateTimeField(null=True, blank=True,
                                           verbose_name=_("Admission time"))
     presale_end = models.DateTimeField(
@@ -1738,6 +1735,110 @@ class SubEvent(EventMixin, LoggedModel):
         for variation in variations:
             if event != variation.item.event:
                 raise ValidationError(_('One or more variations do not belong to this event.'))
+
+    @staticmethod
+    def clean_session_blocks(event, blocks):
+        for block in blocks:
+            if event != block.subevent:
+                raise ValidationError(_('One or more session blocks do not belong to this subevent.'))
+
+    @property
+    def has_session_blocks(self):
+        """Check if this SubEvent uses session blocks"""
+        return self.session_blocks.exists()
+
+    def get_all_session_dates(self):
+        """
+        Returns all session blocks if they exist, otherwise returns the main date_from/date_to
+        """
+        if self.has_session_blocks:
+            return list(self.session_blocks.all())
+        return [(self.date_from, self.date_to)]
+
+    def get_date_range_display_with_sessions(self, tz=None, as_html=False):
+        """
+        Enhanced date range display that shows session blocks if present
+        """
+
+        blocks = self.session_blocks.all()
+        if not self.has_session_blocks or not blocks:
+            return self.get_date_range_display(tz=tz, as_html=as_html)
+
+        # Format multiple session blocks
+        session_strings = []
+        for block in blocks:
+            time_str = '{}–{}'.format(
+                _date(block.date_from.astimezone(tz), "TIME_FORMAT"),
+                _date(block.date_to.astimezone(tz), "TIME_FORMAT"),
+            )
+            session_strings.append(time_str)
+
+        separator = "<br>" if as_html else ", "
+        return separator.join(session_strings)
+
+    def get_first_session_start(self):
+        """Get the earliest session start time"""
+        if self.has_session_blocks:
+            return self.session_blocks.order_by('date_from').first().date_from
+        return self.date_from
+
+    def get_last_session_end(self):
+        """Get the latest session end time"""
+        if self.has_session_blocks:
+            last_block = self.session_blocks.order_by('-date_to').first()
+            return last_block.date_to or last_block.date_from
+        return self.date_to or self.date_from
+
+
+class SubEventSessionBlock(models.Model):
+    """
+    Represents a session block within a SubEvent, allowing a single SubEvent
+    to span multiple non-contiguous time periods while maintaining single voucher support.
+    """
+    subevent = models.ForeignKey(
+        'SubEvent',
+        related_name='session_blocks',
+        on_delete=models.CASCADE
+    )
+
+    date_from = models.DateTimeField(
+        verbose_name=_("Session start"),
+        help_text=_("Start date and time of this session block")
+    )
+
+    date_to = models.DateTimeField(
+        null=True, blank=True,
+        verbose_name=_("Session end"),
+        help_text=_("End date and time of this session block")
+    )
+
+    location = models.TextField(
+        null=True, blank=True,
+        max_length=200,
+        verbose_name=_("Location")
+    )
+
+    class Meta:
+        ordering = ['date_from']
+        verbose_name = _("Session block")
+        verbose_name_plural = _("Session blocks")
+
+    def __str__(self):
+        if self.name:
+            return f"{self.subevent.name} - {self.name}"
+        return f"{self.subevent.name} - {self.date_from.strftime('%Y-%m-%d %H:%M')}"
+
+    def clean(self):
+        super().clean()
+        if self.date_to and self.date_from >= self.date_to:
+            raise ValidationError(_("Session end must be after session start"))
+
+        # Validate that session falls within parent subevent date range
+        if self.subevent_id:
+            if self.subevent.date_from and self.date_from < self.subevent.date_from:
+                raise ValidationError(_("Session start must be after subevent start"))
+            if self.subevent.date_to and self.date_to and self.date_to > self.subevent.date_to:
+                raise ValidationError(_("Session end must be before subevent end"))
 
 
 @scopes_disabled()
