@@ -39,7 +39,7 @@ from pretix.base.templatetags.rich_text import (
     DEFAULT_CALLBACKS, EMAIL_RE, URL_RE, abslink_callback,
     markdown_compile_email, truelink_callback,
 )
-from pretix.helpers.format import SafeFormatter, format_map
+from pretix.helpers.format import FormattedString, SafeFormatter, format_map
 
 from pretix.base.services.placeholders import (  # noqa
     get_available_placeholders, PlaceholderContext
@@ -141,6 +141,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
         return markdown_compile_email(plaintext, context=context)
 
     def render(self, plain_body: str, plain_signature: str, subject: str, order, position, context) -> str:
+        apply_format_map = not isinstance(plain_body, FormattedString)
         body_md = self.compile_markdown(plain_body, context)
         if context:
             linker = bleach.Linker(
@@ -149,12 +150,13 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
                 callbacks=DEFAULT_CALLBACKS + [truelink_callback, abslink_callback],
                 parse_email=True
             )
-            body_md = format_map(
-                body_md,
-                context=context,
-                mode=SafeFormatter.MODE_RICH_TO_HTML,
-                linkifier=linker
-            )
+            if apply_format_map:
+                body_md = format_map(
+                    body_md,
+                    context=context,
+                    mode=SafeFormatter.MODE_RICH_TO_HTML,
+                    linkifier=linker
+                )
         htmlctx = {
             'site': settings.PRETIX_INSTANCE_NAME,
             'site_url': settings.SITE_URL,

@@ -81,7 +81,9 @@ from pretix.base.signals import (
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
-from pretix.helpers.format import SafeFormatter, format_map
+from pretix.helpers.format import (
+    FormattedString, PlainHtmlAlternativeString, SafeFormatter, format_map,
+)
 from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.ical import get_private_icals
@@ -218,6 +220,9 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     if email == INVALID_ADDRESS:
         return
 
+    if isinstance(template, FormattedString):
+        raise TypeError("Cannot pass an already formatted body template")
+
     if no_order_links and not plain_text_only:
         raise ValueError('If you set no_order_links, you also need to set plain_text_only.')
 
@@ -251,23 +256,28 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     if event and attach_tickets and not event.settings.mail_attach_tickets:
         attach_tickets = False
 
-    with language(locale):
+    with language(locale), override(timezone):
         if isinstance(context, dict) and order:
             _autoextend_context(context, order)
 
         # Build raw content
-        body_plain = render_mail(template, context, placeholder_mode=SafeFormatter.MODE_RICH_TO_PLAIN)
+        content_plain = render_mail(template, context, placeholder_mode=None)
         if settings_holder:
             signature = str(settings_holder.settings.get('mail_text_signature'))
         else:
             signature = ""
 
         # Build full plain-text body
+        if not isinstance(content_plain, FormattedString):
+            body_plain = format_map(content_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
+        else:
+            body_plain = content_plain
         body_plain = _wrap_plain_body(body_plain, signature, event, order, position, no_order_links)
-        body_plain = format_map(body_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
 
         # Build subject
-        subject = str(subject).format_map(TolerantDict(context))
+        if not isinstance(subject, FormattedString):
+            subject = format_map(subject, context)
+
         subject = raw_subject = subject.replace('\n', ' ').replace('\r', '')[:900]
         if settings_holder:
             subject = prefix_subject(settings_holder, subject)
@@ -286,26 +296,24 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             else:
                 renderer = ClassicMailRenderer(None, organizer)
 
-            with override(timezone):
-                content_plain = render_mail(template, context, placeholder_mode=None)
-                try:
-                    if 'context' in inspect.signature(renderer.render).parameters:
-                        body_html = renderer.render(content_plain, signature, raw_subject, order, position, context)
-                    elif 'position' in inspect.signature(renderer.render).parameters:
-                        # Backwards compatibility
-                        warnings.warn('Email renderer called without context argument because context argument is not '
-                                      'supported.',
-                                      DeprecationWarning)
-                        body_html = renderer.render(content_plain, signature, raw_subject, order, position)
-                    else:
-                        # Backwards compatibility
-                        warnings.warn('Email renderer called without position argument because position argument is not '
-                                      'supported.',
-                                      DeprecationWarning)
-                        body_html = renderer.render(content_plain, signature, raw_subject, order)
-                except:
-                    logger.exception('Could not render HTML body')
-                    body_html = None
+            try:
+                if 'context' in inspect.signature(renderer.render).parameters:
+                    body_html = renderer.render(content_plain, signature, raw_subject, order, position, context)
+                elif 'position' in inspect.signature(renderer.render).parameters:
+                    # Backwards compatibility
+                    warnings.warn('Email renderer called without context argument because context argument is not '
+                                  'supported.',
+                                  DeprecationWarning)
+                    body_html = renderer.render(content_plain, signature, raw_subject, order, position)
+                else:
+                    # Backwards compatibility
+                    warnings.warn('Email renderer called without position argument because position argument is not '
+                                  'supported.',
+                                  DeprecationWarning)
+                    body_html = renderer.render(content_plain, signature, raw_subject, order)
+            except:
+                logger.exception('Could not render HTML body')
+                body_html = None
 
         m = OutgoingMail.objects.create(
             organizer=organizer,
@@ -790,7 +798,12 @@ def render_mail(template, context, placeholder_mode: Optional[int]=SafeFormatter
             body = format_map(body, context, mode=placeholder_mode)
     else:
         tpl = get_template(template)
-        body = tpl.render(context)
+        context = {
+            # Known bug, should behave differently for plain and HTML but we'll fix after security release
+            k: v.html if isinstance(v, PlainHtmlAlternativeString) else v
+            for k, v in context.items()
+        }
+        body = FormattedString(tpl.render(context))
     return body
 
 
@@ -936,7 +949,7 @@ def _wrap_plain_body(content_plain, signature, event, order, position, no_order_
     body_plain += "\r\n\r\n-- \r\n"
 
     if signature:
-        signature = signature.format(event=event.name if event else '')
+        signature = format_map(signature, {"event": event.name if event else ''})
         body_plain += signature
         body_plain += "\r\n\r\n-- \r\n"
 
@@ -948,7 +961,7 @@ def _wrap_plain_body(content_plain, signature, event, order, position, no_order_
         body_plain += _(
             "You can view your order details at the following URL:\n{orderurl}."
         ).replace("\n", "\r\n").format(
-            event=event.name, orderurl=build_absolute_uri(
+            orderurl=build_absolute_uri(
                 order.event, 'presale:event.order.position', kwargs={
                     'order': order.code,
                     'secret': position.web_secret,
