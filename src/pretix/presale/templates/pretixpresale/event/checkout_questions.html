@@ -128,10 +128,11 @@
                                     </div>
                                     <div class="col-md-9 form-control-text">
                                         <ul class="addon-list">
-                                            {{ pos.subevent.name }} &middot; <!-- {{ pos.subevent.get_date_range_display_with_times_as_html }} -->
+                                            {{ pos.subevent.name }} &middot;
                                             <span class="text-muted" aria-hidden="true">
                                                 {{ pos.subevent.get_date_range_display_as_html }}
                                             </span>
+                                            {% if not pos.subevent.has_session_blocks %}
                                             <br/>
                                             <span class="event-time event-time-start" data-time="{{ pos.subevent.date_from.isoformat }}" data-timezone="{{ event.timezone }}">
                                                 <br>
@@ -154,6 +155,7 @@
                                                     {{ event.tzstr }}
                                                 {% endwith %}
                                             </span>
+                                            {% endif %}
                                             {% endif %}
                                         </ul>
                                     </div>

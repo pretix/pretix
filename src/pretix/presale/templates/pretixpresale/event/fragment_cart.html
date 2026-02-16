@@ -64,64 +64,69 @@
                         <span class="fa fa-calendar fa-fw" aria-hidden="true"></span> {{ line.subevent.name }}
                         <br>
                         <span class="text-muted" aria-hidden="true">
-                            <!-- {{ line.subevent.get_date_range_display_with_times_as_html }} -->
                             {{ line.subevent.get_date_range_display_as_html }}
                         </span>
-                        <!-- <span class="sr-only">
-                            <time datetime="{% if event.settings.show_times %}{{ line.subevent.date_from.isoformat }}{% else %}{{ line.subevent.date_from|date:"Y-m-d" }}{% endif %}">{{ line.subevent.get_date_from_display }}</time>
-                            {% if event.settings.show_date_to and line.subevent.date_to %}
-                                – <time datetime="{% if event.settings.show_times %}{{ line.subevent.date_to.isoformat }}{% else %}{{ line.subevent.date_to|date:"Y-m-d" }}{% endif %}">{{ line.subevent.get_date_to_display }}</time>
-                            {% endif %}
-                        </span> -->
 
-                        {% if event.settings.show_times %}
-                        <br>
-                        <span class="event-time event-time-start" data-time="{{ line.subevent.date_from.isoformat }}" data-timezone="{{ event.timezone }}">
+                        {% if line.subevent.has_session_blocks %}
                             <br>
-                            <span class="fa fa-clock-o" aria-hidden="true"></span>
-                            {% with time_human=line.subevent.date_from|date:"TIME_FORMAT" time_24=line.subevent.date_from|time:"H:i" %}
-                                {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
-                                    Begin: {{ time }}
-                                {% endblocktrans %}
-                                {{ event.tzstr }}
-                            {% endwith %}
-                        </span>
-                            {% if event.settings.show_date_to and line.subevent.date_to %}
-                            <span class="event-time event-time-end" data-time="{{ line.subevent.date_to.isoformat }}" data-timezone="{{ event.timezone }}">
+                            <div class="session-blocks">
+                                <br>
+                                {% for session_block in line.subevent.session_blocks.all %}
+                                    <strong>Session {{ forloop.counter }} - {{ session_block.date_from|date:"DATE_FORMAT" }}</strong>
+                                    <span class="event-time event-time-start" data-time="{{ session_block.date_from.isoformat }}" data-timezone="{{ event.timezone }}">
+                                        <br>
+                                        <span class="fa fa-clock-o" aria-hidden="true"></span>
+                                        {% with time_human=session_block.date_from|date:"TIME_FORMAT" time_24=session_block.date_from|time:"H:i" %}
+                                            {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                                Begin: {{ time }}
+                                            {% endblocktrans %}
+                                            {{ event.tzstr }}
+                                        {% endwith %}
+                                    </span>
+                                    {% if event.settings.show_date_to and session_block.date_to %}
+                                    <span class="event-time event-time-end" data-time="{{ session_block.date_to.isoformat }}" data-timezone="{{ event.timezone }}">
+                                        <br>
+                                        <span class="fa fa-clock-o" aria-hidden="true"></span>
+                                        {% with time_human=session_block.date_to|date:"TIME_FORMAT" time_24=session_block.date_to|time:"H:i" %}
+                                            {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                                End: {{ time }}
+                                            {% endblocktrans %}
+                                            {{ event.tzstr }}
+                                        {% endwith %}
+                                    </span>
+                                    {% endif %}
+                                    <br><br>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {% if event.settings.show_times %}
+                            <br>
+                            <span class="event-time event-time-start" data-time="{{ line.subevent.date_from.isoformat }}" data-timezone="{{ event.timezone }}">
                                 <br>
                                 <span class="fa fa-clock-o" aria-hidden="true"></span>
-                                {% with time_human=line.subevent.date_to|date:"TIME_FORMAT" time_24=line.subevent.date_to|time:"H:i" %}
+                                {% with time_human=line.subevent.date_from|date:"TIME_FORMAT" time_24=line.subevent.date_from|time:"H:i" %}
                                     {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
-                                        End: {{ time }}
+                                        Begin: {{ time }}
                                     {% endblocktrans %}
                                     {{ event.tzstr }}
                                 {% endwith %}
                             </span>
+                                {% if event.settings.show_date_to and line.subevent.date_to %}
+                                <span class="event-time event-time-end" data-time="{{ line.subevent.date_to.isoformat }}" data-timezone="{{ event.timezone }}">
+                                    <br>
+                                    <span class="fa fa-clock-o" aria-hidden="true"></span>
+                                    {% with time_human=line.subevent.date_to|date:"TIME_FORMAT" time_24=line.subevent.date_to|time:"H:i" %}
+                                        {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                            End: {{ time }}
+                                        {% endblocktrans %}
+                                        {{ event.tzstr }}
+                                    {% endwith %}
+                                </span>
+                                {% endif %}
                             {% endif %}
+                            </dd>
                         {% endif %}
-                        </dd>
-                        {% if subevent.has_session_blocks %}
-                            <div class="session-blocks">
-                                <h4>{% trans "Sessions" %}</h4>
-                                {% for block in subevent.session_blocks.all %}
-                                    <div class="session-block">
-                                        <strong>Session {{ block.id }}:</strong>
-                                        {% with time_human=block.date_from|date:"TIME_FORMAT" time_24=block.date_from|time:"H:i" %}
-                                            {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
-                                                Session Begin: {{ time }}
-                                            {% endblocktrans %}
-                                            {{ event.tzstr }}
-                                        {% endwith %}
-                                        {% with time_human=block.date_to|date:"TIME_FORMAT" time_24=block.date_to|time:"H:i" %}
-                                            {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
-                                                Session End: {{ time }}
-                                            {% endblocktrans %}
-                                            {{ event.tzstr }}
-                                        {% endwith %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+
                     </div>
                     {% if line.subevent.location %}
                     {% if not line.addon_to or line.addon_to.subevent_id != line.subevent_id %}

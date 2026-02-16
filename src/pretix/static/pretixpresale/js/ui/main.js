@@ -638,9 +638,11 @@ $(function () {
     var local_tz = moment.tz.guess()
 
     var $fei_div = set_timezone_times_for_event($("div.frag-event-info"), local_tz, $("<div style='width: fit-content;'>"))
-    var $infodiv = $(".frag-event-info").find(".info-row").last();
-    var $infofirst = $infodiv.find(".event-time").first();
-    $fei_div.insertBefore($infofirst);
+    if ($fei_div.children().length) {
+        var $infodiv = $(".frag-event-info").find(".info-row").last();
+        var $infofirst = $infodiv.find(".event-time").first();
+        $fei_div.insertBefore($infofirst);
+    }
 
     // calendar view
     $(".table-calendar td.has-events ul.events li").each(function() {
@@ -650,23 +652,29 @@ $(function () {
     // list view
     $("dl div.row").each(function() {
         var $fei_list_div = set_timezone_times_for_event($(this), local_tz, $("<div style='width: fit-content;'>"))
-        var $list_infofirst = $(this).find(".event-time").first();
-        $fei_list_div.insertBefore($list_infofirst);
+        if ($fei_list_div.children().length) {
+            var $list_infofirst = $(this).find(".event-time").first();
+            $fei_list_div.insertBefore($list_infofirst);
+        }
     });
 
     // cart view
     $("dl div.cart-icon-details").each(function() {
         var $cid_list_div = set_timezone_times_for_event($(this), local_tz, $("<div style='width: fit-content;'>"))
-        var $cid_infofirst = $(this).find(".event-time").first();
-        $cid_list_div.insertBefore($cid_infofirst);
+        if ($cid_list_div.children().length) {
+            var $cid_infofirst = $(this).find(".event-time").first();
+            $cid_list_div.insertBefore($cid_infofirst);
+        }
     });
 
     // registration confirmation view
     $("ul.addon-list").each(function() {
         // set_timezone_times_for_event($(this), local_tz)
         var $aid_list_div = set_timezone_times_for_event($(this), local_tz, $("<div style='width: fit-content;'>"))
-        var $aid_infofirst = $(this).find(".event-time").first();
-        $aid_list_div.insertBefore($aid_infofirst);
+        if ($aid_list_div.children().length) {
+            var $aid_infofirst = $(this).find(".event-time").first();
+            $aid_list_div.insertBefore($aid_infofirst);
+        }
     });
 
     // For a very weird reason, window width is 0 on an initial load of the widget

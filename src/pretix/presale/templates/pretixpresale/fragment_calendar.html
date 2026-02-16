@@ -41,27 +41,110 @@
                             </p>
                             <ul class="events">
                                 {% for event in day.events %}
-                                    <li><a class="event {% if event.continued %}continued{% endif %} {% spaceless %}
-    {% if event.event.presale_is_running and show_avail %}
-        {% if event.event.best_availability_state == 100 %}
-            available {% if event.event.best_availability_is_low %} low {% endif %}
-        {% elif event.event.waiting_list_active and event.event.best_availability_state >= 0 %}
-            waitinglist
-        {% elif event.event.best_availability_state == 20 %}
-            reserved
-        {% elif event.event.best_availability_state < 20 %}
-            soldout
-        {% endif %}
-    {% elif event.event.presale_is_running %}
-        running
-    {% elif event.event.presale_has_ended %}
-        over
-    {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
-        soon
-    {% else %}
-        soon
-    {% endif %}
-{% endspaceless %}"
+                                    {% if event.event.has_session_blocks %}
+                                        {% for session_block in event.event.session_blocks.all %}
+                                            {% if session_block.date_from.date == day.date %}
+                                                {% with event=event event_time=session_block.date_from time_end=session_block.date_to %}
+                                                    <li id="foo"><a class="event {% spaceless %}
+                                                        {% if event.event.presale_is_running and show_avail %}
+                                                            {% if event.event.best_availability_state == 100 %}
+                                                                available {% if event.event.best_availability_is_low %} low {% endif %}
+                                                            {% elif event.event.waiting_list_active and event.event.best_availability_state >= 0 %}
+                                                                waitinglist
+                                                            {% elif event.event.best_availability_state == 20 %}
+                                                                reserved
+                                                            {% elif event.event.best_availability_state < 20 %}
+                                                                soldout
+                                                            {% endif %}
+                                                        {% elif event.event.presale_is_running %}
+                                                            running
+                                                        {% elif event.event.presale_has_ended %}
+                                                            over
+                                                        {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
+                                                            soon
+                                                        {% else %}
+                                                            soon
+                                                        {% endif %}
+                                                    {% endspaceless %}"
+                                                        href="{{ event.url }}">
+                                                        <span class="event-name">
+                                                            {{ event.event.name }} - Session {{ forloop.counter }}
+                                                        </span>
+                                                        <span class="event-time" data-time="{{ session_block.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-tzstr="{{ event.event.tzstr }}" data-time-short>
+                                                            <span class="fa fa-clock-o" aria-hidden="true"></span>
+                                                            <time datetime="{{ session_block.date_from|date_fast:"H:i" }}">{{ session_block.date_from|date_fast:"TIME_FORMAT" }} </time>
+                                                            {% if event.event.settings.show_date_to and session_block.date_to %}
+                                                                <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span> <time datetime="{{ session_block.date_to|date_fast:"H:i" }}">{{ session_block.date_to|date_fast:"TIME_FORMAT" }}</time>
+                                                            {% endif %}
+                                                            {% if multiple_timezones %}
+                                                                {{ event.timezone }}
+                                                            {% else %}
+                                                                {{ event.event.tzstr }}
+                                                            {% endif %}
+                                                        </span>
+                                                        <span class="event-status">
+                                                            {% if event.event.presale_is_running and show_avail %}
+                                                                {% if event.event.best_availability_state == 100 %}
+                                                                    {% if event.event.best_availability_is_low %}
+                                                                        <span class="fa fa-exclamation-circle" aria-hidden="true"></span> {% trans "Few tickets left" %}
+                                                                    {% else %}
+                                                                        {% if event.event.has_paid_item %}
+                                                                            <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Buy now" context "available_event_in_list" %}
+                                                                        {% else %}
+                                                                            <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                {% elif event.event.waiting_list_active and event.event.best_availability_state >= 0 %}
+                                                                    <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Waiting list" %}
+                                                                {% elif event.event.best_availability_state == 20 %}
+                                                                    {% trans "Reserved" %}
+                                                                {% elif event.event.best_availability_state < 20 %}
+                                                                    {% if event.event.has_paid_item %}
+                                                                        {% trans "Sold out" %}
+                                                                    {% else %}
+                                                                        {% trans "Fully booked" %}
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            {% elif event.event.presale_is_running %}
+                                                                <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
+                                                            {% elif event.event.presale_has_ended %}
+                                                                {% trans "Sale over" %}
+                                                            {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
+                                                                <span class="fa fa-ticket" aria-hidden="true"></span>
+                                                                {% html_time event.event.effective_presale_start "SHORT_DATE_FORMAT" as start_date %}
+                                                                {% blocktrans with start_date=start_date %}
+                                                                    from {{ start_date }}
+                                                                {% endblocktrans %}
+                                                            {% else %}
+                                                                <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Soon" %}
+                                                            {% endif %}
+                                                        </span>
+                                                    </a></li>
+                                                {% endwith %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                    <li id="bar"><a class="event {% if event.continued %}continued{% endif %} {% spaceless %}
+                                            {% if event.event.presale_is_running and show_avail %}
+                                                {% if event.event.best_availability_state == 100 %}
+                                                    available {% if event.event.best_availability_is_low %} low {% endif %}
+                                                {% elif event.event.waiting_list_active and event.event.best_availability_state >= 0 %}
+                                                    waitinglist
+                                                {% elif event.event.best_availability_state == 20 %}
+                                                    reserved
+                                                {% elif event.event.best_availability_state < 20 %}
+                                                    soldout
+                                                {% endif %}
+                                            {% elif event.event.presale_is_running %}
+                                                running
+                                            {% elif event.event.presale_has_ended %}
+                                                over
+                                            {% elif event.event.settings.presale_start_show_date and event.event.effective_presale_start %}
+                                                soon
+                                            {% else %}
+                                                soon
+                                            {% endif %}
+                                        {% endspaceless %}"
                                        href="{{ event.url }}">
                                         {% if show_names|default_if_none:True %}
                                             <span class="event-name">
@@ -123,6 +206,7 @@
                                             </span>
                                         {% endif %}
                                     </a></li>
+                                    {% endif %}
                                 {% endfor %}
                             </ul>
                         </td>
