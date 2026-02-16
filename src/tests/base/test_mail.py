@@ -90,8 +90,8 @@ def order(env, item):
         status=Order.STATUS_PENDING,
         secret="k24fiuwvu8kxz3y1",
         sales_channel=event.organizer.sales_channels.get(identifier="web"),
-        datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.UTC),
-        expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.UTC),
+        datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
+        expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
         total=23,
         locale="en",
     )
