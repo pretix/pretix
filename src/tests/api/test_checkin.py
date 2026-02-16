@@ -1178,6 +1178,30 @@ def test_store_failed(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_store_failed_after_success(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+        p.all_checkins.create(
+            type=Checkin.TYPE_ENTRY,
+            nonce='foobar',
+            successful=True,
+            list=clist,
+            raw_barcode=p.secret
+        )
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event.slug, clist.pk,
+    ), {
+        'raw_barcode': p.secret,
+        'nonce': 'foobar',
+        'position': p.pk,
+        'error_reason': 'unpaid'
+    }, format='json')
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert Checkin.all.filter(position=p).count() == 2
+
+
+@pytest.mark.django_db
 def test_redeem_unknown(token_client, organizer, clist, event, order):
     resp = _redeem(token_client, organizer, clist, 'unknown_secret', {'force': True})
     assert resp.status_code == 404
