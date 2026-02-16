@@ -38,13 +38,10 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import (
-    CachedFile, Checkin, Event, InvoiceAddress, Order, User,
-)
+from pretix.base.models import Checkin, Event, InvoiceAddress, Order, User
 from pretix.base.services.mail import mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
-from pretix.helpers.format import format_map
 
 
 def _chunks(lst, n):
@@ -64,7 +61,6 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
     user = User.objects.get(pk=user) if user else None
     subject = LazyI18nString(subject)
     message = LazyI18nString(message)
-    attachments_for_log = [cf.filename for cf in CachedFile.objects.filter(pk__in=attachments)] if attachments else []
 
     def _send_to_order(o):
         send_to_order = recipients in ('both', 'orders')
@@ -122,7 +118,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
 
                 with language(o.locale, event.settings.region):
                     email_context = get_email_context(event=event, order=o, invoice_address=ia, position=p)
-                    mail(
+                    outgoing_mail = mail(
                         p.attendee_email,
                         subject,
                         message,
@@ -135,25 +131,17 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                         attach_ical=attach_ical,
                         attach_cached_files=attachments
                     )
-                    o.log_action(
-                        'pretix.plugins.sendmail.order.email.sent.attendee',
-                        user=user,
-                        data={
-                            'position': p.positionid,
-                            'subject': format_map(subject.localize(o.locale), email_context),
-                            'message': format_map(message.localize(o.locale), email_context),
-                            'recipient': p.attendee_email,
-                            'attach_tickets': attach_tickets,
-                            'attach_ical': attach_ical,
-                            'attach_other_files': [],
-                            'attach_cached_files': attachments_for_log,
-                        }
-                    )
+                    if outgoing_mail:
+                        o.log_action(
+                            'pretix.plugins.sendmail.order.email.sent.attendee',
+                            user=user,
+                            data=outgoing_mail.log_data(),
+                        )
 
         if send_to_order and o.email:
             with language(o.locale, event.settings.region):
                 email_context = get_email_context(event=event, order=o, invoice_address=ia)
-                mail(
+                outgoing_mail = mail(
                     o.email,
                     subject,
                     message,
@@ -165,19 +153,12 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     attach_ical=attach_ical,
                     attach_cached_files=attachments,
                 )
-                o.log_action(
-                    'pretix.plugins.sendmail.order.email.sent',
-                    user=user,
-                    data={
-                        'subject': format_map(subject.localize(o.locale), email_context),
-                        'message': format_map(message.localize(o.locale), email_context),
-                        'recipient': o.email,
-                        'attach_tickets': attach_tickets,
-                        'attach_ical': attach_ical,
-                        'attach_other_files': [],
-                        'attach_cached_files': attachments_for_log,
-                    }
-                )
+                if outgoing_mail:
+                    o.log_action(
+                        'pretix.plugins.sendmail.order.email.sent',
+                        user=user,
+                        data=outgoing_mail.log_data(),
+                    )
 
     for chunk in _chunks(objects, 1000):
         orders = Order.objects.filter(pk__in=chunk, event=event)

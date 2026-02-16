@@ -1295,6 +1295,7 @@ class ManualPayment(BasePaymentProvider):
 
     def format_map(self, order, payment):
         return {
+            # Possible placeholder injection, we should make sure to never include user-controlled variables here
             'order': order.code,
             'amount': payment.amount,
             'currency': self.event.currency,

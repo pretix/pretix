@@ -33,8 +33,7 @@ from pretix.base.invoicing.transmission import (
     transmission_types,
 )
 from pretix.base.models import Invoice, InvoiceAddress
-from pretix.base.services.mail import mail, render_mail
-from pretix.helpers.format import format_map
+from pretix.base.services.mail import mail
 
 
 @transmission_types.new()
@@ -134,9 +133,7 @@ class EmailTransmissionProvider(TransmissionProvider):
             subject = invoice.order.event.settings.get('mail_subject_order_invoice', as_type=LazyI18nString)
 
             # Do not set to completed because that is done by the email sending task
-            subject = format_map(subject, context)
-            email_content = render_mail(template, context)
-            mail(
+            outgoing_mail = mail(
                 [recipient],
                 subject,
                 template,
@@ -151,19 +148,10 @@ class EmailTransmissionProvider(TransmissionProvider):
                 plain_text_only=True,
                 no_order_links=True,
             )
-            invoice.order.log_action(
-                'pretix.event.order.email.invoice',
-                user=None,
-                auth=None,
-                data={
-                    'subject': subject,
-                    'message': email_content,
-                    'position': None,
-                    'recipient': recipient,
-                    'invoices': [invoice.pk],
-                    'attach_tickets': False,
-                    'attach_ical': False,
-                    'attach_other_files': [],
-                    'attach_cached_files': [],
-                }
-            )
+            if outgoing_mail:
+                invoice.order.log_action(
+                    'pretix.event.order.email.invoice',
+                    user=None,
+                    auth=None,
+                    data=outgoing_mail.log_data()
+                )

@@ -39,7 +39,7 @@ def vouchers_send(event: Event, vouchers: list, subject: str, message: str, reci
         with language(event.settings.locale):
             email_context = get_email_context(event=event, name=r.get('name') or '',
                                               voucher_list=[v.code for v in voucher_list])
-            mail(
+            outgoing_mail = mail(
                 r['email'],
                 subject,
                 LazyI18nString(message),
@@ -60,8 +60,8 @@ def vouchers_send(event: Event, vouchers: list, subject: str, message: str, reci
                     data={
                         'recipient': r['email'],
                         'name': r.get('name'),
-                        'subject': subject,
-                        'message': message,
+                        'subject': outgoing_mail.subject,
+                        'message': outgoing_mail.body_plain,
                     },
                     save=False
                 ))

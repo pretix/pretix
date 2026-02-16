@@ -149,13 +149,13 @@ def prefix_subject(settings_holder, subject, highlight=False):
     return subject
 
 
-def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, LazyI18nString],
+def mail(email: Union[str, Sequence[str]], subject: Union[str, FormattedString], template: Union[str, LazyI18nString],
          context: Dict[str, Any] = None, event: Event = None, locale: str = None, order: Order = None,
          position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
          customer: Customer = None, invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None,
          attach_ical=False, attach_cached_files: Sequence = None, attach_other_files: list=None,
          plain_text_only=False, no_order_links=False, cc: Sequence[str]=None, bcc: Sequence[str]=None,
-         sensitive: bool=False):
+         sensitive: bool=False) -> Optional[OutgoingMail]:
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -335,14 +335,26 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             should_attach_other_files=attach_other_files or [],
             sensitive=sensitive,
         )
+        m._prefetched_objects_cache = {}
         if invoices and not position:
             m.should_attach_invoices.add(*invoices)
+            # Hack: For logging, we'll later make a `should_attach_invoices.all()` call. We can prevent a useless
+            # DB query by filling the cache
+            m._prefetched_objects_cache[m.should_attach_invoices.prefetch_cache_name] = invoices
+        else:
+            m._prefetched_objects_cache[m.should_attach_invoices.prefetch_cache_name] = Invoice.objects.none()
         if attach_cached_files:
+            cf_list = []
             for cf in attach_cached_files:
                 if not isinstance(cf, CachedFile):
-                    m.should_attach_cached_files.add(CachedFile.objects.get(pk=cf))
-                else:
-                    m.should_attach_cached_files.add(cf)
+                    cf = CachedFile.objects.get(pk=cf)
+                m.should_attach_cached_files.add(cf)
+                cf_list.append(cf)
+            # Hack: For logging, we'll later make a `should_attach_cached_files.all()` call. We can prevent a useless
+            # DB query by filling the cache
+            m._prefetched_objects_cache[m.should_attach_cached_files.prefetch_cache_name] = cf_list
+        else:
+            m._prefetched_objects_cache[m.should_attach_cached_files.prefetch_cache_name] = CachedFile.objects.none()
 
         send_task = mail_send_task.si(
             outgoing_mail=m.id
@@ -363,6 +375,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             transaction.on_commit(
                 lambda: chain(*task_chain).apply_async()
             )
+
+    return m
 
 
 class CustomEmail(EmailMultiAlternatives):
