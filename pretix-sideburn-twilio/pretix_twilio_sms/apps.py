@@ -26,3 +26,17 @@ class PluginApp(PluginConfig):
 
     def ready(self):
         from . import signals  # NOQA
+        self._patch_customer_views()
+
+    def _patch_customer_views(self):
+        from django.apps import apps
+
+        if not apps.is_installed("pretix_twilio_sms"):
+            return
+
+        from pretix.presale.views import customer as presale_customer
+
+        def profile_get_template_names(self):
+            return ["pretix_twilio_sms/customer_profile.html"]
+
+        presale_customer.ProfileView.get_template_names = profile_get_template_names
