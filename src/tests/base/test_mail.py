@@ -42,7 +42,6 @@ import pytest
 from django.conf import settings
 from django.core import mail as djmail
 from django.test import override_settings
-from django.utils.html import escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scope, scopes_disabled
@@ -332,13 +331,14 @@ def test_placeholder_html_rendering_from_template(env):
 
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [user.email]
-    # Known bug for now: These should not have HTML for the plain body, but we'll fix this safter the security release
-    assert escape('Event name: <strong>event & co. kg</strong> {currency}') in djmail.outbox[0].body
-    assert '<strong>IBAN</strong>: 123<br>\n<strong>BIC</strong>: 456' in djmail.outbox[0].body
-    assert '**Meta**: <em>Beep</em>' in djmail.outbox[0].body
-    assert escape('Event website: [<strong>event & co. kg</strong> {currency}](https://example.org/dummy)') in djmail.outbox[0].body
-    # todo: assert '&lt;' not in djmail.outbox[0].body
-    # todo: assert '&amp;' not in djmail.outbox[0].body
+    assert 'Event name: <strong>event & co. kg</strong> {currency}' in djmail.outbox[0].body
+    assert 'Event: <strong>event & co. kg</strong> {currency}' in djmail.outbox[0].body
+    assert '**IBAN**: 123  \n**BIC**: 456' in djmail.outbox[0].body
+    assert '**Meta**: *Beep*' in djmail.outbox[0].body
+    assert 'Event website: [<strong>event & co. kg</strong> {currency}](https://example.org/dummy)' in djmail.outbox[0].body
+    assert '<a ' not in djmail.outbox[0].body
+    assert '&lt;' not in djmail.outbox[0].body
+    assert '&amp;' not in djmail.outbox[0].body
     assert 'Unevaluated placeholder: {currency}' in djmail.outbox[0].body
     assert 'EUR' not in djmail.outbox[0].body
     html = _extract_html(djmail.outbox[0])
@@ -346,11 +346,13 @@ def test_placeholder_html_rendering_from_template(env):
     assert '<strong>event' not in html
     assert 'Event name: &lt;strong&gt;event &amp; co. kg&lt;/strong&gt; {currency}' in html
     assert '<strong>IBAN</strong>: 123<br/>\n<strong>BIC</strong>: 456' in html
-    assert '<strong>Meta</strong>: <em>Beep</em>' in html
+    assert '**Meta**: <em>Beep</em>' in html
     assert 'Unevaluated placeholder: {currency}' in html
     assert 'EUR' not in html
+    assert 'Event website: [&lt;strong&gt;event &amp; co. kg&lt;/strong&gt; {currency}](https://example.org/dummy)' in html
+    # Links are from raw HTML and therefore trusted, rel and target is not added automatically
     assert re.search(
-        r'Event website: <a href="https://example.org/dummy" rel="noopener" style="[^"]+" target="_blank">'
+        r'Event: <a href="https://example.com/dummy" style="[^"]+">'
         r'&lt;strong&gt;event &amp; co. kg&lt;/strong&gt; {currency}</a>',
         html
     )

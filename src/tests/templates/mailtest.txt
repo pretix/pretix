@@ -1,13 +1,29 @@
 {% load i18n %}
 This is a test file for sending mails.
+
+Django variables will get evaluated:
+
 Event name: {{ event }}
+
+pretix variables will not in a template rendering:
+
 Unevaluated placeholder: {currency}
+
+We can use advanced Django things:
+
 {% get_current_language as LANGUAGE_CODE %}
 The language code used for rendering this email is {{ LANGUAGE_CODE }}.
+
+Custom content is rendered safely without HTML/Markdown/parameter injection
+unless the parameter is marked as "HTML-safe":
 
 Payment info:
 {{ payment_info }}
 
 **Meta**: {{ meta_Test }}
 
+Markdown will not be evaluated when coming from a template file!
+
 Event website: [{{event}}](https://example.org/{{event_slug}})
+
+Event: {% if to_html %}<a href="https://example.com/{{event_slug}}">{% endif %}{{ event }}{% if to_html %}</a>{% endif %}

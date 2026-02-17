@@ -58,6 +58,7 @@ from django.core.mail.message import SafeMIMEText
 from django.db import connection, transaction
 from django.db.models import Q
 from django.dispatch import receiver
+from django.template import Context
 from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.timezone import now, override
@@ -261,17 +262,22 @@ def mail(email: Union[str, Sequence[str]], subject: Union[str, FormattedString],
             _autoextend_context(context, order)
 
         # Build raw content
-        content_plain = render_mail(template, context, placeholder_mode=None)
+        content = render_mail(template, context, placeholder_mode=None)
         if settings_holder:
             signature = str(settings_holder.settings.get('mail_text_signature'))
         else:
             signature = ""
 
         # Build full plain-text body
-        if not isinstance(content_plain, FormattedString):
-            body_plain = format_map(content_plain, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
+        if isinstance(content, FormattedString):
+            # Already formatted by render_mail() from format_values
+            body_plain = content
+        elif isinstance(content, PlainHtmlAlternativeString):
+            # Already formatted by render_mail() form a django template
+            body_plain = content.plain
         else:
-            body_plain = content_plain
+            # Not yet formatted
+            body_plain = format_map(content, context, mode=SafeFormatter.MODE_RICH_TO_PLAIN)
         body_plain = _wrap_plain_body(body_plain, signature, event, order, position, no_order_links)
 
         # Build subject
@@ -298,19 +304,19 @@ def mail(email: Union[str, Sequence[str]], subject: Union[str, FormattedString],
 
             try:
                 if 'context' in inspect.signature(renderer.render).parameters:
-                    body_html = renderer.render(content_plain, signature, raw_subject, order, position, context)
+                    body_html = renderer.render(content, signature, raw_subject, order, position, context)
                 elif 'position' in inspect.signature(renderer.render).parameters:
                     # Backwards compatibility
                     warnings.warn('Email renderer called without context argument because context argument is not '
                                   'supported.',
                                   DeprecationWarning)
-                    body_html = renderer.render(content_plain, signature, raw_subject, order, position)
+                    body_html = renderer.render(content, signature, raw_subject, order, position)
                 else:
                     # Backwards compatibility
                     warnings.warn('Email renderer called without position argument because position argument is not '
                                   'supported.',
                                   DeprecationWarning)
-                    body_html = renderer.render(content_plain, signature, raw_subject, order)
+                    body_html = renderer.render(content, signature, raw_subject, order)
             except:
                 logger.exception('Could not render HTML body')
                 body_html = None
@@ -810,15 +816,22 @@ def render_mail(template, context, placeholder_mode: Optional[int]=SafeFormatter
         body = str(template)
         if context and placeholder_mode:
             body = format_map(body, context, mode=placeholder_mode)
+        return body
     else:
         tpl = get_template(template)
-        context = {
-            # Known bug, should behave differently for plain and HTML but we'll fix after security release
+
+        plain_context = Context({
+            k: v.plain if isinstance(v, PlainHtmlAlternativeString) else v
+            for k, v in context.items()
+        } | {"to_html": False}, autoescape=False)
+        html_context = Context({
             k: v.html if isinstance(v, PlainHtmlAlternativeString) else v
             for k, v in context.items()
-        }
-        body = FormattedString(tpl.render(context))
-    return body
+        } | {"to_html": True}, autoescape=True)
+        return PlainHtmlAlternativeString(
+            plain=tpl.template.render(plain_context),
+            html=tpl.template.render(html_context),
+        )
 
 
 def replace_images_with_cid_paths(body_html):

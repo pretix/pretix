@@ -22,7 +22,7 @@
 import logging
 from itertools import groupby
 from smtplib import SMTPResponseException
-from typing import TypeVar
+from typing import TypeVar, Union
 
 import bleach
 import css_inline
@@ -31,6 +31,7 @@ from django.core.mail.backends.smtp import EmailBackend
 from django.db.models import Count
 from django.dispatch import receiver
 from django.template.loader import get_template
+from django.utils.safestring import mark_safe
 from django.utils.translation import get_language, gettext_lazy as _
 
 from pretix.base.models import Event
@@ -39,7 +40,9 @@ from pretix.base.templatetags.rich_text import (
     DEFAULT_CALLBACKS, EMAIL_RE, URL_RE, abslink_callback,
     markdown_compile_email, truelink_callback,
 )
-from pretix.helpers.format import FormattedString, SafeFormatter, format_map
+from pretix.helpers.format import (
+    FormattedString, PlainHtmlAlternativeString, SafeFormatter, format_map,
+)
 
 from pretix.base.services.placeholders import (  # noqa
     get_available_placeholders, PlaceholderContext
@@ -83,8 +86,8 @@ class BaseHTMLMailRenderer:
     def __str__(self):
         return self.identifier
 
-    def render(self, plain_body: str, plain_signature: str, subject: str, order=None,
-               position=None, context=None) -> str:
+    def render(self, content: Union[str, FormattedString, PlainHtmlAlternativeString], plain_signature: str,
+               subject: str, order=None, position=None, context=None) -> str:
         """
         This method should generate the HTML part of the email.
 
@@ -140,27 +143,37 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
     def compile_markdown(self, plaintext, context=None):
         return markdown_compile_email(plaintext, context=context)
 
-    def render(self, plain_body: str, plain_signature: str, subject: str, order, position, context) -> str:
-        apply_format_map = not isinstance(plain_body, FormattedString)
-        body_md = self.compile_markdown(plain_body, context)
-        if context:
-            linker = bleach.Linker(
-                url_re=URL_RE,
-                email_re=EMAIL_RE,
-                callbacks=DEFAULT_CALLBACKS + [truelink_callback, abslink_callback],
-                parse_email=True
-            )
-            if apply_format_map:
-                body_md = format_map(
-                    body_md,
+    def render(self, content: Union[str, FormattedString, PlainHtmlAlternativeString], plain_signature: str,
+               subject: str, order=None, position=None, context=None) -> str:
+        if isinstance(content, FormattedString):
+            # Raw string that is already formatted but not markdown-rendered
+            body_content_html = self.compile_markdown(content, context)
+
+        elif isinstance(content, PlainHtmlAlternativeString):
+            # HTML already rendered by Django templates
+            body_content_html = content.html
+
+        else:
+            # Raw string that is not yet formatted or markdown-rendered
+            body_content_html = self.compile_markdown(content, context)
+            if context:
+                linker = bleach.Linker(
+                    url_re=URL_RE,
+                    email_re=EMAIL_RE,
+                    callbacks=DEFAULT_CALLBACKS + [truelink_callback, abslink_callback],
+                    parse_email=True
+                )
+                body_content_html = format_map(
+                    body_content_html,
                     context=context,
                     mode=SafeFormatter.MODE_RICH_TO_HTML,
                     linkifier=linker
                 )
+
         htmlctx = {
             'site': settings.PRETIX_INSTANCE_NAME,
             'site_url': settings.SITE_URL,
-            'body': body_md,
+            'body': mark_safe(body_content_html),
             'subject': str(subject),
             'color': settings.PRETIX_PRIMARY_COLOR,
             'rtl': get_language() in settings.LANGUAGES_RTL or get_language().split('-')[0] in settings.LANGUAGES_RTL,
