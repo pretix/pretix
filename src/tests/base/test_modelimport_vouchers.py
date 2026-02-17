@@ -170,7 +170,7 @@ def test_price_mode_validation(event, item, user):
         import_vouchers.apply(
             args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
         ).get()
-    assert 'It is pointless to set a value without a price mode.' in str(excinfo.value)
+    assert 'It is pointless to set a value without a price effect.' in str(excinfo.value)
 
     settings['price_mode'] = 'static:percent'
     import_vouchers.apply(
