@@ -8,9 +8,6 @@
         <h1>{% trans "Not found" %}</h1>
         <p>{% trans "I'm afraid we could not find the the resource you requested." %}</p>
         <p>{{ exception }}</p>
-        <p class="links">
-            <a id='goback' href='#'>{% trans "Take a step back" %}</a>
-        </p>
         {% if request.user.is_staff and not staff_session %}
             <form action="{% url 'control:user.sudo' %}?next={{ request.path|add:"?"|add:request.GET.urlencode|urlencode }}" method="post">
                 <p>
