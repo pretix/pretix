@@ -3,11 +3,12 @@
 
 .. _`importcol`:
 
-Extending the order import process
-==================================
+Extending the import process
+============================
 
-It's possible through the backend to import orders into pretix, for example from a legacy ticketing system. If your
-plugins defines additional data structures around orders, it might be useful to make it possible to import them as well.
+It's possible through the backend to import objects into pretix, for example orders from a legacy ticketing system. If
+your plugin defines additional data structures around those objects, it might be useful to make it possible to import
+them as well.
 
 Import process
 --------------
@@ -40,7 +41,7 @@ Column registration
 
 The import API does not make a lot of usage from signals, however, it
 does use a signal to get a list of all available import columns. Your plugin
-should listen for this signal and return the subclass of ``pretix.base.orderimport.ImportColumn``
+should listen for this signal and return the subclass of ``pretix.base.modelimport.ImportColumn``
 that we'll provide in this plugin:
 
 .. sourcecode:: python
@@ -56,10 +57,16 @@ that we'll provide in this plugin:
             EmailColumn(sender),
         ]
 
+Similar signals exist for other objects:
+
+.. automodule:: pretix.base.signals
+   :members: voucher_import_columns
+
+
 The column class API
 --------------------
 
-.. class:: pretix.base.orderimport.ImportColumn
+.. class:: pretix.base.modelimport.ImportColumn
 
    The central object of each import extension is the subclass of ``ImportColumn``.
 
