@@ -198,6 +198,7 @@ class ParametrizedGiftcardTransactionWebhookEvent(ParametrizedWebhookEvent):
             'notification_id': logentry.pk,
             'issuer_id': logentry.organizer_id,
             'acceptor_id': logentry.parsed_data.get('acceptor_id'),
+            'acceptor_slug': logentry.parsed_data.get('acceptor_slug'),
             'giftcard': giftcard.pk,
             'action': logentry.action_type,
         }

@@ -1850,7 +1850,8 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                         data={
                             'value': value,
                             'text': request.POST.get('text'),
-                            'acceptor_id': self.request.organizer.id
+                            'acceptor_id': self.request.organizer.id,
+                            'acceptor_slug': self.request.organizer.slug
                         },
                         user=self.request.user,
                     )
@@ -1913,7 +1914,8 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                 user=self.request.user,
                 data={
                     'value': form.cleaned_data['value'],
-                    'acceptor_id': self.request.organizer.id
+                    'acceptor_id': self.request.organizer.id,
+                    'acceptor_slug': self.request.organizer.slug
                 }
             )
         return redirect(reverse(

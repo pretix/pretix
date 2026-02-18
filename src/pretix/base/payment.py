@@ -1650,7 +1650,8 @@ class GiftCardPayment(BasePaymentProvider):
                     action='pretix.giftcards.transaction.payment',
                     data={
                         'value': trans.value,
-                        'acceptor_id': self.event.organizer.id
+                        'acceptor_id': self.event.organizer.id,
+                        'acceptor_slug': self.event.organizer.slug
                     }
                 )
         except PaymentException as e:
@@ -1682,6 +1683,7 @@ class GiftCardPayment(BasePaymentProvider):
             data={
                 'value': refund.amount,
                 'acceptor_id': self.event.organizer.id,
+                'acceptor_slug': self.event.organizer.slug,
                 'text': refund.comment,
             }
         )

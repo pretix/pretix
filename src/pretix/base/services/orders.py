@@ -253,7 +253,8 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
                         auth=auth,
                         data={
                             'value': position.price,
-                            'acceptor_id': order.event.organizer.id
+                            'acceptor_id': order.event.organizer.id,
+                            'acceptor_slug': order.event.organizer.slug
                         }
                     )
                     break
@@ -563,6 +564,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                         data={
                             'value': -position.price,
                             'acceptor_id': order.event.organizer.id,
+                            'acceptor_slug': order.event.organizer.slug
                         }
                     )
 
@@ -2457,7 +2459,8 @@ class OrderChangeManager:
                             auth=self.auth,
                             data={
                                 'value': -position.price,
-                                'acceptor_id': self.order.event.organizer.id
+                                'acceptor_id': self.order.event.organizer.id,
+                                'acceptor_slug': self.order.event.organizer.slug
                             }
                         )
 
@@ -2483,7 +2486,8 @@ class OrderChangeManager:
                                 auth=self.auth,
                                 data={
                                     'value': -opa.position.price,
-                                    'acceptor_id': self.order.event.organizer.id
+                                    'acceptor_id': self.order.event.organizer.id,
+                                    'acceptor_slug': self.order.event.organizer.slug
                                 }
                             )
 
@@ -3453,6 +3457,7 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
                     data={
                         'value': trans.value,
                         'acceptor_id': order.event.organizer.id,
+                        'acceptor_slug': order.event.organizer.slug
                     }
                 )
                 any_giftcards = True
