@@ -14,7 +14,7 @@ RUN apt-get update && \
             libxslt1-dev \
             locales \
             nginx \
-            python3.11-virtualenv \
+            python3.11-venv \
             python3.11-dev \
             sudo \
             supervisor \
