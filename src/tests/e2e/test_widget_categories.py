@@ -19,19 +19,18 @@ class TestCategoryDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Category names should be shown as h3 headers.
 
-        The widget_items fixture creates a 'Tickets' category.
+        The items fixture creates a 'Tickets' category.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Category header should be visible
         category_header = page.locator(
@@ -42,17 +41,16 @@ class TestCategoryDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items_with_category_description,
+        organizer,
+        event,
+        items_with_category_description,
         widget_page
     ):
         """
         Category descriptions should be displayed below category name.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Category description should be visible
         desc = page.locator('.pretix-widget-category-description')
@@ -63,18 +61,17 @@ class TestCategoryDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items_multiple_categories,
+        organizer,
+        event,
+        items_multiple_categories,
         widget_page
     ):
         """
         Items should be grouped under respective categories
         and maintain category sort order.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Both categories should be visible
         expect(page.locator(

@@ -18,9 +18,9 @@ class TestResponsiveLayout:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -30,9 +30,8 @@ class TestResponsiveLayout:
         # Set narrow viewport
         page.set_viewport_size({"width": 375, "height": 667})
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Should have mobile class
         expect(page.locator('.pretix-widget-mobile')).to_be_visible()
@@ -41,9 +40,9 @@ class TestResponsiveLayout:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -53,9 +52,8 @@ class TestResponsiveLayout:
         # Ensure wide viewport (default is 1280)
         page.set_viewport_size({"width": 1280, "height": 720})
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Should NOT have mobile class
         expect(page.locator('.pretix-widget-mobile')).to_have_count(0)
@@ -67,9 +65,9 @@ class TestResponsiveLayout:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -79,9 +77,8 @@ class TestResponsiveLayout:
         # Start with desktop viewport
         page.set_viewport_size({"width": 1280, "height": 720})
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Should not be mobile
         expect(page.locator('.pretix-widget-mobile')).to_have_count(0)

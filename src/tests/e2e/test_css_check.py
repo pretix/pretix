@@ -9,13 +9,13 @@ from playwright.sync_api import Page
 def test_css_contains_no_scss_syntax(
     page: Page,
     live_server_url: str,
-    widget_organizer,
-    widget_event,
-    widget_items
+    organizer,
+    event,
+    items
 ):
     """Verify CSS is compiled and doesn't contain SCSS syntax."""
     # Fetch the CSS directly
-    css_url = f"{live_server_url}/{widget_organizer.slug}/{widget_event.slug}/widget/v2.css"
+    css_url = f"{live_server_url}/{organizer.slug}/{event.slug}/widget/v2.css"
 
     print(f"\nFetching CSS from: {css_url}")
     response = page.request.get(css_url)

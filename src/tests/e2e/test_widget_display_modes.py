@@ -21,21 +21,20 @@ class TestWidgetMode:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Default widget mode should show full product listing
         with categories, items, and a buy button.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Should show items
-        for item in widget_items:
+        for item in items:
             expect(page.locator(
                 f'.pretix-widget-item:has-text("{item.name}")'
             )).to_be_visible()
@@ -54,22 +53,21 @@ class TestCalendarView:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event_series,
+        organizer,
+        event_series,
         widget_page
     ):
         """
         Calendar view should show a monthly grid with event dates.
         """
-        event, subevents = widget_event_series
+        event, subevents = event_series
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
+            organizer.slug,
             event.slug,
             **{'list-type': 'calendar'}
         )
-        widget_page.wait_for_widget_load()
 
         # Should show calendar table
         expect(page.locator(
@@ -84,22 +82,21 @@ class TestCalendarView:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event_series,
+        organizer,
+        event_series,
         widget_page
     ):
         """
         Clicking next month button should navigate to the next month.
         """
-        event, subevents = widget_event_series
+        event, subevents = event_series
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
+            organizer.slug,
             event.slug,
             **{'list-type': 'calendar'}
         )
-        widget_page.wait_for_widget_load()
 
         # Get current month heading text
         header = page.locator('.pretix-widget-event-calendar-head')
@@ -121,8 +118,8 @@ class TestCalendarView:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event_series,
+        organizer,
+        event_series,
         widget_page
     ):
         """
@@ -133,15 +130,14 @@ class TestCalendarView:
         (target_url resolves to configured domain, not live_server).
         We verify the links exist and have correct structure.
         """
-        event, _ = widget_event_series
+        event, _ = event_series
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
+            organizer.slug,
             event.slug,
             **{'list-type': 'calendar'}
         )
-        widget_page.wait_for_widget_load()
 
         # Event links should exist and show event info
         event_link = page.locator(
@@ -172,22 +168,21 @@ class TestListView:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event_series,
+        organizer,
+        event_series,
         widget_page
     ):
         """
         List view should display events as a linear list.
         """
-        event, subevents = widget_event_series
+        event, subevents = event_series
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
+            organizer.slug,
             event.slug,
             **{'list-type': 'list'}
         )
-        widget_page.wait_for_widget_load()
 
         # Should show event list entries
         entries = page.locator('.pretix-widget-event-list-entry')
@@ -200,22 +195,21 @@ class TestListView:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event_series,
+        organizer,
+        event_series,
         widget_page
     ):
         """
         List view should show subevent names.
         """
-        event, subevents = widget_event_series
+        event, subevents = event_series
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
+            organizer.slug,
             event.slug,
             **{'list-type': 'list'}
         )
-        widget_page.wait_for_widget_load()
 
         # At least the first subevent name should appear
         expect(page.locator(
@@ -226,8 +220,8 @@ class TestListView:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event_series,
+        organizer,
+        event_series,
         widget_page
     ):
         """
@@ -237,15 +231,14 @@ class TestListView:
         (target_url resolves to configured domain, not live_server).
         We verify the entries have correct structure.
         """
-        event, _ = widget_event_series
+        event, _ = event_series
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
+            organizer.slug,
             event.slug,
             **{'list-type': 'list'}
         )
-        widget_page.wait_for_widget_load()
 
         # Each entry should show availability info
         first_entry = page.locator(
@@ -266,9 +259,9 @@ class TestButtonMode:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -276,8 +269,8 @@ class TestButtonMode:
         """
         widget_page.goto_button_test_page(
             live_server_url,
-            widget_organizer.slug,
-            widget_event.slug
+            organizer.slug,
+            event.slug
         )
 
         # Wait for script to load and initialize
@@ -292,9 +285,9 @@ class TestButtonMode:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -302,8 +295,8 @@ class TestButtonMode:
         """
         widget_page.goto_button_test_page(
             live_server_url,
-            widget_organizer.slug,
-            widget_event.slug
+            organizer.slug,
+            event.slug
         )
 
         page.wait_for_timeout(2000)
@@ -313,5 +306,5 @@ class TestButtonMode:
             page.locator('.pretix-button').click()
 
         popup = popup_info.value
-        assert widget_organizer.slug in popup.url
+        assert organizer.slug in popup.url
         popup.close()

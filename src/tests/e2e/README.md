@@ -145,11 +145,8 @@ The `widget_page` fixture provides convenient methods:
 
 ```python
 def test_example(widget_page, live_server_url, widget_event, widget_items):
-    # Navigate to event
-    widget_page.goto_event(live_server_url, 'testorg', 'testevent')
-
-    # Wait for widget to load
-    widget_page.wait_for_widget_load()
+    # Navigate to event and wait for widget to load
+    widget_page.goto(live_server_url, 'testorg', 'testevent')
 
     # Select item quantity
     widget_page.select_item_quantity('General Admission', 2)
@@ -177,8 +174,7 @@ def test_example(widget_page, live_server_url, widget_event, widget_items):
 ```python
 @pytest.mark.django_db
 def test_widget_loads(page, live_server_url, widget_organizer, widget_event, widget_items, widget_page):
-    widget_page.goto_event(live_server_url, widget_organizer.slug, widget_event.slug)
-    widget_page.wait_for_widget_load()
+    widget_page.goto(live_server_url, widget_organizer.slug, widget_event.slug)
 
     # Verify content
     expect(page.locator(f'text="{widget_event.name}"')).to_be_visible()
@@ -191,8 +187,7 @@ def test_widget_loads(page, live_server_url, widget_organizer, widget_event, wid
 def test_variations(page, live_server_url, widget_organizer, widget_event, widget_item_with_variations, widget_page):
     item, variations = widget_item_with_variations
 
-    widget_page.goto_event(live_server_url, widget_organizer.slug, widget_event.slug)
-    widget_page.wait_for_widget_load()
+    widget_page.goto(live_server_url, widget_organizer.slug, widget_event.slug)
 
     # Expand variations
     widget_page.expand_variations(item.name)
@@ -207,8 +202,7 @@ def test_variations(page, live_server_url, widget_organizer, widget_event, widge
 ```python
 @pytest.mark.django_db
 def test_checkout(page, context, live_server_url, widget_organizer, widget_event, widget_items, widget_page):
-    widget_page.goto_event(live_server_url, widget_organizer.slug, widget_event.slug)
-    widget_page.wait_for_widget_load()
+    widget_page.goto(live_server_url, widget_organizer.slug, widget_event.slug)
 
     # Add items
     widget_page.select_item_quantity(widget_items[0].name, 2)
@@ -447,8 +441,7 @@ class TestFeatureName:
         Then: expected outcome
         """
         # Arrange
-        widget_page.goto_event(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, widget_organizer.slug, widget_event.slug)
 
         # Act
         widget_page.select_item_quantity(widget_items[0].name, 1)

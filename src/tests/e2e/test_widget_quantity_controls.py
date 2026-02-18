@@ -19,9 +19,9 @@ class TestQuantityControls:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_single_select,
+        organizer,
+        event,
+        item_single_select,
         widget_page
     ):
         """
@@ -30,10 +30,9 @@ class TestQuantityControls:
         For items limited to 1 per order, a checkbox is more intuitive than
         a number input.
         """
-        item = widget_item_single_select
+        item = item_single_select
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         # Find the item
         item_elem = page.locator(f'.pretix-widget-item:has-text("{item.name}")')
@@ -47,9 +46,9 @@ class TestQuantityControls:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_single_select,
+        organizer,
+        event,
+        item_single_select,
         widget_page
     ):
         """
@@ -60,10 +59,9 @@ class TestQuantityControls:
         Note: When there's only one item, it may be auto-selected by the widget.
         This test verifies the check/uncheck functionality works regardless.
         """
-        item = widget_item_single_select
+        item = item_single_select
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(f'.pretix-widget-item:has-text("{item.name}")')
         checkbox = item_elem.locator('input[type="checkbox"]')
@@ -85,9 +83,9 @@ class TestQuantityControls:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -95,11 +93,10 @@ class TestQuantityControls:
 
         Plus/minus buttons provide an easy way to increment/decrement quantity.
         """
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         # Regular items should have number input with +/- buttons
-        item_elem = page.locator(f'.pretix-widget-item:has-text("{widget_items[0].name}")')
+        item_elem = page.locator(f'.pretix-widget-item:has-text("{items[0].name}")')
 
         # Should have number input
         expect(item_elem.locator('input[type="number"]')).to_be_visible()
@@ -112,9 +109,9 @@ class TestQuantityControls:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -122,10 +119,9 @@ class TestQuantityControls:
 
         Each click increments the value in the number input.
         """
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
-        item_elem = page.locator(f'.pretix-widget-item:has-text("{widget_items[0].name}")')
+        item_elem = page.locator(f'.pretix-widget-item:has-text("{items[0].name}")')
         number_input = item_elem.locator('input[type="number"]')
         plus_button = item_elem.locator('button:has-text("+")').first
 
@@ -151,9 +147,9 @@ class TestQuantityControls:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -161,10 +157,9 @@ class TestQuantityControls:
 
         Quantity should not go below 0.
         """
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
-        item_elem = page.locator(f'.pretix-widget-item:has-text("{widget_items[0].name}")')
+        item_elem = page.locator(f'.pretix-widget-item:has-text("{items[0].name}")')
         number_input = item_elem.locator('input[type="number"]')
         plus_button = item_elem.locator('button:has-text("+")').first
         minus_button = item_elem.locator('button:has-text("-")').first
@@ -193,9 +188,9 @@ class TestQuantityControls:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -203,14 +198,13 @@ class TestQuantityControls:
 
         Number input should accept typed values.
         """
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         # Directly set quantity using helper
-        widget_page.select_item_quantity(widget_items[0].name, 5)
+        widget_page.select_item_quantity(items[0].name, 5)
 
         # Verify value
-        item_elem = page.locator(f'.pretix-widget-item:has-text("{widget_items[0].name}")')
+        item_elem = page.locator(f'.pretix-widget-item:has-text("{items[0].name}")')
         number_input = item_elem.locator('input[type="number"]')
         expect(number_input).to_have_value("5")
 
@@ -223,16 +217,15 @@ class TestOrderLimits:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_single_select,
+        organizer,
+        event,
+        item_single_select,
         widget_page
     ):
         """Item with order_max=1 should show checkbox (implicit max enforcement)."""
-        item = widget_item_single_select  # This has order_max=1
+        item = item_single_select  # This has order_max=1
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(f'.pretix-widget-item:has-text("{item.name}")')
         expect(item_elem).to_be_visible()
@@ -246,17 +239,16 @@ class TestOrderLimits:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """Multiple items with different quantities should open iframe checkout."""
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
-        widget_page.select_item_quantity(widget_items[0].name, 2)
-        widget_page.select_item_quantity(widget_items[1].name, 1)
+        widget_page.select_item_quantity(items[0].name, 2)
+        widget_page.select_item_quantity(items[1].name, 1)
 
         widget_page.click_buy_button()
 
@@ -276,9 +268,9 @@ class TestFreePrice:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_free_price,
+        organizer,
+        event,
+        item_free_price,
         widget_page
     ):
         """
@@ -286,10 +278,9 @@ class TestFreePrice:
 
         User should be able to enter their own price.
         """
-        item = widget_item_free_price
+        item = item_free_price
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(f'.pretix-widget-item:has-text("{item.name}")')
         expect(item_elem).to_be_visible()
@@ -302,9 +293,9 @@ class TestFreePrice:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_free_price,
+        organizer,
+        event,
+        item_free_price,
         widget_page
     ):
         """
@@ -312,10 +303,9 @@ class TestFreePrice:
 
         The min attribute should be set to the item's default price.
         """
-        item = widget_item_free_price
+        item = item_free_price
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(f'.pretix-widget-item:has-text("{item.name}")')
         price_input = item_elem.locator('.pretix-widget-pricebox-price-input, input[name^="price_"]').first
@@ -329,9 +319,9 @@ class TestFreePrice:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_free_price,
+        organizer,
+        event,
+        item_free_price,
         widget_page
     ):
         """
@@ -339,10 +329,9 @@ class TestFreePrice:
 
         Amount above minimum should be accepted.
         """
-        item = widget_item_free_price
+        item = item_free_price
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(f'.pretix-widget-item:has-text("{item.name}")')
         price_input = item_elem.locator('.pretix-widget-pricebox-price-input, input[name^="price_"]').first

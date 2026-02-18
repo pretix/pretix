@@ -21,17 +21,16 @@ class TestCartBasics:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """Selecting items and clicking Buy should open iframe checkout."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
-        widget_page.select_item_quantity(widget_items[0].name, 2)
+        widget_page.select_item_quantity(items[0].name, 2)
         widget_page.click_buy_button()
 
         # Iframe checkout should open
@@ -48,15 +47,14 @@ class TestCartBasics:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """Clicking Buy without selecting items should not open checkout."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Don't select any items, just click buy
         widget_page.click_buy_button()
@@ -70,7 +68,7 @@ class TestCartBasics:
 
         # Items should still be there
         expect(page.locator(
-            f'.pretix-widget-item:has-text("{widget_items[0].name}")'
+            f'.pretix-widget-item:has-text("{items[0].name}")'
         )).to_be_visible()
 
 
@@ -83,17 +81,16 @@ class TestCartPersistence:
         page: Page,
         context: BrowserContext,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """Adding items to cart should create a pretix_widget cookie."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
-        widget_page.select_item_quantity(widget_items[0].name, 1)
+        widget_page.select_item_quantity(items[0].name, 1)
         widget_page.click_buy_button()
 
         # Wait for iframe checkout to open (cookie is set during cart creation)
@@ -111,18 +108,17 @@ class TestCartPersistence:
         page: Page,
         context: BrowserContext,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """After creating a cart and reloading, widget should show resume option."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Create a real cart by adding items and opening checkout
-        widget_page.select_item_quantity(widget_items[0].name, 1)
+        widget_page.select_item_quantity(items[0].name, 1)
         widget_page.click_buy_button()
         widget_page.wait_for_iframe_checkout()
 
@@ -150,17 +146,16 @@ class TestIframeCheckout:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """With skip-ssl-check, checkout should open in iframe on HTTP."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
-        widget_page.select_item_quantity(widget_items[0].name, 1)
+        widget_page.select_item_quantity(items[0].name, 1)
         widget_page.click_buy_button()
 
         widget_page.wait_for_iframe_checkout()
@@ -168,23 +163,22 @@ class TestIframeCheckout:
         iframe_elem = page.locator('iframe[name^="pretix-widget-"]')
         src = iframe_elem.get_attribute('src')
         assert 'iframe=1' in src
-        assert widget_organizer.slug in src
+        assert organizer.slug in src
 
     def test_close_iframe_button(
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """User should be able to close checkout iframe."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
-        widget_page.select_item_quantity(widget_items[0].name, 1)
+        widget_page.select_item_quantity(items[0].name, 1)
         widget_page.click_buy_button()
 
         widget_page.wait_for_iframe_checkout()
@@ -198,17 +192,16 @@ class TestIframeCheckout:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """Iframe checkout URL should include take_cart_id parameter."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
-        widget_page.select_item_quantity(widget_items[0].name, 2)
+        widget_page.select_item_quantity(items[0].name, 2)
         widget_page.click_buy_button()
 
         widget_page.wait_for_iframe_checkout()
@@ -221,17 +214,16 @@ class TestIframeCheckout:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """Iframe checkout overlay container should be visible during checkout."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
-        widget_page.select_item_quantity(widget_items[0].name, 1)
+        widget_page.select_item_quantity(items[0].name, 1)
         widget_page.click_buy_button()
 
         widget_page.wait_for_iframe_checkout()
@@ -248,19 +240,18 @@ class TestMultipleItemSelection:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """Selecting multiple items should open checkout with all of them."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Select multiple items
-        widget_page.select_item_quantity(widget_items[0].name, 2)
-        widget_page.select_item_quantity(widget_items[1].name, 1)
+        widget_page.select_item_quantity(items[0].name, 2)
+        widget_page.select_item_quantity(items[1].name, 1)
 
         widget_page.click_buy_button()
 
@@ -275,22 +266,21 @@ class TestMultipleItemSelection:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
-        widget_item_single_select,
+        organizer,
+        event,
+        items,
+        item_single_select,
         widget_page
     ):
         """Selecting both checkbox and quantity items should open checkout."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Select quantity item
-        widget_page.select_item_quantity(widget_items[0].name, 3)
+        widget_page.select_item_quantity(items[0].name, 3)
 
         # Select checkbox item
-        widget_page.select_item_quantity(widget_item_single_select.name, 1)
+        widget_page.select_item_quantity(item_single_select.name, 1)
 
         widget_page.click_buy_button()
 

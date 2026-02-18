@@ -20,34 +20,33 @@ class TestPriceDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Item prices should display with currency code.
 
-        Currency format should match event settings (USD).
+        Currency format should match event settings (EUR).
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
-        # Check that prices are displayed with USD currency code
-        # General Admission is USD 50.00
-        # USD is in a separate span, so check for both parts
-        # Use .first since there are multiple items with USD
-        expect(page.locator('text=/USD/').first).to_be_visible()
+        # Check that prices are displayed with EUR currency code
+        # General Admission is EUR 50.00
+        # EUR is in a separate span, so check for both parts
+        # Use .first since there are multiple items with EUR
+        expect(page.locator('text=/EUR/').first).to_be_visible()
         expect(page.locator('text=/50\\.00/').first).to_be_visible()
 
     def test_free_items_display_free_text(
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_free,
+        organizer,
+        event,
+        item_free,
         widget_page
     ):
         """
@@ -55,11 +54,10 @@ class TestPriceDisplay:
 
         Makes free items more obvious to users.
         """
-        item = widget_item_free
+        item = item_free
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Should show "FREE" text
         item_elem = page.locator(
@@ -73,22 +71,21 @@ class TestPriceDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_decimals,
+        organizer,
+        event,
+        item_with_decimals,
         widget_page
     ):
         """
         Prices should display with proper decimal formatting.
 
-        USD should show 2 decimal places (e.g., $25.00 not $25).
+        EUR should show 2 decimal places (e.g., $25.00 not $25).
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Should show price with .50
-        expect(page.locator('text=/USD.*12\\.50/')).to_be_visible()
+        expect(page.locator('text=/EUR.*12\\.50/')).to_be_visible()
 
 
 @pytest.mark.django_db
@@ -99,9 +96,9 @@ class TestTaxDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_tax,
+        organizer,
+        event,
+        item_with_tax,
         widget_page
     ):
         """
@@ -109,11 +106,10 @@ class TestTaxDisplay:
 
         Should display "incl. X% VAT" or similar.
         """
-        item = widget_item_with_tax
+        item = item_with_tax
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
             f'.pretix-widget-item:has-text("{item.name}")')
@@ -128,9 +124,9 @@ class TestTaxDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -138,13 +134,12 @@ class TestTaxDisplay:
 
         Tax line should be absent for tax-free items.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
-        # widget_items by default have no tax
+        # items by default have no tax
         # We just verify the items display without errors
-        for item in widget_items:
+        for item in items:
             item_elem = page.locator(
                 f'.pretix-widget-item:has-text("{item.name}")')
             expect(item_elem).to_be_visible()
@@ -158,9 +153,9 @@ class TestDiscountedPricing:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -168,18 +163,17 @@ class TestDiscountedPricing:
 
         This is a smoke test to ensure price rendering works.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # All items should display their prices
-        for item in widget_items:
+        for item in items:
             item_elem = page.locator(
                 f'.pretix-widget-item:has-text("{item.name}")')
             expect(item_elem).to_be_visible()
 
-            # Should have USD currency and price displayed
-            expect(item_elem.locator('text=/USD/')).to_be_visible()
+            # Should have EUR currency and price displayed
+            expect(item_elem.locator('text=/EUR/')).to_be_visible()
 
 
 @pytest.mark.django_db
@@ -190,9 +184,9 @@ class TestPriceForVariations:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """
@@ -200,11 +194,10 @@ class TestPriceForVariations:
 
         E.g., "$20.00 - $30.00" for variations from $20 to $30.
         """
-        item, _ = widget_item_with_variations
+        item, _ = item_with_variations
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Variations are collapsed by default
         item_elem = page.locator(
@@ -212,12 +205,12 @@ class TestPriceForVariations:
         expect(item_elem).to_be_visible()
 
         # Should show price range in main row (not in hidden variations)
-        # Format: USD 20.00 – 30.00 (en-dash, not hyphen)
+        # Format: EUR 20.00 – 30.00 (en-dash, not hyphen)
         # Look specifically in the main row's price column
         main_row = item_elem.locator('.pretix-widget-main-item-row')
         price_col = main_row.locator('.pretix-widget-item-price-col')
         expect(
-            price_col.locator('text=/USD.*20\\.00/')
+            price_col.locator('text=/EUR.*20\\.00/')
         ).to_be_visible()
         expect(price_col.locator('text=/30\\.00/')).to_be_visible()
 
@@ -225,9 +218,9 @@ class TestPriceForVariations:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """
@@ -235,16 +228,15 @@ class TestPriceForVariations:
 
         Each size should show its own price.
         """
-        item, variations = widget_item_with_variations
+        item, variations = item_with_variations
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Expand variations
         widget_page.expand_variations(item.name)
 
-        # Check each variation shows a price with USD currency
+        # Check each variation shows a price with EUR currency
         # We don't check exact amounts because formatting may vary
         for var in variations:
             var_elem = page.locator(
@@ -253,5 +245,5 @@ class TestPriceForVariations:
             )
             expect(var_elem).to_be_visible()
 
-            # Should contain USD currency code
-            expect(var_elem.locator('text=/USD/')).to_be_visible()
+            # Should contain EUR currency code
+            expect(var_elem.locator('text=/EUR/')).to_be_visible()

@@ -19,8 +19,8 @@ class TestEmptyStates:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
+        organizer,
+        event,
         widget_page
     ):
         """
@@ -28,9 +28,8 @@ class TestEmptyStates:
         Should show the widget container but no item rows.
         """
         # Navigate without creating any items
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Widget should still be present
         expect(page.locator('.pretix-widget')).to_be_visible()
@@ -43,18 +42,17 @@ class TestEmptyStates:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Submitting with zero quantity should not navigate away.
         The widget should remain visible without opening checkout.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Don't select any items, just click buy
         widget_page.click_buy_button()
@@ -65,7 +63,7 @@ class TestEmptyStates:
 
         # Items should still be visible
         expect(page.locator(
-            f'.pretix-widget-item:has-text("{widget_items[0].name}")'
+            f'.pretix-widget-item:has-text("{items[0].name}")'
         )).to_be_visible()
 
 
@@ -77,20 +75,19 @@ class TestMinPerOrder:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_min_order,
+        organizer,
+        event,
+        item_min_order,
         widget_page
     ):
         """
         Items with min_per_order should display a text message
         indicating the minimum quantity (e.g. "minimum amount to order: 2").
         """
-        item = widget_item_min_order
+        item = item_min_order
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
             f'.pretix-widget-item:has-text("{item.name}")')
@@ -110,20 +107,19 @@ class TestSpecialCharacters:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_special_chars,
+        organizer,
+        event,
+        item_special_chars,
         widget_page
     ):
         """
         Items with special characters (umlauts, ampersands, etc.)
         should display correctly.
         """
-        item = widget_item_special_chars
+        item = item_special_chars
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Item with special characters should be visible
         item_elem = page.locator(

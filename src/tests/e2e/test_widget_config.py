@@ -19,25 +19,24 @@ class TestItemsFilter:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         When items="<id>" is set, only that item should be shown.
         """
         # Get the first item's ID
-        target_item = widget_items[0]
-        other_item = widget_items[1]
+        target_item = items[0]
+        other_item = items[1]
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
-            widget_event.slug,
+            organizer.slug,
+            event.slug,
             items=str(target_item.pk)
         )
-        widget_page.wait_for_widget_load()
 
         # Target item should be visible
         expect(page.locator(
@@ -53,26 +52,25 @@ class TestItemsFilter:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         When items="<id1>,<id2>", both items should be shown.
         """
-        ids = ','.join(str(item.pk) for item in widget_items)
+        ids = ','.join(str(item.pk) for item in items)
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
-            widget_event.slug,
+            organizer.slug,
+            event.slug,
             items=ids
         )
-        widget_page.wait_for_widget_load()
 
         # Both items should be visible
-        for item in widget_items:
+        for item in items:
             expect(page.locator(
                 f'.pretix-widget-item:has-text("{item.name}")'
             )).to_be_visible()
@@ -86,26 +84,25 @@ class TestCategoriesFilter:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items_multiple_categories,
+        organizer,
+        event,
+        items_multiple_categories,
         widget_page
     ):
         """
         When categories="<id>" is set, only items from that category
         should be shown.
         """
-        items = widget_items_multiple_categories
+        items = items_multiple_categories
         # Get the category of the first item (Music)
         target_category = items[0].category
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
-            widget_event.slug,
+            organizer.slug,
+            event.slug,
             categories=str(target_category.pk)
         )
-        widget_page.wait_for_widget_load()
 
         # Music item should be visible
         expect(page.locator(
@@ -126,9 +123,9 @@ class TestDisableVouchers:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_voucher,
+        organizer,
+        event,
+        voucher,
         widget_page
     ):
         """
@@ -136,13 +133,12 @@ class TestDisableVouchers:
         even when vouchers exist.
         """
         # Navigate with disable-vouchers attribute
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
-            widget_event.slug,
+            organizer.slug,
+            event.slug,
             **{'disable-vouchers': ''}
         )
-        widget_page.wait_for_widget_load()
 
         # Voucher section should NOT be visible
         voucher_section = page.locator('.pretix-widget-voucher')
@@ -157,22 +153,21 @@ class TestDisableIframe:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         When disable-iframe is set, checkout should open in a new tab
         instead of an iframe overlay.
         """
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
-            widget_event.slug,
+            organizer.slug,
+            event.slug,
             **{'disable-iframe': ''}
         )
-        widget_page.wait_for_widget_load()
 
         # Select quantity for an item
         widget_page.select_item_quantity('General Admission', 1)
@@ -183,5 +178,5 @@ class TestDisableIframe:
 
         popup = popup_info.value
         # New tab should navigate to checkout URL
-        assert widget_organizer.slug in popup.url
+        assert organizer.slug in popup.url
         popup.close()

@@ -19,9 +19,9 @@ class TestVoucherDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_voucher,
+        organizer,
+        event,
+        voucher,
         widget_page
     ):
         """
@@ -29,9 +29,8 @@ class TestVoucherDisplay:
 
         The widget checks `vouchers_exist` in the API response.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Voucher section should be visible
         voucher_section = page.locator('.pretix-widget-voucher')
@@ -51,17 +50,16 @@ class TestVoucherDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Voucher input should not appear when no vouchers exist.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Voucher section should NOT be visible
         voucher_section = page.locator('.pretix-widget-voucher')
@@ -71,23 +69,22 @@ class TestVoucherDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_voucher,
+        organizer,
+        event,
+        voucher,
         widget_page
     ):
         """
         Voucher explanation text should display when configured.
         """
         # Set voucher explanation text on the event
-        widget_event.settings.set(
+        event.settings.set(
             'voucher_explanation_text',
             'Enter your voucher code to get a discount.'
         )
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Explanation text should be visible
         explanation = page.locator('.pretix-widget-voucher-text')
@@ -103,9 +100,9 @@ class TestVoucherRedemption:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_voucher,
+        organizer,
+        event,
+        voucher,
         widget_page
     ):
         """
@@ -113,9 +110,8 @@ class TestVoucherRedemption:
 
         With skip-ssl-check (added by test harness), this opens in iframe.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Enter voucher code
         voucher_input = page.locator('.pretix-widget-voucher-input')

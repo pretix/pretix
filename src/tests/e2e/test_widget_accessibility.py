@@ -23,38 +23,36 @@ class TestWidgetAriaLabels:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Main widget wrapper should have role="article"
         and aria-label with event name.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         wrapper = page.locator('.pretix-widget-wrapper')
         expect(wrapper).to_have_attribute('role', 'article')
-        expect(wrapper).to_have_attribute('aria-label', widget_event.name)
+        expect(wrapper).to_have_attribute('aria-label', event.name)
 
     def test_widget_wrapper_is_focusable(
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Widget wrapper should have tabindex="0" for keyboard access.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         wrapper = page.locator('.pretix-widget-wrapper')
         expect(wrapper).to_have_attribute('tabindex', '0')
@@ -63,9 +61,9 @@ class TestWidgetAriaLabels:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -76,13 +74,12 @@ class TestWidgetAriaLabels:
         is explicitly enabled for single events (auto mode hides it).
         We use the display-event-info attribute to force it on.
         """
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
-            widget_event.slug,
+            organizer.slug,
+            event.slug,
             **{'display-event-info': 'true'}
         )
-        widget_page.wait_for_widget_load()
 
         heading = page.locator(
             '.pretix-widget-event-header strong[role="heading"]')
@@ -98,21 +95,20 @@ class TestQuantityControlAccessibility:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Plus/minus buttons should have descriptive aria-labels.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Find increment button for first item
         item_elem = page.locator(
-            f'.pretix-widget-item:has-text("{widget_items[0].name}")')
+            f'.pretix-widget-item:has-text("{items[0].name}")')
         inc_btn = item_elem.locator('button[aria-label]').last
         dec_btn = item_elem.locator('button[aria-label]').first
 
@@ -126,20 +122,19 @@ class TestQuantityControlAccessibility:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Quantity input should be connected to a label via aria-labelledby.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
-            f'.pretix-widget-item:has-text("{widget_items[0].name}")')
+            f'.pretix-widget-item:has-text("{items[0].name}")')
         qty_input = item_elem.locator('input[type="number"]')
 
         labelledby = qty_input.get_attribute('aria-labelledby')
@@ -154,17 +149,16 @@ class TestVoucherAccessibility:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_voucher,
+        organizer,
+        event,
+        voucher,
         widget_page
     ):
         """
         Voucher input should reference the headline via aria-labelledby.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         voucher_input = page.locator('.pretix-widget-voucher-input')
         headline = page.locator('.pretix-widget-voucher-headline')
@@ -186,20 +180,19 @@ class TestVariationAccessibility:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """
         Variations toggle button should have aria-expanded
         and aria-controls attributes.
         """
-        item, _ = widget_item_with_variations
+        item, _ = item_with_variations
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
             f'.pretix-widget-item:has-text("{item.name}")')
@@ -226,22 +219,21 @@ class TestCalendarAccessibility:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event_series,
+        organizer,
+        event_series,
         widget_page
     ):
         """
         Calendar table should have tabindex="0" and aria-labelledby.
         """
-        event, _ = widget_event_series
+        event, _ = event_series
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
+            organizer.slug,
             event.slug,
             **{'list-type': 'calendar'}
         )
-        widget_page.wait_for_widget_load()
 
         table = page.locator('.pretix-widget-event-calendar-table')
         expect(table).to_have_attribute('tabindex', '0')
@@ -254,23 +246,22 @@ class TestCalendarAccessibility:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event_series,
+        organizer,
+        event_series,
         widget_page
     ):
         """
         Calendar day-of-week headers should have full day names
         as aria-labels (Mo -> Monday, Tu -> Tuesday, etc.).
         """
-        event, _ = widget_event_series
+        event, _ = event_series
 
-        widget_page.goto_widget_test_page(
+        widget_page.goto(
             live_server_url,
-            widget_organizer.slug,
+            organizer.slug,
             event.slug,
             **{'list-type': 'calendar'}
         )
-        widget_page.wait_for_widget_load()
 
         # Check first day header has aria-label
         first_header = page.locator(
@@ -289,18 +280,17 @@ class TestKeyboardNavigation:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Pressing Tab should cycle through interactive elements
         (inputs, buttons) within the widget.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Tab through several elements
         focused_tags = set()
