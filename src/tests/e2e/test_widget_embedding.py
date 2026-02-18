@@ -16,9 +16,9 @@ class TestWidgetEmbedding:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -29,25 +29,24 @@ class TestWidgetEmbedding:
         - All configured items
         """
         # Navigate to test page with widget embedded
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug
         )
-        widget_page.wait_for_widget_load()
 
         # Verify widget container exists with event aria-label
         widget = page.locator('.pretix-widget-wrapper')
-        expect(widget).to_have_attribute('aria-label', widget_event.name)
+        expect(widget).to_have_attribute('aria-label', event.name)
 
         # Verify items are listed
-        for item in widget_items:
+        for item in items:
             expect(page.locator(f'text="{item.name}"')).to_be_visible()
 
     def test_widget_displays_loading_state(
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
+        organizer,
+        event,
         widget_page
     ):
         """
@@ -56,8 +55,8 @@ class TestWidgetEmbedding:
         The loading spinner should eventually disappear when data is loaded.
         """
         # Navigate to widget test page
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug, wait=False
         )
 
         # Wait for widget element
@@ -74,8 +73,8 @@ class TestWidgetEmbedding:
         widget_page
     ):
         """Widget should display error message for invalid event."""
-        widget_page.goto_widget_test_page(
-            live_server_url, 'invalid-org', 'invalid-event'
+        widget_page.goto(
+            live_server_url, 'invalid-org', 'invalid-event', wait=False
         )
 
         # Should show widget container
@@ -90,9 +89,9 @@ class TestWidgetEmbedding:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -100,13 +99,12 @@ class TestWidgetEmbedding:
 
         Item descriptions should be visible for items that have them.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug
         )
-        widget_page.wait_for_widget_load()
 
         # Check that descriptions are shown
-        for item in widget_items:
+        for item in items:
             if item.description:
                 expect(
                     page.locator(f'text="{item.description}"')
@@ -116,9 +114,9 @@ class TestWidgetEmbedding:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -126,21 +124,20 @@ class TestWidgetEmbedding:
 
         Prices should be formatted with currency and decimal places.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug
         )
-        widget_page.wait_for_widget_load()
 
         # Verify prices are shown (with currency)
         # Each item should have its price displayed
-        for item in widget_items:
+        for item in items:
             # Find the item container first, then check price within it
             item_container = page.locator(
                 f'.pretix-widget-item:has-text("{item.name}")'
             )
             expect(item_container).to_be_visible()
 
-            # Check price is present (formatted as "USD XX.XX")
+            # Check price is present (formatted as "EUR XX.XX")
             price_text = f"{float(item.default_price):.2f}"
             price_box = item_container.locator('.pretix-widget-pricebox')
             expect(price_box).to_contain_text(price_text)
@@ -154,8 +151,8 @@ class TestWidgetEventInfo:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
+        organizer,
+        event,
         widget_page
     ):
         """
@@ -165,10 +162,9 @@ class TestWidgetEventInfo:
         date by default. This test verifies the widget loads without
         checking for specific date display.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug
         )
-        widget_page.wait_for_widget_load()
 
         # Widget should be present and functional
         # (Event date display varies by configuration)
@@ -179,8 +175,8 @@ class TestWidgetEventInfo:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
+        organizer,
+        event,
         widget_page
     ):
         """

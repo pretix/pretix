@@ -84,131 +84,13 @@ def live_server_url(live_server, settings):
 
     return live_server.url
 
-
-@pytest.fixture(scope='session', autouse=True)
-def _register_widget_test_view():
-    """
-    Register a test view that serves an HTML page with widget embedded.
-
-    This allows E2E tests to navigate to a real URL instead of using
-    set_content, which causes CORS issues.
-    """
-    from django.http import HttpResponse
-    from django.views import View
-    from django.urls import path
-    from pretix.multidomain import maindomain_urlconf as urls
-
-    class WidgetTestView(View):
-        """Serve HTML page with widget embedded for E2E testing."""
-
-        # Widget attributes that can be passed as query params
-        WIDGET_ATTRS = [
-            'items', 'categories', 'voucher', 'disable-vouchers',
-            'disable-iframe', 'subevent', 'list-type',
-            'display-event-info', 'skip-ssl-check',
-        ]
-
-        def get(self, request, organizer, event):
-            # Build URLs exactly as in working index.html
-            base_url = f"{request.scheme}://{request.get_host()}"
-            event_url = f"{base_url}/{organizer}/{event}/"
-            # CSS is scoped to event, JS is at root
-            widget_css = f"{base_url}/{organizer}/{event}/widget/v2.css"
-            widget_js = f"{base_url}/widget/v2.en.js"
-
-            # Build extra attributes from query params
-            extra_attrs = ''
-            for attr in self.WIDGET_ATTRS:
-                val = request.GET.get(attr)
-                if val is not None:
-                    if val == '':
-                        # Boolean attribute (e.g., disable-vouchers)
-                        extra_attrs += f' {attr}'
-                    else:
-                        extra_attrs += f' {attr}="{val}"'
-
-            # Always add skip-ssl-check so iframe checkout works on HTTP
-            if 'skip-ssl-check' not in extra_attrs:
-                extra_attrs += ' skip-ssl-check'
-
-            html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widget Test</title>
-    <link rel="stylesheet" type="text/css" href="{widget_css}" crossorigin>
-  </head>
-  <body>
-    <pretix-widget event="{event_url}"{extra_attrs}></pretix-widget>
-    <script type="text/javascript" src="{widget_js}" async crossorigin></script>
-</body>
-</html>"""
-            resp = HttpResponse(html, content_type='text/html')
-            resp['Content-Security-Policy'] = "script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'"
-            return resp
-
-    class ButtonTestView(View):
-        """Serve HTML page with pretix-button element for E2E testing."""
-
-        def get(self, request, organizer, event):
-            base_url = f"{request.scheme}://{request.get_host()}"
-            event_url = f"{base_url}/{organizer}/{event}/"
-            widget_css = f"{base_url}/{organizer}/{event}/widget/v2.css"
-            widget_js = f"{base_url}/widget/v2.en.js"
-
-            # Build extra attributes from query params
-            extra_attrs = ''
-            for attr in ['items', 'voucher', 'subevent', 'disable-iframe']:
-                val = request.GET.get(attr)
-                if val is not None:
-                    if val == '':
-                        extra_attrs += f' {attr}'
-                    else:
-                        extra_attrs += f' {attr}="{val}"'
-
-            button_text = request.GET.get('button-text', 'Buy tickets!')
-
-            html = f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Button Test</title>
-    <link rel="stylesheet" type="text/css" href="{widget_css}" crossorigin>
-</head>
-<body>
-    <pretix-button event="{event_url}"{extra_attrs}>{button_text}</pretix-button>
-    <script type="text/javascript" src="{widget_js}" async crossorigin></script>
-</body>
-</html>"""
-            resp = HttpResponse(html, content_type='text/html')
-            resp['Content-Security-Policy'] = "script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'"
-            return resp
-
-    # Add URL patterns
-    test_pattern = path(
-        'widget-test/<str:organizer>/<str:event>/',
-        WidgetTestView.as_view()
-    )
-    button_pattern = path(
-        'button-test/<str:organizer>/<str:event>/',
-        ButtonTestView.as_view()
-    )
-
-    # Insert at beginning of URL patterns
-    if hasattr(urls, 'urlpatterns'):
-        urls.urlpatterns.insert(0, test_pattern)
-        urls.urlpatterns.insert(0, button_pattern)
-
-
 # ============================================================================
 # Test Data Fixtures - Organizers and Events
 # ============================================================================
 
 @pytest.fixture
 @scopes_disabled()
-def widget_organizer(db):
+def organizer(db):
     """
     Create an organizer for widget tests.
     Reuses the same pattern as existing API tests.
@@ -222,15 +104,15 @@ def widget_organizer(db):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_event(widget_organizer):
+def event(organizer):
     """Create a basic event for widget tests."""
     event = Event.objects.create(
-        organizer=widget_organizer,
+        organizer=organizer,
         name='Test Event',
         slug='testevent',
         date_from=datetime(2026, 6, 1, 10, 0, 0, tzinfo=timezone.utc),
         date_to=datetime(2026, 6, 1, 18, 0, 0, tzinfo=timezone.utc),
-        currency='USD',
+        currency='EUR',
         live=True,
         testmode=False,
         plugins='pretix.plugins.banktransfer',
@@ -243,7 +125,7 @@ def widget_event(widget_organizer):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_items(widget_event):
+def items(event):
     """Create basic test items/products."""
     from pretix.base.models import ItemCategory
 
@@ -251,14 +133,14 @@ def widget_items(widget_event):
 
     # Create a proper category
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Tickets',
         position=0
     )
 
     # General Admission ticket
     item1 = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='General Admission',
         default_price=Decimal('50.00'),
@@ -269,7 +151,7 @@ def widget_items(widget_event):
 
     # VIP ticket
     item2 = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='VIP Ticket',
         default_price=Decimal('150.00'),
@@ -281,7 +163,7 @@ def widget_items(widget_event):
     # Create quotas for each item
     for item in items:
         quota = Quota.objects.create(
-            event=widget_event,
+            event=event,
             name=f'{item.name} Quota',
             size=100,
         )
@@ -296,19 +178,19 @@ def widget_items(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_with_variations(widget_event):
+def item_with_variations(event):
     """Create an item with size variations (S, M, L, XL)."""
     from pretix.base.models import ItemCategory
 
     # Create category for the item
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Merchandise',
         position=1
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Event T-Shirt',
         default_price=Decimal('25.00'),
@@ -334,7 +216,7 @@ def widget_item_with_variations(widget_event):
 
     # Create quota for all variations
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='T-Shirt Quota',
         size=50,
     )
@@ -348,18 +230,18 @@ def widget_item_with_variations(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_single_select(widget_event):
+def item_single_select(event):
     """Create an item with max_per_order=1 (should show checkbox)."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='VIP',
         position=2
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='VIP Pass',
         default_price=Decimal('500.00'),
@@ -369,7 +251,7 @@ def widget_item_single_select(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='VIP Quota',
         size=10,
     )
@@ -380,18 +262,18 @@ def widget_item_single_select(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_free_price(widget_event):
+def item_free_price(event):
     """Create an item with pay-what-you-want pricing."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Donations',
         position=3
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Donation',
         default_price=Decimal('10.00'),
@@ -401,7 +283,7 @@ def widget_item_free_price(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Donation Quota',
         size=999,
     )
@@ -412,18 +294,18 @@ def widget_item_free_price(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_sold_out(widget_event):
+def item_sold_out(event):
     """Create a sold out item."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Early Bird',
         position=4
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Early Bird Ticket',
         default_price=Decimal('30.00'),
@@ -433,7 +315,7 @@ def widget_item_sold_out(widget_event):
 
     # Create quota with size=0 (sold out)
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Early Bird Quota',
         size=0,
     )
@@ -444,18 +326,18 @@ def widget_item_sold_out(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_free(widget_event):
+def item_free(event):
     """Create a free item (price = 0.00)."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Free Stuff',
         position=10
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Free Gift',
         default_price=Decimal('0.00'),
@@ -463,7 +345,7 @@ def widget_item_free(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Free Gift Quota',
         size=100,
     )
@@ -474,18 +356,18 @@ def widget_item_free(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_with_decimals(widget_event):
+def item_with_decimals(event):
     """Create an item with non-zero decimal price."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Test Category',
         position=11
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Half Price Item',
         default_price=Decimal('12.50'),
@@ -493,7 +375,7 @@ def widget_item_with_decimals(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Half Price Quota',
         size=50,
     )
@@ -504,25 +386,25 @@ def widget_item_with_decimals(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_with_tax(widget_event):
+def item_with_tax(event):
     """Create an item with tax rule."""
     from pretix.base.models import ItemCategory, TaxRule
 
     # Create tax rule
     tax_rule = TaxRule.objects.create(
-        event=widget_event,
+        event=event,
         name='VAT',
         rate=Decimal('19.00'),  # 19% VAT
     )
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Taxed Items',
         position=12
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Taxed Product',
         default_price=Decimal('100.00'),
@@ -531,7 +413,7 @@ def widget_item_with_tax(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Taxed Product Quota',
         size=50,
     )
@@ -546,18 +428,18 @@ def widget_item_with_tax(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_min_order(widget_event):
+def item_min_order(event):
     """Create an item with min_per_order=2."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Group Tickets',
         position=13
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Group Pass',
         default_price=Decimal('40.00'),
@@ -566,7 +448,7 @@ def widget_item_min_order(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Group Pass Quota',
         size=50,
     )
@@ -577,18 +459,18 @@ def widget_item_min_order(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_special_chars(widget_event):
+def item_special_chars(event):
     """Create an item with special characters in the name."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Spezial',
         position=14
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Böhm & Söhne Konzert',
         default_price=Decimal('55.00'),
@@ -596,7 +478,7 @@ def widget_item_special_chars(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Special Quota',
         size=50,
     )
@@ -611,19 +493,19 @@ def widget_item_special_chars(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_items_with_category_description(widget_event):
+def items_with_category_description(event):
     """Create items with a category that has a description."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Tickets',
         description='Early bird tickets available',
         position=0
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Early Bird',
         default_price=Decimal('35.00'),
@@ -631,7 +513,7 @@ def widget_items_with_category_description(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Early Bird Quota',
         size=100,
     )
@@ -642,24 +524,24 @@ def widget_items_with_category_description(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_items_multiple_categories(widget_event):
+def items_multiple_categories(event):
     """Create items in multiple categories to test grouping and ordering."""
     from pretix.base.models import ItemCategory
 
     cat_music = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Music',
         position=0
     )
 
     cat_food = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Food & Drink',
         position=1
     )
 
     item1 = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=cat_music,
         name='Concert Ticket',
         default_price=Decimal('75.00'),
@@ -667,7 +549,7 @@ def widget_items_multiple_categories(widget_event):
     )
 
     item2 = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=cat_food,
         name='Food Pass',
         default_price=Decimal('25.00'),
@@ -676,7 +558,7 @@ def widget_items_multiple_categories(widget_event):
 
     for item in [item1, item2]:
         quota = Quota.objects.create(
-            event=widget_event,
+            event=event,
             name=f'{item.name} Quota',
             size=100,
         )
@@ -691,33 +573,33 @@ def widget_items_multiple_categories(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_voucher(widget_event, widget_items):
+def voucher(event, items):
     """Create a voucher for the event."""
     voucher = Voucher.objects.create(
-        event=widget_event,
+        event=event,
         code='TESTCODE2024',
         max_usages=10,
         price_mode='none',
     )
     # Clear the vouchers_exist cache so the widget picks it up
-    widget_event.get_cache().delete('vouchers_exist')
+    event.get_cache().delete('vouchers_exist')
     return voucher
 
 
 @pytest.fixture
 @scopes_disabled()
-def widget_voucher_with_item(widget_event, widget_items):
+def voucher_with_item(event, items):
     """Create a voucher tied to a specific item."""
-    item = widget_items[0]
+    item = items[0]
     voucher = Voucher.objects.create(
-        event=widget_event,
+        event=event,
         code='ITEMVOUCHER',
         max_usages=5,
         price_mode='percent',
         value=Decimal('20.00'),  # 20% off
         item=item,
     )
-    widget_event.get_cache().delete('vouchers_exist')
+    event.get_cache().delete('vouchers_exist')
     return voucher
 
 
@@ -727,21 +609,21 @@ def widget_voucher_with_item(widget_event, widget_items):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_sold_out_with_waitinglist(widget_event):
+def item_sold_out_with_waitinglist(event):
     """Create a sold out item with waiting list enabled."""
     from pretix.base.models import ItemCategory
 
     # Enable waiting list on the event
-    widget_event.settings.set('waiting_list_enabled', True)
+    event.settings.set('waiting_list_enabled', True)
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Sold Out',
         position=20
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Sold Out Concert',
         default_price=Decimal('80.00'),
@@ -751,7 +633,7 @@ def widget_item_sold_out_with_waitinglist(widget_event):
 
     # Create quota with size=0 (sold out)
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Sold Out Quota',
         size=0,
     )
@@ -766,17 +648,17 @@ def widget_item_sold_out_with_waitinglist(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_event_series(widget_organizer):
+def event_series(organizer):
     """Create an event series with multiple subevents, items, and quotas."""
     from pretix.base.models import ItemCategory
 
     event = Event.objects.create(
-        organizer=widget_organizer,
+        organizer=organizer,
         name='Concert Series',
         slug='concert-series',
         date_from=datetime(2026, 6, 1, 19, 0, 0, tzinfo=timezone.utc),
         has_subevents=True,
-        currency='USD',
+        currency='EUR',
         live=True,
         plugins='pretix.plugins.banktransfer',
     )
@@ -839,15 +721,16 @@ def widget_page(page):
         def __init__(self, page: Page):
             self.page = page
 
-        def goto_widget_test_page(
+        def goto(
             self,
             live_server_url: str,
             org_slug: str,
             event_slug: str,
+            wait=True,
             **widget_attrs
         ):
             """
-            Navigate to a test page with widget embedded.
+            Navigate to a test page with widget embedded and wait for it to load.
 
             Uses a Django view that serves an HTML page with the pretix
             widget embedded, simulating how it would be used on a customer's
@@ -856,6 +739,9 @@ def widget_page(page):
             Extra keyword arguments are passed as query params to the view,
             which converts them to widget attributes. For boolean attributes
             (like disable-vouchers), pass an empty string as value.
+
+            Set wait=False to skip waiting for the widget to load (useful for
+            tests that need to observe loading/error states).
             """
             # Navigate to the test view URL
             test_url = f"{live_server_url}/widget-test/{org_slug}/{event_slug}/"
@@ -863,11 +749,8 @@ def widget_page(page):
                 from urllib.parse import urlencode
                 test_url += '?' + urlencode(widget_attrs)
             self.page.goto(test_url)
-            return self
-
-        def goto_event(self, live_server_url: str, org_slug: str, event_slug: str):
-            """Navigate to an event page."""
-            self.page.goto(f"{live_server_url}/{org_slug}/{event_slug}/")
+            if wait:
+                self.wait_for_widget_load()
             return self
 
         def wait_for_widget_load(self):
@@ -975,18 +858,18 @@ def widget_page(page):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_require_voucher(widget_event):
+def item_require_voucher(event):
     """Create an item that requires a voucher to purchase."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Voucher Only',
         position=30
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Exclusive Pass',
         default_price=Decimal('200.00'),
@@ -995,7 +878,7 @@ def widget_item_require_voucher(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Exclusive Quota',
         size=50,
     )
@@ -1006,18 +889,18 @@ def widget_item_require_voucher(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_low_stock(widget_event):
+def item_low_stock(event):
     """Create an item with low stock (quota_left visible)."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Limited',
         position=31
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Last Chance Ticket',
         default_price=Decimal('65.00'),
@@ -1025,32 +908,32 @@ def widget_item_low_stock(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Limited Quota',
         size=3,
     )
     quota.items.add(item)
 
     # Enable "show quota left" on the event
-    widget_event.settings.set('show_quota_left', True)
+    event.settings.set('show_quota_left', True)
 
     return item
 
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_not_yet_available(widget_event):
+def item_not_yet_available(event):
     """Create an item that is not yet available (future available_from)."""
     from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Coming Soon',
         position=32
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Future Ticket',
         default_price=Decimal('45.00'),
@@ -1060,7 +943,7 @@ def widget_item_not_yet_available(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Future Quota',
         size=100,
     )
@@ -1075,7 +958,7 @@ def widget_item_not_yet_available(widget_event):
 
 @pytest.fixture
 @scopes_disabled()
-def widget_item_with_picture(widget_event):
+def item_with_picture(event):
     """Create an item with a product picture."""
     from pretix.base.models import ItemCategory
     from django.core.files.uploadedfile import SimpleUploadedFile
@@ -1083,7 +966,7 @@ def widget_item_with_picture(widget_event):
     from PIL import Image as PILImage
 
     category = ItemCategory.objects.create(
-        event=widget_event,
+        event=event,
         name='Gallery Items',
         position=40
     )
@@ -1101,7 +984,7 @@ def widget_item_with_picture(widget_event):
     )
 
     item = Item.objects.create(
-        event=widget_event,
+        event=event,
         category=category,
         name='Art Print',
         default_price=Decimal('35.00'),
@@ -1111,7 +994,7 @@ def widget_item_with_picture(widget_event):
     )
 
     quota = Quota.objects.create(
-        event=widget_event,
+        event=event,
         name='Art Print Quota',
         size=50,
     )
@@ -1144,3 +1027,118 @@ def cross_browser_page(request, playwright):
     page.close()
     context.close()
     browser.close()
+
+
+@pytest.fixture(scope='session', autouse=True)
+def _register_widget_test_view():
+    """
+    Register a test view that serves an HTML page with widget embedded.
+
+    This allows E2E tests to navigate to a real URL instead of using
+    set_content, which causes CORS issues.
+    """
+    from django.http import HttpResponse
+    from django.views import View
+    from django.urls import path
+    from pretix.multidomain import maindomain_urlconf as urls
+
+    class WidgetTestView(View):
+        """Serve HTML page with widget embedded for E2E testing."""
+
+        # Widget attributes that can be passed as query params
+        WIDGET_ATTRS = [
+            'items', 'categories', 'voucher', 'disable-vouchers',
+            'disable-iframe', 'subevent', 'list-type',
+            'display-event-info', 'skip-ssl-check',
+        ]
+
+        def get(self, request, organizer, event):
+            base_url = f"{request.scheme}://{request.get_host()}"
+            event_url = f"{base_url}/{organizer}/{event}/"
+            widget_css = f"{base_url}/{organizer}/{event}/widget/v2.css"
+            widget_js = f"{base_url}/widget/v2.en.js"
+
+            # Build extra attributes from query params
+            extra_attrs = ''
+            for attr in self.WIDGET_ATTRS:
+                val = request.GET.get(attr)
+                if val is not None:
+                    if val == '':
+                        # Boolean attribute (e.g., disable-vouchers)
+                        extra_attrs += f' {attr}'
+                    else:
+                        extra_attrs += f' {attr}="{val}"'
+
+            # Always add skip-ssl-check so iframe checkout works on HTTP
+            if 'skip-ssl-check' not in extra_attrs:
+                extra_attrs += ' skip-ssl-check'
+
+            html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widget Test</title>
+    <link rel="stylesheet" type="text/css" href="{widget_css}" crossorigin>
+  </head>
+  <body>
+    <pretix-widget event="{event_url}"{extra_attrs}></pretix-widget>
+    <script type="text/javascript" src="{widget_js}" async crossorigin></script>
+</body>
+</html>"""
+            resp = HttpResponse(html, content_type='text/html')
+            resp['Content-Security-Policy'] = "script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'"
+            return resp
+
+    class ButtonTestView(View):
+        """Serve HTML page with pretix-button element for E2E testing."""
+
+        def get(self, request, organizer, event):
+            base_url = f"{request.scheme}://{request.get_host()}"
+            event_url = f"{base_url}/{organizer}/{event}/"
+            widget_css = f"{base_url}/{organizer}/{event}/widget/v2.css"
+            widget_js = f"{base_url}/widget/v2.en.js"
+
+            # Build extra attributes from query params
+            extra_attrs = ''
+            for attr in ['items', 'voucher', 'subevent', 'disable-iframe']:
+                val = request.GET.get(attr)
+                if val is not None:
+                    if val == '':
+                        extra_attrs += f' {attr}'
+                    else:
+                        extra_attrs += f' {attr}="{val}"'
+
+            button_text = request.GET.get('button-text', 'Buy tickets!')
+
+            html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test</title>
+    <link rel="stylesheet" type="text/css" href="{widget_css}" crossorigin>
+</head>
+<body>
+    <pretix-button event="{event_url}"{extra_attrs}>{button_text}</pretix-button>
+    <script type="text/javascript" src="{widget_js}" async crossorigin></script>
+</body>
+</html>"""
+            resp = HttpResponse(html, content_type='text/html')
+            resp['Content-Security-Policy'] = "script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'"
+            return resp
+
+    # Add URL patterns
+    test_pattern = path(
+        'widget-test/<str:organizer>/<str:event>/',
+        WidgetTestView.as_view()
+    )
+    button_pattern = path(
+        'button-test/<str:organizer>/<str:event>/',
+        ButtonTestView.as_view()
+    )
+
+    # Insert at beginning of URL patterns
+    if hasattr(urls, 'urlpatterns'):
+        urls.urlpatterns.insert(0, test_pattern)
+        urls.urlpatterns.insert(0, button_pattern)

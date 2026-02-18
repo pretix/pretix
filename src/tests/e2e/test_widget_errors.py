@@ -18,16 +18,15 @@ class TestErrorDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
+        organizer,
+        event,
         widget_page
     ):
         """
         Loading a non-existent event should show an error message.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, 'nonexistent-event')
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, 'nonexistent-event')
 
         # Should show error message
         expect(page.locator(
@@ -38,17 +37,16 @@ class TestErrorDisplay:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
+        organizer,
+        event,
         widget_page
     ):
         """
         Error state should include a link to open the ticket shop
         in a new tab as a fallback.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, 'nonexistent-event')
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, 'nonexistent-event')
 
         # Should show fallback action link
         action_link = page.locator('.pretix-widget-error-action a')
@@ -66,19 +64,18 @@ class TestSoldOutState:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_sold_out,
+        organizer,
+        event,
+        item_sold_out,
         widget_page
     ):
         """
         Items with zero quota should show as unavailable/sold out.
         """
-        item = widget_item_sold_out
+        item = item_sold_out
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
             f'.pretix-widget-item:has-text("{item.name}")')
@@ -93,20 +90,19 @@ class TestSoldOutState:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_sold_out,
+        organizer,
+        event,
+        item_sold_out,
         widget_page
     ):
         """
         Sold out items should show a status message like
         "Sold out" or "Currently unavailable".
         """
-        item = widget_item_sold_out
+        item = item_sold_out
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
             f'.pretix-widget-item:has-text("{item.name}")')

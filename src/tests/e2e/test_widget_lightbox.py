@@ -19,18 +19,17 @@ class TestItemPicture:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_picture,
+        organizer,
+        event,
+        item_with_picture,
         widget_page
     ):
         """Item with picture should display a thumbnail image."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
-            f'.pretix-widget-item:has-text("{widget_item_with_picture.name}")')
+            f'.pretix-widget-item:has-text("{item_with_picture.name}")')
         expect(item_elem).to_be_visible()
 
         # Should have picture element
@@ -41,18 +40,17 @@ class TestItemPicture:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_picture,
+        organizer,
+        event,
+        item_with_picture,
         widget_page
     ):
         """Item picture should have alt text."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
-            f'.pretix-widget-item:has-text("{widget_item_with_picture.name}")')
+            f'.pretix-widget-item:has-text("{item_with_picture.name}")')
 
         img = item_elem.locator('.pretix-widget-item-picture')
         alt = img.get_attribute('alt')
@@ -62,18 +60,17 @@ class TestItemPicture:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_picture,
+        organizer,
+        event,
+        item_with_picture,
         widget_page
     ):
         """Picture should be wrapped in a clickable link."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
-            f'.pretix-widget-item:has-text("{widget_item_with_picture.name}")')
+            f'.pretix-widget-item:has-text("{item_with_picture.name}")')
 
         link = item_elem.locator('.pretix-widget-item-picture-link')
         expect(link).to_be_visible()
@@ -84,18 +81,17 @@ class TestItemPicture:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_picture,
+        organizer,
+        event,
+        item_with_picture,
         widget_page
     ):
         """Item row should have pretix-widget-item-with-picture class."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
-            f'.pretix-widget-item-with-picture:has-text("{widget_item_with_picture.name}")')
+            f'.pretix-widget-item-with-picture:has-text("{item_with_picture.name}")')
         expect(item_elem).to_be_visible()
 
 
@@ -107,18 +103,17 @@ class TestLightbox:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_picture,
+        organizer,
+        event,
+        item_with_picture,
         widget_page
     ):
         """Clicking item picture should open lightbox overlay."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
-            f'.pretix-widget-item:has-text("{widget_item_with_picture.name}")')
+            f'.pretix-widget-item:has-text("{item_with_picture.name}")')
 
         # Click the picture link
         link = item_elem.locator('.pretix-widget-item-picture-link')
@@ -132,18 +127,17 @@ class TestLightbox:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_picture,
+        organizer,
+        event,
+        item_with_picture,
         widget_page
     ):
         """Lightbox should display fullsize image."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
-            f'.pretix-widget-item:has-text("{widget_item_with_picture.name}")')
+            f'.pretix-widget-item:has-text("{item_with_picture.name}")')
         item_elem.locator('.pretix-widget-item-picture-link').click()
 
         # Wait for lightbox
@@ -157,18 +151,17 @@ class TestLightbox:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_picture,
+        organizer,
+        event,
+        item_with_picture,
         widget_page
     ):
         """Lightbox close button should close the overlay."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
-            f'.pretix-widget-item:has-text("{widget_item_with_picture.name}")')
+            f'.pretix-widget-item:has-text("{item_with_picture.name}")')
         item_elem.locator('.pretix-widget-item-picture-link').click()
 
         # Wait for lightbox to appear
@@ -187,18 +180,17 @@ class TestLightbox:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_picture,
+        organizer,
+        event,
+        item_with_picture,
         widget_page
     ):
         """Lightbox dialog should have role='alertdialog'."""
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
-            f'.pretix-widget-item:has-text("{widget_item_with_picture.name}")')
+            f'.pretix-widget-item:has-text("{item_with_picture.name}")')
         item_elem.locator('.pretix-widget-item-picture-link').click()
 
         page.wait_for_timeout(1000)

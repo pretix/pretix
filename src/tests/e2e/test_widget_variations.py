@@ -19,9 +19,9 @@ class TestProductVariations:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """
@@ -29,10 +29,9 @@ class TestProductVariations:
 
         Variations should be collapsed by default with a button to expand them.
         """
-        item, variations = widget_item_with_variations
+        item, variations = item_with_variations
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         # Should show item name
         expect(page.locator(f'text="{item.name}"')).to_be_visible()
@@ -46,9 +45,9 @@ class TestProductVariations:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """
@@ -56,10 +55,9 @@ class TestProductVariations:
 
         After expanding, all variation options should be visible.
         """
-        item, variations = widget_item_with_variations
+        item, variations = item_with_variations
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         # Expand variations
         widget_page.expand_variations(item.name)
@@ -75,16 +73,15 @@ class TestProductVariations:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """Clicking toggle again should collapse variations."""
-        item, variations = widget_item_with_variations
+        item, variations = item_with_variations
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(f'.pretix-widget-item:has-text("{item.name}")')
         toggle_btn = item_elem.locator('button:has-text("variants"), button:has-text("Show variants")')
@@ -111,9 +108,9 @@ class TestProductVariations:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """
@@ -121,17 +118,16 @@ class TestProductVariations:
 
         When variations have different prices, should display range like "$20 - $30".
         """
-        item, variations = widget_item_with_variations
+        item, variations = item_with_variations
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         # Should show price range
         # Variations go from $20 to $30
         item_elem = page.locator(f'.pretix-widget-item:has-text("{item.name}")')
 
         # Look for price range indicators
-        # Format is "USD 20.00 – 30.00" in the main item's price box (first one)
+        # Format is "EUR 20.00 – 30.00" in the main item's price box (first one)
         price_box = item_elem.locator('.pretix-widget-pricebox').first
         expect(price_box).to_contain_text('20.00')
         expect(price_box).to_contain_text('30.00')
@@ -140,9 +136,9 @@ class TestProductVariations:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """
@@ -150,10 +146,9 @@ class TestProductVariations:
 
         After expanding variations, each should have its own quantity selector.
         """
-        item, variations = widget_item_with_variations
+        item, variations = item_with_variations
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         # Expand variations
         widget_page.expand_variations(item.name)
@@ -171,9 +166,9 @@ class TestProductVariations:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """
@@ -181,10 +176,9 @@ class TestProductVariations:
 
         When expanded, variations should display their specific prices.
         """
-        item, variations = widget_item_with_variations
+        item, variations = item_with_variations
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         # Expand variations
         widget_page.expand_variations(item.name)
@@ -216,16 +210,15 @@ class TestVariationSubmission:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_with_variations,
+        organizer,
+        event,
+        item_with_variations,
         widget_page
     ):
         """Submitting with a variation selected should open iframe checkout."""
-        item, variations = widget_item_with_variations
+        item, variations = item_with_variations
 
-        widget_page.goto_widget_test_page(live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(live_server_url, organizer.slug, event.slug)
 
         # Expand and select a variation
         widget_page.expand_variations(item.name)

@@ -17,9 +17,9 @@ class TestWaitingList:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_sold_out_with_waitinglist,
+        organizer,
+        event,
+        item_sold_out_with_waitinglist,
         widget_page
     ):
         """
@@ -31,11 +31,10 @@ class TestWaitingList:
         - Item: allow_waitinglist = True
         - Item availability < 100 (sold out)
         """
-        item = widget_item_sold_out_with_waitinglist
+        item = item_sold_out_with_waitinglist
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Find the sold out item
         item_elem = page.locator(
@@ -51,19 +50,18 @@ class TestWaitingList:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_item_sold_out_with_waitinglist,
+        organizer,
+        event,
+        item_sold_out_with_waitinglist,
         widget_page
     ):
         """
         Waiting list link URL should include item ID parameter.
         """
-        item = widget_item_sold_out_with_waitinglist
+        item = item_sold_out_with_waitinglist
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         item_elem = page.locator(
             f'.pretix-widget-item:has-text("{item.name}")')

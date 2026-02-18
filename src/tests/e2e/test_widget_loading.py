@@ -19,17 +19,16 @@ class TestLoadingStates:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Loading spinner should be hidden once widget content loads.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Loading spinner should be hidden (display:none)
         loading = page.locator('.pretix-widget-loading')
@@ -39,32 +38,32 @@ class TestLoadingStates:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Widget should fully load within 15 seconds.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug, wait=False)
 
         # Widget should appear within 15s
         page.wait_for_selector('.pretix-widget', timeout=15000)
 
         # Items should be visible within 15s total
         expect(page.locator(
-            f'.pretix-widget-item:has-text("{widget_items[0].name}")'
+            f'.pretix-widget-item:has-text("{items[0].name}")'
         )).to_be_visible(timeout=15000)
 
     def test_no_javascript_errors_on_load(
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
@@ -73,9 +72,8 @@ class TestLoadingStates:
         errors = []
         page.on('pageerror', lambda err: errors.append(str(err)))
 
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # No JS errors should have occurred
         assert len(errors) == 0, f"JavaScript errors: {errors}"
@@ -89,18 +87,17 @@ class TestWidgetReload:
         self,
         page: Page,
         live_server_url: str,
-        widget_organizer,
-        widget_event,
-        widget_items,
+        organizer,
+        event,
+        items,
         widget_page
     ):
         """
         Widget CSS should load and apply styles.
         No SCSS syntax should leak into rendered styles.
         """
-        widget_page.goto_widget_test_page(
-            live_server_url, widget_organizer.slug, widget_event.slug)
-        widget_page.wait_for_widget_load()
+        widget_page.goto(
+            live_server_url, organizer.slug, event.slug)
 
         # Check that widget has actual styled dimensions
         # (not zero-height which would indicate CSS failure)
