@@ -14,8 +14,8 @@ RUN apt-get update && \
             libxslt1-dev \
             locales \
             nginx \
-            python3-virtualenv \
-            python3-dev \
+            python3.11-virtualenv \
+            python3.11-dev \
             sudo \
             supervisor \
             libmaxminddb0 \
