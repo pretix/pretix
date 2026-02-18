@@ -610,6 +610,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'logo_image_large',
         'logo_show_title',
         'og_image',
+        'show_confirm_texts_on_order_detail'
     ]
 
     base_context = {

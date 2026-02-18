@@ -302,6 +302,9 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         )
         ctx = super().get_context_data(**kwargs)
 
+        if self.request.event.settings.show_confirm_texts_on_order_detail:
+            ctx['confirm_messages'] = {f'confirmed_text_{n}': text for n, text in enumerate(self.order.meta_info_data['confirm_messages'])}
+            ctx['show_confirm_texts'] = True
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )

@@ -2272,6 +2272,16 @@ DEFAULTS = {
         'serializer_class': serializers.ListField,
         'serializer_kwargs': lambda: dict(child=I18nField()),
     },
+    'show_confirm_texts_on_order_detail': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show on order details page"),
+            help_text=_("If enabled, the confirmation texts will be displayed on the order detail page after purchase.")
+        )
+    },
     'mail_html_renderer': {
         'default': 'classic',
         'type': str
