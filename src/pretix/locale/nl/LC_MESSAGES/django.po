@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-12 00:00+0000\n"
+"PO-Revision-Date: 2026-02-18 20:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -18454,7 +18454,7 @@ msgstr "Meldingen"
 
 #: pretix/control/navigation.py:392
 msgid "2FA"
-msgstr "tweefactorauthenticatie (2FA)"
+msgstr "Twee-factor-authenticatie (2FA)"
 
 #: pretix/control/navigation.py:397
 msgid "Authorized apps"
