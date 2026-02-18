@@ -83,7 +83,7 @@ from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import (
     SafeEventMultipleChoiceField, multimail_validate,
 )
-from pretix.control.forms.widgets import Select2
+from pretix.control.forms.widgets import Select2, Select2Multiple
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -244,6 +244,12 @@ class SafeOrderPositionChoiceField(forms.ModelChoiceField):
 
     def label_from_instance(self, op):
         return f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})'
+
+
+class SafeOrderPositionMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def __init__(self, queryset, **kwargs):
+        queryset = queryset.model.all.none()
+        super().__init__(queryset, **kwargs)
 
 
 class EventMetaPropertyForm(I18nModelForm):
@@ -845,12 +851,12 @@ class ReusableMediumUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ReusableMedium
-        fields = ['active', 'expires', 'customer', 'linked_giftcard', 'linked_orderposition', 'notes']
+        fields = ['active', 'expires', 'customer', 'linked_giftcard', 'linked_orderpositions', 'notes']
         field_classes = {
             'expires': SplitDateTimeField,
             'customer': SafeModelChoiceField,
             'linked_giftcard': SafeModelChoiceField,
-            'linked_orderposition': SafeOrderPositionChoiceField,
+            'linked_orderpositions': SafeOrderPositionMultipleChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,
@@ -860,8 +866,8 @@ class ReusableMediumUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         organizer = self.instance.organizer
 
-        self.fields['linked_orderposition'].queryset = OrderPosition.all.filter(order__event__organizer=organizer).all()
-        self.fields['linked_orderposition'].widget = Select2(
+        self.fields['linked_orderpositions'].queryset = OrderPosition.all.filter(order__event__organizer=organizer).all()
+        self.fields['linked_orderpositions'].widget = Select2Multiple(
             attrs={
                 'data-model-select2': 'generic',
                 'data-select2-url': reverse('control:organizer.ticket_select2', kwargs={
@@ -869,8 +875,8 @@ class ReusableMediumUpdateForm(forms.ModelForm):
                 }),
             }
         )
-        self.fields['linked_orderposition'].widget.choices = self.fields['linked_orderposition'].choices
-        self.fields['linked_orderposition'].required = False
+        self.fields['linked_orderpositions'].widget.choices = self.fields['linked_orderpositions'].choices
+        self.fields['linked_orderpositions'].required = False
 
         self.fields['linked_giftcard'].queryset = organizer.issued_gift_cards.all()
         self.fields['linked_giftcard'].widget = Select2(
@@ -924,12 +930,12 @@ class ReusableMediumCreateForm(ReusableMediumUpdateForm):
 
     class Meta:
         model = ReusableMedium
-        fields = ['active', 'type', 'identifier', 'expires', 'linked_orderposition', 'linked_giftcard', 'customer', 'notes']
+        fields = ['active', 'type', 'identifier', 'expires', 'linked_orderpositions', 'linked_giftcard', 'customer', 'notes']
         field_classes = {
             'expires': SplitDateTimeField,
             'customer': SafeModelChoiceField,
             'linked_giftcard': SafeModelChoiceField,
-            'linked_orderposition': SafeOrderPositionChoiceField,
+            'linked_orderpositions': SafeOrderPositionMultipleChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,
