@@ -379,7 +379,7 @@ class CustomEmail(EmailMultiAlternatives):
         return super()._create_mime_attachment(content, mimetype)
 
 
-@app.task(base=TransactionAwareTask, bind=True, acks_late=True)
+@app.task(base=TransactionAwareTask, bind=True, acks_late=True, rate_limit=settings.EMAIL_TASK_RATE_LIMIT)
 def mail_send_task(self, **kwargs) -> bool:
     if "outgoing_mail" in kwargs:
         outgoing_mail = kwargs.get("outgoing_mail")
