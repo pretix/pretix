@@ -509,7 +509,6 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.valid_if_pending.set': _('The order has been set to be usable before it is paid.'),
     'pretix.event.order.valid_if_pending.unset': _('The order has been set to require payment before use.'),
     'pretix.event.order.expired': _('The order has been marked as expired.'),
-    'pretix.event.order.paid': _('The order has been marked as paid.'),
     'pretix.event.order.cancellationrequest.deleted': _('The cancellation request has been deleted.'),
     'pretix.event.order.refunded': _('The order has been refunded.'),
     'pretix.event.order.reactivated': _('The order has been reactivated.'),
@@ -541,7 +540,7 @@ def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, bl
     'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
                                               'toggled.'),
     'pretix.event.order.checkin_text': _('The order\'s check-in text has been changed.'),
-    'pretix.event.order.pretix.event.order.valid_if_pending': _('The order\'s flag to be considered valid even if '
+    'pretix.event.order.valid_if_pending': _('The order\'s flag to be considered valid even if '
                                                                 'unpaid has been toggled.'),
     'pretix.event.order.payment.changed': _('A new payment {local_id} has been started instead of the previous one.'),
     'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
@@ -581,6 +580,21 @@ class CoreOrderLogEntryType(OrderLogEntryType):
     pass
 
 
+@log_entry_types.new()
+class OrderPaidLogEntryType(CoreOrderLogEntryType):
+    action_type = 'pretix.event.order.paid'
+    plain = _('The order has been marked as paid.')
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "provider": {"type": ["null", "string"], "shred": False, },
+            "info": {"type": ["null", "string", "object"], "shred": True, },
+            "date": {"type": ["null", "string"], "shred": False, },
+            "force": {"type": "boolean", "shred": False, },
+        },
+    }
+
+
 @log_entry_types.new_from_dict({
     'pretix.voucher.added': _('The voucher has been created.'),
     'pretix.voucher.sent': _('The voucher has been sent to {recipient}.'),
@@ -592,13 +606,63 @@ class CoreOrderLogEntryType(OrderLogEntryType):
     'pretix.voucher.added.waitinglist': _('The voucher has been assigned to {email} through the waiting list.'),
 })
 class CoreVoucherLogEntryType(VoucherLogEntryType):
-    pass
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "item": {"type": ["null", "number"], "shred": False, },
+            "variation": {"type": ["null", "number"], "shred": False, },
+            "tag": {"type": "string", "shred": False,},
+            "block_quota": {"type": "boolean", "shred": False, },
+            "valid_until": {"type": ["null", "string"], "shred": False, },
+            "min_usages": {"type": "number", "shred": False, },
+            "max_usages": {"type": "number", "shred": False, },
+            "subevent": {"type": ["null", "number", "object"], "shred": False, },
+            "source": {"type": "string", "shred": False,},
+            "allow_ignore_quota": {"type": "boolean", "shred": False, },
+            "code": {"type": "string", "shred": False,},
+            "comment": {"type": "string", "shred": True,},
+            "price_mode": {"type": "string", "shred": False,},
+            "seat": {"type": "string", "shred": False,},
+            "quota": {"type": ["null", "number"], "shred": False,},
+            "value": {"type": ["null", "string"], "shred": False,},
+            "redeemed": {"type": "number", "shred": False,},
+            "all_addons_included": {"type": "boolean", "shred": False, },
+            "all_bundles_included": {"type": "boolean", "shred": False, },
+            "budget": {"type": ["null", "number"], "shred": False, },
+            "itemvar": {"type": "string", "shred": False,},
+            "show_hidden_items": {"type": "boolean", "shred": False, },
+
+            # bulk create:
+            "bulk": {"type": "boolean", "shred": False,},
+            "seats": {"type": "array", "shred": False,},
+            "send": {"type": ["string", "boolean"], "shred": False,},
+            "send_recipients": {"type": "array", "shred": True,},
+            "send_subject": {"type": "string", "shred": False,},
+            "send_message": {"type": "string", "shred": True,},
+
+            # pretix.voucher.sent
+            "recipient": {"type": "string", "shred": True,},
+            "name": {"type": "string", "shred": True,},
+            "subject": {"type": "string", "shred": False,},
+            "message": {"type": "string", "shred": True,},
+
+            # pretix.voucher.added.waitinglist
+            "email": {"type": "string", "shred": True,},
+            "waitinglistentry": {"type": "number", "shred": False, },
+        },
+    }
 
 
 @log_entry_types.new()
 class VoucherRedeemedLogEntryType(VoucherLogEntryType):
     action_type = 'pretix.voucher.redeemed'
     plain = _('The voucher has been redeemed in order {order_code}.')
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "order_code": {"type": "string", "shred": False, },
+        },
+    }
 
     def display(self, logentry, data):
         url = reverse('control:event.order', kwargs={
@@ -641,9 +705,16 @@ class TeamMembershipLogEntryType(LogEntryType):
     'pretix.team.member.removed': _('{user} has been removed from the team.'),
     'pretix.team.invite.created': _('{user} has been invited to the team.'),
     'pretix.team.invite.resent': _('Invite for {user} has been resent.'),
+    'pretix.team.invite.deleted': _('Invite for {user} has been deleted.'),
 })
 class CoreTeamMembershipLogEntryType(TeamMembershipLogEntryType):
-    pass
+    data_schema = {
+        "type": "object",
+        "properties": {
+            "email": {"type": "string", "shred": True, },
+            "user": {"type": "number", "shred": False, },
+        },
+    }
 
 
 @log_entry_types.new()
@@ -852,6 +923,10 @@ class OrganizerPluginStateLogEntryType(LogEntryType):
     'pretix.event.permissions.invited': _('A user has been invited to the event team.'),
     'pretix.event.permissions.changed': _('A user\'s permissions have been changed.'),
     'pretix.event.permissions.deleted': _('A user has been removed from the event team.'),
+    'pretix.event.seats.blocks.changed': _('A seat in the seating plan has been blocked or unblocked.'),
+    'pretix.seatingplan.added': _('A seating plan has been added.'),
+    'pretix.seatingplan.changed': _('A seating plan has been changed.'),
+    'pretix.seatingplan.deleted': _('A seating plan has been deleted.'),
 })
 class CoreEventLogEntryType(EventLogEntryType):
     pass

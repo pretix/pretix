@@ -809,7 +809,7 @@ class SalesChannelViewSet(viewsets.ModelViewSet):
             identifier=serializer.instance.identifier,
         )
         inst.log_action(
-            'pretix.sales_channel.changed',
+            'pretix.saleschannel.changed',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data,

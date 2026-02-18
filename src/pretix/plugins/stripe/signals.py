@@ -31,6 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from paypalhttp import HttpResponse
 
 from pretix.base.forms import SecretKeySettingsField
+from pretix.base.logentrytype_registry import LogEntryType, log_entry_types
 from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
@@ -81,37 +82,36 @@ def html_head_presale(sender, request=None, **kwargs):
         return ""
 
 
-@receiver(signal=logentry_display, dispatch_uid="stripe_logentry_display")
-def pretixcontrol_logentry_display(sender, logentry, **kwargs):
-    if logentry.action_type != 'pretix.plugins.stripe.event':
-        return
+@log_entry_types.new()
+class StripeEvent(LogEntryType):
+    action_type = 'pretix.plugins.stripe.event'
 
-    data = json.loads(logentry.data)
-    event_type = data.get('type')
-    text = None
-    plains = {
-        'charge.succeeded': _('Charge succeeded.'),
-        'charge.refunded': _('Charge refunded.'),
-        'charge.updated': _('Charge updated.'),
-        'charge.pending': _('Charge pending'),
-        'source.chargeable': _('Payment authorized.'),
-        'source.canceled': _('Payment authorization canceled.'),
-        'source.failed': _('Payment authorization failed.')
-    }
+    def display(self, logentry, data):
+        event_type = data.get('type')
+        text = None
+        plains = {
+            'charge.succeeded': _('Charge succeeded.'),
+            'charge.refunded': _('Charge refunded.'),
+            'charge.updated': _('Charge updated.'),
+            'charge.pending': _('Charge pending'),
+            'source.chargeable': _('Payment authorized.'),
+            'source.canceled': _('Payment authorization canceled.'),
+            'source.failed': _('Payment authorization failed.')
+        }
 
-    if event_type in plains:
-        text = plains[event_type]
-    elif event_type == 'charge.failed':
-        text = _('Charge failed. Reason: {}').format(data['data']['object']['failure_message'])
-    elif event_type == 'charge.dispute.created':
-        text = _('Dispute created. Reason: {}').format(data['data']['object']['reason'])
-    elif event_type == 'charge.dispute.updated':
-        text = _('Dispute updated. Reason: {}').format(data['data']['object']['reason'])
-    elif event_type == 'charge.dispute.closed':
-        text = _('Dispute closed. Status: {}').format(data['data']['object']['status'])
+        if event_type in plains:
+            text = plains[event_type]
+        elif event_type == 'charge.failed':
+            text = _('Charge failed. Reason: {}').format(data['data']['object']['failure_message'])
+        elif event_type == 'charge.dispute.created':
+            text = _('Dispute created. Reason: {}').format(data['data']['object']['reason'])
+        elif event_type == 'charge.dispute.updated':
+            text = _('Dispute updated. Reason: {}').format(data['data']['object']['reason'])
+        elif event_type == 'charge.dispute.closed':
+            text = _('Dispute closed. Status: {}').format(data['data']['object']['status'])
 
-    if text:
-        return _('Stripe reported an event: {}').format(text)
+        if text:
+            return _('Stripe reported an event: {}').format(text)
 
 
 settings_hierarkey.add_default('payment_stripe_method_card', True, bool)
