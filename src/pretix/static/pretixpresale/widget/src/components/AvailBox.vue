@@ -86,7 +86,8 @@ function onStep (e: Event) {
 onMounted(() => {
 	// Auto-select first item if single item with no variations
 	if (
-		store.itemnum === 1
+		!store.cartExists
+		&& store.itemnum === 1
 		&& (!store.categories[0]?.items[0]?.has_variations || store.categories[0]?.items[0]?.variations.length < 2)
 		&& !store.hasSeatingPlan
 		&& quantity.value
