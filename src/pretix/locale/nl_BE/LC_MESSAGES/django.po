@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-19 13:40+0000\n"
+"PO-Revision-Date: 2026-02-19 13:43+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -3865,8 +3865,8 @@ msgstr "Datum evenement: {date_range}"
 msgid ""
 "A Peppol participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
-"Het identificatienummer van een Peppol-deelnemer begint altijd met een "
-"voorvoegsel, gevolgd door een dubbelepunt (:)."
+"De ID van een Peppol-deelnemer begint altijd met een prefix, gevolgd door "
+"een dubbelepunt (:)."
 
 #: pretix/base/invoicing/peppol.py:140
 #, python-format
@@ -3874,7 +3874,7 @@ msgid ""
 "The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
-"Het voorvoegsel van de Peppol-deelnemer-ID %(number)s is niet bekend in ons "
+"Het prefix van de Peppol-deelnemer-ID %(number)s is niet bekend in ons "
 "systeem. Neem contact met ons op als u zeker weet dat deze ID correct is."
 
 #: pretix/base/invoicing/peppol.py:144
@@ -3883,10 +3883,13 @@ msgid ""
 "The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"De ID van de Peppol-deelnemer komt niet overeen met de validatieregels voor "
+"het prefix %(number)s. Neem contact met ons op als u zeker weet dat de ID "
+"correct is."
 
 #: pretix/base/invoicing/peppol.py:166
 msgid "The Peppol participant ID is not registered on the Peppol network."
-msgstr ""
+msgstr "De ID is niet geregistreerd op het Peppol-netwerk."
 
 #: pretix/base/invoicing/peppol.py:192
 msgid "Peppol participant ID"
