@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-18 20:00+0000\n"
+"PO-Revision-Date: 2026-02-19 22:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -3080,7 +3080,7 @@ msgstr "Standaard wordt aanmaakdatum van het rapport gebruikt."
 #: pretix/plugins/reports/accountingreport.py:105
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
 msgid "All"
-msgstr "Alle"
+msgstr "Allemaal"
 
 #: pretix/base/exporters/orderlist.py:1364 pretix/control/forms/filter.py:1577
 msgid "Live"
@@ -6412,7 +6412,7 @@ msgstr "verlopen"
 #: pretix/base/models/orders.py:254 pretix/control/forms/filter.py:596
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:65
 msgid "Locale"
-msgstr "Lokalisatie"
+msgstr "Taal"
 
 #: pretix/base/models/orders.py:269 pretix/control/forms/filter.py:607
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
@@ -14660,7 +14660,7 @@ msgstr "Geldige bestellingen"
 
 #: pretix/control/forms/filter.py:224
 msgid "Paid (or canceled with paid fee)"
-msgstr "Betaald (of geannuleerd met betaalde toeslag)"
+msgstr "betaald (of geannuleerd met kosten)"
 
 #: pretix/control/forms/filter.py:225 pretix/control/forms/filter.py:1230
 msgid "Paid or confirmed"
