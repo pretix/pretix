@@ -7,7 +7,7 @@ using Playwright. It integrates Playwright with Django's test infrastructure.
 import os
 import pytest
 from decimal import Decimal
-from datetime import datetime, timezone, timedelta
+from datetime import date, datetime, timezone, timedelta
 from playwright.sync_api import Browser, BrowserContext, Page, expect
 from django_scopes import scopes_disabled
 
@@ -17,6 +17,16 @@ from pretix.base.models import (
 
 # Allow Django ORM operations in async context (required for Playwright integration)
 os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
+
+
+def _future_dt(days=30, hour=10, minute=0):
+    """Build a future UTC datetime with a fixed time-of-day.
+
+    Uses a relative date so tests don't expire, but pins the time
+    component so results are deterministic regardless of when tests run.
+    """
+    d = date.today() + timedelta(days=days)
+    return datetime(d.year, d.month, d.day, hour, minute, tzinfo=timezone.utc)
 
 
 # ============================================================================
@@ -110,8 +120,8 @@ def event(organizer):
         organizer=organizer,
         name='Test Event',
         slug='testevent',
-        date_from=datetime(2026, 6, 1, 10, 0, 0, tzinfo=timezone.utc),
-        date_to=datetime(2026, 6, 1, 18, 0, 0, tzinfo=timezone.utc),
+        date_from=_future_dt(days=30, hour=10),
+        date_to=_future_dt(days=30, hour=18),
         currency='EUR',
         live=True,
         testmode=False,
@@ -656,7 +666,7 @@ def event_series(organizer):
         organizer=organizer,
         name='Concert Series',
         slug='concert-series',
-        date_from=datetime(2026, 6, 1, 19, 0, 0, tzinfo=timezone.utc),
+        date_from=_future_dt(days=30, hour=19),
         has_subevents=True,
         currency='EUR',
         live=True,
@@ -682,7 +692,7 @@ def event_series(organizer):
 
     # Create multiple subevents (dates)
     subevents = []
-    base_date = datetime(2026, 6, 1, 19, 0, 0, tzinfo=timezone.utc)
+    base_date = _future_dt(days=30, hour=19)
 
     for i in range(15):  # Create 15 dates across 2 months
         se = SubEvent.objects.create(
@@ -938,7 +948,7 @@ def item_not_yet_available(event):
         name='Future Ticket',
         default_price=Decimal('45.00'),
         active=True,
-        available_from=datetime(2099, 1, 1, tzinfo=timezone.utc),
+        available_from=_future_dt(days=365),
         available_from_mode='info',  # Show as "not yet available" instead of hiding
     )
 
