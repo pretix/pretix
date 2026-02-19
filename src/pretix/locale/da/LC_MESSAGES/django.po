@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-03 17:12+0000\n"
+"PO-Revision-Date: 2026-02-19 13:40+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -33567,8 +33567,8 @@ msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
 msgstr ""
-"Du har tilføjet ordrer, hvor det er muligt at lave yderligere indstillinger "
-"før du forsætter."
+"For nogle af produkterne i din kurv kan du vælge yderligere muligheder, før "
+"du fortsætter."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:16
 msgid ""
@@ -33581,10 +33581,8 @@ msgid "We're now trying to book these add-ons for you!"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional options for"
-msgstr "Tilkøbsmuligheder for"
+msgstr "Yderligere muligheder for"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:60
 #, fuzzy
@@ -33928,11 +33926,11 @@ msgstr[0] "Du skal vælge præcis én mulighed fra denne kategori."
 msgstr[1] "Du skal vælge %(min_count)s muligheder fra denne kategori."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:26
-#, fuzzy, python-format
+#, python-format
 msgid "You can choose one option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] "Du kan vælge en af følgende muligheder for dette arrangement."
-msgstr[1] "Du kan vælge en af følgende muligheder for dette arrangement."
+msgstr[0] "Du kan vælge én mulighed fra denne kategori."
+msgstr[1] "Du kan vælge op til %(max_count)s muligheder fra denne kategori."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:34
 #, python-format
