@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-12 00:00+0000\n"
+"PO-Revision-Date: 2026-02-19 22:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -14693,7 +14693,7 @@ msgstr "Geldige bestellingen"
 
 #: pretix/control/forms/filter.py:224
 msgid "Paid (or canceled with paid fee)"
-msgstr "Betaald (of geannuleerd met betaalde toeslag)"
+msgstr "betaald (of geannuleerd met kosten)"
 
 #: pretix/control/forms/filter.py:225 pretix/control/forms/filter.py:1230
 msgid "Paid or confirmed"
@@ -21256,7 +21256,7 @@ msgstr "Metadata"
 #: pretix/control/templates/pretixcontrol/event/settings.html:59
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:126
 msgid "Localization"
-msgstr "Lokalisatie"
+msgstr "Taal"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:67
 msgid "Customer and attendee data"
