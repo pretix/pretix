@@ -2012,7 +2012,8 @@ class OrderPayment(models.Model):
             self._send_paid_mail(invoice if transmit_invoice_mail else None, user, mail_text)
             if self.order.event.settings.mail_send_order_paid_attendee:
                 for p in self.order.positions.all():
-                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != self.order.email:
+                    if p.addon_to_id is None and p.attendee_email and (self.order.event.settings.mail_send_order_paid_all_attendees
+                                                                       or p.attendee_email != self.order.email):
                         self._send_paid_mail_attendee(p, user)
 
         if invoice and not transmit_invoice_mail:
