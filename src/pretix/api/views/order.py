@@ -90,7 +90,6 @@ from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
     regenerate_invoice, transmit_invoice,
 )
-from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _order_placed_email,
     _order_placed_email_attendee, approve_order, cancel_order, deny_order,
@@ -439,8 +438,6 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                 return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
             except PaymentException as e:
                 return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-            except SendMailException:
-                pass
 
             return self.retrieve(request, [], **kwargs)
         return Response(
@@ -634,10 +631,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
         order = self.get_object()
         if not order.email:
             return Response({'detail': 'There is no email address associated with this order.'}, status=status.HTTP_400_BAD_REQUEST)
-        try:
-            order.resend_link(user=self.request.user, auth=self.request.auth)
-        except SendMailException:
-            return Response({'detail': _('There was an error sending the mail. Please try again later.')}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+        order.resend_link(user=self.request.user, auth=self.request.auth)
 
         return Response(
             status=status.HTTP_204_NO_CONTENT
@@ -1616,8 +1610,6 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                     )
                 except Quota.QuotaExceededException:
                     pass
-                except SendMailException:
-                    pass
 
             serializer = OrderPaymentSerializer(r, context=serializer.context)
 
@@ -1655,8 +1647,6 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except PaymentException as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-        except SendMailException:
-            pass
         return self.retrieve(request, [], **kwargs)
 
     @action(detail=True, methods=['POST'])

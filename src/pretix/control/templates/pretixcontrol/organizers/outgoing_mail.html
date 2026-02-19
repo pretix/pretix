@@ -1,0 +1,222 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load urlreplace %}
+{% load icon %}
+{% load compress %}
+{% load static %}
+{% block inner %}
+    <h1>
+        {% trans "Outgoing email" %}
+    </h1>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Email details" %}</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-7 col-md-12">
+
+                    <dl class="dl-horizontal">
+                        <dt>{% trans "From" context "email" %}</dt>
+                        <dd>{{ sender }}</dd>
+                        <dt>{% trans "To" context "email" %}</dt>
+                        <dd>{{ mail.to|join:", " }}</dd>
+                        {% if mail.cc %}
+                            <dt>{% trans "Cc" context "email" %}</dt>
+                            <dd>{{ mail.cc|join:", " }}</dd>
+                        {% endif %}
+                        {% if mail.bcc %}
+                            <dt>{% trans "Bcc" context "email" %}</dt>
+                            <dd>{{ mail.bcc|join:", " }}</dd>
+                        {% endif %}
+                        <dt>{% trans "Subject" %}</dt>
+                        <dd>{{ mail.subject }}</dd>
+                        <dt>{% trans "Status" %}</dt>
+                        <dd>
+                            {% if mail.status == "queued" %}
+                                <span class="label label-info">{% icon "clock-o" %} {% trans "queued" %}</span>
+                            {% elif mail.status == "inflight" %}
+                                <span class="label label-info">{% icon "send" %} {% trans "being sent" %}</span>
+                            {% elif mail.status == "awaiting_retry" %}
+                                <span class="label label-warning">{% icon "repeat" %} {% trans "will be retried" %}</span>
+                            {% elif mail.status == "failed" %}
+                                <span class="label label-danger">{% icon "warning" %} {% trans "failed" %}</span>
+                            {% elif mail.status == "bounced" %}
+                                <span class="label label-danger">{% icon "exclamation-circle" %} {% trans "bounced" %}</span>
+                            {% elif mail.status == "withheld" %}
+                                <span class="label label-warning">{% icon "ban" %} {% trans "withheld" %}</span>
+                            {% elif mail.status == "aborted" %}
+                                <span class="label label-danger">{% icon "ban" %} {% trans "aborted" %}</span>
+                            {% elif mail.status == "sent" %}
+                                <span class="label label-success">{% icon "check" %} {% trans "sent" %}</span>
+                            {% endif %}
+                        </dd>
+                        <dt>{% trans "Creation" %}</dt>
+                        <dd>{{ mail.created|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                        {% if mail.sent %}
+                            <dt>{% trans "Sent" %}</dt>
+                            <dd>{{ mail.sent|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                        {% endif %}
+                        {% if mail.retry_after and mail.status == "awaiting_retry" %}
+                            <dt>{% trans "Next attempt (estimate)" %}</dt>
+                            <dd>{{ mail.retry_after|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                        {% endif %}
+                        {% if mail.event %}
+                            <dt>{% trans "Event" %}</dt>
+                            <dd>
+                                <a href="{% url "control:event.index" organizer=request.organizer.slug event=mail.event.slug %}">
+                                    {{ mail.event }}
+                                </a>
+                            </dd>
+                        {% endif %}
+                        {% if mail.order %}
+                            <dt>{% trans "Order" %}</dt>
+                            <dd>
+                                <a href="{% url "control:event.order" organizer=request.organizer.slug event=mail.event.slug code=mail.order.code %}">
+                                    {{ mail.order.code }}</a>{% if mail.orderposition %}-
+                                {{ mail.orderposition.positionid }}{% endif %}
+                            </dd>
+                        {% endif %}
+                        {% if mail.customer %}
+                            <dt>{% trans "Customer" %}</dt>
+                            <dd>
+                                {% icon "user fa-fw" %}
+                                <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=mail.customer.identifier %}">
+                                    {{ mail.customer }}
+                                </a>
+                            </dd>
+                        {% endif %}
+                    </dl>
+                </div>
+                {% if mail.actual_attachments %}
+                    <div class="col-lg-5 col-md-12">
+                        <strong>{% trans "Attachments" %}</strong><br>
+                        <ul class="list-unstyled">
+                            {% for a in mail.actual_attachments %}
+                                <li>
+                                    {% if a.type == "text/calendar" %}
+                                        {% icon "calendar-plus-o fa-fw" %}
+                                    {% elif a.type == "application/pdf" %}
+                                        {% icon "file-pdf-o fa-fw" %}
+                                    {% elif "image/" in a.type %}
+                                        {% icon "file-image-o fa-fw" %}
+                                    {% elif "msword" in a.type or "document" in a.type %}
+                                        {% icon "file-word-o fa-fw" %}
+                                    {% elif "excel" in a.type or "spreadsheet" in a.type %}
+                                        {% icon "file-excel-o fa-fw" %}
+                                    {% elif "powerpoint" in a.type or "presentation" in a.type %}
+                                        {% icon "file-powerpoint-o fa-fw" %}
+                                    {% elif "pkpass" in a.type %}
+                                        {% icon "qrcode fa-fw" %}
+                                    {% else %}
+                                        {% icon "file-o fa-fw" %}
+                                    {% endif %}
+                                    {{ a.name }}
+                                    <span class="text-muted">
+                                        ({{ a.size|filesizeformat }})
+                                    </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div>
+        <ul class="nav nav-tabs" role="tablist">
+            {% if mail.is_failed %}
+                <li role="presentation" class="active">
+                    <a href="#tab-error" role="tab" data-toggle="tab">
+                        <span class="fa fa-warning"></span>
+                        {% trans "Error" %}
+                    </a>
+                </li>
+            {% endif %}
+            {% if mail.body_html %}
+                <li role="presentation"
+                    {% if not mail.is_failed %}class="active"{% endif %}>
+                    <a href="#tab-html" role="tab" data-toggle="tab">
+                        <span class="fa fa-eye"></span>
+                        {% trans "HTML content" %}
+                    </a>
+                </li>
+            {% endif %}
+            <li role="presentation"
+                {% if not mail.is_failed and not mail.body_html %}class="active"{% endif %}>
+                <a href="#tab-text" role="tab" data-toggle="tab">
+                    <span class="fa fa-file-text-o"></span>
+                    {% trans "Text content" %}
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#tab-headers" role="tab" data-toggle="tab">
+                    <span class="fa fa-code"></span>
+                    {% trans "Headers" %}
+                </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            {% if mail.is_failed %}
+                <div role="tabpanel" class="tab-pane active" id="tab-error">
+                    <strong>
+                        {{ mail.error }}
+                    </strong>
+                    <pre>{{ mail.error_detail }}</pre>
+                </div>
+            {% endif %}
+            {% if mail.body_html %}
+                <div role="tabpanel"
+                     class="tab-pane {% if not mail.is_failed %}active{% endif %}"
+                     id="tab-html">
+                    {% if mail.sensitive %}
+                        <div class="empty-collection">
+                            <p>
+                                {% icon "eye-slash fa-4x" %}
+                            </p>
+                            <p>
+                                {% blocktrans trimmed %}
+                                    Sensitive content not shown for security reasons
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    {% else %}
+                        {{ data_url|json_script:"mail_body_html" }}
+                    {% endif %}
+                </div>
+            {% endif %}
+            <div role="tabpanel"
+                 class="tab-pane {% if not mail.is_failed and not mail.body_html %}active{% endif %}"
+                 id="tab-text">
+                {% if mail.sensitive %}
+                    <div class="empty-collection">
+                        <p>
+                            {% icon "eye-slash fa-4x" %}
+                        </p>
+                        <p>
+                            {% blocktrans trimmed %}
+                                Sensitive content not shown for security reasons
+                            {% endblocktrans %}
+                        </p>
+                    </div>
+                {% else %}
+                    <pre><code>{{ mail.body_plain }}</code></pre>
+                {% endif %}
+            </div>
+            <div role="tabpanel"
+                 class="tab-pane"
+                 id="tab-headers">
+                <pre><code>{% for k, v in mail.headers.items %}{{ k }}: {{ v }}<br>{% endfor %}</code></pre>
+                <p class="text-muted">
+                    {% trans "Additional headers will be added by the mail server and are not visible here." %}
+                </p>
+            </div>
+        </div>
+
+    </div>
+    {% compress js %}
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/outgoingmail.js" %}"></script>
+    {% endcompress %}
+{% endblock %}

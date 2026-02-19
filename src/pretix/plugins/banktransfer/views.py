@@ -58,7 +58,6 @@ from localflavor.generic.forms import BICFormField, IBANFormField
 
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
-from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.base.templatetags.money import money_filter
 from pretix.control.permissions import (
@@ -160,11 +159,6 @@ class ActionView(View):
             p.confirm(user=self.request.user)
         except Quota.QuotaExceededException:
             pass
-        except SendMailException:
-            return JsonResponse({
-                'status': 'error',
-                'message': _('Problem sending email.')
-            })
         trans.state = BankTransaction.STATE_VALID
         trans.save()
         trans.order.payments.filter(

@@ -25,7 +25,7 @@ from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured
 from django.db import connection, transaction
 from django.db.models import (
-    Aggregate, Expression, F, Field, Lookup, OrderBy, Value,
+    Aggregate, Expression, F, Field, JSONField, Lookup, OrderBy, Value,
 )
 from django.utils.functional import lazy
 
@@ -152,6 +152,19 @@ class NotEqual(Lookup):
         rhs, rhs_params = self.process_rhs(compiler, connection)
         params = lhs_params + rhs_params
         return '%s <> %s' % (lhs, rhs), params
+
+
+@JSONField.register_lookup
+class ContainsString(Lookup):
+    lookup_name = 'containsstring'
+
+    def as_sql(self, compiler, connection):
+        if connection.vendor != "postgresql":
+            raise NotImplementedError("Lookup in JSON Array not supported on this database")
+        lhs, lhs_params = self.process_lhs(compiler, connection)
+        rhs, rhs_params = self.process_rhs(compiler, connection)
+        params = lhs_params + rhs_params
+        return '%s ? %s' % (lhs, rhs), params
 
 
 class PostgresWindowFrame(Expression):

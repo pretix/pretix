@@ -81,6 +81,7 @@ from pretix.helpers.countries import CachedCountries, pycountry_add
 ROUNDING_MODES = (
     ('line', _('Compute taxes for every line individually')),
     ('sum_by_net', _('Compute taxes based on net total')),
+    ('sum_by_net_only_business', _('For business customers, compute taxes based on net total. For individuals, use line-based rounding')),
     ('sum_by_net_keep_gross', _('Compute taxes based on net total with stable gross prices')),
     # We could also have sum_by_gross, but we're not aware of any use-cases for it
 )
@@ -2944,6 +2945,28 @@ To set a new password, please click here:
 This link is valid for one day.
 
 If you did not request a new password, please ignore this email.
+
+Best regards,  
+
+Your {organizer} team"""))  # noqa: W291
+    },
+    'mail_subject_customer_security_notice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Changes to your account at {organizer}")),
+    },
+    'mail_text_customer_security_notice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
+
+the following change has been made to your account at {organizer}:
+
+{message}
+
+You can review and change your account settings here:
+
+{url}
+
+If this change was not performed by you, please contact us immediately.
 
 Best regards,  
 

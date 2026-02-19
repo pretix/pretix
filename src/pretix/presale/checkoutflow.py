@@ -1654,11 +1654,6 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         order = Order.objects.get(id=value)
         return self.get_order_url(order)
 
-    def get_error_message(self, exception):
-        if exception.__class__.__name__ == 'SendMailException':
-            return _('There was an error sending the confirmation mail. Please try again later.')
-        return super().get_error_message(exception)
-
     def get_error_url(self):
         return self.get_step_url(self.request)
 

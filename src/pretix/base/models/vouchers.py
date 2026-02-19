@@ -239,7 +239,7 @@ class Voucher(LoggedModel):
         )
     )
     price_mode = models.CharField(
-        verbose_name=_("Price mode"),
+        verbose_name=_("Price effect"),
         max_length=100,
         choices=PRICE_MODES,
         default='none'

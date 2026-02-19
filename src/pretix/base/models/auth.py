@@ -334,27 +334,24 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             return self.email
 
     def send_security_notice(self, messages, email=None):
-        from pretix.base.services.mail import SendMailException, mail
+        from pretix.base.services.mail import mail
 
-        try:
-            with language(self.locale):
-                msg = '- ' + '\n- '.join(str(m) for m in messages)
+        with language(self.locale):
+            msg = '- ' + '\n- '.join(str(m) for m in messages)
 
-            mail(
-                email or self.email,
-                _('Account information changed'),
-                'pretixcontrol/email/security_notice.txt',
-                {
-                    'user': self,
-                    'messages': msg,
-                    'url': build_absolute_uri('control:user.settings')
-                },
-                event=None,
-                user=self,
-                locale=self.locale
-            )
-        except SendMailException:
-            pass  # Already logged
+        mail(
+            email or self.email,
+            _('Account information changed'),
+            'pretixcontrol/email/security_notice.txt',
+            {
+                'user': self,
+                'messages': msg,
+                'url': build_absolute_uri('control:user.settings')
+            },
+            event=None,
+            user=self,
+            locale=self.locale
+        )
 
     def send_confirmation_code(self, session, reason, email=None, state=None):
         """

@@ -372,6 +372,19 @@
                 </article>
             {% endif %}
         {% endfor %}
+
+        {% if c.items_missing %}
+            <div class="product-appendix-row">
+                <p class="text-muted">
+                    {% trans "There are products selected in this add-on category that currently cannot be changed because they are not on sale:" %}
+                </p>
+                <ul class="text-muted">
+                    {% for itemvar, count in c.items_missing.items %}
+                        <li>{{ count }}x {{ itemvar.0 }}{% if itemvar.1 %} – {{ itemvar.1 }}{% endif %}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
     </fieldset>
     {% endwith %}
 {% empty %}

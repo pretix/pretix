@@ -56,7 +56,6 @@ from pretix.base.models import (
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import change_payment_provider
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.celery_app import app
@@ -72,13 +71,10 @@ def notify_incomplete_payment(o: Order):
         email_context = get_email_context(event=o.event, order=o, pending_sum=o.pending_sum)
         email_subject = o.event.settings.mail_subject_order_incomplete_payment
 
-        try:
-            o.send_mail(
-                email_subject, email_template, email_context,
-                'pretix.event.order.email.expire_warning_sent'
-            )
-        except SendMailException:
-            logger.exception('Reminder email could not be sent')
+        o.send_mail(
+            email_subject, email_template, email_context,
+            'pretix.event.order.email.expire_warning_sent'
+        )
 
 
 def cancel_old_payments(order):
@@ -286,9 +282,6 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, regex_match_to_s
         try:
             p.confirm()
         except Quota.QuotaExceededException:
-            # payment confirmed but order status could not be set, no longer problem of this plugin
-            cancel_old_payments(order)
-        except SendMailException:
             # payment confirmed but order status could not be set, no longer problem of this plugin
             cancel_old_payments(order)
         else:

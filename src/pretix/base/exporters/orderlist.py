@@ -651,6 +651,7 @@ class OrderListExporter(MultiSheetListExporter):
             pgettext('address', 'State'),
             _('Voucher'),
             _('Voucher budget usage'),
+            _('Voucher tag'),
             _('Pseudonymization ID'),
             _('Ticket secret'),
             _('Seat ID'),
@@ -769,6 +770,7 @@ class OrderListExporter(MultiSheetListExporter):
                     op.state_for_address or '',
                     op.voucher.code if op.voucher else '',
                     op.voucher_budget_use if op.voucher_budget_use else '',
+                    op.voucher.tag if op.voucher else '',
                     op.pseudonymization_id,
                     op.secret,
                 ]

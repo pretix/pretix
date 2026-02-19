@@ -24,12 +24,13 @@ from smtplib import SMTPResponseException
 
 import pytest
 import responses
+from django.conf import settings
 from django.db import transaction
 from django.test.utils import override_settings
 from django_scopes import scopes_disabled
 from tests.base import SoupTest, extract_form_fields
 
-from pretix.base.models import Event, Organizer, Team, User
+from pretix.base.models import Event, Organizer, OutgoingMail, Team, User
 
 
 @pytest.fixture
@@ -453,3 +454,111 @@ class OrganizerTest(SoupTest):
         self.event1.refresh_from_db()
         assert 'pretix.plugins.banktransfer' not in self.event1.get_plugins()
         assert 'pretix.plugins.stripe' in self.event1.get_plugins()
+
+    def test_outgoing_mails_list_and_detail(self):
+        m1 = OutgoingMail.objects.create(
+            organizer=self.orga1,
+            to=['rightrecipient@example.com'],
+            subject='Test',
+            body_plain='Test',
+            sender='sender@example.com',
+            headers={},
+        )
+        m2 = OutgoingMail.objects.create(
+            organizer=self.orga2,
+            to=['wrongrecipient@example.com'],
+            subject='Test',
+            body_plain='Test',
+            sender='sender@example.com',
+            headers={},
+        )
+        resp = self.client.get('/control/organizer/%s/outgoingmails' % self.orga1.slug)
+        assert resp.status_code == 200
+        assert b"rightrecipient@example.com" in resp.content
+        assert b"wrongrecipient@example.com" not in resp.content
+
+        resp = self.client.get('/control/organizer/%s/outgoingmails?status=queued' % self.orga1.slug)
+        assert resp.status_code == 200
+        assert b"rightrecipient@example.com" in resp.content
+        resp = self.client.get('/control/organizer/%s/outgoingmails?status=sent' % self.orga1.slug)
+        assert resp.status_code == 200
+        assert b"rightrecipient@example.com" not in resp.content
+
+        if 'postgresql' in settings.DATABASES['default']['ENGINE']:
+            resp = self.client.get('/control/organizer/%s/outgoingmails?query=RIGHTrecipient@example.com' % self.orga1.slug)
+            assert resp.status_code == 200
+            assert b"rightrecipient@example.com" in resp.content
+            resp = self.client.get('/control/organizer/%s/outgoingmails?query=wrongrecipient@example.com' % self.orga1.slug)
+            assert resp.status_code == 200
+            assert b"rightrecipient@example.com" not in resp.content
+
+        resp = self.client.get('/control/organizer/%s/outgoingmail/%d/' % (self.orga1.slug, m1.pk))
+        assert resp.status_code == 200
+        assert b"rightrecipient@example.com" in resp.content
+
+        resp = self.client.get('/control/organizer/%s/outgoingmail/%d/' % (self.orga1.slug, m2.pk))
+        assert resp.status_code == 404
+
+    def test_outgoing_mails_retry(self):
+        m1 = OutgoingMail.objects.create(
+            organizer=self.orga1,
+            status=OutgoingMail.STATUS_SENT,
+            to=['rightrecipient@example.com'],
+            subject='Test',
+            body_plain='Test',
+            sender='sender@example.com',
+            headers={},
+        )
+        m2 = OutgoingMail.objects.create(
+            organizer=self.orga1,
+            status=OutgoingMail.STATUS_FAILED,
+            to=['rightrecipient@example.com'],
+            subject='Test',
+            body_plain='Test',
+            sender='sender@example.com',
+            headers={},
+        )
+        resp = self.client.post(
+            '/control/organizer/%s/outgoingmail/bulk_action' % self.orga1.slug,
+            data={
+                "action": "retry",
+                "outgoingmail": [m1.pk, m2.pk]
+            }
+        )
+        assert resp.status_code == 302
+        m1.refresh_from_db()
+        m2.refresh_from_db()
+        assert m1.status == OutgoingMail.STATUS_SENT
+        assert m2.status in (OutgoingMail.STATUS_SENT, OutgoingMail.STATUS_QUEUED)
+
+    def test_outgoing_mails_abort(self):
+        m1 = OutgoingMail.objects.create(
+            organizer=self.orga1,
+            status=OutgoingMail.STATUS_SENT,
+            to=['rightrecipient@example.com'],
+            subject='Test',
+            body_plain='Test',
+            sender='sender@example.com',
+            headers={},
+        )
+        m2 = OutgoingMail.objects.create(
+            organizer=self.orga1,
+            status=OutgoingMail.STATUS_QUEUED,
+            to=['rightrecipient@example.com'],
+            subject='Test',
+            body_plain='Test',
+            sender='sender@example.com',
+            headers={},
+        )
+        resp = self.client.post(
+            '/control/organizer/%s/outgoingmail/bulk_action' % self.orga1.slug,
+            data={
+                "action": "abort",
+                "__ALL": "on",
+            }
+        )
+        assert resp.status_code == 302
+        m1.refresh_from_db()
+        m2.refresh_from_db()
+        assert m1.status == OutgoingMail.STATUS_SENT
+        assert m2.status == OutgoingMail.STATUS_ABORTED

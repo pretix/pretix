@@ -41,7 +41,6 @@ from hijack import signals
 
 from pretix.base.auth import get_auth_backends
 from pretix.base.models import User
-from pretix.base.services.mail import SendMailException
 from pretix.control.forms.filter import UserFilterForm
 from pretix.control.forms.users import UserEditForm
 from pretix.control.permissions import AdministratorPermissionRequiredMixin
@@ -139,11 +138,7 @@ class UserResetView(AdministratorPermissionRequiredMixin, RecentAuthenticationRe
 
     def post(self, request, *args, **kwargs):
         self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
-        try:
-            self.object.send_password_reset()
-        except SendMailException:
-            messages.error(request, _('There was an error sending the mail. Please try again later.'))
-            return redirect(self.get_success_url())
+        self.object.send_password_reset()
 
         self.object.log_action('pretix.control.auth.user.forgot_password.mail_sent',
                                user=request.user)

@@ -103,7 +103,7 @@ from pretix.base.plugins import (
     PLUGIN_LEVEL_ORGANIZER,
 )
 from pretix.base.services.export import multiexport, scheduled_organizer_export
-from pretix.base.services.mail import SendMailException, mail, prefix_subject
+from pretix.base.services.mail import mail, prefix_subject
 from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
@@ -1037,24 +1037,21 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         return ctx
 
     def _send_invite(self, instance):
-        try:
-            mail(
-                instance.email,
-                _('pretix account invitation'),
-                'pretixcontrol/email/invitation.txt',
-                {
-                    'user': self,
-                    'organizer': self.request.organizer.name,
-                    'team': instance.team.name,
-                    'url': build_global_uri('control:auth.invite', kwargs={
-                        'token': instance.token
-                    })
-                },
-                event=None,
-                locale=self.request.LANGUAGE_CODE
-            )
-        except SendMailException:
-            pass  # Already logged
+        mail(
+            instance.email,
+            _('pretix account invitation'),
+            'pretixcontrol/email/invitation.txt',
+            {
+                'user': self,
+                'organizer': self.request.organizer.name,
+                'team': instance.team.name,
+                'url': build_global_uri('control:auth.invite', kwargs={
+                    'token': instance.token
+                })
+            },
+            event=None,
+            locale=self.request.LANGUAGE_CODE
+        )
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
@@ -1670,9 +1667,12 @@ class GiftCardAcceptanceInviteView(OrganizerDetailViewMixin, OrganizerPermission
             active=False,
         )
         self.request.organizer.log_action(
-            'pretix.giftcards.acceptance.acceptor.invited',
-            data={'acceptor': form.cleaned_data['acceptor'].slug,
-                  'reusable_media': form.cleaned_data['reusable_media']},
+            action='pretix.giftcards.acceptance.acceptor.invited',
+            data={
+                'acceptor': form.cleaned_data['acceptor'].slug,
+                'issuer': self.request.organizer.slug,
+                'reusable_media': form.cleaned_data['reusable_media']
+            },
             user=self.request.user
         )
         messages.success(self.request, _('The selected organizer has been invited.'))
@@ -1708,8 +1708,11 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
             ).delete()
             if done:
                 self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.acceptor.removed',
-                    data={'acceptor': request.POST.get("delete_acceptor")},
+                    action='pretix.giftcards.acceptance.acceptor.removed',
+                    data={
+                        'acceptor': request.POST.get("delete_acceptor"),
+                        'issuer': self.request.organizer.slug
+                    },
                     user=request.user
                 )
             messages.success(self.request, _('The selected connection has been removed.'))
@@ -1719,8 +1722,11 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
             ).delete()
             if done:
                 self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.issuer.removed',
-                    data={'issuer': request.POST.get("delete_acceptor")},
+                    action='pretix.giftcards.acceptance.issuer.removed',
+                    data={
+                        'issuer': request.POST.get("delete_acceptor"),
+                        'acceptor': self.request.organizer.slug
+                    },
                     user=request.user
                 )
             messages.success(self.request, _('The selected connection has been removed.'))
@@ -1730,8 +1736,11 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
             ).update(active=True)
             if done:
                 self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.issuer.accepted',
-                    data={'issuer': request.POST.get("accept_issuer")},
+                    action='pretix.giftcards.acceptance.issuer.accepted',
+                    data={
+                        'issuer': request.POST.get("accept_issuer"),
+                        'acceptor': self.request.organizer.slug
+                    },
                     user=request.user
                 )
             messages.success(self.request, _('The selected connection has been accepted.'))
@@ -1837,10 +1846,12 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                         acceptor=request.organizer,
                     )
                     self.object.log_action(
-                        'pretix.giftcards.transaction.manual',
+                        action='pretix.giftcards.transaction.manual',
                         data={
                             'value': value,
-                            'text': request.POST.get('text')
+                            'text': request.POST.get('text'),
+                            'acceptor_id': self.request.organizer.id,
+                            'acceptor_slug': self.request.organizer.slug
                         },
                         user=self.request.user,
                     )
@@ -1889,15 +1900,24 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         messages.success(self.request, _('The gift card has been created and can now be used.'))
         form.instance.issuer = self.request.organizer
         super().form_valid(form)
-        form.instance.transactions.create(
-            acceptor=self.request.organizer,
-            value=form.cleaned_data['value']
+        form.instance.log_action(
+            action='pretix.giftcards.created',
+            user=self.request.user,
         )
-        form.instance.log_action('pretix.giftcards.created', user=self.request.user, data={})
         if form.cleaned_data['value']:
-            form.instance.log_action('pretix.giftcards.transaction.manual', user=self.request.user, data={
-                'value': form.cleaned_data['value']
-            })
+            form.instance.transactions.create(
+                acceptor=self.request.organizer,
+                value=form.cleaned_data['value']
+            )
+            form.instance.log_action(
+                action='pretix.giftcards.transaction.manual',
+                user=self.request.user,
+                data={
+                    'value': form.cleaned_data['value'],
+                    'acceptor_id': self.request.organizer.id,
+                    'acceptor_slug': self.request.organizer.slug
+                }
+            )
         return redirect(reverse(
             'control:organizer.giftcard',
             kwargs={
@@ -1925,7 +1945,11 @@ class GiftCardUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
     def form_valid(self, form):
         messages.success(self.request, _('The gift card has been changed.'))
         super().form_valid(form)
-        form.instance.log_action('pretix.giftcards.modified', user=self.request.user, data=dict(form.cleaned_data))
+        form.instance.log_action(
+            action='pretix.giftcards.modified',
+            user=self.request.user,
+            data=dict(form.cleaned_data)
+        )
         return redirect(reverse(
             'control:organizer.giftcard',
             kwargs={
@@ -3027,6 +3051,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                 locale=self.customer.locale,
                 customer=self.customer,
                 organizer=self.request.organizer,
+                sensitive=True,
             )
             messages.success(
                 self.request,

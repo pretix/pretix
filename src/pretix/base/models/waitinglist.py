@@ -34,7 +34,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import User, Voucher
-from pretix.base.services.mail import SendMailException, mail, render_mail
+from pretix.base.services.mail import mail, render_mail
 from pretix.helpers import OF_SELF
 
 from ...helpers.format import format_map
@@ -272,34 +272,30 @@ class WaitingListEntry(LoggedModel):
         with language(self.locale, self.event.settings.region):
             recipient = self.email
 
-            try:
-                email_content = render_mail(template, context)
-                subject = format_map(subject, context)
-                mail(
-                    recipient, subject, template, context,
-                    self.event,
-                    self.locale,
-                    headers=headers,
-                    sender=sender,
-                    auto_email=auto_email,
-                    attach_other_files=attach_other_files,
-                    attach_cached_files=attach_cached_files,
-                )
-            except SendMailException:
-                raise
-            else:
-                self.log_action(
-                    log_entry_type,
-                    user=user,
-                    auth=auth,
-                    data={
-                        'subject': subject,
-                        'message': email_content,
-                        'recipient': recipient,
-                        'attach_other_files': attach_other_files,
-                        'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
-                    }
-                )
+            email_content = render_mail(template, context)
+            subject = format_map(subject, context)
+            mail(
+                recipient, subject, template, context,
+                self.event,
+                self.locale,
+                headers=headers,
+                sender=sender,
+                auto_email=auto_email,
+                attach_other_files=attach_other_files,
+                attach_cached_files=attach_cached_files,
+            )
+            self.log_action(
+                log_entry_type,
+                user=user,
+                auth=auth,
+                data={
+                    'subject': subject,
+                    'message': email_content,
+                    'recipient': recipient,
+                    'attach_other_files': attach_other_files,
+                    'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
+                }
+            )
 
     @staticmethod
     def clean_itemvar(event, item, variation):

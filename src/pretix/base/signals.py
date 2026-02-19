@@ -944,32 +944,40 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 
 email_filter = EventPluginSignal()
 """
-Arguments: ``message``, ``order``, ``user``
+Arguments: ``message``, ``order``, ``user``, ``outgoing_mail``
 
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
 return a (possibly modified) copy of the message object passed to you.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
+The ``outgoing_mail`` argument will contain the ``OutgoingMail`` model instance. Note that the ``message`` object
+might have newer information if a previous plugin already modified the email.
 If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
 it will be ``None``.
 If the email is associated with a specific user, e.g. a notification email, the ``user`` argument will be passed as
 well, otherwise it will be ``None``.
+
+You can raise ``WithholdMailException`` to prevent the email from being sent, e.g. when implementing rate limiting.
 """
 
 global_email_filter = GlobalSignal()
 """
-Arguments: ``message``, ``order``, ``user``, ``customer``, ``organizer``
+Arguments: ``message``, ``order``, ``user``, ``customer``, ``organizer``, ``outgoing_mail``
 
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
 return a (possibly modified) copy of the message object passed to you.
 
 This signal is called on all events and even if there is no known event. ``sender`` is an event or None.
 The ``message`` argument will contain an ``EmailMultiAlternatives`` object.
+The ``outgoing_mail`` argument will contain the ``OutgoingMail`` model instance. Note that the ``message`` object
+might have newer information if a previous plugin already modified the email.
 If the email is associated with a specific order, the ``order`` argument will be passed as well, otherwise
 it will be ``None``.
 If the email is associated with a specific user, e.g. a notification email, the ``user`` argument will be passed as
 well, otherwise it will be ``None``.
+
+You can raise ``WithholdMailException`` to prevent the email from being sent, e.g. when implementing rate limiting.
 """
 
 

@@ -585,6 +585,7 @@ class MailSettingsForm(SettingsForm):
         help_text=''.join([
             str(_("All emails will be sent to this address as a Bcc copy.")),
             str(_("You can specify multiple recipients separated by commas.")),
+            str(_("Sensitive emails like password resets will not be sent in Bcc.")),
         ]),
         validators=[multimail_validate],
         required=False,
@@ -634,6 +635,16 @@ class MailSettingsForm(SettingsForm):
         required=False,
         widget=I18nMarkdownTextarea,
     )
+    mail_subject_customer_security_notice = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_text_customer_security_notice = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nMarkdownTextarea,
+    )
 
     base_context = {
         'mail_text_customer_registration': ['customer', 'url'],
@@ -642,6 +653,8 @@ class MailSettingsForm(SettingsForm):
         'mail_subject_customer_email_change': ['customer', 'url'],
         'mail_text_customer_reset': ['customer', 'url'],
         'mail_subject_customer_reset': ['customer', 'url'],
+        'mail_text_customer_security_notice': ['customer', 'url', 'message'],
+        'mail_subject_customer_security_notice': ['customer', 'url', 'message'],
     }
 
     def _get_sample_context(self, base_parameters):
@@ -654,6 +667,9 @@ class MailSettingsForm(SettingsForm):
                 self.organizer,
                 'presale:organizer.customer.activate'
             ) + '?token=' + get_random_string(30)
+
+        if 'message' in base_parameters:
+            placeholders['message'] = _('Your password has been changed.')
 
         if 'customer' in base_parameters:
             placeholders['name'] = pgettext_lazy('person_name_sample', 'John Doe')

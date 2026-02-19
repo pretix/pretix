@@ -99,6 +99,15 @@
     }
 }
 
+.product-appendix-row {
+    border-top: 1px solid $table-border-color;
+    border-bottom: 1px solid $table-border-color;
+    padding: 1.25*$line-height-computed 0;
+    & > :last-child {
+        margin-bottom: 0;
+    }
+}
+
 article.item-with-variations {
     margin: 0 -15px;
     padding: 0 15px;

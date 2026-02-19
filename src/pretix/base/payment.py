@@ -1231,8 +1231,8 @@ class ManualPayment(BasePaymentProvider):
     def is_allowed(self, request: HttpRequest, total: Decimal=None):
         return 'pretix.plugins.manualpayment' in self.event.plugins and super().is_allowed(request, total)
 
-    def order_change_allowed(self, order: Order):
-        return 'pretix.plugins.manualpayment' in self.event.plugins and super().order_change_allowed(order)
+    def order_change_allowed(self, order: Order, request=None):
+        return 'pretix.plugins.manualpayment' in self.event.plugins and super().order_change_allowed(order, request)
 
     @property
     def public_name(self):
@@ -1646,6 +1646,14 @@ class GiftCardPayment(BasePaymentProvider):
                     'transaction_id': trans.pk,
                 }
                 payment.confirm(send_mail=not is_early_special_case, generate_invoice=not is_early_special_case)
+                gc.log_action(
+                    action='pretix.giftcards.transaction.payment',
+                    data={
+                        'value': trans.value,
+                        'acceptor_id': self.event.organizer.id,
+                        'acceptor_slug': self.event.organizer.slug
+                    }
+                )
         except PaymentException as e:
             payment.fail(info={'error': str(e)})
             raise e
@@ -1670,6 +1678,15 @@ class GiftCardPayment(BasePaymentProvider):
             'transaction_id': trans.pk,
         }
         refund.done()
+        gc.log_action(
+            action='pretix.giftcards.transaction.refund',
+            data={
+                'value': refund.amount,
+                'acceptor_id': self.event.organizer.id,
+                'acceptor_slug': self.event.organizer.slug,
+                'text': refund.comment,
+            }
+        )
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_free")

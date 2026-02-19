@@ -21,6 +21,7 @@
 #
 from typing import Optional
 
+from django.utils.translation import gettext_lazy as _
 from django_countries.fields import Country
 
 from pretix.base.models import Invoice, InvoiceAddress
@@ -105,6 +106,22 @@ class TransmissionType:
 
     def transmission_info_to_form_data(self, transmission_info: dict) -> dict:
         return transmission_info
+
+    def describe_info(self, transmission_info: dict, country: Country, is_business: bool):
+        form_data = self.transmission_info_to_form_data(transmission_info)
+        data = []
+        visible_field_keys = self.invoice_address_form_fields_visible(country, is_business)
+        for k, f in self.invoice_address_form_fields.items():
+            if k not in visible_field_keys:
+                continue
+            v = form_data.get(k)
+            if v is True:
+                v = _("Yes")
+            elif v is False:
+                v = _("No")
+            if v:
+                data.append((f.label, v))
+        return data
 
     def pdf_watermark(self) -> Optional[str]:
         """

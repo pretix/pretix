@@ -90,7 +90,6 @@ from pretix.base.services.invoices import (
 from pretix.base.services.locking import (
     LOCK_TRUST_WINDOW, LockTimeoutException, lock_objects,
 )
-from pretix.base.services.mail import SendMailException
 from pretix.base.services.memberships import (
     create_membership, validate_memberships_in_order,
 )
@@ -248,6 +247,16 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
                 for gc in position.issued_gift_cards.all():
                     gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
                     gc.transactions.create(value=position.price, order=order, acceptor=order.event.organizer)
+                    gc.log_action(
+                        action='pretix.giftcards.transaction.manual',
+                        user=user,
+                        auth=auth,
+                        data={
+                            'value': position.price,
+                            'acceptor_id': order.event.organizer.id,
+                            'acceptor_slug': order.event.organizer.slug
+                        }
+                    )
                     break
 
                 for m in position.granted_memberships.all():
@@ -438,33 +447,27 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 email_attendee_subject = order.event.settings.mail_subject_order_approved_attendee
 
             email_context = get_email_context(event=order.event, order=order)
-            try:
-                order.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_approved', user,
-                    attach_tickets=True,
-                    attach_ical=order.event.settings.mail_attach_ical and (
-                        not order.event.settings.mail_attach_ical_paid_only or
-                        order.total == Decimal('0.00') or
-                        order.valid_if_pending
-                    ),
-                    invoices=[invoice] if invoice and transmit_invoice_mail else []
-                )
-            except SendMailException:
-                logger.exception('Order approved email could not be sent')
+            order.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.order_approved', user,
+                attach_tickets=True,
+                attach_ical=order.event.settings.mail_attach_ical and (
+                    not order.event.settings.mail_attach_ical_paid_only or
+                    order.total == Decimal('0.00') or
+                    order.valid_if_pending
+                ),
+                invoices=[invoice] if invoice and transmit_invoice_mail else []
+            )
 
             if email_attendees:
                 for p in order.positions.all():
                     if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
                         email_attendee_context = get_email_context(event=order.event, order=order, position=p)
-                        try:
-                            p.send_mail(
-                                email_attendee_subject, email_attendee_template, email_attendee_context,
-                                'pretix.event.order.email.order_approved', user,
-                                attach_tickets=True,
-                            )
-                        except SendMailException:
-                            logger.exception('Order approved email could not be sent to attendee')
+                        p.send_mail(
+                            email_attendee_subject, email_attendee_template, email_attendee_context,
+                            'pretix.event.order.email.order_approved', user,
+                            attach_tickets=True,
+                        )
 
     return order.pk
 
@@ -501,13 +504,10 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
             email_template = order.event.settings.mail_text_order_denied
             email_subject = order.event.settings.mail_subject_order_denied
             email_context = get_email_context(event=order.event, order=order, comment=comment)
-            try:
-                order.send_mail(
-                    email_subject, email_template, email_context,
-                    'pretix.event.order.email.order_denied', user
-                )
-            except SendMailException:
-                logger.exception('Order denied email could not be sent')
+            order.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.order_denied', user
+            )
 
     return order.pk
 
@@ -558,6 +558,15 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                     )
                 else:
                     gc.transactions.create(value=-position.price, order=order, acceptor=order.event.organizer)
+                    gc.log_action(
+                        action='pretix.giftcards.transaction.manual',
+                        user=user,
+                        data={
+                            'value': -position.price,
+                            'acceptor_id': order.event.organizer.id,
+                            'acceptor_slug': order.event.organizer.slug
+                        }
+                    )
 
             for m in position.granted_memberships.all():
                 m.canceled = True
@@ -660,14 +669,11 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 email_template = order.event.settings.mail_text_order_canceled
                 email_subject = order.event.settings.mail_subject_order_canceled
                 email_context = get_email_context(event=order.event, order=order, comment=comment or "")
-                try:
-                    order.send_mail(
-                        email_subject, email_template, email_context,
-                        'pretix.event.order.email.order_canceled', user,
-                        invoices=transmit_invoices_mail,
-                    )
-                except SendMailException:
-                    logger.exception('Order canceled email could not be sent')
+                order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.order_canceled', user,
+                    invoices=transmit_invoices_mail,
+                )
 
     for p in order.payments.filter(state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING)):
         try:
@@ -968,7 +974,7 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
             fee.tax_rule = None  # TODO: deprecate
 
     # Apply rounding to get final total in case no payment fees will be added
-    apply_rounding(event.settings.tax_rounding, event.currency, [*positions, *fees])
+    apply_rounding(event.settings.tax_rounding, address, event.currency, [*positions, *fees])
     total = sum([c.price for c in positions]) + sum([f.value for f in fees])
 
     payments_assigned = Decimal("0.00")
@@ -995,7 +1001,7 @@ def _apply_rounding_and_fees(positions: List[CartPosition], payment_requests: Li
             p['fee'] = pf
 
             # Re-apply rounding as grand total has changed
-            apply_rounding(event.settings.tax_rounding, event.currency, [*positions, *fees])
+            apply_rounding(event.settings.tax_rounding, address, event.currency, [*positions, *fees])
             total = sum([c.price for c in positions]) + sum([f.value for f in fees])
 
             # Re-calculate to_pay as grand total has changed
@@ -1108,46 +1114,40 @@ def _order_placed_email(event: Event, order: Order, email_template, subject_temp
                         log_entry: str, invoice, payments: List[OrderPayment], is_free=False):
     email_context = get_email_context(event=event, order=order, payments=payments)
 
-    try:
-        order.send_mail(
-            subject_template, email_template, email_context,
-            log_entry,
-            invoices=[invoice] if invoice else [],
-            attach_tickets=True,
-            attach_ical=event.settings.mail_attach_ical and (
-                not event.settings.mail_attach_ical_paid_only or
-                is_free or
-                order.valid_if_pending
-            ),
-            attach_other_files=[a for a in [
-                event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-            ] if a],
-        )
-    except SendMailException:
-        logger.exception('Order received email could not be sent')
+    order.send_mail(
+        subject_template, email_template, email_context,
+        log_entry,
+        invoices=[invoice] if invoice else [],
+        attach_tickets=True,
+        attach_ical=event.settings.mail_attach_ical and (
+            not event.settings.mail_attach_ical_paid_only or
+            is_free or
+            order.valid_if_pending
+        ),
+        attach_other_files=[a for a in [
+            event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+        ] if a],
+    )
 
 
 def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosition, email_template, subject_template,
                                  log_entry: str, is_free=False):
     email_context = get_email_context(event=event, order=order, position=position)
 
-    try:
-        position.send_mail(
-            subject_template, email_template, email_context,
-            log_entry,
-            invoices=[],
-            attach_tickets=True,
-            attach_ical=event.settings.mail_attach_ical and (
-                not event.settings.mail_attach_ical_paid_only or
-                is_free or
-                order.valid_if_pending
-            ),
-            attach_other_files=[a for a in [
-                event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-            ] if a],
-        )
-    except SendMailException:
-        logger.exception('Order received email could not be sent to attendee')
+    position.send_mail(
+        subject_template, email_template, email_context,
+        log_entry,
+        invoices=[],
+        attach_tickets=True,
+        attach_ical=event.settings.mail_attach_ical and (
+            not event.settings.mail_attach_ical_paid_only or
+            is_free or
+            order.valid_if_pending
+        ),
+        attach_other_files=[a for a in [
+            event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+        ] if a],
+    )
 
 
 def _perform_order(event: Event, payment_requests: List[dict], position_ids: List[str],
@@ -1476,13 +1476,10 @@ def send_expiry_warnings(sender, **kwargs):
                         email_template = settings.mail_text_order_pending_warning
                         email_subject = settings.mail_subject_order_pending_warning
 
-                    try:
-                        o.send_mail(
-                            email_subject, email_template, email_context,
-                            'pretix.event.order.email.expire_warning_sent'
-                        )
-                    except SendMailException:
-                        logger.exception('Reminder email could not be sent')
+                    o.send_mail(
+                        email_subject, email_template, email_context,
+                        'pretix.event.order.email.expire_warning_sent'
+                    )
 
 
 @receiver(signal=periodic_task)
@@ -1543,14 +1540,11 @@ def send_download_reminders(sender, **kwargs):
                 email_template = event.settings.mail_text_download_reminder
                 email_subject = event.settings.mail_subject_download_reminder
                 email_context = get_email_context(event=event, order=o)
-                try:
-                    o.send_mail(
-                        email_subject, email_template, email_context,
-                        'pretix.event.order.email.download_reminder_sent',
-                        attach_tickets=True
-                    )
-                except SendMailException:
-                    logger.exception('Reminder email could not be sent')
+                o.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.download_reminder_sent',
+                    attach_tickets=True
+                )
 
                 if event.settings.mail_send_download_reminder_attendee:
                     for p in positions:
@@ -1564,14 +1558,11 @@ def send_download_reminders(sender, **kwargs):
                             email_template = event.settings.mail_text_download_reminder_attendee
                             email_subject = event.settings.mail_subject_download_reminder_attendee
                             email_context = get_email_context(event=event, order=o, position=p)
-                            try:
-                                o.send_mail(
-                                    email_subject, email_template, email_context,
-                                    'pretix.event.order.email.download_reminder_sent',
-                                    attach_tickets=True, position=p
-                                )
-                            except SendMailException:
-                                logger.exception('Reminder email could not be sent to attendee')
+                            o.send_mail(
+                                email_subject, email_template, email_context,
+                                'pretix.event.order.email.download_reminder_sent',
+                                attach_tickets=True, position=p
+                            )
 
 
 def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
@@ -1579,13 +1570,10 @@ def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
         email_template = order.event.settings.mail_text_order_changed
         email_context = get_email_context(event=order.event, order=order)
         email_subject = order.event.settings.mail_subject_order_changed
-        try:
-            order.send_mail(
-                email_subject, email_template, email_context,
-                'pretix.event.order.email.order_changed', user, auth=auth, invoices=invoices, attach_tickets=True,
-            )
-        except SendMailException:
-            logger.exception('Order changed email could not be sent')
+        order.send_mail(
+            email_subject, email_template, email_context,
+            'pretix.event.order.email.order_changed', user, auth=auth, invoices=invoices, attach_tickets=True,
+        )
 
 
 class OrderChangeManager:
@@ -1641,6 +1629,7 @@ class OrderChangeManager:
     ChangeValidUntilOperation = namedtuple('ChangeValidUntilOperation', ('position', 'valid_until'))
     AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
     RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
+    ForceRecomputeOperation = namedtuple('ForceRecomputeOperation', tuple())
 
     class AddPositionResult:
         _position: Optional[OrderPosition]
@@ -1804,6 +1793,7 @@ class OrderChangeManager:
         positions = self.order.positions.select_related('item', 'item__tax_rule')
         ia = self._invoice_address
         tax_rules = self._current_tax_rules()
+        self._operations.append(self.ForceRecomputeOperation())
 
         for pos in positions:
             tax_rule = tax_rules.get(pos.pk, pos.tax_rule)
@@ -2094,6 +2084,43 @@ class OrderChangeManager:
                     )
                     item_counts[item] += 1
 
+        # Detect removed add-ons and create RemoveOperations
+        for cp, al in list(current_addons.items()):
+            for k, v in al.items():
+                input_num = input_addons[cp.id].get(k, 0)
+                current_num = len(current_addons[cp].get(k, []))
+                if input_num < current_num:
+                    for a in current_addons[cp][k][:current_num - input_num]:
+                        if a.canceled:
+                            continue
+                        is_unavailable = (
+                            # If an item is no longer available due to time, it should usually also be no longer
+                            # user-removable, because e.g. the stock has already been ordered.
+                            # We always pass has_voucher=True because if a product now requires a voucher, it usually does
+                            # not mean it should be unremovable for others.
+                            # This also prevents accidental removal through the UI because a hidden product will no longer
+                            # be part of the input.
+                            (a.variation and a.variation.unavailability_reason(has_voucher=True, subevent=a.subevent))
+                            or (a.variation and not a.variation.all_sales_channels and not a.variation.limit_sales_channels.contains(self.order.sales_channel))
+                            or a.item.unavailability_reason(has_voucher=True, subevent=a.subevent)
+                            or (
+                                not a.item.all_sales_channels and
+                                not a.item.limit_sales_channels.contains(self.order.sales_channel)
+                            )
+                        )
+                        if is_unavailable:
+                            # "Re-select" add-on
+                            selected_addons[cp.id, a.item.category_id][a.item_id, a.variation_id] += 1
+                            continue
+                        if a.checkins.filter(list__consider_tickets_used=True).exists():
+                            raise OrderError(
+                                error_messages['addon_already_checked_in'] % {
+                                    'addon': str(a.item.name),
+                                }
+                            )
+                        self.cancel(a)
+                        item_counts[a.item] -= 1
+
         # Check constraints on the add-on combinations
         for op in toplevel_op:
             item = op.item
@@ -2125,41 +2152,6 @@ class OrderChangeManager:
                             'cat': str(iao.addon_category.name),
                         }
                     )
-
-        # Detect removed add-ons and create RemoveOperations
-        for cp, al in list(current_addons.items()):
-            for k, v in al.items():
-                input_num = input_addons[cp.id].get(k, 0)
-                current_num = len(current_addons[cp].get(k, []))
-                if input_num < current_num:
-                    for a in current_addons[cp][k][:current_num - input_num]:
-                        if a.canceled:
-                            continue
-                        is_unavailable = (
-                            # If an item is no longer available due to time, it should usually also be no longer
-                            # user-removable, because e.g. the stock has already been ordered.
-                            # We always pass has_voucher=True because if a product now requires a voucher, it usually does
-                            # not mean it should be unremovable for others.
-                            # This also prevents accidental removal through the UI because a hidden product will no longer
-                            # be part of the input.
-                            (a.variation and a.variation.unavailability_reason(has_voucher=True, subevent=a.subevent))
-                            or (a.variation and not a.variation.all_sales_channels and not a.variation.limit_sales_channels.contains(self.order.sales_channel))
-                            or a.item.unavailability_reason(has_voucher=True, subevent=a.subevent)
-                            or (
-                                not item.all_sales_channels and
-                                not item.limit_sales_channels.contains(self.order.sales_channel)
-                            )
-                        )
-                        if is_unavailable:
-                            continue
-                        if a.checkins.filter(list__consider_tickets_used=True).exists():
-                            raise OrderError(
-                                error_messages['addon_already_checked_in'] % {
-                                    'addon': str(a.item.name),
-                                }
-                            )
-                        self.cancel(a)
-                        item_counts[a.item] -= 1
 
         for item, count in item_counts.items():
             if count == 0:
@@ -2461,6 +2453,16 @@ class OrderChangeManager:
                         ))
                     else:
                         gc.transactions.create(value=-position.price, order=self.order, acceptor=self.order.event.organizer)
+                        gc.log_action(
+                            action='pretix.giftcards.transaction.manual',
+                            user=self.user,
+                            auth=self.auth,
+                            data={
+                                'value': -position.price,
+                                'acceptor_id': self.order.event.organizer.id,
+                                'acceptor_slug': self.order.event.organizer.slug
+                            }
+                        )
 
                 for m in position.granted_memberships.with_usages().all():
                     m.canceled = True
@@ -2478,6 +2480,16 @@ class OrderChangeManager:
                             ))
                         else:
                             gc.transactions.create(value=-opa.position.price, order=self.order, acceptor=self.order.event.organizer)
+                            gc.log_action(
+                                action='pretix.giftcards.transaction.manual',
+                                user=self.user,
+                                auth=self.auth,
+                                data={
+                                    'value': -opa.position.price,
+                                    'acceptor_id': self.order.event.organizer.id,
+                                    'acceptor_slug': self.order.event.organizer.slug
+                                }
+                            )
 
                     for m in opa.granted_memberships.with_usages().all():
                         m.canceled = True
@@ -2640,6 +2652,10 @@ class OrderChangeManager:
                         except BlockedTicketSecret.DoesNotExist:
                             pass
                 # todo: revoke list handling
+            elif isinstance(op, self.ForceRecomputeOperation):
+                self.order.log_action('pretix.event.order.changed.recomputed', user=self.user, auth=self.auth, data={})
+            else:
+                raise TypeError(f"Unknown operation {type(op)}")
 
         for p in secret_dirty:
             assign_ticket_secret(
@@ -2694,7 +2710,10 @@ class OrderChangeManager:
             fees.append(new_fee)
 
         changed_by_rounding = set(apply_rounding(
-            self.order.tax_rounding_mode, self.event.currency, [p for p in split_positions if not p.canceled] + fees
+            self.order.tax_rounding_mode,
+            self._invoice_address,
+            self.event.currency,
+            [p for p in split_positions if not p.canceled] + fees
         ))
         split_order.total = sum([p.price for p in split_positions if not p.canceled])
 
@@ -2716,7 +2735,10 @@ class OrderChangeManager:
                 fee.delete()
 
             changed_by_rounding |= set(apply_rounding(
-                self.order.tax_rounding_mode, self.event.currency, [p for p in split_positions if not p.canceled] + fees
+                self.order.tax_rounding_mode,
+                self._invoice_address,
+                self.event.currency,
+                [p for p in split_positions if not p.canceled] + fees
             ))
             split_order.total = sum([p.price for p in split_positions if not p.canceled]) + sum([f.value for f in fees])
 
@@ -2833,7 +2855,12 @@ class OrderChangeManager:
         if fee_changed:
             fees = list(self.order.fees.all())
 
-        changed = apply_rounding(self.order.tax_rounding_mode, self.order.event.currency, [*positions, *fees])
+        changed = apply_rounding(
+            self.order.tax_rounding_mode,
+            self._invoice_address,
+            self.order.event.currency,
+            [*positions, *fees]
+        )
         for l in changed:
             if isinstance(l, OrderPosition):
                 l.save(update_fields=[
@@ -3131,7 +3158,10 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
                 customer=order.customer,
                 testmode=order.testmode
             )
-            giftcard.log_action('pretix.giftcards.created', data={})
+            giftcard.log_action(
+                action='pretix.giftcards.created',
+                data={}
+            )
             r = order.refunds.create(
                 order=order,
                 payment=None,
@@ -3269,8 +3299,12 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 
     positions = list(order.positions.all())
     fees = list(order.fees.all())
+    try:
+        ia = order.invoice_address
+    except InvoiceAddress.DoesNotExist:
+        ia = None
     rounding_changed = set(apply_rounding(
-        order.tax_rounding_mode, order.event.currency, [*positions, *[f for f in fees if f.pk != fee.pk]]
+        order.tax_rounding_mode, ia, order.event.currency, [*positions, *[f for f in fees if f.pk != fee.pk]]
     ))
     total_without_fee = sum(c.price for c in positions) + sum(f.value for f in fees if f.pk != fee.pk)
     pending_sum_without_fee = max(Decimal("0.00"), total_without_fee - already_paid)
@@ -3295,7 +3329,7 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
         fee = None
 
     rounding_changed |= set(apply_rounding(
-        order.tax_rounding_mode, order.event.currency, [*positions, *fees]
+        order.tax_rounding_mode, ia, order.event.currency, [*positions, *fees]
     ))
     for l in rounding_changed:
         if isinstance(l, OrderPosition):
@@ -3414,7 +3448,18 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
                     currency=sender.currency, issued_in=p, testmode=order.testmode,
                     expires=sender.organizer.default_gift_card_expiry,
                 )
-                gc.transactions.create(value=p.price - issued, order=order, acceptor=sender.organizer)
+                gc.log_action(
+                    action='pretix.giftcards.created',
+                )
+                trans = gc.transactions.create(value=p.price - issued, order=order, acceptor=sender.organizer)
+                gc.log_action(
+                    action='pretix.giftcards.transaction.manual',
+                    data={
+                        'value': trans.value,
+                        'acceptor_id': order.event.organizer.id,
+                        'acceptor_slug': order.event.organizer.slug
+                    }
+                )
                 any_giftcards = True
                 p.secret = gc.secret
                 p.save(update_fields=['secret'])

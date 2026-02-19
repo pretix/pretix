@@ -148,4 +148,7 @@ def pycountry_add(db, **kw):
             continue
         value = value.lower()
         index = db.indices.setdefault(key, {})
-        index.setdefault(value, set()).add(obj)
+        if key in ["country_code"]:
+            index.setdefault(value, set()).add(obj)
+        else:
+            index[value] = obj

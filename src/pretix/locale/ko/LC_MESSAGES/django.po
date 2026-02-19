@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2025-12-03 23:00+0000\n"
-"Last-Translator: SJang1 <git@sjang.dev>\n"
-"Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
-">\n"
+"PO-Revision-Date: 2026-02-01 21:00+0000\n"
+"Last-Translator: z3rrry <z3rrry@gmail.com>\n"
+"Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/"
+"ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -2283,6 +2283,9 @@ msgid ""
 "contain at least one position of this product. The order totals etc. still "
 "include all products contained in the order."
 msgstr ""
+"아무것도 선택하지 않으면, 모든 상품이 포함됩니다. 상품이 1개 이상 포함되는 "
+"경우에 주문이 포함됩니다. 주문 합계 등에는 주문에 포함된 모든 상품이 "
+"포함됩니다."
 
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:478
@@ -2546,10 +2549,8 @@ msgid "Voucher"
 msgstr "바우처"
 
 #: pretix/base/exporters/orderlist.py:653
-#, fuzzy
-#| msgid "Voucher deleted"
 msgid "Voucher budget usage"
-msgstr "바우처 제거됨"
+msgstr "바우처 예산 사용량"
 
 #: pretix/base/exporters/orderlist.py:654
 msgid "Pseudonymization ID"
@@ -26784,11 +26785,11 @@ msgstr ""
 
 #: pretix/control/views/dashboards.py:114
 msgid "Attendees (ordered)"
-msgstr ""
+msgstr "참가자 (정렬된)"
 
 #: pretix/control/views/dashboards.py:124
 msgid "Attendees (paid)"
-msgstr ""
+msgstr "참가자 (결제된)"
 
 #: pretix/control/views/dashboards.py:136
 #, python-brace-format
