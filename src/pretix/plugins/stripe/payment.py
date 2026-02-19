@@ -118,6 +118,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - UPI: ✗
 # - Netbanking: ✗
 # - TWINT: ✓
+# - Wero: ✓ (No settings UI yet)
 #
 # Bank transfers
 # - ACH Bank Transfer: ✗
@@ -509,6 +510,15 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'before they work properly.'),
                      required=False,
                  )),
+                # Disabled for now, since still in closed Beta and only available to dedicated boarded accounts.
+                # ('method_wero',
+                #  forms.BooleanField(
+                #     label=_('Wero'),
+                #      disabled=self.event.currency not in 'EUR',
+                #      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                #                  'before they work properly.'),
+                #      required=False,
+                #  )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
         if not self.settings.connect_client_id or self.settings.secret_key:
@@ -1946,3 +1956,15 @@ class StripeMobilePay(StripeRedirectMethod):
                 "type": "mobilepay",
             },
         }
+
+
+class StripeWero(StripeRedirectMethod):
+    identifier = 'stripe_wero'
+    verbose_name = _('WERO via Stripe')
+    public_name = 'WERO'
+    method = 'wero'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to European online banking users, whose banking institutions support WERO '
+        'either through their native banking apps or through the WERO wallet app. Please have you app ready.'
+    )
