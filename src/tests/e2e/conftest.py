@@ -30,7 +30,7 @@ def browser_context_args(browser_context_args):
         **browser_context_args,
         "viewport": {"width": 1280, "height": 720},
         "locale": "en-US",
-        "timezone_id": "America/New_York",
+        "timezone_id": "Europe/Berlin",
         # Enable video recording for debugging (optional)
         # "record_video_dir": "test-results/videos/",
     }
@@ -117,7 +117,7 @@ def event(organizer):
         testmode=False,
         plugins='pretix.plugins.banktransfer',
     )
-    event.settings.set('timezone', 'America/New_York')
+    event.settings.set('timezone', 'Europe/Berlin')
     event.settings.set('locale', 'en')
     event.settings.set('locales', ['en'])
     return event
@@ -662,7 +662,7 @@ def event_series(organizer):
         live=True,
         plugins='pretix.plugins.banktransfer',
     )
-    event.settings.set('timezone', 'America/New_York')
+    event.settings.set('timezone', 'Europe/Berlin')
     event.settings.set('locale', 'en')
     event.settings.set('locales', ['en'])
 
