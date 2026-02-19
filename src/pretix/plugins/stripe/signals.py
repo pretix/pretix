@@ -49,7 +49,7 @@ def register_payment_provider(sender, **kwargs):
         StripeMultibanco, StripePayByBank, StripePayPal, StripePromptPay,
         StripePrzelewy24, StripeRevolutPay, StripeSEPADirectDebit,
         StripeSettingsHolder, StripeSofort, StripeSwish, StripeTwint,
-        StripeWeChatPay, StripeWero
+        StripeWeChatPay, StripeWero,
     )
 
     return [
