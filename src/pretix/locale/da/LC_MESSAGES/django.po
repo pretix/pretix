@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-26 13:19+0000\n"
-"PO-Revision-Date: 2026-02-19 13:40+0000\n"
+"PO-Revision-Date: 2026-02-19 22:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
@@ -9117,8 +9117,8 @@ msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
-"Du modtager denne mail, fordi nogen har foretaget en bestilling til {event} "
-"for dig."
+"Du modtager denne e-mail, fordi nogen har foretaget en bestilling til "
+"{event} til dig."
 
 #: pretix/base/services/mail.py:288 pretix/base/services/mail.py:304
 #, python-brace-format
@@ -9130,7 +9130,7 @@ msgstr "Du kan se dine bestillingsdetaljer på følgende url: {orderurl}."
 #: pretix/base/services/mail.py:300
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr "Du modtager denne e-mail fordi du har afgivet bestlling på {event}."
+msgstr "Du modtager denne e-mail, fordi du har afgivet en ordre til {event}."
 
 #: pretix/base/services/mail.py:494
 msgctxt "attachment_filename"
@@ -13131,12 +13131,11 @@ msgid "Click here disable all notifications immediately:"
 msgstr ""
 
 #: pretix/base/templates/pretixbase/email/order_details.html:7
-#, fuzzy
 msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
 msgstr ""
-"Du modtager denne e-mail fordi du har afgivet bestilling på følgende "
+"Du modtager denne e-mail, fordi nogen har tilmeldt dig til følgende "
 "arrangement:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:12
@@ -13156,13 +13155,13 @@ msgid "Contact:"
 msgstr "Kontakt:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-format
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
-msgstr "Du modtager denne e-mail fordi du har afgivet bestlling på {event}."
+msgstr ""
+"Du modtager denne e-mail, fordi du har afgivet en ordre til <strong>%(event)"
+"s</strong>."
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
