@@ -1753,12 +1753,31 @@ class Question(LoggedModel):
                                                           help_text=_(
                                                               'Currently not supported in our apps and during check-in'
                                                           ))
-    valid_file_portrait = models.BooleanField(
-        default=False,
-        verbose_name=_('Validate file to be a portrait'),
-        help_text=_('If checked, files must be images with an aspect ratio of 3:4. This is commonly used for photos '
-                    'printed on badges.')
+    valid_file_ratio = models.CharField(
+        max_length=16,
+        blank=True,
+        null=True,
+        verbose_name=_('Image Validation'),
+        help_text=_('If loaded, the user will be asked to crop the image to this ratio.'),
+        choices=(
+            ('free', _('Free cropping')),
+            ('3:4', _('Portrait (3:4)')),
+            ('1:1', _('Square (1:1)')),
+            ('4:3', _('Landscape (4:3)')),
+            ('16:9', _('Widescreen (16:9)')),
+        )
     )
+
+    @property
+    def valid_file_portrait(self):
+        return self.valid_file_ratio == "3:4"
+
+    @valid_file_portrait.setter
+    def valid_file_portrait(self, value):
+        if value:
+            self.valid_file_ratio = "3:4"
+        elif self.valid_file_ratio == "3:4":
+            self.valid_file_ratio = None
 
     objects = ScopedManager(organizer='event__organizer')
 
