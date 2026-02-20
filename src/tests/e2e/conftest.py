@@ -127,6 +127,7 @@ def event(organizer):
         testmode=False,
         plugins='pretix.plugins.banktransfer',
     )
+    event.set_defaults()
     event.settings.set('timezone', 'Europe/Berlin')
     event.settings.set('locale', 'en')
     event.settings.set('locales', ['en'])
@@ -672,11 +673,11 @@ def event_series(organizer):
         live=True,
         plugins='pretix.plugins.banktransfer',
     )
+    event.set_defaults()
     event.settings.set('timezone', 'Europe/Berlin')
     event.settings.set('locale', 'en')
     event.settings.set('locales', ['en'])
 
-    # Create item + category for the series
     category = ItemCategory.objects.create(
         event=event,
         name='Tickets',
@@ -690,11 +691,10 @@ def event_series(organizer):
         active=True,
     )
 
-    # Create multiple subevents (dates)
     subevents = []
     base_date = _future_dt(days=30, hour=19)
 
-    for i in range(15):  # Create 15 dates across 2 months
+    for i in range(15):
         se = SubEvent.objects.create(
             event=event,
             name=f'Concert Night {i+1}',
@@ -778,6 +778,7 @@ def widget_page(page):
 
             # Find number input within that row
             number_input = item_row.locator('input[type="number"]').first
+            number_input.wait_for(state='visible', timeout=5000)
             if number_input.count() > 0:
                 number_input.fill(str(quantity))
             else:
@@ -805,7 +806,10 @@ def widget_page(page):
 
         def click_buy_button(self):
             """Click the buy/register button."""
-            buy_button = self.page.locator('button:has-text("Buy"), button:has-text("Register")')
+            buy_button = self.page.locator("""
+            .pretix-widget-action button:has-text("Buy"),
+            .pretix-widget-action button:has-text("Register")
+            """)
             buy_button.first.click()
             return self
 
