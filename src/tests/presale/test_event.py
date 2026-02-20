@@ -52,7 +52,7 @@ from tests.testdummy.signals import FoobarSalesChannel
 
 from pretix.base.models import (
     Event, Item, ItemCategory, ItemVariation, Order, Organizer, Quota, Team,
-    User, WaitingListEntry,
+    User, WaitingListEntry, SubEventSessionBlock
 )
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
@@ -354,6 +354,21 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         content = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertLess(content.index('Cool SE'), content.index('Epic SE'))
 
+    def test_subevent_session_block_list_ordering(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Epic SE', date_from=now() + datetime.timedelta(days=1), active=True)
+            SubEventSessionBlock.create(name='Epic SB1', date_from=now() + datetime.timedelta(days=1, hours=3), date_to=now() + datetime.timedelta(days=1,hours=4), subevent=se1)
+            SubEventSessionBlock.create(name='Epic SB2', date_from=now() + datetime.timedelta(days=1, hours=5), date_to=now() + datetime.timedelta(days=1,hours=6), subevent=se1)
+            se2 = self.event.subevents.create(name='Cool SE', date_from=now() + datetime.timedelta(days=2), active=True)
+            SubEventSessionBlock.create(name='Cool SB1', date_from=now() + datetime.timedelta(days=2, hours=7), date_to=now() + datetime.timedelta(days=2, hours=8), subevent=se2)
+
+        self.event.settings.frontpage_subevent_ordering = 'date_ascending'
+        content = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertLess(content.index('Epic SB1'), content.index('Epic SB2'))
+        self.assertLess(content.index('Epic SB1'), content.index('Cool SB1'))
+
     def test_subevent_calendar(self):
         self.event.settings.event_list_type = 'calendar'
         self.event.has_subevents = True
@@ -398,6 +413,18 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertIn("Early-bird", resp.rendered_content)
         resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se2.pk))
         self.assertNotIn("Early-bird", resp.rendered_content)
+
+    def test_subevent_session_blocks(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se1 = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            SubEventSessionBlock.objects.create(name='SB1', date_from=now() + datetime.timedelta(hours=1), date_to=now() + datetime.timedelta(hours=2), subevent=se1)
+            SubEventSessionBlock.objects.create(name='SB2', date_from=now() + datetime.timedelta(hours=3), date_to=now() + datetime.timedelta(hours=4), subevent=se1)
+
+        resp = self.client.get('/%s/%s/%d/' % (self.orga.slug, self.event.slug, se1.pk))
+        self.assertIn("SB1", resp.rendered_content)
+        self.assertIn("SB2", resp.rendered_content)
 
     def test_subevent_disabled(self):
         self.event.has_subevents = True

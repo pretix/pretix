@@ -416,6 +416,15 @@ class Checkin(models.Model):
         null=True, blank=True,
     )
 
+    session_block = models.ForeignKey(
+        'pretixbase.SubEventSessionBlock',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='checkins',
+        verbose_name=_('Session block'),
+    )
+
     # Datetime of checkin, might be different from created if past scans are uploaded
     datetime = models.DateTimeField(default=now)
 

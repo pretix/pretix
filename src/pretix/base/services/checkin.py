@@ -939,7 +939,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
                     raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False,
-                    gate=None):
+                    gate=None, session_block=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -955,6 +955,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     :param datetime: The datetime of the checkin, defaults to now.
     :param simulate: If true, the check-in is not saved.
     :param gate: The gate the check-in was performed at.
+    :param session_block: The subevent session block to perform check-in for, if any.
     """
 
     # !!!!!!!!!
@@ -1135,6 +1136,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     force_sent=force,
                     raw_barcode=raw_barcode,
                     raw_source_type=raw_source_type,
+                    session_block=session_block,
                 )
                 op.order.log_action('pretix.event.checkin', data={
                     'position': op.id,

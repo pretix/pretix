@@ -1824,9 +1824,7 @@ class SubEventSessionBlock(models.Model):
         verbose_name_plural = _("Session blocks")
 
     def __str__(self):
-        if self.name:
-            return f"{self.subevent.name} - {self.name}"
-        return f"{self.subevent.name} - {self.date_from.strftime('%Y-%m-%d %H:%M')}"
+        return f"{self.subevent.name}: [{self.date_from.strftime('%Y-%m-%d %H:%M')} - {self.date_to.strftime('%Y-%m-%d %H:%M') if self.date_to else '...'}]"
 
     def clean(self):
         super().clean()

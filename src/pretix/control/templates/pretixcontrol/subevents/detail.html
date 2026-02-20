@@ -71,12 +71,9 @@
                                                 <div class="col-md-10">
                                                     <span class="fa fa-calendar"></span>
                                                     {% if form.instance.pk %}
-                                                        {{ form.instance.date_from|date:"SHORT_DATETIME_FORMAT" }}
-                                                        {% if form.instance.date_to %}
-                                                            - {{ form.instance.date_to|date:"SHORT_DATETIME_FORMAT" }}
-                                                        {% endif %}
+                                                        Session {{ forloop.counter }}
                                                         {% if form.instance.location %}
-                                                            ({{ form.instance.location }})
+                                                            - {{ form.instance.location }}
                                                         {% endif %}
                                                     {% else %}
                                                         {% trans "New session block" %}

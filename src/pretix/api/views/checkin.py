@@ -449,7 +449,8 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
-                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False):
+                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False,
+                    session_block=None):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -482,6 +483,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         device=device,
         gate=gate,
         nonce=nonce,
+        session_block=session_block,
         forced=force,
     )
     raw_barcode_for_checkin = None
@@ -747,6 +749,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 from_revoked_secret=from_revoked_secret,
                 simulate=simulate,
                 gate=gate,
+                session_block=session_block,
             )
         except RequiredQuestionsError as e:
             return Response({
@@ -910,6 +913,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             canceled_supported=self.request.data.get('canceled_supported', False),
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=True,
+            session_block=self.request.data.get('session_block'),
         )
 
 
@@ -946,6 +950,7 @@ class CheckinRPCRedeemView(views.APIView):
             canceled_supported=True,
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=False,
+            session_block=s.validated_data.get('session_block'),
         )
 
 
