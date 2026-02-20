@@ -1,0 +1,5 @@
+[plugin]
+package = "pretix-sideburn-twilio"
+modules = [ "pretix_twilio_sms" ]
+marketplace_name = "sideburn-twilio"
+
