@@ -791,16 +791,17 @@ class PaypalMethod(BasePaymentProvider):
             any_captures = False
             all_captures_completed = True
             for purchaseunit in pp_captured_order.purchase_units:
-                for capture in purchaseunit.payments.captures:
-                    try:
-                        ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=capture.id)
-                    except ReferencedPayPalObject.MultipleObjectsReturned:
-                        pass
+                if hasattr(purchaseunit, 'payments'):
+                    for capture in purchaseunit.payments.captures:
+                        try:
+                            ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=capture.id)
+                        except ReferencedPayPalObject.MultipleObjectsReturned:
+                            pass
 
-                    if capture.status != 'COMPLETED':
-                        all_captures_completed = False
-                    else:
-                        any_captures = True
+                        if capture.status != 'COMPLETED':
+                            all_captures_completed = False
+                        else:
+                            any_captures = True
             if not (any_captures and all_captures_completed):
                 messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
                                             'soon as the payment completed.'))
