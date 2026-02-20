@@ -19,8 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.db.models import Prefetch
-from django.forms import ChoiceField, EmailField, ValidationError
+from django import forms
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelChoiceField
@@ -35,7 +34,7 @@ from pretix.control.forms.widgets import Select2
 
 
 class WaitingListEntryEditForm(I18nModelForm):
-    itemvar = ChoiceField(
+    itemvar = forms.ChoiceField(
         error_messages={
             'invalid_choice': _("Select a valid choice.")
         }
@@ -116,7 +115,7 @@ class WaitingListEntryEditForm(I18nModelForm):
         cleaned_data = super().clean()
 
         if self.instance.voucher is not None:
-            raise ValidationError(_('A voucher for this waiting list entry was already sent out.'))
+            raise forms.ValidationError(_('A voucher for this waiting list entry was already sent out.'))
 
         itemvar = cleaned_data.get('itemvar')
         if itemvar:
@@ -140,7 +139,7 @@ class WaitingListEntryEditForm(I18nModelForm):
         ]
         field_classes = {
             'subevent': SafeModelChoiceField,
-            'email': EmailField,
+            'email': forms.EmailField,
             'phone': PhoneNumberField,
         }
         widgets = {
