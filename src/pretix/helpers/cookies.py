@@ -49,11 +49,11 @@ def set_cookie_without_samesite(request, response, key, *args, **kwargs):
         response.cookies[key]['Partitioned'] = True
 
         if has_safari_partitioned_bug(useragent):
-            # There may be partitioned cookies set from previous sessions, which override 
+            # There may be partitioned cookies set from previous sessions, which override
             # these non-partitioned ones. Delete these partitioned cookies.
             response.delete_cookie(key)
-            response.cookies[key+":Partitioned"] = response.cookies[key]
-            del(response.cookies[key])
+            response.cookies[key + ":Partitioned"] = response.cookies[key]
+            del response.cookies[key]
 
             # re-set the cookie without Partitioned
             response.set_cookie(key, *args, **kwargs)
