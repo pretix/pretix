@@ -365,7 +365,7 @@ class TeamInviteSerializer(serializers.ModelSerializer):
     def _send_invite(self, instance):
         mail(
             instance.email,
-            _('account invitation'),
+            _('Account invitation'),
             'pretixcontrol/email/invitation.txt',
             {
                 'instance': settings.PRETIX_INSTANCE_NAME,
