@@ -539,6 +539,7 @@ WeChat-Zahlung
 Weiterleitungs-URIs
 Weiterleitungs-URL
 Weiterleitungs-URLs
+WERO
 WhatsApp
 Widget
 Widget-Code

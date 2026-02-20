@@ -473,7 +473,7 @@ def register_default_webhook_events(sender, **kwargs):
         ),
         ParametrizedGiftcardTransactionWebhookEvent(
             'pretix.giftcards.transaction.*',
-            _('Gift card used in transcation'),
+            _('Gift card used in transaction'),
         )
     )
 
