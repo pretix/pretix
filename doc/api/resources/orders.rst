@@ -1723,8 +1723,10 @@ List of all order positions
 
    Returns a list of all order positions within all events of a given organizer (with sufficient access permissions).
 
-   Supported query parameters and output format of this endpoint are identical to the list endpoint within an event,
-   with the exception that the ``pdf_data`` parameter is not supported here.
+   The supported query parameters and output format of this endpoint are almost identical to those of the list endpoint
+   within an event.
+   The only changes are that responses also contain the ``event`` attribute in each result and that the 'pdf_data'
+   parameter is not supported.
 
    **Example request**:
 
