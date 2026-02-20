@@ -73,8 +73,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
-    BlockedTicketSecret, InvoiceAddress, OrderFee, OrderRefund,
-    generate_secret,
+    BlockedTicketSecret, InstallmentPlan, InvoiceAddress, OrderFee,
+    OrderRefund, generate_secret,
 )
 from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
@@ -82,6 +82,7 @@ from pretix.base.payment import GiftCardPayment, PaymentException
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import cart, tickets
+from pretix.base.services.installments import create_installment_plan
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
     invoice_transmission_separately, order_invoice_transmission_separately,
@@ -1086,7 +1087,15 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
             )
 
     if payment_requests and not order.require_approval:
+        installment_payment = None
+        other_payments = []
         for p in payment_requests:
+            if p.get('pay_in_installments'):
+                installment_payment = p
+            else:
+                other_payments.append(p)
+
+        for p in other_payments:
             if not p.get('multi_use_supported') or p['payment_amount'] > Decimal('0.00'):
                 payments.append(order.payments.create(
                     state=OrderPayment.PAYMENT_STATE_CREATED,
@@ -1096,6 +1105,31 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
                     info=json.dumps(p['info_data']),
                     process_initiated=False,
                 ))
+
+        if installment_payment:
+            installment_amount = installment_payment['payment_amount']
+            provider = event.get_payment_providers().get(installment_payment['provider'])
+            if provider and provider.installments_available(installment_amount):
+                installments_count = installment_payment.get('installments_count')
+                if not installments_count or installments_count < 2:
+                    installments_count = provider.settings.get('installments_count', as_type=int, default=3)
+                max_allowed = provider.get_max_installments_for_cart()
+                installments_count = min(installments_count, max_allowed)
+                try:
+                    plan = create_installment_plan(
+                        order,
+                        installment_payment['provider'],
+                        installments_count,
+                        fee=installment_payment.get('fee'),
+                        info_data=installment_payment.get('info_data'),
+                        amount=installment_amount,
+                    )
+                except ValueError as e:
+                    raise OrderError(str(e))
+                else:
+                    payments.append(plan.order.payments.first())
+            else:
+                raise OrderError(_('Installments are not available for the selected payment method.'))
 
     orderpositions = OrderPosition.transform_cart_positions(positions, order)
     order.create_transactions(positions=orderpositions, fees=fees, is_new=True)
@@ -1414,6 +1448,11 @@ def expire_orders(sender, **kwargs):
         Exists(
             OrderFee.objects.filter(order_id=OuterRef('pk'), fee_type=OrderFee.FEE_TYPE_CANCELLATION)
         )
+    ).exclude(
+        # Don't expire orders with active installment plans - remaining payments are scheduled
+        Exists(
+            InstallmentPlan.objects.filter(order_id=OuterRef('pk'), status=InstallmentPlan.STATUS_ACTIVE)
+        )
     ).prefetch_related('event').order_by('event_id')
     for o in qs:
         if o.event_id != event_id:
@@ -1435,6 +1474,11 @@ def send_expiry_warnings(sender, **kwargs):
     for o in Order.objects.filter(
             expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING,
             datetime__lte=now() - timedelta(hours=2), require_approval=False
+    ).exclude(
+        # Don't send expiry warnings for orders with active installment plans
+        Exists(
+            InstallmentPlan.objects.filter(order_id=OuterRef('pk'), status=InstallmentPlan.STATUS_ACTIVE)
+        )
     ).only('pk', 'event_id', 'expires').order_by('event_id'):
 
         lp = o.payments.last()

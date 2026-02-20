@@ -2484,6 +2484,76 @@ You can change your order details and view the status of your order at
 Best regards,  
 Your {event} team"""))  # noqa: W291
     },
+    'mail_text_installment_failed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+unfortunately, your recent installment payment for {event} failed.
+Please update your payment method or retry the payment by {expire_date}
+to avoid cancellation of your order.
+
+Reason: {failure_reason}
+
+You can update your payment method at:
+{url}
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_installment_failed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Payment failed: {code}")),
+    },
+    'mail_text_installment_reminder': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+this is a reminder for your upcoming installment payment for {event}.
+Your payment of {amount} is due on {date}.
+
+You can view the details and status of your installment plan at
+{url}
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_installment_reminder': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Payment reminder: {code}")),
+    },
+    'mail_text_installment_grace_warning': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+this is a final warning regarding your failed installment payment for {event}.
+If we do not receive payment by {expire_date}, your order will be cancelled.
+
+You can resolve this immediately at:
+{url}
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_installment_grace_warning': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Urgent: Payment required for {code}")),
+    },
+    'mail_text_installment_cancelled': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+your order for {event} has been cancelled because we did not receive payment
+for your overdue installment within the grace period.
+
+Any installments already paid will be refunded according to our terms.
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_installment_cancelled': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Order cancelled: {code}")),
+    },
     'mail_attachment_new_order': {
         'default': None,
         'type': File,

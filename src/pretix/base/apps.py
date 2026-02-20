@@ -46,7 +46,7 @@ class PretixBaseConfig(AppConfig):
         from .invoicing import pdf, transmission, email, peppol, national  # NOQA
         from . import notifications  # NOQA
         from . import email  # NOQA
-        from .services import auth, checkin, currencies, datasync, export, mail, tickets, cart, modelimport, orders, invoices, cleanup, update_check, quotas, notifications, vouchers  # NOQA
+        from .services import auth, checkin, currencies, datasync, export, mail, tickets, cart, modelimport, orders, invoices, cleanup, update_check, quotas, notifications, vouchers, installments  # NOQA
         from .models import _transactions  # NOQA
         from django.conf import settings
 
