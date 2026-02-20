@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-20 12:28+0000\n"
+"POT-Creation-Date: 2026-02-20 12:53+0000\n"
 "PO-Revision-Date: 2025-01-04 01:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -716,7 +716,7 @@ msgstr "Hediye kartı"
 #: pretix/api/webhooks.py:476
 #, fuzzy
 #| msgid "Redemptions"
-msgid "Gift card used in transcation"
+msgid "Gift card used in transaction"
 msgstr "Ödeme"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-20 12:28+0000\n"
+"POT-Creation-Date: 2026-02-20 12:53+0000\n"
 "PO-Revision-Date: 2026-01-16 22:00+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -682,7 +682,7 @@ msgstr "Presentkorts kod"
 #: pretix/api/webhooks.py:476
 #, fuzzy
 #| msgid "Gift card transactions"
-msgid "Gift card used in transcation"
+msgid "Gift card used in transaction"
 msgstr "Transaktioner med presentkort"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103

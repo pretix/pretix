@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-20 12:28+0000\n"
+"POT-Creation-Date: 2026-02-20 12:53+0000\n"
 "PO-Revision-Date: 2024-09-23 18:00+0000\n"
 "Last-Translator: Albizuri <oier@puntu.eus>\n"
 "Language-Team: Basque <https://translate.pretix.eu/projects/pretix/pretix/eu/"
@@ -680,7 +680,7 @@ msgstr "Opari-txartelaren kodea"
 #: pretix/api/webhooks.py:476
 #, fuzzy
 #| msgid "Gift card transactions"
-msgid "Gift card used in transcation"
+msgid "Gift card used in transaction"
 msgstr "Opari-txartelaren transakzioak"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103

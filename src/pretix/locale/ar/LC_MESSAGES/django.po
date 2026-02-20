@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-20 12:28+0000\n"
+"POT-Creation-Date: 2026-02-20 12:53+0000\n"
 "PO-Revision-Date: 2025-04-08 18:00+0000\n"
 "Last-Translator: Menaouer Chaabi "
 "<98581961+DerJimno@users.noreply.github.com>\n"
@@ -707,7 +707,7 @@ msgstr "رمز بطاقة الهدية"
 #: pretix/api/webhooks.py:476
 #, fuzzy
 #| msgid "Gift card redemptions"
-msgid "Gift card used in transcation"
+msgid "Gift card used in transaction"
 msgstr "استرداد بطاقة هدية"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
