@@ -1,6 +1,6 @@
 {% load i18n %}{% blocktrans with url=url|safe %}Hello,
 
-you have been invited to a team on pretix, a platform to perform event
+you have been invited to a team on {{ instance }}, a platform to perform event
 ticket sales.
 
 Organizer: {{ organizer }}
@@ -13,5 +13,5 @@ If you do not want to join, you can safely ignore or delete this email.
 
 Best regards,  
 
-Your pretix team
+Your {{ instance }} team
 {% endblocktrans %}
