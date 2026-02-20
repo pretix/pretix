@@ -1175,10 +1175,18 @@ class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnly
 
         perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
 
-        if isinstance(self.request.auth, (TeamAPIToken, Device)) or self.request.user.is_authenticated:
-            qs = qs.filter(
-                order__event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            auth_obj = self.request.auth
+        elif self.request.user.is_authenticated:
+            auth_obj = self.request.user
+        else:
+            raise PermissionDenied()
+
+        qs = qs.filter(
+            order__event__in=auth_obj.get_events_with_permission(perm, request=self.request).filter(
+                organizer=self.request.organizer
             )
+        )
 
         return qs
 
