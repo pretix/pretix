@@ -1,6 +1,6 @@
 {% load i18n %}{% blocktrans with url=url|safe messages=messages|safe %}Hello,
 
-this is to inform you that the account information of your pretix account has been
+this is to inform you that the account information of your {{ instance }} account has been
 changed. In particular, the following changes have been performed:
 
 {{ messages }}
@@ -12,5 +12,5 @@ You can review and change your account settings here:
 {{ url }}
 
 Best regards,  
-Your pretix team
+Your {{ instance }} team
 {% endblocktrans %}

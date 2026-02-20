@@ -176,6 +176,7 @@ def shred(self, event: Event, fileid: str, confirm_code: str, user: int=None, lo
                 _('Data shredding completed'),
                 'pretixbase/email/shred_completed.txt',
                 {
+                    'instance': settings.PRETIX_INSTANCE_NAME,
                     'user': user,
                     'organizer': event.organizer.name,
                     'event': str(event.name),
