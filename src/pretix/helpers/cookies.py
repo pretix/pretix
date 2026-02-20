@@ -47,6 +47,34 @@ def set_cookie_without_samesite(request, response, key, *args, **kwargs):
         # CHIPS
         response.cookies[key]['Partitioned'] = True
 
+        if is_safari(useragent):
+            # Safari currently exhibits a bug where Partitioned cookies (CHIPS) are not
+            # sent back to the originating site after multi-hop cross-site redirects,
+            # breaking SSO login flows in pretix.
+            #
+            # Partitioned cookies were initially introduced in Safari 18.4, removed
+            # again in 18.5 due to a bug, and reintroduced in Safari 26.2, where the
+            # current issue is present.
+            #
+            # Once the Safari issue is fixed, this check should be refined to be
+            # conditional on the affected versions only.
+            #
+            # WebKit issues:
+            #
+            #   - https://bugs.webkit.org/show_bug.cgi?id=292975
+            #   - https://bugs.webkit.org/show_bug.cgi?id=306194
+            #
+            # There may be partitioned cookies set from previous sessions, which override 
+            # these non-partitioned ones. Delete these partionied cookies.
+            response.delete_cookie(key)
+            response.cookies[key+":Partitioned"] = response.cookies[key]
+            del(response.cookies[key])
+
+            # re-set the cookie without Partitioned
+            response.set_cookie(key, *args, **kwargs)
+            response.cookies[key]['samesite'] = 'None'
+            response.cookies[key]['secure'] = is_secure
+
 
 # Based on https://www.chromium.org/updates/same-site/incompatible-clients
 # Copyright 2019 Google LLC.
