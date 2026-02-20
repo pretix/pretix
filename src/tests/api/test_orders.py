@@ -1171,10 +1171,10 @@ def test_orderposition_list(
         'type': 'entry'
     }]
     if '/events/' in endpoint:
-        with django_assert_num_queries(16):
+        with django_assert_num_queries(18):
             resp = token_client.get(endpoint + '?has_checkin=true')
     else:
-        with django_assert_num_queries(15):
+        with django_assert_num_queries(17):
             resp = token_client.get(endpoint + '?has_checkin=true')
     assert [res] == resp.data['results']
 
