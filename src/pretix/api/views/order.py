@@ -1152,9 +1152,9 @@ class OrderPositionViewSetMixin:
             qs = qs.prefetch_related(
                 Prefetch('checkins', queryset=Checkin.objects.select_related("device")),
                 Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
-                'answers', 'answers__options', 'answers__question',
+                'answers', 'answers__options', 'answers__question', 'order__event', 'order__event__organizer'
             ).select_related(
-                'item', 'order', 'order__event', 'order__event__organizer', 'seat'
+                'item', 'order', 'seat'
             )
         return qs
 
