@@ -123,6 +123,15 @@
         {% endif %}
         <div class="clearfix"></div>
     </div>
+        {% if event_logo and event_logo_show_title %}
+            <h2 class="content-header">
+                {{ event.name }}
+                {% if request.event.settings.show_dates_on_frontpage %}
+                    <small>{{ event.get_date_range_display_as_html }}</small>
+                {% endif %}
+            </h2>
+            <hr>
+        {% endif %}
     {% if request.event.testmode %}
         {% if request.sales_channel.type_instance.testmode_supported %}
             <div class="alert alert-warning">
@@ -168,9 +177,8 @@
                 </strong></p>
             </div>
         {% endif %}
-
-
     {% endif %}
+
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags }}"{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} id="error-message"{% endif %}>

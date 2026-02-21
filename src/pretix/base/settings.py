@@ -3158,7 +3158,7 @@ Your {organizer} team"""))  # noqa: W291
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_('Show event title even if a header image is present'),
-            help_text=_('The title will only be shown on the event front page. If no header image is uploaded for the event, but the header image '
+            help_text=_('If no header image is uploaded for the event, but the header image '
                         'from the organizer profile is used, this option will be ignored and the event title will always be shown.'),
         )
     },
