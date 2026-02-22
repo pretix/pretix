@@ -630,9 +630,14 @@ class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, Template
         ])
         self.request.user.update_session_token()
         update_session_auth_hash(self.request, self.request.user)
-        messages.success(request, _('Your emergency codes have been newly generated. Remember to store them in a safe '
-                                    'place in case you lose access to your devices. You will not be able to view them '
-                                    'again here.\n\nYour emergency codes:\n- ' + '\n- '.join(t.token for t in d.token_set.all())))
+        messages.success(
+            request,
+            _('Your emergency codes have been newly generated. Remember to store them in a safe '
+              'place in case you lose access to your devices. You will not be able to view them '
+              'again here.\n\nYour emergency codes:\n{tokens}').format(
+                tokens='- ' + '\n- '.join(t.token for t in d.token_set.all())
+            )
+        )
         return redirect(reverse('control:user.settings.2fa'))
 
 
