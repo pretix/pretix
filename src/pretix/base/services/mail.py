@@ -389,7 +389,7 @@ def mail_send_task(self, **kwargs) -> bool:
         # mail_send_task(self, *, outgoing_mail)
         with scopes_disabled():
             mail_send(**kwargs)
-        return
+        return False
     else:
         raise ValueError("Unknown arguments")
 
@@ -443,15 +443,24 @@ def mail_send_task(self, **kwargs) -> bool:
                         content = ct.file.read()
                         args.append((name, content, ct.type))
                         attach_size += len(content)
-                    except Exception:
+                    except Exception as e:
                         # This sometimes fails e.g. with FileNotFoundError. We haven't been able to figure out
                         # why (probably some race condition with ticket cache invalidation?), so retry later.
                         try:
-                            self.retry(max_retries=5, countdown=60)
+                            logger.exception(f'Could not attach tickets to email {outgoing_mail.guid}, will retry')
+                            retry_after = 60
+                            outgoing_mail.error = "Tickets not ready"
+                            outgoing_mail.error_detail = str(e)
+                            outgoing_mail.sent = now()
+                            outgoing_mail.status = OutgoingMail.STATUS_AWAITING_RETRY
+                            outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
+                            outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after",
+                                                              "actual_attachments"])
+                            self.retry(max_retries=5, countdown=retry_after)
                         except MaxRetriesExceededError:
                             # Well then, something is really wrong, let's send it without attachment before we
                             # don't send at all
-                            logger.exception(f'Could not attach tickets to email {outgoing_mail.guid}')
+                            logger.exception(f'Too many retries attaching tickets to email {outgoing_mail.guid}, skip attachment')
                             pass
 
                 if attach_size * 1.37 < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1024 * 1024:
