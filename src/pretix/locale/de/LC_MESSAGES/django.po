@@ -5,16 +5,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-20 12:53+0000\n"
-"PO-Revision-Date: 2026-01-26 13:49+0000\n"
+"PO-Revision-Date: 2026-02-22 16:36+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/_base_settings.py:87
@@ -648,22 +648,16 @@ msgid "Customer account anonymized"
 msgstr "Kundenkonto anonymisiert"
 
 #: pretix/api/webhooks.py:468
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card added"
-msgstr "Gutscheincode"
+msgstr "Wertgutschein hinzugefügt"
 
 #: pretix/api/webhooks.py:472
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "Gutscheincode"
+msgstr "Wertgutschein geändert"
 
 #: pretix/api/webhooks.py:476
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card used in transaction"
-msgstr "Wertgutschein-Transaktionen"
+msgstr "Wertgutschein in Transaktion verwendet"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1054
@@ -2586,10 +2580,8 @@ msgid "Voucher budget usage"
 msgstr "Verwendetes Gutscheinbudget"
 
 #: pretix/base/exporters/orderlist.py:654
-#, fuzzy
-#| msgid "Voucher tags"
 msgid "Voucher tag"
-msgstr "Gutschein-Tags"
+msgstr "Gutschein-Tag"
 
 #: pretix/base/exporters/orderlist.py:655
 msgid "Pseudonymization ID"
@@ -3407,39 +3399,34 @@ msgid "Street and Number"
 msgstr "Straße und Hausnummer"
 
 #: pretix/base/forms/questions.py:893
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date between {min} and {max}."
-msgstr "Bitte geben Sie einen kürzeren Namen ein."
+msgstr "Bitte geben Sie ein Datum zwischen {min} und {max} ein."
 
 #: pretix/base/forms/questions.py:899
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date no earlier than {min}."
-msgstr "Bitte geben Sie einen gültigen Verkaufskanal ein."
+msgstr "Bitte geben Sie ein Datum ein, das nicht vor dem {min} liegt."
 
 #: pretix/base/forms/questions.py:904
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date no later than {max}."
-msgstr "Bitte geben Sie einen kürzeren Namen ein."
+msgstr "Bitte geben Sie ein Datum ein, das nicht nach dem {max} liegt."
 
 #: pretix/base/forms/questions.py:942
 #, python-brace-format
 msgid "Please enter a date and time between {min} and {max}."
-msgstr ""
+msgstr "Bitte geben Sie einen Zeitpunkt zwischen {min} und {max} ein."
 
 #: pretix/base/forms/questions.py:948
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date and time no earlier than {min}."
-msgstr "Bitte geben Sie einen gültigen Verkaufskanal ein."
+msgstr "Bitte geben Sie einen Zeitpunkt nicht vor {min} ein."
 
 #: pretix/base/forms/questions.py:953
-#, fuzzy, python-brace-format
-#| msgid "Please enter the code of your gift card."
+#, python-brace-format
 msgid "Please enter a date and time no later than {max}."
-msgstr "Bitte geben Sie den Code Ihres Wertgutscheins ein."
+msgstr "Bitte geben Sie einen Zeitpunkt nicht nach {max} ein."
 
 #: pretix/base/forms/questions.py:1172
 msgid ""
@@ -4327,11 +4314,10 @@ msgid "Price effect"
 msgstr "Preisart"
 
 #: pretix/base/modelimport_vouchers.py:150
-#, fuzzy, python-brace-format
-#| msgid "Could not parse {value} as a price mode, use one of {options}."
+#, python-brace-format
 msgid "Could not parse {value} as a price effect, use one of {options}."
 msgstr ""
-"Konnte {value} nicht als Preis-Modus erkennen, verfügbare Optionen: "
+"Konnte {value} nicht als Preismodus zuordnen, verwenden Sie eins von "
 "{options}."
 
 #: pretix/base/modelimport_vouchers.py:160 pretix/base/models/vouchers.py:248
@@ -4339,10 +4325,8 @@ msgid "Voucher value"
 msgstr "Gutscheinwert"
 
 #: pretix/base/modelimport_vouchers.py:165
-#, fuzzy
-#| msgid "It is pointless to set a value without a price mode."
 msgid "It is pointless to set a value without a price effect."
-msgstr "Es ist widersprüchlich, einen Wert ohne einen Preis-Modus zu setzen."
+msgstr "Es ist widersprüchlich, einen Wert ohne einen Preismodus zu setzen."
 
 #: pretix/base/modelimport_vouchers.py:237 pretix/base/models/items.py:2121
 #: pretix/base/models/vouchers.py:275
@@ -6434,46 +6418,41 @@ msgstr "Ende"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:38
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:139
 msgid "queued"
-msgstr ""
+msgstr "wartet"
 
 #: pretix/base/models/mail.py:53
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:40
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:141
 msgid "being sent"
-msgstr ""
+msgstr "wird gesendet"
 
 #: pretix/base/models/mail.py:54
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "awaiting retry"
-msgstr "Wartelisten-Eintrag"
+msgstr "warte auf neuen Versuch"
 
 #: pretix/base/models/mail.py:55
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:48
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:149
 msgid "withheld"
-msgstr ""
+msgstr "zurückgehalten"
 
 #: pretix/base/models/mail.py:57
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:50
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:151
 msgid "aborted"
-msgstr ""
+msgstr "abgebrochen"
 
 #: pretix/base/models/mail.py:58
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:52
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:153
-#, fuzzy
-#| msgctxt "checkin state"
-#| msgid "Present"
 msgid "sent"
-msgstr "Anwesend"
+msgstr "gesendet"
 
 #: pretix/base/models/mail.py:59
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:46
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:147
 msgid "bounced"
-msgstr ""
+msgstr "zurückgekommen"
 
 #: pretix/base/models/memberships.py:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:28
@@ -9882,6 +9861,8 @@ msgid ""
 "For business customers, compute taxes based on net total. For individuals, "
 "use line-based rounding"
 msgstr ""
+"Berechne die Steuern auf Basis der Nettosumme für Geschäftskunden. Berechne "
+"zeilenweise Rundung für Privatkunden"
 
 #: pretix/base/settings.py:85
 msgid "Compute taxes based on net total with stable gross prices"
@@ -12630,30 +12611,12 @@ msgstr ""
 "Das {organizer}-Team"
 
 #: pretix/base/settings.py:2955
-#, fuzzy, python-brace-format
-#| msgid "Activate your account at {organizer}"
+#, python-brace-format
 msgid "Changes to your account at {organizer}"
-msgstr "Aktivieren Sie Ihr Kundenkonto bei {organizer}"
+msgstr "Änderungen an Ihrem Kundenkonto bei {organizer}"
 
 #: pretix/base/settings.py:2959
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {name},\n"
-#| "\n"
-#| "you requested to change the email address of your account at "
-#| "{organizer}!\n"
-#| "\n"
-#| "To confirm the change, please click here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "This link is valid for one day.\n"
-#| "\n"
-#| "If you did not request this, please ignore this email.\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your {organizer} team"
+#, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -12673,17 +12636,17 @@ msgid ""
 msgstr ""
 "Hallo {name},\n"
 "\n"
-"vielen Dank für Ihre Anmeldung für ein Kundenkonto bei {organizer}!\n"
+"die folgende Änderung wurde an Ihrem Kundenkonto bei {organizer} "
+"vorgenommen:\n"
 "\n"
-"Um Ihr Kundenkonto zu aktivieren und ein Passwort zu wählen, klicken Sie "
-"bitte hier:\n"
+"{message}\n"
+"\n"
+"Sie können Ihre Kontoeinstellungen hier ansehen und ändern:\n"
 "\n"
 "{url}\n"
 "\n"
-"Dieser Link ist gültig für einen Tag.\n"
-"\n"
-"Wenn Sie sich nicht selbst angemeldet haben, können Sie diese E-Mail "
-"ignorieren.\n"
+"Wenn diese Änderung nicht von Ihnen vorgenommen wurde, kontaktieren Sie uns "
+"bitte schnellstmöglich.\n"
 "\n"
 "Viele Grüße\n"
 "\n"
@@ -14425,6 +14388,11 @@ msgid ""
 "business customers and consumers do not receive invoices. This can cause the "
 "payment amount to change when the invoice address is changed."
 msgstr ""
+"Wie die vorherige Option, aber nur für Geschäftskunden. Für Privatkunden "
+"wird zeilweise gerundet. Empfohlen, wenn E-Rechnungen nur für "
+"Geschäftskunden relevant sind und Privatkunden keine Rechnungen erhalten. "
+"Dies kann dazu führen, dass sich der Zahlbetrag ändert, wenn die "
+"Rechnungsadresse geändert wird."
 
 #: pretix/control/forms/event.py:876
 msgid ""
@@ -15428,10 +15396,8 @@ msgid "Revoked devices"
 msgstr "Gesperrte Geräte"
 
 #: pretix/control/forms/filter.py:2827 pretix/control/forms/filter.py:2829
-#, fuzzy
-#| msgid "Require email addresses per ticket"
 msgid "Search email address or subject"
-msgstr "E-Mail-Adressen pro Ticket erfordern"
+msgstr "Suche E-Mail-Adresse oder Betreff"
 
 #: pretix/control/forms/global_settings.py:62
 msgid "Additional footer text"
@@ -16675,7 +16641,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:588
 msgid "Sensitive emails like password resets will not be sent in Bcc."
-msgstr ""
+msgstr "Sensitive E-Mails wie Passwort-Resets werden nicht mit Bcc geschickt."
 
 #: pretix/control/forms/organizer.py:598
 msgid "This will be attached to every email."
@@ -17160,10 +17126,8 @@ msgid "A fee has been added"
 msgstr "Eine Gebühr wurde hinzugefügt"
 
 #: pretix/control/logdisplay.py:176
-#, fuzzy
-#| msgid "The new vouchers have been created."
 msgid "Taxes and rounding have been recomputed"
-msgstr "Die neuen Gutscheine wurden erstellt."
+msgstr "Steuern und Rundung wurden neu berechnet"
 
 #: pretix/control/logdisplay.py:184
 #, python-brace-format
@@ -17893,16 +17857,12 @@ msgid "A scheduled export has failed: {reason}."
 msgstr "Ein geplanter Export ist fehlgeschlagen: {reason}."
 
 #: pretix/control/logdisplay.py:708
-#, fuzzy
-#| msgid "The email has been queued to be sent."
 msgid "Failed emails have been scheduled to be retried."
-msgstr "Die E-Mail wurde zum Versenden gespeichert."
+msgstr "Fehlgeschlagene E-Mails wurden für einen neuen Versuch eingeplant."
 
 #: pretix/control/logdisplay.py:709
-#, fuzzy
-#| msgid "The order details have been changed."
 msgid "Queued emails have been aborted."
-msgstr "Die Bestelldetails wurden geändert."
+msgstr "Wartende E-Mails wurden abgebrochen."
 
 #: pretix/control/logdisplay.py:710
 msgid "Gift card acceptance for another organizer has been added."
@@ -18257,16 +18217,12 @@ msgid "A manual transaction has been performed."
 msgstr "Eine manuelle Transaktion wurde durchgeführt."
 
 #: pretix/control/logdisplay.py:804
-#, fuzzy
-#| msgid "This payment has been canceled."
 msgid "A payment has been performed."
-msgstr "Die Zahlung wurde storniert."
+msgstr "Eine Zahlung wurde ausgeführt."
 
 #: pretix/control/logdisplay.py:805
-#, fuzzy
-#| msgid "The refund has been processed."
 msgid "A refund has been performed. "
-msgstr "Die Erstattung wurde verarbeitet."
+msgstr "Eine Erstattung wurde ausgeführt. "
 
 #: pretix/control/logdisplay.py:806
 #, python-brace-format
@@ -18843,10 +18799,8 @@ msgstr "Geräte"
 
 #: pretix/control/navigation.py:683
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:8
-#, fuzzy
-#| msgid "Send out emails"
 msgid "Outgoing emails"
-msgstr "E-Mails verschicken"
+msgstr "E-Mail-Ausgang"
 
 #: pretix/control/permissions.py:72 pretix/control/permissions.py:109
 #: pretix/control/permissions.py:140 pretix/control/permissions.py:157
@@ -26056,10 +26010,8 @@ msgid "Customer account password reset"
 msgstr "Kundenkonto-Passwort zurücksetzen"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:69
-#, fuzzy
-#| msgid "Customer account registration"
 msgid "Customer account security notification"
-msgstr "Kundenkonto-Registrierung"
+msgstr "Sicherheitsnachricht für Kundenkonten"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:5
 msgid "Delete membership type:"
@@ -26105,87 +26057,74 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:10
 msgid "Outgoing email"
-msgstr ""
+msgstr "Ausgehende E-Mail"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:14
-#, fuzzy
-#| msgid "Email settings"
 msgid "Email details"
-msgstr "E-Mail-Einstellungen"
+msgstr "E-Mail-Details"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:21
-#, fuzzy
-#| msgctxt "mail_header"
-#| msgid "From"
 msgctxt "email"
 msgid "From"
-msgstr "Von"
+msgstr "Absender"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:23
 msgctxt "email"
 msgid "To"
-msgstr ""
+msgstr "Empfänger"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:26
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:106
 msgctxt "email"
 msgid "Cc"
-msgstr ""
+msgstr "Cc"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:30
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:109
 msgctxt "email"
 msgid "Bcc"
-msgstr ""
+msgstr "Bcc"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:42
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:143
-#, fuzzy
-#| msgid "You will be refunded"
 msgid "will be retried"
-msgstr "Ihre Erstattung"
+msgstr "wird erneut versucht"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:55
-#, fuzzy
-#| msgid "Creation date"
 msgid "Creation"
-msgstr "Erstellungszeitpunkt"
+msgstr "Erstellung"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:58
 msgid "Sent"
-msgstr ""
+msgstr "Versendet"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:62
 msgid "Next attempt (estimate)"
-msgstr ""
+msgstr "Nächster Versuch (Schätzung)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:142
-#, fuzzy
-#| msgid "Email content"
 msgid "HTML content"
-msgstr "E-Mail-Inhalt"
+msgstr "HTML-Inhalt"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:150
-#, fuzzy
-#| msgid "Image content"
 msgid "Text content"
-msgstr "Bild-Inhalt"
+msgstr "Text-Inhalt"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:156
-#, fuzzy
-#| msgid "Header image"
 msgid "Headers"
-msgstr "Header-Bild"
+msgstr "Kopfzeilen"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:180
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:199
 msgid "Sensitive content not shown for security reasons"
-msgstr ""
+msgstr "Sensitiver Inhalt aus Sicherheitsgründen nicht gezeigt"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:213
 msgid ""
 "Additional headers will be added by the mail server and are not visible here."
 msgstr ""
+"Zusätzliche Kopfzeilen werden vom E-Mail-Server hinzugefügt und sind hier "
+"nicht sichtbar."
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:11
 #, python-format
@@ -26193,32 +26132,28 @@ msgid ""
 "This is an overview of all emails sent by your organizer account in the last "
 "%(days)s days."
 msgstr ""
+"Dies ist eine Übersicht über alle E-Mails, die von Ihrem Veranstalterkonto "
+"in den letzten %(days)s Tagen verschickt wurden."
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:18
-#, fuzzy
-#| msgid "You haven't created any rules yet."
 msgid "You haven't sent any emails recently."
-msgstr "Sie haben bisher keine Regeln erstellt."
+msgstr "Es wurden in letzter Zeit keine E-Mails gesendet."
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:63
-#, fuzzy
-#| msgid "Content"
 msgid "Context"
-msgstr "Inhalt"
+msgstr "Kontext"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:160
-#, fuzzy
-#| msgid "Event:"
 msgid "Sent:"
-msgstr "Veranstaltung:"
+msgstr "Gesendet:"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:175
 msgid "Retry (if failed or withheld)"
-msgstr ""
+msgstr "Erneut versuchen (nur fehlgeschlagene oder zurückgehaltene)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:179
 msgid "Abort (if queued, awaiting retry or withheld)"
-msgstr ""
+msgstr "Abbrechen (nur wartende oder zurückgehaltene)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
@@ -27683,31 +27618,24 @@ msgid "Emergency tokens"
 msgstr "Notfall-Tokens"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:147
-#, fuzzy
-#| msgid ""
-#| "If you lose access to your devices, you can use one of the following keys "
-#| "to log in. We recommend to store them in a safe place, e.g. printed out "
-#| "or in a password manager. Every token can be used at most once."
 msgid ""
 "If you lose access to your devices, you can use one of your emergency tokens "
 "to log in. We recommend to store them in a safe place, e.g. printed out or "
 "in a password manager. Every token can be used at most once."
 msgstr ""
-"Wenn Sie Zugriff auf Ihre Geräte verlieren, können Sie sich mit einem der "
-"folgenden Token einloggen. Wir empfehlen, diese an einem sicheren Ort "
+"Wenn Sie Zugriff auf Ihre Geräte verlieren, können Sie sich mit einem Ihrer "
+"Notfall-Token einloggen. Wir empfehlen, diese an einem sicheren Ort "
 "aufzubewahren, z.B. ausgedruckt oder in einem Passwort-Manager. Jeder Token "
 "kann nur einmal verwendet werden."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:155
 #, python-format
 msgid "You generated your emergency tokens on %(generation_date_time)s."
-msgstr ""
+msgstr "Sie haben Ihre Notfalltokens am %(generation_date_time)s erstellt."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:161
-#, fuzzy
-#| msgid "You don’t have any memberships in your account yet."
 msgid "You don't have any emergency tokens yet."
-msgstr "In Ihrem Kundenkonto sind noch keine Mitgliedschaften gespeichert."
+msgstr "Sie haben noch keine Notfalltokens erstellt."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:166
 msgid "Generate new emergency tokens"
@@ -29124,20 +29052,18 @@ msgid "The selected product has been deactivated."
 msgstr "Das ausgewählte Produkt wurde deaktiviert."
 
 #: pretix/control/views/mail.py:161
-#, fuzzy, python-brace-format
-#| msgid "Sending of an email has failed."
+#, python-brace-format
 msgid "A retry of one email was scheduled."
 msgid_plural "A retry of {num} emails was scheduled."
-msgstr[0] "Das Versenden einer E-Mail ist fehlgeschlagen."
-msgstr[1] "Das Versenden einer E-Mail ist fehlgeschlagen."
+msgstr[0] "Ein neuer Versuch für eine E-Mail wurde eingeplant."
+msgstr[1] "Ein neuer Versuch für {num} E-Mails wurde eingeplant."
 
 #: pretix/control/views/mail.py:185
-#, fuzzy, python-brace-format
-#| msgid "The email has been queued to be sent."
+#, python-brace-format
 msgid "One email was aborted and will not be sent."
 msgid_plural "{num} emails were aborted and will not be sent."
-msgstr[0] "Die E-Mail wurde zum Versenden gespeichert."
-msgstr[1] "Die E-Mail wurde zum Versenden gespeichert."
+msgstr[0] "Eine E-Mail wurde abgebrochen und wird nicht verschickt."
+msgstr[1] "{num} E-Mails wurden abgebrochen und werden nicht verschickt."
 
 #: pretix/control/views/mailsetup.py:200
 msgid ""
@@ -30184,10 +30110,6 @@ msgid "Two-factor authentication is now disabled for your account."
 msgstr "Zwei-Faktor-Authentifizierung ist nun deaktiviert."
 
 #: pretix/control/views/user.py:633
-#, fuzzy
-#| msgid ""
-#| "Your emergency codes have been newly generated. Remember to store them in "
-#| "a safe place in case you lose access to your devices."
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices. You will not be able to "
@@ -30198,7 +30120,12 @@ msgid ""
 "- "
 msgstr ""
 "Ihre Notfall-Tokens wurden neu generiert. Denken Sie daran, diese an einem "
-"sicheren Ort aufzubewahren, falls Sie Zugriff auf Ihre Geräte verlieren."
+"sicheren Ort aufzubewahren, falls Sie Zugriff auf Ihre Geräte verlieren. Sie "
+"können sie hier nicht erneut sehen.\n"
+"\n"
+"Ihre Notfall-Tokens:\n"
+"- \n"
+"- "
 
 #: pretix/control/views/user.py:650
 msgid "Your notifications have been disabled."
@@ -33842,10 +33769,8 @@ msgstr ""
 "Finnland zur Verfügung. Bitte halten Sie Ihre App bereit."
 
 #: pretix/plugins/stripe/payment.py:1963
-#, fuzzy
-#| msgid "EPS via Stripe"
 msgid "WERO via Stripe"
-msgstr "EPS über Stripe"
+msgstr "WERO über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1968
 msgid ""
@@ -33853,6 +33778,9 @@ msgid ""
 "banking institutions support WERO either through their native banking apps "
 "or through the WERO wallet app. Please have you app ready."
 msgstr ""
+"Diese Zahlungsmethode ist verfügbar für europäische Online-Banking-Nutzer, "
+"deren Bank WERO entweder über die Banking-App oder über die WERO-App "
+"unterstützt. Bitte halten Sie Ihre App bereit."
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge succeeded."
@@ -35364,6 +35292,8 @@ msgid ""
 "There are products selected in this add-on category that currently cannot be "
 "changed because they are not on sale:"
 msgstr ""
+"Es sind weitere Produkte in dieser Kategorie ausgewählt, die derzeit nicht "
+"geändert werden können, da sie nicht zum Verkauf stehen:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:392
 msgid "There are no add-ons available for this product."
@@ -35558,6 +35488,9 @@ msgid ""
 "exclusive price. Due to rounding, this caused a small change to the total "
 "price."
 msgstr ""
+"Da Sie eine Firmenadresse eingegeben haben, wurde Ihr Preis aus dem Preis "
+"ohne Umsatzsteuer neu berechnet. Durch geänderte Rundung hat sich der "
+"Endpreis deiner Buchung minimal verändert."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:516
 #, python-format
