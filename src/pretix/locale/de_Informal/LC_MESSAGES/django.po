@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-20 12:53+0000\n"
-"PO-Revision-Date: 2026-02-22 16:26+0000\n"
+"PO-Revision-Date: 2026-02-22 16:36+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -9849,8 +9849,8 @@ msgid ""
 "For business customers, compute taxes based on net total. For individuals, "
 "use line-based rounding"
 msgstr ""
-"Für Geschäftskunden, berechne die Steuern auf Basis der Nettosumme. Für "
-"Privatkunden, nutze zeilenweise Rundung"
+"Berechne die Steuern auf Basis der Nettosumme für Geschäftskunden. Berechne "
+"zeilenweise Rundung für Privatkunden"
 
 #: pretix/base/settings.py:85
 msgid "Compute taxes based on net total with stable gross prices"
@@ -26098,7 +26098,7 @@ msgid ""
 "This is an overview of all emails sent by your organizer account in the last "
 "%(days)s days."
 msgstr ""
-"Dies ist eine Übersicht über alle E-Mails, die von Ihrem Veranstalterkonto "
+"Dies ist eine Übersicht über alle E-Mails, die von deinem Veranstalterkonto "
 "in den letzten %(days)s Tagen verschickt wurden."
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:18
@@ -33720,10 +33720,8 @@ msgstr ""
 "Finnland zur Verfügung. Bitte halte deine App bereit."
 
 #: pretix/plugins/stripe/payment.py:1963
-#, fuzzy
-#| msgid "EPS via Stripe"
 msgid "WERO via Stripe"
-msgstr "EPS über Stripe"
+msgstr "WERO über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1968
 msgid ""
@@ -33731,6 +33729,9 @@ msgid ""
 "banking institutions support WERO either through their native banking apps "
 "or through the WERO wallet app. Please have you app ready."
 msgstr ""
+"Diese Zahlungsmethode ist verfügbar für europäische Online-Banking-Nutzer, "
+"deren Bank WERO entweder über die Banking-App oder über die WERO-App "
+"unterstützt. Bitte halte deine App bereit."
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge succeeded."
@@ -35236,6 +35237,8 @@ msgid ""
 "There are products selected in this add-on category that currently cannot be "
 "changed because they are not on sale:"
 msgstr ""
+"Es sind weitere Produkte in dieser Kategorie ausgewählt, die derzeit nicht "
+"geändert werden können, da sie nicht zum Verkauf stehen:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:392
 msgid "There are no add-ons available for this product."
@@ -35429,6 +35432,9 @@ msgid ""
 "exclusive price. Due to rounding, this caused a small change to the total "
 "price."
 msgstr ""
+"Da du eine Firmenadresse eingegeben hast, wurde dein Preis aus dem Preis "
+"ohne Umsatzsteuer neu berechnet. Durch geänderte Rundung hat sich der "
+"Endpreis deiner Buchung minimal verändert."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:516
 #, python-format
