@@ -4,10 +4,16 @@ E2E Test Configuration for Pretix Widget with Playwright
 This module provides pytest fixtures for end-to-end testing of the pretix widget
 using Playwright. It integrates Playwright with Django's test infrastructure.
 """
+
+# TODO dev server websocket does not work, but is this relevant?
+
 import os
+import subprocess
 import pytest
 from decimal import Decimal
 from datetime import date, datetime, timezone, timedelta
+from urllib.request import urlopen
+from urllib.error import URLError
 from playwright.sync_api import Browser, BrowserContext, Page, expect
 from django_scopes import scopes_disabled
 
@@ -27,6 +33,43 @@ def _future_dt(days=30, hour=10, minute=0):
     """
     d = date.today() + timedelta(days=days)
     return datetime(d.year, d.month, d.day, hour, minute, tzinfo=timezone.utc)
+
+
+# ============================================================================
+# Widget Asset Configuration (old Vue2 / new Vite / Vite dev server)
+# ============================================================================
+
+PROJECT_ROOT = os.path.join(
+    os.path.dirname(__file__),
+    '../../..'
+)
+
+VITE_DEV_PORT = 5180
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _widget_assets():
+    """
+    Build or check the widget JS depending on env vars.
+
+    - Default: old Vue2 widget (no build needed)
+    - PRETIX_WIDGET_VITE=1: run vite build, Django serves the output
+    - PRETIX_WIDGET_VITE_DEV=1: uses your already-running vite dev server
+    """
+    if os.environ.get("PRETIX_WIDGET_VITE_DEV"):
+        try:
+            urlopen(f'http://localhost:{VITE_DEV_PORT}/', timeout=2)
+        except (URLError, OSError):
+            raise RuntimeError(
+                f'PRETIX_WIDGET_VITE_DEV is set but no Vite dev server found on port {VITE_DEV_PORT}. '
+                f'Start it with: npm run dev:widget'
+            )
+        yield
+    elif os.environ.get("PRETIX_WIDGET_VITE"):
+        subprocess.check_call(['npm', 'run', 'build:widget'], cwd=PROJECT_ROOT)
+        yield
+    else:
+        yield  # Old widget, no build needed
 
 
 # ============================================================================
@@ -86,11 +129,11 @@ def live_server_url(live_server, settings):
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         }
 
-    # Fix SITE_URL to point to live server instead of example.com.
-    # This makes build_absolute_uri() return localhost URLs so the widget's
-    # target_url (from the API response) resolves to the live server.
-    # Without this, form submissions (cart/add) go to example.com.
     settings.SITE_URL = live_server.url
+
+    # Enable Vite widget if requested via env var
+    if os.environ.get("PRETIX_WIDGET_VITE") or os.environ.get("PRETIX_WIDGET_VITE_DEV"):
+        settings.PRETIX_WIDGET_VITE = True
 
     return live_server.url
 
@@ -1070,7 +1113,12 @@ def _register_widget_test_view():
             base_url = f"{request.scheme}://{request.get_host()}"
             event_url = f"{base_url}/{organizer}/{event}/"
             widget_css = f"{base_url}/{organizer}/{event}/widget/v2.css"
-            widget_js = f"{base_url}/widget/v2.en.js"
+
+            if os.environ.get("PRETIX_WIDGET_VITE_DEV"):
+                script_tag = f'<script type="module" src="http://localhost:{VITE_DEV_PORT}/src/main.ts"></script>'
+            else:
+                widget_js = f"{base_url}/widget/v2.en.js"
+                script_tag = f'<script type="text/javascript" src="{widget_js}" async crossorigin></script>'
 
             # Build extra attributes from query params
             extra_attrs = ''
@@ -1097,7 +1145,7 @@ def _register_widget_test_view():
   </head>
   <body>
     <pretix-widget event="{event_url}"{extra_attrs}></pretix-widget>
-    <script type="text/javascript" src="{widget_js}" async crossorigin></script>
+    {script_tag}
 </body>
 </html>"""
             resp = HttpResponse(html, content_type='text/html')
@@ -1111,7 +1159,12 @@ def _register_widget_test_view():
             base_url = f"{request.scheme}://{request.get_host()}"
             event_url = f"{base_url}/{organizer}/{event}/"
             widget_css = f"{base_url}/{organizer}/{event}/widget/v2.css"
-            widget_js = f"{base_url}/widget/v2.en.js"
+
+            if os.environ.get("PRETIX_WIDGET_VITE_DEV"):
+                script_tag = f'<script type="module" src="http://localhost:{VITE_DEV_PORT}/src/main.ts"></script>'
+            else:
+                widget_js = f"{base_url}/widget/v2.en.js"
+                script_tag = f'<script type="text/javascript" src="{widget_js}" async crossorigin></script>'
 
             # Build extra attributes from query params
             extra_attrs = ''
@@ -1135,7 +1188,7 @@ def _register_widget_test_view():
 </head>
 <body>
     <pretix-button event="{event_url}"{extra_attrs}>{button_text}</pretix-button>
-    <script type="text/javascript" src="{widget_js}" async crossorigin></script>
+    {script_tag}
 </body>
 </html>"""
             resp = HttpResponse(html, content_type='text/html')

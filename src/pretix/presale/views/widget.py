@@ -123,7 +123,8 @@ def widget_css_etag(request, version, **kwargs):
 
 def widget_js_etag(request, version, lang, **kwargs):
     gs = GlobalSettingsObject()
-    return gs.settings.get('widget_checksum_{}_{}'.format(version, lang))
+    variant = 'vite' if getattr(settings, 'PRETIX_WIDGET_VITE', False) else 'legacy'
+    return gs.settings.get('widget_checksum_{}_{}_{}'.format(version, lang, variant))
 
 
 @gzip_page
@@ -152,13 +153,16 @@ def widget_css(request, version, **kwargs):
     return resp
 
 
-def generate_widget_js(version, lang):
+def generate_widget_js(version, lang, use_vite=False):
     code = []
     with language(lang):
         # Provide isolation
         code.append('(function (siteglobals) {\n')
         code.append('var module = {}, exports = {};\n')
-        code.append('var lang = "%s";\n' % lang)
+        if use_vite:
+            code.append('const LANG = "%s";\n' % lang)
+        else:
+            code.append('var lang = "%s";\n' % lang)
 
         c = JavaScriptCatalog()
         c.translation = DjangoTranslation(lang, domain='djangojs')
@@ -179,20 +183,25 @@ def generate_widget_js(version, lang):
             'plural': plural,
         })
         i18n_js = template.render(context)
-        i18n_js = i18n_js.replace('for (const ', 'for (var ')  # remove if we really want to break IE11 for good
-        i18n_js = i18n_js.replace(r"value.includes(", r"-1 != value.indexOf(")  # remove if we really want to break IE11 for good
         code.append(i18n_js)
 
-        files = [
-            'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
-            'pretixpresale/js/widget/docready.js',
-            'pretixpresale/js/widget/floatformat.js',
-            'pretixpresale/js/widget/widget.js' if version == version_max else 'pretixpresale/js/widget/widget.v{}.js'.format(version),
-        ]
-        for fname in files:
-            f = finders.find(fname)
-            with open(f, 'r', encoding='utf-8') as fp:
+        if use_vite:
+            vite_js = finders.find('vite/widget/widget.js')
+            if not vite_js:
+                raise FileNotFoundError('Vite widget build not found. Run: npm run build:widget')
+            with open(vite_js, 'r', encoding='utf-8') as fp:
                 code.append(fp.read())
+        else:
+            files = [
+                'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
+                'pretixpresale/js/widget/docready.js',
+                'pretixpresale/js/widget/floatformat.js',
+                'pretixpresale/js/widget/widget.js' if version == version_max else 'pretixpresale/js/widget/widget.v{}.js'.format(version),
+            ]
+            for fname in files:
+                f = finders.find(fname)
+                with open(f, 'r', encoding='utf-8') as fp:
+                    code.append(fp.read())
 
         if settings.DEBUG:
             code.append('})(this);\n')
@@ -213,15 +222,22 @@ def widget_js(request, version, lang, **kwargs):
     if version < version_min:
         version = version_min
 
-    cached_js = cache.get('widget_js_data_v{}_{}'.format(version, lang))
+    use_vite = getattr(settings, 'PRETIX_WIDGET_VITE', False)
+    variant = 'vite' if use_vite else 'legacy'
+    cache_prefix = 'widget_js_data_v{}_{}_{}'.format(version, lang, variant)
+
+    cached_js = cache.get(cache_prefix)
     if cached_js and not settings.DEBUG:
         resp = HttpResponse(cached_js, content_type='text/javascript')
         resp._csp_ignore = True
         resp['Access-Control-Allow-Origin'] = '*'
         return resp
 
+    settings_key = 'widget_file_v{}_{}_{}'.format(version, lang, variant)
+    checksum_key = 'widget_checksum_v{}_{}_{}'.format(version, lang, variant)
+
     gs = GlobalSettingsObject()
-    fname = gs.settings.get('widget_file_v{}_{}'.format(version, lang))
+    fname = gs.settings.get(settings_key)
     resp = None
     if fname and not settings.DEBUG:
         if isinstance(fname, File):
@@ -229,21 +245,21 @@ def widget_js(request, version, lang, **kwargs):
         try:
             data = default_storage.open(fname).read()
             resp = HttpResponse(data, content_type='text/javascript')
-            cache.set('widget_js_data_v{}_{}'.format(version, lang), data, 3600 * 4)
+            cache.set(cache_prefix, data, 3600 * 4)
         except:
             logger.exception('Failed to open widget.js')
 
     if not resp:
-        data = generate_widget_js(version, lang).encode()
+        data = generate_widget_js(version, lang, use_vite=use_vite).encode()
         checksum = hashlib.sha1(data).hexdigest()
         if not settings.DEBUG:
             newname = default_storage.save(
-                'widget/widget.{}.{}.{}.js'.format(version, lang, checksum),
+                'widget/widget.{}.{}.{}.{}.js'.format(version, lang, variant, checksum),
                 ContentFile(data)
             )
-            gs.settings.set('widget_file_v{}_{}'.format(version, lang), 'file://' + newname)
-            gs.settings.set('widget_checksum_v{}_{}'.format(version, lang), checksum)
-            cache.set('widget_js_data_v{}_{}'.format(version, lang), data, 3600 * 4)
+            gs.settings.set(settings_key, 'file://' + newname)
+            gs.settings.set(checksum_key, checksum)
+            cache.set(cache_prefix, data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
     resp._csp_ignore = True
     resp['Access-Control-Allow-Origin'] = '*'
