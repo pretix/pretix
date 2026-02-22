@@ -1,9 +1,8 @@
 // Internationalization strings for the pretix widget
-// Django's i18n file expects `this` to be the global object, but ES modules
-// have `this` as undefined. Import as raw text and execute with a local context.
-
-// TODO hack
-import djangoI18nScript from '../../../jsi18n/en/djangojs.js?raw'
+// In production, widget.py injects the `django` global before this script loads.
+// In dev mode, Django's i18n file expects `this` to be the global object, but
+// ES modules have `this` as undefined — so we import as raw text and execute
+// with a local context.
 
 interface Django {
 	pgettext: (context: string, text: string) => string
@@ -12,10 +11,17 @@ interface Django {
 	get_format: (formatType: string) => string | number
 }
 
-// Create a local context object to capture django without polluting window
-const context: { django?: Django } = {}
-new Function(djangoI18nScript).call(context)
-const django = context.django!
+let django: Django
+
+if (import.meta.env.DEV) {
+	// TODO this does not actually grab the correct language strings
+	const raw = (await import(`../../../jsi18n/${LANG}/djangojs.js?raw`)).default
+	const context: { django?: Django } = {}
+	new Function(raw).call(context)
+	django = context.django!
+} else {
+	django = (globalThis as any).django
+}
 
 export const STRINGS = {
 	quantity: django.pgettext('widget', 'Quantity'),

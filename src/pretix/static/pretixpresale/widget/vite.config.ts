@@ -1,7 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+	server: {
+		port: 5180
+	},
 	plugins: [
 		vue()
 	],
@@ -11,8 +14,8 @@ export default defineConfig({
 		},
 	},
 	build: {
-		manifest: true,
-		outDir: import.meta.dirname + '/../../../../../static.dist/vite/widget',
+		minify: false, // django will do minification
+		outDir: import.meta.dirname + '/../../../static.dist/vite/widget',
 		rollupOptions: {
 			input: {
 				main: import.meta.dirname + '/src/main.ts',
@@ -28,6 +31,8 @@ export default defineConfig({
 		exclude: ['moment', 'jquery']
 	},
 	define: {
-		LANG: JSON.stringify(process.env.PRETIX_WIDGET_LANG || 'en')
-	}
-})
+		...(mode === 'development' && {
+			LANG: JSON.stringify(process.env.PRETIX_WIDGET_LANG || 'en'),
+		}),
+	},
+}))

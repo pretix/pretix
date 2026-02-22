@@ -19,9 +19,10 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
     "dev:widget": "vite src/pretix/static/pretixpresale/widget",
-    "build:widget": "vite build --config src/pretix/static/pretixpresale/widget/vite.config.ts",
+    "build": "npm run build:control -s && npm run build:widget -s",
+    "build:control": "vite build",
+    "build:widget": "vite build src/pretix/static/pretixpresale/widget",
     "lint:eslint": "eslint . --ext .js,.ts,.vue",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
