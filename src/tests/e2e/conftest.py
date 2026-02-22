@@ -874,14 +874,7 @@ def widget_page(page):
             """Close the checkout iframe."""
             close_btn = self.page.locator('.pretix-widget-frame-close button')
             close_btn.click()
-            # Wait for iframe to close
-            self.page.wait_for_function(
-                """() => {
-                    const frame = document.querySelector('.pretix-widget-frame-shown');
-                    return !frame || !frame.classList.contains('pretix-widget-frame-shown');
-                }""",
-                timeout=5000
-            )
+            self.page.locator('.pretix-widget-frame-shown').wait_for(state='detached', timeout=5000)
             return self
 
         def expand_variations(self, item_name: str):
