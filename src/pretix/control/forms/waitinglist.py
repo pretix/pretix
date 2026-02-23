@@ -29,7 +29,7 @@ from pretix.base.forms import I18nModelForm
 from pretix.base.forms.questions import (
     NamePartsFormField, WrappedPhoneNumberPrefixWidget,
 )
-from pretix.base.models import ItemVariation, WaitingListEntry
+from pretix.base.models import WaitingListEntry
 from pretix.control.forms.widgets import Select2
 
 
@@ -98,7 +98,7 @@ class WaitingListEntryEditForm(I18nModelForm):
                 for variation in item.variations.all():
                     if variation.active:
                         choices.append(
-                            ('{}-{}'.format(item.pk, variation.pk), '{} - {}'.format(str(item),str(variation)))
+                            ('{}-{}'.format(item.pk, variation.pk), '{} - {}'.format(str(item), str(variation)))
                         )
             else:
                 choices.append(('{}'.format(item.pk), str(item)))
