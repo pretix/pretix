@@ -31,7 +31,7 @@ dependencies = [
   "BeautifulSoup4==4.14.*",
   "bleach==6.3.*",
   "celery==5.6.*",
-  "chardet==5.2.*",
+  "chardet==6.0.*",
   "cryptography>=44.0.0",
   "css-inline==0.20.*",
   "defusedcsv>=1.1.0",
