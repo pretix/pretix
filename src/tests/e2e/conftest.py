@@ -742,7 +742,7 @@ def event_series(organizer):
             event=event,
             name=f'Concert Night {i+1}',
             date_from=base_date + timedelta(days=i*2),
-            date_to=base_date + timedelta(days=i*2, hours=3),
+            date_to=base_date + timedelta(days=i*2, hours=2),
             active=True,
         )
         subevents.append(se)
@@ -808,10 +808,16 @@ def widget_page(page):
 
         def wait_for_widget_load(self):
             """Wait for widget to finish loading."""
-            # Wait for widget element with longer timeout
             self.page.wait_for_selector('.pretix-widget', timeout=15000)
-            # Give it a moment to render content
-            self.page.wait_for_timeout(1000)
+            # Wait for loading spinner to be hidden (widget has rendered content)
+            self.page.locator('.pretix-widget-loading').wait_for(state='hidden', timeout=15000)
+            return self
+
+        def wait_for_loading_indicator(self, timeout=15000):
+            """Wait for the loading indicator to appear and then disappear (display: none)."""
+            loading = self.page.locator('.pretix-widget-loading')
+            loading.wait_for(state='visible', timeout=timeout)
+            loading.wait_for(state='hidden', timeout=timeout)
             return self
 
         def select_item_quantity(self, item_name: str, quantity: int):
@@ -824,6 +830,7 @@ def widget_page(page):
             number_input.wait_for(state='visible', timeout=5000)
             if number_input.count() > 0:
                 number_input.fill(str(quantity))
+                number_input.dispatch_event('change')
             else:
                 # Maybe it's a checkbox (order_max=1)
                 checkbox = item_row.locator('input[type="checkbox"]').first
@@ -845,6 +852,7 @@ def widget_page(page):
             # Find input
             input_field = variation.locator('input[type="number"]').first
             input_field.fill(str(quantity))
+            input_field.dispatch_event('change')
             return self
 
         def click_buy_button(self):
@@ -871,10 +879,27 @@ def widget_page(page):
             return iframe
 
         def close_iframe(self):
-            """Close the checkout iframe."""
+            """Close the checkout iframe and wait for the widget to reload.
+
+            The widget triggers a reload() when the iframe is closed
+            (without incrementing the loading counter), so we wait for
+            the XHR response to complete before returning.
+            """
             close_btn = self.page.locator('.pretix-widget-frame-close button')
-            close_btn.click()
-            self.page.locator('.pretix-widget-frame-shown').wait_for(state='detached', timeout=5000)
+            # Wait for the reload XHR that fires when the iframe closes
+            with self.page.expect_response(
+                lambda r: 'widget/product_list' in r.url,
+                timeout=15000
+            ):
+                close_btn.click()
+                self.page.locator('.pretix-widget-frame-shown').wait_for(
+                    state='detached', timeout=5000
+                )
+            return self
+
+        def wait_for_view(self, selector: str, timeout=15000):
+            """Wait for a specific element to appear after a view switch."""
+            self.page.locator(selector).first.wait_for(state='visible', timeout=timeout)
             return self
 
         def expand_variations(self, item_name: str):
