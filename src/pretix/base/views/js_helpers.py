@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pycountry
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext, pgettext, pgettext_lazy
@@ -29,6 +30,7 @@ from django_scopes import scope
 from pretix.base.addressvalidation import (
     COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED,
 )
+from pretix.base.i18n import language
 from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import Organizer
 from pretix.base.models.tax import VAT_ID_COUNTRIES
@@ -38,7 +40,8 @@ from pretix.base.settings import (
 
 VAT_ID_LABELS = {
     # VAT ID is a EU concept and Switzerland has a distinct, but differently-named concept
-    "CH": pgettext_lazy("tax_id_swiss", "UID"),  # Translators: Only translate to French (IDE) and Italien (IDI), otherwise keep the same
+    # Translators: Only translate to French (IDE) and Italien (IDI), otherwise keep the same
+    "CH": pgettext_lazy("tax_id_swiss", "UID"),
 
     # Awareness around VAT IDs differes by EU country. For example, in Germany the VAT ID is assigned
     # separately to each company and only used in cross-country transactions. Therefore, it makes sense
@@ -46,10 +49,15 @@ VAT_ID_LABELS = {
     # In contrast, in Italy the EU-compatible VAT ID is not separately assigned, but is just "IT" + the national tax
     # number (Partita IVA) and also used on domestic transactions. So someone who never purchased something international
     # for their company, might still know the value, if we call it the right way and not just "VAT ID".
-    "IT": pgettext_lazy("tax_id_italy", "VAT ID / P.IVA"),  # Translators: Translate to only "P.IVA" in Italian, keep second part as-is in other languages
-    "GR": pgettext_lazy("tax_id_greece", "VAT ID / TIN"),  # Translators: Translate to only "ΑΦΜ" in Greek
-    "ES": pgettext_lazy("tax_id_spain", "VAT ID / NIF"),  # Translators: Translate to only "NIF" in Spanish
-    "PT": pgettext_lazy("tax_id_portugal", "VAT ID / NIF"),  # Translators: Translate to only "NIF" in Portuguese
+
+    # Translators: Translate to only "P.IVA" in Italian, keep second part as-is in other languages
+    "IT": pgettext_lazy("tax_id_italy", "VAT ID / P.IVA"),
+    # Translators: Translate to only "ΑΦΜ" in Greek
+    "GR": pgettext_lazy("tax_id_greece", "VAT ID / TIN"),
+    # Translators: Translate to only "NIF" in Spanish
+    "ES": pgettext_lazy("tax_id_spain", "VAT ID / NIF"),
+    # Translators: Translate to only "NIF" in Portuguese
+    "PT": pgettext_lazy("tax_id_portugal", "VAT ID / NIF"),
 }
 
 
@@ -76,14 +84,14 @@ def _info(cc):
     statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
     return {
         'data': [
-            {'name': s.name, 'code': s.code[3:]}
+            {'name': gettext(s.name), 'code': s.code[3:]}
             for s in sorted(statelist, key=lambda s: s.name)
         ],
         **info,
     }
 
 
-def address_form(request):
+def _address_form(request):
     cc = request.GET.get("country", "DE")
     info = _info(cc)
 
@@ -103,7 +111,7 @@ def address_form(request):
             for t in get_transmission_types():
                 if t.is_available(event=event, country=country, is_business=is_business):
                     result = {"name": str(t.public_name), "code": t.identifier}
-                    if t.exclusive:
+                    if t.is_exclusive(event=event, country=country, is_business=is_business):
                         info["transmission_types"] = [result]
                         break
                     else:
@@ -150,5 +158,16 @@ def address_form(request):
             if info["vat_id"]["required"]:
                 # The help text explains that it is optional, so we want to hide that if it is required
                 info["vat_id"]["helptext_visible"] = False
+
+    return info
+
+
+def address_form(request):
+    locale = request.GET.get('locale')
+    if locale in dict(settings.LANGUAGES):
+        with language(locale):
+            info = _address_form(request)
+    else:
+        info = _address_form(request)
 
     return JsonResponse(info)

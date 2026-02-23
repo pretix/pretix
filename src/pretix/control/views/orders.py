@@ -33,6 +33,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import copy
 import json
 import logging
 import mimetypes
@@ -97,9 +98,7 @@ from pretix.base.services.invoices import (
     invoice_qualified, regenerate_invoice, transmit_invoice,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import (
-    SendMailException, prefix_subject, render_mail,
-)
+from pretix.base.services.mail import prefix_subject, render_mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
     extend_order, mark_order_expired, mark_order_refunded,
@@ -508,9 +507,10 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
+        ctx['invoice_qualified'] = invoice_qualified(self.order)
+        ctx['can_generate_invoice'] = ctx['invoice_qualified'] and (
             self.request.event.settings.invoice_generate in ('admin', 'user', 'paid', 'user_paid', 'True')
-        ) and self.order.status in (Order.STATUS_PAID, Order.STATUS_PENDING) and (
+        ) and (
             not self.order.invoices.exists()
             or self.order.invoices.filter(is_cancellation=True).count() >= self.order.invoices.filter(is_cancellation=False).count()
         )
@@ -1064,10 +1064,6 @@ class OrderPaymentConfirm(OrderView):
                 messages.error(self.request, str(e))
             except PaymentException as e:
                 messages.error(self.request, str(e))
-            except SendMailException:
-                messages.warning(self.request,
-                                 _('The payment has been marked as complete, but we were unable to send a '
-                                   'confirmation mail.'))
             else:
                 messages.success(self.request, _('The payment has been marked as complete.'))
         else:
@@ -1230,7 +1226,11 @@ class OrderRefundView(OrderView):
                     customer=order.customer,
                     testmode=order.testmode
                 )
-                giftcard.log_action('pretix.giftcards.created', user=self.request.user, data={})
+                giftcard.log_action(
+                    action='pretix.giftcards.created',
+                    user=self.request.user,
+                    data={}
+                )
                 refunds.append(OrderRefund(
                     order=order,
                     payment=None,
@@ -1538,9 +1538,6 @@ class OrderTransition(OrderView):
                     'message': str(e)
                 })
                 messages.error(self.request, str(e))
-            except SendMailException:
-                messages.warning(self.request, _('The order has been marked as paid, but we were unable to send a '
-                                                 'confirmation mail.'))
             else:
                 messages.success(self.request, _('The payment has been created successfully.'))
         elif self.order.cancel_allowed() and to == 'c':
@@ -1741,14 +1738,15 @@ class OrderInvoiceReissue(OrderView):
                     messages.error(self.request, _('The invoice has been cleaned of personal data.'))
                 else:
                     c = generate_cancellation(inv)
-                    if order.status not in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
+                    if invoice_qualified(order):
                         inv = generate_invoice(order)
+                        messages.success(self.request, _('The invoice has been reissued.'))
                     else:
                         inv = c
+                        messages.success(self.request, _('The invoice has been canceled.'))
                     order.log_action('pretix.event.order.invoice.reissued', user=self.request.user, data={
                         'invoice': inv.pk
                     })
-                    messages.success(self.request, _('The invoice has been reissued.'))
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):  # NOQA
@@ -1778,15 +1776,11 @@ class OrderResendLink(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        try:
-            if 'position' in kwargs:
-                p = get_object_or_404(self.order.positions, pk=kwargs['position'])
-                p.resend_link(user=self.request.user)
-            else:
-                self.order.resend_link(user=self.request.user)
-        except SendMailException:
-            messages.error(self.request, _('There was an error sending the mail. Please try again later.'))
-            return redirect(self.get_order_url())
+        if 'position' in kwargs:
+            p = get_object_or_404(self.order.positions, pk=kwargs['position'])
+            p.resend_link(user=self.request.user)
+        else:
+            self.order.resend_link(user=self.request.user)
 
         messages.success(self.request, _('The email has been queued to be sent.'))
         return redirect(self.get_order_url())
@@ -2430,24 +2424,18 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
             }
             return self.get(self.request, *self.args, **self.kwargs)
         else:
-            try:
-                order.send_mail(
-                    form.cleaned_data['subject'], email_template,
-                    email_context, 'pretix.event.order.email.custom_sent',
-                    self.request.user, auto_email=False,
-                    attach_tickets=form.cleaned_data.get('attach_tickets', False),
-                    invoices=form.cleaned_data.get('attach_invoices', []),
-                    attach_other_files=[a for a in [
-                        self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-                    ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
-                )
-                messages.success(self.request,
-                                 _('Your message has been queued and will be sent to {}.'.format(order.email)))
-            except SendMailException:
-                messages.error(
-                    self.request,
-                    _('Failed to send mail to the following user: {}'.format(order.email))
-                )
+            order.send_mail(
+                form.cleaned_data['subject'], email_template,
+                email_context, 'pretix.event.order.email.custom_sent',
+                self.request.user, auto_email=False,
+                attach_tickets=form.cleaned_data.get('attach_tickets', False),
+                invoices=form.cleaned_data.get('attach_invoices', []),
+                attach_other_files=[a for a in [
+                    self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+                ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
+            )
+            messages.success(self.request,
+                             _('Your message has been queued and will be sent to {}.'.format(order.email)))
             return super(OrderSendMail, self).form_valid(form)
 
     def get_success_url(self):
@@ -2500,23 +2488,19 @@ class OrderPositionSendMail(OrderSendMail):
             }
             return self.get(self.request, *self.args, **self.kwargs)
         else:
-            try:
-                position.send_mail(
-                    form.cleaned_data['subject'],
-                    email_template,
-                    email_context,
-                    'pretix.event.order.position.email.custom_sent',
-                    self.request.user,
-                    attach_tickets=form.cleaned_data.get('attach_tickets', False),
-                    attach_other_files=[a for a in [
-                        self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-                    ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
-                )
-                messages.success(self.request,
-                                 _('Your message has been queued and will be sent to {}.'.format(position.attendee_email)))
-            except SendMailException:
-                messages.error(self.request,
-                               _('Failed to send mail to the following user: {}'.format(position.attendee_email)))
+            position.send_mail(
+                form.cleaned_data['subject'],
+                email_template,
+                email_context,
+                'pretix.event.order.position.email.custom_sent',
+                self.request.user,
+                attach_tickets=form.cleaned_data.get('attach_tickets', False),
+                attach_other_files=[a for a in [
+                    self.request.event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
+                ] if a] if form.cleaned_data.get('attach_new_order', False) else [],
+            )
+            messages.success(self.request,
+                             _('Your message has been queued and will be sent to {}.'.format(position.attendee_email)))
             return super(OrderSendMail, self).form_valid(form)
 
 
@@ -2677,8 +2661,8 @@ class ExportMixin:
             if id != ex.identifier:
                 continue
 
-            if self.scheduled:
-                initial = dict(self.scheduled.export_form_data)
+            if self.scheduled or self.scheduled_copy_from:
+                initial = dict((self.scheduled or self.scheduled_copy_from).export_form_data)
 
                 test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
                 test_form.fields = ex.export_form_fields
@@ -2720,6 +2704,11 @@ class ExportMixin:
             return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.POST.get("scheduled"))
         elif "scheduled" in self.request.GET:
             return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled"))
+
+    @cached_property
+    def scheduled_copy_from(self):
+        if "scheduled_copy_from" in self.request.GET:
+            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled_copy_from"))
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -2790,7 +2779,16 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
         if request.POST.get("schedule") == "save":
-            if self.exporter.form.is_valid() and self.rrule_form.is_valid() and self.schedule_form.is_valid():
+            if not self.has_permission():
+                messages.error(
+                    self.request,
+                    _(
+                        "Your user account does not have sufficient permission to run this report, therefore "
+                        "you cannot schedule it."
+                    )
+                )
+                return super().get(request, *args, **kwargs)
+            elif self.exporter.form.is_valid() and self.rrule_form.is_valid() and self.schedule_form.is_valid():
                 self.schedule_form.instance.export_identifier = self.exporter.identifier
                 self.schedule_form.instance.export_form_data = self.exporter.form.cleaned_data
                 self.schedule_form.instance.schedule_rrule = str(self.rrule_form.to_rrule())
@@ -2829,6 +2827,8 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     def rrule_form(self):
         if self.scheduled:
             initial = RRuleForm.initial_from_rrule(self.scheduled.schedule_rrule)
+        elif self.scheduled_copy_from:
+            initial = RRuleForm.initial_from_rrule(self.scheduled_copy_from.schedule_rrule)
         else:
             initial = {}
         return RRuleForm(
@@ -2839,11 +2839,15 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
 
     @cached_property
     def schedule_form(self):
-        instance = self.scheduled or ScheduledEventExport(
-            event=self.request.event,
-            owner=self.request.user,
-        )
-        if not self.scheduled:
+        if self.scheduled_copy_from:
+            instance = copy.copy(self.scheduled_copy_from)
+            instance.pk = None
+        else:
+            instance = self.scheduled or ScheduledEventExport(
+                event=self.request.event,
+                owner=self.request.user,
+            )
+        if not self.scheduled and not self.scheduled_copy_from:
             initial = {
                 "mail_subject": gettext("Export: {title}").format(title=self.exporter.verbose_name),
                 "mail_template": gettext("Hello,\n\nattached to this email, you can find a new scheduled report for {name}.").format(
@@ -2868,18 +2872,11 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        if "schedule" in self.request.POST or self.scheduled:
-            if "schedule" in self.request.POST and not self.has_permission():
-                messages.error(
-                    self.request,
-                    _(
-                        "Your user account does not have sufficient permission to run this report, therefore "
-                        "you cannot schedule it."
-                    )
-                )
-            else:
-                ctx['schedule_form'] = self.schedule_form
-                ctx['rrule_form'] = self.rrule_form
+
+        if "schedule" in self.request.POST or self.scheduled or self.scheduled_copy_from:
+            ctx['schedule_form'] = self.schedule_form
+            ctx['rrule_form'] = self.rrule_form
+            ctx['scheduled_copy_from'] = self.scheduled_copy_from
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:
@@ -3016,7 +3013,7 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
             return _('All orders have been canceled.')
         else:
             return _('The orders have been canceled. An error occurred with {count} orders, please '
-                     'check all uncanceled orders.').format(count=value)
+                     'check all uncanceled orders.').format(count=value["failed"])
 
     def get_success_url(self, value):
         if settings.HAS_CELERY:
@@ -3097,7 +3094,7 @@ class EventCancelConfirm(EventPermissionRequiredMixin, AsyncAction, FormView):
             return _('All orders have been canceled.')
         else:
             return _('The orders have been canceled. An error occurred with {count} orders, please '
-                     'check all uncanceled orders.').format(count=value)
+                     'check all uncanceled orders.').format(count=value["failed"])
 
     def get_success_url(self, value):
         return reverse('control:event.cancel', kwargs={

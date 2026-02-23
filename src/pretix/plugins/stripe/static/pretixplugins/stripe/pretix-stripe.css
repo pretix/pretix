@@ -79,3 +79,9 @@
 .vcenter {
   margin: auto;
 }
+
+.stripe-qr-code {
+    max-width: 80%;
+    width: 200px;
+    height: auto;
+}

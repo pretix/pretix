@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 10:37+0000\n"
-"PO-Revision-Date: 2025-09-08 18:57+0000\n"
-"Last-Translator: Alois Pospíšil <alois.pospisil@gmail.com>\n"
+"POT-Creation-Date: 2026-01-26 09:10+0000\n"
+"PO-Revision-Date: 2026-01-08 04:00+0000\n"
+"Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "cs/>\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -141,7 +141,7 @@ msgstr "Pokračovat"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
 msgid "Confirming your payment …"
 msgstr "Potvrzuji vaši platbu …"
 
@@ -150,16 +150,26 @@ msgid "Payment method unavailable"
 msgstr "Způsob platby není k dispozici"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
 msgid "Placed orders"
 msgstr "Zadané objednávky"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
 msgid "Paid orders"
 msgstr "Zaplacené objednávky"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+msgid "Attendees (ordered)"
+msgstr ""
+
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+msgid "Attendees (paid)"
+msgstr ""
+
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
 msgid "Total revenue"
 msgstr "Celkové příjmy"
 
@@ -345,7 +355,7 @@ msgstr "Ne"
 msgid "close"
 msgstr "zavřít"
 
-#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixbase/js/addressform.js:101
 #: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "povinný"
@@ -416,7 +426,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "Pokud akce trvá déle než několik minut, kontaktujte nás."
 
 #: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
@@ -734,7 +744,7 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:49
 msgid "Cart expired"
-msgstr "Nákupní košík vypršel"
+msgstr "Rezervace košíku vypršela"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:58
 #: pretix/static/pretixpresale/js/ui/cart.js:84
@@ -753,27 +763,23 @@ msgstr[2] ""
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
 msgid "Your cart has expired."
-msgstr "Nákupní košík vypršel."
+msgstr "Platnost rezervace vašeho košíku vypršela."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
-#, fuzzy
-#| msgid ""
-#| "The items in your cart are no longer reserved for you. You can still "
-#| "complete your order as long as they’re available."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
 msgstr ""
-"Produkty v nákupním košíku již nejsou pro vás rezervovány. Pokud je lístek "
-"stále dostupný, můžete objednávku dokončit."
+"Produkty v nákupním košíku již nejsou rezervovány. Svou objednávku se přesto "
+"můžete pokusit dokončit, některé položky však už nemusí být dostupné."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
 msgid "Do you want to renew the reservation period?"
-msgstr ""
+msgstr "Chcete obnovit rezervaci košíku?"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:90
 msgid "Renew reservation"
-msgstr ""
+msgstr "Obnovit rezervaci"
 
 #: pretix/static/pretixpresale/js/ui/main.js:194
 msgid "The organizer keeps %(currency)s %(amount)s"

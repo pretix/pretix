@@ -43,7 +43,7 @@ def _validate_sample_lines(sample_lines, rounding_mode):
         (line.tax_value_includes_rounding_correction, line.price_includes_rounding_correction)
         for line in sample_lines
     ]
-    changed = apply_rounding(rounding_mode, "EUR", sample_lines)
+    changed = apply_rounding(rounding_mode, None, "EUR", sample_lines)
     for line, original in zip(sample_lines, corrections):
         if (line.tax_value_includes_rounding_correction, line.price_includes_rounding_correction) != original:
             assert line in changed
@@ -108,7 +108,7 @@ def test_revert_net_rounding_to_single_line(sample_lines):
         tax_rate=Decimal("19.00"),
         tax_code="S",
     )
-    apply_rounding("sum_by_net", "EUR", [l])
+    apply_rounding("sum_by_net", None, "EUR", [l])
     assert l.price == Decimal("100.00")
     assert l.price_includes_rounding_correction == Decimal("0.00")
     assert l.tax_value == Decimal("15.97")
@@ -126,7 +126,7 @@ def test_revert_net_keep_gross_rounding_to_single_line(sample_lines):
         tax_rate=Decimal("19.00"),
         tax_code="S",
     )
-    apply_rounding("sum_by_net_keep_gross", "EUR", [l])
+    apply_rounding("sum_by_net_keep_gross", None, "EUR", [l])
     assert l.price == Decimal("100.00")
     assert l.price_includes_rounding_correction == Decimal("0.00")
     assert l.tax_value == Decimal("15.97")
@@ -144,7 +144,7 @@ def test_rounding_of_impossible_gross_price(rounding_mode):
         price=Decimal("23.00"),
     )
     l._calculate_tax(tax_rule=TaxRule(rate=Decimal("7.00")), invoice_address=InvoiceAddress())
-    apply_rounding(rounding_mode, "EUR", [l])
+    apply_rounding(rounding_mode, None, "EUR", [l])
     assert l.price == Decimal("23.01")
     assert l.price_includes_rounding_correction == Decimal("0.01")
     assert l.tax_value == Decimal("1.51")
@@ -164,12 +164,12 @@ def test_round_down():
     assert sum(l.tax_value for l in lines) == Decimal("79.85")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("420.15")
 
-    apply_rounding("sum_by_net", "EUR", lines)
+    apply_rounding("sum_by_net", None, "EUR", lines)
     assert sum(l.price for l in lines) == Decimal("499.98")
     assert sum(l.tax_value for l in lines) == Decimal("79.83")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("420.15")
 
-    apply_rounding("sum_by_net_keep_gross", "EUR", lines)
+    apply_rounding("sum_by_net_keep_gross", None, "EUR", lines)
     assert sum(l.price for l in lines) == Decimal("500.00")
     assert sum(l.tax_value for l in lines) == Decimal("79.83")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("420.17")
@@ -187,12 +187,12 @@ def test_round_up():
     assert sum(l.tax_value for l in lines) == Decimal("79.80")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("420.10")
 
-    apply_rounding("sum_by_net", "EUR", lines)
+    apply_rounding("sum_by_net", None, "EUR", lines)
     assert sum(l.price for l in lines) == Decimal("499.92")
     assert sum(l.tax_value for l in lines) == Decimal("79.82")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("420.10")
 
-    apply_rounding("sum_by_net_keep_gross", "EUR", lines)
+    apply_rounding("sum_by_net_keep_gross", None, "EUR", lines)
     assert sum(l.price for l in lines) == Decimal("499.90")
     assert sum(l.tax_value for l in lines) == Decimal("79.82")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("420.08")
@@ -210,12 +210,12 @@ def test_round_currency_without_decimals():
     assert sum(l.tax_value for l in lines) == Decimal("7980.00")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("42010.00")
 
-    apply_rounding("sum_by_net", "JPY", lines)
+    apply_rounding("sum_by_net", None, "JPY", lines)
     assert sum(l.price for l in lines) == Decimal("49992.00")
     assert sum(l.tax_value for l in lines) == Decimal("7982.00")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("42010.00")
 
-    apply_rounding("sum_by_net_keep_gross", "JPY", lines)
+    apply_rounding("sum_by_net_keep_gross", None, "JPY", lines)
     assert sum(l.price for l in lines) == Decimal("49990.00")
     assert sum(l.tax_value for l in lines) == Decimal("7982.00")
     assert sum(l.price - l.tax_value for l in lines) == Decimal("42008.00")
@@ -235,7 +235,7 @@ def test_do_not_touch_free(rounding_mode):
         price=Decimal("23.00"),
     )
     l2._calculate_tax(tax_rule=TaxRule(rate=Decimal("7.00")), invoice_address=InvoiceAddress())
-    apply_rounding(rounding_mode, "EUR", [l1, l2])
+    apply_rounding(rounding_mode, None, "EUR", [l1, l2])
     assert l2.price == Decimal("23.01")
     assert l2.price_includes_rounding_correction == Decimal("0.01")
     assert l2.tax_value == Decimal("1.51")
@@ -245,3 +245,20 @@ def test_do_not_touch_free(rounding_mode):
     assert l1.price_includes_rounding_correction == Decimal("0.00")
     assert l1.tax_value == Decimal("0.00")
     assert l1.tax_value_includes_rounding_correction == Decimal("0.00")
+
+
+@pytest.mark.django_db
+def test_only_business():
+    lines = [OrderPosition(
+        price=Decimal("100.00"),
+        tax_value=Decimal("15.97"),
+        tax_rate=Decimal("19.00"),
+        tax_code="S",
+    ) for _ in range(5)]
+    assert sum(l.price for l in lines) == Decimal("500.00")
+
+    apply_rounding("sum_by_net_only_business", None, "EUR", lines)
+    assert sum(l.price for l in lines) == Decimal("500.00")
+
+    apply_rounding("sum_by_net_only_business", InvoiceAddress(is_business=True), "EUR", lines)
+    assert sum(l.price for l in lines) == Decimal("499.98")

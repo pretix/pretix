@@ -37,7 +37,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.models.base import LoggedModel
 
 PositionInfo = namedtuple('PositionInfo',
-                          ['item_id', 'subevent_id', 'subevent_date_from', 'line_price_gross', 'is_addon_to',
+                          ['item_id', 'subevent_id', 'subevent_date_from', 'line_price_gross', 'addon_to',
                            'voucher_discount'])
 
 
@@ -279,6 +279,42 @@ class Discount(LoggedModel):
             for idx in condition_idx_group:
                 collect_potential_discounts[idx] = [(self, inf, -1, subevent_id)]
 
+    def _addon_idx(self, positions, idx):
+        """
+        If we have the following cart:
+
+        - Main product
+          - 10x Addon product 5€
+        - Main product
+          - 10x Addon product 5€
+
+        And we have a discount rule that grants "every 10th product is free", people tend to expect
+
+        - Main product
+          - 9x Addon product 5€
+          - 1x Addon product free
+        - Main product
+          - 9x Addon product 5€
+          - 1x Addon product free
+
+        And get confused if they get
+
+        - Main product
+          - 8x Addon product 5€
+          - 2x Addon product free
+        - Main product
+          - 10x Addon product 5€
+
+        Even if the result is the same. Therefore, we sort positions in the cart not only by price, but also by their
+        relative index within their addon group. This is only a heuristic and there are *still* scenarios where the more
+        unexpected version happens, e.g. if prices are different. We need to accept this as long as discounts work on
+        cart level and not on addon-group level, but this simple sorting reduces the number of support issues by making
+        the weird case less likely.
+        """
+        if not positions[idx].addon_to:
+            return 0
+        return len([1 for i, p in positions.items() if i < idx and p.addon_to == positions[idx].addon_to])
+
     def _apply_min_count(self, positions, condition_idx_group, benefit_idx_group, result, collect_potential_discounts, subevent_id):
         if len(condition_idx_group) < self.condition_min_count:
             return
@@ -288,8 +324,8 @@ class Discount(LoggedModel):
 
         if self.benefit_only_apply_to_cheapest_n_matches:
             # sort by line_price
-            condition_idx_group = sorted(condition_idx_group, key=lambda idx: (positions[idx].line_price_gross, -idx))
-            benefit_idx_group = sorted(benefit_idx_group, key=lambda idx: (positions[idx].line_price_gross, -idx))
+            condition_idx_group = sorted(condition_idx_group, key=lambda idx: (positions[idx].line_price_gross, self._addon_idx(positions, idx), -idx))
+            benefit_idx_group = sorted(benefit_idx_group, key=lambda idx: (positions[idx].line_price_gross, self._addon_idx(positions, idx), -idx))
 
             # Prevent over-consuming of items, i.e. if our discount is "buy 2, get 1 free", we only
             # want to match multiples of 3
@@ -434,7 +470,7 @@ class Discount(LoggedModel):
             for idx, p in positions.items():
                 subevent_to_idx[p.subevent_id].append(idx)
             for v in subevent_to_idx.values():
-                v.sort(key=lambda idx: positions[idx].line_price_gross)
+                v.sort(key=lambda idx: (positions[idx].line_price_gross, self._addon_idx(positions, idx)))
             subevent_order = sorted(list(subevent_to_idx.keys()), key=lambda s: len(subevent_to_idx[s]), reverse=True)
 
             # Build groups of exactly condition_min_count distinct subevents
@@ -458,7 +494,7 @@ class Discount(LoggedModel):
 
                 # Sort the list by prices, then pick one. For "buy 2 get 1 free" we apply a "pick 1 from the start
                 # and 2 from the end" scheme to optimize price distribution among groups
-                candidates = sorted(candidates, key=lambda idx: positions[idx].line_price_gross)
+                candidates = sorted(candidates, key=lambda idx: (positions[idx].line_price_gross, self._addon_idx(positions, idx)))
                 if len(current_group) < (self.benefit_only_apply_to_cheapest_n_matches or 0):
                     candidate = candidates[0]
                 else:

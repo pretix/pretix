@@ -191,7 +191,7 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
                                     {"transmission_info": {r: "This field is required for the selected type of invoice transmission."}}
                                 )
                     break  # do not call else branch of for loop
-                elif t.exclusive:
+                elif t.is_exclusive(self.context["request"].event, data.get("country"), data.get("is_business")):
                     if t.is_available(self.context["request"].event, data.get("country"), data.get("is_business")):
                         raise ValidationError({
                             "transmission_type": "The transmission type '%s' must be used for this country or address type." % (
@@ -703,6 +703,16 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
 
         if 'answers.question' in self.context['expand']:
             self.fields['answers'].child.fields['question'] = QuestionSerializer(read_only=True)
+
+        if 'addons' in self.context['expand']:
+            # Experimental feature, undocumented on purpose for now in case we need to remove it again
+            # for performance reasons
+            subl = CheckinListOrderPositionSerializer(read_only=True, many=True, context={
+                **self.context,
+                'expand': [v for v in self.context['expand'] if v != 'addons'],
+                'pdf_data': False,
+            })
+            self.fields['addons'] = subl
 
 
 class OrderPaymentTypeField(serializers.Field):
@@ -1601,7 +1611,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 order.sales_channel,
                 [
                     (cp.item_id, cp.subevent_id, cp.subevent.date_from if cp.subevent_id else None, cp.price,
-                     bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
+                     cp.addon_to, cp.is_bundled, pos._voucher_discount)
                     for cp in order_positions
                 ]
             )
@@ -1733,6 +1743,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             rounding_mode = self.context["event"].settings.tax_rounding
         changed = apply_rounding(
             rounding_mode,
+            ia,
             self.context["event"].currency,
             [*pos_map.values(), *fees]
         )

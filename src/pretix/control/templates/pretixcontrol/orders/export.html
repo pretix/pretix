@@ -22,7 +22,7 @@
                                 {{ s.owner.fullname|default:s.owner.email }}
                             </span>
                         </div>
-                        <div class="col-lg-5 col-md-6 col-xs-12">
+                        <div class="col-lg-4 col-md-5 col-xs-12">
                             {% if s.schedule_next_run %}
                                 <span class="fa fa-clock-o fa-fw"></span>
                                 {% trans "Next run:" %}
@@ -53,7 +53,7 @@
                                 {{ s.mail_subject }}
                             </span>
                         </div>
-                        <div class="col-lg-2 col-md-2 col-xs-12 text-right">
+                        <div class="col-lg-3 col-md-3 col-xs-12 text-right">
                             <form action="{% url "control:event.orders.export.do" event=request.event.slug organizer=request.organizer.slug %}"
                                   method="post" class="form-horizontal" data-asynctask data-asynctask-download
                                   data-asynctask-long>
@@ -72,6 +72,9 @@
                                     </button>
                                     <a href="?identifier={{ s.export_identifier }}&scheduled={{ s.pk }}" class="btn btn-default" title="{% trans "Edit" %}" data-toggle="tooltip">
                                         <span class="fa fa-edit"></span>
+                                    </a>
+                                    <a href="?identifier={{ s.export_identifier }}&scheduled_copy_from={{ s.pk }}" class="btn btn-default" title="{% trans "Copy" %}" data-toggle="tooltip">
+                                        <span class="fa fa-copy"></span>
                                     </a>
                                 {% endif %}
                                 <a href="{% url "control:event.orders.export.scheduled.delete" event=request.event.slug organizer=request.event.organizer.slug pk=s.pk %}" class="btn btn-danger" title="{% trans "Delete" %}" data-toggle="tooltip">

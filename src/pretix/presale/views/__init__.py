@@ -48,7 +48,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scopes_disabled
 
-from pretix.base.i18n import get_language_without_region
+from pretix.base.i18n import get_language_without_region, set_region
 from pretix.base.middleware import get_supported_language
 from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderFee, Question,
@@ -167,7 +167,7 @@ class CartMixin:
             fees = []
 
         if not order:
-            apply_rounding(self.request.event.settings.tax_rounding, self.request.event.currency, [*lcp, *fees])
+            apply_rounding(self.request.event.settings.tax_rounding, self.invoice_address, self.request.event.currency, [*lcp, *fees])
 
         total = sum([c.price for c in lcp]) + sum([f.value for f in fees])
         net_total = sum(p.price - p.tax_value for p in lcp) + sum([f.net_value for f in fees])
@@ -209,6 +209,8 @@ class CartMixin:
                     pos.valid_from,
                     pos.valid_until,
                     pos.used_membership_id,
+                    pos.gross_price_before_rounding,
+                    pos.tax_value_before_rounding,
                 )
 
         positions = []
@@ -222,8 +224,8 @@ class CartMixin:
             if not hasattr(group, 'tax_rule'):
                 group.tax_rule = group.item.tax_rule
 
-            group.bundle_sum = group.price + sum(a.price for a in has_addons[group.pk])
-            group.bundle_sum_net = group.net_price + sum(a.net_price for a in has_addons[group.pk])
+            group.price_for_input = group.gross_price_before_rounding + sum(a.gross_price_before_rounding for a in has_addons[group.pk])
+            group.price_for_input_net = group.net_price_before_rounding + sum(a.net_price_before_rounding for a in has_addons[group.pk])
 
             if answers:
                 group.cache_answers(all=False)
@@ -262,9 +264,14 @@ class CartMixin:
             'max_expiry_extend': max_expiry_extend,
             'is_ordered': bool(order),
             'itemcount': sum(c.count for c in positions if not c.addon_to),
+            'show_rounding_info': (
+                self.request.event.settings.tax_rounding == "sum_by_net_only_business" and
+                not self.request.event.settings.display_net_prices and
+                sum(c.price_includes_rounding_correction for c in positions) + sum(f.price_includes_rounding_correction for f in fees)
+            ),
             'itemvarsums': itemvarsums,
             'current_selected_payments': [
-                p for p in self.current_selected_payments(positions, fees, self.invoice_address)
+                p for p in self.current_selected_payments(lcp, fees, self.invoice_address)
                 if p.get('multi_use_supported')
             ]
         }
@@ -273,7 +280,7 @@ class CartMixin:
         raw_payments = copy.deepcopy(self.cart_session.get('payments', []))
         fees = [f for f in fees if f.fee_type != OrderFee.FEE_TYPE_PAYMENT]  # we re-compute these here
 
-        apply_rounding(self.request.event.settings.tax_rounding, self.request.event.currency, [*positions, *fees])
+        apply_rounding(self.request.event.settings.tax_rounding, invoice_address, self.request.event.currency, [*positions, *fees])
         total = sum([c.price for c in positions]) + sum([f.value for f in fees])
 
         payments = []
@@ -327,7 +334,7 @@ class CartMixin:
                 fees.append(pf)
 
                 # Re-apply rounding as grand total has changed
-                apply_rounding(self.request.event.settings.tax_rounding, self.request.event.currency, [*positions, *fees])
+                apply_rounding(self.request.event.settings.tax_rounding, invoice_address, self.request.event.currency, [*positions, *fees])
                 total = sum([c.price for c in positions]) + sum([f.value for f in fees])
 
                 # Re-calculate to_pay as grand total has changed
@@ -542,6 +549,7 @@ def iframe_entry_view_wrapper(view_func):
                 region = request.event.settings.region
                 if '-' not in lng and region:
                     lng += '-' + region.lower()
+                set_region(region)
 
             # with language() is not good enough here – we really need to take the role of LocaleMiddleware and modify
             # global state, because template rendering might be happening lazily.

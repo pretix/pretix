@@ -82,6 +82,10 @@ SAMPLE_EXPORTER_CONFIG = {
             "name": "event_date_range",
             "required": False
         },
+        {
+            "name": "items",
+            "required": False
+        },
     ]
 }
 
@@ -105,6 +109,10 @@ def test_org_list(token_client, organizer, event):
     c = copy.deepcopy(SAMPLE_EXPORTER_CONFIG)
     c['input_parameters'].insert(0, {
         "name": "events",
+        "required": False
+    })
+    c['input_parameters'].remove({
+        "name": "items",
         "required": False
     })
     resp = token_client.get('/api/v1/organizers/{}/exporters/'.format(organizer.slug))
@@ -389,7 +397,7 @@ def test_event_scheduled_export_create(user_client, organizer, event, user):
         '/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug),
         data={
             "export_identifier": "orderlist",
-            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this", "items": []},
             "locale": "en",
             "mail_additional_recipients": "foo@example.org",
             "mail_additional_recipients_cc": "",
@@ -403,7 +411,7 @@ def test_event_scheduled_export_create(user_client, organizer, event, user):
     )
     assert resp.status_code == 201
     created = event.scheduled_exports.get(id=resp.data["id"])
-    assert created.export_form_data == {"_format": "xlsx", "date_range": "year_this"}
+    assert created.export_form_data == {"_format": "xlsx", "date_range": "year_this", "items": []}
     assert created.owner == user
     assert created.schedule_next_run > now()
 
@@ -414,7 +422,7 @@ def test_event_scheduled_export_create_requires_user(token_client, organizer, ev
         '/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug),
         data={
             "export_identifier": "orderlist",
-            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this", "items": []},
             "locale": "en",
             "mail_additional_recipients": "foo@example.org",
             "mail_additional_recipients_cc": "",
@@ -453,7 +461,7 @@ def test_event_scheduled_export_update_token(token_client, organizer, event, use
     )
     assert resp.status_code == 200
     created = event.scheduled_exports.get(id=resp.data["id"])
-    assert created.export_form_data == {"_format": "xlsx", "date_range": "month_this"}
+    assert created.export_form_data == {"_format": "xlsx", "date_range": "month_this", "items": []}
 
 
 @pytest.fixture

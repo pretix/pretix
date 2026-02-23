@@ -594,10 +594,11 @@ class Item(LoggedModel):
         on_delete=models.SET_NULL,
         verbose_name=_("Only show after sellout of"),
         help_text=_("If you select a product here, this product will only be shown when that product is "
-                    "sold out. If combined with the option to hide sold-out products, this allows you to "
-                    "swap out products for more expensive ones once the cheaper option is sold out. There might "
-                    "be a short period in which both products are visible while all tickets of the referenced "
-                    "product are reserved, but not yet sold.")
+                    "no longer available. This will happen either because the other product has sold out or because "
+                    "the time is outside of the sales window for the other product. If combined with the option "
+                    "to hide sold-out products, this allows you to swap out products for more expensive ones once "
+                    "the cheaper option is sold out. There might be a short period in which both products are visible "
+                    "while all tickets of the referenced product are reserved, but not yet sold.")
     )
     hidden_if_item_available_mode = models.CharField(
         choices=UNAVAIL_MODES,

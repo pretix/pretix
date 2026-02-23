@@ -1,4 +1,5 @@
 {% extends "pretixpresale/event/base.html" %}
+{% load html_time %}
 {% load i18n %}
 {% load bootstrap3 %}
 {% load eventsignal %}
@@ -92,11 +93,10 @@
                     A payment of {{ total }} is still pending for this order.
                 {% endblocktrans %}</strong>
                 <strong>
-                {% with date_human=order|format_expires|safe date_iso=order.expires|date:"c" %}
-                    {% blocktrans trimmed with date='<time datetime="'|add:date_iso|add:'">'|add:date_human|add:"</time>"|safe %}
+                {% html_time order.expires "format_expires" as date %}
+                    {% blocktrans trimmed with date=date %}
                         Please complete your payment before {{ date }}
                     {% endblocktrans %}
-                {% endwith %}
                 </strong>
                 </p>
                 {% if last_payment %}
@@ -304,7 +304,7 @@
                             <dt>{% trans "Phone number" %}</dt>
                             <dd>{{ order.phone|phone_format }}</dd>
                         {% endif %}
-                        {% if invoice_address_asked %}
+                        {% if invoice_address_asked and order.invoice_address.is_business %}
                             <dt>{% trans "Company" %}</dt>
                             <dd>{{ order.invoice_address.company }}</dd>
                         {% endif %}

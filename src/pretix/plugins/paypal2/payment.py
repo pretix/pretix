@@ -54,7 +54,6 @@ from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
-from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
@@ -787,7 +786,12 @@ class PaypalMethod(BasePaymentProvider):
                 else:
                     pp_captured_order = response.result
 
-                for purchaseunit in pp_captured_order.purchase_units:
+            payment.refresh_from_db()
+
+            any_captures = False
+            all_captures_completed = True
+            for purchaseunit in pp_captured_order.purchase_units:
+                if hasattr(purchaseunit, 'payments'):
                     for capture in purchaseunit.payments.captures:
                         try:
                             ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=capture.id)
@@ -795,14 +799,16 @@ class PaypalMethod(BasePaymentProvider):
                             pass
 
                         if capture.status != 'COMPLETED':
-                            messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
-                                                        'soon as the payment completed.'))
-                            payment.info = json.dumps(pp_captured_order.dict())
-                            payment.state = OrderPayment.PAYMENT_STATE_PENDING
-                            payment.save()
-                            return
-
-            payment.refresh_from_db()
+                            all_captures_completed = False
+                        else:
+                            any_captures = True
+            if not (any_captures and all_captures_completed):
+                messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
+                                            'soon as the payment completed.'))
+                payment.info = json.dumps(pp_captured_order.dict())
+                payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                payment.save()
+                return
 
             if pp_captured_order.status != 'COMPLETED':
                 payment.fail(info=pp_captured_order.dict())
@@ -821,9 +827,6 @@ class PaypalMethod(BasePaymentProvider):
                 payment.confirm()
             except Quota.QuotaExceededException as e:
                 raise PaymentException(str(e))
-
-            except SendMailException:
-                messages.warning(request, _('There was an error sending the confirmation mail.'))
         finally:
             if 'payment_paypal_oid' in request.session:
                 del request.session['payment_paypal_oid']

@@ -569,7 +569,7 @@ def category_select2(request, **kwargs):
         page = 1
 
     qs = request.event.categories.filter(
-        name__icontains=i18ncomp(query)
+        Q(name__icontains=i18ncomp(query)) | Q(internal_name__icontains=query)
     ).order_by('name')
 
     total = qs.count()

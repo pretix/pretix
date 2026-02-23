@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import uuid
+
 import css_inline
 from django.conf import settings
 from django.template.loader import get_template
@@ -26,7 +28,9 @@ from django.utils.timezone import override
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.i18n import language
-from pretix.base.models import LogEntry, NotificationSetting, User
+from pretix.base.models import (
+    LogEntry, NotificationSetting, OutgoingMail, User,
+)
 from pretix.base.notifications import Notification, get_all_notification_types
 from pretix.base.services.mail import mail_send_task
 from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
@@ -153,16 +157,26 @@ def send_notification_mail(notification: Notification, user: User):
     tpl_plain = get_template('pretixbase/email/notification.txt')
     body_plain = tpl_plain.render(ctx)
 
-    mail_send_task.apply_async(kwargs={
-        'to': [user.email],
-        'subject': '[{}] {}: {}'.format(
+    guid = uuid.uuid4()
+    m = OutgoingMail.objects.create(
+        guid=guid,
+        user=user,
+        to=[user.email],
+        subject='[{}] {}: {}'.format(
             settings.PRETIX_INSTANCE_NAME,
             notification.event.settings.mail_prefix or notification.event.slug.upper(),
             notification.title
         ),
-        'body': body_plain,
-        'html': body_html,
-        'sender': settings.MAIL_FROM_NOTIFICATIONS,
-        'headers': {},
-        'user': user.pk
+        body_plain=body_plain,
+        body_html=body_html,
+        sender=settings.MAIL_FROM_NOTIFICATIONS,
+        headers={
+            'X-Auto-Response-Suppress': 'OOF, NRN, AutoReply, RN',
+            'Auto-Submitted': 'auto-generated',
+            'X-Mailer': 'pretix',
+            'X-PX-Correlation': str(guid),
+        },
+    )
+    mail_send_task.apply_async(kwargs={
+        'outgoing_mail': m.pk,
     })

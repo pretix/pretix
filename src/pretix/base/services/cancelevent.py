@@ -36,7 +36,7 @@ from pretix.base.models import (
     SubEvent, TaxRule, User, WaitingListEntry,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.mail import mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _cancel_order, _try_auto_refund,
 )
@@ -53,17 +53,14 @@ logger = logging.getLogger(__name__)
 def _send_wle_mail(wle: WaitingListEntry, subject: LazyI18nString, message: LazyI18nString, subevent: SubEvent):
     with language(wle.locale, wle.event.settings.region):
         email_context = get_email_context(event_or_subevent=subevent or wle.event, event=wle.event)
-        try:
-            mail(
-                wle.email,
-                format_map(subject, email_context),
-                message,
-                email_context,
-                wle.event,
-                locale=wle.locale
-            )
-        except SendMailException:
-            logger.exception('Waiting list canceled email could not be sent')
+        mail(
+            wle.email,
+            format_map(subject, email_context),
+            message,
+            email_context,
+            wle.event,
+            locale=wle.locale
+        )
 
 
 def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, subevent: SubEvent,
@@ -77,14 +74,11 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
         email_context = get_email_context(event_or_subevent=subevent or order.event, refund_amount=refund_amount,
                                           order=order, position_or_address=ia, event=order.event)
         real_subject = format_map(subject, email_context)
-        try:
-            order.send_mail(
-                real_subject, message, email_context,
-                'pretix.event.order.email.event_canceled',
-                user,
-            )
-        except SendMailException:
-            logger.exception('Order canceled email could not be sent')
+        order.send_mail(
+            real_subject, message, email_context,
+            'pretix.event.order.email.event_canceled',
+            user,
+        )
 
         for p in positions:
             if subevent and p.subevent_id != subevent.id:
@@ -97,15 +91,12 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
                                                   refund_amount=refund_amount,
                                                   position_or_address=p,
                                                   order=order, position=p)
-                try:
-                    order.send_mail(
-                        real_subject, message, email_context,
-                        'pretix.event.order.email.event_canceled',
-                        position=p,
-                        user=user
-                    )
-                except SendMailException:
-                    logger.exception('Order canceled email could not be sent to attendee')
+                order.send_mail(
+                    real_subject, message, email_context,
+                    'pretix.event.order.email.event_canceled',
+                    position=p,
+                    user=user
+                )
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))

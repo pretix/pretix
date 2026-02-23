@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-20 10:37+0000\n"
-"PO-Revision-Date: 2025-05-05 09:40+0000\n"
-"Last-Translator: \"Luca Martinelli [Sannita]\" <sannita@gmail.com>\n"
+"POT-Creation-Date: 2026-01-26 09:10+0000\n"
+"PO-Revision-Date: 2026-02-10 16:49+0000\n"
+"Last-Translator: Raffaele Doretto <ced@comune.portogruaro.ve.it>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.11.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -143,7 +143,7 @@ msgstr "Continua"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
 msgid "Confirming your payment …"
 msgstr "Stiamo processando il tuo pagamento …"
 
@@ -152,16 +152,26 @@ msgid "Payment method unavailable"
 msgstr ""
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
 msgid "Placed orders"
 msgstr "Ordini effettuati"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
 msgid "Paid orders"
 msgstr "Ordini pagati"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+msgid "Attendees (ordered)"
+msgstr ""
+
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+msgid "Attendees (paid)"
+msgstr ""
+
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
 msgid "Total revenue"
 msgstr "Ricavi totali"
 
@@ -348,7 +358,7 @@ msgstr "No"
 msgid "close"
 msgstr "Chiudi"
 
-#: pretix/static/pretixbase/js/addressform.js:98
+#: pretix/static/pretixbase/js/addressform.js:101
 #: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "richiesta"
@@ -1124,6 +1134,9 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
+"Alcune o tutte le categorie di biglietti sono attualmente esaurite. Se lo "
+"desideri, puoi aggiungerti alla lista d'attesa. Ti informeremo se i posti "
+"saranno nuovamente disponibili."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:76
 msgctxt "widget"

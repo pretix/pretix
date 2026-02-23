@@ -339,13 +339,17 @@ class UserSettings2FATest(SoupTest):
 
     def test_gen_emergency(self):
         self.client.get('/control/settings/2fa/')
+        assert not StaticDevice.objects.filter(user=self.user, name='emergency').exists()
+
+        self.client.post('/control/settings/2fa/regenemergency')
         d = StaticDevice.objects.get(user=self.user, name='emergency')
         assert d.token_set.count() == 10
         old_tokens = set(t.token for t in d.token_set.all())
+
         self.client.post('/control/settings/2fa/regenemergency')
-        new_tokens = set(t.token for t in d.token_set.all())
         d = StaticDevice.objects.get(user=self.user, name='emergency')
         assert d.token_set.count() == 10
+        new_tokens = set(t.token for t in d.token_set.all())
         assert old_tokens != new_tokens
 
     def test_delete_u2f(self):

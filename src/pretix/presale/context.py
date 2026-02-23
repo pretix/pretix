@@ -179,6 +179,7 @@ def _default_context(request):
     ctx['html_page_header'] = "".join(h for h in _html_page_header if h)
     ctx['footer'] = _footer
     ctx['site_url'] = settings.SITE_URL
+    ctx['request_get_items'] = request.GET.items()
 
     ctx['js_datetime_format'] = get_javascript_format_without_seconds('DATETIME_INPUT_FORMATS')
     ctx['js_date_format'] = get_javascript_format_without_seconds('DATE_INPUT_FORMATS')

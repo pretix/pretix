@@ -313,12 +313,12 @@
                             <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"
                                 value="1" />
                             <input type="hidden" name="price_{{ line.item.id }}_{{ line.variation.id }}"
-                                    value="{% if event.settings.display_net_prices %}{{ line.bundle_sum_net }}{% else %}{{ line.bundle_sum }}{% endif %}" />
+                                    value="{% if event.settings.display_net_prices %}{{ line.price_for_input_net }}{% else %}{{ line.price_for_input }}{% endif %}" />
                         {% else %}
                             <input type="hidden" name="item_{{ line.item.id }}"
                                     value="1" />
                             <input type="hidden" name="price_{{ line.item.id }}"
-                                    value="{% if event.settings.display_net_prices %}{{ line.bundle_sum_net }}{% else %}{{ line.bundle_sum }}{% endif %}" />
+                                   value="{% if event.settings.display_net_prices %}{{ line.price_for_input_net }}{% else %}{{ line.price_for_input }}{% endif %}" />
                         {% endif %}
                         <button class="btn btn-mini btn-link {% if line.seat %}btn-invisible{% endif %}" title="{% blocktrans with item=line.item.name %}Add one more {{item}} to your cart{% endblocktrans %}" {% if line.seat %}disabled{% endif %}>
                             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -493,7 +493,18 @@
         </div>
     {% endif %}
 </div>
-
+{% if cart.show_rounding_info %}
+    <div class="text-muted">
+        <small>
+            {% icon "info-circle" %}
+            {% blocktrans trimmed %}
+                Since you entered a business address, your price was computed from the
+                VAT-exclusive price. Due to rounding, this caused a small change to the
+                total price.
+            {% endblocktrans %}
+        </small>
+    </div>
+{% endif %}
 <div class="row">
     <div class="col-md-12">
     {% if not cart.is_ordered %}
@@ -519,7 +530,7 @@
         <dialog role="alertdialog" id="cart-extend-confirmation-dialog" class="inline-dialog" aria-labelledby="cart-deadline">
             <form method="dialog">
                 <p>
-                    <button class="btn btn-success" autofocus value="OK">
+                    <button class="btn btn-success" value="OK">
                         <span role="img" aria-label="{% trans "OK" %}.">
                             {% icon "check" %}
                         </span>

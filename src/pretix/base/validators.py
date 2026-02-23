@@ -95,6 +95,7 @@ class OrganizerSlugBanlistValidator(BanlistValidator):
         'csp_report',
         'widget',
         'lead',
+        'scheduling',
     ]
 
 

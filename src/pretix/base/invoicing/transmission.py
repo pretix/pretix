@@ -21,6 +21,7 @@
 #
 from typing import Optional
 
+from django.utils.translation import gettext_lazy as _
 from django_countries.fields import Country
 
 from pretix.base.models import Invoice, InvoiceAddress
@@ -59,15 +60,6 @@ class TransmissionType:
         return 100
 
     @property
-    def exclusive(self) -> bool:
-        """
-        If a transmission type is exclusive, no other type can be chosen if this type is
-        available. Use e.g. if a certain transmission type is legally required in a certain
-        jurisdiction.
-        """
-        return False
-
-    @property
     def enforce_transmission(self) -> bool:
         """
         If a transmission type enforces transmission, every invoice created with this type will be transferred.
@@ -81,6 +73,15 @@ class TransmissionType:
             provider.is_available(event, country, is_business)
             for provider, _ in providers
         )
+
+    def is_exclusive(self, event, country: Country, is_business: bool) -> bool:
+        """
+        If a transmission type is exclusive, no other type can be chosen if this type is
+        available. Use e.g. if a certain transmission type is legally required in a certain
+        jurisdiction. Event can be None in organizer-level contexts. Exclusiveness has no effect if
+        the type is not available.
+        """
+        return False
 
     def invoice_address_form_fields_required(self, country: Country, is_business: bool):
         return set()
@@ -105,6 +106,22 @@ class TransmissionType:
 
     def transmission_info_to_form_data(self, transmission_info: dict) -> dict:
         return transmission_info
+
+    def describe_info(self, transmission_info: dict, country: Country, is_business: bool):
+        form_data = self.transmission_info_to_form_data(transmission_info)
+        data = []
+        visible_field_keys = self.invoice_address_form_fields_visible(country, is_business)
+        for k, f in self.invoice_address_form_fields.items():
+            if k not in visible_field_keys:
+                continue
+            v = form_data.get(k)
+            if v is True:
+                v = _("Yes")
+            elif v is False:
+                v = _("No")
+            if v:
+                data.append((f.label, v))
+        return data
 
     def pdf_watermark(self) -> Optional[str]:
         """

@@ -521,9 +521,20 @@ def invoice_pdf_task(invoice: int):
 
 
 def invoice_qualified(order: Order):
-    if order.total == Decimal('0.00') or order.require_approval or \
-            order.sales_channel.identifier not in order.event.settings.get('invoice_generate_sales_channels'):
+    if order.total == Decimal('0.00'):
         return False
+    if order.require_approval:
+        return False
+    if order.sales_channel.identifier not in order.event.settings.invoice_generate_sales_channels:
+        return False
+    if order.status in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
+        return False
+    if order.event.settings.invoice_generate_only_business:
+        try:
+            ia = order.invoice_address
+            return ia.is_business
+        except InvoiceAddress.DoesNotExist:
+            return False
     return True
 
 

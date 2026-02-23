@@ -66,8 +66,10 @@ from geoip2.errors import AddressNotFoundError
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
-from phonenumbers import NumberParseException, national_significant_number
-from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
+from phonenumbers import (
+    COUNTRY_CODE_TO_REGION_CODE, REGION_CODE_FOR_NON_GEO_ENTITY,
+    NumberParseException, national_significant_number,
+)
 from PIL import ImageOps
 
 from pretix.base.forms.widgets import (
@@ -305,7 +307,9 @@ class WrappedPhonePrefixSelect(Select):
         choices = [("", "---------")]
 
         if initial:
-            for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+            for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
+                if all(v == REGION_CODE_FOR_NON_GEO_ENTITY for v in values):
+                    continue
                 if initial in values:
                     self.initial = "+%d" % prefix
                     break
@@ -437,7 +441,9 @@ def guess_phone_prefix_from_request(request, event):
 
 
 def get_phone_prefix(country):
-    for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+    if country == REGION_CODE_FOR_NON_GEO_ENTITY:
+        return None
+    for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
         if country in values:
             return prefix
     return None
@@ -884,18 +890,18 @@ class BaseQuestionsForm(forms.Form):
                 if not help_text:
                     if q.valid_date_min and q.valid_date_max:
                         help_text = format_lazy(
-                            'Please enter a date between {min} and {max}.',
+                            _('Please enter a date between {min} and {max}.'),
                             min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
                             max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
                         )
                     elif q.valid_date_min:
                         help_text = format_lazy(
-                            'Please enter a date no earlier than {min}.',
+                            _('Please enter a date no earlier than {min}.'),
                             min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
                         )
                     elif q.valid_date_max:
                         help_text = format_lazy(
-                            'Please enter a date no later than {max}.',
+                            _('Please enter a date no later than {max}.'),
                             max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
                         )
                 if initial and initial.answer:
@@ -933,18 +939,18 @@ class BaseQuestionsForm(forms.Form):
                 if not help_text:
                     if q.valid_datetime_min and q.valid_datetime_max:
                         help_text = format_lazy(
-                            'Please enter a date and time between {min} and {max}.',
+                            _('Please enter a date and time between {min} and {max}.'),
                             min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
                             max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
                         )
                     elif q.valid_datetime_min:
                         help_text = format_lazy(
-                            'Please enter a date and time no earlier than {min}.',
+                            _('Please enter a date and time no earlier than {min}.'),
                             min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
                         )
                     elif q.valid_datetime_max:
                         help_text = format_lazy(
-                            'Please enter a date and time no later than {max}.',
+                            _('Please enter a date and time no later than {max}.'),
                             max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
                         )
 
@@ -1411,7 +1417,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
                 self.instance.transmission_type = transmission_type.identifier
                 self.instance.transmission_info = transmission_type.form_data_to_transmission_info(data)
-            elif transmission_type.exclusive:
+            elif transmission_type.is_exclusive(self.event, data.get("country"), data.get("is_business")):
                 if transmission_type.is_available(self.event, data.get("country"), data.get("is_business")):
                     raise ValidationError({
                         "transmission_type": "The transmission type '%s' must be used for this country or address type." % (

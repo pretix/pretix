@@ -167,6 +167,7 @@ Footer
 Footer-Link
 Footer-Text
 Galicisch
+GBP
 Geocoding
 Geocoding-Daten
 Geo-Koordinaten
@@ -255,6 +256,7 @@ NFC-Chip
 NFC-Chips
 NFC-Medien
 NFC-Zahlungsmitteln
+NIF
 Nr
 NREI
 number
@@ -263,6 +265,8 @@ Objekt-IDs
 Offline-Scan
 OK
 Online-Banking
+Online-Banking-Nutzer
+Onlinebanking
 Onlinebanking-Zugangsdaten
 Open
 OpenCage-API-Key
@@ -292,6 +296,7 @@ Peppol-Netzwerk
 Peppol-Teilnehmer-ID
 Peppol-Teilnehmer-IDs
 Personalisierung
+P.IVA
 PKCE-Erweiterung
 Platzhalterzeichen
 Play
@@ -330,6 +335,9 @@ pretix-Versionen
 pretix-Widget
 Produkt-ID
 Produkt-Metadaten
+PromptPay
+PromptPay-QR-Code
+PromptPay-Zahlung
 Przelewy
 pt
 px
@@ -449,6 +457,7 @@ Ticketing
 Ticketing-Firma
 Ticket-Output
 Ticket-QR-Code
+TIN
 TODO
 To-Do-Liste
 TOTP
@@ -531,6 +540,8 @@ WeChat-Zahlung
 Weiterleitungs-URIs
 Weiterleitungs-URL
 Weiterleitungs-URLs
+WERO
+WERO-App
 WhatsApp
 Widget
 Widget-Code

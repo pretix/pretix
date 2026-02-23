@@ -35,7 +35,7 @@ from django.utils.translation.trans_real import (
     parse_accept_lang_header,
 )
 
-from pretix.base.i18n import get_language_without_region
+from pretix.base.i18n import get_language_without_region, set_region
 from pretix.base.settings import global_settings_object
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
@@ -92,10 +92,14 @@ class LocaleMiddleware(MiddlewareMixin):
                 )
                 if '-' not in language and settings_holder.settings.region:
                     language += '-' + settings_holder.settings.region
+                if settings_holder.settings.region:
+                    set_region(settings_holder.settings.region)
         else:
             gs = global_settings_object(request)
             if '-' not in language and gs.settings.region:
                 language += '-' + gs.settings.region
+            if gs.settings.region:
+                set_region(gs.settings.region)
 
         translation.activate(language)
         request.LANGUAGE_CODE = get_language_without_region()

@@ -679,6 +679,15 @@ def get_organizer_navigation(request):
             'active': (url.url_name == 'organizer.datasync.failedjobs'),
         }])
 
+        nav.append({
+            'label': _('Outgoing emails'),
+            'url': reverse('control:organizer.outgoingmails', kwargs={
+                'organizer': request.organizer.slug,
+            }),
+            'active': 'organizer.outgoingmail' in url.url_name,
+            'icon': 'send',
+        })
+
     merge_in(nav, sorted(
         sum((list(a[1]) for a in nav_organizer.send(request.organizer, request=request, organizer=request.organizer)),
             []),

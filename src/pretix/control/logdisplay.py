@@ -171,6 +171,12 @@ class OrderFeeAdded(OrderChangeLogEntryType):
 
 
 @log_entry_types.new()
+class OrderRecomputed(OrderChangeLogEntryType):
+    action_type = 'pretix.event.order.changed.recomputed'
+    plain = _('Taxes and rounding have been recomputed')
+
+
+@log_entry_types.new()
 class OrderFeeChanged(OrderChangeLogEntryType):
     action_type = 'pretix.event.order.changed.feevalue'
 
@@ -699,6 +705,8 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.organizer.export.schedule.deleted': _('A scheduled export has been deleted.'),
     'pretix.organizer.export.schedule.executed': _('A scheduled export has been executed.'),
     'pretix.organizer.export.schedule.failed': _('A scheduled export has failed: {reason}.'),
+    'pretix.organizer.outgoingmails.retried': _('Failed emails have been scheduled to be retried.'),
+    'pretix.organizer.outgoingmails.aborted': _('Queued emails have been aborted.'),
     'pretix.giftcards.acceptance.added': _('Gift card acceptance for another organizer has been added.'),
     'pretix.giftcards.acceptance.removed': _('Gift card acceptance for another organizer has been removed.'),
     'pretix.giftcards.acceptance.acceptor.invited': _('A new gift card acceptor has been invited.'),
@@ -793,6 +801,8 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.giftcards.created': _('The gift card has been created.'),
     'pretix.giftcards.modified': _('The gift card has been changed.'),
     'pretix.giftcards.transaction.manual': _('A manual transaction has been performed.'),
+    'pretix.giftcards.transaction.payment': _('A payment has been performed.'),
+    'pretix.giftcards.transaction.refund': _('A refund has been performed. '),
     'pretix.team.token.created': _('The token "{name}" has been created.'),
     'pretix.team.token.deleted': _('The token "{name}" has been revoked.'),
     'pretix.event.checkin.reset': _('The check-in and print log state has been reset.')
@@ -814,7 +824,7 @@ class OrganizerPluginStateLogEntryType(LogEntryType):
             if app and hasattr(app, 'PretixPluginMeta'):
                 return {
                     'href': reverse('control:organizer.settings.plugins', kwargs={
-                        'organizer': logentry.event.organizer.slug,
+                        'organizer': logentry.organizer.slug,
                     }) + '#plugin_' + logentry.parsed_data['plugin'],
                     'val': app.PretixPluginMeta.name
                 }

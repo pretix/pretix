@@ -45,7 +45,7 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import formset_factory, inlineformset_factory
 from django.urls import reverse
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property, lazy
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
@@ -53,7 +53,7 @@ from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django_countries.fields import LazyTypedChoiceField
 from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import (
-    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextInput,
+    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
 )
 from pytz import common_timezones
 
@@ -207,6 +207,7 @@ class EventWizardBasicsForm(I18nModelForm):
             'Sample Conference Center\nHeidelberg, Germany'
         )
         self.fields['slug'].widget.prefix = build_absolute_uri(self.organizer, 'presale:organizer.index')
+        self.fields['tax_rate']._required = True  # Do not render as optional because it is conditionally required
         if self.has_subevents:
             del self.fields['presale_start']
             del self.fields['presale_end']
@@ -866,6 +867,11 @@ class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
                 "The gross price of some products may be changed to ensure correct rounding, while the net "
                 "prices will be kept as configured. This may cause the actual payment amount to differ."
             ),
+            "sum_by_net_only_business": _(
+                "Same as above, but only applied to business customers. Line-based rounding will be used for consumers. "
+                "Recommended when e-invoicing is only used for business customers and consumers do not receive "
+                "invoices. This can cause the payment amount to change when the invoice address is changed."
+            ),
             "sum_by_net_keep_gross": _(
                 "Recommended for e-invoicing when you primarily sell to consumers. "
                 "The gross or net price of some products may be changed automatically to ensure correct "
@@ -938,6 +944,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_show_payments',
         'invoice_reissue_after_modify',
         'invoice_generate',
+        'invoice_generate_only_business',
         'invoice_period',
         'invoice_attendee_name',
         'invoice_event_location',
@@ -1310,9 +1317,17 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_invoice = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nMarkdownTextarea,
-        help_text=_("This will only be used if the invoice is sent to a different email address or at a different time "
-                    "than the order confirmation."),
+        widget=I18nTextarea,  # no Markdown supported
+        help_text=lazy(
+            lambda: str(_(
+                "This will only be used if the invoice is sent to a different email address or at a different time "
+                "than the order confirmation."
+            )) + " " + str(_(
+                "Formatting is not supported, as some accounting departments process mail automatically and do not "
+                "handle formatted emails properly."
+            )),
+            str
+        )()
     )
     mail_subject_download_reminder = I18nFormField(
         label=_("Subject sent to order contact address"),
@@ -1480,6 +1495,9 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         'mail_subject_resend_all_links': ['event', 'orders'],
         'mail_attach_ical_description': ['event', 'event_or_subevent'],
     }
+    plain_rendering = {
+        'mail_text_order_invoice',
+    }
 
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.get('obj')
@@ -1498,7 +1516,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         self.event.meta_values_cached = self.event.meta_values.select_related('property').all()
 
         for k, v in self.base_context.items():
-            self._set_field_placeholders(k, v, rich=k.startswith('mail_text_'))
+            self._set_field_placeholders(k, v, rich=k.startswith('mail_text_') and k not in self.plain_rendering)
 
         for k, v in list(self.fields.items()):
             if k.endswith('_attendee') and not event.settings.attendee_emails_asked:
@@ -1958,6 +1976,13 @@ class EventFooterLinkForm(I18nModelForm):
     class Meta:
         model = EventFooterLink
         fields = ('label', 'url')
+        widgets = {
+            "url": forms.URLInput(
+                attrs={
+                    "placeholder": "https://..."
+                }
+            )
+        }
 
 
 class BaseEventFooterLinkFormSet(I18nFormSetMixin, forms.BaseInlineFormSet):

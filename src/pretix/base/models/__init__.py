@@ -41,6 +41,7 @@ from .items import (
     itempicture_upload_to,
 )
 from .log import LogEntry
+from .mail import OutgoingMail
 from .media import ReusableMedium
 from .memberships import Membership, MembershipType
 from .notifications import NotificationSetting

@@ -76,11 +76,12 @@ from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
     ExtFileField, FontSelect, MultipleLanguagesWidget, SingleLanguageWidget,
 )
-from pretix.helpers.countries import CachedCountries
+from pretix.helpers.countries import CachedCountries, pycountry_add
 
 ROUNDING_MODES = (
     ('line', _('Compute taxes for every line individually')),
     ('sum_by_net', _('Compute taxes based on net total')),
+    ('sum_by_net_only_business', _('For business customers, compute taxes based on net total. For individuals, use line-based rounding')),
     ('sum_by_net_keep_gross', _('Compute taxes based on net total with stable gross prices')),
     # We could also have sum_by_gross, but we're not aware of any use-cases for it
 )
@@ -177,6 +178,19 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Allow customers to log in with email address and password"),
             help_text=_("If disabled, you will need to connect one or more single-sign-on providers."),
+            widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
+        )
+    },
+    'customer_accounts_require_login_for_order_access': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Require login to access order confirmation pages"),
+            help_text=_("If enabled, users who were logged in at the time of purchase must also log in to access their order information. "
+                        "If a customer account is created while placing an order, the restriction only becomes active after the customer "
+                        "account is activated."),
             widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
         )
     },
@@ -1211,6 +1225,15 @@ DEFAULTS = {
     'invoice_generate_sales_channels': {
         'default': json.dumps(['web']),
         'type': list
+    },
+    'invoice_generate_only_business': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Only issue invoices to business customers"),
+        )
     },
     'invoice_address_from': {
         'default': '',
@@ -2927,6 +2950,28 @@ Best regards,
 
 Your {organizer} team"""))  # noqa: W291
     },
+    'mail_subject_customer_security_notice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Changes to your account at {organizer}")),
+    },
+    'mail_text_customer_security_notice': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
+
+the following change has been made to your account at {organizer}:
+
+{message}
+
+You can review and change your account settings here:
+
+{url}
+
+If this change was not performed by you, please contact us immediately.
+
+Best regards,  
+
+Your {organizer} team"""))  # noqa: W291
+    },
     'smtp_use_custom': {
         'default': 'False',
         'type': bool
@@ -3914,7 +3959,7 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     'MX': (['State', 'Federal district', 'Federal entity'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
     'IT': (['Province', 'Free municipal consortium', 'Metropolitan city', 'Autonomous province',
-            'Free municipal consortium', 'Decentralized regional entity'], 'short'),
+            'Decentralized regional entity'], 'short'),
 }
 COUNTRY_STATE_LABEL = {
     # Countries in which the "State" field should not be called "State"
@@ -3922,6 +3967,8 @@ COUNTRY_STATE_LABEL = {
     'JP': pgettext_lazy('address', 'Prefecture'),
     'IT': pgettext_lazy('address', 'Province'),
 }
+# Workaround for https://github.com/pretix/pretix/issues/5796
+pycountry_add(pycountry.subdivisions, code="IT-AO", country_code="IT", name="Valle d'Aosta", parent="23", parent_code="IT-23", type="Province")
 
 settings_hierarkey = Hierarkey(attribute_name='settings')
 

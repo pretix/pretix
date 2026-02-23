@@ -174,7 +174,9 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
 
     :param event: Event the cart belongs to
     :param sales_channel: Sales channel the cart was created with
-    :param positions: Tuple of the form ``(item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, is_bundled, voucher_discount)``
+    :param positions: Tuple of the form ``(item_id, subevent_id, subevent_date_from, line_price_gross, addon_to_id, is_bundled, voucher_discount)``
+                      ``addon_to_id`` does not have to be the proper ID, any identifier is okay, even ``True``/``False`` are accepted, but
+                      a better result may be given if addons to the same main product have the same distinct value.
     :param collect_potential_discounts: If a `defaultdict(list)` is supplied, all discounts that could be applied to the cart
     based on the "consumed" items, but lack matching "benefitting" items will be collected therein.
     The dict will contain a mapping from index in the `positions` list of the item that could be consumed, to a list
@@ -196,9 +198,9 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
     ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')
     for discount in discount_qs:
         result = discount.apply({
-            idx: PositionInfo(item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, voucher_discount)
+            idx: PositionInfo(item_id, subevent_id, subevent_date_from, line_price_gross, addon_to, voucher_discount)
             for
-            idx, (item_id, subevent_id, subevent_date_from, line_price_gross, is_addon_to, is_bundled, voucher_discount)
+            idx, (item_id, subevent_id, subevent_date_from, line_price_gross, addon_to, is_bundled, voucher_discount)
             in enumerate(positions)
             if not is_bundled and idx not in new_prices
         }, collect_potential_discounts)
@@ -209,7 +211,8 @@ def apply_discounts(event: Event, sales_channel: Union[str, SalesChannel],
     return [new_prices.get(idx, (p[3], None)) for idx, p in enumerate(positions)]
 
 
-def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_keep_gross"], currency: str,
+def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_only_business", "sum_by_net_keep_gross"],
+                   invoice_address: Optional[InvoiceAddress], currency: str,
                    lines: List[Union[OrderPosition, CartPosition, OrderFee]]) -> list:
     """
     Given a list of order positions / cart positions / order fees (may be mixed), applies the given rounding mode
@@ -224,11 +227,17 @@ def apply_rounding(rounding_mode: Literal["line", "sum_by_net", "sum_by_net_keep
     When rounding mode is set to ``"sum_by_net"``, the gross prices and tax values of the individual lines will be
     adjusted such that the per-taxrate/taxcode subtotal is rounded correctly. The net prices will stay constant.
 
-    :param rounding_mode: One of ``"line"``, ``"sum_by_net"``, or ``"sum_by_net_keep_gross"``.
+    :param rounding_mode: One of ``"line"``, ``"sum_by_net"``, ``"sum_by_net_only_business"``, or ``"sum_by_net_keep_gross"``.
+    :param invoice_address: The invoice address, or ``None``
     :param currency: Currency that will be used to determine rounding precision
     :param lines: List of order/cart contents
     :return: Collection of ``lines`` members that have been changed and may need to be persisted to the database.
     """
+    if rounding_mode == "sum_by_net_only_business":
+        if invoice_address and invoice_address.is_business:
+            rounding_mode = "sum_by_net"
+        else:
+            rounding_mode = "line"
 
     def _key(line):
         return (line.tax_rate, line.tax_code or "")

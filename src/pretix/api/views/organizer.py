@@ -249,12 +249,24 @@ class GiftCardViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         value = serializer.validated_data.pop('value')
         inst = serializer.save(issuer=self.request.organizer)
-        inst.transactions.create(value=value, acceptor=self.request.organizer)
         inst.log_action(
-            'pretix.giftcards.transaction.manual',
+            action='pretix.giftcards.created',
             user=self.request.user,
             auth=self.request.auth,
-            data=merge_dicts(self.request.data, {'id': inst.pk})
+        )
+        inst.transactions.create(value=value, acceptor=self.request.organizer)
+        inst.log_action(
+            action='pretix.giftcards.transaction.manual',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=merge_dicts(
+                self.request.data,
+                {
+                    'id': inst.pk,
+                    'acceptor_id': self.request.organizer.id,
+                    'acceptor_slug': self.request.organizer.slug
+                }
+            )
         )
 
     @transaction.atomic()
@@ -269,7 +281,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
             inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency,
                                    testmode=serializer.instance.testmode)
             inst.log_action(
-                'pretix.giftcards.modified',
+                action='pretix.giftcards.modified',
                 user=self.request.user,
                 auth=self.request.auth,
                 data=self.request.data,
@@ -282,10 +294,14 @@ class GiftCardViewSet(viewsets.ModelViewSet):
             diff = value - old_value
             inst.transactions.create(value=diff, acceptor=self.request.organizer)
             inst.log_action(
-                'pretix.giftcards.transaction.manual',
+                action='pretix.giftcards.transaction.manual',
                 user=self.request.user,
                 auth=self.request.auth,
-                data={'value': diff}
+                data={
+                    'value': diff,
+                    'acceptor_id': self.request.organizer.id,
+                    'acceptor_slug': self.request.organizer.slug
+                }
             )
 
         return inst
@@ -309,10 +325,15 @@ class GiftCardViewSet(viewsets.ModelViewSet):
             }, status=status.HTTP_409_CONFLICT)
         gc.transactions.create(value=value, text=text, info=info, acceptor=self.request.organizer)
         gc.log_action(
-            'pretix.giftcards.transaction.manual',
+            action='pretix.giftcards.transaction.manual',
             user=self.request.user,
             auth=self.request.auth,
-            data={'value': value, 'text': text}
+            data={
+                'value': value,
+                'text': text,
+                'acceptor_id': self.request.organizer.id,
+                'acceptor_slug': self.request.organizer.slug
+            }
         )
         return Response(GiftCardSerializer(gc, context=self.get_serializer_context()).data, status=status.HTTP_200_OK)
 

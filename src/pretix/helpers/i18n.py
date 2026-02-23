@@ -229,7 +229,8 @@ def get_language_score(locale):
     if not catalog:
         score = 1
     else:
-        score = len(list(catalog.items())) or 1
+        source_strings = [k[1] if isinstance(k, tuple) else k for k in catalog.keys()]
+        score = len(set(source_strings)) or 1
     return score
 
 

@@ -71,7 +71,6 @@ from pretix.base.payment import (
     BasePaymentProvider, PaymentException, WalletQueries,
 )
 from pretix.base.plugins import get_all_plugins
-from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
@@ -119,6 +118,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - UPI: ✗
 # - Netbanking: ✗
 # - TWINT: ✓
+# - Wero: ✓ (No settings UI yet)
 #
 # Bank transfers
 # - ACH Bank Transfer: ✗
@@ -137,7 +137,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # Real-time payments
 # - Swish: ✓
 # - PayNow: ✗
-# - PromptPay: ✗
+# - PromptPay: ✓
 # - Pix: ✗
 #
 # Vouchers
@@ -440,6 +440,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'before they work properly.'),
                      required=False,
                  )),
+                ('method_promptpay',
+                 forms.BooleanField(
+                     label='PromptPay',
+                     disabled=self.event.currency != 'THB',
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before they work properly.'),
+                     required=False,
+                 )),
                 ('method_swish',
                  forms.BooleanField(
                      label=_('Swish'),
@@ -502,6 +510,15 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'before they work properly.'),
                      required=False,
                  )),
+                # Disabled for now, since still in closed Beta and only available to dedicated boarded accounts.
+                # ('method_wero',
+                #  forms.BooleanField(
+                #     label=_('Wero'),
+                #      disabled=self.event.currency not in 'EUR',
+                #      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                #                  'before they work properly.'),
+                #      required=False,
+                #  )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
         if not self.settings.connect_client_id or self.settings.secret_key:
@@ -992,9 +1009,6 @@ class StripeMethod(BasePaymentProvider):
                     payment.confirm()
                 except Quota.QuotaExceededException as e:
                     raise PaymentException(str(e))
-
-                except SendMailException:
-                    raise PaymentException(_('There was an error sending the confirmation mail.'))
             elif intent.status == 'processing':
                 if request:
                     messages.warning(request, _('Your payment is pending completion. We will inform you as soon as the '
@@ -1880,6 +1894,30 @@ class StripeSwish(StripeRedirectMethod):
         }
 
 
+class StripePromptPay(StripeRedirectMethod):
+    identifier = 'stripe_promptpay'
+    verbose_name = _('PromptPay via Stripe')
+    public_name = 'PromptPay'
+    method = 'promptpay'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to PromptPay users in Thailand. Please have your app ready.'
+    )
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return super().is_allowed(request, total) and request.event.currency == "THB"
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "promptpay",
+                "billing_details": {
+                    "email": payment.order.email,
+                },
+            },
+        }
+
+
 class StripeTwint(StripeRedirectMethod):
     identifier = 'stripe_twint'
     verbose_name = _('TWINT via Stripe')
@@ -1918,3 +1956,15 @@ class StripeMobilePay(StripeRedirectMethod):
                 "type": "mobilepay",
             },
         }
+
+
+class StripeWero(StripeRedirectMethod):
+    identifier = 'stripe_wero'
+    verbose_name = _('WERO via Stripe')
+    public_name = 'WERO'
+    method = 'wero'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to European online banking users, whose banking institutions support WERO '
+        'either through their native banking apps or through the WERO wallet app. Please have you app ready.'
+    )

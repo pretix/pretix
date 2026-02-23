@@ -353,7 +353,7 @@
                                                             data-toggle="tooltip"
                                                             title="{% trans 'Generate a cancellation document for this invoice and create a new invoice with a new invoice number.' %}"
                                                         {% endif %}>
-                                                    {% if order.status == "c" %}
+                                                    {% if order.status == "c" or not invoice_qualified %}
                                                         {% trans "Generate cancellation" %}
                                                     {% else %}
                                                         {% trans "Cancel and reissue" %}

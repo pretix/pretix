@@ -716,7 +716,7 @@ $(function () {
     // free-range price input auto-check checkbox/set count-input to 1 if 0
     $("[data-checked-onchange]").each(function() {
         var countInput = this;
-        $("#" + this.getAttribute("data-checked-onchange")).on("change", function() {
+        $("#" + this.getAttribute("data-checked-onchange")).on("input", function() {
             if (countInput.type === "checkbox") {
                 if (countInput.checked) return;
                 countInput.checked = true;
@@ -730,6 +730,11 @@ $(function () {
             // in case of a change, trigger event
             $(countInput).trigger("change");
         });
+    });
+
+    $("#customer-account-login-providers a").click(function () {
+        // Prevent double-submit, see also https://github.com/pretix/pretix/issues/5836
+        $(this).addClass("disabled");
     });
 });
 

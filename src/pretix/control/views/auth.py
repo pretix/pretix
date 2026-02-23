@@ -57,6 +57,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django_otp import match_token
+from django_otp.plugins.otp_static.models import StaticDevice
 from webauthn.helpers import generate_challenge
 
 from pretix.base.auth import get_auth_backends
@@ -65,7 +66,6 @@ from pretix.base.forms.auth import (
 )
 from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
-from pretix.base.services.mail import SendMailException
 from pretix.helpers.http import get_client_ip, redirect_to_url
 from pretix.helpers.security import handle_login_source
 
@@ -149,6 +149,8 @@ def login(request):
             return process_login(request, form.user_cache, form.cleaned_data.get('keep_logged_in', False))
     else:
         form = LoginForm(backend=backend, request=request)
+        # Detect redirection loop (usually means cookie not accepted)
+        ctx['possible_cookie_problem'] = request.path in request.headers.get("Referer", "")
     ctx['form'] = form
     ctx['can_register'] = settings.PRETIX_REGISTRATION
     ctx['can_reset'] = settings.PRETIX_PASSWORD_RESET
@@ -346,9 +348,6 @@ class Forgot(TemplateView):
             except User.DoesNotExist:
                 logger.warning('Backend password reset for unregistered e-mail \"' + email + '\" requested.')
 
-            except SendMailException:
-                logger.exception('Sending password reset email to \"' + email + '\" failed.')
-
             except RepeatedResetDenied:
                 pass
 
@@ -363,7 +362,7 @@ class Forgot(TemplateView):
                 else:
                     messages.info(request, _('If the address is registered to valid account, then we have sent you an email containing further instructions.'))
 
-                return redirect('control:auth.forgot')
+            return redirect('control:auth.forgot')
         else:
             return self.get(request, *args, **kwargs)
 
@@ -538,6 +537,10 @@ class Login2FAView(TemplateView):
                     break
         else:
             valid = match_token(self.user, token)
+            if isinstance(valid, StaticDevice):
+                self.user.send_security_notice([
+                    _("A recovery code for two-factor authentification was used to log in.")
+                ])
 
         if valid:
             logger.info(f"Backend login successful for user {self.user.pk} with 2FA.")

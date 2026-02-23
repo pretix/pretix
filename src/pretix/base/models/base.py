@@ -59,6 +59,37 @@ class CachedFile(models.Model):
     web_download = models.BooleanField(default=True)  # allow web download, True for backwards compatibility in plugins
     session_key = models.TextField(null=True, blank=True)  # only allow download in this session
 
+    def session_key_for_request(self, request, salt=None):
+        from ...api.models import OAuthAccessToken, OAuthApplication
+        from .devices import Device
+        from .organizer import TeamAPIToken
+
+        if hasattr(request, "auth") and isinstance(request.auth, OAuthAccessToken):
+            k = f'app:{request.auth.application.pk}'
+        elif hasattr(request, "auth") and isinstance(request.auth, OAuthApplication):
+            k = f'app:{request.auth.pk}'
+        elif hasattr(request, "auth") and isinstance(request.auth, TeamAPIToken):
+            k = f'token:{request.auth.pk}'
+        elif hasattr(request, "auth") and isinstance(request.auth, Device):
+            k = f'device:{request.auth.pk}'
+        elif request.session.session_key:
+            k = request.session.session_key
+        else:
+            raise ValueError("No auth method found to bind to")
+
+        if salt:
+            k = f"{k}!{salt}"
+        return k
+
+    def allowed_for_session(self, request, salt=None):
+        return (
+            not self.session_key or
+            self.session_key_for_request(request, salt) == self.session_key
+        )
+
+    def bind_to_session(self, request, salt=None):
+        self.session_key = self.session_key_for_request(request, salt)
+
 
 @receiver(post_delete, sender=CachedFile)
 def cached_file_delete(sender, instance, **kwargs):
@@ -99,6 +130,8 @@ class LoggingMixin:
             organizer_id = self.event.organizer_id
         elif hasattr(self, 'organizer_id'):
             organizer_id = self.organizer_id
+        elif hasattr(self, 'issuer_id'):
+            organizer_id = self.issuer_id
 
         if user and not user.is_authenticated:
             user = None

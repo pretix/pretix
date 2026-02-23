@@ -108,6 +108,8 @@ def indent(s):
 
 
 def widget_css_etag(request, version, **kwargs):
+    if version > version_max:
+        return None
     if version < version_min:
         version = version_min
     # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
@@ -471,10 +473,11 @@ class WidgetAPIProductList(EventListMixin, View):
             availability['color'] = 'red'
             availability['text'] = gettext('Sale over')
             availability['reason'] = 'over'
-        elif event.settings.presale_start_show_date and ev.presale_start:
+        elif event.settings.presale_start_show_date and ev.effective_presale_start:
             availability['color'] = 'orange'
             availability['text'] = gettext('from %(start_date)s') % {
-                'start_date': date_format(ev.presale_start.astimezone(tz or event.timezone), "SHORT_DATE_FORMAT")
+                'start_date': date_format(ev.effective_presale_start.astimezone(tz or event.timezone),
+                                          "SHORT_DATE_FORMAT")
             }
             availability['reason'] = 'soon'
         else:

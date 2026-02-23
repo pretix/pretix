@@ -12,6 +12,7 @@
                 <legend>{% trans "Invoice generation" %}</legend>
                 {% bootstrap_field form.invoice_generate layout="control" %}
                 {% bootstrap_field form.invoice_generate_sales_channels layout="control" %}
+                {% bootstrap_field form.invoice_generate_only_business layout="control" %}
                 {% bootstrap_field form.invoice_email_attachment layout="control" %}
                 {% bootstrap_field form.invoice_email_organizer layout="control" %}
                 {% bootstrap_field form.invoice_language layout="control" %}
@@ -111,11 +112,6 @@
                                             <span class="text-success">
                                                 <span class="fa fa-check fa-fw"></span>
                                                 {% trans "Available" %}
-                                                {% if t.exclusive %}
-                                                    <span data-toggle="tooltip" title="{% trans "When this type is available for an invoice address, no other type can be selected." %}">
-                                                        {% trans "(exclusive)" %}
-                                                    </span>
-                                                {% endif %}
                                             </span>
                                         {% else %}
                                             <span class="text-muted">

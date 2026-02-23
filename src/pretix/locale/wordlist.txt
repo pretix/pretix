@@ -10,6 +10,7 @@ analytics
 anonymize
 anonymized
 Auth
+authentification
 authenticator
 automatical
 availabilities
@@ -58,6 +59,7 @@ filetype
 frontend
 frontpage
 Galician
+GBP
 GENEXAMPLE
 Geo
 geo
@@ -99,6 +101,7 @@ Mx
 MyBank
 multiline
 NFC
+NIF
 NREI
 NXP
 OpenCage
@@ -126,6 +129,7 @@ pretixdroid
 pretixPOS
 pretixPRINT
 pretixSCAN
+PromptPay
 Przelewy
 Pseudonymization
 px
@@ -183,6 +187,7 @@ webhooks
 webserver
 Wechat
 WeChat
+WERO
 WhatsApp
 whitespace
 xlsx

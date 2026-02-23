@@ -34,7 +34,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import User, Voucher
-from pretix.base.services.mail import SendMailException, mail, render_mail
+from pretix.base.services.mail import mail, render_mail
+from pretix.helpers import OF_SELF
 
 from ...helpers.format import format_map
 from ...helpers.names import build_name
@@ -158,6 +159,7 @@ class WaitingListEntry(LoggedModel):
         if availability[1] is None or availability[1] < 1:
             raise WaitingListException(_('This product is currently not available.'))
 
+        event = self.event
         ev = self.subevent or self.event
         if ev.seat_category_mappings.filter(product=self.item).exists():
             # Generally, we advertise the waiting list to be based on quotas only. This makes it dangerous
@@ -185,44 +187,49 @@ class WaitingListEntry(LoggedModel):
             if not free_seats:
                 raise WaitingListException(_('No seat with this product is currently available.'))
 
-        if self.voucher:
-            raise WaitingListException(_('A voucher has already been sent to this person.'))
         if '@' not in self.email:
             raise WaitingListException(_('This entry is anonymized and can no longer be used.'))
 
         with transaction.atomic():
-            e = self.email
-            if self.name:
-                e += ' / ' + self.name
+            locked_wle = WaitingListEntry.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
+            locked_wle.event = event
+            if locked_wle.voucher:
+                raise WaitingListException(_('A voucher has already been sent to this person.'))
+            e = locked_wle.email
+            if locked_wle.name:
+                e += ' / ' + locked_wle.name
             v = Voucher.objects.create(
-                event=self.event,
+                event=locked_wle.event,
                 max_usages=1,
-                valid_until=now() + timedelta(hours=self.event.settings.waiting_list_hours),
-                item=self.item,
-                variation=self.variation,
+                valid_until=now() + timedelta(hours=locked_wle.event.settings.waiting_list_hours),
+                item=locked_wle.item,
+                variation=locked_wle.variation,
                 tag='waiting-list',
                 comment=_('Automatically created from waiting list entry for {email}').format(
                     email=e
                 ),
                 block_quota=True,
-                subevent=self.subevent,
+                subevent=locked_wle.subevent,
             )
             v.log_action('pretix.voucher.added', {
-                'item': self.item.pk,
-                'variation': self.variation.pk if self.variation else None,
+                'item': locked_wle.item.pk,
+                'variation': locked_wle.variation.pk if locked_wle.variation else None,
                 'tag': 'waiting-list',
                 'block_quota': True,
                 'valid_until': v.valid_until.isoformat(),
                 'max_usages': 1,
-                'subevent': self.subevent.pk if self.subevent else None,
+                'subevent': locked_wle.subevent.pk if locked_wle.subevent else None,
                 'source': 'waitinglist',
             }, user=user, auth=auth)
             v.log_action('pretix.voucher.added.waitinglist', {
-                'email': self.email,
-                'waitinglistentry': self.pk,
+                'email': locked_wle.email,
+                'waitinglistentry': locked_wle.pk,
             }, user=user, auth=auth)
-            self.voucher = v
-            self.save()
+            locked_wle.voucher = v
+            locked_wle.save()
+
+        self.refresh_from_db()
+        self.event = event
 
         with language(self.locale, self.event.settings.region):
             self.send_mail(
@@ -265,34 +272,30 @@ class WaitingListEntry(LoggedModel):
         with language(self.locale, self.event.settings.region):
             recipient = self.email
 
-            try:
-                email_content = render_mail(template, context)
-                subject = format_map(subject, context)
-                mail(
-                    recipient, subject, template, context,
-                    self.event,
-                    self.locale,
-                    headers=headers,
-                    sender=sender,
-                    auto_email=auto_email,
-                    attach_other_files=attach_other_files,
-                    attach_cached_files=attach_cached_files,
-                )
-            except SendMailException:
-                raise
-            else:
-                self.log_action(
-                    log_entry_type,
-                    user=user,
-                    auth=auth,
-                    data={
-                        'subject': subject,
-                        'message': email_content,
-                        'recipient': recipient,
-                        'attach_other_files': attach_other_files,
-                        'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
-                    }
-                )
+            email_content = render_mail(template, context)
+            subject = format_map(subject, context)
+            mail(
+                recipient, subject, template, context,
+                self.event,
+                self.locale,
+                headers=headers,
+                sender=sender,
+                auto_email=auto_email,
+                attach_other_files=attach_other_files,
+                attach_cached_files=attach_cached_files,
+            )
+            self.log_action(
+                log_entry_type,
+                user=user,
+                auth=auth,
+                data={
+                    'subject': subject,
+                    'message': email_content,
+                    'recipient': recipient,
+                    'attach_other_files': attach_other_files,
+                    'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
+                }
+            )
 
     @staticmethod
     def clean_itemvar(event, item, variation):

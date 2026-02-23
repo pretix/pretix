@@ -41,10 +41,18 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Checkin, Event, InvoiceAddress, Order, User,
 )
-from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.mail import mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
 from pretix.helpers.format import format_map
+
+
+def _chunks(lst, n):
+    """
+    Yield successive n-sized chunks from lst.
+    """
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
 
 
 @app.task(base=ProfiledEventTask, acks_late=True)
@@ -53,14 +61,12 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                          recipients: str, filter_checkins: bool, not_checked_in: bool, checkin_lists: list,
                          attachments: list = None, attach_tickets: bool = False,
                          attach_ical: bool = False) -> None:
-    failures = []
     user = User.objects.get(pk=user) if user else None
-    orders = Order.objects.filter(pk__in=objects, event=event)
     subject = LazyI18nString(subject)
     message = LazyI18nString(message)
     attachments_for_log = [cf.filename for cf in CachedFile.objects.filter(pk__in=attachments)] if attachments else []
 
-    for o in orders:
+    def _send_to_order(o):
         send_to_order = recipients in ('both', 'orders')
 
         try:
@@ -114,70 +120,69 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                 if subevents_to and p.subevent.date_from >= subevents_to:
                     continue
 
-                try:
-                    with language(o.locale, event.settings.region):
-                        email_context = get_email_context(event=event, order=o, invoice_address=ia, position=p)
-                        mail(
-                            p.attendee_email,
-                            subject,
-                            message,
-                            email_context,
-                            event,
-                            locale=o.locale,
-                            order=o,
-                            position=p,
-                            attach_tickets=attach_tickets,
-                            attach_ical=attach_ical,
-                            attach_cached_files=attachments
-                        )
-                        o.log_action(
-                            'pretix.plugins.sendmail.order.email.sent.attendee',
-                            user=user,
-                            data={
-                                'position': p.positionid,
-                                'subject': format_map(subject.localize(o.locale), email_context),
-                                'message': format_map(message.localize(o.locale), email_context),
-                                'recipient': p.attendee_email,
-                                'attach_tickets': attach_tickets,
-                                'attach_ical': attach_ical,
-                                'attach_other_files': [],
-                                'attach_cached_files': attachments_for_log,
-                            }
-                        )
-                except SendMailException:
-                    failures.append(p.attendee_email)
-
-        if send_to_order and o.email:
-            try:
                 with language(o.locale, event.settings.region):
-                    email_context = get_email_context(event=event, order=o, invoice_address=ia)
+                    email_context = get_email_context(event=event, order=o, invoice_address=ia, position=p)
                     mail(
-                        o.email,
+                        p.attendee_email,
                         subject,
                         message,
                         email_context,
                         event,
                         locale=o.locale,
                         order=o,
+                        position=p,
                         attach_tickets=attach_tickets,
                         attach_ical=attach_ical,
-                        attach_cached_files=attachments,
+                        attach_cached_files=attachments
                     )
                     o.log_action(
-                        'pretix.plugins.sendmail.order.email.sent',
+                        'pretix.plugins.sendmail.order.email.sent.attendee',
                         user=user,
                         data={
+                            'position': p.positionid,
                             'subject': format_map(subject.localize(o.locale), email_context),
                             'message': format_map(message.localize(o.locale), email_context),
-                            'recipient': o.email,
+                            'recipient': p.attendee_email,
                             'attach_tickets': attach_tickets,
                             'attach_ical': attach_ical,
                             'attach_other_files': [],
                             'attach_cached_files': attachments_for_log,
                         }
                     )
-            except SendMailException:
-                failures.append(o.email)
+
+        if send_to_order and o.email:
+            with language(o.locale, event.settings.region):
+                email_context = get_email_context(event=event, order=o, invoice_address=ia)
+                mail(
+                    o.email,
+                    subject,
+                    message,
+                    email_context,
+                    event,
+                    locale=o.locale,
+                    order=o,
+                    attach_tickets=attach_tickets,
+                    attach_ical=attach_ical,
+                    attach_cached_files=attachments,
+                )
+                o.log_action(
+                    'pretix.plugins.sendmail.order.email.sent',
+                    user=user,
+                    data={
+                        'subject': format_map(subject.localize(o.locale), email_context),
+                        'message': format_map(message.localize(o.locale), email_context),
+                        'recipient': o.email,
+                        'attach_tickets': attach_tickets,
+                        'attach_ical': attach_ical,
+                        'attach_other_files': [],
+                        'attach_cached_files': attachments_for_log,
+                    }
+                )
+
+    for chunk in _chunks(objects, 1000):
+        orders = Order.objects.filter(pk__in=chunk, event=event)
+        for o in orders:
+            _send_to_order(o)
 
 
 @app.task(base=ProfiledEventTask, acks_late=True)

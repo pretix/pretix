@@ -58,7 +58,6 @@ from localflavor.generic.forms import BICFormField, IBANFormField
 
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
-from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.base.templatetags.money import money_filter
 from pretix.control.permissions import (
@@ -66,7 +65,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.helpers.json import CustomJSONEncoder
-from pretix.plugins.banktransfer import csvimport, mt940import
+from pretix.plugins.banktransfer import camtimport, csvimport, mt940import
 from pretix.plugins.banktransfer.models import (
     BankImportJob, BankTransaction, RefundExport,
 )
@@ -160,11 +159,6 @@ class ActionView(View):
             p.confirm(user=self.request.user)
         except Quota.QuotaExceededException:
             pass
-        except SendMailException:
-            return JsonResponse({
-                'status': 'error',
-                'message': _('Problem sending email.')
-            })
         trans.state = BankTransaction.STATE_VALID
         trans.save()
         trans.order.payments.filter(
@@ -419,6 +413,9 @@ class ImportView(ListView):
         ):
             return self.process_mt940()
 
+        elif 'file' in self.request.FILES and '.xml' in self.request.FILES.get('file').name.lower():
+            return self.process_camt()
+
         elif self.request.FILES.get('file') is None:
             messages.error(self.request, _('You must choose a file to import.'))
             return self.redirect_back()
@@ -431,6 +428,14 @@ class ImportView(ListView):
     @cached_property
     def settings(self):
         return SettingsSandbox('payment', 'banktransfer', getattr(self.request, 'event', self.request.organizer))
+
+    def process_camt(self):
+        try:
+            return self.start_processing(camtimport.parse(self.request.FILES.get('file')))
+        except:
+            logger.exception('Failed to import CAMT file')
+            messages.error(self.request, _('We were unable to process your input.'))
+            return self.redirect_back()
 
     def process_mt940(self):
         try:

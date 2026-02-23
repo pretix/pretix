@@ -42,7 +42,7 @@
                     {% endif %}
                     <div id="invoice" class="profile-scope"
                          data-profiles-id="addresses_json"
-                         data-address-information-url="{% url "js_helpers.address_form" %}?invoice=true&organizer={{ event.organizer.slug|urlencode }}&event={{ event.slug|urlencode }}">
+                         data-address-information-url="{% url "js_helpers.address_form" %}?invoice=true&amp;organizer={{ event.organizer.slug|urlencode }}&amp;event={{ event.slug|urlencode }}&amp;locale={{ request.LANGUAGE_CODE }}">
                         <div class="panel-body">
                             {% if addresses_data %}
                                 <div class="form-group profile-select-container js-do-not-copy-answers">

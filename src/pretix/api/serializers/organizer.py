@@ -49,7 +49,7 @@ from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
     PLUGIN_LEVEL_ORGANIZER,
 )
-from pretix.base.services.mail import SendMailException, mail
+from pretix.base.services.mail import mail
 from pretix.base.settings import validate_organizer_settings
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -363,24 +363,21 @@ class TeamInviteSerializer(serializers.ModelSerializer):
         )
 
     def _send_invite(self, instance):
-        try:
-            mail(
-                instance.email,
-                _('pretix account invitation'),
-                'pretixcontrol/email/invitation.txt',
-                {
-                    'user': self,
-                    'organizer': self.context['organizer'].name,
-                    'team': instance.team.name,
-                    'url': build_global_uri('control:auth.invite', kwargs={
-                        'token': instance.token
-                    })
-                },
-                event=None,
-                locale=get_language_without_region()  # TODO: expose?
-            )
-        except SendMailException:
-            pass  # Already logged
+        mail(
+            instance.email,
+            _('pretix account invitation'),
+            'pretixcontrol/email/invitation.txt',
+            {
+                'user': self,
+                'organizer': self.context['organizer'].name,
+                'team': instance.team.name,
+                'url': build_global_uri('control:auth.invite', kwargs={
+                    'token': instance.token
+                })
+            },
+            event=None,
+            locale=get_language_without_region()  # TODO: expose?
+        )
 
     def create(self, validated_data):
         if 'email' in validated_data:
@@ -443,6 +440,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'customer_accounts',
         'customer_accounts_native',
         'customer_accounts_link_by_email',
+        'customer_accounts_require_login_for_order_access',
         'invoice_regenerate_allowed',
         'contact_mail',
         'imprint_url',

@@ -1428,6 +1428,27 @@ class CartTest(CartTestMixin, TestCase):
                 self.assertEqual(cp2.expires, now() + self.cart_reservation_time)
                 self.assertEqual(cp2.max_extend, now() + 11 * self.cart_reservation_time)
 
+    def test_expired_cart_extend_price_change_note(self):
+        start_time = datetime.datetime(2024, 1, 1, 10, 00, 00, tzinfo=datetime.timezone.utc)
+        max_extend = start_time + 11 * self.cart_reservation_time
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=max_extend, max_extend=max_extend
+            )
+            cp1.update_listed_price_and_voucher()
+        self.ticket.default_price = Decimal("25.00")
+        self.ticket.save()
+        with freezegun.freeze_time(max_extend + timedelta(hours=1)):
+            response = self.client.post('/%s/%s/cart/extend' % (self.orga.slug, self.event.slug), {
+            }, follow=True)
+            doc = BeautifulSoup(response.rendered_content, "lxml")
+            self.assertIn('some of the prices in your cart changed', doc.select('.alert-success')[0].text)
+            with scopes_disabled():
+                cp1.refresh_from_db()
+                self.assertEqual(cp1.price, Decimal("25.00"))
+                self.assertEqual(cp1.expires, now() + self.cart_reservation_time)
+
     def test_expired_cart_extend_fails_partially_on_bundled(self):
         start_time = datetime.datetime(2024, 1, 1, 10, 00, 00, tzinfo=datetime.timezone.utc)
         max_extend = start_time + 11 * self.cart_reservation_time
@@ -2709,7 +2730,6 @@ class CartAddonTest(CartTestMixin, TestCase):
             item=self.workshop1, price=Decimal('0.00'),
             event=self.event, cart_id=self.session_key, addon_to=cp1
         )
-        self.cm.extend_expired_positions()
         self.cm.commit()
         cp2.refresh_from_db()
         assert cp2.expires > now()
@@ -2732,7 +2752,6 @@ class CartAddonTest(CartTestMixin, TestCase):
             item=self.workshop1, price=Decimal('0.00'),
             event=self.event, cart_id=self.session_key, addon_to=cp1
         )
-        self.cm.extend_expired_positions()
         with self.assertRaises(CartError):
             self.cm.commit()
         assert CartPosition.objects.count() == 0
@@ -3400,7 +3419,6 @@ class CartAddonTest(CartTestMixin, TestCase):
             item=self.workshop1, price=Decimal('12.00'),
             event=self.event, cart_id=self.session_key, addon_to=cp1
         )
-        self.cm.extend_expired_positions()
         self.cm.commit()
         cp1.refresh_from_db()
         cp2.refresh_from_db()
@@ -3409,15 +3427,29 @@ class CartAddonTest(CartTestMixin, TestCase):
         assert cp2.addon_to_id == cp1.pk
 
     @classscope(attr='orga')
+    def test_expand_expired_price_change(self):
+        cp1 = CartPosition.objects.create(
+            expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time,
+            item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        self.ticket.default_price = Decimal("25.00")
+        self.ticket.save()
+        self.cm.commit()
+        cp1.refresh_from_db()
+        assert cp1.expires > now()
+        assert cp1.listed_price == Decimal("25.00")
+        assert cp1.price == Decimal("25.00")
+
+    @classscope(attr='orga')
     def test_expand_expired_refresh_voucher(self):
         v = Voucher.objects.create(item=self.ticket, value=Decimal('20.00'), event=self.event, price_mode='set',
-                                   valid_until=now() + timedelta(days=2), max_usages=999, redeemed=0)
+                                   valid_until=now() + timedelta(days=2), max_usages=1, redeemed=0)
         cp1 = CartPosition.objects.create(
             expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time,
             item=self.ticket, price=Decimal('21.50'),
             event=self.event, cart_id=self.session_key, voucher=v
         )
-        self.cm.extend_expired_positions()
         self.cm.commit()
         cp1.refresh_from_db()
         assert cp1.expires > now()
@@ -4080,6 +4112,8 @@ class CartBundleTest(CartTestMixin, TestCase):
 
     @classscope(attr='orga')
     def test_extend_bundled_and_addon(self):
+        self.trans.require_bundling = False
+        self.trans.save()
         cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
             price=21.5, expires=now() - timedelta(minutes=10), max_extend=now() + 10 * self.cart_reservation_time
