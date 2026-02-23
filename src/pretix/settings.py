@@ -211,6 +211,10 @@ USE_X_FORWARDED_HOST = config.getboolean('pretix', 'trust_x_forwarded_host', fal
 
 
 REQUEST_ID_HEADER = config.get('pretix', 'request_id_header', fallback=False)
+if REQUEST_ID_HEADER in config.cp.BOOLEAN_STATES:
+    raise ImproperlyConfigured(
+        "request_id_header should be set to a header name, not a boolean value."
+    )
 
 if config.getboolean('pretix', 'trust_x_forwarded_proto', fallback=False):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
