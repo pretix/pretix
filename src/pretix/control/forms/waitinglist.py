@@ -19,17 +19,44 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django import forms
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelChoiceField
+from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms import I18nModelForm
+from pretix.base.forms.questions import (
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
+)
 from pretix.base.models import WaitingListEntry
 from pretix.control.forms.widgets import Select2
 
 
-class WaitingListEntryTransferForm(I18nModelForm):
+class WaitingListEntryEditForm(I18nModelForm):
+    itemvar = forms.ChoiceField(
+        error_messages={
+            'invalid_choice': _("Select a valid choice.")
+        }
+    )
 
     def __init__(self, *args, **kwargs):
+        self.instance = kwargs.get('instance', None)
+        initial = kwargs.get('initial', {})
+
+        choices = []
+        if self.instance and self.instance.pk and 'itemvar' not in initial:
+            if self.instance.variation is not None:
+                initial['itemvar'] = f'{self.instance.item.pk}-{self.instance.variation.pk}'
+                if self.instance.variation.active is False:
+                    choices.append((initial['itemvar'], str(self.instance.variation)))
+            else:
+                initial['itemvar'] = self.instance.item.pk
+                if self.instance.item.active is False:
+                    choices.append((initial['itemvar'], str(self.instance)))
+
+        kwargs['initial'] = initial
+
         super().__init__(*args, **kwargs)
 
         if self.event.has_subevents:
@@ -45,12 +72,73 @@ class WaitingListEntryTransferForm(I18nModelForm):
                 }
             )
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        else:
+            del self.fields['subevent']
+
+        if self.event.settings.waiting_list_names_asked:
+            self.fields['name_parts'] = NamePartsFormField(
+                max_length=255,
+                required=self.event.settings.waiting_list_names_required,
+                scheme=self.event.organizer.settings.name_scheme,
+                titles=self.event.organizer.settings.name_scheme_titles,
+                label=_('Name'),
+            )
+        else:
+            del self.fields['name_parts']
+
+        if not self.event.settings.waiting_list_phones_asked:
+            del self.fields['phone']
+
+        items = self.event.items.filter(active=True).prefetch_related(
+            'variations'
+        )
+
+        for item in items:
+            if len(item.variations.all()) > 0:
+                for variation in item.variations.all():
+                    if variation.active:
+                        choices.append(
+                            ('{}-{}'.format(item.pk, variation.pk), '{} - {}'.format(str(item), str(variation)))
+                        )
+            else:
+                choices.append(('{}'.format(item.pk), str(item)))
+
+        self.fields['itemvar'].label = _("Product")
+        self.fields['itemvar'].help_text = _("Only includes active products.")
+        self.fields['itemvar'].required = True
+        self.fields['itemvar'].choices = choices
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if self.instance.voucher is not None:
+            raise forms.ValidationError(_('A voucher for this waiting list entry was already sent out.'))
+
+        itemvar = cleaned_data.get('itemvar')
+        if itemvar:
+            self.instance.item = self.event.items.get(pk=itemvar.split('-')[0])
+            if '-' in itemvar:
+                self.instance.variation = self.instance.item.variations.get(pk=itemvar.split('-')[1])
+
+        if ((self.instance.item and not self.instance.item.active) or
+                (self.instance.variation and not self.instance.variation.active)):
+            self.add_error('itemvar', _('The selected product is not active.'))
+
+        return cleaned_data
 
     class Meta:
         model = WaitingListEntry
         fields = [
+            'email',
+            'name_parts',
+            'phone',
             'subevent',
         ]
         field_classes = {
             'subevent': SafeModelChoiceField,
+            'email': forms.EmailField,
+            'phone': PhoneNumberField,
+        }
+        widgets = {
+            'phone': WrappedPhoneNumberPrefixWidget,
         }
