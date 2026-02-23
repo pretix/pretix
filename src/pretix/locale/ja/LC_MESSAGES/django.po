@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-20 12:53+0000\n"
-"PO-Revision-Date: 2026-02-12 20:00+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2026-02-23 10:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -641,22 +641,16 @@ msgid "Customer account anonymized"
 msgstr "顧客アカウントが匿名化されました"
 
 #: pretix/api/webhooks.py:468
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card added"
-msgstr "ギフトカードのコード"
+msgstr "ギフトカードを追加済み"
 
 #: pretix/api/webhooks.py:472
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "ギフトカードのコード"
+msgstr "ギフトカードを修正済み"
 
 #: pretix/api/webhooks.py:476
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card used in transaction"
-msgstr "ギフトカード取引"
+msgstr "ギフトカードを取引で使用済み"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1054
@@ -708,7 +702,7 @@ msgstr "{system} のユーザー"
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:31
 #: pretix/presale/templates/pretixpresale/event/order.html:300
 msgid "Email"
-msgstr "メール"
+msgstr "電子メール"
 
 #: pretix/base/auth.py:157 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:226 pretix/base/models/auth.py:750
@@ -921,7 +915,7 @@ msgstr "参加者"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:172
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:175
 msgid "Attendee email"
-msgstr "参加者のメールアドレス"
+msgstr "参加者の電子メール"
 
 #: pretix/base/datasync/sourcefields.py:219
 msgid "Attendee or order email"
@@ -2316,7 +2310,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:116 pretix/control/forms/event.py:1793
 #: pretix/control/forms/organizer.py:116
 msgid "Event slug"
-msgstr "イベントのスラッグ"
+msgstr "イベントのスラグ"
 
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:481
@@ -2359,7 +2353,7 @@ msgstr "イベントのスラッグ"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:34
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:79
 msgid "Status"
-msgstr "状態"
+msgstr "ステータス"
 
 #: pretix/base/exporters/orderlist.py:284
 #: pretix/base/exporters/orderlist.py:484
@@ -2493,7 +2487,7 @@ msgstr "税規則"
 #: pretix/base/exporters/orderlist.py:518
 #: pretix/base/exporters/orderlist.py:729 pretix/base/models/orders.py:205
 msgid "canceled"
-msgstr "キャンセルされました"
+msgstr "キャンセル済み"
 
 #: pretix/base/exporters/orderlist.py:618
 #: pretix/base/exporters/orderlist.py:944
@@ -2575,8 +2569,6 @@ msgid "Voucher budget usage"
 msgstr "バウチャー予算の使用状況"
 
 #: pretix/base/exporters/orderlist.py:654
-#, fuzzy
-#| msgid "Voucher tags"
 msgid "Voucher tag"
 msgstr "バウチャータグ"
 
@@ -3395,39 +3387,34 @@ msgid "Street and Number"
 msgstr "町域番地"
 
 #: pretix/base/forms/questions.py:893
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date between {min} and {max}."
-msgstr "より短い名前を入力してください。"
+msgstr "{min} から {max}の範囲でデータを入力してください。"
 
 #: pretix/base/forms/questions.py:899
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date no earlier than {min}."
-msgstr "有効な販売チャネルを入力してください。"
+msgstr "{min}よりも後の日付を入力してください。"
 
 #: pretix/base/forms/questions.py:904
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date no later than {max}."
-msgstr "より短い名前を入力してください。"
+msgstr "{max}より短い日付を入力してください。"
 
 #: pretix/base/forms/questions.py:942
 #, python-brace-format
 msgid "Please enter a date and time between {min} and {max}."
-msgstr ""
+msgstr "{min} から {max}の範囲内で日時を入力してください。"
 
 #: pretix/base/forms/questions.py:948
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date and time no earlier than {min}."
-msgstr "有効な販売チャネルを入力してください。"
+msgstr "{min}より後の日時を入力してください。"
 
 #: pretix/base/forms/questions.py:953
-#, fuzzy, python-brace-format
-#| msgid "Please enter the correct result."
+#, python-brace-format
 msgid "Please enter a date and time no later than {max}."
-msgstr "正しい結果を入力してください。"
+msgstr "{max}より前の日時を入力してください。"
 
 #: pretix/base/forms/questions.py:1172
 msgid ""
@@ -3582,14 +3569,14 @@ msgstr "サンプル: %s"
 #: pretix/base/forms/widgets.py:71
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "提供可能なプレースホルダー: {list}"
+msgstr "利用可能なプレースホルダー:{list}"
 
 #: pretix/base/forms/widgets.py:214 pretix/base/models/items.py:1656
 #: pretix/plugins/checkinlists/exporters.py:757
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:54
 msgid "Time"
-msgstr "時間"
+msgstr "時刻"
 
 #: pretix/base/forms/widgets.py:234 pretix/base/forms/widgets.py:239
 msgid "Business or institutional customer"
@@ -4293,22 +4280,19 @@ msgid "Price effect"
 msgstr "価格の効果"
 
 #: pretix/base/modelimport_vouchers.py:150
-#, fuzzy, python-brace-format
-#| msgid "Could not parse {value} as a price mode, use one of {options}."
+#, python-brace-format
 msgid "Could not parse {value} as a price effect, use one of {options}."
 msgstr ""
-"{value}を価格モードとして解析できませんでした。{options}のいずれかを使用して"
-"ください。"
+"{value}を価格エフェクトとして解析できませんでした。{options}のいずれかを使用"
+"してください。"
 
 #: pretix/base/modelimport_vouchers.py:160 pretix/base/models/vouchers.py:248
 msgid "Voucher value"
 msgstr "バウチャーの金額"
 
 #: pretix/base/modelimport_vouchers.py:165
-#, fuzzy
-#| msgid "It is pointless to set a value without a price mode."
 msgid "It is pointless to set a value without a price effect."
-msgstr "価格モードなしに値を設定することは意味がありません。"
+msgstr "価格エフェクトなしに値を設定することは意味がありません。"
 
 #: pretix/base/modelimport_vouchers.py:237 pretix/base/models/items.py:2121
 #: pretix/base/models/vouchers.py:275
@@ -4445,7 +4429,7 @@ msgstr "全ての製品（新規に作成されたものを含む）"
 #: pretix/base/models/checkin.py:56 pretix/plugins/badges/exporters.py:436
 #: pretix/plugins/checkinlists/exporters.py:854
 msgid "Limit to products"
-msgstr "対象製品に限定"
+msgstr "商品の上限"
 
 #: pretix/base/models/checkin.py:60
 msgid ""
@@ -4861,12 +4845,12 @@ msgstr ""
 #: pretix/base/models/discount.py:177
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr "利用可能な開催日：開始日"
+msgstr "開始日として使用可能な日付の初期"
 
 #: pretix/base/models/discount.py:182
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "利用可能な開催日：終了日"
+msgstr "開始日として使用可能な日付の終期"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -5512,7 +5496,7 @@ msgstr "製品の写真"
 #: pretix/base/models/items.py:584
 msgctxt "hidden_if_available_legacy"
 msgid "Only show after sellout of"
-msgstr "完売後のみ表示："
+msgstr "完売後のみ表示する"
 
 #: pretix/base/models/items.py:585
 msgid ""
@@ -6268,7 +6252,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:185
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:59
 msgid "Quotas"
-msgstr "クォータ（割り当て上限）"
+msgstr "クォータ"
 
 #: pretix/base/models/items.py:2195
 msgid "All variations must belong to an item contained in the items list."
@@ -6321,46 +6305,41 @@ msgstr "終了"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:38
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:139
 msgid "queued"
-msgstr ""
+msgstr "キューに追加済み"
 
 #: pretix/base/models/mail.py:53
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:40
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:141
 msgid "being sent"
-msgstr ""
+msgstr "送信対象"
 
 #: pretix/base/models/mail.py:54
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "awaiting retry"
-msgstr "空席待ちリスト登録"
+msgstr "リトライ待ち"
 
 #: pretix/base/models/mail.py:55
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:48
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:149
 msgid "withheld"
-msgstr ""
+msgstr "保留済み"
 
 #: pretix/base/models/mail.py:57
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:50
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:151
 msgid "aborted"
-msgstr ""
+msgstr "中断済み"
 
 #: pretix/base/models/mail.py:58
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:52
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:153
-#, fuzzy
-#| msgctxt "checkin state"
-#| msgid "Present"
 msgid "sent"
-msgstr "出席"
+msgstr "送信済み"
 
 #: pretix/base/models/mail.py:59
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:46
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:147
 msgid "bounced"
-msgstr ""
+msgstr "差し戻し済み"
 
 #: pretix/base/models/memberships.py:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:28
@@ -6415,7 +6394,7 @@ msgstr "会員タイプ"
 
 #: pretix/base/models/orders.py:202
 msgid "pending"
-msgstr "保留"
+msgstr "保留中"
 
 #: pretix/base/models/orders.py:203 pretix/base/payment.py:570
 #: pretix/base/services/invoices.py:592
@@ -9639,6 +9618,8 @@ msgid ""
 "For business customers, compute taxes based on net total. For individuals, "
 "use line-based rounding"
 msgstr ""
+"顧客が事業者の場合は本体価格の合計に対して税金が計算されます。個人の場合は、"
+"品目単位で端数計算されます"
 
 #: pretix/base/settings.py:85
 msgid "Compute taxes based on net total with stable gross prices"
@@ -12252,30 +12233,12 @@ msgstr ""
 "{organizer}チーム"
 
 #: pretix/base/settings.py:2955
-#, fuzzy, python-brace-format
-#| msgid "Activate your account at {organizer}"
+#, python-brace-format
 msgid "Changes to your account at {organizer}"
-msgstr "{organizer}でアカウントを有効化"
+msgstr "{organizer}でアカウントを変更"
 
 #: pretix/base/settings.py:2959
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {name},\n"
-#| "\n"
-#| "you requested to change the email address of your account at "
-#| "{organizer}!\n"
-#| "\n"
-#| "To confirm the change, please click here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "This link is valid for one day.\n"
-#| "\n"
-#| "If you did not request this, please ignore this email.\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your {organizer} team"
+#, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -12295,15 +12258,16 @@ msgid ""
 msgstr ""
 "こんにちは{name}様、\n"
 "\n"
-"あなたは{organizer}でのアカウントのメールアドレス変更をリクエストしました！\n"
+"{organizer}でのアカウントが以下の通り変更されました。\n"
 "\n"
-"変更を確認するためには、こちらをクリックしてください：\n"
+"{message}\n"
+"\n"
+"アカウントの変更内容は、こちらで確認できます：\n"
 "\n"
 "{url}\n"
 "\n"
-"このリンクは1日間有効です。\n"
-"\n"
-"もしリクエストをしていない場合は、このメールを無視してください。\n"
+"もしあなたがこのリクエストをしていない場合は、ただちに私たちにご連絡ください"
+"。\n"
 "\n"
 "よろしくお願いいたします。\n"
 "\n"
@@ -13996,6 +13960,10 @@ msgid ""
 "business customers and consumers do not receive invoices. This can cause the "
 "payment amount to change when the invoice address is changed."
 msgstr ""
+"上記と同様ですが、ビジネス顧客にのみ適用されます。消費者向けに品目ごとの端数"
+"計算が行われます。E-invoicing がビジネス顧客のみで使用され、消費者が請求書を"
+"受け取らない場合に推奨されます。請求書の住所が変更されると、支払金額が変わる"
+"可能性があります。"
 
 #: pretix/control/forms/event.py:876
 msgid ""
@@ -14990,10 +14958,8 @@ msgid "Revoked devices"
 msgstr "取り消されたデバイス"
 
 #: pretix/control/forms/filter.py:2827 pretix/control/forms/filter.py:2829
-#, fuzzy
-#| msgid "Require email addresses per ticket"
 msgid "Search email address or subject"
-msgstr "チケットごとにメールアドレスを必須にする"
+msgstr "メールアドレスまたはサブジェクトを検索する"
 
 #: pretix/control/forms/global_settings.py:62
 msgid "Additional footer text"
@@ -16185,7 +16151,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:588
 msgid "Sensitive emails like password resets will not be sent in Bcc."
-msgstr ""
+msgstr "パスワードリセットなどの機微な内容の電子メールは、Bccで送信されません。"
 
 #: pretix/control/forms/organizer.py:598
 msgid "This will be attached to every email."
@@ -16663,10 +16629,8 @@ msgid "A fee has been added"
 msgstr "手数料が追加されました"
 
 #: pretix/control/logdisplay.py:176
-#, fuzzy
-#| msgid "The new vouchers have been created."
 msgid "Taxes and rounding have been recomputed"
-msgstr "新しいバウチャーが作成されました。"
+msgstr "税と端数処理が再計算されました"
 
 #: pretix/control/logdisplay.py:184
 #, python-brace-format
@@ -17369,16 +17333,12 @@ msgid "A scheduled export has failed: {reason}."
 msgstr "スケジュールされたエクスポートが失敗しました：{reason}。"
 
 #: pretix/control/logdisplay.py:708
-#, fuzzy
-#| msgid "The email has been queued to be sent."
 msgid "Failed emails have been scheduled to be retried."
-msgstr "メールが送信待ちキューに追加されました。"
+msgstr "失敗した電子メールがリトライ待ちにスケジュールされました。"
 
 #: pretix/control/logdisplay.py:709
-#, fuzzy
-#| msgid "The order details have been changed."
 msgid "Queued emails have been aborted."
-msgstr "注文の詳細が変更されました。"
+msgstr "キューに入っていた電子メールが、破棄されました。"
 
 #: pretix/control/logdisplay.py:710
 msgid "Gift card acceptance for another organizer has been added."
@@ -17728,16 +17688,12 @@ msgid "A manual transaction has been performed."
 msgstr "手動取引が実行されました。"
 
 #: pretix/control/logdisplay.py:804
-#, fuzzy
-#| msgid "This payment has been canceled."
 msgid "A payment has been performed."
-msgstr "この支払いはキャンセルされました。"
+msgstr "支払いが実行されました。"
 
 #: pretix/control/logdisplay.py:805
-#, fuzzy
-#| msgid "The refund has been processed."
 msgid "A refund has been performed. "
-msgstr "払い戻しが処理されました。"
+msgstr "払い戻しが処理されました。 "
 
 #: pretix/control/logdisplay.py:806
 #, python-brace-format
@@ -18310,10 +18266,8 @@ msgstr "デバイス"
 
 #: pretix/control/navigation.py:683
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:8
-#, fuzzy
-#| msgid "Send out emails"
 msgid "Outgoing emails"
-msgstr "メールを送る"
+msgstr "送信する電子メール"
 
 #: pretix/control/permissions.py:72 pretix/control/permissions.py:109
 #: pretix/control/permissions.py:140 pretix/control/permissions.py:157
@@ -25334,10 +25288,8 @@ msgid "Customer account password reset"
 msgstr "顧客アカウントのパスワードリセット"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:69
-#, fuzzy
-#| msgid "Customer account registration"
 msgid "Customer account security notification"
-msgstr "顧客アカウントの登録"
+msgstr "顧客アカウントのセキュリティ通知"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:5
 msgid "Delete membership type:"
@@ -25380,87 +25332,72 @@ msgstr "これは年間パスや10枚券などの製品を有効にするため�
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:10
 msgid "Outgoing email"
-msgstr ""
+msgstr "送信する電子メール"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:14
-#, fuzzy
-#| msgid "Email settings"
 msgid "Email details"
-msgstr "メール設定"
+msgstr "電子メールの詳細"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:21
-#, fuzzy
-#| msgctxt "mail_header"
-#| msgid "From"
 msgctxt "email"
 msgid "From"
-msgstr "From"
+msgstr "発信者"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:23
 msgctxt "email"
 msgid "To"
-msgstr ""
+msgstr "宛先"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:26
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:106
 msgctxt "email"
 msgid "Cc"
-msgstr ""
+msgstr "CC"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:30
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:109
 msgctxt "email"
 msgid "Bcc"
-msgstr ""
+msgstr "BCC"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:42
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:143
-#, fuzzy
-#| msgid "You will be refunded"
 msgid "will be retried"
-msgstr "返金されます"
+msgstr "再試行されます"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:55
-#, fuzzy
-#| msgid "Creation date"
 msgid "Creation"
-msgstr "作成日"
+msgstr "作成"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:58
 msgid "Sent"
-msgstr ""
+msgstr "送信済み"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:62
 msgid "Next attempt (estimate)"
-msgstr ""
+msgstr "次回の試行(予測)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:142
-#, fuzzy
-#| msgid "Email content"
 msgid "HTML content"
-msgstr "メールコンテンツ"
+msgstr "HTMLコンテンツ"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:150
-#, fuzzy
-#| msgid "Image content"
 msgid "Text content"
-msgstr "画像の内容"
+msgstr "テキストの内容"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:156
-#, fuzzy
-#| msgid "Header image"
 msgid "Headers"
-msgstr "ヘッダー画像"
+msgstr "ヘッダー"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:180
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:199
 msgid "Sensitive content not shown for security reasons"
-msgstr ""
+msgstr "機微な内容は、セキュリティ上の理由で表示されません"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:213
 msgid ""
 "Additional headers will be added by the mail server and are not visible here."
-msgstr ""
+msgstr "追加のヘッダーはメールサーバによって追加され、ここでは表示されません。"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:11
 #, python-format
@@ -25468,32 +25405,28 @@ msgid ""
 "This is an overview of all emails sent by your organizer account in the last "
 "%(days)s days."
 msgstr ""
+"これは、過去 %(days)s日間に主催者アカウントから送信されたすべてのメールの概要"
+"です。"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:18
-#, fuzzy
-#| msgid "You haven't created any rules yet."
 msgid "You haven't sent any emails recently."
-msgstr "まだルールを作成していません。"
+msgstr "まだ電子メールを送信していません。"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:63
-#, fuzzy
-#| msgid "Content"
 msgid "Context"
 msgstr "内容"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:160
-#, fuzzy
-#| msgid "Event:"
 msgid "Sent:"
-msgstr "イベント:"
+msgstr "送信済み:"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:175
 msgid "Retry (if failed or withheld)"
-msgstr ""
+msgstr "再試行(失敗または保留された場合)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:179
 msgid "Abort (if queued, awaiting retry or withheld)"
-msgstr ""
+msgstr "中断(キューに入っているか、再試行待ち、または保留中)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
@@ -26912,31 +26845,24 @@ msgid "Emergency tokens"
 msgstr "緊急トークン"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:147
-#, fuzzy
-#| msgid ""
-#| "If you lose access to your devices, you can use one of the following keys "
-#| "to log in. We recommend to store them in a safe place, e.g. printed out "
-#| "or in a password manager. Every token can be used at most once."
 msgid ""
 "If you lose access to your devices, you can use one of your emergency tokens "
 "to log in. We recommend to store them in a safe place, e.g. printed out or "
 "in a password manager. Every token can be used at most once."
 msgstr ""
-"デバイスへのアクセスが失われた場合、次のキーのいずれかを使用してログインでき"
-"ます。安全な場所に保存することをお勧めします。例えば、印刷したりパスワードマ"
-"ネージャーに保存したりすることができます。各トークンは最大1回しか使用できませ"
-"ん。"
+"デバイスへのアクセスが失われた場合、緊急トークンを使用してログインできます。"
+"安全な場所に保存することをお勧めします。例えば、印刷したり"
+"パスワードマネージャーに保存したりすることができます。各トークンは最大1回しか"
+"使用できません。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:155
 #, python-format
 msgid "You generated your emergency tokens on %(generation_date_time)s."
-msgstr ""
+msgstr "%(generation_date_time)sに緊急トークンを生成しました。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:161
-#, fuzzy
-#| msgid "You don’t have any memberships in your account yet."
 msgid "You don't have any emergency tokens yet."
-msgstr "まだアカウントにメンバーシップはありません。"
+msgstr "まだアカウントに緊急トークンがありません。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:166
 msgid "Generate new emergency tokens"
@@ -28316,18 +28242,16 @@ msgid "The selected product has been deactivated."
 msgstr "選択された製品が無効化されました。"
 
 #: pretix/control/views/mail.py:161
-#, fuzzy, python-brace-format
-#| msgid "Sending of an email has failed."
+#, python-brace-format
 msgid "A retry of one email was scheduled."
 msgid_plural "A retry of {num} emails was scheduled."
-msgstr[0] "メールの送信に失敗しました。"
+msgstr[0] "{num}通の電子メールの送信がスケジュールされていました。"
 
 #: pretix/control/views/mail.py:185
-#, fuzzy, python-brace-format
-#| msgid "The email has been queued to be sent."
+#, python-brace-format
 msgid "One email was aborted and will not be sent."
 msgid_plural "{num} emails were aborted and will not be sent."
-msgstr[0] "メールが送信待ちキューに追加されました。"
+msgstr[0] "{num}通の電子メールが破棄され、今後送信されません。"
 
 #: pretix/control/views/mailsetup.py:200
 msgid ""
@@ -29341,10 +29265,6 @@ msgid "Two-factor authentication is now disabled for your account."
 msgstr "アカウントの二要素認証が無効になりました。"
 
 #: pretix/control/views/user.py:633
-#, fuzzy
-#| msgid ""
-#| "Your emergency codes have been newly generated. Remember to store them in "
-#| "a safe place in case you lose access to your devices."
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices. You will not be able to "
@@ -29355,7 +29275,12 @@ msgid ""
 "- "
 msgstr ""
 "新しい緊急コードが生成されました。デバイスへのアクセスを失った場合に備えて、"
-"安全な場所に保存することを忘れないでください。"
+"安全な場所に保存することを忘れないでください。このコードはここで再度表示する"
+"ことはできません。\n"
+"\n"
+"あなたの緊急コード:\n"
+"-\n"
+"- "
 
 #: pretix/control/views/user.py:650
 msgid "Your notifications have been disabled."
@@ -31506,7 +31431,7 @@ msgstr "ページ%d"
 #: pretix/plugins/reports/exporters.py:212
 #, python-format
 msgid "Created: %s"
-msgstr "作成日：%s"
+msgstr "作成済み:%s"
 
 #: pretix/plugins/reports/exporters.py:255
 msgid "Order overview (PDF)"
@@ -32912,10 +32837,8 @@ msgstr ""
 "です。アプリを準備してください。"
 
 #: pretix/plugins/stripe/payment.py:1963
-#, fuzzy
-#| msgid "EPS via Stripe"
 msgid "WERO via Stripe"
-msgstr "Stripe経由でEPS"
+msgstr "Stripe経由でWERO"
 
 #: pretix/plugins/stripe/payment.py:1968
 msgid ""
@@ -32923,6 +32846,9 @@ msgid ""
 "banking institutions support WERO either through their native banking apps "
 "or through the WERO wallet app. Please have you app ready."
 msgstr ""
+"この支払い方法は、欧州のオンラインバンキング利用者で、金融機関がネイティブの"
+"銀行アプリまたはWEROウォレットアプリを通じてWEROをサポートしている方がご利用"
+"いただけます。アプリをご用意ください。"
 
 #: pretix/plugins/stripe/signals.py:93
 msgid "Charge succeeded."
@@ -34392,6 +34318,8 @@ msgid ""
 "There are products selected in this add-on category that currently cannot be "
 "changed because they are not on sale:"
 msgstr ""
+"このアドオンカテゴリで選択された製品の中には、現在セール対象外のため変更でき"
+"ない商品があります："
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:392
 msgid "There are no add-ons available for this product."
@@ -34579,6 +34507,8 @@ msgid ""
 "exclusive price. Due to rounding, this caused a small change to the total "
 "price."
 msgstr ""
+"事業所の住所をご入力いただいたため、価格はVAT税抜き価格から算出されました。端"
+"数処理のため、総額に小さな変更が生じました。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:516
 #, python-format
