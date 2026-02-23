@@ -15,7 +15,10 @@ let django: Django
 
 if (import.meta.env.DEV) {
 	// TODO this does not actually grab the correct language strings
-	const raw = (await import(`../../../jsi18n/${LANG}/djangojs.js?raw`)).default
+	const modules = import.meta.glob('../../../jsi18n/*/djangojs.js', { eager: true, query: '?raw', import: 'default' }) as Record<string, string>
+	const key = `../../../jsi18n/${LANG}/djangojs.js`
+	const raw = modules[key]
+	if (!raw) throw new Error(`Missing i18n module for lang "${LANG}": ${key}`)
 	const context: { django?: Django } = {}
 	new Function(raw).call(context)
 	django = context.django!
