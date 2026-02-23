@@ -90,19 +90,16 @@ class WaitingListEntryEditForm(I18nModelForm):
             del self.fields['phone']
 
         items = self.event.items.filter(active=True).prefetch_related(
-            Prefetch(
-                'variations',
-                queryset=(ItemVariation.objects.filter(item__event=self.event, active=True)),
-                to_attr='active_variations',
-            )
+            'variations'
         )
 
         for item in items:
-            if len(item.active_variations) > 0:
-                for variation in item.active_variations:
-                    choices.append(
-                        ('{}-{}'.format(item.pk, variation.pk), str(variation))
-                    )
+            if len(item.variations.all()) > 0:
+                for variation in item.variations.all():
+                    if variation.active:
+                        choices.append(
+                            ('{}-{}'.format(item.pk, variation.pk), '{} - {}'.format(str(item),str(variation)))
+                        )
             else:
                 choices.append(('{}'.format(item.pk), str(item)))
 
