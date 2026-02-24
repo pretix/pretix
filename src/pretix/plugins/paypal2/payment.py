@@ -802,7 +802,7 @@ class PaypalMethod(BasePaymentProvider):
                             all_captures_completed = False
                         else:
                             any_captures = True
-            if not (any_captures and all_captures_completed):
+            if any_captures and not all_captures_completed:
                 messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
                                             'soon as the payment completed.'))
                 payment.info = json.dumps(pp_captured_order.dict())
