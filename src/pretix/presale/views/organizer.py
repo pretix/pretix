@@ -531,6 +531,9 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
             date_to = event.date_to.astimezone(tz).date()
             d = max(date_from, before.date())
             while d <= date_to and d <= after.date():
+                if date_to != date_from and datetime_to.hour == 0 and datetime_to.minute == 0 and datetime_to.second == 0 and (d == date_to or d == after.date()):
+                    # multi-day event, but special case ends midnight, so do not show on the day it ends
+                    break
                 first = d == date_from
                 ebd[d].append({
                     'event': event,
@@ -659,6 +662,9 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, sales_channel, eve
             date_to = se.date_to.astimezone(tz).date()
             d = max(date_from, before.date())
             while d <= date_to and d <= after.date():
+                if date_to != date_from and datetime_to.hour == 0 and datetime_to.minute == 0 and datetime_to.second == 0 and (d == date_to or d == after.date()):
+                    # multi-day event, but special case ends midnight, so do not show on the day it ends
+                    break
                 first = d == date_from
                 ebd[d].append({
                     'continued': not first,
