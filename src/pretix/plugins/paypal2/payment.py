@@ -836,7 +836,7 @@ class PaypalMethod(BasePaymentProvider):
         try:
             if (
                     payment.info
-                    and payment.info_data['purchase_units'][0]['payments']['captures'][0]['status'] == 'pending'
+                    and payment.info_data['purchase_units'][0]['payments']['captures'][0]['status'] == 'PENDING'
             ):
                 retry = False
         except (KeyError, IndexError):
