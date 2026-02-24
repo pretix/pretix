@@ -393,7 +393,6 @@ class TokenView(View):
 
             if grant.code_challenge_method == "S256":
                 expected_challenge = base64.urlsafe_b64encode(hashlib.sha256(request.POST["code_verifier"].encode()).digest()).decode().rstrip("=")
-                print(grant.code_challenge, expected_challenge)
                 if expected_challenge != grant.code_challenge:
                     return JsonResponse({
                         "error": "invalid_grant",
