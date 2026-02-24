@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-20 12:53+0000\n"
-"PO-Revision-Date: 2026-02-23 10:00+0000\n"
+"PO-Revision-Date: 2026-02-24 11:49+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -212,7 +212,7 @@ msgstr "ターゲットURL"
 #: pretix/api/models.py:118 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:352
 msgid "All events (including newly created ones)"
-msgstr "すべてのイベント（新しく作成されたイベントを含む）"
+msgstr "すべてのイベント（最近作成されたイベントを含む）"
 
 #: pretix/api/models.py:119 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:353
@@ -9157,7 +9157,7 @@ msgstr ""
 #: pretix/base/services/modelimport.py:289
 #, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr "行{row}のデータが無効です: {message}"
+msgstr "行{row}のデータが無効: {message}"
 
 #: pretix/base/services/modelimport.py:270
 msgid "A voucher cannot be created without a code."
@@ -14617,7 +14617,7 @@ msgstr "支払い作成日（から）"
 
 #: pretix/control/forms/filter.py:1072
 msgid "Payment created until"
-msgstr "作成された支払（まで）"
+msgstr "この日までに作成された支払い"
 
 #: pretix/control/forms/filter.py:1077
 msgid "Paid from"
@@ -24313,7 +24313,7 @@ msgstr "データのプレビュー"
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:43
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:43
 msgid "Import settings"
-msgstr "インポート設定"
+msgstr "設定をインポート"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:49
@@ -24348,7 +24348,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:22
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:46
 msgid "Import file"
-msgstr "ファイルをインポートします"
+msgstr "ファイルをインポートする"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:25
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:25
@@ -24358,12 +24358,12 @@ msgstr "文字セット"
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:27
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:27
 msgid "Detect automatically"
-msgstr "自動的に検出します"
+msgstr "自動で検出する"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:35
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:35
 msgid "Start import"
-msgstr "インポートを開始します"
+msgstr "インポートを開始する"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:14
 msgid "Nobody ordered a ticket yet."
@@ -28875,7 +28875,7 @@ msgstr "チームが作成されました。チームにメンバーを追加す
 #: pretix/control/views/organizer.py:3521
 #: pretix/control/views/organizer.py:3565
 msgid "Your changes could not be saved."
-msgstr "変更は保存できませんでした。"
+msgstr "変更が保存できませんでした。"
 
 #: pretix/control/views/organizer.py:983
 msgid "The selected team cannot be deleted."
@@ -30384,7 +30384,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
-msgstr "テストモードでは、エクスポートにはテストモードの注文のみが含まれます。"
+msgstr "テストモードにおいて、エクスポートにはテストモードの注文のみが含まれます。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:19
 msgid ""
@@ -34554,7 +34554,7 @@ msgstr "カートを空にする"
 #: pretix/presale/templates/pretixpresale/event/index.html:248
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:16
 msgid "Redeem a voucher"
-msgstr "バウチャーを利用する"
+msgstr "バウチャーを使用する"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:71
 msgid "We're applying this voucher to your cart..."
