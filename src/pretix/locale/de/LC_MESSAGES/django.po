@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-22 19:19+0000\n"
+"PO-Revision-Date: 2026-02-24 12:07+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17073,28 +17073,21 @@ msgid "You need to specify as many seats as voucher codes."
 msgstr "Sie müssen genau so viele Sitze angeben, wie du Gutscheine erzeugst."
 
 #: pretix/control/forms/waitinglist.py:39
-#, fuzzy
-#| msgid "Please select a valid seat."
 msgid "Select a valid choice."
-msgstr "Bitte wählen Sie einen gültigen Sitzplatz aus."
+msgstr "Bitte wählen Sie eine gültige Auswahl aus."
 
 #: pretix/control/forms/waitinglist.py:107
-#, fuzzy
-#| msgid "Active products"
 msgid "Only includes active products."
-msgstr "Aktive Produkte"
+msgstr "Enthält nur aktive Produkte."
 
 #: pretix/control/forms/waitinglist.py:115
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "A voucher for this waiting list entry was already sent out."
-msgstr "Ein Gutschein mit diesem Code existiert bereits."
+msgstr ""
+"Ein Gutschein für diesen Eintrag auf der Warteliste wurde bereits verschickt."
 
 #: pretix/control/forms/waitinglist.py:125
-#, fuzzy
-#| msgid "The selected product has been deactivated."
 msgid "The selected product is not active."
-msgstr "Das ausgewählte Produkt wurde deaktiviert."
+msgstr "Das ausgewählte Produkt ist nicht aktiv."
 
 #: pretix/control/logdisplay.py:73 pretix/control/logdisplay.py:83
 msgid "The order has been changed:"
@@ -18881,6 +18874,10 @@ msgid ""
 "in repeatedly. Please check if your browser is set to block cookies, or "
 "delete all existing cookies and retry."
 msgstr ""
+"Es sieht aus, als ob Ihr Browser unseren Cookie nicht akzeptiert und Sie "
+"sich wiederholt anmelden müssen. Bitte prüfen Sie, ob Ihr Browser so "
+"eingestellt ist, dass er Cookies blockiert, oder löschen Sie alle "
+"bestehenden Cookies und versuchen Sie es erneut."
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:35
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
@@ -28183,10 +28180,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/edit.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/edit.html:6
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:273
-#, fuzzy
-#| msgid "Entry"
 msgid "Edit entry"
-msgstr "Eingang"
+msgstr "Eintrag bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:17
 msgid ""
@@ -30128,15 +30123,7 @@ msgid "Two-factor authentication is now disabled for your account."
 msgstr "Zwei-Faktor-Authentifizierung ist nun deaktiviert."
 
 #: pretix/control/views/user.py:635
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Your emergency codes have been newly generated. Remember to store them in "
-#| "a safe place in case you lose access to your devices. You will not be "
-#| "able to view them again here.\n"
-#| "\n"
-#| "Your emergency codes:\n"
-#| "- \n"
-#| "- "
+#, python-brace-format
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices. You will not be able to "
@@ -30150,8 +30137,7 @@ msgstr ""
 "können sie hier nicht erneut sehen.\n"
 "\n"
 "Ihre Notfall-Tokens:\n"
-"- \n"
-"- "
+"{tokens}"
 
 #: pretix/control/views/user.py:655
 msgid "Your notifications have been disabled."
@@ -30321,10 +30307,8 @@ msgid "The selected entry has been deleted."
 msgstr "Der ausgewählte Eintrag wurde gelöscht."
 
 #: pretix/control/views/waitinglist.py:417
-#, fuzzy
-#| msgid "The waitinglist entry has been transferred."
 msgid "The waitinglist entry has been changed."
-msgstr "Der Eintrag wurde auf einen anderen Termin übertragen."
+msgstr "Der Eintrag auf der Warteliste wurde geändert."
 
 #: pretix/helpers/countries.py:134
 msgid "Belarus"
