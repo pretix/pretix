@@ -237,7 +237,7 @@ class OutboundSyncProvider:
                     sq.set_sync_error("exceeded", e.messages, e.full_message)
                 else:
                     logger.info(
-                        f"Could not sync order {sq.order.code} to {type(self).__name__} "
+                        f"Could not sync order {sq.order.code} to {sq.sync_provider} "
                         f"(transient error, attempt #{sq.failed_attempts}, next {sq.not_before})",
                         exc_info=True,
                     )
