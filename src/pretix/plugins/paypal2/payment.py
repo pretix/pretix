@@ -802,31 +802,37 @@ class PaypalMethod(BasePaymentProvider):
                             all_captures_completed = False
                         else:
                             any_captures = True
-            if not (any_captures and all_captures_completed):
+
+            # Payment has at least one capture, but it is not yet completed
+            if any_captures and not all_captures_completed:
                 messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
                                             'soon as the payment completed.'))
                 payment.info = json.dumps(pp_captured_order.dict())
                 payment.state = OrderPayment.PAYMENT_STATE_PENDING
                 payment.save()
                 return
+            # Payment has at least one capture and all captures are completed
+            elif any_captures and all_captures_completed:
+                if pp_captured_order.status != 'COMPLETED':
+                    payment.fail(info=pp_captured_order.dict())
+                    logger.error('Invalid state: %s' % repr(pp_captured_order.dict()))
+                    raise PaymentException(
+                        _('We were unable to process your payment. See below for details on how to proceed.')
+                    )
 
-            if pp_captured_order.status != 'COMPLETED':
-                payment.fail(info=pp_captured_order.dict())
-                logger.error('Invalid state: %s' % repr(pp_captured_order.dict()))
-                raise PaymentException(
-                    _('We were unable to process your payment. See below for details on how to proceed.')
-                )
+                if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
+                    logger.warning('PayPal success event even though order is already marked as paid')
+                    return
 
-            if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
-                logger.warning('PayPal success event even though order is already marked as paid')
+                try:
+                    payment.info = json.dumps(pp_captured_order.dict())
+                    payment.save(update_fields=['info'])
+                    payment.confirm()
+                except Quota.QuotaExceededException as e:
+                    raise PaymentException(str(e))
+            # Payment has not any captures yet - so it's probably in created status
+            else:
                 return
-
-            try:
-                payment.info = json.dumps(pp_captured_order.dict())
-                payment.save(update_fields=['info'])
-                payment.confirm()
-            except Quota.QuotaExceededException as e:
-                raise PaymentException(str(e))
         finally:
             if 'payment_paypal_oid' in request.session:
                 del request.session['payment_paypal_oid']
