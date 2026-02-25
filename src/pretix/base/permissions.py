@@ -19,11 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
+import functools
 import logging
 import warnings
 from collections import OrderedDict
-from typing import Dict, List, NamedTuple, Set, Tuple
+from typing import Callable, Dict, List, NamedTuple, Set, Tuple
 
 from django.apps import apps
 from django.dispatch import receiver
@@ -35,11 +35,22 @@ from pretix.base.signals import (
 )
 
 logger = logging.getLogger(__name__)
-_ALL_EVENT_PERMISSION_GROUPS = None
-_ALL_ORGANIZER_PERMISSION_GROUPS = None
-_ALL_EVENT_PERMISSIONS = None
-_ALL_ORGANIZER_PERMISSIONS = None
-_CACHE_TIME_APPS_READY = None  # hack: we need to clear the cache after plugins are loaded during startup
+
+
+def cache_until_change(input_value: Callable):
+    def decorator(func):
+        old_input_value = None
+        cached_result = None
+
+        @functools.wraps(func)
+        def wrapper():
+            nonlocal cached_result, old_input_value
+            if cached_result is None or old_input_value != input_value():
+                cached_result = func()
+                old_input_value = input_value()
+            return cached_result
+        return wrapper
+    return decorator
 
 
 class PermissionOption(NamedTuple):
@@ -56,12 +67,8 @@ class PermissionGroup(NamedTuple):
     help_text: str | Promise = None
 
 
+@cache_until_change(input_value=lambda: apps.ready)
 def get_all_event_permission_groups() -> Dict[str, PermissionGroup]:
-    global _ALL_EVENT_PERMISSION_GROUPS, _CACHE_TIME_APPS_READY
-
-    if _ALL_EVENT_PERMISSION_GROUPS and apps.ready == _CACHE_TIME_APPS_READY:
-        return _ALL_EVENT_PERMISSION_GROUPS
-
     types = OrderedDict()
     for recv, ret in register_event_permission_groups.send(None):
         if isinstance(ret, (list, tuple)):
@@ -69,17 +76,11 @@ def get_all_event_permission_groups() -> Dict[str, PermissionGroup]:
                 types[r.name] = r
         else:
             types[ret.name] = ret
-    _ALL_EVENT_PERMISSION_GROUPS = types
-    _CACHE_TIME_APPS_READY = apps.ready
     return types
 
 
+@cache_until_change(input_value=lambda: apps.ready)
 def get_all_organizer_permission_groups() -> Dict[str, PermissionGroup]:
-    global _ALL_ORGANIZER_PERMISSION_GROUPS, _CACHE_TIME_APPS_READY
-
-    if _ALL_ORGANIZER_PERMISSION_GROUPS and apps.ready == _CACHE_TIME_APPS_READY:
-        return _ALL_ORGANIZER_PERMISSION_GROUPS
-
     types = OrderedDict()
     for recv, ret in register_organizer_permission_groups.send(None):
         if isinstance(ret, (list, tuple)):
@@ -87,42 +88,29 @@ def get_all_organizer_permission_groups() -> Dict[str, PermissionGroup]:
                 types[r.name] = r
         else:
             types[ret.name] = ret
-    _ALL_ORGANIZER_PERMISSION_GROUPS = types
-    _CACHE_TIME_APPS_READY = apps.ready
     return types
 
 
+@cache_until_change(input_value=lambda: apps.ready)
 def get_all_event_permissions() -> Set[str]:
     from pretix.helpers.permission_migration import OLD_TO_NEW_EVENT_COMPAT
-    global _ALL_EVENT_PERMISSIONS, _CACHE_TIME_APPS_READY
-
-    if _ALL_EVENT_PERMISSIONS and apps.ready == _CACHE_TIME_APPS_READY:
-        return _ALL_EVENT_PERMISSIONS
 
     res = set(OLD_TO_NEW_EVENT_COMPAT.keys())
     for pg in get_all_event_permission_groups().values():
         for a in pg.actions:
             res.add(f"{pg.name}:{a}")
-
-    _ALL_EVENT_PERMISSIONS = res
-    _CACHE_TIME_APPS_READY = apps.ready
     return res
 
 
+@cache_until_change(input_value=lambda: apps.ready)
 def get_all_organizer_permissions() -> Set[str]:
     from pretix.helpers.permission_migration import OLD_TO_NEW_ORGANIZER_COMPAT
-    global _ALL_ORGANIZER_PERMISSIONS, _CACHE_TIME_APPS_READY
-
-    if _ALL_ORGANIZER_PERMISSIONS and apps.ready == _CACHE_TIME_APPS_READY:
-        return _ALL_ORGANIZER_PERMISSIONS
 
     res = set(OLD_TO_NEW_ORGANIZER_COMPAT.keys())
     for pg in get_all_organizer_permission_groups().values():
         for a in pg.actions:
             res.add(f"{pg.name}:{a}")
 
-    _ALL_ORGANIZER_PERMISSIONS = res
-    _CACHE_TIME_APPS_READY = apps.ready
     return res
 
 
