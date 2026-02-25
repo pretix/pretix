@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-21 03:00+0000\n"
+"PO-Revision-Date: 2026-02-25 23:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -17032,28 +17032,20 @@ msgid "You need to specify as many seats as voucher codes."
 msgstr "Je moet evenveel stoelnummers als vouchercodes opgeven."
 
 #: pretix/control/forms/waitinglist.py:39
-#, fuzzy
-#| msgid "Please select a valid seat."
 msgid "Select a valid choice."
-msgstr "Kies een geldige beschikbare stoel."
+msgstr "Maak een geldige keuze."
 
 #: pretix/control/forms/waitinglist.py:107
-#, fuzzy
-#| msgid "Active products"
 msgid "Only includes active products."
-msgstr "Actieve producten"
+msgstr "Bevat alleen actieve producten."
 
 #: pretix/control/forms/waitinglist.py:115
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "A voucher for this waiting list entry was already sent out."
-msgstr "Er bestaat al een voucher met deze code."
+msgstr "Er is al een voucher verzonden naar deze inschrijver op de wachtlijst."
 
 #: pretix/control/forms/waitinglist.py:125
-#, fuzzy
-#| msgid "The selected product has been deactivated."
 msgid "The selected product is not active."
-msgstr "Het gekozen product is uitgeschakeld."
+msgstr "Het gekozen product is niet actief."
 
 #: pretix/control/logdisplay.py:73 pretix/control/logdisplay.py:83
 msgid "The order has been changed:"
@@ -18844,6 +18836,9 @@ msgid ""
 "in repeatedly. Please check if your browser is set to block cookies, or "
 "delete all existing cookies and retry."
 msgstr ""
+"Je browser lijkt ons cookie niet te accepteren, waardoor je telkens opnieuw "
+"moet inloggen. Controleer of je browser cookies blokkeert of verwijder alle "
+"opgeslagen cookies en probeer het opnieuw."
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:35
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
@@ -28141,10 +28136,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/edit.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/edit.html:6
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:273
-#, fuzzy
-#| msgid "Entry"
 msgid "Edit entry"
-msgstr "Binnenkomst"
+msgstr "Inschrijving bewerken"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:17
 msgid ""
@@ -30080,15 +30073,7 @@ msgid "Two-factor authentication is now disabled for your account."
 msgstr "Twee-factor-authenticatie is nu uitgeschakeld voor je account."
 
 #: pretix/control/views/user.py:635
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Your emergency codes have been newly generated. Remember to store them in "
-#| "a safe place in case you lose access to your devices. You will not be "
-#| "able to view them again here.\n"
-#| "\n"
-#| "Your emergency codes:\n"
-#| "- \n"
-#| "- "
+#, python-brace-format
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices. You will not be able to "
@@ -30102,8 +30087,7 @@ msgstr ""
 "Je kunt ze hier niet meer opnieuw laten tonen.\n"
 "\n"
 "Je noodcodes:\n"
-"-\n"
-"- "
+"{tokens}"
 
 #: pretix/control/views/user.py:655
 msgid "Your notifications have been disabled."
@@ -30270,10 +30254,8 @@ msgid "The selected entry has been deleted."
 msgstr "De gekozen inschrijving is verwijderd."
 
 #: pretix/control/views/waitinglist.py:417
-#, fuzzy
-#| msgid "The waitinglist entry has been transferred."
 msgid "The waitinglist entry has been changed."
-msgstr "De wachtlijstvermelding is overgedragen."
+msgstr "De inschrijving op de wachtlijst is veranderd."
 
 #: pretix/helpers/countries.py:134
 msgid "Belarus"
