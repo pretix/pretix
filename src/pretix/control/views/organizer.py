@@ -1039,9 +1039,10 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     def _send_invite(self, instance):
         mail(
             instance.email,
-            _('pretix account invitation'),
+            _('Account invitation'),
             'pretixcontrol/email/invitation.txt',
             {
+                'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
                 'organizer': self.request.organizer.name,
                 'team': instance.team.name,
