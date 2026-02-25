@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
 "PO-Revision-Date: 2026-02-25 23:00+0000\n"
-"Last-Translator: André Almeida <andrealmeid@riseup.net>\n"
+"Last-Translator: Pedro Orlando <scramblerdoodle@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -834,6 +834,8 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
+"Atualize o mapeamento de valor para o campo \"{field_name}\" - opção \"{val}"
+"\" não atribuída"
 
 #: pretix/base/datasync/sourcefields.py:128
 msgid "Order position details"
@@ -1140,7 +1142,7 @@ msgstr "Link do ingresso"
 #: pretix/base/datasync/sourcefields.py:578
 #, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "Dia/horário de check-in na lista {}"
+msgstr "Data/horário de check-in na lista {}"
 
 #: pretix/base/datasync/sourcefields.py:590
 #, python-brace-format
@@ -2575,10 +2577,8 @@ msgid "Voucher budget usage"
 msgstr "Código de cupom utilizado:"
 
 #: pretix/base/exporters/orderlist.py:654
-#, fuzzy
-#| msgid "Voucher tags"
 msgid "Voucher tag"
-msgstr "Marcadores de cupons"
+msgstr "Marcador de cupom"
 
 #: pretix/base/exporters/orderlist.py:655
 msgid "Pseudonymization ID"
@@ -3906,6 +3906,8 @@ msgstr "Data do evento: {date_range}"
 msgid ""
 "A Peppol participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
+"Um ID de participante Peppol começa sempre com um prefixo, seguido de dois "
+"pontos (:)."
 
 #: pretix/base/invoicing/peppol.py:140
 #, python-format
