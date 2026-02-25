@@ -126,7 +126,7 @@ def test_specific_event_permission_limited(event, user):
     assert not user.has_event_permission(event.organizer, event, 'event.settings.general:write')
 
     assert user.has_event_permission(event.organizer, event, ('event.orders:write', 'event.settings.general:write'))
-    assert not user.has_event_permission(event.organizer, event, ('organizer.teams:write', 'event.settings.general:write'))
+    assert not user.has_event_permission(event.organizer, event, ('event.items:write', 'event.settings.general:write'))
 
     team.limit_event_permissions = {}
     team.save()
@@ -182,7 +182,7 @@ def test_event_permissions_multiple_teams(event, user):
     }
     assert user.get_event_permission_set(event.organizer, event2) == {
         'event.orders:write', 'event.settings.general:write', 'event.settings.general:write',
-        'can_change_orders', 'can_change_event_settings',
+        'can_change_orders', 'can_change_event_settings', 'can_change_settings',
     }
 
 
@@ -337,7 +337,7 @@ def test_check_with_legacy_permission_names(event, user):
         "organizer.reusablemedia:write",
     }
     assert team1.event_permission_set() == {
-        "event.settings.general:write", "can_change_event_settings",
+        "event.settings.general:write", "can_change_event_settings", "can_change_settings",
     }
     assert team1.event_permission_set(include_legacy=False) == {
         "event.settings.general:write",
@@ -346,7 +346,7 @@ def test_check_with_legacy_permission_names(event, user):
     # User methods
     user._teamcache = {}
     assert user.get_event_permission_set(event.organizer, event) == {
-        "event.settings.general:write", "can_change_event_settings",
+        "event.settings.general:write", "can_change_event_settings", "can_change_settings",
     }
     assert user.get_organizer_permission_set(event.organizer) == {
         "organizer.giftcards:read",

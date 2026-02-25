@@ -702,6 +702,7 @@ def get_organizer_navigation(request):
             'active': (url.url_name == 'organizer.datasync.failedjobs'),
         }])
 
+    if 'organizer.outgoingmails:read' in request.orgapermset:
         nav.append({
             'label': _('Outgoing emails'),
             'url': reverse('control:organizer.outgoingmails', kwargs={

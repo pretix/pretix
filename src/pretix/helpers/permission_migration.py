@@ -42,7 +42,8 @@ OLD_TO_NEW_EVENT_MIGRATION = {
 OLD_TO_NEW_ORGANIZER_MIGRATION = {
     "can_create_events": ["organizer.events:create"],
     "can_change_organizer_settings": ["organizer.settings.general:write", "organizer.devices:read",
-                                      "organizer.devices:write", "organizer.seatingplans:write"],
+                                      "organizer.devices:write", "organizer.seatingplans:write",
+                                      "organizer.outgoingmails:read"],
     "can_change_teams": ["organizer.teams:write"],
     "can_manage_gift_cards": ["organizer.giftcards:read", "organizer.giftcards:write"],
     "can_manage_customers": ["organizer.customers:read", "organizer.customers:write"],
