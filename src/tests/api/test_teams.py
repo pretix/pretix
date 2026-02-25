@@ -254,6 +254,7 @@ def test_team_update_legacy_add_all_perms(token_client, organizer, event, second
         'organizer.devices:read': True,
         'organizer.devices:write': True,
         'organizer.seatingplans:write': True,
+        'organizer.outgoingmails:read': True,
     }
     assert resp.data["can_manage_customers"] is True
     assert resp.data["can_change_teams"] is False

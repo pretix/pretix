@@ -260,10 +260,10 @@ def register_default_organizer_permissions(sender, **kwargs):
             label=_("Events"),
             actions=["create"],
             options=[
-                PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "Only existing events")),
-                PermissionOption(actions=("create",), label=pgettext_lazy("permission_level", "Create new events")),
+                PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "Access existing events")),
+                PermissionOption(actions=("create",), label=pgettext_lazy("permission_level", "Access existing and create new events")),
             ],
-            help_text="",
+            help_text=_("The level of access to events is determined in detail by the settings below."),
         ),
         PermissionGroup(
             name="organizer.settings.general",

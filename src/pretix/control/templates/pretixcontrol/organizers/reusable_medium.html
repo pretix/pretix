@@ -22,7 +22,6 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    {% csrf_token %}
                     <dl class="dl-horizontal">
                         <dt>{% trans "Media type" context "reusable_media" %}</dt>
                         <dd>{{ medium.get_type_display }}</dd>
