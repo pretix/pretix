@@ -29,10 +29,11 @@ fabric.Imagearea = fabric.util.createClass(fabric.Rect, {
 
         this.callSuper('initialize', text, options);
         this.set('label', options.label || '');
+        this.set('missing_image_transparent', options.missing_image_transparent || false);
     },
 
     toObject: function () {
-        return fabric.util.object.extend(this.callSuper('toObject'), {});
+        return fabric.util.object.extend(this.callSuper('toObject'), {missing_image_transparent: this.missing_image_transparent});
     },
 
     _render: function (ctx) {
@@ -311,6 +312,7 @@ var editor = {
                     height: editor._px2mm(o.height * o.scaleY).toFixed(2),
                     width: editor._px2mm(o.width * o.scaleX).toFixed(2),
                     content: o.content,
+                    missing_image_transparent: o.missing_image_transparent || false,
                 });
             } else  if (o.type === "barcodearea") {
                 col = (new fabric.Color(o.fill))._source;
@@ -367,6 +369,7 @@ var editor = {
             o.set('width', editor._mm2px(d.width));
             o.set('scaleX', 1);
             o.set('scaleY', 1);
+            o.missing_image_transparent = d.missing_image_transparent || false;
         } else if (d.type === "poweredby") {
             o = editor._add_poweredby(d.content);
             o.content = d.content;
@@ -654,6 +657,7 @@ var editor = {
             $("#toolbox-height").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-width").val(editor._px2mm(o.width * o.scaleX).toFixed(2));
             $("#toolbox-imagecontent").val(o.content);
+            $("#toolbox-image-transparent").prop("checked", o.missing_image_transparent || false);
         } else if (o.type === "poweredby") {
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-poweredby-style").val(o.content);
@@ -784,7 +788,9 @@ var editor = {
             o.set('scaleX', 1);
             o.set('scaleY', 1);
             o.set('top', new_top)
+            o.set('top', new_top)
             o.content = $("#toolbox-imagecontent").val();
+            o.missing_image_transparent = $("#toolbox-image-transparent").prop("checked");
         } else if (o.type === "poweredby") {
             var new_h = Math.max(1, editor._mm2px($("#toolbox-squaresize").val()));
             new_top += o.height * o.scaleY - new_h;

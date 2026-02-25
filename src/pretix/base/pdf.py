@@ -975,17 +975,18 @@ class Renderer:
                 )
                 canvas.restoreState()
         else:
-            canvas.saveState()
-            canvas.setFillColorRGB(.8, .8, .8, alpha=1)
-            canvas.rect(
-                x=float(o['left']) * mm,
-                y=float(o['bottom']) * mm,
-                width=float(o['width']) * mm,
-                height=float(o['height']) * mm,
-                stroke=0,
-                fill=1,
-            )
-            canvas.restoreState()
+            if not o.get('missing_image_transparent', False):
+                canvas.saveState()
+                canvas.setFillColorRGB(.8, .8, .8, alpha=1)
+                canvas.rect(
+                    x=float(o['left']) * mm,
+                    y=float(o['bottom']) * mm,
+                    width=float(o['width']) * mm,
+                    height=float(o['height']) * mm,
+                    stroke=0,
+                    fill=1,
+                )
+                canvas.restoreState()
 
     def _text_paragraph(self, op: OrderPosition, order: Order, o: dict, legacy_lineheight=False, override_fontsize=None):
         font = o['fontfamily']
