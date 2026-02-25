@@ -329,4 +329,13 @@ def register_default_organizer_permissions(sender, **kwargs):
             actions=["write"],
             options=OPTS_ALL_READ,
         ),
+        PermissionGroup(
+            name="organizer.outgoingmails",
+            label=_("Outgoing emails"),
+            actions=["read"],
+            options=[
+                PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "No access")),
+                PermissionOption(actions=("read",), label=pgettext_lazy("permission_level", "View")),
+            ],
+        ),
     ]
