@@ -14,8 +14,8 @@ RUN apt-get update && \
             libxslt1-dev \
             locales \
             nginx \
-            python3-virtualenv \
-            python3-dev \
+            python3.11-venv \
+            python3.11-dev \
             sudo \
             supervisor \
             libmaxminddb0 \
@@ -53,7 +53,7 @@ COPY pretix-regex-validation /pretix/pretix-regex-validation
 
 RUN pip3 install -U \
         pip \
-        setuptools \
+        "setuptools<81" \
         wheel && \
     cd /pretix && \
     PRETIX_DOCKER_BUILD=TRUE pip3 install \

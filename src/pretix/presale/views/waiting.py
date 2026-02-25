@@ -251,33 +251,3 @@ class WaitingRemoveView(EventViewMixin, CustomerRequiredMixin, TemplateView):
 
     def get_success_url(self):
         return self.get_index_url()
-
-
-@method_decorator(allow_frame_if_namespaced, 'dispatch')
-class WaitingRankView(EventViewMixin, CustomerRequiredMixin, View):
-    """
-    View to check a customer's rank in the waiting list.
-    Returns JSON with the rank or error message.
-    """
-
-    def get(self, request, *args, **kwargs):
-        customer_email = request.customer.email
-        
-        try:
-            products_data = get_waiting_list_ranks(request.event, customer_email)
-            
-            if not products_data:
-                return JsonResponse({
-                    'error': _('You are not on the waiting list for this event.')
-                }, status=404)
-            
-            return JsonResponse({
-                'products': products_data
-            })
-            
-        except Exception as e:
-            return JsonResponse({
-                'error': _('An error occurred while checking your rank.')
-            }, status=500)
-
-
