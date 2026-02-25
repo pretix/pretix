@@ -194,7 +194,7 @@ def init_event_exporter(identifier, **kwargs):
     return None
 
 
-def init_event_exporters(event, user=None, token=None, device=None, request=None, progress_callback=None, staff_session=False):
+def init_event_exporters(event, user=None, token=None, device=None, request=None, staff_session=False, **kwargs):
     if not user and not token and not device:
         raise ValueError("No auth source given.")
     perm_holder = device or token or user
@@ -211,7 +211,7 @@ def init_event_exporters(event, user=None, token=None, device=None, request=None
         if not perm_holder.has_event_permission(event.organizer, event, permission_name, request) and not staff_session:
             continue
 
-        exporter: BaseExporter = response(event=event, organizer=event.organizer, progress_callback=progress_callback)
+        exporter: BaseExporter = response(event=event, organizer=event.organizer, **kwargs)
 
         if not exporter.available_for_user(user if user and user.is_authenticated else None):
             continue
@@ -227,7 +227,7 @@ def init_organizer_exporter(identifier, **kwargs):
 
 
 def init_organizer_exporters(
-    organizer, user=None, token=None, device=None, request=None, progress_callback=None, staff_session=False, event_qs=None
+    organizer, user=None, token=None, device=None, request=None, staff_session=False, event_qs=None, **kwargs
 ):
     if not user and not token and not device:
         raise ValueError("No auth source given.")
@@ -243,7 +243,7 @@ def init_organizer_exporters(
             continue
 
         if issubclass(response, OrganizerLevelExportMixin):
-            exporter: BaseExporter = response(event=Event.objects.none(), organizer=organizer, progress_callback=progress_callback)
+            exporter: BaseExporter = response(event=Event.objects.none(), organizer=organizer, **kwargs)
 
             try:
                 if not perm_holder.has_organizer_permission(organizer, response.get_required_organizer_permission(), request) and not staff_session:
@@ -295,7 +295,7 @@ def init_organizer_exporters(
             if not _has_permission_on_any_team_cache[permission_name]:
                 continue
 
-            exporter: BaseExporter = response(event=_event_list_cache[permission_name], organizer=organizer, progress_callback=progress_callback)
+            exporter: BaseExporter = response(event=_event_list_cache[permission_name], organizer=organizer, **kwargs)
 
         if not exporter.available_for_user(user if user and user.is_authenticated else None):
             continue
