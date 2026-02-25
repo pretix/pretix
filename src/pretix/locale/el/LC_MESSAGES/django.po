@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2025-02-14 21:00+0000\n"
-"Last-Translator: deborahfoell <deborah.foell@om.org>\n"
-"Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
-">\n"
+"PO-Revision-Date: 2026-02-25 23:00+0000\n"
+"Last-Translator: David Ibáñez Cerdeira <dibanez@gmail.com>\n"
+"Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
+"\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -20467,7 +20467,7 @@ msgstr "Ορίστε νέο κωδικό πρόσβασης"
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:25
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:25
 msgid "Save"
-msgstr "Αποθηκεύση"
+msgstr "gardar"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
