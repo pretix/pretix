@@ -59,6 +59,7 @@ Possible values for ``limit_organizer_permissions`` defined in the core pretix s
     organizer.reusablemedia:write
     organizer.devices:read
     organizer.devices:write
+    organizer.outgoingmails:read
 
 Possible values for ``limit_event_permissions`` defined in the core pretix system (plugins might add more)::
 
