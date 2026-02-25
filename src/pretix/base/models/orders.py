@@ -337,8 +337,8 @@ class Order(LockModel, LoggedModel):
         verbose_name_plural = _("Orders")
         ordering = ("-datetime", "-pk")
         indexes = [
-            models.Index(fields=["datetime", "id"]),
-            models.Index(fields=["last_modified", "id"]),
+            models.Index(fields=["datetime", "id"], name="pretixbase__datetim_66aff0_idx"),
+            models.Index(fields=["last_modified", "id"], name="pretixbase__last_mo_4ebf8b_idx"),
         ]
         constraints = [
             models.UniqueConstraint(fields=["organizer", "code"], name="order_organizer_code_uniq"),
@@ -3104,7 +3104,7 @@ class Transaction(models.Model):
     class Meta:
         ordering = 'datetime', 'pk'
         indexes = [
-            models.Index(fields=['datetime', 'id'])
+            models.Index(fields=['datetime', 'id'], name="pretixbase__datetim_b20405_idx")
         ]
 
     def save(self, *args, **kwargs):

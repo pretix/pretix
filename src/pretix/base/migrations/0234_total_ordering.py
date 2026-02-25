@@ -41,16 +41,20 @@ class Migration(migrations.Migration):
             name='datetime',
             field=models.DateTimeField(),
         ),
-        migrations.AlterIndexTogether(
-            name='logentry',
-            index_together={('datetime', 'id')},
+        migrations.AddIndex(
+            'logentry',
+            models.Index(fields=('datetime', 'id'), name="pretixbase__datetim_b1fe5a_idx"),
         ),
-        migrations.AlterIndexTogether(
-            name='order',
-            index_together={('datetime', 'id'), ('last_modified', 'id')},
+        migrations.AddIndex(
+            'order',
+            models.Index(fields=["datetime", "id"], name="pretixbase__datetim_66aff0_idx"),
         ),
-        migrations.AlterIndexTogether(
-            name='transaction',
-            index_together={('datetime', 'id')},
+        migrations.AddIndex(
+            'order',
+            models.Index(fields=["last_modified", "id"], name="pretixbase__last_mo_4ebf8b_idx"),
+        ),
+        migrations.AddIndex(
+            'transaction',
+            models.Index(fields=('datetime', 'id'), name="pretixbase__datetim_b20405_idx"),
         ),
     ]
