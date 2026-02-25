@@ -271,7 +271,7 @@ class OrderListExporter(MultiSheetListExporter):
 
         qs = self._date_filter(qs, form_data, rel='')
 
-        if form_data['paid_only']:
+        if form_data.get('paid_only'):
             qs = qs.filter(status=Order.STATUS_PAID)
         return qs
 
@@ -457,7 +457,7 @@ class OrderListExporter(MultiSheetListExporter):
         ).annotate(
             payment_providers=Subquery(p_providers, output_field=CharField()),
         ).select_related('order', 'order__invoice_address', 'order__customer', 'tax_rule')
-        if form_data['paid_only']:
+        if form_data.get('paid_only'):
             qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
 
         if form_data.get('items'):
@@ -560,7 +560,7 @@ class OrderListExporter(MultiSheetListExporter):
         qs = OrderPosition.all.filter(
             order__event__in=self.events,
         )
-        if form_data['paid_only']:
+        if form_data.get('paid_only'):
             qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
 
         if form_data.get('items'):

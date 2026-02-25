@@ -134,7 +134,7 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
 
     event_qs = organizer.events.all()
     if form_data.get('events') is not None and not form_data.get('all_events'):
-        if isinstance(form_data['events'][0], str):
+        if form_data['events'] and isinstance(form_data['events'][0], str):  # legacy API-created schedules
             event_qs = event_qs.filter(slug__in=form_data.get('events'))
         else:
             event_qs = event_qs.filter(pk__in=form_data.get('events'))
