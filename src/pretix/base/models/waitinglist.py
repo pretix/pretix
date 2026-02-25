@@ -34,10 +34,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import User, Voucher
-from pretix.base.services.mail import mail, render_mail
+from pretix.base.services.mail import mail
 from pretix.helpers import OF_SELF
 
-from ...helpers.format import format_map
 from ...helpers.names import build_name
 from .base import LoggedModel
 from .event import Event, SubEvent
@@ -272,9 +271,7 @@ class WaitingListEntry(LoggedModel):
         with language(self.locale, self.event.settings.region):
             recipient = self.email
 
-            email_content = render_mail(template, context)
-            subject = format_map(subject, context)
-            mail(
+            outgoing_mail = mail(
                 recipient, subject, template, context,
                 self.event,
                 self.locale,
@@ -284,18 +281,13 @@ class WaitingListEntry(LoggedModel):
                 attach_other_files=attach_other_files,
                 attach_cached_files=attach_cached_files,
             )
-            self.log_action(
-                log_entry_type,
-                user=user,
-                auth=auth,
-                data={
-                    'subject': subject,
-                    'message': email_content,
-                    'recipient': recipient,
-                    'attach_other_files': attach_other_files,
-                    'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
-                }
-            )
+            if outgoing_mail:
+                self.log_action(
+                    log_entry_type,
+                    user=user,
+                    auth=auth,
+                    data=outgoing_mail.log_data(),
+                )
 
     @staticmethod
     def clean_itemvar(event, item, variation):
