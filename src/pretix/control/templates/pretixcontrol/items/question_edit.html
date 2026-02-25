@@ -48,7 +48,7 @@
                     {% bootstrap_field form.valid_string_length_max layout="control" %}
                 </div>
                 <div id="valid-file">
-                    {% bootstrap_field form.valid_file_portrait layout="control" %}
+                    {% bootstrap_field form.valid_file_ratio layout="control" %}
                 </div>
                 <div id="answer-options">
                     <h3>{% trans "Answer options" %}</h3>
@@ -148,6 +148,7 @@
                 </div>
             </fieldset>
         </div>
+
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
