@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-01-26 22:00+0000\n"
-"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
+"PO-Revision-Date: 2026-02-25 23:00+0000\n"
+"Last-Translator: André Almeida <andrealmeid@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -291,42 +291,28 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "O item empacotado não deve ter pacotes por conta própria."
 
 #: pretix/api/serializers/item.py:235
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "O pagamento foi feito muito tarde para ser aceito."
+msgstr "O início do programa não pode estar vazio."
 
 #: pretix/api/serializers/item.py:239
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "O pagamento foi feito muito tarde para ser aceito."
+msgstr "O fim do programa não pode estar vazio."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2322
-#, fuzzy
-#| msgid "The maximum date must not be before the minimum value."
 msgid "The program end must not be before the program start."
-msgstr "A data máxima deve ser antes do valor mínimo."
+msgstr "O final do programa não pode acontecer antes do início do programa."
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2316
-#, fuzzy
-#| msgid "You can not select a subevent if your event is not an event series."
 msgid "You cannot use program times on an event series."
-msgstr ""
-"Você não pode selecionar um subevento se o seu evento não for uma série de "
-"eventos."
+msgstr "Você não pode usar o horário do programa em uma série de eventos."
 
 #: pretix/api/serializers/item.py:337
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
-#| "Please use the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, program times or variations via PATCH/PUT is not "
 "supported. Please use the dedicated nested endpoint."
 msgstr ""
-"A atualização de complementos, pacotes ou variações via PATCH/PUT não é "
-"suportada. Use o endpoint aninhado dedicado."
+"A atualização de complementos, horário de programas ou variações via PATCH/"
+"PUT não é suportada. Use o endpoint aninhado dedicado."
 
 #: pretix/api/serializers/item.py:345
 msgid "Only admission products can currently be personalized."
@@ -640,6 +626,8 @@ msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
 msgstr ""
+"Inclui apenas mudanças explícitas para o voucher, não inclui, por exemplo, "
+"um aumento no número de reembolsos."
 
 #: pretix/api/webhooks.py:454
 msgid "Voucher deleted"
@@ -658,22 +646,16 @@ msgid "Customer account anonymized"
 msgstr "Conta foi anonimizada"
 
 #: pretix/api/webhooks.py:470
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card added"
-msgstr "Código do cartão-presente"
+msgstr "Cartão-presente adicionado"
 
 #: pretix/api/webhooks.py:474
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "Código do cartão-presente"
+msgstr "Cartão de presente adicionado"
 
 #: pretix/api/webhooks.py:478
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card used in transaction"
-msgstr "Transações com cartões-presente"
+msgstr "Cartão de presente usado em transação"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1054
@@ -1156,10 +1138,9 @@ msgid "Ticket link"
 msgstr "Link do ingresso"
 
 #: pretix/base/datasync/sourcefields.py:578
-#, fuzzy, python-brace-format
-#| msgid "Check-in list {val}"
+#, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "Lista de check-in {val}"
+msgstr "Dia/horário de check-in na lista {}"
 
 #: pretix/base/datasync/sourcefields.py:590
 #, python-brace-format
