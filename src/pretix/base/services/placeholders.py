@@ -24,6 +24,7 @@ import logging
 from datetime import timedelta
 from decimal import Decimal
 
+from django.db.models import Prefetch, prefetch_related_objects
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.html import escape, mark_safe
@@ -35,6 +36,7 @@ from pretix.base.forms.widgets import format_placeholders_help_text
 from pretix.base.i18n import (
     LazyCurrencyNumber, LazyDate, LazyExpiresDate, LazyNumber,
 )
+from pretix.base.models import EventMetaValue
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES, get_name_parts_localized
 from pretix.base.signals import (
@@ -752,6 +754,11 @@ def base_placeholders(sender, **kwargs):
             name_scheme['sample'][f]
         ))
 
+    prefetch_related_objects(
+        [sender],
+        Prefetch('meta_values', queryset=EventMetaValue.objects.select_related("property"), to_attr="meta_values_cached")
+    )
+    prefetch_related_objects([sender.organizer], Prefetch('meta_properties'))
     for k, v in sender.meta_data.items():
         ph.append(MarkdownTextPlaceholder(
             'meta_%s' % k, ['event'], lambda event, k=k: event.meta_data[k],

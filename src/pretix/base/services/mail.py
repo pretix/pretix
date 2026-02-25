@@ -409,6 +409,18 @@ def mail_send_task(self, **kwargs) -> bool:
         outgoing_mail.inflight_since = now()
         outgoing_mail.save(update_fields=["status", "inflight_since"])
 
+    # Performance optimization, saves database queries later on if we resolve the known relationships
+    if outgoing_mail.event_id:
+        assert outgoing_mail.event.organizer_id == outgoing_mail.organizer.pk
+        outgoing_mail.event.organizer = outgoing_mail.organizer
+    if outgoing_mail.order_id:
+        assert outgoing_mail.order.event_id == outgoing_mail.event_id
+        outgoing_mail.order.event = outgoing_mail.event
+        outgoing_mail.order.organizer = outgoing_mail.organizer
+    if outgoing_mail.orderposition_id:
+        assert outgoing_mail.orderposition.order_id == outgoing_mail.order_id
+        outgoing_mail.orderposition.order = outgoing_mail.order
+
     headers = dict(outgoing_mail.headers)
     headers.setdefault('X-PX-Correlation', str(outgoing_mail.guid))
     email = CustomEmail(
