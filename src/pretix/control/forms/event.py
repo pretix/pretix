@@ -1133,6 +1133,13 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
                     'tickets, the following email will be sent out to the attendees.'),
         required=False,
     )
+    mail_send_order_placed_all_attendees = forms.BooleanField(
+        label=_("Send an email to all attendees"),
+        help_text=_('Sends the email to all attendees, including email addresses that are equal to the person that orders the tickets. '
+                    'Activating this option ensures that the following email is sent to all attendees. '
+                    'This option applies only if the option above is activated.'),
+        required=False,
+    )
     mail_subject_order_placed_attendee = I18nFormField(
         label=_("Subject sent to attendees"),
         required=False,
@@ -1160,6 +1167,13 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
                     'tickets, the following email will be sent out to the attendees.'),
         required=False,
     )
+    mail_send_order_paid_all_attendees = forms.BooleanField(
+        label=_("Send an email to all attendees"),
+        help_text=_('Sends the email to all attendees, including email addresses that are equal to the person that orders the tickets. '
+                    'Activating this option ensures that the following email is sent to all attendees. '
+                    'This option applies only if the option above is activated.'),
+        required=False,
+    )
     mail_subject_order_paid_attendee = I18nFormField(
         label=_("Subject sent to attendees"),
         required=False,
@@ -1185,6 +1199,13 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         label=_("Send an email to attendees"),
         help_text=_('If the order contains attendees with email addresses different from the person who orders the '
                     'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_send_order_free_all_attendees = forms.BooleanField(
+        label=_("Send an email to all attendees"),
+        help_text=_('Sends the email to all attendees, including email addresses that are equal to the person that orders the tickets. '
+                    'Activating this option ensures that the following email is sent to all attendees. '
+                    'This option applies only if the option above is activated.'),
         required=False,
     )
     mail_subject_order_free_attendee = I18nFormField(
@@ -1345,6 +1366,13 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
                     'tickets, the following email will be sent out to the attendees.'),
         required=False,
     )
+    mail_send_download_reminder_all_attendees = forms.BooleanField(
+        label=_("Send an email to all attendees"),
+        help_text=_('Sends the email to all attendees, including email addresses that are equal to the person that orders the tickets. '
+                    'Activating this option ensures that the following email is sent to all attendees. '
+                    'This option applies only if the option above is activated.'),
+        required=False,
+    )
     mail_subject_download_reminder_attendee = I18nFormField(
         label=_("Subject sent to attendees"),
         required=False,
@@ -1390,6 +1418,13 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
                     'tickets, the following email will be sent out to the attendees.'),
         required=False,
     )
+    mail_send_order_approved_all_attendees = forms.BooleanField(
+        label=_("Send an email to all attendees"),
+        help_text=_('Sends the email to all attendees, including email addresses that are equal to the person that orders the tickets. '
+                    'Activating this option ensures that the following email is sent to all attendees. '
+                    'This option applies only if the option above is activated.'),
+        required=False,
+    )
     mail_subject_order_approved_attendee = I18nFormField(
         label=_("Subject sent to attendees"),
         required=False,
@@ -1418,6 +1453,13 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         label=_("Send an email to attendees"),
         help_text=_('If the order contains attendees with email addresses different from the person who orders the '
                     'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_send_order_approved_free_all_attendees = forms.BooleanField(
+        label=_("Send an email to all attendees"),
+        help_text=_('Sends the email to all attendees, including email addresses that are equal to the person that orders the tickets. '
+                    'Activating this option ensures that the following email is sent to all attendees. '
+                    'This option applies only if the option above is activated.'),
         required=False,
     )
     mail_subject_order_approved_free_attendee = I18nFormField(

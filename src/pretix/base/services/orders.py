@@ -437,12 +437,14 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 email_template = order.event.settings.mail_text_order_approved_free
                 email_subject = order.event.settings.mail_subject_order_approved_free
                 email_attendees = order.event.settings.mail_send_order_approved_free_attendee
+                email_all_attendees = order.event.settings.mail_send_order_approved_free_all_attendees
                 email_attendee_template = order.event.settings.mail_text_order_approved_free_attendee
                 email_attendee_subject = order.event.settings.mail_subject_order_approved_free_attendee
             else:
                 email_template = order.event.settings.mail_text_order_approved
                 email_subject = order.event.settings.mail_subject_order_approved
                 email_attendees = order.event.settings.mail_send_order_approved_attendee
+                email_all_attendees = order.event.settings.mail_send_order_approved_all_attendees
                 email_attendee_template = order.event.settings.mail_text_order_approved_attendee
                 email_attendee_subject = order.event.settings.mail_subject_order_approved_attendee
 
@@ -461,7 +463,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
 
             if email_attendees:
                 for p in order.positions.all():
-                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
+                    if p.addon_to_id is None and p.attendee_email and (email_all_attendees or p.attendee_email != order.email):
                         email_attendee_context = get_email_context(event=order.event, order=order, position=p)
                         p.send_mail(
                             email_attendee_subject, email_attendee_template, email_attendee_context,
@@ -1343,6 +1345,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             log_entry = 'pretix.event.order.email.order_free'
 
             email_attendees = event.settings.mail_send_order_free_attendee
+            email_all_attendees = event.settings.mail_send_order_free_all_attendees
             email_attendees_template = event.settings.mail_text_order_free_attendee
             subject_attendees_template = event.settings.mail_subject_order_free_attendee
         else:
@@ -1351,6 +1354,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             log_entry = 'pretix.event.order.email.order_placed'
 
             email_attendees = event.settings.mail_send_order_placed_attendee
+            email_all_attendees = event.settings.mail_send_order_placed_all_attendees
             email_attendees_template = event.settings.mail_text_order_placed_attendee
             subject_attendees_template = event.settings.mail_subject_order_placed_attendee
 
@@ -1367,7 +1371,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             )
             if email_attendees:
                 for p in order.positions.all():
-                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
+                    if p.addon_to_id is None and p.attendee_email and (email_all_attendees or p.attendee_email != order.email):
                         _order_placed_email_attendee(event, order, p, email_attendees_template, subject_attendees_template, log_entry,
                                                      is_free=free_order_flow)
 
@@ -1554,7 +1558,8 @@ def send_download_reminders(sender, **kwargs):
                             )
                             if now() < reminder_date:
                                 continue
-                        if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
+                        if p.addon_to_id is None and p.attendee_email and (event.settings.mail_send_download_reminder_all_attendees
+                                                                           and p.attendee_email != o.email):
                             email_template = event.settings.mail_text_download_reminder_attendee
                             email_subject = event.settings.mail_subject_download_reminder_attendee
                             email_context = get_email_context(event=event, order=o, position=p)
