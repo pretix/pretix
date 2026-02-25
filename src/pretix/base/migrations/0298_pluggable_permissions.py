@@ -46,7 +46,7 @@ def migrate_teams_backward(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0296_invoice_invoice_from_state"),
+        ("pretixbase", "0297_outgoingmail"),
     ]
 
     operations = [
