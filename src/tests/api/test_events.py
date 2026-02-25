@@ -577,7 +577,9 @@ def test_event_create_with_clone_unknown_source(user, user_client, organizer, ev
 
 
 @pytest.mark.django_db
-def test_event_create_with_clone_across_organizers(user, user_client, organizer, event, taxrule):
+def test_event_create_with_clone_across_organizers(user, user_client, organizer, event, taxrule, team):
+    team.all_event_permissions = True
+    team.save()
     with scopes_disabled():
         target_org = Organizer.objects.create(name='Dummy', slug='dummy2')
         team = target_org.teams.create(
@@ -620,6 +622,51 @@ def test_event_create_with_clone_across_organizers(user, user_client, organizer,
         assert cloned_event.testmode
         assert cloned_event.settings.timezone == "Europe/Vienna"
         assert cloned_event.tax_rules.exists()
+
+
+@pytest.mark.django_db
+def test_event_create_with_clone_across_organizers_lack_of_permission_on_source(user, user_client, team, organizer, event, taxrule):
+    team.all_event_permissions = False
+    team.limit_event_permissions = {
+        "event.settings.general:write": True,
+    }
+    team.save()
+    with scopes_disabled():
+        target_org = Organizer.objects.create(name='Dummy', slug='dummy2')
+        team = target_org.teams.create(
+            name="Test-Team",
+            all_event_permissions=True,
+            all_organizer_permissions=True,
+        )
+        team.members.add(user)
+
+    resp = user_client.post(
+        '/api/v1/organizers/{}/events/?clone_from={}/{}'.format(target_org.slug, organizer.slug, event.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "testmode": True,
+            "currency": "EUR",
+            "date_from": "2018-12-27T10:00:00Z",
+            "date_to": "2018-12-28T10:00:00Z",
+            "date_admission": None,
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2030",
+            "plugins": [
+                "pretix.plugins.ticketoutputpdf"
+            ],
+            "timezone": "Europe/Vienna"
+        },
+        format='json'
+    )
+    assert resp.status_code == 403
+    assert resp.data["detail"] == "Not sufficient permission on source event to copy"
 
 
 @pytest.mark.django_db

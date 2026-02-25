@@ -101,6 +101,7 @@ class EventWizardFoundationForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
         self.session = kwargs.pop('session')
+        self.clone_from = kwargs.pop('clone_from')
         super().__init__(*args, **kwargs)
         qs = Organizer.objects.all()
         if not self.user.has_active_staff_session(self.session.session_key):
@@ -125,6 +126,16 @@ class EventWizardFoundationForm(forms.Form):
             organizer = self.fields['organizer'].queryset.first()
             self.fields['organizer'].initial = organizer
             self.fields['locales'].initial = organizer.settings.locales
+
+    def clean(self):
+        d = super().clean()
+        if d.get('organizer') and self.clone_from and not self.user.has_active_staff_session(self.session.session_key):
+            if not self.clone_from.allow_copy_data(d['organizer'], self.user):
+                raise ValidationError({
+                    "organizer": _("You do not have a sufficient level of access on the event you selected "
+                                   "to copy it to the desired organizer.")
+                })
+        return d
 
 
 class EventWizardBasicsForm(I18nModelForm):
@@ -199,6 +210,7 @@ class EventWizardBasicsForm(I18nModelForm):
         self.has_subevents = kwargs.pop('has_subevents')
         self.user = kwargs.pop('user')
         self.session = kwargs.pop('session')
+        self.clone_from = kwargs.pop('clone_from')
         super().__init__(*args, **kwargs)
         if 'timezone' not in self.initial:
             self.initial['timezone'] = get_current_timezone_name()
@@ -239,6 +251,18 @@ class EventWizardBasicsForm(I18nModelForm):
                               'check "{field}" above.').format(field=self.fields["no_taxes"].label)
             })
 
+        if self.clone_from and not self.user.has_active_staff_session(self.session.session_key):
+            if data.get("team"):
+                source_event_perms = self.user.get_event_permission_set(self.organizer, self.clone_from)
+                team_perms = data["team"].event_permission_set(include_legacy=False)
+                print(source_event_perms)
+                print(team_perms)
+                if any(t not in source_event_perms for t in team_perms if ":" in t):
+                    raise ValidationError({
+                        "team": _("You cannot choose a team that would give you more access than you have on "
+                                  "the event you are copying.")
+                    })
+
         # change timezone
         zone = ZoneInfo(data.get('timezone'))
         data['date_from'] = self.reset_timezone(zone, data.get('date_from'))
@@ -262,10 +286,9 @@ class EventWizardBasicsForm(I18nModelForm):
 
     @staticmethod
     def has_control_rights(user, organizer, session):
+        # It's mostly pointless to let a user create an event where they can't event change the name or create products,
+        # so we detect if the user has sufficient access for that on a new event.
         return user.teams.filter(
-            TeamQuerySet.event_permission_q("event.items:write"),
-            TeamQuerySet.event_permission_q("event.orders:write"),
-            TeamQuerySet.event_permission_q("event.vouchers:write"),
             TeamQuerySet.event_permission_q("event.settings.general:write"),
             organizer=organizer,
             all_events=True,
@@ -298,23 +321,24 @@ class EventWizardCopyForm(forms.Form):
         if user.has_active_staff_session(session.session_key):
             return Event.objects.all()
         return Event.objects.filter(
+            # It is generally pointless to let users copy events when they would not even be able to change the
+            # date of the event they have just created. Therefore, even if it looks wrong, we're checking a write
+            # permission for read access.
             Q(organizer_id__in=user.teams.filter(
-                # TODO: review these!
-                # Restrict cross-organizer copying further than same-organizer copying?
                 TeamQuerySet.event_permission_q("event.settings.general:write"),
-                TeamQuerySet.event_permission_q("event.items:write"),
                 all_events=True,
             ).values_list('organizer', flat=True)) | Q(id__in=user.teams.filter(
                 TeamQuerySet.event_permission_q("event.settings.general:write"),
-                TeamQuerySet.event_permission_q("event.items:write"),
             ).values_list('limit_events__id', flat=True))
         )
 
     def __init__(self, *args, **kwargs):
-        kwargs.pop('organizer')
+        self.organizer = kwargs.pop('organizer')
         kwargs.pop('locales')
         self.session = kwargs.pop('session')
+        self.team = kwargs.pop('team')
         kwargs.pop('has_subevents')
+        kwargs.pop('clone_from')
         self.user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
 
@@ -332,6 +356,24 @@ class EventWizardCopyForm(forms.Form):
             required=False
         )
         self.fields['copy_from_event'].widget.choices = self.fields['copy_from_event'].choices
+
+    def clean(self):
+        d = super().clean()
+        if d.get('copy_from_event') and not self.user.has_active_staff_session(self.session.session_key):
+            if not d['copy_from_event'].allow_copy_data(self.organizer, self.user):
+                raise ValidationError({
+                    "copy_from_event": _("You do not have a sufficient level of access on the event you selected "
+                                         "to copy it to the desired organizer.")
+                })
+            if self.team:
+                source_event_perms = self.user.get_event_permission_set(self.organizer, d['copy_from_event'])
+                team_perms = self.team.event_permission_set(include_legacy=False)
+                if any(t not in source_event_perms for t in team_perms if ":" in t):
+                    raise ValidationError({
+                        "copy_from_event": _("You cannot choose an event on which you have less access than the "
+                                             "team you selected in the previous step.")
+                    })
+        return d
 
 
 class EventMetaValueForm(forms.ModelForm):

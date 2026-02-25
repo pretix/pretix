@@ -281,6 +281,11 @@ class EventViewSet(viewsets.ModelViewSet):
         new_event = serializer.save(organizer=self.request.organizer)
 
         if copy_from:
+            perm_holder = (self.request.auth if isinstance(self.request.auth, (Device, TeamAPIToken))
+                           else self.request.user)
+            if not copy_from.allow_copy_data(self.request.organizer, perm_holder):
+                raise PermissionDenied("Not sufficient permission on source event to copy")
+
             new_event.copy_data_from(copy_from, skip_meta_data='meta_data' in serializer.validated_data)
 
             if plugins is not None:
@@ -345,7 +350,7 @@ class CloneEventViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        ctx['event'] = self.kwargs['event']
+        ctx['event'] = Event.objects.get(slug=self.kwargs['event'], organizer=self.request.organizer)
         ctx['organizer'] = self.request.organizer
         return ctx
 
@@ -355,6 +360,9 @@ class CloneEventViewSet(viewsets.ModelViewSet):
                        else self.request.user)
         if not perm_holder.has_organizer_permission(self.request.organizer, "organizer.events:create", request=self.request):
             raise PermissionDenied("No permission to create events")
+
+        if not serializer.context['event'].allow_copy_data(self.request.organizer, perm_holder):
+            raise PermissionDenied("Not sufficient permission on source event to copy")
 
         serializer.save(organizer=self.request.organizer)
 
