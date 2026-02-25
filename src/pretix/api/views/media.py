@@ -53,10 +53,12 @@ with scopes_disabled():
         customer = django_filters.CharFilter(field_name='customer__identifier')
         updated_since = django_filters.IsoDateTimeFilter(field_name='updated', lookup_expr='gte')
         created_since = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='gte')
+        # backwards-compatible
+        linked_orderposition = django_filters.NumberFilter(field_name='linked_orderpositions__id')
 
         class Meta:
             model = ReusableMedium
-            fields = ['identifier', 'type', 'active', 'customer', 'linked_orderposition', 'linked_giftcard']
+            fields = ['identifier', 'type', 'active', 'customer', 'linked_orderpositions', 'linked_giftcard']
 
 
 class ReusableMediaViewSet(viewsets.ModelViewSet):
@@ -75,7 +77,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
         ).order_by().values('card').annotate(s=Sum('value')).values('s')
         return self.request.organizer.reusable_media.prefetch_related(
             Prefetch(
-                'linked_orderposition',
+                'linked_orderpositions',
                 queryset=OrderPosition.objects.select_related(
                     'order', 'order__event', 'order__event__organizer', 'seat',
                 ).prefetch_related(
@@ -155,7 +157,6 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
                         type=s.validated_data["type"],
                         identifier=s.validated_data["identifier"],
                     )
-                m.linked_orderposition = None  # not relevant for cross-organizer
                 m.customer = None  # not relevant for cross-organizer
                 s = self.get_serializer(m)
                 return Response({"result": s.data})

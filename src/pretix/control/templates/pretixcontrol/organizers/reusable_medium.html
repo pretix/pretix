@@ -28,7 +28,19 @@
                             <dt>{% trans "Media type" context "reusable_media" %}</dt>
                             <dd>{{ medium.get_type_display }}</dd>
                             <dt>{% trans "Identifier" context "reusable_media" %}</dt>
-                            <dd><code>{{ medium.identifier }}</code></dd>
+                            <dd>
+                                <code id="medium_identifier">{{ medium.identifier }}</code>
+                                <button type="button" class="btn btn-default btn-xs btn-clipboard js-only" data-clipboard-target="#medium_identifier">
+                                    <i class="fa fa-clipboard" aria-hidden="true"></i>
+                                    <span class="sr-only">{% trans "Copy to clipboard" %}</span>
+                                </button>
+                                {% if medium.type == "barcode" %}
+                                <button type="button" class="btn btn-default btn-xs js-only" data-toggle="qrcode" data-qrcode="{{ medium.identifier }}">
+                                    <i class="fa fa-qrcode" aria-hidden="true"></i>
+                                    <span class="sr-only">{% trans "Create QR code" %}</span>
+                                </button>
+                                {% endif %}
+                            </dd>
                             <dt>{% trans "Status" %}</dt>
                             <dd>
                                 {% if not medium.active %}
@@ -49,13 +61,13 @@
                                     </a>
                                 </span>
                                 {% endif %}
-                                {% if medium.linked_orderposition %}
+                                {% for op in medium.linked_orderpositions.all %}
                                     <span class="helper-display-block">
-                                    <span class="fa fa-ticket fa-fw"></span>
-                                    <a href="{% url "control:event.order" event=medium.linked_orderposition.order.event.slug organizer=request.organizer.slug code=medium.linked_orderposition.order.code %}">
-                                        {{ medium.linked_orderposition.order.code }}</a>-{{ medium.linked_orderposition.positionid }}
-                                </span>
-                                {% endif %}
+                                        <span class="fa fa-ticket fa-fw"></span>
+                                        <a href="{% url "control:event.order" event=op.order.event.slug organizer=request.organizer.slug code=op.order.code %}">
+                                            {{ op.order.code }}</a>-{{ op.positionid }}
+                                    </span>
+                                {% endfor %}
                                 {% if medium.linked_giftcard %}
                                     <span class="helper-display-block">
                                     <span class="fa fa-credit-card fa-fw"></span>

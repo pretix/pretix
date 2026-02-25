@@ -72,6 +72,16 @@ class ReusableMedium(LoggedModel):
         max_length=200,
         verbose_name=pgettext_lazy('reusable_medium', 'Identifier'),
     )
+    claim_token = models.CharField(
+        max_length=200,
+        verbose_name=pgettext_lazy('reusable_medium', 'Claim token'),
+        null=True, blank=True
+    )
+    label = models.CharField(
+        max_length=200,
+        verbose_name=pgettext_lazy('reusable_medium', 'Label'),
+        null=True, blank=True
+    )
 
     active = models.BooleanField(
         verbose_name=_('Active'),
@@ -89,12 +99,14 @@ class ReusableMedium(LoggedModel):
         on_delete=models.SET_NULL,
         verbose_name=_('Customer account'),
     )
-    linked_orderposition = models.ForeignKey(
+    linked_orderpositions = models.ManyToManyField(
         OrderPosition,
-        null=True, blank=True,
         related_name='linked_media',
-        on_delete=models.SET_NULL,
-        verbose_name=_('Linked ticket'),
+        verbose_name=_('Linked tickets'),
+        help_text=_(
+            'If you link to more than one ticket, make sure there is no overlap in validity. '
+            'If multiple tickets are valid at once, this will lead to failed check-ins.'
+        )
     )
     linked_giftcard = models.ForeignKey(
         GiftCard,

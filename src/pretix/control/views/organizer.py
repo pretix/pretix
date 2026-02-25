@@ -3339,8 +3339,10 @@ class ReusableMediaListView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_queryset(self):
         qs = self.request.organizer.reusable_media.select_related(
-            'customer', 'linked_orderposition', 'linked_orderposition__order', 'linked_orderposition__order__event',
-            'linked_giftcard'
+            'customer',
+            'linked_giftcard',
+        ).prefetch_related(
+            Prefetch('linked_orderpositions', queryset=OrderPosition.objects.select_related("order", "order__event"))
         )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
@@ -3388,10 +3390,14 @@ class ReusableMediumCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
     @transaction.atomic
     def form_valid(self, form):
         r = super().form_valid(form)
-        form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data={
+
+        data = {
             k: getattr(form.instance, k)
             for k in form.changed_data
-        })
+        }
+        if "linked_orderpositions" in data:
+            data["linked_orderpositions"] = data["linked_orderpositions"].values_list("pk", flat=True)
+        form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
         return r
 
@@ -3417,10 +3423,13 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
     @transaction.atomic
     def form_valid(self, form):
         if form.has_changed():
-            self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data={
+            data = {
                 k: getattr(self.object, k)
                 for k in form.changed_data
-            })
+            }
+            if "linked_orderpositions" in data:
+                data["linked_orderpositions"] = data["linked_orderpositions"].values_list("pk", flat=True)
+            self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 

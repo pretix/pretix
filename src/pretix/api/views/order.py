@@ -193,7 +193,7 @@ with scopes_disabled():
                 )
             ).values('id')
 
-            matching_media = ReusableMedium.objects.filter(identifier=u).values_list('linked_orderposition__order_id', flat=True)
+            matching_media = ReusableMedium.objects.filter(identifier=u).values_list('linked_orderpositions__order_id', flat=True)
 
             mainq = (
                 code
@@ -1030,7 +1030,7 @@ with scopes_disabled():
         search = django_filters.CharFilter(method='search_qs')
 
         def search_qs(self, queryset, name, value):
-            matching_media = ReusableMedium.objects.filter(identifier=value).values_list('linked_orderposition', flat=True)
+            matching_media = ReusableMedium.objects.filter(identifier=value).values_list('linked_orderpositions', flat=True)
             return queryset.filter(
                 Q(secret__istartswith=value)
                 | Q(attendee_name_cached__icontains=value)

@@ -1029,13 +1029,15 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     requested_valid_from = serializers.DateTimeField(required=False, allow_null=True)
     use_reusable_medium = serializers.PrimaryKeyRelatedField(queryset=ReusableMedium.objects.none(),
                                                              required=False, allow_null=True)
+    add_to_reusable_medium = serializers.PrimaryKeyRelatedField(queryset=ReusableMedium.objects.none(),
+                                                                required=False, allow_null=True)
 
     class Meta:
         model = OrderPosition
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
                   'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until',
-                  'requested_valid_from', 'use_reusable_medium', 'discount')
+                  'requested_valid_from', 'use_reusable_medium', 'add_to_reusable_medium', 'discount')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1047,6 +1049,8 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
         with scopes_disabled():
             if 'use_reusable_medium' in self.fields:
                 self.fields['use_reusable_medium'].queryset = ReusableMedium.objects.all()
+            if 'add_to_reusable_medium' in self.fields:
+                self.fields['add_to_reusable_medium'].queryset = ReusableMedium.objects.all()
 
     def validate_secret(self, secret):
         if secret and OrderPosition.all.filter(order__event=self.context['event'], secret=secret).exists():
@@ -1061,6 +1065,9 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 'The specified medium does not belong to this organizer.'
             )
         return m
+
+    def validate_add_to_reusable_medium(self, m):
+        return self.validate_use_reusable_medium(m)
 
     def validate_item(self, item):
         if item.event != self.context['event']:
@@ -1135,6 +1142,13 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 {'discount': ['You can only specify a discount if you do the price computation, but price is not set.']}
             )
+
+        if 'use_reusable_medium' in data and 'add_to_reusable_medium' in data:
+            raise ValidationError({
+                'use_reusable_medium': ['You can only specify either use_reusable_medium or add_to_reusable_medium.'],
+                'add_to_reusable_medium': ['You can only specify either use_reusable_medium or add_to_reusable_medium.'],
+            })
+
         return data
 
 
@@ -1550,7 +1564,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos_data['attendee_name_parts'] = {
                     '_legacy': attendee_name
                 }
-            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers' and k != '_quotas' and k != 'use_reusable_medium'})
+            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k not in ('answers', '_quotas', 'use_reusable_medium', 'add_to_reusable_medium')})
             if simulate:
                 pos.order = order._wrapped
             else:
@@ -1624,6 +1638,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         for pos_data in positions_data:
             answers_data = pos_data.pop('answers', [])
             use_reusable_medium = pos_data.pop('use_reusable_medium', None)
+            add_to_reusable_medium = pos_data.pop('add_to_reusable_medium', None)
             pos = pos_data['__instance']
             pos._calculate_tax(invoice_address=ia)
 
@@ -1665,10 +1680,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         answ.options.add(*options)
 
                 if use_reusable_medium:
-                    use_reusable_medium.linked_orderposition = pos
-                    use_reusable_medium.save(update_fields=['linked_orderposition'])
+                    use_reusable_medium.linked_orderpositions.set([pos])
                     use_reusable_medium.log_action(
                         'pretix.reusable_medium.linked_orderposition.changed',
+                        data={
+                            'by_order': order.code,
+                            'linked_orderposition': pos.pk,
+                        }
+                    )
+                if add_to_reusable_medium:
+                    add_to_reusable_medium.linked_orderpositions.add(pos)
+                    add_to_reusable_medium.log_action(
+                        'pretix.reusable_medium.linked_orderposition.added',
                         data={
                             'by_order': order.code,
                             'linked_orderposition': pos.pk,
