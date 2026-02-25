@@ -2783,7 +2783,16 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
         if request.POST.get("schedule") == "save":
-            if not self.has_permission():
+            if self.scheduled and self.scheduled.pk and not self.has_permission_to_edit_scheduled():
+                messages.error(
+                    self.request,
+                    _(
+                        "Your user account does not have sufficient permission to run this report, therefore "
+                        "you cannot change it."
+                    )
+                )
+                return super().get(request, *args, **kwargs)
+            elif (not self.scheduled or not self.scheduled.pk) and not self.has_permission_to_create_scheduled():
                 messages.error(
                     self.request,
                     _(
@@ -2871,8 +2880,32 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     def get_queryset(self):
         return self.get_scheduled_queryset()
 
-    def has_permission(self):
-        return self.request.user.has_event_permission(self.request.organizer, self.request.event, "event.orders:read")
+    def has_permission_to_edit_scheduled(self):
+        # Exports can be edited by
+        # - their owner
+        # - any staff session user
+        # - any user with permission for organizer settings *and* the permissions required to run the rport
+        # This is to prevent a possible privilege escalation where user A creates a scheduled export and
+        # user B has settings permission (= they can see the export configuration), but not enough permission
+        # to run the export themselves. Without this check, user B could modify the export and add themselves
+        # as a recipient. Thereby, user B would gain access to data they can't have.
+        if not self.exporter:
+            return False
+        if self.scheduled.owner == self.request.user:
+            return True
+        if self.request.user.has_active_staff_session(self.request.session.session_key):
+            return True
+        if not self.exporter.available_for_user(self.request.user):
+            return False
+        if self.request.user.has_event_permission(self.request.organizer, self.request.event,
+                                                  "event.settings.general:write", request=self.request):
+            return self.request.user.has_event_permission(self.request.organizer, self.request.event,
+                                                          self.exporter.get_required_event_permission())
+
+    def has_permission_to_create_scheduled(self):
+        # Exports can only be created if the user has the correct permissions. We *ignore* staff sessions, because
+        # the export is not *run* during a staff session and then would fail at the scheduled time.
+        return self.request.user.has_event_permission(self.request.organizer, self.request.event, self.exporter.get_required_event_permission())
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -2881,6 +2914,15 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
             ctx['schedule_form'] = self.schedule_form
             ctx['rrule_form'] = self.rrule_form
             ctx['scheduled_copy_from'] = self.scheduled_copy_from
+
+            if self.scheduled and self.scheduled.pk and not self.has_permission_to_edit_scheduled() and self.exporter:
+                ctx['no_save'] = True
+                for f in self.exporter.form.fields.values():
+                    f.disabled = True
+                for f in self.rrule_form.fields.values():
+                    f.disabled = True
+                for f in self.schedule_form.fields.values():
+                    f.disabled = True
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:

@@ -40,16 +40,18 @@
         </fieldset>
         {% if schedule_form %}
             {% include "pretixcontrol/orders/fragment_export_schedule_form.html" %}
-            <div class="form-group submit-group">
-                <button formaction="{{ request.get_full_path }}" name="schedule" value="save" type="submit"
-                        class="btn btn-primary btn-save" data-no-asynctask>
-                    {% if scheduled_copy_from %}
-                        {% trans "Save copy" %}
-                    {% else %}
-                        {% trans "Save" %}
-                    {% endif %}
-                </button>
-            </div>
+            {% if not no_save %}
+                <div class="form-group submit-group">
+                    <button formaction="{{ request.get_full_path }}" name="schedule" value="save" type="submit"
+                            class="btn btn-primary btn-save" data-no-asynctask>
+                        {% if scheduled_copy_from %}
+                            {% trans "Save copy" %}
+                        {% else %}
+                            {% trans "Save" %}
+                        {% endif %}
+                    </button>
+                </div>
+            {% endif %}
         {% else %}
             <div class="form-group submit-group">
                 <button type="submit" class="btn btn-primary btn-save">

@@ -27,7 +27,9 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.base.exporter import OrganizerLevelExportMixin
-from pretix.base.models import ScheduledEventExport, ScheduledOrganizerExport
+from pretix.base.models import (
+    Event, ScheduledEventExport, ScheduledOrganizerExport,
+)
 from pretix.base.timeframes import SerializerDateFrameField
 
 
@@ -54,18 +56,27 @@ class ExporterSerializer(serializers.Serializer):
 
 class JobRunSerializer(serializers.Serializer):
     def __init__(self, *args, **kwargs):
-        ex = kwargs.pop('exporter')
+        ex = self.ex = kwargs.pop('exporter')
         super().__init__(*args, **kwargs)
         if ex.is_multievent and not isinstance(ex, OrganizerLevelExportMixin):
+            self.fields["all_events"] = serializers.BooleanField(
+                required=False,
+            )
             self.fields["events"] = serializers.SlugRelatedField(
                 queryset=ex.events,
                 required=False,
-                allow_empty=False,
+                allow_empty=True,
                 slug_field='slug',
                 many=True
             )
         for k, v in ex.export_form_fields.items():
             self.fields[k] = form_field_to_serializer_field(v)
+
+    def to_representation(self, instance):
+        # Translate between events as a list of slugs (API) and list of ints (database)
+        if self.ex.is_multievent and not isinstance(self.ex, OrganizerLevelExportMixin) and "events" in instance and isinstance(instance["events"], list):
+            instance["events"] = [e.slug for e in self.ex.events.filter(pk__in=instance["events"]).only("slug")]
+        return instance
 
     def to_internal_value(self, data):
         if isinstance(data, QueryDict):
@@ -94,6 +105,14 @@ class JobRunSerializer(serializers.Serializer):
                 data[fk] = f'{d_from.isoformat() if d_from else ""}/{d_to.isoformat() if d_to else ""}'
 
         data = super().to_internal_value(data)
+
+        # Translate between events as a list of slugs (API) and list of ints (database)
+        if self.ex.is_multievent and not isinstance(self.ex, OrganizerLevelExportMixin) and "events" in data and isinstance(data["events"], list):
+            if data["events"] and isinstance(data["events"][0], Event):
+                data["events"] = [e.pk for e in data["events"]]
+            elif data["events"] and isinstance(data["events"][0], str):
+                data["events"] = [e.pk for e in self.ex.events.filter(slug__in=data["events"]).only("pk")]
+
         return data
 
     def is_valid(self, raise_exception=False):
@@ -130,12 +149,19 @@ class ScheduledExportSerializer(serializers.ModelSerializer):
             exporter = self.context['exporters'].get(identifier)
             if exporter:
                 try:
-                    JobRunSerializer(exporter=exporter).to_internal_value(attrs["export_form_data"])
+                    attrs["export_form_data"] = JobRunSerializer(exporter=exporter).to_internal_value(attrs["export_form_data"])
                 except ValidationError as e:
                     raise ValidationError({"export_form_data": e.detail})
             else:
                 raise ValidationError({"export_identifier": ["Unknown exporter."]})
         return attrs
+
+    def to_representation(self, instance):
+        repr = super().to_representation(instance)
+        exporter = self.context['exporters'].get(instance.export_identifier)
+        if exporter:
+            repr["export_form_data"] = JobRunSerializer(exporter=exporter).to_representation(repr["export_form_data"])
+        return repr
 
     def validate_mail_additional_recipients(self, value):
         d = value.replace(' ', '')
