@@ -445,7 +445,7 @@ class CloneEventSerializer(EventSerializer):
         date_admission = validated_data.pop('date_admission', None)
         new_event = super().create({**validated_data, 'plugins': None})
 
-        event = Event.objects.filter(slug=self.context['event'], organizer=self.context['organizer'].pk).first()
+        event = self.context['event']
         new_event.copy_data_from(event, skip_meta_data='meta_data' in validated_data)
 
         if plugins is not None:
