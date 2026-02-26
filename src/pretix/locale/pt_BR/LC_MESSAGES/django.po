@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
 "PO-Revision-Date: 2026-02-26 08:00+0000\n"
-"Last-Translator: André Almeida <andrealmeid@riseup.net>\n"
+"Last-Translator: Pedro Orlando <scramblerdoodle@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -3623,7 +3623,7 @@ msgstr "PDF por e-mail"
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr "Sistema de Câmbio Italiano (SDI)"
+msgstr "Sistema de Câmbio Italiano (SdI)"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
@@ -3922,14 +3922,17 @@ msgid ""
 "The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"O ID de participante Peppol não corresponde às regras de validação para o "
+"prefixo %(number)s. Entre em contato se tiver certeza que este ID está "
+"correto."
 
 #: pretix/base/invoicing/peppol.py:166
 msgid "The Peppol participant ID is not registered on the Peppol network."
-msgstr ""
+msgstr "O ID de participante Peppol não está registrado na rede Peppol."
 
 #: pretix/base/invoicing/peppol.py:192
 msgid "Peppol participant ID"
-msgstr ""
+msgstr "ID de participante Peppol"
 
 #: pretix/base/invoicing/peppol.py:208
 msgctxt "peppol_invoice"
@@ -3943,6 +3946,9 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
+"Este documento PDF é uma cópia visual da fatura e não constitui uma fatura "
+"para efeitos de IVA. A fatura original é emitida em formato XML e "
+"transmitida através da rede Peppol."
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
@@ -4076,6 +4082,9 @@ msgid ""
 "The date can be specified through its full name, full date and time, or "
 "internal ID, provided only one date in the system matches the input."
 msgstr ""
+"A data pode ser especificada através do seu nome completo, data e hora "
+"completas, ou ID interno, desde que apenas uma data no sistema corresponda à "
+"entrada."
 
 #: pretix/base/modelimport_orders.py:120 pretix/presale/views/waiting.py:157
 msgctxt "subevent"
@@ -5554,14 +5563,6 @@ msgid "Only show after sellout of"
 msgstr "Exibir apenas após o esgotamento de"
 
 #: pretix/base/models/items.py:596
-#, fuzzy
-#| msgid ""
-#| "If you select a product here, this product will only be shown when that "
-#| "product is sold out. If combined with the option to hide sold-out "
-#| "products, this allows you to swap out products for more expensive ones "
-#| "once the cheaper option is sold out. There might be a short period in "
-#| "which both products are visible while all tickets of the referenced "
-#| "product are reserved, but not yet sold."
 msgid ""
 "If you select a product here, this product will only be shown when that "
 "product is no longer available. This will happen either because the other "
@@ -5572,12 +5573,14 @@ msgid ""
 "products are visible while all tickets of the referenced product are "
 "reserved, but not yet sold."
 msgstr ""
-"Se você selecionar um produto aqui, esse produto só será exibido quando "
-"estiver esgotado. Se combinado com a opção de ocultar produtos esgotados, "
-"isso permite que você troque os produtos por outros mais caros, uma vez que "
-"a opção mais barata esteja esgotada. Pode haver um curto período em que "
-"ambos os produtos ficam visíveis enquanto todos os ingressos do produto "
-"referenciado são reservados, mas ainda não vendidos."
+"Se você selecionar um produto aqui, esse produto só será exibido quando não "
+"estiver mais disponível. Isso pode acontecer porque o outro produto está "
+"esgotado ou porque a data está fora do período de venda do outro produto. Se "
+"combinado com a opção de ocultar produtos esgotados, isso permite que você "
+"troque os produtos por outros mais caros, uma vez que a opção mais barata "
+"esteja esgotada. Pode haver um curto período em que ambos os produtos ficam "
+"visíveis enquanto todos os ingressos do produto referenciado são reservados, "
+"mas ainda não vendidos."
 
 #: pretix/base/models/items.py:611
 msgid ""
@@ -8165,7 +8168,7 @@ msgstr "Cidade Aleatória"
 
 #: pretix/base/pdf.py:352
 msgid "Sesame Street 42"
-msgstr "Sesame Street 42"
+msgstr "Rua Sésamo 42"
 
 #: pretix/base/pdf.py:357
 msgid "12345"
@@ -8185,7 +8188,7 @@ msgstr "Estado de exemplo"
 
 #: pretix/base/pdf.py:372
 msgid "Atlantis"
-msgstr "Atlantis"
+msgstr "Atlântida"
 
 #: pretix/base/pdf.py:376
 msgid "List of Add-Ons"
@@ -9071,7 +9074,7 @@ msgstr "Um texto específico do provedor de pagamento pode aparecer aqui."
 
 #: pretix/base/services/invoices.py:594
 msgid "214th Example Street"
-msgstr "214th Example Street"
+msgstr "Rua Exemplo 214"
 
 #: pretix/base/services/invoices.py:595
 msgid "012345"
@@ -9771,13 +9774,15 @@ msgstr "Computar impostos de cada linha individualmente"
 
 #: pretix/base/settings.py:83
 msgid "Compute taxes based on net total"
-msgstr ""
+msgstr "Calcular impostos baseado no total líquido"
 
 #: pretix/base/settings.py:84
 msgid ""
 "For business customers, compute taxes based on net total. For individuals, "
 "use line-based rounding"
 msgstr ""
+"Para pessoas jurídicas, calcule impostos baseado no total líquido. Para "
+"pessoas físicas, arredonde o valor para o par mais próximo"
 
 #: pretix/base/settings.py:85
 msgid "Compute taxes based on net total with stable gross prices"
@@ -9811,7 +9816,7 @@ msgstr "Se desabilitado, você precisará conectar um ou mais provedores de SSO.
 
 #: pretix/base/settings.py:190
 msgid "Require login to access order confirmation pages"
-msgstr ""
+msgstr "Exigir login para acessar página de confirmação de pedido"
 
 #: pretix/base/settings.py:191
 msgid ""
@@ -9820,6 +9825,10 @@ msgid ""
 "placing an order, the restriction only becomes active after the customer "
 "account is activated."
 msgstr ""
+"Se habilitado, usuários que estiverem conectados no momento da compra também "
+"precisarão fazer login para acessar suas informações de pedido. Se a conta "
+"do cliente for criada no momento do pedido, a restrição só se tornará ativa "
+"depois que sua conta for ativada."
 
 #: pretix/base/settings.py:203
 msgid "Match orders based on email address"
@@ -10015,6 +10024,10 @@ msgid ""
 "for tax reporting, you need to make sure to account for possible rounding "
 "differences if your external system rounds differently than pretix."
 msgstr ""
+"Note que se você transferir suas informações de venda do pretix para um "
+"sistema externo para fins de declaração de imposto de renda, tome cuidado "
+"com possíveis diferenças de arredondamento de valor se o sistema externo "
+"arredondar de uma maneira diferente que o pretix."
 
 #: pretix/base/settings.py:515
 msgid "Ask for invoice address"
@@ -10124,18 +10137,14 @@ msgid "Ask for VAT ID"
 msgstr "Pedir por ID do IVA"
 
 #: pretix/base/settings.py:646
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Only works if an invoice address is asked for. VAT ID is never required "
-#| "and only requested from business customers in the following countries: "
-#| "{countries}"
+#, python-brace-format
 msgid ""
 "Only works if an invoice address is asked for. VAT ID is only requested from "
 "business customers in the following countries: {countries}."
 msgstr ""
 "Só funciona se for solicitado um endereço de faturamento. O ID do IVA nunca "
 "é necessário e só é solicitado a clientes empresariais nos seguintes países: "
-"{countries}"
+"{countries}."
 
 #: pretix/base/settings.py:665
 msgid "Require VAT ID in"
@@ -10147,6 +10156,9 @@ msgid ""
 "ID in all countries. VAT ID will be required for all business addresses in "
 "the selected countries."
 msgstr ""
+"O ID de IVA é opcional por padrão, porque nem todas as empresas são "
+"designadas um ID de IVA em todos os países. O ID de IVA é obrigatório para "
+"todas as empresas sediadas nos países selecionados."
 
 #: pretix/base/settings.py:686
 msgid "Invoice address explanation"
@@ -10558,6 +10570,8 @@ msgid ""
 "Automatic based on ticket-specific validity, membership validity, event "
 "series date, or event date"
 msgstr ""
+"Automático baseado na validade do ingresso, validade da assinatura, data da "
+"sequência de eventos, ou data do evento"
 
 #: pretix/base/settings.py:1180 pretix/base/settings.py:1191
 msgid "Automatic, but prefer invoice date over event date"
@@ -10621,7 +10635,7 @@ msgstr "Linha do endereço"
 
 #: pretix/base/settings.py:1248
 msgid "Albert Einstein Road 52"
-msgstr "Albert Einstein Road 52"
+msgstr "Estrada Albert Einstein 52"
 
 #: pretix/base/settings.py:1322
 msgid "Domestic tax ID"
@@ -12506,24 +12520,7 @@ msgid "Changes to your account at {organizer}"
 msgstr "Ativar sua conta em {organizer}"
 
 #: pretix/base/settings.py:2959
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {name},\n"
-#| "\n"
-#| "you requested to change the email address of your account at "
-#| "{organizer}!\n"
-#| "\n"
-#| "To confirm the change, please click here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "This link is valid for one day.\n"
-#| "\n"
-#| "If you did not request this, please ignore this email.\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your {organizer} team"
+#, python-brace-format
 msgid ""
 "Hello {name},\n"
 "\n"
@@ -12543,15 +12540,15 @@ msgid ""
 msgstr ""
 "Olá {name},\n"
 "\n"
-"Você solicitou a mudança do endereço de email da sua conta em {organizer}!\n"
+"Houve uma alteração em sua conta de {organizer}:\n"
 "\n"
-"Para confirmar a alteração, por favor clique aqui:\n"
+"{message}\n"
+"\n"
+"Você pode revisar e mudar suas configurações de conta aqui:\n"
 "\n"
 "{url}\n"
 "\n"
-"Este link é válido por um dia.\n"
-"\n"
-"Se você não fez esta solicitação, por favor, ignore este email.\n"
+"Se esta mudança não foi feita por você, contate-nos imediatamente.\n"
 "\n"
 "Atenciosamente,\n"
 "\n"
@@ -13363,6 +13360,8 @@ msgstr ""
 msgid ""
 "You have requested us to cancel an event which includes a larger bulk-refund:"
 msgstr ""
+"Você nos pediu um cancelamento de um evento que inclui um reembolso em massa "
+"maior:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:6
 msgid "Estimated refund amount"
@@ -13373,6 +13372,8 @@ msgid ""
 "Please confirm that you want to proceed by coping the following confirmation "
 "code into the cancellation form:"
 msgstr ""
+"Por favor, preencha o seguinte código de confirmação no formulário de "
+"cancelamento se desejar continuar:"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -17004,10 +17005,8 @@ msgid "A fee has been added"
 msgstr "Uma taxa foi adicionada"
 
 #: pretix/control/logdisplay.py:176
-#, fuzzy
-#| msgid "The new vouchers have been created."
 msgid "Taxes and rounding have been recomputed"
-msgstr "Os novos cupons foram criados."
+msgstr "Impostos e arredondamento foram recalculados"
 
 #: pretix/control/logdisplay.py:184
 #, python-brace-format
@@ -17150,27 +17149,20 @@ msgstr ""
 "\"."
 
 #: pretix/control/logdisplay.py:335
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
-#| "\"{type}\", error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} at {datetime} for list \"{list}\", "
 "type \"{type}\"."
 msgstr ""
-"Escaneamento da posição #{posid} negado em {datetime} para lista \"{list}\", "
-"tipo \"{type}\", código de erro \"{errorcode}\"."
+"Anulação ignorada da posição #{posid} em {datetime} para lista \"{list}\", "
+"tipo \"{type}\"."
 
 #: pretix/control/logdisplay.py:336
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", "
-#| "error code \"{errorcode}\"."
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Escaneamento da posição #{posid} negado para lista \"{list}\", tipo \"{type}"
-"\", código de erro \"{errorcode}\"."
+"Anulação ignorada da posição #{posid} para lista \"{list}\", tipo \"{type}\"."
 
 #: pretix/control/logdisplay.py:338 pretix/control/logdisplay.py:339
 #, python-brace-format
@@ -17596,10 +17588,9 @@ msgid "Cart positions including the voucher have been deleted."
 msgstr "O cupom selecionado foi excluído."
 
 #: pretix/control/logdisplay.py:592
-#, fuzzy, python-brace-format
-#| msgid "A voucher has been sent to a person on the waiting list."
+#, python-brace-format
 msgid "The voucher has been assigned to {email} through the waiting list."
-msgstr "Um cupom foi enviado para uma pessoa na lista de espera."
+msgstr "O cupom foi enviado para {email} através da lista de espera."
 
 #: pretix/control/logdisplay.py:601
 #, python-brace-format
@@ -18104,10 +18095,8 @@ msgid "A payment has been performed."
 msgstr "Este pagamento foi cancelado."
 
 #: pretix/control/logdisplay.py:805
-#, fuzzy
-#| msgid "The refund has been processed."
 msgid "A refund has been performed. "
-msgstr "O reembolso foi processado."
+msgstr "Um reembolso foi realizado. "
 
 #: pretix/control/logdisplay.py:806
 #, python-brace-format
@@ -20200,12 +20189,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/email_setup.html:35
 msgctxt "mail_header"
 msgid "From"
-msgstr "From"
+msgstr "De"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:40
 msgctxt "mail_header"
 msgid "Reply-To"
-msgstr "Reply-To"
+msgstr "Responder à"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:56
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:18
@@ -23759,10 +23748,8 @@ msgid "Invoice is not yet transmitted"
 msgstr "A fatura ainda não foi enviada por e-mail ao cliente"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:302
-#, fuzzy
-#| msgid "This ticket shop is currently in test mode."
 msgid "Invoice is currently in transmission"
-msgstr "Esta loja de ingressos está em modo de teste."
+msgstr "Fatura está sendo enviada"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:307
 msgid "Invoice not transmitted in test mode"
@@ -24438,16 +24425,12 @@ msgid "The system will create manual refunds that you need to execute."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:44
-#, fuzzy
-#| msgid "Text (if order will not expire automatically)"
 msgid "Refunds will not happen automatically."
-msgstr "Texto (se o pedido não expirar automaticamente)"
+msgstr "Reembolsos não são realizados automaticamente."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:52
-#, fuzzy
-#| msgid "Send information via email"
 msgid "Inform all customers via email."
-msgstr "Enviar informação por email"
+msgstr "Informar a todos os clientes por e-mail."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:57
 msgid "Inform all waiting list contacts via email."
@@ -25385,7 +25368,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:229
 msgid "Barcode media"
-msgstr "Barcode media"
+msgstr "Mídia de código de barras"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:233
 msgid ""
@@ -25450,7 +25433,7 @@ msgstr "Adicionar domínio"
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html:64
 msgid "Run export now and download result"
-msgstr ""
+msgstr "Executar exportar agora e baixar o resultado"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
 msgid "Delete gate:"
@@ -27858,10 +27841,10 @@ msgid "Please try again."
 msgstr "Por favor, tente novamente."
 
 #: pretix/control/views/auth.py:542
-#, fuzzy
-#| msgid "Two-factor authentication is required to log in"
 msgid "A recovery code for two-factor authentification was used to log in."
-msgstr "A autenticação de dois fatores é necessária para fazer login"
+msgstr ""
+"Um código de verificação para autenticação de dois fatores foi usada para "
+"fazer login."
 
 #: pretix/control/views/auth.py:558
 msgid "Invalid code, please try again."
@@ -27872,10 +27855,8 @@ msgid "The selected check-ins have been reverted."
 msgstr "Os check-ins selecionados foram revertidos."
 
 #: pretix/control/views/checkin.py:283
-#, fuzzy
-#| msgid "The selected event was not found."
 msgid "The selected tickets have been marked as checked out."
-msgstr "O evento selecionado não foi encontrado."
+msgstr "Os ingressos selecionados foram marcados como retirados."
 
 #: pretix/control/views/checkin.py:285
 msgid "The selected tickets have been marked as checked in."
@@ -28330,11 +28311,11 @@ msgstr ""
 
 #: pretix/control/views/item.py:238
 msgid "The selected category has been deleted."
-msgstr "A categoria selecionada foi excluída"
+msgstr "A categoria selecionada foi excluída."
 
 #: pretix/control/views/item.py:323
 msgid "The new category has been created."
-msgstr "A nova categoria foi criada"
+msgstr "A nova categoria foi criada."
 
 #: pretix/control/views/item.py:371
 msgid "The order of categories has been updated."
@@ -28443,20 +28424,18 @@ msgid "The selected product has been deactivated."
 msgstr "O produto selecionado foi desativado."
 
 #: pretix/control/views/mail.py:161
-#, fuzzy, python-brace-format
-#| msgid "Sending of an email has failed."
+#, python-brace-format
 msgid "A retry of one email was scheduled."
 msgid_plural "A retry of {num} emails was scheduled."
-msgstr[0] "O envio de um email falhou."
-msgstr[1] "O envio de um email falhou."
+msgstr[0] "Um reenvio de e-mail foi agendado."
+msgstr[1] "Um reenvio de {num} e-mails foi agendado."
 
 #: pretix/control/views/mail.py:185
-#, fuzzy, python-brace-format
-#| msgid "The email has been queued to be sent."
+#, python-brace-format
 msgid "One email was aborted and will not be sent."
 msgid_plural "{num} emails were aborted and will not be sent."
-msgstr[0] "O e-mail foi colocado na fila para ser enviado."
-msgstr[1] "O e-mail foi colocado na fila para ser enviado."
+msgstr[0] "O e-mail foi abortado e não será enviado."
+msgstr[1] "{num} e-mails foram abortados e não serão enviados."
 
 #: pretix/control/views/mailsetup.py:200
 msgid ""
@@ -29383,8 +29362,9 @@ msgid "The device has been removed."
 msgstr "O dispositivo foi removido."
 
 #: pretix/control/views/user.py:450
+#, fuzzy
 msgid "This security device is already registered."
-msgstr ""
+msgstr "Este dispositivo de segurança já está registrado."
 
 #: pretix/control/views/user.py:469 pretix/control/views/user.py:530
 msgid "A new two-factor authentication device has been added to your account."
@@ -29432,10 +29412,7 @@ msgid "Two-factor authentication is now disabled for your account."
 msgstr "A autenticação de dois fatores agora está desabilitada para sua conta."
 
 #: pretix/control/views/user.py:635
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Your emergency codes have been newly generated. Remember to store them in "
-#| "a safe place in case you lose access to your devices."
+#, python-brace-format
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices. You will not be able to "
@@ -29445,7 +29422,11 @@ msgid ""
 "{tokens}"
 msgstr ""
 "Seus códigos de emergência foram gerados recentemente. Lembre-se de armazená-"
-"los em um local seguro caso você perca o acesso aos seus dispositivos."
+"los em um local seguro caso você perca o acesso aos seus dispositivos. Você "
+"não poderá vê-los novamente aqui.\n"
+"\n"
+"Seus códigos de emergência:\n"
+"{tokens}"
 
 #: pretix/control/views/user.py:655
 msgid "Your notifications have been disabled."
@@ -31626,8 +31607,9 @@ msgid "Report exporter"
 msgstr "Exportador de relatórios"
 
 #: pretix/plugins/reports/apps.py:51
+#, fuzzy
 msgid "Generate printable reports about your sales."
-msgstr ""
+msgstr "Gere relatórios imprimíveis sobre suas vendas."
 
 #: pretix/plugins/reports/exporters.py:101
 #, python-format
@@ -31988,8 +31970,9 @@ msgid "Send email to"
 msgstr "Enviar email para"
 
 #: pretix/plugins/sendmail/models.py:280
+#, fuzzy
 msgid "Only enabled rules are actually sent"
-msgstr ""
+msgstr "Somente as regras ativadas são realmente enviadas"
 
 #: pretix/plugins/sendmail/models.py:327
 #, python-brace-format
@@ -32801,7 +32784,7 @@ msgstr "expira em {month}/{year}"
 
 #: pretix/plugins/stripe/payment.py:1217
 msgid "SEPA Debit via Stripe"
-msgstr "SEPA Debit via Stripe"
+msgstr "Débito SEPA via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1218
 msgid "SEPA Debit"
