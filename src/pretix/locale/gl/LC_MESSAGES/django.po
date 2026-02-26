@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-26 18:00+0000\n"
+"PO-Revision-Date: 2026-02-27 03:00+0000\n"
 "Last-Translator: Sandra Rial Pérez <sandrarial@gestiontickets.online>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -8808,9 +8808,8 @@ msgstr ""
 "demasiado ocupado. Por favor, inténtalo de nuevo."
 
 #: pretix/base/services/cart.py:109 pretix/presale/views/cart.py:262
-#, fuzzy
 msgid "You did not select any products."
-msgstr "Usted no seleccionó ningún producto."
+msgstr "Non seleccionaches ningún produto."
 
 #: pretix/base/services/cart.py:110
 #, fuzzy
@@ -10850,6 +10849,11 @@ msgid ""
 "beyond the \"last date of payments\" configured above, which is always "
 "enforced."
 msgstr ""
+"A orde só caducará realmente estes días despois da data de caducidade "
+"comunicada ao cliente. Se seleccionas \"Só finalizar os prazos de pagamento "
+"en días laborables\" arriba, isto tamén se respectará. Non obstante, isto "
+"non se demorará máis alá da \"última data de pagamentos\" configurada "
+"arriba, que sempre se aplica."
 
 #: pretix/base/settings.py:1051
 msgid "Hide \"payment pending\" state on customer-facing pages"
@@ -17127,10 +17131,9 @@ msgstr ""
 "permiso para cambiar de equipo y permisos."
 
 #: pretix/control/forms/organizer.py:369 pretix/control/forms/organizer.py:407
-#, fuzzy
 msgid ""
 "Your device will not have access to anything, please select some events."
-msgstr "Actualmente no tiene acceso a ningún evento."
+msgstr "O teu dispositivo non terá acceso a nada. Selecciona algúns eventos."
 
 #: pretix/control/forms/organizer.py:559 pretix/plugins/stripe/payment.py:311
 #, fuzzy
@@ -25448,18 +25451,17 @@ msgid "How should the refund be sent?"
 msgstr "¿Cómo debe enviarse el reembolso?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:25
-#, fuzzy
 msgid ""
 "Any payments that you selected for automatical refunds will be immediately "
 "communicate the refund request to the respective payment provider. Manual "
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
 msgstr ""
-"Cualquier pago que haya seleccionado para reembolsos automáticos será "
-"comunicado inmediatamente la solicitud de reembolso al proveedor de pago "
-"respectivo. Los reembolsos manuales se crearán como reembolsos pendientes, "
-"luego podrá marcarlos como hechos una vez que haya transferido el dinero de "
-"vuelta al cliente."
+"Calquera pagamento que seleccionaches para reembolsos automáticos "
+"comunicarase inmediatamente a solicitude de reembolso ao provedor de "
+"pagamentos correspondente. Os reembolsos manuais crearanse como reembolsos "
+"pendentes e poderás marcalos máis tarde como feitos unha vez que "
+"transferiches o diñeiro de volta ao cliente."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:32
 #, fuzzy
@@ -30047,11 +30049,10 @@ msgid "The plugin {} is now active."
 msgstr "La taquilla seleccionada no está disponible en este momento."
 
 #: pretix/control/views/event.py:546
-#, fuzzy
 msgid ""
 "This payment provider does not exist or the respective plugin is disabled."
 msgstr ""
-"Este proveedor de pago no existe o el plugin correspondiente está "
+"Este provedor de pagamentos non existe ou o plugin correspondente está "
 "desactivado."
 
 #: pretix/control/views/event.py:838 pretix/control/views/organizer.py:357
@@ -31779,10 +31780,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:78
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:47
 #: pretix/presale/templates/pretixpresale/organizers/index.html:71
-#, fuzzy
 msgctxt "timerange"
 msgid "until"
-msgstr "Fecha y hora"
+msgstr "ata"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
@@ -33795,6 +33795,8 @@ msgid ""
 "This payment is being reviewed by PayPal. Until the review is lifted, the "
 "money will not be disbursed and the order remain in its pending state."
 msgstr ""
+"PayPal está a revisar este pago. Ata que se revogue a revisión, o diñeiro "
+"non se desembolsará e o pedido permanecerá pendente."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:5
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
@@ -36455,20 +36457,17 @@ msgstr "Advertencia:"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:131
 #: pretix/presale/templates/pretixpresale/event/base.html:205
-#, fuzzy
 msgid "This ticket shop is currently in test mode."
-msgstr "La taquilla seleccionada no está disponible en este momento."
+msgstr "Esta billeteira está actualmente en modo de probas."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:134
 #: pretix/presale/templates/pretixpresale/event/base.html:208
-#, fuzzy
 msgid ""
 "Please do not perform any real purchases as your order might be deleted "
 "without notice."
 msgstr ""
-"Esta tienda de tickets está actualmente en modo de prueba. Por favor no "
-"realice ninguna compra real ya que su orden podría ser eliminada sin previo "
-"aviso."
+"Non realices ningunha compra real, xa que o teu pedido podería ser eliminado "
+"sen previo aviso."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:138
 #, python-format
@@ -36485,6 +36484,9 @@ msgid ""
 "href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-"
 "hidden=\"true\"></span>time machine</a>."
 msgstr ""
+"Para ver a túa tenda en diferentes momentos, podes activar a opción <a "
+"href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-"
+"hidden=\"true\"></span>time machine</a>."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:167
 #: pretix/presale/templates/pretixpresale/event/base.html:214
@@ -36814,21 +36816,16 @@ msgid "This sales channel does not provide support for test mode."
 msgstr "Este proveedor de pagos no provee soporte para modo de prueba."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:103
-#, fuzzy
 msgid "If you continue, you might pay an actual order with non-existing money!"
-msgstr ""
-"¡Si se continúa es posible que se pague una orden de compra con dinero "
-"inexistente!"
+msgstr "¡Se continúas, poderías pagar un pedido real con diñeiro inexistente!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:111
-#, fuzzy
 msgid "This payment provider does not provide support for test mode."
-msgstr "Este proveedor de pagos no provee soporte para modo de prueba."
+msgstr "Este provedor de pagamentos non ofrece soporte para o modo de proba."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:113
-#, fuzzy
 msgid "If you continue, actual money might be transferred."
-msgstr "Si continúa, dinero real podría ser transferido."
+msgstr "Se continúas, podería transferirse diñeiro real."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:124
 #, fuzzy
@@ -37497,16 +37494,15 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:185
 msgid ""
 "Your entire order will be considered unpaid until you paid this difference."
-msgstr ""
+msgstr "O teu pedido considerarase non pagado ata que pagues esta diferenza."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:186
-#, fuzzy
 msgid ""
 "You might not be able to use any of the tickets in your order until this "
 "payment has been received."
 msgstr ""
-"Se ha enviado un correo electrónico para notificar al usuario que se ha "
-"recibido el pago."
+"É posible que non poidas usar ningún dos billetes do teu pedido ata que se "
+"reciba este pago."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 msgctxt "checkoutflow"
@@ -37997,16 +37993,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:170
 #, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr ""
+msgstr "Esta tarxeta regalo é válida ata %(expiry)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:181
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
-"Un reembolso de %(amount)s te ha sido enviado. Dependiendo del método de "
-"pago, por favor permitir hasta 14 días para que se muestre en tu declaración."
+"Enviouseche un reembolso de %(amount)s. Dependendo do método de pagamento, "
+"pode pasar ata 14 días ata que apareza no teu extracto."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/position.html:33
@@ -38218,7 +38214,7 @@ msgstr "Importe de reembolso:"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:138
 #, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr ""
+msgstr "A súa tarxeta regalo será válida ata %(expiry_date)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:126
 msgid "I want the refund as a gift card for later purchases"
@@ -38478,9 +38474,9 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
-"Se as entradas volven estar dispoñibles, informaremos ás primeiras persoas "
-"na listaxe de agarda. Se recibe unha notificación, terá %(hours)s de tempo "
-"para mercar un billete ata que llo asignemos á seguinte persoa na listaxe."
+"Se volven haber entradas dispoñibles, informaremos ás primeiras persoas da "
+"lista de espera. Se che avisamos, terás %(hours)s horas para mercar unha "
+"entrada ata que lla asignemos á seguinte persoa da lista."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
 msgid ""
@@ -38526,6 +38522,9 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
+"Seleccionacheste da nosa lista de espera para mercar unha entrada. Se xa non "
+"necesitas a entrada, por favor, ten a amabilidade de retirala da lista para "
+"que poidamos pasala á seguinte persoa que estea esperando o antes posible!"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 #, fuzzy
@@ -38720,9 +38719,8 @@ msgid "Save selection"
 msgstr "Selección de datos"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:145
-#, fuzzy
 msgid "You didn't select any ticket."
-msgstr "Usted no seleccionó ningún producto."
+msgstr "Non seleccionaches ningún producto."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:146
 msgid ""
@@ -38879,9 +38877,9 @@ msgid "Expired since %(date)s"
 msgstr "Expirado"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:46
-#, fuzzy, python-format
+#, python-format
 msgid "Valid until %(date)s"
-msgstr "Entrada: %(datetime)s"
+msgstr "Válido ata %(date)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:66
 #, fuzzy
@@ -39111,6 +39109,7 @@ msgstr ""
 msgid ""
 "The gift card has been saved to your cart. Please continue your checkout."
 msgstr ""
+"A tarxeta agasallo gardouse no teu carro. Continúa co proceso de compra."
 
 #: pretix/presale/views/cart.py:520
 msgid "Your cart has been updated."
