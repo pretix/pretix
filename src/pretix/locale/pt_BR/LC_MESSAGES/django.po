@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-26 08:00+0000\n"
-"Last-Translator: Pedro Orlando <scramblerdoodle@gmail.com>\n"
+"PO-Revision-Date: 2026-02-26 18:00+0000\n"
+"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -20576,11 +20576,11 @@ msgstr "Este plugin reportou os seguintes problemas:"
 #: pretix/control/templates/pretixcontrol/event/fragment_qr_dropdown.html:24
 #, python-format
 msgid "Download QR code as %(filetype)s image"
-msgstr "Baixar QR Code como imagem %(filetype)s"
+msgstr "Baixar QR Code (%(filetype)s)"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
-msgstr "Sua linha do tempo"
+msgstr "Linha do tempo"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:20
 msgid "Shop URL:"
@@ -20589,7 +20589,7 @@ msgstr "URL do evento:"
 #: pretix/control/templates/pretixcontrol/event/index.html:27
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:57
 msgid "Create QR code"
-msgstr "Criar QR Code"
+msgstr "Gerar QR Code"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:36
 msgid ""
@@ -22501,7 +22501,7 @@ msgstr "Adicionar um horário de programa"
 #: pretix/control/templates/pretixcontrol/items/discounts.html:105
 #: pretix/control/templates/pretixcontrol/items/index.html:94
 msgid "Only available in a limited timeframe"
-msgstr "Disponível apenas em um período de tempo limitado"
+msgstr "Disponível em um período de tempo limitado"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:38
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:164
@@ -22826,10 +22826,10 @@ msgid ""
 "the right to change the order of products or move products to a different "
 "category."
 msgstr ""
-"Você encontra abaixo uma lista de todos os produtos disponívels. Clique no "
-"nome de um produto para acessar e alterar os seus detalhes. Utilize os "
-"botões à direito para alterar a ordem ou mover os produtos para uma "
-"categoria diferente."
+"Abaixo há uma lista de todos os produtos disponíveis. Clique no nome do "
+"produto para exibir e alterar os seus detalhes. Os botões a direita podem "
+"ser utilizados para alterar a ordenação ou movê-los para uma categoria "
+"diferente."
 
 #: pretix/control/templates/pretixcontrol/items/index.html:19
 msgid "You haven't created any products yet."
@@ -22838,7 +22838,7 @@ msgstr "Você ainda não criou nenhum produto."
 #: pretix/control/templates/pretixcontrol/items/index.html:25
 #: pretix/control/templates/pretixcontrol/items/index.html:30
 msgid "Create a new product"
-msgstr "Criar um novo produto"
+msgstr "Novo produto"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:102
 msgid "Personalized admission ticket"
