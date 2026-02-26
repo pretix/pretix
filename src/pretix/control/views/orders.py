@@ -1641,9 +1641,17 @@ class OrderCheckVATID(OrderView):
 
             try:
                 normalized_id = validate_vat_id(ia.vat_id, str(ia.country))
-                ia.vat_id_validated = True
-                ia.vat_id = normalized_id
-                ia.save()
+                with transaction.atomic():
+                    ia.vat_id_validated = True
+                    ia.vat_id = normalized_id
+                    ia.save()
+                    self.order.log_action(
+                        'pretix.event.order.vatid.validated',
+                        data={
+                            'vat_id': normalized_id,
+                        },
+                        user=self.request.user,
+                    )
             except VATIDFinalError as e:
                 messages.error(self.request, e.message)
             except VATIDTemporaryError:
