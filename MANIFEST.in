@@ -48,3 +48,4 @@ recursive-include src Makefile
 recursive-exclude doc *
 recursive-exclude deployment *
 recursive-exclude res *
+recursive-include tests *.py
