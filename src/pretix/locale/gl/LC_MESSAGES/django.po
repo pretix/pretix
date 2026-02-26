@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-25 23:00+0000\n"
+"PO-Revision-Date: 2026-02-26 18:00+0000\n"
 "Last-Translator: David Ibáñez Cerdeira <dibanez@gmail.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -726,7 +726,7 @@ msgid "Your password must contain both numeric and alphabetic characters."
 msgstr "O teu contrasinal debe conter caracteres numéricos e alfabéticos."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
-#, fuzzy, python-format
+#, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
@@ -2576,10 +2576,8 @@ msgid "Voucher"
 msgstr "Vale"
 
 #: pretix/base/exporters/orderlist.py:653
-#, fuzzy
-#| msgid "Voucher code used:"
 msgid "Voucher budget usage"
-msgstr "Código de desconto utilizado:"
+msgstr "Código de desconto utilizado"
 
 #: pretix/base/exporters/orderlist.py:654
 #, fuzzy
@@ -3208,7 +3206,7 @@ msgstr "Identificador"
 #: pretix/control/forms/orders.py:78
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:138
 msgid "Expiration date"
-msgstr "Expiration date"
+msgstr "Data de caducidade"
 
 #: pretix/base/exporters/reusablemedia.py:51 pretix/base/models/media.py:90
 #: pretix/control/templates/pretixcontrol/order/index.html:216
@@ -3216,7 +3214,7 @@ msgstr "Expiration date"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:136
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:8
 msgid "Customer account"
-msgstr "Customer account"
+msgstr "Conta de cliente"
 
 #: pretix/base/exporters/reusablemedia.py:52 pretix/base/models/media.py:97
 msgid "Linked ticket"
@@ -3406,21 +3404,19 @@ msgid "Street and Number"
 msgstr "Rúa e Número"
 
 #: pretix/base/forms/questions.py:893
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date between {min} and {max}."
-msgstr "Por favor, introduza un nome máis curto."
+msgstr "Introduza unha data entre {min} e {max}."
 
 #: pretix/base/forms/questions.py:899
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please enter a date no earlier than {min}."
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "Introduza unha data non anterior a {min}."
 
 #: pretix/base/forms/questions.py:904
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date no later than {max}."
-msgstr "Por favor, introduza un nome máis curto."
+msgstr "Introduza unha data non posterior a {max}."
 
 #: pretix/base/forms/questions.py:942
 #, python-brace-format
@@ -3428,9 +3424,9 @@ msgid "Please enter a date and time between {min} and {max}."
 msgstr ""
 
 #: pretix/base/forms/questions.py:948
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please enter a date and time no earlier than {min}."
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "Introduza unha data e unha hora non anteriores a {min}."
 
 #: pretix/base/forms/questions.py:953
 #, python-brace-format
@@ -3548,7 +3544,7 @@ msgstr "O teu contrasinal actual"
 #: pretix/base/forms/user.py:111 pretix/control/forms/users.py:50
 #: pretix/presale/forms/customer.py:397
 msgid "New password"
-msgstr "New password"
+msgstr "Novo contrasinal"
 
 #: pretix/base/forms/user.py:117 pretix/control/forms/users.py:54
 msgid "Repeat new password"
@@ -3785,10 +3781,9 @@ msgid "Cancellation"
 msgstr "Cancelación"
 
 #: pretix/base/invoicing/pdf.py:732 pretix/base/invoicing/pdf.py:740
-#, fuzzy
 msgctxt "invoice"
 msgid "Description"
-msgstr "Descripción"
+msgstr "Descrición"
 
 #: pretix/base/invoicing/pdf.py:733 pretix/base/invoicing/pdf.py:741
 #, fuzzy
@@ -4001,10 +3996,10 @@ msgid "Product {val}"
 msgstr "Producto {val}"
 
 #: pretix/base/logentrytypes.py:109
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "subevent"
 msgid "Date {val}"
-msgstr "Fecha {val}"
+msgstr "Data {val}"
 
 #: pretix/base/logentrytypes.py:116
 #, fuzzy, python-brace-format
@@ -4027,9 +4022,9 @@ msgid "Question {val}"
 msgstr "Pregunta {val}"
 
 #: pretix/base/logentrytypes.py:144
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax rule {val}"
-msgstr "Regla de impuesto {val}"
+msgstr "Regra do imposto {val}"
 
 #: pretix/base/media.py:71
 msgid "Barcode / QR-Code"
@@ -4047,9 +4042,8 @@ msgid "Default list"
 msgstr "Lista predeterminada"
 
 #: pretix/base/modelimport.py:126
-#, fuzzy
 msgid "Keep empty"
-msgstr "Mantener vacío"
+msgstr "Manter valeiro"
 
 #: pretix/base/modelimport.py:160
 #, python-brace-format
@@ -4069,21 +4063,18 @@ msgstr ""
 #: pretix/base/modelimport.py:253 pretix/control/views/orders.py:1175
 #: pretix/control/views/orders.py:1204 pretix/control/views/orders.py:1253
 #: pretix/control/views/orders.py:1288 pretix/control/views/orders.py:1311
-#, fuzzy
 msgid "You entered an invalid number."
-msgstr "Ha introducido un número no válido."
+msgstr "Introduciches un número non válido."
 
 #: pretix/base/modelimport.py:300 pretix/base/modelimport.py:312
-#, fuzzy
 msgctxt "subevent"
 msgid "No matching date was found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Non se atoparon respostas coincidentes."
 
 #: pretix/base/modelimport.py:302 pretix/base/modelimport.py:314
-#, fuzzy
 msgctxt "subevent"
 msgid "Multiple matching dates were found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Non se atoparon respostas coincidentes."
 
 #: pretix/base/modelimport_orders.py:73
 msgid "Grouping"
@@ -4108,10 +4099,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/modelimport_orders.py:120 pretix/presale/views/waiting.py:157
-#, fuzzy
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr "Necesitas seleccionar una fecha."
+msgstr "Tes que escoller unha data."
 
 #: pretix/base/modelimport_orders.py:131
 msgid ""
@@ -4120,15 +4110,13 @@ msgstr ""
 
 #: pretix/base/modelimport_orders.py:149
 #: pretix/base/modelimport_vouchers.py:194
-#, fuzzy
 msgid "No matching product was found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Non se atoparon respostas coincidentes."
 
 #: pretix/base/modelimport_orders.py:151
 #: pretix/base/modelimport_vouchers.py:196
-#, fuzzy
 msgid "Multiple matching products were found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Atopáronse varios produtos coincidentes."
 
 #: pretix/base/modelimport_orders.py:160
 #: pretix/base/modelimport_vouchers.py:205 pretix/base/models/items.py:1257
@@ -4143,21 +4131,18 @@ msgstr ""
 #: pretix/base/modelimport_orders.py:181
 #: pretix/base/modelimport_vouchers.py:225
 #: pretix/base/modelimport_vouchers.py:259
-#, fuzzy
 msgid "No matching variation was found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Non se atopou ningunha variación coincidente."
 
 #: pretix/base/modelimport_orders.py:183
 #: pretix/base/modelimport_vouchers.py:227
 #: pretix/base/modelimport_vouchers.py:261
-#, fuzzy
 msgid "Multiple matching variations were found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Atopáronse varias variacións coincidentes."
 
 #: pretix/base/modelimport_orders.py:186
-#, fuzzy
 msgid "You need to select a variation for this product."
-msgstr "Necesita seleccionar una variación del producto."
+msgstr "Debes seleccionar unha variación para este produto."
 
 #: pretix/base/modelimport_orders.py:265 pretix/base/modelimport_orders.py:417
 #, fuzzy
@@ -4165,24 +4150,20 @@ msgid "The country needs to be specified using a two-letter country code."
 msgstr "El conteo necesita ser igual o mayor que cero."
 
 #: pretix/base/modelimport_orders.py:281 pretix/base/modelimport_orders.py:432
-#, fuzzy
 msgid "Please enter a valid country code."
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "Introduza un código de país válido."
 
 #: pretix/base/modelimport_orders.py:290 pretix/base/modelimport_orders.py:441
 msgid "The state can be specified by its short form or full name."
 msgstr ""
 
 #: pretix/base/modelimport_orders.py:300 pretix/base/modelimport_orders.py:450
-#, fuzzy
 msgid "States are not supported for this country."
-msgstr ""
-"Los reembolsos automáticos no son soportados por este proveedor de pago."
+msgstr "Os estados non son compatibles con este país."
 
 #: pretix/base/modelimport_orders.py:308 pretix/base/modelimport_orders.py:458
-#, fuzzy
 msgid "Please enter a valid state."
-msgstr "Por favor, seleccione una cuota."
+msgstr "Introduza un estado válido."
 
 #: pretix/base/modelimport_orders.py:359 pretix/control/forms/filter.py:688
 msgid "Attendee email address"
@@ -4197,9 +4178,8 @@ msgstr "Correo electrónico do participante"
 #: pretix/control/templates/pretixcontrol/order/index.html:608
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:193
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:196
-#, fuzzy
 msgid "Attendee address"
-msgstr "Insignias de participante"
+msgstr "Enderezo do asistente"
 
 #: pretix/base/modelimport_orders.py:445
 #, fuzzy
@@ -4207,30 +4187,26 @@ msgid "State"
 msgstr "Estado"
 
 #: pretix/base/modelimport_orders.py:468
-#, fuzzy
 msgid "Calculate from product"
-msgstr "Crear un primer producto"
+msgstr "Calcular a partir do produto"
 
 #: pretix/base/modelimport_orders.py:486
 #: pretix/control/templates/pretixcontrol/checkin/index.html:111
 #: pretix/control/templates/pretixcontrol/order/index.html:536
-#, fuzzy
 msgid "Ticket code"
-msgstr "Código de ticket"
+msgstr "Código do billete"
 
 #: pretix/base/modelimport_orders.py:487
-#, fuzzy
 msgid "Generate automatically"
-msgstr "Registrado automáticamente"
+msgstr "Xerar automaticamente"
 
 #: pretix/base/modelimport_orders.py:496
 msgid "You cannot assign a position secret that already exists."
 msgstr ""
 
 #: pretix/base/modelimport_orders.py:528
-#, fuzzy
 msgid "Please enter a valid language code."
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "Introduza un código de idioma válido."
 
 #: pretix/base/modelimport_orders.py:581
 msgid ""
@@ -4239,9 +4215,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/modelimport_orders.py:599 pretix/base/modelimport_orders.py:601
-#, fuzzy
 msgid "Please enter a valid sales channel."
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "Introduza unha canle de vendas válida."
 
 #: pretix/base/modelimport_orders.py:611
 #, fuzzy
@@ -4250,24 +4225,22 @@ msgstr "El importe del reembolso debe ser positivo e inferior a {}."
 
 #: pretix/base/modelimport_orders.py:626
 #: pretix/base/modelimport_vouchers.py:291
-#, fuzzy
 msgid "Multiple matching seats were found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Atopáronse varios asentos coincidentes."
 
 #: pretix/base/modelimport_orders.py:628
 #: pretix/base/modelimport_vouchers.py:293
-#, fuzzy
 msgid "No matching seat was found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Non se atopou ningún asento coincidente."
 
 #: pretix/base/modelimport_orders.py:631
 #: pretix/base/modelimport_vouchers.py:296 pretix/base/services/cart.py:220
 #: pretix/base/services/modelimport.py:178
 #: pretix/base/services/modelimport.py:299
-#, fuzzy
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
-msgstr "Esta URL semántica ya está en uso. Por favor, elija una diferente."
+msgstr ""
+"O asento que seleccionaches xa está ocupado. Selecciona un asento diferente."
 
 #: pretix/base/modelimport_orders.py:634 pretix/base/services/cart.py:217
 #, fuzzy
