@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
 "PO-Revision-Date: 2026-02-26 18:00+0000\n"
-"Last-Translator: David Ibáñez Cerdeira <dibanez@gmail.com>\n"
+"Last-Translator: Sandra Rial Pérez <sandrarial@gestiontickets.online>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
 "Language: gl\n"
@@ -650,16 +650,12 @@ msgid "Gift card added"
 msgstr "Código da tarxeta de regalo"
 
 #: pretix/api/webhooks.py:474
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "Código da tarxeta de regalo"
+msgstr "Tarxeta regalo modificada"
 
 #: pretix/api/webhooks.py:478
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card used in transaction"
-msgstr "Amortizacións de tarxetas de regalo"
+msgstr "Tarxeta regalo usada na transacción"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1054
@@ -6854,9 +6850,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/orders.py:2322
-#, fuzzy
 msgid "Service fee"
-msgstr "Tarifa por servicio"
+msgstr "Taxa de servizo"
 
 #: pretix/base/models/orders.py:2323
 #, fuzzy
@@ -11685,9 +11680,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2011
-#, fuzzy
 msgid "Charge payment, shipping and service fees"
-msgstr "Conservar cuota de pago, envío y servicios"
+msgstr "Pago de cargos, envío e taxas de servizo"
 
 #: pretix/base/settings.py:2025
 #, fuzzy
@@ -11720,9 +11714,8 @@ msgid "Keep a fixed cancellation fee"
 msgstr "Mantener una tarifa de cancelación fija"
 
 #: pretix/base/settings.py:2068
-#, fuzzy
 msgid "Keep payment, shipping and service fees"
-msgstr "Conservar cuota de pago, envío y servicios"
+msgstr "Manter o pago, o envío e as taxas de servizo"
 
 #: pretix/base/settings.py:2080 pretix/control/forms/orders.py:920
 #, fuzzy
@@ -21277,6 +21270,9 @@ msgid ""
 "as payment, service, or shipping fees, even though an additional payment "
 "might be required."
 msgstr ""
+"Se un cambio supón unha variación de prezo, non se producirá ningún cambio "
+"nas taxas como as de pagamento, servizo ou envío, aínda que poida ser "
+"necesario realizar un pago adicional."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:64
 msgid ""
@@ -24571,6 +24567,9 @@ msgid ""
 "%(fee)s for this order, but for a cancellation performed by you, you need to "
 "set the cancellation fee here:"
 msgstr ""
+"A taxa de cancelación configurada para unha cancelación de autoservizo sería "
+"de %(fee)s para este pedido, pero para unha cancelación realizada por "
+"vostede, debe definir a taxa de cancelación aquí:"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:220
@@ -33821,7 +33820,7 @@ msgstr "Por favor, inténtalo de nuevo."
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:29
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:57
 msgid "Please select how you want to pay."
-msgstr "Por favor, seleccione cómo desexa pagar."
+msgstr "Por favor, seleccione como desexa pagar."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:10
 #, fuzzy
@@ -36650,9 +36649,8 @@ msgid "Modify contact information"
 msgstr "Información de contacto"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:171
-#, fuzzy
 msgid "Confirmations"
-msgstr "Confirmaciones"
+msgstr "Confirmacións"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:190
 #, fuzzy
@@ -36799,9 +36797,8 @@ msgid "Please select a payment method below."
 msgstr "Por favor seleccione un método de pago."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:54
-#, fuzzy
 msgid "Please select how you want to pay the remaining balance:"
-msgstr "Por favor, seleccione cómo desea pagar."
+msgstr "Selecciona como queres pagar o saldo restante:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:82
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:45
