@@ -10,4 +10,3 @@ dist/
 pretix/static/jsi18n/
 node_modules/
 .eggs/
-
