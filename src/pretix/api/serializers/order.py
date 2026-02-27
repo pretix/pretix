@@ -1218,13 +1218,14 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
     def validate_payment_info(self, info):
         if info:
-            if not info.strip().startswith("{"):
-                # only objects are allowed
-                raise ValidationError('Payment info must be a valid JSON-object.')
             try:
                 obj = json.loads(info)
             except ValueError:
-                raise ValidationError('Payment info must be a valid JSON-object.')
+                raise ValidationError('Payment info must be valid JSON.')
+
+            if not isinstance(obj, dict):
+                # only objects are allowed
+                raise ValidationError('Payment info must be a JSON-object.')
         return info
 
     def validate_expires(self, expires):
