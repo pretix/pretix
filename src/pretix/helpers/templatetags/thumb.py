@@ -22,10 +22,11 @@
 import logging
 
 from django import template
+from django.core.cache import cache
 from django.core.files.storage import default_storage
 
 from pretix import settings
-from pretix.helpers.thumb import get_thumbnail
+from pretix.helpers.thumb import get_srcset_sizes, get_thumbnail
 
 register = template.Library()
 logger = logging.getLogger(__name__)
@@ -46,3 +47,30 @@ def thumb(source, arg):
         # default_storage.url works for all files in NanoCDNStorage. For others, this may return an invalid URL.
         # But for a fallback, this can probably be accepted.
         return source.url if hasattr(source, 'url') else default_storage.url(str(source))
+
+
+@register.filter
+def thumbset(source, arg):
+    cache_key = f"thumbset:{source}:{arg}"
+    cached_thumbset = cache.get(cache_key)
+    if cached_thumbset is not None:
+        return cached_thumbset
+    formats = list(set().union(
+        settings.PILLOW_FORMATS_IMAGE,
+        settings.PILLOW_FORMATS_QUESTIONS_FAVICON,
+        settings.PILLOW_FORMATS_QUESTIONS_IMAGE
+    ))
+
+    srcs = []
+    if not cached_thumbset:
+        for thumbsize, factor in get_srcset_sizes(arg):
+            try:
+                t = get_thumbnail(source, thumbsize, formats=formats, skip_if_limited_by_input=True)
+                if t:
+                    srcs.append(f"{t.thumb.url} {factor}")
+            except:
+                logger.exception(f'Failed to create thumbnail of {source} at {thumbsize}')
+
+    srcset = ", ".join(srcs)
+    cache.set(cache_key, srcset, timeout=3600)
+    return srcset
