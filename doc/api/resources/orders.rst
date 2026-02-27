@@ -1719,6 +1719,56 @@ List of all order positions
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
+.. http:get:: /api/v1/organizers/(organizer)/orderpositions/
+
+   Returns a list of all order positions within all events of a given organizer (with sufficient access permissions).
+
+   The supported query parameters and output format of this endpoint are almost identical to those of the list endpoint
+   within an event.
+   The only changes are that responses also contain the ``event`` attribute in each result and that the 'pdf_data'
+   parameter is not supported.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/orderpositions/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+      X-Page-Generated: 2017-12-01T10:00:00Z
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id:": 23442
+            "event": "sampleconf",
+            "order": "ABC12",
+            "positionid": 1,
+            "canceled": false,
+            "item": 1345,
+            ...
+          }
+        ]
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+
+
 Fetching individual positions
 -----------------------------
 

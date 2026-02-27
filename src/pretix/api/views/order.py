@@ -57,9 +57,10 @@ from pretix.api.serializers.order import (
     BlockedTicketSecretSerializer, InvoiceSerializer, OrderCreateSerializer,
     OrderPaymentCreateSerializer, OrderPaymentSerializer,
     OrderPositionSerializer, OrderRefundCreateSerializer,
-    OrderRefundSerializer, OrderSerializer, OrganizerTransactionSerializer,
-    PriceCalcSerializer, PrintLogSerializer, RevokedTicketSecretSerializer,
-    SimulatedOrderSerializer, TransactionSerializer,
+    OrderRefundSerializer, OrderSerializer, OrganizerOrderPositionSerializer,
+    OrganizerTransactionSerializer, PriceCalcSerializer, PrintLogSerializer,
+    RevokedTicketSecretSerializer, SimulatedOrderSerializer,
+    TransactionSerializer,
 )
 from pretix.api.serializers.orderchange import (
     BlockNameSerializer, OrderChangeOperationSerializer,
@@ -1065,8 +1066,7 @@ with scopes_disabled():
             }
 
 
-class OrderPositionViewSet(viewsets.ModelViewSet):
-    serializer_class = OrderPositionSerializer
+class OrderPositionViewSetMixin:
     queryset = OrderPosition.all.none()
     filter_backends = (DjangoFilterBackend, RichOrderingFilter)
     ordering = ('order__datetime', 'positionid')
@@ -1087,8 +1087,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
-        ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
+        ctx['pdf_data'] = False
         ctx['check_quotas'] = self.request.query_params.get('check_quotas', 'true').lower() == 'true'
         return ctx
 
@@ -1097,9 +1096,8 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             qs = OrderPosition.all
         else:
             qs = OrderPosition.objects
-
-        qs = qs.filter(order__event=self.request.event)
-        if self.request.query_params.get('pdf_data', 'false').lower() == 'true':
+        qs = qs.filter(order__event__organizer=self.request.organizer)
+        if self.request.query_params.get('pdf_data', 'false').lower() == 'true' and getattr(self.request, 'event', None):
             prefetch_related_objects([self.request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [self.request.event],
@@ -1154,9 +1152,9 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             qs = qs.prefetch_related(
                 Prefetch('checkins', queryset=Checkin.objects.select_related("device")),
                 Prefetch('print_logs', queryset=PrintLog.objects.select_related('device')),
-                'answers', 'answers__options', 'answers__question',
+                'answers', 'answers__options', 'answers__question', 'order__event', 'order__event__organizer'
             ).select_related(
-                'item', 'order', 'order__event', 'order__event__organizer', 'seat'
+                'item', 'order', 'seat'
             )
         return qs
 
@@ -1167,6 +1165,45 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             if prov.identifier == identifier:
                 return prov
         raise NotFound('Unknown output provider.')
+
+
+class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    serializer_class = OrganizerOrderPositionSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
+
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            auth_obj = self.request.auth
+        elif self.request.user.is_authenticated:
+            auth_obj = self.request.user
+        else:
+            raise PermissionDenied()
+
+        qs = qs.filter(
+            order__event__in=auth_obj.get_events_with_permission(perm, request=self.request).filter(
+                organizer=self.request.organizer
+            )
+        )
+
+        return qs
+
+
+class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet):
+    serializer_class = OrderPositionSerializer
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false').lower() == 'true'
+        return ctx
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(order__event=self.request.event)
+        return qs
 
     @action(detail=True, methods=['POST'], url_name='price_calc')
     def price_calc(self, request, *args, **kwargs):

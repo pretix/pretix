@@ -636,6 +636,14 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         return entry
 
 
+class OrganizerOrderPositionSerializer(OrderPositionSerializer):
+    event = SlugRelatedField(slug_field='slug', read_only=True)
+
+    class Meta(OrderPositionSerializer.Meta):
+        fields = OrderPositionSerializer.Meta.fields + ('event',)
+        read_only_fields = OrderPositionSerializer.Meta.read_only_fields + ('event',)
+
+
 class RequireAttentionField(serializers.Field):
     def to_representation(self, instance: OrderPosition):
         return instance.require_checkin_attention
