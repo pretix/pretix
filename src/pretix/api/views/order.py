@@ -73,10 +73,10 @@ from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
-    Invoice, InvoiceAddress, ItemMetaValue, ItemVariation,
+    InstallmentPlan, Invoice, InvoiceAddress, ItemMetaValue, ItemVariation,
     ItemVariationMetaValue, Order, OrderFee, OrderPayment, OrderPosition,
-    OrderRefund, Quota, ReusableMedium, SubEvent, SubEventMetaValue, TaxRule,
-    TeamAPIToken, generate_secret,
+    OrderRefund, Quota, ReusableMedium, ScheduledInstallment, SubEvent,
+    SubEventMetaValue, TaxRule, TeamAPIToken, generate_secret,
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, PrintLog, QuestionAnswer, RevokedTicketSecret,
@@ -86,6 +86,9 @@ from pretix.base.payment import PaymentException
 from pretix.base.pdf import get_images
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
+from pretix.base.services.installments import (
+    cancel_installment_plan, process_single_installment,
+)
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_qualified,
     regenerate_invoice, transmit_invoice,
@@ -122,6 +125,7 @@ with scopes_disabled():
         customer = django_filters.CharFilter(field_name='customer__identifier')
         sales_channel = django_filters.CharFilter(field_name='sales_channel__identifier')
         payment_provider = django_filters.CharFilter(method='provider_qs')
+        installment_status = django_filters.CharFilter(method='installment_status_qs')
 
         class Meta:
             model = Order
@@ -149,6 +153,40 @@ with scopes_disabled():
             return qs.filter(Exists(
                 OrderPayment.objects.filter(order=OuterRef('pk'), provider=value)
             ))
+
+        def installment_status_qs(self, qs, name, value):
+            if value == 'none':
+                return qs.exclude(Exists(
+                    InstallmentPlan.objects.filter(order=OuterRef('pk'))
+                ))
+            elif value == 'active':
+                return qs.filter(Exists(
+                    InstallmentPlan.objects.filter(
+                        order=OuterRef('pk'),
+                        status=InstallmentPlan.STATUS_ACTIVE
+                    )
+                ))
+            elif value == 'completed':
+                return qs.filter(Exists(
+                    InstallmentPlan.objects.filter(
+                        order=OuterRef('pk'),
+                        status=InstallmentPlan.STATUS_COMPLETED
+                    )
+                ))
+            elif value == 'failed':
+                return qs.filter(Exists(
+                    InstallmentPlan.objects.filter(
+                        order=OuterRef('pk'),
+                        status__in=[InstallmentPlan.STATUS_FAILED, InstallmentPlan.STATUS_CANCELLED]
+                    )
+                ) | Exists(
+                    InstallmentPlan.objects.filter(
+                        order=OuterRef('pk'),
+                        status=InstallmentPlan.STATUS_ACTIVE,
+                        grace_period_end__isnull=False
+                    )
+                ))
+            return qs
 
         def subevent_before_qs(self, qs, name, value):
             if getattr(self.request, 'event', None):
@@ -1020,6 +1058,114 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             context=self.get_serializer_context(),
         )
         return Response(serializer.data)
+
+    @action(detail=True, methods=['GET', 'DELETE'], url_path='installment-plan', url_name='installment_plan')
+    def installment_plan(self, request, **kwargs):
+        """
+        Get or cancel the installment plan for an order.
+        GET: Returns plan data or 404 if the order has no installment plan.
+        DELETE: Cancels the plan. Optionally cancels order with ?cancel_order=true.
+        """
+        order = self.get_object()
+
+        try:
+            plan = order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            raise NotFound('This order does not have an installment plan.')
+
+        if request.method == 'GET':
+            next_installment = plan.installments.filter(
+                state='pending'
+            ).order_by('due_date').first()
+
+            data = {
+                'status': plan.status,
+                'total_installments': plan.total_installments,
+                'installments_paid': plan.installments_paid,
+                'amount_per_installment': str(plan.amount_per_installment),
+                'payment_provider': plan.payment_provider,
+                'next_payment_date': next_installment.due_date if next_installment else None,
+                'grace_period_end': plan.grace_period_end,
+            }
+
+            return Response(data, status=status.HTTP_200_OK)
+
+        elif request.method == 'DELETE':
+            cancel_order_param = request.query_params.get('cancel_order', '').lower() == 'true'
+            user = request.user if hasattr(request, 'user') and request.user.is_authenticated else None
+
+            cancel_installment_plan(
+                plan,
+                cancel_order=cancel_order_param,
+                user=user,
+                log=True
+            )
+
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=['GET'], url_path='installment-plan/installments', url_name='installment_plan_installments')
+    def installment_plan_installments(self, request, **kwargs):
+        """
+        Get the list of scheduled installments for an order's installment plan.
+        Returns 404 if the order has no installment plan.
+        """
+        order = self.get_object()
+
+        try:
+            plan = order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            raise NotFound('This order does not have an installment plan.')
+
+        installments = plan.installments.all().order_by('installment_number')
+
+        results = []
+        for inst in installments:
+            results.append({
+                'installment_number': inst.installment_number,
+                'amount': str(inst.amount),
+                'due_date': inst.due_date,
+                'state': inst.state,
+                'payment_id': inst.payment_id,
+                'processed_at': inst.processed_at,
+                'failure_reason': inst.failure_reason,
+            })
+
+        return Response({'results': results}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['POST'], url_path='installment-plan/retry', url_name='installment_plan_retry')
+    def installment_plan_retry(self, request, **kwargs):
+        """
+        Manually trigger a retry for failed installments.
+        Returns 400 if no failed installment exists.
+        """
+        order = self.get_object()
+
+        try:
+            plan = order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            raise NotFound('This order does not have an installment plan.')
+
+        failed_installment = plan.installments.filter(
+            state=ScheduledInstallment.STATE_FAILED
+        ).order_by('installment_number').first()
+
+        if not failed_installment:
+            return Response(
+                {'error': 'No failed installment to retry.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        success = process_single_installment(failed_installment)
+        if success:
+            return Response(
+                {'message': 'Installment payment retried successfully.'},
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {'error': 'Installment payment retry failed.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 with scopes_disabled():

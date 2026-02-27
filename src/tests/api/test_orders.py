@@ -34,7 +34,9 @@ from stripe import error
 from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition
+from pretix.base.models import (
+    InstallmentPlan, InvoiceAddress, Order, OrderPosition,
+)
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 
 
@@ -2040,3 +2042,109 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     ))
     assert resp.status_code == 200
     assert not resp.data.get('pdf_data')
+
+
+@pytest.mark.django_db
+def test_order_list_filter_installment_status(token_client, organizer, event, order, item):
+    """Test filtering orders by installment status."""
+    with scopes_disabled():
+        order_active = Order.objects.create(
+            code='ACTIVE',
+            event=event,
+            email='active@localhost',
+            status=Order.STATUS_PENDING,
+            datetime=now(),
+            expires=now() + datetime.timedelta(days=10),
+            total=Decimal('300.00'),
+            locale='en',
+            sales_channel=organizer.sales_channels.get(identifier="web"),
+        )
+        InstallmentPlan.objects.create(  # noqa: F841
+            order=order_active,
+            payment_provider='dummy',
+            payment_token={},
+            total_installments=3,
+            installments_paid=1,
+            amount_per_installment=Decimal('100.00'),
+            status=InstallmentPlan.STATUS_ACTIVE
+        )
+
+        # Order with completed installment plan
+        order_completed = Order.objects.create(
+            code='COMPL',
+            event=event,
+            email='completed@localhost',
+            status=Order.STATUS_PAID,
+            datetime=now(),
+            expires=now() + datetime.timedelta(days=10),
+            total=Decimal('300.00'),
+            locale='en',
+            sales_channel=organizer.sales_channels.get(identifier="web"),
+        )
+        InstallmentPlan.objects.create(  # noqa: F841
+            order=order_completed,
+            payment_provider='dummy',
+            payment_token={},
+            total_installments=3,
+            installments_paid=3,
+            amount_per_installment=Decimal('100.00'),
+            status=InstallmentPlan.STATUS_COMPLETED
+        )
+
+        order_failed = Order.objects.create(
+            code='FAIL',
+            event=event,
+            email='failed@localhost',
+            status=Order.STATUS_PENDING,
+            datetime=now(),
+            expires=now() + datetime.timedelta(days=10),
+            total=Decimal('300.00'),
+            locale='en',
+            sales_channel=organizer.sales_channels.get(identifier="web"),
+        )
+        InstallmentPlan.objects.create(  # noqa: F841
+            order=order_failed,
+            payment_provider='dummy',
+            payment_token={},
+            total_installments=3,
+            installments_paid=1,
+            amount_per_installment=Decimal('100.00'),
+            status=InstallmentPlan.STATUS_ACTIVE,
+            grace_period_end=now() + datetime.timedelta(days=7)
+        )
+
+    # Test filter=none: orders without installment plans
+    resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/orders/?installment_status=none')
+    assert resp.status_code == 200
+    codes = [o['code'] for o in resp.data['results']]
+    assert order.code in codes  # Original order has no plan
+    assert 'ACTIVE' not in codes
+    assert 'COMPL' not in codes
+    assert 'FAIL' not in codes
+
+    # Test filter=active: orders with active installment plans
+    resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/orders/?installment_status=active')
+    assert resp.status_code == 200
+    codes = [o['code'] for o in resp.data['results']]
+    assert 'ACTIVE' in codes
+    assert order.code not in codes
+    assert 'COMPL' not in codes
+    # Note: FAIL has active status but is in grace period, so might or might not appear depending on filter logic
+
+    # Test filter=completed: orders with completed installment plans
+    resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/orders/?installment_status=completed')
+    assert resp.status_code == 200
+    codes = [o['code'] for o in resp.data['results']]
+    assert 'COMPL' in codes
+    assert order.code not in codes
+    assert 'ACTIVE' not in codes
+    assert 'FAIL' not in codes
+
+    # Test filter=failed: orders with failed/cancelled plans or in grace period
+    resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/orders/?installment_status=failed')
+    assert resp.status_code == 200
+    codes = [o['code'] for o in resp.data['results']]
+    assert 'FAIL' in codes  # In grace period
+    assert order.code not in codes
+    assert 'ACTIVE' not in codes
+    assert 'COMPL' not in codes

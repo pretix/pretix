@@ -84,8 +84,8 @@ from pretix.base.models import (
     Quota, ScheduledEventExport, generate_secret,
 )
 from pretix.base.models.orders import (
-    CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
-    PrintLog,
+    CancellationRequest, InstallmentPlan, OrderFee, OrderPayment,
+    OrderPosition, OrderRefund, PrintLog, ScheduledInstallment,
 )
 from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.payment import PaymentException
@@ -93,6 +93,9 @@ from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.cancelevent import cancel_event
 from pretix.base.services.export import export, scheduled_event_export
+from pretix.base.services.installments import (
+    cancel_installment_plan, process_single_installment,
+)
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
     invoice_qualified, regenerate_invoice, transmit_invoice,
@@ -555,6 +558,17 @@ class OrderDetail(OrderView):
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = self.order.pending_sum
 
+        try:
+            installment_plan = self.order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            pass
+        else:
+            ctx['installment_plan'] = installment_plan
+            ctx['installments'] = installment_plan.installments.all().order_by('installment_number')
+            ctx['has_failed_installments'] = installment_plan.installments.filter(
+                state=ScheduledInstallment.STATE_FAILED
+            ).exists()
+
         return ctx
 
     @cached_property
@@ -924,6 +938,109 @@ class OrderRefundCancel(OrderView):
     def get(self, *args, **kwargs):
         return render(self.request, 'pretixcontrol/order/refund_cancel.html', {
             'order': self.order,
+        })
+
+
+class OrderInstallmentPlanCancel(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        try:
+            plan = self.order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            messages.error(self.request, _('This order does not have an installment plan.'))
+            return redirect(self.get_order_url())
+
+        if plan.status != InstallmentPlan.STATUS_ACTIVE:
+            messages.error(self.request, _('This installment plan cannot be canceled.'))
+            return redirect(self.get_order_url())
+
+        cancel_order_too = self.request.POST.get('cancel_order') == 'on'
+
+        with transaction.atomic():
+            try:
+                cancel_installment_plan(
+                    plan,
+                    cancel_order=cancel_order_too,
+                    user=self.request.user if self.request.user.is_authenticated else None
+                )
+            except Exception as e:
+                messages.error(self.request, _('Failed to cancel installment plan: {error}').format(error=str(e)))
+                return redirect(self.get_order_url())
+
+        if cancel_order_too:
+            messages.success(self.request, _('The installment plan and order have been canceled.'))
+        else:
+            messages.success(self.request, _('The installment plan has been canceled.'))
+
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        try:
+            plan = self.order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            messages.error(self.request, _('This order does not have an installment plan.'))
+            return redirect(self.get_order_url())
+
+        return render(self.request, 'pretixcontrol/order/installment_plan_cancel.html', {
+            'order': self.order,
+            'plan': plan,
+        })
+
+
+class OrderInstallmentRetry(OrderView):
+    permission = 'can_change_orders'
+
+    def post(self, *args, **kwargs):
+        try:
+            plan = self.order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            messages.error(self.request, _('This order does not have an installment plan.'))
+            return redirect(self.get_order_url())
+
+        if plan.status != InstallmentPlan.STATUS_ACTIVE:
+            messages.error(self.request, _('This installment plan is not active.'))
+            return redirect(self.get_order_url())
+
+        failed_installment = plan.installments.filter(
+            state=ScheduledInstallment.STATE_FAILED
+        ).order_by('installment_number').first()
+
+        if not failed_installment:
+            messages.error(self.request, _('No failed installment to retry.'))
+            return redirect(self.get_order_url())
+
+        try:
+            success = process_single_installment(failed_installment)
+        except Exception as e:
+            messages.error(self.request, _('Failed to retry installment: {error}').format(error=str(e)))
+        else:
+            if success:
+                messages.success(self.request, _('Installment payment retried successfully.'))
+            else:
+                messages.error(self.request, _('Installment payment retry failed.'))
+
+        return redirect(self.get_order_url())
+
+    def get(self, *args, **kwargs):
+        try:
+            plan = self.order.installment_plan
+        except InstallmentPlan.DoesNotExist:
+            messages.error(self.request, _('This order does not have an installment plan.'))
+            return redirect(self.get_order_url())
+
+        failed_installment = plan.installments.filter(
+            state=ScheduledInstallment.STATE_FAILED
+        ).order_by('installment_number').first()
+
+        if not failed_installment:
+            messages.error(self.request, _('No failed installment to retry.'))
+            return redirect(self.get_order_url())
+
+        return render(self.request, 'pretixcontrol/order/installment_retry.html', {
+            'order': self.order,
+            'plan': plan,
+            'failed_installment': failed_installment,
         })
 
 

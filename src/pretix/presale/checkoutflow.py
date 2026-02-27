@@ -67,6 +67,7 @@ from pretix.base.services.cart import (
     set_cart_addons,
 )
 from pretix.base.services.cross_selling import CrossSellingService
+from pretix.base.services.installments import calculate_installment_amounts
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
 from pretix.base.services.tasks import EventTask
@@ -1283,12 +1284,36 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                 form = provider.payment_form_render(self.request, self._total_order_value + fee)
             else:
                 form = provider.payment_form_render(self.request)
-            providers.append({
+
+            provider_dict = {
                 'provider': provider,
                 'fee': fee,
                 'total': self._total_order_value + fee,
                 'form': form
-            })
+            }
+
+            if provider.installments_supported:
+                provider_dict['installments_available'] = provider.installments_available(self._total_order_value)
+                if provider_dict['installments_available']:
+                    max_installments = provider.get_max_installments_for_cart()
+                    provider_dict['installments_count'] = max_installments
+
+                    # Generate all available installment options (2 to max)
+                    provider_dict['installment_options'] = []
+                    for count in range(2, max_installments + 1):
+                        amounts = calculate_installment_amounts(self._total_order_value, count)
+                        provider_dict['installment_options'].append({
+                            'count': count,
+                            'amount': amounts[0],
+                        })
+
+                    provider_dict['selected_installments'] = 0
+                    for payment in self.cart_session.get('payments', []):
+                        if payment.get('provider') == provider.identifier:
+                            provider_dict['selected_installments'] = payment.get('installments_count', 0)
+                            break
+
+            providers.append(provider_dict)
         return providers
 
     @cached_property
@@ -1329,12 +1354,21 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                     # Providers with multi_use_supported will call this themselves
                     simulated_payments = self.cart_session.get('payments', {})
                     simulated_payments = [p for p in simulated_payments if p.get('multi_use_supported')]
+
+                    installments_count_str = request.POST.get(f'installments_count_{pprov.identifier}', '0')
+                    try:
+                        installments_count = int(installments_count_str)
+                    except (ValueError, TypeError):
+                        installments_count = 0
+
                     simulated_payments.append({
                         'provider': pprov.identifier,
                         'multi_use_supported': False,
                         'min_value': None,
                         'max_value': None,
                         'info_data': {},
+                        'pay_in_installments': installments_count >= 2,
+                        'installments_count': installments_count,
                     })
                     cart = self.get_cart(payments=simulated_payments)
                 else:
@@ -1378,7 +1412,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                         # There can only be one payment method that does not have multi_use_supported, remove all
                         # previous ones.
                         self.cart_session['payments'] = [p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')]
-                        add_payment_to_cart(request, pprov, None, None, None)
+                        add_payment_to_cart(request, pprov, None, None, None, installments_count)
 
                         if isinstance(resp, str):
                             return redirect_to_url(resp)
@@ -1615,7 +1649,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             'contact_form_data': self.cart_session.get('contact_form_data', {}),
             'confirm_messages': [
                 str(m) for m in self.confirm_messages.values()
-            ]
+            ],
+            'pay_in_installments': any(p.get('pay_in_installments') for p in self.cart_session.get('payments', []))
         }
         api_meta = {}
         unlock_hashes = request.session.get('pretix_unlock_hashes', [])

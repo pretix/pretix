@@ -64,6 +64,33 @@
                 </ul>
             </div>
         {% endif %}
+        {% if cart.installments %}
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                        {% trans "Installment plan" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="alert alert-info">
+                        <strong>{% trans "You have selected to pay in installments." %}</strong>
+                        {% blocktrans trimmed with count=cart.installments.count %}
+                            Your order total will be split into {{ count }} payments.
+                        {% endblocktrans %}
+                    </div>
+                    <dl class="dl-horizontal">
+                        <dt>{% trans "Due today" %}</dt>
+                        <dd><strong>{{ cart.installments.first_payment|money:request.event.currency }}</strong></dd>
+                        <dt>{% trans "Total installments" %}</dt>
+                        <dd>{{ cart.installments.count }}</dd>
+                    </dl>
+                    <p class="text-muted">
+                        {% trans "The remaining payments will be automatically charged monthly to your payment method. You may receive email reminders before upcoming payments." %}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
         {% eventsignal event "pretix.presale.signals.checkout_confirm_page_content" request=request %}
         <div class="row">
             {% if invoice_address_asked %}
