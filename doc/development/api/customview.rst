@@ -55,12 +55,12 @@ your views:
     )
 
     class AdminView(EventPermissionRequiredMixin, View):
-        permission = 'can_view_orders'
+        permission = 'event.orders:read'
 
         ...
 
 
-    @event_permission_required('can_view_orders')
+    @event_permission_required('event.orders:read')
     def admin_view(request, organizer, event):
         ...
 
@@ -78,7 +78,7 @@ event-related views, there is also a signal that allows you to add the view to t
     @receiver(nav_event, dispatch_uid='friends_tickets_nav')
     def navbar_info(sender, request, **kwargs):
         url = resolve(request.path_info)
-        if not request.user.has_event_permission(request.organizer, request.event, 'can_change_vouchers'):
+        if not request.user.has_event_permission(request.organizer, request.event, 'event.vouchers:read'):
             return []
         return [{
             'label': _('My plugin view'),
@@ -118,7 +118,7 @@ for good integration. If you just want to display a form, you could do it like t
 
     class MySettingsView(EventSettingsViewMixin, EventSettingsFormView):
         model = Event
-        permission = 'can_change_settings'
+        permission = 'event.settings.general:write'
         form_class = MySettingsForm
         template_name = 'my_plugin/settings.html'
 
@@ -204,13 +204,13 @@ In case of ``orga_router`` and ``event_router``, permission checking is done for
 in the control panel. However, you need to make sure on your own only to return the correct subset of data! ``request
 .event`` and ``request.organizer`` are available as usual.
 
-To require a special permission like ``can_view_orders``, you do not need to inherit from a special ViewSet base
+To require a special permission like ``event.orders:read``, you do not need to inherit from a special ViewSet base
 class, you can just set the ``permission`` attribute on your viewset:
 
 .. code-block:: python
 
     class MyViewSet(ModelViewSet):
-        permission = 'can_view_orders'
+        permission = 'event.orders:read'
         ...
 
 If you want to check the permission only for some methods of your viewset, you have to do it yourself. Note here that
@@ -220,7 +220,7 @@ following:
 .. code-block:: python
 
     perm_holder = (request.auth if isinstance(request.auth, TeamAPIToken) else request.user)
-    if perm_holder.has_event_permission(request.event.organizer, request.event, 'can_view_orders'):
+    if perm_holder.has_event_permission(request.event.organizer, request.event, 'event.orders:read'):
         ...
 
 

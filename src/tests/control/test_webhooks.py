@@ -63,7 +63,7 @@ def admin_user(admin_team):
 
 @pytest.fixture
 def admin_team(organizer):
-    return Team.objects.create(organizer=organizer, can_change_organizer_settings=True, name='Admin team')
+    return Team.objects.create(organizer=organizer, all_organizer_permissions=True, name='Admin team')
 
 
 @pytest.mark.django_db

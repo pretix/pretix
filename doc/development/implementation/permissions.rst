@@ -2,7 +2,7 @@ Permissions
 ===========
 
 pretix uses a fine-grained permission system to control who is allowed to control what parts of the system.
-The central concept here is the concept of *Teams*. You can read more on `configuring teams and permissions <user-teams>`_
+The central concept here is the concept of *Teams*. You can read more on `configuring teams and permissions`_
 and the :class:`pretix.base.models.Team` model in the respective parts of the documentation. The basic digest is:
 An organizer account can have any number of teams, and any number of users can be part of a team. A team can be
 assigned a set of permissions and connected to some or all of the events of the organizer.
@@ -25,8 +25,8 @@ permission level to access a view:
 
 
     class MyOrgaView(OrganizerPermissionRequiredMixin, View):
-        permission = 'can_change_organizer_settings'
-        # Only users with the permission ``can_change_organizer_settings`` on
+        permission = 'organizer.settings.general:write'
+        # Only users with the permission ``organizer.settings.general:write`` on
         # this organizer can access this
 
 
@@ -35,9 +35,9 @@ permission level to access a view:
         # Only users with *any* permission on this organizer can access this
 
 
-    @organizer_permission_required('can_change_organizer_settings')
+    @organizer_permission_required('organizer.settings.general:write')
     def my_orga_view(request, organizer, **kwargs):
-        # Only users with the permission ``can_change_organizer_settings`` on
+        # Only users with the permission ``organizer.settings.general:write`` on
         # this organizer can access this
 
 
@@ -56,8 +56,8 @@ Of course, the same is available on event level:
 
 
     class MyEventView(EventPermissionRequiredMixin, View):
-        permission = 'can_change_event_settings'
-        # Only users with the permission ``can_change_event_settings`` on
+        permission = 'event.settings.general:write'
+        # Only users with the permission ``event.settings.general:write`` on
         # this event can access this
 
 
@@ -66,9 +66,9 @@ Of course, the same is available on event level:
         # Only users with *any* permission on this event can access this
 
 
-    @event_permission_required('can_change_event_settings')
+    @event_permission_required('event.settings.general:write')
     def my_event_view(request, organizer, **kwargs):
-        # Only users with the permission ``can_change_event_settings`` on
+        # Only users with the permission ``event.settings.general:write`` on
         # this event can access this
 
 
@@ -121,7 +121,7 @@ When creating your own ``viewset`` using Django REST framework, you just need to
 and pretix will check it automatically for you::
 
     class MyModelViewSet(viewsets.ReadOnlyModelViewSet):
-        permission = 'can_view_orders'
+        permission = 'event.orders:read'
 
 Checking permission in code
 ---------------------------
@@ -136,12 +136,12 @@ Return all users that are in any team that is connected to this event::
 
 Return all users that are in a team with a specific permission for this event::
 
-    >>> event.get_users_with_permission('can_change_event_settings')
+    >>> event.get_users_with_permission('event.orders:read')
     <QuerySet: …>
 
 Determine if a user has a certain permission for a specific event::
 
-    >>> user.has_event_permission(organizer, event, 'can_change_event_settings', request=request)
+    >>> user.has_event_permission(organizer, event, 'event.orders:read', request=request)
     True
 
 Determine if a user has any permission for a specific event::
@@ -153,27 +153,27 @@ In the two previous commands, the ``request`` argument is optional, but required
 
 The same method exists for organizer-level permissions::
 
-    >>> user.has_organizer_permission(organizer, 'can_change_event_settings', request=request)
+    >>> user.has_organizer_permission(organizer, 'event.orders:read', request=request)
     True
 
 Sometimes, it might be more useful to get the set of permissions at once::
 
     >>> user.get_event_permission_set(organizer, event)
-    {'can_change_event_settings', 'can_view_orders', 'can_change_orders'}
+    {'event.settings.general:write', 'event.orders:read', 'event.orders:write'}
 
     >>> user.get_organizer_permission_set(organizer, event)
-    {'can_change_organizer_settings', 'can_create_events'}
+    {'organizer.settings.general:write', 'organizer.events:create'}
 
 Within a view on the ``/control`` subpath, the results of these two methods are already available in the
 ``request.eventpermset`` and ``request.orgapermset`` properties. This makes it convenient to query them in templates::
 
-    {% if "can_change_orders" in request.eventpermset %}
+    {% if "event.orders:write" in request.eventpermset %}
         …
     {% endif %}
 
 You can also do the reverse to get any events a user has access to::
 
-    >>> user.get_events_with_permission('can_change_event_settings', request=request)
+    >>> user.get_events_with_permission('event.settings.general:write', request=request)
     <QuerySet: …>
 
     >>> user.get_events_with_any_permission(request=request)
@@ -195,3 +195,53 @@ staff mode is active. You can check if a user is in staff mode using their sessi
 Staff mode has a hard time limit and during staff mode, a middleware will log all requests made by that user. Later,
 the user is able to also save a message to comment on what they did in their administrative session. This feature is
 intended to help compliance with data protection rules as imposed e.g. by GDPR.
+
+Adding permissions
+------------------
+
+Plugins can add permissions through the ``register_event_permission_groups`` and ``register_organizer_permission_groups``.
+We recommend to use this only for very significant permissions, as the system will become less usable with too many
+permission levels, also because the team page will show all permission options, even those of disabled plugins.
+
+To register your permissions, you need to register a **permission group** (often representing an area of functionality
+or a key model). Below that group, there are **actions**, which represent the actual permissions. Permissions will be
+generated as ``<group_name>:<action>``. Then, you need to define **options** which are the valid combinations of the
+actions that should be possible to select for a team. This two-step mechanism exists to provide a better user experience
+and avoid useless combinations like "write but not read".
+
+Example::
+
+    @receiver(register_event_permission_groups)
+    def register_plugin_event_permissions(sender, **kwargs):
+        return [
+            PermissionGroup(
+                name="pretix_myplugin.resource",
+                label=_("Resources"),
+                actions=["read", "write"],
+                options=[
+                    PermissionOption(actions=tuple(), label=_("No access")),
+                    PermissionOption(actions=("read",), label=_("View")),
+                    PermissionOption(actions=("read", "write"), label=_("View and change")),
+                ],
+                help_text=_("Some help text")
+            ),
+        ]
+
+
+    @receiver(register_organizer_permission_groups)
+    def register_plugin_organizer_permissions(sender, **kwargs):
+        return [
+            PermissionGroup(
+                name="pretix_myplugin.resource",
+                label=_("Resources"),
+                actions=["read", "write"],
+                options=[
+                    PermissionOption(actions=tuple(), label=_("No access")),
+                    PermissionOption(actions=("read",), label=_("View")),
+                    PermissionOption(actions=("read", "write"), label=_("View and change")),
+                ],
+                help_text=_("Some help text")
+            ),
+        ]
+
+.. _configuring teams and permissions: https://docs.pretix.eu/guides/teams/

@@ -47,7 +47,7 @@ class MailSettingPreviewTest(SoupTest):
         )
         self.locale_event.settings.locales = ['en', 'de-informal']
         self.locale_event.save()
-        t = Team.objects.create(organizer=self.orga1, can_change_items=True, can_change_event_settings=True)
+        t = Team.objects.create(organizer=self.orga1, all_event_permissions=True)
         t.members.add(self.user)
         t.limit_events.add(self.locale_event)
         t.limit_events.add(self.event1)

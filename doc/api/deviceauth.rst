@@ -197,10 +197,11 @@ Permissions & security profiles
 
 Device authentication is currently hardcoded to grant the following permissions:
 
-* View event meta data and products etc.
-* View orders
-* Change orders
-* Manage gift cards
+* Read event meta data and products etc.
+* Read and write orders
+* Read and write gift cards
+* Read and write reusable media
+* Read vouchers
 
 Devices cannot change events or products and cannot access vouchers.
 

@@ -482,7 +482,7 @@ class UserSettingsNotificationsTest(SoupTest):
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(), plugins='pretix.plugins.banktransfer'
         )
-        t = o.teams.create(can_change_orders=True, all_events=True)
+        t = o.teams.create(limit_event_permissions={"event.orders:write": True}, all_events=True)
         t.members.add(self.user)
 
     def test_toggle_all(self):

@@ -86,7 +86,7 @@ class OutgoingMailListView(OutgoingMailQueryMixin, OrganizerDetailViewMixin, Org
     template_name = 'pretixcontrol/organizers/outgoing_mails.html'
     # Assume "the highest" permission level for now because emails could belog to any event, order, or customer.
     # We plan to add a special permissoin in the future
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.outgoingmails:read'
     context_object_name = 'mails'
     paginate_by = 100
 
@@ -100,7 +100,7 @@ class OutgoingMailListView(OutgoingMailQueryMixin, OrganizerDetailViewMixin, Org
 class OutgoingMailDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
     model = OutgoingMail
     template_name = 'pretixcontrol/organizers/outgoing_mail.html'
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.outgoingmails:read'
     context_object_name = 'mail'
 
     def get_object(self, queryset=None):
@@ -136,7 +136,7 @@ class OutgoingMailDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequir
 
 
 class OutgoingMailBulkAction(OutgoingMailQueryMixin, OrganizerPermissionRequiredMixin, OrganizerDetailViewMixin, View):
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.outgoingmails:read'
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):

@@ -52,8 +52,8 @@ class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
     ordering = ('datetime',)
     ordering_fields = ('datetime', 'cart_id')
     lookup_field = 'id'
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
 
     def get_queryset(self):
         return CartPosition.objects.filter(

@@ -39,15 +39,19 @@
                 {% endblocktrans %}
             </p>
 
-            <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-               class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new discount" %}</a>
+            {% if 'event.items:write' in request.eventpermset %}
+                <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new discount" %}</a>
+            {% endif %}
         </div>
     {% else %}
-        <p>
-            <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-               class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new discount" %}
-            </a>
-        </p>
+        {% if 'event.items:write' in request.eventpermset %}
+            <p>
+                <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new discount" %}
+                </a>
+            </p>
+        {% endif %}
         <form method="post">
             {% csrf_token %}
             <div class="table-responsive">
@@ -70,8 +74,12 @@
                                 {% else %}
                                     <del>
                                 {% endif %}
-                                    <a  href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}">
+                                {% if 'event.items:write' in request.eventpermset %}
+                                    <a href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}">
                                     {{ d.internal_name }}</a>
+                                {% else %}
+                                    {{ d.internal_name }}
+                                {% endif %}
                                 {% if d.active %}
                                     </strong>
                                 {% else %}
@@ -134,23 +142,25 @@
                                 </td>
                             {% endif %}
                             <td class="text-right flip">
-                                <button formaction="{% url "control:event.items.discounts.up" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
-                                        class="btn btn-default btn-sm sortable-up" title="{% trans "Move up" %}"
-                                        {% if forloop.counter0 == 0 and not page_obj.has_previous %}
-                                        disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
-                                <button formaction="{% url "control:event.items.discounts.down" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
-                                        class="btn btn-default btn-sm sortable-down" title="{% trans "Move down" %}"
-                                        {% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}>
-                                    <i class="fa fa-arrow-down"></i></button>
-                                <span class="dnd-container" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
-                                <a href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
-                                   class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                                <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ d.id }}"
-                                   class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">
-                                    <span class="fa fa-copy"></span>
-                                </a>
-                                <a href="{% url "control:event.items.discounts.delete" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
-                                   class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% if 'event.items:write' in request.eventpermset %}
+                                    <button formaction="{% url "control:event.items.discounts.up" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
+                                            class="btn btn-default btn-sm sortable-up" title="{% trans "Move up" %}"
+                                            {% if forloop.counter0 == 0 and not page_obj.has_previous %}
+                                            disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
+                                    <button formaction="{% url "control:event.items.discounts.down" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
+                                            class="btn btn-default btn-sm sortable-down" title="{% trans "Move down" %}"
+                                            {% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}>
+                                        <i class="fa fa-arrow-down"></i></button>
+                                    <span class="dnd-container" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
+                                    <a href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
+                                       class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                    <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ d.id }}"
+                                       class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">
+                                        <span class="fa fa-copy"></span>
+                                    </a>
+                                    <a href="{% url "control:event.items.discounts.delete" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
+                                       class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

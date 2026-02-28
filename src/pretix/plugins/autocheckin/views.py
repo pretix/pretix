@@ -35,7 +35,7 @@ from pretix.plugins.autocheckin.models import AutoCheckinRule
 
 
 class IndexView(EventPermissionRequiredMixin, ListView):
-    permission = "can_change_event_settings"
+    permission = "event.settings.general:write"
     template_name = "pretixplugins/autocheckin/index.html"
     paginate_by = 50
     context_object_name = "rules"
@@ -70,7 +70,7 @@ class IndexView(EventPermissionRequiredMixin, ListView):
 
 class RuleAddView(EventPermissionRequiredMixin, CreateView):
     template_name = "pretixplugins/autocheckin/add.html"
-    permission = "can_change_event_settings"
+    permission = "event.settings.general:write"
     form_class = AutoCheckinRuleForm
     model = AutoCheckinRule
 
@@ -140,7 +140,7 @@ class RuleEditView(EventPermissionRequiredMixin, UpdateView):
     model = AutoCheckinRule
     form_class = AutoCheckinRuleForm
     template_name = "pretixplugins/autocheckin/edit.html"
-    permission = "can_change_event_settings"
+    permission = "event.settings.general:write"
 
     def get_object(self, queryset=None) -> AutoCheckinRule:
         return get_object_or_404(
@@ -178,7 +178,7 @@ class RuleEditView(EventPermissionRequiredMixin, UpdateView):
 
 class RuleDeleteView(EventPermissionRequiredMixin, DeleteView):
     model = AutoCheckinRule
-    permission = "can_change_event_settings"
+    permission = "event.settings.general:write"
     template_name = "pretixplugins/autocheckin/delete.html"
     context_object_name = "rule"
 

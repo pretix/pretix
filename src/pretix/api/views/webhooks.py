@@ -35,8 +35,8 @@ class WebhookFilter(FilterSet):
 class WebHookViewSet(viewsets.ModelViewSet):
     serializer_class = WebHookSerializer
     queryset = WebHook.objects.none()
-    permission = 'can_change_organizer_settings'
-    write_permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
+    write_permission = 'organizer.settings.general:write'
     filter_backends = (DjangoFilterBackend,)
     filterset_class = WebhookFilter
 

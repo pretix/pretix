@@ -72,7 +72,7 @@ def on_control_order_info(sender: Event, request, order: Order, **kwargs):
 
 
 class ControlSyncJob(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, request, provider, *args, **kwargs):
         prov, meta = datasync_providers.get(active_in=self.request.event, identifier=provider)
@@ -154,7 +154,7 @@ class GlobalFailedSyncJobsView(AdministratorPermissionRequiredMixin, FailedSyncJ
 
 
 class OrganizerFailedSyncJobsView(OrganizerPermissionRequiredMixin, FailedSyncJobsView):
-    permission = "can_change_organizer_settings"
+    permission = "organizer.settings.general:write"
 
     def get_queryset(self):
         return super().get_queryset().filter(
@@ -163,7 +163,7 @@ class OrganizerFailedSyncJobsView(OrganizerPermissionRequiredMixin, FailedSyncJo
 
 
 class EventFailedSyncJobsView(EventPermissionRequiredMixin, FailedSyncJobsView):
-    permission = "can_change_event_settings"
+    permission = "event.settings.general:write"
 
     def get_queryset(self):
         return super().get_queryset().filter(

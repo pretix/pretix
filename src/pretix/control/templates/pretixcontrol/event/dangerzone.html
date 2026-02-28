@@ -40,12 +40,16 @@
                     this option.
                 {% endblocktrans %}
             </div>
-            <div class="col-sm-12 col-md-3">
-                <a href="{% url "control:event.cancel" organizer=request.organizer.slug event=request.event.slug %}"
-                        class="btn btn-danger btn-block btn-lg">
-                    <span class="fa fa-ban"></span>
-                    {% trans "Cancel event" %}
-                </a>
+            <div class="col-sm-12 col-md-3 text-center">
+                {% if "event:cancel" in request.eventpermset %}
+                    <a href="{% url "control:event.cancel" organizer=request.organizer.slug event=request.event.slug %}"
+                            class="btn btn-danger btn-block btn-lg">
+                        <span class="fa fa-ban"></span>
+                        {% trans "Cancel event" %}
+                    </a>
+                {% else %}
+                    {% trans "No permission" %}
+                {% endif %}
             </div>
         </div>
     </div>

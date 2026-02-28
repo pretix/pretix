@@ -56,7 +56,7 @@ def event(organizer):
 
 @pytest.fixture
 def admin_team(organizer):
-    return Team.objects.create(organizer=organizer, can_change_teams=True, name='Admin team')
+    return Team.objects.create(organizer=organizer, all_organizer_permissions=True, all_event_permissions=True, name='Admin team')
 
 
 @pytest.fixture
@@ -216,7 +216,7 @@ def test_team_remove_last_admin(event, admin_user, admin_team, client):
     with scopes_disabled():
         assert admin_user in admin_team.members.all()
 
-    t2.can_change_teams = True
+    t2.limit_organizer_permissions = {"organizer.teams:write": True}
     t2.save()
     resp = client.post('/control/organizer/dummy/team/{}/'.format(admin_team.pk), {
         'remove-member': admin_user.pk
@@ -229,17 +229,35 @@ def test_team_remove_last_admin(event, admin_user, admin_team, client):
 @pytest.mark.django_db
 def test_create_team(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/organizer/dummy/team/add', {
+    r = client.post('/control/organizer/dummy/team/add', {
         'name': 'Foo',
-        'can_create_events': 'on',
+        'organizer_organizer.events': "create",
+        'organizer_organizer.settings.general': "EMPTY",
+        'organizer_organizer.teams': "EMPTY",
+        'organizer_organizer.giftcards': "EMPTY",
+        'organizer_organizer.customers': "EMPTY",
+        'organizer_organizer.reusablemedia': "EMPTY",
+        'organizer_organizer.devices': "EMPTY",
+        'organizer_organizer.seatingplans': "EMPTY",
+        'organizer_organizer.outgoingmails': "EMPTY",
+        'event_event.settings.general': "write",
+        'event_event.settings.payment': "EMPTY",
+        'event_event.settings.tax': "EMPTY",
+        'event_event.settings.invoicing': "EMPTY",
+        'event_event.subevents': "EMPTY",
+        'event_event.items': "EMPTY",
+        'event_event.orders': "EMPTY",
+        'event_event.vouchers': "EMPTY",
+        'event_event': "EMPTY",
         'limit_events': str(event.pk),
-        'can_change_event_settings': 'on'
     }, follow=True)
+    assert 'alert-success' in r.content.decode()
     with scopes_disabled():
         t = Team.objects.last()
-        assert t.can_change_event_settings
-        assert t.can_create_events
-        assert not t.can_change_organizer_settings
+        assert not t.all_event_permissions
+        assert t.limit_event_permissions == {"event.settings.general:write": True}
+        assert not t.all_organizer_permissions
+        assert t.limit_organizer_permissions == {"organizer.events:create": True}
         assert list(t.limit_events.all()) == [event]
         assert list(t.members.all()) == [admin_user]
 
@@ -247,15 +265,36 @@ def test_create_team(event, admin_user, admin_team, client):
 @pytest.mark.django_db
 def test_update_team(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/organizer/dummy/team/{}/edit'.format(admin_team.pk), {
+    r = client.post('/control/organizer/dummy/team/{}/edit'.format(admin_team.pk), {
         'name': 'Admin',
-        'can_change_teams': 'on',
         'limit_events': str(event.pk),
-        'can_change_event_settings': 'on'
+        'all_event_permissions': 'on',
+        'all_organizer_permissions': '',
+        'organizer_organizer.events': "EMPTY",
+        'organizer_organizer.settings.general': "EMPTY",
+        'organizer_organizer.teams': "write",
+        'organizer_organizer.giftcards': "EMPTY",
+        'organizer_organizer.customers': "EMPTY",
+        'organizer_organizer.reusablemedia': "EMPTY",
+        'organizer_organizer.devices': "EMPTY",
+        'organizer_organizer.seatingplans': "EMPTY",
+        'organizer_organizer.outgoingmails': "EMPTY",
+        'event_event.settings.general': "write",
+        'event_event.settings.payment': "EMPTY",
+        'event_event.settings.tax': "EMPTY",
+        'event_event.settings.invoicing': "EMPTY",
+        'event_event.subevents': "EMPTY",
+        'event_event.items': "EMPTY",
+        'event_event.orders': "EMPTY",
+        'event_event.vouchers': "EMPTY",
+        'event_event': "EMPTY",
     }, follow=True)
+    assert 'alert-success' in r.content.decode()
     admin_team.refresh_from_db()
-    assert admin_team.can_change_event_settings
-    assert not admin_team.can_change_organizer_settings
+    assert admin_team.all_event_permissions
+    assert admin_team.limit_event_permissions == {}
+    assert not admin_team.all_organizer_permissions
+    assert admin_team.limit_organizer_permissions == {"organizer.teams:write": True}
     with scopes_disabled():
         assert list(admin_team.limit_events.all()) == [event]
 
@@ -265,7 +304,23 @@ def test_update_last_team_to_be_no_admin(event, admin_user, admin_team, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
     resp = client.post('/control/organizer/dummy/team/{}/edit'.format(admin_team.pk), {
         'name': 'Admin',
-        'can_change_event_settings': 'on'
+        'organizer_organizer.events': "write",
+        'organizer_organizer.settings.general': "EMPTY",
+        'organizer_organizer.teams': "EMPTY",
+        'organizer_organizer.giftcards': "EMPTY",
+        'organizer_organizer.customers': "EMPTY",
+        'organizer_organizer.reusablemedia': "EMPTY",
+        'organizer_organizer.devices': "EMPTY",
+        'organizer_organizer.seatingplans': "EMPTY",
+        'event_event.settings.general': "write",
+        'event_event.settings.payment': "EMPTY",
+        'event_event.settings.tax': "EMPTY",
+        'event_event.settings.invoicing': "EMPTY",
+        'event_event.subevents': "EMPTY",
+        'event_event.items': "EMPTY",
+        'event_event.orders': "EMPTY",
+        'event_event.vouchers': "EMPTY",
+        'event_event': "EMPTY",
     }, follow=True)
     assert 'alert-danger' in resp.content.decode()
 

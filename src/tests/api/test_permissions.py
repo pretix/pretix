@@ -43,247 +43,255 @@ from pretix.base.models import Organizer
 event_urls = [
     (None, ''),
     (None, 'categories/'),
-    ('can_view_orders', 'invoices/'),
+    ('event.orders:read', 'invoices/'),
     (None, 'items/'),
-    ('can_view_orders', 'orders/'),
-    ('can_view_orders', 'orderpositions/'),
+    ('event.orders:read', 'orders/'),
+    ('event.orders:read', 'orderpositions/'),
     (None, 'questions/'),
     (None, 'quotas/'),
-    ('can_view_vouchers', 'vouchers/'),
+    ('event.vouchers:read', 'vouchers/'),
     (None, 'subevents/'),
     (None, 'taxrules/'),
-    ('can_view_orders', 'waitinglistentries/'),
-    ('can_view_orders', 'checkinlists/'),
-    ('can_view_orders', 'checkins/'),
+    ('event.orders:read', 'waitinglistentries/'),
+    ('event.orders:read', 'checkinlists/'),
+    ('event.orders:read', 'checkins/'),
     (None, 'seats/'),
 ]
 
 event_permission_sub_urls = [
-    ('get', 'can_change_event_settings', 'settings/', 200),
-    ('patch', 'can_change_event_settings', 'settings/', 200),
-    ('get', 'can_view_orders', 'revokedsecrets/', 200),
-    ('get', 'can_view_orders', 'revokedsecrets/1/', 404),
-    ('get', 'can_view_orders', 'blockedsecrets/', 200),
-    ('get', 'can_view_orders', 'blockedsecrets/1/', 404),
-    ('get', 'can_view_orders', 'transactions/', 200),
-    ('get', 'can_view_orders', 'transactions/1/', 404),
-    ('get', 'can_view_orders', 'orders/', 200),
-    ('get', 'can_view_orders', 'orderpositions/', 200),
-    ('delete', 'can_change_orders', 'orderpositions/1/', 404),
-    ('post', 'can_change_orders', 'orderpositions/1/price_calc/', 404),
-    ('get', 'can_view_vouchers', 'vouchers/', 200),
-    ('get', 'can_view_orders', 'invoices/', 200),
-    ('get', 'can_view_orders', 'invoices/1/', 404),
-    ('post', 'can_change_orders', 'invoices/1/regenerate/', 404),
-    ('post', 'can_change_orders', 'invoices/1/reissue/', 404),
-    ('post', 'can_change_orders', 'invoices/1/retransmit/', 404),
-    ('get', 'can_view_orders', 'waitinglistentries/', 200),
-    ('get', 'can_view_orders', 'waitinglistentries/1/', 404),
-    ('post', 'can_change_orders', 'waitinglistentries/', 400),
-    ('delete', 'can_change_orders', 'waitinglistentries/1/', 404),
-    ('patch', 'can_change_orders', 'waitinglistentries/1/', 404),
-    ('put', 'can_change_orders', 'waitinglistentries/1/', 404),
-    ('post', 'can_change_orders', 'waitinglistentries/1/send_voucher/', 404),
+    ('get', None, 'settings/', 200),
+    ('patch', 'event.settings.general:write', 'settings/', 200),
+    ('get', 'event.orders:read', 'revokedsecrets/', 200),
+    ('get', 'event.orders:read', 'revokedsecrets/1/', 404),
+    ('get', 'event.orders:read', 'blockedsecrets/', 200),
+    ('get', 'event.orders:read', 'blockedsecrets/1/', 404),
+    ('get', 'event.orders:read', 'transactions/', 200),
+    ('get', 'event.orders:read', 'transactions/1/', 404),
+    ('get', 'event.orders:read', 'orders/', 200),
+    ('get', 'event.orders:read', 'orderpositions/', 200),
+    ('delete', 'event.orders:write', 'orderpositions/1/', 404),
+    ('post', 'event.orders:write', 'orderpositions/1/price_calc/', 404),
+    ('get', 'event.vouchers:read', 'vouchers/', 200),
+    ('get', 'event.orders:read', 'invoices/', 200),
+    ('get', 'event.orders:read', 'invoices/1/', 404),
+    ('post', 'event.orders:write', 'invoices/1/regenerate/', 404),
+    ('post', 'event.orders:write', 'invoices/1/reissue/', 404),
+    ('post', 'event.orders:write', 'invoices/1/retransmit/', 404),
+    ('get', 'event.orders:read', 'waitinglistentries/', 200),
+    ('get', 'event.orders:read', 'waitinglistentries/1/', 404),
+    ('post', 'event.orders:write', 'waitinglistentries/', 400),
+    ('delete', 'event.orders:write', 'waitinglistentries/1/', 404),
+    ('patch', 'event.orders:write', 'waitinglistentries/1/', 404),
+    ('put', 'event.orders:write', 'waitinglistentries/1/', 404),
+    ('post', 'event.orders:write', 'waitinglistentries/1/send_voucher/', 404),
     ('get', None, 'categories/', 200),
     ('get', None, 'items/', 200),
     ('get', None, 'questions/', 200),
     ('get', None, 'quotas/', 200),
     ('get', None, 'discounts/', 200),
-    ('post', 'can_change_items', 'items/', 400),
+    ('post', 'event.items:write', 'items/', 400),
     ('get', None, 'items/1/', 404),
-    ('put', 'can_change_items', 'items/1/', 404),
-    ('patch', 'can_change_items', 'items/1/', 404),
-    ('delete', 'can_change_items', 'items/1/', 404),
-    ('post', 'can_change_items', 'categories/', 400),
+    ('put', 'event.items:write', 'items/1/', 404),
+    ('patch', 'event.items:write', 'items/1/', 404),
+    ('delete', 'event.items:write', 'items/1/', 404),
+    ('post', 'event.items:write', 'categories/', 400),
     ('get', None, 'categories/1/', 404),
-    ('put', 'can_change_items', 'categories/1/', 404),
-    ('patch', 'can_change_items', 'categories/1/', 404),
-    ('delete', 'can_change_items', 'categories/1/', 404),
-    ('post', 'can_change_items', 'discounts/', 400),
+    ('put', 'event.items:write', 'categories/1/', 404),
+    ('patch', 'event.items:write', 'categories/1/', 404),
+    ('delete', 'event.items:write', 'categories/1/', 404),
+    ('post', 'event.items:write', 'discounts/', 400),
     ('get', None, 'discounts/1/', 404),
-    ('put', 'can_change_items', 'discounts/1/', 404),
-    ('patch', 'can_change_items', 'discounts/1/', 404),
-    ('delete', 'can_change_items', 'discounts/1/', 404),
-    ('post', 'can_change_items', 'items/1/variations/', 404),
+    ('put', 'event.items:write', 'discounts/1/', 404),
+    ('patch', 'event.items:write', 'discounts/1/', 404),
+    ('delete', 'event.items:write', 'discounts/1/', 404),
+    ('post', 'event.items:write', 'items/1/variations/', 404),
     ('get', None, 'items/1/variations/', 404),
     ('get', None, 'items/1/variations/1/', 404),
-    ('put', 'can_change_items', 'items/1/variations/1/', 404),
-    ('patch', 'can_change_items', 'items/1/variations/1/', 404),
-    ('delete', 'can_change_items', 'items/1/variations/1/', 404),
+    ('put', 'event.items:write', 'items/1/variations/1/', 404),
+    ('patch', 'event.items:write', 'items/1/variations/1/', 404),
+    ('delete', 'event.items:write', 'items/1/variations/1/', 404),
     ('get', None, 'items/1/addons/', 404),
     ('get', None, 'items/1/addons/1/', 404),
-    ('post', 'can_change_items', 'items/1/addons/', 404),
-    ('put', 'can_change_items', 'items/1/addons/1/', 404),
-    ('patch', 'can_change_items', 'items/1/addons/1/', 404),
-    ('delete', 'can_change_items', 'items/1/addons/1/', 404),
+    ('post', 'event.items:write', 'items/1/addons/', 404),
+    ('put', 'event.items:write', 'items/1/addons/1/', 404),
+    ('patch', 'event.items:write', 'items/1/addons/1/', 404),
+    ('delete', 'event.items:write', 'items/1/addons/1/', 404),
     ('get', None, 'subevents/', 200),
     ('get', None, 'subevents/1/', 404),
+    ('post', 'event.subevents:write', 'subevents/', 400),
+    ('patch', 'event.subevents:write', 'subevents/1/', 404),
+    ('put', 'event.subevents:write', 'subevents/1/', 404),
     ('get', None, 'taxrules/', 200),
     ('get', None, 'taxrules/1/', 404),
-    ('post', 'can_change_event_settings', 'taxrules/', 400),
-    ('put', 'can_change_event_settings', 'taxrules/1/', 404),
-    ('patch', 'can_change_event_settings', 'taxrules/1/', 404),
-    ('delete', 'can_change_event_settings', 'taxrules/1/', 404),
-    ('get', 'can_change_event_settings', 'sendmail_rules/', 200),
-    ('get', 'can_change_event_settings', 'sendmail_rules/1/', 404),
-    ('post', 'can_change_event_settings', 'sendmail_rules/', 400),
-    ('put', 'can_change_event_settings', 'sendmail_rules/1/', 404),
-    ('patch', 'can_change_event_settings', 'sendmail_rules/1/', 404),
-    ('delete', 'can_change_event_settings', 'sendmail_rules/1/', 404),
-    ('get', 'can_view_vouchers', 'vouchers/', 200),
-    ('get', 'can_view_vouchers', 'vouchers/1/', 404),
-    ('post', 'can_change_vouchers', 'vouchers/', 201),
-    ('put', 'can_change_vouchers', 'vouchers/1/', 404),
-    ('patch', 'can_change_vouchers', 'vouchers/1/', 404),
-    ('delete', 'can_change_vouchers', 'vouchers/1/', 404),
+    ('post', 'event.settings.tax:write', 'taxrules/', 400),
+    ('put', 'event.settings.tax:write', 'taxrules/1/', 404),
+    ('patch', 'event.settings.tax:write', 'taxrules/1/', 404),
+    ('delete', 'event.settings.tax:write', 'taxrules/1/', 404),
+    ('get', 'event.settings.general:write', 'sendmail_rules/', 200),
+    ('get', 'event.settings.general:write', 'sendmail_rules/1/', 404),
+    ('post', 'event.settings.general:write', 'sendmail_rules/', 400),
+    ('put', 'event.settings.general:write', 'sendmail_rules/1/', 404),
+    ('patch', 'event.settings.general:write', 'sendmail_rules/1/', 404),
+    ('delete', 'event.settings.general:write', 'sendmail_rules/1/', 404),
+    ('get', 'event.vouchers:read', 'vouchers/', 200),
+    ('get', 'event.vouchers:read', 'vouchers/1/', 404),
+    ('post', 'event.vouchers:write', 'vouchers/', 201),
+    ('put', 'event.vouchers:write', 'vouchers/1/', 404),
+    ('patch', 'event.vouchers:write', 'vouchers/1/', 404),
+    ('delete', 'event.vouchers:write', 'vouchers/1/', 404),
     ('get', None, 'quotas/', 200),
     ('get', None, 'quotas/1/', 404),
-    ('post', 'can_change_items', 'quotas/', 400),
-    ('put', 'can_change_items', 'quotas/1/', 404),
-    ('patch', 'can_change_items', 'quotas/1/', 404),
-    ('delete', 'can_change_items', 'quotas/1/', 404),
+    ('post', 'event.items:write', 'quotas/', 400),
+    ('put', 'event.items:write', 'quotas/1/', 404),
+    ('patch', 'event.items:write', 'quotas/1/', 404),
+    ('delete', 'event.items:write', 'quotas/1/', 404),
     ('get', None, 'questions/', 200),
     ('get', None, 'questions/1/', 404),
-    ('post', 'can_change_items', 'questions/', 400),
-    ('put', 'can_change_items', 'questions/1/', 404),
-    ('patch', 'can_change_items', 'questions/1/', 404),
-    ('delete', 'can_change_items', 'questions/1/', 404),
+    ('post', 'event.items:write', 'questions/', 400),
+    ('put', 'event.items:write', 'questions/1/', 404),
+    ('patch', 'event.items:write', 'questions/1/', 404),
+    ('delete', 'event.items:write', 'questions/1/', 404),
     ('get', None, 'questions/1/options/', 404),
     ('get', None, 'questions/1/options/1/', 404),
-    ('put', 'can_change_items', 'questions/1/options/1/', 404),
-    ('patch', 'can_change_items', 'questions/1/options/1/', 404),
-    ('delete', 'can_change_items', 'questions/1/options/1/', 404),
-    ('post', 'can_change_orders', 'orders/', 400),
-    ('patch', 'can_change_orders', 'orders/ABC12/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/mark_paid/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/mark_pending/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/mark_expired/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/mark_canceled/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/approve/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/deny/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/extend/', 400),
-    ('post', 'can_change_orders', 'orders/ABC12/create_invoice/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/resend_link/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/regenerate_secrets/', 404),
-    ('get', 'can_view_orders', 'orders/ABC12/payments/', 404),
-    ('get', 'can_view_orders', 'orders/ABC12/payments/1/', 404),
-    ('get', 'can_view_orders', 'orders/ABC12/refunds/', 404),
-    ('get', 'can_view_orders', 'orders/ABC12/refunds/1/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/payments/1/confirm/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/payments/1/refund/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/payments/1/cancel/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/refunds/1/cancel/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/refunds/1/process/', 404),
-    ('post', 'can_change_orders', 'orders/ABC12/refunds/1/done/', 404),
-    ('get', 'can_view_orders', 'checkinlists/', 200),
-    ('post', 'can_change_orders', 'checkinlists/1/failed_checkins/', 400),
-    ('get', 'can_view_orders', 'checkins/', 200),
-    ('get', 'can_view_orders', 'checkins/1/', 404),
-    ('post', 'can_change_event_settings', 'checkinlists/', 400),
-    ('put', 'can_change_event_settings', 'checkinlists/1/', 404),
-    ('patch', 'can_change_event_settings', 'checkinlists/1/', 404),
-    ('delete', 'can_change_event_settings', 'checkinlists/1/', 404),
-    ('get', 'can_view_orders', 'checkinlists/1/positions/', 404),
-    ('post', 'can_change_orders', 'checkinlists/1/positions/3/redeem/', 404),
-    ('post', 'can_create_events', 'clone/', 400),
-    ('get', 'can_view_orders', 'cartpositions/', 200),
-    ('get', 'can_view_orders', 'cartpositions/1/', 404),
-    ('post', 'can_change_orders', 'cartpositions/', 400),
-    ('delete', 'can_change_orders', 'cartpositions/1/', 404),
-    ('post', 'can_view_orders', 'exporters/invoicedata/run/', 400),
-    ('get', 'can_view_orders', 'exporters/invoicedata/download/bc3f9884-26ee-425b-8636-80613f84b6fa/3cb49ae6-eda3'
-                               '-4605-814e-099e23777b36/', 404),
+    ('put', 'event.items:write', 'questions/1/options/1/', 404),
+    ('patch', 'event.items:write', 'questions/1/options/1/', 404),
+    ('delete', 'event.items:write', 'questions/1/options/1/', 404),
+    ('post', 'event.orders:write', 'orders/', 400),
+    ('patch', 'event.orders:write', 'orders/ABC12/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/mark_paid/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/mark_pending/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/mark_expired/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/mark_canceled/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/approve/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/deny/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/extend/', 400),
+    ('post', 'event.orders:write', 'orders/ABC12/create_invoice/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/resend_link/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/regenerate_secrets/', 404),
+    ('get', 'event.orders:read', 'orders/ABC12/payments/', 404),
+    ('get', 'event.orders:read', 'orders/ABC12/payments/1/', 404),
+    ('get', 'event.orders:read', 'orders/ABC12/refunds/', 404),
+    ('get', 'event.orders:read', 'orders/ABC12/refunds/1/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/payments/1/confirm/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/payments/1/refund/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/payments/1/cancel/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/refunds/1/cancel/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/refunds/1/process/', 404),
+    ('post', 'event.orders:write', 'orders/ABC12/refunds/1/done/', 404),
+    ('get', 'event.orders:read', 'checkinlists/', 200),
+    ('post', 'event.orders:write', 'checkinlists/1/failed_checkins/', 400),
+    ('get', 'event.orders:read', 'checkins/', 200),
+    ('get', 'event.orders:read', 'checkins/1/', 404),
+    ('post', 'event.settings.general:write', 'checkinlists/', 400),
+    ('put', 'event.settings.general:write', 'checkinlists/1/', 404),
+    ('patch', 'event.settings.general:write', 'checkinlists/1/', 404),
+    ('delete', 'event.settings.general:write', 'checkinlists/1/', 404),
+    ('get', 'event.orders:read', 'checkinlists/1/positions/', 404),
+    ('post', 'event.orders:write', 'checkinlists/1/positions/3/redeem/', 404),
+    ('post', ('organizer.events:create', 'event.settings.general:write'), 'clone/', 400),
+    ('get', 'event.orders:read', 'cartpositions/', 200),
+    ('get', 'event.orders:read', 'cartpositions/1/', 404),
+    ('post', 'event.orders:write', 'cartpositions/', 400),
+    ('delete', 'event.orders:write', 'cartpositions/1/', 404),
+    ('post', 'event.orders:read', 'exporters/invoicedata/run/', 400),
     ('get', None, 'item_meta_properties/', 200),
     ('get', None, 'item_meta_properties/0/', 404),
-    ('post', 'can_change_event_settings', 'item_meta_properties/', 400),
-    ('patch', 'can_change_event_settings', 'item_meta_properties/0/', 404),
-    ('delete', 'can_change_event_settings', 'item_meta_properties/0/', 404),
+    ('post', 'event.settings.general:write', 'item_meta_properties/', 400),
+    ('patch', 'event.settings.general:write', 'item_meta_properties/0/', 404),
+    ('delete', 'event.settings.general:write', 'item_meta_properties/0/', 404),
     ('get', None, 'seats/', 200),
-    ('get', 'can_view_orders', 'seats/?expand=orderposition', 200),
-    ('get', 'can_view_orders', 'seats/?expand=cartposition', 200),
-    ('get', 'can_view_vouchers', 'seats/?expand=voucher', 200),
+    ('get', 'event.orders:read', 'seats/?expand=orderposition', 200),
+    ('get', 'event.orders:read', 'seats/?expand=cartposition', 200),
+    ('get', 'event.vouchers:read', 'seats/?expand=voucher', 200),
     ('get', None, 'seats/1/', 404),
-    ('patch', 'can_change_event_settings', 'seats/1/', 404),
+    ('patch', 'event.settings.general:write', 'seats/1/', 404),
 ]
 
 org_permission_sub_urls = [
-    ('patch', 'can_change_organizer_settings', '', 200),
-    ('patch', 'can_change_organizer_settings', 'settings/', 200),
-    ('get', 'can_change_organizer_settings', 'webhooks/', 200),
-    ('post', 'can_change_organizer_settings', 'webhooks/', 400),
-    ('get', 'can_change_organizer_settings', 'webhooks/1/', 404),
-    ('put', 'can_change_organizer_settings', 'webhooks/1/', 404),
-    ('patch', 'can_change_organizer_settings', 'webhooks/1/', 404),
-    ('delete', 'can_change_organizer_settings', 'webhooks/1/', 404),
-    ('get', 'can_manage_customers', 'customers/', 200),
-    ('post', 'can_manage_customers', 'customers/', 201),
-    ('get', 'can_manage_customers', 'customers/1/', 404),
-    ('patch', 'can_manage_customers', 'customers/1/', 404),
-    ('post', 'can_manage_customers', 'customers/1/anonymize/', 404),
-    ('put', 'can_manage_customers', 'customers/1/', 404),
-    ('delete', 'can_manage_customers', 'customers/1/', 404),
-    ('get', 'can_manage_customers', 'memberships/', 200),
-    ('post', 'can_manage_customers', 'memberships/', 400),
-    ('get', 'can_manage_customers', 'memberships/1/', 404),
-    ('patch', 'can_manage_customers', 'memberships/1/', 404),
-    ('put', 'can_manage_customers', 'memberships/1/', 404),
-    ('delete', 'can_manage_customers', 'memberships/1/', 404),
-    ('get', 'can_change_organizer_settings', 'saleschannels/', 200),
-    ('post', 'can_change_organizer_settings', 'saleschannels/', 400),
-    ('get', 'can_change_organizer_settings', 'saleschannels/web/', 200),
-    ('patch', 'can_change_organizer_settings', 'saleschannels/web/', 200),
-    ('put', 'can_change_organizer_settings', 'saleschannels/api.1/', 404),
-    ('delete', 'can_change_organizer_settings', 'saleschannels/api.1/', 404),
-    ('get', 'can_change_organizer_settings', 'membershiptypes/', 200),
-    ('post', 'can_change_organizer_settings', 'membershiptypes/', 400),
-    ('get', 'can_change_organizer_settings', 'membershiptypes/1/', 404),
-    ('patch', 'can_change_organizer_settings', 'membershiptypes/1/', 404),
-    ('put', 'can_change_organizer_settings', 'membershiptypes/1/', 404),
-    ('delete', 'can_change_organizer_settings', 'membershiptypes/1/', 404),
-    ('get', 'can_manage_gift_cards', 'giftcards/', 200),
-    ('post', 'can_manage_gift_cards', 'giftcards/', 400),
-    ('get', 'can_manage_gift_cards', 'giftcards/1/', 404),
-    ('put', 'can_manage_gift_cards', 'giftcards/1/', 404),
-    ('patch', 'can_manage_gift_cards', 'giftcards/1/', 404),
-    ('get', 'can_manage_gift_cards', 'giftcards/1/transactions/', 404),
-    ('get', 'can_manage_gift_cards', 'giftcards/1/transactions/1/', 404),
-    ('get', 'can_change_organizer_settings', 'devices/', 200),
-    ('post', 'can_change_organizer_settings', 'devices/', 400),
-    ('get', 'can_change_organizer_settings', 'devices/1/', 404),
-    ('put', 'can_change_organizer_settings', 'devices/1/', 404),
-    ('patch', 'can_change_organizer_settings', 'devices/1/', 404),
-    ('get', 'can_change_teams', 'teams/', 200),
-    ('post', 'can_change_teams', 'teams/', 400),
-    ('get', 'can_change_teams', 'teams/{team_id}/', 200),
-    ('put', 'can_change_teams', 'teams/{team_id}/', 400),
-    ('patch', 'can_change_teams', 'teams/{team_id}/', 200),
-    ('get', 'can_change_teams', 'teams/{team_id}/members/', 200),
-    ('delete', 'can_change_teams', 'teams/{team_id}/members/2/', 404),
-    ('get', 'can_change_teams', 'teams/{team_id}/invites/', 200),
-    ('get', 'can_change_teams', 'teams/{team_id}/invites/2/', 404),
-    ('delete', 'can_change_teams', 'teams/{team_id}/invites/2/', 404),
-    ('post', 'can_change_teams', 'teams/{team_id}/invites/', 400),
-    ('get', 'can_change_teams', 'teams/{team_id}/tokens/', 200),
-    ('get', 'can_change_teams', 'teams/{team_id}/tokens/0/', 404),
-    ('delete', 'can_change_teams', 'teams/{team_id}/tokens/0/', 404),
-    ('post', 'can_change_teams', 'teams/{team_id}/tokens/', 400),
-    ('get', 'can_manage_reusable_media', 'reusablemedia/1/', 404),
+    ('patch', 'organizer.settings.general:write', '', 200),
+    ('patch', 'organizer.settings.general:write', 'settings/', 200),
+    ('get', 'organizer.settings.general:write', 'webhooks/', 200),
+    ('post', 'organizer.settings.general:write', 'webhooks/', 400),
+    ('get', 'organizer.settings.general:write', 'webhooks/1/', 404),
+    ('put', 'organizer.settings.general:write', 'webhooks/1/', 404),
+    ('patch', 'organizer.settings.general:write', 'webhooks/1/', 404),
+    ('delete', 'organizer.settings.general:write', 'webhooks/1/', 404),
+    ('get', 'organizer.customers:read', 'customers/', 200),
+    ('post', 'organizer.customers:write', 'customers/', 201),
+    ('get', 'organizer.customers:read', 'customers/1/', 404),
+    ('patch', 'organizer.customers:write', 'customers/1/', 404),
+    ('post', 'organizer.customers:write', 'customers/1/anonymize/', 404),
+    ('put', 'organizer.customers:write', 'customers/1/', 404),
+    ('delete', 'organizer.customers:write', 'customers/1/', 404),
+    ('get', 'organizer.customers:read', 'memberships/', 200),
+    ('post', 'organizer.customers:write', 'memberships/', 400),
+    ('get', 'organizer.customers:read', 'memberships/1/', 404),
+    ('patch', 'organizer.customers:write', 'memberships/1/', 404),
+    ('put', 'organizer.customers:write', 'memberships/1/', 404),
+    ('delete', 'organizer.customers:write', 'memberships/1/', 404),
+    ('get', 'organizer.settings.general:write', 'saleschannels/', 200),
+    ('post', 'organizer.settings.general:write', 'saleschannels/', 400),
+    ('get', 'organizer.settings.general:write', 'saleschannels/web/', 200),
+    ('patch', 'organizer.settings.general:write', 'saleschannels/web/', 200),
+    ('put', 'organizer.settings.general:write', 'saleschannels/api.1/', 404),
+    ('delete', 'organizer.settings.general:write', 'saleschannels/api.1/', 404),
+    ('get', 'organizer.settings.general:write', 'membershiptypes/', 200),
+    ('post', 'organizer.settings.general:write', 'membershiptypes/', 400),
+    ('get', 'organizer.settings.general:write', 'membershiptypes/1/', 404),
+    ('patch', 'organizer.settings.general:write', 'membershiptypes/1/', 404),
+    ('put', 'organizer.settings.general:write', 'membershiptypes/1/', 404),
+    ('delete', 'organizer.settings.general:write', 'membershiptypes/1/', 404),
+    ('get', 'organizer.giftcards:read', 'giftcards/', 200),
+    ('post', 'organizer.giftcards:write', 'giftcards/', 400),
+    ('get', 'organizer.giftcards:read', 'giftcards/1/', 404),
+    ('put', 'organizer.giftcards:write', 'giftcards/1/', 404),
+    ('patch', 'organizer.giftcards:write', 'giftcards/1/', 404),
+    ('get', 'organizer.giftcards:read', 'giftcards/1/transactions/', 404),
+    ('get', 'organizer.giftcards:read', 'giftcards/1/transactions/1/', 404),
+    ('get', 'organizer.devices:read', 'devices/', 200),
+    ('post', 'organizer.devices:write', 'devices/', 400),
+    ('get', 'organizer.devices:read', 'devices/1/', 404),
+    ('put', 'organizer.devices:write', 'devices/1/', 404),
+    ('patch', 'organizer.devices:write', 'devices/1/', 404),
+    ('get', 'organizer.teams:write', 'teams/', 200),
+    ('post', 'organizer.teams:write', 'teams/', 400),
+    ('get', 'organizer.teams:write', 'teams/{team_id}/', 200),
+    ('put', 'organizer.teams:write', 'teams/{team_id}/', 400),
+    ('patch', 'organizer.teams:write', 'teams/{team_id}/', 200),
+    ('get', 'organizer.teams:write', 'teams/{team_id}/members/', 200),
+    ('delete', 'organizer.teams:write', 'teams/{team_id}/members/2/', 404),
+    ('get', 'organizer.teams:write', 'teams/{team_id}/invites/', 200),
+    ('get', 'organizer.teams:write', 'teams/{team_id}/invites/2/', 404),
+    ('delete', 'organizer.teams:write', 'teams/{team_id}/invites/2/', 404),
+    ('post', 'organizer.teams:write', 'teams/{team_id}/invites/', 400),
+    ('get', 'organizer.teams:write', 'teams/{team_id}/tokens/', 200),
+    ('get', 'organizer.teams:write', 'teams/{team_id}/tokens/0/', 404),
+    ('delete', 'organizer.teams:write', 'teams/{team_id}/tokens/0/', 404),
+    ('post', 'organizer.teams:write', 'teams/{team_id}/tokens/', 400),
+    ('get', 'organizer.reusablemedia:read', 'reusablemedia/', 200),
+    ('get', 'organizer.reusablemedia:read', 'reusablemedia/1/', 404),
+    ('post', 'organizer.reusablemedia:write', 'reusablemedia/', 400),
+    ('patch', 'organizer.reusablemedia:write', 'reusablemedia/1/', 404),
+    ('put', 'organizer.reusablemedia:write', 'reusablemedia/1/', 404),
+    ('post', 'organizer.seatingplans:write', 'seatingplans/', 400),
+    ('patch', 'organizer.seatingplans:write', 'seatingplans/1/', 404),
+    ('put', 'organizer.seatingplans:write', 'seatingplans/1/', 404),
 ]
 
 
 event_permission_root_urls = [
-    ('post', 'can_create_events', 400),
-    ('put', 'can_change_event_settings', 400),
-    ('patch', 'can_change_event_settings', 200),
-    ('delete', 'can_change_event_settings', 204),
+    ('post', 'organizer.events:create', 400),
+    ('put', 'event.settings.general:write', 400),
+    ('patch', 'event.settings.general:write', 200),
+    ('delete', 'event.settings.general:write', 204),
 ]
 
 
 @pytest.fixture
 def token_client(client, team):
-    team.can_view_orders = True
-    team.can_view_vouchers = True
-    team.can_change_items = True
+    team.limit_event_permissions["event.orders:read"] = True
+    team.limit_event_permissions["event.vouchers:read"] = True
+    team.limit_event_permissions["event.items:write"] = True
     team.save()
     t = team.tokens.create(name='Foo')
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
@@ -329,7 +337,7 @@ def test_event_allowed_all_events(token_client, team, organizer, event, url):
 @pytest.mark.parametrize("url", event_urls)
 def test_event_allowed_all_events_device(device_client, device, organizer, event, url):
     resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
-    if url[0] is None or url[0] in device.permission_set():
+    if url[0] is None or url[0] in device._event_permission_set():
         assert resp.status_code == 200
     else:
         assert resp.status_code == 403
@@ -352,7 +360,7 @@ def test_event_allowed_limit_events_device(device_client, organizer, device, eve
     device.save()
     device.limit_events.add(event)
     resp = device_client.get('/api/v1/organizers/{}/events/{}/{}'.format(organizer.slug, event.slug, url[1]))
-    if url[0] is None or url[0] in device.permission_set():
+    if url[0] is None or url[0] in device._event_permission_set():
         assert resp.status_code == 200
     else:
         assert resp.status_code == 403
@@ -387,8 +395,14 @@ def test_event_not_existing(token_client, organizer, url, event):
 @pytest.mark.parametrize("urlset", event_permission_sub_urls)
 def test_token_event_subresources_permission_allowed(token_client, team, organizer, event, urlset):
     team.all_events = True
-    if urlset[1]:
-        setattr(team, urlset[1], True)
+    if urlset[1] is not None:
+        for t in ((urlset[1],) if isinstance(urlset[1], str) else urlset[1]):
+            if "organizer" in urlset[1]:
+                team.all_organizer_permissions = False
+                team.limit_organizer_permissions[t] = True
+            else:
+                team.all_event_permissions = False
+                team.limit_event_permissions[t] = True
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
@@ -402,7 +416,10 @@ def test_token_event_subresources_permission_not_allowed(token_client, team, org
         team.all_events = False
     else:
         team.all_events = True
-        setattr(team, urlset[1], False)
+        team.all_event_permissions = False
+        team.limit_event_permissions.pop(urlset[1], None)
+        team.all_organizer_permissions = False
+        team.limit_organizer_permissions.pop(urlset[1], None)
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
@@ -416,7 +433,14 @@ def test_token_event_subresources_permission_not_allowed(token_client, team, org
 @pytest.mark.parametrize("urlset", event_permission_root_urls)
 def test_token_event_permission_allowed(token_client, team, organizer, event, urlset):
     team.all_events = True
-    setattr(team, urlset[1], True)
+    if urlset[1] is not None:
+        for t in ((urlset[1],) if isinstance(urlset[1], str) else urlset[1]):
+            if "organizer" in urlset[1]:
+                team.all_organizer_permissions = False
+                team.limit_organizer_permissions[t] = True
+            else:
+                team.all_event_permissions = False
+                team.limit_event_permissions[t] = True
     team.save()
     if urlset[0] == 'post':
         resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/'.format(organizer.slug))
@@ -429,7 +453,9 @@ def test_token_event_permission_allowed(token_client, team, organizer, event, ur
 @pytest.mark.parametrize("urlset", event_permission_root_urls)
 def test_token_event_permission_not_allowed(token_client, team, organizer, event, urlset):
     team.all_events = True
-    setattr(team, urlset[1], False)
+    team.all_event_permissions = False
+    team.limit_event_permissions.pop(urlset[1], None)
+    team.all_organizer_permissions = False
     team.save()
     if urlset[0] == 'post':
         resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/events/'.format(organizer.slug))
@@ -537,11 +563,11 @@ def test_update_session_activity(user_client, team, organizer, event):
 @pytest.mark.django_db
 @pytest.mark.parametrize("urlset", event_permission_sub_urls)
 def test_device_subresource_permission_check(device_client, device, organizer, event, urlset):
-    if urlset == ('get', 'can_change_event_settings', 'settings/', 200):
+    if urlset == ('get', 'event.settings.general:write', 'settings/', 200):
         return
     resp = getattr(device_client, urlset[0])('/api/v1/organizers/{}/events/{}/{}'.format(
         organizer.slug, event.slug, urlset[2]))
-    if urlset[1] is None or urlset[1] in device.permission_set():
+    if urlset[1] is None or urlset[1] in device._event_permission_set():
         assert resp.status_code == urlset[3]
     else:
         if urlset[3] == 404:
@@ -555,7 +581,8 @@ def test_device_subresource_permission_check(device_client, device, organizer, e
 def test_token_org_subresources_permission_allowed(token_client, team, organizer, event, urlset):
     team.all_events = True
     if urlset[1]:
-        setattr(team, urlset[1], True)
+        team.all_organizer_permissions = False
+        team.limit_organizer_permissions[urlset[1]] = True
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/{}'.format(
         organizer.slug, urlset[2].format(team_id=team.pk)))
@@ -568,8 +595,8 @@ def test_token_org_subresources_permission_not_allowed(token_client, team, organ
     if urlset[1] is None:
         team.all_events = False
     else:
-        team.all_events = True
-        setattr(team, urlset[1], False)
+        team.all_organizer_permissions = False
+        team.limit_organizer_permissions.pop(urlset[1], None)
     team.save()
     resp = getattr(token_client, urlset[0])('/api/v1/organizers/{}/{}'.format(
         organizer.slug, urlset[2].format(team_id=team.pk)))

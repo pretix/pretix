@@ -206,7 +206,7 @@ class RenderJobSerializer(serializers.Serializer):
 
 
 class TicketRendererViewSet(viewsets.ViewSet):
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_serializer_kwargs(self):
         return {}

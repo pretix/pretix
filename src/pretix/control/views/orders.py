@@ -92,7 +92,9 @@ from pretix.base.payment import PaymentException
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.cancelevent import cancel_event
-from pretix.base.services.export import export, scheduled_event_export
+from pretix.base.services.export import (
+    export, init_event_exporters, scheduled_event_export,
+)
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
     invoice_qualified, regenerate_invoice, transmit_invoice,
@@ -109,9 +111,7 @@ from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, validate_vat_id,
 )
 from pretix.base.services.tickets import generate
-from pretix.base.signals import (
-    order_modified, register_data_exporters, register_ticket_outputs,
-)
+from pretix.base.signals import order_modified, register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.mixins import OrderQuestionsViewMixin
@@ -169,7 +169,7 @@ class OrderSearchMixin:
 
 class OrderSearch(OrderSearchMixin, EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/orders/search.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -199,7 +199,7 @@ class OrderSearch(OrderSearchMixin, EventPermissionRequiredMixin, TemplateView):
 
 class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, AsyncFormView):
     template_name = 'pretixcontrol/orders/bulk_action.html'
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     form_class = forms.Form
 
     def get_queryset(self):
@@ -402,7 +402,7 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
     model = Order
     context_object_name = 'orders'
     template_name = 'pretixcontrol/orders/index.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_queryset(self):
         qs = Order.objects.filter(
@@ -526,7 +526,7 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
 
 class OrderDetail(OrderView):
     template_name = 'pretixcontrol/order/index.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -626,7 +626,7 @@ class OrderDetail(OrderView):
 
 class OrderTransactions(OrderView):
     template_name = 'pretixcontrol/order/transactions.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -645,7 +645,7 @@ class OrderTransactions(OrderView):
 
 class OrderDownload(AsyncAction, OrderView):
     task = generate
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_success_url(self, value):
         return self.get_self_url()
@@ -744,7 +744,7 @@ class OrderDownload(AsyncAction, OrderView):
 
 
 class OrderComment(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         form = CommentForm(self.request.POST)
@@ -784,7 +784,7 @@ class OrderComment(OrderView):
 
 
 class OrderApprove(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         if self.order.require_approval:
@@ -803,7 +803,7 @@ class OrderApprove(OrderView):
 
 
 class OrderDelete(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         if self.order.testmode:
@@ -833,7 +833,7 @@ class OrderDelete(OrderView):
 
 
 class OrderDeny(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, request, *args, **kwargs):
         if self.order.require_approval:
@@ -859,7 +859,7 @@ class OrderDeny(OrderView):
 
 
 class OrderPaymentCancel(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     @cached_property
     def payment(self):
@@ -898,7 +898,7 @@ class OrderPaymentCancel(OrderView):
 
 
 class OrderRefundCancel(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     @cached_property
     def refund(self):
@@ -928,7 +928,7 @@ class OrderRefundCancel(OrderView):
 
 
 class OrderRefundProcess(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     @cached_property
     def refund(self):
@@ -967,7 +967,7 @@ class OrderRefundProcess(OrderView):
 
 
 class OrderRefundDone(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     @cached_property
     def refund(self):
@@ -990,7 +990,7 @@ class OrderRefundDone(OrderView):
 
 
 class OrderCancellationRequestDelete(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     @cached_property
     def req(self):
@@ -1024,7 +1024,7 @@ class OrderCancellationRequestDelete(OrderView):
 
 
 class OrderPaymentConfirm(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     @cached_property
     def payment(self):
@@ -1078,7 +1078,7 @@ class OrderPaymentConfirm(OrderView):
 
 
 class OrderRefundView(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     @cached_property
     def start_form(self):
@@ -1427,7 +1427,7 @@ class OrderRefundView(OrderView):
 
 
 class OrderTransition(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     @cached_property
     def req(self):
@@ -1592,7 +1592,7 @@ class OrderTransition(OrderView):
 
 
 class OrderInvoiceCreate(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         with transaction.atomic():
@@ -1618,7 +1618,7 @@ class OrderInvoiceCreate(OrderView):
 
 
 class OrderCheckVATID(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         try:
@@ -1666,7 +1666,7 @@ class OrderCheckVATID(OrderView):
 
 
 class OrderInvoiceRegenerate(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         try:
@@ -1699,7 +1699,7 @@ class OrderInvoiceRegenerate(OrderView):
 
 
 class OrderInvoiceRetransmit(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         with transaction.atomic(durable=True):
@@ -1730,7 +1730,7 @@ class OrderInvoiceRetransmit(OrderView):
 
 
 class OrderInvoiceReissue(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         with transaction.atomic():
@@ -1781,7 +1781,7 @@ class OrderInvoiceInspect(AdministratorPermissionRequiredMixin, OrderView):
 
 
 class OrderResendLink(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         if 'position' in kwargs:
@@ -1798,7 +1798,7 @@ class OrderResendLink(OrderView):
 
 
 class InvoiceDownload(EventPermissionRequiredMixin, View):
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_order_url(self):
         return reverse('control:event.order', kwargs={
@@ -1842,7 +1842,7 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
 
 
 class OrderExtend(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def post(self, *args, **kwargs):
         if self.form.is_valid():
@@ -1890,7 +1890,7 @@ class OrderExtend(OrderView):
 
 
 class OrderReactivate(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     @cached_property
     def reactivate_form(self):
@@ -1940,7 +1940,7 @@ class OrderReactivate(OrderView):
 
 
 class OrderChange(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     template_name = 'pretixcontrol/order/change.html'
 
     @cached_property
@@ -2197,7 +2197,7 @@ class OrderChange(OrderView):
 
 
 class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     template_name = 'pretixcontrol/order/change_questions.html'
     only_user_visible = False
     all_optional = True
@@ -2250,7 +2250,7 @@ class OrderModifyInformation(OrderQuestionsViewMixin, OrderView):
 
 
 class OrderContactChange(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     template_name = 'pretixcontrol/order/change_contact.html'
 
     def get_context_data(self, **kwargs):
@@ -2265,7 +2265,7 @@ class OrderContactChange(OrderView):
             data=self.request.POST if self.request.method == "POST" else None,
             customers=self.request.organizer.settings.customer_accounts and (
                 self.request.user.has_organizer_permission(
-                    self.request.organizer, 'can_manage_customers', request=self.request
+                    self.request.organizer, 'organizer.customers:write', request=self.request
                 )
             )
         )
@@ -2334,7 +2334,7 @@ class OrderContactChange(OrderView):
 
 
 class OrderLocaleChange(OrderView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     template_name = 'pretixcontrol/order/change_locale.html'
 
     def get_context_data(self, **kwargs):
@@ -2390,7 +2390,7 @@ class OrderViewMixin:
 
 class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
     template_name = 'pretixcontrol/order/sendmail.html'
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     form_class = OrderMailForm
 
     def get_form_kwargs(self):
@@ -2514,7 +2514,7 @@ class OrderPositionSendMail(OrderSendMail):
 
 class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
     template_name = 'pretixcontrol/order/mail_history.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
     model = LogEntry
     context_object_name = 'logs'
     paginate_by = 10
@@ -2551,7 +2551,7 @@ class OrderEmailHistory(EventPermissionRequiredMixin, OrderViewMixin, ListView):
 
 
 class AnswerDownload(EventPermissionRequiredMixin, OrderViewMixin, ListView):
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get(self, request, *args, **kwargs):
         answid = kwargs.get('answer')
@@ -2575,7 +2575,7 @@ class AnswerDownload(EventPermissionRequiredMixin, OrderViewMixin, ListView):
 
 class OverView(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/orders/overview.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     @cached_property
     def filter_form(self):
@@ -2614,7 +2614,7 @@ class OverView(EventPermissionRequiredMixin, TemplateView):
 
 
 class OrderGo(EventPermissionRequiredMixin, View):
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_order(self, code):
         try:
@@ -2649,12 +2649,7 @@ class OrderGo(EventPermissionRequiredMixin, View):
 class ExportMixin:
     @cached_property
     def exporters(self):
-        responses = register_data_exporters.send(self.request.event)
-        raw_exporters = [response(self.request.event, self.request.organizer) for r, response in responses if response]
-        raw_exporters = [
-            ex for ex in raw_exporters
-            if ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
-        ]
+        raw_exporters = list(init_event_exporters(self.request.event, user=self.request.user, request=self.request))
         return sorted(
             raw_exporters,
             key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
@@ -2699,7 +2694,7 @@ class ExportMixin:
             return ex
 
     def get_scheduled_queryset(self):
-        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_change_event_settings',
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'event.settings.general:write',
                                                       request=self.request):
             qs = self.request.event.scheduled_exports.filter(owner=self.request.user)
         else:
@@ -2726,7 +2721,7 @@ class ExportMixin:
 
 
 class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, TemplateView):
-    permission = 'can_view_orders'
+    permission = None
     known_errortypes = ['ExportError', 'ExportEmptyError']
     task = export
     template_name = 'pretixcontrol/orders/export_form.html'
@@ -2771,11 +2766,20 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, Templ
         cf.date = now()
         cf.expires = now() + timedelta(hours=24)
         cf.save()
-        return self.do(self.request.event.id, str(cf.id), self.exporter.identifier, data)
+        return self.do(
+            self.request.event.id,
+            user=self.request.user.id,
+            fileid=str(cf.id),
+            provider=self.exporter.identifier,
+            device=None,
+            token=None,
+            form_data=data,
+            staff_session=self.request.user.has_active_staff_session(self.request.session.session_key)
+        )
 
 
 class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
-    permission = 'can_view_orders'
+    permission = None
     paginate_by = 25
     context_object_name = 'scheduled'
 
@@ -2787,7 +2791,16 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
         if request.POST.get("schedule") == "save":
-            if not self.has_permission():
+            if self.scheduled and self.scheduled.pk and not self.has_permission_to_edit_scheduled():
+                messages.error(
+                    self.request,
+                    _(
+                        "Your user account does not have sufficient permission to run this report, therefore "
+                        "you cannot change it."
+                    )
+                )
+                return super().get(request, *args, **kwargs)
+            elif (not self.scheduled or not self.scheduled.pk) and not self.has_permission_to_create_scheduled():
                 messages.error(
                     self.request,
                     _(
@@ -2875,8 +2888,32 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     def get_queryset(self):
         return self.get_scheduled_queryset()
 
-    def has_permission(self):
-        return self.request.user.has_event_permission(self.request.organizer, self.request.event, "can_view_orders")
+    def has_permission_to_edit_scheduled(self):
+        # Exports can be edited by
+        # - their owner
+        # - any staff session user
+        # - any user with permission for organizer settings *and* the permissions required to run the rport
+        # This is to prevent a possible privilege escalation where user A creates a scheduled export and
+        # user B has settings permission (= they can see the export configuration), but not enough permission
+        # to run the export themselves. Without this check, user B could modify the export and add themselves
+        # as a recipient. Thereby, user B would gain access to data they can't have.
+        if not self.exporter:
+            return False
+        if self.scheduled.owner == self.request.user:
+            return True
+        if self.request.user.has_active_staff_session(self.request.session.session_key):
+            return True
+        if not self.exporter.available_for_user(self.request.user):
+            return False
+        if self.request.user.has_event_permission(self.request.organizer, self.request.event,
+                                                  "event.settings.general:write", request=self.request):
+            return self.request.user.has_event_permission(self.request.organizer, self.request.event,
+                                                          self.exporter.get_required_event_permission())
+
+    def has_permission_to_create_scheduled(self):
+        # Exports can only be created if the user has the correct permissions. We *ignore* staff sessions, because
+        # the export is not *run* during a staff session and then would fail at the scheduled time.
+        return self.request.user.has_event_permission(self.request.organizer, self.request.event, self.exporter.get_required_event_permission())
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -2885,6 +2922,15 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
             ctx['schedule_form'] = self.schedule_form
             ctx['rrule_form'] = self.rrule_form
             ctx['scheduled_copy_from'] = self.scheduled_copy_from
+
+            if self.scheduled and self.scheduled.pk and not self.has_permission_to_edit_scheduled() and self.exporter:
+                ctx['no_save'] = True
+                for f in self.exporter.form.fields.values():
+                    f.disabled = True
+                for f in self.rrule_form.fields.values():
+                    f.disabled = True
+                for f in self.schedule_form.fields.values():
+                    f.disabled = True
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:
@@ -2895,7 +2941,7 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
 
 
 class DeleteScheduledExportView(EventPermissionRequiredMixin, ExportMixin, CompatDeleteView):
-    permission = 'can_view_orders'
+    permission = None
     template_name = 'pretixcontrol/orders/export_delete.html'
     context_object_name = 'export'
 
@@ -2944,7 +2990,7 @@ class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = OrderRefund
     context_object_name = 'refunds'
     template_name = 'pretixcontrol/orders/refunds.html'
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_queryset(self):
         qs = OrderRefund.objects.filter(
@@ -2969,7 +3015,7 @@ class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
 class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
     template_name = 'pretixcontrol/orders/cancel.html'
-    permission = 'can_change_orders'
+    permission = 'event:cancel'
     form_class = EventCancelForm
     task = cancel_event
     known_errortypes = ['OrderError']
@@ -3054,7 +3100,7 @@ class EventCancel(EventPermissionRequiredMixin, AsyncAction, FormView):
 
 class EventCancelConfirm(EventPermissionRequiredMixin, AsyncAction, FormView):
     template_name = 'pretixcontrol/orders/cancel_confirm.html'
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     form_class = EventCancelConfirmForm
     task = cancel_event
     known_errortypes = ['OrderError']

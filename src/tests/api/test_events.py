@@ -243,7 +243,8 @@ def test_event_create(team, token_client, organizer, event, meta_prop):
         {"key": "Workshop", "label": {"en": "Workshop"}},
     ]
     meta_prop.save()
-    team.can_change_organizer_settings = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
     organizer.meta_properties.create(
         name="protected", protected=True
@@ -576,21 +577,15 @@ def test_event_create_with_clone_unknown_source(user, user_client, organizer, ev
 
 
 @pytest.mark.django_db
-def test_event_create_with_clone_across_organizers(user, user_client, organizer, event, taxrule):
+def test_event_create_with_clone_across_organizers(user, user_client, organizer, event, taxrule, team):
+    team.all_event_permissions = True
+    team.save()
     with scopes_disabled():
         target_org = Organizer.objects.create(name='Dummy', slug='dummy2')
         team = target_org.teams.create(
             name="Test-Team",
-            can_change_teams=True,
-            can_manage_gift_cards=True,
-            can_change_items=True,
-            can_create_events=True,
-            can_change_event_settings=True,
-            can_change_vouchers=True,
-            can_view_vouchers=True,
-            can_change_orders=True,
-            can_manage_customers=True,
-            can_change_organizer_settings=True
+            all_event_permissions=True,
+            all_organizer_permissions=True,
         )
         team.members.add(user)
 
@@ -627,6 +622,51 @@ def test_event_create_with_clone_across_organizers(user, user_client, organizer,
         assert cloned_event.testmode
         assert cloned_event.settings.timezone == "Europe/Vienna"
         assert cloned_event.tax_rules.exists()
+
+
+@pytest.mark.django_db
+def test_event_create_with_clone_across_organizers_lack_of_permission_on_source(user, user_client, team, organizer, event, taxrule):
+    team.all_event_permissions = False
+    team.limit_event_permissions = {
+        "event.settings.general:write": True,
+    }
+    team.save()
+    with scopes_disabled():
+        target_org = Organizer.objects.create(name='Dummy', slug='dummy2')
+        team = target_org.teams.create(
+            name="Test-Team",
+            all_event_permissions=True,
+            all_organizer_permissions=True,
+        )
+        team.members.add(user)
+
+    resp = user_client.post(
+        '/api/v1/organizers/{}/events/?clone_from={}/{}'.format(target_org.slug, organizer.slug, event.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "testmode": True,
+            "currency": "EUR",
+            "date_from": "2018-12-27T10:00:00Z",
+            "date_to": "2018-12-28T10:00:00Z",
+            "date_admission": None,
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2030",
+            "plugins": [
+                "pretix.plugins.ticketoutputpdf"
+            ],
+            "timezone": "Europe/Vienna"
+        },
+        format='json'
+    )
+    assert resp.status_code == 403
+    assert resp.data["detail"] == "Not sufficient permission on source event to copy"
 
 
 @pytest.mark.django_db
@@ -1394,7 +1434,14 @@ def test_get_event_settings(token_client, organizer, event):
 
 
 @pytest.mark.django_db
-def test_patch_event_settings(token_client, organizer, event):
+def test_patch_event_settings(token_client, organizer, event, team):
+    team.all_event_permissions = False
+    team.limit_event_permissions = {
+        "event.settings.general:write": True,
+        "event.settings.tax:write": True,
+    }
+    team.save()
+
     organizer.settings.imprint_url = 'https://example.org'
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
@@ -1509,6 +1556,29 @@ def test_patch_event_settings(token_client, organizer, event):
     assert set(resp.data['locales']) == set(locales)
     event.settings.flush()
     assert set(event.settings.locales) == set(locales)
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'display_net_prices': True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.settings.flush()
+    assert event.settings.display_net_prices
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'invoice_address_asked': False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'invoice_address_asked': ['Setting this field requires permission event.settings.invoicing:write']
+    }
 
 
 @pytest.mark.django_db

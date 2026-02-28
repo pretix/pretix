@@ -15,8 +15,10 @@
                     No media have been created yet.
                 {% endblocktrans %}
             </p>
-            <a href="{% url "control:organizer.reusable_medium.create" organizer=request.organizer.slug %}"
-               class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new medium" %}</a>
+            {% if "organizer.reusablemedia:write" in request.orgapermset %}
+                <a href="{% url "control:organizer.reusable_medium.create" organizer=request.organizer.slug %}"
+                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new medium" %}</a>
+            {% endif %}
         </div>
     {% else %}
         <div class="panel panel-default">
@@ -40,10 +42,12 @@
                 </div>
             </form>
         </div>
-        <p>
-            <a href="{% url "control:organizer.reusable_medium.create" organizer=request.organizer.slug %}"
-               class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new medium" %}</a>
-        </p>
+        {% if "organizer.reusablemedia:write" in request.orgapermset %}
+            <p>
+                <a href="{% url "control:organizer.reusable_medium.create" organizer=request.organizer.slug %}"
+                   class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new medium" %}</a>
+            </p>
+        {% endif %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
                 <thead>
@@ -77,9 +81,13 @@
                             {% if m.customer %}
                                 <span class="helper-display-block">
                                     <span class="fa fa-user fa-fw"></span>
-                                    <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=m.customer.identifier %}">
+                                    {% if "organizer.customers:read" in request.orgapermset %}
+                                        <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=m.customer.identifier %}">
+                                            {{ m.customer }}
+                                        </a>
+                                    {% else %}
                                         {{ m.customer }}
-                                    </a>
+                                    {% endif %}
                                 </span>
                             {% endif %}
                             {% if m.linked_orderposition %}
@@ -92,8 +100,12 @@
                             {% if m.linked_giftcard %}
                                 <span class="helper-display-block">
                                     <span class="fa fa-credit-card fa-fw"></span>
-                                    <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=m.linked_giftcard.id %}">
-                                        {{ m.linked_giftcard.secret }}</a>
+                                    {% if "organizer.giftcards:read" in request.orgapermset %}
+                                        <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=m.linked_giftcard.id %}">
+                                            {{ m.linked_giftcard.secret }}</a>
+                                    {% else %}
+                                        {{ m.linked_giftcard.secret|slice:":3" }}…
+                                    {% endif %}
                                 </span>
                             {% endif %}
                         </td>

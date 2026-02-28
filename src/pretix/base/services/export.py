@@ -34,7 +34,7 @@ from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
-from pretix.base.exporter import OrganizerLevelExportMixin
+from pretix.base.exporter import BaseExporter, OrganizerLevelExportMixin
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
     CachedFile, Device, Event, Organizer, ScheduledEventExport, TeamAPIToken,
@@ -64,7 +64,15 @@ class ExportEmptyError(ExportError):
 
 
 @app.task(base=ProfiledEventTask, throws=(ExportError, ExportEmptyError), bind=True)
-def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
+def export(self, event: Event, user: User, device: int, token: int, fileid: str, provider: str,
+           form_data: Dict[str, Any], staff_session=False) -> None:
+    if user:
+        user = User.objects.get(pk=user)
+    if device:
+        device = Device.objects.get(pk=device)
+    if token:
+        device = TeamAPIToken.objects.get(pk=token)
+
     def set_progress(val):
         if not self.request.called_directly:
             self.update_state(
@@ -72,30 +80,38 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
                 meta={'value': val}
             )
 
+    ex = init_event_exporter(
+        identifier=provider,
+        event=event,
+        user=user,
+        token=token,
+        device=device,
+        staff_session=staff_session,
+        progress_callback=set_progress,
+    )
+    if not ex:
+        raise ExportError(
+            gettext('Export not found or you do not have sufficient permission to perform this export.')
+        )
+
     file = CachedFile.objects.get(id=fileid)
     with language(event.settings.locale, event.settings.region), override(event.settings.timezone):
-        responses = register_data_exporters.send(event)
-        for recv, response in responses:
-            if not response:
-                continue
-            ex = response(event, event.organizer, set_progress)
-            if ex.identifier == provider:
-                if ex.repeatable_read:
-                    with repeatable_reads_transaction():
-                        d = ex.render(form_data)
-                else:
-                    d = ex.render(form_data)
+        if ex.repeatable_read:
+            with repeatable_reads_transaction():
+                d = ex.render(form_data)
+        else:
+            d = ex.render(form_data)
 
-                if d is None:
-                    raise ExportError(
-                        gettext('Your export did not contain any data.')
-                    )
-                file.filename, file.type, data = d
+        if d is None:
+            raise ExportError(
+                gettext('Your export did not contain any data.')
+            )
+        file.filename, file.type, data = d
 
-                close_old_connections()  # This task can run very long, we might need a new DB connection
+        close_old_connections()  # This task can run very long, we might need a new DB connection
 
-                f = ContentFile(data)
-                file.file.save(cachedfile_name(file, file.filename), f)
+        f = ContentFile(data)
+        file.file.save(cachedfile_name(file, file.filename), f)
     return str(file.pk)
 
 
@@ -105,10 +121,7 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
     if device:
         device = Device.objects.get(pk=device)
     if token:
-        device = TeamAPIToken.objects.get(pk=token)
-    allowed_events = (device or token or user).get_events_with_permission('can_view_orders')
-    if user and staff_session:
-        allowed_events = organizer.events.all()
+        token = TeamAPIToken.objects.get(pk=token)
 
     def set_progress(val):
         if not self.request.called_directly:
@@ -118,12 +131,35 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
             )
 
     file = CachedFile.objects.get(id=fileid)
+
+    event_qs = organizer.events.all()
+    if form_data.get('events') is not None and not form_data.get('all_events'):
+        if form_data['events'] and isinstance(form_data['events'][0], str):  # legacy API-created schedules
+            event_qs = event_qs.filter(slug__in=form_data.get('events'))
+        else:
+            event_qs = event_qs.filter(pk__in=form_data.get('events'))
+
+    ex = init_organizer_exporter(
+        identifier=provider,
+        organizer=organizer,
+        user=user,
+        token=token,
+        device=device,
+        staff_session=staff_session,
+        progress_callback=set_progress,
+        event_qs=event_qs,
+    )
+    if not ex:
+        raise ExportError(
+            gettext('Export not found or you do not have sufficient permission to perform this export.')
+        )
+
     if user:
         locale = user.locale
         timezone = user.timezone
         region = None  # todo: add to user?
     else:
-        e = allowed_events.first()
+        e = ex.events.first()
         if e:
             locale = e.settings.locale
             timezone = e.settings.timezone
@@ -133,45 +169,138 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
             timezone = organizer.settings.timezone or settings.TIME_ZONE
             region = organizer.settings.region
     with language(locale, region), override(timezone):
-        if form_data.get('events') is not None and not form_data.get('all_events'):
-            if isinstance(form_data['events'][0], str):
-                events = allowed_events.filter(slug__in=form_data.get('events'), organizer=organizer)
-            else:
-                events = allowed_events.filter(pk__in=form_data.get('events'), organizer=organizer)
+        if ex.repeatable_read:
+            with repeatable_reads_transaction():
+                d = ex.render(form_data)
         else:
-            events = allowed_events.filter(organizer=organizer)
-        responses = register_multievent_data_exporters.send(organizer)
+            d = ex.render(form_data)
+        if d is None:
+            raise ExportError(
+                gettext('Your export did not contain any data.')
+            )
+        file.filename, file.type, data = d
 
-        for recv, response in responses:
-            if not response:
-                continue
-            ex = response(events, organizer, set_progress)
-            if ex.identifier == provider:
-                if (
-                    isinstance(ex, OrganizerLevelExportMixin) and
-                    not staff_session and
-                    not (device or token or user).has_organizer_permission(organizer, ex.organizer_required_permission)
-                ):
-                    raise ExportError(
-                        gettext('You do not have sufficient permission to perform this export.')
-                    )
+        close_old_connections()  # This task can run very long, we might need a new DB connection
 
-                if ex.repeatable_read:
-                    with repeatable_reads_transaction():
-                        d = ex.render(form_data)
-                else:
-                    d = ex.render(form_data)
-                if d is None:
-                    raise ExportError(
-                        gettext('Your export did not contain any data.')
-                    )
-                file.filename, file.type, data = d
-
-                close_old_connections()  # This task can run very long, we might need a new DB connection
-
-                f = ContentFile(data)
-                file.file.save(cachedfile_name(file, file.filename), f)
+        f = ContentFile(data)
+        file.file.save(cachedfile_name(file, file.filename), f)
     return str(file.pk)
+
+
+def init_event_exporter(identifier, **kwargs):
+    for ex in init_event_exporters(**kwargs):
+        if ex.identifier == identifier:
+            return ex
+    return None
+
+
+def init_event_exporters(event, user=None, token=None, device=None, request=None, staff_session=False, **kwargs):
+    if not user and not token and not device:
+        raise ValueError("No auth source given.")
+    perm_holder = device or token or user
+
+    responses = register_data_exporters.send(event)
+    for r, response in responses:
+        if not response:
+            continue
+
+        if issubclass(response, OrganizerLevelExportMixin):
+            raise TypeError("Cannot user organizer-level exporter on event level")
+
+        permission_name = response.get_required_event_permission()
+        if not perm_holder.has_event_permission(event.organizer, event, permission_name, request) and not staff_session:
+            continue
+
+        exporter: BaseExporter = response(event=event, organizer=event.organizer, **kwargs)
+
+        if not exporter.available_for_user(user if user and user.is_authenticated else None):
+            continue
+
+        yield exporter
+
+
+def init_organizer_exporter(identifier, **kwargs):
+    for ex in init_organizer_exporters(**kwargs):
+        if ex.identifier == identifier:
+            return ex
+    return None
+
+
+def init_organizer_exporters(
+    organizer, user=None, token=None, device=None, request=None, staff_session=False, event_qs=None, **kwargs
+):
+    if not user and not token and not device:
+        raise ValueError("No auth source given.")
+    perm_holder = device or token or user
+
+    _event_list_cache = {}
+    _has_permission_on_any_team_cache = {}
+    _team_cache = None
+
+    responses = register_multievent_data_exporters.send(organizer)
+    for r, response in responses:
+        if not response:
+            continue
+
+        if issubclass(response, OrganizerLevelExportMixin):
+            exporter: BaseExporter = response(event=Event.objects.none(), organizer=organizer, **kwargs)
+
+            try:
+                if not perm_holder.has_organizer_permission(organizer, response.get_required_organizer_permission(), request) and not staff_session:
+                    continue
+            except NotImplementedError:
+                logger.error(f"Not showing export {response} because get_required_organizer_permission() is not implemented.")
+                continue
+
+        else:
+            permission_name = response.get_required_event_permission()
+
+            if permission_name not in _event_list_cache:
+                if staff_session:
+                    events = event_qs.all()
+                elif event_qs is not None:
+                    events = event_qs.filter(
+                        pk__in=perm_holder.get_events_with_permission(
+                            permission_name, request=request
+                        ).filter(
+                            organizer=organizer
+                        ).values("id")
+                    )
+                else:
+                    events = perm_holder.get_events_with_permission(
+                        permission_name, request=request
+                    ).filter(
+                        organizer=organizer
+                    )
+
+                _event_list_cache[permission_name] = events
+
+            if permission_name not in _has_permission_on_any_team_cache:
+                # Check if the user has this event permission on any teams they are part of to decide whether to show
+                # the export at all.
+                # This is different from _event_list_cache[permission_name].exists() for the case of an organizer with
+                # zero events in total, or a team with zero events. In these cases, we still want people to be able
+                # to see waht exports they'll get once they have events.
+                if user:
+                    if _team_cache is None:
+                        _team_cache = list(user.teams.filter(organizer=organizer))
+                    _has_permission_on_any_team_cache[permission_name] = staff_session or any(
+                        t.has_event_permission(permission_name) for t in _team_cache
+                    )
+                elif token:
+                    _has_permission_on_any_team_cache[permission_name] = token.team.has_event_permission(permission_name)
+                elif device:
+                    _has_permission_on_any_team_cache[permission_name] = device.has_event_permission(permission_name)
+
+            if not _has_permission_on_any_team_cache[permission_name]:
+                continue
+
+            exporter: BaseExporter = response(event=_event_list_cache[permission_name], organizer=organizer, **kwargs)
+
+        if not exporter.available_for_user(user if user and user.is_authenticated else None):
+            continue
+
+        yield exporter
 
 
 def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, config_url, retry_func, has_permission):
@@ -217,7 +346,7 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
 
         try:
             if not exporter:
-                raise ExportError("Export type not found.")
+                raise ExportError("Export type not found or permission denied.")
             if exporter.repeatable_read:
                 with repeatable_reads_transaction():
                     d = exporter.render(schedule.export_form_data)
@@ -291,31 +420,20 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
 def scheduled_organizer_export(self, organizer: Organizer, schedule: int) -> None:
     schedule = organizer.scheduled_exports.get(pk=schedule)
 
-    allowed_events = schedule.owner.get_events_with_permission('can_view_orders')
+    event_qs = organizer.events.all()
     if schedule.export_form_data.get('events') is not None and not schedule.export_form_data.get('all_events'):
         if isinstance(schedule.export_form_data['events'][0], str):
-            events = allowed_events.filter(slug__in=schedule.export_form_data.get('events'), organizer=organizer)
+            event_qs = event_qs.filter(slug__in=schedule.export_form_data.get('events'))
         else:
-            events = allowed_events.filter(pk__in=schedule.export_form_data.get('events'), organizer=organizer)
-    else:
-        events = allowed_events.filter(organizer=organizer)
+            event_qs = event_qs.filter(pk__in=schedule.export_form_data.get('events'))
 
-    responses = register_multievent_data_exporters.send(organizer)
-    exporter = None
-    for recv, response in responses:
-        if not response:
-            continue
-        ex = response(events, organizer)
-        if ex.identifier == schedule.export_identifier:
-            exporter = ex
-            break
-
+    exporter = init_organizer_exporter(
+        identifier=schedule.export_identifier,
+        organizer=organizer,
+        user=schedule.owner,
+        event_qs=event_qs,
+    )
     has_permission = schedule.owner.is_active
-    if isinstance(exporter, OrganizerLevelExportMixin):
-        if not schedule.owner.has_organizer_permission(organizer, exporter.organizer_required_permission):
-            has_permission = False
-    if exporter and not exporter.available_for_user(schedule.owner):
-        has_permission = False
 
     _run_scheduled_export(
         schedule,
@@ -336,17 +454,12 @@ def scheduled_organizer_export(self, organizer: Organizer, schedule: int) -> Non
 def scheduled_event_export(self, event: Event, schedule: int) -> None:
     schedule = event.scheduled_exports.get(pk=schedule)
 
-    responses = register_data_exporters.send(event)
-    exporter = None
-    for recv, response in responses:
-        if not response:
-            continue
-        ex = response(event, event.organizer)
-        if ex.identifier == schedule.export_identifier:
-            exporter = ex
-            break
-
-    has_permission = schedule.owner.is_active and schedule.owner.has_event_permission(event.organizer, event, 'can_view_orders')
+    exporter = init_event_exporter(
+        identifier=schedule.export_identifier,
+        event=event,
+        user=schedule.owner,
+    )
+    has_permission = schedule.owner.is_active
 
     _run_scheduled_export(
         schedule,

@@ -119,7 +119,39 @@ def test_medium_list(token_client, organizer, event, medium):
 
 
 @pytest.mark.django_db
-def test_medium_detail(token_client, organizer, event, medium, giftcard, customer):
+def test_medium_detail_permission_missing(token_client, organizer, event, medium, giftcard, customer, team):
+    team.all_organizer_permissions = False
+    team.limit_organizer_permissions = {
+        "organizer.reusablemedia:read": True,
+    }
+    team.save()
+    resp = token_client.get(
+        '/api/v1/organizers/{}/reusablemedia/{}/?expand=linked_giftcard'.format(
+            organizer.slug, medium.pk
+        )
+    )
+    assert resp.status_code == 403
+    assert "No permission to access gift card details." in str(resp.data)
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/reusablemedia/{}/?expand=customer'.format(
+            organizer.slug, medium.pk
+        )
+    )
+    assert resp.status_code == 403
+    assert "No permission to access customer details." in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_medium_detail(token_client, organizer, event, medium, giftcard, customer, team):
+    team.all_organizer_permissions = False
+    team.limit_organizer_permissions = {
+        "organizer.reusablemedia:read": True,
+        "organizer.customers:read": True,
+        "organizer.giftcards:read": True,
+    }
+    team.save()
+
     res = dict(TEST_MEDIUM_RES)
     res["id"] = medium.pk
     res["created"] = medium.created.isoformat().replace('+00:00', 'Z')
@@ -340,7 +372,16 @@ def test_medium_lookup_not_found(token_client, organizer, organizer2, medium):
 
 
 @pytest.mark.django_db
-def test_medium_lookup_autocreate(token_client, organizer):
+def test_medium_lookup_autocreate(token_client, organizer, team):
+    team.all_organizer_permissions = False
+    team.limit_organizer_permissions = {
+        "organizer.reusablemedia:read": True,
+        "organizer.reusablemedia:write": True,
+        "organizer.customers:read": True,
+        "organizer.giftcards:read": True,
+    }
+    team.save()
+
     # Disabled
     resp = token_client.post(
         '/api/v1/organizers/{}/reusablemedia/lookup/'.format(organizer.slug),
@@ -386,7 +427,15 @@ def test_medium_lookup_autocreate(token_client, organizer):
 
 
 @pytest.mark.django_db
-def test_medium_autocreate_giftcard(token_client, organizer):
+def test_medium_autocreate_giftcard(token_client, organizer, team):
+    team.all_organizer_permissions = False
+    team.limit_organizer_permissions = {
+        "organizer.reusablemedia:write": True,
+        "organizer.reusablemedia:read": True,
+        "organizer.customers:read": True,
+        "organizer.giftcards:read": True,
+    }
+    team.save()
     organizer.settings.reusable_media_type_nfc_mf0aes_autocreate_giftcard = True
     organizer.settings.reusable_media_type_nfc_mf0aes_autocreate_giftcard_currency = 'USD'
     resp = token_client.post(

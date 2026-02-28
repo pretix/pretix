@@ -246,7 +246,7 @@ def webhook(request, *args, **kwargs):
     return HttpResponse(status=200)
 
 
-@event_permission_required('can_change_event_settings')
+@event_permission_required('event.settings.general:write')
 @require_POST
 def oauth_disconnect(request, **kwargs):
     del request.event.settings.payment_paypal_connect_refresh_token

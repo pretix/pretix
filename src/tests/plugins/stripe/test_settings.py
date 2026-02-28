@@ -74,7 +74,7 @@ def env(client):
     event.settings.set('attendee_names_asked', False)
     event.settings.set('payment_stripe__enabled', True)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=event.organizer, can_change_event_settings=True)
+    t = Team.objects.create(organizer=event.organizer, all_event_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
     client.force_login(user)

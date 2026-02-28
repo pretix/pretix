@@ -110,9 +110,8 @@ def logged_in_client(client, event):
     user = User.objects.create_superuser('dummy@dummy.dummy', 'dummy')
     t = Team.objects.create(
         organizer=event.organizer,
-        all_events=True, can_create_events=True, can_change_teams=True,
-        can_change_organizer_settings=True, can_change_event_settings=True, can_change_items=True,
-        can_view_orders=True, can_change_orders=True, can_view_vouchers=True, can_change_vouchers=True
+        all_event_permissions=True,
+        all_organizer_permissions=True,
     )
     t.members.add(user)
     client.force_login(user)

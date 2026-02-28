@@ -66,6 +66,7 @@ from pretix.control.signals import (
 from pretix.helpers.daterange import daterange
 
 from ...base.models.orders import CancellationRequest
+from ...base.models.organizer import TeamQuerySet
 from ...base.templatetags.money import money_filter
 from ..logdisplay import OVERVIEW_BANLIST
 
@@ -350,10 +351,10 @@ def event_index(request, organizer, event):
         except SubEvent.DoesNotExist:
             pass
 
-    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'can_view_orders',
+    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'event.orders:read',
                                                         request=request)
     can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
-                                                                  'can_change_event_settings', request=request)
+                                                                  'event.settings.general:write', request=request)
 
     widgets = []
     if can_view_orders:
@@ -425,11 +426,11 @@ def event_index_log_lazy(request, organizer, event):
                                                          'device').order_by('-datetime')
     qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
 
-    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'can_view_orders',
+    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'event.orders:read',
                                                         request=request)
     can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
-                                                                  'can_change_event_settings', request=request)
-    can_view_vouchers = request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers',
+                                                                  'event.settings.general:write', request=request)
+    can_view_vouchers = request.user.has_event_permission(request.organizer, request.event, 'event.vouchers:read',
                                                           request=request)
 
     if not can_view_orders:
@@ -441,7 +442,7 @@ def event_index_log_lazy(request, organizer, event):
             ContentType.objects.get_for_model(Voucher),
             ContentType.objects.get_for_model(Order)
         ]
-        if request.user.has_event_permission(request.organizer, request.event, 'can_change_items', request=request):
+        if request.user.has_event_permission(request.organizer, request.event, 'event.items:write', request=request):
             allowed_types += [
                 ContentType.objects.get_for_model(Item),
                 ContentType.objects.get_for_model(ItemCategory),
@@ -491,8 +492,13 @@ def widgets_for_event_qs(request, qs, user, nmax, lazy=False):
     # Get set of events where we have the permission to show the # of orders
     if not lazy:
         events_with_orders = set(qs.filter(
-            Q(organizer_id__in=user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
-            | Q(id__in=user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
+            Q(organizer_id__in=user.teams.filter(
+                TeamQuerySet.event_permission_q("event.orders:read"),
+                all_events=True,
+            ).values_list('organizer', flat=True))
+            | Q(id__in=user.teams.filter(
+                TeamQuerySet.event_permission_q("event.orders:read"),
+            ).values_list('limit_events__id', flat=True))
         ).values_list('id', flat=True))
 
     tpl = """
@@ -635,7 +641,7 @@ def user_index(request):
 
     ctx = {
         'widgets': rearrange(widgets),
-        'can_create_event': request.user.teams.filter(can_create_events=True).exists(),
+        'can_create_event': request.user.teams.with_organizer_permission("organizer.events:create").exists(),
         'upcoming': widgets_for_event_qs(
             request,
             annotated_event_query(request, lazy=True).filter(

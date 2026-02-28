@@ -1,0 +1,329 @@
+#
+# This file is part of pretix (Community Edition).
+#
+# Copyright (C) 2014-2020  Raphael Michel and contributors
+# Copyright (C) 2020-today pretix GmbH and contributors
+#
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+# Public License as published by the Free Software Foundation in version 3 of the License.
+#
+# ADDITIONAL TERMS APPLY: Pursuant to Section 7 of the GNU Affero General Public License, additional terms are
+# applicable granting you additional permissions and placing additional restrictions on your usage of this software.
+# Please refer to the pretix LICENSE file to obtain the full terms applicable to this work. If you did not receive
+# this file, see <https://pretix.eu/about/en/license>.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
+# <https://www.gnu.org/licenses/>.
+#
+import functools
+import logging
+import warnings
+from collections import OrderedDict
+from typing import Callable, Dict, List, NamedTuple, Set, Tuple
+
+from django.apps import apps
+from django.dispatch import receiver
+from django.utils.functional import Promise
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
+
+from pretix.base.signals import (
+    register_event_permission_groups, register_organizer_permission_groups,
+)
+
+logger = logging.getLogger(__name__)
+
+
+def cache_until_change(input_value: Callable):
+    def decorator(func):
+        old_input_value = None
+        cached_result = None
+
+        @functools.wraps(func)
+        def wrapper():
+            nonlocal cached_result, old_input_value
+            if cached_result is None or old_input_value != input_value():
+                cached_result = func()
+                old_input_value = input_value()
+            return cached_result
+        return wrapper
+    return decorator
+
+
+class PermissionOption(NamedTuple):
+    actions: Tuple[str, ...]
+    label: str | Promise
+    help_text: str | Promise = None
+
+
+class PermissionGroup(NamedTuple):
+    name: str
+    label: str | Promise
+    actions: List[str]
+    options: List[PermissionOption]
+    help_text: str | Promise = None
+
+
+@cache_until_change(input_value=lambda: apps.ready)
+def get_all_event_permission_groups() -> Dict[str, PermissionGroup]:
+    types = OrderedDict()
+    for recv, ret in register_event_permission_groups.send(None):
+        if isinstance(ret, (list, tuple)):
+            for r in ret:
+                types[r.name] = r
+        else:
+            types[ret.name] = ret
+    return types
+
+
+@cache_until_change(input_value=lambda: apps.ready)
+def get_all_organizer_permission_groups() -> Dict[str, PermissionGroup]:
+    types = OrderedDict()
+    for recv, ret in register_organizer_permission_groups.send(None):
+        if isinstance(ret, (list, tuple)):
+            for r in ret:
+                types[r.name] = r
+        else:
+            types[ret.name] = ret
+    return types
+
+
+@cache_until_change(input_value=lambda: apps.ready)
+def get_all_event_permissions() -> Set[str]:
+    from pretix.helpers.permission_migration import OLD_TO_NEW_EVENT_COMPAT
+
+    res = set(OLD_TO_NEW_EVENT_COMPAT.keys())
+    for pg in get_all_event_permission_groups().values():
+        for a in pg.actions:
+            res.add(f"{pg.name}:{a}")
+    return res
+
+
+@cache_until_change(input_value=lambda: apps.ready)
+def get_all_organizer_permissions() -> Set[str]:
+    from pretix.helpers.permission_migration import OLD_TO_NEW_ORGANIZER_COMPAT
+
+    res = set(OLD_TO_NEW_ORGANIZER_COMPAT.keys())
+    for pg in get_all_organizer_permission_groups().values():
+        for a in pg.actions:
+            res.add(f"{pg.name}:{a}")
+
+    return res
+
+
+def assert_valid_event_permission(permission, allow_legacy=True, allow_tuple=True):
+    if not apps.ready:
+        # can't really check yet
+        return
+    if allow_legacy and permission == "can_change_settings":
+        permission = "can_change_event_settings"
+    if permission is None:
+        return
+    if isinstance(permission, (list, tuple)) and allow_tuple:
+        for p in permission:
+            assert_valid_event_permission(p)
+        return
+    if not allow_legacy and ':' not in permission:
+        raise ValueError(f"Not allowed to use legacy permission '{permission}'")
+    all_permissions = get_all_event_permissions()
+    if permission not in all_permissions:
+        # Warning *and* exception because warning is silently caught when used in if statements in Django templates
+        warnings.warn(f"Use of undefined permission '{permission}'")
+        raise Exception(f"Undefined permission '{permission}'")
+
+
+def assert_valid_organizer_permission(permission, allow_legacy=True, allow_tuple=True):
+    if not apps.ready:
+        # can't really check yet
+        return
+    if permission is None:
+        return
+    if isinstance(permission, (list, tuple)) and allow_tuple:
+        for p in permission:
+            assert_valid_organizer_permission(p)
+        return
+    if not allow_legacy and ':' not in permission:
+        raise ValueError(f"Not allowed to use legacy permission '{permission}'")
+    all_permissions = get_all_organizer_permissions()
+    if permission not in all_permissions:
+        # Warning *and* exception because warning is silently caught when used in if statements in Django templates
+        warnings.warn(f"Use of undefined permission '{permission}'")
+        raise Exception(f"Undefined permission '{permission}'")
+
+
+OPTS_ALL_READ = [
+    PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "View")),
+    PermissionOption(actions=("write",), label=pgettext_lazy("permission_level", "View and change")),
+]
+OPTS_ALL_READ_SETTINGS_API = [
+    PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "View"),
+                     help_text=_("API only")),
+    PermissionOption(actions=("write",), label=pgettext_lazy("permission_level", "View and change")),
+]
+OPTS_ALL_READ_SETTINGS_PARENT = [
+    PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "View"),
+                     help_text=_("Menu item will only show up if the user has permission for general settings.")),
+    PermissionOption(actions=("write",), label=pgettext_lazy("permission_level", "View and change")),
+]
+OPTS_READ_WRITE = [
+    PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "No access")),
+    PermissionOption(actions=("read",), label=pgettext_lazy("permission_level", "View")),
+    PermissionOption(actions=("read", "write"), label=pgettext_lazy("permission_level", "View and change")),
+]
+
+
+@receiver(register_event_permission_groups, dispatch_uid="base_register_default_event_permissions")
+def register_default_event_permissions(sender, **kwargs):
+    return [
+        PermissionGroup(
+            name="event.settings.general",
+            label=_("General settings"),
+            actions=["write"],
+            options=OPTS_ALL_READ_SETTINGS_API,
+            help_text=_(
+                "This includes access to all settings not listed explicitly below, including plugin settings."
+            ),
+        ),
+        PermissionGroup(
+            name="event.settings.payment",
+            label=_("Payment settings"),
+            actions=["write"],
+            options=OPTS_ALL_READ_SETTINGS_PARENT,
+        ),
+        PermissionGroup(
+            name="event.settings.tax",
+            label=_("Tax settings"),
+            actions=["write"],
+            options=OPTS_ALL_READ_SETTINGS_PARENT,
+        ),
+        PermissionGroup(
+            name="event.settings.invoicing",
+            label=_("Invoicing settings"),
+            actions=["write"],
+            options=OPTS_ALL_READ_SETTINGS_PARENT,
+        ),
+        PermissionGroup(
+            name="event.subevents",
+            label=_("Event series dates"),
+            actions=["write"],
+            options=OPTS_ALL_READ,
+        ),
+        PermissionGroup(
+            name="event.items",
+            label=_("Products, quotas and questions"),
+            actions=["write"],
+            options=OPTS_ALL_READ,
+            help_text=_("Also includes related objects like categories or discounts."),
+        ),
+        PermissionGroup(
+            name="event.orders",
+            label=_("Orders"),
+            actions=["read", "write", "checkin"],
+            options=[
+                PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "No access")),
+                PermissionOption(actions=("checkin",), label=pgettext_lazy("permission_level", "Only check-in")),
+                PermissionOption(actions=("read",), label=pgettext_lazy("permission_level", "View all")),
+                PermissionOption(actions=("read", "checkin"), label=pgettext_lazy("permission_level", "View all and check-in")),
+                PermissionOption(actions=("read", "write"), label=pgettext_lazy("permission_level", "View all and change"),
+                                 help_text=_("Includes the ability to cancel and refund individual orders.")),
+            ],
+            help_text=_("Also includes related objects like the waiting list."),
+        ),
+        PermissionGroup(
+            name="event.vouchers",
+            label=_("Vouchers"),
+            actions=["read", "write"],
+            options=OPTS_READ_WRITE,
+        ),
+        PermissionGroup(
+            name="event",
+            label=_("Full event or date cancellation"),
+            actions=["cancel"],
+            options=[
+                # If we ever add more actions, we need a new UI idea here
+                PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "Not allowed")),
+                PermissionOption(actions=("cancel",), label=pgettext_lazy("permission_level", "Allowed")),
+            ],
+            help_text="",
+        ),
+    ]
+
+
+@receiver(register_organizer_permission_groups, dispatch_uid="base_register_default_organizer_permissions")
+def register_default_organizer_permissions(sender, **kwargs):
+    return [
+        PermissionGroup(
+            name="organizer.events",
+            label=_("Events"),
+            actions=["create"],
+            options=[
+                PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "Access existing events")),
+                PermissionOption(actions=("create",), label=pgettext_lazy("permission_level", "Access existing and create new events")),
+            ],
+            help_text=_("The level of access to events is determined in detail by the settings below."),
+        ),
+        PermissionGroup(
+            name="organizer.settings.general",
+            label=_("Settings"),
+            actions=["write"],
+            options=OPTS_ALL_READ_SETTINGS_API,
+            help_text=_("This includes access to all organizer-level functionality not listed explicitly below, including plugin settings."),
+        ),
+        PermissionGroup(
+            name="organizer.teams",
+            label=_("Teams"),
+            actions=["write"],
+            options=[
+                PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "No access")),
+                PermissionOption(actions=("write",), label=pgettext_lazy("permission_level", "View and change"),
+                                 help_text=_("Includes the ability to give someone (including oneself) additional permissions.")),
+            ],
+        ),
+        PermissionGroup(
+            name="organizer.giftcards",
+            label=_("Gift cards"),
+            actions=["read", "write"],
+            options=OPTS_READ_WRITE,
+        ),
+        PermissionGroup(
+            name="organizer.customers",
+            label=_("Customers"),
+            actions=["read", "write"],
+            options=OPTS_READ_WRITE,
+        ),
+        PermissionGroup(
+            name="organizer.reusablemedia",
+            label=_("Reusable media"),
+            actions=["read", "write"],
+            options=OPTS_READ_WRITE,
+        ),
+        PermissionGroup(
+            name="organizer.devices",
+            label=_("Devices"),
+            actions=["read", "write"],
+            options=[
+                PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "No access")),
+                PermissionOption(actions=("read",), label=pgettext_lazy("permission_level", "View")),
+                PermissionOption(actions=("read", "write"), label=pgettext_lazy("permission_level", "View and change"),
+                                 help_text=_("Includes the ability to give access to events and data oneself does not have access to.")),
+            ],
+        ),
+        PermissionGroup(
+            name="organizer.seatingplans",
+            label=_("Seating plans"),
+            actions=["write"],
+            options=OPTS_ALL_READ,
+        ),
+        PermissionGroup(
+            name="organizer.outgoingmails",
+            label=_("Outgoing emails"),
+            actions=["read"],
+            options=[
+                PermissionOption(actions=tuple(), label=pgettext_lazy("permission_level", "No access")),
+                PermissionOption(actions=("read",), label=pgettext_lazy("permission_level", "View")),
+            ],
+        ),
+    ]

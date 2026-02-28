@@ -44,7 +44,7 @@ from pretix.base.models import Event, Order, Organizer, Team, User
 
 @pytest.fixture
 def env():
-    o = Organizer.objects.create(name='Dummy', slug='dummy')
+    o = Organizer.objects.create(name='Dummy', slug='dummy', plugins='pretix.plugins.banktransfer')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer'
@@ -292,7 +292,7 @@ def test_wrong_event(perf_patch, client, env, url):
         organizer=env[2], name='Dummy', slug='dummy2',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(pk=2, organizer=env[2], can_change_event_settings=True)
+    t = Team.objects.create(pk=2, organizer=env[2], all_event_permissions=True)
     t.members.add(env[1])
     t.limit_events.add(event2)
 
@@ -307,115 +307,114 @@ HTTP_POST = "post"
 HTTP_GET = "get"
 
 event_permission_urls = [
-    ("can_change_event_settings", "live/", 200, HTTP_GET),
-    ("can_change_event_settings", "delete/", 200, HTTP_GET),
-    ("can_change_event_settings", "dangerzone/", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/plugins", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/payment", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/tickets", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/email", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/email/setup", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/cancel", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/invoice", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/widget", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/invoice/preview", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/tax/", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/tax/1/", 404, HTTP_GET),
-    ("can_change_event_settings", "settings/tax/add", 200, HTTP_GET),
-    ("can_change_event_settings", "settings/tax/1/delete", 404, HTTP_GET),
-    ("can_change_event_settings", "settings/tax/1/default", 404, HTTP_POST),
-    ("can_change_event_settings", "comment/", 405, HTTP_GET),
-    # Lists are currently not access-controlled
-    # ("can_change_items", "items/", 200),
-    ("can_change_items", "items/add", 200, HTTP_GET),
-    ("can_change_items", "items/1/up", 404, HTTP_POST),
-    ("can_change_items", "items/1/down", 404, HTTP_POST),
-    ("can_change_items", "items/reorder/2/", 400, HTTP_POST),
-    ("can_change_items", "items/1/delete", 404, HTTP_GET),
-    # ("can_change_items", "categories/", 200),
+    ("event.settings.general:write", "live/", 200, HTTP_GET),
+    ("event.settings.general:write", "delete/", 200, HTTP_GET),
+    ("event.settings.general:write", "dangerzone/", 200, HTTP_GET),
+    ("event.settings.general:write", "settings/", 200, HTTP_GET),
+    # ("event.settings.payment:write", "settings/payment", 200, HTTP_GET),  GET allowed also with other permissions
+    ("event.settings.payment:write", "settings/payment", 200, HTTP_POST),
+    ("event.settings.payment:write", "settings/payment/banktransfer", 200, HTTP_GET),
+    ("event.settings.general:write", "settings/tickets", 200, HTTP_GET),
+    ("event.settings.general:write", "settings/email", 200, HTTP_GET),
+    ("event.settings.general:write", "settings/email/setup", 200, HTTP_GET),
+    ("event.settings.general:write", "settings/cancel", 200, HTTP_GET),
+    ("event.settings.general:write", "settings/widget", 200, HTTP_GET),
+    ("event.settings.invoicing:write", "settings/invoice", 200, HTTP_GET),
+    ("event.settings.invoicing:write", "settings/invoice/preview", 200, HTTP_GET),
+    ("event.settings.tax:write", "settings/tax/", 200, HTTP_GET),
+    ("event.settings.tax:write", "settings/tax/1/", 404, HTTP_GET),
+    ("event.settings.tax:write", "settings/tax/add", 200, HTTP_GET),
+    ("event.settings.tax:write", "settings/tax/1/delete", 404, HTTP_GET),
+    ("event.settings.tax:write", "settings/tax/1/default", 404, HTTP_POST),
+    ("event.settings.general:write", "comment/", 405, HTTP_GET),
+    (None, "items/", 200, HTTP_GET),
+    ("event.items:write", "items/add", 200, HTTP_GET),
+    ("event.items:write", "items/1/up", 404, HTTP_POST),
+    ("event.items:write", "items/1/down", 404, HTTP_POST),
+    ("event.items:write", "items/reorder/2/", 400, HTTP_POST),
+    ("event.items:write", "items/1/delete", 404, HTTP_GET),
+    (None, "categories/", 200, HTTP_GET),
     # We don't have to create categories and similar objects
     # for testing this, it is enough to test that a 404 error
     # is returned instead of a 403 one.
-    ("can_change_items", "categories/2/", 404, HTTP_GET),
-    ("can_change_items", "categories/2/delete", 404, HTTP_GET),
-    ("can_change_items", "categories/2/up", 404, HTTP_POST),
-    ("can_change_items", "categories/2/down", 404, HTTP_POST),
-    ("can_change_items", "categories/reorder", 400, HTTP_POST),
-    ("can_change_items", "categories/add", 200, HTTP_GET),
-    # ("can_change_items", "questions/", 200, HTTP_GET),
-    ("can_change_items", "questions/2/", 404, HTTP_GET),
-    ("can_change_items", "questions/2/delete", 404, HTTP_GET),
-    ("can_change_items", "questions/reorder", 400, HTTP_POST),
-    ("can_change_items", "questions/add", 200, HTTP_GET),
-    # ("can_change_items", "quotas/", 200, HTTP_GET),
-    ("can_change_items", "quotas/2/change", 404, HTTP_GET),
-    ("can_change_items", "quotas/2/delete", 404, HTTP_GET),
-    ("can_change_items", "quotas/add", 200, HTTP_GET),
-    # ("can_change_items", "discounts/", 200),
-    # We don't have to create categories and similar objects
-    # for testing this, it is enough to test that a 404 error
-    # is returned instead of a 403 one.
-    ("can_change_items", "discounts/2/", 404, HTTP_GET),
-    ("can_change_items", "discounts/2/delete", 404, HTTP_GET),
-    ("can_change_items", "discounts/2/up", 404, HTTP_POST),
-    ("can_change_items", "discounts/2/down", 404, HTTP_POST),
-    ("can_change_items", "discounts/reorder", 400, HTTP_POST),
-    ("can_change_items", "discounts/add", 200, HTTP_GET),
-    ("can_change_event_settings", "subevents/", 200, HTTP_GET),
-    ("can_change_event_settings", "subevents/2/", 404, HTTP_GET),
-    ("can_change_event_settings", "subevents/2/delete", 404, HTTP_GET),
-    ("can_change_event_settings", "subevents/add", 200, HTTP_GET),
-    ("can_view_orders", "orders/overview/", 200, HTTP_GET),
-    ("can_view_orders", "orders/export/", 200, HTTP_GET),
-    ("can_view_orders", "orders/export/do", 302, HTTP_POST),
-    ("can_view_orders", "orders/", 200, HTTP_GET),
-    ("can_view_orders", "orders/FOO/", 200, HTTP_GET),
-    ("can_change_orders", "orders/FOO/extend", 200, HTTP_GET),
-    ("can_change_orders", "orders/FOO/reactivate", 302, HTTP_GET),
-    ("can_change_orders", "orders/FOO/contact", 200, HTTP_GET),
-    ("can_change_orders", "orders/FOO/transition", 405, HTTP_GET),
-    ("can_change_orders", "orders/FOO/checkvatid", 405, HTTP_GET),
-    ("can_change_orders", "orders/FOO/resend", 405, HTTP_GET),
-    ("can_change_orders", "orders/FOO/invoice", 405, HTTP_GET),
-    ("can_change_orders", "orders/FOO/change", 200, HTTP_GET),
-    ("can_change_orders", "orders/FOO/approve", 200, HTTP_GET),
-    ("can_change_orders", "orders/FOO/deny", 200, HTTP_GET),
-    ("can_change_orders", "orders/FOO/delete", 302, HTTP_GET),
-    ("can_change_orders", "orders/FOO/comment", 405, HTTP_GET),
-    ("can_change_orders", "orders/FOO/locale", 200, HTTP_GET),
-    ("can_change_orders", "orders/FOO/sendmail", 200, HTTP_GET),
-    ("can_change_orders", "orders/FOO/1/sendmail", 404, HTTP_GET),
-    ("can_change_orders", "orders/import/", 200, HTTP_GET),
-    ("can_change_orders", "orders/import/0ab7b081-92d3-4480-82de-2f8b056fd32f/", 404, HTTP_GET),
-    ("can_view_orders", "orders/FOO/answer/5/", 404, HTTP_GET),
-    ("can_change_orders", "cancel/", 200, HTTP_GET),
-    ("can_change_vouchers", "vouchers/add", 200, HTTP_GET),
-    ("can_change_vouchers", "vouchers/bulk_add", 200, HTTP_GET),
-    ("can_view_vouchers", "vouchers/", 200, HTTP_GET),
-    ("can_view_vouchers", "vouchers/tags/", 200, HTTP_GET),
-    ("can_view_vouchers", "vouchers/1234/", 404, HTTP_GET),
-    ("can_change_vouchers", "vouchers/1234/", 404, HTTP_POST),
-    ("can_change_vouchers", "vouchers/1234/delete", 404, HTTP_GET),
-    ("can_view_orders", "waitinglist/", 200, HTTP_GET),
-    ("can_change_orders", "waitinglist/auto_assign", 405, HTTP_GET),
-    ("can_change_orders", "waitinglist/action", 405, HTTP_GET),
-    ("can_view_orders", "checkins/", 200, HTTP_GET),
-    ("can_view_orders", "checkinlists/", 200, HTTP_GET),
-    ("can_view_orders", "checkinlists/1/", 404, HTTP_GET),
-    ("can_change_orders", "checkinlists/1/bulk_action", 404, HTTP_POST),
-    ("can_checkin_orders", "checkinlists/1/bulk_action", 404, HTTP_POST),
-    ("can_change_event_settings", "checkinlists/add", 200, HTTP_GET),
-    ("can_change_event_settings", "checkinlists/1/change", 404, HTTP_GET),
-    ("can_change_event_settings", "checkinlists/1/delete", 404, HTTP_GET),
+    ("event.items:write", "categories/2/", 404, HTTP_GET),
+    ("event.items:write", "categories/2/delete", 404, HTTP_GET),
+    ("event.items:write", "categories/2/up", 404, HTTP_POST),
+    ("event.items:write", "categories/2/down", 404, HTTP_POST),
+    ("event.items:write", "categories/reorder", 400, HTTP_POST),
+    ("event.items:write", "categories/add", 200, HTTP_GET),
+    (None, "questions/", 200, HTTP_GET),
+    (None, "questions/2/", 404, HTTP_GET),
+    ("event.items:write", "questions/2/delete", 404, HTTP_GET),
+    ("event.items:write", "questions/reorder", 400, HTTP_POST),
+    ("event.items:write", "questions/add", 200, HTTP_GET),
+    (None, "quotas/", 200, HTTP_GET),
+    ("event.items:write", "quotas/2/change", 404, HTTP_GET),
+    ("event.items:write", "quotas/2/delete", 404, HTTP_GET),
+    ("event.items:write", "quotas/add", 200, HTTP_GET),
+    (None, "discounts/", 200, HTTP_GET),
+    ("event.items:write", "discounts/2/", 404, HTTP_GET),
+    ("event.items:write", "discounts/2/delete", 404, HTTP_GET),
+    ("event.items:write", "discounts/2/up", 404, HTTP_POST),
+    ("event.items:write", "discounts/2/down", 404, HTTP_POST),
+    ("event.items:write", "discounts/reorder", 400, HTTP_POST),
+    ("event.items:write", "discounts/add", 200, HTTP_GET),
+    (None, "subevents/", 200, HTTP_GET),
+    ("event.subevents:write", "subevents/2/", 404, HTTP_GET),
+    ("event.subevents:write", "subevents/2/", 404, HTTP_POST),
+    ("event.subevents:write", "subevents/2/delete", 404, HTTP_GET),
+    ("event.subevents:write", "subevents/add", 200, HTTP_GET),
+    ("event.subevents:write", "subevents/bulk_add", 200, HTTP_GET),
+    ("event.subevents:write", "subevents/bulk_action", 302, HTTP_POST),
+    ("event.subevents:write", "subevents/bulk_edit", 404, HTTP_POST),
+    ("event.orders:read", "orders/overview/", 200, HTTP_GET),
+    ("event.orders:read", "orders/", 200, HTTP_GET),
+    ("event.orders:read", "orders/FOO/", 200, HTTP_GET),
+    ("event.orders:write", "orders/FOO/extend", 200, HTTP_GET),
+    ("event.orders:write", "orders/FOO/reactivate", 302, HTTP_GET),
+    ("event.orders:write", "orders/FOO/contact", 200, HTTP_GET),
+    ("event.orders:write", "orders/FOO/transition", 405, HTTP_GET),
+    ("event.orders:write", "orders/FOO/checkvatid", 405, HTTP_GET),
+    ("event.orders:write", "orders/FOO/resend", 405, HTTP_GET),
+    ("event.orders:write", "orders/FOO/invoice", 405, HTTP_GET),
+    ("event.orders:write", "orders/FOO/change", 200, HTTP_GET),
+    ("event.orders:write", "orders/FOO/approve", 200, HTTP_GET),
+    ("event.orders:write", "orders/FOO/deny", 200, HTTP_GET),
+    ("event.orders:write", "orders/FOO/delete", 302, HTTP_GET),
+    ("event.orders:write", "orders/FOO/comment", 405, HTTP_GET),
+    ("event.orders:write", "orders/FOO/locale", 200, HTTP_GET),
+    ("event.orders:write", "orders/FOO/sendmail", 200, HTTP_GET),
+    ("event.orders:write", "orders/FOO/1/sendmail", 404, HTTP_GET),
+    ("event.orders:write", "orders/import/", 200, HTTP_GET),
+    ("event.orders:write", "orders/import/0ab7b081-92d3-4480-82de-2f8b056fd32f/", 404, HTTP_GET),
+    ("event.orders:read", "orders/FOO/answer/5/", 404, HTTP_GET),
+    ("event:cancel", "cancel/", 200, HTTP_GET),
+    ("event.vouchers:write", "vouchers/add", 200, HTTP_GET),
+    ("event.vouchers:write", "vouchers/bulk_add", 200, HTTP_GET),
+    ("event.vouchers:read", "vouchers/", 200, HTTP_GET),
+    ("event.vouchers:read", "vouchers/tags/", 200, HTTP_GET),
+    ("event.vouchers:read", "vouchers/1234/", 404, HTTP_GET),
+    ("event.vouchers:write", "vouchers/1234/", 404, HTTP_POST),
+    ("event.vouchers:write", "vouchers/1234/delete", 404, HTTP_GET),
+    ("event.orders:read", "waitinglist/", 200, HTTP_GET),
+    ("event.orders:write", "waitinglist/auto_assign", 405, HTTP_GET),
+    ("event.orders:write", "waitinglist/action", 405, HTTP_GET),
+    ("event.orders:read", "checkins/", 200, HTTP_GET),
+    ("event.orders:read", "checkinlists/", 200, HTTP_GET),
+    ("event.orders:read", "checkinlists/1/", 404, HTTP_GET),
+    ("event.orders:write", "checkinlists/1/bulk_action", 404, HTTP_POST),
+    ("event.orders:checkin", "checkinlists/1/bulk_action", 404, HTTP_POST),
+    ("event.settings.general:write", "checkinlists/add", 200, HTTP_GET),
+    ("event.settings.general:write", "checkinlists/1/change", 404, HTTP_GET),
+    ("event.settings.general:write", "checkinlists/1/delete", 404, HTTP_GET),
 
     # bank transfer
-    ("can_change_orders", "banktransfer/import/", 200, HTTP_GET),
-    ("can_change_orders", "banktransfer/job/1/", 404, HTTP_GET),
-    ("can_change_orders", "banktransfer/action/", 200, HTTP_GET),
-    ("can_change_orders", "banktransfer/refunds/", 200, HTTP_GET),
-    ("can_change_orders", "banktransfer/export/1/", 404, HTTP_GET),
-    ("can_change_orders", "banktransfer/sepa-export/1/", 404, HTTP_GET),
+    ("event.orders:write", "banktransfer/import/", 200, HTTP_GET),
+    ("event.orders:write", "banktransfer/job/1/", 404, HTTP_GET),
+    ("event.orders:write", "banktransfer/action/", 200, HTTP_GET),
+    ("event.orders:write", "banktransfer/refunds/", 200, HTTP_GET),
+    ("event.orders:write", "banktransfer/export/1/", 404, HTTP_GET),
+    ("event.orders:write", "banktransfer/sepa-export/1/", 404, HTTP_GET),
 ]
 
 
@@ -425,7 +424,10 @@ def test_wrong_event_permission(perf_patch, client, env, perm, url, code, http_m
     t = Team(
         pk=2, organizer=env[2], all_events=True
     )
-    setattr(t, perm, False)
+    if not perm:
+        pytest.skip()
+    t.all_event_permissions = False
+    t.limit_event_permissions.pop(perm, None)
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -443,7 +445,7 @@ def test_limited_event_permission_for_other_event(perf_patch, client, env, perm,
         organizer=env[2], name='Dummy', slug='dummy2',
         date_from=now(), plugins='pretix.plugins.banktransfer'
     )
-    t = Team.objects.create(pk=2, organizer=env[2], can_change_event_settings=True)
+    t = Team.objects.create(pk=2, organizer=env[2], all_event_permissions=True)
     t.members.add(env[1])
     t.limit_events.add(event2)
 
@@ -460,14 +462,16 @@ def test_current_permission(client, env):
     t = Team(
         pk=2, organizer=env[2], all_events=True
     )
-    setattr(t, 'can_change_event_settings', True)
+    setattr(t, 'event.settings.general:write', True)
+    t.all_event_permissions = False
+    t.limit_event_permissions['event.settings.general:write'] = True
     t.save()
     t.members.add(env[1])
 
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/settings/')
     assert response.status_code == 200
-    setattr(t, 'can_change_event_settings', False)
+    t.limit_event_permissions.pop('event.settings.general:write', None)
     t.save()
     response = client.get('/control/event/dummy/dummy/settings/')
     assert response.status_code == 403
@@ -477,7 +481,8 @@ def test_current_permission(client, env):
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_correct_event_permission_all_events(perf_patch, client, env, perm, url, code, http_method):
     t = Team(pk=2, organizer=env[2], all_events=True)
-    setattr(t, perm, True)
+    t.all_event_permissions = False
+    t.limit_event_permissions[perm] = True
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -495,7 +500,8 @@ def test_correct_event_permission_all_events(perf_patch, client, env, perm, url,
 @pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
 def test_correct_event_permission_limited(perf_patch, client, env, perm, url, code, http_method):
     t = Team(pk=2, organizer=env[2])
-    setattr(t, perm, True)
+    t.all_event_permissions = False
+    t.limit_event_permissions[perm] = True
     t.save()
     t.members.add(env[1])
     t.limit_events.add(env[0])
@@ -521,77 +527,80 @@ def test_wrong_organizer(perf_patch, client, env, url):
 
 
 organizer_permission_urls = [
-    ("can_change_teams", "organizer/dummy/teams", 200),
-    ("can_change_teams", "organizer/dummy/team/add", 200),
-    ("can_change_teams", "organizer/dummy/team/1/", 200),
-    ("can_change_teams", "organizer/dummy/team/1/edit", 200),
-    ("can_change_teams", "organizer/dummy/team/1/delete", 200),
-    ("can_change_organizer_settings", "organizer/dummy/edit", 200),
-    ("can_change_organizer_settings", "organizer/dummy/settings/plugins", 200),
-    ("can_change_organizer_settings", "organizer/dummy/settings/plugins/pretix.plugins.sendmail/events", 200),
-    ("can_change_organizer_settings", "organizer/dummy/settings/email", 200),
-    ("can_change_organizer_settings", "organizer/dummy/settings/email/setup", 200),
-    ("can_change_organizer_settings", "organizer/dummy/outgoingmails", 200),
-    ("can_change_organizer_settings", "organizer/dummy/outgoingmail/1/", 404),
-    ("can_change_organizer_settings", "organizer/dummy/outgoingmail/bulk_action", 405),
-    ("can_change_organizer_settings", "organizer/dummy/devices", 200),
-    ("can_change_organizer_settings", "organizer/dummy/devices/select2", 200),
-    ("can_change_organizer_settings", "organizer/dummy/device/add", 200),
-    ("can_change_organizer_settings", "organizer/dummy/device/1/edit", 404),
-    ("can_change_organizer_settings", "organizer/dummy/device/1/connect", 404),
-    ("can_change_organizer_settings", "organizer/dummy/device/1/revoke", 404),
-    ("can_change_organizer_settings", "organizer/dummy/gates", 200),
-    ("can_change_organizer_settings", "organizer/dummy/gates/select2", 200),
-    ("can_change_organizer_settings", "organizer/dummy/gate/add", 200),
-    ("can_change_organizer_settings", "organizer/dummy/gate/1/edit", 404),
-    ("can_change_organizer_settings", "organizer/dummy/gate/1/delete", 404),
-    ("can_change_organizer_settings", "organizer/dummy/properties", 200),
-    ("can_change_organizer_settings", "organizer/dummy/property/add", 200),
-    ("can_change_organizer_settings", "organizer/dummy/property/1/edit", 404),
-    ("can_change_organizer_settings", "organizer/dummy/property/1/delete", 404),
-    ("can_change_organizer_settings", "organizer/dummy/channels", 200),
-    ("can_change_organizer_settings", "organizer/dummy/channel/add", 200),
-    ("can_change_organizer_settings", "organizer/dummy/channel/web/edit", 200),
-    ("can_change_organizer_settings", "organizer/dummy/channel/web/delete", 200),
-    ("can_change_organizer_settings", "organizer/dummy/membershiptypes", 200),
-    ("can_change_organizer_settings", "organizer/dummy/membershiptype/add", 200),
-    ("can_change_organizer_settings", "organizer/dummy/membershiptype/1/edit", 404),
-    ("can_change_organizer_settings", "organizer/dummy/membershiptype/1/delete", 404),
-    ("can_change_organizer_settings", "organizer/dummy/ssoproviders", 200),
-    ("can_change_organizer_settings", "organizer/dummy/ssoprovider/add", 200),
-    ("can_change_organizer_settings", "organizer/dummy/ssoprovider/1/edit", 404),
-    ("can_change_organizer_settings", "organizer/dummy/ssoprovider/1/delete", 404),
-    ("can_manage_customers", "organizer/dummy/customers", 200),
-    ("can_manage_customers", "organizer/dummy/customer/ABC/edit", 404),
-    ("can_manage_customers", "organizer/dummy/customer/ABC/anonymize", 404),
-    ("can_manage_customers", "organizer/dummy/customer/ABC/membership/add", 404),
-    ("can_manage_customers", "organizer/dummy/customer/ABC/membership/1/edit", 404),
-    ("can_manage_customers", "organizer/dummy/customer/ABC/", 404),
-    ("can_manage_reusable_media", "organizer/dummy/reusable_media", 200),
-    ("can_manage_reusable_media", "organizer/dummy/reusable_media/1/edit", 404),
-    ("can_manage_reusable_media", "organizer/dummy/reusable_media/1/", 404),
-    ("can_manage_gift_cards", "organizer/dummy/giftcards", 200),
-    ("can_manage_gift_cards", "organizer/dummy/giftcard/add", 200),
-    ("can_manage_gift_cards", "organizer/dummy/giftcard/1/", 404),
-    ("can_manage_gift_cards", "organizer/dummy/giftcard/1/edit", 404),
-    ("can_change_organizer_settings", "organizer/dummy/giftcards/acceptance", 200),
-    ("can_change_organizer_settings", "organizer/dummy/giftcards/acceptance/invite", 200),
+    ("organizer.teams:write", "organizer/dummy/teams", 200),
+    ("organizer.teams:write", "organizer/dummy/team/add", 200),
+    ("organizer.teams:write", "organizer/dummy/team/1/", 200),
+    ("organizer.teams:write", "organizer/dummy/team/1/edit", 200),
+    ("organizer.teams:write", "organizer/dummy/team/1/delete", 200),
+    ("organizer.settings.general:write", "organizer/dummy/edit", 200),
+    ("organizer.settings.general:write", "organizer/dummy/settings/plugins", 200),
+    ("organizer.settings.general:write", "organizer/dummy/settings/plugins/pretix.plugins.sendmail/events", 200),
+    ("organizer.settings.general:write", "organizer/dummy/settings/email", 200),
+    ("organizer.settings.general:write", "organizer/dummy/settings/email/setup", 200),
+    ("organizer.outgoingmails:read", "organizer/dummy/outgoingmails", 200),
+    ("organizer.outgoingmails:read", "organizer/dummy/outgoingmail/1/", 404),
+    ("organizer.outgoingmails:read", "organizer/dummy/outgoingmail/bulk_action", 405),
+    ("organizer.devices:read", "organizer/dummy/devices", 200),
+    ("organizer.devices:read", "organizer/dummy/devices/select2", 200),
+    ("organizer.devices:write", "organizer/dummy/device/add", 200),
+    ("organizer.devices:write", "organizer/dummy/device/1/edit", 404),
+    ("organizer.devices:write", "organizer/dummy/device/1/connect", 404),
+    ("organizer.devices:write", "organizer/dummy/device/1/revoke", 404),
+    ("organizer.devices:read", "organizer/dummy/gates", 200),
+    ("organizer.devices:read", "organizer/dummy/gates/select2", 200),
+    ("organizer.devices:write", "organizer/dummy/gate/add", 200),
+    ("organizer.devices:write", "organizer/dummy/gate/1/edit", 404),
+    ("organizer.devices:write", "organizer/dummy/gate/1/delete", 404),
+    ("organizer.settings.general:write", "organizer/dummy/properties", 200),
+    ("organizer.settings.general:write", "organizer/dummy/property/add", 200),
+    ("organizer.settings.general:write", "organizer/dummy/property/1/edit", 404),
+    ("organizer.settings.general:write", "organizer/dummy/property/1/delete", 404),
+    ("organizer.settings.general:write", "organizer/dummy/channels", 200),
+    ("organizer.settings.general:write", "organizer/dummy/channel/add", 200),
+    ("organizer.settings.general:write", "organizer/dummy/channel/web/edit", 200),
+    ("organizer.settings.general:write", "organizer/dummy/channel/web/delete", 200),
+    ("organizer.settings.general:write", "organizer/dummy/membershiptypes", 200),
+    ("organizer.settings.general:write", "organizer/dummy/membershiptype/add", 200),
+    ("organizer.settings.general:write", "organizer/dummy/membershiptype/1/edit", 404),
+    ("organizer.settings.general:write", "organizer/dummy/membershiptype/1/delete", 404),
+    ("organizer.settings.general:write", "organizer/dummy/ssoproviders", 200),
+    ("organizer.settings.general:write", "organizer/dummy/ssoprovider/add", 200),
+    ("organizer.settings.general:write", "organizer/dummy/ssoprovider/1/edit", 404),
+    ("organizer.settings.general:write", "organizer/dummy/ssoprovider/1/delete", 404),
+    ("organizer.customers:read", "organizer/dummy/customers", 200),
+    ("organizer.customers:write", "organizer/dummy/customer/ABC/edit", 404),
+    ("organizer.customers:write", "organizer/dummy/customer/ABC/anonymize", 404),
+    ("organizer.customers:write", "organizer/dummy/customer/ABC/membership/add", 404),
+    ("organizer.customers:write", "organizer/dummy/customer/ABC/membership/1/edit", 404),
+    ("organizer.customers:read", "organizer/dummy/customer/ABC/", 404),
+    ("organizer.reusablemedia:read", "organizer/dummy/reusable_media", 200),
+    ("organizer.reusablemedia:write", "organizer/dummy/reusable_media/1/edit", 404),
+    ("organizer.reusablemedia:read", "organizer/dummy/reusable_media/1/", 404),
+    ("organizer.giftcards:read", "organizer/dummy/giftcards", 200),
+    ("organizer.giftcards:write", "organizer/dummy/giftcard/add", 200),
+    ("organizer.giftcards:read", "organizer/dummy/giftcard/1/", 404),
+    ("organizer.giftcards:write", "organizer/dummy/giftcard/1/edit", 404),
+    ("organizer.settings.general:write", "organizer/dummy/giftcards/acceptance", 200),
+    ("organizer.settings.general:write", "organizer/dummy/giftcards/acceptance/invite", 200),
 
     # bank transfer
-    ("can_change_orders", "organizer/dummy/banktransfer/import/", 200),
-    ("can_change_orders", "organizer/dummy/banktransfer/job/1/", 404),
-    ("can_change_orders", "organizer/dummy/banktransfer/action/", 200),
-    ("can_change_orders", "organizer/dummy/banktransfer/refunds/", 200),
-    ("can_change_orders", "organizer/dummy/banktransfer/export/1/", 404),
-    ("can_change_orders", "organizer/dummy/banktransfer/sepa-export/1/", 404),
+    ("event.orders:write", "organizer/dummy/banktransfer/import/", 200),
+    ("event.orders:write", "organizer/dummy/banktransfer/job/1/", 404),
+    ("event.orders:write", "organizer/dummy/banktransfer/action/", 200),
+    ("event.orders:write", "organizer/dummy/banktransfer/refunds/", 200),
+    ("event.orders:write", "organizer/dummy/banktransfer/export/1/", 404),
+    ("event.orders:write", "organizer/dummy/banktransfer/sepa-export/1/", 404),
 ]
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
 def test_wrong_organizer_permission(perf_patch, client, env, perm, url, code):
-    t = Team(pk=2, organizer=env[2])
-    setattr(t, perm, False)
+    t = Team(pk=2, organizer=env[2], all_events=True)
+    t.all_organizer_permissions = False
+    t.limit_organizer_permissions.pop(perm, None)
+    t.all_event_permissions = False
+    t.limit_event_permissions.pop(perm, None)
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -602,8 +611,14 @@ def test_wrong_organizer_permission(perf_patch, client, env, perm, url, code):
 @pytest.mark.django_db
 @pytest.mark.parametrize("perm,url,code", organizer_permission_urls)
 def test_correct_organizer_permission(perf_patch, client, env, perm, url, code):
-    t = Team(pk=2, organizer=env[2])
-    setattr(t, perm, True)
+    t = Team(pk=2, organizer=env[2], all_events=True)
+    if perm.startswith("event."):
+        t.all_organizer_permissions = False
+        t.all_event_permissions = False
+        t.limit_event_permissions[perm] = True
+    else:
+        t.all_organizer_permissions = False
+    t.limit_organizer_permissions[perm] = True
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')

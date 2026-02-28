@@ -204,7 +204,7 @@ class ShreddersMixin:
 
 
 class EventShreddersViewSet(ShreddersMixin, viewsets.ViewSet):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def get_serializer_kwargs(self):
         return {}

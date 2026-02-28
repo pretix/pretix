@@ -39,8 +39,11 @@ from datetime import time
 
 import pytest
 from django.utils.timezone import now
+from rest_framework.test import APIClient
 
-from pretix.base.models import CachedFile, User
+from pretix.base.models import (
+    CachedFile, Event, ScheduledEventExport, ScheduledOrganizerExport, User,
+)
 
 SAMPLE_EXPORTER_CONFIG = {
     "identifier": "orderlist",
@@ -111,6 +114,10 @@ def test_org_list(token_client, organizer, event):
         "name": "events",
         "required": False
     })
+    c['input_parameters'].insert(0, {
+        "name": "all_events",
+        "required": False
+    })
     c['input_parameters'].remove({
         "name": "items",
         "required": False
@@ -143,13 +150,6 @@ def test_org_validate_events(token_client, organizer, team, event):
         '_format': 'xlsx',
     }, format='json')
     assert resp.status_code == 202
-
-    resp = token_client.post('/api/v1/organizers/{}/exporters/orderlist/run/'.format(organizer.slug), data={
-        '_format': 'xlsx',
-        'events': []
-    }, format='json')
-    assert resp.status_code == 400
-    assert resp.data == {"events": ["This list may not be empty."]}
 
     resp = token_client.post('/api/v1/organizers/{}/exporters/orderlist/run/'.format(organizer.slug), data={
         '_format': 'xlsx',
@@ -280,7 +280,8 @@ def test_org_level_export(token_client, organizer, team, event):
     }, format='json')
     assert resp.status_code == 202
 
-    team.can_manage_gift_cards = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
 
     resp = token_client.post('/api/v1/organizers/{}/exporters/giftcardlist/run/'.format(organizer.slug), data={
@@ -339,10 +340,12 @@ def test_event_scheduled_export_list_token(token_client, organizer, event, user,
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
-    team.can_change_event_settings = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
+    team.all_event_permissions = False
     team.save()
 
-    # Token can no longer sees it an gets error message
+    # Token can no longer sees it and gets error message
     resp = token_client.get('/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug))
     assert resp.status_code == 403
 
@@ -361,7 +364,9 @@ def test_event_scheduled_export_list_user(user_client, organizer, event, user, t
     resp = user_client.get('/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug))
     assert [res] == resp.data['results']
 
-    team.can_change_event_settings = False
+    team.all_organizer_permissions = False
+    team.limit_event_permissions = {"event.orders:read": True}
+    team.all_event_permissions = False
     team.save()
 
     # Owner still can
@@ -498,7 +503,8 @@ def test_org_scheduled_export_list_token(token_client, organizer, user, team, or
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
-    team.can_change_organizer_settings = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
 
     # Token can no longer sees it an gets error message
@@ -521,7 +527,8 @@ def test_org_scheduled_export_list_user(user_client, organizer, user, team, org_
     resp = user_client.get('/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug))
     assert [res] == resp.data['results']
 
-    team.can_change_organizer_settings = False
+    team.limit_organizer_permissions = {"organizer.events:create": True}
+    team.all_organizer_permissions = False
     team.save()
 
     # Owner still can
@@ -817,3 +824,232 @@ def test_org_scheduled_export_validate_rrule(user_client, organizer, user):
     )
     assert resp.status_code == 400
     assert resp.data == {"schedule_rrule": ["BYEASTER not supported"]}
+
+
+def _can_see_but_not_edit_org_export(client, scheduled):
+    response = client.get(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format("dummy", scheduled.pk),
+    )
+    assert response.status_code == 200
+
+    response = client.patch(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format("dummy", scheduled.pk),
+        data=response.data,
+        format='json',
+    )
+    return response.status_code == 200
+
+
+@pytest.mark.django_db(transaction=True)
+def test_organizer_edit_restrictions(client, event, organizer, user, team):
+    # This tests the prevention of a possible privilege escalation where user A creates a scheduled export and
+    # user B has settings permission (= they can see the export configuration), but not enough permission
+    # to run the export themselves. Without this check, user B could modify the export and add themselves
+    # as a recipient. Thereby, user B would gain access to data they can't have.
+    user1_client = APIClient()
+    user1_client.force_authenticate(user=user)
+    user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
+    user2_client = APIClient()
+    user2_client.force_authenticate(user=user2)
+    team1_client = APIClient()
+    t = team.tokens.create(name='Foo')
+    team1_client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+
+    event1 = event
+    event2 = Event.objects.create(
+        organizer=organizer, name="Dummy", slug="dummy2",
+        date_from=now(), plugins="pretix.plugins.banktransfer,pretix.plugins.stripe,tests.testdummy"
+    )
+
+    team1 = team
+    team1.all_organizer_permissions = False
+    team1.all_event_permissions = False
+    team1.all_events = False
+    team1.limit_organizer_permissions = {"organizer.settings.general:write": True}
+    team1.limit_event_permissions = {"event.orders:read": True, "event.settings.general:write": True}
+    team1.save()
+    team1.limit_events.add(event1)
+    team1.members.add(user)
+
+    t = team.tokens.create(name='Foo')
+    client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+
+    team2 = organizer.teams.create(
+        all_organizer_permissions=False, all_event_permissions=False, all_events=False,
+        limit_event_permissions={"event.orders:read": True},
+        limit_organizer_permissions={"organizer.giftcards:read": True}
+    )
+    team2.limit_events.add(event2)
+    team2.members.add(user2)
+
+    # Scenario 1
+    # User 2 created an export for all events. User 2 can edit it, because they own it.
+    # User 1 can see it, because they have permission to see scheduled exports, but can't change it, because they
+    # don't have access to all events.
+    s1 = ScheduledOrganizerExport.objects.create(
+        organizer=organizer,
+        owner=user2,
+        export_identifier="dummy_orders",
+        export_form_data={"all_events": True, "events": []},
+        mail_subject="Test",
+        mail_template="Test",
+        locale="en",
+        schedule_rrule="DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO",
+        schedule_rrule_time=time(2, 30, 0)
+    )
+    user._teamcache = {}
+    user2._teamcache = {}
+    assert _can_see_but_not_edit_org_export(user2_client, s1)
+    assert not _can_see_but_not_edit_org_export(user1_client, s1)
+    assert not _can_see_but_not_edit_org_export(team1_client, s1)
+
+    # Scenario 2
+    # User 2 created an export for all events. User 2 can edit it, because they own it.
+    # User 1 can see it, because they have permission to see scheduled exports, and change it, because they
+    # have access to all events.
+    team1.all_events = True
+    team1.save()
+    user._teamcache = {}
+    user2._teamcache = {}
+    assert _can_see_but_not_edit_org_export(user2_client, s1)
+    assert _can_see_but_not_edit_org_export(user1_client, s1)
+    assert _can_see_but_not_edit_org_export(team1_client, s1)
+
+    # Scenario 3
+    # User 2 created an export for a specific event. User 2 can edit it, because they own it.
+    # User 1 can see it, because they have permission to see scheduled exports, but can't change it, because they
+    # don't have access to that event.
+    team1.all_events = False
+    team1.save()
+    s1.export_form_data = {"all_events": False, "events": [event2.pk]}
+    s1.save()
+    user._teamcache = {}
+    user2._teamcache = {}
+    assert _can_see_but_not_edit_org_export(user2_client, s1)
+    assert not _can_see_but_not_edit_org_export(user1_client, s1)
+    assert not _can_see_but_not_edit_org_export(team1_client, s1)
+
+    # Scenario 4
+    # User 2 created an export for a specific event. User 2 can edit it, because they own it.
+    # User 1 can see it, because they have permission to see scheduled exports, and change it, because they
+    # have access to that event.
+    team1.limit_events.add(event2)
+    user._teamcache = {}
+    user2._teamcache = {}
+    assert _can_see_but_not_edit_org_export(user2_client, s1)
+    assert _can_see_but_not_edit_org_export(user1_client, s1)
+    assert _can_see_but_not_edit_org_export(team1_client, s1)
+
+    # Scenario 5
+    # User 2 created an export that requires a special permission on organizer level
+    # user 1 can see it, because they have permission to see scheduled exports, but can't change it, because they lack
+    # that special permission
+    s2 = ScheduledOrganizerExport.objects.create(
+        organizer=organizer,
+        owner=user2,
+        export_identifier="giftcardlist",
+        mail_subject="Test",
+        mail_template="Test",
+        locale="en",
+        schedule_rrule="DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO",
+        schedule_rrule_time=time(2, 30, 0)
+    )
+    user._teamcache = {}
+    user2._teamcache = {}
+    assert _can_see_but_not_edit_org_export(user2_client, s2)
+    assert not _can_see_but_not_edit_org_export(user1_client, s2)
+    assert not _can_see_but_not_edit_org_export(team1_client, s2)
+
+    # Scenario 6
+    # User 2 created an export that requires a special permission on organizer level
+    # user 1 can see it, because they have permission to see scheduled exports, and change it, because they have
+    # that special permission
+    team1.limit_organizer_permissions["organizer.giftcards:read"] = True
+    team1.save()
+    user._teamcache = {}
+    assert _can_see_but_not_edit_org_export(user2_client, s2)
+    assert _can_see_but_not_edit_org_export(team1_client, s2)
+    assert _can_see_but_not_edit_org_export(user1_client, s2)
+
+
+def _can_see_but_not_edit_event_export(client, scheduled):
+    response = client.get(
+        '/api/v1/organizers/{}/events/{}/scheduled_exports/{}/'.format("dummy", "dummy", scheduled.pk),
+    )
+    assert response.status_code == 200
+
+    response = client.patch(
+        '/api/v1/organizers/{}/events/{}/scheduled_exports/{}/'.format("dummy", "dummy", scheduled.pk),
+        data=response.data,
+        format='json',
+    )
+    return response.status_code == 200
+
+
+@pytest.mark.django_db(transaction=True)
+def test_event_edit_restrictions(client, event, organizer, user, team):
+    # This tests the prevention of a possible privilege escalation where user A creates a scheduled export and
+    # user B has settings permission (= they can see the export configuration), but not enough permission
+    # to run the export themselves. Without this check, user B could modify the export and add themselves
+    # as a recipient. Thereby, user B would gain access to data they can't have.
+    user1_client = APIClient()
+    user1_client.force_authenticate(user=user)
+    user2 = User.objects.create_user("dummy2@dummy.dummy", "dummy")
+    user2_client = APIClient()
+    user2_client.force_authenticate(user=user2)
+    team1_client = APIClient()
+    t = team.tokens.create(name='Foo')
+    team1_client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+
+    event1 = event
+
+    team1 = team
+    team1.all_organizer_permissions = False
+    team1.all_event_permissions = False
+    team1.all_events = False
+    team1.limit_organizer_permissions = {"organizer.settings.general:write": True}
+    team1.limit_event_permissions = {"event.orders:read": True, "event.settings.general:write": True}
+    team1.save()
+    team1.limit_events.add(event1)
+    team1.members.add(user)
+
+    t = team.tokens.create(name='Foo')
+    client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)
+
+    team2 = organizer.teams.create(
+        all_organizer_permissions=False, all_event_permissions=False, all_events=False,
+        limit_event_permissions={"event.orders:read": True, "event.vouchers:read": True},
+        limit_organizer_permissions={"organizer.giftcards:read": True}
+    )
+    team2.limit_events.add(event1)
+    team2.members.add(user2)
+
+    # User 2 created an export that requires a special permission on organizer level
+    # user 1 can see it, because they have permission to see scheduled exports, but can't change it, because they lack
+    # that special permission
+    s2 = ScheduledEventExport.objects.create(
+        event=event,
+        owner=user2,
+        export_identifier="dummy_vouchers",
+        mail_subject="Test",
+        mail_template="Test",
+        locale="en",
+        schedule_rrule="DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO",
+        schedule_rrule_time=time(2, 30, 0)
+    )
+    user._teamcache = {}
+    user2._teamcache = {}
+    assert _can_see_but_not_edit_event_export(user2_client, s2)
+    assert not _can_see_but_not_edit_event_export(user1_client, s2)
+    assert not _can_see_but_not_edit_event_export(team1_client, s2)
+
+    # Scenario 6
+    # User 2 created an export that requires a special permission on organizer level
+    # user 1 can see it, because they have permission to see scheduled exports, and change it, because they have
+    # that special permission
+    team1.limit_event_permissions["event.vouchers:read"] = True
+    team1.save()
+    user._teamcache = {}
+    assert _can_see_but_not_edit_event_export(user2_client, s2)
+    assert _can_see_but_not_edit_event_export(team1_client, s2)
+    assert _can_see_but_not_edit_event_export(user1_client, s2)

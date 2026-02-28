@@ -42,7 +42,7 @@ def env():
         organizer=o, name='Dummy', slug='dummy', plugins='pretix.plugins.paypal2',
         date_from=now(), live=True
     )
-    t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)
+    t = Team.objects.create(organizer=event.organizer, all_event_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
     o1 = Order.objects.create(

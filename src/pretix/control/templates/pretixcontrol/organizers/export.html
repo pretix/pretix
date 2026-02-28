@@ -34,7 +34,7 @@
                             {% if s.export_verbose_name == "?" %}
                                 <strong class="text-danger">
                                     <span class="fa fa-warning fa-fw"></span>
-                                    {% trans "Exporter not found" %}
+                                    {% trans "Exporter not found or no permission" %}
                                 </strong>
                             {% elif s.error_counter >= 5 %}
                                 <strong class="text-danger">
@@ -115,5 +115,9 @@
                 </a>
             {% endfor %}
         </div>
+    {% empty %}
+        <p class="empty-collection">
+            {% trans "There are no exporters available for you." %}
+        </p>
     {% endfor %}
 {% endblock %}

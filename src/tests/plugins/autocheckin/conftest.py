@@ -68,18 +68,8 @@ def team(organizer):
         organizer=organizer,
         name="Test-Team",
         all_events=True,
-        can_change_teams=True,
-        can_manage_gift_cards=True,
-        can_change_items=True,
-        can_create_events=True,
-        can_change_event_settings=True,
-        can_change_vouchers=True,
-        can_view_vouchers=True,
-        can_view_orders=True,
-        can_change_orders=True,
-        can_manage_customers=True,
-        can_manage_reusable_media=True,
-        can_change_organizer_settings=True,
+        all_organizer_permissions=True,
+        all_event_permissions=True,
     )
 
 

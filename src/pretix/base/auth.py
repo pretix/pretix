@@ -224,7 +224,7 @@ class HistoryPasswordValidator:
         ).delete()
 
 
-def has_event_access_permission(request, permission='can_change_event_settings'):
+def has_event_access_permission(request, permission='event.settings.general:write'):
     return (
         request.user.is_authenticated and
         request.user.has_event_permission(request.organizer, request.event, permission, request=request)

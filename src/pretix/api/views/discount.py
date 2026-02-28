@@ -57,7 +57,7 @@ class DiscountViewSet(ConditionalListView, viewsets.ModelViewSet):
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     permission = None
-    write_permission = 'can_change_items'
+    write_permission = 'event.items:write'
 
     def get_queryset(self):
         return self.request.event.discounts.prefetch_related(

@@ -23,8 +23,10 @@
                     {% endblocktrans %}
                 </p>
 
-                <a href="{% url "control:event.settings.tax.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new tax rule" %}</a>
+                {% if "event.settings.tax:write" in request.eventpermset %}
+                    <a href="{% url "control:event.settings.tax.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                       class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new tax rule" %}</a>
+                {% endif %}
             </div>
         {% else %}
             <div class="table-responsive">
@@ -42,10 +44,14 @@
                     {% for tr in taxrules %}
                         <tr>
                             <td>
-                                <strong><a
-                                        href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}">
-                                    {{ tr.internal_name|default:tr.name }}
-                                </a></strong>
+                                {% if "event.settings.tax:write" in request.eventpermset %}
+                                    <strong><a
+                                            href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}">
+                                        {{ tr.internal_name|default:tr.name }}
+                                    </a></strong>
+                                {% else %}
+                                    <strong>{{ tr.internal_name|default:tr.name }}</strong>
+                                {% endif %}
                             </td>
                             <td>
                                 {% if tr.default %}
@@ -53,7 +59,7 @@
                                     <span class="fa fa-check"></span>
                                     {% trans "Default" %}
                                 </span>
-                                {% else %}
+                                {% elif "event.settings.tax:write" in request.eventpermset %}
                                     <form class="form-inline" method="post"
                                           action="{% url "control:event.settings.tax.default" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}">
                                         {% csrf_token %}
@@ -83,10 +89,12 @@
                                 {% endif %}
                             </td>
                             <td class="text-right flip">
-                                <a href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}"
-                                   class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                                <a href="{% url "control:event.settings.tax.delete" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}"
-                                   class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% if "event.settings.tax:write" in request.eventpermset %}
+                                    <a href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}"
+                                       class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                    <a href="{% url "control:event.settings.tax.delete" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}"
+                                       class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -94,9 +102,11 @@
                     <tfoot>
                     <tr>
                         <td colspan="5">
-                            <a href="{% url "control:event.settings.tax.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                               class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new tax rule" %}
-                            </a>
+                            {% if "event.settings.tax:write" in request.eventpermset %}
+                                <a href="{% url "control:event.settings.tax.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                                   class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new tax rule" %}
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                     </tfoot>
@@ -111,10 +121,12 @@
             {% bootstrap_field form.tax_rounding layout="control" %}
             {% bootstrap_field form.display_net_prices layout="control" %}
         </fieldset>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
-        </div>
+        {% if "event.settings.tax:write" in request.eventpermset %}
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        {% endif %}
     </form>
 {% endblock %}

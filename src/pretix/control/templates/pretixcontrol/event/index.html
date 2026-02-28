@@ -155,22 +155,24 @@
             </form>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Event logs" %}
-            </h3>
-        </div>
-        <ul class="list-group" id="logs_target">
-            <div class="logs-lazy-loading">
-                <span class="fa fa-cog fa-4x"></span>
+    {% if "event.orders:read" in request.eventpermset or "event.orders:write" in request.eventpermset or "event.settings.general:write" in request.eventpermset or "event.items:write" in request.eventpermset %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {% trans "Event logs" %}
+                </h3>
             </div>
-        </ul>
-        <div class="panel-footer">
-            <a href="{% url "control:event.log" event=request.event.slug organizer=request.event.organizer.slug %}">
-                {% trans "Show more logs" %}
-            </a>
+            <ul class="list-group" id="logs_target">
+                <div class="logs-lazy-loading">
+                    <span class="fa fa-cog fa-4x"></span>
+                </div>
+            </ul>
+            <div class="panel-footer">
+                <a href="{% url "control:event.log" event=request.event.slug organizer=request.event.organizer.slug %}">
+                    {% trans "Show more logs" %}
+                </a>
+            </div>
         </div>
-    </div>
+    {% endif %}
 
 {% endblock %}

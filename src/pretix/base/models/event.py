@@ -843,6 +843,33 @@ class Event(EventMixin, LoggedModel):
             time(hour=23, minute=59, second=59)
         ), tz)
 
+    def allow_copy_data(self, new_organizer, auth) -> bool:
+        """
+        Returns whether it is allowed to copy the event to the target organizer. Auth can be TeamAPIToken or User.
+        """
+        from ..permissions import get_all_event_permissions
+        from .auth import User
+
+        if self.organizer == new_organizer:
+            # Copying in the same organizer is always okay with any read access, we just need to ensure it does not
+            # grant more permissions than I had before, but that is handled by the view logic
+            return auth.has_event_permission(self.organizer, self, None)
+
+        if isinstance(auth, User):
+            # Cross-organizer copying requires almost full permission of source to prevent settings extraction
+            required_permissions = get_all_event_permissions() - {
+                # We do not require these, as this data is not copied
+                "event:orders.read", "event:orders.write", "event:vouchers.read", "event:vouchers.write",
+                "event:subevents.write",
+            }
+            given_permission = auth.get_event_permission_set(self.organizer, self)
+            return all(p in given_permission for p in required_permissions if ":" not in p)
+
+        else:
+            # Tokens or devices can never copy between organizers, as they are organizer-bound. Kept for future
+            # compatibility and easier calling
+            return False
+
     def copy_data_from(self, other, skip_meta_data=False):
         from ..signals import event_copy_data
         from . import (
@@ -1386,14 +1413,13 @@ class Event(EventMixin, LoggedModel):
         from .auth import User
 
         if permission:
-            kwargs = {permission: True}
+            qs = Team.objects.with_event_permission(permission)
         else:
-            kwargs = {}
+            qs = Team.objects.all()
 
-        team_with_perm = Team.objects.filter(
+        team_with_perm = qs.filter(
             members__pk=OuterRef('pk'),
             organizer=self.organizer,
-            **kwargs
         ).filter(
             Q(all_events=True) | Q(limit_events__pk=self.pk)
         )

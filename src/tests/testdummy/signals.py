@@ -22,11 +22,13 @@
 from django.dispatch import receiver
 
 from pretix.base.channels import SalesChannelType
+from pretix.base.exporter import BaseExporter
 from pretix.base.invoicing.transmission import (
     TransmissionProvider, transmission_providers,
 )
 from pretix.base.models import Invoice
 from pretix.base.signals import (
+    register_data_exporters, register_multievent_data_exporters,
     register_payment_providers, register_sales_channel_types,
     register_ticket_outputs,
 )
@@ -46,6 +48,40 @@ def register_payment_provider(sender, **kwargs):
         DummyPartialRefundablePaymentProvider, DummyPaymentProvider,
     )
     return [DummyPaymentProvider, DummyFullRefundablePaymentProvider, DummyPartialRefundablePaymentProvider]
+
+
+class DummyOrdersExporter(BaseExporter):
+    verbose_name = "Dummy orders"
+    identifier = "dummy_orders"
+
+
+class DummyVoucherExporter(BaseExporter):
+    verbose_name = "Dummy orders"
+    identifier = "dummy_vouchers"
+
+    @classmethod
+    def get_required_event_permission(cls) -> str:
+        return "event.vouchers:read"
+
+
+@receiver(register_data_exporters, dispatch_uid="dummy_exporter_o")
+def register_data_exporters_recv_o(sender, **kwargs):
+    return DummyOrdersExporter
+
+
+@receiver(register_data_exporters, dispatch_uid="dummy_exporter_v")
+def register_data_exporters_recv_v(sender, **kwargs):
+    return DummyVoucherExporter
+
+
+@receiver(register_multievent_data_exporters, dispatch_uid="dummy_exporter_multi_o")
+def register_multievent_data_exporters_recv_o(sender, **kwargs):
+    return DummyOrdersExporter
+
+
+@receiver(register_multievent_data_exporters, dispatch_uid="dummy_exporter_multi_v")
+def register_multievent_data_exporters_recv(sender, **kwargs):
+    return DummyVoucherExporter
 
 
 class FoobazSalesChannel(SalesChannelType):

@@ -984,9 +984,8 @@ def test_search_multiple_lists(token_client, organizer, clist_all, clist_event2,
 @pytest.mark.django_db
 def test_without_permission(token_client, event, team, organizer, clist_all, order):
     with scopes_disabled():
-        team.can_view_orders = False
-        team.can_change_orders = False
-        team.can_checkin_orders = False
+        team.limit_event_permissions = {}
+        team.all_event_permissions = False
         team.save()
     resp = token_client.get(
         '/api/v1/organizers/{}/checkinrpc/search/?list={}&search=dummy.test&ordering=attendee_name'.format(organizer.slug, clist_all.pk))
@@ -1043,9 +1042,8 @@ def test_checkin_only_permission(token_client, event, team, organizer, clist_all
     assert resp.data['position'].get('pdf_data')
 
     with scopes_disabled():
-        team.can_view_orders = False
-        team.can_change_orders = False
-        team.can_checkin_orders = True
+        team.limit_event_permissions = {"event.orders:checkin": True}
+        team.all_event_permissions = False
         team.save()
 
     # With limited permissions, I can not search with a 2-character query
