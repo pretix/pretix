@@ -42,6 +42,8 @@ from django.utils.html import escape
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _
 
+from pretix.helpers.format import PlainHtmlAlternativeString
+
 
 def replace_arabic_numbers(inp):
     if not isinstance(inp, str):
@@ -61,11 +63,18 @@ def replace_arabic_numbers(inp):
     return inp.translate(table)
 
 
+def format_placeholder_help_text(placeholder_name, sample_value):
+    if isinstance(sample_value, PlainHtmlAlternativeString):
+        sample_value = sample_value.plain
+    title = (_("Sample: %s") % sample_value) if sample_value else ""
+    return ('<button type="button" class="content-placeholder" title="%s">{%s}</button>' % (escape(title), escape(placeholder_name)))
+
+
 def format_placeholders_help_text(placeholders, event=None):
     placeholders = [(k, v.render_sample(event) if event else v) for k, v in placeholders.items()]
     placeholders.sort(key=lambda x: x[0])
     phs = [
-        '<button type="button" class="content-placeholder" title="%s">{%s}</button>' % (escape(_("Sample: %s") % v) if v else "", escape(k))
+        format_placeholder_help_text(k, v)
         for k, v in placeholders
     ]
     return _('Available placeholders: {list}').format(
