@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-24 11:49+0000\n"
+"PO-Revision-Date: 2026-03-01 16:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -16579,28 +16579,20 @@ msgid "You need to specify as many seats as voucher codes."
 msgstr "あなたはバウチャーコードの数と同じだけの席を指定する必要があります。"
 
 #: pretix/control/forms/waitinglist.py:39
-#, fuzzy
-#| msgid "Please select a valid seat."
 msgid "Select a valid choice."
-msgstr "有効な座席を選択してください。"
+msgstr "有効な選択肢を選んでください。"
 
 #: pretix/control/forms/waitinglist.py:107
-#, fuzzy
-#| msgid "Active products"
 msgid "Only includes active products."
-msgstr "有効な製品"
+msgstr "有効な製品のみを含みます。"
 
 #: pretix/control/forms/waitinglist.py:115
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "A voucher for this waiting list entry was already sent out."
-msgstr "このコードを持つバウチャーはすでに存在しています。"
+msgstr "この空席待ちリストの内容を持つバウチャーはすでに発送済みです。"
 
 #: pretix/control/forms/waitinglist.py:125
-#, fuzzy
-#| msgid "The selected product has been deactivated."
 msgid "The selected product is not active."
-msgstr "選択された製品が無効化されました。"
+msgstr "選択された製品無効です。"
 
 #: pretix/control/logdisplay.py:73 pretix/control/logdisplay.py:83
 msgid "The order has been changed:"
@@ -18348,6 +18340,9 @@ msgid ""
 "in repeatedly. Please check if your browser is set to block cookies, or "
 "delete all existing cookies and retry."
 msgstr ""
+"お使いのブラウザが私どものクッキーを受け入れていないようですので、繰り返し"
+"ログインする必要があります。ブラウザがクッキーをブロックする設定になっている"
+"か、既存のクッキーをすべて削除して再試行してください。"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:35
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
@@ -27400,10 +27395,8 @@ msgstr "次のエントリはすでにバウチャーが添付されているた
 #: pretix/control/templates/pretixcontrol/waitinglist/edit.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/edit.html:6
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:273
-#, fuzzy
-#| msgid "Entry"
 msgid "Edit entry"
-msgstr "入場"
+msgstr "エントリーを編集する"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:17
 msgid ""
