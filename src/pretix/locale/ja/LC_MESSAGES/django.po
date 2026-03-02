@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-01 16:00+0000\n"
+"PO-Revision-Date: 2026-03-02 10:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -6997,22 +6997,22 @@ msgstr "2006/112/EC号指令の第309条に基づいて免除"
 #: pretix/base/models/tax.py:253
 msgctxt "tax_code"
 msgid "Intra-Community acquisition from second hand means of transport"
-msgstr "中古輸送手段のEU域内取得"
+msgstr "中古輸送手段の域内取得"
 
 #: pretix/base/models/tax.py:255
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of second hand goods"
-msgstr "中古品のEU域内取得"
+msgstr "中古品の域内取得"
 
 #: pretix/base/models/tax.py:257
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of works of art"
-msgstr "芸術作品のEU域内取得"
+msgstr "芸術作品の域内取得"
 
 #: pretix/base/models/tax.py:259
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of collectors items and antiques"
-msgstr "コレクターアイテムおよび骨董品のEU域内取得"
+msgstr "コレクターアイテムおよび骨董品の域内取得"
 
 #: pretix/base/models/tax.py:261
 msgctxt "tax_code"
@@ -29276,15 +29276,7 @@ msgid "Two-factor authentication is now disabled for your account."
 msgstr "アカウントの二要素認証が無効になりました。"
 
 #: pretix/control/views/user.py:635
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Your emergency codes have been newly generated. Remember to store them in "
-#| "a safe place in case you lose access to your devices. You will not be "
-#| "able to view them again here.\n"
-#| "\n"
-#| "Your emergency codes:\n"
-#| "- \n"
-#| "- "
+#, python-brace-format
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices. You will not be able to "
@@ -29298,8 +29290,7 @@ msgstr ""
 "ことはできません。\n"
 "\n"
 "あなたの緊急コード:\n"
-"-\n"
-"- "
+"{tokens}"
 
 #: pretix/control/views/user.py:655
 msgid "Your notifications have been disabled."
@@ -29464,10 +29455,8 @@ msgid "The selected entry has been deleted."
 msgstr "選択されたエントリは削除されました。"
 
 #: pretix/control/views/waitinglist.py:417
-#, fuzzy
-#| msgid "The waitinglist entry has been transferred."
 msgid "The waitinglist entry has been changed."
-msgstr "空席待ちリスト登録が転送されました。"
+msgstr "空席待ちリスト登録が変更されました。"
 
 #: pretix/helpers/countries.py:134
 msgid "Belarus"
