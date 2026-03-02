@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-28 20:00+0000\n"
-"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
+"PO-Revision-Date: 2026-03-03 07:00+0000\n"
+"Last-Translator: André Almeida <andrealmeid@riseup.net>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -4071,6 +4071,10 @@ msgid ""
 "together...\". Lines with the same grouping value will be put in the same "
 "order, but MUST be consecutive lines of the input file."
 msgstr ""
+"Aplicável apenas quando o \"Modo de importação\" estiver definido como "
+"\"Agrupar várias linhas...\". As linhas com o mesmo valor de agrupamento "
+"serão colocadas no mesmo pedido, mas DEVEM ser linhas consecutivas do "
+"ficheiro de entrada."
 
 #: pretix/base/modelimport_orders.py:101
 msgid "Enter a valid phone number."
@@ -9665,21 +9669,14 @@ msgid "Uncategorized"
 msgstr "Descategorizado"
 
 #: pretix/base/services/tax.py:43
-#, fuzzy
-#| msgid ""
-#| "Your VAT ID could not be checked, as the VAT checking service of your "
-#| "country is currently not available. We will therefore need to charge VAT "
-#| "on your invoice. You can get the tax amount back via the VAT "
-#| "reimbursement process."
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country is currently not available. We will therefore need to charge you the "
 "same tax rate as if you did not enter a VAT ID."
 msgstr ""
 "Seu ID de IVA não pôde ser verificado, pois o serviço de verificação de IVA "
-"do seu país atualmente não está disponível. Por isso, devemos cobrar o IVA "
-"na sua nota fiscal. Você pode recuperar o valor do imposto através do "
-"processo de reembolso."
+"do seu país atualmente não está disponível. Por isso, devemos cobrar a mesma "
+"tributação como se você não tivesse preenchido seu IVA ID."
 
 #: pretix/base/services/tax.py:47 pretix/base/services/tax.py:366
 #: pretix/base/services/tax.py:393
@@ -9786,7 +9783,7 @@ msgstr ""
 
 #: pretix/base/settings.py:85
 msgid "Compute taxes based on net total with stable gross prices"
-msgstr ""
+msgstr "Calcular impostos baseado no total líquido com preços brutos estáveis"
 
 #: pretix/base/settings.py:135
 msgid "Allow usage of restricted plugins"
@@ -9890,14 +9887,8 @@ msgid "Add-on products will not be counted."
 msgstr "Os produtos complementares não serão contados."
 
 #: pretix/base/settings.py:349
-#, fuzzy
-#| msgid ""
-#| "Show net prices instead of gross prices in the product list (not "
-#| "recommended!)"
 msgid "Show net prices instead of gross prices in the product list"
-msgstr ""
-"Mostrar preços líquidos em vez de preços brutos na lista de produtos (não "
-"recomendado!)"
+msgstr "Mostrar preços líquidos em vez de preços brutos na lista de produtos"
 
 #: pretix/base/settings.py:350
 msgid ""
@@ -10507,20 +10498,18 @@ msgid "Charge no taxes"
 msgstr "Não cobrar taxas"
 
 #: pretix/base/settings.py:1113
-#, fuzzy
-#| msgid "Tax rule for payment fees"
 msgid "Tax handling on payment fees"
-msgstr "Regra de imposto para taxas de pagamento"
+msgstr "Gestão de tributação de taxa de pagamento"
 
 #: pretix/base/settings.py:1129 pretix/base/settings.py:1138
 msgid "Use same taxes as order positions (split according to net prices)"
 msgstr ""
+"Usar os mesmo impostos que o pedido (divididos de acordo com os preços "
+"líquidos)"
 
 #: pretix/base/settings.py:1134
-#, fuzzy
-#| msgid "Charge a fixed cancellation fee"
 msgid "Tax handling on cancellation fees"
-msgstr "Cobrar uma taxa fixa de cancelamento"
+msgstr "Impostos sobre as taxas de cancelamento"
 
 #: pretix/base/settings.py:1150 pretix/base/settings.py:1162
 msgid "Do not generate invoices"
@@ -10624,10 +10613,8 @@ msgstr ""
 "emitir uma nova fatura se for necessário fazer uma alteração."
 
 #: pretix/base/settings.py:1235
-#, fuzzy
-#| msgid "Restrict to business customers"
 msgid "Only issue invoices to business customers"
-msgstr "Restringir a clientes empresariais"
+msgstr "Emitir faturas apenas para clientes empresariais"
 
 #: pretix/base/settings.py:1244
 msgid "Address line"
@@ -11487,16 +11474,12 @@ msgid "Accessibility information URL"
 msgstr "URL de informação de acessibilidade"
 
 #: pretix/base/settings.py:2243
-#, fuzzy
-#| msgid ""
-#| "This should point e.g. to a part of your website that explains how you "
-#| "use data gathered in your ticket shop."
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
 msgstr ""
 "Isso deve apontar, por exemplo, para uma parte de seu site que explica como "
-"você usa os dados coletados em sua loja de ingressos."
+"a sua bilheteria cumpre com regulamentações de acessibilidade."
 
 #: pretix/base/settings.py:2250
 #: pretix/presale/templates/pretixpresale/event/base.html:228
@@ -12514,10 +12497,9 @@ msgstr ""
 "Organização {organizer}"
 
 #: pretix/base/settings.py:2955
-#, fuzzy, python-brace-format
-#| msgid "Activate your account at {organizer}"
+#, python-brace-format
 msgid "Changes to your account at {organizer}"
-msgstr "Ativar sua conta em {organizer}"
+msgstr "Mudanças da sua conta em {organizer}"
 
 #: pretix/base/settings.py:2959
 #, python-brace-format
@@ -12607,13 +12589,6 @@ msgid "Header image"
 msgstr "Imagem de cabeçalho"
 
 #: pretix/base/settings.py:3129
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your event name "
-#| "and date in the page header. By default, we show your logo with a size of "
-#| "up to 1140x120 pixels. You can increase the size with the setting below. "
-#| "We recommend not using small details on the picture as it will be resized "
-#| "on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. If you use a white background, we show your logo "
@@ -12622,10 +12597,11 @@ msgid ""
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
 "Ao fornecer uma imagem de cabeçalho, não exibiremos o nome e a data do "
-"evento no cabeçalho da página. Por padrão, mostramos sua imagem com um "
-"tamanho de até 1140 x 120 pixels. Você pode aumentar o tamanho nas "
-"configurações abaixo. Recomendamos não utilizar pequenos detalhes na imagem, "
-"pois ela será redimensionada em telas menores."
+"evento no cabeçalho da página. Se você usar um fundo branco, mostramos sua "
+"imagem com um tamanho de até 1140 x 120 pixels. Se não, o tamanho máximo é "
+"de 1120 x 120 pixels. Você pode aumentar o tamanho nas configurações abaixo. "
+"Recomendamos não utilizar pequenos detalhes na imagem, pois ela será "
+"redimensionada em telas menores."
 
 #: pretix/base/settings.py:3150 pretix/base/settings.py:3193
 msgid "Use header image in its full size"
@@ -12652,13 +12628,6 @@ msgstr ""
 "sempre será mostrado."
 
 #: pretix/base/settings.py:3173 pretix/control/forms/organizer.py:528
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your "
-#| "organization name in the page header. By default, we show your logo with "
-#| "a size of up to 1140x120 pixels. You can increase the size with the "
-#| "setting below. We recommend not using small details on the picture as it "
-#| "will be resized on smaller screens."
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. If you use a white background, we show your logo "
@@ -12667,10 +12636,11 @@ msgid ""
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
 "Se você fornecer uma imagem de logotipo, por padrão, não mostraremos o nome "
-"da sua organização no cabeçalho da página. Por padrão, mostramos seu "
-"logotipo com um tamanho de até 1140x120 pixels. Você pode aumentar o tamanho "
-"com a configuração abaixo. Recomendamos não usar pequenos detalhes na "
-"imagem, pois ela será redimensionada em telas menores."
+"da sua organização no cabeçalho da página. Se você usar um fundo branco, "
+"mostramos seu logotipo com um tamanho de até 1140x120 pixels. Se não,  o "
+"tamanho máximo é de 1120 x 120 pixels. Você pode aumentar o tamanho com a "
+"configuração abaixo. Recomendamos não usar pequenos detalhes na imagem, pois "
+"ela será redimensionada em telas menores."
 
 #: pretix/base/settings.py:3203
 msgid "Use header image also for events without an individually uploaded logo"
@@ -14054,6 +14024,7 @@ msgstr "Todos os portões"
 #: pretix/control/forms/checkin.py:222
 msgid "I am sure that the check-in state of the entire event should be reset."
 msgstr ""
+"Tenho certeza de que o estate de check-in do evento todo deve ser resetado."
 
 #: pretix/control/forms/event.py:91
 msgid "Use languages"
@@ -14248,6 +14219,7 @@ msgstr "Preços incluindo impostos"
 #: pretix/control/forms/event.py:815
 msgid "Recommended if you sell tickets at least partly to consumers."
 msgstr ""
+"Recomendado se você vende ingressos pelo menos em parte para consumidores."
 
 #: pretix/control/forms/event.py:819
 msgid "Prices excluding tax"
