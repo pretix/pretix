@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-25 23:00+0000\n"
+"PO-Revision-Date: 2026-03-02 10:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -9673,7 +9673,7 @@ msgstr "Het bedrag is van je kaart afgeschreven."
 
 #: pretix/base/services/placeholders.py:699
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr "Maak het geld over naar deze bankrekening: NL13 TEST 0123 4567 89"
+msgstr "Maak het geld over naar deze bankrekening: 9999-9999-9999-9999"
 
 #: pretix/base/services/placeholders.py:799
 #: pretix/control/views/organizer.py:349
@@ -34057,7 +34057,7 @@ msgid ""
 "completed your payment, you can refresh this page."
 msgstr ""
 "Scan de QR-code hieronder om je WeChat-betaling uit te voeren. Als je de "
-"betaling hebt afgerond kan je deze pagina verversen."
+"betaling hebt afgerond, kan je deze pagina verversen."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:62
 msgid ""
@@ -35231,7 +35231,7 @@ msgstr "incl. belasting"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:359
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
-msgstr "<strong>excl.</strong> %(rate)s%% %(name)s"
+msgstr "<strong>plus</strong> %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:180
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:320
