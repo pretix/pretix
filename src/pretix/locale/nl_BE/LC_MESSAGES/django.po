@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-27 14:22+0000\n"
+"PO-Revision-Date: 2026-03-02 10:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -17603,352 +17603,365 @@ msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires payment."
 msgstr ""
+"Er is een e-mail verzonden naar de gebruiker verzonden dat de bestelling "
+"ontvangen is en betaald moet worden."
 
 #: pretix/control/logdisplay.py:574
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
 msgstr ""
+"Er is een e-mail naar de gebruiker verzonden dat de bestelling ontvangen is "
+"en goedgekeurd moet worden."
 
 #: pretix/control/logdisplay.py:577
 msgid ""
 "An email with a link to the order detail page has been resent to the user."
 msgstr ""
+"De e-mail met een link naar de details van de bestelling is opnieuw "
+"verstuurd naar de gebruiker."
 
 #: pretix/control/logdisplay.py:578
 msgid "An email has been sent to notify the user that the payment failed."
 msgstr ""
+"Er is een e-mail naar de gebruiker verzonden dat de betaling mislukt is."
 
 #: pretix/control/logdisplay.py:585
 msgid "The voucher has been created."
-msgstr ""
+msgstr "De voucher is aangemaakt."
 
 #: pretix/control/logdisplay.py:588
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
 msgstr ""
+"De voucher is verlopen omdat de ontvanger zichzelf van de wachtlijst heeft "
+"verwijderd."
 
 #: pretix/control/logdisplay.py:589
 msgid "The voucher has been changed."
-msgstr ""
+msgstr "De voucher is aangepast."
 
 #: pretix/control/logdisplay.py:590
 msgid "The voucher has been deleted."
-msgstr ""
+msgstr "De voucher is verwijderd."
 
 #: pretix/control/logdisplay.py:591
 msgid "Cart positions including the voucher have been deleted."
 msgstr ""
+"De producten in het winkelwagentje, inclusief de voucher, zijn verwijderd."
 
 #: pretix/control/logdisplay.py:592
 #, python-brace-format
 msgid "The voucher has been assigned to {email} through the waiting list."
-msgstr ""
+msgstr "De voucher is via de wachtlijst toegewezen aan {email}."
 
 #: pretix/control/logdisplay.py:601
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr ""
+msgstr "De voucher is ingewisseld in bestelling {order_code}."
 
 #: pretix/control/logdisplay.py:616
 msgid "The category has been added."
-msgstr ""
+msgstr "De categorie is toegevoegd."
 
 #: pretix/control/logdisplay.py:617
 msgid "The category has been deleted."
-msgstr ""
+msgstr "De categorie is verwijderd."
 
 #: pretix/control/logdisplay.py:618
 msgid "The category has been changed."
-msgstr ""
+msgstr "De categorie is aangepast."
 
 #: pretix/control/logdisplay.py:619
 msgid "The category has been reordered."
-msgstr ""
+msgstr "De categorie is opnieuw geordend."
 
 #: pretix/control/logdisplay.py:626
 msgid "The tax rule has been added."
-msgstr ""
+msgstr "De belastingregel is toegevoegd."
 
 #: pretix/control/logdisplay.py:627
 msgid "The tax rule has been deleted."
-msgstr ""
+msgstr "De belastingregel is verwijderd."
 
 #: pretix/control/logdisplay.py:628
 msgid "The tax rule has been changed."
-msgstr ""
+msgstr "De belastingregel is aangepast."
 
 #: pretix/control/logdisplay.py:640
 #, python-brace-format
 msgid "{user} has been added to the team."
-msgstr ""
+msgstr "{user} is toegevoegd aan het team."
 
 #: pretix/control/logdisplay.py:641
 #, python-brace-format
 msgid "{user} has been removed from the team."
-msgstr ""
+msgstr "{user} is verwijderd uit het team."
 
 #: pretix/control/logdisplay.py:642
 #, python-brace-format
 msgid "{user} has been invited to the team."
-msgstr ""
+msgstr "{user} is uitgenodigd voor het team."
 
 #: pretix/control/logdisplay.py:643
 #, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr ""
+msgstr "De uitnodiging voor {user} is opnieuw verstuurd."
 
 #: pretix/control/logdisplay.py:654
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
 msgstr ""
+"{user} is bij het team gekomen via de uitnodiging verstuurd naar {email}."
 
 #: pretix/control/logdisplay.py:664
 msgid "Your account settings have been changed."
-msgstr ""
+msgstr "Uw accountinstellingen zijn aangepast."
 
 #: pretix/control/logdisplay.py:667 pretix/control/views/user.py:963
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
-msgstr ""
+msgstr "Uw e-mailadres is veranderd naar {email}."
 
 #: pretix/control/logdisplay.py:671
 msgid "Your account has been enabled."
-msgstr ""
+msgstr "Uw account is ingeschakeld."
 
 #: pretix/control/logdisplay.py:673
 msgid "Your account has been disabled."
-msgstr ""
+msgstr "Uw account is uitgeschakeld."
 
 #: pretix/control/logdisplay.py:678 pretix/presale/views/customer.py:642
 #, python-brace-format
 msgid "Your email address has been changed from {old_email} to {email}."
-msgstr ""
+msgstr "Uw e-mailadres is veranderd van \"{old_email}\" naar \"{email}\"."
 
 #: pretix/control/logdisplay.py:679
 #, python-brace-format
 msgid "Your email address {email} has been confirmed."
-msgstr ""
+msgstr "Uw e-mailadres {email} is bevestigd."
 
 #: pretix/control/logdisplay.py:691
 #, python-brace-format
 msgid "You impersonated {}."
-msgstr ""
+msgstr "U hebt gewerkt als {}."
 
 #: pretix/control/logdisplay.py:692
 #, python-brace-format
 msgid "You stopped impersonating {}."
-msgstr ""
+msgstr "U bent gestopt met werken als {}."
 
 #: pretix/control/logdisplay.py:699
 msgid "This object has been created by cloning."
-msgstr ""
+msgstr "Dit object is aangemaakt via kopiëren."
 
 #: pretix/control/logdisplay.py:700
 msgid "The organizer has been changed."
-msgstr ""
+msgstr "De organisator is veranderd."
 
 #: pretix/control/logdisplay.py:701
 msgid "The organizer settings have been changed."
-msgstr ""
+msgstr "De instellingen van de organisator zijn aangepast."
 
 #: pretix/control/logdisplay.py:702 pretix/control/logdisplay.py:847
 msgid "The footer links have been changed."
-msgstr ""
+msgstr "De links in de voettekst zijn aangepast."
 
 #: pretix/control/logdisplay.py:703 pretix/control/logdisplay.py:752
 msgid "A scheduled export has been added."
-msgstr ""
+msgstr "Er is een geplande export toegevoegd."
 
 #: pretix/control/logdisplay.py:704 pretix/control/logdisplay.py:753
 msgid "A scheduled export has been changed."
-msgstr ""
+msgstr "Een geplande export is gewijzigd."
 
 #: pretix/control/logdisplay.py:705 pretix/control/logdisplay.py:754
 msgid "A scheduled export has been deleted."
-msgstr ""
+msgstr "Een geplande export is verwijderd."
 
 #: pretix/control/logdisplay.py:706 pretix/control/logdisplay.py:755
 msgid "A scheduled export has been executed."
-msgstr ""
+msgstr "Een geplande export is uitgevoerd."
 
 #: pretix/control/logdisplay.py:707 pretix/control/logdisplay.py:756
 #, python-brace-format
 msgid "A scheduled export has failed: {reason}."
-msgstr ""
+msgstr "Een geplande export is mislukt: {reason}."
 
 #: pretix/control/logdisplay.py:708
 msgid "Failed emails have been scheduled to be retried."
-msgstr ""
+msgstr "Niet-afgeleverde e-mails zullen opnieuw verzonden worden."
 
 #: pretix/control/logdisplay.py:709
 msgid "Queued emails have been aborted."
-msgstr ""
+msgstr "De e-mails in de wachtrij zijn geannuleerd."
 
 #: pretix/control/logdisplay.py:710
 msgid "Gift card acceptance for another organizer has been added."
-msgstr ""
+msgstr "Cadeaubonacceptatie voor een andere organisator is toegevoegd."
 
 #: pretix/control/logdisplay.py:711
 msgid "Gift card acceptance for another organizer has been removed."
-msgstr ""
+msgstr "Cadeaubonacceptatie voor een andere organisator is verwijderd."
 
 #: pretix/control/logdisplay.py:712
 msgid "A new gift card acceptor has been invited."
-msgstr ""
+msgstr "Er is een nieuwe acceptant van cadeaubonnen uitgenodigd."
 
 #: pretix/control/logdisplay.py:713
 msgid "A gift card acceptor has been removed."
-msgstr ""
+msgstr "Een acceptant van cadeaubonnen is verwijderd."
 
 #: pretix/control/logdisplay.py:714
 msgid "A gift card issuer has been removed or declined."
-msgstr ""
+msgstr "Een uitgever van cadeaubonnen is verwijderd of geweigerd."
 
 #: pretix/control/logdisplay.py:715
 msgid "A new gift card issuer has been accepted."
-msgstr ""
+msgstr "Er is een nieuwe uitgever van cadeaubonnen geaccepteerd."
 
 #: pretix/control/logdisplay.py:716
 msgid "The webhook has been created."
-msgstr ""
+msgstr "De webhook is aangemaakt."
 
 #: pretix/control/logdisplay.py:717
 msgid "The webhook has been changed."
-msgstr ""
+msgstr "De webhook is gewijzigd."
 
 #: pretix/control/logdisplay.py:718
 msgid "The webhook call retry jobs have been manually expedited."
-msgstr ""
+msgstr "Het opnieuw aanroepen van een gefaalde webhook is handmatig versneld."
 
 #: pretix/control/logdisplay.py:719
 msgid "The webhook call retry jobs have been dropped."
 msgstr ""
+"De taken voor het opnieuw proberen uit te voeren van webhooks zijn "
+"weggegooid."
 
 #: pretix/control/logdisplay.py:720
 msgid "The SSO provider has been created."
-msgstr ""
+msgstr "De SSO-provider is aangemaakt."
 
 #: pretix/control/logdisplay.py:721
 msgid "The SSO provider has been changed."
-msgstr ""
+msgstr "De SSO-provider is gewijzigd."
 
 #: pretix/control/logdisplay.py:722
 msgid "The SSO provider has been deleted."
-msgstr ""
+msgstr "De SSO-provider is verwijderd."
 
 #: pretix/control/logdisplay.py:723
 msgid "The SSO client has been created."
-msgstr ""
+msgstr "De SSO-client is aangemaakt."
 
 #: pretix/control/logdisplay.py:724
 msgid "The SSO client has been changed."
-msgstr ""
+msgstr "De SSO-client is gewijzigd."
 
 #: pretix/control/logdisplay.py:725
 msgid "The SSO client has been deleted."
-msgstr ""
+msgstr "De SSO-client is verwijderd."
 
 #: pretix/control/logdisplay.py:726 pretix/control/views/organizer.py:2669
 msgid "The membership type has been created."
-msgstr ""
+msgstr "Het lidmaatschapstype is aangemaakt."
 
 #: pretix/control/logdisplay.py:727
 msgid "The membership type has been changed."
-msgstr ""
+msgstr "Het lidmaatschapstype is gewijzigd."
 
 #: pretix/control/logdisplay.py:728
 msgid "The membership type has been deleted."
-msgstr ""
+msgstr "Het lidmaatschapstype is verwijderd."
 
 #: pretix/control/logdisplay.py:729 pretix/control/views/organizer.py:3510
 msgid "The sales channel has been created."
-msgstr ""
+msgstr "Het verkoopskanaal is aangemaakt."
 
 #: pretix/control/logdisplay.py:730
 msgid "The sales channel has been changed."
-msgstr ""
+msgstr "Het verkoopskanaal is gewijzigd."
 
 #: pretix/control/logdisplay.py:731
 msgid "The sales channel has been deleted."
-msgstr ""
+msgstr "Het verkoopskanaal is verwijderd."
 
 #: pretix/control/logdisplay.py:732
 msgid "The account has been created."
-msgstr ""
+msgstr "Het account is aangemaakt."
 
 #: pretix/control/logdisplay.py:733
 msgid "The account has been changed."
-msgstr ""
+msgstr "Het account is gewijzigd."
 
 #: pretix/control/logdisplay.py:734
 msgid "A membership for this account has been added."
-msgstr ""
+msgstr "Er is een lidmaatschap voor dit account toegevoegd."
 
 #: pretix/control/logdisplay.py:735
 msgid "A membership of this account has been changed."
-msgstr ""
+msgstr "Een lidmaatschap van dit account is gewijzigd."
 
 #: pretix/control/logdisplay.py:736
 msgid "A membership of this account has been deleted."
-msgstr ""
+msgstr "Een lidmaatschap van dit account is verwijderd."
 
 #: pretix/control/logdisplay.py:737
 msgid "The account has been disabled and anonymized."
-msgstr ""
+msgstr "Het account is uitgeschakeld en geanonimiseerd."
 
 #: pretix/control/logdisplay.py:738
 msgid "A new password has been requested."
-msgstr ""
+msgstr "Er is een nieuw wachtwoord aangevraagd."
 
 #: pretix/control/logdisplay.py:739
 msgid "A new password has been set."
-msgstr ""
+msgstr "Er is een nieuw wachtwoord ingesteld."
 
 #: pretix/control/logdisplay.py:741
 msgid "The reusable medium has been created."
-msgstr ""
+msgstr "Het herbruikbare medium is aangemaakt."
 
 #: pretix/control/logdisplay.py:742
 msgid "The reusable medium has been created automatically."
-msgstr ""
+msgstr "Het herbruikbare medium is automatisch aangemaakt."
 
 #: pretix/control/logdisplay.py:743
 msgid "The reusable medium has been changed."
-msgstr ""
+msgstr "Het herbruikbare medium is gewijzigd."
 
 #: pretix/control/logdisplay.py:744
 msgid "The medium has been connected to a new ticket."
-msgstr ""
+msgstr "Het medium is gekoppeld aan een nieuw ticket."
 
 #: pretix/control/logdisplay.py:745
 msgid "The medium has been connected to a new gift card."
-msgstr ""
+msgstr "Het medium is gekoppeld aan een nieuwe cadeaubon."
 
 #: pretix/control/logdisplay.py:747
 msgid "The event's internal comment has been updated."
-msgstr ""
+msgstr "Het interne commentaar van het evenement is bijgewerkt."
 
 #: pretix/control/logdisplay.py:748
 msgid "The event has been canceled."
-msgstr ""
+msgstr "Het evenement is geannuleerd."
 
 #: pretix/control/logdisplay.py:749
 msgid "An event has been deleted."
-msgstr ""
+msgstr "Een evenement is verwijderd."
 
 #: pretix/control/logdisplay.py:750
 msgid "A removal process for personal data has been started."
-msgstr ""
+msgstr "Er is een verwijderingsproces voor persoonsgegevens gestart."
 
 #: pretix/control/logdisplay.py:751
 msgid "A removal process for personal data has been completed."
-msgstr ""
+msgstr "Het verwijderingsproces voor persoonsgegevens is voltooid."
 
 #: pretix/control/logdisplay.py:757
 msgid "The user has been created."
-msgstr ""
+msgstr "De gebruiker is aangemaakt."
 
 #: pretix/control/logdisplay.py:758
 #, python-brace-format
@@ -17956,24 +17969,26 @@ msgid ""
 "A first login using {agent_type} on {os_type} from {country} has been "
 "detected."
 msgstr ""
+"Er is een eerste aanmelding gedetecteerd met {agent_type} op {os_type} "
+"vanuit {country}."
 
 #: pretix/control/logdisplay.py:760 pretix/control/views/user.py:477
 #: pretix/control/views/user.py:537 pretix/control/views/user.py:596
 msgid "Two-factor authentication has been enabled."
-msgstr ""
+msgstr "Twee-factor-authenticatie is ingeschakeld."
 
 #: pretix/control/logdisplay.py:761 pretix/control/views/user.py:380
 #: pretix/control/views/user.py:612
 msgid "Two-factor authentication has been disabled."
-msgstr ""
+msgstr "Twee-factor-authenticatie is uitgeschakeld."
 
 #: pretix/control/logdisplay.py:762 pretix/control/views/user.py:629
 msgid "Your two-factor emergency codes have been regenerated."
-msgstr ""
+msgstr "Uw twee-factor-noodtokens zijn opnieuw gegenereerd."
 
 #: pretix/control/logdisplay.py:763
 msgid "A two-factor emergency code has been generated."
-msgstr ""
+msgstr "Er is een twee-factor-noodcode gegenereerd."
 
 #: pretix/control/logdisplay.py:764
 #, python-brace-format
@@ -17981,6 +17996,8 @@ msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
 "account."
 msgstr ""
+"Een nieuw twee-factor-authenticatieapparaat \"{name}\" is toegevoegd aan uw "
+"account."
 
 #: pretix/control/logdisplay.py:766
 #, python-brace-format
@@ -17988,447 +18005,453 @@ msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
 msgstr ""
+"Het twee-factor-authenticatieapparaat \"{name}\" is verwijderd van uw "
+"account."
 
 #: pretix/control/logdisplay.py:768
 msgid "Notifications have been enabled."
-msgstr ""
+msgstr "Meldingen zijn ingeschakeld."
 
 #: pretix/control/logdisplay.py:769
 msgid "Notifications have been disabled."
-msgstr ""
+msgstr "Meldingen zijn uitgeschakeld."
 
 #: pretix/control/logdisplay.py:770
 msgid "Your notification settings have been changed."
-msgstr ""
+msgstr "Uw meldingsinstellingen zijn aangepast."
 
 #: pretix/control/logdisplay.py:771
 msgid "This user has been anonymized."
-msgstr ""
+msgstr "Deze gebruiker is geanonimiseerd."
 
 #: pretix/control/logdisplay.py:775
 msgid "Password reset mail sent."
-msgstr ""
+msgstr "Wachtwoord-herstelmail verstuurd."
 
 #: pretix/control/logdisplay.py:776
 msgid "The password has been reset."
-msgstr ""
+msgstr "Het wachtwoord is opnieuw ingesteld."
 
 #: pretix/control/logdisplay.py:777
 msgid ""
 "A repeated password reset has been denied, as the last request was less than "
 "24 hours ago."
 msgstr ""
+"Een herhaald verzoek tot wachtwoordherstel is geweigerd, omdat het vorige "
+"verzoek minder dan 24 uur geleden was."
 
 #: pretix/control/logdisplay.py:779
 #, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
-msgstr ""
+msgstr "De organisator \"{name}\" is verwijderd."
 
 #: pretix/control/logdisplay.py:780 pretix/control/logdisplay.py:1011
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr ""
+msgstr "Er is een voucher verstuurd naar een persoon op de wachtlijst."
 
 #: pretix/control/logdisplay.py:781
 msgid "An entry has been transferred to another waiting list."
-msgstr ""
+msgstr "Een inschrijving is verplaatst naar een andere wachtlijst."
 
 #: pretix/control/logdisplay.py:782
 msgid "The team has been created."
-msgstr ""
+msgstr "Het team is aangemaakt."
 
 #: pretix/control/logdisplay.py:783
 msgid "The team settings have been changed."
-msgstr ""
+msgstr "De teaminstellingen zijn gewijzigd."
 
 #: pretix/control/logdisplay.py:784
 msgid "The team has been deleted."
-msgstr ""
+msgstr "Het team is verwijderd."
 
 #: pretix/control/logdisplay.py:785 pretix/control/views/organizer.py:2335
 msgid "The gate has been created."
-msgstr ""
+msgstr "De ingang is aangemaakt."
 
 #: pretix/control/logdisplay.py:786
 msgid "The gate has been changed."
-msgstr ""
+msgstr "De ingang is gewijzigd."
 
 #: pretix/control/logdisplay.py:787
 msgid "The gate has been deleted."
-msgstr ""
+msgstr "De ingang is verwijderd."
 
 #: pretix/control/logdisplay.py:788
 msgctxt "subevent"
 msgid "The event date has been deleted."
-msgstr ""
+msgstr "De evenementdatum is verwijderd."
 
 #: pretix/control/logdisplay.py:789
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr ""
+msgstr "De evenementdatum is geannuleerd."
 
 #: pretix/control/logdisplay.py:790
 msgctxt "subevent"
 msgid "The event date has been changed."
-msgstr ""
+msgstr "De evenementdatum is gewijzigd."
 
 #: pretix/control/logdisplay.py:791
 msgctxt "subevent"
 msgid "The event date has been created."
-msgstr ""
+msgstr "De evenementdatum is aangemaakt."
 
 #: pretix/control/logdisplay.py:792
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
-msgstr ""
+msgstr "Er is een quotum toegevoegd aan de evenementdatum."
 
 #: pretix/control/logdisplay.py:793
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
-msgstr ""
+msgstr "Een quotum van de evenementdatum is gewijzigd."
 
 #: pretix/control/logdisplay.py:794
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
-msgstr ""
+msgstr "Een quotum van de evenementdatum is verwijderd."
 
 #: pretix/control/logdisplay.py:795
 msgid "The device has been created."
-msgstr ""
+msgstr "Het apparaat is aangemaakt."
 
 #: pretix/control/logdisplay.py:796
 msgid "The device has been changed."
-msgstr ""
+msgstr "Het apparaat is gewijzigd."
 
 #: pretix/control/logdisplay.py:797
 msgid "Access of the device has been revoked."
-msgstr ""
+msgstr "De toegang van het apparaat is ingetrokken."
 
 #: pretix/control/logdisplay.py:798
 msgid "The device has been initialized."
-msgstr ""
+msgstr "Het apparaat is geïnitialiseerd."
 
 #: pretix/control/logdisplay.py:799
 msgid "The access token of the device has been regenerated."
-msgstr ""
+msgstr "Het toegangstoken van het apparaat is opnieuw gegenereerd."
 
 #: pretix/control/logdisplay.py:800
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
+"Het apparaat heeft de server op de hoogte gesteld van een hardware- of "
+"software-update."
 
 #: pretix/control/logdisplay.py:801
 msgid "The gift card has been created."
-msgstr ""
+msgstr "De cadeaubon is aangemaakt."
 
 #: pretix/control/logdisplay.py:802 pretix/control/views/organizer.py:1946
 msgid "The gift card has been changed."
-msgstr ""
+msgstr "De cadeaubon is gewijzigd."
 
 #: pretix/control/logdisplay.py:803
 msgid "A manual transaction has been performed."
-msgstr ""
+msgstr "Een handmatige transactie is uitgevoerd."
 
 #: pretix/control/logdisplay.py:804
 msgid "A payment has been performed."
-msgstr ""
+msgstr "Er is een betaling uitgevoerd."
 
 #: pretix/control/logdisplay.py:805
 msgid "A refund has been performed. "
-msgstr ""
+msgstr "Er is een terugbetaling uitgevoegd, "
 
 #: pretix/control/logdisplay.py:806
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
-msgstr ""
+msgstr "Het token \"{name}\" is aangemaakt."
 
 #: pretix/control/logdisplay.py:807
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
-msgstr ""
+msgstr "Het token \"{name}\" is ingetrokken."
 
 #: pretix/control/logdisplay.py:808
 msgid "The check-in and print log state has been reset."
-msgstr ""
+msgstr "De check-in- en afdrukstatus is gereset."
 
 #: pretix/control/logdisplay.py:815 pretix/control/logdisplay.py:874
 msgid "The plugin has been enabled."
-msgstr ""
+msgstr "De plug-in is ingeschakeld."
 
 #: pretix/control/logdisplay.py:816 pretix/control/logdisplay.py:875
 #: pretix/control/views/event.py:489 pretix/control/views/organizer.py:754
 msgid "The plugin has been disabled."
-msgstr ""
+msgstr "De plug-in is uitgeschakeld."
 
 #: pretix/control/logdisplay.py:819 pretix/control/logdisplay.py:878
 #, python-brace-format
 msgid "Plugin {val}"
-msgstr ""
+msgstr "Plug-in {val}"
 
 #: pretix/control/logdisplay.py:834
 msgid "A meta property has been added to this event."
-msgstr ""
+msgstr "Er is een meta-eigenschap toegevoegd aan dit evenement."
 
 #: pretix/control/logdisplay.py:835
 msgid "A meta property has been removed from this event."
-msgstr ""
+msgstr "Een meta-eigenschap van dit evenement is verwijderd."
 
 #: pretix/control/logdisplay.py:836
 msgid "A meta property has been changed on this event."
-msgstr ""
+msgstr "Een meta-eigenschap van dit evenement is gewijzigd."
 
 #: pretix/control/logdisplay.py:837
 msgid "The event settings have been changed."
-msgstr ""
+msgstr "De evenementinstellingen zijn gewijzigd."
 
 #: pretix/control/logdisplay.py:838
 msgid "The ticket download settings have been changed."
-msgstr ""
+msgstr "De instellingen voor het downloaden van tickets zijn gewijzigd."
 
 #: pretix/control/logdisplay.py:841
 msgid "The shop has been taken live."
-msgstr ""
+msgstr "De winkel is live gezet."
 
 #: pretix/control/logdisplay.py:842
 msgid "The shop has been taken offline."
-msgstr ""
+msgstr "De winkel is offline gehaald."
 
 #: pretix/control/logdisplay.py:843
 msgid "The shop has been taken into test mode."
-msgstr ""
+msgstr "De winkel is in testmodus gezet."
 
 #: pretix/control/logdisplay.py:844
 msgid "The test mode has been disabled."
-msgstr ""
+msgstr "De testmodus is uitgeschakeld."
 
 #: pretix/control/logdisplay.py:845
 msgid "The event has been created."
-msgstr ""
+msgstr "Het evenement is aangemaakt."
 
 #: pretix/control/logdisplay.py:846
 msgid "The event details have been changed."
-msgstr ""
+msgstr "De evenementdetails zijn gewijzigd."
 
 #: pretix/control/logdisplay.py:848
 msgid "An answer option has been added to the question."
-msgstr ""
+msgstr "Er is een antwoordoptie aan de vraag toegevoegd."
 
 #: pretix/control/logdisplay.py:849
 msgid "An answer option has been removed from the question."
-msgstr ""
+msgstr "Een antwoordoptie is verwijderd van de vraag."
 
 #: pretix/control/logdisplay.py:850
 msgid "An answer option has been changed."
-msgstr ""
+msgstr "Een antwoordoptie is gewijzigd."
 
 #: pretix/control/logdisplay.py:851
 msgid "A user has been added to the event team."
-msgstr ""
+msgstr "Er is een gebruiker toegevoegd aan het evenementteam."
 
 #: pretix/control/logdisplay.py:852
 msgid "A user has been invited to the event team."
-msgstr ""
+msgstr "Een gebruiker is uitgenodigd voor het evenementteam."
 
 #: pretix/control/logdisplay.py:853
 msgid "A user's permissions have been changed."
-msgstr ""
+msgstr "De rechten van een gebruiker zijn gewijzigd."
 
 #: pretix/control/logdisplay.py:854
 msgid "A user has been removed from the event team."
-msgstr ""
+msgstr "Een gebruiker is verwijderd van het evenementteam."
 
 #: pretix/control/logdisplay.py:861
 msgid "The check-in list has been added."
-msgstr ""
+msgstr "De check-in-lijst is toegevoegd."
 
 #: pretix/control/logdisplay.py:862 pretix/control/logdisplay.py:863
 msgid "The check-in list has been deleted."
-msgstr ""
+msgstr "De check-in-lijst is verwijderd."
 
 #: pretix/control/logdisplay.py:864
 msgid "The check-in list has been changed."
-msgstr ""
+msgstr "De check-in-lijst is gewijzigd."
 
 #: pretix/control/logdisplay.py:867
 #, python-brace-format
 msgid "Check-in list {val}"
-msgstr ""
+msgstr "Check-in-lijst {val}"
 
 #: pretix/control/logdisplay.py:894
 msgid "The product has been created."
-msgstr ""
+msgstr "Het product is aangemaakt."
 
 #: pretix/control/logdisplay.py:895
 msgid "The product has been changed."
-msgstr ""
+msgstr "Het product is gewijzigd."
 
 #: pretix/control/logdisplay.py:896
 msgid "The product has been reordered."
-msgstr ""
+msgstr "Het product is opnieuw gesorteerd."
 
 #: pretix/control/logdisplay.py:897
 msgid "The product has been deleted."
-msgstr ""
+msgstr "Het product is verwijderd."
 
 #: pretix/control/logdisplay.py:898
 msgid "An add-on has been added to this product."
-msgstr ""
+msgstr "Er is een add-on toegevoegd aan dit product."
 
 #: pretix/control/logdisplay.py:899
 msgid "An add-on has been removed from this product."
-msgstr ""
+msgstr "Een add-on is verwijderd van dit product."
 
 #: pretix/control/logdisplay.py:900
 msgid "An add-on has been changed on this product."
-msgstr ""
+msgstr "Een add-on van dit product is gewijzigd."
 
 #: pretix/control/logdisplay.py:901
 msgid "A bundled item has been added to this product."
-msgstr ""
+msgstr "Er is een gebundeld product toegevoegd aan dit product."
 
 #: pretix/control/logdisplay.py:902
 msgid "A bundled item has been removed from this product."
-msgstr ""
+msgstr "Een gebundeld product is verwijderd uit dit product."
 
 #: pretix/control/logdisplay.py:903
 msgid "A bundled item has been changed on this product."
-msgstr ""
+msgstr "Een gebundeld product van dit product is gewijzigd."
 
 #: pretix/control/logdisplay.py:904
 msgid "A program time has been added to this product."
-msgstr ""
+msgstr "Aan dit product is een programmatijd toegevoegd."
 
 #: pretix/control/logdisplay.py:905
 msgid "A program time has been changed on this product."
-msgstr ""
+msgstr "Bij dit product is de programmatijd gewijzigd."
 
 #: pretix/control/logdisplay.py:906
 msgid "A program time has been removed from this product."
-msgstr ""
+msgstr "Bij dit product is een programmatijd verwijderd."
 
 #: pretix/control/logdisplay.py:913
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
-msgstr ""
+msgstr "De variant \"{value}\" is aangemaakt."
 
 #: pretix/control/logdisplay.py:914
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
-msgstr ""
+msgstr "De variant \"{value}\" is verwijderd."
 
 #: pretix/control/logdisplay.py:915
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr ""
+msgstr "De variant \"{value}\" is gewijzigd."
 
 #: pretix/control/logdisplay.py:932
 #, python-brace-format
 msgid "Payment {local_id} has been confirmed."
-msgstr ""
+msgstr "Betaling {local_id} is bevestigd."
 
 #: pretix/control/logdisplay.py:933
 #, python-brace-format
 msgid "Payment {local_id} has been canceled."
-msgstr ""
+msgstr "Betaling {local_id} is geannuleerd."
 
 #: pretix/control/logdisplay.py:934
 #, python-brace-format
 msgid "Canceling payment {local_id} has failed."
-msgstr ""
+msgstr "Het annuleren van betaling {local_id} is mislukt."
 
 #: pretix/control/logdisplay.py:935
 #, python-brace-format
 msgid "Payment {local_id} has been started."
-msgstr ""
+msgstr "Betaling {local_id} is gestart."
 
 #: pretix/control/logdisplay.py:936
 #, python-brace-format
 msgid "Payment {local_id} has failed."
-msgstr ""
+msgstr "Betaling {local_id} is mislukt."
 
 #: pretix/control/logdisplay.py:937
 #, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr ""
+msgstr "De bestelling kon niet worden gemarkeerd als betaald: {message}"
 
 #: pretix/control/logdisplay.py:938
 msgid "The order has been overpaid."
-msgstr ""
+msgstr "Er is te veel betaald voor de bestelling."
 
 #: pretix/control/logdisplay.py:939
 #, python-brace-format
 msgid "Refund {local_id} has been created."
-msgstr ""
+msgstr "Terugbetaling {local_id} is aangemaakt."
 
 #: pretix/control/logdisplay.py:940
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
-msgstr ""
+msgstr "Terugbetaling {local_id} is aangemaakt door een externe entiteit."
 
 #: pretix/control/logdisplay.py:941
 msgid "The customer requested you to issue a refund."
-msgstr ""
+msgstr "De klant heeft u om een terugbetaling gevraagd."
 
 #: pretix/control/logdisplay.py:942
 #, python-brace-format
 msgid "Refund {local_id} has been completed."
-msgstr ""
+msgstr "Terugbetaling {local_id} is voltooid."
 
 #: pretix/control/logdisplay.py:943
 #, python-brace-format
 msgid "Refund {local_id} has been canceled."
-msgstr ""
+msgstr "Terugbetaling {local_id} is geannuleerd."
 
 #: pretix/control/logdisplay.py:944
 #, python-brace-format
 msgid "Refund {local_id} has failed."
-msgstr ""
+msgstr "Terugbetaling {local_id} is mislukt."
 
 #: pretix/control/logdisplay.py:951
 msgid "The quota has been added."
-msgstr ""
+msgstr "Het quotum is toegevoegd."
 
 #: pretix/control/logdisplay.py:952
 msgid "The quota has been deleted."
-msgstr ""
+msgstr "Het quotum is verwijderd."
 
 #: pretix/control/logdisplay.py:953
 msgid "The quota has been changed."
-msgstr ""
+msgstr "Het quotum is gewijzigd."
 
 #: pretix/control/logdisplay.py:954
 msgid "The quota has closed."
-msgstr ""
+msgstr "Het quotum is gesloten."
 
 #: pretix/control/logdisplay.py:955 pretix/control/views/item.py:1065
 msgid "The quota has been re-opened."
-msgstr ""
+msgstr "Het quotum is opnieuw geopend."
 
 #: pretix/control/logdisplay.py:962
 msgid "The question has been added."
-msgstr ""
+msgstr "De vraag is toegevoegd."
 
 #: pretix/control/logdisplay.py:963
 msgid "The question has been deleted."
-msgstr ""
+msgstr "De vraag is verwijderd."
 
 #: pretix/control/logdisplay.py:964
 msgid "The question has been changed."
-msgstr ""
+msgstr "De vraag is gewijzigd."
 
 #: pretix/control/logdisplay.py:965
 msgid "The question has been reordered."
-msgstr ""
+msgstr "De vraag is opnieuw gesorteerd."
 
 #: pretix/control/logdisplay.py:972
 msgid "The discount has been added."
-msgstr ""
+msgstr "De korting is toegevoegd."
 
 #: pretix/control/logdisplay.py:973
 msgid "The discount has been deleted."
-msgstr ""
+msgstr "De korting is verwijderd."
 
 #: pretix/control/logdisplay.py:974
 msgid "The discount has been changed."
-msgstr ""
+msgstr "De korting is gewijzigd."
 
 #: pretix/control/logdisplay.py:998
 #, python-brace-format
@@ -18436,42 +18459,49 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list \"{list}"
 "\"."
 msgstr ""
+"Positie #{posid} is handmatig gemarkeerd als ingecheckt op {datetime} op "
+"lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:1003
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
 msgstr ""
+"Positie #{posid} is opnieuw ingecheckt op {datetime} op lijst \"{list}\"."
 
 #: pretix/control/logdisplay.py:1012
 msgid "An entry has been removed from the waiting list."
-msgstr ""
+msgstr "Er is een inschrijving verwijderd van de wachtlijst."
 
 #: pretix/control/logdisplay.py:1013
 msgid "An entry has been changed on the waiting list."
-msgstr ""
+msgstr "Een inschrijving op de wachtlijst is gewijzigd."
 
 #: pretix/control/logdisplay.py:1014
 msgid "An entry has been added to the waiting list."
-msgstr ""
+msgstr "Er is een inschrijving toegevoegd aan de wachtlijst."
 
 #: pretix/control/middleware.py:153 pretix/control/middleware.py:167
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
 msgstr ""
+"Het gekozen evenement was niet gevonden, of u hebt geen rechten om het te "
+"beheren."
 
 #: pretix/control/middleware.py:180 pretix/control/middleware.py:190
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
 msgstr ""
+"De gekozen organisator was niet gevonden, of u hebt geen rechten om hem te "
+"beheren."
 
 #: pretix/control/navigation.py:37 pretix/control/navigation.py:338
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashbord"
 
 #: pretix/control/navigation.py:49 pretix/control/navigation.py:382
 #: pretix/control/navigation.py:492
@@ -18486,7 +18516,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:19
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:15
 msgid "General"
-msgstr ""
+msgstr "Algemeen"
 
 #: pretix/control/navigation.py:57
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:151
@@ -18511,7 +18541,7 @@ msgstr "Betaling"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:89
 #: pretix/presale/templates/pretixpresale/organizers/index.html:91
 msgid "Tickets"
-msgstr ""
+msgstr "Tickets"
 
 #: pretix/control/navigation.py:89
 #: pretix/control/templates/pretixcontrol/event/tax.html:4
@@ -18519,21 +18549,21 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:764
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:457
 msgid "Taxes"
-msgstr ""
+msgstr "Belastingen"
 
 #: pretix/control/navigation.py:97
 msgid "Invoicing"
-msgstr ""
+msgstr "Facturatie"
 
 #: pretix/control/navigation.py:105
 msgctxt "action"
 msgid "Cancellation"
-msgstr ""
+msgstr "Annulatie"
 
 #: pretix/control/navigation.py:113
 #: pretix/control/templates/pretixcontrol/event/widget.html:8
 msgid "Widget"
-msgstr ""
+msgstr "Widget"
 
 #: pretix/control/navigation.py:126 pretix/control/navigation.py:435
 #: pretix/control/navigation.py:485
@@ -18545,19 +18575,19 @@ msgstr ""
 #: pretix/plugins/returnurl/apps.py:40
 #: pretix/plugins/ticketoutputpdf/apps.py:55
 msgid "Settings"
-msgstr ""
+msgstr "Instellingen"
 
 #: pretix/control/navigation.py:164
 msgid "Categories"
-msgstr ""
+msgstr "Categorieën"
 
 #: pretix/control/navigation.py:180
 msgid "Discounts"
-msgstr ""
+msgstr "Kortingen"
 
 #: pretix/control/navigation.py:213
 msgid "Overview"
-msgstr ""
+msgstr "Overzicht"
 
 #: pretix/control/navigation.py:221
 #: pretix/control/templates/pretixcontrol/order/index.html:908
@@ -18571,26 +18601,26 @@ msgstr "Terugbetalingen"
 
 #: pretix/control/navigation.py:247
 msgid "Import"
-msgstr ""
+msgstr "Import"
 
 #: pretix/control/navigation.py:276
 msgid "All vouchers"
-msgstr ""
+msgstr "Alle vouchers"
 
 #: pretix/control/navigation.py:284
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: pretix/control/navigation.py:296
 msgctxt "navigation"
 msgid "Check-in"
-msgstr ""
+msgstr "Check-in"
 
 #: pretix/control/navigation.py:313
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:4
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:6
 msgid "Check-in history"
-msgstr ""
+msgstr "Check-in-geschiedenis"
 
 #: pretix/control/navigation.py:356
 #: pretix/control/templates/pretixcontrol/event/plugins.html:20
@@ -18598,7 +18628,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:20
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:127
 msgid "Search"
-msgstr ""
+msgstr "Zoeken"
 
 #: pretix/control/navigation.py:368
 #: pretix/control/templates/pretixcontrol/order/index.html:814
@@ -18610,20 +18640,20 @@ msgstr "Betalingen"
 
 #: pretix/control/navigation.py:376
 msgid "User settings"
-msgstr ""
+msgstr "Gebruikersinstellingen"
 
 #: pretix/control/navigation.py:387
 #: pretix/control/templates/pretixcontrol/user/settings.html:34
 msgid "Notifications"
-msgstr ""
+msgstr "Meldingen"
 
 #: pretix/control/navigation.py:392
 msgid "2FA"
-msgstr ""
+msgstr "Twee-factor-authenticatie (2FA)"
 
 #: pretix/control/navigation.py:397
 msgid "Authorized apps"
-msgstr ""
+msgstr "Geautoriseerde apps"
 
 #: pretix/control/navigation.py:402
 #: pretix/control/templates/pretixcontrol/user/history.html:4
@@ -18631,39 +18661,39 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/history.html:10
 #: pretix/control/templates/pretixcontrol/user/settings.html:98
 msgid "Account history"
-msgstr ""
+msgstr "Accountgeschiedenis"
 
 #: pretix/control/navigation.py:417
 msgid "All users"
-msgstr ""
+msgstr "Alle gebruikers"
 
 #: pretix/control/navigation.py:422
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:7
 msgid "Admin sessions"
-msgstr ""
+msgstr "Beheerderssessies"
 
 #: pretix/control/navigation.py:429
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:7
 msgid "Global settings"
-msgstr ""
+msgstr "Algemene instellingen"
 
 #: pretix/control/navigation.py:440
 msgid "Update check"
-msgstr ""
+msgstr "Controleren op updates"
 
 #: pretix/control/navigation.py:445
 msgid "License check"
-msgstr ""
+msgstr "Licentie controleren"
 
 #: pretix/control/navigation.py:450
 msgid "System report"
-msgstr ""
+msgstr "Systeemrapport"
 
 #: pretix/control/navigation.py:455 pretix/control/navigation.py:675
 msgid "Data sync problems"
-msgstr ""
+msgstr "Problemen met gegevenssynchronisatie"
 
 #: pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -18673,62 +18703,62 @@ msgstr "Metadata evenement"
 #: pretix/control/navigation.py:527
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
 msgid "Webhooks"
-msgstr ""
+msgstr "Webhooks"
 
 #: pretix/control/navigation.py:560
 msgid "Acceptance"
-msgstr ""
+msgstr "Acceptatie"
 
 #: pretix/control/navigation.py:581
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
 msgid "Customers"
-msgstr ""
+msgstr "Klanten"
 
 #: pretix/control/navigation.py:600
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:6
 msgid "SSO clients"
-msgstr ""
+msgstr "SSO-clients"
 
 #: pretix/control/navigation.py:609
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:6
 msgid "SSO providers"
-msgstr ""
+msgstr "SSO-providers"
 
 #: pretix/control/navigation.py:638 pretix/control/navigation.py:645
 msgid "Devices"
-msgstr ""
+msgstr "Apparaten"
 
 #: pretix/control/navigation.py:683
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:8
 msgid "Outgoing emails"
-msgstr ""
+msgstr "Uitgaande e-mails"
 
 #: pretix/control/permissions.py:72 pretix/control/permissions.py:109
 #: pretix/control/permissions.py:140 pretix/control/permissions.py:157
 msgid "You do not have permission to view this content."
-msgstr ""
+msgstr "U bent niet gemachtigd om deze inhoud te bekijken."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:42
 #: pretix/control/templates/pretixcontrol/base.html:360
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
-msgstr ""
+msgstr "U werkt momenteel namens %(user)s."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:47
 #: pretix/control/templates/pretixcontrol/base.html:365
 msgid "Stop impersonating"
-msgstr ""
+msgstr "Terug naar eigen gebruiker"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
-msgstr ""
+msgstr "Herstelinformatie verzenden"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:7
 msgid "Accept an invitation"
-msgstr ""
+msgstr "Teamuitnodiging accepteren"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:10
 #, python-format
@@ -18737,11 +18767,14 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
+"Als u al een account op deze site hebt met een ander e-mailadres, dan kunt u "
+"<a %(login_href)s>inloggen</a> en vervolgens opnieuw op deze link klikken om "
+"de uitnodiging met uw bestaande account te accepteren."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
 msgid "Login"
-msgstr ""
+msgstr "Inloggen"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:51
@@ -21614,7 +21647,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:160
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:124
 msgid "Open event dashboard"
-msgstr ""
+msgstr "Evenementdashbord openen"
 
 #: pretix/control/templates/pretixcontrol/font_option.html:2
 msgctxt "typography"
@@ -28811,10 +28844,8 @@ msgid "The selected entry has been deleted."
 msgstr ""
 
 #: pretix/control/views/waitinglist.py:417
-#, fuzzy
-#| msgid "Waiting list entry changed"
 msgid "The waitinglist entry has been changed."
-msgstr "Wachtlijstitem gewijzigd"
+msgstr "Inschrijving op de wachtlijst gewijzigd."
 
 #: pretix/helpers/countries.py:134
 msgid "Belarus"
@@ -28864,10 +28895,8 @@ msgid "Login from new source detected"
 msgstr ""
 
 #: pretix/helpers/security.py:169
-#, fuzzy
-#| msgid "Unknown country code."
 msgid "Unknown country"
-msgstr "Onbekende landcode."
+msgstr "Onbekend land"
 
 #: pretix/multidomain/models.py:36
 msgid "Organizer domain"
@@ -31455,6 +31484,10 @@ msgid ""
 "automatically cancel orders when charges are refunded externally and to "
 "process asynchronous payment methods like SOFORT."
 msgstr ""
+"Stel een <a href=\"https://dashboard.stripe.com/account/webhooks\">Stripe "
+"Webhook</a> op het volgende endpoint in om automatisch bestellingen te "
+"annuleren wanneer betalingen extern worden terugbetaald en om asynchrone "
+"betaalmethodes zoals SOFORT te verwerken."
 
 #: pretix/plugins/stripe/payment.py:222
 msgid "Enable MOTO payments for resellers"
@@ -31537,6 +31570,11 @@ msgid ""
 "take into consideration if Google Pay/Apple Pay has been disabled in the "
 "Stripe Dashboard."
 msgstr ""
+"pretix zal controleren of de webbrowser van de klant wallet-gebaseerde "
+"betaalmethodes zoals Apple Pay of Google Pay ondersteunt en deze prominent "
+"weergeven naast de kredietkaartmethode. Bij deze detectie wordt geen "
+"rekening gehouden met het feit of Google Pay/Apple Pay uitgeschakeld is in "
+"het Stripe-dashbord."
 
 #: pretix/plugins/stripe/payment.py:322
 msgid "Statement descriptor postfix"
