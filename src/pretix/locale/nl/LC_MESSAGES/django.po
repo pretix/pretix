@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-02 10:00+0000\n"
+"PO-Revision-Date: 2026-03-03 20:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -13801,12 +13801,12 @@ msgstr "Altijd"
 #: pretix/base/timeline.py:60
 msgctxt "timeline"
 msgid "Your event starts"
-msgstr "Uw evenement start"
+msgstr "Start van uw evenement"
 
 #: pretix/base/timeline.py:68
 msgctxt "timeline"
 msgid "Your event ends"
-msgstr "Uw evenement eindigt"
+msgstr "Einde van uw evenement"
 
 #: pretix/base/timeline.py:76
 msgctxt "timeline"
@@ -22354,7 +22354,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/item/base.html:24
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:79
 msgid "Manage quotas"
-msgstr "Vragen quotums"
+msgstr "Quota beheren"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:27
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:82
