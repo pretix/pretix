@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-03 07:00+0000\n"
-"Last-Translator: André Almeida <andrealmeid@riseup.net>\n"
+"PO-Revision-Date: 2026-03-04 05:00+0000\n"
+"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -2579,7 +2579,7 @@ msgstr "Uso do cupom"
 
 #: pretix/base/exporters/orderlist.py:654
 msgid "Voucher tag"
-msgstr "Marcador de cupom"
+msgstr "Tag de cupom"
 
 #: pretix/base/exporters/orderlist.py:655
 msgid "Pseudonymization ID"
@@ -4943,7 +4943,7 @@ msgid ""
 "codes, invoice numbers, and bank transfer references."
 msgstr ""
 "Deve conter apenas letras minúsculas, números, pontos e traços, sendo "
-"exclusiva para suas eventos. Recomendamos uma abreviação ou data com menos "
+"exclusiva para seus eventos. Recomendamos uma abreviação ou data com menos "
 "de 10 caracteres e que seja facilmente lembrada, mas você também pode usar "
 "um valor aleatório. Esta informação será usada em URLs, códigos de pedido, "
 "número de faturas e referências de transações bancárias."
@@ -10329,7 +10329,7 @@ msgstr "em minutos"
 
 #: pretix/base/settings.py:922
 msgid "Set payment term"
-msgstr "Definir prazo de pagamento"
+msgstr "Prazo de pagamento"
 
 #: pretix/base/settings.py:929
 msgid ""
@@ -11437,13 +11437,13 @@ msgstr ""
 
 #: pretix/base/settings.py:2210 pretix/control/forms/event.py:1841
 msgid "Contact address"
-msgstr "Endereço de contato"
+msgstr "Email de contato"
 
 #: pretix/base/settings.py:2211 pretix/control/forms/event.py:1843
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr ""
-"Será exibido publicamente para que participantes possam entrar em contato "
-"com você."
+"Exibido publicamente para que participantes possam entrar em contato com "
+"você."
 
 #: pretix/base/settings.py:2219 pretix/control/forms/event.py:1835
 msgid "Imprint URL"
@@ -15130,7 +15130,7 @@ msgstr "Permitir ignorar a cota"
 
 #: pretix/control/forms/filter.py:2264 pretix/control/forms/filter.py:2266
 msgid "Filter by tag"
-msgstr "Filtrar por marcador"
+msgstr "Filtrar por tag"
 
 #: pretix/control/forms/filter.py:2271 pretix/control/forms/filter.py:2273
 msgid "Search voucher"
@@ -16801,19 +16801,14 @@ msgid "or"
 msgstr "ou"
 
 #: pretix/control/forms/vouchers.py:305
-#, fuzzy
-#| msgid ""
-#| "You can either supply a list of email addresses with one email address "
-#| "per line, or the contents of a CSV file with a title column and one or "
-#| "more of the columns \"email\", \"number\", \"name\", or \"tag\"."
 msgid ""
 "You can either supply a list of email addresses with one email address per "
 "line, or the contents of a CSV file with a title row and one or more of the "
 "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
-"Forneça uma lista de endereços de email com um endereço por linha, ou o "
-"conteúdo de um arquivo CSV com uma coluna de título e uma (ou mais colunas) "
-"\"email\", \"number\", \"name\" ou \"tag\"."
+"Você pode fornecer uma lista de endereços de email com um endereço por "
+"linha, ou o conteúdo de um arquivo CSV com uma linha de título e uma ou mais "
+"colunas \"email\", \"number\", \"name\" ou \"tag\"."
 
 #: pretix/control/forms/vouchers.py:339
 msgid "Maximum usages per voucher"
@@ -18530,7 +18525,7 @@ msgstr "Todos os cupons"
 
 #: pretix/control/navigation.py:284
 msgid "Tags"
-msgstr "Marcadores"
+msgstr "Tags"
 
 #: pretix/control/navigation.py:296
 msgctxt "navigation"
@@ -21719,8 +21714,8 @@ msgid ""
 "To embed the widget onto your website, simply copy the following code to the "
 "<code>&lt;head&gt;</code> section of your website:"
 msgstr ""
-"Para incorporar o widget ao seu site, copie o seguinte código dentro da tag "
-"<code>&lt;head&gt;</code> do seu site:"
+"Incorpore o widget ao seu site copiando o seguinte código dentro da tag "
+"<code>&lt;head&gt;</code>:"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:25
 msgid ""
@@ -27477,7 +27472,7 @@ msgid ""
 "They also enable you to reserve some quota for your very special guests."
 msgstr ""
 "Cupons permitem que você atribua ingressos a pessoas específicas por um "
-"preço mais baixo. Também permite que você reserva alguma cota para seus "
+"preço mais baixo. Também permite que você reserve cotas diferentes para "
 "convidados especiais."
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:67
@@ -27496,7 +27491,7 @@ msgstr "Criar um novo cupom"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:79
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:91
 msgid "Create multiple new vouchers"
-msgstr "Criar múltiplos novos cupons"
+msgstr "Criar múltiplos cupons"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:98
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:142
@@ -27523,27 +27518,27 @@ msgstr "Use como modelo para novos cupons"
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:6
 msgid "Voucher tags"
-msgstr "Marcadores de cupons"
+msgstr "Tags de cupons"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:8
 msgid ""
 "If you add a \"tag\" to a voucher, you can here see statistics on their "
 "usage."
 msgstr ""
-"Se você adicionar um \"marcador\" a um cupom, poderá ver aqui as "
-"estatísticas sobre seu uso."
+"Ao adicionar uma \"tag\" a um cupom, as estatísticas sobre seu uso podem ser "
+"vistas aqui."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:32
 msgid "You haven't added any tags to vouchers yet."
-msgstr "Você ainda não adicionou nenhum marcador aos cupons."
+msgstr "Não foi adicionada nenhuma tag aos cupons."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:43
 msgid "Redeemed vouchers"
-msgstr "Resgatar cupons"
+msgstr "Cupons resgatados"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:57
 msgid "Empty tag"
-msgstr "Marcador vazio"
+msgstr "Tag vazia"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:6
@@ -29808,6 +29803,9 @@ msgid ""
 "download the badges in the backend or automatically print them with our "
 "check-in apps."
 msgstr ""
+"Gerar automaticamente crachás ou tags de nome para seus participantes. Você "
+"pode baixar os crachás no backend ou imprimí-los automaticamente com nossas "
+"aplicações de check-in."
 
 #: pretix/plugins/badges/exporters.py:89
 msgid "One badge per page"
