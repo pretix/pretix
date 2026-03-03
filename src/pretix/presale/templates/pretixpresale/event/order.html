@@ -39,6 +39,10 @@
                         <strong>
                             {% trans "Please note that we still await approval by the event organizer before you can pay and complete this order." %}
                         </strong>
+                    {% elif installment_plan %}
+                        <strong>
+                            {% trans "Your first installment has been received. The remaining installments will be charged automatically according to schedule." %}
+                        </strong>
                     {% elif not event.settings.payment_pending_hidden %}
                         <strong>
                             {% trans "Please note that we still await your payment to complete the process." %}
@@ -80,7 +84,7 @@
         <dt class="sr-only">Status</dt>
         <dd class="text-muted">{% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event %}</dd>
     </dl>
-    {% if order.status == "n" and not order.require_approval %}
+    {% if order.status == "n" and not order.require_approval and not installment_plan %}
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">
@@ -120,6 +124,78 @@
             </div>
         </div>
     {% endif %}
+
+    {% if installment_plan %}
+        <div class="panel {% if failed_installment %}panel-danger{% else %}panel-info{% endif %}">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {% trans "Installment plan" %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>{% trans "Total installments" %}</dt>
+                    <dd>{{ installment_plan.total_installments }}</dd>
+
+                    <dt>{% trans "Installments paid" %}</dt>
+                    <dd>{{ installment_plan.installments_paid }} {% trans "of" %} {{ installment_plan.total_installments }}</dd>
+
+                    <dt>{% trans "Amount per installment" %}</dt>
+                    <dd>{{ installment_plan.amount_per_installment|money:event.currency }}</dd>
+
+                    {% if next_installment %}
+                        <dt>{% trans "Next payment" %}</dt>
+                        <dd>
+                            {{ next_installment.amount|money:event.currency }}
+                            {% trans "due on" %} {{ next_installment.due_date|date:"SHORT_DATE_FORMAT" }}
+                        </dd>
+                    {% endif %}
+                </dl>
+
+                {% if failed_installment %}
+                    <div class="alert alert-danger">
+                        <strong>{% trans "Payment failed" %}</strong>
+                        {% blocktrans trimmed with amount=failed_installment.amount|money:event.currency date=installment_plan.grace_period_end|date:"SHORT_DATE_FORMAT" %}
+                            Your installment payment of {{ amount }} has failed.
+                            Please update your payment method by {{ date }} to avoid cancellation of your order.
+                        {% endblocktrans %}
+                        <p class="text-right" style="margin-top: 10px; margin-bottom: 0;">
+                            <a href="{% url "presale:event.order.installment.recovery" event.organizer.slug event.slug order.code order.secret %}"
+                               class="btn btn-danger">
+                                <i class="fa fa-credit-card"></i>
+                                {% trans "Update payment method" %}
+                            </a>
+                        </p>
+                    </div>
+                {% endif %}
+
+                {% if installment_history %}
+                    <h4>{% trans "Payment history" %}</h4>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Installment" %}</th>
+                                <th>{% trans "Amount" %}</th>
+                                <th>{% trans "Due date" %}</th>
+                                <th>{% trans "Paid on" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for inst in installment_history %}
+                                <tr>
+                                    <td>{{ inst.installment_number }}</td>
+                                    <td>{{ inst.amount|money:event.currency }}</td>
+                                    <td>{{ inst.due_date|date:"SHORT_DATE_FORMAT" }}</td>
+                                    <td>{{ inst.processed_at|date:"SHORT_DATE_FORMAT" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
     {% eventsignal event "pretix.presale.signals.order_info_top" order=order request=request %}
     {% if order.cancellation_requests.exists %}
         <div class="alert alert-info">

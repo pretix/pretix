@@ -55,6 +55,7 @@ from pretix.base.models import (
     QuestionAnswer, QuestionOption, TaxRule,
 )
 from pretix.base.services.cart import get_fees
+from pretix.base.services.installments import calculate_installment_amounts
 from pretix.base.services.pricing import apply_rounding
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.cookies import set_cookie_without_samesite
@@ -248,6 +249,26 @@ class CartMixin:
         for p in cartpos:
             itemvarsums[p.variation or p.item] += 1
 
+        payment_requests = payments if payments is not None else self.cart_session.get('payments', [])
+
+        multi_use_total = Decimal('0.00')
+        for p in payment_requests:
+            if p.get('multi_use_supported') and p.get('max_value'):
+                multi_use_total += min(Decimal(p['max_value']), total - multi_use_total)
+
+        installments = None
+        for p in payment_requests:
+            if p.get('pay_in_installments') and p.get('installments_count', 0) >= 2:
+                count = p['installments_count']
+                payment_fees = sum(f.value for f in fees if f.fee_type == OrderFee.FEE_TYPE_PAYMENT)
+                remaining = total - multi_use_total - payment_fees
+                amounts = calculate_installment_amounts(remaining, count)
+                installments = {
+                    'count': count,
+                    'first_payment': amounts[0] + payment_fees,  # First payment includes fees
+                }
+                break
+
         return {
             'positions': positions,
             'invoice_address': self.invoice_address,
@@ -273,7 +294,8 @@ class CartMixin:
             'current_selected_payments': [
                 p for p in self.current_selected_payments(lcp, fees, self.invoice_address)
                 if p.get('multi_use_supported')
-            ]
+            ],
+            'installments': installments,
         }
 
     def current_selected_payments(self, positions, fees, invoice_address, *, warn=False):

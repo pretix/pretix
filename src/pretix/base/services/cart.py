@@ -1568,7 +1568,8 @@ class CartManager:
             raise CartError(err)
 
 
-def add_payment_to_cart_session(cart_session, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):
+def add_payment_to_cart_session(cart_session, provider, min_value: Decimal=None, max_value: Decimal=None,
+                                info_data: dict=None, installments_count: int=0):
     """
     :param cart_session: The current cart session.
     :param provider: The instance of your payment provider.
@@ -1577,6 +1578,7 @@ def add_payment_to_cart_session(cart_session, provider, min_value: Decimal=None,
                       to use for payment providers which charge a payment fee, as this can be very user-unfriendly if
                       users need a second payment method just for the payment fee of the first method.
     :param info_data: A dictionary of information that will be passed through to the ``OrderPayment.info_data`` attribute.
+    :param installments_count: Number of installments (0 means pay in full, 2+ means pay in installments).
     :return:
     """
     cart_session.setdefault('payments', [])
@@ -1587,10 +1589,13 @@ def add_payment_to_cart_session(cart_session, provider, min_value: Decimal=None,
         'min_value': str(min_value) if min_value is not None else None,
         'max_value': str(max_value) if max_value is not None else None,
         'info_data': info_data or {},
+        'pay_in_installments': installments_count >= 2,
+        'installments_count': installments_count,
     })
 
 
-def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):
+def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: Decimal=None,
+                        info_data: dict=None, installments_count: int=0):
     """
     :param request: The current HTTP request context.
     :param provider: The instance of your payment provider.
@@ -1599,12 +1604,13 @@ def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: D
                       to use for payment providers which charge a payment fee, as this can be very user-unfriendly if
                       users need a second payment method just for the payment fee of the first method.
     :param info_data: A dictionary of information that will be passed through to the ``OrderPayment.info_data`` attribute.
+    :param installments_count: Number of installments (0 means pay in full, 2+ means pay in installments).
     :return:
     """
     from pretix.presale.views.cart import cart_session
 
     cs = cart_session(request)
-    add_payment_to_cart_session(cs, provider, min_value, max_value, info_data)
+    add_payment_to_cart_session(cs, provider, min_value, max_value, info_data, installments_count)
 
 
 def get_fees(event, request, _total_ignored_=None, invoice_address=None, payments=None, positions=None):
