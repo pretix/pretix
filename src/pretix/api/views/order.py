@@ -1180,7 +1180,7 @@ class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnly
         elif self.request.user.is_authenticated:
             auth_obj = self.request.user
         else:
-            raise PermissionDenied()
+            raise PermissionDenied("Unknown authentication scheme")
 
         qs = qs.filter(
             order__event__in=auth_obj.get_events_with_permission(perm, request=self.request).filter(
