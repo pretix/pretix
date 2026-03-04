@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-03 20:00+0000\n"
+"PO-Revision-Date: 2026-03-04 16:21+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -19484,7 +19484,7 @@ msgstr "Filter"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:50
 msgid "Your search did not match any check-ins."
-msgstr "Uw zoekopdracht leverde geen resultaten op."
+msgstr "Uw zoekopdracht leverde geen resultaten (check-ins) op."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:52
 msgid "You haven't scanned any tickets yet."
@@ -24282,6 +24282,8 @@ msgstr "Terugbetaling annuleren"
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
 msgstr ""
+"Weet u zeker dat u deze terugbetaling wilt annuleren? U kunt deze actie niet "
+"ongedaan maken."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
 msgid ""
@@ -24289,21 +24291,25 @@ msgid ""
 "will just mark this transfer as aborted in pretix. This will also not "
 "reactivate the order, it will just allow you to choose a new refund method."
 msgstr ""
+"Als het geld al onderweg is, zal dit het geld niet tegenhouden, maar wordt "
+"deze overboeking in pretix gemarkeerd als afgebroken. Dit zal de bestelling "
+"ook niet opnieuw activeren, maar u kunt wel een nieuwe terugbetalingsmethode "
+"kiezen."
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
-msgstr ""
+msgstr "Ja, annuleer terugbetaling"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:10
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:5
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:9
 msgid "Refund order"
-msgstr ""
+msgstr "Bestelling terugbetalen"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:23
 msgid "How should the refund be sent?"
-msgstr ""
+msgstr "Hoe moet de terugbetaling uitgevoerd worden?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:25
 msgid ""
@@ -24312,57 +24318,64 @@ msgid ""
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
 msgstr ""
+"Betalingen die u aanmerkt voor automatische terugbetaling zullen "
+"onmiddellijk het terugbetaalverzoek communiceren aan de betalingsprovider. "
+"Handmatige terugbetalingen zullen worden aangemaakt als openstaande "
+"terugbetalingen. U kunt deze later als uitgevoerd markeren, wanneer u "
+"daadwerkelijk het geld overgemaakt hebt naar de klant."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:32
 msgid "Refund to original payment method"
-msgstr ""
+msgstr "Terugbetalen naar oorspronkelijke betaalwijze"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:39
 msgid "Amount not refunded"
-msgstr ""
+msgstr "Niet terugbetaald bedrag"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:40
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:87
 msgid "Refund amount"
-msgstr ""
+msgstr "Terug te betalen bedrag"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:68
 msgid "Full amount"
-msgstr ""
+msgstr "Volledig bedrag"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:71
 msgid "This payment method does not support automatic refunds."
-msgstr ""
+msgstr "Deze betaalwijze ondersteunt geen automatische terugbetaling."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:80
 msgid "Refund to a different payment method"
-msgstr ""
+msgstr "Terugbetaling op een ander betaalmiddel"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:86
 msgid "Recipient / options"
-msgstr ""
+msgstr "Ontvanger / opties"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:114
 msgid "Transfer to other order"
-msgstr ""
+msgstr "Verrekenen met andere bestelling"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:131
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_create.html:5
 msgid "Create a new gift card"
-msgstr ""
+msgstr "Nieuwe cadeaubon aanmaken"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:135
 msgid ""
 "The gift card can be used to buy tickets for all events of this organizer."
 msgstr ""
+"Deze cadeaubon kan gebruikt worden om tickets te kopen voor alle evenementen "
+"van deze organisator."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:159
 msgid "Manual refund"
-msgstr ""
+msgstr "Handmatige terugbetaling"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:163
 msgid "Keep transfer as to do"
-msgstr ""
+msgstr "Terugbetaling als onvoltooid markeren"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:167
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:5
@@ -24370,19 +24383,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:10
 msgid "Mark refund as done"
-msgstr ""
+msgstr "Terugbetaling als uitgevoerd markeren"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:213
 msgid "Perform refund"
-msgstr ""
+msgstr "Terugbetaling uitvoeren"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
 msgid "Do you really want to mark this refund as complete?"
-msgstr ""
+msgstr "Wilt u deze terugbetaling echt als uitgevoerd markeren?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 msgid "Mark as done"
-msgstr ""
+msgstr "Markeren als voltooid"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
 #, python-format
@@ -24392,98 +24405,108 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is "
 "<strong>%(total)s</strong>."
 msgstr ""
+"We hebben vernomen dat <strong>%(amount)s</strong> is terugbetaald via "
+"<strong>%(method)s</strong>. Wanneer deze terugbetaling verwerkt is, zal de "
+"bestelling een openstaand bedrag van <strong>%(pending)s</strong> hebben. "
+"Het totale bedrag van de bestelling is <strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
 msgstr ""
+"Aangezien de bestelling al geannuleerd is, heeft dit geen invloed op de "
+"status."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:36
 msgid "What should happen to the ticket order?"
-msgstr ""
+msgstr "Wat moet er met de ticketbestelling gebeuren?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:43
 msgid ""
 "Mark the order as unpaid and allow the customer to pay again with another "
 "payment method."
 msgstr ""
+"Markeer de bestelling als onbetaald en sta de gebruiker toe om met een "
+"andere betaalwijze te betalen."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:48
 msgid "Cancel the order irrevocably."
-msgstr ""
+msgstr "Annuleer de bestelling onomkeerbaar."
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:20
 msgid "How much do you want to refund?"
-msgstr ""
+msgstr "Hoeveel wilt u terugbetalen?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:25
 msgid "Refund full paid amount"
-msgstr ""
+msgstr "Betaal betaald bedrag volledig terug"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:32
 msgid "Refund only"
-msgstr ""
+msgstr "Alleen dit bedrag terugbetalen"
 
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:40
 msgid "What should happen to the order?"
-msgstr ""
+msgstr "Wat moet er met de bestelling gebeuren?"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:4
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:7
 #: pretix/plugins/sendmail/signals.py:94
 msgid "Send email"
-msgstr ""
+msgstr "E-mail verzenden"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:30
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:74
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:42
 msgid "Email preview"
-msgstr ""
+msgstr "Voorbeeld van e-mail"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:41
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:80
 msgid "Preview email"
-msgstr ""
+msgstr "E-mailvoorbeeld weergeven"
 
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:44
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:89
 msgid "Send"
-msgstr ""
+msgstr "Versturen"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:5
 #: pretix/control/templates/pretixcontrol/order/transactions.html:8
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:22
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:22
 msgid "Transaction history"
-msgstr ""
+msgstr "Transactiegeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:24
 msgid "Single price"
-msgstr ""
+msgstr "Eenheidsprijs"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:25
 msgid "Total tax value"
-msgstr ""
+msgstr "Totaal belastingbedrag"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:26
 msgid "Total price"
-msgstr ""
+msgstr "Totaalbedrag"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:37
 msgid ""
 "This order was created before we introduced this table, therefore this data "
 "might be inaccurate."
 msgstr ""
+"Deze bestelling is aangemaakt voor we deze tabel geïntroduceerd hebben. "
+"Daarom zijn deze gegevens mogelijk onnauwkeurig."
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:63
 #: pretix/control/templates/pretixcontrol/order/transactions.html:73
 #, python-format
 msgid "incl. %(amount)s rounding correction"
-msgstr ""
+msgstr "incl. %(amount)s afrondingscorrectie"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
 msgid "Modify orders"
-msgstr ""
+msgstr "Bestellingen wijzigen"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:12
 #, python-format
@@ -24492,14 +24515,17 @@ msgid ""
 "<strong>%(allowed)s</strong> of the selected <strong>%(total)s</strong> "
 "orders."
 msgstr ""
+"De actie <strong>%(label)s</strong> kan toegepast worden op <strong>%"
+"(allowed)s</strong> van de <strong>%(total)s</strong> geselecteerde "
+"bestellingen."
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:71
 msgid "Do you want to continue?"
-msgstr ""
+msgstr "Wilt u doorgaan?"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:77
 msgid "This operation cannot be reversed."
-msgstr ""
+msgstr "Deze actie kan niet worden teruggedraaid."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:9
 msgid ""
@@ -24508,27 +24534,37 @@ msgid ""
 "orders can be created. Make sure that you check afterwards for any overpaid "
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
+"U kunt deze pagina gebruiken om alle bestellingen tegelijk te annuleren en "
+"terug te betalen als u uw evenement moet annuleren. Dit zal ook alle "
+"producten uitschakelen, zodat er geen nieuwe bestellingen aangemaakt kunnen "
+"worden. Controleer na het gebruiken van deze optie op overbetaalde "
+"bestellingen en openstaande terugbetalingen die u handmatig moet uitvoeren."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:15
 msgid ""
 "After starting this operation, depending on the size of your event, it might "
 "take a few minutes or longer until all orders are processed."
 msgstr ""
+"Na het uitvoeren van deze actie kan het (afhankelijk van het aantal "
+"bestellingen) een aantal minuten of langer duren tot alle bestellingen "
+"verwerkt zijn."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:21
 msgid ""
 "All actions performed on this page are irreversible. If in doubt, please "
 "contact support before using it."
 msgstr ""
+"Alle acties op deze pagina zijn onomkeerbaar. Neem bij twijfel contact op "
+"met de pretix-ondersteuning voor u ze gebruikt."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:29
 msgctxt "subevents"
 msgid "Select date"
-msgstr ""
+msgstr "Datum kiezen"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:37
 msgid "Refund options"
-msgstr ""
+msgstr "Terugbetalingsopties"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:85
@@ -24539,7 +24575,7 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:8
 msgid "Send out emails"
-msgstr ""
+msgstr "E-mails uitsturen"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:54
 msgid ""
@@ -24548,6 +24584,10 @@ msgid ""
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
 msgstr ""
+"Aangezien u de terugbetalingen in de vorm van een cadeaubon uitgeeft, moet u "
+"uw klanten uitleggen hoe ze deze bon kunnen verkrijgen. De eenvoudigste "
+"manier is om een korte uitleg en een link naar hun bestelling te versturen "
+"met behulp van de e-mailfunctie die hier wordt aangeboden."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:64
 msgid ""
@@ -24555,80 +24595,90 @@ msgid ""
 "new tickets due to the products being disabled. You can choose to inform "
 "people on the waiting list by using this option."
 msgstr ""
+"Uw wachtlijst zal niet automatisch verwijderd worden, maar er worden geen "
+"nieuwe tickets verstuurd, omdat alle producten uitgeschakeld worden. Met "
+"deze optie kunt u de mensen op de wachtlijst informeren over de annulatie."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:71
 msgid ""
 "You should not execute this function multiple times for the same event, or "
 "everyone on the waiting list will get multiple emails."
 msgstr ""
+"Gebruik deze functie niet meerdere keren voor hetzelfde evenement, omdat "
+"anders iedereen op de wachtlijst meerdere e-mails ontvangt."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:84
 msgid "Preview refund amount"
-msgstr ""
+msgstr "Voorbeeld van het terug te betalen bedrag"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:88
 msgid "Cancel all orders"
-msgstr ""
+msgstr "Alle bestellingen annuleren"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:13
 msgid "If you proceed, the system will do the following:"
-msgstr ""
+msgstr "Als u doorgaat, doet het systeem het volgende:"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:19
 #, python-format
 msgid "%(count)s order will be canceled fully"
 msgid_plural "%(count)s orders will be canceled fully"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s bestelling wordt volledig geannuleerd"
+msgstr[1] "%(count)s bestellingen worden volledig geannuleerd"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:26
 #, python-format
 msgid "%(count)s order will be canceled partially"
 msgid_plural "%(count)s orders will be canceled partially"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s bestelling wordt gedeeltelijk geannuleerd"
+msgstr[1] "%(count)s bestellingen worden gedeeltelijk geannuleerd"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:36
 #, python-format
 msgid "%(amount)s are eligible for refunds."
-msgstr ""
+msgstr "%(amount)s komen in aanmerking voor terugbetaling."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:40
 msgid ""
 "The system will attempt to refund the money automatically if supported by "
 "the payment method."
 msgstr ""
+"Het systeem zal proberen het geld automatisch terug te storten als dit door "
+"de betaalwijze ondersteund wordt."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:42
 msgid "The system will create manual refunds that you need to execute."
 msgstr ""
+"Het systeem zal handmatige terugbetalingen aanmaken die u moet uitvoeren."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:44
 msgid "Refunds will not happen automatically."
-msgstr ""
+msgstr "Terugbetalingen gebeuren niet automatisch."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:52
 msgid "Inform all customers via email."
-msgstr ""
+msgstr "Informeer alle klanten via e-mail."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:57
 msgid "Inform all waiting list contacts via email."
-msgstr ""
+msgstr "Informeer alle personen op de wachtlijst via e-mail."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:62
 msgid ""
 "These numbers are estimates and may change if the data in your event "
 "recently changed."
 msgstr ""
+"Deze cijfers zijn schattingen en kunnen veranderen als de gegevens in uw "
+"evenement recentelijk gewijzigd zijn."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:76
 #, python-format
 msgid "Proceed and refund approx. %(amount)s"
-msgstr ""
+msgstr "Doorgaan en ongeveer %(amount)s terugbetalen"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel_confirm.html:80
 msgid "Proceed and cancel orders"
-msgstr ""
+msgstr "Doorgaan en bestellingen annuleren"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
@@ -24639,41 +24689,41 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:4
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:7
 msgid "Data export"
-msgstr ""
+msgstr "Data exporteren"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:11
 #: pretix/control/templates/pretixcontrol/organizers/export.html:11
 msgid "Scheduled exports"
-msgstr ""
+msgstr "Geplande exports"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:28
 #: pretix/control/templates/pretixcontrol/organizers/export.html:28
 msgid "Next run:"
-msgstr ""
+msgstr "Volgende uitvoering:"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:32
 #: pretix/control/templates/pretixcontrol/organizers/export.html:32
 msgid "No next run scheduled"
-msgstr ""
+msgstr "Geen volgende uitvoering gepland"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:37
 #: pretix/control/templates/pretixcontrol/organizers/export.html:37
 msgid "Exporter not found"
-msgstr ""
+msgstr "Exporteerder niet gevonden"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:42
 #: pretix/control/templates/pretixcontrol/organizers/export.html:42
 msgid "Disabled due to multiple failures"
-msgstr ""
+msgstr "Uitgeschakeld wegens meerdere mislukkingen"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:47
 #: pretix/control/templates/pretixcontrol/organizers/export.html:47
 msgid "Failed recently"
-msgstr ""
+msgstr "Onlangs mislukt"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:64
 msgid "Run export now"
-msgstr ""
+msgstr "Export nu uitvoeren"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:69
 #: pretix/control/templates/pretixcontrol/organizers/export.html:69
@@ -24681,29 +24731,31 @@ msgid ""
 "Run export and send via email now. This will not change the next scheduled "
 "execution."
 msgstr ""
+"Voer nu een export uit en verzend hem via e-mail. Dit beïnvloedt de volgende "
+"geplande uitvoering niet."
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:76
 #: pretix/control/templates/pretixcontrol/organizers/export.html:76
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:54
 msgid "Copy"
-msgstr ""
+msgstr "Kopiëren"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:98
 #: pretix/control/templates/pretixcontrol/organizers/export.html:98
 msgid "Other exports"
-msgstr ""
+msgstr "Overige exports"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:107
 #: pretix/control/templates/pretixcontrol/organizers/export.html:107
 msgid "Recommended for new users"
-msgstr ""
+msgstr "Aanbevolen voor nieuwe gebruikers"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:6
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:6
 msgid "Delete scheduled export"
-msgstr ""
+msgstr "Geplande export verwijderen"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:9
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:9
@@ -24712,11 +24764,13 @@ msgid ""
 "Are you sure you want to delete the scheduled export <strong>%(export)s</"
 "strong>?"
 msgstr ""
+"Weet u zeker dat u de geplande export <strong>%(export)s</strong> wilt "
+"verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:27
 msgid "Export options"
-msgstr ""
+msgstr "Exportopties"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:32
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:33
@@ -24724,87 +24778,89 @@ msgid ""
 "Your generated Excel file will have <strong>multiple sheets</strong>. Some "
 "data you are looking for might not be on the first sheet."
 msgstr ""
+"Uw gegenereerd Excel-bestand zal <strong>meerdere werkbladen</strong> "
+"bevatten. Sommige gegevens zullen niet op het eerste werkblad staan."
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:46
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:47
 msgid "Save copy"
-msgstr ""
+msgstr "Kopie opslaan"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:56
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:57
 msgid "Start export"
-msgstr ""
+msgstr "Export starten"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:61
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:62
 msgid "Schedule export"
-msgstr ""
+msgstr "Export plannen"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:6
 msgid "Schedule"
-msgstr ""
+msgstr "Planning"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:15
 msgid "Repetition schedule"
-msgstr ""
+msgstr "Herhalingsschema"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:46
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s"
-msgstr ""
+msgstr "Herhaal elke %(interval)s %(freq)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:54
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:89
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:200
 msgid "At the same date every year"
-msgstr ""
+msgstr "Op dezelfde datum elk jaar"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:58
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:93
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:204
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr ""
+msgstr "Op de %(setpos)s %(weekday)s van %(month)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:68
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:103
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:214
 msgid "At the same date every month"
-msgstr ""
+msgstr "Op dezelfde dag elke maand"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:72
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:107
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:218
 #, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr ""
+msgstr "Op de %(setpos)s %(weekday)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:85
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:120
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:231
 #, python-format
 msgid "Repeat for %(count)s times"
-msgstr ""
+msgstr "Herhaal %(count)s keer"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:91
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:126
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:237
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr ""
+msgstr "Herhaal tot %(until)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:97
 msgid "Forever"
-msgstr ""
+msgstr "Voor altijd"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:110
 msgid ""
 "Every time your schedule is executed, the report will be sent via email."
-msgstr ""
+msgstr "Bij elke uitvoering zal het rapport via e-mail verstuurd worden."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:111
 msgid "Please note the following limitations:"
-msgstr ""
+msgstr "Let op de volgende beperkingen:"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:114
 msgid ""
@@ -24812,65 +24868,76 @@ msgid ""
 "exports that output e.g. statistical data, not for reports that include "
 "sensitive personal data."
 msgstr ""
+"E-mail is geen sterk versleuteld medium. We raden het daarom alleen aan voor "
+"rapporten die bijvoorbeeld uitsluitend statistieken bevatten en geen "
+"gevoelige persoonsgegevens."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:117
 msgid ""
 "Email is not made for large files. If your export ends up to be larger than "
 "20 megabytes, it will not be sent."
 msgstr ""
+"E-mail is niet gemaakt voor grote bestanden. Als de export groter is dan 20 "
+"megabyte, zal hij niet verzonden worden."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:122
 msgid "Owner"
-msgstr ""
+msgstr "Eigenaar"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:128
 msgid ""
 "The export will be performed using the owner's permission level, i.e. if the "
 "owner loses access to the data, the report will stop."
 msgstr ""
+"De export wordt uitgevoerd met het machtigingsniveau van de eigenaar, d.w.z. "
+"als de eigenaar de toegang tot de gegevens verliest, wordt het rapport "
+"gestopt."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:129
 msgid "The owner will receive the result as well as any error messages."
-msgstr ""
+msgstr "De eigenaar ontvangt het resultaat en eventuele foutmeldingen."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:130
 msgid ""
 "The additional recipients you add below will only receive an email if the "
 "report was successful."
 msgstr ""
+"De extra ontvangers die hieronder toegevoegd worden, ontvangen alleen een e-"
+"mail als het rapport gelukt is."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:131
 msgid ""
 "All recipients of the export will be able to see who the owner of the report "
 "is."
 msgstr ""
+"Alle ontvangers van de export kunnen zien wie de eigenaar van het rapport is."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:13
 msgctxt "order state"
 msgid "Pending (confirmed)"
-msgstr ""
+msgstr "Openstaand (bevestigd)"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:19
 msgid "Canceled (paid fee)"
-msgstr ""
+msgstr "Geannuleerd (betaalde kosten)"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:6
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:8
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:4
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:6
 msgid "Import attendees"
-msgstr ""
+msgstr "Deelnemers importeren"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:13
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:13
 msgid "Data preview"
-msgstr ""
+msgstr "Gegevensvoorbeeld"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:43
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:43
 msgid "Import settings"
-msgstr ""
+msgstr "Instellingen importeren"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:49
@@ -24878,17 +24945,19 @@ msgid ""
 "The import will be performed regardless of your quotas, so it will be "
 "possible to overbook your event using this option."
 msgstr ""
+"De import wordt uitgevoerd ongeacht uw quota. Het is daarom mogelijk dat uw "
+"evenement met deze optie overboekt raakt."
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:57
 #: pretix/control/templates/pretixcontrol/vouchers/import_process.html:57
 msgid "Perform import"
-msgstr ""
+msgstr "Import uitvoeren"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:10
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:10
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:16
 msgid "Upload a new file"
-msgstr ""
+msgstr "Nieuw bestand uploaden"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:16
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:16
@@ -24896,66 +24965,68 @@ msgid ""
 "The uploaded file should be a CSV file with a header row. You will be able "
 "to assign the meanings of the different columns in the next step."
 msgstr ""
+"Het geüploade bestand moet een CSV-bestand zijn met een header-rij. In de "
+"volgende stap kunt u de betekenis van de verschillende kolommen toewijzen."
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:22
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:22
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:46
 msgid "Import file"
-msgstr ""
+msgstr "Bestand importeren"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:25
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:25
 msgid "Character set"
-msgstr ""
+msgstr "Tekenset"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:27
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:27
 msgid "Detect automatically"
-msgstr ""
+msgstr "Automatisch detecteren"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:35
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:35
 msgid "Start import"
-msgstr ""
+msgstr "Import starten"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:14
 msgid "Nobody ordered a ticket yet."
-msgstr ""
+msgstr "Er zijn nog geen tickets besteld."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:22
 msgid "Take your shop live"
-msgstr ""
+msgstr "Zet uw winkel live"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:27
 msgid "Go to the ticket shop"
-msgstr ""
+msgstr "Ga naar de ticketwinkel"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:35
 msgid "Search query:"
-msgstr ""
+msgstr "Zoekopdracht:"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:49
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:20
 msgid "Go!"
-msgstr ""
+msgstr "Start!"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:89
 msgid "Advanced search"
-msgstr ""
+msgstr "Geavanceerde zoekopdracht"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:102
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr ""
+msgstr "Lijst gefilterd op antwoorden op vraag \"%(question)s\"."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:107
 msgid "Remove filter"
-msgstr ""
+msgstr "Filter verwijderen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:145
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:208
 msgid "Order paid / total"
-msgstr ""
+msgstr "Bestelling betaald / totaal"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:176
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:109
@@ -24964,7 +25035,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:153
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:193
 msgid "select row for batch-operation"
-msgstr ""
+msgstr "selecteer rij voor batchbewerking"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:192
 #: pretix/control/templates/pretixcontrol/orders/index.html:194
@@ -24973,13 +25044,13 @@ msgstr ""
 #, python-format
 msgctxt "followup"
 msgid "TODO %(date)s"
-msgstr ""
+msgstr "TO DO %(date)s"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:215
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:247
 #: pretix/control/templates/pretixcontrol/search/orders.html:95
 msgid "CANCELLATION REQUESTED"
-msgstr ""
+msgstr "ANNULATIE AANGEVRAAGD"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:218
 #: pretix/control/templates/pretixcontrol/orders/index.html:220
@@ -24988,41 +25059,41 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/search/orders.html:98
 #: pretix/control/templates/pretixcontrol/search/orders.html:100
 msgid "REFUND PENDING"
-msgstr ""
+msgstr "OPENSTAANDE TERUGBETALING"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:223
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:255
 #: pretix/control/templates/pretixcontrol/search/orders.html:103
 msgid "OVERPAID"
-msgstr ""
+msgstr "TE VEEL BETAALD"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:225
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:257
 #: pretix/control/templates/pretixcontrol/search/orders.html:105
 msgid "UNDERPAID"
-msgstr ""
+msgstr "TE WEINIG BETAALD"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:227
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:259
 #: pretix/control/templates/pretixcontrol/search/orders.html:107
 msgid "FULLY PAID"
-msgstr ""
+msgstr "VOLLEDIG BETAALD"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:239
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:271
 msgid "INVOICE NOT CANCELED"
-msgstr ""
+msgstr "FACTUUR NIET GEANNULEERD"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:251
 msgid "Sum over all pages"
-msgstr ""
+msgstr "Som over alle pagina's"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:254
 #, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 bestelling"
+msgstr[1] "%(s)s bestellingen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:263
 #: pretix/control/templates/pretixcontrol/orders/index.html:272
@@ -25030,41 +25101,43 @@ msgid ""
 "This sum includes canceled orders. For your ticket revenue, look at the "
 "\"order overview\"."
 msgstr ""
+"Dit bedrag is inclusief geannuleerde bestellingen. Voor uw ticketinkomsten "
+"kunt u het besteloverzicht raadplegen."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:290
 msgid "Select action"
-msgstr ""
+msgstr "Actie selecteren"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:311
 #: pretix/control/views/orders.py:360
 msgid "Refund overpaid amount"
-msgstr ""
+msgstr "Te veel betaald bedrag terugbetalen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:319
 #: pretix/control/views/orders.py:345
 msgid "Mark as expired if overdue"
-msgstr ""
+msgstr "Achterstallige betalingen als verlopen markeren"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:327
 msgid "Delete (test mode only)"
-msgstr ""
+msgstr "Verwijderen (alleen in testmodus)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
 msgid "Order overview"
-msgstr ""
+msgstr "Bestellingsoverzicht"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:10
 msgid "Sales"
-msgstr ""
+msgstr "Verkoop"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:11
 msgid "Revenue (gross)"
-msgstr ""
+msgstr "Omzet (bruto)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:12
 msgid "Revenue (net)"
-msgstr ""
+msgstr "Omzet (netto)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:49
 #: pretix/plugins/reports/exporters.py:476
@@ -25075,6 +25148,12 @@ msgid ""
 "be removed in the future. Use the \"Accounting report\" in the export "
 "section instead."
 msgstr ""
+"Het wordt afgeraden om dit rapport op datum te filteren. De resultaten "
+"kunnen misleidend zijn, omdat dit rapport alleen rekening houdt met de "
+"huidige status van een bestelling en geen rekening houdt met eerdere "
+"wijzigingen in de bestelling. Deze datumfilter wordt mogelijk in de toekomst "
+"verwijderd. Gebruik in plaats daarvan het \"afrekeningsrapport\" in het "
+"exportgedeelte."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:66
 msgctxt "subevent"
@@ -25082,56 +25161,60 @@ msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
+"Als u een enkele datum selecteert, zullen toeslagen hier niet getoond "
+"worden, omdat het onduidelijk kan zijn bij welke datum ze horen."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:80
 #: pretix/plugins/reports/exporters.py:393
 msgid "Purchased"
-msgstr ""
+msgstr "Gekocht"
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:34
 msgid "No refunds are currently open."
-msgstr ""
+msgstr "Er zijn geen openstaande terugbetalingen."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:109
 msgid "Actions"
-msgstr ""
+msgstr "Acties"
 
 #: pretix/control/templates/pretixcontrol/orders/search.html:7
 #: pretix/control/templates/pretixcontrol/orders/search.html:9
 #: pretix/control/templates/pretixcontrol/search/orders.html:7
 #: pretix/control/templates/pretixcontrol/search/orders.html:9
 msgid "Order search"
-msgstr ""
+msgstr "Bestellingen doorzoeken"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_add.html:6
 #: pretix/control/templates/pretixcontrol/organizers/channel_add_choice.html:6
 msgid "Add sales channel"
-msgstr ""
+msgstr "Verkoopskanaal toevoegen"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_add.html:13
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:13
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:24
 msgid "Channel type"
-msgstr ""
+msgstr "Soort kanaal"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:5
 msgid "Delete sales channel:"
-msgstr ""
+msgstr "Verkoopskanaal verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:10
 msgid "Are you sure you want to delete this sales channel?"
-msgstr ""
+msgstr "Weet u zeker dat u dit verkoopskanaal wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_delete.html:15
 msgid ""
 "This sales channel cannot be deleted since it has already been used to sell "
 "orders or because it is a core element of the system."
 msgstr ""
+"Dit verkoopskanaal kan niet verwijderd worden, omdat het al voor verkopen "
+"gebruikt is of omdat het een kernelement van het systeem is."
 
 #: pretix/control/templates/pretixcontrol/organizers/channel_edit.html:6
 msgid "Sales channel:"
-msgstr ""
+msgstr "Verkoopskanaal:"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:8
 msgid ""
@@ -25139,14 +25222,18 @@ msgid ""
 "through. This is useful to unlock new revenue streams or to separate revenue "
 "between different sources for reporting purchases."
 msgstr ""
+"Op deze pagina kunt u de verschillende kanalen beheren via welke uw tickets "
+"verkocht kunnen worden. Dit is handig voor het ontwikkelen van nieuwe "
+"inkomstenbronnen of het scheiden van inkomsten uit verschillende bronnen "
+"voor rapportage."
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:15
 msgid "Add a new channel"
-msgstr ""
+msgstr "Nieuw verkoopskanaal toevoegen"
 
 #: pretix/control/templates/pretixcontrol/organizers/channels.html:22
 msgid "Channel"
-msgstr ""
+msgstr "Kanaal"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:8
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:14
@@ -25154,113 +25241,123 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:18
 #, python-format
 msgid "Customer #%(id)s"
-msgstr ""
+msgstr "Klant #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:55
 msgid "Send password reset link"
-msgstr ""
+msgstr "Link voor wachtwoordherstel verzenden"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:80
 msgid "This includes all paid orders by this customer across all your events."
 msgstr ""
+"Dit omvat alle betaalde bestellingen van deze klant voor al uw evenementen."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:81
 msgid "Lifetime spending"
-msgstr ""
+msgstr "Levenslange uitgaven"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:103
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:39
 #: pretix/control/templates/pretixcontrol/users/form.html:24
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonimiseren"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:122
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:35
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:60
 msgid "Usages"
-msgstr ""
+msgstr "Gebruik"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:189
 msgid "Add membership"
-msgstr ""
+msgstr "Lidmaatschap toevoegen"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:241
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html:29
 msgid "Matched to the account based on the email address."
-msgstr ""
+msgstr "Aan het account gekoppeld op basis van het e-mailadres."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:294
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
 msgid "Last transaction"
-msgstr ""
+msgstr "Laatste transactie"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:334
 msgid "Customer history"
-msgstr ""
+msgstr "Klantgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:11
 #, python-format
 msgid "Anonymize customer #%(id)s"
-msgstr ""
+msgstr "Klant #%(id)s anonimiseren"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:16
 msgid "Are you sure you want to anonymize this customer account?"
-msgstr ""
+msgstr "Weet u zeker dat u dit klantenaccount wilt anonimiseren?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:20
 msgid "All orders will be disconnected from this customer account."
-msgstr ""
+msgstr "Alle bestellingen zullen worden losgekoppeld van dit klantenaccount."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:22
 msgid ""
 "The orders themselves will not be anonymized and can still contain personal "
 "information!"
 msgstr ""
+"De bestellingen zelf zullen niet worden geanonimiseerd en kunnen nog steeds "
+"persoonsgegevens bevatten!"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:26
 msgid ""
 "The customer will no longer be able to log in and will lose access to any "
 "membership benefits."
 msgstr ""
+"De klant zal niet meer kunnen inloggen en zal geen gebruik meer kunnen maken "
+"van eventuele lidmaatschappen."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:29
 msgid "This action is irreversible."
-msgstr ""
+msgstr "Deze actie kan niet ongedaan worden gemaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:16
 msgid "New customer"
-msgstr ""
+msgstr "Nieuwe klant"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:15
 msgid "Are you sure you want to delete this membership?"
-msgstr ""
+msgstr "Weet u zeker dat u dit lidmaatschap wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:17
 msgid ""
 "This membership cannot be deleted since it has been used in an order. Change "
 "its end date to the past instead."
 msgstr ""
+"Dit lidmaatschap kan niet verwijderd worden, want het is in een bestelling "
+"gebruikt. Verander in plaats hiervan de einddatum van het lidmaatschap naar "
+"een datum in het verleden."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:14
 msgid "No customer accounts have been created yet."
-msgstr ""
+msgstr "Er zijn nog geen klantenaccounts aangemaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:19
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:48
 msgid "Create a new customer"
-msgstr ""
+msgstr "Nieuwe klant aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
-msgstr ""
+msgstr "Organisator verwijderen"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:9
 msgid ""
 "This operation will destroy this organizer including all events, "
 "configuration, products, quotas, questions, vouchers, lists, etc."
 msgstr ""
+"Deze actie zal deze organisator verwijderen, inclusief alle evenementen, "
+"instellingen, producten, quota, vragen, vouchers, lijsten, etc."
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:22
 #, python-format
@@ -25268,117 +25365,131 @@ msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
+"Om te bevestigen dat u dit echt wilt, typt u hier de korte naam van de "
+"organisator (“%(slug)s”) in:"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
 msgid ""
 "This organizer account can not be deleted as it already contains orders, "
 "invoices, or devices."
 msgstr ""
+"Deze organisator kan niet verwijderd worden, omdat hij al bestellingen, "
+"facturen of apparaten heeft aangemaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:6
 #, python-format
 msgid "Organizer: %(name)s"
-msgstr ""
+msgstr "Organisator: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:6
 msgid "Change multiple devices"
-msgstr ""
+msgstr "Meerdere apparaten wijzigen"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:14
 #, python-format
 msgid "%(number)s selected"
-msgstr ""
+msgstr "%(number)s geselecteerd"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:36
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:24
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:73
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:99
 msgid "Advanced settings"
-msgstr ""
+msgstr "Geavanceerde instellingen"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:6
 msgid "Connect to device:"
-msgstr ""
+msgstr "Apparaat verbinden:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:11
 msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
+"Download een app die compatibel is met pretix, zoals onze check-in-app "
+"<strong>pretixSCAN</strong>."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
 msgid "Download pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN downloaden"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:18
 msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
 msgstr ""
+"Open de app die u wilt verbinden en herstel indien gewenst de app in de "
+"originele staat."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:20
 msgid "Scan the following configuration code:"
-msgstr ""
+msgstr "Scan de volgende configuratiecode:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:22
 msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
 msgstr ""
+"Als uw apparaat geen ondersteuning biedt voor het scannen van een QR-code, "
+"kunt u de volgende code handmatig invoeren:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:24
 msgid "System URL:"
-msgstr ""
+msgstr "Systeem-URL:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:30
 msgid "Token:"
-msgstr ""
+msgstr "Token:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:40
 msgid "Device overview"
-msgstr ""
+msgstr "Apparatenoverzicht"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:6
 msgid "Device:"
-msgstr ""
+msgstr "Apparaat:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:8
 msgid "Connect a new device"
-msgstr ""
+msgstr "Nieuw apparaat verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:40
 msgid "Device history"
-msgstr ""
+msgstr "Apparaatgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:6
 msgid "Device logs"
-msgstr ""
+msgstr "Apparaatlogs"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:5
 msgid "Revoke device access:"
-msgstr ""
+msgstr "Apparaattoegang intrekken:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:9
 msgid "Are you sure you want remove access for this device?"
-msgstr ""
+msgstr "Weet u zeker dat u de toegang van dit apparaat wilt intrekken?"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:10
 msgid ""
 "All data of this device will stay available, but you can't use the device "
 "any more."
 msgstr ""
+"Alle gegevens van dit apparaat blijven beschikbaar, maar u kunt het niet "
+"meer gebruiken."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:14
 msgid "All data uploaded by this device will stay available online."
-msgstr ""
+msgstr "Alle door dit apparaat geüploade gegevens blijven online beschikbaar."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:15
 msgid ""
 "If data (e.g. POS transactions or check-ins) has been created on this device "
 "and has not been uploaded, you will no longer be able to upload it."
 msgstr ""
+"Als gegevens (bijvoorbeeld kassatransacties of check-ins) op het apparaat "
+"aangemaakt zijn en nog niet geüpload, kunnen ze niet meer geüpload worden."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:16
 msgid ""
@@ -25387,59 +25498,65 @@ msgid ""
 "data such as event metadata and POS transactions will persist until you "
 "uninstall or reset the software manually."
 msgstr ""
+"Als de software op het apparaat dit ondersteunt, worden persoonlijke "
+"gegevens, zoals bestellingen, bij de volgende synchronisatiepoging van het "
+"apparaat verwijderd. Niet-persoonlijke gegevens zoals evenement-metadata en "
+"POS-transacties blijven bewaard tot u ze handmatig verwijdert."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:10
 msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
 msgstr ""
+"Via dit menu kunt u hardware (zoals kassa- of scanterminals) met uw account "
+"verbinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:18
 msgid "You haven't connected any hardware devices yet."
-msgstr ""
+msgstr "U hebt nog geen apparaten verbonden."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:24
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:56
 msgid "Connect a device"
-msgstr ""
+msgstr "Apparaat verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:81
 msgid "Hardware model"
-msgstr ""
+msgstr "Hardwaremodel"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:139
 msgid "Not yet initialized"
-msgstr ""
+msgstr "Nog niet geïnstalleerd"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:142
 msgid "Revoked"
-msgstr ""
+msgstr "Ingetrokken"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:164
 msgid "Connect"
-msgstr ""
+msgstr "Verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:175
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:76
 msgid "Logs"
-msgstr ""
+msgstr "Logbestanden"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:188
 #: pretix/control/templates/pretixcontrol/subevents/index.html:211
 msgid "Edit selected"
-msgstr ""
+msgstr "Geselecteerde keuzes bewerken"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:12
 msgid "Organizer settings"
-msgstr ""
+msgstr "Organisatorinstellingen"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:44
 msgid "Organizer page"
-msgstr ""
+msgstr "Organisatorpagina"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:68
 msgid "The links you configure here will also be shown on all of your events."
-msgstr ""
+msgstr "De links die u hier configureert, worden op al uw evenementen getoond."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:143
 msgid ""
@@ -25447,10 +25564,13 @@ msgid ""
 "default settings for all events in this account that do not have their own "
 "design settings."
 msgstr ""
+"Deze instellingen worden gebruikt voor de organisatorpagina en als "
+"standaardinstellingen voor alle evenementen in dit account die geen eigen "
+"ontwerpinstellingen hebben."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:162
 msgid "Privacy"
-msgstr ""
+msgstr "Privacy"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:166
 msgid ""
@@ -25458,6 +25578,9 @@ msgid ""
 "before you are allowed to use cookies or similar technology for analytics, "
 "tracking, payment, or similar purposes."
 msgstr ""
+"Bepaalde rechtsgebieden, zoals de Europese Unie, vereisen de toestemming van "
+"de gebruiker voordat cookies of soortgelijke technologieën gebruikt mogen "
+"worden voor analyses, tracking, betalingen of gelijkaardige doeleinden."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:173
 msgid ""
@@ -25466,6 +25589,9 @@ msgid ""
 "security. Therefore, cookies set by pretix itself do not require consent in "
 "all jurisdictions that we are aware of."
 msgstr ""
+"pretix zelf gebruikt alleen cookies die essentieel zijn om zijn diensten met "
+"een passend beveiligingsniveau te kunnen leveren. Voor de cookies die pretix "
+"plaatst, is in de bij ons bekende rechtsgebieden dus geen toestemming nodig."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:181
 msgid ""
@@ -25473,6 +25599,10 @@ msgid ""
 "affect if you use <strong>plugins</strong> that require additional cookies "
 "<strong>and</strong> participate in our cookie consent mechanism."
 msgstr ""
+"Daarom hebben de instellingen op deze pagina <strong>alleen</strong> effect "
+"als u <strong>plug-ins</strong> gebruikt die aanvullende cookies vereisen "
+"<strong>en</strong> deelneemt aan ons mechanisme voor toestemming voor "
+"cookies."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:188
 msgid ""
@@ -25482,10 +25612,15 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
+"Het is uw verantwoordelijkheid om ervoor te zorgen dat u voldoet aan alle "
+"relevante wetgeving. Wij bieden deze instellingen ter ondersteuning, maar "
+"kunnen geen aansprakelijkheid dragen, aangezien wij de exacte configuratie "
+"van uw gebruik van pretix, de juridische details in uw rechtsgebied of de "
+"afspraken met derden zoals betalings- of trackingaanbieders niet kennen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:205
 msgid "Accessibility"
-msgstr ""
+msgstr "Toegankelijkheid"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:207
 msgid ""
@@ -25494,16 +25629,22 @@ msgid ""
 "template in <a href=\"https://docs.pretix.eu/trust/accessibility/\" "
 "target=\"_blank\">our documentation</a>."
 msgstr ""
+"Sommige rechtsgebieden, waaronder de Europese Unie, vereist dat u informatie "
+"publiceert over de toegankelijkheid van uw ticketwinkel. U kunt een template "
+"vinden in <a href=\"https://docs.pretix.eu/trust/accessibility/\" "
+"target=\"_blank\">onze documentatie</a>."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:217
 msgid ""
 "Instead of an URL, you can also configure a text that will be shown within "
 "pretix. This will be ignored if a URL is configured."
 msgstr ""
+"In plaats van een URL kunt u ook een tekst invoeren die pretix zal "
+"weergeven. De tekst wordt genegeerd als er een URL geconfigureerd is."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:229
 msgid "Barcode media"
-msgstr ""
+msgstr "Barcodemedia"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:233
 msgid ""
@@ -25513,33 +25654,46 @@ msgid ""
 "layout that includes the \"Reusable Medium ID\" as a QR code. Later, the "
 "same barcode may be re-used during the sale of a different product."
 msgstr ""
+"Een barcodecodemedium is elke gedrukte of digitale weergave van een barcode. "
+"De media worden in eerste instantie gecreëerd door een product te verkopen "
+"dat een overeenkomstige regel heeft voor het gebruik van media, evenals een "
+"ticket- of badge-indeling die de tijdelijke aanduiding \"Media-ID\" als QR-"
+"code bevat. De barcode kan later opnieuw gebruikt worden bij de verkoop van "
+"een ander product."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:240
 msgid "Barcode media can currently only be connected to tickets."
-msgstr ""
+msgstr "Barcodemedia kunnen momenteel alleen aan tickets worden gekoppeld."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:243
 msgid ""
 "This subsequent reuse of the barcode is currently only supported during POS "
 "sales."
 msgstr ""
+"Dit hergebruik van de barcode wordt momenteel alleen ondersteund bij POS-"
+"verkopen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:260
 msgid ""
 "This medium type can work with almost any type of NFC chip. With this "
 "option, only the UID of the NFC chip is used for identification."
 msgstr ""
+"Dit type medium kan met vrijwel elk type NFC-chip worden gebruikt. Bij deze "
+"optie wordt alleen de UID van de NFC-chip gebruikt voor identificatie."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:264
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:296
 msgid "NFC media can currently only be connected to gift cards."
-msgstr ""
+msgstr "NFC-media kunnen momenteel alleen gekoppeld worden aan cadeaubonnen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:270
 msgid ""
 "This method does not provide a high level of protection against abuse since "
 "it is possible for malicious users to clone someone's chip with the same UID."
 msgstr ""
+"Deze methode biedt geen hoge mate van bescherming tegen misbruik, aangezien "
+"kwaadwillende gebruikers de chip van iemand anders met dezelfde UID kunnen "
+"klonen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:291
 msgid ""
@@ -25547,105 +25701,117 @@ msgid ""
 "made by NXP. This provides a higher level of security than other approaches, "
 "but requires all chips to be encoded prior to use."
 msgstr ""
+"Dit type medium werkt alleen met NFC-chips van het type Mifare Ultralight "
+"AES, geproduceerd door NXP. Dit biedt een hoger beveiligingsniveau dan "
+"andere benaderingen, maar vereist dat alle chips voorafgaand aan gebruik "
+"worden gecodeerd."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:318
 msgid "Domains"
-msgstr ""
+msgstr "Domeinen"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:320
 msgid "This dialog is intended for advanced users."
-msgstr ""
+msgstr "Deze dialoog is bedoeld voor gevorderde gebruikers."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:321
 msgid ""
 "The domain needs to be configured on your webserver before it can be used "
 "here."
 msgstr ""
+"Het domein moet worden geconfigureerd op uw eigen webserver voordat het hier "
+"kan worden gebruikt."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:377
 msgid "Add domain"
-msgstr ""
+msgstr "Domein toevoegen"
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html:64
 msgid "Run export now and download result"
-msgstr ""
+msgstr "Nu export uitvoeren en het resultaat downloaden"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
 msgid "Delete gate:"
-msgstr ""
+msgstr "Ingang verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:8
 msgid "Are you sure you want to delete the gate?"
-msgstr ""
+msgstr "Weet u zeker dat u de ingang wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:6
 msgid "Gate:"
-msgstr ""
+msgstr "Ingang:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:11
 msgid "Create a new gate"
-msgstr ""
+msgstr "Nieuwe ingang aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:7
 msgid "The list below shows gates that you can use to group check-in devices."
 msgstr ""
+"De lijst hieronder toont de ingangen die u kunt gebruiken om check-in-"
+"apparaten te groeperen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:7
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html:6
 #, python-format
 msgid "Gift card: %(card)s"
-msgstr ""
+msgstr "Cadeaubon: %(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:36
 msgid "Expire date"
-msgstr ""
+msgstr "Verloopdatum"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:43
 msgid "Issued through sale"
-msgstr ""
+msgstr "Uitgegeven door verkoop"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:71
 msgid "Transactions"
-msgstr ""
+msgstr "Transacties"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:81
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:7
 #: pretix/presale/templates/pretixpresale/giftcard/checkout.html:9
 msgid "Information"
-msgstr ""
+msgstr "Informatie"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:94
 msgid ""
 "Create a payment on the respective order that cancels out with this "
 "transaction. The order will then likely be overpaid."
 msgstr ""
+"Maakt een betaling voor deze bestelling die deze transactie compenseert. De "
+"bestelling is dan waarschijnlijk te veel betaald."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:96
 msgid "Revert"
-msgstr ""
+msgstr "Terugboeken"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:139
 msgid "Gift card history"
-msgstr ""
+msgstr "Cadeaubongeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_invite.html:8
 msgid "Invite organizer"
-msgstr ""
+msgstr "Organisator uitnodigen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:8
 msgid "Gift cards acceptance"
-msgstr ""
+msgstr "Acceptatie van cadeaubonnen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:11
 msgid ""
 "This feature allows you to configure acceptance of gift cards across "
 "multiple organizer accounts."
 msgstr ""
+"Met deze functie kunt u de acceptatie van cadeaubonnen voor meerdere "
+"organisatoraccounts configureren."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:18
 msgid "Other organizers you accept gift cards from"
-msgstr ""
+msgstr "Andere organisatoren van wie u cadeaubonnen accepteert"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:23
 msgid ""
@@ -25653,11 +25819,14 @@ msgid ""
 "do so, the other organizer can add you to their list and afterwards, you can "
 "confirm this here."
 msgstr ""
+"U accepteert nog geen cadeaubonnen van andere organisatoren. Als u dat wilt "
+"doen, kan de andere organisator u aan zijn lijst toevoegen en daarna kunt u "
+"dit hier bevestigen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:49
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:128
 msgid "invited"
-msgstr ""
+msgstr "uitgenodigd"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:62
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:140
@@ -25665,19 +25834,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:67
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:120
 msgid "Remove"
-msgstr ""
+msgstr "Verwijderen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:66
 msgid "Accept"
-msgstr ""
+msgstr "Accepteren"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:69
 msgid "Decline"
-msgstr ""
+msgstr "Afwijzen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:84
 msgid "Other organizers accepting gift cards from you"
-msgstr ""
+msgstr "Andere organisatoren die uw cadeaubonnen accepteren"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:87
 msgid ""
@@ -25688,6 +25857,12 @@ msgid ""
 "responsibility to handle the exchange of money to offset the transactions "
 "between the two organizers."
 msgstr ""
+"U kunt andere organisatoren uitnodigen om uw cadeaubonnen te accepteren. "
+"Nadat u dit hebt gedaan, moeten zij naar dezelfde pagina in hun account gaan "
+"en uw uitnodiging accepteren. Houd er rekening mee dat andere organisatoren "
+"ook geld kunnen toevoegen aan cadeaubonnen, dat u vervolgens bij hen moet "
+"ophalen. Het is uw verantwoordelijkheid om de geldtransacties tussen de twee "
+"organisatoren af te handelen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:95
 msgid ""
@@ -25695,6 +25870,9 @@ msgid ""
 "is required if you want them to participate in a shared system with e.g. NFC "
 "payment chips."
 msgstr ""
+"Optioneel kunt u instellen of de andere organisator toegang mag krijgen tot "
+"uw herbruikbare media. Dit is nodig als u wilt dat ze meedoen aan een "
+"gezamenlijk systeem met bijvoorbeeld NFC-betaalmethoden."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:99
 msgid ""
@@ -25702,48 +25880,57 @@ msgid ""
 "on the activated medium types) this will grant the other organizer access to "
 "cryptographic key material required to interact with the media type."
 msgstr ""
+"Gebruik deze optie alleen voor organisatoren die u vertrouwt, aangezien "
+"(afhankelijk van de geactiveerde mediatypen) dit de andere organisator "
+"toegang geeft tot cryptografisch sleutelmateriaal dat nodig is om met het "
+"mediatype te communiceren."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:106
 msgid "Invite new organizer"
-msgstr ""
+msgstr "Nieuwe organisator uitnodigen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:8
 msgid "Issued gift cards"
-msgstr ""
+msgstr "Uitgegeven cadeaubonnen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:13
 msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
+"U hebt nog geen cadeaubonnen uitgegeven. U kunt een product toevoegen in uw "
+"ticketwinkel om cadeaubonnen uit te geven, of u kunt handmatig cadeaubonnen "
+"aanmaken."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:20
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:50
 msgid "Manually issue a gift card"
-msgstr ""
+msgstr "Handmatig een cadeaubon uitgeven"
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
 "The list below shows all organizer accounts you have administrative access "
 "to."
 msgstr ""
+"De lijst hieronder toont alle organisatoraccounts waar u beheerderstoegang "
+"toe heeft."
 
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:6
 msgid "Organizer logs"
-msgstr ""
+msgstr "Organisatorlogs"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:60
 msgid "Customer account registration"
-msgstr ""
+msgstr "Registratie van een klantenaccount"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:63
 msgid "Customer account email change"
-msgstr ""
+msgstr "E-mailadres van klantenaccount wijzigen"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:66
 msgid "Customer account password reset"
-msgstr ""
+msgstr "Wachtwoord van klantenaccount resetten"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:69
 msgid "Customer account security notification"
@@ -25751,24 +25938,26 @@ msgstr "Beveiligingsmelding voor klantenaccount"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:5
 msgid "Delete membership type:"
-msgstr ""
+msgstr "Lidmaatschapstype verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:9
 msgid "Are you sure you want to delete this membership type?"
-msgstr ""
+msgstr "Weet u zeker dat u dit lidmaatschapstype wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:11
 msgid "This membership type cannot be deleted since it has already been used."
 msgstr ""
+"Dit lidmaatschapstype kan niet worden verwijderd, omdat het al gebruikt is "
+"in een bestelling."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:6
 msgid "Membership type:"
-msgstr ""
+msgstr "Lidmaatschapstype:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:21
 msgid "Create a new membership type"
-msgstr ""
+msgstr "Nieuw lidmaatschapstype aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:8
 msgid ""
@@ -25777,15 +25966,21 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
+"U kunt meerdere lidmaatschapstypen definiëren. Lidmaatschappen staan u toe "
+"om producten van verschillende evenementen te koppelen. U kunt een "
+"lidmaatschap verkopen als product in het ene evenement, en vervolgens een "
+"lidmaatschap vereisen om een product in een ander evenement te kopen."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:15
 msgid ""
 "This can be used to enable products like year passes, tickets of ten, etc."
 msgstr ""
+"Dit kan worden gebruikt om prijsmodellen zoals jaarkaarten of "
+"tienbeurtenkaarten mogelijk te maken."
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:10
 msgid "Outgoing email"
-msgstr ""
+msgstr "Uitgaande e-mail"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:14
 msgid "Email details"
@@ -25794,24 +25989,24 @@ msgstr "E-mailgegevens"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:21
 msgctxt "email"
 msgid "From"
-msgstr ""
+msgstr "Van"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:23
 msgctxt "email"
 msgid "To"
-msgstr ""
+msgstr "Aan"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:26
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:106
 msgctxt "email"
 msgid "Cc"
-msgstr ""
+msgstr "Cc"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:30
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:109
 msgctxt "email"
 msgid "Bcc"
-msgstr ""
+msgstr "Bcc"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:42
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:143
@@ -25824,15 +26019,15 @@ msgstr "Aanmaak"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:58
 msgid "Sent"
-msgstr ""
+msgstr "Verstuurd"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:62
 msgid "Next attempt (estimate)"
-msgstr ""
+msgstr "Volgende poging (schatting)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:142
 msgid "HTML content"
-msgstr ""
+msgstr "HTML-inhoud"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:150
 msgid "Text content"
@@ -25845,12 +26040,14 @@ msgstr "Headers"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:180
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:199
 msgid "Sensitive content not shown for security reasons"
-msgstr ""
+msgstr "Gevoelige inhoud niet weergegeven om veiligheidsredenen"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:213
 msgid ""
 "Additional headers will be added by the mail server and are not visible here."
 msgstr ""
+"Er zullen extra headers worden toegevoegd door de mailserver, die hier niet "
+"zichtbaar zijn."
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:11
 #, python-format
@@ -25858,10 +26055,12 @@ msgid ""
 "This is an overview of all emails sent by your organizer account in the last "
 "%(days)s days."
 msgstr ""
+"Dit is een overzicht van alle e-mails verzonden door uw organisatoraccount "
+"tijdens de laatste %(days)s dagen."
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:18
 msgid "You haven't sent any emails recently."
-msgstr ""
+msgstr "U hebt recentelijk geen e-mails verzonden."
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:63
 msgid "Context"
@@ -25869,28 +26068,28 @@ msgstr "Context"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:160
 msgid "Sent:"
-msgstr ""
+msgstr "Verstuurd:"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:175
 msgid "Retry (if failed or withheld)"
-msgstr ""
+msgstr "Opnieuw proberen (indien mislukt of geweigerd)"
 
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:179
 msgid "Abort (if queued, awaiting retry or withheld)"
-msgstr ""
+msgstr "Annuleren (alleen wachtende of geweigerde)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:6
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:12
 #, python-format
 msgid "Events with plugin %(name)s"
-msgstr ""
+msgstr "Evenementen met plug-in %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:18
 #, python-format
 msgid ""
 "The plugin \"%(name)s\" can be enabled or disabled for every event "
 "individually."
-msgstr ""
+msgstr "De plug-in \"%(name)s\" kan per evenement in- of uitgeschakeld worden."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:24
 #, python-format
@@ -25898,6 +26097,9 @@ msgid ""
 "The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
+"De plug-in \"%(name)s\" is ingeschakeld voor uw organisatoraccount, maar "
+"moet ook ingeschakeld worden voor de specifieke evenementen waarbij u hem "
+"wilt gebruiken."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugin_events.html:31
 msgid ""
@@ -25905,6 +26107,9 @@ msgid ""
 "that it might still be necessary to configure the plugin for each event "
 "individually."
 msgstr ""
+"Met dit formulier kunt u de plug-in snel in- of uitschakelen voor veel "
+"evenementen. Houd er rekening mee dat het nog steeds nodig kan zijn om hem "
+"voor elk evenement afzonderlijk te configureren."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:8
 msgid ""
@@ -25912,33 +26117,37 @@ msgid ""
 "account. Plugins might bring additional software functionality, connect your "
 "events to third-party services, or apply other forms of customizations."
 msgstr ""
+"Op deze pagina kunt u plug-ins instellen voor uw organisatoraccount. Plug-"
+"ins kunnen extra softwarefunctionaliteit bieden, uw evenement verbinden met "
+"diensten van derden, of andere vormen van aanpassingen."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:81
 msgid "Active (all events)"
-msgstr ""
+msgstr "Actief (alle evenementen)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:86
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:95
 #, python-format
 msgid "Active (%(count)s event)"
 msgid_plural "Active (%(count)s events)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Actief (%(count)s evenement)"
+msgstr[1] "Actief (%(count)s evenementen)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:118
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:175
 msgid ""
 "Parts of this plugin can be enabled or disabled for events individually."
 msgstr ""
+"Delen van deze plug-in kunnen in- of uitgeschakeld worden per evenement."
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:151
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:169
 msgid "Manage events"
-msgstr ""
+msgstr "Evenementen beheren"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:164
 msgid "This plugin can be enabled or disabled for events individually."
-msgstr ""
+msgstr "Deze plug-in kan per evenement in- of uitgeschakeld worden."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -25946,70 +26155,74 @@ msgid ""
 "can later set for your events and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of events."
 msgstr ""
+"Hier kunt u een reeks metagegevens (variabelen) definiëren die u later voor "
+"uw evenementen kunt instellen en opnieuw kunt gebruiken in bijvoorbeeld "
+"ticketlay-outs. Dit is een handige tijdbesparing als u veel evenementen "
+"aanmaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:15
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:9
 msgid "Create a new property"
-msgstr ""
+msgstr "Nieuwe eigenschap aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:5
 msgid "Delete property:"
-msgstr ""
+msgstr "Eigenschap verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:8
 msgid "Are you sure you want to delete the property?"
-msgstr ""
+msgstr "Weet u zeker dat u de eigenschap wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:7
 msgid "Property:"
-msgstr ""
+msgstr "Eigenschap:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:26
 msgid "Validation"
-msgstr ""
+msgstr "Validatie"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:31
 msgid "Allowed values"
-msgstr ""
+msgstr "Toegestane waarden"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:35
 msgid "If you keep this empty, all input will be allowed."
-msgstr ""
+msgstr "Als u dit leeg laat, wordt alle invoer toegelaten."
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:93
 msgid "Add a new value"
-msgstr ""
+msgstr "Nieuwe waarde toevoegen"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:95
 msgid "Sort alphabetically"
-msgstr ""
+msgstr "Alfabetisch ordenen"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:14
 msgid "No media have been created yet."
-msgstr ""
+msgstr "Er zijn nog geen media aangemaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:19
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:45
 msgid "Create a new medium"
-msgstr ""
+msgstr "Nieuw medium aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:51
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:30
 msgctxt "reusable_media"
 msgid "Identifier"
-msgstr ""
+msgstr "Identifier"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:56
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:28
 msgctxt "reusable_media"
 msgid "Media type"
-msgstr ""
+msgstr "Mediatype"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:59
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:42
 msgctxt "reusable_media"
 msgid "Connections"
-msgstr ""
+msgstr "Verbindingen"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:12
@@ -26018,39 +26231,39 @@ msgstr ""
 #, python-format
 msgctxt "reusable_media"
 msgid "Medium %(id)s"
-msgstr ""
+msgstr "Medium %(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:86
 msgctxt "reusable_media"
 msgid "Medium history"
-msgstr ""
+msgstr "Mediumgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:16
 msgctxt "reusable_media"
 msgid "New medium"
-msgstr ""
+msgstr "Nieuw medium"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:5
 msgid "Delete SSO client:"
-msgstr ""
+msgstr "SSO-client verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:9
 msgid "Are you sure you want to delete this SSO client?"
-msgstr ""
+msgstr "Weet u zeker dat u deze SSO-client wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:11
 msgid "This SSO client cannot be deleted since it has already been used."
-msgstr ""
+msgstr "Deze SSO-client kan niet verwijderd worden omdat hij al gebruikt is."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:6
 msgid "SSO client:"
-msgstr ""
+msgstr "SSO-client:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:15
 msgid "Create a new SSO client"
-msgstr ""
+msgstr "Nieuwe SSO-client aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:8
 msgid ""
@@ -26058,94 +26271,101 @@ msgid ""
 "account credentials by setting up your other systems as a Single-Sign-On "
 "(SSO) client based on OpenID Connect."
 msgstr ""
+"U kunt uw klanten toestaan om met hun klantaccountgegevens in te loggen op "
+"andere systemen door uw andere systemen in te stellen als een Single-Sign-On "
+"(SSO)-client op basis van OpenID Connect."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:5
 msgid "Delete SSO provider:"
-msgstr ""
+msgstr "SSO-provider verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:9
 msgid "Are you sure you want to delete this SSO provider?"
-msgstr ""
+msgstr "Weet u zeker dat u deze SSO-provider wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:11
 msgid "This SSO provider cannot be deleted since it has already been used."
-msgstr ""
+msgstr "Deze SSO-provider kan niet verwijderd worden omdat hij al gebruikt is."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:6
 msgid "SSO provider:"
-msgstr ""
+msgstr "SSO-provider:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:15
 msgid "Create a new SSO provider"
-msgstr ""
+msgstr "Nieuwe SSO-provider aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:16
 msgctxt "sso"
 msgid "Redirection URL"
-msgstr ""
+msgstr "Doorverwijzings-URL"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:8
 msgid ""
 "You can connect existing Single-Sign-On (SSO) providers to allow your "
 "customers to log in using your own account system."
 msgstr ""
+"U kunt bestaande Single Sign-On-diensten (SSO) koppelen, zodat uw klanten "
+"via uw bestaande systeem kunnen inloggen op hun klantenaccount."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
-msgstr ""
+msgstr "Team verwijderen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:7
 msgid ""
 "You cannot delete the team because there would be no one left who could "
 "change team permissions afterwards."
 msgstr ""
+"U kunt het team niet verwijderen, omdat er dan niemand meer overblijft die "
+"de teamrechten kan wijzigen."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:17
 msgid "Are you sure you want to delete the team?"
-msgstr ""
+msgstr "Weet u zeker dat u het team wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:6
 msgid "Team:"
-msgstr ""
+msgstr "Team:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:30
 msgid "Create a new team"
-msgstr ""
+msgstr "Nieuw team aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:10
 msgid "You will be able to add team members in the next step."
-msgstr ""
+msgstr "In de volgende stap kunt u teamleden toevoegen."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:24
 msgid "Organizer permissions"
-msgstr ""
+msgstr "Organisatorrechten"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:33
 msgid "Event permissions"
-msgstr ""
+msgstr "Evenementrechten"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:21
 msgid "Member"
-msgstr ""
+msgstr "Lid"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:36
 msgid "Two-factor authentication enabled"
-msgstr ""
+msgstr "Twee-factor-authenticatie ingeschakeld"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:40
 msgid "Two-factor authentication disabled"
-msgstr ""
+msgstr "Twee-factor-authenticatie uitgeschakeld"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:57
 msgid "invited, pending response"
-msgstr ""
+msgstr "uitgenodigd, wachten op antwoord"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:59
 msgid "resend invite"
-msgstr ""
+msgstr "uitnodiging opnieuw versturen"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:77
 msgid ""
@@ -26153,60 +26373,65 @@ msgid ""
 "have a pretix account, they will immediately be added to the event. "
 "Otherwise, they will be sent an email with an invitation."
 msgstr ""
+"Om een nieuwe gebruiker toe te voegen, kunt u hier diens e-mailadres "
+"invoeren. Als de gebruiker al een pretix-account heeft, zal de gebruiker "
+"direct aan het evenement worden toegevoegd. Anders krijgt de gebruiker een "
+"mail met een uitnodiging."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:85
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:134
 msgid "Add"
-msgstr ""
+msgstr "Toevoegen"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:92
 msgid "API tokens"
-msgstr ""
+msgstr "API-tokens"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:144
 msgid "Team history"
-msgstr ""
+msgstr "Teamgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:8
 msgid "The list below shows all teams that exist within this organizer."
-msgstr ""
+msgstr "De lijst hieronder toont alle teams van deze organisator."
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:38
 msgid "Members"
-msgstr ""
+msgstr "Leden"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:54
 #, python-format
 msgid "+ %(count)s invited"
-msgstr ""
+msgstr "+ %(count)s uitgenodigd"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:6
 msgid "Modify webhook"
-msgstr ""
+msgstr "Webhook bewerken"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:8
 msgid "Create a new webhook"
-msgstr ""
+msgstr "Nieuwe webhook aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:5
 #, python-format
 msgid "Logs for webhook %(url)s"
-msgstr ""
+msgstr "Logs voor webhook %(url)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:7
 msgid "This page shows all calls to your webhook in the past 30 days."
 msgstr ""
+"Deze pagina toont alle aanroepen naar uw webhook in de afgelopen 30 dagen."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:14
 #, python-format
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Er staat één webhook gepland om opnieuw geprobeerd te worden."
+msgstr[1] "Er staan %(count)s webhooks gepland om opnieuw geprobeerd te worden."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:25
 msgid "Stop retrying"
-msgstr ""
+msgstr "Stoppen met opnieuw proberen"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:29
 #, python-format
@@ -26214,18 +26439,21 @@ msgid ""
 "Webhooks scheduled to be retried in less than %(minutes)s minutes may not be "
 "listed here and can no longer be stopped or expedited."
 msgstr ""
+"Webhooks die gepland zijn om binnen minder dan %(minutes)s minuten herhaald "
+"te worden, worden hier mogelijk niet weergegeven en kunnen niet meer gestopt "
+"of versneld worden."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:44
 msgid "This webhook was retried since it previously failed."
-msgstr ""
+msgstr "Deze webhook is opnieuw geprobeerd, omdat hij eerder is mislukt."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:73
 msgid "Failed"
-msgstr ""
+msgstr "Mislukt"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:83
 msgid "Request URL"
-msgstr ""
+msgstr "Verzoek-URL"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:85
 msgid "Request POST body"
@@ -33648,7 +33876,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:76
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:129
 msgid "Modify"
-msgstr ""
+msgstr "Wijzigen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:75
 msgid "Modify invoice information"
