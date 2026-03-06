@@ -413,7 +413,7 @@ class CartManager:
         VoucherOperation: 15,
         ExtendOperation: 20,
         AddOperation: 30
-    }ordermanager
+    }
 
     def __init__(self, event: Event, cart_id: str, sales_channel: SalesChannel,
                  invoice_address: InvoiceAddress=None, widget_data=None, reservation_time: timedelta=None):
