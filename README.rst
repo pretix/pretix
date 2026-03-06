@@ -4,14 +4,14 @@ pretix
 .. image:: https://img.shields.io/pypi/v/pretix.svg
    :target: https://pypi.python.org/pypi/pretix
 
-.. image:: https://github.com/pretix/pretix/workflows/Documentation/badge.svg
+.. image:: https://github.com/ofejiroederhi/pretix/workflows/Documentation/badge.svg
    :target: https://docs.pretix.eu/
 
-.. image:: https://github.com/pretix/pretix/workflows/Tests/badge.svg
-   :target: https://github.com/pretix/pretix/actions/workflows/tests.yml
+.. image:: https://github.com/ofejiroederhi/pretix/workflows/Tests/badge.svg
+   :target: https://github.com/ofejiroederhi/pretix/actions/workflows/tests.yml
 
-.. image:: https://codecov.io/gh/pretix/pretix/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/pretix/pretix
+.. image:: https://codecov.io/gh/ofejiroederhi/pretix/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/ofejiroederhi/pretix
 
 
 
