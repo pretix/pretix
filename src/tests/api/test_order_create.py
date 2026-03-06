@@ -2695,6 +2695,34 @@ def test_order_create_voucher_expired(token_client, organizer, event, item, quot
 
 
 @pytest.mark.django_db
+def test_order_create_voucher_redeemed_and_expired_prefers_redeemed(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    del res['positions'][0]['price']
+    with scopes_disabled():
+        voucher = event.vouchers.create(
+            price_mode="set",
+            value=15,
+            item=item,
+            redeemed=1,
+            valid_until=now() - datetime.timedelta(days=1),
+        )
+    res['positions'][0]['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'positions': [
+            {'voucher': ['The voucher has already been used the maximum number of times.']},
+        ]
+    }
+
+
+@pytest.mark.django_db
 def test_order_create_voucher_block_quota(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
