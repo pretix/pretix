@@ -37,8 +37,10 @@ import inspect
 import logging
 import mimetypes
 import os
+import random
 import re
 import smtplib
+import time
 import uuid
 import warnings
 from datetime import timedelta
@@ -62,6 +64,7 @@ from django.template.loader import get_template
 from django.utils.html import escape
 from django.utils.timezone import now, override
 from django.utils.translation import gettext as _, pgettext
+from django_redis import get_redis_connection
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 from text_unidecode import unidecode
@@ -109,6 +112,146 @@ class WithholdMailException(Exception):
     def __init__(self, error, error_detail):
         self.error = error
         self.error_detail = error_detail
+
+
+class MailRateLimitException(Exception):
+    """
+    Raised when no rate-limit token is available. The task will be retried.
+    """
+    pass
+
+
+def parse_rate_limit(rate_limit_str: str) -> tuple[int, int]:
+    """
+    Parse rate limit format like '10/s' or '600/m' into (count, interval_seconds).
+    
+    :param rate_limit_str: Format like '10/s' (per second), '600/m' (per minute), '3600/h' (per hour)
+    :return: Tuple of (count, interval_seconds)
+    :raises ValueError: If format is invalid
+    
+    Examples:
+        '10/s' -> (10, 1)
+        '600/m' -> (600, 60)
+        '3600/h' -> (3600, 3600)
+    """
+    if not rate_limit_str or '/' not in rate_limit_str:
+        raise ValueError(f"Invalid rate limit format: {rate_limit_str}. Expected format like '10/s', '600/m', or '3600/h'")
+    
+    try:
+        count_str, interval_str = rate_limit_str.strip().split('/')
+        count = int(count_str)
+        
+        interval_map = {
+            's': 1,
+            'm': 60,
+            'h': 3600,
+        }
+        
+        interval_unit = interval_str.strip().lower()
+        if interval_unit not in interval_map:
+            raise ValueError(f"Unknown interval unit: {interval_unit}. Expected 's', 'm', or 'h'")
+        
+        interval_seconds = interval_map[interval_unit]
+        return (count, interval_seconds)
+    except (ValueError, IndexError) as e:
+        raise ValueError(f"Invalid rate limit format: {rate_limit_str}. Expected format like '10/s', '600/m', or '3600/h'") from e
+
+
+def get_mail_rate_limit_config() -> tuple[int, int] | None:
+    """
+    Get the configured mail rate limit from settings.
+    
+    :return: Tuple of (count, interval_seconds) or None if not configured or Redis unavailable
+    """
+    rate_limit_str = getattr(settings, 'MAIL_RATE_LIMIT', None)
+    if not rate_limit_str:
+        return None
+    
+    # Graceful degradation: if Redis is not available, log warning and skip rate limiting
+    if not settings.HAS_REDIS:
+        logger.warning('MAIL_RATE_LIMIT configured but Redis is not available. Rate limiting will be skipped.')
+        return None
+    
+    try:
+        return parse_rate_limit(rate_limit_str)
+    except ValueError as e:
+        logger.error(f'Failed to parse MAIL_RATE_LIMIT setting: {e}')
+        return None
+
+
+def try_acquire_mail_token() -> bool:
+    """
+    Try to acquire a rate-limit token for sending an email.
+    
+    This implements the Token Bucket pattern for rate limiting. It maintains a Redis counter
+    and checks if tokens are available based on elapsed time since the last reset.
+    
+    :return: True if token acquired
+    :raises MailRateLimitException: If rate limit exceeded (caller should retry the task)
+    """
+    rate_config = get_mail_rate_limit_config()
+    if not rate_config:
+        # No rate limiting configured or Redis unavailable
+        return True
+    
+    count, interval_seconds = rate_config
+    
+    try:
+        rc = get_redis_connection("redis")
+        
+        # Use a Redis key to track the token bucket
+        bucket_key = 'mail_rate_limit:bucket'
+        last_refill_key = 'mail_rate_limit:last_refill'
+        
+        # Get current bucket state
+        now = time.time()
+        current_tokens_raw = rc.get(bucket_key)
+        last_refill_raw = rc.get(last_refill_key)
+
+        if current_tokens_raw is None:
+            current_tokens = count
+        else:
+            current_tokens = int(current_tokens_raw)
+
+        if last_refill_raw is None:
+            last_refill = now
+        else:
+            last_refill = float(last_refill_raw)
+        
+        # Calculate tokens to add based on elapsed time
+        elapsed = now - last_refill
+        
+        # Calculate how many tokens to regenerate
+        # Rate: count tokens per interval_seconds
+        # So in 'elapsed' seconds we regenerate (count / interval_seconds) * elapsed tokens
+        tokens_to_add = int((count / interval_seconds) * elapsed)
+        
+        if tokens_to_add > 0:
+            current_tokens = min(count, current_tokens + tokens_to_add)
+            # Advance refill timestamp only by the consumed refill interval to avoid drift.
+            refill_step = interval_seconds / count
+            last_refill = last_refill + (tokens_to_add * refill_step)
+        
+        # Try to consume one token
+        if current_tokens > 0:
+            current_tokens -= 1
+            rc.set(bucket_key, current_tokens, ex=interval_seconds * 2)
+            rc.set(last_refill_key, last_refill, ex=interval_seconds * 2)
+            logger.info(f'Mail rate-limit token acquired. Remaining: {current_tokens}/{count}')
+            return True
+        else:
+            rc.set(last_refill_key, last_refill, ex=interval_seconds * 2)
+            # Calculate how long to wait until next token is available
+            time_until_next = interval_seconds / count
+            logger.info(f'Mail rate-limit exceeded. Rate: {count}/{interval_seconds}s. Next token in ~{time_until_next:.2f}s')
+            raise MailRateLimitException(f'Rate limit exceeded: {count} mails per {interval_seconds}s')
+    
+    except MailRateLimitException:
+        raise
+    except Exception as e:
+        logger.exception(f'Error acquiring mail rate-limit token: {e}')
+        # On unexpected errors, allow mail to be sent (graceful degradation)
+        return True
 
 
 def clean_sender_name(sender_name: str) -> str:
@@ -408,6 +551,41 @@ def mail_send_task(self, **kwargs) -> bool:
         outgoing_mail.status = OutgoingMail.STATUS_INFLIGHT
         outgoing_mail.inflight_since = now()
         outgoing_mail.save(update_fields=["status", "inflight_since"])
+
+    # Check rate limit before changing status to INFLIGHT
+    try:
+        try_acquire_mail_token()
+    except MailRateLimitException:
+        # Count pending emails to distribute retry times
+        pending_count = OutgoingMail.objects.filter(
+            status__in=[OutgoingMail.STATUS_QUEUED, OutgoingMail.STATUS_AWAITING_RETRY]
+        ).count()
+        
+        # Calculate distributed retry countdown
+        rate_config = get_mail_rate_limit_config()
+        if rate_config:
+            count, interval_seconds = rate_config
+            time_per_email = interval_seconds / count
+            
+            # Distribute emails over a time window to prevent thundering herd
+            # Each email gets a slot: base_delay + (random offset within reasonable window)
+            # The window should be large enough to spread all pending emails
+            max_wait_window = min(pending_count * time_per_email * 0.5, 60)  # Cap at 60s
+            countdown = max(1, int(time_per_email + random.random() * max_wait_window))
+        else:
+            logger.error('Rate limit exceeded but no rate limit config available. THIS SHOULD NOT HAPPEN. Defaulting to fixed retry time.')
+            countdown = 3
+        
+        # Update outgoing mail status and retry time (like normal SMTP retries)
+        outgoing_mail.error = "Rate limit exceeded"
+        outgoing_mail.error_detail = f"{pending_count} emails pending, retry in {countdown}s"
+        outgoing_mail.sent = now()
+        outgoing_mail.status = OutgoingMail.STATUS_AWAITING_RETRY
+        outgoing_mail.retry_after = now() + timedelta(seconds=countdown)
+        outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after"])
+        
+        logger.info(f'Email {outgoing_mail.guid}: Rate limit exceeded. {pending_count} emails pending. Retrying in {countdown}s')
+        self.retry(countdown=countdown, max_retries=10)  # throws RetryException, ends function flow
 
     headers = dict(outgoing_mail.headers)
     headers.setdefault('X-PX-Correlation', str(outgoing_mail.guid))
