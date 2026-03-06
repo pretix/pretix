@@ -1626,6 +1626,8 @@ class GiftCardPayment(BasePaymentProvider):
                     raise PaymentException(_("This gift card does not support this currency."))
                 if not gc.accepted_by(self.event.organizer):
                     raise PaymentException(_("This gift card is not accepted by this event organizer."))
+                if gc.value <= Decimal("0.00"):
+                    raise PaymentException(_("All credit on this gift card has been used."))
                 if payment.amount > gc.value:
                     raise PaymentException(_("This gift card was used in the meantime. Please try again."))
                 if gc.testmode and not payment.order.testmode:
