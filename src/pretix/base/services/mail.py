@@ -583,9 +583,24 @@ def mail_send_task(self, **kwargs) -> bool:
         outgoing_mail.status = OutgoingMail.STATUS_AWAITING_RETRY
         outgoing_mail.retry_after = now() + timedelta(seconds=countdown)
         outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after"])
+
+        max_retry_age_seconds = getattr(settings, "MAIL_RATE_LIMIT_MAX_RETRY_AGE", 24 * 3600)
+        if outgoing_mail.created < now() - timedelta(seconds=max_retry_age_seconds):
+            outgoing_mail.error = "Rate limit retries exceeded age limit"
+            outgoing_mail.error_detail = (
+                f"Mail exceeded retry age limit of {max_retry_age_seconds}s while waiting for rate-limit tokens"
+            )
+            outgoing_mail.sent = now()
+            outgoing_mail.status = OutgoingMail.STATUS_FAILED
+            outgoing_mail.retry_after = None
+            outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after"])
+            logger.warning(
+                f"Email {outgoing_mail.guid}: Marked as failed after exceeding rate-limit retry age limit"
+            )
+            return False
         
         logger.info(f'Email {outgoing_mail.guid}: Rate limit exceeded. {pending_count} emails pending. Retrying in {countdown}s')
-        self.retry(countdown=countdown, max_retries=10)  # throws RetryException, ends function flow
+        self.retry(countdown=countdown, max_retries=None)  # throws RetryException, ends function flow
 
     headers = dict(outgoing_mail.headers)
     headers.setdefault('X-PX-Correlation', str(outgoing_mail.guid))

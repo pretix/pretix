@@ -242,6 +242,7 @@ MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED = config.getboolean('mail', 'custom_sen
 MAIL_CUSTOM_SENDER_SPF_STRING = config.get('mail', 'custom_sender_spf_string', fallback='')
 MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = config.getboolean('mail', 'custom_smtp_allow_private_networks', fallback=DEBUG)
 MAIL_RATE_LIMIT = config.get('mail', 'rate_limit', fallback=None)
+MAIL_RATE_LIMIT_MAX_RETRY_AGE = config.getint('mail', 'rate_limit_max_retry_age', fallback=24 * 3600)
 EMAIL_HOST = config.get('mail', 'host', fallback='localhost')
 EMAIL_PORT = config.getint('mail', 'port', fallback=25)
 EMAIL_HOST_USER = config.get('mail', 'user', fallback='')
