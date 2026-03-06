@@ -334,7 +334,8 @@ def _check_position_constraints(
         raise CartPositionError(error_messages['voucher_invalid_subevent'])
 
     # Voucher expired
-    if voucher and voucher.valid_until and voucher.valid_until < time_machine_now_dt:
+    # (checked using real_now_dt as vouchers influence quota calculations)
+    if voucher and voucher.valid_until and voucher.valid_until < real_now_dt:
         raise CartPositionError(error_messages['voucher_expired'])
 
     # Subevent has been disabled
@@ -412,7 +413,7 @@ class CartManager:
         VoucherOperation: 15,
         ExtendOperation: 20,
         AddOperation: 30
-    }
+    }ordermanager
 
     def __init__(self, event: Event, cart_id: str, sales_channel: SalesChannel,
                  invoice_address: InvoiceAddress=None, widget_data=None, reservation_time: timedelta=None):
