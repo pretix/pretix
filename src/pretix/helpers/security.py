@@ -174,3 +174,10 @@ def handle_login_source(user, request):
                     user=user,
                     locale=user.locale
                 )
+
+
+def session_login(request, keep_logged_in=False):
+    request.session["pretix_auth_login_time"] = int(time.time())
+    request.session["pretix_auth_long_session"] = (
+        settings.PRETIX_LONG_SESSIONS and keep_logged_in
+    )
