@@ -255,8 +255,6 @@ class EventWizardBasicsForm(I18nModelForm):
             if data.get("team"):
                 source_event_perms = self.user.get_event_permission_set(self.organizer, self.clone_from)
                 team_perms = data["team"].event_permission_set(include_legacy=False)
-                print(source_event_perms)
-                print(team_perms)
                 if any(t not in source_event_perms for t in team_perms if ":" in t):
                     raise ValidationError({
                         "team": _("You cannot choose a team that would give you more access than you have on "
