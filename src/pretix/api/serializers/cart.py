@@ -148,7 +148,10 @@ class BaseCartPositionCreateSerializer(I18nAwareModelSerializer):
             if voucher and voucher.subevent_id and (not data.get('subevent') or voucher.subevent_id != data['subevent'].pk):
                 raise ValidationError({'voucher': ['The specified voucher is not valid for this subevent.']})
 
-            if voucher.valid_until is not None and voucher.valid_until < now():
+            if voucher.is_fully_redeemed():
+                raise ValidationError({'voucher': ['The specified voucher has already been used the maximum number of times.']})
+
+            if voucher.is_expired():
                 raise ValidationError({'voucher': ['The specified voucher is expired.']})
 
             data['voucher'] = voucher

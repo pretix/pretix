@@ -231,7 +231,10 @@ def _get_voucher_availability(event, voucher_use_diff, now_dt, exclude_position_
     for voucher, count in voucher_use_diff.items():
         voucher.refresh_from_db()
 
-        if voucher.valid_until is not None and voucher.valid_until < now_dt:
+        if voucher.is_fully_redeemed():
+            raise CartError(error_messages['voucher_redeemed'])
+
+        if voucher.is_expired():
             raise CartError(error_messages['voucher_expired'])
 
         redeemed_in_carts = CartPosition.objects.filter(
@@ -573,7 +576,9 @@ class CartManager:
         voucher_use_diff = Counter()
         ops = []
 
-        if not voucher.is_active():
+        if voucher.is_fully_redeemed():
+            raise CartError(error_messages['voucher_redeemed'])
+        if voucher.is_expired():
             raise CartError(error_messages['voucher_expired'])
 
         for p in self.positions:

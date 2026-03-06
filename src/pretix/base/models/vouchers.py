@@ -551,11 +551,13 @@ class Voucher(LoggedModel):
         Returns True if a voucher has not yet been redeemed, but is still
         within its validity (if valid_until is set).
         """
-        if self.redeemed >= self.max_usages:
-            return False
-        if self.valid_until and self.valid_until < now():
-            return False
-        return True
+        return not self.is_fully_redeemed() and not self.is_expired()
+
+    def is_fully_redeemed(self):
+        return self.redeemed >= self.max_usages
+
+    def is_expired(self):
+        return self.valid_until is not None and self.valid_until < now()
 
     def calculate_price(self, original_price: Decimal, max_discount: Decimal=None) -> Decimal:
         """
