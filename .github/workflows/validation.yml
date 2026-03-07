@@ -1,0 +1,43 @@
+# Shift-left early detection: light checks on every push/PR.
+# Catches manifest/sdist mismatch, build breakage, and style issues before heavier CI.
+name: Early Detection (shift left)
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  early:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    name: Early Detection
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # 1. Packaging: sdist/manifest vs version control (e.g. missing MANIFEST.in rules)
+      - name: Install build tools
+        run: pip install -U setuptools build check-manifest
+      - name: check-manifest
+        run: check-manifest
+
+      # 2. Ensure sdist builds
+      - name: Build sdist
+        run: python -m build --sdist
+
+      # 3. Style: flake8 (uses project config in src/setup.cfg)
+      - name: Install dev dependencies
+        run: pip install uv && uv pip install --system -e ".[dev]"
+      - name: Run flake8
+        run: flake8 .
+        working-directory: ./src
