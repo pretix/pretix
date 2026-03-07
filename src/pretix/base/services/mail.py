@@ -44,7 +44,7 @@ import smtplib
 import time
 import uuid
 import warnings
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 from email.mime.image import MIMEImage
 from email.utils import formataddr
 from typing import Any, Dict, List, Optional, Sequence, Union
