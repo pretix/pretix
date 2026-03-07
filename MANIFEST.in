@@ -1,5 +1,6 @@
 include LICENSE
 include README.rst
+include *.properties
 include src/Makefile
 include _build/backend.py
 global-include *.proto
