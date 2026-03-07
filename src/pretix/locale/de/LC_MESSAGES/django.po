@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-02-24 12:07+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2026-03-07 23:00+0000\n"
+"Last-Translator: argonimos <jonas@pfeiffer-wagner.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
 "de/>\n"
 "Language: de\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16\n"
+"X-Generator: Weblate 5.16.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/_base_settings.py:87
@@ -3845,7 +3845,7 @@ msgstr "Restbetrag"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "Rechungsperiode: {daterange}"
+msgstr "Rechnungsperiode: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:1039
 msgctxt "invoice"
