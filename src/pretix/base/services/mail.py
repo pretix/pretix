@@ -35,6 +35,7 @@
 import hashlib
 import inspect
 import logging
+import math
 import mimetypes
 import os
 import random
@@ -43,7 +44,7 @@ import smtplib
 import time
 import uuid
 import warnings
-from datetime import timedelta
+from datetime import timedelta, datetime
 from email.mime.image import MIMEImage
 from email.utils import formataddr
 from typing import Any, Dict, List, Optional, Sequence, Union
@@ -185,6 +186,8 @@ def try_acquire_mail_token() -> bool:
     
     This implements the Token Bucket pattern for rate limiting. It maintains a Redis counter
     and checks if tokens are available based on elapsed time since the last reset.
+    Time handling is aligned to calendar boundaries (second/minute/hour) to provide
+    deterministic and predictable rate-limit windows.
     
     :return: True if token acquired
     :raises MailRateLimitException: If rate limit exceeded (caller should retry the task)
@@ -202,9 +205,19 @@ def try_acquire_mail_token() -> bool:
         # Use a Redis key to track the token bucket
         bucket_key = 'mail_rate_limit:bucket'
         last_refill_key = 'mail_rate_limit:last_refill'
+
+        # Calendar-aligned rounding to the configured rate-limit unit.
+        now_dt = datetime.fromtimestamp(time.time())
         
-        # Get current bucket state
-        now = time.time()
+        if interval_seconds == 1:  # per second: round to full seconds
+            now_dt = now_dt.replace(microsecond=0)
+        elif interval_seconds == 60:  # per minute: round to full minutes
+            now_dt = now_dt.replace(second=0, microsecond=0)
+        elif interval_seconds == 3600:  # per hour: round to full hours
+            now_dt = now_dt.replace(minute=0, second=0, microsecond=0)
+        
+        now = now_dt.timestamp()
+        
         current_tokens_raw = rc.get(bucket_key)
         last_refill_raw = rc.get(last_refill_key)
 
@@ -252,6 +265,39 @@ def try_acquire_mail_token() -> bool:
         logger.exception(f'Error acquiring mail rate-limit token: {e}')
         # On unexpected errors, allow mail to be sent (graceful degradation)
         return True
+
+
+def get_rate_limit_retry_countdown(pending_count: int) -> int:
+    """
+    Calculate retry countdown for a rate-limited mail.
+
+    Retries are distributed across upcoming calendar-aligned windows using jitter.
+    The distribution is intentionally compressed to keep total delay practical,
+    accepting that some mails may need additional retries.
+    """
+
+    rate_config = get_mail_rate_limit_config()
+    if not rate_config:
+        logger.error('Rate limit exceeded but no rate limit config available. THIS SHOULD NOT HAPPEN. Defaulting to fixed retry time.')
+        return random.uniform(10, 90)  # Fallback: random retry between 10 and 90 seconds
+
+    count, interval_seconds = rate_config
+    effective_pending = max(1, pending_count)
+
+    now_ts = time.time()
+    next_boundary = (math.floor(now_ts / interval_seconds) + 1) * interval_seconds
+
+    # Estimate how many full windows are needed, then compress the range.
+    # Lower compression factor = more aggressive scheduling (more retries).
+    # Higher compression factor = more conservative scheduling (fewer retries).
+    estimated_windows = max(1, math.ceil(effective_pending / count))
+    compression_factor = 0.8
+    compressed_windows = max(1.0, estimated_windows * compression_factor)
+
+    distribution_span = min(compressed_windows * interval_seconds, interval_seconds * 5)
+    jitter = random.random() * distribution_span
+    scheduled_ts = next_boundary + jitter
+    return max(1, int(math.ceil(scheduled_ts - now_ts)))
 
 
 def clean_sender_name(sender_name: str) -> str:
@@ -525,7 +571,7 @@ class CustomEmail(EmailMultiAlternatives):
 @app.task(base=TransactionAwareTask, bind=True, acks_late=True)
 def mail_send_task(self, **kwargs) -> bool:
     if "outgoing_mail" in kwargs:
-        outgoing_mail = kwargs.get("outgoing_mail")
+        outgoing_mail_id = kwargs.get("outgoing_mail")
     elif "to" in kwargs:
         # May only occur while upgrading from pretix versions before OutgoingMail when celery tasks are still in-queue
         # during the upgrade. Can be removed after 2026.2.x is released, and then the signature can be changed to
@@ -538,9 +584,9 @@ def mail_send_task(self, **kwargs) -> bool:
 
     with transaction.atomic():
         try:
-            outgoing_mail = OutgoingMail.objects.select_for_update(of=OF_SELF).get(pk=outgoing_mail)
+            outgoing_mail = OutgoingMail.objects.select_for_update(of=OF_SELF).get(pk=outgoing_mail_id)
         except OutgoingMail.DoesNotExist:
-            logger.info(f"Ignoring job for non existing email {outgoing_mail.guid}")
+            logger.info(f"Ignoring job for non existing email with ID {outgoing_mail_id}")
             return False
         if outgoing_mail.status == OutgoingMail.STATUS_INFLIGHT:
             logger.info(f"Ignoring job for inflight email {outgoing_mail.guid}")
@@ -560,22 +606,10 @@ def mail_send_task(self, **kwargs) -> bool:
         pending_count = OutgoingMail.objects.filter(
             status__in=[OutgoingMail.STATUS_QUEUED, OutgoingMail.STATUS_AWAITING_RETRY]
         ).count()
-        
+
         # Calculate distributed retry countdown
-        rate_config = get_mail_rate_limit_config()
-        if rate_config:
-            count, interval_seconds = rate_config
-            time_per_email = interval_seconds / count
-            
-            # Distribute emails over a time window to prevent thundering herd
-            # Each email gets a slot: base_delay + (random offset within reasonable window)
-            # The window should be large enough to spread all pending emails
-            max_wait_window = min(pending_count * time_per_email * 0.5, 60)  # Cap at 60s
-            countdown = max(1, int(time_per_email + random.random() * max_wait_window))
-        else:
-            logger.error('Rate limit exceeded but no rate limit config available. THIS SHOULD NOT HAPPEN. Defaulting to fixed retry time.')
-            countdown = 3
-        
+        countdown = get_rate_limit_retry_countdown(pending_count)
+
         # Update outgoing mail status and retry time (like normal SMTP retries)
         outgoing_mail.error = "Rate limit exceeded"
         outgoing_mail.error_detail = f"{pending_count} emails pending, retry in {countdown}s"
@@ -600,7 +634,15 @@ def mail_send_task(self, **kwargs) -> bool:
             return False
         
         logger.info(f'Email {outgoing_mail.guid}: Rate limit exceeded. {pending_count} emails pending. Retrying in {countdown}s')
-        self.retry(countdown=countdown, max_retries=None)  # throws RetryException, ends function flow
+        try:
+            self.retry(countdown=countdown, max_retries=None)  # throws RetryException, ends function flow
+        except MaxRetriesExceededError:
+            logger.warning(
+                f'Email {outgoing_mail.guid}: Celery reported max retries exceeded during rate-limit retry. '
+                'Scheduling a fresh task instead.'
+            )
+            mail_send_task.apply_async(kwargs={"outgoing_mail": outgoing_mail.pk}, countdown=countdown)
+            return False
 
     headers = dict(outgoing_mail.headers)
     headers.setdefault('X-PX-Correlation', str(outgoing_mail.guid))
