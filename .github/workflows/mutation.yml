@@ -1,0 +1,89 @@
+name: Mutation Tests
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ master ]
+    paths:
+      - ".github/workflows/mutation.yml"
+      - "pyproject.toml"
+      - "src/pretix/base/management/commands/**"
+      - "src/pretix/plugins/paypal2/**"
+      - "src/pretix/plugins/reports/**"
+      - "src/pretix/plugins/statistics/**"
+      - "src/tests/**"
+  schedule:
+    - cron: "0 3 * * 1"
+
+permissions:
+  contents: read
+
+env:
+  FORCE_COLOR: 1
+  PRETIX_CONFIG_FILE: src/tests/ci_sqlite.cfg
+
+jobs:
+  mutation:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - module_name: base-management-commands
+            mutmut_pattern: "pretix.base.management.commands*"
+          - module_name: plugins-statistics
+            mutmut_pattern: "pretix.plugins.statistics*"
+          - module_name: plugins-reports
+            mutmut_pattern: "pretix.plugins.reports*"
+          - module_name: plugins-paypal2
+            mutmut_pattern: "pretix.plugins.paypal2*"
+          - module_name: plugins-paypal2-client-core
+            mutmut_pattern: "pretix.plugins.paypal2.client.core*"
+    name: Mutation (${{ matrix.module_name }})
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system dependencies
+        run: sudo apt update && sudo apt install -y gettext
+
+      - name: Install Python dependencies
+        run: pip3 install uv && uv pip install --system -e ".[dev]"
+
+      - name: Run Django checks
+        working-directory: ./src
+        run: python manage.py check
+
+      - name: Prepare mutation workspace
+        run: rm -rf mutants .mutmut-cache
+
+      - name: Run mutation tests
+        run: mutmut run "${{ matrix.mutmut_pattern }}"
+
+      - name: Export mutation summary
+        if: always()
+        run: |
+          mutmut results > mutmut-results.txt || true
+          if [ -d mutants ]; then
+            tar -czf mutants-cache.tar.gz mutants
+          fi
+          if [ -d .mutmut-cache ]; then
+            tar -czf dot-mutmut-cache.tar.gz .mutmut-cache
+          fi
+
+      - name: Upload mutation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mutation-${{ matrix.module_name }}
+          path: |
+            mutmut-results.txt
+            mutants-cache.tar.gz
+            dot-mutmut-cache.tar.gz

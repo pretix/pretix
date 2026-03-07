@@ -114,6 +114,7 @@ dev = [
   "flake8==7.3.*",
   "freezegun",
   "isort==7.0.*",
+  "mutmut",
   "pep8-naming==0.15.*",
   "potypo",
   "pytest-asyncio>=0.24",
@@ -158,3 +159,31 @@ version = {attr = "pretix.__version__"}
 where = ["src"]
 include = ["pretix*"]
 namespaces = false
+
+[tool.mutmut]
+paths_to_mutate = [
+  "src/pretix/base/management/commands/",
+  "src/pretix/plugins/paypal2/",
+  "src/pretix/plugins/paypal2/client/core/",
+  "src/pretix/plugins/reports/",
+  "src/pretix/plugins/statistics/",
+]
+pytest_add_cli_args_test_selection = [
+  "src/tests/api/test_checkin.py",
+  "src/tests/api/test_organizers.py",
+  "src/tests/base/test_export.py",
+  "src/tests/base/test_metrics.py",
+  "src/tests/base/test_models.py",
+  "src/tests/base/test_runperiodic.py",
+  "src/tests/plugins/paypal2/",
+]
+pytest_add_cli_args = [
+  "-p",
+  "no:sugar",
+  "--maxfail=1",
+]
+also_copy = [
+  "src/tests/ci_sqlite.cfg",
+]
+max_stack_depth = 12
+mutate_only_covered_lines = true
