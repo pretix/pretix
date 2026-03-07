@@ -125,11 +125,11 @@ class MailRateLimitException(Exception):
 def parse_rate_limit(rate_limit_str: str) -> tuple[int, int]:
     """
     Parse rate limit format like '10/s' or '600/m' into (count, interval_seconds).
-    
+
     :param rate_limit_str: Format like '10/s' (per second), '600/m' (per minute), '3600/h' (per hour)
     :return: Tuple of (count, interval_seconds)
     :raises ValueError: If format is invalid
-    
+
     Examples:
         '10/s' -> (10, 1)
         '600/m' -> (600, 60)
@@ -137,21 +137,21 @@ def parse_rate_limit(rate_limit_str: str) -> tuple[int, int]:
     """
     if not rate_limit_str or '/' not in rate_limit_str:
         raise ValueError(f"Invalid rate limit format: {rate_limit_str}. Expected format like '10/s', '600/m', or '3600/h'")
-    
+
     try:
         count_str, interval_str = rate_limit_str.strip().split('/')
         count = int(count_str)
-        
+
         interval_map = {
             's': 1,
             'm': 60,
             'h': 3600,
         }
-        
+
         interval_unit = interval_str.strip().lower()
         if interval_unit not in interval_map:
             raise ValueError(f"Unknown interval unit: {interval_unit}. Expected 's', 'm', or 'h'")
-        
+
         interval_seconds = interval_map[interval_unit]
         return (count, interval_seconds)
     except (ValueError, IndexError) as e:
@@ -161,18 +161,18 @@ def parse_rate_limit(rate_limit_str: str) -> tuple[int, int]:
 def get_mail_rate_limit_config() -> tuple[int, int] | None:
     """
     Get the configured mail rate limit from settings.
-    
+
     :return: Tuple of (count, interval_seconds) or None if not configured or Redis unavailable
     """
     rate_limit_str = getattr(settings, 'MAIL_RATE_LIMIT', None)
     if not rate_limit_str:
         return None
-    
+
     # Graceful degradation: if Redis is not available, log warning and skip rate limiting
     if not settings.HAS_REDIS:
         logger.warning('MAIL_RATE_LIMIT configured but Redis is not available. Rate limiting will be skipped.')
         return None
-    
+
     try:
         return parse_rate_limit(rate_limit_str)
     except ValueError as e:
@@ -183,12 +183,12 @@ def get_mail_rate_limit_config() -> tuple[int, int] | None:
 def try_acquire_mail_token() -> bool:
     """
     Try to acquire a rate-limit token for sending an email.
-    
+
     This implements the Token Bucket pattern for rate limiting. It maintains a Redis counter
     and checks if tokens are available based on elapsed time since the last reset.
     Time handling is aligned to calendar boundaries (second/minute/hour) to provide
     deterministic and predictable rate-limit windows.
-    
+
     :return: True if token acquired
     :raises MailRateLimitException: If rate limit exceeded (caller should retry the task)
     """
@@ -196,28 +196,28 @@ def try_acquire_mail_token() -> bool:
     if not rate_config:
         # No rate limiting configured or Redis unavailable
         return True
-    
+
     count, interval_seconds = rate_config
-    
+
     try:
         rc = get_redis_connection("redis")
-        
+
         # Use a Redis key to track the token bucket
         bucket_key = 'mail_rate_limit:bucket'
         last_refill_key = 'mail_rate_limit:last_refill'
 
         # Calendar-aligned rounding to the configured rate-limit unit.
         now_dt = datetime.fromtimestamp(time.time())
-        
+
         if interval_seconds == 1:  # per second: round to full seconds
             now_dt = now_dt.replace(microsecond=0)
         elif interval_seconds == 60:  # per minute: round to full minutes
             now_dt = now_dt.replace(second=0, microsecond=0)
         elif interval_seconds == 3600:  # per hour: round to full hours
             now_dt = now_dt.replace(minute=0, second=0, microsecond=0)
-        
+
         now = now_dt.timestamp()
-        
+
         current_tokens_raw = rc.get(bucket_key)
         last_refill_raw = rc.get(last_refill_key)
 
@@ -230,21 +230,21 @@ def try_acquire_mail_token() -> bool:
             last_refill = now
         else:
             last_refill = float(last_refill_raw)
-        
+
         # Calculate tokens to add based on elapsed time
         elapsed = now - last_refill
-        
+
         # Calculate how many tokens to regenerate
         # Rate: count tokens per interval_seconds
         # So in 'elapsed' seconds we regenerate (count / interval_seconds) * elapsed tokens
         tokens_to_add = int((count / interval_seconds) * elapsed)
-        
+
         if tokens_to_add > 0:
             current_tokens = min(count, current_tokens + tokens_to_add)
             # Advance refill timestamp only by the consumed refill interval to avoid drift.
             refill_step = interval_seconds / count
             last_refill = last_refill + (tokens_to_add * refill_step)
-        
+
         # Try to consume one token
         if current_tokens > 0:
             current_tokens -= 1
@@ -258,7 +258,7 @@ def try_acquire_mail_token() -> bool:
             time_until_next = interval_seconds / count
             logger.info(f'Mail rate-limit exceeded. Rate: {count}/{interval_seconds}s. Next token in ~{time_until_next:.2f}s')
             raise MailRateLimitException(f'Rate limit exceeded: {count} mails per {interval_seconds}s')
-    
+
     except MailRateLimitException:
         raise
     except Exception as e:
@@ -632,7 +632,7 @@ def mail_send_task(self, **kwargs) -> bool:
                 f"Email {outgoing_mail.guid}: Marked as failed after exceeding rate-limit retry age limit"
             )
             return False
-        
+
         logger.info(f'Email {outgoing_mail.guid}: Rate limit exceeded. {pending_count} emails pending. Retrying in {countdown}s')
         try:
             self.retry(countdown=countdown, max_retries=None)  # throws RetryException, ends function flow
