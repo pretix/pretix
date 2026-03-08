@@ -1753,6 +1753,39 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 else:
                     f.save()
 
+        # Automatically calculate payment provider fees if a payment provider is set and no
+        # explicit payment fee was included in the request. This mirrors the behavior of the
+        # web shop checkout flow (see pretix.base.services.cart.get_fees).
+        has_explicit_payment_fee = any(
+            f.fee_type == OrderFee.FEE_TYPE_PAYMENT for f in fees
+        )
+        if payment_provider and not has_explicit_payment_fee:
+            pprov = self.context['event'].get_payment_providers(cached=True).get(payment_provider)
+            if pprov:
+                to_pay = sum(p.price for p in pos_map.values()) + sum(f.value for f in fees)
+                payment_fee = pprov.calculate_fee(to_pay)
+                if payment_fee:
+                    if self.context['event'].settings.tax_rule_payment == "default":
+                        payment_fee_tax_rule = self.context['event'].cached_default_tax_rule or TaxRule.zero()
+                    else:
+                        payment_fee_tax_rule = TaxRule.zero()
+                    payment_fee_tax = payment_fee_tax_rule.tax(payment_fee, base_price_is='gross', invoice_address=ia)
+                    pf = OrderFee(
+                        fee_type=OrderFee.FEE_TYPE_PAYMENT,
+                        value=payment_fee,
+                        tax_rate=payment_fee_tax.rate,
+                        tax_value=payment_fee_tax.tax,
+                        tax_code=payment_fee_tax.code,
+                        tax_rule=payment_fee_tax_rule,
+                        internal_type=payment_provider,
+                    )
+                    pf.order = order._wrapped if simulate else order
+                    fees.append(pf)
+                    if simulate:
+                        pf.id = 0
+                    else:
+                        pf.save()
+
         rounding_mode = validated_data.get("tax_rounding_mode")
         if not rounding_mode:
             if isinstance(self.context.get("auth"), Device):
