@@ -54,8 +54,9 @@ from pretix.base.models import (
     Event, InvoiceAddress, Order, Organizer, OutgoingMail, User,
 )
 from pretix.base.services.mail import (
-    MailRateLimitException, get_rate_limit_retry_countdown, mail,
-    mail_send_task, parse_rate_limit,
+    MailRateLimitException, get_mail_rate_limit_config,
+    get_rate_limit_retry_countdown, mail, mail_send_task, parse_rate_limit,
+    try_acquire_mail_token,
 )
 
 
@@ -578,6 +579,21 @@ def test_parse_rate_limit_invalid_format():
     with pytest.raises(ValueError):
         parse_rate_limit("not-a-rate")
 
+    with pytest.raises(ValueError):
+        parse_rate_limit("10/unknown")
+
+    with pytest.raises(ValueError):
+        parse_rate_limit("10")  # Missing time unit
+
+    with pytest.raises(ValueError):
+        parse_rate_limit("/s")  # Missing rate
+
+    with pytest.raises(ValueError):
+        parse_rate_limit("not-int/m")  # Invalid rate
+
+    with pytest.raises(ValueError):
+        parse_rate_limit("10/m/m")  # Extra slash
+
 
 def test_get_rate_limit_retry_countdown_calendar_distribution(monkeypatch):
     monkeypatch.setattr('pretix.base.services.mail.get_mail_rate_limit_config', lambda: (10, 60), raising=True)
@@ -619,3 +635,135 @@ def test_queue_state_rate_limit_awaiting_retry(env, monkeypatch):
     assert m.status == OutgoingMail.STATUS_AWAITING_RETRY
     assert m.error == "Rate limit exceeded"
     assert m.retry_after is not None
+
+
+def test_get_mail_rate_limit_config_parse_error(monkeypatch, caplog):
+    """Test get_mail_rate_limit_config handles parse errors gracefully."""
+    # Mock settings with invalid rate limit format
+    class MockSettings:
+        MAIL_RATE_LIMIT = 'invalid-format'
+        HAS_REDIS = True
+
+    monkeypatch.setattr('pretix.base.services.mail.settings', MockSettings(), raising=True)
+
+    # Should return None and log error
+    result = get_mail_rate_limit_config()
+    assert result is None
+    assert 'Failed to parse MAIL_RATE_LIMIT setting' in caplog.text
+
+
+def test_get_mail_rate_limit_config_no_redis(monkeypatch):
+    """Test get_mail_rate_limit_config returns None when Redis is not available."""
+    class MockSettings:
+        MAIL_RATE_LIMIT = '10/m'
+        HAS_REDIS = False
+
+    monkeypatch.setattr('pretix.base.services.mail.settings', MockSettings(), raising=True)
+
+    result = get_mail_rate_limit_config()
+    assert result is None
+
+
+def test_try_acquire_mail_token_no_rate_limit(monkeypatch):
+    """Test try_acquire_mail_token returns True when no rate limit is configured."""
+    monkeypatch.setattr('pretix.base.services.mail.get_mail_rate_limit_config', lambda: None, raising=True)
+
+    result = try_acquire_mail_token()
+    assert result is True
+
+
+def test_try_acquire_mail_token_success(monkeypatch):
+    """Test try_acquire_mail_token successfully acquires a token."""
+    monkeypatch.setattr('pretix.base.services.mail.get_mail_rate_limit_config', lambda: (10, 60), raising=True)
+    monkeypatch.setattr('pretix.base.services.mail.time.time', lambda: 100.0, raising=True)
+
+    # Mock Redis connection
+    class MockRedis:
+        def __init__(self):
+            self.data = {}
+
+        def get(self, key):
+            return self.data.get(key)
+
+        def set(self, key, value, ex=None):
+            self.data[key] = value
+
+    mock_redis = MockRedis()
+    monkeypatch.setattr('pretix.base.services.mail.get_redis_connection', lambda name: mock_redis, raising=True)
+
+    result = try_acquire_mail_token()
+    assert result is True
+    # Verify token was consumed (9 remaining out of 10)
+    assert int(mock_redis.data['mail_rate_limit:bucket']) == 9
+
+
+def test_try_acquire_mail_token_rate_limit_exceeded(monkeypatch):
+    """Test try_acquire_mail_token raises MailRateLimitException when no tokens available."""
+    monkeypatch.setattr('pretix.base.services.mail.get_mail_rate_limit_config', lambda: (10, 60), raising=True)
+    monkeypatch.setattr('pretix.base.services.mail.time.time', lambda: 100.0, raising=True)
+
+    # Mock Redis connection with no tokens available
+    class MockRedis:
+        def __init__(self):
+            self.data = {
+                'mail_rate_limit:bucket': b'0',  # No tokens available
+                'mail_rate_limit:last_refill': b'100.0',
+            }
+
+        def get(self, key):
+            return self.data.get(key)
+
+        def set(self, key, value, ex=None):
+            self.data[key] = value
+
+    mock_redis = MockRedis()
+    monkeypatch.setattr('pretix.base.services.mail.get_redis_connection', lambda name: mock_redis, raising=True)
+
+    with pytest.raises(MailRateLimitException) as exc_info:
+        try_acquire_mail_token()
+    assert 'Rate limit exceeded' in str(exc_info.value)
+
+
+def test_try_acquire_mail_token_refill_tokens(monkeypatch):
+    """Test try_acquire_mail_token refills tokens based on elapsed time."""
+    monkeypatch.setattr('pretix.base.services.mail.get_mail_rate_limit_config', lambda: (10, 60), raising=True)
+    # time.time()=130.0 gets rounded to 120.0 (calendar alignment to full minute)
+    # elapsed = 120.0 - 100.0 = 20s -> should refill 3 tokens (10 tokens/60s * 20s = 3.33 -> 3)
+    monkeypatch.setattr('pretix.base.services.mail.time.time', lambda: 130.0, raising=True)
+
+    # Mock Redis connection with depleted bucket
+    class MockRedis:
+        def __init__(self):
+            self.data = {
+                'mail_rate_limit:bucket': b'0',  # No tokens
+                'mail_rate_limit:last_refill': b'100.0',  # Last refill at t=100
+            }
+
+        def get(self, key):
+            return self.data.get(key)
+
+        def set(self, key, value, ex=None):
+            self.data[key] = value
+
+    mock_redis = MockRedis()
+    monkeypatch.setattr('pretix.base.services.mail.get_redis_connection', lambda name: mock_redis, raising=True)
+
+    result = try_acquire_mail_token()
+    assert result is True
+    # Should have refilled 3 tokens (after calendar rounding), then consumed 1, leaving 2
+    assert int(mock_redis.data['mail_rate_limit:bucket']) == 2
+
+
+def test_try_acquire_mail_token_redis_error_graceful_degradation(monkeypatch):
+    """Test try_acquire_mail_token handles Redis errors gracefully."""
+    monkeypatch.setattr('pretix.base.services.mail.get_mail_rate_limit_config', lambda: (10, 60), raising=True)
+
+    # Mock Redis to raise an exception
+    def mock_get_redis(*args, **kwargs):
+        raise Exception('Redis connection failed')
+
+    monkeypatch.setattr('pretix.base.services.mail.get_redis_connection', mock_get_redis, raising=True)
+
+    # Should not raise, but return True (graceful degradation)
+    result = try_acquire_mail_token()
+    assert result is True

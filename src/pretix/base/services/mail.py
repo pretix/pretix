@@ -870,8 +870,6 @@ def mail_send_task(self, **kwargs) -> bool:
             # Run retries
             try:
                 if retry_strategy == "microsoft_concurrency" and settings.HAS_REDIS:
-                    from django_redis import get_redis_connection
-
                     redis_key = "pretix_mail_retry_" + hashlib.sha1(f"{getattr(backend, 'username', '_')}@{getattr(backend, 'host', '_')}".encode()).hexdigest()
                     rc = get_redis_connection("redis")
                     cnt = rc.incr(redis_key)
