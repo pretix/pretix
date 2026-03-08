@@ -39,6 +39,7 @@ from decimal import Decimal
 from email.mime.text import MIMEText
 
 import pytest
+from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core import mail as djmail
 from django.test import override_settings
@@ -52,7 +53,10 @@ from pretix.base.email import get_email_context
 from pretix.base.models import (
     Event, InvoiceAddress, Order, Organizer, OutgoingMail, User,
 )
-from pretix.base.services.mail import mail, mail_send_task
+from pretix.base.services.mail import (
+    MailRateLimitException, get_rate_limit_retry_countdown, mail,
+    mail_send_task, parse_rate_limit,
+)
 
 
 @pytest.fixture
@@ -562,3 +566,56 @@ def test_escaped_braces_mail_services(env):
     for part in (html, plain, djmail.outbox[0].subject):
         assert "EUR" not in part
         assert "-{currency}-" in part
+
+
+def test_parse_rate_limit_valid_formats():
+    assert parse_rate_limit("10/s") == (10, 1)
+    assert parse_rate_limit("600/m") == (600, 60)
+    assert parse_rate_limit("3600/h") == (3600, 3600)
+
+
+def test_parse_rate_limit_invalid_format():
+    with pytest.raises(ValueError):
+        parse_rate_limit("not-a-rate")
+
+
+def test_get_rate_limit_retry_countdown_calendar_distribution(monkeypatch):
+    monkeypatch.setattr('pretix.base.services.mail.get_mail_rate_limit_config', lambda: (10, 60), raising=True)
+    monkeypatch.setattr('pretix.base.services.mail.time.time', lambda: 100.2, raising=True)
+    monkeypatch.setattr('pretix.base.services.mail.random.random', lambda: 0.5, raising=True)
+
+    # pending_count=50, count=10, interval=60 -> estimated_windows=5
+    # compression_factor=0.8 -> compressed_windows=4
+    # distribution_span=min(4*60, 5*60)=240
+    # next_boundary=120, jitter=120 -> scheduled_ts=240
+    # countdown=ceil(240-100.2)=140
+    assert get_rate_limit_retry_countdown(50) == 140
+
+
+@pytest.mark.django_db
+def test_queue_state_rate_limit_awaiting_retry(env, monkeypatch):
+    monkeypatch.setattr(
+        'pretix.base.services.mail.try_acquire_mail_token',
+        lambda: (_ for _ in ()).throw(MailRateLimitException("limited")),
+        raising=True,
+    )
+    monkeypatch.setattr('pretix.base.services.mail.get_rate_limit_retry_countdown', lambda pending_count: 17, raising=True)
+    monkeypatch.setattr('celery.app.task.Task.retry', lambda *args, **kwargs: (_ for _ in ()).throw(MaxRetriesExceededError()), raising=True)
+    monkeypatch.setattr('pretix.base.services.mail.mail_send_task.apply_async', lambda *args, **kwargs: None, raising=True)
+
+    m = OutgoingMail.objects.create(
+        to=['recipient@example.com'],
+        subject='Test',
+        body_plain='Test',
+        sender='sender@example.com',
+    )
+    assert m.status == OutgoingMail.STATUS_QUEUED
+
+    mail_send_task.apply(kwargs={
+        'outgoing_mail': m.pk,
+    }, max_retries=0)
+
+    m.refresh_from_db()
+    assert m.status == OutgoingMail.STATUS_AWAITING_RETRY
+    assert m.error == "Rate limit exceeded"
+    assert m.retry_after is not None
