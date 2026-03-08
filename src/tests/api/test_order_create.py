@@ -3371,3 +3371,128 @@ def test_order_create_rounding_default_pretixpos_fallback(device, device_client,
     assert resp.data["total"] == "500.00"
     assert resp.data["positions"][0]["price"] == "100.00"
     assert resp.data["positions"][-1]["price"] == "100.00"
+
+
+@pytest.mark.django_db
+def test_order_create_auto_payment_fee(token_client, organizer, event, item, quota, question):
+    """When a payment provider has fees configured and no explicit payment fee is passed,
+    the fee should be automatically calculated and added to the order."""
+    event.settings.set('payment_banktransfer__fee_abs', Decimal('0.25'))
+    event.settings.set('payment_banktransfer__fee_percent', Decimal('1.50'))
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'] = []  # No explicit fees
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        fees = list(o.fees.all())
+        assert len(fees) == 1
+        assert fees[0].fee_type == OrderFee.FEE_TYPE_PAYMENT
+        assert fees[0].internal_type == 'banktransfer'
+        # With reverse calc (default): ((23 + 0.25) * (1 / (1 - 1.5/100)) - 23) = 0.60 (rounded)
+        assert fees[0].value == Decimal('0.60')
+        assert o.total == Decimal('23.60')
+
+
+@pytest.mark.django_db
+def test_order_create_auto_payment_fee_no_double_charge(token_client, organizer, event, item, quota, question):
+    """When an explicit payment fee is passed in the request, no automatic fee should be added."""
+    event.settings.set('payment_banktransfer__fee_abs', Decimal('0.25'))
+    event.settings.set('payment_banktransfer__fee_percent', Decimal('1.50'))
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'] = [
+        {
+            "fee_type": "payment",
+            "value": "0.50",
+            "description": "Manual payment fee",
+            "internal_type": "",
+            "tax_rule": None
+        }
+    ]
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        fees = list(o.fees.all())
+        assert len(fees) == 1
+        assert fees[0].value == Decimal('0.50')
+        assert o.total == Decimal('23.50')
+
+
+@pytest.mark.django_db
+def test_order_create_auto_payment_fee_no_fee_configured(token_client, organizer, event, item, quota, question):
+    """When the payment provider has no fees configured, no fee should be added."""
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'] = []
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.fees.count() == 0
+        assert o.total == Decimal('23.00')
+
+
+@pytest.mark.django_db
+def test_order_create_auto_payment_fee_with_tax(token_client, organizer, event, item, quota, question, taxrule):
+    """When tax_rule_payment is 'default', the auto payment fee should include tax."""
+    event.settings.set('payment_banktransfer__fee_abs', Decimal('0.25'))
+    event.settings.set('payment_banktransfer__fee_percent', Decimal('0.00'))
+    event.settings.set('tax_rule_payment', 'default')
+    taxrule.default = True
+    taxrule.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'] = []
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        fee = o.fees.first()
+        assert fee.fee_type == OrderFee.FEE_TYPE_PAYMENT
+        assert fee.value == Decimal('0.25')
+        assert fee.tax_rate == Decimal('19.00')
+        assert o.total == Decimal('23.25')
+
+
+@pytest.mark.django_db
+def test_order_create_auto_payment_fee_simulate(token_client, organizer, event, item, quota, question):
+    """Auto payment fees should also work in simulate mode."""
+    event.settings.set('payment_banktransfer__fee_abs', Decimal('0.50'))
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'] = []
+    res['simulate'] = True
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data['total'] == '23.50'
+    assert len(resp.data['fees']) == 1
+    assert resp.data['fees'][0]['fee_type'] == 'payment'
+    assert resp.data['fees'][0]['value'] == '0.50'
