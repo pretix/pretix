@@ -3478,6 +3478,32 @@ def test_order_create_auto_payment_fee_with_tax(token_client, organizer, event, 
 
 
 @pytest.mark.django_db
+def test_order_create_auto_payment_fee_without_tax(token_client, organizer, event, item, quota, question):
+    """When tax_rule_payment is not 'default', the auto payment fee should have zero tax."""
+    event.settings.set('payment_banktransfer__fee_abs', Decimal('0.25'))
+    event.settings.set('payment_banktransfer__fee_percent', Decimal('0.00'))
+    event.settings.set('tax_rule_payment', '')
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['fees'] = []
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        fee = o.fees.first()
+        assert fee.fee_type == OrderFee.FEE_TYPE_PAYMENT
+        assert fee.value == Decimal('0.25')
+        assert fee.tax_rate == Decimal('0.00')
+        assert fee.tax_value == Decimal('0.00')
+        assert o.total == Decimal('23.25')
+
+
+@pytest.mark.django_db
 def test_order_create_auto_payment_fee_simulate(token_client, organizer, event, item, quota, question):
     """Auto payment fees should also work in simulate mode."""
     event.settings.set('payment_banktransfer__fee_abs', Decimal('0.50'))
