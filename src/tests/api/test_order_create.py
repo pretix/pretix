@@ -3420,7 +3420,7 @@ def test_order_create_use_gift_cards_only_pending(token_client, organizer, event
             False, 0
         ),
         (
-            True, 2  # TODO check why we get 3 mails, one order receivend and two payments
+            True, 2
         ),
     ],
 )

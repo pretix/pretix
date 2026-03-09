@@ -1819,7 +1819,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         },
                         state=OrderPayment.PAYMENT_STATE_CREATED
                     )
-                    gift_card_payment_provider.execute_payment(request=None, payment=payment, is_early_special_case=not self._send_mail)
+                    gift_card_payment_provider.execute_payment(request=None, payment=payment, is_early_special_case=True)
 
                     if order.pending_sum <= Decimal('0.00'):
                         order.status = Order.STATUS_PAID

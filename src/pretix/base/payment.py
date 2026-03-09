@@ -1657,7 +1657,7 @@ class GiftCardPayment(BasePaymentProvider):
                     }
                 )
         except PaymentException as e:
-            payment.fail(info={'error': str(e)})
+            payment.fail(info={'error': str(e)}, send_mail=not is_early_special_case)
             raise e
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
