@@ -173,7 +173,7 @@ $(function () {
             if (!dependents.transmission_peppol_participant_id.val()) {
                 const fill_peppol_id = function () {
                     const vatId = dependents.vat_id.val();
-                    if (vatId && vatId.startsWith("BE") && dependents.transmission_type.val() === "peppol" && autofill_peppol_id) {
+                    if (vatId && vatId.startsWith("BE") && dependents.transmission_type.val() === "peppol") {
                         dependents.transmission_peppol_participant_id.val("0201:" + vatId.substring(2))
                     }
                 }
