@@ -181,10 +181,11 @@ class WaitingListEntry(LoggedModel):
                 block_quota=True,
                 item_id=self.item_id,
                 subevent_id=self.subevent_id,
-                waitinglistentries__isnull=False
+                waitinglistentries__isnull=False,
+                seat__isnull=True
             ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0
             free_seats = num_free_seats_for_product - num_valid_vouchers_for_product
-            if not free_seats:
+            if free_seats < 1:
                 raise WaitingListException(_('No seat with this product is currently available.'))
 
         if '@' not in self.email:
