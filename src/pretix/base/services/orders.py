@@ -1799,8 +1799,6 @@ class OrderChangeManager:
             tax_rule = tax_rules.get(pos.pk, pos.tax_rule)
             if not tax_rule:
                 continue
-            if not pos.price:
-                continue
 
             try:
                 new_rate = tax_rule.tax_rate_for(ia)
@@ -1817,7 +1815,9 @@ class OrderChangeManager:
                                            override_tax_rate=new_rate, override_tax_code=new_code)
                 self._totaldiff_guesstimate += new_tax.gross - pos.price
                 self._operations.append(self.PriceOperation(pos, new_tax, new_tax.gross - pos.price))
-                self._invoice_dirty = True
+                if pos.price:
+                    # We do not consider the invoice dirty if only 0€-valued taxes are changed
+                    self._invoice_dirty = True
 
     def cancel_fee(self, fee: OrderFee):
         self._totaldiff_guesstimate -= fee.value
