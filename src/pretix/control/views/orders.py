@@ -2414,7 +2414,7 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
             email_context = get_email_context(event=order.event, order=order)
         email_template = LazyI18nString(form.cleaned_data['message'])
         if self.request.POST.get('action') == 'preview':
-            email_subject = format_map(str(form.cleaned_data['subject']), email_context)
+            email_subject = format_map(form.cleaned_data['subject'], email_context)
             email_content = render_mail(email_template, email_context)
             self.preview_output = {
                 'subject': mark_safe(_('Subject: {subject}').format(
