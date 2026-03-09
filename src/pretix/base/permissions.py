@@ -122,7 +122,7 @@ def assert_valid_event_permission(permission, allow_legacy=True, allow_tuple=Tru
         permission = "can_change_event_settings"
     if permission is None:
         return
-    if isinstance(permission, (list, tuple)) and allow_tuple:
+    if isinstance(permission, (AnyPermissionOf, list, tuple)) and allow_tuple:
         for p in permission:
             assert_valid_event_permission(p)
         return
@@ -141,7 +141,7 @@ def assert_valid_organizer_permission(permission, allow_legacy=True, allow_tuple
         return
     if permission is None:
         return
-    if isinstance(permission, (list, tuple)) and allow_tuple:
+    if isinstance(permission, (AnyPermissionOf, list, tuple)) and allow_tuple:
         for p in permission:
             assert_valid_organizer_permission(p)
         return
@@ -152,6 +152,11 @@ def assert_valid_organizer_permission(permission, allow_legacy=True, allow_tuple
         # Warning *and* exception because warning is silently caught when used in if statements in Django templates
         warnings.warn(f"Use of undefined permission '{permission}'")
         raise Exception(f"Undefined permission '{permission}'")
+
+
+class AnyPermissionOf(list):
+    def __init__(self, *items):
+        super().__init__(items)
 
 
 OPTS_ALL_READ = [

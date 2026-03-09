@@ -1072,8 +1072,6 @@ class OrderPositionViewSetMixin:
     ordering = ('order__datetime', 'positionid')
     ordering_fields = ('order__code', 'order__datetime', 'positionid', 'attendee_name', 'order__status',)
     filterset_class = OrderPositionFilter
-    permission = 'event.orders:read'
-    write_permission = 'event.orders:write'
     ordering_custom = {
         'attendee_name': {
             '_order': F('display_name').asc(nulls_first=True),
@@ -1169,11 +1167,13 @@ class OrderPositionViewSetMixin:
 
 class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrganizerOrderPositionSerializer
+    permission = None
+    write_permission = None
 
     def get_queryset(self):
         qs = super().get_queryset()
 
-        perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
+        perm = "event.orders:read" if self.request.method in SAFE_METHODS else "event.orders:write"
 
         if isinstance(self.request.auth, (TeamAPIToken, Device)):
             auth_obj = self.request.auth
@@ -1193,6 +1193,8 @@ class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnly
 
 class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet):
     serializer_class = OrderPositionSerializer
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()

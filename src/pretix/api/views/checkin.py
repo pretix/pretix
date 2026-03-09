@@ -67,6 +67,7 @@ from pretix.base.models import (
     Question, ReusableMedium, RevokedTicketSecret, TeamAPIToken,
 )
 from pretix.base.models.orders import PrintLog
+from pretix.base.permissions import AnyPermissionOf
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
 )
@@ -839,8 +840,8 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     }
 
     filterset_class = CheckinOrderPositionFilter
-    permission = ('event.orders:read', 'event.orders:checkin')
-    write_permission = ('event.orders:write', 'event.orders:checkin')
+    permission = AnyPermissionOf('event.orders:read', 'event.orders:checkin')
+    write_permission = AnyPermissionOf('event.orders:write', 'event.orders:checkin')
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()

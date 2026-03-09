@@ -53,6 +53,7 @@ from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import Checkin, LogEntry, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.orders import PrintLog
+from pretix.base.permissions import AnyPermissionOf
 from pretix.base.services.checkin import (
     LazyRuleVars, _logic_annotate_for_graphic_explain,
 )
@@ -211,7 +212,7 @@ class CheckInListBulkRevertConfirmView(CheckInListQueryMixin, EventPermissionReq
 
 
 class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMixin, AsyncPostView):
-    permission = ('event.orders:write', 'event.orders:checkin')
+    permission = AnyPermissionOf('event.orders:write', 'event.orders:checkin')
 
     def dispatch(self, request, *args, **kwargs):
         self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))
@@ -295,7 +296,7 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
 class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     model = CheckinList
     context_object_name = 'checkinlists'
-    permission = ('event.orders:read', 'event.settings.general:write')
+    permission = AnyPermissionOf('event.orders:read', 'event.settings.general:write')
     template_name = 'pretixcontrol/checkin/lists.html'
     ordering = ('subevent__date_from', 'name', 'pk')
 

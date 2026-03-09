@@ -106,6 +106,7 @@ from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
+from ...base.permissions import AnyPermissionOf
 from ...base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
     PLUGIN_LEVEL_ORGANIZER,
@@ -637,7 +638,7 @@ class WritePermissionMixin:
 class PaymentSettings(WritePermissionMixin, EventSettingsViewMixin, EventSettingsFormView):
     template_name = 'pretixcontrol/event/payment.html'
     form_class = PaymentSettingsForm
-    permission = ('event.settings.payment:write', 'event.settings.general:write')
+    permission = AnyPermissionOf('event.settings.payment:write', 'event.settings.general:write')
     write_permission = 'event.settings.payment:write'
 
     def get_success_url(self) -> str:
@@ -667,7 +668,7 @@ class PaymentSettings(WritePermissionMixin, EventSettingsViewMixin, EventSetting
 class TaxSettings(WritePermissionMixin, EventSettingsViewMixin, EventSettingsFormView):
     template_name = 'pretixcontrol/event/tax.html'
     form_class = TaxSettingsForm
-    permission = ('event.settings.tax:write', 'event.settings.general:write')
+    permission = AnyPermissionOf('event.settings.tax:write', 'event.settings.general:write')
     write_permission = 'event.settings.tax:write'
 
     def get_success_url(self) -> str:
@@ -688,7 +689,7 @@ class InvoiceSettings(WritePermissionMixin, EventSettingsViewMixin, EventSetting
     model = Event
     form_class = InvoiceSettingsForm
     template_name = 'pretixcontrol/event/invoicing.html'
-    permission = ('event.settings.invoicing:write', 'event.settings.general:write')
+    permission = AnyPermissionOf('event.settings.invoicing:write', 'event.settings.general:write')
     write_permission = 'event.settings.invoicing:write'
 
     def get_context_data(self, **kwargs):

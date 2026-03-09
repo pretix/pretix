@@ -52,6 +52,7 @@ from pretix.helpers.models import modelcopy
 from pretix.plugins.badges.forms import BadgeLayoutForm
 from pretix.plugins.badges.tasks import badges_create_pdf
 
+from ...base.permissions import AnyPermissionOf
 from ...helpers.compat import CompatDeleteView
 from .models import BadgeLayout
 from .templates import TEMPLATES
@@ -59,7 +60,7 @@ from .templates import TEMPLATES
 
 class LayoutListView(EventPermissionRequiredMixin, ListView):
     model = BadgeLayout
-    permission = ('event.settings.general:write', 'event.orders:read')
+    permission = AnyPermissionOf('event.settings.general:write', 'event.orders:read')
     template_name = 'pretixplugins/badges/index.html'
     context_object_name = 'layouts'
 

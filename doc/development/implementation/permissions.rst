@@ -65,12 +65,15 @@ Of course, the same is available on event level:
         permission = None
         # Only users with *any* permission on this event can access this
 
+    class MyThirdEventView(EventPermissionRequiredMixin, View):
+        permission = AnyPermissionOf('event.settings.payment:write', 'event.settings.general:write')
+        # Only users with at least one of the specified permissions on this event
+        # can access this
 
     @event_permission_required('event.settings.general:write')
     def my_event_view(request, organizer, **kwargs):
         # Only users with the permission ``event.settings.general:write`` on
         # this event can access this
-
 
     @event_permission_required()
     def my_other_event_view(request, organizer, **kwargs):

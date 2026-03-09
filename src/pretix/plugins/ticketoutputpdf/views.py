@@ -95,7 +95,7 @@ class EditorView(BaseEditorView):
 
 class LayoutListView(EventPermissionRequiredMixin, ListView):
     model = TicketLayout
-    permission = ('event.settings.general:write')
+    permission = 'event.settings.general:write'
     template_name = 'pretixplugins/ticketoutputpdf/index.html'
     context_object_name = 'layouts'
 

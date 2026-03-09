@@ -600,8 +600,10 @@ class TeamAPIToken(models.Model):
         :param request: Ignored, for compatibility with User model
         :return: Iterable of Events
         """
+        from pretix.base.permissions import AnyPermissionOf
+
         if (
-            isinstance(permission, (list, tuple)) and any(self.team.has_event_permission(p) for p in permission)
+            isinstance(permission, (AnyPermissionOf, list, tuple)) and any(self.team.has_event_permission(p) for p in permission)
         ) or (isinstance(permission, str) and self.team.has_event_permission(permission)):
             return self.get_events_with_any_permission()
         else:

@@ -63,6 +63,7 @@ from pretix.base.models import (
     CartPosition, LogEntry, Voucher, WaitingListEntry,
 )
 from pretix.base.models.vouchers import generate_codes
+from pretix.base.permissions import AnyPermissionOf
 from pretix.base.services.mail import prefix_subject
 from pretix.base.services.placeholders import get_sample_context
 from pretix.base.services.vouchers import vouchers_send
@@ -270,7 +271,7 @@ class VoucherDelete(EventPermissionRequiredMixin, CompatDeleteView):
 class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/detail.html'
-    permission = ('event.vouchers:write', 'event.vouchers:read')
+    permission = AnyPermissionOf('event.vouchers:write', 'event.vouchers:read')
     context_object_name = 'voucher'
 
     def form_invalid(self, form):
