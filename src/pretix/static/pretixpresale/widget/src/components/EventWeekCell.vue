@@ -6,7 +6,7 @@ import EventCalendarEvent from './EventCalendarEvent.vue'
 
 const props = defineProps<{
 	day: DayEntry | null
-	mobile: boolean
+	mobile: boolean // TODO inject?
 }>()
 
 const store = inject(StoreKey)!
@@ -47,6 +47,7 @@ function selectDay () {
 
 	if (props.day.events.length === 1) {
 		const ev = props.day.events[0]
+		// TODO store mutation bad
 		store.parentStack.push(store.targetUrl)
 		store.targetUrl = ev.event_url
 		store.error = null
@@ -59,7 +60,6 @@ function selectDay () {
 	}
 }
 </script>
-
 <template lang="pug">
 div(:class="classObject", @click.prevent.stop="selectDay")
 	.pretix-widget-event-calendar-day(v-if="day", :id="id") {{ dayhead }}
@@ -71,6 +71,5 @@ div(:class="classObject", @click.prevent.stop="selectDay")
 			:describedby="id"
 		)
 </template>
-
 <style lang="sass">
 </style>

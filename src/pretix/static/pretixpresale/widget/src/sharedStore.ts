@@ -125,22 +125,23 @@ export function createWidgetStore (config: {
 				if ((window as any).crossOriginIsolated === true) return false
 				return !this.disableIframe && (this.skipSsl || /https.*/.test(document.location.protocol))
 			},
-
 			cookieName (): string {
 				return `pretix_widget_${this.targetUrl.replace(/[^a-zA-Z0-9]+/g, '_')}`
 			},
-
 			cartIdFromCookie (): string | null {
 				return getCookie(this.cookieName) ?? null
 			},
-
+			widgetDataJson (): string {
+				const cloned = { ...this.widgetData }
+				delete cloned.consent
+				return JSON.stringify(cloned)
+			},
 			consentParameter (): string {
 				if (this.widgetData.consent) {
 					return `&consent=${encodeURIComponent(this.widgetData.consent)}`
 				}
 				return ''
 			},
-
 			additionalURLParams (): string {
 				if (!window.location.search.includes('utm_')) {
 					return ''
@@ -153,12 +154,46 @@ export function createWidgetStore (config: {
 				}
 				return params.toString()
 			},
-
 			newTabTarget (): string {
 				return this.subevent ? `${this.targetUrl}${this.subevent}/` : this.targetUrl
 			},
-		},
+			formTarget (): string {
+				const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
+				const isAndroid = navigator.userAgent.toLowerCase().includes('android')
+				if (isAndroid && isFirefox) {
+					return '_top'
+				}
+				return '_blank'
+			},
+			consentParameterValue (): string {
+				if (this.widgetData.consent) {
+					return encodeURIComponent(this.widgetData.consent)
+				}
+				return ''
+			},
+			formAction (): string {
+				if (!this.useIframe && this.isButton && this.items.length === 0) {
+					if (this.voucherCode) return `${this.targetUrl}redeem`
+					if (this.subevent) return `${this.targetUrl}${this.subevent}/`
+					return this.targetUrl
+				}
 
+				let checkoutUrl = `/${this.targetUrl.replace(/^[^/]+:\/\/([^/]+)\//, '')}w/${globalWidgetId}/`
+				if (!this.cartExists) {
+					checkoutUrl += 'checkout/start'
+				}
+				if (this.additionalURLParams) {
+					checkoutUrl += `?${this.additionalURLParams}`
+				}
+
+				let formTarget = `${this.targetUrl}w/${globalWidgetId}/cart/add?iframe=1&next=${encodeURIComponent(checkoutUrl)}`
+				if (this.cartIdFromCookie) {
+					formTarget += `&take_cart_id=${this.cartIdFromCookie}`
+				}
+				formTarget += this.consentParameter
+				return formTarget
+			},
+		},
 		actions: {
 			triggerLoadCallback () {
 				nextTick(() => {
@@ -167,7 +202,6 @@ export function createWidgetStore (config: {
 					}
 				})
 			},
-
 			async reload (opt: { focus?: string } = {}) {
 				if (this.isButton) return
 
@@ -303,28 +337,6 @@ export function createWidgetStore (config: {
 					}
 				}
 			},
-			getFormAction (): string {
-				if (!this.useIframe && this.isButton && this.items.length === 0) {
-					if (this.voucherCode) return `${this.targetUrl}redeem`
-					if (this.subevent) return `${this.targetUrl}${this.subevent}/`
-					return this.targetUrl
-				}
-
-				let checkoutUrl = `/${this.targetUrl.replace(/^[^/]+:\/\/([^/]+)\//, '')}w/${globalWidgetId}/`
-				if (!this.cartExists) {
-					checkoutUrl += 'checkout/start'
-				}
-				if (this.additionalURLParams) {
-					checkoutUrl += `?${this.additionalURLParams}`
-				}
-
-				let formTarget = `${this.targetUrl}w/${globalWidgetId}/cart/add?iframe=1&next=${encodeURIComponent(checkoutUrl)}`
-				if (this.cartIdFromCookie) {
-					formTarget += `&take_cart_id=${this.cartIdFromCookie}`
-				}
-				formTarget += this.consentParameter
-				return formTarget
-			},
 			getVoucherFormTarget (): string {
 				let formTarget = `${this.targetUrl}w/${globalWidgetId}/redeem?iframe=1&locale=${LANG}`
 				if (this.cartIdFromCookie) {
@@ -334,7 +346,7 @@ export function createWidgetStore (config: {
 					formTarget += `&subevent=${this.subevent}`
 				}
 				if (this.widgetData) {
-					formTarget += `&widget_data=${encodeURIComponent(JSON.stringify(this.widgetData))}`
+					formTarget += `&widget_data=${encodeURIComponent(this.widgetDataJson)}`
 				}
 				formTarget += this.consentParameter
 				if (this.additionalURLParams) {
@@ -349,12 +361,11 @@ export function createWidgetStore (config: {
 						setCookie(this.cookieName, data.cart_id, 30)
 					}
 
-					let redirectUrl = data.redirect
-					if (redirectUrl.substring(0, 1) === '/') {
-						redirectUrl = `${this.targetUrl.replace(/^([^/]+:\/\/[^/]+)\/.*$/, '$1')}${redirectUrl}`
+					let url = data.redirect
+					if (url.substring(0, 1) === '/') {
+						url = `${this.targetUrl.replace(/^([^/]+:\/\/[^/]+)\/.*$/, '$1')}${url}`
 					}
 
-					let url = redirectUrl
 					if (url.includes('?')) {
 						url = `${url}&iframe=1&locale=${LANG}&take_cart_id=${this.cartId}`
 					} else {
@@ -375,9 +386,11 @@ export function createWidgetStore (config: {
 					} else {
 						this.overlay.frameSrc = url
 					}
-				} else if (data.async_id && data.check_url) {
+				} else {
 					this.asyncTaskId = data.async_id
-					this.asyncTaskCheckUrl = `${this.targetUrl.replace(/^([^/]+:\/\/[^/]+)\/.*$/, '$1')}${data.check_url}`
+					if (data.check_url) {
+						this.asyncTaskCheckUrl = `${this.targetUrl.replace(/^([^/]+:\/\/[^/]+)\/.*$/, '$1')}${data.check_url}`
+					}
 					this.asyncTaskTimeout = window.setTimeout(() => this.pollAsyncTask(), this.asyncTaskInterval)
 					this.asyncTaskInterval = 250
 				}
@@ -397,11 +410,8 @@ export function createWidgetStore (config: {
 				}
 			},
 			async buy (formData: FormData, event?: Event) {
-				if (this.useIframe) {
-					if (event) event.preventDefault()
-				} else {
-					return
-				}
+				if (!this.useIframe) return
+				if (event) event.preventDefault()
 
 				if (this.isButton && this.items.length === 0) {
 					if (this.voucherCode) {
@@ -412,7 +422,7 @@ export function createWidgetStore (config: {
 					return
 				}
 
-				const url = `${this.getFormAction()}&locale=${LANG}&ajax=1`
+				const url = `${this.formAction}&locale=${LANG}&ajax=1`
 				this.overlay.frameLoading = true
 				this.asyncTaskInterval = 100
 
@@ -427,25 +437,24 @@ export function createWidgetStore (config: {
 							this.overlay.errorUrlAfter = this.newTabTarget
 							this.overlay.errorUrlAfterNewTab = true
 						} else if (e.status === 405) {
+							// Likely a redirect!
 							this.targetUrl = e.responseUrl.substring(0, e.responseUrl.indexOf('/cart/add') - 18)
 							this.overlay.frameLoading = false
-						} else {
-							this.overlay.errorMessage = STRINGS.cart_error
-							this.overlay.frameLoading = false
+							this.buy(formData)
+							return
 						}
-					} else {
-						this.overlay.errorMessage = STRINGS.cart_error
-						this.overlay.frameLoading = false
 					}
+					this.overlay.errorMessage = STRINGS.cart_error
+					this.overlay.frameLoading = false
 				}
 			},
 			redeem (voucherCode: string, event?: Event) {
-				if (this.useIframe) {
-					if (event) event.preventDefault()
-					this.voucherOpen(voucherCode)
-				}
+				if (!this.useIframe) return
+				if (event) event.preventDefault()
+				this.voucherOpen(voucherCode)
 			},
 			voucherOpen (voucherCode: string) {
+				// TODO just use https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
 				const redirectUrl = `${this.getVoucherFormTarget()}&voucher=${encodeURIComponent(voucherCode)}`
 				if (this.useIframe) {
 					this.overlay.frameSrc = redirectUrl
@@ -456,6 +465,7 @@ export function createWidgetStore (config: {
 			resume () {
 				let redirectUrl = `${this.targetUrl}w/${globalWidgetId}/`
 				if (this.subevent && !this.cartId) {
+					// button with subevent but no items
 					redirectUrl += `${this.subevent}/`
 				}
 				redirectUrl += `?iframe=1&locale=${LANG}`
@@ -463,7 +473,7 @@ export function createWidgetStore (config: {
 					redirectUrl += `&take_cart_id=${this.cartId}`
 				}
 				if (this.widgetData) {
-					redirectUrl += `&widget_data=${encodeURIComponent(JSON.stringify(this.widgetData))}`
+					redirectUrl += `&widget_data=${encodeURIComponent(this.widgetDataJson)}`
 				}
 				redirectUrl += this.consentParameter
 				if (this.additionalURLParams) {
@@ -502,7 +512,7 @@ export function createWidgetStore (config: {
 					redirectUrl += `&take_cart_id=${this.cartId}`
 				}
 				if (this.widgetData) {
-					redirectUrl += `&widget_data=${encodeURIComponent(JSON.stringify(this.widgetData))}`
+					redirectUrl += `&widget_data=${encodeURIComponent(this.widgetDataJson)}`
 				}
 				redirectUrl += this.consentParameter
 				if (this.additionalURLParams) {

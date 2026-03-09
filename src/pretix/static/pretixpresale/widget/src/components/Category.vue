@@ -19,6 +19,5 @@ defineProps<{
 			:category="category"
 		)
 </template>
-
 <style lang="sass">
 </style>

@@ -16,6 +16,7 @@ const calendar = ref<HTMLDivElement>()
 const displayEventInfo = computed(() => store.displayEventInfo || (store.displayEventInfo === null && store.parentStack.length > 0))
 
 const monthname = computed(() => {
+	// TODO proper date formatting?
 	if (!store.date) return ''
 	const monthNum = store.date.substr(5, 2)
 	const year = store.date.substr(0, 4)
@@ -26,9 +27,8 @@ const id = computed(() => `${store.htmlId}-event-calendar-table`)
 
 const ariaLabelledby = computed(() => `${store.htmlId}-event-calendar-table-label`)
 
-const showFilters = computed(() => !store.disableFilters && store.metaFilterFields.length > 0)
-
 function backToList () {
+	// TODO should be in store
 	store.weeks = null
 	store.view = 'events'
 	store.name = null
@@ -63,7 +63,6 @@ function nextmonth () {
 	store.reload({ focus: `#${id.value}` })
 }
 </script>
-
 <template lang="pug">
 .pretix-widget-event-calendar(ref="calendar")
 	//- Back navigation
@@ -80,7 +79,7 @@ function nextmonth () {
 	)
 
 	//- Filter
-	EventListFilterForm(v-if="showFilters")
+	EventListFilterForm(v-if="!store.disableFilters && store.metaFilterFields.length > 0")
 
 	//- Calendar navigation
 	.pretix-widget-event-calendar-head
@@ -92,7 +91,7 @@ function nextmonth () {
 		a.pretix-widget-event-calendar-next-month(href="#", @click.prevent.stop="nextmonth")
 			| {{ STRINGS.next_month }} &raquo;
 
-	//- Calendar table
+	//- Calendar
 	table.pretix-widget-event-calendar-table(
 		:id="id",
 		tabindex="0",
@@ -115,6 +114,5 @@ function nextmonth () {
 				:mobile="mobile"
 			)
 </template>
-
 <style lang="sass">
 </style>

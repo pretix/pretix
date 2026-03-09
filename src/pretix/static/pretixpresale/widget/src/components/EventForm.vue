@@ -11,12 +11,9 @@ const voucherinput = ref<HTMLInputElement>()
 const isItemsSelected = ref(false)
 const localVoucher = ref('')
 
-const displayEventInfo = computed(() => store.displayEventInfo || (store.displayEventInfo === null && (store.events || store.weeks || store.days)))
-
 const idVoucherInput = computed(() => `${store.htmlId}-voucher-input`)
-
 const ariaLabelledby = computed(() => `${store.htmlId}-voucher-headline`)
-
+const displayEventInfo = computed(() => store.displayEventInfo || (store.displayEventInfo === null && (store.events || store.weeks || store.days)))
 const idCartExistsMsg = computed(() => `${store.htmlId}-cart-exists`)
 
 const buyLabel = computed(() => {
@@ -43,78 +40,16 @@ const hiddenParams = computed(() => {
 	const params = new URL(store.getVoucherFormTarget()).searchParams
 	params.delete('iframe')
 	params.delete('take_cart_id')
-	return Array.from(params.entries())
+	return [...params.entries()]
 })
 
 const showVoucherForm = computed(() => store.vouchersExist && !store.disableVouchers && !store.voucherCode)
-
-const consentParameterValue = computed(() => {
-	if (store.widgetData.consent) {
-		return encodeURIComponent(store.widgetData.consent)
-	}
-	return ''
-})
-
-const widgetDataJson = computed(() => {
-	const clonedData = { ...store.widgetData }
-	if (clonedData.consent) {
-		delete clonedData.consent
-	}
-	return JSON.stringify(clonedData)
-})
-
-const formAction = computed(() => {
-	const additionalParams = getAdditionalURLParams()
-	let checkoutUrl = `/${store.targetUrl.replace(/^[^\/]+:\/\/([^\/]+)\//, '')}w/${store.widgetId.replace('pretix-widget-', '')}/`
-	if (!store.cartExists) {
-		checkoutUrl += 'checkout/start'
-	}
-	if (additionalParams) {
-		checkoutUrl += `?${additionalParams}`
-	}
-
-	const cookieName = `pretix_widget_${store.targetUrl.replace(/[^a-zA-Z0-9]+/g, '_')}`
-	const cartIdCookie = document.cookie
-		.split('; ')
-		.find((row) => row.startsWith(`${cookieName}=`))
-		?.split('=')[1] || null
-
-	let formTarget = `${store.targetUrl}w/${store.widgetId.replace('pretix-widget-', '')}/cart/add?iframe=1&next=${encodeURIComponent(checkoutUrl)}`
-	if (cartIdCookie) {
-		formTarget += `&take_cart_id=${cartIdCookie}`
-	}
-	if (store.widgetData.consent) {
-		formTarget += `&consent=${encodeURIComponent(store.widgetData.consent)}`
-	}
-	return formTarget
-})
-
-const formTarget = computed(() => {
-	const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
-	const isAndroid = navigator.userAgent.toLowerCase().includes('android')
-	if (isAndroid && isFirefox) {
-		return '_top'
-	}
-	return '_blank'
-})
-
-function getAdditionalURLParams (): string {
-	if (!window.location.search.includes('utm_')) {
-		return ''
-	}
-	const params = new URLSearchParams(window.location.search)
-	for (const [key] of params.entries()) {
-		if (!key.startsWith('utm_')) {
-			params.delete(key)
-		}
-	}
-	return params.toString()
-}
 
 function backToList () {
 	store.targetUrl = store.parentStack.pop() || store.targetUrl
 	store.error = null
 	if (!store.subevent) {
+		// reset if we are not in a series
 		store.name = null
 		store.frontpageText = null
 	}
@@ -123,13 +58,20 @@ function backToList () {
 	store.appendEvents = false
 	store.triggerLoadCallback()
 
-	if (store.events !== null) {
+	if (store.events !== undefined && store.events !== null) {
 		store.view = 'events'
-	} else if (store.days !== null) {
+	} else if (store.days !== undefined && store.days !== null) {
 		store.view = 'days'
 	} else {
 		store.view = 'weeks'
 	}
+
+	// TODO
+	// let $el = this.$root.$el
+	// this.$root.$nextTick(function () {
+	// 	// wait for redraw, then focus content element for better a11y
+	// 	$el.focus()
+	// })
 }
 
 function calcItemsSelected () {
@@ -208,14 +150,14 @@ watch(() => store.overlay?.frameShown, (newValue) => {
 	form(
 		ref="form",
 		method="post",
-		:action="formAction",
-		:target="formTarget",
+		:action="store.formAction",
+		:target="store.formTarget",
 		@submit="handleBuy"
 	)
 		input(v-if="store.voucherCode", type="hidden", name="_voucher_code", :value="store.voucherCode")
 		input(type="hidden", name="subevent", :value="store.subevent")
-		input(type="hidden", name="widget_data", :value="widgetDataJson")
-		input(v-if="consentParameterValue", type="hidden", name="consent", :value="consentParameterValue")
+		input(type="hidden", name="widget_data", :value="store.widgetDataJson")
+		input(v-if="store.consentParameterValue", type="hidden", name="consent", :value="store.consentParameterValue")
 
 		//- Error message
 		.pretix-widget-error-message(v-if="store.error") {{ store.error }}
@@ -242,7 +184,7 @@ watch(() => store.overlay?.frameShown, (newValue) => {
 					| {{ STRINGS.waiting_list }}
 			.pretix-widget-clear
 
-		//- Product list
+		//- Actual Product list
 		Category(v-for="category in store.categories", :key="category.id", :category="category")
 
 		//- Buy button
@@ -293,6 +235,5 @@ watch(() => store.overlay?.frameShown, (newValue) => {
 				button(@click="handleRedeem") {{ STRINGS.redeem }}
 			.pretix-widget-clear
 </template>
-
 <style lang="sass">
 </style>

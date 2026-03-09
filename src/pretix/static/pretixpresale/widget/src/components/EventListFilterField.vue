@@ -16,13 +16,11 @@ const currentValue = computed(() => {
 	return filterParams.get(props.field.key) || ''
 })
 </script>
-
 <template lang="pug">
 .pretix-widget-event-list-filter-field
 	label(:for="id") {{ field.label }}
 	select(:id="id", :name="field.key", :value="currentValue")
 		option(v-for="choice in field.choices", :key="choice[0]", :value="choice[0]") {{ choice[1] }}
 </template>
-
 <style lang="sass">
 </style>

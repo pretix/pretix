@@ -16,32 +16,6 @@ const formMethod = computed(() => {
 	return 'post'
 })
 
-const formAction = computed(() => store.getFormAction())
-
-const formTarget = computed(() => {
-	const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
-	const isAndroid = navigator.userAgent.toLowerCase().includes('android')
-	if (isAndroid && isFirefox) {
-		return '_top'
-	}
-	return '_blank'
-})
-
-const consentParameterValue = computed(() => {
-	if (store.widgetData.consent) {
-		return encodeURIComponent(store.widgetData.consent)
-	}
-	return ''
-})
-
-const widgetDataJson = computed(() => {
-	const clonedData = { ...store.widgetData }
-	if (clonedData.consent) {
-		delete clonedData.consent
-	}
-	return JSON.stringify(clonedData)
-})
-
 function handleBuy (event: Event) {
 	if (form.value) {
 		const formData = new FormData(form.value)
@@ -57,13 +31,13 @@ defineExpose({
 <template lang="pug">
 .pretix-widget-wrapper
 	.pretix-widget-button-container
-		form(ref="form", :method="formMethod", :action="formAction", :target="formTarget")
+		form(ref="form", :method="formMethod", :action="store.formAction", :target="store.formTarget")
 			input(v-if="store.voucherCode", type="hidden", name="_voucher_code", :value="store.voucherCode")
 			input(v-if="store.voucherCode", type="hidden", name="voucher", :value="store.voucherCode")
 			input(type="hidden", name="subevent", :value="store.subevent")
 			input(type="hidden", name="locale", :value="lang")
-			input(type="hidden", name="widget_data", :value="widgetDataJson")
-			input(v-if="consentParameterValue", type="hidden", name="consent", :value="consentParameterValue")
+			input(type="hidden", name="widget_data", :value="store.widgetDataJson")
+			input(v-if="store.consentParameterValue", type="hidden", name="consent", :value="store.consentParameterValue")
 			input(
 				v-for="item in store.items",
 				:key="item.item",
@@ -76,6 +50,5 @@ defineExpose({
 
 	Overlay
 </template>
-
 <style lang="sass">
 </style>

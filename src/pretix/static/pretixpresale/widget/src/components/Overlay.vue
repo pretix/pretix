@@ -69,8 +69,11 @@ function errorClose (e: Event) {
 	store.overlay.errorUrlAfterNewTab = false
 }
 
-function close () {
+function close (e) {
 	if (store.overlay.frameLoading) {
+		// Chrome does not allow blocking dialog.cancel event more than once
+		// => wiggle the loading-element and re-open the modal
+		cancel(e)
 		frameDialog.value?.showModal()
 		return
 	}
@@ -82,6 +85,7 @@ function close () {
 }
 
 function cancel (e: Event) {
+	// do not allow to cancel while frame is loading as we cannot abort the operation
 	if (store.overlay.frameLoading) {
 		e.preventDefault()
 		const target = e.target as HTMLElement
@@ -111,14 +115,14 @@ function triggerCloseCallback () {
 	})
 }
 
+// TODO check if watchEffect is better for the following watchers
 watch(() => store.overlay.lightbox, (newValue, oldValue) => {
-	if (newValue) {
-		if (newValue.image !== oldValue?.image) {
-			newValue.loading = true
-		}
-		if (!oldValue) {
-			lightboxDialog.value?.showModal()
-		}
+	if (!newValue) return
+	if (newValue.image !== oldValue?.image) {
+		newValue.loading = true
+	}
+	if (!oldValue) {
+		lightboxDialog.value?.showModal()
 	}
 })
 
@@ -128,19 +132,19 @@ watch(() => store.overlay.errorMessage, (newValue, oldValue) => {
 	}
 })
 
-watch(() => store.overlay.frameShown, (newValue) => {
-	if (newValue) {
-		nextTick(() => {
-			closeButton.value?.focus()
-		})
-	}
+watch(() => store.overlay.frameShown, async (newValue) => {
+	if (!newValue) return
+	await nextTick()
+	closeButton.value?.focus()
 })
 
 watch(() => store.overlay.frameSrc, (newValue, oldValue) => {
+	// show loading spinner only when previously no frame_src was set
 	if (newValue && !oldValue) {
 		store.overlay.frameLoading = true
 	}
 	if (iframe.value) {
+		// to close and unload the iframe, frame_src can be empty -> make it valid HTML with about:blank
 		iframe.value.src = newValue || 'about:blank'
 	}
 })
@@ -151,7 +155,7 @@ watch(() => store.overlay.frameLoading, (newValue) => {
 			frameDialog.value.showModal()
 		}
 	} else {
-		if (!store.overlay.frameSrc && frameDialog.value?.open) {
+		if (!store.overlay.frameSrc && frameDialog.value?.open) { // finished loading, but no iframe to display => close
 			frameDialog.value.close()
 		}
 	}
@@ -169,7 +173,6 @@ onUnmounted(() => {
 <template lang="pug">
 Teleport(to="body")
 	.pretix-widget-overlay
-		//- Iframe dialog
 		dialog(ref="frameDialog", :class="frameClasses", :aria-label="STRINGS.checkout", @close="close", @cancel="cancel")
 			.pretix-widget-frame-loading(v-show="store.overlay.frameLoading")
 				svg(width="256", height="256", viewBox="0 0 1792 1792", xmlns="http://www.w3.org/2000/svg")
@@ -193,8 +196,6 @@ Teleport(to="body")
 					referrerpolicy="origin",
 					@load="iframeLoaded"
 				) Please enable frames in your browser!
-
-		//- Alert dialog
 		dialog(ref="alertDialog", :class="alertClasses", role="alertdialog", :aria-labelledby="errorMessageId", @close="errorClose")
 			form.pretix-widget-alert-box(method="dialog")
 				p(:id="errorMessageId") {{ store.overlay.errorMessage }}
@@ -207,7 +208,6 @@ Teleport(to="body")
 					path(style="fill:#ffffff;", d="M 599.86438,303.72882 H 1203.5254 V 1503.4576 H 599.86438 Z")
 					path.pretix-widget-primary-color(d="M896 128q209 0 385.5 103t279.5 279.5 103 385.5-103 385.5-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103zm128 1247v-190q0-14-9-23.5t-22-9.5h-192q-13 0-23 10t-10 23v190q0 13 10 23t23 10h192q13 0 22-9.5t9-23.5zm-2-344l18-621q0-12-10-18-10-8-24-8h-220q-14 0-24 8-10 6-10 18l17 621q0 10 10 17.5t24 7.5h185q14 0 23.5-7.5t10.5-17.5z")
 
-		//- Lightbox dialog
 		dialog(ref="lightboxDialog", :class="lightboxClasses", role="alertdialog", @close="lightboxClose")
 			.pretix-widget-lightbox-loading(v-if="store.overlay.lightbox?.loading")
 				svg(width="256", height="256", viewBox="0 0 1792 1792", xmlns="http://www.w3.org/2000/svg")
@@ -227,6 +227,5 @@ Teleport(to="body")
 					)
 					figcaption(v-if="store.overlay.lightbox.description") {{ store.overlay.lightbox.description }}
 </template>
-
 <style lang="sass">
 </style>

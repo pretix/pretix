@@ -21,7 +21,7 @@ const classObject = computed(() => {
 	return o
 })
 
-function select() {
+function select () {
 	store.parentStack.push(store.targetUrl)
 	store.targetUrl = props.event.event_url
 	store.error = null
@@ -30,18 +30,16 @@ function select() {
 	store.reload()
 }
 </script>
-
 <template lang="pug">
 a.pretix-widget-event-calendar-event(
 	href="#",
 	:class="classObject",
-	@click.prevent.stop="select",
-	:aria-describedby="describedby"
+	:aria-describedby="describedby",
+	@click.prevent.stop="select"
 )
 	strong.pretix-widget-event-calendar-event-name {{ event.name }}
 	.pretix-widget-event-calendar-event-date(v-if="!event.continued && event.time") {{ event.time }}
 	.pretix-widget-event-calendar-event-availability(v-if="!event.continued && event.availability.text") {{ event.availability.text }}
 </template>
-
 <style lang="sass">
 </style>
