@@ -255,7 +255,7 @@ class EventWizardBasicsForm(I18nModelForm):
             if data.get("team"):
                 source_event_perms = self.user.get_event_permission_set(self.organizer, self.clone_from)
                 team_perms = data["team"].event_permission_set(include_legacy=False)
-                if any(t not in source_event_perms for t in team_perms if ":" in t):
+                if any(t not in source_event_perms for t in team_perms):
                     raise ValidationError({
                         "team": _("You cannot choose a team that would give you more access than you have on "
                                   "the event you are copying.")
@@ -366,7 +366,7 @@ class EventWizardCopyForm(forms.Form):
             if self.team:
                 source_event_perms = self.user.get_event_permission_set(self.organizer, d['copy_from_event'])
                 team_perms = self.team.event_permission_set(include_legacy=False)
-                if any(t not in source_event_perms for t in team_perms if ":" in t):
+                if any(t not in source_event_perms for t in team_perms):
                     raise ValidationError({
                         "copy_from_event": _("You cannot choose an event on which you have less access than the "
                                              "team you selected in the previous step.")

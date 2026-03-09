@@ -859,11 +859,11 @@ class Event(EventMixin, LoggedModel):
             # Cross-organizer copying requires almost full permission of source to prevent settings extraction
             required_permissions = get_all_event_permissions() - {
                 # We do not require these, as this data is not copied
-                "event:orders.read", "event:orders.write", "event:vouchers.read", "event:vouchers.write",
-                "event:subevents.write",
+                "event.orders:read", "event.orders:write", "event.vouchers:read", "event.vouchers:write",
+                "event.subevents:write",
             }
             given_permission = auth.get_event_permission_set(self.organizer, self)
-            return all(p in given_permission for p in required_permissions if ":" not in p)
+            return all(p in given_permission for p in required_permissions if ":" in p)
 
         else:
             # Tokens or devices can never copy between organizers, as they are organizer-bound. Kept for future
