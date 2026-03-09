@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load static %}
 {% block inner %}
     <h1>
         {% blocktrans with name=request.organizer.name %}Organizer: {{ name }}{% endblocktrans %}
@@ -62,6 +63,7 @@
             <thead>
             <tr>
                 <th>{% trans "Event name" %}</th>
+                <th>{% trans "Sales channels" %}</th>
                 <th>
                     {% trans "Start date" %}
                     /
@@ -77,10 +79,30 @@
                     <td>
                         <strong><a
                                 href="{% url "control:event.index" organizer=e.organizer.slug event=e.slug %}">{{ e.name }}</a></strong>
-                        <br><small>{{ e.slug }}</small>
-                        {% for k, v in e.meta_data.items %}
-                            {% if v %}
-                                <small class="text-muted">&middot; {{ k }}: {{ v }}</small>
+                        <br>
+                        <small>
+                            {{ e.slug }}
+                        </small>
+                        <small class="text-muted">
+                            {% for k, v in e.meta_data.items %}
+                                {% if v %}
+                                    &middot; {{ k }}: {{ v }}
+                                {% endif %}
+                            {% endfor %}
+                        </small>
+                    </td>
+                    <td>
+                        {% for c in sales_channels %}
+                            {% if e.all_sales_channels or c in e.limit_sales_channels.all %}
+                                {% if "." in c.icon %}
+                                    <img src="{% static c.icon %}" class="fa-like-image"
+                                         data-toggle="tooltip" title="{{ c.label }}">
+                                {% else %}
+                                    <span class="fa fa-fw fa-{{ c.icon }} text-muted"
+                                          data-toggle="tooltip" title="{{ c.label }}"></span>
+                                {% endif %}
+                            {% else %}
+                                <span class="fa fa-fw"></span>
                             {% endif %}
                         {% endfor %}
                     </td>
