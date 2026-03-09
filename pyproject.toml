@@ -77,7 +77,7 @@ dependencies = [
   "phonenumberslite==9.0.*",
   "Pillow==12.1.*",
   "pretix-plugin-build",
-  "protobuf==6.33.*",
+  "protobuf==7.34.*",
   "psycopg2-binary",
   "pycountry",
   "pycparser==3.0",
