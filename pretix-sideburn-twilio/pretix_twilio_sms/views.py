@@ -22,11 +22,13 @@ def _get_webhook_auth_token():
     """
     Get the auth token used to validate Twilio webhook signatures.
     Twilio signs requests with the Account Auth Token.
+    Prefers twilio_webhook_auth_token when set; falls back to twilio_auth_token.
     """
     from pretix.base.settings import GlobalSettingsObject
 
     gs = GlobalSettingsObject()
-    return (gs.settings.twilio_auth_token or "").strip()
+    token = (gs.settings.twilio_webhook_auth_token or gs.settings.twilio_auth_token or "").strip()
+    return token
 
 
 def _validate_twilio_request(request):
