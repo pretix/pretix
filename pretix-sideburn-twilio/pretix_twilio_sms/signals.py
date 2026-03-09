@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.signals import register_global_settings
+from pretix.presale.signals import waitinglist_form_class
 
 
 @receiver(register_global_settings, dispatch_uid="twilio_sms_global_settings")
@@ -60,3 +61,14 @@ def register_twilio_global_settings(sender, **kwargs):
             ),
         ]
     )
+
+
+@receiver(waitinglist_form_class, dispatch_uid="twilio_sms_waitinglist_form")
+def inject_waitinglist_form_with_sms(sender, **kwargs):
+    """
+    Provide an extended waiting list form that adds SMS opt-in and phone
+    handling for CustomerSmsPreference and customer.phone updates.
+    """
+    from .forms import WaitingListFormWithSms
+
+    return WaitingListFormWithSms
