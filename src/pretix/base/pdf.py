@@ -815,13 +815,17 @@ class Renderer:
         if content not in ('dark', 'white'):
             content = 'dark'
         img = finders.find('pretixpresale/pdf/powered_by_pretix_{}.png'.format(content))
+        if not img:
+            logger.exception('Can not find image pretixpresale/pdf/powered_by_pretix_{}.png'.format(content))
+            return
 
         ir = ThumbnailingImageReader(img)
         try:
             width, height = ir.resize(None, float(o['size']) * mm, 300)
         except:
             logger.exception("Can not resize image")
-            pass
+            return
+
         canvas.drawImage(ir,
                          float(o['left']) * mm, float(o['bottom']) * mm,
                          width=width, height=height,
