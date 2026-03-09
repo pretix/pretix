@@ -50,6 +50,7 @@ COPY pyproject.toml /pretix/pyproject.toml
 COPY _build /pretix/_build
 COPY src /pretix/src
 COPY pretix-regex-validation /pretix/pretix-regex-validation
+COPY pretix-sideburn-twilio /pretix/pretix-sideburn-twilio
 
 RUN pip3 install -U \
         pip \
@@ -59,6 +60,7 @@ RUN pip3 install -U \
     PRETIX_DOCKER_BUILD=TRUE pip3 install \
         -e ".[memcached]" \
         gunicorn django-extensions ipython && \
+    pip3 install -e /pretix/pretix-sideburn-twilio && \
     rm -rf ~/.cache/pip
 
 
