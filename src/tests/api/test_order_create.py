@@ -32,13 +32,11 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
-
-from pretix.base.models import OrderPayment
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
-    InvoiceAddress, Item, Order, OrderPosition, Organizer, Question,
-    SeatingPlan, GiftCard
+    GiftCard, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
+    Organizer, Question, SeatingPlan,
 )
 from pretix.base.models.orders import CartPosition, OrderFee, QuestionAnswer
 
@@ -3401,8 +3399,8 @@ def test_order_create_use_gift_cards_only_pending(token_client, organizer, event
     gc = GiftCard.objects.create(issuer=organizer, currency='EUR')
     gc.transactions.create(value=Decimal("100.00"), acceptor=organizer).save()
 
-    res['status']=order_status
-    res['use_gift_cards']=[gc.secret]
+    res['status'] = order_status
+    res['use_gift_cards'] = [gc.secret]
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -3422,7 +3420,7 @@ def test_order_create_use_gift_cards_only_pending(token_client, organizer, event
             False, 0
         ),
         (
-            True, 2 # TODO check why we get 3 mails, one order receivend and two payments
+            True, 2  # TODO check why we get 3 mails, one order receivend and two payments
         ),
     ],
 )
@@ -3445,7 +3443,7 @@ def test_order_create_use_gift_card(token_client, organizer, event, item, quota,
     gc = GiftCard.objects.create(issuer=organizer, currency='EUR')
     gc.transactions.create(value=Decimal("100.00"), acceptor=organizer).save()
 
-    res['use_gift_cards']=[gc.secret]
+    res['use_gift_cards'] = [gc.secret]
 
     djmail.outbox = []
 
@@ -3465,6 +3463,7 @@ def test_order_create_use_gift_card(token_client, organizer, event, item, quota,
 
     assert len(djmail.outbox) == mail_amount
 
+
 @pytest.mark.django_db
 def test_order_create_use_multiple_gift_cards(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
@@ -3481,15 +3480,15 @@ def test_order_create_use_multiple_gift_cards(token_client, organizer, event, it
     gc_one_eur = GiftCard.objects.create(issuer=organizer, currency='EUR')
     gc_one_eur.transactions.create(value=Decimal("1.00"), acceptor=organizer).save()
 
-    gc_empty=GiftCard.objects.create(issuer=organizer, currency='EUR')
+    gc_empty = GiftCard.objects.create(issuer=organizer, currency='EUR')
 
-    gc_wrong_currency=GiftCard.objects.create(issuer=organizer, currency='USD')
+    gc_wrong_currency = GiftCard.objects.create(issuer=organizer, currency='USD')
     gc_wrong_currency.transactions.create(value=Decimal("100.00"), acceptor=organizer).save()
 
-    gc_enough_eur=GiftCard.objects.create(issuer=organizer, currency='EUR')
+    gc_enough_eur = GiftCard.objects.create(issuer=organizer, currency='EUR')
     gc_enough_eur.transactions.create(value=Decimal("100.00"), acceptor=organizer).save()
 
-    res['use_gift_cards']=[gc_one_eur.secret, gc_empty.secret, gc_wrong_currency.secret, gc_enough_eur.secret]
+    res['use_gift_cards'] = [gc_one_eur.secret, gc_empty.secret, gc_wrong_currency.secret, gc_enough_eur.secret]
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -3529,7 +3528,7 @@ def test_order_create_use_gift_card_and_payment_provider(token_client, organizer
     gc = GiftCard.objects.create(issuer=organizer, currency='EUR')
     gc.transactions.create(value=gc_value, acceptor=organizer).save()
 
-    res['use_gift_cards']=[gc.secret]
+    res['use_gift_cards'] = [gc.secret]
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -3544,5 +3543,5 @@ def test_order_create_use_gift_card_and_payment_provider(token_client, organizer
 
         open_payment = o.payments.last()
         assert open_payment.state == OrderPayment.PAYMENT_STATE_CREATED
-        assert open_payment.amount == o.total-gc_value
+        assert open_payment.amount == o.total - gc_value
         assert open_payment.payment_provider.identifier == res['payment_provider']

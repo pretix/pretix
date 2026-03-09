@@ -62,8 +62,7 @@ from pretix.base.models.orders import (
     BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
     PrintLog, RevokedTicketSecret, Transaction,
 )
-from pretix.base.payment import GiftCardPayment
-from pretix.base.payment import PaymentException
+from pretix.base.payment import GiftCardPayment, PaymentException
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
 from pretix.base.services.locking import LOCK_TRUST_WINDOW, lock_objects
@@ -1806,11 +1805,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 if order.status != Order.STATUS_PAID:
                     gift_card_payment_provider = GiftCardPayment(event=order.event)
 
-                    gc=order.event.organizer.accepted_gift_cards.get(
+                    gc = order.event.organizer.accepted_gift_cards.get(
                         secret=gift_card_secret
                     )
 
-                    payment=order.payments.create(
+                    payment = order.payments.create(
                         amount=min(order.pending_sum, gc.value),
                         provider=gift_card_payment_provider.identifier,
                         info_data={
