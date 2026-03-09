@@ -292,6 +292,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         ctx['layout'] = json.dumps(self.get_current_layout())
         ctx['title'] = self.title
         ctx['locales'] = [p for p in settings.LANGUAGES if p[0] in self.request.event.settings.locales]
+        ctx['maxfilesize'] = self.maxfilesize
         return ctx
 
 
