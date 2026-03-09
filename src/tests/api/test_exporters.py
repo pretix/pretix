@@ -826,18 +826,29 @@ def test_org_scheduled_export_validate_rrule(user_client, organizer, user):
     assert resp.data == {"schedule_rrule": ["BYEASTER not supported"]}
 
 
-def _can_see_but_not_edit_org_export(client, scheduled):
+def _get_and_patch_org_export(client, scheduled, can_see=True, can_edit=None):
+    if can_edit is None:
+        can_edit = can_see
     response = client.get(
         '/api/v1/organizers/{}/scheduled_exports/{}/'.format("dummy", scheduled.pk),
     )
-    assert response.status_code == 200
+    if can_see:
+        assert response.status_code == 200
+    else:
+        assert response.status_code > 400
+        assert can_edit is False  # Check against useless test usage
+        return True  # No point in editing, we don't have a body
 
     response = client.patch(
         '/api/v1/organizers/{}/scheduled_exports/{}/'.format("dummy", scheduled.pk),
         data=response.data,
         format='json',
     )
-    return response.status_code == 200
+    if can_edit:
+        assert response.status_code == 200
+    else:
+        assert response.status_code > 400 or (response.status_code == 400 and "export_identifier" in response.data)
+    return True
 
 
 @pytest.mark.django_db(transaction=True)
@@ -899,9 +910,9 @@ def test_organizer_edit_restrictions(client, event, organizer, user, team):
     )
     user._teamcache = {}
     user2._teamcache = {}
-    assert _can_see_but_not_edit_org_export(user2_client, s1)
-    assert not _can_see_but_not_edit_org_export(user1_client, s1)
-    assert not _can_see_but_not_edit_org_export(team1_client, s1)
+    assert _get_and_patch_org_export(user2_client, s1)
+    assert _get_and_patch_org_export(user1_client, s1, can_see=True, can_edit=False)
+    assert _get_and_patch_org_export(team1_client, s1, can_see=True, can_edit=False)
 
     # Scenario 2
     # User 2 created an export for all events. User 2 can edit it, because they own it.
@@ -911,9 +922,9 @@ def test_organizer_edit_restrictions(client, event, organizer, user, team):
     team1.save()
     user._teamcache = {}
     user2._teamcache = {}
-    assert _can_see_but_not_edit_org_export(user2_client, s1)
-    assert _can_see_but_not_edit_org_export(user1_client, s1)
-    assert _can_see_but_not_edit_org_export(team1_client, s1)
+    assert _get_and_patch_org_export(user2_client, s1)
+    assert _get_and_patch_org_export(user1_client, s1)
+    assert _get_and_patch_org_export(team1_client, s1)
 
     # Scenario 3
     # User 2 created an export for a specific event. User 2 can edit it, because they own it.
@@ -925,9 +936,9 @@ def test_organizer_edit_restrictions(client, event, organizer, user, team):
     s1.save()
     user._teamcache = {}
     user2._teamcache = {}
-    assert _can_see_but_not_edit_org_export(user2_client, s1)
-    assert not _can_see_but_not_edit_org_export(user1_client, s1)
-    assert not _can_see_but_not_edit_org_export(team1_client, s1)
+    assert _get_and_patch_org_export(user2_client, s1)
+    assert _get_and_patch_org_export(user1_client, s1, can_see=True, can_edit=False)
+    assert _get_and_patch_org_export(team1_client, s1, can_see=True, can_edit=False)
 
     # Scenario 4
     # User 2 created an export for a specific event. User 2 can edit it, because they own it.
@@ -936,9 +947,9 @@ def test_organizer_edit_restrictions(client, event, organizer, user, team):
     team1.limit_events.add(event2)
     user._teamcache = {}
     user2._teamcache = {}
-    assert _can_see_but_not_edit_org_export(user2_client, s1)
-    assert _can_see_but_not_edit_org_export(user1_client, s1)
-    assert _can_see_but_not_edit_org_export(team1_client, s1)
+    assert _get_and_patch_org_export(user2_client, s1)
+    assert _get_and_patch_org_export(user1_client, s1)
+    assert _get_and_patch_org_export(team1_client, s1)
 
     # Scenario 5
     # User 2 created an export that requires a special permission on organizer level
@@ -956,9 +967,9 @@ def test_organizer_edit_restrictions(client, event, organizer, user, team):
     )
     user._teamcache = {}
     user2._teamcache = {}
-    assert _can_see_but_not_edit_org_export(user2_client, s2)
-    assert not _can_see_but_not_edit_org_export(user1_client, s2)
-    assert not _can_see_but_not_edit_org_export(team1_client, s2)
+    assert _get_and_patch_org_export(user2_client, s2)
+    assert _get_and_patch_org_export(user1_client, s2, can_see=True, can_edit=False)
+    assert _get_and_patch_org_export(team1_client, s2, can_see=True, can_edit=False)
 
     # Scenario 6
     # User 2 created an export that requires a special permission on organizer level
@@ -967,23 +978,34 @@ def test_organizer_edit_restrictions(client, event, organizer, user, team):
     team1.limit_organizer_permissions["organizer.giftcards:read"] = True
     team1.save()
     user._teamcache = {}
-    assert _can_see_but_not_edit_org_export(user2_client, s2)
-    assert _can_see_but_not_edit_org_export(team1_client, s2)
-    assert _can_see_but_not_edit_org_export(user1_client, s2)
+    assert _get_and_patch_org_export(user2_client, s2)
+    assert _get_and_patch_org_export(team1_client, s2)
+    assert _get_and_patch_org_export(user1_client, s2)
 
 
-def _can_see_but_not_edit_event_export(client, scheduled):
+def _get_and_patch_event_export(client, scheduled, can_see=True, can_edit=True):
+    if can_edit is None:
+        can_edit = can_see
     response = client.get(
         '/api/v1/organizers/{}/events/{}/scheduled_exports/{}/'.format("dummy", "dummy", scheduled.pk),
     )
-    assert response.status_code == 200
+    if can_see:
+        assert response.status_code == 200
+    else:
+        assert response.status_code > 400
+        assert can_edit is False  # Check against useless test usage
+        return True  # No point in editing, we don't have a body
 
     response = client.patch(
         '/api/v1/organizers/{}/events/{}/scheduled_exports/{}/'.format("dummy", "dummy", scheduled.pk),
         data=response.data,
         format='json',
     )
-    return response.status_code == 200
+    if can_edit:
+        assert response.status_code == 200
+    else:
+        assert response.status_code > 400 or (response.status_code == 400 and "export_identifier" in response.data)
+    return True
 
 
 @pytest.mark.django_db(transaction=True)
@@ -1039,9 +1061,9 @@ def test_event_edit_restrictions(client, event, organizer, user, team):
     )
     user._teamcache = {}
     user2._teamcache = {}
-    assert _can_see_but_not_edit_event_export(user2_client, s2)
-    assert not _can_see_but_not_edit_event_export(user1_client, s2)
-    assert not _can_see_but_not_edit_event_export(team1_client, s2)
+    assert _get_and_patch_event_export(user2_client, s2)
+    assert _get_and_patch_event_export(user1_client, s2, can_see=True, can_edit=False)
+    assert _get_and_patch_event_export(team1_client, s2, can_see=True, can_edit=False)
 
     # Scenario 6
     # User 2 created an export that requires a special permission on organizer level
@@ -1050,6 +1072,6 @@ def test_event_edit_restrictions(client, event, organizer, user, team):
     team1.limit_event_permissions["event.vouchers:read"] = True
     team1.save()
     user._teamcache = {}
-    assert _can_see_but_not_edit_event_export(user2_client, s2)
-    assert _can_see_but_not_edit_event_export(team1_client, s2)
-    assert _can_see_but_not_edit_event_export(user1_client, s2)
+    assert _get_and_patch_event_export(user2_client, s2)
+    assert _get_and_patch_event_export(team1_client, s2)
+    assert _get_and_patch_event_export(user1_client, s2)
