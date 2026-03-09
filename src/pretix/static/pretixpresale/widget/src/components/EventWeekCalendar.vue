@@ -24,16 +24,14 @@ const weekname = computed(() => {
 
 const id = computed(() => `${store.htmlId}-event-week-table`)
 
-const showFilters = computed(() => !store.disableFilters && store.metaFilterFields.length > 0)
-
-function backToList() {
+function backToList () {
 	store.weeks = null
 	store.name = null
 	store.frontpageText = null
 	store.view = 'events'
 }
 
-function prevweek() {
+function prevweek () {
 	if (!store.week) return
 	let curWeek = store.week[1]
 	let curYear = store.week[0]
@@ -47,7 +45,7 @@ function prevweek() {
 	store.reload({ focus: `#${id.value}` })
 }
 
-function nextweek() {
+function nextweek () {
 	if (!store.week) return
 	let curWeek = store.week[1]
 	let curYear = store.week[0]
@@ -61,12 +59,11 @@ function nextweek() {
 	store.reload({ focus: `#${id.value}` })
 }
 </script>
-
 <template lang="pug">
 .pretix-widget-event-calendar.pretix-widget-event-week-calendar(ref="weekcalendar")
 	//- Back navigation
 	.pretix-widget-back(v-if="store.events !== null")
-		a(href="#", @click.prevent.stop="backToList", role="button")
+		a(href="#", role="button", @click.prevent.stop="backToList")
 			| &lsaquo; {{ STRINGS.back }}
 
 	//- Event header
@@ -74,7 +71,7 @@ function nextweek() {
 		strong {{ store.name }}
 
 	//- Filter
-	EventListFilterForm(v-if="showFilters")
+	EventListFilterForm(v-if="!store.disableFilters && store.metaFilterFields.length > 0")
 
 	//- Calendar navigation
 	.pretix-widget-event-description(
@@ -82,12 +79,12 @@ function nextweek() {
 		v-html="store.frontpageText"
 	)
 	.pretix-widget-event-calendar-head
-		a.pretix-widget-event-calendar-previous-month(href="#", @click.prevent.stop="prevweek", role="button")
+		a.pretix-widget-event-calendar-previous-month(href="#", role="button", @click.prevent.stop="prevweek")
 			| &laquo; {{ STRINGS.previous_week }}
 		|
 		strong {{ weekname }}
 		|
-		a.pretix-widget-event-calendar-next-month(href="#", @click.prevent.stop="nextweek", role="button")
+		a.pretix-widget-event-calendar-next-month(href="#", role="button", @click.prevent.stop="nextweek")
 			| {{ STRINGS.next_week }} &raquo;
 
 	//- Actual calendar
@@ -95,6 +92,5 @@ function nextweek() {
 		.pretix-widget-event-week-col(v-for="d in store.days", :key="d?.date || ''")
 			EventWeekCell(:day="d", :mobile="mobile")
 </template>
-
 <style lang="sass">
 </style>

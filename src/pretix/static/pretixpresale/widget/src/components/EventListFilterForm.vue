@@ -7,7 +7,7 @@ import EventListFilterField from './EventListFilterField.vue'
 const store = inject(StoreKey)!
 const filterform = ref<HTMLFormElement>()
 
-function onSubmit(e: Event) {
+function onSubmit (e: Event) {
 	e.preventDefault()
 	if (!filterform.value) return
 
@@ -25,7 +25,6 @@ function onSubmit(e: Event) {
 	store.reload()
 }
 </script>
-
 <template lang="pug">
 form.pretix-widget-event-list-filter-form(ref="filterform", @submit="onSubmit")
 	fieldset.pretix-widget-event-list-filter-fieldset
@@ -37,6 +36,5 @@ form.pretix-widget-event-list-filter-form(ref="filterform", @submit="onSubmit")
 		)
 		button {{ STRINGS.filter }}
 </template>
-
 <style lang="sass">
 </style>

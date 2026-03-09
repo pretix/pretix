@@ -61,11 +61,8 @@ const waitingListUrl = computed(() => {
 	if (store.subevent) {
 		u += `&subevent=${store.subevent}`
 	}
-	const widgetDataJson = JSON.stringify(store.widgetData)
-	u += `&widget_data=${encodeURIComponent(widgetDataJson)}`
-	if (store.widgetData.consent) {
-		u += `&consent=${encodeURIComponent(store.widgetData.consent)}`
-	}
+	u += `&widget_data=${encodeURIComponent(store.widgetDataJson)}`
+	u += store.consentParameter
 	return u
 })
 

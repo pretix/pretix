@@ -9,11 +9,12 @@ const store = inject(StoreKey)!
 
 const displayEventInfo = computed(() => store.displayEventInfo || (store.displayEventInfo === null && store.parentStack.length > 0))
 
-const showBackButton = computed(() => store.weeks || store.parentStack.length > 0)
-
-const showFilters = computed(() => !store.disableFilters && store.metaFilterFields.length > 0)
-
-function backToCalendar() {
+function backToCalendar () {
+	// TODO
+	// make sure to always focus content element
+	// this.$nextTick(function () {
+	// 	this.$root.$el.focus()
+	// })
 	store.offset = 0
 	store.appendEvents = false
 
@@ -30,17 +31,16 @@ function backToCalendar() {
 	}
 }
 
-function loadMore() {
+function loadMore () {
 	store.appendEvents = true
 	store.offset += 50
 	store.loading++
 	store.reload()
 }
 </script>
-
 <template lang="pug">
 .pretix-widget-event-list
-	.pretix-widget-back(v-if="showBackButton")
+	.pretix-widget-back(v-if="store.weeks || store.parentStack.length > 0")
 		a(href="#", rel="prev", @click.prevent.stop="backToCalendar")
 			| &lsaquo; {{ STRINGS.back }}
 
@@ -52,7 +52,7 @@ function loadMore() {
 		v-html="store.frontpageText"
 	)
 
-	EventListFilterForm(v-if="showFilters")
+	EventListFilterForm(v-if="!store.disableFilters && store.metaFilterFields.length > 0")
 
 	EventListEntry(
 		v-for="event in store.events",
@@ -63,6 +63,5 @@ function loadMore() {
 	p.pretix-widget-event-list-load-more(v-if="store.hasMoreEvents")
 		button(@click.prevent.stop="loadMore") {{ STRINGS.load_more }}
 </template>
-
 <style lang="sass">
 </style>

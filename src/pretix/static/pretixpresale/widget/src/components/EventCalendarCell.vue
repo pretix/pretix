@@ -26,9 +26,10 @@ const tabindex = computed(() => role.value === 'button' ? '0' : '-1')
 const classObject = computed(() => {
 	const o: Record<string, boolean> = {}
 	if (props.day && props.day.events.length > 0) {
-		o['pretix-widget-has-events'] = true
+		o['pretix-widget-has-events'] = true // TODO static
 		let best = 'red'
 		let allLow = true
+		// TODO decopypasta
 		for (const ev of props.day.events) {
 			if (ev.availability.color === 'green') {
 				best = 'green'
@@ -47,11 +48,12 @@ const classObject = computed(() => {
 	return o
 })
 
-function selectDay(e: Event) {
+function selectDay (e: Event) {
 	if (!props.day || !props.day.events.length || !props.mobile) return
 	e.preventDefault()
 	e.stopPropagation()
 
+	// TODO decopypasta
 	if (props.day.events.length === 1) {
 		const ev = props.day.events[0]
 		store.parentStack.push(store.targetUrl)
@@ -66,22 +68,23 @@ function selectDay(e: Event) {
 	}
 }
 
-function onKeyDown(e: KeyboardEvent) {
+function onKeyDown (e: KeyboardEvent) {
 	const keyDown = e.key ?? e.keyCode
 	if (keyDown === 'Enter' || keyDown === 13 || ['Spacebar', ' '].includes(keyDown as string) || keyDown === 32) {
+		// (prevent default so the page doesn't scroll when pressing space)
 		e.preventDefault()
 		selectDay(e)
 	}
 }
 
-function attachListeners() {
+function attachListeners () {
 	if (role.value === 'button' && cellEl.value) {
 		cellEl.value.addEventListener('click', selectDay)
 		cellEl.value.addEventListener('keydown', onKeyDown)
 	}
 }
 
-function detachListeners() {
+function detachListeners () {
 	if (cellEl.value) {
 		cellEl.value.removeEventListener('click', selectDay)
 		cellEl.value.removeEventListener('keydown', onKeyDown)
@@ -92,6 +95,7 @@ onMounted(() => {
 	attachListeners()
 })
 
+// TODO why different from old version?
 watch(role, (newValue, oldValue) => {
 	if (newValue === 'button' && oldValue !== 'button') {
 		attachListeners()
@@ -100,7 +104,6 @@ watch(role, (newValue, oldValue) => {
 	}
 })
 </script>
-
 <template lang="pug">
 td(
 	ref="cellEl",
@@ -113,6 +116,5 @@ td(
 	.pretix-widget-event-calendar-events(v-if="day")
 		EventCalendarEvent(v-for="e in day.events", :key="e.event_url", :event="e")
 </template>
-
 <style lang="sass">
 </style>

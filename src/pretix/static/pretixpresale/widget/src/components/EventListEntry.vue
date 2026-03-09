@@ -22,7 +22,7 @@ const classObject = computed(() => {
 
 const location = computed(() => props.event.location.replace(/\s*\n\s*/g, ', '))
 
-function select() {
+function select () {
 	store.parentStack.push(store.targetUrl)
 	store.targetUrl = props.event.event_url
 	store.error = null
@@ -31,15 +31,14 @@ function select() {
 	store.reload()
 }
 </script>
-
 <template lang="pug">
 a.pretix-widget-event-list-entry(href="#", :class="classObject", @click.prevent.stop="select")
 	.pretix-widget-event-list-entry-name {{ event.name }}
 	.pretix-widget-event-list-entry-date {{ event.date_range }}
+	//- hidden by css for now, but used by a few people
 	.pretix-widget-event-list-entry-location {{ location }}
 	.pretix-widget-event-list-entry-availability
 		span {{ event.availability.text }}
 </template>
-
 <style lang="sass">
 </style>

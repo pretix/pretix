@@ -36,12 +36,14 @@ onMounted(() => {
 		resizeObserver.observe(wrapper.value)
 	}
 
-	store.reload()
-	emit('mounted')
+	store.reload() // TODO call earlier?
+	emit('mounted') // TODO where does this go?
 })
 
 watch(() => store.view, (newValue, oldValue) => {
 	if (oldValue && wrapper.value) {
+		// always make sure the widget is scrolled to the top
+		// as we only check top, we do not need to wait for a redraw
 		const rect = wrapper.value.getBoundingClientRect()
 		if (rect.top < 0) {
 			wrapper.value.scrollIntoView()
