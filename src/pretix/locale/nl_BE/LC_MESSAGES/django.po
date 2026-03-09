@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-04 16:57+0000\n"
+"PO-Revision-Date: 2026-03-09 12:52+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -26981,6 +26981,10 @@ msgid ""
 "the affected data in your legislation, e.g. for reasons of taxation. In many "
 "countries, you need to keep some data in the live system in case of an audit."
 msgstr ""
+"Het is uw eigen verantwoordelijkheid om te controleren of u de gegevens "
+"volgens uw wetgeving mag verwijderen, bijvoorbeeld om fiscale redenen. In "
+"veel landen moet u bepaalde gegevens in het livesysteem bewaren voor het "
+"geval er een audit plaatsvindt."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:32
 msgid ""
@@ -26988,81 +26992,87 @@ msgid ""
 "to store it offline. Some kinds of data (such as some payment information) "
 "as well as historical log data cannot be downloaded at the moment."
 msgstr ""
+"U kunt voor de meeste categorieën de gegevens gedeeltelijk downloaden om ze "
+"offline op te slaan. Sommige soorten gegevens (bijvoorbeeld sommige "
+"betalingsinformatie) en historische loggegevens kunnen momenteel niet worden "
+"gedownload."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:46
 msgid "Data selection"
-msgstr ""
+msgstr "Gegevensselectie"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:63
 msgid ""
 "We recommend not to remove this data because you might need it in case of a "
 "tax audit."
 msgstr ""
+"We raden aan om deze gegevens niet te verwijderen, omdat u ze mogelijk nodig "
+"hebt bij een belastingaudit."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:10
 msgctxt "subevent"
 msgid "Create multiple dates"
-msgstr ""
+msgstr "Meerdere datums aanmaken"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:35
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:146
 msgid "Repetition rule"
-msgstr ""
+msgstr "Regel voor herhaling"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:81
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:192
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
-msgstr ""
+msgstr "Herhaal ieder(e) %(interval)s %(freq)s, beginnend op %(start)s."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:258
 msgctxt "subevent"
 msgid "Preview"
-msgstr ""
+msgstr "Voorbeeldweergave"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:265
 msgctxt "subevent"
 msgid "Times"
-msgstr ""
+msgstr "Tijden"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:339
 msgid "Start of first slot"
-msgstr ""
+msgstr "Begin van eerste tijdsslot"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:345
 msgid "End of time slots"
-msgstr ""
+msgstr "Einde van tijdsslots"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:351
 msgid "Length of slots"
-msgstr ""
+msgstr "Lengte van tijdsslots"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:360
 msgid "Break between slots"
-msgstr ""
+msgstr "Pauze tussen tijdsslots"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:370
 msgid "Create"
-msgstr ""
+msgstr "Aanmaken"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:377
 msgid "Add a single time slot"
-msgstr ""
+msgstr "Eén tijdsslot toevoegen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:379
 msgid "Add many time slots"
-msgstr ""
+msgstr "Meerdere tijdsslots toevoegen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:481
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:266
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:124
 msgid "Add a new quota"
-msgstr ""
+msgstr "Nieuw quotum toevoegen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:485
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:128
 msgid "Product settings"
-msgstr ""
+msgstr "Productinstellingen"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:487
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:130
@@ -27070,6 +27080,8 @@ msgid ""
 "These settings are optional, if you leave them empty, the default values "
 "from the product settings will be used."
 msgstr ""
+"Deze instellingen zijn optioneel. Als u deze instellingen leeg laat, zullen "
+"de standaardwaarden uit de productinstellingen worden gebruikt."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:523
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:166
