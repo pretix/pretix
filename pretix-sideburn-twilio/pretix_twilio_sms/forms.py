@@ -13,7 +13,60 @@ from pretix.base.forms.questions import (
     guess_phone_prefix_from_request,
 )
 from pretix.base.models import Customer
+from pretix.presale.forms.customer import ChangeInfoForm
 from pretix.presale.forms.waitinglist import WaitingListForm
+
+
+class ChangeInfoFormWithSms(ChangeInfoForm):
+    """
+    Extends ChangeInfoForm with an SMS opt-in checkbox under the phone field.
+    Prepopulated from CustomerSmsPreference; updates CustomerSmsPreference on save.
+    """
+
+    sms_opt_in = forms.BooleanField(
+        label=_("I want to receive SMS updates"),
+        required=False,
+        initial=False,
+    )
+
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request=request, *args, **kwargs)
+        # Prepopulate from customer's SMS preference
+        if self.instance:
+            try:
+                from .models import CustomerSmsPreference
+                self.initial["sms_opt_in"] = self.instance.sms_preference.sms_opt_in
+            except (CustomerSmsPreference.DoesNotExist, AttributeError, ImportError):
+                self.initial["sms_opt_in"] = False
+        # Place sms_opt_in right after phone
+        keys = list(self.fields.keys())
+        new_order = []
+        sms_opt_in_inserted = False
+        for key in keys:
+            if key == "sms_opt_in":
+                continue
+            new_order.append(key)
+            if key == "phone" and not sms_opt_in_inserted:
+                new_order.append("sms_opt_in")
+                sms_opt_in_inserted = True
+        if not sms_opt_in_inserted:
+            new_order.append("sms_opt_in")
+        self.fields = OrderedDict((k, self.fields[k]) for k in new_order)
+
+    def save(self, commit=True):
+        instance = super().save(commit=commit)
+        if not commit:
+            return instance
+        from .models import CustomerSmsPreference
+        opt_in = self.cleaned_data.get("sms_opt_in", False)
+        pref, created = CustomerSmsPreference.objects.get_or_create(
+            customer=instance,
+            defaults={"sms_opt_in": opt_in},
+        )
+        if not created and pref.sms_opt_in != opt_in:
+            pref.sms_opt_in = opt_in
+            pref.save(update_fields=["sms_opt_in", "last_changed"])
+        return instance
 
 
 class WaitingListFormWithSms(WaitingListForm):
