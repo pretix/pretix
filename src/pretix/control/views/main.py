@@ -67,7 +67,12 @@ class EventList(PaginationMixin, ListView):
 
     def get_queryset(self):
         qs = self.request.user.get_events_with_any_permission(self.request).prefetch_related(
-            'organizer', '_settings_objects', 'organizer___settings_objects', 'organizer__meta_properties',
+            'organizer',
+            'organizer__sales_channels',
+            '_settings_objects',
+            'organizer___settings_objects',
+            'organizer__meta_properties',
+            'limit_sales_channels',
             Prefetch(
                 'meta_values',
                 EventMetaValue.objects.select_related('property'),

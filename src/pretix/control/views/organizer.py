@@ -207,6 +207,7 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
             'organizer').prefetch_related(
             'organizer', '_settings_objects', 'organizer___settings_objects',
             'organizer__meta_properties',
+            'limit_sales_channels',
             Prefetch(
                 'meta_values',
                 EventMetaValue.objects.select_related('property'),
@@ -237,6 +238,7 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
             self.filter_form['meta_{}'.format(p.name)] for p in
             self.organizer.meta_properties.filter(filter_allowed=True)
         ]
+        ctx['sales_channels'] = self.request.organizer.sales_channels.all()
         return ctx
 
 

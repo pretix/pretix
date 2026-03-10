@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load urlreplace %}
 {% load bootstrap3 %}
+{% load static %}
 {% block title %}{% trans "Events" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Events" %}</h1>
@@ -74,6 +75,7 @@
                         <a href="?{% url_replace request 'ordering' 'organizer' %}"><i class="fa fa-caret-up"></i></a>
                     </th>
                 {% endif %}
+                <th>{% trans "Sales channels" %}</th>
                 <th>
                     {% trans "Start date" %}
                     <a href="?{% url_replace request 'ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
@@ -108,6 +110,21 @@
                         {% endfor %}
                     </td>
                     {% if not hide_orga %}<td>{{ e.organizer }}</td>{% endif %}
+                    <td>
+                        {% for c in e.organizer.sales_channels.all %}
+                            {% if e.all_sales_channels or c in e.limit_sales_channels.all %}
+                                {% if "." in c.icon %}
+                                    <img src="{% static c.icon %}" class="fa-like-image"
+                                         data-toggle="tooltip" title="{{ c.label }}">
+                                {% else %}
+                                    <span class="fa fa-fw fa-{{ c.icon }} text-muted"
+                                          data-toggle="tooltip" title="{{ c.label }}"></span>
+                                {% endif %}
+                            {% else %}
+                                <span class="fa fa-fw"></span>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                     <td class="event-date-col">
                         {% if e.has_subevents %}
                             <span class="fa fa-fw- fa-calendar"></span>
