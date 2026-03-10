@@ -33,6 +33,18 @@ class WaitingListFormWithSms(WaitingListForm):
         self._customer = kwargs.get("customer")
         self._request = kwargs.get("request")
         super().__init__(*args, **kwargs)
+        # Pre-populate sms_opt_in from CustomerSmsPreference when customer is known
+        if self._customer:
+            try:
+                from .models import CustomerSmsPreference
+            except ImportError:
+                pass
+            else:
+                try:
+                    pref = CustomerSmsPreference.objects.get(customer=self._customer)
+                    self.initial["sms_opt_in"] = pref.sms_opt_in
+                except CustomerSmsPreference.DoesNotExist:
+                    pass
         # When event does not ask for phone, add our own phone field for SMS
         if "phone" not in self.fields:
             if not self.initial.get("sms_phone") and self._customer and self._customer.phone:
