@@ -3535,14 +3535,14 @@ def test_order_create_use_gift_card_exclusive_with_payment_provider(token_client
 
     res['use_gift_cards'] = [gc.secret]
 
-    res_with_payment_provider=copy.deepcopy(res)
+    res_with_payment_provider = copy.deepcopy(res)
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
         ), format='json', data=res_with_payment_provider
     )
     assert resp.status_code == 400
-    assert resp.json() ==  {"use_gift_cards":["The attribute use_gift_cards is not compatible with payment_provider or payment_info"]}
+    assert resp.json() == {"use_gift_cards": ["The attribute use_gift_cards is not compatible with payment_provider or payment_info"]}
 
     res_with_payment_info = copy.deepcopy(res)
     res_with_payment_info['payment_info'] = {"a": "b"}
@@ -3553,7 +3553,7 @@ def test_order_create_use_gift_card_exclusive_with_payment_provider(token_client
         ), format='json', data=res_with_payment_info
     )
     assert resp.status_code == 400
-    assert resp.json() ==  {"use_gift_cards":["The attribute use_gift_cards is not compatible with payment_provider or payment_info"]}
+    assert resp.json() == {"use_gift_cards": ["The attribute use_gift_cards is not compatible with payment_provider or payment_info"]}
 
 
 @pytest.mark.django_db
@@ -3584,3 +3584,38 @@ def test_order_create_use_gift_card_repeated(token_client, organizer, event, ite
     )
     assert resp.status_code == 400
     assert resp.json() == {'use_gift_cards': ['Multiple copies of the same gift card secret are not allowed']}
+
+
+@pytest.mark.django_db
+def test_order_create_use_gift_card_invalid_secret(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    with scopes_disabled():
+        customer = organizer.customers.create()
+
+    res['customer'] = customer.identifier
+    res['api_meta'] = {
+        'test': 1
+    }
+    del res['payment_provider']
+
+    gc_enough_eur = GiftCard.objects.create(issuer=organizer, currency='EUR')
+    gc_enough_eur.transactions.create(value=Decimal("100.00"),
+                                      acceptor=organizer).save()
+
+    res['use_gift_cards'] = ["INVALID", gc_enough_eur.secret]
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.status == Order.STATUS_PAID
+        assert o.payments.count() == 2
+        assert o.payments.all()[0].state == OrderPayment.PAYMENT_STATE_FAILED
+        assert o.payments.all()[1].state == OrderPayment.PAYMENT_STATE_CONFIRMED

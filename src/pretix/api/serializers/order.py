@@ -53,7 +53,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import (
-    CachedFile, Checkin, Customer, Device, Invoice, InvoiceAddress,
+    CachedFile, Checkin, Customer, Device, GiftCard, Invoice, InvoiceAddress,
     InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
     QuestionAnswer, ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule,
     Voucher,
@@ -1830,6 +1830,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
             except PaymentException:
                 pass
+
+            except GiftCard.DoesNotExist as e:
+                payment = order.payments.create(
+                    amount=order.pending_sum,
+                    provider=GiftCardPayment.identifier,
+                    info_data={
+                        'gift_card_secret': gift_card_secret,
+                    },
+                    state=OrderPayment.PAYMENT_STATE_CREATED
+                )
+                payment.fail(info={**payment.info_data, 'error': str(e)},
+                             send_mail=False)
 
         if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID and not validated_data.get('require_approval'):
             order.status = Order.STATUS_PAID
