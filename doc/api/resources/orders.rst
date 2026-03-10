@@ -157,6 +157,10 @@ use_gift_cards                        list of strings            List of gift ca
 
    The ``tax_rounding_mode`` attribute has been added.
 
+.. versionchanged:: 2026.03
+
+   The ``use_gift_cards `` attribute has been added.
+
 .. _order-position-resource:
 
 Order position resource
@@ -1094,15 +1098,15 @@ Creating orders
      whether these emails are enabled for certain sales channels. If set to ``null``, behavior will be controlled by pretix'
      settings based on the sales channels (added in pretix 4.7). Defaults to ``false``.
      Used to be ``send_mail`` before pretix 3.14.
-   * ``use_gift_cards`` (optional) The provided gift cards will be used to pay for this order, they will be debited and
-     all required payment records for these transactions will be created. The gift cards will be used in sequence to pay for
-     the order. Gift cards that cannot be used are skipped. Processing of the gift cards stops as soon as the order is payed.
-     All gift card transactions are listed under ``payments`` in the response.
+   * ``use_gift_cards`` (optional) The provided gift cards will be used to pay for this order. They will be debited and
+     all the necessary payment records for these transactions will be created. The gift cards will be used in sequence to
+     pay for the order. Processing of the gift cards stops as soon as the order is payed for. All gift card transactions
+     are listed under ``payments`` in the response.
      This option can only be used with orders that are in the pending state.
-     You can provide ``payment_info`` and ``payment_provider`` fields in addition to ``use_gift_cards``. A matching
-     payment record for the ``payment_provider`` will be created after all gift cards have been processed. The amount of
-     this entry is the remaining amount you'll need to charge your customer with. The above mentioned caveats for
-     ``payment_info`` still apply.
+     In addition to ``use_gift_cards``, you can provide ``payment_info`` and ``payment_provider`` fields. A matching
+     payment record for the ``payment_provider`` will be created once all the gift cards have been processed. This
+     entry's amount is what you'll need to charge your customer. The above-mentioned caveats for ``payment_info`` still
+     apply.
 
    If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually
    to incrementing integers starting with ``1``. Then, you can reference one of these
