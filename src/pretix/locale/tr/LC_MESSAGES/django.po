@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2025-01-04 01:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2026-03-11 00:00+0000\n"
+"Last-Translator: Demir Kaya <demir@indieturk.org>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
 "tr/>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.9.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -37,7 +37,7 @@ msgstr "Arapça"
 
 #: pretix/_base_settings.py:91
 msgid "Basque"
-msgstr ""
+msgstr "Baskça"
 
 #: pretix/_base_settings.py:92
 msgid "Catalan"
@@ -57,7 +57,7 @@ msgstr "Çekce"
 
 #: pretix/_base_settings.py:96
 msgid "Croatian"
-msgstr ""
+msgstr "Hırvatça"
 
 #: pretix/_base_settings.py:97
 msgid "Danish"
@@ -89,7 +89,7 @@ msgstr "Yunanca"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "İbranice"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -101,7 +101,7 @@ msgstr "İtalyanca"
 
 #: pretix/_base_settings.py:107
 msgid "Japanese"
-msgstr ""
+msgstr "Japonca"
 
 #: pretix/_base_settings.py:108
 msgid "Latvian"
@@ -109,7 +109,7 @@ msgstr "Letonca"
 
 #: pretix/_base_settings.py:109
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Norveççe"
 
 #: pretix/_base_settings.py:110
 msgid "Polish"
@@ -145,7 +145,7 @@ msgstr "İspanyolca"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "İspanyolca (Latin Amerikan)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -203,10 +203,8 @@ msgid "Client secret"
 msgstr "Müşteri sırrı"
 
 #: pretix/api/models.py:116
-#, fuzzy
-#| msgid "Enable"
 msgid "Enable webhook"
-msgstr "Etkinleştirme"
+msgstr "Webhook etkinleştir"
 
 #: pretix/api/models.py:117
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
@@ -277,10 +275,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Bilinmeyen eklenti: '{name}'."
 
 #: pretix/api/serializers/event.py:286 pretix/api/serializers/organizer.py:88
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Bilinmeyen eklenti: '{name}'."
+msgstr "sınırlandırılmış eklenti: '{name}'."
 
 #: pretix/api/serializers/item.py:87 pretix/api/serializers/item.py:149
 #: pretix/api/serializers/item.py:405
@@ -612,10 +609,8 @@ msgid ""
 msgstr ""
 
 #: pretix/api/webhooks.py:413
-#, fuzzy
-#| msgid "Shop not live"
 msgid "Shop taken live"
-msgstr "Mağaza kapalı"
+msgstr "Mağaza çevrimdışı"
 
 #: pretix/api/webhooks.py:417
 #, fuzzy
@@ -624,16 +619,12 @@ msgid "Shop taken offline"
 msgstr "Mağaza çevrimdışı duruma getirildi."
 
 #: pretix/api/webhooks.py:421
-#, fuzzy
-#| msgid "The order has been created."
 msgid "Test-Mode of shop has been activated"
-msgstr "Sipariş oluşturuldu."
+msgstr "Mağazanın Test-Modu aktive oldu"
 
 #: pretix/api/webhooks.py:425
-#, fuzzy
-#| msgid "The order has been created."
 msgid "Test-Mode of shop has been deactivated"
-msgstr "Sipariş oluşturuldu."
+msgstr "Mağazanın Test-Modu deaktif oldu"
 
 #: pretix/api/webhooks.py:429
 #, fuzzy
@@ -660,10 +651,8 @@ msgid "Waiting list entry received voucher"
 msgstr "Liste girdileri bekleniyor"
 
 #: pretix/api/webhooks.py:445
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "Kupon kodu"
+msgstr "Kupon kodu eklendi"
 
 #: pretix/api/webhooks.py:449
 #, fuzzy
