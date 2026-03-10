@@ -157,7 +157,7 @@ DATABASES = {
         'HOST': config.get('database', 'host', fallback=''),
         'PORT': config.get('database', 'port', fallback=''),
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
-        'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',  # Will only be used from Django 4.1 onwards
+        'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',
         'DISABLE_SERVER_SIDE_CURSORS': db_disable_server_side_cursors,
         'OPTIONS': db_options,
         'TEST': {}
@@ -178,6 +178,21 @@ if config.has_section('replica'):
         'TEST': {}
     }
     DATABASE_ROUTERS = ['pretix.helpers.database.ReplicaRouter']
+
+if config.has_section('dbreadonly'):
+    DATABASES['readonly'] = {
+        'ENGINE': 'django.db.backends.' + db_backend,
+        'NAME': config.get('dbreadonly', 'name', fallback=DATABASES['default']['NAME']),
+        'USER': config.get('dbreadonly', 'user', fallback=DATABASES['default']['USER']),
+        'PASSWORD': config.get('dbreadonly', 'password', fallback=DATABASES['default']['PASSWORD']),
+        'HOST': config.get('dbreadonly', 'host', fallback=DATABASES['default']['HOST']),
+        'PORT': config.get('dbreadonly', 'port', fallback=DATABASES['default']['PORT']),
+        'CONN_MAX_AGE': 0,  # do not spam primary with open connections as long as readonly is only used occasionally
+        'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',
+        'DISABLE_SERVER_SIDE_CURSORS': db_disable_server_side_cursors,
+        'OPTIONS': db_options,
+        'TEST': {}
+    }
 
 STATIC_URL = config.get('urls', 'static', fallback='/static/')
 
