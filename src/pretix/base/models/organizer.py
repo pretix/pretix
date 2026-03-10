@@ -319,6 +319,9 @@ class TeamQuerySet(models.QuerySet):
     def event_permission_q(cls, perm_name):
         from ..permissions import assert_valid_event_permission
 
+        if perm_name is None:
+            return Q()
+
         if perm_name.startswith('can_') and perm_name in OLD_TO_NEW_EVENT_COMPAT:  # legacy
             return reduce(operator.and_, [cls.event_permission_q(p) for p in OLD_TO_NEW_EVENT_COMPAT[perm_name]])
         assert_valid_event_permission(perm_name, allow_legacy=False)
@@ -330,6 +333,9 @@ class TeamQuerySet(models.QuerySet):
     @classmethod
     def organizer_permission_q(cls, perm_name):
         from ..permissions import assert_valid_organizer_permission
+
+        if perm_name is None:
+            return Q()
 
         if perm_name.startswith('can_') and perm_name in OLD_TO_NEW_ORGANIZER_COMPAT:  # legacy
             return reduce(operator.and_, [cls.organizer_permission_q(p) for p in OLD_TO_NEW_ORGANIZER_COMPAT[perm_name]])
