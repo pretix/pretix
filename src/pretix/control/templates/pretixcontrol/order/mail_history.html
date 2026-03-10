@@ -24,7 +24,9 @@
                         {% if log.display %}
                             <br/><span class="fa fa-fw fa-comment-o"></span> {{ log.display }}
                         {% endif %}
-                        {% if log.parsed_data.recipient %}
+                        {% if log.parsed_data.to %}
+                            <br/><span class="fa fa-fw fa-envelope-o"></span> {{ log.parsed_data.to|join:", " }}
+                        {% elif log.parsed_data.recipient %} {# legacy #}
                             <br/><span class="fa fa-fw fa-envelope-o"></span> {{ log.parsed_data.recipient }}
                         {% endif %}
                     </p>

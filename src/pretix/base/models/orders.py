@@ -87,7 +87,6 @@ from pretix.base.timemachine import time_machine_now
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
-from ...helpers.format import FormattedString, format_map
 from ...helpers.names import build_name
 from ...testutils.middleware import debugflags_var
 from ._transactions import (
@@ -1167,7 +1166,7 @@ class Order(LockModel, LoggedModel):
                          only be attached for this position and child positions, the link will only point to the
                          position and the attendee email will be used if available.
         """
-        from pretix.base.services.mail import mail, render_mail
+        from pretix.base.services.mail import mail
 
         if not self.email and not (position and position.attendee_email):
             return
@@ -1177,32 +1176,20 @@ class Order(LockModel, LoggedModel):
             if position and position.attendee_email:
                 recipient = position.attendee_email
 
-            email_content = render_mail(template, context)
-            if not isinstance(subject, FormattedString):
-                subject = format_map(subject, context)
-            mail(
+            outgoing_mail = mail(
                 recipient, subject, template, context,
                 self.event, self.locale, self, headers=headers, sender=sender,
                 invoices=invoices, attach_tickets=attach_tickets,
                 position=position, auto_email=auto_email, attach_ical=attach_ical,
                 attach_other_files=attach_other_files, attach_cached_files=attach_cached_files,
             )
-            self.log_action(
-                log_entry_type,
-                user=user,
-                auth=auth,
-                data={
-                    'subject': subject,
-                    'message': email_content,
-                    'position': position.positionid if position else None,
-                    'recipient': recipient,
-                    'invoices': [i.pk for i in invoices] if invoices else [],
-                    'attach_tickets': attach_tickets,
-                    'attach_ical': attach_ical,
-                    'attach_other_files': attach_other_files,
-                    'attach_cached_files': [cf.filename for cf in attach_cached_files] if attach_cached_files else [],
-                }
-            )
+            if outgoing_mail:
+                self.log_action(
+                    log_entry_type,
+                    user=user,
+                    auth=auth,
+                    data=outgoing_mail.log_data(),
+                )
 
     def resend_link(self, user=None, auth=None):
         with language(self.locale, self.event.settings.region):
@@ -2900,17 +2887,14 @@ class OrderPosition(AbstractPosition):
         :param attach_tickets: Attach tickets of this order, if they are existing and ready to download
         :param attach_ical: Attach relevant ICS files
         """
-        from pretix.base.services.mail import mail, render_mail
+        from pretix.base.services.mail import mail
 
         if not self.attendee_email:
             return
 
         with language(self.order.locale, self.order.event.settings.region):
             recipient = self.attendee_email
-            email_content = render_mail(template, context)
-            if not isinstance(subject, FormattedString):
-                subject = format_map(subject, context)
-            mail(
+            outgoing_mail = mail(
                 recipient, subject, template, context,
                 self.event, self.order.locale, order=self.order, headers=headers, sender=sender,
                 position=self,
@@ -2919,21 +2903,13 @@ class OrderPosition(AbstractPosition):
                 attach_ical=attach_ical,
                 attach_other_files=attach_other_files,
             )
-            self.order.log_action(
-                log_entry_type,
-                user=user,
-                auth=auth,
-                data={
-                    'subject': subject,
-                    'message': email_content,
-                    'recipient': recipient,
-                    'invoices': [i.pk for i in invoices] if invoices else [],
-                    'attach_tickets': attach_tickets,
-                    'attach_ical': attach_ical,
-                    'attach_other_files': attach_other_files,
-                    'attach_cached_files': [],
-                }
-            )
+            if outgoing_mail:
+                self.order.log_action(
+                    log_entry_type,
+                    user=user,
+                    auth=auth,
+                    data=outgoing_mail.log_data(),
+                )
 
     def resend_link(self, user=None, auth=None):
 

@@ -363,7 +363,7 @@ class EmailAddressShredder(BaseDataShredder):
                     le.save(update_fields=['data', 'shredded'])
             else:
                 shred_log_fields(le, banlist=[
-                    'recipient', 'message', 'subject', 'full_mail', 'old_email', 'new_email'
+                    'recipient', 'message', 'subject', 'full_mail', 'old_email', 'new_email', 'bcc', 'cc',
                 ])
 
 

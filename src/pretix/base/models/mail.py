@@ -220,3 +220,20 @@ class OutgoingMail(models.Model):
             error_log_action_type = 'pretix.email.error'
             log_target = None
         return log_target, error_log_action_type
+
+    def log_data(self):
+        return {
+            "subject": self.subject,
+            "message": self.body_plain,
+            "to": self.to,
+            "cc": self.cc,
+            "bcc": self.bcc,
+
+            "invoices": [i.pk for i in self.should_attach_invoices.all()],
+            "attach_tickets": self.should_attach_tickets,
+            "attach_ical": self.should_attach_ical,
+            "attach_other_files": self.should_attach_other_files,
+            "attach_cached_files": [cf.filename for cf in self.should_attach_cached_files.all()],
+
+            "position": self.orderposition.positionid if self.orderposition else None,
+        }
