@@ -3400,6 +3400,7 @@ def test_order_create_use_gift_cards_only_pending(token_client, organizer, event
     gc.transactions.create(value=Decimal("100.00"), acceptor=organizer).save()
 
     res['status'] = order_status
+    del res['payment_provider']
     res['use_gift_cards'] = [gc.secret]
 
     resp = token_client.post(
@@ -3430,7 +3431,6 @@ def test_order_create_use_gift_card(token_client, organizer, event, item, quota,
     res['positions'][0]['answers'][0]['question'] = question.pk
     with scopes_disabled():
         customer = organizer.customers.create()
-    del res['payment_provider']
 
     res['customer'] = customer.identifier
     res['api_meta'] = {
@@ -3442,7 +3442,7 @@ def test_order_create_use_gift_card(token_client, organizer, event, item, quota,
 
     gc = GiftCard.objects.create(issuer=organizer, currency='EUR')
     gc.transactions.create(value=Decimal("100.00"), acceptor=organizer).save()
-
+    del res['payment_provider']
     res['use_gift_cards'] = [gc.secret]
 
     djmail.outbox = []
@@ -3519,13 +3519,12 @@ def test_order_create_use_multiple_gift_cards(token_client, organizer, event, it
 
 
 @pytest.mark.django_db
-def test_order_create_use_gift_card_and_payment_provider(token_client, organizer, event, item, quota, question):
+def test_order_create_use_gift_card_exclusive_with_payment_provider(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
     with scopes_disabled():
         customer = organizer.customers.create()
-
     res['customer'] = customer.identifier
     res['api_meta'] = {
         'test': 1
@@ -3536,21 +3535,25 @@ def test_order_create_use_gift_card_and_payment_provider(token_client, organizer
 
     res['use_gift_cards'] = [gc.secret]
 
+    res_with_payment_provider=copy.deepcopy(res)
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
-        ), format='json', data=res
+        ), format='json', data=res_with_payment_provider
     )
-    assert resp.status_code == 201
+    assert resp.status_code == 400
+    assert resp.json() ==  {"use_gift_cards":["The attribute use_gift_cards is not compatible with payment_provider or payment_info"]}
 
-    with scopes_disabled():
-        o = Order.objects.get(code=resp.data['code'])
-        assert o.status == Order.STATUS_PENDING
-
-        open_payment = o.payments.last()
-        assert open_payment.state == OrderPayment.PAYMENT_STATE_CREATED
-        assert open_payment.amount == o.total - gc_value
-        assert open_payment.payment_provider.identifier == res['payment_provider']
+    res_with_payment_info = copy.deepcopy(res)
+    res_with_payment_info['payment_info'] = {"a": "b"}
+    del res_with_payment_info['payment_provider']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res_with_payment_info
+    )
+    assert resp.status_code == 400
+    assert resp.json() ==  {"use_gift_cards":["The attribute use_gift_cards is not compatible with payment_provider or payment_info"]}
 
 
 @pytest.mark.django_db

@@ -1314,6 +1314,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         simulate = validated_data.pop('simulate', False)
         gift_card_secrets = validated_data.pop('use_gift_cards') if 'use_gift_cards' in validated_data else []
 
+        if (payment_provider is not None or payment_info != '{}') and len(gift_card_secrets) > 0:
+            raise ValidationError({"use_gift_cards": ['The attribute use_gift_cards is not compatible with payment_provider or payment_info']})
         if validated_data.get('status') != Order.STATUS_PENDING and len(gift_card_secrets) > 0:
             raise ValidationError({"use_gift_cards": ['The attribute use_gift_cards is only supported for orders that are created as pending']})
         if len(set(gift_card_secrets)) != len(gift_card_secrets):

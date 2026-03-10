@@ -1104,10 +1104,9 @@ Creating orders
      pay for the order. Processing of the gift cards stops as soon as the order is payed for. All gift card transactions
      are listed under ``payments`` in the response.
      This option can only be used with orders that are in the pending state.
-     In addition to ``use_gift_cards``, you can provide ``payment_info`` and ``payment_provider`` fields. A matching
-     payment record for the ``payment_provider`` will be created once all the gift cards have been processed. This
-     entry's amount is what you'll need to charge your customer. The above-mentioned caveats for ``payment_info`` still
-     apply.
+     The ``use_gift_cards`` attribute can not be combined with ``payment_info`` and ``payment_provider`` fields. If the
+     order isn't completely paid after its creation with ``use_gift_cards``, then a subsequent request to the payment
+     endpoint is needed.
 
    If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually
    to incrementing integers starting with ``1``. Then, you can reference one of these
