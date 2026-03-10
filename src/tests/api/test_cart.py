@@ -1019,6 +1019,27 @@ def test_cartpos_create_with_voucher_redeemed(token_client, organizer, event, it
 
 
 @pytest.mark.django_db
+def test_cartpos_create_with_voucher_redeemed_and_expired_prefers_redeemed(token_client, organizer, event, item, quota):
+    with scopes_disabled():
+        voucher = event.vouchers.create(
+            code="FOOBAR",
+            item=item,
+            redeemed=1,
+            valid_until=now() - datetime.timedelta(days=1),
+        )
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {'voucher': ['The specified voucher has already been used the maximum number of times.']}
+
+
+@pytest.mark.django_db
 def test_cartpos_create_bulk_with_voucher(token_client, organizer, event, item, quota):
     with scopes_disabled():
         voucher = event.vouchers.create(code="FOOBAR", item=item, max_usages=3, redeemed=1)

@@ -855,6 +855,14 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code), follow=True)
         assert "alert-danger" in html.rendered_content
 
+    def test_fail_redeemed_and_expired_prefers_redeemed(self):
+        self.v.redeemed = 1
+        self.v.valid_until = now() - datetime.timedelta(days=1)
+        self.v.save()
+        html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code), follow=True)
+        assert "already been used the maximum number of times" in html.rendered_content
+        assert "This voucher is expired." not in html.rendered_content
+
     def test_fail_unknown(self):
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, 'ABC'), follow=True)
         assert "alert-danger" in html.rendered_content
