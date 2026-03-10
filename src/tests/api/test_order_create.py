@@ -3551,3 +3551,33 @@ def test_order_create_use_gift_card_and_payment_provider(token_client, organizer
         assert open_payment.state == OrderPayment.PAYMENT_STATE_CREATED
         assert open_payment.amount == o.total - gc_value
         assert open_payment.payment_provider.identifier == res['payment_provider']
+
+
+@pytest.mark.django_db
+def test_order_create_use_gift_card_repeated(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    with scopes_disabled():
+        customer = organizer.customers.create()
+    res['customer'] = customer.identifier
+    res['api_meta'] = {
+        'test': 1
+    }
+    del res['payment_provider']
+
+    gc_one_eur = GiftCard.objects.create(issuer=organizer, currency='EUR')
+    gc_one_eur.transactions.create(value=Decimal("1.00"), acceptor=organizer).save()
+
+    gc_enough_eur = GiftCard.objects.create(issuer=organizer, currency='EUR')
+    gc_enough_eur.transactions.create(value=Decimal("100.00"), acceptor=organizer).save()
+
+    res['use_gift_cards'] = [gc_one_eur.secret, gc_one_eur.secret, gc_enough_eur.secret]
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.json() == {'use_gift_cards': ['Multiple copies of the same gift card secret are not allowed']}

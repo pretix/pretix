@@ -117,7 +117,8 @@ cancellation_date                     datetime                   Time of order c
                                                                  reliable for orders that have been cancelled,
                                                                  reactivated and cancelled again.
 plugin_data                           object                     Additional data added by plugins.
-use_gift_cards                        list of strings            List of gift card secrets that are used to pay for this order.
+use_gift_cards                        list of strings            List of unique gift card secrets that are used to pay
+                                                                 for this order.
 ===================================== ========================== =======================================================
 
 

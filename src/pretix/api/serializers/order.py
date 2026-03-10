@@ -1316,6 +1316,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
         if validated_data.get('status') != Order.STATUS_PENDING and len(gift_card_secrets) > 0:
             raise ValidationError({"use_gift_cards": ['The attribute use_gift_cards is only supported for orders that are created as pending']})
+        if len(set(gift_card_secrets)) != len(gift_card_secrets):
+            raise ValidationError({"use_gift_cards": ['Multiple copies of the same gift card secret are not allowed']})
 
         if not validated_data.get("sales_channel"):
             validated_data["sales_channel"] = self.context['event'].organizer.sales_channels.get(identifier="web")
