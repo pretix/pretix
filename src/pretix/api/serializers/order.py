@@ -1239,10 +1239,6 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     errs[i]['voucher'] = [error_messages['voucher_invalid_subevent']]
                     continue
 
-                if v.valid_until is not None and v.valid_until < now_dt:
-                    errs[i]['voucher'] = [error_messages['voucher_expired']]
-                    continue
-
                 voucher_usage[v] += 1
                 if voucher_usage[v] > 0:
                     redeemed_in_carts = CartPosition.objects.filter(
@@ -1253,6 +1249,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         errs[i]['voucher'] = [
                             'The voucher has already been used the maximum number of times.'
                         ]
+                        continue
+
+                if v.is_expired():
+                    errs[i]['voucher'] = [error_messages['voucher_expired']]
+                    continue
 
                 if v.budget is not None:
                     price = pos_data.get('price')

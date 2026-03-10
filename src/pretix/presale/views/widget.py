@@ -718,10 +718,10 @@ class WidgetAPIProductList(EventListMixin, View):
         if 'voucher' in request.GET:
             try:
                 self.voucher = request.event.vouchers.get(code__iexact=request.GET.get('voucher').strip())
-                if self.voucher.redeemed >= self.voucher.max_usages:
+                if self.voucher.is_fully_redeemed():
                     data['error'] = error_messages['voucher_redeemed']
                     fail = True
-                if self.voucher.valid_until is not None and self.voucher.valid_until < now():
+                elif self.voucher.is_expired():
                     data['error'] = error_messages['voucher_expired']
                     fail = True
 

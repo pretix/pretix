@@ -32,6 +32,7 @@
                     <dt>{% trans "Phone" %}</dt>
                     <dd>{{ customer.phone }}</dd>
                 {% endif %}
+                {% block customer_profile_after_phone %}{% endblock %}
             </dl>
             <div class="text-right">
                 <a href="{% eventurl request.organizer "presale:organizer.customer.change" %}"

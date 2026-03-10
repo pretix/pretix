@@ -13,6 +13,7 @@ maintainers = [
 ]
 
 dependencies = [
+    "twilio>=8.0.0",
 ]
 
 [project.entry-points."pretix.plugin"]
