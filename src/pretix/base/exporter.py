@@ -59,11 +59,22 @@ class BaseExporter:
     This is the base class for all data exporters
     """
 
-    def __init__(self, event, organizer, progress_callback=lambda v: None):
+    def __init__(self, event, organizer, user=None, token=None, device=None, progress_callback=lambda v: None):
+        """
+        :param event: Event context, can also be a queryset of events for multi-event exports
+        :param organizer: Organizer context
+        :param user: The user who triggered the export (or None).
+        :param token: The API token that triggered the export (or None).
+        :param device: The device that triggered the export (or None)
+        :param progress_callback: Callback function with progress
+        """
         self.event = event
         self.organizer = organizer
         self.progress_callback = progress_callback
         self.is_multievent = isinstance(event, QuerySet)
+        self.user = user
+        self.token = token
+        self.device = device
         if isinstance(event, QuerySet):
             self.events = event
             self.event = None
