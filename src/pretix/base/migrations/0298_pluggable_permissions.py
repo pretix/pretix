@@ -17,9 +17,14 @@ def migrate_teams_forward(apps, schema_editor):
             for k, v in OLD_TO_NEW_EVENT_MIGRATION.items():
                 if getattr(team, k):
                     team.limit_event_permissions.update({kk: True for kk in v})
+
+            # Prevent combinations that were possible previously but no longer make sense
             if team.limit_event_permissions.get("event.orders:checkin") and team.limit_event_permissions.get("event.orders:write"):
-                # Redundant and not allowed
                 team.limit_event_permissions.pop("event.orders:checkin")
+            if team.limit_event_permissions.get("event.orders:write") and not team.limit_event_permissions.get("event.orders:read"):
+                team.limit_event_permissions.pop("event.orders:write")
+            if team.limit_event_permissions.get("event.vouchers:write") and not team.limit_event_permissions.get("event.vouchers:read"):
+                team.limit_event_permissions.pop("event.vouchers:write")
 
         if all(getattr(team, k) for k in OLD_TO_NEW_ORGANIZER_MIGRATION.keys()):
             team.all_organizer_permissions = True
