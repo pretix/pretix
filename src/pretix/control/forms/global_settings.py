@@ -104,6 +104,12 @@ class GlobalSettingsForm(SettingsForm):
                 help_text=_("Will be served at {domain}/.well-known/apple-developer-merchantid-domain-association").format(
                     domain=settings.SITE_URL
                 )
+            )),
+            ('widget_vite_origins', forms.CharField(
+                widget=forms.Textarea(attrs={'rows': '3'}),
+                required=False,
+                label=_("Vite widget origins"),
+                help_text=_("One origin per line (e.g. https://example.com). Requests from these origins will be served the new vite-based widget."),
             ))
         ])
         responses = register_global_settings.send(self)

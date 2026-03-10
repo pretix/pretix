@@ -121,9 +121,21 @@ def widget_css_etag(request, version, **kwargs):
         return f'{_get_source_cache_key(version)}-{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}'
 
 
+def _use_vite(request):
+    if getattr(settings, 'PRETIX_WIDGET_VITE', False):
+        return True
+    origin = request.META.get('HTTP_ORIGIN', '')
+    gs = GlobalSettingsObject()
+    vite_origins = gs.settings.get('widget_vite_origins', as_type=str, default='')
+    if origin and vite_origins:
+        origins_list = [o.strip() for o in vite_origins.strip().splitlines() if o.strip()]
+        return origin in origins_list
+    return False
+
+
 def widget_js_etag(request, version, lang, **kwargs):
     gs = GlobalSettingsObject()
-    variant = 'vite' if getattr(settings, 'PRETIX_WIDGET_VITE', False) else 'legacy'
+    variant = 'vite' if _use_vite(request) else 'legacy'
     return gs.settings.get('widget_checksum_{}_{}_{}'.format(version, lang, variant))
 
 
@@ -222,7 +234,7 @@ def widget_js(request, version, lang, **kwargs):
     if version < version_min:
         version = version_min
 
-    use_vite = getattr(settings, 'PRETIX_WIDGET_VITE', False)
+    use_vite = _use_vite(request)
     variant = 'vite' if use_vite else 'legacy'
     cache_prefix = 'widget_js_data_v{}_{}_{}'.format(version, lang, variant)
 
