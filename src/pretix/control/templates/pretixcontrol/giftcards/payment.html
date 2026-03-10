@@ -15,4 +15,8 @@
     </dd>
     <dt>{% trans "Issuer" %}</dt>
     <dd>{{ gc.issuer }}</dd>
+    {% if error %}
+         <dt>{% trans "Error" %}</dt>
+        <dd>{{ error }}</dd>
+    {% endif %}
 </dl>

@@ -1533,6 +1533,8 @@ class GiftCardPayment(BasePaymentProvider):
                 'request': request,
                 'event': self.event,
                 'gc': gc,
+                **({'error': payment.info_data[
+                    'error']} if 'error' in payment.info_data else {})
             }
             return template.render(ctx)
 
@@ -1554,7 +1556,8 @@ class GiftCardPayment(BasePaymentProvider):
             'gift_card': {
                 'id': gc.pk,
                 'secret': gc.secret,
-                'organizer': gc.issuer.slug
+                'organizer': gc.issuer.slug,
+                ** ({'error': payment.info_data['error']} if 'error' in payment.info_data else {})
             }
         }
 
@@ -1657,7 +1660,7 @@ class GiftCardPayment(BasePaymentProvider):
                     }
                 )
         except PaymentException as e:
-            payment.fail(info={'error': str(e)}, send_mail=not is_early_special_case)
+            payment.fail(info={**payment.info_data, 'error': str(e)}, send_mail=not is_early_special_case)
             raise e
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
