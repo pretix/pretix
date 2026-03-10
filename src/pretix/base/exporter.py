@@ -191,7 +191,7 @@ class BaseExporter:
         return True
 
     @classmethod
-    def get_required_event_permission(cls) -> str:
+    def get_required_event_permission(cls) -> Optional[str]:
         """
         The permission level required to use this exporter for events. For multi-event-exports, this will be used
         to limit the selection of events. Will be ignored if the ``OrganizerLevelExportMixin`` mixin is used.
@@ -206,7 +206,7 @@ class OrganizerLevelExportMixin:
         raise TypeError("required_event_permission may not be called on OrganizerLevelExportMixin")
 
     @classmethod
-    def get_required_organizer_permission(cls) -> str:
+    def get_required_organizer_permission(cls) -> Optional[str]:
         """
         The permission level required to use this exporter. Must be set for organizer-level exports. Set to `None` to
         allow everyone with any access to the organizer.
