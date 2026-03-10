@@ -3499,17 +3499,23 @@ def test_order_create_use_multiple_gift_cards(token_client, organizer, event, it
 
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
+        # order has a payment entry per giftcard
         assert o.status == Order.STATUS_PAID
         assert o.payments.count() == 4
 
-        assert gc_one_eur.transactions.count() == 2
+        assert gc_one_eur.transactions.count() == 2  # +1€ charge and -1€ payment
         assert o.payments.all()[0].state == OrderPayment.PAYMENT_STATE_CONFIRMED
-        assert gc_empty.transactions.count() == 0
+        assert Decimal(-1.00) == gc_one_eur.transactions.last().value
+
+        assert gc_empty.transactions.count() == 0  # no charge and no payment transaction
         assert o.payments.all()[1].state == OrderPayment.PAYMENT_STATE_FAILED
-        assert gc_wrong_currency.transactions.count() == 1
+
+        assert gc_wrong_currency.transactions.count() == 1  # charge transaction
         assert o.payments.all()[2].state == OrderPayment.PAYMENT_STATE_FAILED
-        assert gc_enough_eur.transactions.count() == 2
+
+        assert gc_enough_eur.transactions.count() == 2  # +100€ charge and -remainder € payment
         assert o.payments.all()[3].state == OrderPayment.PAYMENT_STATE_CONFIRMED
+        assert -(o.total - Decimal(1.00)) == gc_enough_eur.transactions.last().value
 
 
 @pytest.mark.django_db

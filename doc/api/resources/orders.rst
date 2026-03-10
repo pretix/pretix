@@ -117,6 +117,7 @@ cancellation_date                     datetime                   Time of order c
                                                                  reliable for orders that have been cancelled,
                                                                  reactivated and cancelled again.
 plugin_data                           object                     Additional data added by plugins.
+use_gift_cards                        list of strings            List of gift card secrets that are used to pay for this order.
 ===================================== ========================== =======================================================
 
 
@@ -987,8 +988,6 @@ Creating orders
 
        * does not support file upload questions
 
-       * does not support redeeming gift cards
-
        * does not support or validate memberships
 
 
@@ -1095,6 +1094,15 @@ Creating orders
      whether these emails are enabled for certain sales channels. If set to ``null``, behavior will be controlled by pretix'
      settings based on the sales channels (added in pretix 4.7). Defaults to ``false``.
      Used to be ``send_mail`` before pretix 3.14.
+   * ``use_gift_cards`` (optional) The provided gift cards will be used to pay for this order, they will be debited and
+     all required payment records for these transactions will be created. The gift cards will be used in sequence to pay for
+     the order. Gift cards that cannot be used are skipped. Processing of the gift cards stops as soon as the order is payed.
+     All gift card transactions are listed under ``payments`` in the response.
+     This option can only be used with orders that are in the pending state.
+     You can provide ``payment_info`` and ``payment_provider`` fields in addition to ``use_gift_cards``. A matching
+     payment record for the ``payment_provider`` will be created after all gift cards have been processed. The amount of
+     this entry is the remaining amount you'll need to charge your customer with. The above mentioned caveats for
+     ``payment_info`` still apply.
 
    If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually
    to incrementing integers starting with ``1``. Then, you can reference one of these
