@@ -2,6 +2,7 @@
 Twilio SMS plugin services: waiting list voucher SMS (queued after email).
 """
 import logging
+import re
 
 from django_scopes import scope, scopes_disabled
 
@@ -16,6 +17,123 @@ logger = logging.getLogger(__name__)
 WAITING_LIST_SMS_MESSAGE = (
     "Your Sideburn waitlist number is up! Please check your email for details."
 )
+
+# Minimum number of digits for a plausible phone number (E.164 allows 10–15).
+MIN_PHONE_DIGITS = 10
+
+
+def _get_twilio_config():
+    """
+    Load Twilio credentials from global settings.
+
+    Returns dict with keys: account_sid, auth_token, from_number.
+    Returns None if any required value is missing.
+    """
+    from pretix.base.settings import GlobalSettingsObject
+
+    gs = GlobalSettingsObject()
+    account_sid = (gs.settings.twilio_account_sid or "").strip()
+    auth_token = gs.settings.twilio_auth_token
+    from_number = (gs.settings.twilio_phone_number or "").strip()
+    if not account_sid or not auth_token or not from_number:
+        return None
+    return {
+        "account_sid": account_sid,
+        "auth_token": auth_token,
+        "from_number": from_number,
+    }
+
+
+def _is_valid_phone(phone):
+    """
+    Validate that a value looks like a usable phone number for SMS.
+
+    Accepts str or objects that stringify to a number (e.g. PhoneNumber).
+    Requires non-empty, stripped, and at least MIN_PHONE_DIGITS digits.
+    """
+    if phone is None:
+        return False
+    cleaned = (phone.strip() if isinstance(phone, str) else str(phone)).strip()
+    if not cleaned:
+        return False
+    digits = re.sub(r"\D", "", cleaned)
+    return len(digits) >= MIN_PHONE_DIGITS
+
+
+def send_sms_to_customer(
+    *,
+    phone,
+    sms_opt_in,
+    message=None,
+    customer_id=None,
+    event_id=None,
+    entry_id=None,
+):
+    """
+    Send an SMS to a customer using the Twilio SDK.
+
+    Only sends if sms_opt_in is True and phone passes validation.
+    Uses global Twilio settings (account SID, auth token, from number).
+    Logs Twilio errors and does not raise, so callers (e.g. email flow) are not broken.
+    """
+    if not sms_opt_in:
+        logger.info(
+            "pretix_twilio_sms: send_sms_to_customer skip: sms_opt_in is False "
+            "(customer_id=%s event_id=%s entry_id=%s)",
+            customer_id,
+            event_id,
+            entry_id,
+        )
+        return
+
+    if not _is_valid_phone(phone):
+        logger.info(
+            "pretix_twilio_sms: send_sms_to_customer skip: invalid or missing phone "
+            "(customer_id=%s event_id=%s entry_id=%s, phone=%s)",
+            customer_id,
+            event_id,
+            entry_id,
+            phone,
+        )
+        return
+
+    config = _get_twilio_config()
+    if not config:
+        logger.warning(
+            "pretix_twilio_sms: send_sms_to_customer skip: Twilio not configured "
+            "(missing account_sid, auth_token, or twilio_phone_number)"
+        )
+        return
+
+    body = (message or WAITING_LIST_SMS_MESSAGE).strip()
+    if not body:
+        logger.warning("pretix_twilio_sms: send_sms_to_customer skip: empty message")
+        return
+
+    try:
+        from twilio.rest import Client
+
+        client = Client(config["account_sid"], config["auth_token"])
+        cleaned_phone = phone.strip() if isinstance(phone, str) else str(phone)
+        client.messages.create(
+            body=body,
+            from_=config["from_number"],
+            to=cleaned_phone,
+        )
+        logger.info(
+            "pretix_twilio_sms: send_sms_to_customer sent (customer_id=%s event_id=%s entry_id=%s)",
+            customer_id,
+            event_id,
+            entry_id,
+        )
+    except Exception as e:
+        logger.exception(
+            "pretix_twilio_sms: send_sms_to_customer Twilio error (customer_id=%s event_id=%s entry_id=%s): %s",
+            customer_id,
+            event_id,
+            entry_id,
+            e,
+        )
 
 
 def _get_customer_and_phone(waiting_list_entry):
@@ -79,6 +197,10 @@ def send_waiting_list_sms_dummy(
         sms_opt_in,
         message or WAITING_LIST_SMS_MESSAGE,
     )
+
+
+# Pluggable sender: task calls this so tests can patch to send_waiting_list_sms_dummy.
+_sms_sender = send_sms_to_customer
 
 
 def queue_waiting_list_sms_after_mail(*, event_id, order, customer, to):
@@ -177,19 +299,21 @@ def send_waiting_list_sms_task(
     message=None,
 ):
     """
-    Celery task: run waiting list SMS (dummy or real) with pre-resolved data.
+    Celery task: run waiting list SMS with pre-resolved data.
     Queued only after the voucher email has been sent; receives data from
     queue_waiting_list_sms_after_mail so no DB lookups are needed.
+    Uses _sms_sender (send_sms_to_customer by default; tests can patch to
+    send_waiting_list_sms_dummy to avoid hitting Twilio).
     """
     logger.info(
         "pretix_twilio_sms: send_waiting_list_sms_task started entry_id=%s",
         entry_id,
     )
-    send_waiting_list_sms_dummy(
-        event_id=event_id,
-        entry_id=entry_id,
-        customer_id=customer_id,
+    _sms_sender(
         phone=phone,
         sms_opt_in=sms_opt_in,
         message=message or WAITING_LIST_SMS_MESSAGE,
+        customer_id=customer_id,
+        event_id=event_id,
+        entry_id=entry_id,
     )
