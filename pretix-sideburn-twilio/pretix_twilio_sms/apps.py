@@ -39,4 +39,7 @@ class PluginApp(PluginConfig):
         def profile_get_template_names(self):
             return ["pretix_twilio_sms/customer_profile.html"]
 
+        from pretix_twilio_sms.forms import ChangeInfoFormWithSms
+
         presale_customer.ProfileView.get_template_names = profile_get_template_names
+        presale_customer.ChangeInformationView.form_class = ChangeInfoFormWithSms
