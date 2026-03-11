@@ -315,8 +315,9 @@ class OrderListExporter(MultiSheetListExporter):
             for id, vn in payment_methods:
                 headers.append(_('Paid by {method}').format(method=vn))
 
-        # get meta_data labels from first cached event
-        headers += next(iter(self.event_object_cache.values())).meta_data.keys()
+        if self.event_object_cache:
+            # get meta_data labels from first cached event if any
+            headers += next(iter(self.event_object_cache.values())).meta_data.keys()
         yield headers
 
         full_fee_sum_cache = {
@@ -503,8 +504,9 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('External customer ID'))
         headers.append(_('Payment providers'))
 
-        # get meta_data labels from first cached event
-        headers += next(iter(self.event_object_cache.values())).meta_data.keys()
+        if self.event_object_cache:
+            # get meta_data labels from first cached event if any
+            headers += next(iter(self.event_object_cache.values())).meta_data.keys()
         yield headers
 
         yield self.ProgressSetTotal(total=qs.count())
@@ -707,9 +709,9 @@ class OrderListExporter(MultiSheetListExporter):
             _('Position order link')
         ]
 
-        # get meta_data labels from first cached event
-        meta_data_labels = next(iter(self.event_object_cache.values())).meta_data.keys()
         if has_subevents:
+            # get meta_data labels from first cached event
+            meta_data_labels = next(iter(self.event_object_cache.values())).meta_data.keys()
             headers += meta_data_labels
         yield headers
 
