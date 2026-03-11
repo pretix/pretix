@@ -80,7 +80,7 @@ class WaitingView(EventViewMixin, FormView):
             else:
                 if i.cached_availability[0] == Quota.AVAILABILITY_OK:
                     continue
-                choices.append((f'{i.pk}', f'{i.name}'))
+                choices.append((f'{i.pk}', f'{i.name} ({i.category.name})'))
         return choices
 
     def get_form_kwargs(self):
