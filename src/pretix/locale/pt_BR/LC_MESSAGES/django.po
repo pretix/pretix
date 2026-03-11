@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-11 00:00+0000\n"
+"PO-Revision-Date: 2026-03-11 07:08+0000\n"
 "Last-Translator: Pedro Orlando <scramblerdoodle@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
@@ -14242,6 +14242,10 @@ msgid ""
 "product, the total tax amount can differ from when it would be computed from "
 "the order total."
 msgstr ""
+"Recomendado quando a fatura eletrônica não é necessária. Cada produto será "
+"vendido com os preços líquido e bruto anunciados. No entanto, em pedidos de "
+"mais de um produto, o total de impostos pode diferir de seu valor quando "
+"computado do valor total do pedido."
 
 #: pretix/control/forms/event.py:865
 msgid ""
@@ -14250,6 +14254,11 @@ msgid ""
 "may be changed to ensure correct rounding, while the net prices will be kept "
 "as configured. This may cause the actual payment amount to differ."
 msgstr ""
+"Recomendado para fatura digital quando se vende principalmente para clientes-"
+"empresa e mostrar preços aos clientes sem contar impostos. O preço bruto de "
+"alguns produtos pode mudar para garantir o arredondamento correto, enquanto "
+"os preços líquidos serão mantidos como configurados. Isso pode fazer o valor "
+"de pagamento real diferir."
 
 #: pretix/control/forms/event.py:871
 msgid ""
@@ -14258,6 +14267,10 @@ msgid ""
 "business customers and consumers do not receive invoices. This can cause the "
 "payment amount to change when the invoice address is changed."
 msgstr ""
+"Como o anterior, mas se aplica apenas à clientes-empresa. Arredondamento "
+"normal será usado para clientes. Recomendado quando a fatura digital só for "
+"usada para clientes-empresa e clientes não recebem faturas. Isso pode "
+"modificar o valor de pagamento quando o endereço da fatura for modificado."
 
 #: pretix/control/forms/event.py:876
 msgid ""
@@ -14470,12 +14483,17 @@ msgid ""
 "This will only be used if the invoice is sent to a different email address "
 "or at a different time than the order confirmation."
 msgstr ""
+"Isso só será usado se a fatura for enviada para um endereço de e-mail "
+"diferente ou em um momento diferente que o da confirmação do pedido."
 
 #: pretix/control/forms/event.py:1326
 msgid ""
 "Formatting is not supported, as some accounting departments process mail "
 "automatically and do not handle formatted emails properly."
 msgstr ""
+"Formatação não é suportada, pois alguns departamentos de contabilidade "
+"processam correio automaticamente e não gerenciam corretamente e-mails "
+"formatados."
 
 #: pretix/control/forms/event.py:1362
 msgid ""
@@ -15988,12 +16006,16 @@ msgid ""
 "Please enter a gross amount. As per your event settings, the taxes will be "
 "split the same way as the order positions."
 msgstr ""
+"Insira um valor bruto. Segundo suas configurações de evento, os impostos "
+"serão divididos da mesma maneira que as posições de pedido."
 
 #: pretix/control/forms/orders.py:209
 msgid ""
 "Please enter a gross amount. As per your event settings, the default tax "
 "rate will be charged."
 msgstr ""
+"Insira um valor bruto. Segundo suas configurações de evento, será cobrada a "
+"taxa padrão de imposto."
 
 #: pretix/control/forms/orders.py:213
 msgid "As per your event settings, no tax will be charged."
@@ -16407,6 +16429,8 @@ msgstr "Eu entendo que esta ação não é reversível e eu quero continuar"
 msgid ""
 "We have just emailed you a confirmation code to enter to confirm this action"
 msgstr ""
+"Acabamos de te enviar um código de confirmação a ser inserido para confirmar "
+"esta ação"
 
 #: pretix/control/forms/orders.py:1055
 #, fuzzy
@@ -17232,7 +17256,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:473
 #, python-brace-format
 msgid "Error while transferring data to {provider_display_name}:"
-msgstr ""
+msgstr "Erro durante transferência de dados para {provider_display_name}:"
 
 #: pretix/control/logdisplay.py:474 pretix/control/logdisplay.py:475
 #, python-brace-format
@@ -17387,6 +17411,8 @@ msgid ""
 "Invoice {full_invoice_no} has not been transmitted because the transmission "
 "provider does not support test mode invoices."
 msgstr ""
+"Fatura {full_invoice_no} não foi transmitida pois o provedor de transmissão "
+"não suporta faturas em modo de teste."
 
 #: pretix/control/logdisplay.py:538
 #, python-brace-format
@@ -18711,6 +18737,10 @@ msgid ""
 "in repeatedly. Please check if your browser is set to block cookies, or "
 "delete all existing cookies and retry."
 msgstr ""
+"Parece que o seu navegador não está aceitando os cookies e é necessário "
+"fazer login repetidas vezes. Por favor, cheque se seu navegador está "
+"configurado para bloquear cookies, ou delete todos os cookies existentes e "
+"tente novamente."
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:35
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
@@ -19742,6 +19772,12 @@ msgid ""
 "hardware setup but only before your event started, and you admitted any real "
 "attendees or printed any real badges or tickets."
 msgstr ""
+"Com esta funcionalidade, você pode resetar completamente o estado de check-"
+"in do evento. Isso deletará todos os registros de check-in e todos os "
+"registros de ingressos e crachás impressos. Recomendamos usar esta "
+"funcionalidade depois de testar sua configuração de hardware, mas antes de "
+"seu evento começar, de fazer check-in de qualquer participante ou de "
+"imprimir qualquer crachá ou ingresso real."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:18
 #, python-format
@@ -19756,8 +19792,9 @@ msgstr[1] "Isso irá deletar permanentemente <strong>%(count)s check-ins</strong
 msgid "Additionally, <strong>1 print log</strong> will be deleted."
 msgid_plural ""
 "Additionally, <strong>%(count)s print logs</strong> will be deleted."
-msgstr[0] ""
+msgstr[0] "Adicionalmente, <strong>1 log de impressão</strong> será deletado."
 msgstr[1] ""
+"Adicionalmente, <strong>%(count)s logs de impressão</strong> serão deletados."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:30
 msgid "This cannot be reverted!"
@@ -19768,6 +19805,9 @@ msgid ""
 "The deleted entries will still show up in the \"Order history\" section, but "
 "for all other purposes the system will behave as if they never existed."
 msgstr ""
+"As entradas deletadas ainda aparecerão na seção \"Histórico de pedidos\", "
+"mas para qualquer outra finalidade o sistema agirá como se nunca tivessem "
+"existido."
 
 #: pretix/control/templates/pretixcontrol/checkin/reset.html:46
 msgid "Proceed with reset"
@@ -19906,6 +19946,9 @@ msgid ""
 "external system has failed. You can start another attempt to sync them "
 "manually."
 msgstr ""
+"Nesta página, providenciamos uma lista de pedidos em que a sincronização de "
+"dados com um sistema externo falhou. Você pode começar outra tentativa para "
+"sincronizá-los manualmente."
 
 #: pretix/control/templates/pretixcontrol/datasync/failed_jobs.html:24
 msgid "Sync provider"
@@ -20636,6 +20679,8 @@ msgid ""
 "Orders in this event could not be <strong>synced to an external system</"
 "strong> as configured."
 msgstr ""
+"Pedidos neste evento não puderam ser <strong>sincronizados com um sistema "
+"externo</strong> como configurado."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:88
 msgid "Show sync problems"
@@ -20670,6 +20715,9 @@ msgid ""
 "be shown. Therefore, we recommend that you set the date of service to a "
 "different option."
 msgstr ""
+"Foi configurado que sua loja não é um evento e a data de evento não deve ser "
+"mostrada. Portanto, recomendamos que você configure a data do serviço para "
+"uma opção diferente."
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:41
 msgid "Address form"
@@ -20694,6 +20742,11 @@ msgid ""
 "default, sending invoices as PDF files via email is always available. Other "
 "types of transmission can be added by plugins."
 msgstr ""
+"pretix pode transmitir faturas usando diferentes métodos de trasmissão. "
+"Diferentes métodos de transmissão podem ser necessários dependendo do país e "
+"do setor de atividade. Por padrão, enviar faturas como arquivos PDF por e-"
+"mail está sempre disponível. Outros tipos de transmissão podem ser "
+"adicionados com plugins."
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:89
 msgid ""
@@ -20701,6 +20754,9 @@ msgid ""
 "customers may depend on the country of the customer or whether the customer "
 "is entering a business address."
 msgstr ""
+"A possibilidade dos clientes selecionarem um dos métodos de transmissão aqui "
+"listados pode depender no país do cliente ou do cliente ter informado um "
+"endereço profissional."
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:98
 msgid "Transmission method"
@@ -21177,6 +21233,8 @@ msgid ""
 "Enabling this plugin will enable some of its functionality for the entire "
 "organizer account."
 msgstr ""
+"Ativar este plugin vai ativar algumas de suas funcionalidades para toda a "
+"conta de organizador."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:159
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:159
@@ -21413,6 +21471,8 @@ msgid ""
 "Customers won't be able to add themselves to the waiting list, because "
 "\"Hide all products that are sold out\" is enabled."
 msgstr ""
+"Clientes não poderão adicionar eles próprios para a lista de espera, pois a "
+"opção \"Esconder todos os produtos esgotados\" está ativada."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:260
 msgctxt "subevents"
@@ -21539,6 +21599,10 @@ msgid ""
 "optionally contain additional rules that depend on the customer's country "
 "and type."
 msgstr ""
+"As regras de imposto definem diferentes cenários de cobrança de imposto que "
+"podem depois serem atribuídas para produtos individuais. Cada regra de "
+"imposto contém uma taxa de imposto padrão e pode opcionalmente conter regras "
+"adicionais que dependem no país do cliente, e tipo de cliente."
 
 #: pretix/control/templates/pretixcontrol/event/tax.html:21
 msgid "You haven't created any tax rules yet."
@@ -21628,6 +21692,10 @@ msgid ""
 "not responsible for the correct handling of taxes in your ticket shop. If in "
 "doubt, please contact a lawyer or tax consultant."
 msgstr ""
+"Essas configurações são destinadas para usuários avançados. Veja a <a "
+"href=\"%(docs)s\">documentação</a> para mais informações. Note que não somos "
+"responsáveis pelo tratamento correto de impostos na sua bilheteria. Em caso "
+"de dúvida, entre em contato com um advogado ou um contador."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:45
 msgid "Custom rules"
@@ -21641,6 +21709,12 @@ msgid ""
 "the first rule matches the order, it will be used and all further rules will "
 "be ignored. If no rule matches, tax will be charged."
 msgstr ""
+"Essas configurações são destinadas a usuários profissionais com situações de "
+"tributação muito específicas. Se criar qualquer regra aqui, as configurações "
+"de inversão de cobrança acima serão ignoradas. As regras serão verificadas "
+"em ordem e uma vez que a primeira regra corresponde a um pedido, ela será "
+"usada e todas as outras regras serão ignoradas. Se nenhuma regra "
+"corresponder, o imposto será cobrado."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:53
 msgid "All of these rules will only apply if an invoice address is set."
@@ -21699,6 +21773,9 @@ msgid ""
 "%(plugin_settings_href)s>plugin settings</a> and activate one or more ticket "
 "output plugins."
 msgstr ""
+"Não há saídas de ingressos disponíveis. Por favor, acesse as <a %"
+"(plugin_settings_href)s>configurações de plugins</a> e ative um ou mais "
+"plugins de saída de ingressos."
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:62
 msgid "Download time"
@@ -21741,6 +21818,8 @@ msgid ""
 "JavaScript is disabled in your browser. To access our ticket shop without "
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
+"JavaScript está desativado no seu navegador. Para acessar nossa bilheteria "
+"sem JavaScript, por favor <a %(a_attr)s>clique aqui</a>."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:64
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:15
@@ -22131,6 +22210,9 @@ msgid ""
 "installation. Update checks are performed on a daily basis if your cronjob "
 "is set up properly."
 msgstr ""
+"Nenhuma verificação de atualização foi realizada desde a ultima atualização "
+"desta instalação. Verificações de atualização são realizadas diariamente se "
+"o seu cronjob estiver configurado corretamente."
 
 #: pretix/control/templates/pretixcontrol/global_update.html:20
 #: pretix/control/templates/pretixcontrol/global_update.html:39
@@ -22216,6 +22298,8 @@ msgid ""
 "This product is currently not being sold since you configured below that it "
 "should only be available in a certain timeframe."
 msgstr ""
+"Este produto não está sendo vendido atualmente, pois foi configurado abaixo "
+"que ele só deve estar disponível durante um determinado período."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:41
 msgid ""
