@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-09 23:00+0000\n"
+"PO-Revision-Date: 2026-03-11 18:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -27547,32 +27547,36 @@ msgstr "Nieuwe noodtokens genereren"
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:6
 msgid "Regenerate emergency codes"
-msgstr ""
+msgstr "Noodtokens opnieuw genereren"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:10
 msgid "Do you really want to regenerate your emergency codes?"
-msgstr ""
+msgstr "Wilt u echt nieuwe noodtokens genereren?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:13
 msgid "The old codes will no longer work."
-msgstr ""
+msgstr "De oude codes zullen niet meer werken."
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:4
 #: pretix/control/templates/pretixcontrol/user/change_email.html:8
 msgid "Change login email address"
-msgstr ""
+msgstr "Loginadres wijzigen"
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:13
 msgid ""
 "This changes the email address used to login to your account, as well as "
 "where we send email notifications."
 msgstr ""
+"Hierdoor verandert het e-mailadres dat u gebruikt om in te loggen op uw "
+"account, evenals het adres waarnaar we e-mailmeldingen sturen."
 
 #: pretix/control/templates/pretixcontrol/user/change_email.html:18
 msgid ""
 "We will send a confirmation code to your new email address, which you need "
 "to enter in the next step to confirm the email address is correct."
 msgstr ""
+"We sturen een bevestigingscode naar uw nieuwe e-mailadres. Die code moet u "
+"in de volgende stap invoeren om te bevestigen dat het e-mailadres correct is."
 
 #: pretix/control/templates/pretixcontrol/user/change_password.html:4
 #: pretix/control/templates/pretixcontrol/user/change_password.html:8
@@ -27580,73 +27584,73 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/settings.html:67
 #: pretix/presale/templates/pretixpresale/organizers/customer_base.html:28
 msgid "Change password"
-msgstr ""
+msgstr "Wachtwoord wijzigen"
 
 #: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html:4
 #: pretix/control/templates/pretixcontrol/user/confirmation_code_dialog.html:8
 msgid "Enter confirmation code"
-msgstr ""
+msgstr "Bevestigingscode invoeren"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:4
 #: pretix/control/templates/pretixcontrol/user/notifications.html:6
 msgid "Notification settings"
-msgstr ""
+msgstr "Meldingsinstellingen"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:16
 msgid "Notifications are turned on according to the settings below."
-msgstr ""
+msgstr "Meldingen worden ingeschakeld volgens de instellingen hieronder."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:25
 msgid "All notifications are turned off globally."
-msgstr ""
+msgstr "Alle meldingen zijn uitgeschakeld."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:33
 msgid "Choose event"
-msgstr ""
+msgstr "Evenement kiezen"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:37
 msgid "All my events"
-msgstr ""
+msgstr "Al mijn evenementen"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:45
 msgid "Save your modifications before switching events."
-msgstr ""
+msgstr "Sla uw wijzigingen op voordat u van evenement wisselt."
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:52
 msgid "Choose notifications to get"
-msgstr ""
+msgstr "Kies de meldingen die u wilt ontvangen"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:56
 msgid "Notification type"
-msgstr ""
+msgstr "Meldingstype"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:57
 msgid "Email notification"
-msgstr ""
+msgstr "E-mailmelding"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 msgid "Global"
-msgstr ""
+msgstr "Globaal"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:72
 #: pretix/control/templates/pretixcontrol/user/settings.html:38
 msgid "On"
-msgstr ""
+msgstr "Aan"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:71
 #: pretix/control/templates/pretixcontrol/user/settings.html:42
 msgid "Off"
-msgstr ""
+msgstr "Uit"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:75
 msgid "You have no permission to receive this notification"
-msgstr ""
+msgstr "U hebt geen toestemming om deze melding te ontvangen"
 
 #: pretix/control/templates/pretixcontrol/user/notifications_disable.html:4
 msgid "Disable notifications"
-msgstr ""
+msgstr "E-mailmeldingen uitschakelen"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:12
 #, python-format
