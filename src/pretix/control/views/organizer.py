@@ -100,7 +100,7 @@ from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.payment import PaymentException
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
-    PLUGIN_LEVEL_ORGANIZER,
+    PLUGIN_LEVEL_ORGANIZER, plugin_is_available,
 )
 from pretix.base.services.export import multiexport, scheduled_organizer_export
 from pretix.base.services.mail import mail, prefix_subject
@@ -597,6 +597,13 @@ class OrganizerCreate(CreateView):
         })
 
 
+def available_plugins(organizer):
+    from pretix.base.plugins import get_all_plugins
+
+    return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
+            and getattr(p, 'visible', True))
+
+
 class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Organizer
     context_object_name = 'organizer'
@@ -605,12 +612,6 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
     def get_object(self, queryset=None) -> Organizer:
         return self.request.organizer
-
-    def available_plugins(self, organizer):
-        from pretix.base.plugins import get_all_plugins
-
-        return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
-                and getattr(p, 'visible', True))
 
     def prepare_links(self, pluginmeta, key):
         links = getattr(pluginmeta, key, [])
@@ -637,7 +638,7 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
         from pretix.base.plugins import CATEGORY_LABELS, CATEGORY_ORDER
 
         context = super().get_context_data(*args, **kwargs)
-        plugins = list(self.available_plugins(self.object))
+        plugins = list(available_plugins(self.object))
 
         active_counter = Counter()
         events_total = 0
@@ -685,7 +686,7 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
         self.object = self.get_object()
 
         plugins_available = {
-            p.module: p for p in self.available_plugins(self.object)
+            p.module: p for p in available_plugins(self.object)
         }
         choose_events_next = False
         with transaction.atomic():
@@ -786,12 +787,6 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
         }
         return kwargs
 
-    def available_plugins(self, organizer):
-        from pretix.base.plugins import get_all_plugins
-
-        return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
-                and getattr(p, 'visible', True))
-
     def get_context_data(self, **kwargs):
         return super().get_context_data(
             plugin=self.plugin,
@@ -799,12 +794,10 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
         )
 
     def dispatch(self, request, *args, **kwargs):
-        plugins_available = {
-            p.module: p for p in self.available_plugins(self.request.organizer)
-        }
-        if kwargs["plugin"] not in plugins_available:
+        try:
+            self.plugin = next(p for p in available_plugins(self.request.organizer) if p.module == kwargs["plugin"])
+        except StopIteration:
             raise Http404(_("Unknown plugin."))
-        self.plugin = plugins_available[kwargs["plugin"]]
         level = getattr(self.plugin, "level", PLUGIN_LEVEL_EVENT)
         if level == PLUGIN_LEVEL_ORGANIZER:
             raise Http404(_("This plugin can only be enabled for the entire organizer account."))
@@ -835,6 +828,9 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
         logentries_to_save = []
 
         for e in self.request.organizer.events.filter(pk__in=events_to_enable):
+            if not plugin_is_available(self.plugin, organizer=self.request.organizer, event=e):
+                messages.success(self.request, _("This plugin cannot be activated for event {}.").format(e.name))
+                continue
             logentries_to_save.append(
                 e.log_action('pretix.event.plugins.enabled', user=self.request.user, data={'plugin': self.plugin.module}, save=False)
             )
