@@ -829,7 +829,7 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
         for e in self.request.organizer.events.filter(pk__in=events_to_enable):
             if not plugin_is_available(self.plugin, organizer=self.request.organizer, event=e):
-                messages.success(self.request, _("This plugin cannot be activated for event {}.").format(e.name))
+                messages.warning(self.request, _("This plugin cannot be activated for event {}.").format(e.name))
                 continue
             logentries_to_save.append(
                 e.log_action('pretix.event.plugins.enabled', user=self.request.user, data={'plugin': self.plugin.module}, save=False)
