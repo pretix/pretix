@@ -1569,7 +1569,7 @@ class StripeGiropay(StripeRedirectWithAccountNamePaymentIntentMethod):
 class StripeIdeal(StripeRedirectMethod):
     identifier = 'stripe_ideal'
     verbose_name = _('iDEAL via Stripe')
-    public_name = _('iDEAL')
+    public_name = _('iDEAL | Wero')
     method = 'ideal'
     explanation = _(
         'iDEAL is an online payment method available to customers of Dutch banks. Please keep your online '
