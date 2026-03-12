@@ -1068,6 +1068,9 @@ class TicketSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
+            if not provider.show_settings:
+                continue
+
             provider.form = ProviderForm(
                 obj=self.request.event,
                 settingspref='ticketoutput_%s_' % provider.identifier,

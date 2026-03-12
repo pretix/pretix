@@ -945,7 +945,7 @@ class TaxSettingsForm(EventSettingsValidationMixin, SettingsForm):
 class ProviderForm(SettingsForm):
     """
     This is a SettingsForm, but if fields are set to required=True, validation
-    errors are only raised if the payment method is enabled.
+    errors are only raised if the provider is enabled.
     """
 
     def __init__(self, *args, **kwargs):
