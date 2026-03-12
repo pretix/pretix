@@ -114,7 +114,7 @@ class BaseTicketOutput:
         If you override this method, make sure that positions that are addons (i.e. ``addon_to``
         is set) are only outputted if the event setting ``ticket_download_addons`` is active.
         Do the same for positions that are non-admission without ``ticket_download_nonadm`` active.
-        If you want, you can just iterate over ``order.positions_with_tickets`` which applies the
+        If you want, you can just iterate over ``self.get_tickets_to_print`` which applies the
         appropriate filters for you.
         """
         with tempfile.TemporaryDirectory() as d:
@@ -191,6 +191,15 @@ class BaseTicketOutput:
         that is displayed below the form fields configured in ``settings_form_fields``.
         """
         pass
+
+    @property
+    def show_settings(self) -> bool:
+        """
+        Returns whether or not this output should be shown in the ticket settings.
+
+        .. note:: If you set this to false, you need to have some other mechanism to decide whether this output is enabled
+        """
+        return True
 
     @property
     def download_button_text(self) -> str:
