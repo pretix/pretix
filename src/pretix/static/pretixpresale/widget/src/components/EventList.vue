@@ -9,12 +9,12 @@ const store = inject(StoreKey)!
 
 const displayEventInfo = computed(() => store.displayEventInfo || (store.displayEventInfo === null && store.parentStack.length > 0))
 
-function backToCalendar () {
-	// TODO
+async function backToCalendar (event: MouseEvent) {
 	// make sure to always focus content element
-	// this.$nextTick(function () {
-	// 	this.$root.$el.focus()
-	// })
+	await nextTick()
+	const rootEl = (event.target as HTMLElement).closest('.pretix-widget-wrapper') as HTMLElement | null
+	rootEl?.focus()
+
 	store.offset = 0
 	store.appendEvents = false
 
@@ -37,6 +37,8 @@ function loadMore () {
 	store.loading++
 	store.reload()
 }
+
+console.log(store)
 </script>
 <template lang="pug">
 .pretix-widget-event-list
