@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref, watch, onMounted, onBeforeUnmount } from 'vue'
+import { computed, inject, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { StoreKey } from '~/sharedStore'
 import { STRINGS } from '~/i18n'
 import Category from './Category.vue'
@@ -45,7 +45,7 @@ const hiddenParams = computed(() => {
 
 const showVoucherForm = computed(() => store.vouchersExist && !store.disableVouchers && !store.voucherCode)
 
-function backToList () {
+async function backToList () {
 	store.targetUrl = store.parentStack.pop() || store.targetUrl
 	store.error = null
 	if (!store.subevent) {
@@ -66,12 +66,10 @@ function backToList () {
 		store.view = 'weeks'
 	}
 
-	// TODO
-	// let $el = this.$root.$el
-	// this.$root.$nextTick(function () {
-	// 	// wait for redraw, then focus content element for better a11y
-	// 	$el.focus()
-	// })
+	// wait for redraw, then focus content element for better a11y
+	const rootEl = form.value?.closest('.pretix-widget-wrapper') as HTMLElement | null
+	await nextTick()
+	rootEl?.focus()
 }
 
 function calcItemsSelected () {
