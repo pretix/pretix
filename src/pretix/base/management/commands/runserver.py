@@ -22,7 +22,7 @@ class Command(Parent):
         if settings.VITE_DEV_MODE and os.environ.get(DJANGO_AUTORELOAD_ENV) != "true":
             # Start the vite server in the background
             vite_server = subprocess.Popen(
-                ["npm", "run", "dev"],
+                ["npm", "run", "dev:control"],
                 cwd=Path(__file__).parent.parent.parent.parent.parent
             )
 
