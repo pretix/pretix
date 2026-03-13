@@ -1680,6 +1680,13 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         answ.options.add(*options)
 
                 if use_reusable_medium:
+                    for op in use_reusable_medium.linked_orderpositions.all():
+                        use_reusable_medium.log_action(
+                            'pretix.reusable_medium.linked_orderposition.removed',
+                            data={
+                                'linked_orderposition': op.pk,
+                            }
+                        )
                     use_reusable_medium.linked_orderpositions.set([pos])
                     use_reusable_medium.log_action(
                         'pretix.reusable_medium.linked_orderposition.changed',
