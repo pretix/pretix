@@ -252,6 +252,88 @@ def test_medium_create(token_client, organizer, giftcard):
         assert m.created > now() - timedelta(minutes=10)
         assert m.updated > now() - timedelta(minutes=10)
 
+@pytest.mark.django_db
+def test_medium_create_linked_orderposition(token_client, organizer, organizer2, event, medium):
+    with scopes_disabled():
+        o = Order.objects.create(
+            code='FOO', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+            total=14, locale='en'
+        )
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
+                                         personalized=True)
+        op = o.positions.create(item=ticket, price=Decimal("14"))
+        op2 = o.positions.create(item=ticket, price=Decimal("14"))
+
+    payload = dict(TEST_MEDIUM_CREATE_PAYLOAD)
+
+    # wrong organizer for orderposition
+    resp = token_client.post(
+        '/api/v1/organizers/{}/reusablemedia/'.format(organizer2.slug),
+        payload,
+        format='json'
+    )
+    assert resp.status_code == 403
+
+    # unkown orderposition
+    payload['linked_orderposition'] = "unknown"
+    resp = token_client.post(
+        '/api/v1/organizers/{}/reusablemedia/'.format(organizer.slug),
+        payload,
+        format='json'
+    )
+    assert resp.status_code == 400
+
+    # create with linked_orderposition
+    payload['linked_orderposition'] = op.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/reusablemedia/'.format(organizer.slug),
+        payload,
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        m = ReusableMedium.objects.get(pk=resp.data['id'])
+        assert list(m.linked_orderpositions.values_list('pk', flat=True)) == [op.pk]
+
+    # double-check API-response for fallback-values
+    resp = token_client.get(
+        '/api/v1/organizers/{}/reusablemedia/{}/'.format(organizer.slug, resp.data['id'])
+    )
+    assert resp.status_code == 200
+    assert resp.data['linked_orderposition'] == op.pk
+    assert resp.data['linked_orderpositions'] == [op.pk]
+
+    # create with linked_orderposition and linked_orderpositions (not allowed)
+    payload['identifier'] = "FOOBAZ"
+    payload['linked_orderpositions'] = [op.pk, op2.pk]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/reusablemedia/'.format(organizer.slug),
+        payload,
+        format='json'
+    )
+    assert resp.status_code == 400
+
+    # multiple linked_orderpositions
+    del payload['linked_orderposition']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/reusablemedia/'.format(organizer.slug),
+        payload,
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        m = ReusableMedium.objects.get(pk=resp.data['id'])
+        assert list(m.linked_orderpositions.values_list('pk', flat=True)) == [op.pk, op2.pk]
+
+    # double-check API-response for fallback-values
+    resp = token_client.get(
+        '/api/v1/organizers/{}/reusablemedia/{}/'.format(organizer.slug, resp.data['id'])
+    )
+    assert resp.status_code == 200
+    assert resp.data['linked_orderposition'] == None
+    assert resp.data['linked_orderpositions'] == [op.pk, op2.pk]
 
 @pytest.mark.django_db
 def test_medium_foreignkeyval(token_client, organizer, giftcard2):
