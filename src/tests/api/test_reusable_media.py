@@ -381,6 +381,53 @@ def test_medium_patch(token_client, organizer, event, medium, giftcard, customer
     assert medium.info == {'test': 2}
     assert medium.identifier == "ABCDEFGH"
 
+    # test patch with linked_orderpositions
+    with scopes_disabled():
+        o = Order.objects.create(
+            code='FOO', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+            total=14, locale='en'
+        )
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
+                                         personalized=True)
+        op = o.positions.create(item=ticket, price=Decimal("14"))
+        op2 = o.positions.create(item=ticket, price=Decimal("14"))
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/reusablemedia/{}/'.format(organizer.slug, medium.pk),
+        {
+            'linked_orderposition': op.pk,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    medium.refresh_from_db()
+    with scopes_disabled():
+        assert list(medium.linked_orderpositions.values_list('pk', flat=True)) == [op.pk]
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/reusablemedia/{}/'.format(organizer.slug, medium.pk),
+        {
+            'linked_orderpositions': [op.pk, op2.pk],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    medium.refresh_from_db()
+    with scopes_disabled():
+        assert list(medium.linked_orderpositions.values_list('pk', flat=True)) == [op.pk, op2.pk]
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/reusablemedia/{}/'.format(organizer.slug, medium.pk),
+        {
+            'linked_orderposition': op.pk,
+            'linked_orderpositions': [op.pk, op2.pk],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+
 
 @pytest.mark.django_db
 def test_medium_no_deletion(token_client, organizer, event, medium):
