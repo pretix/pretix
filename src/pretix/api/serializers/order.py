@@ -1866,7 +1866,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             )
         elif payment_provider:
             order.payments.create(
-                amount=order.pending_sum,
+                amount=order.total,
                 provider=payment_provider,
                 info=payment_info,
                 state=OrderPayment.PAYMENT_STATE_CREATED
