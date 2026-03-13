@@ -283,7 +283,7 @@ class SecurityMiddleware(MiddlewareMixin):
             'script-src': ["{static}"] + (["http://localhost:5173", "ws://localhost:5173"] if settings.VITE_DEV_MODE else []),
             'object-src': ["'none'"],
             'frame-src': ['{static}'],
-            'style-src': ["{static}", "{media}"]+ (["unsafe-inline"] if settings.VITE_DEV_MODE else []),
+            'style-src': ["{static}", "{media}"] + (["unsafe-inline"] if settings.VITE_DEV_MODE else []),
             'connect-src': ["{dynamic}", "{media}"] + (["http://localhost:5173", "ws://localhost:5173"] if settings.VITE_DEV_MODE else []),
             'img-src': ["{static}", "{media}", "data:"] + img_src,
             'font-src': ["{static}"] + list(font_src),

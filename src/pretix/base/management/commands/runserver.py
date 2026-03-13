@@ -6,13 +6,15 @@
 It runs the local frontend server, if node is installed and the setting
 is set.
 """
-import os
 import atexit
+import os
 import subprocess
 from pathlib import Path
 
 from django.conf import settings
-from django.contrib.staticfiles.management.commands.runserver import Command as Parent
+from django.contrib.staticfiles.management.commands.runserver import (
+    Command as Parent,
+)
 from django.utils.autoreload import DJANGO_AUTORELOAD_ENV
 
 
@@ -32,7 +34,7 @@ class Command(Parent):
                     vite_server.wait(timeout=5)
                 except subprocess.TimeoutExpired:
                     vite_server.kill()
-            
+
             atexit.register(cleanup)
 
         super().handle(*args, **options)

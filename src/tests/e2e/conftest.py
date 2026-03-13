@@ -9,16 +9,19 @@ using Playwright. It integrates Playwright with Django's test infrastructure.
 
 import os
 import subprocess
-import pytest
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
-from datetime import date, datetime, timezone, timedelta
-from urllib.request import urlopen
 from urllib.error import URLError
-from playwright.sync_api import Browser, BrowserContext, Page, expect
+from urllib.request import urlopen
+
+import pytest
 from django_scopes import scopes_disabled
+from playwright.sync_api import (  # noqa: F401
+    Browser, BrowserContext, Page, expect,
+)
 
 from pretix.base.models import (
-    Organizer, Event, Item, Quota, ItemVariation, SubEvent, Voucher
+    Event, Item, ItemVariation, Organizer, Quota, SubEvent, Voucher,
 )
 
 # Allow Django ORM operations in async context (required for Playwright integration)
@@ -136,6 +139,7 @@ def live_server_url(live_server, settings):
         settings.PRETIX_WIDGET_VITE = True
 
     return live_server.url
+
 
 # ============================================================================
 # Test Data Fixtures - Organizers and Events
@@ -740,9 +744,9 @@ def event_series(organizer):
     for i in range(15):
         se = SubEvent.objects.create(
             event=event,
-            name=f'Concert Night {i+1}',
-            date_from=base_date + timedelta(days=i*2),
-            date_to=base_date + timedelta(days=i*2, hours=2),
+            name=f'Concert Night {i + 1}',
+            date_from=base_date + timedelta(days=i * 2),
+            date_to=base_date + timedelta(days=i * 2, hours=2),
             active=True,
         )
         subevents.append(se)
@@ -750,7 +754,7 @@ def event_series(organizer):
         # Each subevent needs its own quota
         quota = Quota.objects.create(
             event=event,
-            name=f'Concert {i+1} Quota',
+            name=f'Concert {i + 1} Quota',
             size=100,
             subevent=se,
         )
@@ -1035,10 +1039,12 @@ def item_not_yet_available(event):
 @scopes_disabled()
 def item_with_picture(event):
     """Create an item with a product picture."""
-    from pretix.base.models import ItemCategory
-    from django.core.files.uploadedfile import SimpleUploadedFile
     import io
+
+    from django.core.files.uploadedfile import SimpleUploadedFile
     from PIL import Image as PILImage
+
+    from pretix.base.models import ItemCategory
 
     category = ItemCategory.objects.create(
         event=event,
@@ -1113,8 +1119,9 @@ def _register_widget_test_view():
     set_content, which causes CORS issues.
     """
     from django.http import HttpResponse
-    from django.views import View
     from django.urls import path
+    from django.views import View
+
     from pretix.multidomain import maindomain_urlconf as urls
 
     class WidgetTestView(View):
