@@ -18,7 +18,7 @@
     "doc": "doc"
   },
   "scripts": {
-    "dev": "vite",
+    "dev:control": "vite",
     "dev:widget": "vite src/pretix/static/pretixpresale/widget",
     "build": "npm run build:control -s && npm run build:widget -s",
     "build:control": "vite build",
