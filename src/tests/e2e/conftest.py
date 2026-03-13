@@ -1205,7 +1205,7 @@ def _register_widget_test_view():
     <link rel="stylesheet" type="text/css" href="{widget_css}" crossorigin>
 </head>
 <body>
-    <pretix-button event="{event_url}"{extra_attrs}>{button_text}</pretix-button>
+    <pretix-button event="{event_url}"{extra_attrs} skip-ssl-check>{button_text}</pretix-button>
     {script_tag}
 </body>
 </html>"""
