@@ -9,5 +9,5 @@ Please do never give this code to another person. Our support team will never as
 If this code was not requested by you, please contact us immediately.
 
 Best regards,
-Your pretix team
+Your {{ instance }} team
 {% endblocktrans %}

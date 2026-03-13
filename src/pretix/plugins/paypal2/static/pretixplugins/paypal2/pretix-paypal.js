@@ -38,7 +38,7 @@ var pretixpaypal = {
         credit: gettext('PayPal Credit'),
         card: gettext('Credit Card'),
         paylater: gettext('PayPal Pay Later'),
-        ideal: gettext('iDEAL'),
+        ideal: gettext('iDEAL | Wero'),
         sepa: gettext('SEPA Direct Debit'),
         bancontact: gettext('Bancontact'),
         giropay: gettext('giropay'),

@@ -12,6 +12,9 @@
     <meta charset="utf-8">
     <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
     {% block custom_header %}{% endblock %}
+    {% if css_theme %}
+        <link rel="stylesheet" type="text/css" href="{{ css_theme }}" />
+    {% endif %}
 </head>
 <body>
 <div class="container">

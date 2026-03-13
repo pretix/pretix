@@ -896,6 +896,41 @@ def test_order_create_payment_info_optional(token_client, organizer, event, item
 
 
 @pytest.mark.django_db
+def test_order_create_payment_info_valid_object(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+
+    res["payment_info"] = [{"should": "fail"}]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+
+    res['payment_info'] = {
+        'foo': {
+            'bar': [1, 2],
+            'test': False
+        }
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+
+        p = o.payments.first()
+    assert p.provider == "banktransfer"
+    assert p.amount == o.total
+    assert json.loads(p.info) == res['payment_info']
+
+
+@pytest.mark.django_db
 def test_order_create_position_secret_optional(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk

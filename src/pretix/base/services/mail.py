@@ -149,13 +149,13 @@ def prefix_subject(settings_holder, subject, highlight=False):
     return subject
 
 
-def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, LazyI18nString],
+def mail(email: Union[str, Sequence[str]], subject: Union[str, FormattedString], template: Union[str, LazyI18nString],
          context: Dict[str, Any] = None, event: Event = None, locale: str = None, order: Order = None,
          position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
          customer: Customer = None, invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None,
          attach_ical=False, attach_cached_files: Sequence = None, attach_other_files: list=None,
          plain_text_only=False, no_order_links=False, cc: Sequence[str]=None, bcc: Sequence[str]=None,
-         sensitive: bool=False):
+         sensitive: bool=False) -> Optional[OutgoingMail]:
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -335,14 +335,26 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             should_attach_other_files=attach_other_files or [],
             sensitive=sensitive,
         )
+        m._prefetched_objects_cache = {}
         if invoices and not position:
             m.should_attach_invoices.add(*invoices)
+            # Hack: For logging, we'll later make a `should_attach_invoices.all()` call. We can prevent a useless
+            # DB query by filling the cache
+            m._prefetched_objects_cache[m.should_attach_invoices.prefetch_cache_name] = invoices
+        else:
+            m._prefetched_objects_cache[m.should_attach_invoices.prefetch_cache_name] = Invoice.objects.none()
         if attach_cached_files:
+            cf_list = []
             for cf in attach_cached_files:
                 if not isinstance(cf, CachedFile):
-                    m.should_attach_cached_files.add(CachedFile.objects.get(pk=cf))
-                else:
-                    m.should_attach_cached_files.add(cf)
+                    cf = CachedFile.objects.get(pk=cf)
+                m.should_attach_cached_files.add(cf)
+                cf_list.append(cf)
+            # Hack: For logging, we'll later make a `should_attach_cached_files.all()` call. We can prevent a useless
+            # DB query by filling the cache
+            m._prefetched_objects_cache[m.should_attach_cached_files.prefetch_cache_name] = cf_list
+        else:
+            m._prefetched_objects_cache[m.should_attach_cached_files.prefetch_cache_name] = CachedFile.objects.none()
 
         send_task = mail_send_task.si(
             outgoing_mail=m.id
@@ -363,6 +375,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             transaction.on_commit(
                 lambda: chain(*task_chain).apply_async()
             )
+
+    return m
 
 
 class CustomEmail(EmailMultiAlternatives):
@@ -389,7 +403,7 @@ def mail_send_task(self, **kwargs) -> bool:
         # mail_send_task(self, *, outgoing_mail)
         with scopes_disabled():
             mail_send(**kwargs)
-        return
+        return False
     else:
         raise ValueError("Unknown arguments")
 
@@ -408,6 +422,18 @@ def mail_send_task(self, **kwargs) -> bool:
         outgoing_mail.status = OutgoingMail.STATUS_INFLIGHT
         outgoing_mail.inflight_since = now()
         outgoing_mail.save(update_fields=["status", "inflight_since"])
+
+    # Performance optimization, saves database queries later on if we resolve the known relationships
+    if outgoing_mail.event_id:
+        assert outgoing_mail.event.organizer_id == outgoing_mail.organizer.pk
+        outgoing_mail.event.organizer = outgoing_mail.organizer
+    if outgoing_mail.order_id:
+        assert outgoing_mail.order.event_id == outgoing_mail.event_id
+        outgoing_mail.order.event = outgoing_mail.event
+        outgoing_mail.order.organizer = outgoing_mail.organizer
+    if outgoing_mail.orderposition_id:
+        assert outgoing_mail.orderposition.order_id == outgoing_mail.order_id
+        outgoing_mail.orderposition.order = outgoing_mail.order
 
     headers = dict(outgoing_mail.headers)
     headers.setdefault('X-PX-Correlation', str(outgoing_mail.guid))
@@ -443,15 +469,24 @@ def mail_send_task(self, **kwargs) -> bool:
                         content = ct.file.read()
                         args.append((name, content, ct.type))
                         attach_size += len(content)
-                    except Exception:
+                    except Exception as e:
                         # This sometimes fails e.g. with FileNotFoundError. We haven't been able to figure out
                         # why (probably some race condition with ticket cache invalidation?), so retry later.
                         try:
-                            self.retry(max_retries=5, countdown=60)
+                            logger.exception(f'Could not attach tickets to email {outgoing_mail.guid}, will retry')
+                            retry_after = 60
+                            outgoing_mail.error = "Tickets not ready"
+                            outgoing_mail.error_detail = str(e)
+                            outgoing_mail.sent = now()
+                            outgoing_mail.status = OutgoingMail.STATUS_AWAITING_RETRY
+                            outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
+                            outgoing_mail.save(update_fields=["status", "error", "error_detail", "sent", "retry_after",
+                                                              "actual_attachments"])
+                            self.retry(max_retries=5, countdown=retry_after)
                         except MaxRetriesExceededError:
                             # Well then, something is really wrong, let's send it without attachment before we
                             # don't send at all
-                            logger.exception(f'Could not attach tickets to email {outgoing_mail.guid}')
+                            logger.exception(f'Too many retries attaching tickets to email {outgoing_mail.guid}, skip attachment')
                             pass
 
                 if attach_size * 1.37 < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT - 1024 * 1024:

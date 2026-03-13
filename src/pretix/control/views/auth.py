@@ -149,6 +149,8 @@ def login(request):
             return process_login(request, form.user_cache, form.cleaned_data.get('keep_logged_in', False))
     else:
         form = LoginForm(backend=backend, request=request)
+        # Detect redirection loop (usually means cookie not accepted)
+        ctx['possible_cookie_problem'] = request.path in request.headers.get("Referer", "")
     ctx['form'] = form
     ctx['can_register'] = settings.PRETIX_REGISTRATION
     ctx['can_reset'] = settings.PRETIX_PASSWORD_RESET

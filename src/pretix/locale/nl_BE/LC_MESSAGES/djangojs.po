@@ -1,17 +1,18 @@
-# pretix translation file Dutch
-# Copyright (C) 2018 the pretix authors
-# This file is distributed under the same license as the pretix package.
-# Maarten Visscher <mail@maartenvisscher.nl>, 2018.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: 1\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 09:10+0000\n"
-"PO-Revision-Date: 2026-02-19 22:00+0000\n"
+"POT-Creation-Date: 2026-02-20 12:29+0000\n"
+"PO-Revision-Date: 2026-02-21 03:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
-"nl/>\n"
-"Language: nl\n"
+"Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/nl_BE/>\n"
+"Language: nl_BE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -63,7 +64,7 @@ msgstr "iDEAL"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
-msgstr "SEPA-incasso"
+msgstr "Domiciliëring"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
 msgid "Bancontact"
@@ -312,7 +313,7 @@ msgstr "Ticket geblokkeerd"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket not valid at this time"
-msgstr "Ticket is op dit moment niet geldig"
+msgstr "Ticket is op dit tijdstip niet geldig"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Order canceled"
@@ -419,14 +420,12 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
-"Uw aanvraag wordt naar de server verstuurd. Controleer uw internetverbinding "
-"en probeer het opnieuw als dit langer dan een minuut duurt."
+"Uw aanvraag wordt naar de server verstuurd. Als dit langer dan een minuut "
+"duurt, controleer dan uw internetverbinding en probeer het opnieuw."
 
 #: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
-"Als dit langer dan een paar minuten duurt, neem dan alstublieft contact met "
-"ons op."
+msgstr "Als dit langer dan een paar minuten duurt, neem dan contact met ons op."
 
 #: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
@@ -524,7 +523,7 @@ msgstr "Alle volgende voorwaarden (EN)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
 msgid "At least one of the conditions below (OR)"
-msgstr "Ten minste één van de volgende voorwaarden (OF)"
+msgstr "Minstens één van de volgende voorwaarden (OF)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
 msgid "Event start"
@@ -598,7 +597,7 @@ msgstr "Tekstobject (verouderd)"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:911
 msgid "Text box"
-msgstr "Tekstvak"
+msgstr "Tekstveld"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:913
 msgid "Barcode area"
@@ -627,7 +626,7 @@ msgstr "Opslaan mislukt."
 #: pretix/static/pretixcontrol/js/ui/editor.js:1361
 #: pretix/static/pretixcontrol/js/ui/editor.js:1412
 msgid "Error while uploading your PDF file, please try again."
-msgstr "Probleem bij het uploaden van het PDF-bestand. Probeer het opnieuw."
+msgstr "Fout bij het uploaden van het PDF-bestand. Probeer het opnieuw."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1395
 msgid "Do you really want to leave the editor without saving your changes?"
@@ -731,35 +730,35 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"De items in uw winkelwagen zijn niet meer voor u gereserveerd. U kunt uw "
+"De items in uw winkelwagentje zijn niet meer voor u gereserveerd. U kunt uw "
 "bestelling nog afronden, zolang de producten nog beschikbaar zijn."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:49
 msgid "Cart expired"
-msgstr "Winkelwagen verlopen"
+msgstr "Winkelwagentje verlopen"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:58
 #: pretix/static/pretixpresale/js/ui/cart.js:84
 msgid "Your cart is about to expire."
-msgstr "Uw winkelwagen verloopt bijna."
+msgstr "Uw winkelwagentje verloopt bijna."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:62
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "De items in uw winkelwagen zijn nog één minuut voor u gereserveerd."
+msgstr[0] "De items in uw winkelwagentje zijn nog één minuut voor u gereserveerd."
 msgstr[1] ""
-"De items in uw winkelwagen zijn nog {num} minuten voor u gereserveerd."
+"De items in uw winkelwagentje zijn nog {num} minuten voor u gereserveerd."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:83
 msgid "Your cart has expired."
-msgstr "Uw winkelwagen is verlopen."
+msgstr "Uw winkelwagentje is verlopen."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:86
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they're available."
 msgstr ""
-"De items in uw winkelwagen zijn niet meer voor u gereserveerd. U kunt uw "
+"De items in uw winkelwagentje zijn niet meer voor u gereserveerd. U kunt uw "
 "bestelling nog afronden, zolang de producten nog beschikbaar zijn."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:87
@@ -793,17 +792,17 @@ msgstr "Google Pay"
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Quantity"
-msgstr "Aantal"
+msgstr "Hoeveelheid"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr "Verlaag aantal"
+msgstr "Hoeveelheid verminderen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr "Verhoog aantal"
+msgstr "Hoeveelheid verhogen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
@@ -835,7 +834,7 @@ msgstr "Nieuwe prijs: %s"
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "Select"
-msgstr "Selecteer"
+msgstr "Selecteren"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 #, javascript-format
@@ -970,7 +969,8 @@ msgstr "Afrekenen"
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr "De winkelwagen kon niet aangemaakt worden. Probeer het later opnieuw."
+msgstr ""
+"Het winkelwagentje kon niet aangemaakt worden. Probeer het later opnieuw"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"
@@ -978,7 +978,7 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
-"Uw winkelwagen kon niet worden aangemaakt omdat er op dit moment te veel "
+"Uw winkelwagentje kon niet worden aangemaakt omdat er op dit moment te veel "
 "gebruikers actief zijn in deze ticketwinkel. Klik op \"Doorgaan\" om opnieuw "
 "te proberen in een nieuw tabblad."
 
@@ -993,8 +993,8 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
-"U hebt momenteel een actieve winkelwagen voor dit evenement. Als u meer "
-"producten selecteert, worden deze toegevoegd aan uw bestaande winkelwagen."
+"U hebt momenteel een actief winkelwagentje voor dit evenement. Als u meer "
+"producten selecteert, worden deze toegevoegd aan uw bestaande winkelwagentje."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
 msgctxt "widget"
@@ -1024,12 +1024,12 @@ msgstr "Sluiten"
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgctxt "widget"
 msgid "Close checkout"
-msgstr "Afrekenen sluiten"
+msgstr "Afrekenen afsluiten"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
-msgstr "U kunt deze actie niet annuleren. Wacht tot het laden is voltooid."
+msgstr "U kunt deze actie niet annuleren. Wacht tot het laden voltooid is."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
@@ -1104,31 +1104,31 @@ msgstr "Meer laden"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "Mo"
-msgstr "Ma"
+msgstr "ma"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:79
 msgid "Tu"
-msgstr "Di"
+msgstr "di"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:80
 msgid "We"
-msgstr "Wo"
+msgstr "wo"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
 msgid "Th"
-msgstr "Do"
+msgstr "do"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
 msgid "Fr"
-msgstr "Vr"
+msgstr "vr"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
 msgid "Sa"
-msgstr "Za"
+msgstr "za"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:84
 msgid "Su"
-msgstr "Zo"
+msgstr "zo"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
 msgid "Monday"
@@ -1205,76 +1205,3 @@ msgstr "november"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "december"
-
-#~ msgid "Time zone:"
-#~ msgstr "Tijdzone:"
-
-#~ msgid ""
-#~ "Your color has bad contrast for text on white background, please choose a "
-#~ "darker shade."
-#~ msgstr ""
-#~ "Uw kleur heeft een slecht contrast voor tekst op een witte achtergrond, "
-#~ "kies een donkerdere kleur."
-
-#~ msgid "Please enter a quantity for one of the ticket types."
-#~ msgstr "Voer een hoeveelheid voor een van de producten in."
-
-#~ msgctxt "widget"
-#~ msgid "See variations"
-#~ msgstr "Zie variaties"
-
-#~ msgid "Lead Scan QR"
-#~ msgstr "QR-code voor lead-scanning"
-
-#~ msgid "Invalid product"
-#~ msgstr "Ongeldig product"
-
-#~ msgid "Invalid ticket"
-#~ msgstr "Ongeldig ticket"
-
-#, fuzzy
-#~ msgid "Check-in result"
-#~ msgstr "QR-code voor check-in"
-
-#, fuzzy
-#~ msgid "day"
-#~ msgstr "Mei"
-
-#, fuzzy
-#~ msgid "week"
-#~ msgstr "Volgende week"
-
-#, fuzzy
-#~ msgid "on"
-#~ msgstr "Geen"
-
-#, fuzzy
-#~ msgid "months"
-#~ msgstr "Volgende maand"
-
-#, fuzzy
-#~ msgid "month"
-#~ msgstr "Volgende maand"
-
-#, fuzzy
-#~ msgid "the"
-#~ msgstr "Andere"
-
-#~ msgctxt "widget"
-#~ msgid ""
-#~ "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
-#~ "ticketing powered by pretix</a>"
-#~ msgstr ""
-#~ "<a href=\"https://pretix.eu\" target=\"_blank\" "
-#~ "rel=\"noopener\">ticketsysteem mogelijk gemaakt door pretix</a>"
-
-#~ msgid ""
-#~ "Your request has been queued on the server and will now be processed. If "
-#~ "this takes longer than two minutes, please contact us or go back in your "
-#~ "browser and try again."
-#~ msgstr ""
-#~ "Uw aanvraag wordt in behandeling genomen op de server. Als dit langer dan "
-#~ "twee minuten duurt, neem contact met ons op of probeer opnieuw."
-
-#~ msgid "QR Code"
-#~ msgstr "QR-code"

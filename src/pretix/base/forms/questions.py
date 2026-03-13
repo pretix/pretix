@@ -1415,6 +1415,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                     if not data.get(r):
                         raise ValidationError({r: _("This field is required for the selected type of invoice transmission.")})
 
+                transmission_type.validate_invoice_address_data(data)
                 self.instance.transmission_type = transmission_type.identifier
                 self.instance.transmission_info = transmission_type.form_data_to_transmission_info(data)
             elif transmission_type.is_exclusive(self.event, data.get("country"), data.get("is_business")):

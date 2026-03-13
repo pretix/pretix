@@ -265,6 +265,7 @@ Objekt-IDs
 Offline-Scan
 OK
 Online-Banking
+Online-Banking-Nutzer
 Onlinebanking
 Onlinebanking-Zugangsdaten
 Open
@@ -539,6 +540,8 @@ WeChat-Zahlung
 Weiterleitungs-URIs
 Weiterleitungs-URL
 Weiterleitungs-URLs
+WERO
+WERO-App
 WhatsApp
 Widget
 Widget-Code

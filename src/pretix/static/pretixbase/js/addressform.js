@@ -173,8 +173,8 @@ $(function () {
             if (!dependents.transmission_peppol_participant_id.val()) {
                 const fill_peppol_id = function () {
                     const vatId = dependents.vat_id.val();
-                    if (vatId && vatId.startsWith("BE") && dependents.transmission_type.val() === "peppol" && autofill_peppol_id) {
-                        dependents.transmission_peppol_participant_id.val("0201:" + vatId.substring(2))
+                    if (vatId && vatId.startsWith("BE") && dependents.transmission_type.val() === "peppol") {
+                        dependents.transmission_peppol_participant_id.val("0208:" + vatId.substring(2))
                     }
                 }
                 dependents.vat_id.add(dependents.transmission_type).on("change", fill_peppol_id);

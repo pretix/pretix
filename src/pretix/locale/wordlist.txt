@@ -187,6 +187,7 @@ webhooks
 webserver
 Wechat
 WeChat
+WERO
 WhatsApp
 whitespace
 xlsx

@@ -51,6 +51,7 @@ from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
+from pretix.base.invoicing.pdf import InvoiceNotReadyException
 from pretix.base.invoicing.transmission import (
     get_transmission_types, transmission_providers,
 )
@@ -504,7 +505,7 @@ def generate_invoice(order: Order, trigger_pdf=True):
     return invoice
 
 
-@app.task(base=TransactionAwareTask)
+@app.task(base=TransactionAwareTask, throws=(InvoiceNotReadyException,))
 def invoice_pdf_task(invoice: int):
     with scopes_disabled():
         i = Invoice.objects.get(pk=invoice)

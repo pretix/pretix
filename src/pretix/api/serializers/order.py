@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import json
 import logging
 import os
 from collections import Counter, defaultdict
@@ -636,6 +637,14 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         return entry
 
 
+class OrganizerOrderPositionSerializer(OrderPositionSerializer):
+    event = SlugRelatedField(slug_field='slug', read_only=True)
+
+    class Meta(OrderPositionSerializer.Meta):
+        fields = OrderPositionSerializer.Meta.fields + ('event',)
+        read_only_fields = OrderPositionSerializer.Meta.read_only_fields + ('event',)
+
+
 class RequireAttentionField(serializers.Field):
     def to_representation(self, instance: OrderPosition):
         return instance.require_checkin_attention
@@ -1214,6 +1223,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         if pp not in self.context['event'].get_payment_providers():
             raise ValidationError('The given payment provider is not known.')
         return pp
+
+    def validate_payment_info(self, info):
+        if info:
+            try:
+                obj = json.loads(info)
+            except ValueError:
+                raise ValidationError('payment_info must be valid JSON.')
+
+            if not isinstance(obj, dict):
+                # only objects are allowed
+                raise ValidationError('payment_info must be a JSON object.')
+        return info
 
     def validate_expires(self, expires):
         if expires < now():

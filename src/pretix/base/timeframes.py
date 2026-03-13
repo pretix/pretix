@@ -423,7 +423,7 @@ def resolve_timeframe_to_dates_inclusive(ref_dt, frame, timezone) -> Tuple[Optio
     raise ValueError(f"Invalid timeframe '{frame}'")
 
 
-def resolve_timeframe_to_datetime_start_inclusive_end_exclusive(ref_dt, frame, timezone) -> Tuple[Optional[date], Optional[date]]:
+def resolve_timeframe_to_datetime_start_inclusive_end_exclusive(ref_dt, frame, timezone) -> Tuple[Optional[datetime], Optional[datetime]]:
     """
     Given a serialized timeframe, evaluate it relative to `ref_dt` and return a tuple of datetimes
     where the first element ist the first possible datetime within the timeframe and the second
