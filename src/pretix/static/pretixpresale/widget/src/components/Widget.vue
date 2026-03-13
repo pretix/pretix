@@ -40,7 +40,7 @@ onMounted(() => {
 	emit('mounted') // TODO where does this go?
 })
 
-watch(() => store.view, (newValue, oldValue) => {
+watch(() => store.view, (_newValue, oldValue) => {
 	if (oldValue && wrapper.value) {
 		// always make sure the widget is scrolled to the top
 		// as we only check top, we do not need to wait for a redraw

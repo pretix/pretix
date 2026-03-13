@@ -60,5 +60,5 @@ onUnmounted(() => {
 })
 </script>
 <template lang="pug">
-input.form-control(ref="input", :id="id", :required="required")
+input.form-control(:id="id", ref="input", :required="required")
 </template>

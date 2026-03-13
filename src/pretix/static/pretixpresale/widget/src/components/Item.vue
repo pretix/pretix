@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, ref, watch, onMounted, nextTick } from 'vue'
+import { computed, inject, ref, watch, onMounted } from 'vue'
 import type { Item, Category } from '~/types'
 import { StoreKey } from '~/sharedStore'
 import { STRINGS, interpolate } from '~/i18n'
