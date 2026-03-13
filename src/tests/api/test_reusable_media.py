@@ -252,6 +252,7 @@ def test_medium_create(token_client, organizer, giftcard):
         assert m.created > now() - timedelta(minutes=10)
         assert m.updated > now() - timedelta(minutes=10)
 
+
 @pytest.mark.django_db
 def test_medium_create_linked_orderposition(token_client, organizer, organizer2, event, medium):
     with scopes_disabled():
@@ -332,8 +333,9 @@ def test_medium_create_linked_orderposition(token_client, organizer, organizer2,
         '/api/v1/organizers/{}/reusablemedia/{}/'.format(organizer.slug, resp.data['id'])
     )
     assert resp.status_code == 200
-    assert resp.data['linked_orderposition'] == None
+    assert resp.data['linked_orderposition'] is None
     assert resp.data['linked_orderpositions'] == [op.pk, op2.pk]
+
 
 @pytest.mark.django_db
 def test_medium_foreignkeyval(token_client, organizer, giftcard2):
