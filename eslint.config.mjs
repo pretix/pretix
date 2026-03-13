@@ -83,5 +83,26 @@ export default defineConfig([
 			'@stylistic/generator-star-spacing': 0,
 			'@stylistic/yield-star-spacing': ['error', 'after'],
 		},
-	}
+	},
+	{
+		files: [
+			'src/pretix/static/pretixcontrol/js/ui/checkinrules/**/*.vue',
+			'src/pretix/plugins/webcheckin/**/*.vue',
+		],
+		languageOptions: {
+			globals: {
+				moment: 'readonly',
+			},
+		},
+	},
+	{
+		files: [
+			'src/pretix/static/pretixpresale/widget/**/*.{ts,vue}',
+		],
+		languageOptions: {
+			globals: {
+				LANG: 'readonly',
+			},
+		},
+	},
 ])

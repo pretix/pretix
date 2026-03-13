@@ -81,7 +81,7 @@ function calcItemsSelected () {
 	isItemsSelected.value = hasChecked || hasQuantity
 }
 
-function focusVoucherField () {
+function _focusVoucherField () {
 	voucherinput.value?.focus()
 }
 
