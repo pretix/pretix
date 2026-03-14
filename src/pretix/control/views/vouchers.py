@@ -309,7 +309,20 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
                     k: form.cleaned_data.get(k) for k in form.changed_data
                 }
             )
-        return super().form_valid(form)
+        ret = super().form_valid(form)
+
+        # Remove any cart positions that are no longer valid for this voucher
+        invalid_carts = [
+            cp.pk
+            for cp in CartPosition.objects.filter(voucher=self.object).select_related('item', 'variation')
+            if not self.object.applies_to(cp.item, cp.variation)
+        ]
+
+        if invalid_carts:
+            CartPosition.objects.filter(addon_to__pk__in=invalid_carts).delete()
+            CartPosition.objects.filter(pk__in=invalid_carts).delete()
+
+        return ret
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):

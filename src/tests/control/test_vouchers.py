@@ -43,8 +43,8 @@ from django_scopes import scopes_disabled
 from tests.base import SoupTestMixin, extract_form_fields
 
 from pretix.base.models import (
-    Event, Item, ItemVariation, Order, OrderPosition, Organizer, Quota, Team,
-    User, Voucher,
+    CartPosition, Event, Item, ItemVariation, Order, OrderPosition, Organizer,
+    Quota, Team, User, Voucher,
 )
 
 
@@ -733,6 +733,70 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
             'block_quota': 'on',
             'subevent': se1.pk
         }, expected_failure=True)
+
+    def test_change_voucher_removes_invalid_cart_positions(self):
+        with scopes_disabled():
+            v = self.event.vouchers.create(item=self.ticket)
+
+            cp_valid = CartPosition.objects.create(
+                event=self.event, cart_id='test-session', item=self.ticket,
+                price=23, expires=now() + datetime.timedelta(hours=1), voucher=v,
+            )
+
+            cp_invalid = CartPosition.objects.create(
+                event=self.event, cart_id='test-session', item=self.shirt,
+                variation=self.shirt_red, price=14,
+                expires=now() + datetime.timedelta(hours=1), voucher=v,
+            )
+
+        self._change_voucher(v, {
+            'itemvar': '%d' % self.ticket.pk,
+        })
+
+        with scopes_disabled():
+            assert CartPosition.objects.filter(pk=cp_valid.pk).exists()
+            assert not CartPosition.objects.filter(pk=cp_invalid.pk).exists()
+
+    def test_change_voucher_keeps_valid_cart_positions(self):
+        with scopes_disabled():
+            v = self.event.vouchers.create(quota=self.quota_tickets)
+
+            cp = CartPosition.objects.create(
+                event=self.event, cart_id='test-session', item=self.ticket,
+                price=23, expires=now() + datetime.timedelta(hours=1), voucher=v,
+            )
+
+        self._change_voucher(v, {
+            'itemvar': 'q-%d' % self.quota_tickets.pk,
+        })
+
+        with scopes_disabled():
+            assert CartPosition.objects.filter(pk=cp.pk).exists()
+
+    def test_change_voucher_removes_invalid_cart_positions_with_addons(self):
+        with scopes_disabled():
+            addon_item = Item.objects.create(event=self.event, name='Addon', default_price=0)
+            v = self.event.vouchers.create(item=self.ticket)
+
+            cp_invalid = CartPosition.objects.create(
+                event=self.event, cart_id='test-session', item=self.shirt,
+                variation=self.shirt_red, price=14,
+                expires=now() + datetime.timedelta(hours=1), voucher=v,
+            )
+
+            cp_addon = CartPosition.objects.create(
+                event=self.event, cart_id='test-session', item=addon_item,
+                price=0, expires=now() + datetime.timedelta(hours=1),
+                addon_to=cp_invalid,
+            )
+
+        self._change_voucher(v, {
+            'itemvar': '%d' % self.ticket.pk,
+        })
+
+        with scopes_disabled():
+            assert not CartPosition.objects.filter(pk=cp_invalid.pk).exists()
+            assert not CartPosition.objects.filter(pk=cp_addon.pk).exists()
 
     def test_order_warning_deduplication(self):
         with scopes_disabled():
