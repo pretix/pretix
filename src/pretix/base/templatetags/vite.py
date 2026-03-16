@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 register = template.Library()
 LOGGER = logging.getLogger(__name__)
 _MANIFEST = {}
-MANIFEST_PATH = settings.STATIC_ROOT + "pretalx-manifest.json"
+MANIFEST_PATH = settings.STATIC_ROOT + "/vite/control/.vite/manifest.json"
 
 # We're building the manifest if we don't have a dev server running AND if we're
 # not currently running `rebuild` (which creates the manifest in the first place).

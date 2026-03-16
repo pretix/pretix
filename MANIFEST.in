@@ -48,3 +48,8 @@ recursive-include src Makefile
 recursive-exclude doc *
 recursive-exclude deployment *
 recursive-exclude res *
+
+include package.json
+include package-lock.json
+include tsconfig.json
+include vite.config.ts

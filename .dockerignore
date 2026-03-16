@@ -1,5 +1,6 @@
 doc/
 env/
+node_modules/
 res/
 local/
 .git/

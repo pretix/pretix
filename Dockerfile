@@ -20,11 +20,11 @@ RUN apt-get update && \
             supervisor \
             libmaxminddb0 \
             libmaxminddb-dev \
-            zlib1g-dev \
-            nodejs  \
-            npm && \
+            zlib1g-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash - && \
+    apt-get install -y nodejs && \
     dpkg-reconfigure locales &&  \
     locale-gen C.UTF-8 &&  \
     /usr/sbin/update-locale LANG=C.UTF-8 && \
@@ -49,6 +49,10 @@ COPY deployment/docker/production_settings.py /pretix/src/production_settings.py
 COPY pyproject.toml /pretix/pyproject.toml
 COPY _build /pretix/_build
 COPY src /pretix/src
+COPY package.json /pretix/package.json
+COPY package-lock.json /pretix/package-lock.json
+COPY tsconfig.json /pretix/tsconfig.json
+COPY vite.config.ts /pretix/vite.config.ts
 
 RUN pip3 install -U \
         pip \
