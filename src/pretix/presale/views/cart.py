@@ -848,7 +848,6 @@ class AnswerDownload(EventViewMixin, View):
         resp = FileResponse(
             answer.file,
             filename=filename,
-            as_attachment=True,
             content_type=ftype or 'application/binary'
         )
         return resp
