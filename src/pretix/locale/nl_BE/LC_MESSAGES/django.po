@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-14 22:00+0000\n"
+"PO-Revision-Date: 2026-03-16 09:44+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -28269,12 +28269,12 @@ msgstr ""
 #: pretix/control/views/auth.py:271
 #, python-brace-format
 msgid "You are now part of the team \"{}\"."
-msgstr ""
+msgstr "U bent nu lid van het team \"{}\"."
 
 #: pretix/control/views/auth.py:302
 #, python-brace-format
 msgid "Welcome to pretix! You are now part of the team \"{}\"."
-msgstr ""
+msgstr "Welkom bij pretix! U bent nu lid van het team \"{}\"."
 
 #: pretix/control/views/auth.py:360
 msgid ""
@@ -28282,12 +28282,17 @@ msgid ""
 "email containing further instructions. Please note that we will send at most "
 "one email every 24 hours."
 msgstr ""
+"Als het adres gekoppeld is aan een geldig account, zullen we u een e-mail "
+"sturen met verdere instructies. Let op: we sturen ten hoogste één e-mail per "
+"24 uur."
 
 #: pretix/control/views/auth.py:363
 msgid ""
 "If the address is registered to valid account, then we have sent you an "
 "email containing further instructions."
 msgstr ""
+"Als het adres gekoppeld is aan een geldig account, zullen we u een e-mail "
+"sturen met verdere instructies."
 
 #: pretix/control/views/auth.py:383
 msgid ""
@@ -28295,42 +28300,48 @@ msgid ""
 "address into your address bar. Please note that the link is only valid for "
 "three days and that the link can only be used once."
 msgstr ""
+"U hebt op een ongeldige link geklikt. Controleer of u het volledige adres in "
+"uw adresbalk hebt gekopieerd. Let op: de link is maar drie dagen geldig en "
+"kan maar één keer gebruikt worden."
 
 #: pretix/control/views/auth.py:386
 msgid "We were unable to find the user you requested a new password for."
 msgstr ""
+"De gebruiker waarvoor u een nieuw wachtwoord wilt aanvragen, is niet bekend."
 
 #: pretix/control/views/auth.py:424
 msgid "You can now login using your new password."
-msgstr ""
+msgstr "U kunt nu inloggen met uw nieuwe wachtwoord."
 
 #: pretix/control/views/auth.py:476
 msgid "Please try again."
-msgstr ""
+msgstr "Probeer het opnieuw."
 
 #: pretix/control/views/auth.py:542
 msgid "A recovery code for two-factor authentification was used to log in."
 msgstr ""
+"Er is een herstelcode voor twee-factor-authenticatie gebruikt om in te "
+"loggen."
 
 #: pretix/control/views/auth.py:558
 msgid "Invalid code, please try again."
-msgstr ""
+msgstr "Ongeldige code, probeer het opnieuw."
 
 #: pretix/control/views/checkin.py:281
 msgid "The selected check-ins have been reverted."
-msgstr ""
+msgstr "De gekozen check-ins zijn teruggedraaid."
 
 #: pretix/control/views/checkin.py:283
 msgid "The selected tickets have been marked as checked out."
-msgstr ""
+msgstr "De geselecteerde tickets zijn aangemerkt als uitgecheckt."
 
 #: pretix/control/views/checkin.py:285
 msgid "The selected tickets have been marked as checked in."
-msgstr ""
+msgstr "De geselecteerde tickets zijn aangemerkt als ingecheckt."
 
 #: pretix/control/views/checkin.py:374
 msgid "The new check-in list has been created."
-msgstr ""
+msgstr "De nieuwe check-in-lijst is aangemaakt."
 
 #: pretix/control/views/checkin.py:381 pretix/control/views/checkin.py:441
 #: pretix/control/views/discounts.py:134 pretix/control/views/discounts.py:182
@@ -28356,14 +28367,16 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
 msgstr ""
+"De wijzigingen konden niet worden opgeslagen. Zie hieronder voor meer "
+"informatie."
 
 #: pretix/control/views/checkin.py:420 pretix/control/views/checkin.py:457
 msgid "The requested list does not exist."
-msgstr ""
+msgstr "De gevraagde lijst bestaat niet."
 
 #: pretix/control/views/checkin.py:466
 msgid "The selected list has been deleted."
-msgstr ""
+msgstr "De gekozen lijst is verwijderd."
 
 #: pretix/control/views/dashboards.py:114
 msgid "Attendees (ordered)"
@@ -28376,71 +28389,73 @@ msgstr "Deelnemers (betaald)"
 #: pretix/control/views/dashboards.py:136
 #, python-brace-format
 msgid "Total revenue ({currency})"
-msgstr ""
+msgstr "Totale omzet ({currency})"
 
 #: pretix/control/views/dashboards.py:147
 msgid "Active products"
-msgstr ""
+msgstr "Actieve producten"
 
 #: pretix/control/views/dashboards.py:212
 msgid "available to give to people on waiting list"
-msgstr ""
+msgstr "beschikbaar om aan mensen op de wachtlijst te geven"
 
 #: pretix/control/views/dashboards.py:222
 msgid "total waiting list length"
-msgstr ""
+msgstr "lengte van de wachtlijst"
 
 #: pretix/control/views/dashboards.py:251
 #, python-brace-format
 msgid "{quota} left"
-msgstr ""
+msgstr "{quota} over"
 
 #: pretix/control/views/dashboards.py:271
 msgid "Your ticket shop is"
-msgstr ""
+msgstr "Uw ticketwinkel is"
 
 #: pretix/control/views/dashboards.py:271
 msgid "Click here to change"
-msgstr ""
+msgstr "Klik hier om te wijzigen"
 
 #: pretix/control/views/dashboards.py:272
 msgid "live"
-msgstr ""
+msgstr "live"
 
 #: pretix/control/views/dashboards.py:273
 msgid "live and in test mode"
-msgstr ""
+msgstr "live en in testmodus"
 
 #: pretix/control/views/dashboards.py:274
 msgid "not yet public"
-msgstr ""
+msgstr "nog niet openbaar"
 
 #: pretix/control/views/dashboards.py:275
 msgid "in private test mode"
-msgstr ""
+msgstr "in privétestmodus"
 
 #: pretix/control/views/dashboards.py:303
 #, python-brace-format
 msgid "Present – {list}"
-msgstr ""
+msgstr "Aanwezig - {list}"
 
 #: pretix/control/views/dashboards.py:321
 msgid "Welcome to pretix!"
-msgstr ""
+msgstr "Welkom bij pretix!"
 
 #: pretix/control/views/dashboards.py:327
 msgid "Get started with our setup tool"
-msgstr ""
+msgstr "Ga aan de slag met onze instelhulp"
 
 #: pretix/control/views/dashboards.py:328
 msgid ""
 "To start selling tickets, you need to create products or quotas. The fastest "
 "way to create this is to use our setup tool."
 msgstr ""
+"Om tickets te verkopen, moet u producten en quota aanmaken. De snelste "
+"manier is onze tool voor het opzetten van evenementen."
 
 #: pretix/control/views/dashboards.py:330
 msgid "Set up event"
-msgstr ""
+msgstr "Een evenement aanmaken"
 
 #: pretix/control/views/dashboards.py:539
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:111
@@ -28449,7 +28464,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:80
 #: pretix/presale/views/widget.py:474
 msgid "Sale over"
-msgstr ""
+msgstr "Verkoop afgelopen"
 
 #: pretix/control/views/dashboards.py:541
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:119
@@ -28457,123 +28472,132 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:88
 #: pretix/presale/views/widget.py:485
 msgid "Soon"
-msgstr ""
+msgstr "Binnenkort"
 
 #: pretix/control/views/dashboards.py:566
 #, python-brace-format
 msgid "{num} order"
 msgid_plural "{num} orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{num} bestelling"
+msgstr[1] "{num} bestellingen"
 
 #: pretix/control/views/datasync.py:82 pretix/control/views/datasync.py:113
 msgid "The sync job has been set to run as soon as possible."
 msgstr ""
+"De synchronisatie wordt op het eerstvolgende beschikbare moment uitgevoerd."
 
 #: pretix/control/views/datasync.py:90 pretix/control/views/datasync.py:104
 msgid ""
 "The sync job could not be found. It may have been processed in the meantime."
 msgstr ""
+"De synchronisatieopdracht is niet gevonden. Mogelijk is deze inmiddels "
+"verwerkt."
 
 #: pretix/control/views/datasync.py:93 pretix/control/views/datasync.py:107
 msgid "The sync job is already in progress."
-msgstr ""
+msgstr "De synchronisatieopdracht loopt al."
 
 #: pretix/control/views/datasync.py:96
 msgid "The sync job has been canceled."
-msgstr ""
+msgstr "De synchronisatieopdracht is geannuleerd."
 
 #: pretix/control/views/datasync.py:144
 msgid "The selected jobs have been set to run as soon as possible."
 msgstr ""
+"De geselecteerde opdrachten worden op het eerst mogelijke moment uitgevoerd."
 
 #: pretix/control/views/datasync.py:147
 msgid "The selected jobs have been canceled."
-msgstr ""
+msgstr "De geselecteerde opdrachten zijn geannuleerd."
 
 #: pretix/control/views/discounts.py:67 pretix/control/views/discounts.py:109
 #: pretix/control/views/discounts.py:214
 msgid "The requested discount does not exist."
-msgstr ""
+msgstr "De gevraagde korting bestaat niet."
 
 #: pretix/control/views/discounts.py:77
 msgid "The selected discount has been deleted."
-msgstr ""
+msgstr "De geselecteerde korting is verwijderd."
 
 #: pretix/control/views/discounts.py:85
 msgid "The selected discount has been deactivated."
-msgstr ""
+msgstr "De geselecteerde korting is uitgeschakeld."
 
 #: pretix/control/views/discounts.py:176
 msgid "The new discount has been created."
-msgstr ""
+msgstr "De nieuwe korting is aangemaakt."
 
 #: pretix/control/views/discounts.py:227
 msgid "The order of discounts has been updated."
-msgstr ""
+msgstr "De volgorde van kortingen is bijgewerkt."
 
 #: pretix/control/views/discounts.py:260 pretix/control/views/item.py:192
 #: pretix/control/views/item.py:404 pretix/control/views/item.py:538
 #: pretix/control/views/organizer.py:2595
 #: pretix/control/views/organizer.py:3656
 msgid "Some of the provided object ids are invalid."
-msgstr ""
+msgstr "Sommige van de opgegeven object-ID's zijn ongeldig."
 
 #: pretix/control/views/discounts.py:263
 msgid "Not all discounts have been selected."
-msgstr ""
+msgstr "Niet alle kortingen zijn geselecteerd."
 
 #: pretix/control/views/event.py:453
 msgid ""
 "You do not have sufficient permission to enable plugins that need to be "
 "enabled for the entire organizer account."
 msgstr ""
+"U beschikt niet over voldoende rechten om plug-ins te activeren die voor het "
+"hele organisatorenaccount ingeschakeld moeten zijn."
 
 #: pretix/control/views/event.py:472 pretix/control/views/organizer.py:714
 #, python-brace-format
 msgid "The plugin {} is now active, you can configure it here:"
-msgstr ""
+msgstr "De plug-in {} is nu geactiveerd. U kunt hem hier configureren:"
 
 #: pretix/control/views/event.py:481 pretix/control/views/organizer.py:723
 #, python-brace-format
 msgid "The plugin {} is now active."
-msgstr ""
+msgstr "De plug-in {} is nu geactiveerd."
 
 #: pretix/control/views/event.py:546
 msgid ""
 "This payment provider does not exist or the respective plugin is disabled."
 msgstr ""
+"Deze betaalwijze bestaat niet of de bijbehorende plug-in is uitgeschakeld."
 
 #: pretix/control/views/event.py:838 pretix/control/views/organizer.py:357
 #: pretix/control/views/vouchers.py:561
 msgid "invalid item"
-msgstr ""
+msgstr "ongeldig item"
 
 #: pretix/control/views/event.py:925
 #, python-format
 msgid "Your order: %(code)s"
-msgstr ""
+msgstr "Uw bestelling: %(code)s"
 
 #: pretix/control/views/event.py:934
 msgid "Unknown email renderer."
-msgstr ""
+msgstr "Onbekende e-mailrenderer."
 
 #: pretix/control/views/event.py:950 pretix/control/views/orders.py:684
 #: pretix/presale/views/order.py:1162 pretix/presale/views/order.py:1169
 msgid "You requested an invalid ticket output type."
-msgstr ""
+msgstr "U hebt een ongeldig uitvoertype geselecteerd."
 
 #: pretix/control/views/event.py:1098
 msgid "Your shop is live now!"
-msgstr ""
+msgstr "Uw winkel is nu live!"
 
 #: pretix/control/views/event.py:1106
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
 msgstr ""
+"We hebben uw winkel offline gehaald. U kunt hem opnieuw inschakelen wanneer "
+"u dit wilt!"
 
 #: pretix/control/views/event.py:1114
 msgid "Your shop is now in test mode!"
-msgstr ""
+msgstr "Uw winkel staat nu in testmodus!"
 
 #: pretix/control/views/event.py:1131
 msgid ""
