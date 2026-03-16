@@ -1378,7 +1378,7 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
             return redirect(self.get_order_url())
 
         try:
-            resp = FileResponse(
+            return FileResponse(
                 invoice.file.file,
                 filename='{}.pdf'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", invoice.number)),
                 content_type='application/pdf'
@@ -1386,7 +1386,6 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
         except FileNotFoundError:
             invoice_pdf_task.apply(args=(invoice.pk,))
             return self.get(request, *args, **kwargs)
-        return resp
 
 
 class OrderChangeMixin:
