@@ -1315,13 +1315,6 @@ class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet
             as_attachment=True,
             content_type=ftype or 'application/binary'
         )
-        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
-            self.request.event.slug.upper(),
-            pos.order.code,
-            pos.positionid,
-            os.path.basename(answer.file.name).split('.', 1)[1]
-        )
-        return resp
 
     @action(detail=True, url_name="printlog", url_path="printlog", methods=["POST"])
     def printlog(self, request, **kwargs):
