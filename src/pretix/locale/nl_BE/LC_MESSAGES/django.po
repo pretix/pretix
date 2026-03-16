@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-16 09:46+0000\n"
+"PO-Revision-Date: 2026-03-16 18:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -28635,59 +28635,63 @@ msgid ""
 "Specifically, the following plugins still contain data depends on this "
 "event: {plugin_names}"
 msgstr ""
+"Met name de volgende plug-ins hebben nog gegevens van dit evenement nodig: "
+"{plugin_names}"
 
 #: pretix/control/views/event.py:1281 pretix/control/views/orders.py:777
 msgid "The comment has been updated."
-msgstr ""
+msgstr "De opmerking is bijgewerkt."
 
 #: pretix/control/views/event.py:1283 pretix/control/views/orders.py:779
 msgid "Could not update the comment."
-msgstr ""
+msgstr "De opmerking kon niet opgeslagen worden."
 
 #: pretix/control/views/event.py:1311 pretix/control/views/main.py:337
 msgid "VAT"
-msgstr ""
+msgstr "Btw"
 
 #: pretix/control/views/event.py:1347
 msgid "The new tax rule has been created."
-msgstr ""
+msgstr "De nieuwe belastingregel is aangemaakt."
 
 #: pretix/control/views/event.py:1370 pretix/control/views/event.py:1433
 #: pretix/control/views/event.py:1479
 msgid "The requested tax rule does not exist."
-msgstr ""
+msgstr "De gevraagde belastingregel bestaat niet."
 
 #: pretix/control/views/event.py:1488
 msgid "The selected tax rule has been deleted."
-msgstr ""
+msgstr "De gekozen belastingregel is verwijderd."
 
 #: pretix/control/views/event.py:1490
 msgid "The selected tax rule can not be deleted."
-msgstr ""
+msgstr "De gekozen belastingregel kan niet verwijderd worden."
 
 #: pretix/control/views/event.py:1541
 msgid "Your event is not empty, you need to set it up manually."
-msgstr ""
+msgstr "Uw evenement is niet leeg, u moet het handmatig opzetten."
 
 #: pretix/control/views/event.py:1676
 msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
 msgstr ""
+"Uw wijzigingen zijn opgeslagen. U kunt nu verdergaan met het bekijken van uw "
+"instellingen of uw evenement live zetten om de verkoop te starten!"
 
 #: pretix/control/views/event.py:1697
 msgid "Regular ticket"
-msgstr ""
+msgstr "Standaardticket"
 
 #: pretix/control/views/event.py:1702
 msgid "Reduced ticket"
-msgstr ""
+msgstr "Ticket met korting"
 
 #: pretix/control/views/global_settings.py:69
 #: pretix/control/views/global_settings.py:92
 #: pretix/control/views/global_settings.py:168
 msgid "Your changes have not been saved, see below for errors."
-msgstr ""
+msgstr "Uw wijzigingen zijn niet opgeslagen, zie onder voor details."
 
 #: pretix/control/views/global_settings.py:208
 msgid ""
@@ -28696,6 +28700,9 @@ msgid ""
 "others, you must either use pretix under AGPLv3 terms or obtain a pretix "
 "Enterprise license."
 msgstr ""
+"U schendt de licentievoorwaarden. Als u de functies van pretix aan derden "
+"aanbiedt of twijfelt, moet u pretix gebruiken onder de AGPLv3-voorwaarden of "
+"een Enterprise-licentie aanschaffen."
 
 #: pretix/control/views/global_settings.py:216
 msgid ""
@@ -28703,18 +28710,26 @@ msgid ""
 "license if you install any plugins licensed with strong copyleft, otherwise "
 "you are likely in violation of the license of these plugins."
 msgstr ""
+"U kunt geen gebruik maken van de extra toestemming als u plug-ins met een "
+"strenge copyleft-licentie hebt geïnstalleerd, anders schendt u de "
+"licentievoorwaarden van deze plug-ins."
 
 #: pretix/control/views/global_settings.py:224
 msgid ""
 "If you're using pretix under AGPL license, you need to provide instructions "
 "on how to access the source code."
 msgstr ""
+"Als u pretix onder de AGPL-licentie gebruikt, bent u verplicht om "
+"instructies te tonen hoe de broncode van uw pretix-installatie kan worden "
+"opgevraagd."
 
 #: pretix/control/views/global_settings.py:231
 msgid ""
 "You must not use pretix under AGPL terms if you use pretix Enterprise "
 "plugins."
 msgstr ""
+"U kunt pretix niet onder de AGPL-licentie gebruiken als u pretix Enterprise-"
+"plug-ins gebruikt."
 
 #: pretix/control/views/global_settings.py:238
 msgid ""
@@ -28723,6 +28738,10 @@ msgid ""
 "license terms as pretix (AGPLv3 + additional restrictions). Make sure to "
 "keep it up to date!"
 msgstr ""
+"U moet alle wijzigingen die u in de broncode van Pretix aangebracht hebt, "
+"vrij toegankelijk maken voor alle bezoekers van uw website in de vorm van "
+"broncode, onder dezelfde licentievoorwaarden als die van Pretix (AGPLv3 + "
+"aanvullende beperkingen). Zorg ervoor dat u de broncode up-to-date houdt!"
 
 #: pretix/control/views/global_settings.py:245
 msgid ""
@@ -28730,6 +28749,10 @@ msgid ""
 "visitor of your site in source code form under the same license terms as "
 "pretix (AGPLv3 + additional restrictions). Make sure to keep it up to date!"
 msgstr ""
+"U moet al uw geïnstalleerde plug-ins vrij beschikbaar maken aan elke "
+"bezoeker van uw site, in de vorm van broncode onder dezelfde "
+"licentievoorwaarden als pretix (AGPLv3 + extra beperkingen). Zorg ervoor dat "
+"u de broncode up-to-date houdt!"
 
 #: pretix/control/views/global_settings.py:256
 #, python-brace-format
@@ -28737,6 +28760,9 @@ msgid ""
 "We found the plugin \"{plugin}\" with license \"{license}\" which this tool "
 "does not know about and therefore cannot give any recommendations."
 msgstr ""
+"We hebben de plug-in \"{plugin}\" met licentie \"{license}\" gevonden, "
+"waarover deze licentiecontrole geen informatie heeft en daarom geen "
+"aanbevelingen kan doen."
 
 #: pretix/control/views/global_settings.py:264
 #, python-brace-format
@@ -28744,6 +28770,8 @@ msgid ""
 "You selected that you have no active pretix Enterprise licenses, but we "
 "found the following Enterprise plugin: {plugin}"
 msgstr ""
+"U hebt aangegeven dat u geen actieve pretix Enterprise-licenties hebt, maar "
+"we hebben de volgende pretix Enterprise-plug-in gevonden: {plugin}"
 
 #: pretix/control/views/global_settings.py:271
 #, python-brace-format
@@ -28751,6 +28779,9 @@ msgid ""
 "You selected that you have no copyleft-licensed plugins installed, but we "
 "found the plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
+"U hebt aangegeven dat u geen plug-ins onder copyleft-voorwaarden hebt "
+"geïnstalleerd, maar we hebben de plug-in \"{plugin}\" met de licentie \""
+"{license}\" gevonden."
 
 #: pretix/control/views/global_settings.py:278
 #, python-brace-format
@@ -28758,50 +28789,53 @@ msgid ""
 "You selected that you have no free plugins installed, but we found the "
 "plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
+"U hebt aangegeven dat u geen vrij beschikbare plug-ins hebt geïnstalleerd, "
+"maar we hebben de plug-in \"{plugin}\" onder de licentie \"{license}\" "
+"gevonden."
 
 #: pretix/control/views/item.py:141 pretix/control/views/item.py:1606
 msgid "The requested product does not exist."
-msgstr ""
+msgstr "Het gevraagde product bestaat niet."
 
 #: pretix/control/views/item.py:159
 msgid "The order of items has been updated."
-msgstr ""
+msgstr "De volgorde van items is bijgewerkt."
 
 #: pretix/control/views/item.py:227 pretix/control/views/item.py:262
 #: pretix/control/views/item.py:353
 msgid "The requested product category does not exist."
-msgstr ""
+msgstr "De gevraagde productcategorie bestaat niet."
 
 #: pretix/control/views/item.py:238
 msgid "The selected category has been deleted."
-msgstr ""
+msgstr "De gekozen categorie is verwijderd."
 
 #: pretix/control/views/item.py:323
 msgid "The new category has been created."
-msgstr ""
+msgstr "De nieuwe categorie is aangemaakt."
 
 #: pretix/control/views/item.py:371
 msgid "The order of categories has been updated."
-msgstr ""
+msgstr "De volgorde van categorieën is bijgewerkt."
 
 #: pretix/control/views/item.py:407 pretix/control/views/item.py:541
 #: pretix/control/views/organizer.py:2598
 #: pretix/control/views/organizer.py:3659
 msgid "Not all objects have been selected."
-msgstr ""
+msgstr "Niet alle objecten zijn geselecteerd."
 
 #: pretix/control/views/item.py:480
 msgid "Street"
-msgstr ""
+msgstr "Straat"
 
 #: pretix/control/views/item.py:582 pretix/control/views/item.py:743
 #: pretix/control/views/item.py:765
 msgid "The requested question does not exist."
-msgstr ""
+msgstr "De geselecteerde vraag bestaat niet."
 
 #: pretix/control/views/item.py:600
 msgid "The selected question has been deleted."
-msgstr ""
+msgstr "De geselecteerde vraag is verwijderd."
 
 #: pretix/control/views/item.py:690
 msgid "File uploaded"
@@ -29081,14 +29115,19 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Geachte heer, mevrouw,\n"
+"\n"
+"We hebben uw bestelling helaas niet kunnen annuleren.\n"
+"\n"
+"Het team van {event}"
 
 #: pretix/control/views/orders.py:1068
 msgid "The payment has been marked as complete."
-msgstr ""
+msgstr "De betaling is bevestigd."
 
 #: pretix/control/views/orders.py:1070
 msgid "This payment can not be confirmed at the moment."
-msgstr ""
+msgstr "Deze betaling kan momenteel niet bevestigd worden."
 
 #: pretix/control/views/orders.py:1161
 msgid ""
@@ -29096,22 +29135,28 @@ msgid ""
 "time. Please have a look at the order details and check if your refund is "
 "still necessary."
 msgstr ""
+"Deze terugbetaling is niet doorgegaan omdat er tegelijkertijd een andere "
+"terugbetaling verwerkt werd. Controleer in de bestelgegevens of de "
+"terugbetaling nog steeds nodig is."
 
 #: pretix/control/views/orders.py:1266
 msgid "You entered an order in an event with a different currency."
 msgstr ""
+"U hebt een bestelling geselecteerd in een evenement met een andere valuta."
 
 #: pretix/control/views/orders.py:1317
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
-msgstr ""
+msgstr "U kunt niet meer terugbetalen dan het nog niet terugbetaalde bedrag."
 
 #: pretix/control/views/orders.py:1322
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
 msgstr ""
+"U hebt gekozen voor een gedeeltelijke terugbetaling via een betaalwijze die "
+"alleen volledige terugbetalingen ondersteunt."
 
 #: pretix/control/views/orders.py:1352
 #, python-brace-format
@@ -29119,11 +29164,13 @@ msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
 msgstr ""
+"Een van de terugbetalingen kon niet verwerkt worden. Probeer op een andere "
+"manier terug te betalen. De foutmelding was: {}"
 
 #: pretix/control/views/orders.py:1358
 #, python-brace-format
 msgid "A refund of {} has been processed."
-msgstr ""
+msgstr "Een terugbetaling van {} is verwerkt."
 
 #: pretix/control/views/orders.py:1362
 #, python-brace-format
@@ -29131,15 +29178,18 @@ msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
 msgstr ""
+"Een terugbetaling van {} is opgeslagen, maar nog niet volledig verwerkt. U "
+"kunt de terugbetaling hieronder als afgehandeld markeren."
 
 #: pretix/control/views/orders.py:1391
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
 msgstr ""
+"De nieuwe cadeaubon is aangemaakt. U kunt hem nu naar de gebruiker sturen."
 
 #: pretix/control/views/orders.py:1399
 msgid "Your gift card code"
-msgstr ""
+msgstr "Uw cadeauboncode"
 
 #: pretix/control/views/orders.py:1401
 #, python-brace-format
@@ -29153,14 +29203,24 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Geachte heer, mevrouw,\n"
+"\n"
+"We hebben u {amount} terugbetaald voor uw bestelling.\n"
+"\n"
+"U kunt de cadeauboncode {giftcard} gebruiken om te betalen voor toekomstige "
+"bestellingen in onze winkel.\n"
+"\n"
+"Het team van {event}"
 
 #: pretix/control/views/orders.py:1412
 msgid "The refunds you selected do not match the selected total refund amount."
 msgstr ""
+"De ingevoerde bedragen komen niet overeen met het geselecteerde terug te "
+"betalen bedrag."
 
 #: pretix/control/views/orders.py:1542
 msgid "The payment has been created successfully."
-msgstr ""
+msgstr "De betaling is met succes verwerkt."
 
 #: pretix/control/views/orders.py:1556
 msgid ""
