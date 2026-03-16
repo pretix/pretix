@@ -1228,19 +1228,17 @@ class OrderDownloadMixin:
                     self.output.identifier
                 )
                 filename = "-".join(filter(None, name_parts)) + value.extension
-                resp = FileResponse(value.file.file, filename=filename, content_type=value.type)
-                return resp
+                return FileResponse(value.file.file, filename=filename, content_type=value.type)
         elif isinstance(value, CachedCombinedTicket):
             if value.type == 'text/uri-list':
                 resp = HttpResponseRedirect(value.file.file.read())
                 return resp
             else:
-                resp = FileResponse(
+                return FileResponse(
                     value.file.file,
                     filename="-".join(self.request.event.slug.upper(), self.order.code, self.output.identifier) + value.extension,
                     content_type=value.type
                 )
-                return resp
         else:
             return redirect(self.get_self_url())
 
