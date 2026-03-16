@@ -286,12 +286,12 @@ def test_by_secret_special_chars(token_client, organizer, clist, event, order):
 @pytest.mark.django_db
 def test_by_medium(token_client, organizer, clist, event, order):
     with scopes_disabled():
-        ReusableMedium.objects.create(
+        rm = ReusableMedium.objects.create(
             type="barcode",
             identifier="abcdef",
             organizer=organizer,
-            linked_orderposition=order.positions.first(),
         )
+        rm.linked_orderpositions.add(order.positions.first())
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
@@ -299,6 +299,48 @@ def test_by_medium(token_client, organizer, clist, event, order):
         ci = clist.checkins.get(position=order.positions.first())
     assert ci.raw_barcode == "abcdef"
     assert ci.raw_source_type == "barcode"
+
+
+@pytest.mark.django_db
+def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="barcode",
+            identifier="abcdef",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.first())
+        op_item_other = order.positions.all()[1]
+        rm.linked_orderpositions.add(op_item_other)
+
+    # multiple tickets are valid => no check-in
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'ambiguous'
+
+    with scopes_disabled():
+        op_item_other.valid_from = datetime.datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
+        op_item_other.valid_until = datetime.datetime(2020, 1, 1, 15, 0, 0, tzinfo=event.timezone)
+        op_item_other.save()
+
+    with freeze_time("2020-01-01 13:45:00"):
+        # multiple tickets are valid => no check-in
+        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 400
+        assert resp.data['status'] == 'error'
+        assert resp.data['reason'] == 'ambiguous'
+
+    with freeze_time("2020-01-01 10:45:00"):
+        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 201
+        assert resp.data['status'] == 'ok'
+
+    with freeze_time("2020-01-01 15:45:00"):
+        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 400
+        assert resp.data['status'] == 'error'
+        assert resp.data['reason'] == 'already_redeemed'
 
 
 @pytest.mark.django_db
@@ -318,12 +360,12 @@ def test_by_medium_not_connected(token_client, organizer, clist, event, order):
 @pytest.mark.django_db
 def test_by_medium_wrong_event(token_client, organizer, clist, event, order2):
     with scopes_disabled():
-        ReusableMedium.objects.create(
+        rm = ReusableMedium.objects.create(
             type="barcode",
             identifier="abcdef",
             organizer=organizer,
-            linked_orderposition=order2.positions.first(),
         )
+        rm.linked_orderpositions.add(order2.positions.first())
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 404
     assert resp.data['status'] == 'error'
@@ -337,12 +379,12 @@ def test_by_medium_wrong_event(token_client, organizer, clist, event, order2):
 @pytest.mark.django_db
 def test_by_medium_wrong_type(token_client, organizer, clist, event, order):
     with scopes_disabled():
-        ReusableMedium.objects.create(
+        rm = ReusableMedium.objects.create(
             type="nfc_uid",
             identifier="abcdef",
             organizer=organizer,
-            linked_orderposition=order.positions.first(),
         )
+        rm.linked_orderpositions.add(order.positions.first())
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 404
     assert resp.data['status'] == 'error'
@@ -355,13 +397,13 @@ def test_by_medium_wrong_type(token_client, organizer, clist, event, order):
 @pytest.mark.django_db
 def test_by_medium_inactive(token_client, organizer, clist, event, order):
     with scopes_disabled():
-        ReusableMedium.objects.create(
+        rm = ReusableMedium.objects.create(
             type="barcode",
             identifier="abcdef",
             organizer=organizer,
             active=False,
-            linked_orderposition=order.positions.first(),
         )
+        rm.linked_orderpositions.add(order.positions.first())
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 404
     assert resp.data['status'] == 'error'

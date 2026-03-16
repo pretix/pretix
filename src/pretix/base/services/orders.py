@@ -3495,8 +3495,8 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
                     identifier=mt.generate_identifier(sender.organizer),
                     active=True,
                     customer=order.customer,
-                    linked_orderposition=p,
                 )
+                rm.linked_orderpositions.add(p)
                 rm.log_action(
                     'pretix.reusable_medium.created',
                     data={
