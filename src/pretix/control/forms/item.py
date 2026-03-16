@@ -165,6 +165,12 @@ class QuestionForm(I18nModelForm):
         self.fields['identifier'].required = False
         self.fields['dependency_values'].required = False
         self.fields['help_text'].widget.attrs['rows'] = 3
+        self.fields['valid_file_ratio'].required = False
+        self.fields['valid_file_ratio'].choices = [
+            ('', _('Disabled')),
+        ] + [
+            c for c in self.fields['valid_file_ratio'].choices if c[0] != ''
+        ]
 
     def clean_dependency_values(self):
         val = self.data.getlist('dependency_values')
@@ -211,12 +217,19 @@ class QuestionForm(I18nModelForm):
         Question._clean_identifier(self.instance.event, val, self.instance)
         return val
 
+    def clean_valid_file_ratio(self):
+        val = self.cleaned_data.get('valid_file_ratio')
+        if not val:
+            return None
+        return val
+
     def clean(self):
         d = super().clean()
         if d.get('dependency_question') and not d.get('dependency_values'):
             raise ValidationError({'dependency_values': [_('This field is required')]})
         if d.get('dependency_question') and d.get('ask_during_checkin'):
             raise ValidationError(_('Dependencies between questions are not supported during check-in.'))
+
         return d
 
     class Meta:
@@ -241,7 +254,7 @@ class QuestionForm(I18nModelForm):
             'valid_datetime_max',
             'valid_date_min',
             'valid_date_max',
-            'valid_file_portrait',
+            'valid_file_ratio',
             'valid_string_length_max',
         ]
         widgets = {

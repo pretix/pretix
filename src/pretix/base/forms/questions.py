@@ -490,8 +490,8 @@ class MaxDateTimeValidator(MaxValueValidator):
             raise e
 
 
-class PortraitImageWidget(UploadedFileWidget):
-    template_name = 'pretixbase/forms/widgets/portrait_image.html'
+class CroppedImageWidget(UploadedFileWidget):
+    template_name = 'pretixbase/forms/widgets/cropped_image.html'
 
     def value_from_datadict(self, data, files, name):
         d = super().value_from_datadict(data, files, name)
@@ -500,14 +500,14 @@ class PortraitImageWidget(UploadedFileWidget):
         return d
 
 
-class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileField):
-    widget = PortraitImageWidget
+class CroppedImageField(SizeValidationMixin, ExtValidationMixin, forms.FileField):
+    widget = CroppedImageWidget
     default_error_messages = {
         'aspect_ratio_landscape': _(
             "You uploaded an image in landscape orientation. Please upload an image in portrait orientation."
         ),
-        'aspect_ratio_not_3_by_4': _(
-            "Please upload an image where the width is 3/4 of the height."
+        'aspect_ratio_wrong': _(
+            "Please upload an image with the correct aspect ratio."
         ),
         'max_dimension': _(
             "The file you uploaded has a very large number of pixels, please upload an image no larger than 10000 x 10000 pixels."
@@ -566,7 +566,7 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
             # before we calc aspect ratio, we need to check and apply EXIF-orientation
             image = ImageOps.exif_transpose(image)
 
-            if f._cropdata:
+            if getattr(f, '_cropdata', None):
                 image = image.crop((
                     f._cropdata.get('x', 0),
                     f._cropdata.get('y', 0),
@@ -580,17 +580,15 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
                     f = SimpleUploadedFile(f.name, output.getvalue(), f.content_type)
                     f.image = image
 
-            if image.width > image.height:
-                raise ValidationError(
-                    self.error_messages['aspect_ratio_landscape'],
-                    code='aspect_ratio_landscape',
-                )
+            if self.ratio:
+                w, h = map(float, self.ratio.split(':'))
+                ratio = w / h
+                if not ratio * .95 < image.width / image.height < ratio * 1.05:
+                    raise ValidationError(
+                        self.error_messages['aspect_ratio_wrong'],
+                        code='aspect_ratio_wrong',
+                    )
 
-            if not 3 / 4 * .95 < image.width / image.height < 3 / 4 * 1.05:  # give it some tolerance
-                raise ValidationError(
-                    self.error_messages['aspect_ratio_not_3_by_4'],
-                    code='aspect_ratio_not_3_by_4',
-                )
         except Exception as exc:
             logger.exception('Could not parse image')
             # Pillow doesn't recognize it as an image.
@@ -605,6 +603,7 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
         return f
 
     def __init__(self, *args, **kwargs):
+        self.ratio = kwargs.pop('ratio', None)
         kwargs.setdefault('ext_whitelist', settings.FILE_UPLOAD_EXTENSIONS_QUESTION_IMAGE)
         kwargs.setdefault('max_size', settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
         super().__init__(*args, **kwargs)
@@ -865,12 +864,18 @@ class BaseQuestionsForm(forms.Form):
                     initial=initial.options.all() if initial else None,
                 )
             elif q.type == Question.TYPE_FILE:
-                if q.valid_file_portrait:
-                    field = PortraitImageField(
+                if q.valid_file_ratio:
+                    ratio = q.valid_file_ratio
+                    if ratio == 'free':
+                        ratio = None
+                    field = CroppedImageField(
                         label=label, required=required,
                         help_text=help_text,
                         initial=initial.file if initial else None,
-                        widget=PortraitImageWidget(position=pos, event=event, answer=initial, attrs={'data-portrait-photo': 'true'}),
+                        widget=CroppedImageWidget(position=pos, event=event, answer=initial, attrs={
+                            'data-crop-ratio': q.valid_file_ratio
+                        }),
+                        ratio=ratio
                     )
                 else:
                     field = ExtFileField(
