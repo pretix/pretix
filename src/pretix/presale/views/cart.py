@@ -841,9 +841,14 @@ class AnswerDownload(EventViewMixin, View):
             return Http404()
 
         ftype, _ = mimetypes.guess_type(answer.file.name)
-        resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
-        resp['Content-Disposition'] = 'attachment; filename="{}-cart-{}"'.format(
+        filename = '{}-cart-{}'.format(
             self.request.event.slug.upper(),
             os.path.basename(answer.file.name).split('.', 1)[1]
         ).encode("ascii", "ignore")
+        resp = FileResponse(
+            answer.file,
+            filename=filename,
+            as_attachment=True,
+            content_type=ftype or 'application/binary'
+        )
         return resp
