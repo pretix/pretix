@@ -746,7 +746,6 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
         if settings.DEBUG:
             # attachment is more secure as we're dealing with user-generated stuff here, but inline is much more convenient during debugging
             resp['Content-Disposition'] = 'inline; filename="{}"'.format(fname)
-            resp._csp_ignore = True
         else:
             resp['Content-Disposition'] = 'attachment; filename="{}"'.format(fname)
         return resp
