@@ -53,7 +53,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.invoicing.transmission import get_transmission_types
 from pretix.base.models import (
-    CachedFile, Checkin, Customer, Device, Invoice, InvoiceAddress,
+    CachedFile, Checkin, Customer, Device, GiftCard, Invoice, InvoiceAddress,
     InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
     QuestionAnswer, ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule,
     Voucher,
@@ -62,6 +62,7 @@ from pretix.base.models.orders import (
     BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
     PrintLog, RevokedTicketSecret, Transaction,
 )
+from pretix.base.payment import GiftCardPayment, PaymentException
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
 from pretix.base.services.locking import LOCK_TRUST_WINDOW, lock_objects
@@ -1200,6 +1201,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     )
     tax_rounding_mode = serializers.ChoiceField(choices=ROUNDING_MODES, allow_null=True, required=False,)
     locale = serializers.ChoiceField(choices=[], required=False, allow_null=True)
+    use_gift_cards = serializers.ListField(child=serializers.CharField(required=False), required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1215,7 +1217,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'checkin_text', 'payment_info', 'payment_date',
                   'consume_carts', 'force', 'send_email', 'simulate', 'customer', 'custom_followup_at',
-                  'require_approval', 'valid_if_pending', 'expires', 'api_meta', 'tax_rounding_mode')
+                  'require_approval', 'valid_if_pending', 'expires', 'api_meta', 'tax_rounding_mode', 'use_gift_cards')
 
     def validate_payment_provider(self, pp):
         if pp is None:
@@ -1310,6 +1312,14 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         payment_date = validated_data.pop('payment_date', now())
         force = validated_data.pop('force', False)
         simulate = validated_data.pop('simulate', False)
+        gift_card_secrets = validated_data.pop('use_gift_cards') if 'use_gift_cards' in validated_data else []
+
+        if (payment_provider is not None or payment_info != '{}') and len(gift_card_secrets) > 0:
+            raise ValidationError({"use_gift_cards": ['The attribute use_gift_cards is not compatible with payment_provider or payment_info']})
+        if validated_data.get('status') != Order.STATUS_PENDING and len(gift_card_secrets) > 0:
+            raise ValidationError({"use_gift_cards": ['The attribute use_gift_cards is only supported for orders that are created as pending']})
+        if len(set(gift_card_secrets)) != len(gift_card_secrets):
+            raise ValidationError({"use_gift_cards": ['Multiple copies of the same gift card secret are not allowed']})
 
         if not validated_data.get("sales_channel"):
             validated_data["sales_channel"] = self.context['event'].organizer.sales_channels.get(identifier="web")
@@ -1793,6 +1803,45 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
         if order.total != Decimal('0.00') and order.event.currency == "XXX":
             raise ValidationError('Paid products not supported without a valid currency.')
+
+        for gift_card_secret in gift_card_secrets:
+            try:
+                if order.status != Order.STATUS_PAID:
+                    gift_card_payment_provider = GiftCardPayment(event=order.event)
+
+                    gc = order.event.organizer.accepted_gift_cards.get(
+                        secret=gift_card_secret
+                    )
+
+                    payment = order.payments.create(
+                        amount=min(order.pending_sum, gc.value),
+                        provider=gift_card_payment_provider.identifier,
+                        info_data={
+                            'gift_card': gc.pk,
+                            'gift_card_secret': gc.secret,
+                            'retry': True
+                        },
+                        state=OrderPayment.PAYMENT_STATE_CREATED
+                    )
+                    gift_card_payment_provider.execute_payment(request=None, payment=payment, is_early_special_case=True)
+
+                    if order.pending_sum <= Decimal('0.00'):
+                        order.status = Order.STATUS_PAID
+
+            except PaymentException:
+                pass
+
+            except GiftCard.DoesNotExist as e:
+                payment = order.payments.create(
+                    amount=order.pending_sum,
+                    provider=GiftCardPayment.identifier,
+                    info_data={
+                        'gift_card_secret': gift_card_secret,
+                    },
+                    state=OrderPayment.PAYMENT_STATE_CREATED
+                )
+                payment.fail(info={**payment.info_data, 'error': str(e)},
+                             send_mail=False)
 
         if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID and not validated_data.get('require_approval'):
             order.status = Order.STATUS_PAID

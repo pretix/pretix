@@ -117,6 +117,8 @@ cancellation_date                     datetime                   Time of order c
                                                                  reliable for orders that have been cancelled,
                                                                  reactivated and cancelled again.
 plugin_data                           object                     Additional data added by plugins.
+use_gift_cards                        list of strings            List of unique gift card secrets that are used to pay
+                                                                 for this order.
 ===================================== ========================== =======================================================
 
 
@@ -155,6 +157,10 @@ plugin_data                           object                     Additional data
 .. versionchanged:: 2025.10
 
    The ``tax_rounding_mode`` attribute has been added.
+
+.. versionchanged:: 2026.03
+
+   The ``use_gift_cards `` attribute has been added.
 
 .. _order-position-resource:
 
@@ -987,8 +993,6 @@ Creating orders
 
        * does not support file upload questions
 
-       * does not support redeeming gift cards
-
        * does not support or validate memberships
 
 
@@ -1095,6 +1099,14 @@ Creating orders
      whether these emails are enabled for certain sales channels. If set to ``null``, behavior will be controlled by pretix'
      settings based on the sales channels (added in pretix 4.7). Defaults to ``false``.
      Used to be ``send_mail`` before pretix 3.14.
+   * ``use_gift_cards`` (optional) The provided gift cards will be used to pay for this order. They will be debited and
+     all the necessary payment records for these transactions will be created. The gift cards will be used in sequence to
+     pay for the order. Processing of the gift cards stops as soon as the order is payed for. All gift card transactions
+     are listed under ``payments`` in the response.
+     This option can only be used with orders that are in the pending state.
+     The ``use_gift_cards`` attribute can not be combined with ``payment_info`` and ``payment_provider`` fields. If the
+     order isn't completely paid after its creation with ``use_gift_cards``, then a subsequent request to the payment
+     endpoint is needed.
 
    If you want to use add-on products, you need to set the ``positionid`` fields of all positions manually
    to incrementing integers starting with ``1``. Then, you can reference one of these
