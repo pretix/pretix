@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-24 11:50+0000\n"
-"PO-Revision-Date: 2026-03-16 09:44+0000\n"
+"PO-Revision-Date: 2026-03-16 09:46+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -28604,24 +28604,30 @@ msgid ""
 "An order could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
+"Deze bestelling kon niet verwijderd worden, omdat bepaalde omstandigheden "
+"(bijvoorbeeld door plug-ins gegenereerde gegevens) dit niet toestaan."
 
 #: pretix/control/views/event.py:1137
 msgid "We've disabled test mode for you. Let's sell some real tickets!"
 msgstr ""
+"We hebben de testmodus voor u uitgeschakeld. Veel succes met de echte "
+"ticketverkoop!"
 
 #: pretix/control/views/event.py:1159
 msgid "This event can not be deleted."
-msgstr ""
+msgstr "Dit evenement kan niet verwijderd worden."
 
 #: pretix/control/views/event.py:1182
 msgid "The event has been deleted."
-msgstr ""
+msgstr "Het evenement is verwijderd."
 
 #: pretix/control/views/event.py:1185
 msgid ""
 "The event could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
+"Dit evenement kon niet verwijderd worden, omdat bepaalde omstandigheden "
+"(bijvoorbeeld door plug-ins gegenereerde gegevens) dit niet toestaan."
 
 #: pretix/control/views/event.py:1201
 #, python-brace-format
