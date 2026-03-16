@@ -1223,7 +1223,7 @@ class OrderDownloadMixin:
                 name_parts = (
                     self.request.event.slug.upper(),
                     self.order.code,
-                    self.order_position.positionid,
+                    str(self.order_position.positionid),
                     self.order_position.subevent.date_from.strftime('%Y_%m_%d') if self.order_position.subevent else None,
                     self.output.identifier
                 )
