@@ -13,6 +13,7 @@ register = template.Library()
 LOGGER = logging.getLogger(__name__)
 _MANIFEST = {}
 MANIFEST_PATH = settings.STATIC_ROOT + "/vite/control/.vite/manifest.json"
+MANIFEST_BASE = "vite/control/"
 
 # We're building the manifest if we don't have a dev server running AND if we're
 # not currently running `rebuild` (which creates the manifest in the first place).
@@ -46,7 +47,7 @@ def generate_css_tags(asset, already_processed=None):
     if "css" in manifest_entry:
         for css_path in manifest_entry["css"]:
             if css_path not in already_processed:
-                full_path = urljoin(settings.STATIC_URL, css_path)
+                full_path = urljoin(settings.STATIC_URL, MANIFEST_BASE + css_path)
                 tags.append(f'<link rel="stylesheet" href="{full_path}" />')
             already_processed.append(css_path)
 
@@ -78,7 +79,7 @@ def vite_asset(path):
     tags = generate_css_tags(path)
     tags.append(
         generate_script_tag(
-            manifest_entry["file"], {"type": "module", "crossorigin": ""}
+            MANIFEST_BASE + manifest_entry["file"], {"type": "module", "crossorigin": ""}
         )
     )
     return "".join(tags)
