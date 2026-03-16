@@ -716,7 +716,6 @@ class OrderDownload(AsyncAction, OrderView):
                         self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
                         self.output.identifier, value.extension
                     ),
-                    as_attachment=True,
                     content_type=value.type
                 )
         elif isinstance(value, CachedCombinedTicket):
@@ -729,7 +728,6 @@ class OrderDownload(AsyncAction, OrderView):
                     filename='{}-{}-{}{}'.format(
                         self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
                     ),
-                    as_attachment=True,
                     content_type=value.type
                 )
         else:
