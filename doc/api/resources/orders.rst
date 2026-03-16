@@ -160,7 +160,7 @@ use_gift_cards                        list of strings            List of unique 
 
 .. versionchanged:: 2026.03
 
-   The ``use_gift_cards `` attribute has been added.
+   The ``use_gift_cards`` attribute has been added.
 
 .. _order-position-resource:
 
