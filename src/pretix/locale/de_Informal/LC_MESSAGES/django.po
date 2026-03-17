@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-17 14:32+0000\n"
+"PO-Revision-Date: 2026-03-17 14:34+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -14293,16 +14293,12 @@ msgid "This is an event series"
 msgstr "Dies ist eine Veranstaltungsreihe"
 
 #: pretix/control/forms/event.py:135 pretix/control/forms/event.py:363
-#, fuzzy
-#| msgid ""
-#| "You do not have sufficient permission to enable plugins that need to be "
-#| "enabled for the entire organizer account."
 msgid ""
 "You do not have a sufficient level of access on the event you selected to "
 "copy it to the desired organizer."
 msgstr ""
-"Du hast keine ausreichende Berechtigung, um Erweiterungen zu aktivieren, die "
-"für das ganze Veranstalterkonto aktiv sein müssen."
+"Du hast keine ausreichende Berechtigung für die gewählte Veranstaltung, um "
+"sie in den gewünschten Veranstalter zu kopieren."
 
 #: pretix/control/forms/event.py:143
 msgid ""
@@ -14383,6 +14379,8 @@ msgid ""
 "You cannot choose a team that would give you more access than you have on "
 "the event you are copying."
 msgstr ""
+"Du kannst kein Team auswählen, das dir mehr Zugriff gewähren würde als auf "
+"die Veranstaltung, die du kopierst."
 
 #: pretix/control/forms/event.py:344
 msgid "Copy configuration from"
@@ -14398,6 +14396,8 @@ msgid ""
 "You cannot choose an event on which you have less access than the team you "
 "selected in the previous step."
 msgstr ""
+"Du kannst keine Veranstaltung auswählen, auf die du weniger Zugriff hast als "
+"das Team, das du im vorherigen Schritt ausgewählt hast."
 
 #: pretix/control/forms/event.py:387 pretix/control/forms/item.py:1304
 #: pretix/control/forms/subevents.py:411
@@ -16770,7 +16770,7 @@ msgstr "Du kannst nur eine Veranstalterdomain festlegen."
 
 #: pretix/control/forms/organizer.py:322
 msgid "Provided by a plugin"
-msgstr ""
+msgstr "Durch eine Erweiterung bereitgestellt"
 
 #: pretix/control/forms/organizer.py:438
 msgid ""
@@ -17653,10 +17653,8 @@ msgid "The order has been denied (comment: \"{comment}\")."
 msgstr "Die Bestellung wurde abgelehnt (Kommentar: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:521
-#, fuzzy
-#| msgid "The order has been overpaid."
 msgid "The customer VAT ID has been verified."
-msgstr "Die Bestellung wurde überzahlt."
+msgstr "Die USt-ID des Kunden wurde überprüft."
 
 #: pretix/control/logdisplay.py:522
 #, python-brace-format
@@ -17955,10 +17953,9 @@ msgid "{user} has been invited to the team."
 msgstr "{user} wurde ins Team eingeladen."
 
 #: pretix/control/logdisplay.py:644
-#, fuzzy, python-brace-format
-#| msgid "Invite for {user} has been resent."
+#, python-brace-format
 msgid "Invite for {user} has been deleted."
-msgstr "Die Einladung für {user} wurde erneut verschickt."
+msgstr "Einladung für {user} wurde gelöscht."
 
 #: pretix/control/logdisplay.py:645
 #, python-brace-format
@@ -20265,21 +20262,7 @@ msgid "Add property"
 msgstr "Eigenschaft hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/email/confirmation_code.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "%(reason)s\n"
-#| "\n"
-#| "    %(code)s\n"
-#| "\n"
-#| "Please do never give this code to another person. Our support team will "
-#| "never ask for this code.\n"
-#| "\n"
-#| "If this code was not requested by you, please contact us immediately.\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20307,7 +20290,7 @@ msgstr ""
 "Wenn du diesen Code nicht angefragt hast, kontaktiere uns bitte sofort.\n"
 "\n"
 "Viele Grüße,\n"
-"Dein pretix-Team\n"
+"Dein %(instance)s-Team\n"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt:1
 #, python-format
@@ -20344,17 +20327,7 @@ msgstr ""
 "Dein Team von %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you requested a new password. Please go to the following page to reset "
-#| "your password:\n"
-#| "\n"
-#| "%(url)s\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your %(event)s team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20374,27 +20347,10 @@ msgstr ""
 "%(url)s\n"
 "\n"
 "Viele Grüße,  \n"
-"Dein %(event)s Team\n"
+"Dein %(instance)s-Team\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you have been invited to a team on pretix, a platform to perform event\n"
-#| "ticket sales.\n"
-#| "\n"
-#| "Organizer: %(organizer)s\n"
-#| "Team: %(team)s\n"
-#| "\n"
-#| "If you want to join that team, just click on the following link:\n"
-#| "%(url)s\n"
-#| "\n"
-#| "If you do not want to join, you can safely ignore or delete this email.\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20416,8 +20372,8 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"du wurdest in das Team eines Veranstalters auf pretix eingeladen, einer "
-"Plattform zum\n"
+"du wurdest in das Team eines Veranstalters auf %(instance)s eingeladen, "
+"einer Plattform zum\n"
 "Verkaufen von Veranstaltungstickets.\n"
 "\n"
 "Veranstalter: %(organizer)s\n"
@@ -20432,7 +20388,7 @@ msgstr ""
 "\n"
 "Viele Grüße\n"
 "\n"
-"Das pretix-Team\n"
+"Das %(instance)s-Team\n"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt:1
 #, python-format
@@ -20470,24 +20426,7 @@ msgstr ""
 "Das %(instance)s-Team\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "this is to inform you that the account information of your pretix account "
-#| "has been\n"
-#| "changed. In particular, the following changes have been performed:\n"
-#| "\n"
-#| "%(messages)s\n"
-#| "\n"
-#| "If this change was not performed by you, please contact us immediately.\n"
-#| "\n"
-#| "You can review and change your account settings here:\n"
-#| "\n"
-#| "%(url)s\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20508,7 +20447,7 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"die Einstellungen deines pretix-Kontos wurden verändert. Es wurden die "
+"die Einstellungen deines %(instance)s-Kontos wurden verändert. Es wurden die "
 "folgenden Änderungen\n"
 "vorgenommen:\n"
 "\n"
@@ -20522,7 +20461,7 @@ msgstr ""
 "%(url)s\n"
 "\n"
 "Viele Grüße\n"
-"Dein pretix-Team\n"
+"Dein %(instance)s-Team\n"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:8
@@ -20784,10 +20723,8 @@ msgstr ""
 "kannst du das mit dieser Option tun."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:51
-#, fuzzy
-#| msgid "Permissions"
 msgid "No permission"
-msgstr "Berechtigungen"
+msgstr "Keine Berechtigung"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:72
@@ -23337,10 +23274,8 @@ msgid "Edit question"
 msgstr "Frage bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:55
-#, fuzzy
-#| msgid "You do not have permission to view this content."
 msgid "No permission to view answers."
-msgstr "Du hast keine Berechtigung, diese Inhalte aufzurufen."
+msgstr "Du hast keine Berechtigung, diese Antworten zu sehen."
 
 #: pretix/control/templates/pretixcontrol/items/question.html:63
 msgid "No matching answers found."
@@ -24995,10 +24930,8 @@ msgstr "Keine nächste Ausführung geplant"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:37
 #: pretix/control/templates/pretixcontrol/organizers/export.html:37
-#, fuzzy
-#| msgid "Exporter not found"
 msgid "Exporter not found or no permission"
-msgstr "Export nicht gefunden"
+msgstr "Export nicht gefunden oder keine Berechtigung"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:42
 #: pretix/control/templates/pretixcontrol/organizers/export.html:42
@@ -25041,10 +24974,8 @@ msgstr "Empfohlen für neue Benutzer*innen"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:120
 #: pretix/control/templates/pretixcontrol/organizers/export.html:120
-#, fuzzy
-#| msgid "There are no add-ons available for this product."
 msgid "There are no exporters available for you."
-msgstr "Es sind keine Zusatzprodukte für dieses Produkt verfügbar."
+msgstr "Es sind keine Exporte für dich verfügbar."
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:6
@@ -26997,7 +26928,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:274
 #, python-format
 msgid "max. %(size)s, smaller is better"
-msgstr ""
+msgstr "max. %(size)s, kleiner ist besser"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:282
 msgid "Download current background"
@@ -29772,16 +29703,12 @@ msgid "There was a problem processing your input. See below for error details."
 msgstr "Die Eingabe konnte nicht verarbeitet werden."
 
 #: pretix/control/views/orders.py:2798 pretix/control/views/organizer.py:2131
-#, fuzzy
-#| msgid ""
-#| "Your user account does not have sufficient permission to run this report, "
-#| "therefore you cannot schedule it."
 msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot change it."
 msgstr ""
 "Du hast nicht genug Berechtigungen um diesen Bericht auszuführen, daher "
-"kannst du ihn nicht einplanen."
+"kannst du ihn nicht ändern."
 
 #: pretix/control/views/orders.py:2807 pretix/control/views/organizer.py:2140
 msgid ""
@@ -36833,6 +36760,9 @@ msgid ""
 "the shop that affect quotas, such as the validity period of carts and "
 "vouchers."
 msgstr ""
+"Bitte beachten, dass die geänderte Zeit nicht für Aspekte des Shops "
+"einbezogen wird, die Kontingente betreffen, wie z.B. den Gültigkeitszeitraum "
+"von Warenkörben und Gutscheinen."
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:31
 msgid "Enable time machine"
