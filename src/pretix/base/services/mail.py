@@ -39,6 +39,7 @@ import mimetypes
 import os
 import re
 import smtplib
+import time
 import uuid
 import warnings
 from datetime import timedelta
@@ -435,6 +436,22 @@ def mail_send_task(self, **kwargs) -> bool:
         assert outgoing_mail.orderposition.order_id == outgoing_mail.order_id
         outgoing_mail.orderposition.order = outgoing_mail.order
 
+    # Rate limit check
+    backend = outgoing_mail.get_mail_backend()
+    is_limited, retry_after = _check_rate_limit(backend, outgoing_mail)
+    if is_limited:
+        logger.info(f"Rate limited email {outgoing_mail.guid}, retrying in {retry_after}s")
+        outgoing_mail.status = OutgoingMail.STATUS_AWAITING_RETRY
+        outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
+        outgoing_mail.save(update_fields=["status", "retry_after"])
+        try:
+            self.retry(max_retries=100, countdown=retry_after)
+        except MaxRetriesExceededError:
+            outgoing_mail.status = OutgoingMail.STATUS_FAILED
+            outgoing_mail.retry_after = None
+            outgoing_mail.save(update_fields=["status", "retry_after"])
+            return False
+
     headers = dict(outgoing_mail.headers)
     headers.setdefault('X-PX-Correlation', str(outgoing_mail.guid))
     email = CustomEmail(
@@ -647,7 +664,6 @@ def mail_send_task(self, **kwargs) -> bool:
                 "type": a[2],
             } for a in email.attachments
         ]
-        backend = outgoing_mail.get_mail_backend()
         try:
             backend.send_messages([email])
         except Exception as e:
@@ -1024,6 +1040,56 @@ def _wrap_plain_body(content_plain, signature, event, order, position, no_order_
     body_plain += "\r\n"
 
     return body_plain
+
+
+def _check_rate_limit(backend, outgoing_mail):
+    """
+    Fixed-window Redis counter keyed by SMTP identity + time bucket.
+    Returns (is_limited: bool, retry_after_seconds: int).
+    """
+    if not settings.HAS_REDIS:
+        return False, 0
+
+    # Resolve rate limit settings via hierarkey (event → organizer → global)
+    event = getattr(outgoing_mail, 'event', None)
+    if event:
+        count = event.settings.get('smtp_rate_limit_count', as_type=int)
+        window = event.settings.get('smtp_rate_limit_window', as_type=int)
+    elif outgoing_mail.organizer:
+        count = outgoing_mail.organizer.settings.get('smtp_rate_limit_count', as_type=int)
+        window = outgoing_mail.organizer.settings.get('smtp_rate_limit_window', as_type=int)
+    else:
+        count, window = 0, 600
+
+    # Fallback to pretix.cfg
+    if not count and settings.EMAIL_RATE_LIMIT_COUNT:
+        count = settings.EMAIL_RATE_LIMIT_COUNT
+        window = settings.EMAIL_RATE_LIMIT_WINDOW
+
+    if not count:
+        return False, 0
+
+    # Key by SMTP identity
+    host = getattr(backend, 'host', settings.EMAIL_HOST) or '_'
+    username = getattr(backend, 'username', settings.EMAIL_HOST_USER) or '_'
+    identity = hashlib.sha1(f"{username}@{host}".encode()).hexdigest()
+
+    window_id = int(time.time()) // window
+    redis_key = f"pretix_mail_ratelimit_{identity}_{window_id}"
+
+    from django_redis import get_redis_connection
+    rc = get_redis_connection("redis")
+
+    cnt = rc.incr(redis_key)
+    if cnt == 1:
+        rc.expire(redis_key, window + 10)
+
+    if cnt > count:
+        ttl = rc.ttl(redis_key)
+        retry_after = max(ttl if ttl and ttl > 0 else 10, 5)
+        return True, retry_after
+
+    return False, 0
 
 
 def _retry_strategy(e: Exception):

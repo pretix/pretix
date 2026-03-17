@@ -250,6 +250,8 @@ EMAIL_USE_SSL = config.getboolean('mail', 'ssl', fallback=False)
 EMAIL_SUBJECT_PREFIX = '[pretix] '
 EMAIL_BACKEND = EMAIL_CUSTOM_SMTP_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_TIMEOUT = 60
+EMAIL_RATE_LIMIT_COUNT = config.getint('mail', 'rate_limit_count', fallback=0)
+EMAIL_RATE_LIMIT_WINDOW = config.getint('mail', 'rate_limit_window', fallback=600)
 
 ADMINS = [('Admin', n) for n in config.get('mail', 'admins', fallback='').split(",") if n]
 

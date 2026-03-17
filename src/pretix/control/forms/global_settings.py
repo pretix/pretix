@@ -104,7 +104,20 @@ class GlobalSettingsForm(SettingsForm):
                 help_text=_("Will be served at {domain}/.well-known/apple-developer-merchantid-domain-association").format(
                     domain=settings.SITE_URL
                 )
-            ))
+            )),
+            ('smtp_rate_limit_count', forms.IntegerField(
+                required=False,
+                label=_("Email rate limit (number of emails)"),
+                help_text=_("Maximum number of emails per time window through the default SMTP server. "
+                            "Set to 0 or leave empty to disable. Shared across all workers."),
+                min_value=0,
+            )),
+            ('smtp_rate_limit_window', forms.IntegerField(
+                required=False,
+                label=_("Email rate limit window (seconds)"),
+                help_text=_("Time window in seconds for the email rate limit. Default: 600 (10 minutes)."),
+                min_value=1,
+            )),
         ])
         responses = register_global_settings.send(self)
         for r, response in sorted(responses, key=lambda r: str(r[0])):

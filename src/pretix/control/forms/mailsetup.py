@@ -76,6 +76,19 @@ class SMTPMailForm(SettingsForm):
         help_text=_("Commonly enabled on port 465."),
         required=False
     )
+    smtp_rate_limit_count = forms.IntegerField(
+        label=_("Email rate limit (number of emails)"),
+        help_text=_("Maximum number of emails per time window. Set to 0 or leave empty to disable. "
+                    "Shared across all workers."),
+        required=False,
+        min_value=0,
+    )
+    smtp_rate_limit_window = forms.IntegerField(
+        label=_("Email rate limit window (seconds)"),
+        help_text=_("Time window in seconds for the email rate limit. Default: 600 (10 minutes)."),
+        required=False,
+        min_value=1,
+    )
 
     def clean(self):
         data = super().clean()
