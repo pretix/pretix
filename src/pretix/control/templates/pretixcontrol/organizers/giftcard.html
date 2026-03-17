@@ -10,10 +10,12 @@
         {% if card.testmode %}
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
-        <a href="{% url "control:organizer.giftcard.edit" organizer=request.organizer.slug giftcard=card.id %}"
-                class="btn btn-default">
-            <i class="fa fa-edit"></i> {% trans "Edit" %}
-        </a>
+        {% if "organizer.giftcards:write" in request.orgapermset %}
+            <a href="{% url "control:organizer.giftcard.edit" organizer=request.organizer.slug giftcard=card.id %}"
+                    class="btn btn-default">
+                <i class="fa fa-edit"></i> {% trans "Edit" %}
+            </a>
+        {% endif %}
     </h1>
     <div class="row">
         <div class="col-md-10 col-xs-12">
@@ -112,22 +114,24 @@
                             </tr>
                         {% endfor %}
                         </tbody>
-                        <tfoot>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <input type="text" class="form-control helper-display-block" placeholder="{% trans "Text" %}"
-                                        name="text">
-                            </td>
-                            <td class="text-right form-inline">
-                                <input type="text" class="form-control input-sm" placeholder="{% trans "Value" %}" name="value">
-                                <button type="submit" class="btn btn-primary">
-                                    <span class="fa fa-plus"></span>
-                                </button>
-                            </td>
+                        {% if "organizer.giftcards:write" in request.orgapermset %}
+                            <tfoot>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <input type="text" class="form-control helper-display-block" placeholder="{% trans "Text" %}"
+                                            name="text">
+                                </td>
+                                <td class="text-right form-inline">
+                                    <input type="text" class="form-control input-sm" placeholder="{% trans "Value" %}" name="value">
+                                    <button type="submit" class="btn btn-primary">
+                                        <span class="fa fa-plus"></span>
+                                    </button>
+                                </td>
 
-                        </tr>
-                        </tfoot>
+                            </tr>
+                            </tfoot>
+                        {% endif %}
                     </table>
                 </form>
             </div>

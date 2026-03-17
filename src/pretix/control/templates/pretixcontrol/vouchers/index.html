@@ -72,7 +72,7 @@
                 {% endif %}
             </p>
 
-            {% if "can_change_vouchers" in request.eventpermset %}
+            {% if "event.vouchers:write" in request.eventpermset %}
                 <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                         class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
                 <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
@@ -83,7 +83,7 @@
         </div>
     {% else %}
         <p>
-            {% if "can_change_vouchers" in request.eventpermset %}
+            {% if "event.vouchers:write" in request.eventpermset %}
                 <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                         class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
                 <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
@@ -103,7 +103,7 @@
                 <table class="table table-hover table-quotas">
                     <thead>
                     <tr>
-                        {% if "can_change_vouchers" in request.eventpermset %}
+                        {% if "event.vouchers:write" in request.eventpermset %}
                             <th>
                                 <label aria-label="{% trans "select all rows for batch-operation" %}" class="batch-select-label">
                                     <input type="checkbox" data-toggle-table />
@@ -148,7 +148,7 @@
                     <tbody>
                     {% for v in vouchers %}
                         <tr>
-                            {% if "can_change_vouchers" in request.eventpermset %}
+                            {% if "event.vouchers:write" in request.eventpermset %}
                                 <td>
                                     <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label">
                                         <input type="checkbox" name="voucher" class="batch-select-checkbox" value="{{ v.pk }}"/>
@@ -192,7 +192,7 @@
                                 </td>
                             {% endif %}
                             <td class="text-right flip">
-                                {% if "can_change_vouchers" in request.eventpermset %}
+                                {% if "event.vouchers:write" in request.eventpermset %}
                                     <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ v.id }}"
                                        class="btn btn-sm btn-default" title="{% trans "Use as a template for new vouchers" %}" data-toggle="tooltip">
                                         <span class="fa fa-copy"></span>
@@ -205,7 +205,7 @@
                     </tbody>
                 </table>
             </div>
-            {% if "can_change_vouchers" in request.eventpermset %}
+            {% if "event.vouchers:write" in request.eventpermset %}
                 <div class="batch-select-actions">
                     <button type="submit" class="btn btn-danger" name="action" value="delete">
                         <i class="fa fa-trash" aria-hidden="true"></i>

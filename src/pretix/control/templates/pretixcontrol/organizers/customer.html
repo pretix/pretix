@@ -93,16 +93,18 @@
                         {% endif %}
                         </dl>
                     </form>
-                    <div class="text-right">
-                        <a href="{% url "control:organizer.customer.edit" organizer=request.organizer.slug customer=customer.identifier %}"
-                                class="btn btn-default">
-                            <i class="fa fa-edit"></i> {% trans "Edit" %}
-                        </a>
-                        <a href="{% url "control:organizer.customer.anonymize" organizer=request.organizer.slug customer=customer.identifier %}"
-                                class="btn btn-danger">
-                            <i class="fa fa-trash"></i> {% trans "Anonymize" %}
-                        </a>
-                    </div>
+                    {% if "organizer.customers:write" in request.orgapermset %}
+                        <div class="text-right">
+                            <a href="{% url "control:organizer.customer.edit" organizer=request.organizer.slug customer=customer.identifier %}"
+                                    class="btn btn-default">
+                                <i class="fa fa-edit"></i> {% trans "Edit" %}
+                            </a>
+                            <a href="{% url "control:organizer.customer.anonymize" organizer=request.organizer.slug customer=customer.identifier %}"
+                                    class="btn btn-danger">
+                                <i class="fa fa-trash"></i> {% trans "Anonymize" %}
+                            </a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="panel panel-default items">
@@ -162,35 +164,39 @@
                                 </div>
                             </td>
                             <td class="text-right flip">
-                                <a href="{% url "control:organizer.customer.membership.edit" organizer=request.organizer.slug customer=customer.identifier id=m.pk %}"
-                                        data-toggle="tooltip"
-                                        title="{% trans "Edit" %}"
-                                        class="btn btn-default">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                {% if m.testmode %}
-                                    <a href="{% url "control:organizer.customer.membership.delete" organizer=request.organizer.slug customer=customer.identifier id=m.pk %}"
+                                {% if "organizer.customers:write" in request.orgapermset %}
+                                    <a href="{% url "control:organizer.customer.membership.edit" organizer=request.organizer.slug customer=customer.identifier id=m.pk %}"
                                             data-toggle="tooltip"
-                                            title="{% trans "Delete" %}"
-                                            class="btn btn-danger">
-                                        <i class="fa fa-trash"></i>
+                                            title="{% trans "Edit" %}"
+                                            class="btn btn-default">
+                                        <i class="fa fa-edit"></i>
                                     </a>
+                                    {% if m.testmode %}
+                                        <a href="{% url "control:organizer.customer.membership.delete" organizer=request.organizer.slug customer=customer.identifier id=m.pk %}"
+                                                data-toggle="tooltip"
+                                                title="{% trans "Delete" %}"
+                                                class="btn btn-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <td colspan="7">
-                            <a href="{% url "control:organizer.customer.membership.add" organizer=request.organizer.slug customer=customer.identifier %}"
-                                    class="btn btn-default">
-                                <i class="fa fa-plus"></i>
-                                {% trans "Add membership" %}
-                            </a>
-                        </td>
-                    </tr>
-                    </tfoot>
+                    {% if "organizer.customers:write" in request.orgapermset %}
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <a href="{% url "control:organizer.customer.membership.add" organizer=request.organizer.slug customer=customer.identifier %}"
+                                        class="btn btn-default">
+                                    <i class="fa fa-plus"></i>
+                                    {% trans "Add membership" %}
+                                </a>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    {% endif %}
                 </table>
             </div>
             <div class="panel panel-default items">
@@ -300,14 +306,18 @@
                         {% for gc in gift_cards %}
                             <tr>
                                 <td>
-                                    <a href="{% url "control:organizer.giftcard" organizer=organizer.slug giftcard=gc.id %}">
-                                <strong>{{ gc.secret }}</strong></a>
-                                {% if gc.testmode %}
-                                    <span class="label label-warning">{% trans "TEST MODE" %}</span>
-                                {% endif %}
-                                {% if gc.expired %}
-                                    <span class="label label-danger">{% trans "Expired" %}</span>
-                                {% endif %}
+                                    {% if "organizer.giftcards:read" in request.orgapermset %}
+                                        <a href="{% url "control:organizer.giftcard" organizer=organizer.slug giftcard=gc.id %}">
+                                            <strong>{{ gc.secret }}</strong></a>
+                                    {% else %}
+                                        <strong>{{ gc.secret|slice:":3" }}…</strong>
+                                    {% endif %}
+                                    {% if gc.testmode %}
+                                        <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                    {% endif %}
+                                    {% if gc.expired %}
+                                        <span class="label label-danger">{% trans "Expired" %}</span>
+                                    {% endif %}
                                 </td>
                                 <td>{{ gc.issuance|date:"SHORT_DATETIME_FORMAT" }}</td>
                                 <td>{% if gc.expires %}{{ gc.expires|date:"SHORT_DATETIME_FORMAT" }}{% endif %}</td>
@@ -316,10 +326,12 @@
                                     <p class="text-right">{{ gc.value|money:gc.currency }}</p>
                                 </td>
                                 <td class="text-right">
-                                    <a href="{% url "control:organizer.giftcard" organizer=organizer.slug giftcard=gc.id %}"
-                                            class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Details" %}">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
+                                    {% if "organizer.giftcards:read" in request.orgapermset %}
+                                        <a href="{% url "control:organizer.giftcard" organizer=organizer.slug giftcard=gc.id %}"
+                                                class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Details" %}">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

@@ -317,7 +317,7 @@ class OrderViewSetMixin:
 
 class OrganizerOrderViewSet(OrderViewSetMixin, viewsets.ReadOnlyModelViewSet):
     def get_base_queryset(self):
-        perm = "can_view_orders" if self.request.method in SAFE_METHODS else "can_change_orders"
+        perm = "event.orders:read" if self.request.method in SAFE_METHODS else "event.orders:write"
         if isinstance(self.request.auth, (TeamAPIToken, Device)):
             return Order.objects.filter(
                 event__organizer=self.request.organizer,
@@ -338,8 +338,8 @@ class OrganizerOrderViewSet(OrderViewSetMixin, viewsets.ReadOnlyModelViewSet):
 
 
 class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -1072,8 +1072,6 @@ class OrderPositionViewSetMixin:
     ordering = ('order__datetime', 'positionid')
     ordering_fields = ('order__code', 'order__datetime', 'positionid', 'attendee_name', 'order__status',)
     filterset_class = OrderPositionFilter
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
     ordering_custom = {
         'attendee_name': {
             '_order': F('display_name').asc(nulls_first=True),
@@ -1169,11 +1167,13 @@ class OrderPositionViewSetMixin:
 
 class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrganizerOrderPositionSerializer
+    permission = None
+    write_permission = None
 
     def get_queryset(self):
         qs = super().get_queryset()
 
-        perm = self.permission if self.request.method in SAFE_METHODS else self.write_permission
+        perm = "event.orders:read" if self.request.method in SAFE_METHODS else "event.orders:write"
 
         if isinstance(self.request.auth, (TeamAPIToken, Device)):
             auth_obj = self.request.auth
@@ -1193,6 +1193,8 @@ class OrganizerOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ReadOnly
 
 class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet):
     serializer_class = OrderPositionSerializer
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -1611,8 +1613,8 @@ class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet
 class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderPaymentSerializer
     queryset = OrderPayment.objects.none()
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
     lookup_field = 'local_id'
 
     def get_serializer_context(self):
@@ -1784,8 +1786,8 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
 class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderRefundSerializer
     queryset = OrderRefund.objects.none()
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
     lookup_field = 'local_id'
 
     def get_queryset(self):
@@ -1942,13 +1944,18 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('nr',)
     ordering_fields = ('nr', 'date')
     filterset_class = InvoiceFilter
-    permission = 'can_view_orders'
     lookup_url_kwarg = 'number'
     lookup_field = 'nr'
-    write_permission = 'can_change_orders'
+
+    def _get_permission_name(self, request):
+        if 'event' in request.resolver_match.kwargs:
+            if request.method not in SAFE_METHODS:
+                return "event.orders:write"
+            return "event.orders:read"
+        return None  # org-level is handled by event__in check
 
     def get_queryset(self):
-        perm = "can_view_orders" if self.request.method in SAFE_METHODS else "can_change_orders"
+        perm = "event.orders:read" if self.request.method in SAFE_METHODS else "event.orders:write"
         if getattr(self.request, 'event', None):
             qs = self.request.event.invoices
         elif isinstance(self.request.auth, (TeamAPIToken, Device)):
@@ -2089,8 +2096,8 @@ class RevokedSecretViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('-created',)
     ordering_fields = ('created', 'secret')
     filterset_class = RevokedSecretFilter
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
 
     def get_queryset(self):
         return RevokedTicketSecret.objects.filter(event=self.request.event)
@@ -2111,8 +2118,8 @@ class BlockedSecretViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('-updated', '-pk')
     filterset_class = BlockedSecretFilter
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
 
     def get_queryset(self):
         return BlockedTicketSecret.objects.filter(event=self.request.event)
@@ -2147,7 +2154,7 @@ class TransactionViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('datetime', 'pk')
     ordering_fields = ('datetime', 'created', 'id',)
     filterset_class = TransactionFilter
-    permission = 'can_view_orders'
+    permission = 'event.orders:read'
 
     def get_queryset(self):
         return Transaction.objects.filter(order__event=self.request.event).select_related("order")
@@ -2164,11 +2171,11 @@ class OrganizerTransactionViewSet(TransactionViewSet):
 
         if isinstance(self.request.auth, (TeamAPIToken, Device)):
             qs = qs.filter(
-                order__event__in=self.request.auth.get_events_with_permission("can_view_orders"),
+                order__event__in=self.request.auth.get_events_with_permission("event.orders:read"),
             )
         elif self.request.user.is_authenticated:
             qs = qs.filter(
-                order__event__in=self.request.user.get_events_with_permission("can_view_orders", request=self.request)
+                order__event__in=self.request.user.get_events_with_permission("event.orders:read", request=self.request)
             )
         else:
             raise PermissionDenied("Unknown authentication scheme")

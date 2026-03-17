@@ -31,6 +31,7 @@ def second_team(organizer, event):
     t = organizer.teams.create(
         name='User team',
         all_events=False,
+        limit_event_permissions={"event.orders:read": True},
     )
     t.limit_events.add(event)
     return t
@@ -41,8 +42,10 @@ TEST_TEAM_RES = {
     'can_change_teams': True, 'can_change_organizer_settings': True, 'can_manage_gift_cards': True,
     'can_manage_customers': True, 'can_manage_reusable_media': True,
     'can_change_event_settings': True, 'can_change_items': True, 'can_view_orders': True, 'can_change_orders': True,
-    'can_view_vouchers': True, 'can_change_vouchers': True, 'can_checkin_orders': False,
+    'can_view_vouchers': True, 'can_change_vouchers': True, 'can_checkin_orders': True,
     'require_2fa': False,
+    'all_event_permissions': True, 'limit_event_permissions': [],
+    'all_organizer_permissions': True, 'limit_organizer_permissions': [],
 }
 
 SECOND_TEAM_RES = {
@@ -50,9 +53,11 @@ SECOND_TEAM_RES = {
     'can_create_events': False,
     'can_manage_customers': False, 'can_manage_reusable_media': False,
     'can_change_teams': False, 'can_change_organizer_settings': False, 'can_manage_gift_cards': False,
-    'can_change_event_settings': False, 'can_change_items': False, 'can_view_orders': False, 'can_change_orders': False,
+    'can_change_event_settings': False, 'can_change_items': False, 'can_view_orders': True, 'can_change_orders': False,
     'can_view_vouchers': False, 'can_change_vouchers': False, 'can_checkin_orders': False,
     'require_2fa': False,
+    'all_event_permissions': False, 'limit_event_permissions': ["event.orders:read"],
+    'all_organizer_permissions': False, 'limit_organizer_permissions': [],
 }
 
 
@@ -95,8 +100,80 @@ def test_team_create(token_client, organizer, event):
 
 
 @pytest.mark.django_db
-def test_team_update(token_client, organizer, event, second_team):
-    assert not second_team.can_change_event_settings
+def test_team_update(token_client, organizer, event, team, second_team):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
+        {
+            'all_event_permission': False,
+            'limit_event_permissions': ["event.settings.general:write"],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    second_team.refresh_from_db()
+    assert second_team.limit_event_permissions == {
+        'event.settings.general:write': True,
+    }
+    assert not second_team.all_event_permissions
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
+        {
+            'all_event_permission': False,
+            'limit_event_permissions': ["INVALID"],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert "invalid" in str(resp.data)
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, team.pk),
+        {
+            'limit_event_permissions': ["event.settings.general:write"],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert "Do not set both" in str(resp.data)
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
+        {
+            'all_organizer_permissions': False,
+            'limit_organizer_permissions': ["organizer.devices:write"],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert ("For permission group organizer.devices, the valid combinations of actions are '' or 'read' or "
+            "'read,write' but you tried to set 'write'.") in str(resp.data)
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
+        {
+            'all_organizer_permissions': True,
+            'limit_organizer_permissions': ["organizer.events:create"],
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert "Do not set both" in str(resp.data)
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
+        {
+            'all_events': True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert "Do not set both" in str(resp.data)
+
+
+@pytest.mark.django_db
+@pytest.mark.filterwarnings("ignore")
+def test_team_update_legacy_add_perm(token_client, organizer, event, second_team):
     resp = token_client.patch(
         '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
         {
@@ -107,15 +184,95 @@ def test_team_update(token_client, organizer, event, second_team):
     assert resp.status_code == 200
     second_team.refresh_from_db()
     assert second_team.can_change_event_settings
+    assert second_team.limit_event_permissions == {
+        "event.settings.general:write": True,
+        "event.settings.payment:write": True,
+        "event.settings.tax:write": True,
+        "event.settings.invoicing:write": True,
+        "event.subevents:write": True,
+        "event.orders:read": True,
+    }
+
+
+@pytest.mark.django_db
+@pytest.mark.filterwarnings("ignore")
+def test_team_update_legacy_add_all_perms(token_client, organizer, event, second_team):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
+        {
+            'can_change_event_settings': True,
+            'can_change_items': True,
+            # can_view_orders omitted because already set
+            'can_change_orders': True,
+            'can_checkin_orders': True,
+            'can_view_vouchers': True,
+            'can_change_vouchers': True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    second_team.refresh_from_db()
+    assert second_team.all_event_permissions
+    assert second_team.limit_event_permissions == {}
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
         {
-            'all_events': True,
+            'can_create_events': True,
+            'can_change_organizer_settings': True,
+            'can_change_teams': True,
+            'can_manage_gift_cards': True,
+            'can_manage_customers': True,
+            'can_manage_reusable_media': True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    second_team.refresh_from_db()
+    assert second_team.all_organizer_permissions
+    assert second_team.limit_organizer_permissions == {}
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
+        {
+            'can_change_teams': False,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    second_team.refresh_from_db()
+    assert not second_team.all_organizer_permissions
+    assert second_team.limit_organizer_permissions == {
+        'organizer.settings.general:write': True,
+        'organizer.giftcards:read': True,
+        'organizer.giftcards:write': True,
+        'organizer.events:create': True,
+        'organizer.customers:read': True,
+        'organizer.customers:write': True,
+        'organizer.reusablemedia:read': True,
+        'organizer.reusablemedia:write': True,
+        'organizer.devices:read': True,
+        'organizer.devices:write': True,
+        'organizer.seatingplans:write': True,
+        'organizer.outgoingmails:read': True,
+    }
+    assert resp.data["can_manage_customers"] is True
+    assert resp.data["can_change_teams"] is False
+
+
+@pytest.mark.django_db
+@pytest.mark.filterwarnings("ignore")
+def test_team_update_legacy_and_new(token_client, organizer, event, second_team):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/teams/{}/'.format(organizer.slug, second_team.pk),
+        {
+            'can_change_event_settings': True,
+            'all_organizer_permissions': True,
         },
         format='json'
     )
     assert resp.status_code == 400
+    assert "You cannot set deprecated and current permission attributes" in str(resp.data)
 
 
 @pytest.mark.django_db

@@ -473,7 +473,7 @@ def paymentintent_webhook(event, event_json, paymentintent_id, rso):
     return HttpResponse(status=200)
 
 
-@event_permission_required('can_change_event_settings')
+@event_permission_required('event.settings.general:write')
 def oauth_disconnect(request, **kwargs):
     if request.method != "POST":
         return render(request, 'pretixplugins/stripe/oauth_disconnect.html', {})
@@ -671,7 +671,7 @@ class ScaReturnView(StripeOrderView, View):
 
 class OrganizerSettingsFormView(DecoupleMixin, OrganizerDetailViewMixin, AdministratorPermissionRequiredMixin, FormView):
     model = Organizer
-    permission = 'can_change_organizer_settings'
+    permission = 'organizer.settings.general:write'
     form_class = OrganizerStripeSettingsForm
     template_name = 'pretixplugins/stripe/organizer_stripe.html'
 

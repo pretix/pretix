@@ -33,6 +33,13 @@ $(function () {
             dependents[cleanName($(this).attr("name"))] = $(this)
         })
 
+        const dependentsDisabled = [];
+        for (var k in dependents) {
+            if (dependents[k].prop("disabled")) {
+                dependentsDisabled.push(k);
+            }
+        }
+
         if (!Object.values(dependents).some((el) => el.length)) {
             // No address fields found, do not create request
             return;
@@ -101,7 +108,7 @@ $(function () {
                     label.append('<i class="label-required">' + gettext('required') + '</i>')
                 }
             }
-            for (var k in dependents) dependents[k].prop("disabled", false);
+            for (var k in dependents) dependents[k].prop("disabled", dependentsDisabled.includes(k));
             loader.hide();
         }
 
@@ -158,7 +165,7 @@ $(function () {
                         required = false;
 
                     dependent.closest(".form-group").toggle(visible).toggleClass('required', required);
-                    dependent.prop("required", required).prop("disabled", false);
+                    dependent.prop("required", required).prop("disabled", dependentsDisabled.includes(k));
                 }
             }).finally(function () {
                 loader.hide();

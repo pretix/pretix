@@ -7,7 +7,7 @@
 {% block inside %}
     <h1>
         {% blocktrans with name=quota.name %}Quota: {{ name }}{% endblocktrans %}
-        {% if 'can_change_items' in request.eventpermset %}
+        {% if 'event.items:write' in request.eventpermset %}
             <a href="{% url "control:event.items.quotas.edit" event=request.event.slug organizer=request.event.organizer.slug quota=quota.pk %}"
                class="btn btn-default">
                 <span class="fa fa-edit"></span>

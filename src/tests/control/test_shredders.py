@@ -58,8 +58,7 @@ class EventShredderTest(SoupTest):
             plugins='pretix.plugins.banktransfer,pretix.plugins.stripe,tests.testdummy'
         )
 
-        t = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
-                                can_change_items=True, can_change_orders=True)
+        t = Team.objects.create(organizer=self.orga1, all_organizer_permissions=True, all_event_permissions=True)
         t.members.add(self.user)
         t.limit_events.add(self.event1)
         self.order = Order.objects.create(

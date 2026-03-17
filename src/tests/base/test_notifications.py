@@ -65,7 +65,7 @@ def order(event):
 
 @pytest.fixture
 def team(event):
-    return event.organizer.teams.create(all_events=True, can_view_orders=True)
+    return event.organizer.teams.create(all_events=True, all_event_permissions=True)
 
 
 @pytest.fixture
@@ -142,7 +142,8 @@ def test_notification_ignore_same_user(event, order, user, monkeypatch_on_commit
 @pytest.mark.django_db
 def test_notification_ignore_insufficient_permissions(event, order, user, team, monkeypatch_on_commit):
     djmail.outbox = []
-    team.can_view_orders = False
+    team.all_event_permissions = False
+    team.limit_event_permissions = {"event.vouchers:read": True}
     team.save()
     user.notification_settings.create(
         method='mail', event=event, action_type='pretix.event.order.paid', enabled=True

@@ -58,7 +58,7 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
         )
-        t = Team.objects.create(organizer=self.orga, can_view_vouchers=True, can_change_vouchers=True)
+        t = Team.objects.create(organizer=self.orga, all_event_permissions=True)
         t.members.add(self.user)
         t.limit_events.add(self.event)
         self.client.login(email='dummy@dummy.dummy', password='dummy')

@@ -561,6 +561,18 @@ however for this signal, the ``sender`` **may also be None** to allow creating t
 notification settings!
 """
 
+register_event_permission_groups = GlobalSignal()
+"""
+This signal is sent out to get all known permissions. Receivers should return an
+instance of pretix.base.permissions.PermissionGroup or a list of such instances.
+"""
+
+register_organizer_permission_groups = GlobalSignal()
+"""
+This signal is sent out to get all known permissions. Receivers should return an
+instance of pretix.base.permissions.PermissionGroup or a list of such instances.
+"""
+
 notification = EventPluginSignal()
 """
 Arguments: ``logentry_id``, ``notification_type``
@@ -1105,6 +1117,9 @@ api_event_settings_fields = EventPluginSignal()
 """
 This signal is sent out to collect serializable settings fields for the API. You are expected to
 return a dictionary mapping names of attributes in the settings store to DRF serializer field instances.
+
+These are readable for all users with access to the events, therefore secrets stored in the settings store
+should not be included!
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
