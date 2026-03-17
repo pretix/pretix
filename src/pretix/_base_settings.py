@@ -245,7 +245,6 @@ STORAGES = {
 
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
-    ('text/vue', 'pretix.helpers.compressor.VueCompiler'),
 )
 
 COMPRESS_OFFLINE_CONTEXT = {
