@@ -1295,6 +1295,7 @@ class ManualPayment(BasePaymentProvider):
 
     def format_map(self, order, payment):
         return {
+            # Possible placeholder injection, we should make sure to never include user-controlled variables here
             'order': order.code,
             'amount': payment.amount,
             'currency': self.event.currency,
@@ -1525,16 +1526,26 @@ class GiftCardPayment(BasePaymentProvider):
     def payment_control_render(self, request, payment) -> str:
         from .models import GiftCard
 
-        if 'gift_card' in payment.info_data:
-            gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
+        if any(key in payment.info_data for key in ('gift_card', 'error')):
             template = get_template('pretixcontrol/giftcards/payment.html')
-
             ctx = {
                 'request': request,
                 'event': self.event,
-                'gc': gc,
+                **({'error': payment.info_data[
+                    'error']} if 'error' in payment.info_data else {}),
+                **({'gift_card_secret': payment.info_data[
+                    'gift_card_secret']} if 'gift_card_secret' in payment.info_data else {})
             }
-            return template.render(ctx)
+
+            try:
+                gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
+                ctx = {
+                    'gc': gc,
+                }
+            except GiftCard.DoesNotExist:
+                pass
+            finally:
+                return template.render(ctx)
 
     def payment_control_render_short(self, payment: OrderPayment) -> str:
         d = payment.info_data
@@ -1549,12 +1560,16 @@ class GiftCardPayment(BasePaymentProvider):
         try:
             gc = GiftCard.objects.get(pk=payment.info_data.get('gift_card'))
         except GiftCard.DoesNotExist:
-            return {}
+            return {
+                **({'error': payment.info_data[
+                    'error']} if 'error' in payment.info_data else {})
+            }
         return {
             'gift_card': {
                 'id': gc.pk,
                 'secret': gc.secret,
-                'organizer': gc.issuer.slug
+                'organizer': gc.issuer.slug,
+                ** ({'error': payment.info_data['error']} if 'error' in payment.info_data else {})
             }
         }
 
@@ -1626,6 +1641,8 @@ class GiftCardPayment(BasePaymentProvider):
                     raise PaymentException(_("This gift card does not support this currency."))
                 if not gc.accepted_by(self.event.organizer):
                     raise PaymentException(_("This gift card is not accepted by this event organizer."))
+                if gc.value <= Decimal("0.00"):
+                    raise PaymentException(_("All credit on this gift card has been used."))
                 if payment.amount > gc.value:
                     raise PaymentException(_("This gift card was used in the meantime. Please try again."))
                 if gc.testmode and not payment.order.testmode:
@@ -1646,8 +1663,16 @@ class GiftCardPayment(BasePaymentProvider):
                     'transaction_id': trans.pk,
                 }
                 payment.confirm(send_mail=not is_early_special_case, generate_invoice=not is_early_special_case)
+                gc.log_action(
+                    action='pretix.giftcards.transaction.payment',
+                    data={
+                        'value': trans.value,
+                        'acceptor_id': self.event.organizer.id,
+                        'acceptor_slug': self.event.organizer.slug
+                    }
+                )
         except PaymentException as e:
-            payment.fail(info={'error': str(e)})
+            payment.fail(info={**payment.info_data, 'error': str(e)}, send_mail=not is_early_special_case)
             raise e
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
@@ -1670,6 +1695,15 @@ class GiftCardPayment(BasePaymentProvider):
             'transaction_id': trans.pk,
         }
         refund.done()
+        gc.log_action(
+            action='pretix.giftcards.transaction.refund',
+            data={
+                'value': refund.amount,
+                'acceptor_id': self.event.organizer.id,
+                'acceptor_slug': self.event.organizer.slug,
+                'text': refund.comment,
+            }
+        )
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_free")

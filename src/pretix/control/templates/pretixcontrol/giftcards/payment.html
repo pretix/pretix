@@ -3,16 +3,26 @@
 <dl class="dl-horizontal">
     <dt>{% trans "Gift card code" %}</dt>
     <dd>
-        <a href="{% url "control:organizer.giftcard" organizer=gc.issuer.slug giftcard=gc.pk %}">
-            {{ gc.secret }}
-        </a>
-        {% if gc.issuer != request.organizer %}
-            <span class="text-muted">
-                <br>
-                <span class="fa fa-group"></span> {{ gc.issuer }}
-            </span>
+        {% if gc %}
+            <a href="{% url "control:organizer.giftcard" organizer=gc.issuer.slug giftcard=gc.pk %}">
+                {{ gc.secret }}
+            </a>
+            {% if gc.issuer.slug != request.organizer %}
+                <span class="text-muted">
+                    <br>
+                    <span class="fa fa-group"></span> {{ gc.issuer }}
+                </span>
+            {% endif %}
+        {% elif gift_card_secret %}
+            {{ gift_card_secret }}
         {% endif %}
     </dd>
-    <dt>{% trans "Issuer" %}</dt>
-    <dd>{{ gc.issuer }}</dd>
+    {% if gc %}
+        <dt>{% trans "Issuer" %}</dt>
+        <dd>{{ gc.issuer }}</dd>
+    {% endif %}
+    {% if error %}
+         <dt>{% trans "Error" %}</dt>
+        <dd>{{ error }}</dd>
+    {% endif %}
 </dl>

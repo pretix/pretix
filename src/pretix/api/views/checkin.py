@@ -188,11 +188,15 @@ class CheckinListViewSet(viewsets.ModelViewSet):
         clist = self.get_object()
         if serializer.validated_data.get('nonce'):
             if kwargs.get('position'):
-                prev = kwargs['position'].all_checkins.filter(nonce=serializer.validated_data['nonce']).first()
+                prev = kwargs['position'].all_checkins.filter(
+                    nonce=serializer.validated_data['nonce'],
+                    successful=False
+                ).first()
             else:
                 prev = clist.checkins.filter(
                     nonce=serializer.validated_data['nonce'],
                     raw_barcode=serializer.validated_data['raw_barcode'],
+                    successful=False
                 ).first()
             if prev:
                 # Ignore because nonce is already handled

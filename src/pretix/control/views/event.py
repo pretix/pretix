@@ -870,11 +870,15 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                                 )
 
                         except ValueError:
-                            msgs[self.supported_locale[idx]] = '<div class="alert alert-danger">{}</div>'.format(
-                                PlaceholderValidator.error_message)
+                            msgs[self.supported_locale[idx]] = format_html(
+                                '<div class="alert alert-danger">{}</div>',
+                                PlaceholderValidator.error_message
+                            )
                         except KeyError as e:
-                            msgs[self.supported_locale[idx]] = '<div class="alert alert-danger">{}</div>'.format(
-                                _('Invalid placeholder: {%(value)s}') % {'value': e.args[0]})
+                            msgs[self.supported_locale[idx]] = format_html(
+                                '<div class="alert alert-danger">{}</div>',
+                                _('Invalid placeholder: {%(value)s}') % {'value': e.args[0]}
+                            )
 
         return JsonResponse({
             'item': preview_item,

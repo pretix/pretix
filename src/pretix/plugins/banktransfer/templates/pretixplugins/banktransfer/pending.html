@@ -21,10 +21,10 @@
             <dt>{% trans "Reference code (important):" %}</dt><dd><b>{{ code }}</b></dd>
             <dt>{% trans "Amount:" %}</dt><dd>{{ amount|money:event.currency }}</dd>
             {% if settings.bank_details_type == "sepa" %}
-                <dt>{% trans "Account holder" %}:</dt><dd>{{ settings.bank_details_sepa_name }}</dt>
-                <dt>{% trans "IBAN" %}:</dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dt>
-                <dt>{% trans "BIC" %}:</dt><dd>{{ settings.bank_details_sepa_bic }}</dt>
-                <dt>{% trans "Bank" %}:</dt><dd>{{ settings.bank_details_sepa_bank }}</dt>
+                <dt>{% trans "Account holder" %}:</dt><dd>{{ settings.bank_details_sepa_name }}</dd>
+                <dt>{% trans "IBAN" %}:</dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dd>
+                <dt>{% trans "BIC" %}:</dt><dd>{{ settings.bank_details_sepa_bic }}</dd>
+                <dt>{% trans "Bank" %}:</dt><dd>{{ settings.bank_details_sepa_bank }}</dd>
             {% endif %}
         </dl>
         {% if details %}

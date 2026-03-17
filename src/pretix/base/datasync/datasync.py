@@ -216,7 +216,10 @@ class OutboundSyncProvider:
 
             try:
                 mapped_objects = self.sync_order(sq.order)
-                if not all(all(not res or res.sync_info.get("action", "") == "nothing_to_do" for res in res_list) for res_list in mapped_objects.values()):
+                actions_taken = [res and res.sync_info.get("action", "") for res_list in mapped_objects.values() for res in res_list]
+                should_write_logentry = any(action not in (None, "nothing_to_do") for action in actions_taken)
+                logger.info('Synced order %s to %s, actions: %r, log: %r', sq.order.code, sq.sync_provider, actions_taken, should_write_logentry)
+                if should_write_logentry:
                     sq.order.log_action("pretix.event.order.data_sync.success", {
                         "provider": self.identifier,
                         "objects": {
@@ -237,7 +240,7 @@ class OutboundSyncProvider:
                     sq.set_sync_error("exceeded", e.messages, e.full_message)
                 else:
                     logger.info(
-                        f"Could not sync order {sq.order.code} to {type(self).__name__} "
+                        f"Could not sync order {sq.order.code} to {sq.sync_provider} "
                         f"(transient error, attempt #{sq.failed_attempts}, next {sq.not_before})",
                         exc_info=True,
                     )

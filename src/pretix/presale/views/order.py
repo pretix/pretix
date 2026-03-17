@@ -909,6 +909,21 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(
+            **kwargs,
+        )
+
+        ctx['invoice_generation_selfservice'] = (
+            self.request.event.settings.invoice_reissue_after_modify or
+            (
+                can_generate_invoice(self.request.event, self.order, ignore_payments=True) and
+                not self.order.invoices.exists()
+            )
+        )
+
+        return ctx
+
     def dispatch(self, request, *args, **kwargs):
         self.request = request
         self.kwargs = kwargs
@@ -1510,7 +1525,10 @@ class OrderChangeMixin:
                             'max_count': iao.max_count,
                             'iao': iao,
                             'items': [i for i in items if not i.require_voucher],
-                            'items_missing': {k: v for k, v in current_addon_products_missing.items() if v},
+                            'items_missing': {
+                                k: v for k, v in current_addon_products_missing.items()
+                                if v and k[0].category_id == iao.addon_category_id
+                            },
                         })
 
         return positions

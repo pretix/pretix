@@ -148,6 +148,10 @@ class NumberedCanvas(Canvas):
         self.restoreState()
 
 
+class InvoiceNotReadyException(Exception):
+    pass
+
+
 class BaseInvoiceRenderer:
     """
     This is the base class for all invoice renderers.

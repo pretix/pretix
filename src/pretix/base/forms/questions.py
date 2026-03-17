@@ -890,18 +890,18 @@ class BaseQuestionsForm(forms.Form):
                 if not help_text:
                     if q.valid_date_min and q.valid_date_max:
                         help_text = format_lazy(
-                            'Please enter a date between {min} and {max}.',
+                            _('Please enter a date between {min} and {max}.'),
                             min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
                             max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
                         )
                     elif q.valid_date_min:
                         help_text = format_lazy(
-                            'Please enter a date no earlier than {min}.',
+                            _('Please enter a date no earlier than {min}.'),
                             min=date_format(q.valid_date_min, "SHORT_DATE_FORMAT"),
                         )
                     elif q.valid_date_max:
                         help_text = format_lazy(
-                            'Please enter a date no later than {max}.',
+                            _('Please enter a date no later than {max}.'),
                             max=date_format(q.valid_date_max, "SHORT_DATE_FORMAT"),
                         )
                 if initial and initial.answer:
@@ -939,18 +939,18 @@ class BaseQuestionsForm(forms.Form):
                 if not help_text:
                     if q.valid_datetime_min and q.valid_datetime_max:
                         help_text = format_lazy(
-                            'Please enter a date and time between {min} and {max}.',
+                            _('Please enter a date and time between {min} and {max}.'),
                             min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
                             max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
                         )
                     elif q.valid_datetime_min:
                         help_text = format_lazy(
-                            'Please enter a date and time no earlier than {min}.',
+                            _('Please enter a date and time no earlier than {min}.'),
                             min=date_format(q.valid_datetime_min, "SHORT_DATETIME_FORMAT"),
                         )
                     elif q.valid_datetime_max:
                         help_text = format_lazy(
-                            'Please enter a date and time no later than {max}.',
+                            _('Please enter a date and time no later than {max}.'),
                             max=date_format(q.valid_datetime_max, "SHORT_DATETIME_FORMAT"),
                         )
 
@@ -1415,6 +1415,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                     if not data.get(r):
                         raise ValidationError({r: _("This field is required for the selected type of invoice transmission.")})
 
+                transmission_type.validate_invoice_address_data(data)
                 self.instance.transmission_type = transmission_type.identifier
                 self.instance.transmission_info = transmission_type.form_data_to_transmission_info(data)
             elif transmission_type.is_exclusive(self.event, data.get("country"), data.get("is_business")):

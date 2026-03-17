@@ -13,5 +13,5 @@ Start time: {{ start_time }} (new data added after this time might not have been
 
 Best regards,
 
-Your pretix team
+Your {{ instance }} team
 {% endblocktrans %}

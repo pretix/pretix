@@ -86,7 +86,7 @@ class OrderSyncQueue(models.Model):
 
     def set_sync_error(self, failure_mode, messages, full_message):
         logger.exception(
-            f"Could not sync order {self.order.code} to {type(self).__name__} ({failure_mode})"
+            f"Could not sync order {self.order.code} to {self.sync_provider} ({failure_mode})"
         )
         self.order.log_action(f"pretix.event.order.data_sync.failed.{failure_mode}", {
             "provider": self.sync_provider,

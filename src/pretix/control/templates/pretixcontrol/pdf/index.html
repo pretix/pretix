@@ -264,12 +264,17 @@
                                     The paper size will match the PDF.
                                 {% endblocktrans %}
                             </p>
-                            <p>
+                            <p class="text-center">
                                 <span class="btn btn-default fileinput-button background-button btn-block">
                                     <i class="fa fa-upload"></i>
                                     <span>{% trans "Upload PDF as background" %}</span>
                                     <input id="fileupload" type="file" name="background" accept="application/pdf">
                                 </span>
+                                <small class="text-muted">
+                                    {% blocktrans trimmed with size=maxfilesize|filesizeformat %}
+                                        max. {{ size }}, smaller is better
+                                    {% endblocktrans %}
+                                </small>
                             </p>
                             <p class="text-center">
                                 <a class="btn btn-link background-download-button" href="{{ pdf }}" target="_blank">

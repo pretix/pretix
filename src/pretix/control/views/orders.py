@@ -1226,7 +1226,11 @@ class OrderRefundView(OrderView):
                     customer=order.customer,
                     testmode=order.testmode
                 )
-                giftcard.log_action('pretix.giftcards.created', user=self.request.user, data={})
+                giftcard.log_action(
+                    action='pretix.giftcards.created',
+                    user=self.request.user,
+                    data={}
+                )
                 refunds.append(OrderRefund(
                     order=order,
                     payment=None,
@@ -1637,9 +1641,17 @@ class OrderCheckVATID(OrderView):
 
             try:
                 normalized_id = validate_vat_id(ia.vat_id, str(ia.country))
-                ia.vat_id_validated = True
-                ia.vat_id = normalized_id
-                ia.save()
+                with transaction.atomic():
+                    ia.vat_id_validated = True
+                    ia.vat_id = normalized_id
+                    ia.save()
+                    self.order.log_action(
+                        'pretix.event.order.vatid.validated',
+                        data={
+                            'vat_id': normalized_id,
+                        },
+                        user=self.request.user,
+                    )
             except VATIDFinalError as e:
                 messages.error(self.request, e.message)
             except VATIDTemporaryError:
@@ -2409,9 +2421,9 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         with language(order.locale, self.request.event.settings.region):
             email_context = get_email_context(event=order.event, order=order)
         email_template = LazyI18nString(form.cleaned_data['message'])
-        email_subject = format_map(str(form.cleaned_data['subject']), email_context)
-        email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
+            email_subject = format_map(form.cleaned_data['subject'], email_context)
+            email_content = render_mail(email_template, email_context)
             self.preview_output = {
                 'subject': mark_safe(_('Subject: {subject}').format(
                     subject=prefix_subject(order.event, escape(email_subject), highlight=True)
@@ -2473,9 +2485,9 @@ class OrderPositionSendMail(OrderSendMail):
         with language(position.order.locale, self.request.event.settings.region):
             email_context = get_email_context(event=position.order.event, order=position.order, position=position)
         email_template = LazyI18nString(form.cleaned_data['message'])
-        email_subject = format_map(str(form.cleaned_data['subject']), email_context)
-        email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
+            email_subject = format_map(str(form.cleaned_data['subject']), email_context)
+            email_content = render_mail(email_template, email_context)
             self.preview_output = {
                 'subject': mark_safe(_('Subject: {subject}').format(
                     subject=prefix_subject(position.order.event, escape(email_subject), highlight=True))

@@ -49,12 +49,14 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views import View
+from django.views.decorators.cache import never_cache
 from django.views.generic import FormView, ListView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
@@ -78,6 +80,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.auth import get_u2f_appid, get_webauthn_rp_id
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.security import session_reauth
 from pretix.helpers.u2f import websafe_encode
 
 REAL_DEVICE_TYPES = (TOTPDevice, WebAuthnDevice, U2FDevice)
@@ -85,8 +88,9 @@ logger = logging.getLogger(__name__)
 
 
 class RecentAuthenticationRequiredMixin:
-    max_time = 3600
+    max_time = 900
 
+    @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         tdelta = time.time() - request.session.get('pretix_auth_login_time', 0)
         if tdelta > self.max_time:
@@ -156,9 +160,7 @@ class ReauthView(TemplateView):
         valid = valid or self.form.is_valid()
 
         if valid:
-            t = int(time.time())
-            request.session['pretix_auth_login_time'] = t
-            request.session['pretix_auth_last_used'] = t
+            session_reauth(request)
             next_url = get_auth_backends()[request.user.auth_backend].get_next_url(request)
             if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
                 return redirect_to_url(next_url)
@@ -172,9 +174,7 @@ class ReauthView(TemplateView):
         u = backend.request_authenticate(request)
         if u and u == request.user:
             next_url = backend.get_next_url(request)
-            t = int(time.time())
-            request.session['pretix_auth_login_time'] = t
-            request.session['pretix_auth_last_used'] = t
+            session_reauth(request)
             if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
                 return redirect_to_url(next_url)
             return redirect(reverse('control:index'))
@@ -289,16 +289,13 @@ class User2FAMainView(RecentAuthenticationRequiredMixin, TemplateView):
         ctx = super().get_context_data()
 
         try:
-            ctx['static_tokens'] = StaticDevice.objects.get(user=self.request.user, name='emergency').token_set.all()
+            ctx['static_tokens_device'] = StaticDevice.objects.get(user=self.request.user, name='emergency')
         except StaticDevice.MultipleObjectsReturned:
-            ctx['static_tokens'] = StaticDevice.objects.filter(
+            ctx['static_tokens_device'] = StaticDevice.objects.filter(
                 user=self.request.user, name='emergency'
-            ).first().token_set.all()
+            ).first()
         except StaticDevice.DoesNotExist:
-            d = StaticDevice.objects.create(user=self.request.user, name='emergency')
-            for i in range(10):
-                d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
-            ctx['static_tokens'] = d.token_set.all()
+            ctx['static_tokens_device'] = None
 
         ctx['devices'] = []
         for dt in REAL_DEVICE_TYPES:
@@ -630,8 +627,14 @@ class User2FARegenerateEmergencyView(RecentAuthenticationRequiredMixin, Template
         ])
         self.request.user.update_session_token()
         update_session_auth_hash(self.request, self.request.user)
-        messages.success(request, _('Your emergency codes have been newly generated. Remember to store them in a safe '
-                                    'place in case you lose access to your devices.'))
+        messages.success(
+            request,
+            _('Your emergency codes have been newly generated. Remember to store them in a safe '
+              'place in case you lose access to your devices. You will not be able to view them '
+              'again here.\n\nYour emergency codes:\n{tokens}').format(
+                tokens='- ' + '\n- '.join(t.token for t in d.token_set.all())
+            )
+        )
         return redirect(reverse('control:user.settings.2fa'))
 
 

@@ -340,38 +340,43 @@ def get_global_navigation(request):
             'active': (url.url_name == 'index'),
             'icon': 'dashboard',
         },
-        {
-            'label': _('Events'),
-            'url': reverse('control:events'),
-            'active': 'events' in url.url_name,
-            'icon': 'calendar',
-        },
-        {
-            'label': _('Organizers'),
-            'url': reverse('control:organizers'),
-            'active': 'organizers' in url.url_name,
-            'icon': 'group',
-        },
-        {
-            'label': _('Search'),
-            'url': reverse('control:search.orders'),
-            'active': False,
-            'icon': 'search',
-            'children': [
-                {
-                    'label': _('Orders'),
-                    'url': reverse('control:search.orders'),
-                    'active': 'search.orders' in url.url_name,
-                    'icon': 'search',
-                },
-                {
-                    'label': _('Payments'),
-                    'url': reverse('control:search.payments'),
-                    'active': 'search.payments' in url.url_name,
-                    'icon': 'search',
-                },
-            ]
-        },
+    ]
+    if request.user.is_in_any_teams:
+        nav += [
+            {
+                'label': _('Events'),
+                'url': reverse('control:events'),
+                'active': 'events' in url.url_name,
+                'icon': 'calendar',
+            },
+            {
+                'label': _('Organizers'),
+                'url': reverse('control:organizers'),
+                'active': 'organizers' in url.url_name,
+                'icon': 'group',
+            },
+            {
+                'label': _('Search'),
+                'url': reverse('control:search.orders'),
+                'active': False,
+                'icon': 'search',
+                'children': [
+                    {
+                        'label': _('Orders'),
+                        'url': reverse('control:search.orders'),
+                        'active': 'search.orders' in url.url_name,
+                        'icon': 'search',
+                    },
+                    {
+                        'label': _('Payments'),
+                        'url': reverse('control:search.payments'),
+                        'active': 'search.payments' in url.url_name,
+                        'icon': 'search',
+                    },
+                ]
+            },
+        ]
+    nav += [
         {
             'label': _('User settings'),
             'url': reverse('control:user.settings'),

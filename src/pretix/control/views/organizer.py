@@ -207,6 +207,7 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
             'organizer').prefetch_related(
             'organizer', '_settings_objects', 'organizer___settings_objects',
             'organizer__meta_properties',
+            'limit_sales_channels',
             Prefetch(
                 'meta_values',
                 EventMetaValue.objects.select_related('property'),
@@ -237,6 +238,7 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
             self.filter_form['meta_{}'.format(p.name)] for p in
             self.organizer.meta_properties.filter(filter_allowed=True)
         ]
+        ctx['sales_channels'] = self.request.organizer.sales_channels.all()
         return ctx
 
 
@@ -1039,9 +1041,10 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     def _send_invite(self, instance):
         mail(
             instance.email,
-            _('pretix account invitation'),
+            _('Account invitation'),
             'pretixcontrol/email/invitation.txt',
             {
+                'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
                 'organizer': self.request.organizer.name,
                 'team': instance.team.name,
@@ -1667,9 +1670,12 @@ class GiftCardAcceptanceInviteView(OrganizerDetailViewMixin, OrganizerPermission
             active=False,
         )
         self.request.organizer.log_action(
-            'pretix.giftcards.acceptance.acceptor.invited',
-            data={'acceptor': form.cleaned_data['acceptor'].slug,
-                  'reusable_media': form.cleaned_data['reusable_media']},
+            action='pretix.giftcards.acceptance.acceptor.invited',
+            data={
+                'acceptor': form.cleaned_data['acceptor'].slug,
+                'issuer': self.request.organizer.slug,
+                'reusable_media': form.cleaned_data['reusable_media']
+            },
             user=self.request.user
         )
         messages.success(self.request, _('The selected organizer has been invited.'))
@@ -1705,8 +1711,11 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
             ).delete()
             if done:
                 self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.acceptor.removed',
-                    data={'acceptor': request.POST.get("delete_acceptor")},
+                    action='pretix.giftcards.acceptance.acceptor.removed',
+                    data={
+                        'acceptor': request.POST.get("delete_acceptor"),
+                        'issuer': self.request.organizer.slug
+                    },
                     user=request.user
                 )
             messages.success(self.request, _('The selected connection has been removed.'))
@@ -1716,8 +1725,11 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
             ).delete()
             if done:
                 self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.issuer.removed',
-                    data={'issuer': request.POST.get("delete_acceptor")},
+                    action='pretix.giftcards.acceptance.issuer.removed',
+                    data={
+                        'issuer': request.POST.get("delete_acceptor"),
+                        'acceptor': self.request.organizer.slug
+                    },
                     user=request.user
                 )
             messages.success(self.request, _('The selected connection has been removed.'))
@@ -1727,8 +1739,11 @@ class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRe
             ).update(active=True)
             if done:
                 self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.issuer.accepted',
-                    data={'issuer': request.POST.get("accept_issuer")},
+                    action='pretix.giftcards.acceptance.issuer.accepted',
+                    data={
+                        'issuer': request.POST.get("accept_issuer"),
+                        'acceptor': self.request.organizer.slug
+                    },
                     user=request.user
                 )
             messages.success(self.request, _('The selected connection has been accepted.'))
@@ -1834,10 +1849,12 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                         acceptor=request.organizer,
                     )
                     self.object.log_action(
-                        'pretix.giftcards.transaction.manual',
+                        action='pretix.giftcards.transaction.manual',
                         data={
                             'value': value,
-                            'text': request.POST.get('text')
+                            'text': request.POST.get('text'),
+                            'acceptor_id': self.request.organizer.id,
+                            'acceptor_slug': self.request.organizer.slug
                         },
                         user=self.request.user,
                     )
@@ -1886,15 +1903,24 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         messages.success(self.request, _('The gift card has been created and can now be used.'))
         form.instance.issuer = self.request.organizer
         super().form_valid(form)
-        form.instance.transactions.create(
-            acceptor=self.request.organizer,
-            value=form.cleaned_data['value']
+        form.instance.log_action(
+            action='pretix.giftcards.created',
+            user=self.request.user,
         )
-        form.instance.log_action('pretix.giftcards.created', user=self.request.user, data={})
         if form.cleaned_data['value']:
-            form.instance.log_action('pretix.giftcards.transaction.manual', user=self.request.user, data={
-                'value': form.cleaned_data['value']
-            })
+            form.instance.transactions.create(
+                acceptor=self.request.organizer,
+                value=form.cleaned_data['value']
+            )
+            form.instance.log_action(
+                action='pretix.giftcards.transaction.manual',
+                user=self.request.user,
+                data={
+                    'value': form.cleaned_data['value'],
+                    'acceptor_id': self.request.organizer.id,
+                    'acceptor_slug': self.request.organizer.slug
+                }
+            )
         return redirect(reverse(
             'control:organizer.giftcard',
             kwargs={
@@ -1922,7 +1948,11 @@ class GiftCardUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
     def form_valid(self, form):
         messages.success(self.request, _('The gift card has been changed.'))
         super().form_valid(form)
-        form.instance.log_action('pretix.giftcards.modified', user=self.request.user, data=dict(form.cleaned_data))
+        form.instance.log_action(
+            action='pretix.giftcards.modified',
+            user=self.request.user,
+            data=dict(form.cleaned_data)
+        )
         return redirect(reverse(
             'control:organizer.giftcard',
             kwargs={

@@ -204,6 +204,12 @@ class PeppolTransmissionType(TransmissionType):
         }
         return base | {"transmission_peppol_participant_id"}
 
+    def validate_invoice_address_data(self, address_data: dict):
+        # Special case Belgium: If a Belgian business ID is used as Peppol ID, it should match the VAT ID
+        if address_data.get("transmission_peppol_participant_id").startswith("0208:") and address_data.get("vat_id"):
+            if address_data["vat_id"].removeprefix("BE") != address_data["transmission_peppol_participant_id"].removeprefix("0208:"):
+                raise ValidationError({"transmission_peppol_participant_id": _("The Peppol participant ID does not match your VAT ID.")})
+
     def pdf_watermark(self) -> str:
         return pgettext("peppol_invoice", "Visual copy")
 

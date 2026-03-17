@@ -9,7 +9,7 @@
     <script type="text/plain" id="stripe_payment_intent_action_type">{{ payment_intent_action_type }}</script>
     <script type="text/plain" id="stripe_payment_intent_client_secret">{{ payment_intent_client_secret }}</script>
     {% if payment_intent_next_action_redirect_url %}
-        <script type="text/plain" id="stripe_payment_intent_next_action_redirect_url">{{ payment_intent_next_action_redirect_url }}</script>
+        <script type="text/plain" id="stripe_payment_intent_next_action_redirect_url">{{ payment_intent_next_action_redirect_url|safe }}</script>
     {% endif %}
     {% if payment_intent_redirect_action_handling %}
         <script type="text/plain" id="stripe_payment_intent_redirect_action_handling">{{ payment_intent_redirect_action_handling }}</script>

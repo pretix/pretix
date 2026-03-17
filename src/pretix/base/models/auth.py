@@ -49,6 +49,7 @@ from django.core.exceptions import BadRequest, PermissionDenied
 from django.db import IntegrityError, models, transaction
 from django.db.models import Q
 from django.utils.crypto import get_random_string, salted_hmac
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_otp.models import Device
@@ -346,7 +347,8 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             {
                 'user': self,
                 'messages': msg,
-                'url': build_absolute_uri('control:user.settings')
+                'url': build_absolute_uri('control:user.settings'),
+                'instance': settings.PRETIX_INSTANCE_NAME,
             },
             event=None,
             user=self,
@@ -391,6 +393,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                 'user': self,
                 'reason': msg,
                 'code': code,
+                'instance': settings.PRETIX_INSTANCE_NAME,
             },
             event=None,
             user=self,
@@ -430,6 +433,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         mail(
             self.email, _('Password recovery'), 'pretixcontrol/email/forgot.txt',
             {
+                'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
                 'url': (build_absolute_uri('control:auth.forgot.recover')
                         + '?id=%d&token=%s' % (self.id, default_token_generator.make_token(self)))
@@ -663,6 +667,11 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     def update_session_token(self):
         self.session_token = generate_session_token()
         self.save(update_fields=['session_token'])
+
+    @cached_property
+    @scopes_disabled()
+    def is_in_any_teams(self):
+        return self.teams.exists()
 
 
 class UserKnownLoginSource(models.Model):
