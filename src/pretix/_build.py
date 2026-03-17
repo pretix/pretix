@@ -21,7 +21,6 @@
 #
 
 import os
-import shutil
 import subprocess
 
 from setuptools.command.build import build
