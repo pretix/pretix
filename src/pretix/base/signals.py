@@ -159,11 +159,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._sorted_receivers(sender)[0]:
-            if self._is_receiver_active(sender, receiver):
-                response = receiver(signal=self, sender=sender, **named)
-                responses.append((receiver, response))
-        for receiver in self._sorted_receivers(sender)[1]:
+        for receiver in self._sorted_receivers(sender):
             if self._is_receiver_active(sender, receiver):
                 response = receiver(signal=self, sender=sender, **named)
                 responses.append((receiver, response))
@@ -185,11 +181,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._sorted_receivers(sender)[0]:
-            if self._is_receiver_active(sender, receiver):
-                named[chain_kwarg_name] = response
-                response = receiver(signal=self, sender=sender, **named)
-        for receiver in self._sorted_receivers(sender)[1]:
+        for receiver in self._sorted_receivers(sender):
             if self._is_receiver_active(sender, receiver):
                 named[chain_kwarg_name] = response
                 response = receiver(signal=self, sender=sender, **named)
@@ -214,15 +206,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._sorted_receivers(sender)[0]:
-            if self._is_receiver_active(sender, receiver):
-                try:
-                    response = receiver(signal=self, sender=sender, **named)
-                except Exception as err:
-                    responses.append((receiver, err))
-                else:
-                    responses.append((receiver, response))
-        for receiver in self._sorted_receivers(sender)[1]:
+        for receiver in self._sorted_receivers(sender):
             if self._is_receiver_active(sender, receiver):
                 try:
                     response = receiver(signal=self, sender=sender, **named)
@@ -232,10 +216,14 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
                     responses.append((receiver, response))
         return responses
 
+    def asend(self, sender: T, **named):
+        raise NotImplementedError()  # NOQA
+
+    def asend_robust(self, sender: T, **named):
+        raise NotImplementedError()  # NOQA
+
     def _sorted_receivers(self, sender):
-        orig_list_sync = self._live_receivers(sender)[0]
-        # todo: _live_receivers changed return value from [] to [], []
-        orig_list_async = self._live_receivers(sender)[1]
+        orig_list, __ = self._live_receivers(sender)
 
         def _receiver_module(receiver):
             return getattr(receiver, "__module__", receiver.__class__.__module__)
@@ -243,23 +231,15 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         def _receiver_name(receiver):
             return getattr(receiver, "__name__", receiver.__class__.__name__)
 
-        sorted_list_sync = sorted(
-            orig_list_sync,
+        sorted_list = sorted(
+            orig_list,
             key=lambda receiver: (
                 0 if any(_receiver_module(receiver).startswith(m) for m in settings.CORE_MODULES) else 1,
                 _receiver_module(receiver),
                 _receiver_name(receiver),
             )
         )
-        sorted_list_async = sorted(
-            orig_list_async,
-            key=lambda receiver: (
-                0 if any(_receiver_module(receiver).startswith(m) for m in settings.CORE_MODULES) else 1,
-                _receiver_module(receiver),
-                _receiver_name(receiver),
-            )
-        )
-        return sorted_list_sync, sorted_list_async
+        return sorted_list
 
 
 class EventPluginSignal(PluginSignal[Event]):
