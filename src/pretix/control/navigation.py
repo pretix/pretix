@@ -333,8 +333,6 @@ def get_global_navigation(request):
     if not url:
         return []
     has_staff_session = request.user.has_active_staff_session(request.session.session_key)
-    request.user._has_any_teams = request.user.teams.exists()
-    has_any_teams = request.user._has_any_teams
     nav = [
         {
             'label': _('Dashboard'),
@@ -343,7 +341,7 @@ def get_global_navigation(request):
             'icon': 'dashboard',
         },
     ]
-    if has_any_teams:
+    if request.user.is_in_any_teams:
         nav += [
             {
                 'label': _('Events'),
