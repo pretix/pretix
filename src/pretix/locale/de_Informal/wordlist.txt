@@ -540,6 +540,7 @@ WeChat-Zahlung
 Weiterleitungs-URIs
 Weiterleitungs-URL
 Weiterleitungs-URLs
+Wero
 WERO
 WERO-App
 WhatsApp
