@@ -305,6 +305,19 @@ class GlobalSignal(django.dispatch.Signal):
             response = receiver(signal=self, sender=sender, **named)
         return response
 
+    def _live_receivers(self, sender):
+        # Ensure consistent sorting of receivers
+        orig_list = super()._live_receivers(sender)
+        sorted_list = sorted(
+            orig_list,
+            key=lambda receiver: (
+                0 if any(receiver.__module__.startswith(m) for m in settings.CORE_MODULES) else 1,
+                receiver.__module__,
+                receiver.__name__,
+            )
+        )
+        return sorted_list
+
 
 class DeprecatedSignal(GlobalSignal):
 
