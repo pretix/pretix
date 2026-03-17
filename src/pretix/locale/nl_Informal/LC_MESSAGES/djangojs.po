@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 09:10+0000\n"
+"POT-Creation-Date: 2026-03-17 14:06+0000\n"
 "PO-Revision-Date: 2026-01-29 19:43+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -59,8 +59,8 @@ msgid "PayPal Pay Later"
 msgstr "PayPal Later betalen"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
-msgid "iDEAL"
-msgstr "iDEAL"
+msgid "iDEAL | Wero"
+msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
@@ -355,7 +355,7 @@ msgstr "Nee"
 msgid "close"
 msgstr "sluiten"
 
-#: pretix/static/pretixbase/js/addressform.js:101
+#: pretix/static/pretixbase/js/addressform.js:108
 #: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "verplicht"
@@ -425,7 +425,8 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr "Als dit langer dan een paar minuten duurt, neem dan contact met ons op."
+msgstr ""
+"Als dit langer dan een paar minuten duurt, neem dan contact met ons op."
 
 #: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
@@ -667,40 +668,40 @@ msgstr ""
 "Je kleur heeft onvoldoende contrast met wit. Dit heeft invloed op de "
 "toegankelijkheid van je website."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:443
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:445
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "Search query"
 msgstr "Zoekopdracht"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:461
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:462
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "None"
 msgstr "Geen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:468
 msgid "Selected only"
 msgstr "Alleen geselecteerde"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:839
+#: pretix/static/pretixcontrol/js/ui/main.js:841
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Voer een paginanummer in tussen 1 en %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Invalid page number."
 msgstr "Ongeldig paginanummer."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1000
+#: pretix/static/pretixcontrol/js/ui/main.js:1002
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1040
+#: pretix/static/pretixcontrol/js/ui/main.js:1042
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1121
+#: pretix/static/pretixcontrol/js/ui/main.js:1123
 msgid "You have unsaved changes!"
 msgstr "Je hebt nog niet opgeslagen wijzigingen!"
 
@@ -746,7 +747,8 @@ msgstr "Je winkelwagen verloopt bijna."
 #: pretix/static/pretixpresale/js/ui/cart.js:62
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "De artikelen in je winkelwagen worden één minuut voor je gereserveerd."
+msgstr[0] ""
+"De artikelen in je winkelwagen worden één minuut voor je gereserveerd."
 msgstr[1] ""
 "De artikelen in je winkelwagen worden {num} minuten voor je gereserveerd."
 
@@ -1031,7 +1033,8 @@ msgstr "Afrekening afsluiten"
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
-msgstr "Je kunt deze bewerking niet annuleren. Wacht tot het laden voltooid is."
+msgstr ""
+"Je kunt deze bewerking niet annuleren. Wacht tot het laden voltooid is."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgctxt "widget"
@@ -1207,6 +1210,9 @@ msgstr "november"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "december"
+
+#~ msgid "iDEAL"
+#~ msgstr "iDEAL"
 
 #~ msgid "Time zone:"
 #~ msgstr "Tijdzone:"
