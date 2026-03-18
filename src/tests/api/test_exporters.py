@@ -315,7 +315,7 @@ def event_scheduled_export(event, user):
 TEST_SCHEDULED_EXPORT_RES = {
     "owner": "dummy@dummy.dummy",
     "export_identifier": "orderlist",
-    "export_form_data": {'_format': 'xlsx', 'date_range': 'year_this'},
+    "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
     "locale": "en",
     "mail_additional_recipients": "foo@example.org",
     "mail_additional_recipients_cc": "",
