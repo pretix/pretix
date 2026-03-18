@@ -65,8 +65,9 @@ def form_field_to_serializer_field(field):
         if isinstance(field, m_from):
             return m_to(
                 required=field.required,
-                allow_null=not field.required,
+                allow_null=not field.required and not isinstance(field, forms.BooleanField),
                 validators=field.validators,
+                initial=field.initial,
                 **{kwarg: getattr(field, kwarg, None) for kwarg in m_kwargs}
             )
 

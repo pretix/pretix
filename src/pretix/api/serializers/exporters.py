@@ -75,7 +75,8 @@ class JobRunSerializer(serializers.Serializer):
     def to_representation(self, instance):
         # Translate between events as a list of slugs (API) and list of ints (database)
         if self.ex.is_multievent and not isinstance(self.ex, OrganizerLevelExportMixin) and "events" in instance and isinstance(instance["events"], list):
-            instance["events"] = [e.slug for e in self.ex.events.filter(pk__in=instance["events"]).only("slug")]
+            instance["events"] = [e for e in self.ex.events.filter(pk__in=instance["events"])]
+        instance = super().to_representation(instance)
         return instance
 
     def to_internal_value(self, data):

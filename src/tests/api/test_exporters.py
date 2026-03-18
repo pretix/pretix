@@ -315,7 +315,7 @@ def event_scheduled_export(event, user):
 TEST_SCHEDULED_EXPORT_RES = {
     "owner": "dummy@dummy.dummy",
     "export_identifier": "orderlist",
-    "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+    "export_form_data": {'_format': 'xlsx', 'date_range': 'year_this'},
     "locale": "en",
     "mail_additional_recipients": "foo@example.org",
     "mail_additional_recipients_cc": "",
@@ -493,6 +493,7 @@ def org_scheduled_export(organizer, user):
 @pytest.mark.django_db
 def test_org_scheduled_export_list_token(token_client, organizer, user, team, org_scheduled_export):
     res = dict(TEST_SCHEDULED_EXPORT_RES)
+    res["export_form_data"]["event_date_range"] = None
     res["id"] = org_scheduled_export.pk
     res["schedule_next_run"] = org_scheduled_export.schedule_next_run.astimezone(zoneinfo.ZoneInfo("UTC")). \
         isoformat().replace("+00:00", "Z")
@@ -518,6 +519,7 @@ def test_org_scheduled_export_list_user(user_client, organizer, user, team, org_
     team.members.add(user2)
 
     res = dict(TEST_SCHEDULED_EXPORT_RES)
+    res["export_form_data"]["event_date_range"] = None
     res["id"] = org_scheduled_export.pk
     res["schedule_next_run"] = org_scheduled_export.schedule_next_run.astimezone(zoneinfo.ZoneInfo("UTC")). \
         isoformat().replace("+00:00", "Z")
@@ -545,6 +547,7 @@ def test_org_scheduled_export_list_user(user_client, organizer, user, team, org_
 @pytest.mark.django_db
 def test_org_scheduled_export_detail(token_client, organizer, user, org_scheduled_export):
     res = dict(TEST_SCHEDULED_EXPORT_RES)
+    res["export_form_data"]["event_date_range"] = None
     res["id"] = org_scheduled_export.pk
     res["schedule_next_run"] = org_scheduled_export.schedule_next_run.astimezone(zoneinfo.ZoneInfo("UTC")). \
         isoformat().replace("+00:00", "Z")
@@ -959,6 +962,7 @@ def test_organizer_edit_restrictions(client, event, organizer, user, team):
         organizer=organizer,
         owner=user2,
         export_identifier="giftcardlist",
+        export_form_data={"_format": "xlsx"},
         mail_subject="Test",
         mail_template="Test",
         locale="en",
