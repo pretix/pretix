@@ -229,7 +229,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
             return getattr(obj, key, getattr(obj.__class__, key))
 
         def _is_core_module(receiver):
-            m = getattr_fallback_to_class(receiver, "__module__")
+            m = _getattr_fallback_to_class(receiver, "__module__")
             return any(m.startswith(c) for c in settings.CORE_MODULES)
 
         sorted_list = sorted(
@@ -329,19 +329,19 @@ class GlobalSignal(django.dispatch.Signal):
             # TODO: log, raise error?
             pass
 
-        def getattr_fallback_to_class(obj, key):
+        def _getattr_fallback_to_class(obj, key):
             return getattr(obj, key, getattr(obj.__class__, key))
 
         def _is_core_module(receiver):
-            m = getattr_fallback_to_class(receiver, "__module__")
+            m = _getattr_fallback_to_class(receiver, "__module__")
             return any(m.startswith(c) for c in settings.CORE_MODULES)
 
         sorted_list = sorted(
             orig_list,
             key=lambda receiver: (
                 0 if _is_core_module(receiver) else 1,
-                getattr_fallback_to_class(receiver, "__module__"),
-                getattr_fallback_to_class(receiver, "__name__"),
+                _getattr_fallback_to_class(receiver, "__module__"),
+                _getattr_fallback_to_class(receiver, "__name__"),
             )
         )
         return sorted_list, []
