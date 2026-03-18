@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-03 20:00+0000\n"
+"PO-Revision-Date: 2026-03-18 12:23+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -408,10 +408,8 @@ msgstr ""
 
 #: pretix/api/serializers/organizer.py:482
 #: pretix/control/views/organizer.py:1039
-#, fuzzy
-#| msgid "Account information"
 msgid "Account invitation"
-msgstr "Información de la cuenta"
+msgstr "Invitación a crear una cuenta"
 
 #: pretix/api/serializers/organizer.py:503
 #: pretix/control/views/organizer.py:1138
@@ -3966,10 +3964,9 @@ msgid "Peppol participant ID"
 msgstr "Identificador de participante Peppol"
 
 #: pretix/base/invoicing/peppol.py:211
-#, fuzzy
-#| msgid "The Peppol participant ID is not registered on the Peppol network."
 msgid "The Peppol participant ID does not match your VAT ID."
-msgstr "El ID de participante de Peppol no está registrado en la red Peppol."
+msgstr ""
+"El identificador de participante de Peppol no coincide con el número de IVA."
 
 #: pretix/base/invoicing/peppol.py:214
 msgctxt "peppol_invoice"
@@ -4991,7 +4988,7 @@ msgstr ""
 #: pretix/base/models/event.py:607 pretix/base/models/organizer.py:94
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr ""
-"La URL semántica solo puede contener letras, números, puntos y guiones."
+"El nombre de archivo solo puede contener letras, números, puntos y guiones."
 
 #: pretix/base/models/event.py:624 pretix/base/models/event.py:1551
 msgid "Show in lists"
@@ -6893,10 +6890,8 @@ msgstr ""
 "pocos minutos para activar para todos los usuarios."
 
 #: pretix/base/models/organizer.py:378
-#, fuzzy
-#| msgid "Event permissions"
 msgid "All event permissions"
-msgstr "Permisos para eventos"
+msgstr "Todos los permisos del evento"
 
 #: pretix/base/models/organizer.py:379
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:34
@@ -6904,10 +6899,8 @@ msgid "Event permissions"
 msgstr "Permisos para eventos"
 
 #: pretix/base/models/organizer.py:380
-#, fuzzy
-#| msgid "Organizer permissions"
 msgid "All organizer permissions"
-msgstr "Permisos del organizador"
+msgstr "Todos los permisos de organizador"
 
 #: pretix/base/models/organizer.py:381
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:25
@@ -8414,36 +8407,32 @@ msgstr "Su archivo de diseño no es un diseño válido. Mensaje de error: {}"
 #: pretix/base/permissions.py:314 pretix/base/permissions.py:331
 msgctxt "permission_level"
 msgid "View"
-msgstr ""
+msgstr "Ver"
 
 #: pretix/base/permissions.py:164 pretix/base/permissions.py:169
 #: pretix/base/permissions.py:174 pretix/base/permissions.py:179
 #: pretix/base/permissions.py:286 pretix/base/permissions.py:315
-#, fuzzy
-#| msgid "Save and check"
 msgctxt "permission_level"
 msgid "View and change"
-msgstr "Guardar y verificar"
+msgstr "Ver y modificar"
 
 #: pretix/base/permissions.py:168
-#, fuzzy
-#| msgid "API tokens"
 msgid "API only"
-msgstr "Tokens de API"
+msgstr "Solo API"
 
 #: pretix/base/permissions.py:173
 msgid ""
 "Menu item will only show up if the user has permission for general settings."
 msgstr ""
+"Esta opción del menú solo aparecerá si el usuario tiene permiso para acceder "
+"a la configuración general."
 
 #: pretix/base/permissions.py:177 pretix/base/permissions.py:231
 #: pretix/base/permissions.py:285 pretix/base/permissions.py:313
 #: pretix/base/permissions.py:330
-#, fuzzy
-#| msgid "Revoke access"
 msgctxt "permission_level"
 msgid "No access"
-msgstr "Revocar el acceso"
+msgstr "Sin acceso"
 
 #: pretix/base/permissions.py:188
 #: pretix/control/templates/pretixcontrol/event/settings.html:7
@@ -8457,6 +8446,8 @@ msgid ""
 "This includes access to all settings not listed explicitly below, including "
 "plugin settings."
 msgstr ""
+"Esto incluye el acceso a todos los ajustes que no se enumeran explícitamente "
+"a continuación, incluidos los ajustes de los complementos."
 
 #: pretix/base/permissions.py:197
 #: pretix/control/templates/pretixcontrol/event/payment.html:6
@@ -8470,100 +8461,79 @@ msgid "Tax settings"
 msgstr "Configuración de impuestos"
 
 #: pretix/base/permissions.py:209
-#, fuzzy
-#| msgid "Invoice settings"
 msgid "Invoicing settings"
-msgstr "Configuración de la factura"
+msgstr "Configuración de facturación"
 
 #: pretix/base/permissions.py:215
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date added"
 msgid "Event series dates"
-msgstr "Fechas de la serie de eventos añadidas"
+msgstr "Fechas de la serie de eventos"
 
 #: pretix/base/permissions.py:221
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Products, quotas and questions"
-msgstr "Nombre del producto y variación"
+msgstr "Productos, cuotas y preguntas"
 
 #: pretix/base/permissions.py:224
 msgid "Also includes related objects like categories or discounts."
-msgstr ""
+msgstr "También incluye elementos relacionados, como categorías o descuentos."
 
 #: pretix/base/permissions.py:232
-#, fuzzy
-#| msgid "All check-ins"
 msgctxt "permission_level"
 msgid "Only check-in"
-msgstr "Todos los check-ins"
+msgstr "Solo check-in"
 
 #: pretix/base/permissions.py:233
-#, fuzzy
-#| msgid "View full log"
 msgctxt "permission_level"
 msgid "View all"
-msgstr "Ver log completo"
+msgstr "Ver todo"
 
 #: pretix/base/permissions.py:234
-#, fuzzy
-#| msgid "Valid check-in"
 msgctxt "permission_level"
 msgid "View all and check-in"
-msgstr "Check-in válido"
+msgstr "Ver todo y check-in"
 
 #: pretix/base/permissions.py:235
-#, fuzzy
-#| msgid "View all upcoming events"
 msgctxt "permission_level"
 msgid "View all and change"
-msgstr "Ver todos los próximos eventos"
+msgstr "Ver todo y modificar"
 
 #: pretix/base/permissions.py:236
 msgid "Includes the ability to cancel and refund individual orders."
-msgstr ""
+msgstr "Incluye la posibilidad de cancelar y reembolsar pedidos individuales."
 
 #: pretix/base/permissions.py:238
-#, fuzzy
-#| msgid "An entry has been added to the waiting list."
 msgid "Also includes related objects like the waiting list."
-msgstr "Se ha añadido una entrada a la lista de espera."
+msgstr "También incluye elementos relacionados, como la lista de espera."
 
 #: pretix/base/permissions.py:248
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Full event or date cancellation"
-msgstr "Generar cancelación"
+msgstr "Cancelación total del evento o de la fecha"
 
 #: pretix/base/permissions.py:252
-#, fuzzy
-#| msgid "Sale not allowed"
 msgctxt "permission_level"
 msgid "Not allowed"
-msgstr "Venta no permitida"
+msgstr "No está permitido"
 
 #: pretix/base/permissions.py:253
-#, fuzzy
-#| msgid "Allowed titles"
 msgctxt "permission_level"
 msgid "Allowed"
-msgstr "Titulos permitidos"
+msgstr "Permitido"
 
 #: pretix/base/permissions.py:268
 msgctxt "permission_level"
 msgid "Access existing events"
-msgstr ""
+msgstr "Acceder a los eventos existentes"
 
 #: pretix/base/permissions.py:269
 msgctxt "permission_level"
 msgid "Access existing and create new events"
-msgstr ""
+msgstr "Acceder a eventos existentes y crear nuevos eventos"
 
 #: pretix/base/permissions.py:271
 msgid ""
 "The level of access to events is determined in detail by the settings below."
 msgstr ""
+"El nivel de acceso a los eventos se determina en detalle mediante los "
+"ajustes que se indican a continuación."
 
 #: pretix/base/permissions.py:275 pretix/control/navigation.py:143
 #: pretix/control/navigation.py:462 pretix/control/navigation.py:512
@@ -8582,12 +8552,17 @@ msgid ""
 "This includes access to all organizer-level functionality not listed "
 "explicitly below, including plugin settings."
 msgstr ""
+"Esto incluye el acceso a todas las funciones de nivel de organizador que no "
+"se enumeran explícitamente a continuación, incluida la configuración de los "
+"complementos."
 
 #: pretix/base/permissions.py:287
 msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
 msgstr ""
+"Incluye la posibilidad de conceder permisos adicionales a otra persona "
+"(incluido uno mismo)."
 
 #: pretix/base/permissions.py:298 pretix/control/navigation.py:608
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
@@ -8605,12 +8580,12 @@ msgid ""
 "Includes the ability to give access to events and data oneself does not have "
 "access to."
 msgstr ""
+"Incluye la posibilidad de conceder acceso a eventos y datos a los que uno "
+"mismo no tiene acceso."
 
 #: pretix/base/permissions.py:321
-#, fuzzy
-#| msgid "Seating plan"
 msgid "Seating plans"
-msgstr "Plan de asientos"
+msgstr "Planes de asientos"
 
 #: pretix/base/permissions.py:327 pretix/control/navigation.py:712
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:8
@@ -9254,12 +9229,12 @@ msgid "Czech National Bank"
 msgstr "Banco Nacional Checo"
 
 #: pretix/base/services/export.py:94 pretix/base/services/export.py:154
-#, fuzzy
-#| msgid "You do not have sufficient permission to perform this export."
 msgid ""
 "Export not found or you do not have sufficient permission to perform this "
 "export."
-msgstr "No tiene permiso suficiente para realizar esta exportación."
+msgstr ""
+"No se ha encontrado la exportación o no tienes los permisos suficientes para "
+"realizarla."
 
 #: pretix/base/services/export.py:107 pretix/base/services/export.py:179
 #: pretix/base/services/export.py:357
@@ -13735,25 +13710,7 @@ msgid "Contact"
 msgstr "Contacto"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt:2
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we hereby confirm that the following data shredding job has been "
-#| "completed:\n"
-#| "\n"
-#| "Organizer: %(organizer)s\n"
-#| "\n"
-#| "Event: %(event)s\n"
-#| "\n"
-#| "Data selection: %(shredders)s\n"
-#| "\n"
-#| "Start time: %(start_time)s (new data added after this time might not have "
-#| "been deleted)\n"
-#| "\n"
-#| "Best regards,\n"
-#| "\n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -13788,7 +13745,7 @@ msgstr ""
 "\n"
 "Atentamente,\n"
 "\n"
-"Tu equipo de pretix\n"
+"El equipo de %(instance)s\n"
 
 #: pretix/base/templates/pretixbase/forms/widgets/checkbox_sales_channel_option.html:16
 msgid ""
@@ -14350,16 +14307,12 @@ msgid "This is an event series"
 msgstr "Esta es una serie de eventos"
 
 #: pretix/control/forms/event.py:135 pretix/control/forms/event.py:363
-#, fuzzy
-#| msgid ""
-#| "You do not have sufficient permission to enable plugins that need to be "
-#| "enabled for the entire organizer account."
 msgid ""
 "You do not have a sufficient level of access on the event you selected to "
 "copy it to the desired organizer."
 msgstr ""
-"No tienes permisos suficientes para habilitar los plugins que deben "
-"habilitarse para toda su cuenta de organizador."
+"No tiene los permisos necesarios para copiar el evento que ha seleccionado "
+"al organizador deseado."
 
 #: pretix/control/forms/event.py:143
 msgid ""
@@ -14439,6 +14392,8 @@ msgid ""
 "You cannot choose a team that would give you more access than you have on "
 "the event you are copying."
 msgstr ""
+"No puede elegir un equipo que le otorgue más permisos de los que ya tiene en "
+"el evento que está copiando."
 
 #: pretix/control/forms/event.py:344
 msgid "Copy configuration from"
@@ -14454,6 +14409,8 @@ msgid ""
 "You cannot choose an event on which you have less access than the team you "
 "selected in the previous step."
 msgstr ""
+"No puede elegir un evento al que tenga menos derechos de acceso que el "
+"equipo que seleccionó en el paso anterior."
 
 #: pretix/control/forms/event.py:387 pretix/control/forms/item.py:1304
 #: pretix/control/forms/subevents.py:411
@@ -16816,7 +16773,7 @@ msgstr "Sólo puede establecer un dominio de organizador."
 
 #: pretix/control/forms/organizer.py:322
 msgid "Provided by a plugin"
-msgstr ""
+msgstr "Proporcionado por un plugin"
 
 #: pretix/control/forms/organizer.py:438
 msgid ""
@@ -17708,10 +17665,8 @@ msgid "The order has been denied (comment: \"{comment}\")."
 msgstr "El pedido ha sido denegado (comentario: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:521
-#, fuzzy
-#| msgid "The order has been overpaid."
 msgid "The customer VAT ID has been verified."
-msgstr "El pedido ha sido pagado de más."
+msgstr "Se ha verificado el número de identificación fiscal del cliente."
 
 #: pretix/control/logdisplay.py:522
 #, python-brace-format
@@ -18015,10 +17970,9 @@ msgid "{user} has been invited to the team."
 msgstr "{user} ha sido invitado al equipo."
 
 #: pretix/control/logdisplay.py:644
-#, fuzzy, python-brace-format
-#| msgid "Invite for {user} has been resent."
+#, python-brace-format
 msgid "Invite for {user} has been deleted."
-msgstr "La invitación para {user} ha sido reenviada."
+msgstr "Se ha eliminado la invitación para {user}."
 
 #: pretix/control/logdisplay.py:645
 #, python-brace-format
@@ -20338,21 +20292,7 @@ msgid "Add property"
 msgstr "Añadir propiedad"
 
 #: pretix/control/templates/pretixcontrol/email/confirmation_code.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "%(reason)s\n"
-#| "\n"
-#| "    %(code)s\n"
-#| "\n"
-#| "Please do never give this code to another person. Our support team will "
-#| "never ask for this code.\n"
-#| "\n"
-#| "If this code was not requested by you, please contact us immediately.\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20381,7 +20321,7 @@ msgstr ""
 "inmediato.\n"
 "\n"
 "Atentamente,\n"
-"El equipo de pretix\n"
+"El equipo de %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt:1
 #, python-format
@@ -20419,17 +20359,7 @@ msgstr ""
 "Tu equipo de %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you requested a new password. Please go to the following page to reset "
-#| "your password:\n"
-#| "\n"
-#| "%(url)s\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20449,27 +20379,10 @@ msgstr ""
 "%(url)s \n"
 "\n"
 "Saludos, \n"
-"El equipo de pretix\n"
+"El equipo de %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you have been invited to a team on pretix, a platform to perform event\n"
-#| "ticket sales.\n"
-#| "\n"
-#| "Organizer: %(organizer)s\n"
-#| "Team: %(team)s\n"
-#| "\n"
-#| "If you want to join that team, just click on the following link:\n"
-#| "%(url)s\n"
-#| "\n"
-#| "If you do not want to join, you can safely ignore or delete this email.\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20491,7 +20404,8 @@ msgid ""
 msgstr ""
 "Hola, \n"
 "\n"
-"usted ha sido invitado a un equipo en pretix, una plataforma para realizar \n"
+"usted ha sido invitado a un equipo de %(instance)s, una plataforma para "
+"realizar \n"
 "ventas de entradas de eventos. \n"
 "\n"
 "Organizador: %(organizer)s\n"
@@ -20504,7 +20418,7 @@ msgstr ""
 "\n"
 "Saludos cordiales, \n"
 "\n"
-"Su equipo Pretix\n"
+"El equipo de %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt:1
 #, python-format
@@ -20542,24 +20456,7 @@ msgstr ""
 "El equipo de %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "this is to inform you that the account information of your pretix account "
-#| "has been\n"
-#| "changed. In particular, the following changes have been performed:\n"
-#| "\n"
-#| "%(messages)s\n"
-#| "\n"
-#| "If this change was not performed by you, please contact us immediately.\n"
-#| "\n"
-#| "You can review and change your account settings here:\n"
-#| "\n"
-#| "%(url)s\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20580,8 +20477,8 @@ msgid ""
 msgstr ""
 "Hola, \n"
 "\n"
-"esto es para informarle que la información de su cuenta pretix ha sido "
-"cambiada . \n"
+"esto es para informarle que la información de su cuenta del equipo de %"
+"(instance)s ha sido cambiada. \n"
 "En particular, se han realizado las siguientes modificaciones: \n"
 "\n"
 "%(messages)s\n"
@@ -20594,7 +20491,7 @@ msgstr ""
 "%(url)s \n"
 "\n"
 "Saludos cordiales,  \n"
-"su equipo de Pretix\n"
+"El equipo de %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:8
@@ -20864,10 +20761,8 @@ msgstr ""
 "entradas, puede hacerlo a través de esta opción."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:51
-#, fuzzy
-#| msgid "Permissions"
 msgid "No permission"
-msgstr "Permisos"
+msgstr "No tiene permiso"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:72
@@ -23426,10 +23321,8 @@ msgid "Edit question"
 msgstr "Editar pregunta"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:55
-#, fuzzy
-#| msgid "You do not have permission to view this content."
 msgid "No permission to view answers."
-msgstr "No tienes permiso para ver este contenido."
+msgstr "No tiene permiso para ver las respuestas."
 
 #: pretix/control/templates/pretixcontrol/items/question.html:63
 msgid "No matching answers found."
@@ -25078,10 +24971,8 @@ msgstr "No hay próxima ejecución programada"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:37
 #: pretix/control/templates/pretixcontrol/organizers/export.html:37
-#, fuzzy
-#| msgid "Exporter not found"
 msgid "Exporter not found or no permission"
-msgstr "Exportador no encontrado"
+msgstr "No se ha encontrado el exportador o no se dispone de permiso"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:42
 #: pretix/control/templates/pretixcontrol/organizers/export.html:42
@@ -25124,10 +25015,8 @@ msgstr "Recomendado para nuevos usuarios"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:120
 #: pretix/control/templates/pretixcontrol/organizers/export.html:120
-#, fuzzy
-#| msgid "There are no add-ons available for this product."
 msgid "There are no exporters available for you."
-msgstr "No hay complementos disponibles para este producto."
+msgstr "No hay exportadores disponibles para usted."
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:6
@@ -27078,7 +26967,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:274
 #, python-format
 msgid "max. %(size)s, smaller is better"
-msgstr ""
+msgstr "máx. %(size)s; cuanto más pequeño, mejor"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:282
 msgid "Download current background"
@@ -29861,16 +29750,12 @@ msgstr ""
 "los errores."
 
 #: pretix/control/views/orders.py:2798 pretix/control/views/organizer.py:2131
-#, fuzzy
-#| msgid ""
-#| "Your user account does not have sufficient permission to run this report, "
-#| "therefore you cannot schedule it."
 msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot change it."
 msgstr ""
-"Su cuenta de usuario no tiene permisos suficientes para ejecutar este "
-"informe, por lo que no puede programarlo."
+"Su cuenta de usuario no tiene los permisos suficientes para ejecutar este "
+"informe, por lo que no puede modificarlo."
 
 #: pretix/control/views/orders.py:2807 pretix/control/views/organizer.py:2140
 msgid ""
@@ -33945,7 +33830,7 @@ msgstr "iDEAL via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1572
 msgid "iDEAL | Wero"
-msgstr ""
+msgstr "iDEAL | Wero"
 
 #: pretix/plugins/stripe/payment.py:1575
 msgid ""
@@ -36930,6 +36815,9 @@ msgid ""
 "the shop that affect quotas, such as the validity period of carts and "
 "vouchers."
 msgstr ""
+"Tenga en cuenta que la hora modificada no se tiene en cuenta en aquellos "
+"aspectos de la tienda que afectan a los límites, como el periodo de validez "
+"de los carritos y los vales."
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:31
 msgid "Enable time machine"
