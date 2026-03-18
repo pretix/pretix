@@ -20,22 +20,16 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-from django.dispatch import receiver
 from pretix.base.signals import register_ticket_outputs
+from .ticketoutput import OUTPUTS
 
+def connect_signals():
+    for output in OUTPUTS:
+        # DIY functools.partial to make get_defining_app happy
+        def get_register_func(o):
+            def register(sender, **kwargs):
+                return o
+            return register      
+        register_ticket_outputs.connect(get_register_func(output), dispatch_uid=f"output_{output.identifier}")
 
-@receiver(register_ticket_outputs, dispatch_uid="output_wallet")
-def register_ticket_wallet(sender, **kwargs):
-    from .ticketoutput import WalletTicketOutput
-    return WalletTicketOutput
-
-@receiver(register_ticket_outputs, dispatch_uid="output_wallet_apple")
-def register_ticket_wallet_apple(sender, **kwargs):
-    from .ticketoutput import AppleWalletTicketOutput
-    return AppleWalletTicketOutput
-
-
-@receiver(register_ticket_outputs, dispatch_uid="output_wallet_google")
-def register_ticket_wallet_google(sender, **kwargs):
-    from .ticketoutput import GoogleWalletTicketOutput
-    return GoogleWalletTicketOutput
+connect_signals()

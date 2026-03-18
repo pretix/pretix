@@ -1,0 +1,17 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load money %}
+{% block title %}{% trans "Wallet layouts" %}{% endblock %}
+{% block content %}
+    <pre><code>{{ styles }}</code></pre>
+    <pre><code>{{ variables }}</code></pre>
+        {{ styles|json_script:"styles" }}
+        {{ variables|json_script:"variables" }}
+    <form method="post">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" class="btn btn-default">
+            {% trans "Submit " %}
+        </button>
+    </form>
+{% endblock %}
