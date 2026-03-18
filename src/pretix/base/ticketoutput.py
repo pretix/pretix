@@ -193,13 +193,15 @@ class BaseTicketOutput:
         pass
 
     @property
-    def show_settings(self) -> bool:
+    def is_meta(self) -> bool:
         """
-        Returns whether or not this output should be shown in the ticket settings.
+        Returns whether or whether not this output is a "meta" output that only works as a settings holder
+        and should never be used directly. This is a trick to implement outputs with multiple formats but
+        unified settings.
 
-        .. note:: If you set this to false, you need to have some other mechanism to decide whether this output is enabled
+        .. note:: You should set is_enabled to False for meta outputs.
         """
-        return True
+        return False
 
     @property
     def download_button_text(self) -> str:

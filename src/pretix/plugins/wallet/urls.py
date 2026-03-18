@@ -19,17 +19,18 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.urls import re_path
 
-from pretix.base.signals import register_ticket_outputs
-from .ticketoutput import OUTPUTS
+from .views import (
+    EditorView,
+    LayoutListView
+)
 
-def connect_signals():
-    for output in OUTPUTS:
-        # DIY functools.partial to make get_defining_app happy
-        def get_register_func(o):
-            def register(sender, **kwargs):
-                return o
-            return register      
-        register_ticket_outputs.connect(get_register_func(output), dispatch_uid=f"output_{output.identifier}")
-
-connect_signals()
+urlpatterns = [
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/$',
+        LayoutListView.as_view(), name='index'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/edit/(?P<platform>[^/]+)/$',
+        EditorView.as_view(), name='edit'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/edit/(?P<platform>[^/]+)/(?P<layout>[^/]+)/$',
+        EditorView.as_view(), name='edit'),
+]
