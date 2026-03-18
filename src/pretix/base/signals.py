@@ -162,7 +162,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._live_receivers(sender):
+        for receiver in self._live_receivers(sender)[0]:
             if self._is_receiver_active(sender, receiver):
                 response = receiver(signal=self, sender=sender, **named)
                 responses.append((receiver, response))
@@ -184,7 +184,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._live_receivers(sender):
+        for receiver in self._live_receivers(sender)[0]:
             if self._is_receiver_active(sender, receiver):
                 named[chain_kwarg_name] = response
                 response = receiver(signal=self, sender=sender, **named)
@@ -209,7 +209,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._live_receivers(sender):
+        for receiver in self._live_receivers(sender)[0]:
             if self._is_receiver_active(sender, receiver):
                 try:
                     response = receiver(signal=self, sender=sender, **named)
