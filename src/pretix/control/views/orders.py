@@ -567,6 +567,8 @@ class OrderDetail(OrderView):
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
+            if provider.is_meta:
+                continue
             buttons.append({
                 'text': provider.download_button_text or 'Ticket',
                 'icon': provider.download_button_icon or 'fa-download',

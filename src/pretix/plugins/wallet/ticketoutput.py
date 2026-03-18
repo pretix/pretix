@@ -19,27 +19,39 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from collections import OrderedDict
 import logging
 from django.utils.translation import gettext_lazy as _
 from pretix.base.ticketoutput import BaseTicketOutput
-from django import forms
+from pretix.base.models import Event
+from pretix.base.settings import SettingsSandbox
+
+
 logger = logging.getLogger('pretix.plugins.wallet')
 
 
-class WalletTicketOutput(BaseTicketOutput):
+class WalletSettingsHolder(BaseTicketOutput):
     identifier = 'wallet'
-    verbose_name = _('Wallet output')
+    verbose_name = _('Wallet Output')
     
-    is_enabeld = False
-    preview_allowed = False
+    is_meta = True
+    is_enabled = False
+    preview_allowed = False # TODO: implement own preview view or hide button for meta-outputs
 
-class GoogleWalletTicketOutput(BaseTicketOutput):
-    identifier = 'google_wallet'
-    verbose_name = _('google')
-    show_settings = False
-    
-class AppleWalletTicketOutput(BaseTicketOutput):
-    identifier = 'apple_wallet'
-    verbose_name = _('apple')
-    show_settings = False
+class WalletOutput(BaseTicketOutput):
+    settings_form_fields = []
+
+    def __init__(self, event: Event):
+        super().__init__(event)
+        self.settings = SettingsSandbox('ticketoutput', WalletSettingsHolder.identifier, event)
+
+class GoogleWalletTicketOutput(WalletOutput):
+    identifier = 'wallet_google'
+    verbose_name = _('Google')
+    download_button_text = "Add to Google Wallet"
+
+class AppleWalletTicketOutput(WalletOutput):
+    identifier = 'wallet_apple'
+    verbose_name = _('Apple')
+    download_button_text = "Add to Apple Wallet"
+
+OUTPUTS = [WalletSettingsHolder, GoogleWalletTicketOutput, AppleWalletTicketOutput]

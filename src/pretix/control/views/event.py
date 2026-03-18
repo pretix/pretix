@@ -965,7 +965,7 @@ class TicketSettingsPreview(EventPermissionRequiredMixin, View):
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
-            if provider.identifier == self.kwargs.get('output'):
+            if provider.identifier == self.kwargs.get('output') and not provider.is_meta:
                 return provider
 
     def get(self, request, *args, **kwargs):
@@ -1068,7 +1068,9 @@ class TicketSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
-            if not provider.show_settings:
+            provider_settings_fields = provider.settings_form_fields
+            provider_settings_content = provider.settings_content_render(self.request)
+            if not provider_settings_fields and not provider_settings_content:
                 continue
 
             provider.form = ProviderForm(
@@ -1080,17 +1082,17 @@ class TicketSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, FormV
             provider.form.fields = OrderedDict(
                 [
                     ('ticketoutput_%s_%s' % (provider.identifier, k), v)
-                    for k, v in provider.settings_form_fields.items()
+                    for k, v in provider_settings_fields.items()
                 ]
             )
-            provider.settings_content = provider.settings_content_render(self.request)
+            provider.settings_content = provider_settings_content
             provider.form.prepare_fields()
 
             provider.evaluated_preview_allowed = True
             if not provider.preview_allowed:
                 provider.evaluated_preview_allowed = False
             else:
-                for k, v in provider.settings_form_fields.items():
+                for k, v in provider_settings_fields.items():
                     if v.required and not self.request.event.settings.get('ticketoutput_%s_%s' % (provider.identifier, k)):
                         provider.evaluated_preview_allowed = False
                         break
