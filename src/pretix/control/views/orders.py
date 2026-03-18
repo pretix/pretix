@@ -2649,7 +2649,10 @@ class OrderGo(EventPermissionRequiredMixin, View):
 class ExportMixin:
     @cached_property
     def exporters(self):
-        raw_exporters = list(init_event_exporters(self.request.event, user=self.request.user, request=self.request))
+        raw_exporters = list(init_event_exporters(
+            self.request.event, user=self.request.user, request=self.request,
+            staff_session=self.request.user.has_active_staff_session(self.request.session.session_key),
+        ))
         return sorted(
             raw_exporters,
             key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())

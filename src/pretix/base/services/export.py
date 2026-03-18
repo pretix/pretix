@@ -257,7 +257,7 @@ def init_organizer_exporters(
 
             if permission_name not in _event_list_cache:
                 if staff_session:
-                    events = event_qs.all()
+                    events = event_qs.all() if event_qs else organizer.events.all()
                 elif event_qs is not None:
                     events = event_qs.filter(
                         pk__in=perm_holder.get_events_with_permission(
@@ -292,7 +292,7 @@ def init_organizer_exporters(
                 elif device:
                     _has_permission_on_any_team_cache[permission_name] = device.has_event_permission(permission_name)
 
-            if not _has_permission_on_any_team_cache[permission_name]:
+            if not _has_permission_on_any_team_cache[permission_name] and not staff_session:
                 continue
 
             exporter: BaseExporter = response(event=_event_list_cache[permission_name], organizer=organizer, **kwargs)
