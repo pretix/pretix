@@ -2025,7 +2025,10 @@ class ExportMixin:
 
     @cached_property
     def exporters(self):
-        raw_exporters = list(init_organizer_exporters(self.request.organizer, user=self.request.user, request=self.request))
+        raw_exporters = list(init_organizer_exporters(
+            self.request.organizer, user=self.request.user, request=self.request,
+            staff_session=self.request.user.has_active_staff_session(self.request.session.session_key),
+        ))
         return sorted(
             raw_exporters,
             key=lambda ex: (
