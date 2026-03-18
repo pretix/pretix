@@ -315,23 +315,35 @@ class GlobalSignal(django.dispatch.Signal):
         if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
             return response
 
-        for receiver in self._live_receivers(sender):
+        for receiver in self._live_receivers(sender)[0]:
             named[chain_kwarg_name] = response
             response = receiver(signal=self, sender=sender, **named)
         return response
 
     def _live_receivers(self, sender):
         # Ensure consistent sorting of receivers
-        orig_list = super()._live_receivers(sender)
+        orig_list, orig_async_list = super()._live_receivers(sender)
+
+        if orig_async_list:
+            # TODO: log, raise error?
+            pass
+
+        def getattr_fallback_to_class(obj, key):
+            return getattr(obj, key, getattr(obj.__class__, key))
+
+        def _is_core_module(receiver):
+            m = getattr_fallback_to_class(receiver, "__module__")
+            return any(m.startswith(c) for c in settings.CORE_MODULES)
+
         sorted_list = sorted(
             orig_list,
             key=lambda receiver: (
-                0 if any(receiver.__module__.startswith(m) for m in settings.CORE_MODULES) else 1,
-                receiver.__module__,
-                receiver.__name__,
+                0 if _is_core_module(receiver) else 1,
+                getattr_fallback_to_class(receiver, "__module__"),
+                getattr_fallback_to_class(receiver, "__name__"),
             )
         )
-        return sorted_list
+        return sorted_list, []
 
 
 class DeprecatedSignal(GlobalSignal):
