@@ -19,17 +19,29 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-from pretix.base.signals import register_ticket_outputs
-from .ticketoutput import OUTPUTS
+from pretix.base.models import LoggedModel
 
-def connect_signals():
-    for output in OUTPUTS:
-        # DIY functools.partial to make get_defining_app happy
-        def get_register_func(o):
-            def register(sender, **kwargs):
-                return o
-            return register      
-        register_ticket_outputs.connect(get_register_func(output), dispatch_uid=f"output_{output.identifier}")
 
-connect_signals()
+class WalletLayout(LoggedModel):
+    event = models.ForeignKey(
+        'pretixbase.Event',
+        on_delete=models.CASCADE,
+        related_name='wallet_layouts'
+    )
+    name = models.CharField(
+        max_length=190,
+        verbose_name=_('Name')
+    )
+    platform = models.CharField(max_length=10)
+    style = models.CharField(max_length=255)
+    layout = models.TextField()
+
+    class Meta:
+        ordering = ("name",)
+
+    def __str__(self):
+        return self.name
+    # TODO:ScopedManager
