@@ -225,18 +225,19 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
     def _sorted_receivers(self, sender):
         orig_list, __ = self._live_receivers(sender)
 
-        def _receiver_module(receiver):
-            return getattr(receiver, "__module__", receiver.__class__.__module__)
+        def _getattr_fallback_to_class(obj, key):
+            return getattr(obj, key, getattr(obj.__class__, key))
 
-        def _receiver_name(receiver):
-            return getattr(receiver, "__name__", receiver.__class__.__name__)
+        def _is_core_module(receiver):
+            m = getattr_fallback_to_class(receiver, "__module__")
+            return any(m.startswith(c) for c in settings.CORE_MODULES)
 
         sorted_list = sorted(
             orig_list,
             key=lambda receiver: (
-                0 if any(_receiver_module(receiver).startswith(m) for m in settings.CORE_MODULES) else 1,
-                _receiver_module(receiver),
-                _receiver_name(receiver),
+                0 if _is_core_module(receiver) else 1,
+                _getattr_fallback_to_class(receiver, "__module__"),
+                _getattr_fallback_to_class(receiver, "__name__"),
             )
         )
         return sorted_list
