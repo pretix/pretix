@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-18 14:50+0000\n"
+"PO-Revision-Date: 2026-03-18 23:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -29269,50 +29269,56 @@ msgid ""
 "The order could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
+"De bestelling kon niet verwijderd worden omdat sommige beperkingen (bijv. "
+"data aangemaakt door plug-ins) het niet toestaan."
 
 #: pretix/control/views/orders.py:828
 msgid "Only orders created in test mode can be deleted."
 msgstr ""
+"Alleen bestellingen die in de testmodus zijn aangemaakt, kunnen verwijderd "
+"worden."
 
 #: pretix/control/views/orders.py:849
 msgid "The order has been denied and is therefore now canceled."
-msgstr ""
+msgstr "De bestelling is geweigerd en is daarom nu geannuleerd."
 
 #: pretix/control/views/orders.py:889
 msgid "This payment has been canceled."
-msgstr ""
+msgstr "Deze betaling is geannuleerd."
 
 #: pretix/control/views/orders.py:891
 msgid "This payment can not be canceled at the moment."
-msgstr ""
+msgstr "Deze betaling kan momenteel niet geannuleerd worden."
 
 #: pretix/control/views/orders.py:917
 msgid "The refund has been canceled."
-msgstr ""
+msgstr "De terugbetaling is geannuleerd."
 
 #: pretix/control/views/orders.py:919
 msgid "This refund can not be canceled at the moment."
-msgstr ""
+msgstr "Deze terugbetaling kan momenteel niet worden geannuleerd."
 
 #: pretix/control/views/orders.py:953
 msgid "The refund has been processed."
-msgstr ""
+msgstr "De terugbetaling is verwerkt."
 
 #: pretix/control/views/orders.py:955 pretix/control/views/orders.py:981
 msgid "This refund can not be processed at the moment."
-msgstr ""
+msgstr "Deze terugbetaling kan momenteel niet verwerkt worden."
 
 #: pretix/control/views/orders.py:979
 msgid "The refund has been marked as done."
-msgstr ""
+msgstr "De terugbetaling is gemarkeerd als uitgevoerd."
 
 #: pretix/control/views/orders.py:1005
 msgid "The request has been removed. If you want, you can now inform the user."
 msgstr ""
+"Het verzoek is verwijderd. Als u dit wilt, kunt u de gebruiker hier nu over "
+"informeren."
 
 #: pretix/control/views/orders.py:1012
 msgid "Your cancellation request"
-msgstr ""
+msgstr "Uw annulatieverzoek"
 
 #: pretix/control/views/orders.py:1013
 #, python-brace-format
