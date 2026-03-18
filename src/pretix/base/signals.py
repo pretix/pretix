@@ -32,6 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import logging
 import warnings
 from typing import Any, Callable, Generic, List, Tuple, TypeVar
 
@@ -47,6 +48,8 @@ from .plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
     PLUGIN_LEVEL_ORGANIZER,
 )
+
+logger = logging.getLogger(__name__)
 
 app_cache = {}
 T = TypeVar('T')
@@ -159,7 +162,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._sorted_receivers(sender):
+        for receiver in self._live_receivers(sender):
             if self._is_receiver_active(sender, receiver):
                 response = receiver(signal=self, sender=sender, **named)
                 responses.append((receiver, response))
@@ -181,7 +184,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._sorted_receivers(sender):
+        for receiver in self._live_receivers(sender):
             if self._is_receiver_active(sender, receiver):
                 named[chain_kwarg_name] = response
                 response = receiver(signal=self, sender=sender, **named)
@@ -206,7 +209,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._sorted_receivers(sender):
+        for receiver in self._live_receivers(sender):
             if self._is_receiver_active(sender, receiver):
                 try:
                     response = receiver(signal=self, sender=sender, **named)
@@ -222,8 +225,12 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
     def asend_robust(self, sender: T, **named):
         raise NotImplementedError()  # NOQA
 
-    def _sorted_receivers(self, sender):
-        orig_list, __ = self._live_receivers(sender)
+    def _live_receivers(self, sender):
+        orig_list, orig_async_list = super()._live_receivers(sender)
+
+        if orig_async_list:
+            logger.error('Async receivers are not supported.')
+            raise NotImplementedError
 
         def _getattr_fallback_to_class(obj, key):
             return getattr(obj, key, getattr(obj.__class__, key))
@@ -240,7 +247,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
                 _getattr_fallback_to_class(receiver, "__name__"),
             )
         )
-        return sorted_list
+        return sorted_list, []
 
 
 class EventPluginSignal(PluginSignal[Event]):
@@ -321,13 +328,19 @@ class GlobalSignal(django.dispatch.Signal):
             response = receiver(signal=self, sender=sender, **named)
         return response
 
+    def asend(self, sender: T, **named):
+        raise NotImplementedError()  # NOQA
+
+    def asend_robust(self, sender: T, **named):
+        raise NotImplementedError()  # NOQA
+
     def _live_receivers(self, sender):
         # Ensure consistent sorting of receivers
         orig_list, orig_async_list = super()._live_receivers(sender)
 
         if orig_async_list:
-            # TODO: log, raise error?
-            pass
+            logger.error('Async receivers are not supported.')
+            raise NotImplementedError
 
         def _getattr_fallback_to_class(obj, key):
             return getattr(obj, key, getattr(obj.__class__, key))
