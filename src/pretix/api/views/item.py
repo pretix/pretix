@@ -47,13 +47,14 @@ from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.item import (
     ItemAddOnSerializer, ItemBundleSerializer, ItemCategorySerializer,
     ItemProgramTimeSerializer, ItemSerializer, ItemVariationSerializer,
-    QuestionOptionSerializer, QuestionSerializer, QuotaSerializer,
+    QuestionOptionSerializer, QuestionSerializer, QuestionnaireSerializer, QuotaSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
     CartPosition, Item, ItemAddOn, ItemBundle, ItemCategory, ItemProgramTime,
     ItemVariation, Question, QuestionOption, Quota,
 )
+from pretix.base.models.items import Questionnaire
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.i18n import i18ncomp
@@ -534,6 +535,51 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             auth=self.request.auth,
             data={'id': instance.pk}
+        )
+        super().perform_destroy(instance)
+
+
+class QuestionnaireViewSet(ConditionalListView, viewsets.ModelViewSet):
+    serializer_class = QuestionnaireSerializer
+    queryset = Questionnaire.objects.none()
+    #filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
+    #filterset_class = QuestionFilter
+    ordering_fields = ('id', 'position')
+    ordering = ('position', 'id')
+    permission = None
+    write_permission = 'event.items:write'
+
+    def get_queryset(self):
+        return self.request.event.questionnaires.prefetch_related('children').all()
+
+    def perform_create(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.questionnaire.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
+
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.questionnaire.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.event.questionnaire.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
         )
         super().perform_destroy(instance)
 
