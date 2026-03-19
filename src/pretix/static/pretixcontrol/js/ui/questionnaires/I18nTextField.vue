@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, useId, defineProps } from 'vue';
 
-defineProps(['value', 'id'])
+const props = defineProps(['value', 'id']);
 
+if (!props.value) props.value = {};
 </script>
 
 <template>

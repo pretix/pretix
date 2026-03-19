@@ -1,30 +1,32 @@
 <script>
-import Question from './Question.vue';
-import {get_questions, get_items} from './api';
+import Questionnaire from './Questionnaire.vue';
+import {get_datafields, get_items, get_questionnaires} from './api';
 import { i18n_any, QUESTION_TYPE } from './helper';
 import { ref } from 'vue';
 
-const questions_response = await get_questions();
+const datafields_response = await get_datafields();
+const questionnaires_response = await get_questionnaires();
 const items_response = await get_items();
 
-const questions = ref(questions_response.results);
+const questionnaires = ref(questionnaires_response.results);
+const datafields = ref(datafields_response.results);
 export default {
   components: {
-    Question
+    Questionnaire
   },
   methods: {
     i18n_any,
-    addQuestion: function() {
-      questions.value.push({
-        items: [], question: {en:"Untitled question"},
-        type: QUESTION_TYPE.TEXT, help_text: {en:"Help text"},
-      })
-      console.log(questions.value)
+    addQuestionnaire: function() {
+      questionnaires.value.push({
+        items: [], internal_name: "Unnamed questionnaire",
+        type: 'PS',
+      });
     }
   },
   data() {
     return {
-      questions,
+      questionnaires,
+      datafields,
       items: items_response.results,
       selected_product: ref(""),
     }
@@ -44,31 +46,25 @@ export default {
 </style>
 <template>
 
-  <p>
-      <button class="btn btn-default" @click="addQuestion()"><i class="fa fa-plus"></i> Neue Frage erstellen</button>
-  </p>
-
-  <div class="panel panel-default question-editor">
-    <div class="panel-heading">
-      Edit questions for product:
-      <select v-model="selected_product">
-        <option value="">(all)</option>
-        <option v-for="item in items" :value="item.id">
-          {{ i18n_any(item.name) }}
-        </option>
-      </select>
-    </div>
-    <div class="panel-body">
-      <div class="form-horizontal">
-
-        <Question
-          v-for="question in questions"
-          :question="question"
+	<p>
+		Questionnaires for product:
+		<select v-model="selected_product">
+			<option value="">(all)</option>
+			<option v-for="item in items" :value="item.id">
+				{{ i18n_any(item.name) }}
+			</option>
+		</select>
+	</p>
+	<div class="question-editor">
+        <Questionnaire
+          v-for="questionnaire in questionnaires"
+          :questionnaire="questionnaire"
+          :datafields="datafields"
+          :items="items"
           :selected_product="selected_product" />
+	</div>
 
-      </div>
-    </div>
-  </div>
-
-
+  <p>
+      <button class="btn btn-default" @click="addQuestionnaire()"><i class="fa fa-plus"></i> Neuen Fragebogen erstellen</button>
+  </p>
 </template>
