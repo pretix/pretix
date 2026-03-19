@@ -55,7 +55,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
 
@@ -829,6 +829,11 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
             self.save_formset(form.instance)
 
         return ret
+
+
+class QuestionnairesEditor(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_items'
+    template_name = 'pretixcontrol/items/questionnaires.html'
 
 
 class QuotaList(PaginationMixin, ListView):

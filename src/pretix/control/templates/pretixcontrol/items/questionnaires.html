@@ -1,0 +1,27 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load static %}
+{% load compress %}
+{% load vite %}
+
+
+{% block title %}
+    {% trans "Questionnaires" %}
+{% endblock %}
+{% block inside %}
+    <h1>{% trans "Questionnaires" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            Questions allow your attendees to fill in additional data about their ticket. If you provide food, one
+            example might be to ask your users about dietary requirements.
+        {% endblocktrans %}
+    </p>
+
+    <div id="questionnaires-editor">
+        <!-- Vue app mount point -->
+    </div>
+
+    {% vite_hmr %}
+    {% vite_asset "src/pretix/static/pretixcontrol/js/ui/questionnaires/index.ts" %}
+{% endblock %}
