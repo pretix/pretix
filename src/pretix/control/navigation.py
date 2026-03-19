@@ -363,7 +363,7 @@ def get_global_navigation(request):
             'icon': 'dashboard',
         },
     ]
-    if request.user.is_in_any_teams:
+    if request.user.is_in_any_teams or request.user.is_staff:
         nav += [
             {
                 'label': _('Events'),
