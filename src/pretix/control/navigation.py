@@ -182,12 +182,12 @@ def get_event_navigation(request: HttpRequest):
                 'active': 'event.items.categories' in url.url_name,
             },
             {
-                'label': _('Questions'),
-                'url': reverse('control:event.items.questions', kwargs={
+                'label': _('Questionnaires'),
+                'url': reverse('control:event.items.questionnaires', kwargs={
                     'event': request.event.slug,
                     'organizer': request.event.organizer.slug,
                 }),
-                'active': 'event.items.questions' in url.url_name,
+                'active': 'event.items.questionnaires' in url.url_name or 'event.items.questions' in url.url_name,
             },
             {
                 'label': _('Discounts'),
