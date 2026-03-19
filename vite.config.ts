@@ -20,5 +20,8 @@ export default defineConfig({
 	},
 	optimizeDeps: {
 		exclude: ['moment', 'jquery']
-	}
+	},
+	server: {
+		cors: { origin: /^https?:\/\/(?:(?:[^:]+\.)?localhost|127\.0\.0\.1|\[::1\]|[^:]+\.pretix\.work)(?::\d+)?$/ },
+	},
 })
