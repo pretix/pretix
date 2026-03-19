@@ -14,7 +14,8 @@ export default defineConfig({
 		rollupOptions: {
 			input: {
 				'webcheckin/main': path.resolve(__dirname, 'src/pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.ts'),
-				'checkinrules/main': path.resolve(__dirname, 'src/pretix/static/pretixcontrol/js/ui/checkinrules/index.ts')
+				'checkinrules/main': path.resolve(__dirname, 'src/pretix/static/pretixcontrol/js/ui/checkinrules/index.ts'),
+				'questionnaires/main': path.resolve(__dirname, 'src/pretix/static/pretixcontrol/js/ui/questionnaires/index.ts'),
 			},
 		}
 	},
