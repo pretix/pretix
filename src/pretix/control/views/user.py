@@ -80,6 +80,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.auth import get_u2f_appid, get_webauthn_rp_id
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.security import session_reauth
 from pretix.helpers.u2f import websafe_encode
 
 REAL_DEVICE_TYPES = (TOTPDevice, WebAuthnDevice, U2FDevice)
@@ -159,9 +160,7 @@ class ReauthView(TemplateView):
         valid = valid or self.form.is_valid()
 
         if valid:
-            t = int(time.time())
-            request.session['pretix_auth_login_time'] = t
-            request.session['pretix_auth_last_used'] = t
+            session_reauth(request)
             next_url = get_auth_backends()[request.user.auth_backend].get_next_url(request)
             if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
                 return redirect_to_url(next_url)
@@ -175,9 +174,7 @@ class ReauthView(TemplateView):
         u = backend.request_authenticate(request)
         if u and u == request.user:
             next_url = backend.get_next_url(request)
-            t = int(time.time())
-            request.session['pretix_auth_login_time'] = t
-            request.session['pretix_auth_last_used'] = t
+            session_reauth(request)
             if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
                 return redirect_to_url(next_url)
             return redirect(reverse('control:index'))

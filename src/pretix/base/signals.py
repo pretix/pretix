@@ -305,6 +305,19 @@ class GlobalSignal(django.dispatch.Signal):
             response = receiver(signal=self, sender=sender, **named)
         return response
 
+    def _live_receivers(self, sender):
+        # Ensure consistent sorting of receivers
+        orig_list = super()._live_receivers(sender)
+        sorted_list = sorted(
+            orig_list,
+            key=lambda receiver: (
+                0 if any(receiver.__module__.startswith(m) for m in settings.CORE_MODULES) else 1,
+                receiver.__module__,
+                receiver.__name__,
+            )
+        )
+        return sorted_list
+
 
 class DeprecatedSignal(GlobalSignal):
 
@@ -559,6 +572,18 @@ instances.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event,
 however for this signal, the ``sender`` **may also be None** to allow creating the general
 notification settings!
+"""
+
+register_event_permission_groups = GlobalSignal()
+"""
+This signal is sent out to get all known permissions. Receivers should return an
+instance of pretix.base.permissions.PermissionGroup or a list of such instances.
+"""
+
+register_organizer_permission_groups = GlobalSignal()
+"""
+This signal is sent out to get all known permissions. Receivers should return an
+instance of pretix.base.permissions.PermissionGroup or a list of such instances.
 """
 
 notification = EventPluginSignal()
@@ -1105,6 +1130,9 @@ api_event_settings_fields = EventPluginSignal()
 """
 This signal is sent out to collect serializable settings fields for the API. You are expected to
 return a dictionary mapping names of attributes in the settings store to DRF serializer field instances.
+
+These are readable for all users with access to the events, therefore secrets stored in the settings store
+should not be included!
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

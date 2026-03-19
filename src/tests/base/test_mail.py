@@ -562,3 +562,32 @@ def test_escaped_braces_mail_services(env):
     for part in (html, plain, djmail.outbox[0].subject):
         assert "EUR" not in part
         assert "-{currency}-" in part
+
+
+@pytest.mark.django_db
+def test_attached_ical_localization(env, order):
+    event, _, _ = env
+
+    descriptions = {"de": "german description", "en": "english description"}
+    event.settings.mail_attach_ical_description = LazyI18nString(descriptions)
+    event.settings.mail_attach_ical = True
+    event.settings.mail_attach_ical_paid_only = False
+
+    for locale, description in descriptions.items():
+        order.locale = locale
+        order.save()
+
+        djmail.outbox = []
+
+        mail(
+            "dummy@dummy.dummy",
+            "",
+            LazyI18nString(""),
+            event=event,
+            order=order,
+            attach_ical=True
+        )
+
+        assert len(djmail.outbox) == 1
+        assert len(djmail.outbox[0].attachments) == 1
+        assert description in djmail.outbox[0].attachments[0][1]

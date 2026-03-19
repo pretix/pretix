@@ -138,7 +138,7 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
                 code=self.kwargs['order'], received_secret=self.kwargs['secret'], tag=None,
             )
 
-            if has_event_access_permission(self.request, 'can_view_orders'):
+            if has_event_access_permission(self.request, 'event.orders:read'):
                 return order
 
             if order.customer is None or not order.customer.is_verified or self._allow_anonymous_access():
@@ -255,7 +255,7 @@ class TicketPageMixin:
 
         ctx['download_buttons'] = self.download_buttons
 
-        ctx['backend_user'] = has_event_access_permission(self.request, 'can_view_orders')
+        ctx['backend_user'] = has_event_access_permission(self.request, 'event.orders:read')
 
         return ctx
 

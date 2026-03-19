@@ -1762,21 +1762,10 @@ Vue.component('pretix-widget', {
     methods: shared_methods,
     mounted: function () {
         var thisObj = this;
-        if ("ResizeObserver" in window) {
-            var resizeObserver = new ResizeObserver(function(entries) {
-                thisObj.mobile = entries[0].contentRect.width <= 800;
-            });
-            resizeObserver.observe(this.$refs.wrapper);
-        } else {
-            this.mobile = this.$refs.wrapper.clientWidth <= 800;
-            var debounce;
-            window.addEventListener("resize", function() {
-                if (debounce) clearTimeout(debounce);
-                debounce = setTimeout(function () {
-                    thisObj.mobile = thisObj.$refs.wrapper.clientWidth <= 800;
-                }, 100);
-            });
-        }
+        var resizeObserver = new ResizeObserver(function(entries) {
+            thisObj.mobile = entries[0].contentRect.width <= 800;
+        });
+        resizeObserver.observe(this.$refs.wrapper);
     },
     computed: {
         classObject: function () {

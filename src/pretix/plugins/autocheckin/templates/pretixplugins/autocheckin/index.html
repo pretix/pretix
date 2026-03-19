@@ -83,7 +83,7 @@
                             {% endif %}
                         </td>
                         <td class="text-right flip">
-                            {% if "can_change_event_settings" in request.eventpermset %}
+                            {% if "event.settings.general:write" in request.eventpermset %}
                                 <a href="{% url "plugins:autocheckin:edit" organizer=request.event.organizer.slug event=request.event.slug rule=r.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <a href="{% url "plugins:autocheckin:add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ r.id }}"
                                         class="btn btn-default btn-sm" title="{% trans "Clone" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>

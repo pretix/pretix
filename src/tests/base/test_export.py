@@ -48,7 +48,7 @@ def event():
 
 @pytest.fixture
 def team(event):
-    return event.organizer.teams.create(all_events=True, can_view_orders=True)
+    return event.organizer.teams.create(all_events=True, all_event_permissions=True)
 
 
 @pytest.fixture
@@ -105,7 +105,7 @@ def test_event_fail_invalid_config(event, user):
     assert s.error_counter == 1
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == "Export failed"
-    assert "Reason: Export type not found." in djmail.outbox[0].body
+    assert "Reason: Export type not found" in djmail.outbox[0].body
     assert djmail.outbox[0].to == [user.email]
 
 
@@ -143,7 +143,8 @@ def test_event_fail_user_no_permission(event, user, team):
     s.error_counter = 0
     s.save()
 
-    team.can_view_orders = False
+    team.all_event_permissions = False
+    team.limit_event_permissions = {"event.vouchers:read": True}
     team.save()
 
     run_scheduled_exports(None)
@@ -152,7 +153,7 @@ def test_event_fail_user_no_permission(event, user, team):
     assert s.error_counter == 1
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == "Export failed"
-    assert "Reason: Permission denied." in djmail.outbox[0].body
+    assert "Reason: Export type not found or permission denied." in djmail.outbox[0].body
     assert djmail.outbox[0].to == [user.email]
 
 
@@ -235,7 +236,7 @@ def test_organizer_fail_invalid_config(event, user):
     assert s.error_counter == 1
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == "Export failed"
-    assert "Reason: Export type not found." in djmail.outbox[0].body
+    assert "Reason: Export type not found" in djmail.outbox[0].body
     assert djmail.outbox[0].to == [user.email]
 
 
@@ -273,7 +274,8 @@ def test_organizer_fail_user_does_not_have_specific_permission(event, user, team
     s.error_counter = 0
     s.save()
 
-    team.can_manage_customers = False
+    team.all_event_permissions = False
+    team.limit_event_permissions = {"organizer.giftcards:write": True}
     team.save()
 
     run_scheduled_exports(None)
@@ -282,7 +284,7 @@ def test_organizer_fail_user_does_not_have_specific_permission(event, user, team
     assert s.error_counter == 1
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == "Export failed"
-    assert "Reason: Permission denied." in djmail.outbox[0].body
+    assert "Reason: Export type not found or permission denied." in djmail.outbox[0].body
     assert djmail.outbox[0].to == [user.email]
 
 

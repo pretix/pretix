@@ -45,7 +45,9 @@ from django.utils.translation import gettext as _
 from django_scopes import scope
 
 from pretix.base.models import Event, Organizer
-from pretix.base.models.auth import SuperuserPermissionSet, User
+from pretix.base.models.auth import (
+    EventPermissionSet, OrganizerPermissionSet, SuperuserPermissionSet, User,
+)
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.security import (
     Session2FASetupRequired, SessionInvalid, SessionPasswordChangeRequired,
@@ -170,7 +172,7 @@ class PermissionMiddleware:
             if request.user.has_active_staff_session(request.session.session_key):
                 request.eventpermset = SuperuserPermissionSet()
             else:
-                request.eventpermset = request.user.get_event_permission_set(request.organizer, request.event)
+                request.eventpermset = EventPermissionSet(request.user.get_event_permission_set(request.organizer, request.event))
         elif 'organizer' in url.kwargs:
             if url.kwargs['organizer'] == '-':
                 # This is a hack that just takes the user to ANY organizer. It's useful to link to features in support
@@ -192,7 +194,7 @@ class PermissionMiddleware:
             if request.user.has_active_staff_session(request.session.session_key):
                 request.orgapermset = SuperuserPermissionSet()
             else:
-                request.orgapermset = request.user.get_organizer_permission_set(request.organizer)
+                request.orgapermset = OrganizerPermissionSet(request.user.get_organizer_permission_set(request.organizer))
 
         with scope(organizer=getattr(request, 'organizer', None)):
             r = self.get_response(request)

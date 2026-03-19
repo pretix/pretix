@@ -1111,7 +1111,7 @@ class OrderPaymentSearchFilterForm(forms.Form):
             self.fields['organizer'].queryset = Organizer.objects.filter(
                 pk__in=self.request.user.teams.values_list('organizer', flat=True)
             )
-            self.fields['event'].queryset = self.request.user.get_events_with_permission('can_view_orders')
+            self.fields['event'].queryset = self.request.user.get_events_with_permission('event.orders:read')
 
         self.fields['provider'].choices += get_all_payment_providers()
 

@@ -47,9 +47,12 @@ from ..signals import register_multievent_data_exporters
 class CustomerListExporter(OrganizerLevelExportMixin, ListExporter):
     identifier = 'customerlist'
     verbose_name = gettext_lazy('Customer accounts')
-    organizer_required_permission = 'can_manage_customers'
     category = pgettext_lazy('export_category', 'Customer accounts')
     description = gettext_lazy('Download a spreadsheet of all currently registered customer accounts.')
+
+    @classmethod
+    def get_required_organizer_permission(cls) -> str:
+        return 'organizer.customers:write'
 
     @property
     def additional_form_fields(self):

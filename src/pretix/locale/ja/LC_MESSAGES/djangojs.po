@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 09:10+0000\n"
+"POT-Creation-Date: 2026-03-17 14:06+0000\n"
 "PO-Revision-Date: 2026-02-23 10:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -59,8 +59,8 @@ msgid "PayPal Pay Later"
 msgstr "PayPal後払い"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
-msgid "iDEAL"
-msgstr "iDEAL"
+msgid "iDEAL | Wero"
+msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
@@ -355,7 +355,7 @@ msgstr "いいえ"
 msgid "close"
 msgstr "閉じる"
 
-#: pretix/static/pretixbase/js/addressform.js:101
+#: pretix/static/pretixbase/js/addressform.js:108
 #: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "必須"
@@ -370,7 +370,8 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:17
 msgid "Your request has been queued on the server and will soon be processed."
-msgstr "お客様のリクエストはサーバーで受け付けられました。まもなく処理されます。"
+msgstr ""
+"お客様のリクエストはサーバーで受け付けられました。まもなく処理されます。"
 
 #: pretix/static/pretixbase/js/asynctask.js:21
 msgid ""
@@ -393,7 +394,8 @@ msgstr "{code} のエラーが発生しました。"
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
-msgstr "現在サーバへの接続ができませんが、接続試行中です。最新のエラーコード: {code}"
+msgstr ""
+"現在サーバへの接続ができませんが、接続試行中です。最新のエラーコード: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:162
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
@@ -417,8 +419,8 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
-"現在リクエストをサーバへ送信中です。１分以上経っても応答がない場合は、"
-"インターネット接続を確認し、このページを再読み込みして再試行してください。"
+"現在リクエストをサーバへ送信中です。１分以上経っても応答がない場合は、イン"
+"ターネット接続を確認し、このページを再読み込みして再試行してください。"
 
 #: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
@@ -644,59 +646,59 @@ msgstr "不明なエラー。"
 #: pretix/static/pretixcontrol/js/ui/main.js:309
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr ""
-"選択した色は素晴らしいコントラストを持ち、優れたアクセシビリティを提供します"
-"。"
+"選択した色は素晴らしいコントラストを持ち、優れたアクセシビリティを提供しま"
+"す。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid ""
 "Your color has decent contrast and is sufficient for minimum accessibility "
 "requirements."
 msgstr ""
-"選択した色は適切なコントラストを持ち、最小限のアクセシビリティ要件に十分です"
-"。"
+"選択した色は適切なコントラストを持ち、最小限のアクセシビリティ要件に十分で"
+"す。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
-"選択した色は白に対して十分なコントラストがありません。サイトの"
-"アクセシビリティに影響します。"
+"選択した色は白に対して十分なコントラストがありません。サイトのアクセシビリ"
+"ティに影響します。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:443
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:445
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "Search query"
 msgstr "検索クエリ"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:461
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "All"
 msgstr "全て"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:462
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "None"
 msgstr "なし"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:468
 msgid "Selected only"
 msgstr "選択したもののみ"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:839
+#: pretix/static/pretixcontrol/js/ui/main.js:841
 msgid "Enter page number between 1 and %(max)s."
 msgstr "1以上%(max)s以下のページ番号を入力。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Invalid page number."
 msgstr "無効なページ番号。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1000
+#: pretix/static/pretixcontrol/js/ui/main.js:1002
 msgid "Use a different name internally"
 msgstr "内部で別の名前を使用する"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1040
+#: pretix/static/pretixcontrol/js/ui/main.js:1042
 msgid "Click to close"
 msgstr "クリックして閉じる"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1121
+#: pretix/static/pretixcontrol/js/ui/main.js:1123
 msgid "You have unsaved changes!"
 msgstr "保存されていない変更があります！"
 
@@ -1197,6 +1199,9 @@ msgstr "１１月"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "１２月"
+
+#~ msgid "iDEAL"
+#~ msgstr "iDEAL"
 
 #~ msgid "Time zone:"
 #~ msgstr "タイムゾーン："

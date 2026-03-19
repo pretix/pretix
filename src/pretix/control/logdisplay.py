@@ -641,6 +641,7 @@ class TeamMembershipLogEntryType(LogEntryType):
     'pretix.team.member.added': _('{user} has been added to the team.'),
     'pretix.team.member.removed': _('{user} has been removed from the team.'),
     'pretix.team.invite.created': _('{user} has been invited to the team.'),
+    'pretix.team.invite.deleted': _('Invite for {user} has been deleted.'),
     'pretix.team.invite.resent': _('Invite for {user} has been resent.'),
 })
 class CoreTeamMembershipLogEntryType(TeamMembershipLogEntryType):

@@ -53,8 +53,13 @@ def organizer():
 
 @pytest.fixture
 def admin_team(organizer):
-    return Team.objects.create(organizer=organizer, can_change_teams=True, name='Admin team', all_events=True,
-                               can_create_events=True)
+    return Team.objects.create(
+        organizer=organizer,
+        name='Admin team',
+        all_events=True,
+        all_event_permissions=True,
+        all_organizer_permissions=True,
+    )
 
 
 @pytest.fixture
@@ -387,7 +392,7 @@ def test_token_from_code(client, admin_user, organizer, application: OAuthApplic
 @pytest.mark.django_db
 def test_use_token_for_access_one_organizer(client, admin_user, organizer, application: OAuthApplication):
     o2 = Organizer.objects.create(name='A', slug='a')
-    t2 = Team.objects.create(organizer=o2, can_change_teams=True, name='Admin team', all_events=True)
+    t2 = Team.objects.create(organizer=o2, all_organizer_permissions=True, name='Admin team', all_events=True)
     t2.members.add(admin_user)
 
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -434,7 +439,13 @@ def test_use_token_for_access_one_organizer(client, admin_user, organizer, appli
 @pytest.mark.django_db
 def test_use_token_for_access_two_organizers(client, admin_user, organizer, application: OAuthApplication):
     o2 = Organizer.objects.create(name='A', slug='a')
-    t2 = Team.objects.create(organizer=o2, can_change_teams=True, name='Admin team', all_events=True)
+    t2 = Team.objects.create(
+        organizer=o2,
+        all_event_permissions=True,
+        all_organizer_permissions=True,
+        name='Admin team',
+        all_events=True
+    )
     t2.members.add(admin_user)
 
     client.login(email='dummy@dummy.dummy', password='dummy')

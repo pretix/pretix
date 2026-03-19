@@ -63,6 +63,7 @@ from pretix.base.models import (
     CartPosition, LogEntry, Voucher, WaitingListEntry,
 )
 from pretix.base.models.vouchers import generate_codes
+from pretix.base.permissions import AnyPermissionOf
 from pretix.base.services.mail import prefix_subject
 from pretix.base.services.placeholders import get_sample_context
 from pretix.base.services.vouchers import vouchers_send
@@ -83,7 +84,7 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
     model = Voucher
     context_object_name = 'vouchers'
     template_name = 'pretixcontrol/vouchers/index.html'
-    permission = 'can_view_vouchers'
+    permission = 'event.vouchers:read'
 
     @scopes_disabled()  # we have an event check here, and we can save some performance on subqueries
     def get_queryset(self):
@@ -155,7 +156,7 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
 
 class VoucherTags(EventPermissionRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/vouchers/tags.html'
-    permission = 'can_view_vouchers'
+    permission = 'event.vouchers:read'
 
     def get_queryset(self):
         qs = self.request.event.vouchers.order_by('tag').filter(
@@ -196,7 +197,7 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
 class VoucherDeleteCarts(EventPermissionRequiredMixin, CompatDeleteView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/delete_carts.html'
-    permission = 'can_change_vouchers'
+    permission = 'event.vouchers:write'
     context_object_name = 'voucher'
 
     def get_object(self, queryset=None) -> Voucher:
@@ -228,7 +229,7 @@ class VoucherDeleteCarts(EventPermissionRequiredMixin, CompatDeleteView):
 class VoucherDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/delete.html'
-    permission = 'can_change_vouchers'
+    permission = 'event.vouchers:write'
     context_object_name = 'voucher'
 
     def get_object(self, queryset=None) -> Voucher:
@@ -270,7 +271,7 @@ class VoucherDelete(EventPermissionRequiredMixin, CompatDeleteView):
 class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/detail.html'
-    permission = ('can_change_vouchers', 'can_view_vouchers')
+    permission = AnyPermissionOf('event.vouchers:write', 'event.vouchers:read')
     context_object_name = 'voucher'
 
     def form_invalid(self, form):
@@ -286,7 +287,7 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_change_vouchers',
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'event.vouchers:write',
                                                       request=self.request):
             for f in form.fields.values():
                 f.disabled = True
@@ -313,7 +314,7 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
-        if not request.user.has_event_permission(request.organizer, request.event, 'can_change_vouchers',
+        if not request.user.has_event_permission(request.organizer, request.event, 'event.vouchers:write',
                                                  request=request):
             raise PermissionDenied()
         return super().post(request, *args, **kwargs)
@@ -344,7 +345,7 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
 class VoucherCreate(EventPermissionRequiredMixin, CreateView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/detail.html'
-    permission = 'can_change_vouchers'
+    permission = 'event.vouchers:write'
     context_object_name = 'voucher'
 
     def form_invalid(self, form):
@@ -389,7 +390,7 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
 
 
 class VoucherGo(EventPermissionRequiredMixin, View):
-    permission = 'can_view_vouchers'
+    permission = 'event.vouchers:read'
 
     def get_voucher(self, code):
         return Voucher.objects.get(code__iexact=code, event=self.request.event)
@@ -408,7 +409,7 @@ class VoucherGo(EventPermissionRequiredMixin, View):
 class VoucherBulkCreate(EventPermissionRequiredMixin, AsyncFormView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/bulk.html'
-    permission = 'can_change_vouchers'
+    permission = 'event.vouchers:write'
     context_object_name = 'voucher'
     atomic_execute = True
 
@@ -540,7 +541,7 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, AsyncFormView):
 
 
 class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
-    permission = 'can_change_vouchers'
+    permission = 'event.vouchers:write'
 
     # return the origin text if key is missing in dict
     class SafeDict(dict):
@@ -579,7 +580,7 @@ class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
 
 
 class VoucherRNG(EventPermissionRequiredMixin, View):
-    permission = 'can_change_vouchers'
+    permission = 'event.vouchers:write'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -603,7 +604,7 @@ class VoucherRNG(EventPermissionRequiredMixin, View):
 
 
 class VoucherBulkAction(EventPermissionRequiredMixin, View):
-    permission = 'can_change_vouchers'
+    permission = 'event.vouchers:write'
 
     @cached_property
     def objects(self):

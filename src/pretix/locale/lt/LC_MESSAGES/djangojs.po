@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 09:10+0000\n"
+"POT-Creation-Date: 2026-03-17 14:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,7 +60,7 @@ msgid "PayPal Pay Later"
 msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
-msgid "iDEAL"
+msgid "iDEAL | Wero"
 msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
@@ -356,7 +356,7 @@ msgstr ""
 msgid "close"
 msgstr ""
 
-#: pretix/static/pretixbase/js/addressform.js:101
+#: pretix/static/pretixbase/js/addressform.js:108
 #: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr ""
@@ -650,40 +650,40 @@ msgid ""
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:443
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:445
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:461
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "All"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:462
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "None"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:468
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:839
+#: pretix/static/pretixcontrol/js/ui/main.js:841
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1000
+#: pretix/static/pretixcontrol/js/ui/main.js:1002
 msgid "Use a different name internally"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1040
+#: pretix/static/pretixcontrol/js/ui/main.js:1042
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1121
+#: pretix/static/pretixcontrol/js/ui/main.js:1123
 msgid "You have unsaved changes!"
 msgstr ""
 
