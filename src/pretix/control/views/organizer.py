@@ -1322,7 +1322,7 @@ class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.device.changed', user=self.request.user, data={
-                k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+                k: form.cleaned_data[k] if k != 'limit_events' else [e.id for e in form.cleaned_data[k]]
                 for k in form.changed_data
             })
 
