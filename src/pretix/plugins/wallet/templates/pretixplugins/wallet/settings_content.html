@@ -1,0 +1,8 @@
+{% load i18n %}
+<p>
+    <a class="btn btn-primary btn-lg" target="_blank"
+            href="{% url "plugins:wallet:index" organizer=request.organizer.slug event=request.event.slug %}">
+        <span class="fa fa-paint-brush"></span>
+        {% trans "Edit layouts" %}
+    </a>
+</p>
