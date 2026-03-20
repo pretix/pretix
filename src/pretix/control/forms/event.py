@@ -63,7 +63,7 @@ from pretix.base.forms import (
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.models.organizer import TeamQuerySet
-from pretix.base.models.tax import TAX_CODE_LISTS
+from pretix.base.models.tax import TAX_CODE_LISTS, VAT_ID_COUNTRIES
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.settings import (
@@ -530,6 +530,13 @@ class EventUpdateForm(I18nModelForm):
 
 
 class EventSettingsValidationMixin:
+
+    def clean_invoice_address_from_vat_id(self):
+        value = self.cleaned_data.get('invoice_address_from_vat_id')
+        country = self.cleaned_data.get('invoice_address_from_country')
+        if value and country and country not in VAT_ID_COUNTRIES:
+            return None
+        return value
 
     def clean(self):
         data = super().clean()
