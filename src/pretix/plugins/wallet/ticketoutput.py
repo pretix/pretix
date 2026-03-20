@@ -24,34 +24,48 @@ from django.utils.translation import gettext_lazy as _
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.base.models import Event
 from pretix.base.settings import SettingsSandbox
+from django.template.loader import render_to_string
 
 
-logger = logging.getLogger('pretix.plugins.wallet')
+logger = logging.getLogger("pretix.plugins.wallet")
 
 
 class WalletSettingsHolder(BaseTicketOutput):
-    identifier = 'wallet'
-    verbose_name = _('Wallet Output')
-    
+    identifier = "wallet"
+    verbose_name = _("Wallet Output")
+
     is_meta = True
     is_enabled = False
-    preview_allowed = False # TODO: implement own preview view or hide button for meta-outputs
+    preview_allowed = (
+        False  # TODO: implement own preview view or hide button for meta-outputs
+    )
+
+    def settings_content_render(self, request) -> str:
+        return render_to_string(
+            "pretixplugins/wallet/settings_content.html", {"request": request}
+        )
+
 
 class WalletOutput(BaseTicketOutput):
     settings_form_fields = []
 
     def __init__(self, event: Event):
         super().__init__(event)
-        self.settings = SettingsSandbox('ticketoutput', WalletSettingsHolder.identifier, event)
+        self.settings = SettingsSandbox(
+            "ticketoutput", WalletSettingsHolder.identifier, event
+        )
+
 
 class GoogleWalletTicketOutput(WalletOutput):
-    identifier = 'wallet_google'
-    verbose_name = _('Google')
+    identifier = "wallet_google"
+    verbose_name = _("Google")
     download_button_text = "Add to Google Wallet"
 
+
 class AppleWalletTicketOutput(WalletOutput):
-    identifier = 'wallet_apple'
-    verbose_name = _('Apple')
+    identifier = "wallet_apple"
+    verbose_name = _("Apple")
     download_button_text = "Add to Apple Wallet"
+
 
 OUTPUTS = [WalletSettingsHolder, GoogleWalletTicketOutput, AppleWalletTicketOutput]
