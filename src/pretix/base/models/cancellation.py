@@ -2,16 +2,15 @@ import dataclasses
 from dataclasses import dataclass
 from decimal import Decimal
 from functools import reduce
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django.core.validators import MaxValueValidator
-from django.core.validators import MinValueValidator
+from typing import Callable, Dict, List, Set, Union
+
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.functional import _StrPromise
+from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager
 
-from pretix.base.models import Event
-from pretix.base.models import OrderPosition, Order
-from typing import Dict, Union, Callable, List
-
+from pretix.base.models import Event, Order, OrderPosition
 from pretix.base.reldate import ModelRelativeDateTimeField
 from pretix.base.timemachine import time_machine_now
 
@@ -28,33 +27,44 @@ class RelativeFee:
 
     @property
     def amount(self):
-        return self.reference_price * self.percentage
+        return self.reference_price * (self.percentage/100)
 
 
 @dataclass(frozen=True)
-class Ruling:
+class CheckResult:
     cancellation_possible: bool
-    reason: str
+    reason: str | _StrPromise
 
 
-Rulings=Dict[str, Ruling]
+@dataclass(frozen=True)
+class OrderDiff:
+    order: Order
+    prev: Set[OrderPosition]
+    next: Set[OrderPosition]
+
+    def cancellations(self):
+        return self.prev.difference(self.next)
+
+
+
+CheckResult=Dict[str, CheckResult]
 Fee=Union[AbsoluteFee, RelativeFee]
-RuleFn=Callable[[OrderPosition], Rulings]
+CheckFn=Callable[[OrderDiff, OrderPosition], CheckResult]
 
 
-def merge_rulings(a: Rulings, b: Rulings) -> Rulings:
+def merge_check_results(a: CheckResult, b: CheckResult) -> CheckResult:
     result = dict(a)
     for key, b_inner in b.items():
         if key in result:
-            result[key] = result[key] | b_inner  # merge inner dicts
+            result[key] = result[key] | b_inner
         else:
             result[key] = b_inner
     return result
 
 @dataclass(frozen=True)
-class CancellationConsequence:
+class Ruling:
     rule_id: int
-    rulings: Rulings
+    check_results: CheckResult
     order_fee: Decimal=dataclasses.field(default_factory=lambda: Decimal(0))
     position_fee: Fee=dataclasses.field(default_factory=lambda: AbsoluteFee(Decimal(0)))
 
@@ -65,7 +75,7 @@ class CancellationConsequence:
             self,
             'cancellation_possible',
             all(ruling.cancellation_possible
-                for ruling in self.rulings.values()
+                for ruling in self.check_results.values()
             )
         )
 
@@ -74,7 +84,7 @@ class CancellationConsequence:
         return self.position_fee.amount + self.order_fee
 
     def __lt__(self, other):
-        if not isinstance(other, CancellationConsequence):
+        if not isinstance(other, Ruling):
             return NotImplemented
 
         if self.cancellation_possible == other.cancellation_possible:
@@ -85,12 +95,13 @@ class CancellationConsequence:
 
 class CancellationRuleQuerySet(models.QuerySet):
     def cancellation_possible(self, order: Order):
-        return all([v[0].cancellation_possible for v in self._evaluate(order)])
+        verdicts = [v[0] for v in self._evaluate(order)]
+        return all(v.cancellation_possible for v in verdicts), verdicts
 
-    def _evaluate(self, order: Order) -> List[List[CancellationConsequence]]:
+    def _evaluate(self, order: Order) -> List[List[Ruling]]:
         return [self._evaluate_op(position) for position in order.positions.all()]
 
-    def _evaluate_op(self, order_position: OrderPosition) -> List[CancellationConsequence]:
+    def _evaluate_op(self, order_position: OrderPosition) -> List[Ruling]:
         consequences=[rule.apply(order_position) for rule in self]
         consequences.sort()
         return consequences
@@ -98,6 +109,11 @@ class CancellationRuleQuerySet(models.QuerySet):
 
 
 class CancellationRule(models.Model):
+    """
+
+
+    """
+
     organizer=models.ForeignKey(
         "Organizer",
         related_name="orders",
@@ -157,75 +173,132 @@ class CancellationRule(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.rules: List[RuleFn]=[self._rule_order_status, self._rule_time_window,
-                                  self._system_rule_not_checked_in]
+        self.checks: List[CheckFn]=[self._check_order_status, self._check_time_window,
+                                    self._system_check_not_checked_in]
+        self.partial_checks: List[CheckFn]=[self._system_check_not_discounted]
 
     @staticmethod
-    def _system_rule_not_checked_in(order_position: OrderPosition) -> Rulings:
+    def _system_check_not_checked_in(diff: OrderDiff, order_position: OrderPosition) -> CheckResult:
+        check_id = "SYSTEM_TICKET_NOT_USED"
+
         if order_position.checkins.filter(list__consider_tickets_used=True).exists():
-            return {"SYSTEM_TICKET_NOT_USED": Ruling(
+            return {check_id: CheckResult(
                 cancellation_possible=False,
                 reason=f"Order position was used",
             )}
         else:
-            return {"SYSTEM_TICKET_NOT_USED": Ruling(
+            return {check_id: CheckResult(
                 cancellation_possible=True,
                 reason=f"Order position not yet used",
             )}
 
-    def _rule_time_window(self, order_position: OrderPosition) -> Rulings:
-        in_allowed_until = self.allowed_until < time_machine_now()
-        in_exemption = self.except_after > time_machine_now()
-        if in_allowed_until and not in_exemption:
-            return {"TIME_WINDOW": Ruling(
-                cancellation_possible=True,
-                reason=f"Cancellation in required time window between {self.allowed_until} and {self.except_after}",
-            )}
-        elif in_allowed_until and in_exemption:
-            return {"TIME_WINDOW": Ruling(
-                cancellation_possible=False,
-                reason=f"Cancellation in exemption period after {self.except_after}",
-            )}
+    @staticmethod
+    def _system_check_not_discounted(diff: OrderDiff, order_position: OrderPosition) -> CheckResult:
+        """
+        Check that ensures that orders containing discounted order_positions cannot
+        be canceled partially.
+        This is a stop-gap solution until the `discount_grouper` attribute for
+        AbstractPositions is introduced, allowing us to be more grannular
+
+        :param diff:
+        :param order_position:
+        :return CheckResults:
+        """
+        check_id = "SYSTEM_TICKET_NOT_USED"
+
+        if order_position in diff.cancellations():
+            if order_position.discount is None:
+                return {check_id: CheckResult(
+                    cancellation_possible=True,
+                    reason=_("Order position was bought without discount"),
+                )}
+            else:
+                return {check_id: CheckResult(
+                    cancellation_possible=False,
+                    reason=_("Order position was bought with a discount"),
+                )}
         else:
-            return {"TIME_WINDOW": Ruling(
+            return {check_id: CheckResult(
                 cancellation_possible=False,
-                reason=f"Cancellation after time window ending on {self.allowed_until}",
+                reason=_("Order position not canceled - check not applicable"),
             )}
 
-    def _rule_order_status(self, order_position: OrderPosition) -> Rulings:
-        if order_position.order.status == self.order_status:
-            return {"ORDER_STATUS": Ruling(
+    def _check_time_window(self, diff: OrderDiff, order_position: OrderPosition) -> CheckResult:
+        check_id = "TIME_WINDOW"
+
+        relevant_event = order_position.subevent or order_position.event
+
+        if not self.allowed_until and not self.allowed_until:
+            return {check_id: CheckResult(
+                cancellation_possible=True,
+                reason=f"No time window specified",
+            )}
+
+        in_allowed_until=time_machine_now() < self.allowed_until.datetime(
+                relevant_event) if self.allowed_until else False
+        in_exemption=time_machine_now() > self.except_after.datetime(
+                relevant_event) if self.except_after else False
+        if in_allowed_until and not in_exemption:
+            except_after_message = f" and not after {self.except_after.datetime(relevant_event)}" if self.except_after else ""
+
+            return {check_id: CheckResult(
+                cancellation_possible=True,
+                reason=f"Cancellation in required time window before {self.allowed_until.datetime(relevant_event)}{except_after_message}",
+            )}
+        elif in_allowed_until and in_exemption:
+            return {check_id: CheckResult(
+                cancellation_possible=False,
+                reason=f"Cancellation in exemption period after {self.except_after.datetime(relevant_event)}",
+            )}
+        else:
+            return {check_id: CheckResult(
+                cancellation_possible=False,
+                reason=f"Cancellation after time window ending on {self.allowed_until.datetime(relevant_event)}",
+            )}
+
+
+
+    def _check_order_status(self, diff: OrderDiff, order_position: OrderPosition) -> CheckResult:
+        check_id = "ORDER_STATUS"
+
+        if not self.order_status:
+            return {check_id: CheckResult(
+                cancellation_possible=True,
+                reason=f"Orders in every status can be cancelled",
+            )}
+        elif order_position.order.status == self.order_status:
+            return {check_id: CheckResult(
                 cancellation_possible=True,
                 reason=f"Order in required status: '{order_position.order.status}'",
             )}
         else:
-            return {"ORDER_STATUS": Ruling(
+            return {check_id: CheckResult(
                 cancellation_possible=False,
                 reason=f"Order in status '{order_position.order.status}' cannot be canceled",
             )}
 
-    # OrderPositions mit discount dürfen nur storniert werden, wenn alle positions mit dem gleichen discount_grouper storniert werden
+
     # OrderPositions mit Item.min_per_order dürfen nur storniert werden, wenn genug übrig bleiben oder alle des gleichen Items storniert werden
     # OrderPositions mit addon_to != None dürfen nur über den bestehenden Add-On-Flow storniert werden
     # OrderPositions mit is_bundled dürfen nur mit der Parent-Position zusammen storniert werden
     # Shipping modul kann storno geshippter Items verhindern
     # Backend-Anzeige "welche Regel greift da gerade" in der Order
 
-    def apply(self, order_position: OrderPosition) -> CancellationConsequence:
-        rulings=reduce(merge_rulings,
-                       [rule(order_position) for rule in self.rules])
+    def apply(self, diff: OrderDiff, order_position: OrderPosition) -> Ruling:
+        check_results=reduce(merge_check_results,
+                       [rule(diff, order_position) for rule in self.checks])
 
         if self.fee_percentage_per_item and self.fee_absolute_per_item:
             raise NotImplementedError("Should never be reached")
         elif self.fee_absolute_per_item:
             fee=AbsoluteFee(self.fee_absolute_per_item)
         else:
-            fee=RelativeFee(percentage=self.fee_absolute_per_item,
+            fee=RelativeFee(percentage=self.fee_percentage_per_item,
                             reference_price=order_position.price)
 
-        return CancellationConsequence(
+        return Ruling(
             rule_id=self.id,
-            rulings=rulings,
+            check_results=check_results,
             order_fee=self.fee_absolute_per_order,
             position_fee=fee
         )
