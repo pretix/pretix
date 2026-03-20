@@ -4150,7 +4150,7 @@ def validate_event_settings(event, settings_dict):
             )
     if (
         settings_dict.get('invoice_address_from_vat_id') and
-        settings_dict.get('invoice_address_from_country') and 
+        settings_dict.get('invoice_address_from_country') and
         settings_dict.get('invoice_address_from_country') not in VAT_ID_COUNTRIES
     ):
         raise ValidationError({
