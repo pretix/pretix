@@ -584,14 +584,39 @@ class User2FAEnableView(RecentAuthenticationRequiredMixin, TemplateView):
             return redirect(reverse('control:user.settings.2fa'))
         return super().dispatch(request, *args, **kwargs)
 
+    def get(self, request, *args, **kwargs):
+        new_tokens = None
+        try:
+            static_tokens_device = StaticDevice.objects.get(user=self.request.user, name='emergency')
+        except StaticDevice.MultipleObjectsReturned:
+            static_tokens_device = StaticDevice.objects.filter(
+                user=self.request.user, name='emergency'
+            ).first()
+        except StaticDevice.DoesNotExist:
+            static_tokens_device = None
+
+            new_tokens = [get_random_string(length=12, allowed_chars='1234567890') for _ in range(10)]
+            request.session['pretix_2fa_new_emergency_tokens'] = new_tokens
+        return super().get(request, *args, new_emergency_tokens=new_tokens, static_tokens_device=static_tokens_device, **kwargs)
+
     def post(self, request, *args, **kwargs):
+        notices = [
+            _('Two-factor authentication has been enabled.')
+        ]
+        if 'pretix_2fa_new_emergency_tokens' in request.session:
+            d = StaticDevice.objects.create(user=self.request.user, name='emergency')
+            for code in request.session['pretix_2fa_new_emergency_tokens']:
+                d.token_set.create(token=code)
+            self.request.user.log_action('pretix.user.settings.2fa.regenemergency', user=self.request.user)
+            notices += [
+                _('Your two-factor emergency codes have been regenerated.')
+            ]
+            del request.session['pretix_2fa_new_emergency_tokens']
         self.request.user.require_2fa = True
         self.request.user.save()
         self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
         messages.success(request, _('Two-factor authentication is now enabled for your account.'))
-        self.request.user.send_security_notice([
-            _('Two-factor authentication has been enabled.')
-        ])
+        self.request.user.send_security_notice(notices)
         self.request.user.update_session_token()
         update_session_auth_hash(self.request, self.request.user)
         return redirect(reverse('control:user.settings.2fa'))

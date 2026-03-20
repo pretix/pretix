@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load icon %}
 {% block title %}{% trans "Enable two-factor authentication" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Enable two-factor authentication" %}</h1>
@@ -11,8 +12,41 @@
         </p>
         <p>
             {% trans "You will no longer be able to log in to pretix without one of your configured devices." %}
-            {% trans "Please make sure to print out or copy the emergency tokens and store them in a safe place." %}
         </p>
+        {% if new_emergency_tokens %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{% trans "Your emergency codes" %}</h3>
+                </div>
+                <div class="panel-body">
+                    <p>
+                        {% blocktrans trimmed %}
+                            If you lose access to your devices, you can use one of your emergency tokens to log in.
+                            We recommend to store them in a safe place, e.g. printed out or in a password manager.
+                            Every token can be used at most once.
+                        {% endblocktrans %}
+                    </p>
+                    <ul>
+                        {% for code in new_emergency_tokens %}
+                        <li>{{ code }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p>
+                        <label>
+                            <input type="checkbox" required>
+                            {% trans "I stored my emergency tokens in a safe place." %}
+                        </label>
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <p>
+                {% icon "info-circle" %}
+                {% blocktrans trimmed with generation_date_time=static_tokens_device.created_at %}
+                    You generated your emergency tokens on {{ generation_date_time }}.
+                {% endblocktrans %}
+            </p>
+        {% endif %}
         <div class="form-group submit-group">
             <a href="{% url "control:user.settings.2fa" %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
