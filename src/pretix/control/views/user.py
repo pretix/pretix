@@ -465,25 +465,15 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
             notices = [
                 _('A new two-factor authentication device has been added to your account.')
             ]
-            activate = request.POST.get('activate', '')
-            if activate == 'on' and not self.request.user.require_2fa:
-                self.request.user.require_2fa = True
-                self.request.user.save()
-                self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
-                notices.append(
-                    _('Two-factor authentication has been enabled.')
-                )
             self.request.user.send_security_notice(notices)
             self.request.user.update_session_token()
             update_session_auth_hash(self.request, self.request.user)
 
-            note = ''
-            if not self.request.user.require_2fa:
-                note = ' ' + str(_('Please note that you still need to enable two-factor authentication for your '
-                                   'account using the buttons below to make a second factor required for logging '
-                                   'into your account.'))
-            messages.success(request, str(_('The device has been verified and can now be used.')) + note)
-            return redirect(reverse('control:user.settings.2fa'))
+            messages.success(request, str(_('The device has been verified and can now be used.')))
+            if self.request.user.require_2fa:
+                return redirect(reverse('control:user.settings.2fa'))
+            else:
+                return redirect(reverse('control:user.settings.2fa.enable'))
         except Exception:
             messages.error(request, _('The registration could not be completed. Please try again.'))
             logger.exception('WebAuthn registration failed')
@@ -514,7 +504,6 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
 
     def post(self, request, *args, **kwargs):
         token = request.POST.get('token', '')
-        activate = request.POST.get('activate', '')
         if self.device.verify_token(token):
             self.device.confirmed = True
             self.device.save()
@@ -526,24 +515,15 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
             notices = [
                 _('A new two-factor authentication device has been added to your account.')
             ]
-            if activate == 'on' and not self.request.user.require_2fa:
-                self.request.user.require_2fa = True
-                self.request.user.save()
-                self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
-                notices.append(
-                    _('Two-factor authentication has been enabled.')
-                )
             self.request.user.send_security_notice(notices)
             self.request.user.update_session_token()
             update_session_auth_hash(self.request, self.request.user)
 
-            note = ''
-            if not self.request.user.require_2fa:
-                note = ' ' + str(_('Please note that you still need to enable two-factor authentication for your '
-                                   'account using the buttons below to make a second factor required for logging '
-                                   'into your account.'))
-            messages.success(request, str(_('The device has been verified and can now be used.')) + note)
-            return redirect(reverse('control:user.settings.2fa'))
+            messages.success(request, str(_('The device has been verified and can now be used.')))
+            if self.request.user.require_2fa:
+                return redirect(reverse('control:user.settings.2fa'))
+            else:
+                return redirect(reverse('control:user.settings.2fa.enable'))
         else:
             messages.error(request, _('The code you entered was not valid. If this problem persists, please check '
                                       'that the date and time of your phone are configured correctly.'))
