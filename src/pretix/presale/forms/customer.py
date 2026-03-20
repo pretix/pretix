@@ -28,7 +28,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import (
-    get_password_validators, password_validators_help_texts, validate_password,
+    MinimumLengthValidator, get_password_validators, validate_password
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import signing
@@ -302,7 +302,6 @@ class SetPasswordForm(forms.Form):
         label=_('Password'),
         widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
         max_length=4096,
-        required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
@@ -315,6 +314,8 @@ class SetPasswordForm(forms.Form):
         kwargs.setdefault('initial', {})
         kwargs['initial']['email'] = self.customer.email
         super().__init__(*args, **kwargs)
+        if 'password' not in self.data:
+            self.fields['password'].help_text=MinimumLengthValidator(8).get_help_text()
 
     def clean(self):
         password1 = self.cleaned_data.get('password', '')
@@ -329,8 +330,7 @@ class SetPasswordForm(forms.Form):
 
     def clean_password(self):
         password1 = self.cleaned_data.get('password', '')
-        if validate_password(password1, user=self.customer, password_validators=get_customer_password_validators()) is not None:
-            raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
+        validate_password(password1, user=self.customer, password_validators=get_customer_password_validators())
         return password1
 
 
@@ -410,6 +410,9 @@ class ChangePasswordForm(forms.Form):
         kwargs.setdefault('initial', {})
         kwargs['initial']['email'] = self.customer.email
         super().__init__(*args, **kwargs)
+        if 'password' not in self.data:
+            self.fields['password'].help_text=MinimumLengthValidator(8).get_help_text()
+
 
     def clean(self):
         password1 = self.cleaned_data.get('password', '')
@@ -424,8 +427,7 @@ class ChangePasswordForm(forms.Form):
 
     def clean_password(self):
         password1 = self.cleaned_data.get('password', '')
-        if validate_password(password1, user=self.customer, password_validators=get_customer_password_validators()) is not None:
-            raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
+        validate_password(password1, user=self.customer, password_validators=get_customer_password_validators())
         return password1
 
     def clean_password_current(self):
