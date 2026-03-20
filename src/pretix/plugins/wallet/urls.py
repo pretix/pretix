@@ -22,7 +22,8 @@
 from django.urls import re_path
 
 from .views import (
-    EditorView,
+    LayoutEditorView,
+    LayoutCreateView,
     LayoutListView
 )
 
@@ -30,7 +31,7 @@ urlpatterns = [
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/$',
         LayoutListView.as_view(), name='index'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/edit/(?P<platform>[^/]+)/$',
-        EditorView.as_view(), name='edit'),
+        LayoutCreateView.as_view(), name='add'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/edit/(?P<platform>[^/]+)/(?P<layout>[^/]+)/$',
-        EditorView.as_view(), name='edit'),
+        LayoutEditorView.as_view(), name='edit'),
 ]
