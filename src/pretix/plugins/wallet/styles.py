@@ -4,7 +4,23 @@ import enum
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from i18nfield.strings import LazyI18nString
+from .models import WalletLayout
 
+class WalletPlatform:
+    identifier: str
+    name: str
+
+    def get_layout_qs(self):
+        return WalletLayout.objects.filter(platform=self.identifier)
+
+class ApplePlatform(WalletPlatform):
+    identifier = "apple"
+    name = _("Apple")
+
+class GooglePlatform(WalletPlatform):
+    identifier = "apple"
+    name = _("Google")
+    
 class PlaceholderFieldType(enum.Enum):
     TEXT = "text"
     CODE = "qr"
@@ -108,6 +124,7 @@ class GoogleWalletEventTicket(PassStyle):
     ]
 
 
+AVAILABLE_PLATFORMS = {"apple": ApplePlatform, "google": GooglePlatform}
 AVAILABLE_STYLES = [AppleWalletEventTicket(), GoogleWalletEventTicket()]
 
 def get_platforms_with_styles():
@@ -127,7 +144,7 @@ def get_platform_styles(platform):
     return platform_styles
 
 def get_platforms():
-    return sorted(set(style.platform for style in AVAILABLE_STYLES))
+    return AVAILABLE_PLATFORMS
 
 class PassLayout:
     style: PassStyle
