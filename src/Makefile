@@ -9,10 +9,10 @@ localegen:
 	./manage.py makemessages --keep-pot --ignore "pretix/static/npm_dir/*" $(LNGS)
 	./manage.py makemessages --keep-pot -d djangojs --ignore "pretix/static/npm_dir/*" --ignore "pretix/helpers/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static.dist/*" --ignore "data/*" --ignore "pretix/static/rrule/*" --ignore "build/*" $(LNGS)
 
-staticfiles: jsi18n
+staticfiles: npminstall npmbuild jsi18n
 	./manage.py collectstatic --noinput
 
-compress: npminstall
+compress:
 	./manage.py compress
 
 jsi18n: localecompile
@@ -25,8 +25,8 @@ coverage:
 	coverage run -m py.test
 
 npminstall:
-	# keep this in sync with pretix/_build.py!
-	mkdir -p pretix/static.dist/node_prefix/
-	cp -r pretix/static/npm_dir/* pretix/static.dist/node_prefix/
-	npm ci --prefix=pretix/static.dist/node_prefix
+	npm ci
+
+npmbuild:
+	npm run build
 

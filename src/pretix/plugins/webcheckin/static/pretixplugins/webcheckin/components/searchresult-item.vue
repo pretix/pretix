@@ -1,48 +1,48 @@
-<template>
-  <a class="list-group-item searchresult" href="#" @click.prevent="$emit('selected', position)" ref="a">
-    <div class="details">
-      <h4>{{ position.order }}-{{ position.positionid }} {{ position.attendee_name }}</h4>
-      <span>{{ itemvar }}<br></span>
-      <span v-if="subevent">{{ subevent }}<br></span>
-      <div class="secret">{{ position.secret }}</div>
-    </div>
-    <div :class="`status status-${status}`">
-      <span v-if="position.require_attention"><span class="fa fa-warning"></span><br></span>
-      {{ $root.strings[`status.${status}`] }}
-    </div>
-  </a>
-</template>
-<script>
-export default {
-  components: {},
-  props: {
-    position: Object
-  },
-  computed: {
-    status() {
-      if (this.position.checkins.length) return 'redeemed';
-      if (this.position.order__status === 'n' && this.position.order__valid_if_pending) return 'pending_valid';
-      if (this.position.order__status === 'n' && this.position.order__require_approval) return 'require_approval';
-      return this.position.order__status
-    },
-    itemvar() {
-      if (this.position.variation) {
-        return `${i18nstring_localize(this.position.item.name)} – ${i18nstring_localize(this.position.variation.value)}`
-      }
-      return i18nstring_localize(this.position.item.name)
-    },
-    subevent() {
-      if (!this.position.subevent) return ''
-      const name = i18nstring_localize(this.position.subevent.name)
-      const date = moment.utc(this.position.subevent.date_from).tz(this.$root.timezone).format(this.$root.datetime_format)
-      return `${name} · ${date}`
-    },
-  },
-}
-// secret
-// status
-// order code
-// name
-// seat
-// require attention
+<script setup lang="ts">
+import { computed, ref } from 'vue'
+import type { Position } from '../api'
+import { STRINGS, i18nstringLocalize, formatSubevent } from '../i18n'
+
+const props = defineProps<{
+	position: Position
+}>()
+
+defineEmits<{
+	selected: [position: Position]
+}>()
+
+const rootEl = ref<HTMLAnchorElement>()
+
+const status = computed(() => {
+	if (props.position.checkins.length) return 'redeemed'
+	if (props.position.order__status === 'n' && props.position.order__valid_if_pending) return 'pending_valid'
+	if (props.position.order__status === 'n' && props.position.order__require_approval) return 'require_approval'
+	return props.position.order__status
+})
+
+const itemvar = computed(() => {
+	if (props.position.variation) {
+		return `${i18nstringLocalize(props.position.item.name)} – ${i18nstringLocalize(props.position.variation.value)}`
+	}
+	return i18nstringLocalize(props.position.item.name)
+})
+
+const subevent = computed(() => formatSubevent(props.position.subevent))
+
+defineExpose({ el: rootEl })
 </script>
+<template lang="pug">
+a.list-group-item.searchresult(ref="rootEl", href="#", @click.prevent="$emit('selected', position)")
+	.details
+		h4 {{ position.order }}-{{ position.positionid }} {{ position.attendee_name }}
+		span {{ itemvar }}
+			br
+		span(v-if="subevent") {{ subevent }}
+			br
+		.secret {{ position.secret }}
+	.status(:class="`status-${status}`")
+		span(v-if="position.require_attention")
+			span.fa.fa-warning
+			br
+		| {{ STRINGS[`status.${status}`] }}
+</template>
