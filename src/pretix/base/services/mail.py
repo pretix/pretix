@@ -91,6 +91,7 @@ from pretix.presale.ical import get_private_icals
 
 logger = logging.getLogger('pretix.base.mail')
 INVALID_ADDRESS = 'invalid-pretix-mail-address'
+MIN_RATE_LIMIT_RETRY_AFTER = 5  # Minimum seconds before retrying a rate-limited email
 
 
 class TolerantDict(dict):
@@ -1044,49 +1045,62 @@ def _wrap_plain_body(content_plain, signature, event, order, position, no_order_
 
 def _check_rate_limit(backend, outgoing_mail):
     """
-    Fixed-window Redis counter keyed by SMTP identity + time bucket.
-    Returns (is_limited: bool, retry_after_seconds: int).
+    Check whether sending this email would exceed the configured rate limit
+    for the SMTP identity used by the event/organizer. Multiple events sharing
+    the same SMTP credentials share a single counter.
+    Returns (is_limited, retry_after_seconds).
     """
     if not settings.HAS_REDIS:
         return False, 0
 
-    # Resolve rate limit settings via hierarkey (event → organizer → global)
     event = getattr(outgoing_mail, 'event', None)
-    if event:
-        count = event.settings.get('smtp_rate_limit_count', as_type=int)
-        window = event.settings.get('smtp_rate_limit_window', as_type=int)
-    elif outgoing_mail.organizer:
-        count = outgoing_mail.organizer.settings.get('smtp_rate_limit_count', as_type=int)
-        window = outgoing_mail.organizer.settings.get('smtp_rate_limit_window', as_type=int)
+    organizer = getattr(outgoing_mail, 'organizer', None)
+    settings_source = event or organizer
+
+    count, window = None, None
+    if settings_source and settings_source.settings.get('smtp_use_custom', as_type=bool):
+        # Custom SMTP: use event/organizer settings, never pretix.cfg
+        count = settings_source.settings.get('smtp_rate_limit_count', as_type=int)
+        window = settings_source.settings.get('smtp_rate_limit_window', as_type=int)
     else:
-        count, window = 0, 600
+        # System SMTP: always use pretix.cfg limits
+        if settings.EMAIL_RATE_LIMIT_COUNT is not None:
+            count = settings.EMAIL_RATE_LIMIT_COUNT
+            window = settings.EMAIL_RATE_LIMIT_WINDOW
 
-    # Fallback to pretix.cfg
-    if not count and settings.EMAIL_RATE_LIMIT_COUNT:
-        count = settings.EMAIL_RATE_LIMIT_COUNT
-        window = settings.EMAIL_RATE_LIMIT_WINDOW
-
-    if not count:
+    if count is None or window is None:
         return False, 0
 
-    # Key by SMTP identity
     host = getattr(backend, 'host', settings.EMAIL_HOST) or '_'
     username = getattr(backend, 'username', settings.EMAIL_HOST_USER) or '_'
     identity = hashlib.sha1(f"{username}@{host}".encode()).hexdigest()
-
-    window_id = int(time.time()) // window
-    redis_key = f"pretix_mail_ratelimit_{identity}_{window_id}"
+    redis_key = f"pretix_mail_ratelimit_{identity}"
 
     from django_redis import get_redis_connection
     rc = get_redis_connection("redis")
 
-    cnt = rc.incr(redis_key)
-    if cnt == 1:
-        rc.expire(redis_key, window + 10)
+    now_ts = time.time()
+    member = f"{now_ts}:{uuid.uuid4().hex[:8]}"
+
+    # Sliding-window rate limit: prune expired entries, record this attempt,
+    # count hits in the window, and fetch the oldest entry for retry-after.
+    pipe = rc.pipeline()
+    pipe.zremrangebyscore(redis_key, '-inf', now_ts - settings.EMAIL_RATE_LIMIT_MAX_WINDOW)
+    pipe.zadd(redis_key, {member: now_ts})
+    pipe.zcount(redis_key, now_ts - window, '+inf')
+    pipe.expire(redis_key, settings.EMAIL_RATE_LIMIT_MAX_WINDOW + 10)
+    pipe.zrange(redis_key, 0, 0, withscores=True)
+    _, _, cnt, _, oldest = pipe.execute()
 
     if cnt > count:
-        ttl = rc.ttl(redis_key)
-        retry_after = max(ttl if ttl and ttl > 0 else 10, 5)
+        # Remove the just-added entry so blocked attempts don't inflate the counter
+        rc.zrem(redis_key, member)
+        # Oldest entry's timestamp + window = when the first slot frees up
+        if oldest:
+            retry_after = int(oldest[0][1]) + window - now_ts
+            retry_after = max(int(retry_after) + 1, MIN_RATE_LIMIT_RETRY_AFTER)
+        else:
+            retry_after = MIN_RATE_LIMIT_RETRY_AFTER
         return True, retry_after
 
     return False, 0

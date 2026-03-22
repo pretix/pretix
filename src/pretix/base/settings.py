@@ -3061,11 +3061,11 @@ Your {organizer} team"""))  # noqa: W291
         'type': bool
     },
     'smtp_rate_limit_count': {
-        'default': '0',
+        'default': None,
         'type': int,
     },
     'smtp_rate_limit_window': {
-        'default': '600',
+        'default': None,
         'type': int,
     },
     'primary_color': {

@@ -55,7 +55,7 @@ from pretix.base.email import get_email_context
 from pretix.base.models import (
     Event, InvoiceAddress, Order, Organizer, OutgoingMail, User,
 )
-from pretix.base.services.mail import _check_rate_limit, mail, mail_send_task
+from pretix.base.services.mail import MIN_RATE_LIMIT_RETRY_AFTER, _check_rate_limit, mail, mail_send_task
 
 
 @pytest.fixture
@@ -606,13 +606,25 @@ def test_rate_limit_disabled_without_redis():
 
 
 @pytest.mark.django_db
-@override_settings(EMAIL_RATE_LIMIT_COUNT=0, EMAIL_RATE_LIMIT_WINDOW=1800)
-def test_rate_limit_disabled_when_count_zero(env, fakeredis_client):
+@override_settings(EMAIL_RATE_LIMIT_COUNT=None, EMAIL_RATE_LIMIT_WINDOW=None)
+def test_rate_limit_disabled_when_not_configured(env, fakeredis_client):
+    """When no rate limit is configured (None), all emails are allowed."""
     backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
     outgoing_mail = SimpleNamespace(organizer=None)
     is_limited, retry_after = _check_rate_limit(backend, outgoing_mail)
     assert is_limited is False
     assert retry_after == 0
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_RATE_LIMIT_COUNT=0, EMAIL_RATE_LIMIT_WINDOW=60)
+def test_rate_limit_blocks_all_when_count_zero(env, fakeredis_client):
+    """count=0 means zero emails allowed, not 'disabled'."""
+    backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
+    outgoing_mail = SimpleNamespace(organizer=None)
+    is_limited, retry_after = _check_rate_limit(backend, outgoing_mail)
+    assert is_limited is True
+    assert retry_after >= MIN_RATE_LIMIT_RETRY_AFTER
 
 
 @pytest.mark.django_db
@@ -628,71 +640,210 @@ def test_rate_limit_allows_under_limit(env, fakeredis_client):
 @pytest.mark.django_db
 @override_settings(EMAIL_RATE_LIMIT_COUNT=5, EMAIL_RATE_LIMIT_WINDOW=1800)
 def test_rate_limit_blocks_when_exceeded(env, fakeredis_client):
-    window_id = int(time.time()) // 1800
-    identity = hashlib.sha1(b"user@example.com@smtp.example.com").hexdigest()
-    redis_key = f"pretix_mail_ratelimit_{identity}_{window_id}"
-    fakeredis_client.set(redis_key, 5)
-    fakeredis_client.expire(redis_key, 1800)
-
     backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
     outgoing_mail = SimpleNamespace(organizer=None)
+
+    # First 5 should pass
+    for _ in range(5):
+        is_limited, _ = _check_rate_limit(backend, outgoing_mail)
+        assert is_limited is False
+
+    # 6th should be blocked
     is_limited, retry_after = _check_rate_limit(backend, outgoing_mail)
     assert is_limited is True
-    assert retry_after >= 5
+    assert retry_after >= MIN_RATE_LIMIT_RETRY_AFTER
 
 
 @pytest.mark.django_db
-@override_settings(EMAIL_RATE_LIMIT_COUNT=5, EMAIL_RATE_LIMIT_WINDOW=1800)
+@override_settings(EMAIL_RATE_LIMIT_COUNT=3, EMAIL_RATE_LIMIT_WINDOW=1800)
 def test_rate_limit_separate_keys_per_backend(env, fakeredis_client):
     backend_a = SimpleNamespace(host='smtp-a.example.com', username='a@example.com')
     backend_b = SimpleNamespace(host='smtp-b.example.com', username='b@example.com')
     outgoing_mail = SimpleNamespace(organizer=None)
 
-    _check_rate_limit(backend_a, outgoing_mail)
-    _check_rate_limit(backend_b, outgoing_mail)
+    # Use up all 3 slots on backend_a
+    for _ in range(3):
+        _check_rate_limit(backend_a, outgoing_mail)
 
-    # Should have incremented two different keys (check via redis scan)
-    keys = [k for k in fakeredis_client.keys('pretix_mail_ratelimit_*')]
-    assert len(keys) == 2
+    # backend_b should still be allowed (separate counter)
+    is_limited, _ = _check_rate_limit(backend_b, outgoing_mail)
+    assert is_limited is False
 
-
-@pytest.mark.django_db
-@override_settings(EMAIL_RATE_LIMIT_COUNT=100, EMAIL_RATE_LIMIT_WINDOW=1800)
-def test_rate_limit_organizer_overrides_global(env, fakeredis_client):
-    event, user, organizer = env
-    organizer.settings.set('smtp_rate_limit_count', 3)
-    organizer.settings.set('smtp_rate_limit_window', 600)
-
-    # Pre-populate current window key at the organizer limit
-    window_id = int(time.time()) // 600
-    identity = hashlib.sha1(b"user@example.com@smtp.example.com").hexdigest()
-    current_key = f"pretix_mail_ratelimit_{identity}_{window_id}"
-    fakeredis_client.set(current_key, 3)
-
-    backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
-    outgoing_mail = SimpleNamespace(organizer=organizer, event=None)
-
-    is_limited, retry_after = _check_rate_limit(backend, outgoing_mail)
+    # backend_a should be blocked
+    is_limited, _ = _check_rate_limit(backend_a, outgoing_mail)
     assert is_limited is True
 
 
 @pytest.mark.django_db
 @override_settings(EMAIL_RATE_LIMIT_COUNT=100, EMAIL_RATE_LIMIT_WINDOW=1800)
-def test_rate_limit_event_overrides_organizer(env, fakeredis_client):
+def test_rate_limit_custom_smtp_uses_organizer_settings(env, fakeredis_client):
+    """Custom SMTP: organizer rate limit settings are used, not pretix.cfg."""
     event, user, organizer = env
+    organizer.settings.set('smtp_use_custom', True)
+    organizer.settings.set('smtp_rate_limit_count', 3)
+    organizer.settings.set('smtp_rate_limit_window', 600)
+
+    backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
+    outgoing_mail = SimpleNamespace(organizer=organizer, event=None)
+
+    # First 3 should pass (organizer limit=3, not pretix.cfg 100)
+    for _ in range(3):
+        is_limited, _ = _check_rate_limit(backend, outgoing_mail)
+        assert is_limited is False
+
+    # 4th should be blocked by organizer limit
+    is_limited, _ = _check_rate_limit(backend, outgoing_mail)
+    assert is_limited is True
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_RATE_LIMIT_COUNT=100, EMAIL_RATE_LIMIT_WINDOW=1800)
+def test_rate_limit_custom_smtp_event_overrides_organizer(env, fakeredis_client):
+    """Custom SMTP: event-level limit overrides organizer limit."""
+    event, user, organizer = env
+    organizer.settings.set('smtp_use_custom', True)
     organizer.settings.set('smtp_rate_limit_count', 50)
     organizer.settings.set('smtp_rate_limit_window', 1800)
     event.settings.set('smtp_rate_limit_count', 2)
     event.settings.set('smtp_rate_limit_window', 300)
 
-    # Pre-populate current window key at the event limit (window=300)
-    window_id = int(time.time()) // 300
-    identity = hashlib.sha1(b"user@example.com@smtp.example.com").hexdigest()
-    current_key = f"pretix_mail_ratelimit_{identity}_{window_id}"
-    fakeredis_client.set(current_key, 2)
+    backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
+    outgoing_mail = SimpleNamespace(organizer=organizer, event=event)
+
+    # First 2 should pass (event limit=2, not organizer 50)
+    for _ in range(2):
+        is_limited, _ = _check_rate_limit(backend, outgoing_mail)
+        assert is_limited is False
+
+    # 3rd should be blocked by event limit
+    is_limited, _ = _check_rate_limit(backend, outgoing_mail)
+    assert is_limited is True
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_RATE_LIMIT_COUNT=3, EMAIL_RATE_LIMIT_WINDOW=600)
+def test_rate_limit_system_smtp_uses_global_ignores_event_overrides(env, fakeredis_client):
+    """System SMTP: pretix.cfg limits always apply, event/organizer overrides are ignored."""
+    event, user, organizer = env
+    # Not using custom SMTP (system server)
+    organizer.settings.set('smtp_use_custom', False)
+    # Event tries to set a more generous limit — should be ignored
+    event.settings.set('smtp_rate_limit_count', 100)
+    event.settings.set('smtp_rate_limit_window', 1800)
 
     backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
     outgoing_mail = SimpleNamespace(organizer=organizer, event=event)
 
-    is_limited, retry_after = _check_rate_limit(backend, outgoing_mail)
+    # First 3 should pass (pretix.cfg limit=3, not event's 100)
+    for _ in range(3):
+        is_limited, _ = _check_rate_limit(backend, outgoing_mail)
+        assert is_limited is False
+
+    # 4th should be blocked by pretix.cfg limit
+    is_limited, _ = _check_rate_limit(backend, outgoing_mail)
+    assert is_limited is True
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_RATE_LIMIT_COUNT=None, EMAIL_RATE_LIMIT_WINDOW=None)
+def test_rate_limit_custom_smtp_no_limit_when_unconfigured(env, fakeredis_client):
+    """Custom SMTP with no rate limit configured: no limits applied."""
+    event, user, organizer = env
+    organizer.settings.set('smtp_use_custom', True)
+    # No rate limit settings configured on event or organizer
+
+    backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
+    outgoing_mail = SimpleNamespace(organizer=organizer, event=event)
+
+    # Should never be limited — no pretix.cfg fallback for custom SMTP
+    for _ in range(20):
+        is_limited, _ = _check_rate_limit(backend, outgoing_mail)
+        assert is_limited is False
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_RATE_LIMIT_COUNT=None, EMAIL_RATE_LIMIT_WINDOW=None)
+def test_rate_limit_different_windows_share_counter(env, fakeredis_client):
+    """Events with different window sizes on the same SMTP identity must share
+    the same underlying counter, not create additive independent counters."""
+    event, user, organizer = env
+    organizer.settings.set('smtp_use_custom', True)
+    event.settings.set('smtp_rate_limit_count', 5)
+    event.settings.set('smtp_rate_limit_window', 30)
+
+    # Create a second event on the same organizer
+    event_b = Event.objects.create(
+        organizer=organizer, name='Event B', slug='eventb',
+        date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc),
+        live=True,
+    )
+    event_b.settings.set('smtp_rate_limit_count', 10)
+    event_b.settings.set('smtp_rate_limit_window', 60)
+
+    backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
+    outgoing_mail_a = SimpleNamespace(organizer=organizer, event=event)
+    outgoing_mail_b = SimpleNamespace(organizer=organizer, event=event_b)
+
+    # Send 5 emails via Event A — should exhaust Event A's limit
+    for _ in range(5):
+        is_limited, _ = _check_rate_limit(backend, outgoing_mail_a)
+        assert is_limited is False
+
+    # Event A should now be blocked
+    is_limited, _ = _check_rate_limit(backend, outgoing_mail_a)
+    assert is_limited is True
+
+    # Event B has limit=10 but the same SMTP identity already has 5 sends recorded.
+    # Blocked attempts are not counted, so Event B has 5 slots left.
+    for _ in range(5):
+        is_limited, _ = _check_rate_limit(backend, outgoing_mail_b)
+        assert is_limited is False
+
+    # Event B should now be blocked too (total sends via this SMTP = 10)
+    is_limited, _ = _check_rate_limit(backend, outgoing_mail_b)
+    assert is_limited is True
+
+
+@pytest.mark.django_db
+@override_settings(EMAIL_RATE_LIMIT_COUNT=None, EMAIL_RATE_LIMIT_WINDOW=None)
+def test_rate_limit_short_window_does_not_prune_long_window_entries(env, fakeredis_client):
+    """A caller with a short window must not prune entries that a caller with a
+    longer window still needs to count."""
+    event, user, organizer = env
+    organizer.settings.set('smtp_use_custom', True)
+    event.settings.set('smtp_rate_limit_count', 100)
+    event.settings.set('smtp_rate_limit_window', 10)
+
+    event_b = Event.objects.create(
+        organizer=organizer, name='Event B', slug='eventb',
+        date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc),
+        live=True,
+    )
+    event_b.settings.set('smtp_rate_limit_count', 3)
+    event_b.settings.set('smtp_rate_limit_window', 60)
+
+    backend = SimpleNamespace(host='smtp.example.com', username='user@example.com')
+    outgoing_mail_a = SimpleNamespace(organizer=organizer, event=event)
+    outgoing_mail_b = SimpleNamespace(organizer=organizer, event=event_b)
+
+    # Send 3 emails via Event B (window=60, count=3) — uses up Event B's limit
+    for _ in range(3):
+        is_limited, _ = _check_rate_limit(backend, outgoing_mail_b)
+        assert is_limited is False
+
+    # Simulate time passing: entries are now 15s old (outside Event A's 10s window,
+    # but inside Event B's 60s window)
+    identity = hashlib.sha1(b"user@example.com@smtp.example.com").hexdigest()
+    redis_key = f"pretix_mail_ratelimit_{identity}"
+    # Shift all existing entries 15 seconds into the past
+    members = fakeredis_client.zrange(redis_key, 0, -1, withscores=True)
+    for member, score in members:
+        fakeredis_client.zadd(redis_key, {member: score - 15})
+
+    # Now send via Event A (window=10) — this must NOT prune the 15s-old entries
+    _check_rate_limit(backend, outgoing_mail_a)
+
+    # Event B should still be blocked — those 3 entries from 15s ago are within
+    # its 60s window and must still be counted
+    is_limited, _ = _check_rate_limit(backend, outgoing_mail_b)
     assert is_limited is True
