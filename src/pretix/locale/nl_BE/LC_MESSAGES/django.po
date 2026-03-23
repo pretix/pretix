@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-18 23:00+0000\n"
+"PO-Revision-Date: 2026-03-23 21:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -29442,163 +29442,177 @@ msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
 msgstr ""
+"De bestelling is geannuleerd. U kunt nu kiezen hoe u het geld wilt overmaken "
+"naar de gebruiker."
 
 #: pretix/control/views/orders.py:1627 pretix/control/views/orders.py:1631
 msgid "No VAT ID specified."
-msgstr ""
+msgstr "Geen btw-nummer opgegeven."
 
 #: pretix/control/views/orders.py:1635
 msgid "No country specified."
-msgstr ""
+msgstr "Geen land opgegeven."
 
 #: pretix/control/views/orders.py:1639
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
+"Btw-nummer kon niet gecontroleerd worden, omdat dit land niet ondersteund "
+"wordt."
 
 #: pretix/control/views/orders.py:1658
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
 msgstr ""
+"Uw btw-nummer kon niet gecontroleerd worden, omdat de btw-controledienst van "
+"uw land momenteel niet beschikbaar is."
 
 #: pretix/control/views/orders.py:1661
 msgid "This VAT ID is valid."
-msgstr ""
+msgstr "Dit btw-nummer is geldig."
 
 #: pretix/control/views/orders.py:1675 pretix/control/views/orders.py:1709
 #: pretix/control/views/orders.py:1741
 msgid "Unknown invoice."
-msgstr ""
+msgstr "Onbekende factuur."
 
 #: pretix/control/views/orders.py:1678
 msgid "Invoices may not be changed after they are created."
-msgstr ""
+msgstr "Facturen kunnen niet gewijzigd worden nadat ze zijn aangemaakt."
 
 #: pretix/control/views/orders.py:1680
 msgid "Invoices may not be changed after they are transmitted."
-msgstr ""
+msgstr "Facturen kunnen niet gewijzigd worden nadat ze verstuurd zijn."
 
 #: pretix/control/views/orders.py:1682 pretix/control/views/orders.py:1744
 msgid "The invoice has already been canceled."
-msgstr ""
+msgstr "De factuur is al geannuleerd."
 
 #: pretix/control/views/orders.py:1684
 msgid "The invoice file has already been exported."
-msgstr ""
+msgstr "Het factuurbestand is al geëxporteerd."
 
 #: pretix/control/views/orders.py:1686
 msgid "The invoice file is too old to be regenerated."
-msgstr ""
+msgstr "Het factuurbestand is te oud om opnieuw te worden gegenereerd."
 
 #: pretix/control/views/orders.py:1688 pretix/control/views/orders.py:1746
 msgid "The invoice has been cleaned of personal data."
-msgstr ""
+msgstr "Persoonlijke gegevens zijn uit de factuur verwijderd."
 
 #: pretix/control/views/orders.py:1713
 msgid ""
 "The invoice is currently being transmitted. You can start a new attempt "
 "after the current one has been completed."
 msgstr ""
+"De factuur wordt momenteel verzonden. U kunt een nieuwe poging doen nadat de "
+"huidige voltooid is."
 
 #: pretix/control/views/orders.py:1720
 msgid "The invoice has been scheduled for retransmission."
-msgstr ""
+msgstr "De factuur is ingepland voor herverzending."
 
 #: pretix/control/views/orders.py:1754
 msgid "The invoice has been canceled."
-msgstr ""
+msgstr "De factuur is geannuleerd."
 
 #: pretix/control/views/orders.py:1793
 msgid "The email has been queued to be sent."
-msgstr ""
+msgstr "De e-mail is opgeslagen om te worden verzonden."
 
 #: pretix/control/views/orders.py:1817 pretix/presale/views/order.py:1369
 msgid "This invoice has not been found"
-msgstr ""
+msgstr "Deze factuur is niet gevonden"
 
 #: pretix/control/views/orders.py:1824 pretix/presale/views/order.py:1376
 msgid "The invoice file is no longer stored on the server."
-msgstr ""
+msgstr "Het factuurbestand is niet meer opgeslagen op de server."
 
 #: pretix/control/views/orders.py:1829 pretix/presale/views/order.py:1381
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
 msgstr ""
+"Het factuurbestand is nog niet gegenereerd, we zullen het nu voor u "
+"genereren. Probeer het over een paar seconden opnieuw."
 
 #: pretix/control/views/orders.py:1857
 msgid "The payment term has been changed."
-msgstr ""
+msgstr "De betalingstermijn is gewijzigd."
 
 #: pretix/control/views/orders.py:1862 pretix/control/views/orders.py:1919
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
-msgstr ""
+msgstr "We konden uw verzoek niet verwerken, omdat de server het te druk heeft."
 
 #: pretix/control/views/orders.py:1870
 msgid "This action is only allowed for pending orders."
-msgstr ""
+msgstr "Deze actie is alleen toegestaan voor openstaande bestellingen."
 
 #: pretix/control/views/orders.py:1925
 msgid "This action is only allowed for canceled orders."
-msgstr ""
+msgstr "Deze actie is alleen toegestaan voor geannuleerde bestellingen."
 
 #: pretix/control/views/orders.py:2183 pretix/presale/views/order.py:1664
 msgid "An error occurred. Please see the details below."
-msgstr ""
+msgstr "Er is een fout opgetreden. Zie de details hieronder."
 
 #: pretix/control/views/orders.py:2191
 msgid "The order has been changed and the user has been notified."
-msgstr ""
+msgstr "De bestelling is gewijzigd en de gebruiker is op de hoogte gesteld."
 
 #: pretix/control/views/orders.py:2193 pretix/control/views/orders.py:2329
 #: pretix/control/views/orders.py:2366 pretix/presale/views/order.py:1700
 msgid "The order has been changed."
-msgstr ""
+msgstr "De bestelling is gewijzigd."
 
 #: pretix/control/views/orders.py:2220 pretix/presale/checkoutflow.py:943
 #: pretix/presale/views/order.py:845 pretix/presale/views/order.py:981
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr ""
+"We hadden problemen met het verwerken van uw invoer. Zie de fouten hieronder."
 
 #: pretix/control/views/orders.py:2331
 msgid "Nothing about the order had to be changed."
-msgstr ""
+msgstr "Er is geen wijziging aangebracht aan de bestelling."
 
 #: pretix/control/views/orders.py:2412 pretix/plugins/sendmail/views.py:176
 msgid "We could not send the email. See below for details."
-msgstr ""
+msgstr "We konden de e-mail niet versturen. Zie onder voor details."
 
 #: pretix/control/views/orders.py:2428 pretix/control/views/orders.py:2492
 #: pretix/plugins/sendmail/views.py:204 pretix/plugins/sendmail/views.py:671
 #, python-brace-format
 msgid "Subject: {subject}"
-msgstr ""
+msgstr "Onderwerp: {subject}"
 
 #: pretix/control/views/orders.py:2446 pretix/control/views/orders.py:2511
 #, python-brace-format
 msgid "Your message has been queued and will be sent to {}."
-msgstr ""
+msgstr "Uw bericht is in de wachtrij gezet en zal verstuurd worden naar {}."
 
 #: pretix/control/views/orders.py:2564 pretix/presale/views/order.py:1151
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
 msgstr ""
+"Deze link is niet meer geldig. Ga terug, ververs de pagina, en probeer het "
+"opnieuw."
 
 #: pretix/control/views/orders.py:2645
 msgid "There is no order with the given order code."
-msgstr ""
+msgstr "Er is geen bestelling met de gegeven bestelcode."
 
 #: pretix/control/views/orders.py:2751 pretix/control/views/organizer.py:2085
 msgid "The selected exporter was not found."
-msgstr ""
+msgstr "Het geselecteerde exportformaat is niet gevonden."
 
 #: pretix/control/views/orders.py:2761 pretix/control/views/organizer.py:2095
 msgid "There was a problem processing your input. See below for error details."
 msgstr ""
+"Er was een probleem met het verwerken van uw invoer. Zie onder voor details."
 
 #: pretix/control/views/orders.py:2798 pretix/control/views/organizer.py:2131
 msgid ""
@@ -29613,6 +29627,8 @@ msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot schedule it."
 msgstr ""
+"Uw gebruikersaccount heeft onvoldoende rechten om dit rapport uit te voeren. "
+"Daarom kunt u het niet plannen."
 
 #: pretix/control/views/orders.py:2823 pretix/control/views/organizer.py:2156
 #, python-brace-format
@@ -29620,15 +29636,17 @@ msgid ""
 "Your export schedule has been saved. The next export will start around "
 "{datetime}."
 msgstr ""
+"De geplande export is opgeslagen. De volgende export begint omstreeks "
+"{datetime}."
 
 #: pretix/control/views/orders.py:2828 pretix/control/views/organizer.py:2161
 msgid "Your export schedule has been saved, but no next export is planned."
-msgstr ""
+msgstr "De geplande export is opgeslagen, maar er is geen volgende run gepland."
 
 #: pretix/control/views/orders.py:2873 pretix/control/views/organizer.py:2207
 #, python-brace-format
 msgid "Export: {title}"
-msgstr ""
+msgstr "Export: {title}"
 
 #: pretix/control/views/orders.py:2874 pretix/control/views/organizer.py:2209
 #, python-brace-format
@@ -29637,6 +29655,9 @@ msgid ""
 "\n"
 "attached to this email, you can find a new scheduled report for {name}."
 msgstr ""
+"Hallo,\n"
+"\n"
+"Als bijlage bij deze e-mail vindt u een nieuw gepland rapport voor {name}."
 
 #: pretix/control/views/orders.py:2980 pretix/control/views/organizer.py:2343
 msgid ""
@@ -29644,10 +29665,13 @@ msgid ""
 "Depending on system load and type and size of export, this may take a few "
 "minutes."
 msgstr ""
+"We hebben de export gepland. Het resultaat wordt per e-mail verzonden. "
+"Afhankelijk van de systeembelasting, het type en de grootte van de export "
+"kan dit enkele minuten duren."
 
 #: pretix/control/views/orders.py:3067 pretix/control/views/orders.py:3148
 msgid "All orders have been canceled."
-msgstr ""
+msgstr "Alle bestellingen zijn geannuleerd."
 
 #: pretix/control/views/orders.py:3069 pretix/control/views/orders.py:3150
 #, python-brace-format
@@ -29655,28 +29679,32 @@ msgid ""
 "The orders have been canceled. An error occurred with {count} orders, please "
 "check all uncanceled orders."
 msgstr ""
+"De bestellingen zijn geannuleerd. Bij {count} bestellingen is er een fout "
+"opgetreden, controleer alstublieft alle nog niet geannuleerde bestellingen."
 
 #: pretix/control/views/orders.py:3097 pretix/control/views/orders.py:3171
 msgid "Your input was not valid."
-msgstr ""
+msgstr "Uw invoer was ongeldig."
 
 #: pretix/control/views/organizer.py:178
 msgid "Token name"
-msgstr ""
+msgstr "Tokennaam"
 
 #: pretix/control/views/organizer.py:408
 msgid "This organizer can not be deleted."
-msgstr ""
+msgstr "Deze organisator kan niet verwijderd worden."
 
 #: pretix/control/views/organizer.py:431
 msgid "The organizer has been deleted."
-msgstr ""
+msgstr "De organisator is verwijderd."
 
 #: pretix/control/views/organizer.py:435
 msgid ""
 "The organizer could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
+"De organisator kon niet verwijderd worden, omdat sommige beperkingen (bijv. "
+"data aangemaakt door plug-ins) het niet toestaan."
 
 #: pretix/control/views/organizer.py:445
 #, python-brace-format
@@ -29684,30 +29712,33 @@ msgid ""
 "The following database models still contain data that cannot be deleted "
 "automatically: {affected_models}"
 msgstr ""
+"De volgende databasemodellen bevatten nog steeds gegevens die niet "
+"automatisch verwijderd kunnen worden: {affected_models}"
 
 #: pretix/control/views/organizer.py:585
 msgid "The new organizer has been created."
-msgstr ""
+msgstr "De nieuwe organisator is aangemaakt."
 
 #: pretix/control/views/organizer.py:588
 msgid "Administrators"
-msgstr ""
+msgstr "Beheerders"
 
 #: pretix/control/views/organizer.py:806
 msgid "Unknown plugin."
-msgstr ""
+msgstr "Onbekende plug-in."
 
 #: pretix/control/views/organizer.py:812
 msgid "This plugin is currently not active on the organizer account."
 msgstr ""
+"Deze plug-in is momenteel niet actief op het account van de organisator."
 
 #: pretix/control/views/organizer.py:816
 msgid "This plugin is currently not allowed for this organizer account."
-msgstr ""
+msgstr "Deze plug-in is momenteel niet toegestaan voor dit organisatoraccount."
 
 #: pretix/control/views/organizer.py:905
 msgid "The team has been created. You can now add members to the team."
-msgstr ""
+msgstr "Het team is aangemaakt. U kunt nu leden aan het team toevoegen."
 
 #: pretix/control/views/organizer.py:913 pretix/control/views/organizer.py:946
 #: pretix/control/views/organizer.py:1182
@@ -29728,70 +29759,78 @@ msgstr ""
 #: pretix/control/views/organizer.py:3568
 #: pretix/control/views/organizer.py:3612
 msgid "Your changes could not be saved."
-msgstr ""
+msgstr "Uw wijzigingen konden niet worden opgeslagen."
 
 #: pretix/control/views/organizer.py:980
 msgid "The selected team cannot be deleted."
-msgstr ""
+msgstr "Het gekozen team kan niet verwijderd worden."
 
 #: pretix/control/views/organizer.py:992
 msgid ""
 "The team could not be deleted because the team or one of its API tokens is "
 "part of historical audit logs."
 msgstr ""
+"Dit team kan niet verwijderd worden, omdat een van de bijbehorende API-"
+"tokens deel uitmaakt van de systeemlogboeken."
 
 #: pretix/control/views/organizer.py:1000
 msgid ""
 "The team could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
+"Het team kon niet verwijderd worden, omdat sommige beperkingen (bijv. data "
+"aangemaakt door plug-ins) het niet toestaan."
 
 #: pretix/control/views/organizer.py:1006
 msgid "The selected team has been deleted."
-msgstr ""
+msgstr "Het geselecteerde team is verwijderd."
 
 #: pretix/control/views/organizer.py:1069
 msgid ""
 "You cannot remove the last member from this team as no one would be left "
 "with the permission to change teams."
 msgstr ""
+"U kunt het laatste lid niet uit dit team verwijderen, omdat er niemand meer "
+"zou zijn met de machtiging om teams te beheren."
 
 #: pretix/control/views/organizer.py:1080
 msgid "The member has been removed from the team."
-msgstr ""
+msgstr "Het lid is verwijderd uit het team."
 
 #: pretix/control/views/organizer.py:1087
 #: pretix/control/views/organizer.py:1103
 msgid "Invalid invite selected."
-msgstr ""
+msgstr "Ongeldige uitnodiging geselecteerd."
 
 #: pretix/control/views/organizer.py:1096
 msgid "The invite has been revoked."
-msgstr ""
+msgstr "De uitnodiging is ingetrokken."
 
 #: pretix/control/views/organizer.py:1112
 msgid "The invite has been resent."
-msgstr ""
+msgstr "De uitnodiging is opnieuw verstuurd."
 
 #: pretix/control/views/organizer.py:1119
 msgid "Invalid token selected."
-msgstr ""
+msgstr "Ongeldig token geselecteerd."
 
 #: pretix/control/views/organizer.py:1129
 msgid "The token has been revoked."
-msgstr ""
+msgstr "Het token is ingetrokken."
 
 #: pretix/control/views/organizer.py:1141
 msgid "Users need to have a pretix account before they can be invited."
 msgstr ""
+"Gebruikers moeten een pretix-account hebben voordat ze uitgenodigd kunnen "
+"worden."
 
 #: pretix/control/views/organizer.py:1151
 msgid "The new member has been invited to the team."
-msgstr ""
+msgstr "Het nieuwe lid is uitgenodigd voor het team."
 
 #: pretix/control/views/organizer.py:1166
 msgid "The new member has been added to the team."
-msgstr ""
+msgstr "Het nieuwe lid is toegevoegd aan het team."
 
 #: pretix/control/views/organizer.py:1177
 #, python-brace-format
@@ -29800,37 +29839,42 @@ msgid ""
 "Please copy this secret to a safe place. You will not be able to view it "
 "again here."
 msgstr ""
+"Er is een nieuw API-token aangemaakt met de volgende sleutel: {}\n"
+"Bewaar deze sleutel op een veilige plek. U kunt hem hier later niet meer "
+"opvragen."
 
 #: pretix/control/views/organizer.py:1474
 msgid "This device has been set up successfully."
-msgstr ""
+msgstr "Het apparaat is succesvol geïnstalleerd."
 
 #: pretix/control/views/organizer.py:1502
 msgid "This device currently does not have access."
-msgstr ""
+msgstr "Dit apparaat heeft momenteel geen toegang."
 
 #: pretix/control/views/organizer.py:1514
 msgid "Access for this device has been revoked."
-msgstr ""
+msgstr "De toegang voor dit apparaat is ingetrokken."
 
 #: pretix/control/views/organizer.py:1635
 msgid ""
 "All requests will now be scheduled for an immediate attempt. Please allow "
 "for a few minutes before they are processed."
 msgstr ""
+"Alle wachtende webhooks worden nu ingepland voor een nieuwe poging "
+"binnenkort. Even geduld a.u.b. totdat de verwerking voltooid is."
 
 #: pretix/control/views/organizer.py:1642
 msgid "All unprocessed webhooks have been stopped from retrying."
-msgstr ""
+msgstr "Alle onverwerkte webhooks worden niet meer uitgevoerd."
 
 #: pretix/control/views/organizer.py:1677
 msgid "The selected organizer has been invited."
-msgstr ""
+msgstr "De geselecteerde organisator is uitgenodigd."
 
 #: pretix/control/views/organizer.py:1717
 #: pretix/control/views/organizer.py:1731
 msgid "The selected connection has been removed."
-msgstr ""
+msgstr "De geselecteerde verbinding is verwijderd."
 
 #: pretix/control/views/organizer.py:1745
 msgid "The selected connection has been accepted."
