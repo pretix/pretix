@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-09 12:52+0000\n"
+"PO-Revision-Date: 2026-03-23 21:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -399,10 +399,8 @@ msgstr ""
 
 #: pretix/api/serializers/organizer.py:482
 #: pretix/control/views/organizer.py:1039
-#, fuzzy
-#| msgid "Account information"
 msgid "Account invitation"
-msgstr "アカウント情報"
+msgstr "アカウントに招待"
 
 #: pretix/api/serializers/organizer.py:503
 #: pretix/control/views/organizer.py:1138
@@ -3926,10 +3924,8 @@ msgid "Peppol participant ID"
 msgstr "Peppol参加者ID"
 
 #: pretix/base/invoicing/peppol.py:211
-#, fuzzy
-#| msgid "The Peppol participant ID is not registered on the Peppol network."
 msgid "The Peppol participant ID does not match your VAT ID."
-msgstr "Peppol参加者IDはPeppolネットワークに登録されていません。"
+msgstr "Peppolの参加者IDがVAT IDと一致しません。"
 
 #: pretix/base/invoicing/peppol.py:214
 msgctxt "peppol_invoice"
@@ -6766,10 +6762,8 @@ msgstr ""
 "かかる場合があります。"
 
 #: pretix/base/models/organizer.py:378
-#, fuzzy
-#| msgid "Event permissions"
 msgid "All event permissions"
-msgstr "イベントの権限"
+msgstr "すべてのイベントの権限"
 
 #: pretix/base/models/organizer.py:379
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:34
@@ -6777,10 +6771,8 @@ msgid "Event permissions"
 msgstr "イベントの権限"
 
 #: pretix/base/models/organizer.py:380
-#, fuzzy
-#| msgid "Organizer permissions"
 msgid "All organizer permissions"
-msgstr "主催者の権限"
+msgstr "全ての主催者の権限"
 
 #: pretix/base/models/organizer.py:381
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:25
@@ -8244,36 +8236,30 @@ msgstr ""
 #: pretix/base/permissions.py:314 pretix/base/permissions.py:331
 msgctxt "permission_level"
 msgid "View"
-msgstr ""
+msgstr "見る"
 
 #: pretix/base/permissions.py:164 pretix/base/permissions.py:169
 #: pretix/base/permissions.py:174 pretix/base/permissions.py:179
 #: pretix/base/permissions.py:286 pretix/base/permissions.py:315
-#, fuzzy
-#| msgid "Save and check"
 msgctxt "permission_level"
 msgid "View and change"
-msgstr "保存してチェックします"
+msgstr "確認と変更"
 
 #: pretix/base/permissions.py:168
-#, fuzzy
-#| msgid "API tokens"
 msgid "API only"
-msgstr "APIトークン"
+msgstr "APIのみ"
 
 #: pretix/base/permissions.py:173
 msgid ""
 "Menu item will only show up if the user has permission for general settings."
-msgstr ""
+msgstr "メニュー項目は、ユーザーが一般設定の権限を持っている場合にのみ表示されます。"
 
 #: pretix/base/permissions.py:177 pretix/base/permissions.py:231
 #: pretix/base/permissions.py:285 pretix/base/permissions.py:313
 #: pretix/base/permissions.py:330
-#, fuzzy
-#| msgid "Revoke access"
 msgctxt "permission_level"
 msgid "No access"
-msgstr "アクセスを取り消す"
+msgstr "アクセスなし"
 
 #: pretix/base/permissions.py:188
 #: pretix/control/templates/pretixcontrol/event/settings.html:7
@@ -8287,6 +8273,8 @@ msgid ""
 "This includes access to all settings not listed explicitly below, including "
 "plugin settings."
 msgstr ""
+"これには、以下に明示的に記載されていないすべての設定（プラグイン設定を含む）"
+"へのアクセスが含まれます。"
 
 #: pretix/base/permissions.py:197
 #: pretix/control/templates/pretixcontrol/event/payment.html:6
@@ -8300,100 +8288,77 @@ msgid "Tax settings"
 msgstr "税の設定"
 
 #: pretix/base/permissions.py:209
-#, fuzzy
-#| msgid "Invoice settings"
 msgid "Invoicing settings"
-msgstr "請求書の設定"
+msgstr "請求の設定"
 
 #: pretix/base/permissions.py:215
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date added"
 msgid "Event series dates"
-msgstr "イベントシリーズに日程が追加されました"
+msgstr "イベントシリーズの日程"
 
 #: pretix/base/permissions.py:221
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Products, quotas and questions"
-msgstr "製品名とバリエーション"
+msgstr "製品、クオータおよび質問"
 
 #: pretix/base/permissions.py:224
 msgid "Also includes related objects like categories or discounts."
-msgstr ""
+msgstr "カテゴリや割引などの関連オブジェクトも含まれます。"
 
 #: pretix/base/permissions.py:232
-#, fuzzy
-#| msgid "All check-ins"
 msgctxt "permission_level"
 msgid "Only check-in"
-msgstr "すべてのチェックイン"
+msgstr "チェックインのみ"
 
 #: pretix/base/permissions.py:233
-#, fuzzy
-#| msgid "View full log"
 msgctxt "permission_level"
 msgid "View all"
-msgstr "フルログを表示します"
+msgstr "すべてを表示"
 
 #: pretix/base/permissions.py:234
-#, fuzzy
-#| msgid "Valid check-in"
 msgctxt "permission_level"
 msgid "View all and check-in"
-msgstr "有効なチェックイン"
+msgstr "すべてを表示してチェックイン"
 
 #: pretix/base/permissions.py:235
-#, fuzzy
-#| msgid "View all upcoming events"
 msgctxt "permission_level"
 msgid "View all and change"
-msgstr "すべての予定されているイベントを表示します"
+msgstr "すべてを表示して変更する"
 
 #: pretix/base/permissions.py:236
 msgid "Includes the ability to cancel and refund individual orders."
-msgstr ""
+msgstr "個別の注文をキャンセルおよび返金する機能が含まれています。"
 
 #: pretix/base/permissions.py:238
-#, fuzzy
-#| msgid "An entry has been added to the waiting list."
 msgid "Also includes related objects like the waiting list."
-msgstr "空席待ちリストに登録が追加されました。"
+msgstr "待機リストなどの関連オブジェクトも含まれます。"
 
 #: pretix/base/permissions.py:248
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Full event or date cancellation"
-msgstr "キャンセルを生成します"
+msgstr "イベント全体または日程のキャンセル"
 
 #: pretix/base/permissions.py:252
-#, fuzzy
-#| msgid "Sale not allowed"
 msgctxt "permission_level"
 msgid "Not allowed"
-msgstr "販売は許可されていません"
+msgstr "許可されていません"
 
 #: pretix/base/permissions.py:253
-#, fuzzy
-#| msgid "Allowed titles"
 msgctxt "permission_level"
 msgid "Allowed"
-msgstr "選択可能な敬称"
+msgstr "許可されている"
 
 #: pretix/base/permissions.py:268
 msgctxt "permission_level"
 msgid "Access existing events"
-msgstr ""
+msgstr "既存のイベントにアクセス"
 
 #: pretix/base/permissions.py:269
 msgctxt "permission_level"
 msgid "Access existing and create new events"
-msgstr ""
+msgstr "既存のイベントにアクセスし、新しいイベントを作成する"
 
 #: pretix/base/permissions.py:271
 msgid ""
 "The level of access to events is determined in detail by the settings below."
-msgstr ""
+msgstr "イベントへのアクセスレベルは、以下の設定によって詳細に決定されます。"
 
 #: pretix/base/permissions.py:275 pretix/control/navigation.py:143
 #: pretix/control/navigation.py:462 pretix/control/navigation.py:512
@@ -8412,12 +8377,14 @@ msgid ""
 "This includes access to all organizer-level functionality not listed "
 "explicitly below, including plugin settings."
 msgstr ""
+"これには、以下に明示的に記載されていないすべてのオーガナイザーレベル機能への"
+"アクセスが含まれ、プラグイン設定も含まれます。"
 
 #: pretix/base/permissions.py:287
 msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
-msgstr ""
+msgstr "自分自身を含む誰かに追加の権限を付与する機能が含まれています。"
 
 #: pretix/base/permissions.py:298 pretix/control/navigation.py:608
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
@@ -8435,12 +8402,12 @@ msgid ""
 "Includes the ability to give access to events and data oneself does not have "
 "access to."
 msgstr ""
+"自らがアクセスできないイベントやデータへのアクセス権を付与する機能が含まれま"
+"す。"
 
 #: pretix/base/permissions.py:321
-#, fuzzy
-#| msgid "Seating plan"
 msgid "Seating plans"
-msgstr "座席表"
+msgstr "座席プラン"
 
 #: pretix/base/permissions.py:327 pretix/control/navigation.py:712
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:8
@@ -9043,12 +9010,12 @@ msgid "Czech National Bank"
 msgstr "チェコ国立銀行"
 
 #: pretix/base/services/export.py:94 pretix/base/services/export.py:154
-#, fuzzy
-#| msgid "You do not have sufficient permission to perform this export."
 msgid ""
 "Export not found or you do not have sufficient permission to perform this "
 "export."
-msgstr "このエクスポートを実行するための十分な権限がありません。"
+msgstr ""
+"エクスポートが見つからないか、エクスポートを実行するための十分な権限がありま"
+"せん。"
 
 #: pretix/base/services/export.py:107 pretix/base/services/export.py:179
 #: pretix/base/services/export.py:357
@@ -13334,25 +13301,7 @@ msgid "Contact"
 msgstr "連絡先"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt:2
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we hereby confirm that the following data shredding job has been "
-#| "completed:\n"
-#| "\n"
-#| "Organizer: %(organizer)s\n"
-#| "\n"
-#| "Event: %(event)s\n"
-#| "\n"
-#| "Data selection: %(shredders)s\n"
-#| "\n"
-#| "Start time: %(start_time)s (new data added after this time might not have "
-#| "been deleted)\n"
-#| "\n"
-#| "Best regards,\n"
-#| "\n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -13386,7 +13335,7 @@ msgstr ""
 "\n"
 "敬具\n"
 "\n"
-"担当 pretix チーム\n"
+"担当 %(instance)sチーム\n"
 
 #: pretix/base/templates/pretixbase/forms/widgets/checkbox_sales_channel_option.html:16
 msgid ""
@@ -13940,16 +13889,12 @@ msgid "This is an event series"
 msgstr "これはイベントシリーズです"
 
 #: pretix/control/forms/event.py:135 pretix/control/forms/event.py:363
-#, fuzzy
-#| msgid ""
-#| "You do not have sufficient permission to enable plugins that need to be "
-#| "enabled for the entire organizer account."
 msgid ""
 "You do not have a sufficient level of access on the event you selected to "
 "copy it to the desired organizer."
 msgstr ""
-"主催者アカウント全体で有効化する必要があるプラグインを有効にするのに十分な権"
-"限がありません。"
+"選択したイベントに対して、目的の主催者にコピーするための十分なアクセス権があ"
+"りません。"
 
 #: pretix/control/forms/event.py:143
 msgid ""
@@ -14028,6 +13973,8 @@ msgid ""
 "You cannot choose a team that would give you more access than you have on "
 "the event you are copying."
 msgstr ""
+"コピーしているイベントに対して、より多くのアクセス権が付与されるチームを選択"
+"することはできません。"
 
 #: pretix/control/forms/event.py:344
 msgid "Copy configuration from"
@@ -14043,6 +13990,8 @@ msgid ""
 "You cannot choose an event on which you have less access than the team you "
 "selected in the previous step."
 msgstr ""
+"前のステップで選択したチームよりもアクセス権が少ないイベントを選択することは"
+"できません。"
 
 #: pretix/control/forms/event.py:387 pretix/control/forms/item.py:1304
 #: pretix/control/forms/subevents.py:411
@@ -14992,7 +14941,7 @@ msgstr "すべての参加者"
 #: pretix/plugins/checkinlists/exporters.py:109
 #: pretix/plugins/checkinlists/exporters.py:501
 msgid "Checked in"
-msgstr "チェックインしました"
+msgstr "チェックイン済み"
 
 #: pretix/control/forms/filter.py:2043
 #: pretix/plugins/checkinlists/exporters.py:110
@@ -15010,7 +14959,7 @@ msgstr "チェックインしたが退出済み"
 #: pretix/control/templates/pretixcontrol/checkin/index.html:178
 #: pretix/plugins/checkinlists/exporters.py:112
 msgid "Not checked in"
-msgstr "未チェックイン"
+msgstr "チェックイン未了"
 
 #: pretix/control/forms/filter.py:2064
 msgctxt "subevent"
@@ -16347,7 +16296,7 @@ msgstr "1つの組織ドメインのみを設定できます。"
 
 #: pretix/control/forms/organizer.py:322
 msgid "Provided by a plugin"
-msgstr ""
+msgstr "プラグインによって提供"
 
 #: pretix/control/forms/organizer.py:438
 msgid ""
@@ -17216,10 +17165,8 @@ msgid "The order has been denied (comment: \"{comment}\")."
 msgstr "注文は拒否されました（コメント：\"{comment}\"）。"
 
 #: pretix/control/logdisplay.py:521
-#, fuzzy
-#| msgid "The order has been overpaid."
 msgid "The customer VAT ID has been verified."
-msgstr "注文が過払いされました。"
+msgstr "顧客のVAT IDが確認されました。"
 
 #: pretix/control/logdisplay.py:522
 #, python-brace-format
@@ -17498,10 +17445,9 @@ msgid "{user} has been invited to the team."
 msgstr "{user} がチームに招待されました。"
 
 #: pretix/control/logdisplay.py:644
-#, fuzzy, python-brace-format
-#| msgid "Invite for {user} has been resent."
+#, python-brace-format
 msgid "Invite for {user} has been deleted."
-msgstr "{user}への招待状が再送されました。"
+msgstr "{user}への招待が削除されました。"
 
 #: pretix/control/logdisplay.py:645
 #, python-brace-format
@@ -19779,21 +19725,7 @@ msgid "Add property"
 msgstr "プロパティを追加"
 
 #: pretix/control/templates/pretixcontrol/email/confirmation_code.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "%(reason)s\n"
-#| "\n"
-#| "    %(code)s\n"
-#| "\n"
-#| "Please do never give this code to another person. Our support team will "
-#| "never ask for this code.\n"
-#| "\n"
-#| "If this code was not requested by you, please contact us immediately.\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -19821,7 +19753,7 @@ msgstr ""
 "このコードにお心当たりがない場合は、直ちにご連絡ください。\n"
 "\n"
 "よろしくお願いいたします。\n"
-"pretixチーム\n"
+"%(instance)sチーム\n"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt:1
 #, python-format
@@ -19859,17 +19791,7 @@ msgstr ""
 "%(instance)s チーム\n"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you requested a new password. Please go to the following page to reset "
-#| "your password:\n"
-#| "\n"
-#| "%(url)s\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -19889,27 +19811,10 @@ msgstr ""
 "%(url)s\n"
 "\n"
 "よろしくお願いします、  \n"
-"あなたのpretixチーム\n"
+"あなたの%(instance)sチーム\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you have been invited to a team on pretix, a platform to perform event\n"
-#| "ticket sales.\n"
-#| "\n"
-#| "Organizer: %(organizer)s\n"
-#| "Team: %(team)s\n"
-#| "\n"
-#| "If you want to join that team, just click on the following link:\n"
-#| "%(url)s\n"
-#| "\n"
-#| "If you do not want to join, you can safely ignore or delete this email.\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -19931,7 +19836,7 @@ msgid ""
 msgstr ""
 "こんにちは、\n"
 "\n"
-"あなたは、pretixというイベントチケット販売プラットフォームの\n"
+"あなたは、%(instance)sというイベントチケット販売プラットフォームの\n"
 "チームに招待されました。\n"
 "\n"
 "主催者: %(organizer)s\n"
@@ -19944,7 +19849,7 @@ msgstr ""
 "\n"
 "よろしくお願いします。\n"
 "\n"
-"pretixチーム\n"
+"%(instance)sチーム\n"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt:1
 #, python-format
@@ -19981,24 +19886,7 @@ msgstr ""
 "%(instance)sチーム\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "this is to inform you that the account information of your pretix account "
-#| "has been\n"
-#| "changed. In particular, the following changes have been performed:\n"
-#| "\n"
-#| "%(messages)s\n"
-#| "\n"
-#| "If this change was not performed by you, please contact us immediately.\n"
-#| "\n"
-#| "You can review and change your account settings here:\n"
-#| "\n"
-#| "%(url)s\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your pretix team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20019,20 +19907,21 @@ msgid ""
 msgstr ""
 "こんにちは\n"
 "\n"
-"お客様のpretixアカウントの情報が変更されましたので、お知らせいたします。\n"
+"あなたの%(instance)sのアカウント情報が変更されましたので、お知らせいたします"
+"。\n"
 "具体的には、以下の変更が行われました：\n"
 "\n"
 "%(messages)s\n"
 "\n"
-"もしもこの変更がお客様自身によるものでない場合は、直ちにお問い合わせくださ"
-"い。\n"
+"もしもこの変更がお客様自身によるものでない場合は、直ちにお問い合わせください"
+"。\n"
 "\n"
 "アカウント設定の確認や変更はこちらから行えます：\n"
 "\n"
 "%(url)s\n"
 "\n"
 "以上、よろしくお願いいたします。  \n"
-"pretixチームより\n"
+"%(instance)sチームより\n"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:8
@@ -20287,10 +20176,8 @@ msgstr ""
 "ルと払い戻しを行うことができます。"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:51
-#, fuzzy
-#| msgid "Permissions"
 msgid "No permission"
-msgstr "権限"
+msgstr "権限なし"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:72
@@ -22768,10 +22655,8 @@ msgid "Edit question"
 msgstr "質問を編集"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:55
-#, fuzzy
-#| msgid "You do not have permission to view this content."
 msgid "No permission to view answers."
-msgstr "このコンテンツを表示する権限がありません。"
+msgstr "回答を閲覧する権限がありません。"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:63
 msgid "No matching answers found."
@@ -24382,10 +24267,8 @@ msgstr "次の実行は予定されていない"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:37
 #: pretix/control/templates/pretixcontrol/organizers/export.html:37
-#, fuzzy
-#| msgid "Exporter not found"
 msgid "Exporter not found or no permission"
-msgstr "エクスポーターが見つかりません"
+msgstr "エクスポーターが見つからない、または権限がありません"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:42
 #: pretix/control/templates/pretixcontrol/organizers/export.html:42
@@ -24428,10 +24311,8 @@ msgstr "新規ユーザー向けのおすすめです"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:120
 #: pretix/control/templates/pretixcontrol/organizers/export.html:120
-#, fuzzy
-#| msgid "There are no add-ons available for this product."
 msgid "There are no exporters available for you."
-msgstr "この製品に利用可能なアドオンはありません。"
+msgstr "ご利用いただけるエクスポーターがありません。"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:6
@@ -26329,7 +26210,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:274
 #, python-format
 msgid "max. %(size)s, smaller is better"
-msgstr ""
+msgstr "最大%(size)sで、より少ない数値が望ましい"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:282
 msgid "Download current background"
@@ -29023,16 +28904,12 @@ msgstr ""
 "い。"
 
 #: pretix/control/views/orders.py:2798 pretix/control/views/organizer.py:2131
-#, fuzzy
-#| msgid ""
-#| "Your user account does not have sufficient permission to run this report, "
-#| "therefore you cannot schedule it."
 msgid ""
 "Your user account does not have sufficient permission to run this report, "
 "therefore you cannot change it."
 msgstr ""
-"ユーザーアカウントにはこのレポートを実行するのに十分な権限がないため、スケ"
-"ジュールを設定できません。"
+"あなたのユーザーアカウントにはこのレポートを実行する十分な権限がありませんの"
+"で、変更することはできません。"
 
 #: pretix/control/views/orders.py:2807 pretix/control/views/organizer.py:2140
 msgid ""
@@ -32995,7 +32872,7 @@ msgstr "Stripe経由でiDEAL"
 
 #: pretix/plugins/stripe/payment.py:1572
 msgid "iDEAL | Wero"
-msgstr ""
+msgstr "iDEAL | Wero"
 
 #: pretix/plugins/stripe/payment.py:1575
 msgid ""
@@ -35905,6 +35782,8 @@ msgid ""
 "the shop that affect quotas, such as the validity period of carts and "
 "vouchers."
 msgstr ""
+"変更された時間は、カートやバウチャーの有効期間など、クォータに影響を与える"
+"ショップの項目については考慮されませんので、ご了承ください。"
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:31
 msgid "Enable time machine"
