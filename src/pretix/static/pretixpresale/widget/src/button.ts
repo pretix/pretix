@@ -54,13 +54,6 @@ export function createButtonInstance (element: Element, htmlId?: string): App {
 		}
 	})
 
-	// TODO I don't think we need this anymore in vue3
-	// if (element.tagName !== 'pretix-button') {
-	// 	element.innerHTML = '<pretix-button>' + element.innerHTML + '</pretix-button>'
-	// 	// Vue does not replace the container, so watch container as well
-	// 	observer.observe(element, observerOptions)
-	// }
-
 	const app = createApp(ButtonComponent)
 	app.provide(StoreKey, store)
 	app.config.errorHandler = (error, _vm, info) => {
