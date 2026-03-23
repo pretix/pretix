@@ -1,0 +1,98 @@
+contract:
+  name: pretix_event
+  version: "1.0"
+  description: >
+    Martyn's Law (Terrorism (Protection of Premises) Act 2025) compliance audit
+    trail contract for Pretix event records. Enforces that every qualifying
+    Pretix event (200+ expected attendance) has documented evacuation, invacuation,
+    and lockdown procedures with a pre-event staff briefing and a timestamped
+    compliance review. Named after Martyn Hett (1987–2017), killed in the
+    Manchester Arena attack.
+  owner: "Pretix"
+  status: active
+  rules:
+    - name: event_name_required
+      field: event_name
+      type: not_empty
+      severity: error
+      error_message: "event_name is required"
+    - name: event_slug_required
+      field: event_slug
+      type: not_empty
+      severity: error
+      error_message: "event_slug is required"
+    - name: expected_attendance_required
+      field: expected_attendance
+      type: not_empty
+      severity: error
+      error_message: "expected_attendance is required — Martyn's Law applies to qualifying events with 200+ expected attendance"
+    - name: expected_attendance_minimum
+      field: expected_attendance
+      type: min
+      min: 200
+      severity: error
+      error_message: "expected_attendance must be >= 200 — Martyn's Law applies only to events with 200 or more persons expected to attend"
+    - name: duty_tier_required
+      field: duty_tier
+      type: not_empty
+      severity: error
+      error_message: "duty_tier is required — declare 'standard' (200-799) or 'enhanced' (800+)"
+    - name: evacuation_procedure_documented_required
+      field: evacuation_procedure_documented
+      type: not_empty
+      severity: error
+      error_message: "evacuation_procedure_documented must be declared — required for all qualifying events under Martyn's Law"
+    - name: invacuation_procedure_documented_required
+      field: invacuation_procedure_documented
+      type: not_empty
+      severity: error
+      error_message: "invacuation_procedure_documented must be declared — shelter-in-place procedure required under Martyn's Law"
+    - name: lockdown_procedure_documented_required
+      field: lockdown_procedure_documented
+      type: not_empty
+      severity: error
+      error_message: "lockdown_procedure_documented must be declared — required under Martyn's Law"
+    - name: staff_briefing_completed_required
+      field: staff_briefing_completed
+      type: not_empty
+      severity: error
+      error_message: "staff_briefing_completed must be declared — all staff must be briefed before the event opens (Martyn's Law)"
+    - name: compliance_reviewed_by_required
+      field: compliance_reviewed_by
+      type: not_empty
+      severity: error
+      error_message: "compliance_reviewed_by is required — record who verified the compliance declarations"
+    - name: compliance_review_date_required
+      field: compliance_review_date
+      type: not_empty
+      severity: error
+      error_message: "compliance_review_date is required"
+    - name: compliance_review_date_format
+      field: compliance_review_date
+      type: date_format
+      severity: error
+      error_message: "compliance_review_date must be YYYY-MM-DD"
+    - name: senior_responsible_person_required_if_enhanced
+      field: senior_responsible_person
+      type: required_if
+      required_if:
+        field: duty_tier
+        value: "enhanced"
+      severity: error
+      error_message: "senior_responsible_person is required for enhanced-duty events (800+ attendance) under Martyn's Law"
+    - name: sia_notification_reference_required_if_enhanced
+      field: sia_notification_reference
+      type: required_if
+      required_if:
+        field: duty_tier
+        value: "enhanced"
+      severity: error
+      error_message: "sia_notification_reference is required for enhanced-duty events — notify the Security Industry Authority and record the reference"
+    - name: terrorism_protection_plan_documented_required_if_enhanced
+      field: terrorism_protection_plan_documented
+      type: required_if
+      required_if:
+        field: duty_tier
+        value: "enhanced"
+      severity: error
+      error_message: "terrorism_protection_plan_documented is required for enhanced-duty events (800+ attendance) under Martyn's Law"

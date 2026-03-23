@@ -689,6 +689,127 @@ class Event(EventMixin, LoggedModel):
         blank=True,
     )
 
+    # -------------------------------------------------------------------------
+    # Martyn's Law (Terrorism (Protection of Premises) Act 2025) compliance
+    # fields. All nullable — zero breaking changes. Enable validation by
+    # setting ENABLE_OPENDQV_VALIDATION=true (see pretix/base/martyns_law.py).
+    # -------------------------------------------------------------------------
+
+    # Standard duty fields (qualifying events: 200+ expected attendance)
+    expected_attendance = models.PositiveIntegerField(
+        null=True, blank=True,
+        verbose_name=_("Expected attendance"),
+        help_text=_(
+            "Expected number of persons attending. Martyn's Law applies when "
+            "this is 200 or more (Terrorism (Protection of Premises) Act 2025)."
+        ),
+    )
+    DUTY_TIER_CHOICES = [
+        ('standard', _('Standard duty (200–799 expected attendance)')),
+        ('enhanced', _('Enhanced duty (800+ expected attendance)')),
+    ]
+    duty_tier = models.CharField(
+        max_length=20,
+        choices=DUTY_TIER_CHOICES,
+        null=True, blank=True,
+        verbose_name=_("Martyn's Law duty tier"),
+        help_text=_(
+            "Standard: 200–799 expected attendance. "
+            "Enhanced: 800+ expected attendance."
+        ),
+    )
+    evacuation_procedure_documented = models.BooleanField(
+        null=True, blank=True,
+        verbose_name=_("Evacuation procedure documented"),
+        help_text=_(
+            "Confirm that a written evacuation procedure exists and is "
+            "accessible to staff. Required under Martyn's Law."
+        ),
+    )
+    invacuation_procedure_documented = models.BooleanField(
+        null=True, blank=True,
+        verbose_name=_("Invacuation (shelter-in-place) procedure documented"),
+        help_text=_(
+            "Confirm that a written invacuation (shelter-in-place) procedure "
+            "exists. Required under Martyn's Law."
+        ),
+    )
+    lockdown_procedure_documented = models.BooleanField(
+        null=True, blank=True,
+        verbose_name=_("Lockdown procedure documented"),
+        help_text=_(
+            "Confirm that a written lockdown procedure exists. "
+            "Required under Martyn's Law."
+        ),
+    )
+    staff_briefing_completed = models.BooleanField(
+        null=True, blank=True,
+        verbose_name=_("Staff briefing completed"),
+        help_text=_(
+            "Confirm that all staff have been briefed on emergency procedures "
+            "before the event opens. Required under Martyn's Law."
+        ),
+    )
+    staff_briefing_date = models.DateField(
+        null=True, blank=True,
+        verbose_name=_("Staff briefing date"),
+        help_text=_("Date on which the pre-event staff briefing was completed."),
+    )
+
+    # Enhanced duty fields (800+ expected attendance)
+    senior_responsible_person = models.CharField(
+        max_length=200,
+        null=True, blank=True,
+        verbose_name=_("Senior responsible person (SRP)"),
+        help_text=_(
+            "Full name of the designated Senior Responsible Person for "
+            "Martyn's Law enhanced-duty compliance."
+        ),
+    )
+    senior_responsible_person_role = models.CharField(
+        max_length=200,
+        null=True, blank=True,
+        verbose_name=_("Senior responsible person — role/job title"),
+    )
+    sia_notification_reference = models.CharField(
+        max_length=100,
+        null=True, blank=True,
+        verbose_name=_("SIA notification reference"),
+        help_text=_(
+            "Reference number from the Security Industry Authority (SIA) "
+            "notification, required for enhanced-duty premises."
+        ),
+    )
+    terrorism_protection_plan_documented = models.BooleanField(
+        null=True, blank=True,
+        verbose_name=_("Terrorism protection plan documented"),
+        help_text=_(
+            "Confirm that a written Terrorism Protection Plan exists and is "
+            "up to date. Required for enhanced-duty events (800+) under "
+            "Martyn's Law."
+        ),
+    )
+    terrorism_protection_plan_review_date = models.DateField(
+        null=True, blank=True,
+        verbose_name=_("Terrorism protection plan — last review date"),
+    )
+
+    # Audit trail (all qualifying events)
+    compliance_reviewed_by = models.CharField(
+        max_length=200,
+        null=True, blank=True,
+        verbose_name=_("Compliance reviewed by"),
+        help_text=_(
+            "Name of the person who reviewed and confirmed the Martyn's Law "
+            "compliance declarations for this event."
+        ),
+    )
+    compliance_review_date = models.DateField(
+        null=True, blank=True,
+        verbose_name=_("Compliance review date"),
+        help_text=_("Date on which compliance was last reviewed (YYYY-MM-DD)."),
+    )
+
     objects = ScopedManager(organizer='organizer')
 
     class Meta:
