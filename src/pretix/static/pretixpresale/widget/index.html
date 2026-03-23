@@ -4,12 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pretix Widget</title>
-    <link rel="stylesheet" type="text/css" href="http://localhost:8000/testorg/testevent/widget/v2.css" crossorigin>
+    <link id="widget-css" rel="stylesheet" type="text/css" crossorigin>
   </head>
   <body>
-    <pretix-widget event="http://localhost:8000/testorg/testevent/"></pretix-widget>
-    <!-- <script type="text/javascript" src="http://localhost:8000/widget/v2.en.js" async crossorigin></script> -->
+    <div id="widget-container"></div>
+    <script>
+      {
+        const params = new URLSearchParams(window.location.search)
+        const knownParams = new Set(['type', 'host', 'org', 'event', 'mode', 'lang', 'button-text'])
+        const type = params.get('type') || 'widget'
+        const host = params.get('host') || 'http://localhost:8000'
+        const org = params.get('org') || 'testorg'
+        const event = params.get('event') || 'testevent'
+        const mode = params.get('mode') || 'dev'
+        const lang = params.get('lang') || 'de'
 
-    <script type="module" src="/src/main.ts"></script>
+        const baseUrl = `${host}/${org}/${event}`
+
+        document.getElementById('widget-css').href = `${baseUrl}/widget/v2.css`
+
+        const el = document.createElement(type === 'button' ? 'pretix-button' : 'pretix-widget')
+        el.setAttribute('event', `${baseUrl}/`)
+        if (type === 'button') {
+          el.textContent = params.get('button-text') || 'Buy tickets!'
+        }
+        for (const [key, value] of params) {
+          if (knownParams.has(key)) continue
+          el.setAttribute(key, value)
+        }
+        document.getElementById('widget-container').appendChild(el)
+
+        const script = document.createElement('script')
+        if (mode === 'prod') {
+          Object.assign(script, { type: 'text/javascript', src: `${host}/widget/v2.${lang}.js`, async: true, crossOrigin: 'anonymous' })
+        } else {
+          Object.assign(script, { type: 'module', src: '/src/main.ts' })
+        }
+        document.body.appendChild(script)
+      }
+    </script>
   </body>
 </html>
