@@ -48,10 +48,6 @@ window.PretixWidget = {
 }
 
 async function buildWidgets () {
-	// TODO what does this do?
-	document.createElement('pretix-widget')
-	document.createElement('pretix-button')
-
 	await docReady()
 	const widgetElements = document.querySelectorAll('pretix-widget, div.pretix-widget-compat')
 	for (const [i, el] of Array.from(widgetElements).entries()) {
