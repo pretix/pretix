@@ -115,11 +115,11 @@ Running the local development server will also automatically start a vite dev se
 Run the widget development server
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To locally develop the presale widget you need to start a separate vite dev server using:
+To locally develop the presale widget you need to start a separate vite dev server using::
 
     npm run dev:widget
 
-You can control the org, event and much more via query parameters like this:
+You can control the org, event and much more via query parameters like this::
 
     http://localhost:5180/?org=testorg&event=testevent
 
