@@ -203,6 +203,7 @@ class Order(LockModel, LoggedModel):
         (STATUS_EXPIRED, _("expired")),
         (STATUS_CANCELED, _("canceled")),
     )
+    ALLOWED_STATUS_CHARS={char for char, _ in STATUS_CHOICE}  # {'n', 'p', 'e', 'c'}
 
     code = models.CharField(
         max_length=16,

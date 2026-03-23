@@ -31,11 +31,7 @@ class RelativeFee:
         return self.reference_price * (self.percentage/100)
 
 
-@dataclass(frozen=True)
-class CheckRes:
-    cancellation_possible: bool
-    reason: str
-CheckResult=Dict[str, CheckRes]
+Fee=Union[AbsoluteFee, RelativeFee]
 
 @dataclass(frozen=True)
 class OrderDiff:
@@ -46,8 +42,18 @@ class OrderDiff:
     def cancellations(self):
         return self.prev.difference(self.next)
 
+    @staticmethod
+    def cancel_all(order: Order) -> "OrderDiff":
+        return OrderDiff(order=order, prev=set(order.positions.all()), next=set())
 
-Fee=Union[AbsoluteFee, RelativeFee]
+@dataclass(frozen=True)
+class CheckRes:
+    cancellation_possible: bool
+    reason: str
+
+CheckResult=Dict[str, CheckRes]
+
+
 CheckFn=Callable[[OrderDiff, OrderPosition], CheckResult]
 
 
@@ -59,6 +65,7 @@ def merge_check_results(a: CheckResult, b: CheckResult) -> CheckResult:
         else:
             result[key] = b_inner
     return result
+
 
 @dataclass(frozen=True)
 class Ruling:
@@ -101,22 +108,22 @@ class CancellationRuleQuerySet(models.QuerySet):
         return [self._evaluate_op(diff, position) for position in diff.order.positions.all()]
 
     def _evaluate_op(self, diff: OrderDiff, order_position: OrderPosition) -> List[Ruling]:
-        consequences=[rule.apply(diff, order_position) for rule in self]
+        consequences = []
+        for rule in self:
+            if order_position.item in rule.items.all() or order_position.variation in rule.variations.all():
+                consequences.append(rule.apply(diff, order_position))
         consequences.sort()
         return consequences
 
 
-ALLOWED_STATUS_CHARS={char for char, _ in Order.STATUS_CHOICE}  # {'n', 'p', 'e', 'c'}
-
 def validate_status_chars(value):
-    invalid=set(value) - ALLOWED_STATUS_CHARS
+    invalid=set(value) - Order.ALLOWED_STATUS_CHARS
     if invalid:
         raise ValidationError(
-            f"Invalid characters: {invalid}. Allowed: {ALLOWED_STATUS_CHARS}"
+            f"Invalid characters: {invalid}. Allowed: {Order.ALLOWED_STATUS_CHARS}"
         )
     if len(value) != len(set(value)):
         raise ValidationError("Duplicate characters are not allowed.")
-
 
 
 class CancellationRule(models.Model):
@@ -137,17 +144,22 @@ class CancellationRule(models.Model):
         related_name="orders",
         on_delete=models.CASCADE
     )
-    item=models.ForeignKey("Item", on_delete=models.CASCADE, null=True, blank=True) # probably m2m field to avoid duplicating rules
-    item_variation=models.ForeignKey("ItemVariation", on_delete=models.CASCADE, null=True, blank=True) # probably m2m field to avoid duplicating rules
-
+    items = models.ManyToManyField(
+        "Item",
+        verbose_name=_("Items"),
+    )
+    variations=models.ManyToManyField(
+        "ItemVariation",
+        verbose_name=_("Item variations"),
+    )
 
     allowed_if_in_order_status=models.CharField(
         max_length=4,
         choices=Order.STATUS_CHOICE,
         verbose_name=_("Cancellation possible if order is in status"),
-        validators=[validate_status_chars]
+        validators=[validate_status_chars],
+        default="".join(Order.ALLOWED_STATUS_CHARS),
     )
-
     allowed_until=ModelRelativeDateTimeField(null=True, blank=True)
     except_after=ModelRelativeDateTimeField(null=True, blank=True)
 
@@ -171,7 +183,6 @@ class CancellationRule(models.Model):
         verbose_name=_("Absolute Fee per Item"),
         default=Decimal("0.00"),
     )  # wird als sum() kombiniert
-
     fee_absolute_per_order=models.DecimalField(
         max_digits=13,
         decimal_places=2,
@@ -190,6 +201,11 @@ class CancellationRule(models.Model):
         self.checks: List[CheckFn]=[self._check_order_status, self._check_time_window,
                                     self._system_check_not_checked_in, self._system_check_not_discounted]
 
+
+    # TODO weitere System Checks
+    # OrderPositions mit Item.min_per_order dürfen nur storniert werden, wenn genug übrig bleiben oder alle des gleichen Items storniert werden
+    # OrderPositions mit addon_to != None dürfen nur über den bestehenden Add-On-Flow storniert werden
+    # OrderPositions mit is_bundled dürfen nur mit der Parent-Position zusammen storniert werden
 
     @staticmethod
     def _system_check_not_checked_in(diff: OrderDiff, order_position: OrderPosition) -> CheckResult:
@@ -218,7 +234,7 @@ class CancellationRule(models.Model):
         :param order_position:
         :return CheckResults:
         """
-        check_id = "SYSTEM_TICKET_NOT_USED"
+        check_id = "SYSTEM_TICKET_NOT_DISCOUNTED"
 
         if order_position in diff.cancellations():
             if order_position.discount is None:
@@ -273,27 +289,21 @@ class CancellationRule(models.Model):
     def _check_order_status(self, diff: OrderDiff, order_position: OrderPosition) -> CheckResult:
         check_id = "ORDER_STATUS"
 
-        if not self.allowed_until and not self.allowed_until:
+        if diff.order.status == "".join(Order.ALLOWED_STATUS_CHARS):
             return {check_id: CheckRes(
                 cancellation_possible=True,
                 reason=f"Orders in every status can be cancelled",
             )}
-        elif order_position.order.status in self.allowed_if_in_order_status:
+        elif diff.order.status in self.allowed_if_in_order_status:
             return {check_id: CheckRes(
                 cancellation_possible=True,
-                reason=f"Order in required status: '{order_position.order.status}'",
+                reason=f"Order in required status: '{diff.order.status}'",
             )}
         else:
             return {check_id: CheckRes(
                 cancellation_possible=False,
-                reason=f"Order in status '{order_position.order.status}' cannot be canceled",
+                reason=f"Order in status '{diff.order.status}' cannot be canceled",
             )}
-
-
-    # OrderPositions mit Item.min_per_order dürfen nur storniert werden, wenn genug übrig bleiben oder alle des gleichen Items storniert werden
-    # OrderPositions mit addon_to != None dürfen nur über den bestehenden Add-On-Flow storniert werden
-    # OrderPositions mit is_bundled dürfen nur mit der Parent-Position zusammen storniert werden
-
 
 
     def apply(self, diff: OrderDiff, order_position: OrderPosition) -> Ruling:
