@@ -50,13 +50,6 @@ export function createWidgetInstance (element: Element, htmlId?: string): App {
 		}
 	})
 
-	// TODO I don't think we need this anymore in vue3
-	// if (element.tagName !== 'pretix-widget') {
-	// 	element.innerHTML = '<pretix-widget></pretix-widget>'
-	// 	// we need to watch the container as well as the replaced root-node (see mounted())
-	// 	observer.observe(element, observerOptions)
-	// }
-
 	const app = createApp(WidgetComponent)
 	app.provide(StoreKey, store)
 	app.config.errorHandler = (error, _vm, info) => {
