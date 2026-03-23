@@ -36,7 +36,7 @@ def env():
         date_from=now(), plugins='pretix.plugins.ticketoutputpdf'
     )
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=event.organizer, can_create_events=True, can_change_event_settings=True, can_change_items=True)
+    t = Team.objects.create(organizer=event.organizer, all_event_permissions=True, all_organizer_permissions=True)
     t.members.add(user)
     t.limit_events.add(event)
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23)

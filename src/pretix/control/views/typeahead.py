@@ -51,6 +51,7 @@ from pretix.base.models import (
     ItemVariation, ItemVariationMetaValue, Order, OrderPosition, Organizer,
     SubEventMetaValue, User, Voucher,
 )
+from pretix.base.models.organizer import TeamQuerySet
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import (
     event_permission_required, organizer_permission_required,
@@ -172,7 +173,7 @@ def event_list(request):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_manage_gift_cards", "can_manage_reusable_media"))
+@organizer_permission_required(("organizer.giftcards:read", "organizer.reusablemedia:write"))
 def giftcard_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:
@@ -180,7 +181,7 @@ def giftcard_select2(request, **kwargs):
     except ValueError:
         page = 1
 
-    if request.user.has_organizer_permission(request.organizer, 'can_manage_gift_cards', request):
+    if request.user.has_organizer_permission(request.organizer, 'organizer.giftcards:write', request):
         qs = request.organizer.issued_gift_cards.filter(
             Q(secret__icontains=query)
         ).order_by('secret')
@@ -210,7 +211,7 @@ def giftcard_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_manage_reusable_media", "can_manage_gift_cards"))
+@organizer_permission_required(("organizer.reusablemedia:write", "organizer.giftcards:write"))
 def ticket_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:
@@ -240,8 +241,13 @@ def ticket_select2(request, **kwargs):
         qs_orders = qs_orders.filter(
             exact_match | (
                 soft_match & (
-                    Q(order__event__organizer_id__in=request.user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
-                    | Q(order__event_id__in=request.user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
+                    Q(order__event__organizer_id__in=request.user.teams.filter(
+                        TeamQuerySet.event_permission_q("event.orders:read"),
+                        all_events=True,
+                    ).values_list('organizer', flat=True))
+                    | Q(order__event_id__in=request.user.teams.filter(
+                        TeamQuerySet.event_permission_q("event.orders:read")
+                    ).values_list('limit_events__id', flat=True))
                 )
             )
         )
@@ -270,7 +276,7 @@ def ticket_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required("can_manage_customers")
+@organizer_permission_required("organizer.customers:write")
 def customer_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:
@@ -337,9 +343,9 @@ def nav_context_list(request):
         if not request.user.has_active_staff_session(request.session.session_key):
             qs_orders = qs_orders.filter(
                 Q(event__organizer_id__in=request.user.teams.filter(
-                    all_events=True, can_view_orders=True).values_list('organizer', flat=True))
+                    TeamQuerySet.event_permission_q("event.orders:read"), all_events=True).values_list('organizer', flat=True))
                 | Q(event_id__in=request.user.teams.filter(
-                    can_view_orders=True).values_list('limit_events__id', flat=True))
+                    TeamQuerySet.event_permission_q("event.orders:read")).values_list('limit_events__id', flat=True))
             )
 
         qs_vouchers = Voucher.objects.filter(
@@ -348,9 +354,9 @@ def nav_context_list(request):
         if not request.user.has_active_staff_session(request.session.session_key):
             qs_vouchers = qs_vouchers.filter(
                 Q(event__organizer_id__in=request.user.teams.filter(
-                    all_events=True, can_view_vouchers=True).values_list('organizer', flat=True))
+                    TeamQuerySet.event_permission_q("event.vouchers:read"), all_events=True).values_list('organizer', flat=True))
                 | Q(event_id__in=request.user.teams.filter(
-                    can_view_vouchers=True).values_list('limit_events__id', flat=True))
+                    TeamQuerySet.event_permission_q("event.vouchers:read")).values_list('limit_events__id', flat=True))
             )
     else:
         qs_vouchers = Voucher.objects.none()
@@ -813,7 +819,7 @@ def organizer_select2(request):
         qs = qs.filter(Q(name__icontains=term) | Q(slug__icontains=term))
     if not request.user.has_active_staff_session(request.session.session_key):
         if 'can_create' in request.GET:
-            qs = qs.filter(pk__in=request.user.teams.filter(can_create_events=True).values_list('organizer', flat=True))
+            qs = qs.filter(pk__in=request.user.teams.filter(TeamQuerySet.organizer_permission_q("organizer.events:create")).values_list('organizer', flat=True))
         else:
             qs = qs.filter(pk__in=request.user.teams.values_list('organizer', flat=True))
 
@@ -976,21 +982,21 @@ def item_meta_values(request, organizer, event):
     var_matches = var_matches.filter(variation__item__event__organizer_id=organizer.pk)
     all_access = (
         request.user.has_active_staff_session(request.session.session_key)
-        or request.user.teams.filter(all_events=True, organizer=organizer, can_change_items=True).exists()
+        or request.user.teams.filter(TeamQuerySet.event_permission_q("event.items:write"), all_events=True, organizer=organizer).exists()
     )
     if not all_access:
         defaults = defaults.filter(
-            event__id__in=request.user.teams.filter(can_change_items=True).values_list(
+            event__id__in=request.user.teams.filter(TeamQuerySet.event_permission_q("event.items:write")).values_list(
                 'limit_events__id', flat=True
             )
         )
         matches = matches.filter(
-            item__event__id__in=request.user.teams.filter(can_change_items=True).values_list(
+            item__event__id__in=request.user.teams.filter(TeamQuerySet.event_permission_q("event.items:write")).values_list(
                 'limit_events__id', flat=True
             )
         )
         var_matches = var_matches.filter(
-            variation__item__event__id__in=request.user.teams.filter(can_change_items=True).values_list(
+            variation__item__event__id__in=request.user.teams.filter(TeamQuerySet.event_permission_q("event.items:write")).values_list(
                 'limit_events__id', flat=True
             )
         )
@@ -1007,10 +1013,16 @@ def item_meta_values(request, organizer, event):
     })
 
 
-@organizer_permission_required(("can_view_orders", "can_change_organizer_settings"))
-# This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
-# anyone who can see orders for any event can see the check-in log view where this is used as a filter
 def devices_select2(request, **kwargs):
+    allowed = (
+        # This check is a bit of a hack since this is not technically an organizer permission, but it does the job here --
+        # anyone who can see orders for any event can see the check-in log view where this is used as a filter
+        request.user.has_organizer_permission(request.organizer, "organizer.devices:read", request=request) or
+        request.user.get_events_with_permission("event.orders:read").filter(organizer=request.organizer).exists()
+    )
+    if not allowed:
+        raise PermissionDenied()
+
     query = request.GET.get('query', '')
     try:
         page = int(request.GET.get('page', '1'))
@@ -1045,10 +1057,16 @@ def devices_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_view_orders", "can_change_event_settings", "can_change_organizer_settings"))
-# This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
-# anyone who can see orders for any event can see the check-in log view where this is used as a filter
 def gate_select2(request, **kwargs):
+    allowed = (
+        # This check is a bit of a hack since this is not technically an organizer permission, but it does the job here --
+        # anyone who can see orders for any event can see the check-in log view where this is used as a filter
+        request.user.has_organizer_permission(request.organizer, "organizer.devices:read", request=request) or
+        request.user.get_events_with_permission("event.orders:read").filter(organizer=request.organizer).exists()
+    )
+    if not allowed:
+        raise PermissionDenied()
+
     query = request.GET.get('query', '')
     try:
         page = int(request.GET.get('page', '1'))

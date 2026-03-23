@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-26 09:10+0000\n"
+"POT-Creation-Date: 2026-03-17 14:06+0000\n"
 "PO-Revision-Date: 2026-02-09 21:00+0000\n"
 "Last-Translator: roi belotsercovsky <rbelotsercovsky@gmail.com>\n"
 "Language-Team: Hebrew <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -60,8 +60,8 @@ msgid "PayPal Pay Later"
 msgstr "PayPal Pay Later"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
-msgid "iDEAL"
-msgstr "iDEAL"
+msgid "iDEAL | Wero"
+msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
@@ -356,7 +356,7 @@ msgstr "לא"
 msgid "close"
 msgstr "סגור"
 
-#: pretix/static/pretixbase/js/addressform.js:101
+#: pretix/static/pretixbase/js/addressform.js:108
 #: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "required"
 msgstr "נדרש"
@@ -654,40 +654,40 @@ msgid ""
 "will be impacted."
 msgstr "לצבע שלך יש ניגודיות חלשה מדי ביחד לצבע לבן. נגישות האתר תיפגע."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:443
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:445
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "Search query"
 msgstr "שאילתת חיפוש"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:461
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "All"
 msgstr "הכל"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:462
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "None"
 msgstr "כלום"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:468
 msgid "Selected only"
 msgstr "שנבחרו בלבד"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:839
+#: pretix/static/pretixcontrol/js/ui/main.js:841
 msgid "Enter page number between 1 and %(max)s."
 msgstr "הכנס מספר דף בין 1 ל %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Invalid page number."
 msgstr "מספר דף לא תקין."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1000
+#: pretix/static/pretixcontrol/js/ui/main.js:1002
 msgid "Use a different name internally"
 msgstr "השתמש בשם אחר לצורך פנימי"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1040
+#: pretix/static/pretixcontrol/js/ui/main.js:1042
 msgid "Click to close"
 msgstr "לחץ לסגירה"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1121
+#: pretix/static/pretixcontrol/js/ui/main.js:1123
 msgid "You have unsaved changes!"
 msgstr "יש לך שינויים שלא נשמרו!"
 
@@ -1191,3 +1191,6 @@ msgstr "נובמבר"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "דצמבר"
+
+#~ msgid "iDEAL"
+#~ msgstr "iDEAL"

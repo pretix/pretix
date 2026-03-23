@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load getitem %}
 {% block inner %}
     {% if team %}
         <h1>{% trans "Team:" %} {{ team.name }}</h1>
@@ -22,25 +23,24 @@
         </fieldset>
         <fieldset>
             <legend>{% trans "Organizer permissions" %}</legend>
-            {% bootstrap_field form.can_create_events layout="control" %}
-            {% bootstrap_field form.can_manage_gift_cards layout="control" %}
-            {% bootstrap_field form.can_manage_customers layout="control" %}
-            {% bootstrap_field form.can_manage_reusable_media layout="control" %}
-            {% bootstrap_field form.can_change_teams layout="control" %}
-            {% bootstrap_field form.can_change_organizer_settings layout="control" %}
+            {% bootstrap_field form.all_organizer_permissions layout="control" %}
+            <div class="team-permission-groups col-md-9 col-md-offset-3" data-display-dependency="#id_all_organizer_permissions" data-inverse>
+                {% for f in form.organizer_field_names %}
+                    {% bootstrap_field form|getitem:f layout="control" %}
+                {% endfor %}
+            </div>
         </fieldset>
         <fieldset>
             <legend>{% trans "Event permissions" %}</legend>
 
             {% bootstrap_field form.all_events layout="control" %}
             {% bootstrap_field form.limit_events layout="control" %}
-            {% bootstrap_field form.can_change_event_settings layout="control" %}
-            {% bootstrap_field form.can_change_items layout="control" %}
-            {% bootstrap_field form.can_view_orders layout="control" %}
-            {% bootstrap_field form.can_change_orders layout="control" %}
-            {% bootstrap_field form.can_checkin_orders layout="control" %}
-            {% bootstrap_field form.can_view_vouchers layout="control" %}
-            {% bootstrap_field form.can_change_vouchers layout="control" %}
+            {% bootstrap_field form.all_event_permissions layout="control" %}
+            <div class="team-permission-groups col-md-9 col-md-offset-3" data-display-dependency="#id_all_event_permissions" data-inverse>
+                {% for f in form.event_field_names %}
+                    {% bootstrap_field form|getitem:f layout="control" %}
+                {% endfor %}
+            </div>
         </fieldset>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">

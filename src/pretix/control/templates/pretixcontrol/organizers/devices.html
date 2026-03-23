@@ -51,10 +51,12 @@
                 </div>
             </form>
         </div>
-        <p>
-            <a href="{% url "control:organizer.device.add" organizer=request.organizer.slug %}"
-               class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
-        </p>
+        {% if "organizer.devices:write" in request.orgapermset %}
+            <p>
+                <a href="{% url "control:organizer.device.add" organizer=request.organizer.slug %}"
+                   class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
+            </p>
+        {% endif %}
         <form action="{% url "control:organizer.device.bulk_edit" organizer=request.organizer.slug %}" method="post">
             {% csrf_token %}
             {% for field in filter_form %}
@@ -64,10 +66,12 @@
                 <table class="table table-condensed table-hover table-quotas">
                     <thead>
                     <tr>
-                        <th>
-                            <label aria-label="{% trans "select all rows for batch-operation" %}"
-                                   class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
-                        </th>
+                        {% if "organizer.devices:write" in request.orgapermset %}
+                            <th>
+                                <label aria-label="{% trans "select all rows for batch-operation" %}"
+                                       class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                            </th>
+                        {% endif %}
                         <th>{% trans "Device ID" %}
                             <a href="?{% url_replace request 'ordering' '-device_id' %}"><i
                                     class="fa fa-caret-down"></i></a>
@@ -105,12 +109,14 @@
                     <tbody>
                     {% for d in devices %}
                         <tr {% if d.revoked %}class="text-muted"{% endif %}>
-                            <td>
-                                <label aria-label="{% trans "select row for batch-operation" %}"
-                                       class="batch-select-label"><input type="checkbox" name="device"
-                                                                         class="batch-select-checkbox"
-                                                                         value="{{ d.pk }}"/></label>
-                            </td>
+                            {% if "organizer.devices:write" in request.orgapermset %}
+                                <td>
+                                    <label aria-label="{% trans "select row for batch-operation" %}"
+                                           class="batch-select-label"><input type="checkbox" name="device"
+                                                                             class="batch-select-checkbox"
+                                                                             value="{{ d.pk }}"/></label>
+                                </td>
+                            {% endif %}
                             <td>
                                 {{ d.device_id }}
                             </td>
@@ -158,15 +164,17 @@
                                 {% endif %}
                             </td>
                             <td class="text-right flip">
-                                {% if not d.initialized %}
-                                    <a href="{% url "control:organizer.device.connect" organizer=request.organizer.slug device=d.id %}"
-                                       class="btn btn-primary btn-sm"><i class="fa fa-link"></i>
-                                        {% trans "Connect" %}</a>
-                                {% endif %}
-                                {% if not d.initialized or d.api_token %}
-                                    <a href="{% url "control:organizer.device.revoke" organizer=request.organizer.slug device=d.id %}"
-                                       class="btn btn-default btn-sm">
-                                        {% trans "Revoke access" %}</a>
+                                {% if "organizer.devices:write" in request.orgapermset %}
+                                    {% if not d.initialized %}
+                                        <a href="{% url "control:organizer.device.connect" organizer=request.organizer.slug device=d.id %}"
+                                           class="btn btn-primary btn-sm"><i class="fa fa-link"></i>
+                                            {% trans "Connect" %}</a>
+                                    {% endif %}
+                                    {% if not d.initialized or d.api_token %}
+                                        <a href="{% url "control:organizer.device.revoke" organizer=request.organizer.slug device=d.id %}"
+                                           class="btn btn-default btn-sm">
+                                            {% trans "Revoke access" %}</a>
+                                    {% endif %}
                                 {% endif %}
                                 {% if d.initialized %}
                                     <a href="{% url "control:organizer.device.logs" organizer=request.organizer.slug device=d.id %}"
@@ -175,19 +183,23 @@
                                         {% trans "Logs" %}
                                     </a>
                                 {% endif %}
-                                <a href="{% url "control:organizer.device.edit" organizer=request.organizer.slug device=d.id %}"
-                                   class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                {% if "organizer.devices:write" in request.orgapermset %}
+                                    <a href="{% url "control:organizer.device.edit" organizer=request.organizer.slug device=d.id %}"
+                                       class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <div class="batch-select-actions">
-                <button type="submit" class="btn btn-primary btn-save" name="action" value="edit">
-                    <i class="fa fa-edit"></i>{% trans "Edit selected" %}
-                </button>
-            </div>
+            {% if "organizer.devices:write" in request.orgapermset %}
+                <div class="batch-select-actions">
+                    <button type="submit" class="btn btn-primary btn-save" name="action" value="edit">
+                        <i class="fa fa-edit"></i>{% trans "Edit selected" %}
+                    </button>
+                </div>
+            {% endif %}
         </form>
         {% include "pretixcontrol/pagination.html" %}
     {% endif %}

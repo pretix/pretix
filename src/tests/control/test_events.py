@@ -76,13 +76,16 @@ class EventsTest(SoupTest):
             date_from=datetime.datetime(2014, 9, 5, tzinfo=datetime.timezone.utc),
         )
 
-        self.team1 = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
-                                         can_change_items=True)
+        self.team1 = Team.objects.create(
+            organizer=self.orga1,
+            name="T1",
+            all_event_permissions=True,
+            limit_organizer_permissions={"organizer.events:create": True}
+        )
         self.team1.members.add(self.user)
         self.team1.limit_events.add(self.event1)
 
-        self.team2 = Team.objects.create(organizer=self.orga1, can_change_event_settings=True, can_change_items=True,
-                                         can_change_orders=True, can_change_vouchers=True)
+        self.team2 = Team.objects.create(organizer=self.orga1, name="T2", all_event_permissions=True)
         self.team2.members.add(self.user)
 
         self.client.login(email='dummy@dummy.dummy', password='dummy')
@@ -339,7 +342,7 @@ class EventsTest(SoupTest):
         self.orga1.refresh_from_db()
         assert "tests.testdummyhybrid" not in self.orga1.plugins
 
-        t2 = Team.objects.create(organizer=self.orga1, can_change_organizer_settings=True)
+        t2 = Team.objects.create(organizer=self.orga1, all_organizer_permissions=True, all_event_permissions=True)
         t2.members.add(self.user)
 
         self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
@@ -1262,6 +1265,265 @@ class EventsTest(SoupTest):
         })
         assert doc.select(".has-error")
 
+    def test_create_event_copy_from_other_org_validates_source_permissions(self):
+        # To prevent leaks of e.g. settings contents, a user may only copy from one organizer to the other
+        # if they have basically all permissions on the old event for all data that may be copied.
+        self.team1.all_event_permissions = False
+        self.team1.limit_event_permissions = {"event.settings.general:write": True, "event.orders:read": True}
+        self.team1.save()
+        team3 = Team.objects.create(organizer=self.orga2, all_event_permissions=True, all_organizer_permissions=True)
+        team3.members.add(self.user)
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
+            'foundation-organizer': self.orga2.pk,
+            'foundation-locales': ('en', 'de')
+        })
+        assert doc.select("#id_basics-name_0")
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
+            'basics-name_0': '33C3',
+            'basics-name_1': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-location_1': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-tax_rate': '19.00',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
+        })
+        assert doc.select("#id_copy-copy_from_event")
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'copy',
+            'event_wizard-prefix': 'event_wizard',
+            'copy-copy_from_event': self.event1.pk
+        })
+        assert doc.select(".alert-danger")
+        assert "sufficient level of access" in doc.select(".has-error")[0].text
+
+    def test_create_event_clone_from_other_org_validates_source_permissions(self):
+        # To prevent leaks of e.g. settings contents, a user may only copy from one organizer to the other
+        # if they have basically all permissions on the old event for all data that may be copied.
+        self.team1.all_event_permissions = False
+        self.team1.limit_event_permissions = {"event.settings.general:write": True, "event.orders:read": True}
+        self.team1.save()
+        team3 = Team.objects.create(organizer=self.orga2, all_event_permissions=True, all_organizer_permissions=True)
+        team3.members.add(self.user)
+
+        doc = self.post_doc(f'/control/events/add?clone={self.event1.pk}', {
+            'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
+            'foundation-organizer': self.orga2.pk,
+            'foundation-locales': ('en', 'de')
+        })
+        assert doc.select(".alert-danger")
+        assert "sufficient level of access" in doc.select(".has-error")[0].text
+
+    def test_create_event_copy_from_same_org_creates_new_team_with_same_permissions(self):
+        # To prevent unwanted permission escalations, when a user copies an event and a new team is created to make
+        # sure they can access the new event, the new event must be created with the same level of access they have
+        # on the old event.
+        self.team1.all_event_permissions = False
+        self.team1.limit_event_permissions = {"event.settings.general:write": True, "event.orders:read": True}
+        self.team1.save()
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': ('en', 'de')
+        })
+        assert doc.select("#id_basics-name_0")
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
+            'basics-name_0': '33C3',
+            'basics-name_1': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-location_1': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-tax_rate': '19.00',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
+        })
+        assert doc.select("#id_copy-copy_from_event")
+
+        self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'copy',
+            'event_wizard-prefix': 'event_wizard',
+            'copy-copy_from_event': self.event1.pk
+        })
+        with scopes_disabled():
+            ev = Event.objects.get(slug='33c3')
+            new_team = Team.objects.get(limit_events=ev, members=self.user)
+            assert new_team.pk > self.team2.pk
+            assert new_team.all_event_permissions is False
+            assert new_team.all_organizer_permissions is False
+            assert new_team.limit_event_permissions == {"event.settings.general:write": True, "event.orders:read": True}
+            assert new_team.limit_organizer_permissions == {}
+            assert new_team.all_events is False
+            assert new_team.limit_events.get() == ev
+
+    def test_create_event_clone_from_same_org_creates_new_team_with_same_permissions(self):
+        # To prevent unwanted permission escalations, when a user copies an event and a new team is created to make
+        # sure they can access the new event, the new event must be created with the same level of access they have
+        # on the old event.
+        self.team1.all_event_permissions = False
+        self.team1.limit_event_permissions = {"event.settings.general:write": True, "event.orders:read": True}
+        self.team1.save()
+
+        doc = self.post_doc(f'/control/events/add?clone={self.event1.pk}', {
+            'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': ('en', 'de')
+        })
+        assert doc.select("#id_basics-name_0")
+
+        self.post_doc(f'/control/events/add?clone={self.event1.pk}', {
+            'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
+            'basics-name_0': '33C3',
+            'basics-name_1': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-location_1': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-tax_rate': '19.00',
+            'basics-locale': 'en',
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
+        })
+        with scopes_disabled():
+            ev = Event.objects.get(slug='33c3')
+            new_team = Team.objects.get(limit_events=ev, members=self.user)
+            assert new_team.pk > self.team2.pk
+            assert new_team.all_event_permissions is False
+            assert new_team.all_organizer_permissions is False
+            assert new_team.limit_event_permissions == {"event.settings.general:write": True, "event.orders:read": True}
+            assert new_team.limit_organizer_permissions == {}
+            assert new_team.all_events is False
+            assert new_team.limit_events.get() == ev
+
+    def test_create_event_copy_from_same_org_validates_selected_team_permissions(self):
+        # To prevent unwanted permission escalations, when a user copies an event and selects the team the new event
+        # should be attached to, this new team may not have higher permissions than the permissions the user holds for
+        # the event that is copied from.
+        self.team1.all_event_permissions = False
+        self.team1.limit_event_permissions = {"event.settings.general:write": True, "event.orders:read": True}
+        self.team1.save()
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': ('en', 'de')
+        })
+        assert doc.select("#id_basics-name_0")
+        assert doc.select("#id_basics-team")
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
+            'basics-name_0': '33C3',
+            'basics-name_1': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-location_1': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-tax_rate': '19.00',
+            'basics-locale': 'en',
+            'basics-team': self.team2.pk,
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
+        })
+        assert doc.select("#id_copy-copy_from_event")
+
+        doc = self.post_doc('/control/events/add', {
+            'event_wizard-current_step': 'copy',
+            'event_wizard-prefix': 'event_wizard',
+            'copy-copy_from_event': self.event1.pk
+        })
+        assert doc.select(".alert-danger")
+        assert "less access than" in doc.select(".has-error")[0].text
+
+    def test_create_event_clone_from_same_org_validates_selected_team_permissions(self):
+        # To prevent unwanted permission escalations, when a user copies an event and selects the team the new event
+        # should be attached to, this new team may not have higher permissions than the permissions the user holds for
+        # the event that is copied from.
+        self.team1.all_event_permissions = False
+        self.team1.limit_event_permissions = {"event.settings.general:write": True, "event.orders:read": True}
+        self.team1.save()
+
+        doc = self.post_doc(f'/control/events/add?clone={self.event1.pk}', {
+            'event_wizard-current_step': 'foundation',
+            'event_wizard-prefix': 'event_wizard',
+            'foundation-organizer': self.orga1.pk,
+            'foundation-locales': ('en', 'de')
+        })
+        assert doc.select("#id_basics-name_0")
+        assert doc.select("#id_basics-team")
+
+        doc = self.post_doc(f'/control/events/add?clone={self.event1.pk}', {
+            'event_wizard-current_step': 'basics',
+            'event_wizard-prefix': 'event_wizard',
+            'basics-name_0': '33C3',
+            'basics-name_1': '33C3',
+            'basics-slug': '33c3',
+            'basics-date_from_0': '2016-12-27',
+            'basics-date_from_1': '10:00:00',
+            'basics-date_to_0': '2016-12-30',
+            'basics-date_to_1': '19:00:00',
+            'basics-location_0': 'Hamburg',
+            'basics-location_1': 'Hamburg',
+            'basics-currency': 'EUR',
+            'basics-tax_rate': '19.00',
+            'basics-locale': 'en',
+            'basics-team': self.team2.pk,
+            'basics-timezone': 'Europe/Berlin',
+            'basics-presale_start_0': '2016-11-01',
+            'basics-presale_start_1': '10:00:00',
+            'basics-presale_end_0': '2016-11-30',
+            'basics-presale_end_1': '18:00:00',
+        })
+        assert "would give you more access than" in doc.select(".has-error")[0].text
+
 
 class EventDeletionTest(SoupTest):
     @scopes_disabled()
@@ -1276,8 +1538,7 @@ class EventDeletionTest(SoupTest):
             has_subevents=False
         )
 
-        t = Team.objects.create(organizer=self.orga1, can_create_events=True, can_change_event_settings=True,
-                                can_change_items=True)
+        t = Team.objects.create(organizer=self.orga1, all_organizer_permissions=True, all_event_permissions=True)
         t.members.add(self.user)
         t.limit_events.add(self.event1)
         self.ticket = self.event1.items.create(name='Early-bird ticket',

@@ -512,16 +512,17 @@ def mail_send_task(self, **kwargs) -> bool:
 
         # Attach calendar files
         if outgoing_mail.should_attach_ical and outgoing_mail.order:
-            fname = re.sub('[^a-zA-Z0-9 ]', '-', unidecode(pgettext('attachment_filename', 'Calendar invite')))
-            icals = get_private_icals(
-                outgoing_mail.event,
-                [outgoing_mail.orderposition] if outgoing_mail.orderposition else outgoing_mail.order.positions.all()
-            )
-            for i, cal in enumerate(icals):
-                name = '{}{}.ics'.format(fname, f'-{i + 1}' if i > 0 else '')
-                content = cal.serialize()
-                mimetype = 'text/calendar'
-                email.attach(name, content, mimetype)
+            with language(outgoing_mail.order.locale, outgoing_mail.event.settings.region):
+                fname = re.sub('[^a-zA-Z0-9 ]', '-', unidecode(pgettext('attachment_filename', 'Calendar invite')))
+                icals = get_private_icals(
+                    outgoing_mail.event,
+                    [outgoing_mail.orderposition] if outgoing_mail.orderposition else outgoing_mail.order.positions.all()
+                )
+                for i, cal in enumerate(icals):
+                    name = '{}{}.ics'.format(fname, f'-{i + 1}' if i > 0 else '')
+                    content = cal.serialize()
+                    mimetype = 'text/calendar'
+                    email.attach(name, content, mimetype)
 
         invoices_to_mark_transmitted = []
         for inv in outgoing_mail.should_attach_invoices.all():

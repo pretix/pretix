@@ -15,8 +15,10 @@
                     No customer accounts have been created yet.
                 {% endblocktrans %}
             </p>
-            <a href="{% url "control:organizer.customer.create" organizer=request.organizer.slug %}"
-               class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new customer" %}</a>
+            {% if "organizer.customers:write" in request.orgapermset %}
+                <a href="{% url "control:organizer.customer.create" organizer=request.organizer.slug %}"
+                   class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new customer" %}</a>
+            {% endif %}
         </div>
     {% else %}
         <div class="panel panel-default">
@@ -43,10 +45,12 @@
                 </div>
             </form>
         </div>
-        <p>
-            <a href="{% url "control:organizer.customer.create" organizer=request.organizer.slug %}"
-               class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new customer" %}</a>
-        </p>
+        {% if "organizer.customers:write" in request.orgapermset %}
+            <p>
+                <a href="{% url "control:organizer.customer.create" organizer=request.organizer.slug %}"
+                   class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new customer" %}</a>
+            </p>
+        {% endif %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
                 <thead>

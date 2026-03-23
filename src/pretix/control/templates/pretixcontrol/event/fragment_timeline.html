@@ -19,7 +19,7 @@
                         <span class="{% if e.time < nearly_now %}text-muted{% endif %}">
                             {{ e.entry.description }}
                         </span>
-                        {% if e.entry.edit_url %}
+                        {% if e.entry.edit_url and e.entry.edit_permission in request.eventpermset %}
                             &nbsp;
                             <a href="{{ e.entry.edit_url }}" class="text-muted">
                                 <span class="fa fa-edit"></span>

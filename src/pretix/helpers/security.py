@@ -24,6 +24,7 @@ import logging
 import time
 
 from django.conf import settings
+from django.contrib.auth import login as auth_login
 from django.contrib.gis.geoip2 import GeoIP2
 from django.core.cache import cache
 from django.utils.timezone import now
@@ -174,3 +175,17 @@ def handle_login_source(user, request):
                     user=user,
                     locale=user.locale
                 )
+
+
+def session_login(request, user, keep_logged_in=False):
+    auth_login(request, user)
+    session_reauth(request)
+    request.session["pretix_auth_long_session"] = (
+        settings.PRETIX_LONG_SESSIONS and keep_logged_in
+    )
+
+
+def session_reauth(request):
+    t = int(time.time())
+    request.session['pretix_auth_login_time'] = t
+    request.session['pretix_auth_last_used'] = t

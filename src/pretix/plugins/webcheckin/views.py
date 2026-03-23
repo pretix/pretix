@@ -21,12 +21,13 @@
 #
 from django.views.generic import TemplateView
 
+from pretix.base.permissions import AnyPermissionOf
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.countries import CachedCountries
 
 
 class IndexView(EventPermissionRequiredMixin, TemplateView):
-    permission = ('can_change_orders', 'can_checkin_orders')
+    permission = AnyPermissionOf('event.orders:write', 'event.orders:checkin')
     template_name = 'pretixplugins/webcheckin/index.html'
 
     def get_context_data(self, **kwargs):

@@ -186,18 +186,8 @@ def team2(organizer, event2):
     team2 = Team.objects.create(
         organizer=organizer,
         name="Test-Team 2",
-        can_change_teams=True,
-        can_manage_gift_cards=True,
-        can_change_items=True,
-        can_create_events=True,
-        can_change_event_settings=True,
-        can_change_vouchers=True,
-        can_view_vouchers=True,
-        can_change_orders=True,
-        can_manage_customers=True,
-        can_manage_reusable_media=True,
-        can_change_organizer_settings=True,
-
+        all_event_permissions=True,
+        all_organizer_permissions=True,
     )
     team2.limit_events.add(event2)
     team2.save()
@@ -209,6 +199,11 @@ def team2(organizer, event2):
 def limited_token_client(client, team2):
     team2.can_view_orders = True
     team2.can_view_vouchers = True
+    team2.all_event_permissions = True
+    team2.limit_event_permissions = {
+        "event.vouchers:read": True,
+        "event.orders:read": True,
+    }
     team2.save()
     t = team2.tokens.create(name='Foo')
     client.credentials(HTTP_AUTHORIZATION='Token ' + t.token)

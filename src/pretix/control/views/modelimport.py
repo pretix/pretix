@@ -214,7 +214,7 @@ class BaseProcessView(AsyncAction, FormView):
 
 class OrderImportView(EventPermissionRequiredMixin, BaseImportView):
     template_name = 'pretixcontrol/orders/import_start.html'
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
 
     def get_process_url(self, request, cf, charset):
         return reverse('control:event.orders.import.process', kwargs={
@@ -225,7 +225,7 @@ class OrderImportView(EventPermissionRequiredMixin, BaseImportView):
 
 
 class OrderProcessView(EventPermissionRequiredMixin, BaseProcessView):
-    permission = 'can_change_orders'
+    permission = 'event.orders:write'
     template_name = 'pretixcontrol/orders/import_process.html'
     form_class = OrdersProcessForm
     task = import_orders
@@ -257,7 +257,7 @@ class OrderProcessView(EventPermissionRequiredMixin, BaseProcessView):
 
 class VoucherImportView(EventPermissionRequiredMixin, BaseImportView):
     template_name = 'pretixcontrol/vouchers/import_start.html'
-    permission = 'can_change_vouchers'
+    permission = 'event.vouchers:write'
 
     def get_process_url(self, request, cf, charset):
         return reverse('control:event.vouchers.import.process', kwargs={
@@ -268,7 +268,7 @@ class VoucherImportView(EventPermissionRequiredMixin, BaseImportView):
 
 
 class VoucherProcessView(EventPermissionRequiredMixin, BaseProcessView):
-    permission = 'can_change_vouchers'
+    permission = 'event.vouchers:write'
     template_name = 'pretixcontrol/vouchers/import_process.html'
     form_class = VouchersProcessForm
     task = import_vouchers

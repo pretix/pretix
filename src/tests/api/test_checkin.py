@@ -1382,9 +1382,8 @@ def test_checkin_pdf_data_requires_permission(token_client, event, team, organiz
     ))
     assert resp.data['results'][0].get('pdf_data')
     with scopes_disabled():
-        team.can_view_orders = False
-        team.can_change_orders = False
-        team.can_checkin_orders = True
+        team.limit_event_permissions = {"event.orders:checkin": True}
+        team.all_event_permissions = False
         team.save()
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?search=z3fsn8jyu&pdf_data=true'.format(
         organizer.slug, event.slug, clist_all.pk
