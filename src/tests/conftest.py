@@ -131,3 +131,8 @@ def set_lock_namespaces(request):
             yield
     else:
         yield
+
+
+@pytest.fixture
+def class_monkeypatch(request, monkeypatch):
+    request.cls.monkeypatch = monkeypatch
