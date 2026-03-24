@@ -271,7 +271,7 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
             is_secure = request.scheme == 'https'
             # Set the CSRF cookie even if it's already set, so we renew
             # the expiry timer.
-            if is_secure:# and settings.CSRF_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
+            if is_secure and settings.CSRF_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
                 # response.delete_cookie does not work as we might have set a partitioned cookie
                 delete_cookie_without_samesite(
                     request, response,
