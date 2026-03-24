@@ -590,7 +590,7 @@ class Order(LockModel, LoggedModel):
             not kwargs.get('force_save_with_deferred_fields', None) and
             (not update_fields or ('require_approval' not in update_fields and 'status' not in update_fields))
         ):
-            _fail("It is unsafe to call save() on an OrderFee with deferred fields since we can't check if you missed "
+            _fail("It is unsafe to call save() on an Order with deferred fields since we can't check if you missed "
                   "creating a transaction. Call save(force_save_with_deferred_fields=True) if you really want to do "
                   "this.")
 
@@ -2841,7 +2841,7 @@ class OrderPosition(AbstractPosition):
             if Transaction.key(self) != self.__initial_transaction_key or self.canceled != self.__initial_canceled or not self.pk:
                 _transactions_mark_order_dirty(self.order_id, using=kwargs.get('using', None))
         elif not kwargs.get('force_save_with_deferred_fields', None):
-            _fail("It is unsafe to call save() on an OrderFee with deferred fields since we can't check if you missed "
+            _fail("It is unsafe to call save() on an OrderPosition with deferred fields since we can't check if you missed "
                   "creating a transaction. Call save(force_save_with_deferred_fields=True) if you really want to do "
                   "this.")
 
