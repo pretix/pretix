@@ -33,7 +33,7 @@ from django.conf import settings
 from django.core import mail as djmail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.signing import dumps
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django_countries.fields import Country
@@ -60,12 +60,6 @@ from pretix.testutils.sessions import get_cart_session_key
 from .test_timemachine import TimemachineTestMixin
 
 
-@pytest.fixture
-def class_monkeypatch(request, monkeypatch):
-    request.cls.monkeypatch = monkeypatch
-
-
-@pytest.mark.usefixtures("class_monkeypatch")
 class BaseCheckoutTestCase:
     @scopes_disabled()
     def setUp(self):
@@ -104,7 +98,6 @@ class BaseCheckoutTestCase:
         self.workshopquota.items.add(self.workshop2)
         self.workshopquota.variations.add(self.workshop2a)
         self.workshopquota.variations.add(self.workshop2b)
-        self.monkeypatch.setattr("django.db.transaction.on_commit", lambda t: t())
 
     def _set_session(self, key, value):
         session = self.client.session
@@ -4420,6 +4413,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             assert len(djmail.outbox) == 1
             assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
 
+
+class CheckoutTransactionTestCase(BaseCheckoutTestCase, TransactionTestCase):
     def test_order_confirmation_mail_invoice_sent_somewhere_else(self):
         self.event.settings.invoice_address_asked = True
         self.event.settings.invoice_address_required = True
