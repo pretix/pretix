@@ -1,5 +1,7 @@
 .. spelling:word-list:: Rebase rebasing
 
+.. _`codestyle`:
+
 Coding style and quality
 ========================
 
@@ -27,8 +29,6 @@ Code
 
 Commits and Pull Requests
 -------------------------
-
-
 
 Most commits should start as pull requests, therefore this applies to the titles of pull requests as well since
 the pull request title will become the commit message on merge. We prefer merging with GitHub's "Squash and merge"
