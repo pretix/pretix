@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import time
+from datetime import datetime
 from urllib.parse import urlparse
 
 from django.conf import settings
@@ -252,8 +253,15 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
             # Set the CSRF cookie even if it's already set, so we renew
             # the expiry timer.
             if is_secure and settings.CSRF_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
-                response.delete_cookie(settings.CSRF_COOKIE_NAME)
-                response.delete_cookie(settings.CSRF_COOKIE_NAME, samesite="None")
+                # response.delete_cookie does not work as we might have set a partitioned cookie
+                set_cookie_without_samesite(
+                    request, response,
+                    settings.CSRF_COOKIE_NAME,
+                    expires=datetime.utcfromtimestamp(0).strftime("%a, %d %b %Y %H:%M:%S GMT"),
+                    path=settings.CSRF_COOKIE_PATH,
+                    secure=is_secure,
+                    httponly=settings.CSRF_COOKIE_HTTPONLY
+                )
             set_cookie_without_samesite(
                 request, response,
                 '__Host-' + settings.CSRF_COOKIE_NAME if is_secure else settings.CSRF_COOKIE_NAME,
