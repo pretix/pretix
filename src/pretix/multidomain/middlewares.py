@@ -55,7 +55,9 @@ from django.utils.http import http_date
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Organizer
-from pretix.helpers.cookies import delete_cookie_without_samesite, set_cookie_without_samesite
+from pretix.helpers.cookies import (
+    delete_cookie_without_samesite, set_cookie_without_samesite,
+)
 from pretix.multidomain.models import KnownDomain
 
 LOCAL_HOST_NAMES = ('testserver', 'localhost')
