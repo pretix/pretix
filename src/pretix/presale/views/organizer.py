@@ -576,7 +576,7 @@ def filter_subevents_with_plugins(subevents, sales_channel=None):
     if not app_cache:
         _populate_app_cache()
 
-    for receiver in filter_subevents._live_receivers(None):
+    for receiver in filter_subevents._live_receivers(None)[0]:
         app = get_defining_app(receiver)
         event_state = {}
 
