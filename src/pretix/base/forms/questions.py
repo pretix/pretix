@@ -45,7 +45,6 @@ import pycountry
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.gis.geoip2 import GeoIP2
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.validators import (
@@ -102,6 +101,7 @@ from pretix.helpers.countries import (
 from pretix.helpers.escapejson import escapejson_attr
 from pretix.helpers.http import get_client_ip
 from pretix.helpers.i18n import get_format_without_seconds
+from pretix.helpers.security import get_geoip
 from pretix.presale.signals import question_form_fields
 
 logger = logging.getLogger(__name__)
@@ -393,7 +393,7 @@ class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
 
 def guess_country_from_request(request, event):
     if settings.HAS_GEOIP:
-        g = GeoIP2()
+        g = get_geoip()
         try:
             res = g.country(get_client_ip(request))
             if res['country_code'] and len(res['country_code']) == 2:

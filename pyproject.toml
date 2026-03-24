@@ -3,7 +3,7 @@ name = "pretix"
 dynamic = ["version"]
 description = "Reinventing presales, one ticket at a time"
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = {file = "LICENSE"}
 keywords = ["tickets", "web", "shop", "ecommerce"]
 authors = [
@@ -19,10 +19,11 @@ classifiers = [
   "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
   "Environment :: Web Environment",
   "License :: OSI Approved :: GNU Affero General Public License v3",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
-  "Framework :: Django :: 4.2",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Framework :: Django :: 5.2",
 ]
 
 dependencies = [
@@ -36,7 +37,7 @@ dependencies = [
   "css-inline==0.20.*",
   "defusedcsv>=1.1.0",
   "dnspython==2.*",
-  "Django[argon2]==4.2.*,>=4.2.26",
+  "Django[argon2]==5.2.*",
   "django-bootstrap3==26.1",
   "django-compressor==4.6.0",
   "django-countries==8.2.*",
