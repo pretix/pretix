@@ -29,7 +29,9 @@ import inspect
 import logging
 import os
 import threading
+from pathlib import Path
 
+import django
 from django.conf import settings
 from django.db import transaction
 
@@ -74,10 +76,14 @@ def _transactions_mark_order_dirty(order_id, using=None):
     if "PYTEST_CURRENT_TEST" in os.environ:
         # We don't care about Order.objects.create() calls in test code so let's try to figure out if this is test code
         # or not.
-        for frame in inspect.stack():
-            if 'pretix/base/models/orders' in frame.filename:
+        for frame in inspect.stack()[1:]:
+            if (
+                'pretix/base/models/orders' in frame.filename
+                or Path(frame.filename).is_relative_to(Path(django.__file__).parent)
+            ):
+                # Ignore model- and django-internal code
                 continue
-            elif 'test_' in frame.filename or 'conftest.py in frame.filename':
+            elif 'test_' in frame.filename or 'conftest.py' in frame.filename:
                 return
             elif 'pretix/' in frame.filename or 'pretix_' in frame.filename:
                 # This went through non-test code, let's consider it non-test
