@@ -385,11 +385,6 @@ class RegistrationFormTest(TestCase):
         self.assertEqual(response.status_code, 403)
 
 
-@pytest.fixture
-def class_monkeypatch(request, monkeypatch):
-    request.cls.monkeypatch = monkeypatch
-
-
 @pytest.mark.usefixtures("class_monkeypatch")
 class Login2FAFormTest(TestCase):
 
