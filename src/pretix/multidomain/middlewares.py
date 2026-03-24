@@ -191,7 +191,7 @@ class SessionMiddleware(BaseSessionMiddleware):
                 delete_cookie_without_samesite(
                     request, response,
                     settings.SESSION_COOKIE_NAME,
-                    path=settings.SESSION_COOKIE_NAME,
+                    path=settings.SESSION_COOKIE_PATH,
                     secure=is_secure,
                     httponly=settings.SESSION_COOKIE_HTTPONLY or None
                 )
