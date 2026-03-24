@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import re
+from datetime import datetime
 
 from django.conf import settings
 
@@ -47,6 +48,10 @@ def set_cookie_without_samesite(request, response, key, *args, **kwargs):
         # CHIPS
         response.cookies[key]['Partitioned'] = True
 
+
+def delete_cookie_without_samesite(request, response, key, *args, **kwargs):
+    kwargs['expires'] = datetime.utcfromtimestamp(0).strftime("%a, %d %b %Y %H:%M:%S GMT")
+    set_cookie_without_samesite(request, response, key, *args, **kwargs)
 
 # Based on https://www.chromium.org/updates/same-site/incompatible-clients
 # Copyright 2019 Google LLC.
