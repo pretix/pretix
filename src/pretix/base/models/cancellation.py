@@ -164,16 +164,10 @@ class CancellationRule(models.Model):
     except_after=ModelRelativeDateTimeField(null=True, blank=True)
 
     fee_percentage_per_item=models.DecimalField(
-        max_digits=10,
+        max_digits=5,
         decimal_places=2,
-        validators=[
-            MaxValueValidator(
-                limit_value=Decimal("100.00"),
-            ),
-            MinValueValidator(
-                limit_value=Decimal("0.00"),
-            ),
-        ],
+        max_value=Decimal("100.00"),
+        min_value=Decimal("0.00"),
         verbose_name=_("Fee Percentage per Item"),
         default=Decimal("0.00"),
     )  # wird als sum() kombiniert
@@ -237,7 +231,7 @@ class CancellationRule(models.Model):
         check_id = "SYSTEM_TICKET_NOT_DISCOUNTED"
 
         if order_position in diff.cancellations():
-            if order_position.discount is None:
+            if order_position.discount_id is None:
                 return {check_id: CheckRes(
                     cancellation_possible=True,
                     reason=_("Order position was bought without discount"),
