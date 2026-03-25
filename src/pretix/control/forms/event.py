@@ -34,7 +34,6 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from dataclasses import dataclass
 from decimal import Decimal
 from urllib.parse import urlencode
 from zoneinfo import ZoneInfo
@@ -74,8 +73,8 @@ from pretix.base.settings import (
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
-    MultipleLanguagesWidget, SalesChannelCheckboxSelectMultiple, SlugWidget,
-    SplitDateTimeField, SplitDateTimePickerWidget,
+    FontSelect, MultipleLanguagesWidget, SalesChannelCheckboxSelectMultiple,
+    SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.countries import CachedCountries
@@ -579,12 +578,6 @@ class EventSettingsValidationMixin:
                 del self.cleaned_data[field]
 
 
-@dataclass
-class FontOption:
-    title: str
-    data: str
-
-
 class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, SettingsForm):
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
@@ -736,7 +729,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
             del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
         self.fields['primary_font'].choices = [('Open Sans', 'Open Sans')] + sorted([
-            (a, FontOption(title=a, data=v)) for a, v in get_fonts(self.event, pdf_support_required=False).items()
+            (a, FontSelect.FontOption(title=a, data=v)) for a, v in get_fonts(self.event, pdf_support_required=False).items()
         ], key=lambda a: a[0])
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields
