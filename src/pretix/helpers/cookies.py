@@ -50,7 +50,7 @@ def set_cookie_without_samesite(request, response, key, *args, **kwargs):
 
 
 def delete_cookie_without_samesite(request, response, key, *args, **kwargs):
-    kwargs['expires'] = datetime.utcfromtimestamp(0).strftime("%a, %d %b %Y %H:%M:%S GMT")
+    kwargs['expires'] = datetime.fromtimestamp(0).strftime("%a, %d %b %Y %H:%M:%S GMT")
     set_cookie_without_samesite(request, response, key, *args, **kwargs)
 
 # Based on https://www.chromium.org/updates/same-site/incompatible-clients
