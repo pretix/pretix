@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-23 21:00+0000\n"
+"PO-Revision-Date: 2026-03-25 12:41+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -29878,67 +29878,69 @@ msgstr "De geselecteerde verbinding is verwijderd."
 
 #: pretix/control/views/organizer.py:1745
 msgid "The selected connection has been accepted."
-msgstr ""
+msgstr "De geselecteerde verbinding is geaccepteerd."
 
 #: pretix/control/views/organizer.py:1805
 #: pretix/control/views/organizer.py:1842
 msgid "Gift cards are not allowed to have negative values."
-msgstr ""
+msgstr "Cadeaubonnen kunnen geen negatieve waarde hebben."
 
 #: pretix/control/views/organizer.py:1832
 msgid "The transaction could not be reversed."
-msgstr ""
+msgstr "De transactie kon niet teruggedraaid worden."
 
 #: pretix/control/views/organizer.py:1834
 msgid "The transaction has been reversed."
-msgstr ""
+msgstr "De transactie is teruggedraaid."
 
 #: pretix/control/views/organizer.py:1839
 msgid "Your input was invalid, please try again."
-msgstr ""
+msgstr "Uw invoer was ongeldig, probeer het opnieuw."
 
 #: pretix/control/views/organizer.py:1859
 msgid "The manual transaction has been saved."
-msgstr ""
+msgstr "De handmatige transactie is opgeslagen."
 
 #: pretix/control/views/organizer.py:1901
 msgid "The gift card has been created and can now be used."
-msgstr ""
+msgstr "De cadeaubon is aangemaakt en kan nu gebruikt worden."
 
 #: pretix/control/views/organizer.py:2008
 msgid "All events (that I have access to)"
-msgstr ""
+msgstr "Alle evenementen (waar ik toegang toe heb)"
 
 #: pretix/control/views/organizer.py:2450
 msgid "The selected gate has been deleted."
-msgstr ""
+msgstr "De geselecteerde ingang is verwijderd."
 
 #: pretix/control/views/organizer.py:2493
 msgid "You cannot set a default value that is not a valid value."
 msgstr ""
+"U kunt geen standaardwaarde instellen die niet in de lijst met toegestane "
+"waarden staat."
 
 #: pretix/control/views/organizer.py:2520
 msgid "The property has been created."
-msgstr ""
+msgstr "De eigenschap is aangemaakt."
 
 #: pretix/control/views/organizer.py:2587
 msgid "The selected property has been deleted."
-msgstr ""
+msgstr "De geselecteerde eigenschap is verwijderd."
 
 #: pretix/control/views/organizer.py:2611
 msgid "The order of properties has been updated."
-msgstr ""
+msgstr "De volgorde van eigenschappen is bijgewerkt."
 
 #: pretix/control/views/organizer.py:2790
 #: pretix/control/views/organizer.py:2906
 #: pretix/control/views/organizer.py:3036
 #: pretix/control/views/organizer.py:3305
 msgid "The selected object has been deleted."
-msgstr ""
+msgstr "Het geselecteerde object is verwijderd."
 
 #: pretix/control/views/organizer.py:2825
 msgid "The provider has been created."
-msgstr ""
+msgstr "De provider is aangemaakt."
 
 #: pretix/control/views/organizer.py:2945
 #, python-brace-format
@@ -29946,6 +29948,8 @@ msgid ""
 "The SSO client has been created. Please note down the following client "
 "secret, it will never be shown again: {secret}"
 msgstr ""
+"De SSO-client is aangemaakt. Noteer de volgende geheime sleutel. Hij wordt "
+"nooit meer weergegeven: {secret}"
 
 #: pretix/control/views/organizer.py:2995
 #, python-brace-format
@@ -29953,30 +29957,36 @@ msgid ""
 "Your changes have been saved. Please note down the following client secret, "
 "it will never be shown again: {secret}"
 msgstr ""
+"Uw wijzigingen zijn opgeslagen. Sla de geheime sleutel veilig op, want hij "
+"zal hierna nooit meer getoond worden: {secret}"
 
 #: pretix/control/views/organizer.py:3105
 msgid ""
 "We've sent the customer an email with further instructions on resetting your "
 "password."
 msgstr ""
+"We hebben de klant een e-mail gestuurd met verdere instructies om het "
+"wachtwoord te resetten."
 
 #: pretix/control/views/organizer.py:3370
 msgid "The customer account has been anonymized."
-msgstr ""
+msgstr "Het klantenaccount is geanonimiseerd."
 
 #: pretix/control/views/organizer.py:3640
 msgid "This channel can not be deleted."
-msgstr ""
+msgstr "Dit kanaal kan niet verwijderd worden."
 
 #: pretix/control/views/organizer.py:3645
 msgid "The selected sales channel has been deleted."
-msgstr ""
+msgstr "Het geselecteerde verkoopskanaal is verwijderd."
 
 #: pretix/control/views/organizer.py:3647
 msgid ""
 "The channel could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it."
 msgstr ""
+"Het kanaal kon niet verwijderd worden, omdat sommige beperkingen (bijv. data "
+"aangemaakt door plug-ins) het niet toestaan."
 
 #: pretix/control/views/organizer.py:3672
 msgid "The order of sales channels has been updated."
