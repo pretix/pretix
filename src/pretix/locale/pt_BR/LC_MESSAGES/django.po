@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-11 07:08+0000\n"
-"Last-Translator: Pedro Orlando <scramblerdoodle@gmail.com>\n"
+"PO-Revision-Date: 2026-03-25 08:00+0000\n"
+"Last-Translator: Renne Rocha <renne@rocha.dev.br>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -405,10 +405,8 @@ msgstr ""
 
 #: pretix/api/serializers/organizer.py:482
 #: pretix/control/views/organizer.py:1039
-#, fuzzy
-#| msgid "Account information"
 msgid "Account invitation"
-msgstr "Informações da conta"
+msgstr "Convite de conta"
 
 #: pretix/api/serializers/organizer.py:503
 #: pretix/control/views/organizer.py:1138
@@ -6840,10 +6838,8 @@ msgstr ""
 "alguns minutos para entrar em vigor para todos os usuários."
 
 #: pretix/base/models/organizer.py:378
-#, fuzzy
-#| msgid "Event permissions"
 msgid "All event permissions"
-msgstr "Permissões de Evento"
+msgstr "Todas as permissões de evento"
 
 #: pretix/base/models/organizer.py:379
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:34
@@ -6851,10 +6847,8 @@ msgid "Event permissions"
 msgstr "Permissões de Evento"
 
 #: pretix/base/models/organizer.py:380
-#, fuzzy
-#| msgid "Organizer permissions"
 msgid "All organizer permissions"
-msgstr "Permissões de Organizador"
+msgstr "Todas as permissões de organizador"
 
 #: pretix/base/models/organizer.py:381
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:25
@@ -8352,22 +8346,18 @@ msgstr "Seu arquivo de layout não é um layout válido. Mensagem de erro: {}"
 #: pretix/base/permissions.py:314 pretix/base/permissions.py:331
 msgctxt "permission_level"
 msgid "View"
-msgstr ""
+msgstr "Visualizar"
 
 #: pretix/base/permissions.py:164 pretix/base/permissions.py:169
 #: pretix/base/permissions.py:174 pretix/base/permissions.py:179
 #: pretix/base/permissions.py:286 pretix/base/permissions.py:315
-#, fuzzy
-#| msgid "Save and check"
 msgctxt "permission_level"
 msgid "View and change"
-msgstr "Salvar e checar"
+msgstr "Visualizar e alterar"
 
 #: pretix/base/permissions.py:168
-#, fuzzy
-#| msgid "API tokens"
 msgid "API only"
-msgstr "Tokens de API"
+msgstr "Apenas API"
 
 #: pretix/base/permissions.py:173
 msgid ""
@@ -8377,11 +8367,9 @@ msgstr ""
 #: pretix/base/permissions.py:177 pretix/base/permissions.py:231
 #: pretix/base/permissions.py:285 pretix/base/permissions.py:313
 #: pretix/base/permissions.py:330
-#, fuzzy
-#| msgid "Revoke access"
 msgctxt "permission_level"
 msgid "No access"
-msgstr "Revogar acesso"
+msgstr "Sem acesso"
 
 #: pretix/base/permissions.py:188
 #: pretix/control/templates/pretixcontrol/event/settings.html:7
@@ -8408,10 +8396,8 @@ msgid "Tax settings"
 msgstr "Configurações de impostos"
 
 #: pretix/base/permissions.py:209
-#, fuzzy
-#| msgid "Invoice settings"
 msgid "Invoicing settings"
-msgstr "Configurações de fatura"
+msgstr "Configurações de faturamento"
 
 #: pretix/base/permissions.py:215
 #, fuzzy
@@ -8421,52 +8407,40 @@ msgid "Event series dates"
 msgstr "Data da série de eventos adicionada"
 
 #: pretix/base/permissions.py:221
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Products, quotas and questions"
-msgstr "Nome do produto e variação"
+msgstr "Produtos, cotas e perguntas"
 
 #: pretix/base/permissions.py:224
 msgid "Also includes related objects like categories or discounts."
 msgstr ""
 
 #: pretix/base/permissions.py:232
-#, fuzzy
-#| msgid "All check-ins"
 msgctxt "permission_level"
 msgid "Only check-in"
-msgstr "Todos os check-ins"
+msgstr "Apenas check-in"
 
 #: pretix/base/permissions.py:233
-#, fuzzy
-#| msgid "View full log"
 msgctxt "permission_level"
 msgid "View all"
-msgstr "Ver log completo"
+msgstr "Visualizar tudo"
 
 #: pretix/base/permissions.py:234
-#, fuzzy
-#| msgid "Valid check-in"
 msgctxt "permission_level"
 msgid "View all and check-in"
-msgstr "Check-in válido"
+msgstr "Visualizar tudo e check-in"
 
 #: pretix/base/permissions.py:235
-#, fuzzy
-#| msgid "View all upcoming events"
 msgctxt "permission_level"
 msgid "View all and change"
-msgstr "Ver todos eventos futuros"
+msgstr "Visualizar tudo e alterar"
 
 #: pretix/base/permissions.py:236
 msgid "Includes the ability to cancel and refund individual orders."
-msgstr ""
+msgstr "Incluir a habilidade de cancelar e reembolsar pedidos individuais."
 
 #: pretix/base/permissions.py:238
-#, fuzzy
-#| msgid "An entry has been added to the waiting list."
 msgid "Also includes related objects like the waiting list."
-msgstr "Uma entrada foi adicionada à lista de espera."
+msgstr "Também inclui objetos relacionados como a lista de espera."
 
 #: pretix/base/permissions.py:248
 #, fuzzy
@@ -8475,18 +8449,14 @@ msgid "Full event or date cancellation"
 msgstr "Gerar cancelamento"
 
 #: pretix/base/permissions.py:252
-#, fuzzy
-#| msgid "Sale not allowed"
 msgctxt "permission_level"
 msgid "Not allowed"
-msgstr "Venda não permitida"
+msgstr "Não permitida"
 
 #: pretix/base/permissions.py:253
-#, fuzzy
-#| msgid "Allowed titles"
 msgctxt "permission_level"
 msgid "Allowed"
-msgstr "Títulos permitidos"
+msgstr "Permitida"
 
 #: pretix/base/permissions.py:268
 msgctxt "permission_level"
@@ -23995,7 +23965,7 @@ msgstr "Reembolso por pagamento em excesso"
 #: pretix/control/templates/pretixcontrol/order/index.html:118
 #, python-format
 msgid "This order is currently overpaid by %(amount)s."
-msgstr "O pedidos está pago em excesso por %(amount)s."
+msgstr "Este pedido está pago em excesso por %(amount)s."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:122
 #, python-format
@@ -33294,7 +33264,7 @@ msgstr "iDEAL via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1572
 msgid "iDEAL | Wero"
-msgstr ""
+msgstr "iDEAL | Wero"
 
 #: pretix/plugins/stripe/payment.py:1575
 msgid ""
