@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-25 14:14+0000\n"
+"PO-Revision-Date: 2026-03-26 06:00+0000\n"
 "Last-Translator: Pietro Isotti <isottipietro@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -412,9 +412,8 @@ msgstr ""
 
 #: pretix/api/serializers/organizer.py:482
 #: pretix/control/views/organizer.py:1039
-#, fuzzy
 msgid "Account invitation"
-msgstr "Informazioni account modificate"
+msgstr "Invito account"
 
 #: pretix/api/serializers/organizer.py:503
 #: pretix/control/views/organizer.py:1138
@@ -656,22 +655,16 @@ msgid "Customer account anonymized"
 msgstr "Account del cliente anonimizzato"
 
 #: pretix/api/webhooks.py:470
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card added"
-msgstr "Codice carta regalo"
+msgstr "Carta regalo aggiunta"
 
 #: pretix/api/webhooks.py:474
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "Codice carta regalo"
+msgstr "Carta regalo modificata"
 
 #: pretix/api/webhooks.py:478
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card used in transaction"
-msgstr "Transazioni con carta regalo"
+msgstr "Carta regalo usata nella transazione"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1054
@@ -1237,7 +1230,7 @@ msgstr "Caricamento dei file di risposta alle domande"
 #: pretix/plugins/reports/exporters.py:666
 msgctxt "export_category"
 msgid "Order data"
-msgstr "Dati dell'ordine"
+msgstr "Data dell'ordine"
 
 #: pretix/base/exporters/answers.py:56
 msgid ""
@@ -2590,16 +2583,12 @@ msgid "Voucher"
 msgstr "Voucher"
 
 #: pretix/base/exporters/orderlist.py:655
-#, fuzzy
-#| msgid "Voucher deleted"
 msgid "Voucher budget usage"
-msgstr "Buono eliminato"
+msgstr "Utilizzo budget del buono"
 
 #: pretix/base/exporters/orderlist.py:656
-#, fuzzy
-#| msgid "Voucher"
 msgid "Voucher tag"
-msgstr "Voucher"
+msgstr "Voucher tag"
 
 #: pretix/base/exporters/orderlist.py:657
 msgid "Pseudonymization ID"
@@ -3418,39 +3407,34 @@ msgid "Street and Number"
 msgstr "Indirizzo e numero civico"
 
 #: pretix/base/forms/questions.py:893
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date between {min} and {max}."
-msgstr "Per favore inserisci un nome più breve."
+msgstr "Per favore inserisci una data inclusa tra {min} e {max}."
 
 #: pretix/base/forms/questions.py:899
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date no earlier than {min}."
-msgstr "Inserire un canale di vendita valido."
+msgstr "Per favore inserisci una data successiva a {min}."
 
 #: pretix/base/forms/questions.py:904
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date no later than {max}."
-msgstr "Per favore inserisci un nome più breve."
+msgstr "Per favore inserisci una data precedente a {max}."
 
 #: pretix/base/forms/questions.py:942
 #, python-brace-format
 msgid "Please enter a date and time between {min} and {max}."
-msgstr ""
+msgstr "Per favore inserisci data e orario compresi tra {min} e {max}."
 
 #: pretix/base/forms/questions.py:948
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date and time no earlier than {min}."
-msgstr "Inserire un canale di vendita valido."
+msgstr "Per favore inserisci data e orario successivi a {min}."
 
 #: pretix/base/forms/questions.py:953
-#, fuzzy, python-brace-format
-#| msgid "Please enter the correct result."
+#, python-brace-format
 msgid "Please enter a date and time no later than {max}."
-msgstr "Per favore inserisci il risultato corretto."
+msgstr "Per favore inserisci data e orario precedenti a {max}."
 
 #: pretix/base/forms/questions.py:1172
 msgid ""
@@ -5339,7 +5323,6 @@ msgstr "trasmesso"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:44
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:145
 #: pretix/plugins/sendmail/models.py:51
-#, fuzzy
 msgid "failed"
 msgstr "fallito"
 
@@ -6449,13 +6432,13 @@ msgstr "Fine"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:38
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:139
 msgid "queued"
-msgstr ""
+msgstr "in coda"
 
 #: pretix/base/models/mail.py:53
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:40
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:141
 msgid "being sent"
-msgstr ""
+msgstr "invio in corso"
 
 #: pretix/base/models/mail.py:54
 #, fuzzy
@@ -6467,25 +6450,25 @@ msgstr "Voce in lista d'attesa"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:48
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:149
 msgid "withheld"
-msgstr ""
+msgstr "trattenuto"
 
 #: pretix/base/models/mail.py:57
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:50
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:151
 msgid "aborted"
-msgstr ""
+msgstr "annullato"
 
 #: pretix/base/models/mail.py:58
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:52
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:153
 msgid "sent"
-msgstr ""
+msgstr "inviato"
 
 #: pretix/base/models/mail.py:59
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:46
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:147
 msgid "bounced"
-msgstr ""
+msgstr "rimbalzato"
 
 #: pretix/base/models/memberships.py:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:28
@@ -6689,7 +6672,7 @@ msgstr "confermato"
 #: pretix/base/models/orders.py:1734
 msgctxt "payment_state"
 msgid "canceled"
-msgstr "annullato"
+msgstr "cancellato"
 
 #: pretix/base/models/orders.py:1735
 msgctxt "payment_state"
@@ -8519,7 +8502,7 @@ msgstr "Filtra per stato"
 #: pretix/base/permissions.py:233
 msgctxt "permission_level"
 msgid "View all"
-msgstr ""
+msgstr "Vedi tutto"
 
 #: pretix/base/permissions.py:234
 #, fuzzy
@@ -8530,11 +8513,11 @@ msgstr "Filtra per stato"
 #: pretix/base/permissions.py:235
 msgctxt "permission_level"
 msgid "View all and change"
-msgstr ""
+msgstr "Vedi e modifica tutto"
 
 #: pretix/base/permissions.py:236
 msgid "Includes the ability to cancel and refund individual orders."
-msgstr ""
+msgstr "Include il permesso di cancellare e rimborsare ordini individuali."
 
 #: pretix/base/permissions.py:238
 msgid "Also includes related objects like the waiting list."
@@ -8625,7 +8608,7 @@ msgstr "Piano dei posti a sedere"
 #: pretix/base/permissions.py:327 pretix/control/navigation.py:712
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:8
 msgid "Outgoing emails"
-msgstr ""
+msgstr "Email in uscita"
 
 #: pretix/base/plugins.py:138
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
