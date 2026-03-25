@@ -689,8 +689,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context = {}
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
         if context['list_type'] not in ("calendar", "week") and filter_qs.count() > 50:
-            if self.request.event.settings.event_list_type not in ("calendar", "week"):
-                self.request.event.settings.event_list_type = "calendar"
             context['list_type'] = "calendar"
 
         if context['list_type'] == "calendar":
