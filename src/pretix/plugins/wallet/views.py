@@ -34,7 +34,6 @@ class LayoutListView(EventPermissionRequiredMixin, ListView):
 
 class LayoutEditForm(forms.ModelForm):
     style = forms.TypedChoiceField()
-    layout = forms.JSONField(initial={})
 
     def __init__(self, **kwargs):
         self.platform = kwargs.pop('platform')
@@ -70,67 +69,13 @@ class LayoutEditForm(forms.ModelForm):
             )
             layout.validate()
         return self.cleaned_data
-    
-class LayoutCreateView(EventPermissionRequiredMixin, FormView):
-    template_name = "pretixplugins/wallet/edit.html"
-    form_class = LayoutEditForm
-    model = WalletLayout
-    permission = "can_change_event_settings" # TODO: new permission name
-
-    @property
-    def platform(self):
-        return self.kwargs["platform"]
-
-    def get_form_kwargs(self) -> dict[str, Any]:
-        kwargs = super().get_form_kwargs()
-        kwargs["platform"] = self.platform
-        return kwargs
-
-    def get_platform_styles(self):
-        if self.platform not in get_platforms():
-            raise Http404(
-                _("Unknown platform '{platform}'").format(platform=self.platform)
-            )
-        return get_platform_styles(self.platform)
-
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["styles"] = {
-            id: style.asdict() for id, style in self.get_platform_styles().items()
-        }
-        context["variables"] = {
-            "text": {
-                varname: {"label": var["label"], "editor_sample": var["editor_sample"]}
-                for varname, var in get_variables(self.request.event).items()
-            }
-        }
-        return context
-
-    def form_valid(self, form):
-        self.object = WalletLayout.objects.create(
-            event=self.request.event,
-            name=form.cleaned_data["name"],
-            platform=self.platform,
-            style=form.cleaned_data["style"],
-            layout=form.cleaned_data["layout"],
-        )
-        return redirect(
-            reverse(
-                "plugins:wallet:edit",
-                kwargs={
-                    "organizer": self.request.event.organizer.slug,
-                    "event": self.request.event.slug,
-                    "platform": self.platform,
-                    "layout": self.object.pk,
-                },
-            )
-        )
 
 class LayoutEditorView(EventPermissionRequiredMixin, UpdateView):
     template_name = "pretixplugins/wallet/edit.html"
     form_class = LayoutEditForm
-    success_url = ""
-    permission = "can_change_event_settings"
+    model = WalletLayout
+    permission = "can_change_event_settings" # TODO: new permission name
+    pk_url_kwarg = "layout"
 
     @property
     def platform(self):
@@ -160,3 +105,19 @@ class LayoutEditorView(EventPermissionRequiredMixin, UpdateView):
             }
         }
         return context
+
+    def get_success_url(self) -> str:
+        return reverse(
+            "plugins:wallet:edit",
+            kwargs={
+                "organizer": self.request.event.organizer.slug,
+                "event": self.request.event.slug,
+                "platform": self.platform,
+                "layout": self.object.pk,
+            },
+        )
+
+
+class LayoutCreateView(LayoutEditorView):
+    def get_object(self, queryset=None):
+        return WalletLayout(event=self.request.event, platform=self.platform)
