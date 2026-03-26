@@ -19,14 +19,13 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import aiohttp
 import pytest
 import pytest_asyncio
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
-from pytz import UTC
 
 from pretix.base.models import (
     Device, Event, Item, Organizer, Quota, SeatingPlan,
@@ -53,7 +52,7 @@ def organizer():
 def event(organizer):
     e = Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',
-        date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC),
+        date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc),
         presale_end=now() + timedelta(days=300),
         plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf',
         is_public=True, live=True
@@ -109,8 +108,8 @@ def customer(event, membership_type):
 def membership(event, membership_type, customer):
     return customer.memberships.create(
         membership_type=membership_type,
-        date_start=datetime(2017, 1, 1, 0, 0, tzinfo=UTC),
-        date_end=datetime(2099, 1, 1, 0, 0, tzinfo=UTC),
+        date_start=datetime(2017, 1, 1, 0, 0, tzinfo=timezone.utc),
+        date_end=datetime(2099, 1, 1, 0, 0, tzinfo=timezone.utc),
     )
 
 

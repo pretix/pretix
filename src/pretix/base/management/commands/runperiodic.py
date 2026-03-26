@@ -64,7 +64,7 @@ class Command(BaseCommand):
         if not periodic_task.receivers or periodic_task.sender_receivers_cache.get(self) is NO_RECEIVERS:
             return
 
-        for receiver in periodic_task._live_receivers(self):
+        for receiver in periodic_task._live_receivers(self)[0]:
             name = f'{receiver.__module__}.{receiver.__name__}'
             if options['list_tasks']:
                 print(name)

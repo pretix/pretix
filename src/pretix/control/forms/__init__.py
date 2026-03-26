@@ -34,6 +34,7 @@
 
 import datetime
 import os
+from dataclasses import dataclass
 
 from django import forms
 from django.conf import settings
@@ -419,6 +420,11 @@ class SplitDateTimeField(forms.SplitDateTimeField):
 
 class FontSelect(forms.RadioSelect):
     option_template_name = 'pretixcontrol/font_option.html'
+
+    @dataclass
+    class FontOption:
+        title: str
+        data: str
 
 
 class ItemMultipleChoiceField(SafeModelMultipleChoiceField):
