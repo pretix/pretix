@@ -42,7 +42,6 @@ from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, ListView, View
 
@@ -55,6 +54,7 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import customer_created, customer_signed_in
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.http import redirect_to_url
+from pretix.multidomain.middlewares import csrf_protect
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.customer import (
