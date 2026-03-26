@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load money %}
+{% load wallet %}
 {% block title %}{% trans "Wallet layouts" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Wallet layouts" %}</h1>
@@ -8,7 +9,8 @@
         {% for platform in platforms.values %}
             <fieldset>
                 <legend>{{platform.name}}</legend>
-                {% if platforms.get_layout_qs|length == 0 %}
+                {% with platform_layouts=platform|platform_layouts:request.event %}
+                {% if platform_layouts|length == 0 %}
                     <div class="empty-collection">
                         <p>
                             {% blocktrans trimmed %}
@@ -33,7 +35,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for l in platforms.get_layout_qs %}
+                            {% for l in platform_layouts %}
                                 <tr>
                                     <td>
                                         {% if "can_change_event_settings" in request.eventpermset %}
@@ -74,6 +76,7 @@
                         </table>
                     </div>
                 {% endif %}
+                {% endwith %}
             </fieldset>
         {% endfor %}
     </div>
