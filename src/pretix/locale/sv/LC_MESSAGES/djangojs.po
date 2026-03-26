@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:06+0000\n"
-"PO-Revision-Date: 2025-10-10 17:00+0000\n"
+"PO-Revision-Date: 2026-03-26 14:29+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -1023,7 +1023,6 @@ msgid "Waiting list"
 msgstr "Väntelista"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
-#, fuzzy
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
