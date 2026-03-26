@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-26 14:29+0000\n"
+"PO-Revision-Date: 2026-03-26 17:49+0000\n"
 "Last-Translator: Ivano Voghera <ivano.voghera@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -10090,6 +10090,11 @@ msgid ""
 "placing an order, the restriction only becomes active after the customer "
 "account is activated."
 msgstr ""
+"Se abilitato, gli utenti che erano autenticati al momento dell'acquisto "
+"dovranno effettuare l'accesso anche per consultare le informazioni sul "
+"proprio ordine. Se un account cliente viene creato durante l'effettuazione "
+"di un ordine, la restrizione diventerà attiva solo dopo l'attivazione "
+"dell'account stesso."
 
 #: pretix/base/settings.py:203
 msgid "Match orders based on email address"
@@ -13183,6 +13188,9 @@ msgid ""
 "logged email contents. This will also remove the association to customer "
 "accounts."
 msgstr ""
+"Questo rimuoverà tutti gli indirizzi email dagli ordini e dai partecipanti, "
+"così come il contenuto delle email registrate. Rimuoverà inoltre "
+"l'associazione agli account cliente."
 
 #: pretix/base/shredder.py:373
 msgid ""
@@ -17223,9 +17231,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/logdisplay.py:529
-#, fuzzy
 msgid "The customer account has been changed."
-msgstr "La data dell'evento è stata modificata."
+msgstr "L'account cliente è stato modificato."
 
 #: pretix/control/logdisplay.py:530
 msgid "The order locale has been changed."
@@ -25146,9 +25153,8 @@ msgid "Organizer logs"
 msgstr "Organizzatore"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:60
-#, fuzzy
 msgid "Customer account registration"
-msgstr "Invia ordine"
+msgstr "Registrazione account cliente"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:63
 #, fuzzy
@@ -33628,7 +33634,7 @@ msgstr "Invia ordine"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:19
 msgid "Log in with a customer account"
-msgstr ""
+msgstr "Accedi con un account cliente"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:26
 msgid "You are currently logged in with the following credentials."
@@ -35430,13 +35436,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
 msgid "customer account"
-msgstr ""
+msgstr "account cliente"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:8
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:9
-#, fuzzy
 msgid "View customer account"
-msgstr "Vedi un'altra data"
+msgstr "Vedi account cliente"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 #, fuzzy
@@ -35634,9 +35639,8 @@ msgid "Change account information"
 msgstr "Le tue informazioni"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_base.html:41
-#, fuzzy
 msgid "customer account information"
-msgstr "Invia ordine"
+msgstr "Informazioni account cliente"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:28
 #, fuzzy, python-format
