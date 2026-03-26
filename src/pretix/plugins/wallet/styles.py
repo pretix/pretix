@@ -10,15 +10,12 @@ class WalletPlatform:
     identifier: str
     name: str
 
-    def get_layout_qs(self):
-        return WalletLayout.objects.filter(platform=self.identifier)
-
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
     name = _("Apple")
 
 class GooglePlatform(WalletPlatform):
-    identifier = "apple"
+    identifier = "google"
     name = _("Google")
     
 class PlaceholderFieldType(enum.Enum):
