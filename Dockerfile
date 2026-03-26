@@ -1,6 +1,7 @@
 FROM python:3.11-bookworm
 
-RUN apt-get update && \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash - && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
             build-essential \
             gettext \
@@ -20,11 +21,10 @@ RUN apt-get update && \
             supervisor \
             libmaxminddb0 \
             libmaxminddb-dev \
-            zlib1g-dev && \
+            zlib1g-dev \
+            nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash - && \
-    apt-get install -y nodejs && \
     dpkg-reconfigure locales &&  \
     locale-gen C.UTF-8 &&  \
     /usr/sbin/update-locale LANG=C.UTF-8 && \
