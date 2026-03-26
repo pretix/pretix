@@ -37,7 +37,7 @@ class WalletLayout(LoggedModel):
     )
     platform = models.CharField(max_length=10)
     style = models.CharField(max_length=255)
-    layout = models.TextField()
+    layout = models.JSONField()
 
     class Meta:
         ordering = ("name",)
