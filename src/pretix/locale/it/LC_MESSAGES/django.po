@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-26 06:00+0000\n"
-"Last-Translator: Pietro Isotti <isottipietro@gmail.com>\n"
+"PO-Revision-Date: 2026-03-26 14:29+0000\n"
+"Last-Translator: Ivano Voghera <ivano.voghera@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -2317,6 +2317,10 @@ msgid ""
 "contain at least one position of this product. The order totals etc. still "
 "include all products contained in the order."
 msgstr ""
+"Se non ne viene selezionato nessuno, saranno inclusi tutti i prodotti. Gli "
+"ordini vengono inclusi se contengono almeno un articolo di questo prodotto. "
+"I totali dell'ordine ecc. includeranno comunque tutti i prodotti contenuti "
+"nell'ordine."
 
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:479
@@ -3941,7 +3945,7 @@ msgstr ""
 
 #: pretix/base/invoicing/peppol.py:166
 msgid "The Peppol participant ID is not registered on the Peppol network."
-msgstr ""
+msgstr "L'ID partecipante Peppol non è registrato nella rete Peppol."
 
 #: pretix/base/invoicing/peppol.py:192
 msgid "Peppol participant ID"
@@ -3949,7 +3953,7 @@ msgstr "ID partecipante Peppol"
 
 #: pretix/base/invoicing/peppol.py:211
 msgid "The Peppol participant ID does not match your VAT ID."
-msgstr ""
+msgstr "L'ID partecipante Peppol non corrisponde alla tua Partita IVA."
 
 #: pretix/base/invoicing/peppol.py:214
 msgctxt "peppol_invoice"
@@ -4320,7 +4324,7 @@ msgstr "Permetti di superare la quota"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:70
 #: pretix/control/views/vouchers.py:121
 msgid "Price effect"
-msgstr ""
+msgstr "Variazione di prezzo"
 
 #: pretix/base/modelimport_vouchers.py:150
 #, fuzzy, python-brace-format
@@ -6903,7 +6907,7 @@ msgstr "Ammissione all'evento"
 #: pretix/base/models/organizer.py:379
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:34
 msgid "Event permissions"
-msgstr ""
+msgstr "Permessi dell'evento"
 
 #: pretix/base/models/organizer.py:380
 #, fuzzy
@@ -6913,7 +6917,7 @@ msgstr "Impostazioni account"
 #: pretix/base/models/organizer.py:381
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:25
 msgid "Organizer permissions"
-msgstr ""
+msgstr "Permessi dell'organizzatore"
 
 #: pretix/base/models/organizer.py:401
 #, python-format
@@ -8418,7 +8422,7 @@ msgstr "Il tuo file di layout non è un layout valido. Messaggio di errore: {}"
 #: pretix/base/permissions.py:314 pretix/base/permissions.py:331
 msgctxt "permission_level"
 msgid "View"
-msgstr ""
+msgstr "Vista"
 
 #: pretix/base/permissions.py:164 pretix/base/permissions.py:169
 #: pretix/base/permissions.py:174 pretix/base/permissions.py:179
@@ -8430,12 +8434,14 @@ msgstr "Salva modifiche"
 
 #: pretix/base/permissions.py:168
 msgid "API only"
-msgstr ""
+msgstr "Solo API"
 
 #: pretix/base/permissions.py:173
 msgid ""
 "Menu item will only show up if the user has permission for general settings."
 msgstr ""
+"La voce di menu apparirà solo se l'utente ha il permesso per le impostazioni "
+"generali."
 
 #: pretix/base/permissions.py:177 pretix/base/permissions.py:231
 #: pretix/base/permissions.py:285 pretix/base/permissions.py:313
@@ -8457,12 +8463,14 @@ msgid ""
 "This includes access to all settings not listed explicitly below, including "
 "plugin settings."
 msgstr ""
+"Include l'accesso a tutte le impostazioni non elencate esplicitamente di "
+"seguito, comprese le impostazioni dei plugin."
 
 #: pretix/base/permissions.py:197
 #: pretix/control/templates/pretixcontrol/event/payment.html:6
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:5
 msgid "Payment settings"
-msgstr ""
+msgstr "Impostazioni di pagamento"
 
 #: pretix/base/permissions.py:203
 #: pretix/control/templates/pretixcontrol/event/tax.html:120
@@ -8471,10 +8479,8 @@ msgid "Tax settings"
 msgstr "Impostazioni account"
 
 #: pretix/base/permissions.py:209
-#, fuzzy
-#| msgid "Login settings"
 msgid "Invoicing settings"
-msgstr "Impostazioni login"
+msgstr "Impostazioni Fattura"
 
 #: pretix/base/permissions.py:215
 #, fuzzy
@@ -8491,7 +8497,7 @@ msgstr "Nome prodotto e variante"
 
 #: pretix/base/permissions.py:224
 msgid "Also includes related objects like categories or discounts."
-msgstr ""
+msgstr "Include anche gli oggetti correlati come categorie o sconti."
 
 #: pretix/base/permissions.py:232
 #, fuzzy
@@ -8521,7 +8527,7 @@ msgstr "Include il permesso di cancellare e rimborsare ordini individuali."
 
 #: pretix/base/permissions.py:238
 msgid "Also includes related objects like the waiting list."
-msgstr ""
+msgstr "Include anche gli oggetti correlati come la lista d'attesa."
 
 #: pretix/base/permissions.py:248
 #, fuzzy
@@ -8545,17 +8551,19 @@ msgstr "Tasse"
 #: pretix/base/permissions.py:268
 msgctxt "permission_level"
 msgid "Access existing events"
-msgstr ""
+msgstr "Accedere agli eventi esistenti"
 
 #: pretix/base/permissions.py:269
 msgctxt "permission_level"
 msgid "Access existing and create new events"
-msgstr ""
+msgstr "Accedere agli eventi esistenti e crearne di nuovi"
 
 #: pretix/base/permissions.py:271
 msgid ""
 "The level of access to events is determined in detail by the settings below."
 msgstr ""
+"Il livello di accesso agli eventi è determinato nel dettaglio dalle "
+"impostazioni sottostanti."
 
 #: pretix/base/permissions.py:275 pretix/control/navigation.py:143
 #: pretix/control/navigation.py:462 pretix/control/navigation.py:512
@@ -8574,6 +8582,8 @@ msgid ""
 "This includes access to all organizer-level functionality not listed "
 "explicitly below, including plugin settings."
 msgstr ""
+"Include l'accesso a tutte le funzionalità a livello di organizzatore non "
+"elencate esplicitamente di seguito, comprese le impostazioni dei plugin."
 
 #: pretix/base/permissions.py:287
 msgid ""
@@ -21843,6 +21853,8 @@ msgid ""
 "This product is currently not being sold since you configured below that it "
 "should only be available in a certain timeframe."
 msgstr ""
+"Questo prodotto non è attualmente in vendita, poiché è stato configurato per "
+"essere disponibile solo in un determinato intervallo di tempo."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:41
 msgid ""
@@ -22348,6 +22360,8 @@ msgstr "Crea un nuovo organizzatore"
 msgid ""
 "Currently unavailable since a limited timeframe for this product has been set"
 msgstr ""
+"Attualmente non disponibile poiché è stato impostato un intervallo di tempo "
+"limitato per questo prodotto"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:119
 msgid "Condition:"
@@ -27188,6 +27202,12 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
+"Hai configurato il sistema affinché i voucher <strong>non</strong> vengano "
+"inviati automaticamente. Puoi inviarli singolarmente nell'ordine che "
+"preferisci cliccando sui pulsanti accanto a ogni riga di questa tabella (se "
+"la quota è sufficiente), oppure puoi premere il pulsante grande sotto questo "
+"testo per inviare quanti più voucher possibile alle persone in attesa da più "
+"tempo."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:79
 msgid "Send as many vouchers as possible"
