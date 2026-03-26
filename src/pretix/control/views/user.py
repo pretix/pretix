@@ -89,13 +89,31 @@ logger = logging.getLogger(__name__)
 
 class RecentAuthenticationRequiredMixin:
     max_time = 900
+    max_form_time = 900
 
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
-        tdelta = time.time() - request.session.get('pretix_auth_login_time', 0)
-        if tdelta > self.max_time:
+        auth_is_recent = time.time() - request.session.get('pretix_auth_login_time', 0) < self.max_time
+        allowed_by_token = (
+            request.session.pop('pretix_reauthed_flow_token', None) == request.POST.get('flow_token', '')
+            and request.session.pop('pretix_reauthed_flow_allowed_url', None) == request.get_full_path()
+            and time.time() - request.session.pop('pretix_reauthed_flow_start_time', 0) < self.max_form_time
+        )
+        if auth_is_recent or allowed_by_token:
+            return super().dispatch(request, *args, **kwargs)
+        else:
             return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
-        return super().dispatch(request, *args, **kwargs)
+
+    def get_flow_token(self):
+        self.request.session['pretix_reauthed_flow_allowed_url'] = self.request.get_full_path()
+        self.request.session['pretix_reauthed_flow_token'] = get_random_string(22)
+        self.request.session['pretix_reauthed_flow_start_time'] = time.time()
+        return self.request.session['pretix_reauthed_flow_token']
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['flow_token'] = self.get_flow_token()
+        return ctx
 
 
 class ReauthView(TemplateView):
@@ -283,6 +301,7 @@ class UserHistoryView(ListView):
 
 
 class User2FAMainView(RecentAuthenticationRequiredMixin, TemplateView):
+    max_time = 7200
     template_name = 'pretixcontrol/user/2fa_main.html'
 
     def get_context_data(self, **kwargs):
@@ -484,6 +503,7 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
 
 class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_confirm_totp.html'
+    max_form_time = 7200  # this should have effectively no timeout, as the user might need to download the 2fa app first
 
     @cached_property
     def device(self):
@@ -556,6 +576,7 @@ class User2FALeaveTeamsView(RecentAuthenticationRequiredMixin, TemplateView):
 
 class User2FAEnableView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_enable.html'
+    max_form_time = 7200  # this should have effectively no timeout, as the user might take some time to print out their emergency codes, and they would become invalid in case of a timeout
 
     def dispatch(self, request, *args, **kwargs):
         if not any(dt.objects.filter(user=self.request.user, confirmed=True) for dt in REAL_DEVICE_TYPES):

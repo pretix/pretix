@@ -6,6 +6,7 @@
     <h1>{% trans "Leave teams that require two-factor authentication" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
+        <input type="hidden" name="flow_token" value="{{ flow_token }}">
         <p>
             <strong>{% trans "Do you really want to leave the following teams?" %}</strong>
         </p>

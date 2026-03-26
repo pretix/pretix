@@ -6,6 +6,7 @@
     <h1>{% trans "Add a two-factor authentication device" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
+        <input type="hidden" name="flow_token" value="{{ flow_token }}">
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.name layout='horizontal' %}
 
