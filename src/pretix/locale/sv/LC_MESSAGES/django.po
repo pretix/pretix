@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-01-16 22:00+0000\n"
+"PO-Revision-Date: 2026-03-26 10:45+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -35279,10 +35279,8 @@ msgid "We're now trying to book these add-ons for you!"
 msgstr "Vi försöker nu reservera dessa tillval till dig!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional options for"
-msgstr "Ytterligare inställningar"
+msgstr "Ytterligare val för"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:60
 #, fuzzy
@@ -36329,12 +36327,11 @@ msgstr "Visa fullstor bild av %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:131
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:288
-#, fuzzy, python-format
-#| msgid "%(count)s elements"
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "%(count)s element"
-msgstr[1] "%(count)s element"
+msgstr[0] "%(amount)sx i din kundvagn"
+msgstr[1] "%(amount)sx i din kundvagn"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:209
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:374
