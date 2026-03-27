@@ -89,13 +89,31 @@ logger = logging.getLogger(__name__)
 
 class RecentAuthenticationRequiredMixin:
     max_time = 900
+    max_form_time = 900
 
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
-        tdelta = time.time() - request.session.get('pretix_auth_login_time', 0)
-        if tdelta > self.max_time:
+        auth_is_recent = time.time() - request.session.get('pretix_auth_login_time', 0) < self.max_time
+        allowed_by_token = (
+            request.session.pop('pretix_reauthed_flow_token', None) == request.POST.get('flow_token', '')
+            and request.session.pop('pretix_reauthed_flow_allowed_url', None) == request.get_full_path()
+            and time.time() - request.session.pop('pretix_reauthed_flow_start_time', 0) < self.max_form_time
+        )
+        if auth_is_recent or allowed_by_token:
+            return super().dispatch(request, *args, **kwargs)
+        else:
             return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
-        return super().dispatch(request, *args, **kwargs)
+
+    def get_flow_token(self):
+        self.request.session['pretix_reauthed_flow_allowed_url'] = self.request.get_full_path()
+        self.request.session['pretix_reauthed_flow_token'] = get_random_string(22)
+        self.request.session['pretix_reauthed_flow_start_time'] = time.time()
+        return self.request.session['pretix_reauthed_flow_token']
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['flow_token'] = self.get_flow_token()
+        return ctx
 
 
 class ReauthView(TemplateView):
@@ -283,6 +301,7 @@ class UserHistoryView(ListView):
 
 
 class User2FAMainView(RecentAuthenticationRequiredMixin, TemplateView):
+    max_time = 7200
     template_name = 'pretixcontrol/user/2fa_main.html'
 
     def get_context_data(self, **kwargs):
@@ -465,25 +484,15 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
             notices = [
                 _('A new two-factor authentication device has been added to your account.')
             ]
-            activate = request.POST.get('activate', '')
-            if activate == 'on' and not self.request.user.require_2fa:
-                self.request.user.require_2fa = True
-                self.request.user.save()
-                self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
-                notices.append(
-                    _('Two-factor authentication has been enabled.')
-                )
             self.request.user.send_security_notice(notices)
             self.request.user.update_session_token()
             update_session_auth_hash(self.request, self.request.user)
 
-            note = ''
-            if not self.request.user.require_2fa:
-                note = ' ' + str(_('Please note that you still need to enable two-factor authentication for your '
-                                   'account using the buttons below to make a second factor required for logging '
-                                   'into your account.'))
-            messages.success(request, str(_('The device has been verified and can now be used.')) + note)
-            return redirect(reverse('control:user.settings.2fa'))
+            messages.success(request, str(_('The device has been verified and can now be used.')))
+            if self.request.user.require_2fa:
+                return redirect(reverse('control:user.settings.2fa'))
+            else:
+                return redirect(reverse('control:user.settings.2fa.enable'))
         except Exception:
             messages.error(request, _('The registration could not be completed. Please try again.'))
             logger.exception('WebAuthn registration failed')
@@ -494,6 +503,7 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
 
 class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_confirm_totp.html'
+    max_form_time = 7200  # this should have effectively no timeout, as the user might need to download the 2fa app first
 
     @cached_property
     def device(self):
@@ -514,7 +524,6 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
 
     def post(self, request, *args, **kwargs):
         token = request.POST.get('token', '')
-        activate = request.POST.get('activate', '')
         if self.device.verify_token(token):
             self.device.confirmed = True
             self.device.save()
@@ -526,24 +535,15 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
             notices = [
                 _('A new two-factor authentication device has been added to your account.')
             ]
-            if activate == 'on' and not self.request.user.require_2fa:
-                self.request.user.require_2fa = True
-                self.request.user.save()
-                self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
-                notices.append(
-                    _('Two-factor authentication has been enabled.')
-                )
             self.request.user.send_security_notice(notices)
             self.request.user.update_session_token()
             update_session_auth_hash(self.request, self.request.user)
 
-            note = ''
-            if not self.request.user.require_2fa:
-                note = ' ' + str(_('Please note that you still need to enable two-factor authentication for your '
-                                   'account using the buttons below to make a second factor required for logging '
-                                   'into your account.'))
-            messages.success(request, str(_('The device has been verified and can now be used.')) + note)
-            return redirect(reverse('control:user.settings.2fa'))
+            messages.success(request, str(_('The device has been verified and can now be used.')))
+            if self.request.user.require_2fa:
+                return redirect(reverse('control:user.settings.2fa'))
+            else:
+                return redirect(reverse('control:user.settings.2fa.enable'))
         else:
             messages.error(request, _('The code you entered was not valid. If this problem persists, please check '
                                       'that the date and time of your phone are configured correctly.'))
@@ -576,6 +576,7 @@ class User2FALeaveTeamsView(RecentAuthenticationRequiredMixin, TemplateView):
 
 class User2FAEnableView(RecentAuthenticationRequiredMixin, TemplateView):
     template_name = 'pretixcontrol/user/2fa_enable.html'
+    max_form_time = 7200  # this should have effectively no timeout, as the user might take some time to print out their emergency codes, and they would become invalid in case of a timeout
 
     def dispatch(self, request, *args, **kwargs):
         if not any(dt.objects.filter(user=self.request.user, confirmed=True) for dt in REAL_DEVICE_TYPES):
@@ -584,14 +585,39 @@ class User2FAEnableView(RecentAuthenticationRequiredMixin, TemplateView):
             return redirect(reverse('control:user.settings.2fa'))
         return super().dispatch(request, *args, **kwargs)
 
+    def get(self, request, *args, **kwargs):
+        new_tokens = None
+        try:
+            static_tokens_device = StaticDevice.objects.get(user=self.request.user, name='emergency')
+        except StaticDevice.MultipleObjectsReturned:
+            static_tokens_device = StaticDevice.objects.filter(
+                user=self.request.user, name='emergency'
+            ).first()
+        except StaticDevice.DoesNotExist:
+            static_tokens_device = None
+
+            new_tokens = [get_random_string(length=12, allowed_chars='1234567890') for _ in range(10)]
+            request.session['pretix_2fa_new_emergency_tokens'] = new_tokens
+        return super().get(request, *args, new_emergency_tokens=new_tokens, static_tokens_device=static_tokens_device, **kwargs)
+
     def post(self, request, *args, **kwargs):
+        notices = [
+            _('Two-factor authentication has been enabled.')
+        ]
+        if 'pretix_2fa_new_emergency_tokens' in request.session:
+            d = StaticDevice.objects.create(user=self.request.user, name='emergency')
+            for code in request.session['pretix_2fa_new_emergency_tokens']:
+                d.token_set.create(token=code)
+            self.request.user.log_action('pretix.user.settings.2fa.regenemergency', user=self.request.user)
+            notices += [
+                _('Your two-factor emergency codes have been regenerated.')
+            ]
+            del request.session['pretix_2fa_new_emergency_tokens']
         self.request.user.require_2fa = True
         self.request.user.save()
         self.request.user.log_action('pretix.user.settings.2fa.enabled', user=self.request.user)
         messages.success(request, _('Two-factor authentication is now enabled for your account.'))
-        self.request.user.send_security_notice([
-            _('Two-factor authentication has been enabled.')
-        ])
+        self.request.user.send_security_notice(notices)
         self.request.user.update_session_token()
         update_session_auth_hash(self.request, self.request.user)
         return redirect(reverse('control:user.settings.2fa'))

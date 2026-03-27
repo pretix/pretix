@@ -6,9 +6,38 @@
     <h1>{% trans "Add a two-factor authentication device" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
+        <input type="hidden" name="flow_token" value="{{ flow_token }}">
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.name layout='horizontal' %}
-        {% bootstrap_field form.devicetype layout='horizontal' %}
+
+        <div class="form-group">
+            <label class="col-md-3 control-label">{% trans "Device type" %}</label>
+            <div class="col-md-9">
+                <div class="big-radio radio">
+                    <label>
+                        <input type="radio" value="totp" name="{{ form.devicetype.html_name }}" {% if form.devicetype.value == "totp" %}checked{% endif %}>
+                        <strong>{% trans "Smartphone with the Authenticator application" %}</strong><br>
+                        <div class="help-block">
+                            {% blocktrans trimmed %}
+                                Use your smartphone with any Time-based One-Time-Password app like freeOTP, Google Authenticator or Proton Authenticator.
+                            {% endblocktrans %}
+                        </div>
+                    </label>
+                </div>
+                <div class="big-radio radio">
+                    <label>
+                        <input type="radio" value="webauthn" name="{{ form.devicetype.html_name }}" {% if form.devicetype.value == "webauthn" %}checked{% endif %}>
+                        <strong>{% trans "WebAuthn-compatible hardware token" %}</strong><br>
+                        <div class="help-block">
+                            {% blocktrans trimmed %}
+                                Use a hardware token like the Yubikey, or biometric authentication on iOS, macOS and Android.
+                            {% endblocktrans %}
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Continue" %}

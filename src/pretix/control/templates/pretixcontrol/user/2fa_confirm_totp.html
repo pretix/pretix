@@ -28,11 +28,6 @@
                         {% trans "iOS (iTunes)" %}
                     </a>
                 </li>
-                <li>
-                    <a href="https://m.google.com/authenticator">
-                        {% trans "Blackberry (Link via Google)" %}
-                    </a>
-                </li>
             </ul>
         </li>
         <li>
@@ -74,14 +69,11 @@
             {% trans "Enter the displayed code here:" %}
             <form class="form form-inline" method="post" action="">
                 {% csrf_token %}
+                <input type="hidden" name="flow_token" value="{{ flow_token }}">
                 <input type="number" name="token" class="form-control" required="required">
                 <button class="btn btn-primary" type="submit">
                     {% trans "Continue" %}
                 </button><br>
-                <label>
-                    <input type="checkbox" name="activate" checked="checked" value="on">
-                    {% trans "Require second factor for future logins" %}
-                </label>
             </form>
         </li>
     </ol>

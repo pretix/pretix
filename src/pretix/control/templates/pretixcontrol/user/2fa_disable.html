@@ -6,6 +6,7 @@
     <h1>{% trans "Disable two-factor authentication" %}</h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
+        <input type="hidden" name="flow_token" value="{{ flow_token }}">
         <p>
             {% trans "Do you really want to disable two-factor authentication?" %}
         </p>

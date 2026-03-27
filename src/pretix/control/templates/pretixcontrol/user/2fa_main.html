@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/base.html" %}
 {% load i18n %}
+{% load icon %}
 {% load bootstrap3 %}
 {% block title %}{% trans "Two-factor authentication" %}{% endblock %}
 {% block content %}
@@ -120,7 +121,7 @@
                         Delete
                     </a>
                     {% if d.devicetype == "totp" %}
-                        <span class="fa fa-mobile"></span>
+                        <span class="fa fa-mobile fa-lg"></span>
                     {% elif d.devicetype == "webauthn" %}
                         <span class="fa fa-usb"></span>
                     {% elif d.devicetype == "u2f" %}
@@ -152,19 +153,30 @@
             </p>
             {% if static_tokens_device %}
                 <p>
+                    {% icon "info-circle" %}
                     {% blocktrans trimmed with generation_date_time=static_tokens_device.created_at %}
                         You generated your emergency tokens on {{ generation_date_time }}.
                     {% endblocktrans %}
                 </p>
-            {% else %}
+                <a href="{% url "control:user.settings.2fa.regenemergency" %}" class="btn btn-default">
+                    <span class="fa fa-refresh"></span>
+                    {% trans "Generate new emergency tokens" %}
+                </a>
+            {% elif user.require_2fa %}
                 <p>
-                    {% trans "You don't have any emergency tokens yet." %}
+                    {% icon "warning" %}
+                    <strong>{% trans "You don't have any emergency tokens yet." %}</strong>
+                </p>
+                <a href="{% url "control:user.settings.2fa.regenemergency" %}" class="btn btn-default">
+                    <span class="fa fa-refresh"></span>
+                    {% trans "Generate emergency tokens" %}
+                </a>
+            {% else %}
+                <p class="help-block">
+                    {% icon "info-circle" %}
+                    {% trans "Emergency tokens will be generated when you enable two-factor authentication." %}
                 </p>
             {% endif %}
-            <a href="{% url "control:user.settings.2fa.regenemergency" %}" class="btn btn-default">
-                <span class="fa fa-refresh"></span>
-                {% trans "Generate new emergency tokens" %}
-            </a>
         </div>
     </div>
 {% endblock %}
