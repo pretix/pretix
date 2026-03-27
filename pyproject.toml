@@ -92,7 +92,7 @@ dependencies = [
   "qrcode==8.2",
   "redis==7.1.*",
   "reportlab==4.4.*",
-  "requests==2.32.*",
+  "requests==2.33.*",
   "sentry-sdk==2.56.*",
   "sepaxml==2.7.*",
   "stripe==7.9.*",
