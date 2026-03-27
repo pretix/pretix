@@ -678,9 +678,17 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             except Voucher.DoesNotExist:
                 pass
 
+        filter_qs = filter_qs_by_attr(
+            self.request.event.subevents_annotated(
+                self.request.sales_channel,
+                voucher,
+            ).using(settings.DATABASE_REPLICA),
+            self.request
+        )
+
         context = {}
         context['list_type'] = self.request.GET.get("style", self.request.event.settings.event_list_type)
-        if context['list_type'] not in ("calendar", "week") and self.request.event.subevents.filter(date_from__gt=time_machine_now()).count() > 50:
+        if context['list_type'] not in ("calendar", "week") and filter_qs.count() > 50:
             if self.request.event.settings.event_list_type not in ("calendar", "week"):
                 self.request.event.settings.event_list_type = "calendar"
             context['list_type'] = "calendar"
@@ -703,13 +711,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             ebd = defaultdict(list)
             add_subevents_for_days(
-                filter_qs_by_attr(
-                    self.request.event.subevents_annotated(
-                        self.request.sales_channel,
-                        voucher,
-                    ).using(settings.DATABASE_REPLICA),
-                    self.request
-                ),
+                filter_qs,
                 before=limit_before,
                 after=after,
                 ebd=ebd,
@@ -728,7 +730,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 lambda: len(set(str(n) for n in self.request.event.subevents.order_by().values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
                 timeout=120,
             )
-            context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
             context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             if self.request.event.settings.event_calendar_future_only:
@@ -767,13 +768,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             ebd = defaultdict(list)
             add_subevents_for_days(
-                filter_qs_by_attr(
-                    self.request.event.subevents_annotated(
-                        self.request.sales_channel,
-                        voucher=voucher,
-                    ).using(settings.DATABASE_REPLICA),
-                    self.request
-                ),
+                filter_qs,
                 before=limit_before,
                 after=after,
                 ebd=ebd,
@@ -820,15 +815,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 future_only=self.request.event.settings.event_calendar_future_only
             )
         else:
-            subevents = self.request.event.subevents_sorted(
-                filter_qs_by_attr(
-                    self.request.event.subevents_annotated(
-                        self.request.sales_channel,
-                        voucher=voucher,
-                    ).using(settings.DATABASE_REPLICA),
-                    self.request
-                )
-            )
+            subevents = self.request.event.subevents_sorted(filter_qs)
             subevents = filter_subevents_with_plugins(list(subevents), self.request.sales_channel)
             context['subevent_list'] = subevents
             if self.request.event.settings.event_list_available_only and not voucher:
