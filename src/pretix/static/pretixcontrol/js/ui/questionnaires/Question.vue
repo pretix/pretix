@@ -63,21 +63,32 @@ const editor = ref();
         </div>
         <div class="form-group">
           <label class="col-md-3 control-label">
-            Data field type
-          </label>
-          <div class="col-md-9">
-            <select v-model="df.type" class="form-control">
-              <option v-for="(label, type) in QUESTION_TYPE_LABEL" :value="QUESTION_TYPE[type]">{{ label }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-md-3 control-label">
             Help text
           </label>
           <div class="col-md-9">
             <I18nTextField :value="question.help_text"/>
             <div class="help-block">Wenn diese Frage noch weitere Erklärung braucht, können Sie sie hier eintragen.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">
+            Data field
+          </label>
+          <div class="col-md-9">
+            <p class="form-control-static">
+							{{ question.question }}
+							<a href="" target="_blank">Manage data field details</a>
+						</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">
+            Data field type
+          </label>
+          <div class="col-md-9">
+            <select v-model="df.type" class="form-control" disabled>
+              <option v-for="(label, type) in QUESTION_TYPE_LABEL" :value="QUESTION_TYPE[type]">{{ label }}</option>
+            </select>
           </div>
         </div>
         <button @click="editor.close()" class="btn btn-primary pull-right"><span class="fa fa-check"></span> Save and close</button>

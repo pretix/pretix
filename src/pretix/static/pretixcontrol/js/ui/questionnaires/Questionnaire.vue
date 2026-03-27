@@ -6,6 +6,7 @@ import I18nTextField from "./I18nTextField.vue";
 import NativeDialog from "./NativeDialog.vue";
 const id = useId();
 const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'items'])
+const gettext = (window as any).gettext
 
 function toggleItem() {
   const i = props.questionnaire.items.indexOf(props.selected_product);
@@ -16,10 +17,23 @@ function toggleItem() {
   }
 }
 
+function addExistingDatafield(field) {
+	props.questionnaire.children.push({
+		question: field.id,
+		required: false,
+		label: {},
+		help_text: {},
+		dependency_question: null,
+		dependency_values: [],
+	});
+	dlgAddExisting.value.close();
+}
+
 const isHidden = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) === -1);
 const isEditable = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) !== -1);
 
-const editor = ref();
+const dlgEditor = ref();
+const dlgAddExisting = ref();
 
 </script>
 
@@ -27,7 +41,7 @@ const editor = ref();
 <template>
 		<div class="question-edit-buttons"><div>
       <button class="btn btn-default"><i class="fa fa-arrows"></i></button>
-      <button class="btn btn-default" @click="editor.show()"><i class="fa fa-edit"></i></button>
+      <button class="btn btn-default" @click="dlgEditor.show()"><i class="fa fa-edit"></i></button>
       <button class="btn btn-default" @click="toggleItem()" v-if="selected_product"><i :class="`fa fa-eye${isHidden ? '-slash':''}`"></i></button>
     </div></div>
 
@@ -48,7 +62,7 @@ const editor = ref();
 
       </div>
 			<p v-if="true">
-					<button class="btn btn-default" @click="addExistingDatafield()"><i class="fa fa-plus"></i> Bestehendes Datenfeld hinzufügen</button>
+					<button class="btn btn-default" @click="dlgAddExisting.show()"><i class="fa fa-plus"></i> Bestehendes Datenfeld hinzufügen</button>
 					<button class="btn btn-default" @click="newDatafield()"><i class="fa fa-plus"></i> Neues Datenfeld</button>
 					<button class="btn btn-default" @click="addSubtitle()"><i class="fa fa-plus"></i> Zwischenüberschrift</button>
 					<button class="btn btn-default" @click="addTextBlock()"><i class="fa fa-plus"></i> Text</button>
@@ -57,11 +71,11 @@ const editor = ref();
   </details>
 
   <Teleport to="body">
-    <NativeDialog ref="editor" class="modal-card"
-                  title="Edit questionnaire">
+    <NativeDialog ref="dlgEditor" class="modal-card"
+                  :title="gettext('Edit questionnaire')">
         <div class="form-group">
           <label class="col-md-3 control-label">
-            Internal name
+            {{ gettext('Internal name') }}
           </label>
           <div class="col-md-9">
             <input type="text" class="form-control" v-model="questionnaire.internal_name"/>
@@ -69,7 +83,7 @@ const editor = ref();
         </div>
         <div class="form-group">
           <label class="col-md-3 control-label">
-            Visible on products
+            {{ gettext('Visible on products') }}
           </label>
           <div class="col-md-9">
 						<div class="checkbox" v-for="item in items">
@@ -79,8 +93,18 @@ const editor = ref();
 						</div>
           </div>
         </div>
-        <button @click="editor.close()" class="btn btn-primary pull-right"><span class="fa fa-check"></span> Save and close</button>
+        <button @click="dlgEditor.close()" class="btn btn-primary pull-right"><span class="fa fa-check"></span> {{ gettext('Save and close') }}</button>
         <button class="btn btn-default">Delete</button>
+    </NativeDialog>
+
+    <NativeDialog ref="dlgAddExisting" class="modal-card"
+                  :title="gettext('Add existing data field')">
+
+				<div class="list-group">
+					<a href="javascript:" @click="addExistingDatafield(field)" v-for="field in datafields" class="list-group-item">{{ field.internal_name }}</a>
+				</div>
+
+        <button @click="dlgAddExisting.close()" class="btn btn-default pull-right">Cancel</button>
     </NativeDialog>
   </Teleport>
 </template>

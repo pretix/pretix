@@ -10,10 +10,12 @@
     {% trans "Questionnaires" %}
 {% endblock %}
 {% block inside %}
-    <a href="{% url "control:event.items.questions" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default pull-right">
-        {% icon "wrench" %} {% trans "Manage data fields" %}
-    </a>
-    <h1>{% trans "Questionnaires" %}</h1>
+    <h1>
+        {% trans "Questionnaires" %}
+        <a href="{% url "control:event.items.questions" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default pull-right">
+            {% icon "wrench" %} {% trans "Manage data fields" %}
+        </a>
+    </h1>
     <p>
         {% blocktrans trimmed %}
             Questions allow your attendees to fill in additional data about their ticket. If you provide food, one
