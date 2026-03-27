@@ -35,6 +35,7 @@
 from collections import OrderedDict
 
 from django import forms
+from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextInput
 
@@ -104,7 +105,24 @@ class GlobalSettingsForm(SettingsForm):
                 help_text=_("Will be served at {domain}/.well-known/apple-developer-merchantid-domain-association").format(
                     domain=settings.SITE_URL
                 )
-            ))
+            )),
+            ('smtp_rate_limit_count', forms.IntegerField(
+                required=False,
+                label=_("Email rate limit (number of emails)"),
+                help_text=_("Maximum number of emails per time window through the default SMTP server. "
+                            "Leave empty to disable. Set to 0 to block all emails. Shared across all workers."),
+                min_value=0,
+            )),
+            ('smtp_rate_limit_window', forms.IntegerField(
+                required=False,
+                label=_("Email rate limit window (seconds)"),
+                help_text=format_lazy(
+                    _("Time window in seconds for the email rate limit. Maximum: {max_window} seconds."),
+                    max_window=settings.EMAIL_RATE_LIMIT_MAX_WINDOW,
+                ),
+                min_value=1,
+                max_value=settings.EMAIL_RATE_LIMIT_MAX_WINDOW,
+            )),
         ])
         responses = register_global_settings.send(self)
         for r, response in sorted(responses, key=lambda r: str(r[0])):

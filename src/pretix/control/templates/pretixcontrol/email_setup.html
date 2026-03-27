@@ -94,7 +94,23 @@
                                 email sending.
                             {% endblocktrans %}
                         </p>
-                        {% bootstrap_form smtp_form layout="control" %}
+                        {% bootstrap_field smtp_form.mail_from layout="control" %}
+                        {% bootstrap_field smtp_form.smtp_host layout="control" %}
+                        {% bootstrap_field smtp_form.smtp_port layout="control" %}
+                        {% bootstrap_field smtp_form.smtp_username layout="control" %}
+                        {% bootstrap_field smtp_form.smtp_password layout="control" %}
+                        {% bootstrap_field smtp_form.smtp_use_tls layout="control" %}
+                        {% bootstrap_field smtp_form.smtp_use_ssl layout="control" %}
+                        <p>
+                            <a data-toggle="collapse" href="#smtp_advanced">
+                                {% trans "Advanced settings" %}
+                                <span class="fa fa-caret-down"></span>
+                            </a>
+                        </p>
+                        <div class="collapse{% if smtp_form.smtp_rate_limit_count.value %} in{% endif %}" id="smtp_advanced">
+                            {% bootstrap_field smtp_form.smtp_rate_limit_count layout="control" %}
+                            {% bootstrap_field smtp_form.smtp_rate_limit_window layout="control" %}
+                        </div>
                     </div>
                 </div>
             </div>

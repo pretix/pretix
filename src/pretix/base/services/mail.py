@@ -39,6 +39,7 @@ import mimetypes
 import os
 import re
 import smtplib
+import time
 import uuid
 import warnings
 from datetime import timedelta
@@ -90,6 +91,7 @@ from pretix.presale.ical import get_private_icals
 
 logger = logging.getLogger('pretix.base.mail')
 INVALID_ADDRESS = 'invalid-pretix-mail-address'
+MIN_RATE_LIMIT_RETRY_AFTER = 5  # Minimum seconds before retrying a rate-limited email
 
 
 class TolerantDict(dict):
@@ -435,6 +437,22 @@ def mail_send_task(self, **kwargs) -> bool:
         assert outgoing_mail.orderposition.order_id == outgoing_mail.order_id
         outgoing_mail.orderposition.order = outgoing_mail.order
 
+    # Rate limit check
+    backend = outgoing_mail.get_mail_backend()
+    is_limited, retry_after = _check_rate_limit(backend, outgoing_mail)
+    if is_limited:
+        logger.info(f"Rate limited email {outgoing_mail.guid}, retrying in {retry_after}s")
+        outgoing_mail.status = OutgoingMail.STATUS_AWAITING_RETRY
+        outgoing_mail.retry_after = now() + timedelta(seconds=retry_after)
+        outgoing_mail.save(update_fields=["status", "retry_after"])
+        try:
+            self.retry(max_retries=100, countdown=retry_after)
+        except MaxRetriesExceededError:
+            outgoing_mail.status = OutgoingMail.STATUS_FAILED
+            outgoing_mail.retry_after = None
+            outgoing_mail.save(update_fields=["status", "retry_after"])
+            return False
+
     headers = dict(outgoing_mail.headers)
     headers.setdefault('X-PX-Correlation', str(outgoing_mail.guid))
     email = CustomEmail(
@@ -647,7 +665,6 @@ def mail_send_task(self, **kwargs) -> bool:
                 "type": a[2],
             } for a in email.attachments
         ]
-        backend = outgoing_mail.get_mail_backend()
         try:
             backend.send_messages([email])
         except Exception as e:
@@ -1024,6 +1041,69 @@ def _wrap_plain_body(content_plain, signature, event, order, position, no_order_
     body_plain += "\r\n"
 
     return body_plain
+
+
+def _check_rate_limit(backend, outgoing_mail):
+    """
+    Check whether sending this email would exceed the configured rate limit
+    for the SMTP identity used by the event/organizer. Multiple events sharing
+    the same SMTP credentials share a single counter.
+    Returns (is_limited, retry_after_seconds).
+    """
+    if not settings.HAS_REDIS:
+        return False, 0
+
+    event = getattr(outgoing_mail, 'event', None)
+    organizer = getattr(outgoing_mail, 'organizer', None)
+    settings_source = event or organizer
+
+    count, window = None, None
+    if settings_source and settings_source.settings.get('smtp_use_custom', as_type=bool):
+        # Custom SMTP: use event/organizer settings, never pretix.cfg
+        count = settings_source.settings.get('smtp_rate_limit_count', as_type=int)
+        window = settings_source.settings.get('smtp_rate_limit_window', as_type=int)
+    else:
+        # System SMTP: always use pretix.cfg limits
+        if settings.EMAIL_RATE_LIMIT_COUNT is not None:
+            count = settings.EMAIL_RATE_LIMIT_COUNT
+            window = settings.EMAIL_RATE_LIMIT_WINDOW
+
+    if count is None or window is None:
+        return False, 0
+
+    host = getattr(backend, 'host', settings.EMAIL_HOST) or '_'
+    username = getattr(backend, 'username', settings.EMAIL_HOST_USER) or '_'
+    identity = hashlib.sha1(f"{username}@{host}".encode()).hexdigest()
+    redis_key = f"pretix_mail_ratelimit_{identity}"
+
+    from django_redis import get_redis_connection
+    rc = get_redis_connection("redis")
+
+    now_ts = time.time()
+    member = f"{now_ts}:{uuid.uuid4().hex[:8]}"
+
+    # Sliding-window rate limit: prune expired entries, record this attempt,
+    # count hits in the window, and fetch the oldest entry for retry-after.
+    pipe = rc.pipeline()
+    pipe.zremrangebyscore(redis_key, '-inf', now_ts - settings.EMAIL_RATE_LIMIT_MAX_WINDOW)
+    pipe.zadd(redis_key, {member: now_ts})
+    pipe.zcount(redis_key, now_ts - window, '+inf')
+    pipe.expire(redis_key, settings.EMAIL_RATE_LIMIT_MAX_WINDOW + 10)
+    pipe.zrange(redis_key, 0, 0, withscores=True)
+    _, _, cnt, _, oldest = pipe.execute()
+
+    if cnt > count:
+        # Remove the just-added entry so blocked attempts don't inflate the counter
+        rc.zrem(redis_key, member)
+        # Oldest entry's timestamp + window = when the first slot frees up
+        if oldest:
+            retry_after = int(oldest[0][1]) + window - now_ts
+            retry_after = max(int(retry_after) + 1, MIN_RATE_LIMIT_RETRY_AFTER)
+        else:
+            retry_after = MIN_RATE_LIMIT_RETRY_AFTER
+        return True, retry_after
+
+    return False, 0
 
 
 def _retry_strategy(e: Exception):
