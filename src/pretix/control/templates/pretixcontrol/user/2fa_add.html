@@ -15,7 +15,7 @@
                 <div>
                     <div class="big-radio radio">
                         <label>
-                            <input type="radio" value="totp" name="{{ form.devicetype.html_name }}" {% if form.devicetype.value == "totp" %}checked{% endif %}>
+                            <input type="radio" required value="totp" name="{{ form.devicetype.html_name }}" {% if form.devicetype.value == "totp" %}checked{% endif %}>
                             <strong>{% trans "Smartphone with Authenticator app" %}</strong><br>
                             <div class="help-block">
                                 {% blocktrans trimmed %}
@@ -26,7 +26,7 @@
                     </div>
                     <div class="big-radio radio">
                         <label>
-                            <input type="radio" value="webauthn" name="{{ form.devicetype.html_name }}" {% if form.devicetype.value == "webauthn" %}checked{% endif %}>
+                            <input type="radio" required value="webauthn" name="{{ form.devicetype.html_name }}" {% if form.devicetype.value == "webauthn" %}checked{% endif %}>
                             <strong>{% trans "WebAuthn-compatible hardware token" %}</strong><br>
                             <div class="help-block">
                                 {% blocktrans trimmed %}
