@@ -49,11 +49,6 @@ from tests.base import SoupTest, extract_form_fields
 from pretix.base.models import Event, LogEntry, Order, Organizer, Team, User
 
 
-@pytest.fixture
-def class_monkeypatch(request, monkeypatch):
-    request.cls.monkeypatch = monkeypatch
-
-
 @pytest.mark.usefixtures("class_monkeypatch")
 class EventsTest(SoupTest):
     @scopes_disabled()
