@@ -196,8 +196,7 @@ class RegistrationForm(forms.Form):
     def clean_password(self):
         password1 = self.cleaned_data.get('password', '')
         user = User(email=self.cleaned_data.get('email'))
-        if validate_password(password1, user=user) is not None:
-            raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
+        validate_password(password1, user=user)
         return password1
 
     def clean_email(self):
