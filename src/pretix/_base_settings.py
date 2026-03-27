@@ -37,9 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     'django.contrib.humanize',
+    # pretix needs to go before staticfiles
+    # so we can override the runserver command
     'pretix.base',
+    'django.contrib.staticfiles',
     'pretix.control',
     'pretix.presale',
     'pretix.multidomain',
@@ -243,7 +245,6 @@ STORAGES = {
 
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
-    ('text/vue', 'pretix.helpers.compressor.VueCompiler'),
 )
 
 COMPRESS_OFFLINE_CONTEXT = {

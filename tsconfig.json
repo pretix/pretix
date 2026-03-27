@@ -1,0 +1,26 @@
+{
+	"include": [
+		"src/pretix/static/**/*",
+		"src/pretix/static/**/*.vue",
+		"src/pretix/plugins/webcheckin/**/*",
+		"src/pretix/plugins/webcheckin/**/*.vue"
+	],
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {},
+		"strict": false,
+		"allowJs": true,
+		"checkJs": true,
+		"target": "esnext",
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"resolveJsonModule": true,
+		"noErrorTruncation": true,
+		"noImplicitThis": true,
+		"isolatedModules": true,
+		"types": ["node", "events"]
+	},
+	"vueCompilerOptions": {
+		"plugins": ["@vue/language-plugin-pug"]
+	}
+}
