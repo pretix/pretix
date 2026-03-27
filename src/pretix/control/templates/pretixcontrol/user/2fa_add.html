@@ -8,7 +8,45 @@
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.name layout='horizontal' %}
-        {% bootstrap_field form.devicetype layout='horizontal' %}
+
+        <div class="form-group{% if form.devicetype.errors %} has-error{% endif %}">
+            <label class="col-md-3 control-label">{% trans "Device type" %}</label>
+            <div class="col-md-9">
+                <div>
+                    <div class="big-radio radio">
+                        <label>
+                            <input type="radio" required value="totp" name="{{ form.devicetype.html_name }}" {% if form.devicetype.value == "totp" %}checked{% endif %}>
+                            <strong>{% trans "Smartphone with Authenticator app" %}</strong><br>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    Use your smartphone with any Time-based One-Time-Password app like freeOTP, Google Authenticator or Proton Authenticator.
+                                {% endblocktrans %}
+                            </div>
+                        </label>
+                    </div>
+                    <div class="big-radio radio">
+                        <label>
+                            <input type="radio" required value="webauthn" name="{{ form.devicetype.html_name }}" {% if form.devicetype.value == "webauthn" %}checked{% endif %}>
+                            <strong>{% trans "WebAuthn-compatible hardware token" %}</strong><br>
+                            <div class="help-block">
+                                {% blocktrans trimmed %}
+                                    Use a hardware token like the Yubikey, or other biometric authentication like fingerprint or face recognition.
+                                {% endblocktrans %}
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                {% if form.devicetype.errors %}
+                    <div class="help-block">
+                    {% for error in form.devicetype.errors %}
+                        <p>{{ error|escape }}</p>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Continue" %}
