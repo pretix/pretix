@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-26 17:49+0000\n"
+"PO-Revision-Date: 2026-03-27 09:03+0000\n"
 "Last-Translator: Ivano Voghera <ivano.voghera@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -5388,7 +5388,7 @@ msgstr "Categoria normale"
 
 #: pretix/base/models/items.py:115 pretix/control/forms/item.py:111
 msgid "Normal + cross-selling category"
-msgstr "Categoria normale + cross-selling"
+msgstr "Normale + Categoria cross-selling"
 
 #: pretix/base/models/items.py:116 pretix/control/forms/item.py:106
 msgid "Cross-selling category"
