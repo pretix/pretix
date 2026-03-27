@@ -6,4 +6,5 @@ Contributing to pretix
 
    general
    style
+   ai
    codeofconduct
