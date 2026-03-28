@@ -381,12 +381,15 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                 resp = HttpResponse(ct.file.file.read(), content_type='text/uri-list')
                 return resp
             else:
-                resp = FileResponse(ct.file.file, content_type=ct.type)
-                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), order.code,
-                    provider.identifier, ct.extension
+                return FileResponse(
+                    ct.file.file,
+                    filename='{}-{}-{}{}'.format(
+                        self.request.event.slug.upper(), order.code,
+                        provider.identifier, ct.extension
+                    ),
+                    as_attachment=True,
+                    content_type=ct.type
                 )
-                return resp
 
     @action(detail=True, methods=['POST'])
     def mark_paid(self, request, **kwargs):
@@ -1303,14 +1306,17 @@ class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet
             raise NotFound()
 
         ftype, ignored = mimetypes.guess_type(answer.file.name)
-        resp = FileResponse(answer.file, content_type=ftype or 'application/binary')
-        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}"'.format(
-            self.request.event.slug.upper(),
-            pos.order.code,
-            pos.positionid,
-            os.path.basename(answer.file.name).split('.', 1)[1]
+        return FileResponse(
+            answer.file,
+            filename='{}-{}-{}-{}"'.format(
+                self.request.event.slug.upper(),
+                pos.order.code,
+                pos.positionid,
+                os.path.basename(answer.file.name).split('.', 1)[1]
+            ),
+            as_attachment=True,
+            content_type=ftype or 'application/binary'
         )
-        return resp
 
     @action(detail=True, url_name="printlog", url_path="printlog", methods=["POST"])
     def printlog(self, request, **kwargs):
@@ -1365,15 +1371,18 @@ class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet
             if hasattr(image_file, 'seek'):
                 image_file.seek(0)
 
-        resp = FileResponse(image_file, content_type=ftype or 'application/binary')
-        resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}.{}"'.format(
-            self.request.event.slug.upper(),
-            pos.order.code,
-            pos.positionid,
-            key,
-            extension,
+        return FileResponse(
+            image_file,
+            filename='{}-{}-{}-{}.{}'.format(
+                self.request.event.slug.upper(),
+                pos.order.code,
+                pos.positionid,
+                key,
+                extension,
+            ),
+            as_attachment=True,
+            content_type=ftype or 'application/binary'
         )
-        return resp
 
     @action(detail=True, url_name='download', url_path='download/(?P<output>[^/]+)')
     def download(self, request, output, **kwargs):
@@ -1399,12 +1408,15 @@ class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet
                 resp = HttpResponse(ct.file.file.read(), content_type='text/uri-list')
                 return resp
             else:
-                resp = FileResponse(ct.file.file, content_type=ct.type)
-                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), pos.order.code, pos.positionid,
-                    provider.identifier, ct.extension
+                return FileResponse(
+                    ct.file.file,
+                    filename='{}-{}-{}-{}{}'.format(
+                        self.request.event.slug.upper(), pos.order.code, pos.positionid,
+                        provider.identifier, ct.extension
+                    ),
+                    as_attachment=True,
+                    content_type=ct.type
                 )
-                return resp
 
     @action(detail=True, methods=['POST'])
     def regenerate_secrets(self, request, **kwargs):
@@ -1986,9 +1998,12 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         if not invoice.file:
             raise RetryException()
 
-        resp = FileResponse(invoice.file.file, content_type='application/pdf')
-        resp['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(invoice.number)
-        return resp
+        return FileResponse(
+            invoice.file.file,
+            filename='{}.pdf"'.format(invoice.number),
+            as_attachment=True,
+            content_type='application/pdf'
+        )
 
     @action(detail=True, methods=['POST'])
     def transmit(self, request, **kwargs):

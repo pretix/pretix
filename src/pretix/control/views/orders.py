@@ -710,22 +710,26 @@ class OrderDownload(AsyncAction, OrderView):
                 resp = HttpResponseRedirect(value.file.file.read())
                 return resp
             else:
-                resp = FileResponse(value.file.file, content_type=value.type)
-                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
-                    self.output.identifier, value.extension
+                return FileResponse(
+                    value.file.file,
+                    filename='{}-{}-{}-{}{}'.format(
+                        self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
+                        self.output.identifier, value.extension
+                    ),
+                    content_type=value.type
                 )
-                return resp
         elif isinstance(value, CachedCombinedTicket):
             if value.type == 'text/uri-list':
                 resp = HttpResponseRedirect(value.file.file.read())
                 return resp
             else:
-                resp = FileResponse(value.file.file, content_type=value.type)
-                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
+                return FileResponse(
+                    value.file.file,
+                    filename='{}-{}-{}{}'.format(
+                        self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
+                    ),
+                    content_type=value.type
                 )
-                return resp
         else:
             return redirect(self.get_self_url())
 
@@ -1831,14 +1835,14 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
             return redirect(self.get_order_url())
 
         try:
-            resp = FileResponse(self.invoice.file.file, content_type='application/pdf')
+            return FileResponse(
+                self.invoice.file.file,
+                filename='{}.pdf'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", self.invoice.number)),
+                content_type='application/pdf'
+            )
         except FileNotFoundError:
             invoice_pdf_task.apply(args=(self.invoice.pk,))
             return self.get(request, *args, **kwargs)
-
-        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", self.invoice.number))
-        resp._csp_ignore = True  # Some browser's PDF readers do not work with CSP
-        return resp
 
 
 class OrderExtend(OrderView):
