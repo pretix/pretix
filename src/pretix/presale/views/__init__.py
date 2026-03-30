@@ -287,6 +287,12 @@ class CartMixin:
         }
 
     def current_selected_payments(self, positions, fees, invoice_address, *, warn=False):
+        from pretix.presale.views.cart import get_or_create_cart_id
+
+        if not get_or_create_cart_id(self.request, create=False):
+            # No active cart ID, no payments there
+            return []
+
         raw_payments = copy.deepcopy(self.cart_session.get('payments', []))
         fees = [f for f in fees if f.fee_type != OrderFee.FEE_TYPE_PAYMENT]  # we re-compute these here
 
