@@ -114,6 +114,12 @@ class CartMixin:
         return cached_invoice_address(self.request)
 
     def get_cart(self, answers=False, queryset=None, order=None, downloads=False, payments=None):
+        if not self.request.session.session_key and not order:
+            # The user has not even a session ID yet, so they can't have a cart and we can save a lot of work
+            return {
+                'positions': [],
+                # Other keys are not used on non-checkout pages
+            }
         if queryset is not None:
             prefetch = []
             if answers:
@@ -169,7 +175,8 @@ class CartMixin:
         else:
             fees = []
 
-        if not order:
+        if not order and lcp:
+            # Do not re-round for empty cart (useless) or confirmed order (incorrect)
             apply_rounding(self.request.event.settings.tax_rounding, self.invoice_address, self.request.event.currency, [*lcp, *fees])
 
         total = sum([c.price for c in lcp]) + sum([f.value for f in fees])
