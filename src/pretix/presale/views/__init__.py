@@ -70,18 +70,21 @@ def cached_invoice_address(request):
             # do not create a session, if we don't have a session we also don't have an invoice address ;)
             request._checkout_flow_invoice_address = InvoiceAddress()
             return request._checkout_flow_invoice_address
-        cs = cart_session(request)
-        iapk = cs.get('invoice_address')
-        if not iapk:
+        cs = cart_session(request, create=False)
+        if cs is None:
             request._checkout_flow_invoice_address = InvoiceAddress()
         else:
-            try:
-                with scopes_disabled():
-                    request._checkout_flow_invoice_address = InvoiceAddress.objects.get(
-                        pk=iapk, order__isnull=True
-                    )
-            except InvoiceAddress.DoesNotExist:
+            iapk = cs.get('invoice_address')
+            if not iapk:
                 request._checkout_flow_invoice_address = InvoiceAddress()
+            else:
+                try:
+                    with scopes_disabled():
+                        request._checkout_flow_invoice_address = InvoiceAddress.objects.get(
+                            pk=iapk, order__isnull=True
+                        )
+                except InvoiceAddress.DoesNotExist:
+                    request._checkout_flow_invoice_address = InvoiceAddress()
     return request._checkout_flow_invoice_address
 
 

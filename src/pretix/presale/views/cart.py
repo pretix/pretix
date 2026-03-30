@@ -417,7 +417,7 @@ def get_or_create_cart_id(request, create=True):
     return new_id
 
 
-def cart_session(request):
+def cart_session(request, create=True):
     """
     Before pretix 1.8.0, all checkout-related information (like the entered email address) was stored
     in the user's regular session dictionary. This led to data interference and leaks for example if a
@@ -428,7 +428,9 @@ def cart_session(request):
     active cart session sub-dictionary for read and write access.
     """
     request.session.modified = True
-    cart_id = get_or_create_cart_id(request)
+    cart_id = get_or_create_cart_id(request, create=create)
+    if not cart_id and not create:
+        return None
     return request.session['carts'][cart_id]
 
 
