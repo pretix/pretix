@@ -296,7 +296,7 @@ class SetPasswordForm(forms.Form):
     }
     email = forms.EmailField(
         label=_('Email'),
-        disabled=True
+        widget=forms.EmailInput(attrs={'autocomplete': 'username', 'readonly': 'readonly'}),
     )
     password = forms.CharField(
         label=_('Password'),
