@@ -36,6 +36,7 @@
 import datetime
 import re
 from decimal import Decimal
+from importlib import import_module
 from json import loads
 from zoneinfo import ZoneInfo
 
@@ -79,6 +80,34 @@ class EventMiddlewareTest(EventTestMixin, SoupTest):
     def test_event_header(self):
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn(str(self.event.name), doc.find("h1").text)
+
+    def test_no_session_cookie_set_on_event_index_view(self):
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(resp.status_code, 200)
+        assert settings.SESSION_COOKIE_NAME not in self.client.cookies
+
+    def test_no_cart_session_added_on_event_index_view(self):
+        # Make sure a session is present by doing a cart op on another event
+        event2 = Event.objects.create(
+            organizer=self.orga, name='30C3b', slug='30c3b',
+            date_from=datetime.datetime(now().year + 1, 12, 26, 14, 0, tzinfo=datetime.timezone.utc),
+            live=True,
+        )
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, event2.slug), {
+            'item_%d' % 1337: '1',  # item does not need to exist
+            'ajax': 1
+        })
+        assert settings.SESSION_COOKIE_NAME in self.client.cookies
+
+        # Visit shop, make sure no session is created
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(resp.status_code, 200)
+
+        SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+        session = SessionStore(self.client.cookies[settings.SESSION_COOKIE_NAME].value).load()
+        assert set(session.keys()) == {
+            f"current_cart_event_{event2.pk}", "carts"
+        }
 
     def test_not_found(self):
         resp = self.client.get('/%s/%s/' % ('foo', 'bar'))
