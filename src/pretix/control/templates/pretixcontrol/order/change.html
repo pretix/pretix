@@ -329,6 +329,7 @@
                                         {{ add_form.custom_error }}
                                     </div>
                                 {% endif %}
+                                {% bootstrap_field add_form.count layout="control" %}
                                 {% bootstrap_field add_form.itemvar layout="control" %}
                                 {% bootstrap_field add_form.price addon_after=request.event.currency layout="control" %}
                                 {% if add_form.addon_to %}
@@ -364,6 +365,7 @@
                         </div>
                         <div class="panel-body">
                             <div class="form-horizontal">
+                                {% bootstrap_field add_position_formset.empty_form.count layout="control" %}
                                 {% bootstrap_field add_position_formset.empty_form.itemvar layout="control" %}
                                 {% bootstrap_field add_position_formset.empty_form.price addon_after=request.event.currency layout="control" %}
                                 {% if add_position_formset.empty_form.addon_to %}

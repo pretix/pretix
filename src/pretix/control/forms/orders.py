@@ -331,6 +331,10 @@ class OtherOperationsForm(forms.Form):
 
 
 class OrderPositionAddForm(forms.Form):
+    count = forms.IntegerField(
+        label=_('Number of products to add'),
+        initial=1,
+    )
     itemvar = forms.ChoiceField(
         label=_('Product')
     )
@@ -432,6 +436,10 @@ class OrderPositionAddForm(forms.Form):
             d['used_membership'] = [m for m in self.memberships if str(m.pk) == d['used_membership']][0]
         else:
             d['used_membership'] = None
+        if d.get("count", 1) and d.get("seat"):
+            raise ValidationError({
+                "seat": _("You can not choose a seat when adding multiple products at once.")
+            })
         return d
 
 

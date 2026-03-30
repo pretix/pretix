@@ -2059,12 +2059,13 @@ class OrderChange(OrderView):
                 else:
                     variation = None
                 try:
-                    ocm.add_position(item, variation,
-                                     f.cleaned_data['price'],
-                                     f.cleaned_data.get('addon_to'),
-                                     f.cleaned_data.get('subevent'),
-                                     f.cleaned_data.get('seat'),
-                                     f.cleaned_data.get('used_membership'))
+                    for i in range(f.cleaned_data.get("count", 1)):
+                        ocm.add_position(item, variation,
+                                         f.cleaned_data['price'],
+                                         f.cleaned_data.get('addon_to'),
+                                         f.cleaned_data.get('subevent'),
+                                         f.cleaned_data.get('seat'),
+                                         f.cleaned_data.get('used_membership'))
                 except OrderError as e:
                     f.custom_error = str(e)
                     return False
