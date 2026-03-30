@@ -772,7 +772,8 @@ class PaymentDetailsField(serializers.Field):
         try:
             return pp.api_payment_details(value)
         except Exception:
-            return value.info_data
+            logger.exception("Failed to retrieve payment_details")
+            return {}
 
 
 class OrderPaymentSerializer(I18nAwareModelSerializer):
