@@ -411,7 +411,7 @@ def mail_send_task(self, **kwargs) -> bool:
         try:
             outgoing_mail = OutgoingMail.objects.select_for_update(of=OF_SELF).get(pk=outgoing_mail)
         except OutgoingMail.DoesNotExist:
-            logger.info(f"Ignoring job for non existing email {outgoing_mail.guid}")
+            logger.info(f"Ignoring job for non existing email {outgoing_mail}")
             return False
         if outgoing_mail.status == OutgoingMail.STATUS_INFLIGHT:
             logger.info(f"Ignoring job for inflight email {outgoing_mail.guid}")
