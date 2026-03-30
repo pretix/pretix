@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-25 12:41+0000\n"
+"PO-Revision-Date: 2026-03-30 21:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -13279,7 +13279,7 @@ msgstr ""
 #: pretix/base/settings.py:4157
 #, python-brace-format
 msgid "VAT-ID is not supported for \"{}\"."
-msgstr ""
+msgstr "Btw-nummer wordt niet ondersteund voor \"{}\"."
 
 #: pretix/base/settings.py:4164
 msgid "The last payment date cannot be before the end of presale."
@@ -27449,28 +27449,28 @@ msgid "Add a two-factor authentication device"
 msgstr "Twee-factor-authenticatieapparaat toevoegen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:19
-#, fuzzy
-#| msgid "Smartphone with the Authenticator application"
 msgid "Smartphone with Authenticator app"
-msgstr "Smartphone met de Authenticator-applicatie"
+msgstr "Smartphone met Authenticator-app"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:21
 msgid ""
 "Use your smartphone with any Time-based One-Time-Password app like freeOTP, "
 "Google Authenticator or Proton Authenticator."
 msgstr ""
+"Gebruik uw smartphone met een willekeurige app voor tijdgebonden eenmalige "
+"wachtwoorden, zoals freeOTP, Google Authenticator of Proton Authenticator."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:30
-#, fuzzy
-#| msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token"
-msgstr "WebAuthn-compatibel hardware-token (bijvoorbeeld Yubikey)"
+msgstr "WebAuthn-compatibel hardware-token"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:32
 msgid ""
 "Use a hardware token like the Yubikey, or other biometric authentication "
 "like fingerprint or face recognition."
 msgstr ""
+"Gebruik een hardwaretoken zoals de Yubikey, of een andere vorm van "
+"biometrische authenticatie, zoals vingerafdruk- of gezichtsherkenning."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
@@ -30018,38 +30018,39 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:3675
 msgid "The order of sales channels has been updated."
-msgstr ""
+msgstr "De volgorde van de verkoopskanalen is bijgewerkt."
 
 #: pretix/control/views/pdf.py:85
 msgid "The uploaded PDF file is too large."
-msgstr ""
+msgstr "Het geüploade PDF-bestand is te groot."
 
 #: pretix/control/views/pdf.py:87
 msgid "The uploaded PDF file is too small."
-msgstr ""
+msgstr "Het geüploade PDF-bestand is te klein."
 
 #: pretix/control/views/pdf.py:89
 msgid "Please only upload PDF files."
-msgstr ""
+msgstr "Upload alleen PDF-bestanden."
 
 #: pretix/control/views/pdf.py:233
 #, python-brace-format
 msgid "Unfortunately, we were unable to process this PDF file ({reason})."
-msgstr ""
+msgstr "Helaas kunnen we dit PDF-bestand niet verwerken ({reason})."
 
 #: pretix/control/views/shredder.py:162
 msgid "The selected data was deleted successfully."
-msgstr ""
+msgstr "De gekozen gegevens zijn verwijderd."
 
 #: pretix/control/views/subevents.py:168 pretix/control/views/subevents.py:530
 msgctxt "subevent"
 msgid "The requested date does not exist."
-msgstr ""
+msgstr "De gevraagde datum bestaat niet."
 
 #: pretix/control/views/subevents.py:172 pretix/control/views/subevents.py:184
 msgctxt "subevent"
 msgid "A date can not be deleted if orders already have been placed."
 msgstr ""
+"Een datum kan niet verwijderd worden, als er al bestellingen geplaatst zijn."
 
 #: pretix/control/views/subevents.py:203
 msgctxt "subevent"
@@ -30057,79 +30058,85 @@ msgid ""
 "The date could not be deleted as some constraints (e.g. data created by plug-"
 "ins) did not allow it. The date was disabled instead."
 msgstr ""
+"De datum kon niet verwijderd wordne, omdat bepaalde beperkingen "
+"(bijvoorbeeld gegevens die door plug-ins aangemaakt zijn) dit niet "
+"toelieten. De datum werd in plaats daarvan uitgeschakeld."
 
 #: pretix/control/views/subevents.py:207
 msgctxt "subevent"
 msgid "The selected date has been deleted."
-msgstr ""
+msgstr "De geselecteerde datum is verwijderd."
 
 #: pretix/control/views/subevents.py:619
 msgctxt "subevent"
 msgid "The new date has been created."
-msgstr ""
+msgstr "De nieuwe datum is aangemaakt."
 
 #: pretix/control/views/subevents.py:688
 msgctxt "subevent"
 msgid "The selected dates have been disabled."
-msgstr ""
+msgstr "De geselecteerde datums zijn uitgeschakeld."
 
 #: pretix/control/views/subevents.py:701
 msgctxt "subevent"
 msgid "The selected dates have been enabled."
-msgstr ""
+msgstr "De geselecteerde datums zijn ingeschakeld."
 
 #: pretix/control/views/subevents.py:730
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
-msgstr ""
+msgstr "De geselecteerde datums zijn verwijderd of uitgeschakeld."
 
 #: pretix/control/views/subevents.py:918
 msgid "Please do not create more than 100.000 dates at once."
-msgstr ""
+msgstr "U kunt maximaal 100.000 datums tegelijk aanmaken."
 
 #: pretix/control/views/subevents.py:1054
 #, python-brace-format
 msgctxt "subevent"
 msgid "{} new dates have been created."
-msgstr ""
+msgstr "Er zijn {} nieuwe datums aangemaakt."
 
 #: pretix/control/views/typeahead.py:93
 msgid "Series:"
-msgstr ""
+msgstr "Reeks:"
 
 #: pretix/control/views/typeahead.py:116
 #, python-brace-format
 msgid "Order {}"
-msgstr ""
+msgstr "Bestelling {}"
 
 #: pretix/control/views/typeahead.py:129
 #, python-brace-format
 msgid "Voucher {}"
-msgstr ""
+msgstr "Voucher {}"
 
 #: pretix/control/views/user.py:169
 msgid "The password you entered was invalid, please try again."
-msgstr ""
+msgstr "Het ingevoerde wachtwoord is ongeldig. Probeer het opnieuw."
 
 #: pretix/control/views/user.py:334
 msgid "Security devices are only available if pretix is served via HTTPS."
 msgstr ""
+"Beveiligingsapparaten zijn alleen beschikbaar, als pretix via HTTPS wordt "
+"geopend."
 
 #: pretix/control/views/user.py:371
 msgid "A two-factor authentication device has been removed from your account."
-msgstr ""
+msgstr "Een twee-factor-authenticatieapparaat is verwijderd van uw account."
 
 #: pretix/control/views/user.py:382
 msgid "The device has been removed."
-msgstr ""
+msgstr "Het apparaat is verwijderd."
 
 #: pretix/control/views/user.py:447
 msgid "This security device is already registered."
-msgstr ""
+msgstr "Dit beveiligingsapparaat is al geregistreerd."
 
 #: pretix/control/views/user.py:466 pretix/control/views/user.py:527
 msgid "A new two-factor authentication device has been added to your account."
 msgstr ""
+"Er is een nieuw twee-factor-authenticatieapparaat toegevoegd aan uw account."
 
 #: pretix/control/views/user.py:482 pretix/control/views/user.py:542
 msgid ""
@@ -30137,38 +30144,43 @@ msgid ""
 "account using the buttons below to make a second factor required for logging "
 "into your account."
 msgstr ""
+"Let op: u moet de twee-factor-authenticatie nog inschakelen voor uw account "
+"via de onderstaande knop, zodat de tweede factor vereist is om in te loggen."
 
 #: pretix/control/views/user.py:485 pretix/control/views/user.py:545
 msgid "The device has been verified and can now be used."
-msgstr ""
+msgstr "Het apparaat is geverifieerd en kan nu gebruikt worden."
 
 #: pretix/control/views/user.py:488
 msgid "The registration could not be completed. Please try again."
-msgstr ""
+msgstr "De registratie kon niet voltooid worden. Probeer het opnieuw."
 
 #: pretix/control/views/user.py:548
 msgid ""
 "The code you entered was not valid. If this problem persists, please check "
 "that the date and time of your phone are configured correctly."
 msgstr ""
+"De ingevoerde code is ongeldig. Als het probleem zich blijft voordoen, "
+"controleer dan of de datum en tijd op uw telefoon correct ingesteld zijn."
 
 #: pretix/control/views/user.py:568
 msgid "You have left all teams that require two-factor authentication."
-msgstr ""
+msgstr "U hebt alle teams verlaten die twee-factor-authenticatie vereisen."
 
 #: pretix/control/views/user.py:582
 msgid ""
 "Please configure at least one device before enabling two-factor "
 "authentication."
 msgstr ""
+"Stel ten minste één apparaat in voor u twee-factor-authenticatie inschakelt."
 
 #: pretix/control/views/user.py:591
 msgid "Two-factor authentication is now enabled for your account."
-msgstr ""
+msgstr "Twee-factor-authenticatie is nu ingeschakeld voor uw account."
 
 #: pretix/control/views/user.py:607
 msgid "Two-factor authentication is now disabled for your account."
-msgstr ""
+msgstr "Twee-factor-authenticatie is nu uitgeschakeld voor uw account."
 
 #: pretix/control/views/user.py:632
 #, python-brace-format
