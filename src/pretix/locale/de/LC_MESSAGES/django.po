@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-18 02:00+0000\n"
+"PO-Revision-Date: 2026-03-30 11:50+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13341,7 +13341,7 @@ msgstr ""
 #: pretix/base/settings.py:4157
 #, python-brace-format
 msgid "VAT-ID is not supported for \"{}\"."
-msgstr ""
+msgstr "USt-ID wird für \"{}\" nicht unterstützt."
 
 #: pretix/base/settings.py:4164
 msgid "The last payment date cannot be before the end of presale."
@@ -27564,8 +27564,6 @@ msgid "Add a two-factor authentication device"
 msgstr "Gerät hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:19
-#, fuzzy
-#| msgid "Smartphone with the Authenticator application"
 msgid "Smartphone with Authenticator app"
 msgstr "Smartphone mit Authenticator-App"
 
@@ -27574,18 +27572,20 @@ msgid ""
 "Use your smartphone with any Time-based One-Time-Password app like freeOTP, "
 "Google Authenticator or Proton Authenticator."
 msgstr ""
+"Nutzen Sie Ihr Smartphone mit einer App für zeitbasierte Einmalpasswörter "
+"(TOTP) wie z.B. freeOTP, Google Authenticator oder Proton Authenticator."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:30
-#, fuzzy
-#| msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token"
-msgstr "WebAuthn-kompatibler Hardwaretoken (z.B. Yubikey)"
+msgstr "WebAuthn-kompatibler Hardwaretoken"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:32
 msgid ""
 "Use a hardware token like the Yubikey, or other biometric authentication "
 "like fingerprint or face recognition."
 msgstr ""
+"Nutzen Sie einen Hardware-Token wie den Yubikey oder andere biometrische "
+"Authentisierung wie Fingerabdruck oder Gesichtserkennung."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
