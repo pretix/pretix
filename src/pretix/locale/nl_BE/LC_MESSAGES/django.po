@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-30 21:00+0000\n"
+"PO-Revision-Date: 2026-03-31 17:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -30192,22 +30192,28 @@ msgid ""
 "Your emergency codes:\n"
 "{tokens}"
 msgstr ""
+"Uw noodcodes zijn opnieuw gegenereerd. Vergeet niet om ze op een veilige "
+"plaats te bewaren voor het geval u geen toegang meer hebt tot uw apparaten. "
+"U kunt ze hier niet meer opnieuw laten tonen.\n"
+"\n"
+"Uw noodcodes: \n"
+"{tokens}"
 
 #: pretix/control/views/user.py:652
 msgid "Your notifications have been disabled."
-msgstr ""
+msgstr "Uw meldingen zijn uitgeschakeld."
 
 #: pretix/control/views/user.py:701 pretix/control/views/user.py:741
 msgid "Your notification settings have been saved."
-msgstr ""
+msgstr "Uw meldingsinstellingen zijn opgeslagen."
 
 #: pretix/control/views/user.py:819
 msgid "Your comment has been saved."
-msgstr ""
+msgstr "Uw commentaar is opgeslagen."
 
 #: pretix/control/views/user.py:908
 msgid "Your email address was already verified."
-msgstr ""
+msgstr "Uw e-mailadres is al bevestigd."
 
 #: pretix/control/views/user.py:930
 #, python-brace-format
@@ -30215,26 +30221,28 @@ msgid ""
 "Please enter the confirmation code we sent to your email address "
 "<strong>{email}</strong>."
 msgstr ""
+"Voer de bevestigingscode in die we naar het e-mailadres <strong>{email}</"
+"strong> hebben gestuurd."
 
 #: pretix/control/views/user.py:950
 msgid "We were unable to verify your confirmation code. Please try again."
-msgstr ""
+msgstr "We konden uw bevestigingscode niet verifiëren. Probeer het opnieuw."
 
 #: pretix/control/views/user.py:975
 msgid "Your email address has been changed successfully."
-msgstr ""
+msgstr "Uw e-mailadres is met succes gewijzigd."
 
 #: pretix/control/views/user.py:977
 msgid "Your email address has been confirmed successfully."
-msgstr ""
+msgstr "Uw e-mailadres is bevestigd."
 
 #: pretix/control/views/user.py:981
 msgid "The entered confirmation code is not correct. Please try again."
-msgstr ""
+msgstr "De ingevoerde bevestigingscode is niet correct. Probeer het opnieuw."
 
 #: pretix/control/views/users.py:145
 msgid "We sent out an email containing further instructions."
-msgstr ""
+msgstr "We hebben een e-mail met verdere instructies verstuurd."
 
 #: pretix/control/views/users.py:164
 msgid ""
@@ -30242,6 +30250,10 @@ msgid ""
 "This will usually happen if you lost access to your two-factor credentials "
 "and requested a reset of the credentials."
 msgstr ""
+"Er is een noodcode voor twee-factor-authenticatie gegenereerd door een "
+"systeembeheerder. Dat gebeurt meestal als u geen toegang meer hebt tot uw "
+"inloggegevens voor twee-factor-authenticatie en gevraagd hebt om ze te "
+"resetten."
 
 #: pretix/control/views/users.py:169
 #, python-brace-format
@@ -30251,96 +30263,101 @@ msgid ""
 "(other than email, if possible). Any previous emergency tokens for this user "
 "remain active."
 msgstr ""
+"Het noodtoken voor deze gebruiker is \"{token}\". Het token kan slechts één "
+"keer worden gebruikt en mag alleen via een geverifieerd kanaal worden "
+"verzonden (idealiter geen e-mail). Tokens die al gegenereerd zijn, blijven "
+"actief."
 
 #: pretix/control/views/users.py:313
 msgid "The new user has been created."
-msgstr ""
+msgstr "De nieuwe gebruiker is aangemaakt."
 
 #: pretix/control/views/vouchers.py:120
 msgid "Reserve quota"
-msgstr ""
+msgstr "Reserveren in het quotum"
 
 #: pretix/control/views/vouchers.py:120
 msgid "Bypass quota"
-msgstr ""
+msgstr "Quotum omzeilen"
 
 #: pretix/control/views/vouchers.py:209 pretix/control/views/vouchers.py:241
 #: pretix/control/views/vouchers.py:303
 msgid "The requested voucher does not exist."
-msgstr ""
+msgstr "De gevraagde voucher bestaat niet."
 
 #: pretix/control/views/vouchers.py:219
 msgid "The selected cart positions have been removed."
-msgstr ""
+msgstr "De geselecteerde posities in het winkelwagentje zijn verwijderd."
 
 #: pretix/control/views/vouchers.py:245 pretix/control/views/vouchers.py:255
 msgid "A voucher can not be deleted if it already has been redeemed."
-msgstr ""
+msgstr "Een ingewisselde voucher kan niet verwijderd worden."
 
 #: pretix/control/views/vouchers.py:261
 msgid "The selected voucher has been deleted."
-msgstr ""
+msgstr "De geselecteerde voucher is verwijderd."
 
 #: pretix/control/views/vouchers.py:381
 #, python-brace-format
 msgid "The new voucher has been created: {code}"
-msgstr ""
+msgstr "De nieuwe voucher is aangemaakt: {code}"
 
 #: pretix/control/views/vouchers.py:405
 msgid "There is no voucher with the given voucher code."
-msgstr ""
+msgstr "Er is geen voucher met de opgegeven vouchercode."
 
 #: pretix/control/views/vouchers.py:520
 msgid "The new vouchers have been created."
-msgstr ""
+msgstr "De nieuwe vouchers zijn aangemaakt."
 
 #: pretix/control/views/vouchers.py:643
 msgid "The selected vouchers have been deleted or disabled."
-msgstr ""
+msgstr "De geselecteerde vouchers zijn verwijderd of uitgeschakeld."
 
 #: pretix/control/views/waitinglist.py:70
 #, python-brace-format
 msgid "{num} vouchers have been created and sent out via email."
-msgstr ""
+msgstr "{num} vouchers zijn aangemaakt en verstuurd via e-mail."
 
 #: pretix/control/views/waitinglist.py:183
 msgid "The selected entries have been deleted."
-msgstr ""
+msgstr "De geselecteerde inschrijvingen zijn verwijderd."
 
 #: pretix/control/views/waitinglist.py:196
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
 msgstr ""
+"Er is een e-mail met een vouchercode verstuurd naar het opgegeven adres."
 
 #: pretix/control/views/waitinglist.py:200
 #: pretix/control/views/waitinglist.py:219
 #: pretix/control/views/waitinglist.py:238
 msgid "Waiting list entry not found."
-msgstr ""
+msgstr "Wachtlijstinschrijving niet gevonden."
 
 #: pretix/control/views/waitinglist.py:216
 msgid "The waiting list entry has been moved to the top."
-msgstr ""
+msgstr "De wachtlijstinschrijving is verplaatst naar het begin van de lijst."
 
 #: pretix/control/views/waitinglist.py:235
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr ""
+msgstr "De wachtlijstinschrijving is verplaatst naar het eind van de lijst."
 
 #: pretix/control/views/waitinglist.py:326
 msgid "On list since"
-msgstr ""
+msgstr "Op wachtlijst sinds"
 
 #: pretix/control/views/waitinglist.py:347
 msgid "Waiting"
-msgstr ""
+msgstr "Wachtend"
 
 #: pretix/control/views/waitinglist.py:385
 msgid "The requested entry does not exist."
-msgstr ""
+msgstr "De gevraagde inschrijving bestaat niet."
 
 #: pretix/control/views/waitinglist.py:393
 msgid "The selected entry has been deleted."
-msgstr ""
+msgstr "De geselecteerde inschrijving is verwijderd."
 
 #: pretix/control/views/waitinglist.py:418
 msgid "The waitinglist entry has been changed."
@@ -30348,7 +30365,7 @@ msgstr "Inschrijving op de wachtlijst gewijzigd."
 
 #: pretix/helpers/countries.py:134
 msgid "Belarus"
-msgstr ""
+msgstr "Wit-Rusland"
 
 #: pretix/helpers/countries.py:135
 msgid "French Guiana"
@@ -30356,11 +30373,11 @@ msgstr "Frans-Guyana"
 
 #: pretix/helpers/countries.py:136
 msgid "North Macedonia"
-msgstr ""
+msgstr "Noord-Macedonië"
 
 #: pretix/helpers/countries.py:137
 msgid "Macao"
-msgstr ""
+msgstr "Macau"
 
 #: pretix/helpers/daterange.py:54 pretix/helpers/daterange.py:126
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:78
@@ -30368,7 +30385,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:71
 msgctxt "timerange"
 msgid "until"
-msgstr ""
+msgstr "tot"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
@@ -30381,11 +30398,11 @@ msgstr ""
 
 #: pretix/helpers/payment.py:124
 msgid "Open BezahlCode in your banking app to start the payment process."
-msgstr ""
+msgstr "Open BezahlCode in uw bankapp om het betalingsproces te starten."
 
 #: pretix/helpers/security.py:172
 msgid "Login from new source detected"
-msgstr ""
+msgstr "Login vanaf nieuwe locatie gedetecteerd"
 
 #: pretix/helpers/security.py:176
 msgid "Unknown country"
@@ -30393,19 +30410,19 @@ msgstr "Onbekend land"
 
 #: pretix/multidomain/models.py:36
 msgid "Organizer domain"
-msgstr ""
+msgstr "Domein van de organisator"
 
 #: pretix/multidomain/models.py:37
 msgid "Alternative organizer domain for a set of events"
-msgstr ""
+msgstr "Alternatieve organisator voor een reeks evenementen"
 
 #: pretix/multidomain/models.py:38
 msgid "Event domain"
-msgstr ""
+msgstr "Domein evenement"
 
 #: pretix/multidomain/models.py:44
 msgid "Domain name"
-msgstr ""
+msgstr "Domeinnaam"
 
 #: pretix/multidomain/models.py:50
 msgid "Mode"
@@ -30413,15 +30430,15 @@ msgstr "Modus"
 
 #: pretix/multidomain/models.py:69
 msgid "Known domain"
-msgstr ""
+msgstr "Bekend domein"
 
 #: pretix/multidomain/models.py:70
 msgid "Known domains"
-msgstr ""
+msgstr "Bekende domeinen"
 
 #: pretix/plugins/autocheckin/apps.py:30 pretix/plugins/autocheckin/apps.py:33
 msgid "Automated check-in"
-msgstr ""
+msgstr "Automatisch inchecken"
 
 #: pretix/plugins/autocheckin/apps.py:34 pretix/plugins/badges/apps.py:34
 #: pretix/plugins/banktransfer/apps.py:36
@@ -30433,127 +30450,132 @@ msgstr ""
 #: pretix/plugins/stripe/apps.py:35 pretix/plugins/ticketoutputpdf/apps.py:48
 #: pretix/plugins/webcheckin/apps.py:34
 msgid "the pretix team"
-msgstr ""
+msgstr "het pretix-team"
 
 #: pretix/plugins/autocheckin/apps.py:39
 msgid "Automatically check-in specific tickets after they have been sold."
-msgstr ""
+msgstr "Bepaalde tickets automatisch inchecken nadat ze verkocht zijn."
 
 #: pretix/plugins/autocheckin/apps.py:42 pretix/plugins/webcheckin/apps.py:40
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
 msgid "Check-in"
-msgstr ""
+msgstr "Check-in"
 
 #: pretix/plugins/autocheckin/apps.py:42
 #: pretix/plugins/autocheckin/signals.py:47
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:13
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:13
 msgid "Auto check-in"
-msgstr ""
+msgstr "Automatische check-in"
 
 #: pretix/plugins/autocheckin/forms.py:60
 #: pretix/plugins/autocheckin/models.py:82
 msgid "Only including usage of payment providers"
-msgstr ""
+msgstr "Alleen inclusief gebruik van betalingsproviders"
 
 #: pretix/plugins/autocheckin/forms.py:120
 msgid "All variations"
-msgstr ""
+msgstr "Alle varianten"
 
 #: pretix/plugins/autocheckin/forms.py:247
 msgid ""
 "When restricting by payment method, the rule should run after the payment "
 "was received."
 msgstr ""
+"Als de regel beperkt is tot bepaalde betaalmethoden, moet hij pas worden "
+"uitgevoerd nadat de betaling voltooid is."
 
 #: pretix/plugins/autocheckin/models.py:36
 msgid "After order was placed"
-msgstr ""
+msgstr "Na ontvangst van de bestelling"
 
 #: pretix/plugins/autocheckin/models.py:37
 msgid "After order was paid"
-msgstr ""
+msgstr "Na betaling van de bestelling"
 
 #: pretix/plugins/autocheckin/models.py:48
 msgid ""
 "If you keep this empty, all lists that match the purchased product will be "
 "used."
 msgstr ""
+"Als u dit leeg laat, worden alle lijsten die overeenkomen met het gekochte "
+"product gebruikt."
 
 #: pretix/plugins/autocheckin/models.py:59
 msgid "All sales channels"
-msgstr ""
+msgstr "Alle verkoopskanalen"
 
 #: pretix/plugins/autocheckin/models.py:69
 msgid "All products and variations"
-msgstr ""
+msgstr "Alle producten en varianten"
 
 #: pretix/plugins/autocheckin/models.py:78
 msgid "All payment methods"
-msgstr ""
+msgstr "Alle betaalmethodes"
 
 #: pretix/plugins/autocheckin/signals.py:70
 msgid "An auto check-in rule was created"
-msgstr ""
+msgstr "Er is een regel voor automatisch inchecken aangemaakt"
 
 #: pretix/plugins/autocheckin/signals.py:72
 msgid "An auto check-in rule was updated"
-msgstr ""
+msgstr "De regel voor automatisch inchecken is bijgewerkt"
 
 #: pretix/plugins/autocheckin/signals.py:75
 msgid "An auto check-in rule was deleted"
-msgstr ""
+msgstr "De regel voor automatisch inchecken is verwijderd"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:6
 msgid "Create auto check-in rule"
-msgstr ""
+msgstr "Regel voor automatisch inchecken aanmaken"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/add.html:18
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:18
 msgid "Conditions"
-msgstr ""
+msgstr "Voorwaarden"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:6
 msgid "Delete auto check-in rule"
-msgstr ""
+msgstr "Regel voor automatisch inchecken verwijderen"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/delete.html:9
 msgid "Are you sure you want to delete the auto check-in rule?"
 msgstr ""
+"Weet u zeker dat u de regel voor automatisch inchecken wilt verwijderen?"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:4
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/edit.html:6
 msgid "Auto check-in rule"
-msgstr ""
+msgstr "Regel voor automatisch inchecken"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:5
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:7
 msgid "Auto check-in rules"
-msgstr ""
+msgstr "Regels voor automatisch inchecken"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:11
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
 msgid "You haven't created any rules yet."
-msgstr ""
+msgstr "U hebt nog geen regels aangemaakt."
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:17
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:22
 msgid "Create a new check-in rule"
-msgstr ""
+msgstr "Nieuwe regel voor inchecken aanmaken"
 
 #: pretix/plugins/autocheckin/templates/pretixplugins/autocheckin/index.html:32
 msgid "Payment methods"
-msgstr ""
+msgstr "Betaalmethodes"
 
 #: pretix/plugins/autocheckin/views.py:119 pretix/plugins/sendmail/views.py:603
 msgid "Your rule has been created."
-msgstr ""
+msgstr "Uw regel is aangemaakt."
 
 #: pretix/plugins/autocheckin/views.py:209 pretix/plugins/sendmail/views.py:730
 msgid "The selected rule has been deleted."
-msgstr ""
+msgstr "De geselecteerde regel is verwijderd."
 
 #: pretix/plugins/badges/apps.py:30 pretix/plugins/badges/apps.py:33
 #: pretix/plugins/badges/apps.py:41 pretix/plugins/badges/signals.py:54
@@ -30563,7 +30585,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:4
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:6
 msgid "Badges"
-msgstr ""
+msgstr "Badges"
 
 #: pretix/plugins/badges/apps.py:38
 msgid ""
@@ -30571,57 +30593,61 @@ msgid ""
 "download the badges in the backend or automatically print them with our "
 "check-in apps."
 msgstr ""
+"Automatisch badges of naambordjes voor uw deelnemers genereren. U kunt de "
+"badges in het beheerdersgedeelte downloaden of ze automatisch bij de ingang "
+"afdrukken met onze check-in-apps."
 
 #: pretix/plugins/badges/exporters.py:89
 msgid "One badge per page"
-msgstr ""
+msgstr "Eén badge per pagina"
 
 #: pretix/plugins/badges/exporters.py:97
 msgid "4 landscape A6 pages on one A4 page"
-msgstr ""
+msgstr "4 liggende A6-pagina's op één A4-pagina"
 
 #: pretix/plugins/badges/exporters.py:105
 msgid "4 portrait A6 pages on one A4 page"
-msgstr ""
+msgstr "4 staande A6-pagina's op één A4-pagina"
 
 #: pretix/plugins/badges/exporters.py:113
 msgid "8 landscape A7 pages on one A4 page"
-msgstr ""
+msgstr "8 liggende A7-pagina's op één A4-pagina"
 
 #: pretix/plugins/badges/exporters.py:121
 msgid "8 portrait A7 pages on one A4 page"
-msgstr ""
+msgstr "8 staande A7-pagina's op één A4-pagina"
 
 #: pretix/plugins/badges/exporters.py:353
 msgid "None of the selected products is configured to print badges."
-msgstr ""
+msgstr "Geen van de gekozen producten is ingesteld om badges te printen."
 
 #: pretix/plugins/badges/exporters.py:421
 msgid "Attendee badges"
-msgstr ""
+msgstr "Deelnemersbadges"
 
 #: pretix/plugins/badges/exporters.py:422
 #: pretix/plugins/ticketoutputpdf/exporters.py:69
 msgctxt "export_category"
 msgid "PDF collections"
-msgstr ""
+msgstr "PDF-verzamelingen"
 
 #: pretix/plugins/badges/exporters.py:423
 msgid "Download all attendee badges as one large PDF for printing."
 msgstr ""
+"Alle deelnemersbadges in één groot PDF-bestand downloaden om af te drukken."
 
 #: pretix/plugins/badges/exporters.py:444
 #: pretix/plugins/ticketoutputpdf/exporters.py:80
 msgid "Include pending orders"
-msgstr ""
+msgstr "Inclusief openstaande bestellingen"
 
 #: pretix/plugins/badges/exporters.py:449
 msgid "Include add-on or bundled positions"
-msgstr ""
+msgstr "Inclusief add-on of gebundelde posities"
 
 #: pretix/plugins/badges/exporters.py:454
 msgid "Rendering option"
-msgstr ""
+msgstr "Afdrukmodus"
 
 #: pretix/plugins/badges/exporters.py:459
 msgid ""
@@ -30630,38 +30656,42 @@ msgid ""
 "Please note that your individual badge layouts must already be in the "
 "correct size."
 msgstr ""
+"Met deze optie kunt u meerdere badges op één pagina afdrukken, bijvoorbeeld "
+"wanneer u een vel met stickers wilt afdrukken op een gewone kantoorprinter. "
+"Houd er rekening mee dat de afzonderlijke badge-ontwerpen al de juiste "
+"afmetingen moeten hebben."
 
 #: pretix/plugins/badges/exporters.py:465
 msgid "Start event date"
-msgstr ""
+msgstr "Vroegste datum"
 
 #: pretix/plugins/badges/exporters.py:468
 msgid "Only include tickets for dates on or after this date."
-msgstr ""
+msgstr "Alleen tickets voor data op of na deze datum."
 
 #: pretix/plugins/badges/exporters.py:472
 msgid "End event date"
-msgstr ""
+msgstr "Uiterste datum"
 
 #: pretix/plugins/badges/exporters.py:475
 msgid "Only include tickets ordered on or before this date."
-msgstr ""
+msgstr "Alleen tickets die besteld zijn op of voor deze datum."
 
 #: pretix/plugins/badges/exporters.py:479
 msgid "Start order date"
-msgstr ""
+msgstr "Startdatum bestelling"
 
 #: pretix/plugins/badges/exporters.py:482
 msgid "Only include tickets ordered on or after this date."
-msgstr ""
+msgstr "Alleen tickets die besteld zijn op of na deze datum."
 
 #: pretix/plugins/badges/exporters.py:486
 msgid "End order date"
-msgstr ""
+msgstr "Einddatum bestelling"
 
 #: pretix/plugins/badges/exporters.py:489
 msgid "Only include tickets for dates on or before this date."
-msgstr ""
+msgstr "Alleen tickets op of vóór deze datum."
 
 #: pretix/plugins/badges/exporters.py:493
 #: pretix/plugins/checkinlists/exporters.py:118
@@ -30669,7 +30699,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:693
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
 msgid "Sort by"
-msgstr ""
+msgstr "Sorteren op"
 
 #: pretix/plugins/badges/exporters.py:661
 #: pretix/plugins/ticketoutputpdf/exporters.py:242
@@ -30678,64 +30708,67 @@ msgid ""
 "invalid values in your databases, such as answers to number questions which "
 "are not a number."
 msgstr ""
+"Uw gegevens konden niet geconverteerd worden zoals gevraagd. Dit kan worden "
+"veroorzaakt door ongeldige waarden in uw databases, zoals antwoorden op "
+"numerieke vragen die geen getal zijn."
 
 #: pretix/plugins/badges/forms.py:33
 msgid "Template"
-msgstr ""
+msgstr "Sjabloon"
 
 #: pretix/plugins/badges/forms.py:34
 msgid ""
 "You can modify the layout or change to a different page size in the next "
 "step."
-msgstr ""
+msgstr "In de volgende stap kunt u de lay-out of het paginaformaat aanpassen."
 
 #: pretix/plugins/badges/forms.py:51
 msgid "(Do not print badges)"
-msgstr ""
+msgstr "(Geen badges printen)"
 
 #: pretix/plugins/badges/forms.py:84
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:8
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:15
 msgid "Badge layout"
-msgstr ""
+msgstr "Badge-lay-out"
 
 #: pretix/plugins/badges/signals.py:176
 msgid "Badge layout created."
-msgstr ""
+msgstr "Badge-lay-out aangemaakt."
 
 #: pretix/plugins/badges/signals.py:177
 msgid "Badge layout deleted."
-msgstr ""
+msgstr "Badge-lay-out verwijderd."
 
 #: pretix/plugins/badges/signals.py:178
 msgid "Badge layout changed."
-msgstr ""
+msgstr "Badge-lay-out gewijzigd."
 
 #: pretix/plugins/badges/signals.py:182
 #, python-brace-format
 msgid "Badge layout {val}"
-msgstr ""
+msgstr "Badge-lay-out {val}"
 
 #: pretix/plugins/badges/templates.py:83
 msgid "A6 landscape"
-msgstr ""
+msgstr "A6 liggend"
 
 #: pretix/plugins/badges/templates.py:88
 msgid "A6 portrait"
-msgstr ""
+msgstr "A6 staand"
 
 #: pretix/plugins/badges/templates.py:93
 msgid "A7 landscape"
-msgstr ""
+msgstr "A7 liggend"
 
 #: pretix/plugins/badges/templates.py:98
 msgid "A7 portrait"
-msgstr ""
+msgstr "A7 staand"
 
 #: pretix/plugins/badges/templates.py:104
 #, python-brace-format
 msgid "{width} x {height} mm butterfly badge"
-msgstr ""
+msgstr "{width} x {height} mm butterfly-badge"
 
 #: pretix/plugins/badges/templates.py:203
 #: pretix/plugins/badges/templates.py:208
@@ -30751,55 +30784,57 @@ msgstr ""
 #: pretix/plugins/badges/templates.py:259
 #, python-brace-format
 msgid "{width} x {height} mm label"
-msgstr ""
+msgstr "{width} x {height} mm label"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
 msgid "Print badges"
-msgstr ""
+msgstr "Badges afdrukken"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
+"Weet u zeker dat u de badge-lay-out <strong>%(layout)s</strong> wilt "
+"verwijderen?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr ""
+msgstr "Badge-lay-out: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:26
 msgid "Save & continue"
-msgstr ""
+msgstr "Opslaan & doorgaan"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
-msgstr ""
+msgstr "U hebt nog geen badge-lay-outs aangemaakt."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
 msgid "Create a new badge layout"
-msgstr ""
+msgstr "Maak een nieuwe badge-lay-out aan"
 
 #: pretix/plugins/badges/views.py:90
 msgid "The new badge layout has been created."
-msgstr ""
+msgstr "De nieuwe badge-lay-out is aangemaakt."
 
 #: pretix/plugins/badges/views.py:151 pretix/plugins/badges/views.py:184
 #: pretix/plugins/badges/views.py:214
 msgid "The requested badge layout does not exist."
-msgstr ""
+msgstr "De gevraagde badge-lay-out bestaat niet."
 
 #: pretix/plugins/badges/views.py:196
 msgid "The selected badge layout been deleted."
-msgstr ""
+msgstr "De geselecteerde badge-lay-out is verwijderd."
 
 #: pretix/plugins/badges/views.py:218
 #, python-brace-format
 msgid "Badge layout: {}"
-msgstr ""
+msgstr "Badge-lay-out: {}"
 
 #: pretix/plugins/banktransfer/apps.py:32
 #: pretix/plugins/banktransfer/apps.py:35
@@ -30810,13 +30845,15 @@ msgstr ""
 #: pretix/plugins/banktransfer/signals.py:48
 #: pretix/plugins/banktransfer/signals.py:86
 msgid "Bank transfer"
-msgstr ""
+msgstr "Bankoverschrijving"
 
 #: pretix/plugins/banktransfer/apps.py:40
 msgid ""
 "Accept payments from your customers using classical wire transfer methods "
 "with your own bank account."
 msgstr ""
+"Ontvang betalingen van klanten via een gewone bankoverschrijving op uw eigen "
+"bankrekening."
 
 #: pretix/plugins/banktransfer/apps.py:46
 #: pretix/plugins/banktransfer/signals.py:56
@@ -30826,22 +30863,23 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:4
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:7
 msgid "Import bank data"
-msgstr ""
+msgstr "Bankgegevens importeren"
 
 #: pretix/plugins/banktransfer/apps.py:47
 #: pretix/plugins/banktransfer/signals.py:64
 #: pretix/plugins/banktransfer/signals.py:101
 msgid "Export refunds"
-msgstr ""
+msgstr "Terugbetalingen exporteren"
 
 #: pretix/plugins/banktransfer/apps.py:62
 msgid ""
 "Install the python package 'chardet' for better CSV import capabilities."
 msgstr ""
+"Installeer het python-package 'chardet' voor betere CSV-importmogelijkheden."
 
 #: pretix/plugins/banktransfer/camtimport.py:33
 msgid "Empty file or unknown format."
-msgstr ""
+msgstr "Leeg bestand of onbekend bestandsformaat."
 
 #: pretix/plugins/banktransfer/payment.py:69
 msgid ""
@@ -30851,28 +30889,35 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
+"Ik begrijp dat de deelnemers hun betaling rechtstreeks naar mijn "
+"bankrekening zullen overmaken en dat pretix niet automatisch kan zien welke "
+"betalingen binnengekomen zijn. Daarom zal ik de betalingen handmatig als "
+"succesvol markeren of regelmatig een digitaal bankafschrift importeren, "
+"zodat pretix de tickets kan versturen."
 
 #: pretix/plugins/banktransfer/payment.py:76
 msgid "Bank account type"
-msgstr ""
+msgstr "Soort bankrekening"
 
 #: pretix/plugins/banktransfer/payment.py:79
 msgid "SEPA bank account"
-msgstr ""
+msgstr "SEPA-bankrekening"
 
 #: pretix/plugins/banktransfer/payment.py:80
 msgid "Other bank account"
-msgstr ""
+msgstr "Andere bankrekening"
 
 #: pretix/plugins/banktransfer/payment.py:85
 msgid "Name of account holder"
-msgstr ""
+msgstr "Naam van rekeninghouder"
 
 #: pretix/plugins/banktransfer/payment.py:87
 msgid ""
 "Please note: special characters other than letters, numbers, and some "
 "punctuation can cause problems with some banks."
 msgstr ""
+"Opgelet: andere tekens dan letters, cijfers en sommige leestekens kunnen "
+"problemen veroorzaken bij sommige banken."
 
 #: pretix/plugins/banktransfer/payment.py:97
 #: pretix/plugins/banktransfer/payment.py:302
@@ -30894,11 +30939,11 @@ msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py:117
 msgid "Name of bank"
-msgstr ""
+msgstr "Naam van de bank"
 
 #: pretix/plugins/banktransfer/payment.py:127
 msgid "Bank account details"
-msgstr ""
+msgstr "Bankgegevens"
 
 #: pretix/plugins/banktransfer/payment.py:130
 msgid ""
@@ -30906,6 +30951,10 @@ msgid ""
 "transfer payment. If you have lots of international customers, they might "
 "need your full address and your bank's full address."
 msgstr ""
+"Vermeld alle andere informatie die uw klanten nodig hebben om een "
+"bankoverschrijving naar u te doen. Als u veel internationale klanten hebt, "
+"hebben zij mogelijk uw volledige adres en het volledige adres van uw bank "
+"nodig."
 
 #: pretix/plugins/banktransfer/payment.py:136
 msgid ""
@@ -30913,36 +30962,41 @@ msgid ""
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
 msgstr ""
+"Voor SEPA-rekeningen kunt u dit veld leeg laten. Anders vult u alle gegevens "
+"in die uw klanten nodig hebben voor de overschrijving, zoals "
+"rekeningnummers, bankcodes, adressen, enz."
 
 #: pretix/plugins/banktransfer/payment.py:155
 msgid "Do not include hyphens in the payment reference."
-msgstr ""
+msgstr "Zet geen streepjes in het betalingskenmerk."
 
 #: pretix/plugins/banktransfer/payment.py:156
 msgid "This is required in some countries."
-msgstr ""
+msgstr "Dit is in sommige landen verplicht."
 
 #: pretix/plugins/banktransfer/payment.py:160
 msgid "Include invoice number in the payment reference."
-msgstr ""
+msgstr "Zet het factuurnummer in het betalingskenmerk."
 
 #: pretix/plugins/banktransfer/payment.py:164
 msgid "Prefix for the payment reference"
-msgstr ""
+msgstr "Prefix voor het betalingskenmerk"
 
 #: pretix/plugins/banktransfer/payment.py:168
 msgid "Additional text to show on pending orders"
-msgstr ""
+msgstr "Extra tekst die wordt weergegeven bij openstaande bestellingen"
 
 #: pretix/plugins/banktransfer/payment.py:169
 msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
 "addition to the standard text."
 msgstr ""
+"Deze tekst zal naast de standaardtekst getoond worden op de "
+"bevestigingspagina voor openstaande bestellingen."
 
 #: pretix/plugins/banktransfer/payment.py:178
 msgid "IBAN blocklist for refunds"
-msgstr ""
+msgstr "IBAN-blokkeerlijst voor terugbetalingen"
 
 #: pretix/plugins/banktransfer/payment.py:181
 msgid ""
@@ -30954,29 +31008,40 @@ msgid ""
 "can e.g. ban DE0012345 to ban all German IBANs with the bank identifier "
 "starting with 12345."
 msgstr ""
+"Eén IBAN of één IBAN-voorvoegsel per regel. Het systeem probeert geen "
+"automatische terugbetalingen naar deze IBAN’s te verzenden. Dit is "
+"bijvoorbeeld handig als u veel „doorgestuurde betalingen“ van een "
+"betalingsdienstaanbieder ontvangt. U kunt ook landcodes zoals „GB“ opgeven "
+"als u nooit terugbetalingen naar Britse IBAN’s wilt initiëren. De "
+"controlecijfers van de IBAN worden bij de vergelijking genegeerd, zodat u "
+"bijvoorbeeld DE0012345 kunt blokkeren om alle Duitse IBAN's met een bankcode "
+"die begint met 12345 te blokkeren."
 
 #: pretix/plugins/banktransfer/payment.py:208
 msgid "Restrict to business customers"
-msgstr ""
+msgstr "Beperken tot zakelijke klanten"
 
 #: pretix/plugins/banktransfer/payment.py:209
 msgid ""
 "Only allow choosing this payment provider for customers who enter an invoice "
 "address and select \"Business or institutional customer\"."
 msgstr ""
+"Bied deze betaalmethode alleen aan klanten aan die een factuuradres hebben "
+"opgegeven en daarbij de optie \"Zakelijke klant of instelling\" hebben "
+"geselecteerd."
 
 #: pretix/plugins/banktransfer/payment.py:239
 msgid "Please fill out your bank account details."
-msgstr ""
+msgstr "Vul uw bankgegevens in."
 
 #: pretix/plugins/banktransfer/payment.py:243
 msgid "Please enter your bank account details."
-msgstr ""
+msgstr "Voer uw bankgegevens in."
 
 #: pretix/plugins/banktransfer/payment.py:293
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:14
 msgid "Please transfer the full amount to the following bank account:"
-msgstr ""
+msgstr "Maak het volledige bedrag over naar de volgende bankrekening:"
 
 #: pretix/plugins/banktransfer/payment.py:301
 #: pretix/plugins/banktransfer/payment.py:458
@@ -30999,25 +31064,27 @@ msgstr "Rekeninghouder"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:47
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:55
 msgid "Bank"
-msgstr ""
+msgstr "Bank"
 
 #: pretix/plugins/banktransfer/payment.py:343
 msgid "Invalid IBAN/BIC"
-msgstr ""
+msgstr "Ongeldig IBAN/BIC"
 
 #: pretix/plugins/banktransfer/payment.py:428
 #, python-brace-format
 msgid "Bank account {iban}"
-msgstr ""
+msgstr "Bankrekening {iban}"
 
 #: pretix/plugins/banktransfer/payment.py:444
 msgid "Can only create a bank transfer refund from an existing payment."
 msgstr ""
+"Een terugbetaling via bankoverschrijving kan alleen van een bestaande "
+"betaling gestart worden."
 
 #: pretix/plugins/banktransfer/payment.py:464
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/new_refund_control_form.html:7
 msgid "BIC (optional)"
-msgstr ""
+msgstr "BIC (optioneel)"
 
 #: pretix/plugins/banktransfer/payment.py:503
 msgid "Your input was invalid, please see below for details."
