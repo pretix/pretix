@@ -91,6 +91,9 @@ event_patterns = [
     re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/cart/add',
             csrf_exempt(pretix.presale.views.cart.CartAdd.as_view()),
             name='event.cart.add'),
+    re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/cart/create',
+            csrf_exempt(pretix.presale.views.cart.CartCreate.as_view()),
+            name='event.cart.create'),
 
     re_path(r'unlock/(?P<hash>[a-z0-9]{64})/$', pretix.presale.views.user.UnlockHashView.as_view(),
             name='event.payment.unlock'),

@@ -555,6 +555,18 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
                        request.sales_channel.identifier, time_machine_now(default=None))
 
 
+@method_decorator(allow_cors_if_namespaced, 'dispatch')
+class CartCreate(EventViewMixin, CartActionMixin, View):
+    def get(self, request, *args, **kwargs):
+        if 'ajax' in self.request.GET:
+            cart_id = get_or_create_cart_id(self.request, create=True)
+            return JsonResponse({
+                'cart_id': cart_id,
+            })
+        else:
+            return redirect_to_url(self.get_success_url())
+
+
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 class CartExtendReservation(EventViewMixin, CartActionMixin, AsyncAction, View):
     task = extend_cart_reservation
