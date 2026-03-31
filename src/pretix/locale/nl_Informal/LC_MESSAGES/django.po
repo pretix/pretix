@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-18 14:50+0000\n"
+"PO-Revision-Date: 2026-03-31 17:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -13314,7 +13314,7 @@ msgstr ""
 #: pretix/base/settings.py:4157
 #, python-brace-format
 msgid "VAT-ID is not supported for \"{}\"."
-msgstr ""
+msgstr "Btw-nummer wordt niet ondersteund voor \"{}\"."
 
 #: pretix/base/settings.py:4164
 msgid "The last payment date cannot be before the end of presale."
@@ -27518,28 +27518,28 @@ msgid "Add a two-factor authentication device"
 msgstr "Twee-factor-authenticatieapparaat toevoegen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:19
-#, fuzzy
-#| msgid "Smartphone with the Authenticator application"
 msgid "Smartphone with Authenticator app"
-msgstr "Smartphone met de Authenticator-applicatie"
+msgstr "Smartphone met Authenticator-app"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:21
 msgid ""
 "Use your smartphone with any Time-based One-Time-Password app like freeOTP, "
 "Google Authenticator or Proton Authenticator."
 msgstr ""
+"Gebruik je smartphone met een willekeurige app voor tijdgebonden eenmalige "
+"wachtwoorden, zoals freeOTP, Google Authenticator of Proton Authenticator."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:30
-#, fuzzy
-#| msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token"
-msgstr "WebAuthn-compatibel hardware-token (bijvoorbeeld Yubikey)"
+msgstr "WebAuthn-compatibel hardwaretoken"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:32
 msgid ""
 "Use a hardware token like the Yubikey, or other biometric authentication "
 "like fingerprint or face recognition."
 msgstr ""
+"Gebruik een hardwaretoken zoals de Yubikey, of een andere vorm van "
+"biometrische authenticatie, zoals vingerafdruk- of gezichtsherkenning."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
