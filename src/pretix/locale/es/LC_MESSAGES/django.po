@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-18 12:23+0000\n"
+"PO-Revision-Date: 2026-03-31 17:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -13331,7 +13331,7 @@ msgstr ""
 #: pretix/base/settings.py:4157
 #, python-brace-format
 msgid "VAT-ID is not supported for \"{}\"."
-msgstr ""
+msgstr "El NIF no es compatible con «{}»."
 
 #: pretix/base/settings.py:4164
 msgid "The last payment date cannot be before the end of presale."
@@ -27567,28 +27567,30 @@ msgid "Add a two-factor authentication device"
 msgstr "Añadir un dispositivo de autenticación de dos factores"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:19
-#, fuzzy
-#| msgid "Smartphone with the Authenticator application"
 msgid "Smartphone with Authenticator app"
-msgstr "Celular con aplicación de autenticación"
+msgstr "Smartphone con la aplicación Authenticator"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:21
 msgid ""
 "Use your smartphone with any Time-based One-Time-Password app like freeOTP, "
 "Google Authenticator or Proton Authenticator."
 msgstr ""
+"Use su smartphone con cualquier aplicación de contraseñas de un solo uso "
+"basadas en el tiempo, como freeOTP, Google Authenticator o Proton "
+"Authenticator."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:30
-#, fuzzy
-#| msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token"
-msgstr "Hardware compatible con token WebAuthn (p. ej. Yubikey)"
+msgstr "Token físico compatible con WebAuthn"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:32
 msgid ""
 "Use a hardware token like the Yubikey, or other biometric authentication "
 "like fingerprint or face recognition."
 msgstr ""
+"Utiliza un dispositivo de seguridad físico, como el Yubikey, u otro método "
+"de autenticación biométrica, como el reconocimiento de huellas dactilares o "
+"facial."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
