@@ -376,7 +376,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
         self._set_field_placeholders('subject', ['event', 'order', 'event_or_subevent'])
         self._set_field_placeholders('template', ['event', 'order', 'event_or_subevent'], rich=True)
 
-        choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
+        choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n' and e != 'c']
         choices.insert(0, ('n__valid_if_pending', _('payment pending but already confirmed')))
         choices.insert(0, ('n__not_pending_approval_and_not_valid_if_pending',
                            _('payment pending (except unapproved or already confirmed)')))
@@ -385,6 +385,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
             choices.append(
                 ('n__pending_overdue', _('pending with payment overdue'))
             )
+        choices.append(('c', _('Canceled (fully)')))
         self.fields['restrict_to_status'] = forms.MultipleChoiceField(
             label=pgettext_lazy('sendmail_from', 'Restrict to orders with status'),
             widget=forms.CheckboxSelectMultiple(

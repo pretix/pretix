@@ -323,7 +323,6 @@ class Order(LockModel, LoggedModel):
     )
 
     STATUS_FILTERS = (
-        ('', _('All orders')),
         (_('Valid orders'), (
             (STATUS_PAID, _('Paid (or canceled with paid fee)')),
             (STATUS_PAID + 'v', _('Paid or confirmed')),
