@@ -20,7 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import contextlib
-
+import logging
 from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured
 from django.db import connection, transaction
@@ -29,6 +29,7 @@ from django.db.models import (
 )
 from django.utils.functional import lazy
 
+logger = logging.getLogger(__name__)
 
 class DummyRollbackException(Exception):
     pass
@@ -280,3 +281,21 @@ def get_deterministic_ordering(model, ordering):
             # on the primary key to provide total ordering.
             ordering.append("-pk")
     return ordering
+
+
+@contextlib.contextmanager
+def ensure_no_queries():
+    """
+    Ensures that no database queries are being made in that context.
+    Raises a RuntimeError if running in DEBUG mode, otherwise logs
+    an error.
+    :return:
+    """
+    def blocker(*args, **kwargs):
+        if settings.DEBUG:
+            raise RuntimeError(f"Unexpected DB query: {args[0]}")
+        else:
+            logger.error("Unexpected DB query: %s", args[0])
+
+    with connection.execute_wrapper(blocker):
+        yield

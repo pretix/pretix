@@ -41,8 +41,11 @@ from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from functools import reduce
+from itertools import chain
 from time import sleep
+from typing import Dict
 from typing import List, Optional
+from typing import Set
 
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
@@ -53,6 +56,7 @@ from django.db.models import (
     Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Sum,
     Value,
 )
+from django.db.models import Prefetch
 from django.db.models.functions import Coalesce, Greatest
 from django.db.transaction import get_connection
 from django.dispatch import receiver
@@ -71,6 +75,16 @@ from pretix.base.models import (
     Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
     SeatCategoryMapping, User, Voucher,
 )
+from pretix.base.models import Checkin
+from pretix.base.models.cancellation import AbsoluteFee, CancellationCheckResult
+from pretix.base.models.cancellation import CancellationRule
+from pretix.base.models.cancellation import CheckFn
+from pretix.base.models.cancellation import CheckRes
+from pretix.base.models.cancellation import OrderDiff
+from pretix.base.models.cancellation import RelativeFee
+from pretix.base.models.cancellation import Ruling
+from pretix.base.models.cancellation import assert_no_queries
+from pretix.base.models.cancellation import merge_check_results
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
     BlockedTicketSecret, InvoiceAddress, OrderFee, OrderRefund,
@@ -105,9 +119,10 @@ from pretix.base.signals import (
     order_reactivated, order_split, order_valid_if_pending, periodic_task,
     validate_order,
 )
+from pretix.base.signals import self_service_cancellation_checks
 from pretix.base.timemachine import time_machine_now, time_machine_now_assigned
 from pretix.celery_app import app
-from pretix.helpers import OF_SELF
+from pretix.helpers import OF_SELF, ensure_no_queries
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
 from pretix.testutils.middleware import debugflags_var
@@ -3525,3 +3540,171 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
                         'customer': order.customer_id,
                     }
                 )
+
+
+
+class CancellationCheck:
+    id: str
+    prefetches: List[Prefetch] = []
+    related_selects: List[str] = []
+
+    def check(self, order: Order, keep: Set[OrderPosition], order_position: OrderPosition) -> CancellationCheckResult:
+        raise NotImplementedError
+
+ class OrderPositionNotUsedCheck(CancellationCheck):
+    id = "SYSTEM_TICKET_NOT_USED"
+    prefetches = [
+        Prefetch(
+            'checkins',
+            queryset=Checkin.objects.filter(list__consider_tickets_used=True),
+            to_attr='used_checkins'  # stores result in a list attribute
+        )
+    ]
+    related_selects = []
+
+    def check(self, order: Order, keep: Set[OrderPosition], order_position: OrderPosition) -> CancellationCheckResultsById:
+        if order_position.checkins.filter(list__consider_tickets_used=True).exists():
+            return {self.id: CancellationCheckResult(
+                cancellation_possible=False,
+                reason=f"Order position was used",
+            )}
+        else:
+            return {self.id: CancellationCheckResult(
+                cancellation_possible=True,
+                reason=f"Order position not yet used",
+            )}
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_not_used")
+def cancellation_checks_not_used(sender: Event):
+    return OrderPositionNotUsedCheck()
+
+class NotDiscountedCheck(CancellationCheck):
+    """
+    Check that ensures that orders containing discounted order_positions cannot
+    be canceled partially.
+    This is a stop-gap solution until the `discount_grouper` attribute for
+    AbstractPositions is introduced, allowing us to be more grannular
+    """
+
+    id = "SYSTEM_NO_DISCOUNTED_ORDER_POSITIONS"
+    prefetches = [
+    ]
+    related_selects = []
+
+    def check(self, order: Order, keep: Set[OrderPosition], order_position: OrderPosition) -> CancellationCheckResultsById:
+        cancellations = Set(order.positions).difference(keep)
+
+        if order_position in cancellations:
+            if order_position.discount_id is None:
+                return {self.id: CancellationCheckResult(
+                    cancellation_possible=True,
+                    reason=_("Order position was bought without discount"),
+                )}
+            else:
+                return {self.id: CancellationCheckResult(
+                    cancellation_possible=False,
+                    reason=_("Order position was bought with a discount"),
+                )}
+        else:
+            return {self.id: CancellationCheckResult(
+                cancellation_possible=False,
+                reason=_("Order position not canceled - check not applicable"),
+            )}
+
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_not_discountend")
+def cancellation_checks_not_discounted(sender: Event):
+    return NotDiscountedCheck()
+
+
+
+
+# TODO weitere System Checks
+# OrderPositions mit Item.min_per_order dürfen nur storniert werden, wenn genug übrig bleiben oder alle des gleichen Items storniert werden
+# OrderPositions mit addon_to != None dürfen nur über den bestehenden Add-On-Flow storniert werden
+# OrderPositions mit is_bundled dürfen nur mit der Parent-Position zusammen storniert werden
+
+# TODO transaktion
+def self_service_cancel(order: Order, keep: Set[OrderPosition], dry_run: bool):
+    """
+
+    :param order:
+    :param keep:
+    :param dry_run:
+    :return:
+    """
+    cancellation_checks: List[CancellationCheck] = [resp for recv, resp in self_service_cancellation_checks.send(event=order.event)]
+
+    position_rules = CancellationRule.objects.filter(event=order.event).filter("fee_cancellation_process"==Decimal("0.00")).all()
+    process_rules = CancellationRule.objects.filter(event=order.event).filter("fee_cancellation_process"!=Decimal("0.00")).all()
+
+    # Todo get prefetches/selects from rules as well
+    prefetches = list(chain.from_iterable([cc.prefetches for cc in cancellation_checks]))
+    related_selects = list(chain.from_iterable(cc.related_selects for cc in cancellation_checks))
+
+    per_position_rulings: Dict[int, List[Ruling]] = {}
+
+    prefetched_order = Order.objects.select_related(related_selects).prefetch_related(*prefetches).get(pk=order.pk)
+    # All queries should be done by now
+    with ensure_no_queries():
+        for position in prefetched_order.positions:
+            position_rulings = []
+
+            system_check_results = [cc.check(prefetched_order, keep, position) for cc in cancellation_checks]
+
+            for rule in position_rules:
+                check_results = [check(prefetched_order, keep, position) for check in rule.checks]
+
+                if rule.fee_percentage_per_item and rule.fee_absolute_per_item:
+                    raise NotImplementedError("Should never be reached")
+                elif rule.fee_absolute_per_item != Decimal(0.00):
+                    position_rulings.append(
+                        Ruling.from_absolute_fee(
+                            rule_id=rule.id,
+                            results=reduce(lambda a, b: a | b, [*system_check_results, *check_results], {}),
+                            fee_type='position_fee',
+                            absolute_fee=rule.fee_absolute_per_item
+                        )
+                    )
+                else:
+                    position_rulings.append(
+                        Ruling.from_relative_fee(
+                            rule_id=rule.id,
+                            results=reduce(lambda a, b: a | b, [*system_check_results, *check_results], {}),
+                            fee_type='position_fee',
+                            reference_price=position.price,
+                            percentage=rule.fee_absolute_per_item,
+                            currency=order.event.currency
+                        )
+                    )
+            position_rulings.sort()
+            per_position_rulings[position.id] = position_rulings
+        effective_position_rulings = [op_rulings[0] for op_rulings in per_position_rulings.values()]
+
+        process_rulings: List[Ruling] = []
+
+        for rule in process_rules:
+            check_results = [check(prefetched_order, keep, position) for check in rule.checks]
+
+            process_rulings.append(Ruling.from_absolute_fee(
+                rule_id=rule.id,
+                results=reduce(lambda a, b: a | b, [*check_results], {}),
+                fee_type='process_fee',
+                absolute_fee=rule.fee_cancellation_process
+            ))
+
+        process_rulings.sort()
+
+        effective_process_ruling = process_rulings[0]
+
+
+
+    cancellation_possible = all([r.cancellation_possible for r in effective_rulings])
+
+    # TODO zusammenführen der Rulings
+
+    if dry_run:
+        return cancellation_possible, rulings
+    else:
+        ...
