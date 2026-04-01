@@ -40,7 +40,7 @@ from django import forms
 from django.apps import apps
 from django.conf import settings
 from django.db.models import (
-    Count, Exists, F, Max, Model, OrderBy, OuterRef, Q, QuerySet,
+    Count, Exists, F, Model, OrderBy, OuterRef, Q, QuerySet,
 )
 from django.db.models.functions import Coalesce, ExtractWeekDay, Upper
 from django.urls import reverse, reverse_lazy
@@ -219,41 +219,7 @@ class OrderFilterForm(FilterForm):
     )
     status = forms.ChoiceField(
         label=_('Order status'),
-        choices=(
-            ('', _('All orders')),
-            (_('Valid orders'), (
-                (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
-                (Order.STATUS_PAID + 'v', _('Paid or confirmed')),
-                (Order.STATUS_PENDING, _('Pending')),
-                (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),
-            )),
-            (_('Cancellations'), (
-                (Order.STATUS_CANCELED, _('Canceled (fully)')),
-                ('cp', _('Canceled (fully or with paid fee)')),
-                ('cany', _('Canceled (at least one position)')),
-                ('rc', _('Cancellation requested')),
-                ('cni', _('Fully canceled but invoice not canceled')),
-            )),
-            (_('Payment process'), (
-                (Order.STATUS_EXPIRED, _('Expired')),
-                (Order.STATUS_PENDING + Order.STATUS_EXPIRED, _('Pending or expired')),
-                ('o', _('Pending (overdue)')),
-                ('overpaid', _('Overpaid')),
-                ('partially_paid', _('Partially paid')),
-                ('underpaid', _('Underpaid (but confirmed)')),
-                ('pendingpaid', _('Pending (but fully paid)')),
-                ('pendingnopayment', _('Pending (but no current payment)')),
-            )),
-            (_('Approval process'), (
-                ('na', _('Approved, payment pending')),
-                ('pa', _('Approval pending')),
-            )),
-            (_('Follow-up date'), (
-                ('custom_followup_at', _('Follow-up configured')),
-                ('custom_followup_due', _('Follow-up due')),
-            )),
-            ('testmode', _('Test mode')),
-        ),
+        choices=Order.STATUS_FILTERS,
         required=False,
     )
 
@@ -309,114 +275,8 @@ class OrderFilterForm(FilterForm):
                 mainq
             )
 
-        if fdata.get('status'):
-            s = fdata.get('status')
-            if s == 'o':
-                qs = qs.filter(status=Order.STATUS_PENDING, expires__lt=now().replace(hour=0, minute=0, second=0))
-            elif s == 'np':
-                qs = qs.filter(status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
-            elif s == 'ne':
-                qs = qs.filter(status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
-            elif s == 'pv':
-                qs = qs.filter(Q(status=Order.STATUS_PAID) | Q(status=Order.STATUS_PENDING, valid_if_pending=True))
-            elif s in ('p', 'n', 'e', 'c', 'r'):
-                qs = qs.filter(status=s)
-            elif s == 'overpaid':
-                qs = Order.annotate_overpayments(qs, refunds=False, results=True, sums=False)
-                qs = qs.filter(is_overpaid=True)
-            elif s == 'rc':
-                qs = qs.filter(
-                    cancellation_requests__isnull=False
-                ).annotate(
-                    cancellation_request_time=Max('cancellation_requests__created')
-                ).order_by(
-                    '-cancellation_request_time'
-                )
-            elif s == 'pendingpaid':
-                qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
-                qs = qs.filter(
-                    Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0)
-                    & Q(require_approval=False)
-                )
-            elif s == 'pendingnopayment':
-                qs = qs.exclude(
-                    Exists(
-                        OrderPayment.objects.filter(
-                            order=OuterRef('pk'),
-                            state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING)
-                        )
-                    )
-                ).filter(
-                    status=Order.STATUS_PENDING,
-                    require_approval=False,
-                )
-            elif s == 'partially_paid':
-                qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
-                qs = qs.filter(
-                    computed_payment_refund_sum__lt=F('total'),
-                    computed_payment_refund_sum__gt=Decimal('0.00')
-                ).exclude(
-                    status=Order.STATUS_CANCELED
-                )
-            elif s == 'underpaid':
-                qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
-                qs = qs.filter(
-                    Q(status=Order.STATUS_PAID, pending_sum_t__gt=0) |
-                    Q(status=Order.STATUS_CANCELED, pending_sum_rc__gt=0)
-                )
-            elif s == 'cni':
-                i = Invoice.objects.filter(
-                    order=OuterRef('pk'),
-                    is_cancellation=False,
-                    refered__isnull=True,
-                ).order_by().values('order').annotate(k=Count('id')).values('k')
-                qs = qs.annotate(
-                    icnt=i
-                ).filter(
-                    icnt__gt=0,
-                    status=Order.STATUS_CANCELED,
-                )
-            elif s == 'pa':
-                qs = qs.filter(
-                    status=Order.STATUS_PENDING,
-                    require_approval=True
-                )
-            elif s == 'na':
-                qs = qs.filter(
-                    status=Order.STATUS_PENDING,
-                    require_approval=False
-                )
-            elif s == 'custom_followup_at':
-                qs = qs.filter(
-                    custom_followup_at__isnull=False
-                )
-            elif s == 'custom_followup_due':
-                qs = qs.filter(
-                    custom_followup_at__lte=now().astimezone(get_current_timezone()).date()
-                )
-            elif s == 'testmode':
-                qs = qs.filter(
-                    testmode=True
-                )
-            elif s == 'cp':
-                s = OrderPosition.objects.filter(
-                    order=OuterRef('pk')
-                )
-                qs = qs.annotate(
-                    has_pc=Exists(s)
-                ).filter(
-                    Q(status=Order.STATUS_PAID, has_pc=False) | Q(status=Order.STATUS_CANCELED)
-                )
-            elif s == 'cany':
-                s = OrderPosition.all.filter(
-                    order=OuterRef('pk'),
-                    canceled=True,
-                )
-                qs = qs.annotate(
-                    has_pc_c=Exists(s)
-                ).filter(
-                    Q(has_pc_c=True) | Q(status=Order.STATUS_CANCELED)
-                )
+        if s := fdata.get('status'):
+            qs = qs.filter_by_status(qs, [s])
 
         if fdata.get('ordering'):
             qs = qs.order_by(*get_deterministic_ordering(Order, self.get_order_by()))

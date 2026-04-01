@@ -41,6 +41,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Checkin, Item, Order, OrderPosition, Team, User
+from pretix.base.models.orders import OrderFee
 
 
 @pytest.fixture
@@ -615,3 +616,123 @@ def test_waitinglist_sendmail_simple_case(logged_in_client, sendmail_url, event,
 
     assert response.status_code == 200
     assert 'Test subject' in response.rendered_content
+
+
+@pytest.mark.django_db
+def test_sendmail_canceled(logged_in_client, sendmail_url, event, item):
+    event.settings.attendee_emails_asked = True
+    with scopes_disabled():
+        o1 = Order.objects.create(event=event, status=Order.STATUS_CANCELED,
+                                  expires=now() + datetime.timedelta(hours=1),
+                                  total=13, code='DUMMY1', email='order1@dummy.test',
+                                  datetime=now(),
+                                  sales_channel=event.organizer.sales_channels.get(identifier="web"),
+                                  locale='de')
+        o1_p1 = OrderPosition.objects.create(order=o1, item=item, price=13, attendee_email='attendee1@dummy.test')
+        o2 = Order.objects.create(event=event, status=Order.STATUS_PAID,
+                                  expires=now() + datetime.timedelta(hours=1),
+                                  total=2, code='DUMMY2', email='order2@dummy.test',
+                                  datetime=now(),
+                                  sales_channel=event.organizer.sales_channels.get(identifier="web"),
+                                  locale='de')
+        OrderPosition.objects.create(order=o2, item=item, price=13, canceled=True, attendee_email='attendee2@dummy.test')
+        OrderFee.objects.create(order=o2, fee_type=OrderFee.FEE_TYPE_CANCELLATION, value=2)
+        o3 = Order.objects.create(event=event, status=Order.STATUS_PAID,
+                                  expires=now() + datetime.timedelta(hours=1),
+                                  total=13, code='DUMMY3', email='order3@dummy.test',
+                                  datetime=now(),
+                                  sales_channel=event.organizer.sales_channels.get(identifier="web"),
+                                  locale='de')
+        o3_p1 = OrderPosition.objects.create(order=o3, item=item, price=13, attendee_email='attendee3@dummy.test')
+        OrderPosition.objects.create(order=o3, item=item, price=13, canceled=True, attendee_email='attendee4@dummy.test')
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url + 'orders/',
+                                     {'sendto': 'c',
+                                      'action': 'send',
+                                      'recipients': 'orders',
+                                      'items': item.pk,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      },
+                                     follow=True)
+
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert set(tuple(x.to) for x in djmail.outbox) == {(o1.email,), }
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url + 'orders/',
+                                     {'sendto': 'cp',
+                                      'action': 'send',
+                                      'recipients': 'orders',
+                                      'items': item.pk,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      },
+                                     follow=True)
+
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    assert set(tuple(x.to) for x in djmail.outbox) == {(o1.email,), (o2.email,)}
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url + 'orders/',
+                                     {'sendto': 'cany',
+                                      'action': 'send',
+                                      'recipients': 'orders',
+                                      'items': item.pk,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      },
+                                     follow=True)
+
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 3
+    assert set(tuple(x.to) for x in djmail.outbox) == {(o1.email,), (o2.email,), (o3.email,)}
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url + 'orders/',
+                                     {'sendto': 'c',
+                                      'action': 'send',
+                                      'recipients': 'attendees',
+                                      'items': item.pk,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      },
+                                     follow=True)
+
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert set(tuple(x.to) for x in djmail.outbox) == {(o1_p1.attendee_email,), }
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url + 'orders/',
+                                     {'sendto': 'cp',
+                                      'action': 'send',
+                                      'recipients': 'attendees',
+                                      'items': item.pk,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      },
+                                     follow=True)
+
+    assert 'alert-success' in response.rendered_content
+    # o2 has no active attendees
+    assert len(djmail.outbox) == 1
+    assert set(tuple(x.to) for x in djmail.outbox) == {(o1_p1.attendee_email,), }
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url + 'orders/',
+                                     {'sendto': 'cany',
+                                      'action': 'send',
+                                      'recipients': 'attendees',
+                                      'items': item.pk,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      },
+                                     follow=True)
+
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 2
+    assert set(tuple(x.to) for x in djmail.outbox) == {(o1_p1.attendee_email,), (o3_p1.attendee_email,)}

@@ -151,7 +151,13 @@ class OrderMailForm(BaseMailForm):
         initial='orders',
         choices=[]
     )
-    sendto = forms.MultipleChoiceField()  # overridden later
+    sendto = forms.MultipleChoiceField(
+        label=pgettext_lazy('sendmail_form', 'Restrict to orders with status'),
+        widget=forms.CheckboxSelectMultiple(
+            attrs={'class': 'scrolling-multiple-choice no-search'}
+        ),
+        choices=Order.STATUS_FILTER_OPTIONS
+    )
     items = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(
             attrs={'class': 'scrolling-multiple-choice'}
@@ -230,27 +236,15 @@ class OrderMailForm(BaseMailForm):
             self.fields['attach_tickets'].help_text = _("Attachment of tickets is disabled in this event's email "
                                                         "settings.")
 
-        choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
-        choices.insert(0, ('valid_if_pending', _('payment pending but already confirmed')))
-        choices.insert(0, ('na', _('payment pending (except unapproved or already confirmed)')))
-        choices.insert(0, ('pa', _('approval pending')))
-        if not event.settings.get('payment_term_expire_automatically', as_type=bool):
-            choices.append(
-                ('overdue', _('pending with payment overdue'))
-            )
-        self.fields['sendto'] = forms.MultipleChoiceField(
-            label=pgettext_lazy('sendmail_form', 'Restrict to orders with status'),
-            widget=forms.CheckboxSelectMultiple(
-                attrs={'class': 'scrolling-multiple-choice no-search'}
-            ),
-            choices=choices
-        )
         if not self.initial.get('sendto'):
             self.initial['sendto'] = ['p', 'valid_if_pending']
-        elif 'n' in self.initial['sendto']:
-            self.initial['sendto'].append('pa')
-            self.initial['sendto'].append('na')
-            self.initial['sendto'].append('valid_if_pending')
+        else:
+            if 'n' in self.initial['sendto']:
+                self.initial['sendto'].append('pa')
+                self.initial['sendto'].append('na')
+                self.initial['sendto'].append('valid_if_pending')
+            if 'overdue' in self.initial['sendto']:
+                self.initial['sendto'].append('o')
 
         self.fields['items'].queryset = event.items.all()
         if not self.initial.get('items'):
