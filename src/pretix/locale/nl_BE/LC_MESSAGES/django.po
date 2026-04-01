@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-31 17:00+0000\n"
+"PO-Revision-Date: 2026-04-01 17:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -31088,7 +31088,7 @@ msgstr "BIC (optioneel)"
 
 #: pretix/plugins/banktransfer/payment.py:503
 msgid "Your input was invalid, please see below for details."
-msgstr ""
+msgstr "Uw invoer was ongeldig. Zie hieronder voor details."
 
 #: pretix/plugins/banktransfer/refund_export.py:47
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:10
@@ -31097,78 +31097,88 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:12
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:9
 msgid "Payer"
-msgstr ""
+msgstr "Betaler"
 
 #: pretix/plugins/banktransfer/refund_export.py:90
 msgid "Refund"
-msgstr ""
+msgstr "Terugbetaling"
 
 #: pretix/plugins/banktransfer/signals.py:126
 msgid "The invoice was sent to the designated email address."
-msgstr ""
+msgstr "De factuur is verstuurd naar het aangegeven e-mailadres."
 
 #: pretix/plugins/banktransfer/tasks.py:176
 msgid "Automatic split to multiple orders not possible."
-msgstr ""
+msgstr "Automatisch uitsplitsen naar meerdere bestellingen niet mogelijk."
 
 #: pretix/plugins/banktransfer/tasks.py:192
 msgid "The order has already been canceled."
-msgstr ""
+msgstr "De bestelling is al geannuleerd."
 
 #: pretix/plugins/banktransfer/tasks.py:198
 #: pretix/plugins/banktransfer/views.py:99
 #: pretix/plugins/banktransfer/views.py:181
 msgid "Currencies do not match."
-msgstr ""
+msgstr "De munteenheden komen niet overeen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:6
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
 msgstr ""
+"Na het voltooien van uw aankoop vragen wij u het geld over te maken naar de "
+"volgende bankrekening, met vermelding van uw persoonlijk betalingskernmerk:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
 msgid ""
 "Please do not yet start a payment. We'll assign you a personal reference "
 "code after you completed the order."
 msgstr ""
+"Doe nog geen betaling. We zullen na het afronden van de bestelling een "
+"persoonlijk betalingskenmerk aan u toewijzen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:14
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:21
 msgid "Reference code (important):"
-msgstr ""
+msgstr "Betalingskenmerk (belangrijk):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:30
 msgid "We will assign you a personal reference code in the next step."
 msgstr ""
+"In de volgende stap zullen we u een persoonlijk betalingskenmerk toewijzen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
 msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
 msgstr ""
+"Nadat u de bestelling verzonden hebt, zullen wij een persoonlijk "
+"betalingskenmerk aan u toewijzen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:41
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to our "
 "bank account, using a personal reference code."
 msgstr ""
+"Nadat u de bestelling afgerond hebt, verzoeken wij u het bedrag op onze "
+"bankrekening over te maken onder vermelding van uw persoonlijke "
+"betalingskenmerk."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:6
 msgid "Send invoice to"
-msgstr ""
+msgstr "Factuur sturen naar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:14
 msgid "Account"
-msgstr ""
+msgstr "Rekening"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:28
 msgid "Transfer amount"
-msgstr ""
+msgstr "Overschrijvingsbedrag"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:38
 msgid "Reference code"
-msgstr ""
+msgstr "Betalingskenmerk"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
@@ -31176,22 +31186,26 @@ msgid ""
 "are aligned. Please help us by selecting which column contain what kind of "
 "data."
 msgstr ""
+"We konden de kolommen in uw bestand niet automatisch toewijzen. Geef "
+"hieronder aan welke kolommen welk soort gegevens bevatten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:95
 msgid ""
 "More data was uploaded but is not shown here. It will still be processed"
 msgstr ""
+"Er zijn meer gegevens geüpload, maar die wordt hier niet weergegeven. Ze "
+"worden wel verwerkt"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:9
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:9
 msgid "Import currently running…"
-msgstr ""
+msgstr "Import wordt uitgevoerd…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:11
 #, python-format
 msgid "Last import: %(date)s"
-msgstr ""
+msgstr "Laatste import: %(date)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:8
 #, python-format
@@ -31199,117 +31213,134 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
+"In de betalingsinstellingen van uw evenement hebt u %(date)s als de uiterste "
+"betalingsdatum geselecteerd. Daarom kunt u hier geen bestelling als betaald "
+"markeren."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
 msgstr ""
+"Op deze pagina kunt u bankafschriftbestanden uploaden om inkomende "
+"betalingen te verwerken."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:22
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
 msgstr ""
+"Deze functie ondersteunt momenteel <code>.csv</code>-bestanden en bestanden "
+"in het MT940-formaat."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:29
 #: pretix/plugins/banktransfer/views.py:560
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
 msgstr ""
+"Er wordt momenteel een import verwerkt. Probeer het over een paar minuten "
+"opnieuw."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:51
 msgid "Start upload"
-msgstr ""
+msgstr "Upload starten"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:61
 msgid "Unresolved transactions"
-msgstr ""
+msgstr "Niet-toegewezen overschrijvingen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:66
 msgid ""
 "On this page, you can import banking data on a per-event level. You also "
 "only see unmatched transactions imported directly for this event."
 msgstr ""
+"Op deze pagina kunt u bankgegevens per evenement importeren. U kunt ook "
+"alleen onverwerkte transacties zien die direct voor dit evenement zijn "
+"geïmporteerd."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:71
 msgid "Go to organizer-level import"
-msgstr ""
+msgstr "Ga naar import op organisatorniveau"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:78
 msgid "Amount from"
-msgstr ""
+msgstr "Bedrag van"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:80
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:86
 msgid "up to"
-msgstr ""
+msgstr "tot"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:92
 msgid "Clear"
-msgstr ""
+msgstr "Leegmaken"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:101
 msgid "Discard all"
-msgstr ""
+msgstr "Alles verwijderen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:113
 msgid "Your search matched no transactions."
-msgstr ""
+msgstr "Uw zoekopdracht leverde geen transacties op."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "Importresultaat"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
 "the data …"
 msgstr ""
+"Het resultaat van uw import wordt verwerkt. Even geduld terwijl we de "
+"gegevens verwerken…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
 msgstr ""
+"Er is een interne fout opgetreden tijdens het verwerken van de gegevens."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try to re-import the file."
 msgstr ""
+"Sommige transacties zijn mogelijk niet geïmporteerd. Probeer het bestand "
+"opnieuw te importeren."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
 "Your import did not contain any transactions that you did not import before."
-msgstr ""
+msgstr "Uw import bevatte geen transacties die u niet eerder importeerde."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
-msgstr ""
+msgstr "Bestellingen als betaald aangemerkt"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:34
 msgid "Invalid payments"
-msgstr ""
+msgstr "Ongeldige betalingen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:38
 msgid "Ignored payments"
-msgstr ""
+msgstr "Genegeerde betalingen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:44
 msgid "Review invalid and ignored payments"
-msgstr ""
+msgstr "Bekijk ongeldige en genegeerde betalingen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:22
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:27
 msgid "Amount:"
-msgstr ""
+msgstr "Bedrag:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:34
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:30
 msgid "There is no further action required on this website."
-msgstr ""
+msgstr "Er is geen bijkomende actie meer vereist op deze website."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:35
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:31
 msgid "We will send you an email as soon as we received your payment."
-msgstr ""
+msgstr "We zullen u een e-mail sturen zodra we uw betaling ontvangen hebben."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
