@@ -46,7 +46,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, ngettext
 from django.views.generic import DeleteView, FormView, ListView, TemplateView
 
@@ -262,11 +261,8 @@ class OrderSendView(BaseSenderView):
                 i.pk: str(i) for i in logentry.event.checkin_lists.all()
             }
         if 'status' not in _cache_store:
-            status = dict(Order.STATUS_CHOICE)
-            status['overdue'] = _('pending with payment overdue')
-            status['valid_if_pending'] = _('payment pending but already confirmed')
-            status['na'] = _('payment pending (except unapproved or already confirmed)')
-            status['pa'] = _('approval pending')
+            status = dict(Order.STATUS_FILTER_OPTIONS)
+            status['overdue'] = status['o']
             status['r'] = status['c']
             _cache_store['status'] = status
 
@@ -343,16 +339,7 @@ class OrderSendView(BaseSenderView):
 
     def get_object_queryset(self, form):
         qs = Order.objects.filter(event=self.request.event)
-        statusq = Q(status__in=form.cleaned_data['sendto'])
-        if 'overdue' in form.cleaned_data['sendto']:
-            statusq |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False, expires__lt=now())
-        if 'pa' in form.cleaned_data['sendto']:
-            statusq |= Q(status=Order.STATUS_PENDING, require_approval=True)
-        if 'na' in form.cleaned_data['sendto']:
-            statusq |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False)
-        if 'valid_if_pending' in form.cleaned_data['sendto']:
-            statusq |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=True)
-        orders = qs.filter(statusq)
+        orders = qs.filter_by_status(qs, form.cleaned_data['sendto'])
 
         opq = OrderPosition.objects.filter(
             Q(item_id__in=[i.pk for i in form.cleaned_data.get('items')]) | Q(Exists(
@@ -408,9 +395,10 @@ class OrderSendView(BaseSenderView):
         if form.cleaned_data.get('created_to'):
             opq = opq.filter(order__datetime__lt=form.cleaned_data.get('created_to'))
 
+        orders_without_positions = Order.objects.filter(~Exists(OrderPosition.objects.filter(canceled=False, order_id=OuterRef('pk'))))
         # pk__in turns out to be faster than Exists(subquery) in many cases since we often filter on a large subset
         # of orderpositions
-        return orders.filter(pk__in=opq.values_list('order_id'))
+        return orders.filter(Q(pk__in=opq.values_list('order_id')) | Q(pk__in=orders_without_positions))
 
     def describe_match_size(self, cnt):
         return ngettext(
