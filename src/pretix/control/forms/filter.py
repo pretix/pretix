@@ -219,7 +219,7 @@ class OrderFilterForm(FilterForm):
     )
     status = forms.ChoiceField(
         label=_('Order status'),
-        choices=Order.STATUS_FILTERS,
+        choices=[('', _('All orders')), *Order.STATUS_FILTERS],
         required=False,
     )
 
