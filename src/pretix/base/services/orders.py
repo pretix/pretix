@@ -67,9 +67,9 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    CartPosition, Device, Event, GiftCard, Item, ItemVariation, Membership,
-    Order, OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
-    Voucher,
+    CartPosition, Device, Event, GiftCard, Item, ItemVariation, LogEntry,
+    Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
+    SeatCategoryMapping, User, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
@@ -1618,7 +1618,7 @@ class OrderChangeManager:
     MembershipOperation = namedtuple('MembershipOperation', ('position', 'membership'))
     CancelOperation = namedtuple('CancelOperation', ('position', 'price_diff'))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership',
-                                               'valid_from', 'valid_until', 'is_bundled', 'result'))
+                                               'valid_from', 'valid_until', 'is_bundled', 'result', 'count'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
@@ -1632,16 +1632,24 @@ class OrderChangeManager:
     ForceRecomputeOperation = namedtuple('ForceRecomputeOperation', tuple())
 
     class AddPositionResult:
-        _position: Optional[OrderPosition]
+        _positions: Optional[List[OrderPosition]]
 
         def __init__(self):
-            self._position = None
+            self._positions = None
 
         @property
         def position(self) -> OrderPosition:
-            if self._position is None:
+            if self._positions is None:
                 raise RuntimeError("Order position has not been created yet. Call commit() first on OrderChangeManager.")
-            return self._position
+            if len(self._positions) != 1:
+                raise RuntimeError("More than one position created.")
+            return self._positions[0]
+
+        @property
+        def positions(self) -> List[OrderPosition]:
+            if self._positions is None:
+                raise RuntimeError("Order position has not been created yet. Call commit() first on OrderChangeManager.")
+            return self._positions
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True, allow_blocked_seats=False):
         self.order = order
@@ -1848,8 +1856,12 @@ class OrderChangeManager:
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: OrderPosition = None,
                      subevent: SubEvent = None, seat: Seat = None, membership: Membership = None,
-                     valid_from: datetime = None, valid_until: datetime = None) -> 'OrderChangeManager.AddPositionResult':
+                     valid_from: datetime = None, valid_until: datetime = None, count: int = 1) -> 'OrderChangeManager.AddPositionResult':
+        if count < 1:
+            raise ValueError("Count must be positive")
         if isinstance(seat, str):
+            if count > 1:
+                raise ValueError("Cannot combine count > 1 with seat")
             if not seat:
                 seat = None
             else:
@@ -1903,14 +1915,14 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00'):
             self._invoice_dirty = True
 
-        self._totaldiff_guesstimate += price.gross
-        self._quotadiff.update(new_quotas)
+        self._totaldiff_guesstimate += price.gross * count
+        self._quotadiff.update({q: count for q in new_quotas})
         if seat:
             self._seatdiff.update([seat])
 
         result = self.AddPositionResult()
         self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership,
-                                                  valid_from, valid_until, is_bundled, result))
+                                                  valid_from, valid_until, is_bundled, result, count))
         return result
 
     def split(self, position: OrderPosition):
@@ -2530,29 +2542,35 @@ class OrderChangeManager:
                     secret_dirty.remove(position)
                 position.save(update_fields=['canceled', 'secret'])
             elif isinstance(op, self.AddOperation):
-                pos = OrderPosition.objects.create(
-                    item=op.item, variation=op.variation, addon_to=op.addon_to,
-                    price=op.price.gross, order=self.order, tax_rate=op.price.rate, tax_code=op.price.code,
-                    tax_value=op.price.tax, tax_rule=op.item.tax_rule,
-                    positionid=nextposid, subevent=op.subevent, seat=op.seat,
-                    used_membership=op.membership, valid_from=op.valid_from, valid_until=op.valid_until,
-                    is_bundled=op.is_bundled,
-                )
-                nextposid += 1
-                self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
-                    'position': pos.pk,
-                    'item': op.item.pk,
-                    'variation': op.variation.pk if op.variation else None,
-                    'addon_to': op.addon_to.pk if op.addon_to else None,
-                    'price': op.price.gross,
-                    'positionid': pos.positionid,
-                    'membership': pos.used_membership_id,
-                    'subevent': op.subevent.pk if op.subevent else None,
-                    'seat': op.seat.pk if op.seat else None,
-                    'valid_from': op.valid_from.isoformat() if op.valid_from else None,
-                    'valid_until': op.valid_until.isoformat() if op.valid_until else None,
-                })
-                op.result._position = pos
+                new_pos = []
+                new_logs = []
+                for i in range(op.count):
+                    pos = OrderPosition.objects.create(
+                        item=op.item, variation=op.variation, addon_to=op.addon_to,
+                        price=op.price.gross, order=self.order, tax_rate=op.price.rate, tax_code=op.price.code,
+                        tax_value=op.price.tax, tax_rule=op.item.tax_rule,
+                        positionid=nextposid, subevent=op.subevent, seat=op.seat,
+                        used_membership=op.membership, valid_from=op.valid_from, valid_until=op.valid_until,
+                        is_bundled=op.is_bundled,
+                    )
+                    nextposid += 1
+                    new_pos.append(pos)
+                    new_logs.append(self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
+                        'position': pos.pk,
+                        'item': op.item.pk,
+                        'variation': op.variation.pk if op.variation else None,
+                        'addon_to': op.addon_to.pk if op.addon_to else None,
+                        'price': op.price.gross,
+                        'positionid': pos.positionid,
+                        'membership': pos.used_membership_id,
+                        'subevent': op.subevent.pk if op.subevent else None,
+                        'seat': op.seat.pk if op.seat else None,
+                        'valid_from': op.valid_from.isoformat() if op.valid_from else None,
+                        'valid_until': op.valid_until.isoformat() if op.valid_until else None,
+                    }, save=False))
+
+                op.result._positions = new_pos
+                LogEntry.bulk_create_and_postprocess(new_logs)
             elif isinstance(op, self.SplitOperation):
                 position = position_cache.setdefault(op.position.pk, op.position)
                 split_positions.append(position)
@@ -2877,7 +2895,7 @@ class OrderChangeManager:
         return total
 
     def _check_order_size(self):
-        if (len(self.order.positions.all()) + len([op for op in self._operations if isinstance(op, self.AddOperation)])) > settings.PRETIX_MAX_ORDER_SIZE:
+        if (len(self.order.positions.all()) + sum([op.count for op in self._operations if isinstance(op, self.AddOperation)])) > settings.PRETIX_MAX_ORDER_SIZE:
             raise OrderError(
                 self.error_messages['max_order_size'] % {
                     'max': settings.PRETIX_MAX_ORDER_SIZE,
@@ -2938,7 +2956,7 @@ class OrderChangeManager:
         ]) + len([
             o for o in self._operations if isinstance(o, self.SplitOperation)
         ])
-        adds = len([o for o in self._operations if isinstance(o, self.AddOperation)])
+        adds = sum([o.count for o in self._operations if isinstance(o, self.AddOperation)])
         if current > 0 and current - cancels + adds < 1:
             raise OrderError(self.error_messages['complete_cancel'])
 
@@ -2985,17 +3003,18 @@ class OrderChangeManager:
             elif isinstance(op, self.CancelOperation) and op.position in positions_to_fake_cart:
                 fake_cart.remove(positions_to_fake_cart[op.position])
             elif isinstance(op, self.AddOperation):
-                cp = CartPosition(
-                    event=self.event,
-                    item=op.item,
-                    variation=op.variation,
-                    used_membership=op.membership,
-                    subevent=op.subevent,
-                    seat=op.seat,
-                )
-                cp.override_valid_from = op.valid_from
-                cp.override_valid_until = op.valid_until
-                fake_cart.append(cp)
+                for i in range(op.count):
+                    cp = CartPosition(
+                        event=self.event,
+                        item=op.item,
+                        variation=op.variation,
+                        used_membership=op.membership,
+                        subevent=op.subevent,
+                        seat=op.seat,
+                    )
+                    cp.override_valid_from = op.valid_from
+                    cp.override_valid_until = op.valid_until
+                    fake_cart.append(cp)
         try:
             validate_memberships_in_order(self.order.customer, fake_cart, self.event, lock=True, ignored_order=self.order, testmode=self.order.testmode)
         except ValidationError as e:

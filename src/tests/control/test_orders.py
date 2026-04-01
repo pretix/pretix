@@ -1584,10 +1584,11 @@ class OrderChangeTests(SoupTest):
             'add_position-MAX_NUM_FORMS': '100',
             'add_position-0-itemvar': str(self.shirt.pk),
             'add_position-0-do': 'on',
+            'add_position-0-count': '2',
             'add_position-0-price': '14.00',
         })
         with scopes_disabled():
-            assert self.order.positions.count() == 3
+            assert self.order.positions.count() == 4
             assert self.order.positions.last().item == self.shirt
             assert self.order.positions.last().price == 14
 

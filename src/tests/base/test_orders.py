@@ -2407,6 +2407,15 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.positions.count() == 2
 
     @classscope(attr='o')
+    def test_add_item_quota_partial(self):
+        q1 = self.event.quotas.create(name='Test', size=1)
+        q1.items.add(self.shirt)
+        self.ocm.add_position(self.shirt, None, None, None, count=2)
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
+        assert self.order.positions.count() == 2
+
+    @classscope(attr='o')
     def test_add_item_addon(self):
         self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
         self.ticket.addons.create(addon_category=self.shirt.category)
