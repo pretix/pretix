@@ -54,7 +54,7 @@ from bidi import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
-from django.db.models import Max, Min
+from django.db.models import Exists, Max, Min, OuterRef
 from django.db.models.fields.files import FieldFile
 from django.dispatch import receiver
 from django.utils.deconstruct import deconstructible
@@ -76,7 +76,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
-from pretix.base.models import Event, Order, OrderPosition, Question
+from pretix.base.models import Checkin, Event, Order, OrderPosition, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
@@ -377,6 +377,13 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Add-on 1\n2x Add-on 2"),
         "evaluate": lambda op, order, ev: "\n".join([
             str(p) for p in generate_compressed_addon_list(op, order, ev)
+        ])
+    }),
+    ("checked_in_addons", {
+        "label": _("List of Checked-In Add-Ons"),
+        "editor_sample": _("Add-on 1\n2x Add-on 2"),
+        "evaluate": lambda op, order, ev: "\n".join([
+            str(p) for p in generate_compressed_addon_list(op, order, ev, only_checked_in=True)
         ])
     }),
     ("organizer", {
@@ -750,12 +757,16 @@ def get_program_times(op: OrderPosition, ev: Event):
     ])
 
 
-def generate_compressed_addon_list(op, order, event):
+def generate_compressed_addon_list(op, order, event, only_checked_in=False):
     itemcount = defaultdict(int)
-    addons = [p for p in (
+    addon_qs = (
         op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
         else op.addons.select_related('item', 'variation')
-    ) if not p.canceled]
+    )
+    if only_checked_in:
+        addon_qs = addon_qs.filter(Exists(Checkin.objects.filter(position=OuterRef('pk'))), canceled=False)
+    addons = [p for p in addon_qs if not p.canceled]
+
     for pos in addons:
         itemcount[pos.item, pos.variation] += 1
 
