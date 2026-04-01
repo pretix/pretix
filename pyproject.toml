@@ -76,7 +76,7 @@ dependencies = [
   "paypal-checkout-serversdk==1.0.*",
   "PyJWT==2.12.*",
   "phonenumberslite==9.0.*",
-  "Pillow==12.1.*",
+  "Pillow==12.2.*",
   "pretix-plugin-build",
   "protobuf==7.34.*",
   "psycopg2-binary",
