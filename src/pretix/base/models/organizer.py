@@ -556,7 +556,7 @@ class TeamAPIToken(models.Model):
         """
         return self.team.organizer_permission_set() if self.team.organizer == organizer else set()
 
-    def has_event_permission(self, organizer, event, perm_name=None, request=None) -> bool:
+    def has_event_permission(self, organizer, event, perm_name=None, request=None, session_key=None) -> bool:
         """
         Checks if this token is part of a team that grants access of type ``perm_name``
         to the event ``event``.
@@ -565,6 +565,7 @@ class TeamAPIToken(models.Model):
         :param event: The event to check
         :param perm_name: The permission, e.g. ``event.orders:read``
         :param request: This parameter is ignored and only defined for compatibility reasons.
+        :param session_key: This parameter is ignored and only defined for compatibility reasons.
         :return: bool
         """
         has_event_access = (self.team.all_events and organizer == self.team.organizer) or (

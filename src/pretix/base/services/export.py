@@ -214,9 +214,7 @@ def init_event_exporters(event, user=None, token=None, device=None, request=None
         exporter: BaseExporter = response(
             event=event,
             organizer=event.organizer,
-            user=user,
-            token=token,
-            device=device,
+            permission_holder=token or device or user,
             **kwargs
         )
 
@@ -253,9 +251,7 @@ def init_organizer_exporters(
             exporter: BaseExporter = response(
                 event=Event.objects.none(),
                 organizer=organizer,
-                user=user,
-                token=token,
-                device=device,
+                permission_holder=token or device or user,
                 **kwargs,
             )
 
@@ -312,9 +308,7 @@ def init_organizer_exporters(
             exporter: BaseExporter = response(
                 event=_event_list_cache[permission_name],
                 organizer=organizer,
-                user=user,
-                token=token,
-                device=device,
+                permission_holder=token or device or user,
                 **kwargs,
             )
 

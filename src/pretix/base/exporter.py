@@ -47,6 +47,7 @@ from django.utils.formats import localize
 from django.utils.translation import gettext, gettext_lazy as _
 
 from pretix.base.models import Event
+from pretix.base.models.auth import PermissionHolder
 from pretix.helpers.safe_openpyxl import (  # NOQA: backwards compatibility for plugins using excel_safe
     SafeWorkbook, remove_invalid_excel_chars as excel_safe,
 )
@@ -59,7 +60,7 @@ class BaseExporter:
     This is the base class for all data exporters
     """
 
-    def __init__(self, event, organizer, user=None, token=None, device=None, progress_callback=lambda v: None):
+    def __init__(self, event, organizer, permission_holder: PermissionHolder=None, progress_callback=lambda v: None):
         """
         :param event: Event context, can also be a queryset of events for multi-event exports
         :param organizer: Organizer context
@@ -72,9 +73,7 @@ class BaseExporter:
         self.organizer = organizer
         self.progress_callback = progress_callback
         self.is_multievent = isinstance(event, QuerySet)
-        self.user = user
-        self.token = token
-        self.device = device
+        self.permission_holder = permission_holder
         if isinstance(event, QuerySet):
             self.events = event
             self.event = None

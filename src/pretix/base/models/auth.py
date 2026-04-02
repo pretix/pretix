@@ -38,6 +38,7 @@ import operator
 import secrets
 from datetime import timedelta
 from functools import reduce
+from typing import Protocol
 
 from django.conf import settings
 from django.contrib.auth.models import (
@@ -65,6 +66,14 @@ from .base import LoggingMixin
 
 class EmailAddressTakenError(IntegrityError):
     pass
+
+
+class PermissionHolder(Protocol):
+    def has_event_permission(self, organizer, event, perm_name=None, request=None, session_key=None) -> bool:
+        ...
+
+    def has_organizer_permission(self, organizer, perm_name=None, request=None):
+        ...
 
 
 class UserManager(BaseUserManager):
