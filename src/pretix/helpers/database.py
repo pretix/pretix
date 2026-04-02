@@ -21,6 +21,7 @@
 #
 import contextlib
 import logging
+
 from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured
 from django.db import connection, transaction
@@ -30,6 +31,7 @@ from django.db.models import (
 from django.utils.functional import lazy
 
 logger = logging.getLogger(__name__)
+
 
 class DummyRollbackException(Exception):
     pass

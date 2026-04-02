@@ -1212,8 +1212,5 @@ self_service_cancellation_checks = EventPluginSignal()
 This signal is sent out to collect checks to approve or deny a self service cancellation.
 You are expected to return a class instance that implements CancellationCheck.
 It is is expected that that the CheckFn will not issue any further queries.
-
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
- 
-
 """

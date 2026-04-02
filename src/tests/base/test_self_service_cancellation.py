@@ -8,9 +8,7 @@ from django_scopes import scope
 from freezegun import freeze_time
 
 from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
-from pretix.base.models.cancellation import CancellationRule, Ruling
-from pretix.base.models.cancellation import CheckRes
-from pretix.base.models.cancellation import OrderDiff
+from pretix.base.models.cancellation import CancellationRule, OrderDiff
 
 NOW = now()
 DAYS_UNTIL_EVENT=60
