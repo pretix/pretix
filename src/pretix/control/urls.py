@@ -367,6 +367,7 @@ urlpatterns = [
         re_path(r'^discounts/add$', discounts.DiscountCreate.as_view(), name='event.items.discounts.add'),
         re_path(r'^vouchers/$', vouchers.VoucherList.as_view(), name='event.vouchers'),
         re_path(r'^vouchers/tags/$', vouchers.VoucherTags.as_view(), name='event.vouchers.tags'),
+        re_path(r'^vouchers/tags/typeahead$', typeahead.voucher_tag_typeahead, name='event.vouchers.tags.typeahead'),
         re_path(r'^vouchers/rng$', vouchers.VoucherRNG.as_view(), name='event.vouchers.rng'),
         re_path(r'^vouchers/item_select$', typeahead.itemvarquota_select2, name='event.vouchers.itemselect2'),
         re_path(r'^vouchers/(?P<voucher>\d+)/$', vouchers.VoucherUpdate.as_view(), name='event.voucher'),

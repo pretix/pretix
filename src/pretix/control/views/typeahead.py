@@ -956,6 +956,21 @@ def subevent_meta_values(request, organizer, event):
     })
 
 
+@event_permission_required('event.vouchers:read')
+def voucher_tag_typeahead(request, **kwargs):
+    q = request.GET.get('q', '')
+    tags = request.event.vouchers.filter(
+        tag__isnull=False,
+        waitinglistentries__isnull=True,
+    ).filter(
+        tag__icontains=q,
+    ).values_list('tag', flat=True).distinct().order_by('tag')[:10]
+
+    return JsonResponse({
+        'results': [{'name': t} for t in tags]
+    })
+
+
 def item_meta_values(request, organizer, event):
     q = request.GET.get('q')
     propname = request.GET.get('property')
