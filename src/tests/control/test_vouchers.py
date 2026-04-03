@@ -806,3 +806,48 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
 
         assert 'walk-ins' in names
         assert 'waiting-list' not in names
+
+    def test_voucher_filter_qs_signal_filters_list(self):
+        with scopes_disabled():
+            self.event.plugins = 'tests.testdummy'
+            self.event.save()
+            self.event.vouchers.create(item=self.ticket, code='AAAAAAA', tag='visible')
+            self.event.vouchers.create(item=self.ticket, code='BBBBBBB', tag='hidden')
+
+        doc = self.client.get('/control/event/%s/%s/vouchers/' % (self.orga.slug, self.event.slug))
+        content = doc.content.decode()
+
+        assert 'AAAAAAA' in content
+        assert 'BBBBBBB' not in content
+
+    def test_voucher_filter_qs_signal_filters_typeahead(self):
+        with scopes_disabled():
+            self.event.plugins = 'tests.testdummy'
+            self.event.save()
+            self.event.vouchers.create(item=self.ticket, code='AAAAAAA', tag='visible')
+            self.event.vouchers.create(item=self.ticket, code='BBBBBBB', tag='hidden')
+
+        url = '/control/event/%s/%s/vouchers/tags/typeahead' % (self.orga.slug, self.event.slug)
+        resp = self.client.get(url + '?q=')
+
+        assert resp.status_code == 200
+        data = json.loads(resp.content.decode())
+        names = [r['name'] for r in data['results']]
+
+        assert 'visible' in names
+        assert 'hidden' not in names
+
+    def test_voucher_filter_qs_signal_chains_multiple_receivers(self):
+        with scopes_disabled():
+            self.event.plugins = 'tests.testdummy'
+            self.event.save()
+            self.event.vouchers.create(item=self.ticket, code='AAAAAAA', tag='visible')
+            self.event.vouchers.create(item=self.ticket, code='BBBBBBB', tag='hidden')
+            self.event.vouchers.create(item=self.ticket, code='CCCCCCC', tag='hidden2')
+
+        doc = self.client.get('/control/event/%s/%s/vouchers/' % (self.orga.slug, self.event.slug))
+        content = doc.content.decode()
+
+        assert 'AAAAAAA' in content
+        assert 'BBBBBBB' not in content
+        assert 'CCCCCCC' not in content

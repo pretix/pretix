@@ -32,6 +32,7 @@ from pretix.base.signals import (
     register_payment_providers, register_sales_channel_types,
     register_ticket_outputs,
 )
+from pretix.control.signals import voucher_filter_qs
 from pretix.presale.signals import html_head
 
 
@@ -144,3 +145,13 @@ class TestPeppolTransmissionProvider(TransmissionProvider):
     def transmit(self, invoice):
         invoice.transmission_status = Invoice.TRANSMISSION_STATUS_COMPLETED
         invoice.save()
+
+
+@receiver(voucher_filter_qs, dispatch_uid="voucher_filter_qs_dummy")
+def filter_vouchers(sender, qs, **kwargs):
+    return qs.exclude(tag='hidden')
+
+
+@receiver(voucher_filter_qs, dispatch_uid="voucher_filter_qs_dummy2")
+def filter_vouchers_2(sender, qs, **kwargs):
+    return qs.exclude(tag='hidden2')
