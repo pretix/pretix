@@ -1117,7 +1117,7 @@ class CheckinViewSet(viewsets.ReadOnlyModelViewSet):
     permission = 'can_view_orders'
 
     def get_queryset(self):
-        qs = Checkin.all.filter().select_related(
+        qs = Checkin.all.filter(list__event=self.request.event).select_related(
             "position",
             "device",
         )
