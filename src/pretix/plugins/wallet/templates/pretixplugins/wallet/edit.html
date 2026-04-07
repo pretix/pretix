@@ -2,18 +2,23 @@
 {% load i18n %}
 {% load money %}
 {% load bootstrap3 %}
+{% load vite %}
+{% load static %}
+{% load compress %}
+
 
 {% block title %}{% trans "Wallet layouts" %}{% endblock %}
+
 {% block content %}
-    <pre><code>{{ styles }}</code></pre>
-    <pre><code>{{ variables }}</code></pre>
+    <h1>{% trans "Edit layout" %}</h1>
         {{ styles|json_script:"styles" }}
         {{ variables|json_script:"variables" }}
-    <form method="post">
-        {% csrf_token %}
-        {% bootstrap_form form %}
-        <button type="submit" class="btn btn-default">
-            {% trans "Submit " %}
-        </button>
-    </form>
+        {{ form.errors|json_script:"form_errors" }}
+        <form method="post">
+            {% csrf_token %}
+            <div id="editor"></div>
+        </form>
+    {% vite_hmr %}
+    {% vite_asset "src/pretix/plugins/wallet/static/pretixplugins/wallet/main.ts" %}
+    {% csrf_token %}
 {% endblock %}
