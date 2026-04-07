@@ -23,7 +23,7 @@
     "build": "npm run build:control -s && npm run build:widget -s",
     "build:control": "vite build",
     "build:widget": "vite build src/pretix/static/pretixpresale/widget",
-    "lint:eslint": "eslint src/pretix/static/pretixpresale/widget src/pretix/static/pretixcontrol/js/ui/checkinrules src/pretix/plugins/webcheckin",
+    "lint:eslint": "eslint src/pretix/static/pretixpresale/widget src/pretix/static/pretixcontrol/js/ui/checkinrules src/pretix/plugins/webcheckin src/pretix/plugins/wallet",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
