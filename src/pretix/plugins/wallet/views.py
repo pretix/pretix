@@ -4,7 +4,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import FormView, ListView, CreateView, UpdateView
-from pretix.base.pdf import get_variables
+from pretix.base.pdf import get_images, get_variables
 from pretix.control.permissions import EventPermissionRequiredMixin
 from .styles import PassLayout, get_platform_styles, get_platforms
 from .models import WalletLayout
@@ -14,7 +14,9 @@ from django import forms
 from django.core.exceptions import ValidationError
 from i18nfield.fields import I18nCharField
 from i18nfield.forms import I18nModelForm
-
+from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from rest_framework import serializers
+from rest_framework.renderers import JSONRenderer
 # TODO: should this even be a list view?
 class LayoutListView(EventPermissionRequiredMixin, ListView):
     model = WalletLayout
@@ -33,7 +35,7 @@ class LayoutListView(EventPermissionRequiredMixin, ListView):
 
 
 class LayoutEditForm(forms.ModelForm):
-    style = forms.TypedChoiceField()
+    style = forms.ChoiceField()
 
     def __init__(self, **kwargs):
         self.platform = kwargs.pop('platform')
@@ -43,14 +45,14 @@ class LayoutEditForm(forms.ModelForm):
         model = WalletLayout
         fields = ("name","style","layout")
 
-    def __init__(self, platform, **kwargs):
+    def __init__(self, event, platform, **kwargs):
         super().__init__(**kwargs)
+        self.event = event
         self.platform = platform
         self.platform_styles = get_platform_styles(platform)
         self.fields["style"].choices = [
             (id, style.name) for id, style in self.platform_styles.items()
         ]
-        self.fields["style"].coerce = self.coerce_style
 
     def coerce_style(self, value):
         return self.platform_styles[value]
@@ -65,10 +67,27 @@ class LayoutEditForm(forms.ModelForm):
     def clean(self):
         if "style" in self.cleaned_data and "layout" in self.cleaned_data:
             layout = PassLayout(
-                style=self.cleaned_data["style"], layout=self.cleaned_data["layout"]
+                style=self.coerce_style(self.cleaned_data["style"]), layout=self.cleaned_data["layout"]
             )
-            layout.validate()
+            layout.validate(self.event)
         return self.cleaned_data
+
+class LayoutSerializer(I18nAwareModelSerializer):
+    # # TODO: only necessary if we save through this serializer
+    # style = serializers.ChoiceField(choices={})
+
+    # def __init__(self, *args, platform, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.platform = platform
+    #     self.platform_styles = get_platform_styles(platform)
+    #     self.fields["style"].choices = [
+    #         (id, style.name) for id, style in self.platform_styles.items()
+    #     ]
+
+
+    class Meta:
+        model = WalletLayout
+        fields = ("name","style","layout")
 
 class LayoutEditorView(EventPermissionRequiredMixin, UpdateView):
     template_name = "pretixplugins/wallet/edit.html"
@@ -83,6 +102,7 @@ class LayoutEditorView(EventPermissionRequiredMixin, UpdateView):
 
     def get_form_kwargs(self) -> dict[str, Any]:
         kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
         kwargs["platform"] = self.platform
         return kwargs
 
@@ -98,11 +118,25 @@ class LayoutEditorView(EventPermissionRequiredMixin, UpdateView):
         context["styles"] = {
             id: style.asdict() for id, style in self.get_platform_styles().items()
         }
+        if self.request.method == "POST":
+            form = self.get_form()
+            if not form.is_valid():
+                layout_data = LayoutSerializer(self.object).data
+                layout_data.update(form.cleaned_data)
+                context['layout'] = layout_data
+            else:
+                context["layout"] = LayoutSerializer(self.object).data
+        else:
+            context["layout"] = LayoutSerializer(self.object).data
+
         context["variables"] = {
             "text": {
                 varname: {"label": var["label"], "editor_sample": var["editor_sample"]}
                 for varname, var in get_variables(self.request.event).items()
-            }
+            },
+            "image": {
+                varname: {"label": var['label']} for varname, var in get_images(self.request.event).items()
+            } | {"poweredby": {"label": _("pretix-Logo")}} # TODO: image upload
         }
         return context
 
