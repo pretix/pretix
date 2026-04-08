@@ -3060,6 +3060,14 @@ Your {organizer} team"""))  # noqa: W291
         'default': 'False',
         'type': bool
     },
+    'smtp_rate_limit_count': {
+        'default': None,
+        'type': int,
+    },
+    'smtp_rate_limit_window': {
+        'default': None,
+        'type': int,
+    },
     'primary_color': {
         'default': settings.PRETIX_PRIMARY_COLOR,
         'type': str,

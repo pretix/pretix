@@ -39,6 +39,10 @@ from pretix.control.forms.filter import OrganizerFilterForm
 from pretix.control.forms.mailsetup import SimpleMailForm, SMTPMailForm
 
 logger = logging.getLogger(__name__)
+SMTP_SETTINGS_TO_CLEAR = (
+    'smtp_host', 'smtp_port', 'smtp_username', 'smtp_password',
+    'smtp_use_tls', 'smtp_use_ssl', 'smtp_rate_limit_count', 'smtp_rate_limit_window',
+)
 
 
 def get_spf_record(hostname):
@@ -142,24 +146,16 @@ class MailSettingsSetupView(TemplateView):
             else:
                 del self.object.settings.mail_from
             self.object.settings.smtp_use_custom = False
-            del self.object.settings.smtp_host
-            del self.object.settings.smtp_port
-            del self.object.settings.smtp_username
-            del self.object.settings.smtp_password
-            del self.object.settings.smtp_use_tls
-            del self.object.settings.smtp_use_ssl
+            for key in SMTP_SETTINGS_TO_CLEAR:
+                self.object.settings.delete(key)
             messages.success(request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
 
         elif request.POST.get('mode') == 'reset':
             del self.object.settings.mail_from
             del self.object.settings.smtp_use_custom
-            del self.object.settings.smtp_host
-            del self.object.settings.smtp_port
-            del self.object.settings.smtp_username
-            del self.object.settings.smtp_password
-            del self.object.settings.smtp_use_tls
-            del self.object.settings.smtp_use_ssl
+            for key in SMTP_SETTINGS_TO_CLEAR:
+                self.object.settings.delete(key)
             messages.success(request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
 
@@ -176,12 +172,8 @@ class MailSettingsSetupView(TemplateView):
 
             if allow_save:
                 self.object.settings.smtp_use_custom = False
-                del self.object.settings.smtp_host
-                del self.object.settings.smtp_port
-                del self.object.settings.smtp_username
-                del self.object.settings.smtp_password
-                del self.object.settings.smtp_use_tls
-                del self.object.settings.smtp_use_ssl
+                for key in SMTP_SETTINGS_TO_CLEAR:
+                    self.object.settings.delete(key)
                 for k, v in self.simple_form.cleaned_data.items():
                     self.object.settings.set(k, v)
                 self.log_action(self.simple_form.cleaned_data)
