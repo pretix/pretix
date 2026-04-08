@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-01 17:00+0000\n"
+"PO-Revision-Date: 2026-04-08 18:00+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_BE/>\n"
@@ -31346,7 +31346,7 @@ msgstr "We zullen u een e-mail sturen zodra we uw betaling ontvangen hebben."
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:7
 msgid "Export bank transfer refunds"
-msgstr ""
+msgstr "Terugbetalingen per bankoverschrijving exporteren"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:9
 #, python-format
@@ -31354,6 +31354,8 @@ msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
 msgstr ""
+"<strong>%(num_new)s</strong> terugbetalingen per bankoverschrijving zijn "
+"aangemaakt en nog niet geëxporteerd."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
@@ -31366,6 +31368,8 @@ msgid ""
 "If you want, you can now also create these exports for multiple events "
 "combined."
 msgstr ""
+"Als u dat wilt, kunt u deze exportbestanden nu ook voor meerdere evenementen "
+"tegelijk aanmaken."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
 msgid "Go to organizer-level exports"
@@ -31377,7 +31381,7 @@ msgstr "Nieuw exportbestand aanmaken"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:38
 msgid "Aggregate transactions to the same bank account"
-msgstr ""
+msgstr "Overschrijvingen naar hetzelfde rekeningnummer samenvoegen"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:43
 msgid ""
