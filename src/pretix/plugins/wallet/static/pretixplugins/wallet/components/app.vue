@@ -1,37 +1,41 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import StyleSettings from './style-settings.vue'
+import Select from './input/select.vue'
+import Input from './input/input.vue'
 
-const STYLES = JSON.parse(document.querySelector('#styles')?.textContent ?? '{}')
-const VARIABLES = JSON.parse(document.querySelector('#variables')?.textContent ?? '{}')
-const FORM_ERRORS = JSON.parse(document.querySelector('#form_errors')?.textContent ?? '{}')
-const FORM_DATA = JSON.parse(document.querySelector('#form_data')?.textContent ?? '{}')
+const gettext = (window as any).gettext
 
-const style = ref<string | null>(FORM_DATA.style ?? null)
-const name = ref<string>(FORM_DATA.name ?? '')
-const layout = ref(JSON.parse(FORM_DATA.layout ?? '{}') ?? {})
+// TODO: Move to store?
+const STYLES: Styles = JSON.parse(document.querySelector('#styles')?.textContent ?? '{}')
+const VARIABLES: VariableConfig = JSON.parse(document.querySelector('#variables')?.textContent ?? '{}')
+const FORM_ERRORS: Record<string, Array<string>> = JSON.parse(document.querySelector('#form_errors')?.textContent ?? '{}')
+const LAYOUT: Layout = JSON.parse(document.querySelector('#layout')?.textContent ?? '{}')
+
+const name = ref<string>(LAYOUT.name ?? '')
+const style = ref<string | null>(LAYOUT.style ?? null)
+const layout = ref<LayoutData>(LAYOUT.layout ?? {fields: {}})
 </script>
 
 <template lang="pug">
     // TODO: add :key for all `v-for`s
-    //- pre
-    //-     code {{ STYLES }}
+    // TODO: i18n
+    details
+        pre
+            code {{ FORM_ERRORS }}
     .row
         .col-md-8
+            // TODO: show error text
             .form-group(:class='"name" in FORM_ERRORS ? "has-error" : ""')
-                label.control-label(for="layout-info-name") Name
-                input#layout-info-name.form-control(v-model="name" name="name")
+                Input(label="Name" v-model="name" name="name" :errors="FORM_ERRORS['name']")
 
             .form-group(:class='"style" in FORM_ERRORS ? "has-error" : ""')
-                label.control-label(for="layout-info-style") Style
-                select#layout-info-style.form-control(v-model="style" name="style")
-                    option(v-for="styleconfig in STYLES" :key="styleconfig.identifier" :value="styleconfig.identifier") {{ styleconfig.name }}
+                Select(label="Style" v-model="style" :choices="Object.values(STYLES).map(x => [x.identifier, x.name])" name="style" :errors="FORM_ERRORS['style']")
 
-            StyleSettings(v-model="layout" :style="style" :styles="STYLES" :variables="VARIABLES")
+            StyleSettings(v-if="style" v-model="layout" :style="style" :styles="STYLES" :variables="VARIABLES")
         .col-md-4
             .panel.panel-default
                 .panel-heading Preview
-                    // TODO: i18n
                 .panel-body
                     // TODO: Preview
                     pre
