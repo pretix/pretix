@@ -1,7 +1,8 @@
 
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Callable, Dict, List, Literal, Set
+from functools import reduce
+from typing import Callable, Dict, List, Literal, Optional, Set
 
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -16,19 +17,6 @@ from pretix.base.timemachine import time_machine_now
 
 
 @dataclass(frozen=True)
-class OrderDiff:
-    order: Order
-    keep: Set[OrderPosition]
-
-    def cancellations(self):
-        return self.prev.difference(self.next)
-
-    @staticmethod
-    def cancel_all(order: Order) -> "OrderDiff":
-        return OrderDiff(order=order, prev=set(order.positions.all()), next=set())
-
-
-@dataclass(frozen=True)
 class CancellationCheckResult:
     cancellation_possible: bool
     reason: str
@@ -38,7 +26,7 @@ class CancellationCheckResult:
 CancellationCheckResultsById = Dict[str, CancellationCheckResult]
 
 
-CheckFn = Callable[[Order, Set[OrderPosition], OrderPosition], CancellationCheckResultsById]
+CheckFn = Callable[[Order, Set[OrderPosition], Optional[OrderPosition]], CancellationCheckResultsById]
 
 FeeType = Literal['position_fee', 'process_fee']
 
@@ -127,16 +115,6 @@ class Ruling:
             return self.cancellation_possible and not other.cancellation_possible
 
 
-def validate_status_chars(value):
-    invalid = set(value) - Order.ALLOWED_STATUS_CHARS
-    if invalid:
-        raise ValidationError(
-            f"Invalid characters: {invalid}. Allowed: {Order.ALLOWED_STATUS_CHARS}"
-        )
-    if len(value) != len(set(value)):
-        raise ValidationError("Duplicate characters are not allowed.")
-
-
 class CancellationRule(models.Model):
     event = models.ForeignKey(
         Event,
@@ -154,13 +132,7 @@ class CancellationRule(models.Model):
         ItemVariation, blank=True, verbose_name=_("Variations")
     )
 
-    allowed_if_in_order_status = models.CharField(
-        max_length=4,
-        choices=Order.STATUS_CHOICE,
-        verbose_name=_("Cancellation possible if order is in status"),
-        validators=[validate_status_chars],
-        default="".join(Order.ALLOWED_STATUS_CHARS),
-    )
+
     allowed_until = ModelRelativeDateTimeField(null=True, blank=True)
     except_after = ModelRelativeDateTimeField(null=True, blank=True)
 
@@ -187,9 +159,12 @@ class CancellationRule(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.checks: List[CheckFn] = [self._check_order_status, self._check_time_window]
+        self.checks: List[CheckFn] = [self._check_time_window]
 
-    def _check_time_window(self, diff: OrderDiff, order_position: OrderPosition) -> CancellationCheckResultsById:
+
+    # TODO implement order status check
+
+    def _check_time_window(self, order: Order, keep: Set[OrderPosition], position: OrderPosition) -> CancellationCheckResultsById:
         check_id = "TIME_WINDOW"
 
         if not self.allowed_until and not self.allowed_until:
@@ -198,7 +173,7 @@ class CancellationRule(models.Model):
                 reason="No time window specified",
             )}
 
-        relevant_event = order_position.subevent or order_position.event
+        relevant_event = position.subevent or position.event
         in_allowed_until = time_machine_now() < self.allowed_until.datetime(
             relevant_event) if self.allowed_until else False
         in_exemption = time_machine_now() > self.except_after.datetime(
@@ -221,24 +196,33 @@ class CancellationRule(models.Model):
                 reason=f"Cancellation after time window ending on {self.allowed_until.datetime(relevant_event)}",
             )}
 
-    def _check_order_status(self, diff: OrderDiff, order_position: OrderPosition) -> CancellationCheckResultsById:
-        check_id = "ORDER_STATUS"
+    def check(self, system_check_results: List[CancellationCheckResult], order: Order, keep: Set[OrderPosition], position: OrderPosition) -> Optional[Ruling]:
+        if not self.all_products and position.item_id not in self.limit_products.values_list('pk', flat=True):
+            return None
 
-        if diff.order.status == "".join([]):
-            return {check_id: CancellationCheckResult(
-                cancellation_possible=True,
-                reason="Orders in every status can be cancelled",
-            )}
-        elif diff.order.status in self.allowed_if_in_order_status:
-            return {check_id: CancellationCheckResult(
-                cancellation_possible=True,
-                reason=f"Order in required status: '{diff.order.status}'",
-            )}
+        if not self.all_products and position.variation_id not in self.limit_variations.values_list('pk', flat=True):
+            return None
+
+        check_results = [check(order, keep, position) for check in self.checks]
+
+        if self.fee_percentage_per_item and self.fee_absolute_per_item:
+            raise NotImplementedError("Should never be reached")
+        elif self.fee_absolute_per_item != Decimal(0.00):
+            return Ruling.from_absolute_fee(
+                    rule_id=self.id,
+                    results=reduce(lambda a, b: a | b, [*system_check_results, *check_results], {}),
+                    fee_type='position_fee',
+                    absolute_fee=self.fee_absolute_per_item
+                )
         else:
-            return {check_id: CancellationCheckResult(
-                cancellation_possible=False,
-                reason=f"Order in status '{diff.order.status}' cannot be canceled",
-            )}
+            return Ruling.from_relative_fee(
+                    rule_id=self.id,
+                    results=reduce(lambda a, b: a | b, [*system_check_results, *check_results], {}),
+                    fee_type='position_fee',
+                    reference_price=position.price,
+                    percentage=self.fee_absolute_per_item,
+                    currency=order.event.currency
+                )
 
 
 class CancellationCheck:

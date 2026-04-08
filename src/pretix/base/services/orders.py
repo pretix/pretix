@@ -43,9 +43,7 @@ from decimal import Decimal
 from functools import reduce
 from itertools import chain
 from time import sleep
-from typing import Dict
-from typing import List, Optional
-from typing import Set
+from typing import Dict, List, Optional, Set
 
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
@@ -53,8 +51,8 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import (
-    Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Sum,
-    Value,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch, Q, QuerySet,
+    Sum, Value,
 )
 from django.db.models import Prefetch
 from django.db.models.functions import Coalesce, Greatest
@@ -71,20 +69,14 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    CartPosition, Checkin, Device, Event, GiftCard, Item, ItemVariation, LogEntry,
+    CartPosition, Checkin, Device, Event, GiftCard, Item, ItemVariation,
     Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
     SeatCategoryMapping, User, Voucher,
 )
-from pretix.base.models import Checkin
-from pretix.base.models.cancellation import AbsoluteFee, CancellationCheckResult
-from pretix.base.models.cancellation import CancellationRule
-from pretix.base.models.cancellation import CheckFn
-from pretix.base.models.cancellation import CheckRes
-from pretix.base.models.cancellation import OrderDiff
-from pretix.base.models.cancellation import RelativeFee
-from pretix.base.models.cancellation import Ruling
-from pretix.base.models.cancellation import assert_no_queries
-from pretix.base.models.cancellation import merge_check_results
+from pretix.base.models.cancellation import (
+    CancellationCheckResult, CancellationCheckResultsById, CancellationRule,
+    Ruling, CancellationCheck
+)
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
     BlockedTicketSecret, InvoiceAddress, OrderFee, OrderRefund,
@@ -117,9 +109,8 @@ from pretix.base.signals import (
     order_approved, order_canceled, order_changed, order_denied, order_expired,
     order_expiry_changed, order_fee_calculation, order_paid, order_placed,
     order_reactivated, order_split, order_valid_if_pending, periodic_task,
-    validate_order,
+    self_service_cancellation_checks, validate_order,
 )
-from pretix.base.signals import self_service_cancellation_checks
 from pretix.base.timemachine import time_machine_now, time_machine_now_assigned
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF, ensure_no_queries
@@ -3523,16 +3514,7 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
                 )
 
 
-
-class CancellationCheck:
-    id: str
-    prefetches: List[Prefetch] = []
-    related_selects: List[str] = []
-
-    def check(self, order: Order, keep: Set[OrderPosition], order_position: OrderPosition) -> CancellationCheckResult:
-        raise NotImplementedError
-
- class OrderPositionNotUsedCheck(CancellationCheck):
+class OrderPositionNotUsedCheck(CancellationCheck):
     id = "SYSTEM_TICKET_NOT_USED"
     prefetches = [
         Prefetch(
@@ -3547,17 +3529,19 @@ class CancellationCheck:
         if order_position.checkins.filter(list__consider_tickets_used=True).exists():
             return {self.id: CancellationCheckResult(
                 cancellation_possible=False,
-                reason=f"Order position was used",
+                reason="Order position was used",
             )}
         else:
             return {self.id: CancellationCheckResult(
                 cancellation_possible=True,
-                reason=f"Order position not yet used",
+                reason="Order position not yet used",
             )}
+
 
 @receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_not_used")
 def cancellation_checks_not_used(sender: Event):
     return OrderPositionNotUsedCheck()
+
 
 class NotDiscountedCheck(CancellationCheck):
     """
@@ -3593,12 +3577,9 @@ class NotDiscountedCheck(CancellationCheck):
             )}
 
 
-
 @receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_not_discountend")
 def cancellation_checks_not_discounted(sender: Event):
     return NotDiscountedCheck()
-
-
 
 
 # TODO weitere System Checks
@@ -3617,8 +3598,8 @@ def self_service_cancel(order: Order, keep: Set[OrderPosition], dry_run: bool):
     """
     cancellation_checks: List[CancellationCheck] = [resp for recv, resp in self_service_cancellation_checks.send(event=order.event)]
 
-    position_rules = CancellationRule.objects.filter(event=order.event).filter("fee_cancellation_process"==Decimal("0.00")).all()
-    process_rules = CancellationRule.objects.filter(event=order.event).filter("fee_cancellation_process"!=Decimal("0.00")).all()
+    position_rules = CancellationRule.objects.filter(event=order.event).filter("fee_cancellation_process" == Decimal("0.00")).all()
+    process_rules = CancellationRule.objects.filter(event=order.event).filter("fee_cancellation_process" != Decimal("0.00")).all()
 
     # Todo get prefetches/selects from rules as well
     prefetches = list(chain.from_iterable([cc.prefetches for cc in cancellation_checks]))
@@ -3679,13 +3660,6 @@ def self_service_cancel(order: Order, keep: Set[OrderPosition], dry_run: bool):
 
         effective_process_ruling = process_rulings[0]
 
-
-
-    cancellation_possible = all([r.cancellation_possible for r in effective_rulings])
+        cancellation_possible = all([r.cancellation_possible for r in effective_position_rulings])
 
     # TODO zusammenführen der Rulings
-
-    if dry_run:
-        return cancellation_possible, rulings
-    else:
-        ...
