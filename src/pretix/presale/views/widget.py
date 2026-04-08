@@ -530,7 +530,7 @@ class WidgetAPIProductList(EventListMixin, View):
         ]
 
         if hasattr(self.request, 'event') and data['list_type'] not in ("calendar", "week"):
-            # only allow list-view of more than 50 subevents if ordering is by data as this can be done in the database
+            # only allow list-view of more than 50 subevents if ordering is by date as this can be done in the database
             # ordering by name is currently not supported in database due to I18NField-JSON
             ordering = self.request.event.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
             if ordering not in ("date_ascending", "date_descending") and self.request.event.subevents.filter(date_from__gt=now()).count() > 50:
