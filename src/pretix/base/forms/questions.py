@@ -90,7 +90,7 @@ from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, COUNTRY_STATE_LABEL,
     PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
 )
-from pretix.base.templatetags.rich_text import rich_text, URL_RE
+from pretix.base.templatetags.rich_text import URL_RE, rich_text
 from pretix.base.timemachine import time_machine_now
 from pretix.control.forms import (
     ExtFileField, ExtValidationMixin, SizeValidationMixin, SplitDateTimeField,
