@@ -727,8 +727,6 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
     _check_date(event, time_machine_now_dt)
 
     products_seen = Counter()
-    q_avail = Counter()
-    v_avail = Counter()
     v_usages = Counter()
     v_budget = {}
     deleted_positions = set()
@@ -792,6 +790,9 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
                 [op.seat for op in sorted_positions if op.seat],
                 shared_lock_objects=[event]
             )
+
+    q_avail = Counter()
+    v_avail = Counter()
 
     # Check maximum order size
     limit = min(int(event.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)

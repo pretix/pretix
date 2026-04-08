@@ -1412,6 +1412,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         qa = QuotaAvailability()
         qa.queue(*[q for q, d in quota_diff_for_locking.items() if d > 0])
         qa.compute()
+        v_avail = {}
 
         # These are not technically correct as diff use due to the time offset applied above, so let's prevent accidental
         # use further down
@@ -1441,11 +1442,13 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
                 voucher_usage[v] += 1
                 if voucher_usage[v] > 0:
-                    redeemed_in_carts = CartPosition.objects.filter(
-                        Q(voucher=pos_data['voucher']) & Q(event=self.context['event']) & Q(expires__gte=now_dt)
-                    ).exclude(pk__in=[cp.pk for cp in delete_cps])
-                    v_avail = v.max_usages - v.redeemed - redeemed_in_carts.count()
-                    if v_avail < voucher_usage[v]:
+                    if v not in v_avail:
+                        v.refresh_from_db(fields=['redeemed'])
+                        redeemed_in_carts = CartPosition.objects.filter(
+                            Q(voucher=v) & Q(event=self.context['event']) & Q(expires__gte=now_dt)
+                        ).exclude(pk__in=[cp.pk for cp in delete_cps])
+                        v_avail[v] = v.max_usages - v.redeemed - redeemed_in_carts.count()
+                    if v_avail[v] < voucher_usage[v]:
                         errs[i]['voucher'] = [
                             'The voucher has already been used the maximum number of times.'
                         ]
