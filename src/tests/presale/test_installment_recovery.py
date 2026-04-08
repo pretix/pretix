@@ -71,14 +71,16 @@ class TestInstallmentRecovery(TestCase):
     def _mock_provider(self, **overrides):
         defaults = {
             'installments_supported': True,
-            'checkout_prepare': True,
+            'payment_prepare': True,
+            'execute_payment_needs_user': False,
             'execute_payment': None,
             'payment_form_render': '<form></form>',
         }
         defaults.update(overrides)
         provider = MagicMock()
         provider.installments_supported = defaults['installments_supported']
-        provider.checkout_prepare.return_value = defaults['checkout_prepare']
+        provider.execute_payment_needs_user = defaults['execute_payment_needs_user']
+        provider.payment_prepare.return_value = defaults['payment_prepare']
         provider.execute_payment.return_value = defaults['execute_payment']
         provider.payment_form_render.return_value = defaults['payment_form_render']
         return provider
@@ -215,19 +217,35 @@ class TestInstallmentRecovery(TestCase):
             assert self.client.post(self._url()).status_code == 302
 
     @scopes_disabled()
-    def test_post_checkout_prepare_false_rerenders(self):
-        provider = self._mock_provider(checkout_prepare=False)
+    def test_post_payment_prepare_false_rerenders(self):
+        provider = self._mock_provider(payment_prepare=False)
         with patch('pretix.base.models.Event.get_payment_providers', return_value={'dummy': provider}):
             response = self.client.post(self._url())
         assert response.status_code == 200
         assert not OrderPayment.objects.filter(order=self.order).exists()
 
-    def test_post_checkout_prepare_returns_url_redirects(self):
-        provider = self._mock_provider(checkout_prepare='https://pay.example.com/')
+    def test_post_payment_prepare_returns_url_redirects(self):
+        provider = self._mock_provider(payment_prepare='https://pay.example.com/')
         with patch('pretix.base.models.Event.get_payment_providers', return_value={'dummy': provider}):
             response = self.client.post(self._url())
         assert response.status_code == 302
         assert response.url == 'https://pay.example.com/'
+        with scopes_disabled():
+            payment = OrderPayment.objects.get(order=self.order)
+        self.installment.refresh_from_db()
+        assert self.installment.payment == payment
+
+    def test_post_payment_prepare_with_user_execution_redirects_to_confirm(self):
+        provider = self._mock_provider(payment_prepare=True, execute_payment_needs_user=True)
+        with patch('pretix.base.models.Event.get_payment_providers', return_value={'dummy': provider}):
+            response = self.client.post(self._url())
+
+        assert response.status_code == 302
+        with scopes_disabled():
+            payment = OrderPayment.objects.get(order=self.order)
+        assert f'/order/{self.order.code}/{self.order.secret}/pay/{payment.pk}/confirm' in response.url
+        self.installment.refresh_from_db()
+        assert self.installment.payment == payment
 
     @scopes_disabled()
     def test_post_payment_exception_marks_failed(self):

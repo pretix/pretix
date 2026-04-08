@@ -1863,6 +1863,18 @@ class OrderInstallmentRecovery(EventViewMixin, OrderDetailMixin, TemplateView):
     def provider(self):
         return self.request.event.get_payment_providers().get(self.installment_plan.payment_provider)
 
+    def get_payment_confirm_url(self, payment):
+        return eventreverse(self.request.event, 'presale:event.order.pay.confirm', kwargs={
+            'order': self.order.code,
+            'secret': self.order.secret,
+            'payment': payment.pk,
+        })
+
+    def _cleanup_recovery_payment(self, payment):
+        self.failed_installment.payment = None
+        self.failed_installment.save(update_fields=['payment'])
+        payment.delete()
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['order'] = self.order
@@ -1889,15 +1901,8 @@ class OrderInstallmentRecovery(EventViewMixin, OrderDetailMixin, TemplateView):
             messages.error(request, _('The payment provider for this order is not available.'))
             return redirect(self.get_order_url())
 
+        payment = None
         try:
-            cart = {'total': self.failed_installment.amount}
-            resp = self.provider.checkout_prepare(request, cart)
-            if resp is False:
-                messages.error(request, _('Please check your payment information and try again.'))
-                return self.get(request, *args, **kwargs)
-            elif isinstance(resp, str):
-                return redirect(resp)
-
             payment = OrderPayment.objects.create(
                 order=self.order,
                 provider=self.installment_plan.payment_provider,
@@ -1908,6 +1913,18 @@ class OrderInstallmentRecovery(EventViewMixin, OrderDetailMixin, TemplateView):
 
             self.failed_installment.payment = payment
             self.failed_installment.save(update_fields=['payment'])
+
+            resp = self.provider.payment_prepare(request, payment)
+            if resp is False:
+                self._cleanup_recovery_payment(payment)
+                messages.error(request, _('Please check your payment information and try again.'))
+                return self.get(request, *args, **kwargs)
+
+            if isinstance(resp, str):
+                return redirect(resp)
+
+            if self.provider.execute_payment_needs_user:
+                return redirect(self.get_payment_confirm_url(payment))
 
             try:
                 result = self.provider.execute_payment(request, payment)
@@ -1931,6 +1948,8 @@ class OrderInstallmentRecovery(EventViewMixin, OrderDetailMixin, TemplateView):
             return redirect(self.get_order_url())
 
         except Exception:
+            if payment and payment.state == OrderPayment.PAYMENT_STATE_CREATED:
+                self._cleanup_recovery_payment(payment)
             logger.exception('Unexpected error in installment recovery')
             messages.error(request, _('There was an error processing your request. Please try again.'))
             return self.get(request, *args, **kwargs)
