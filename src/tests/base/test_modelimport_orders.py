@@ -993,7 +993,6 @@ def test_import_mixed_order_size_consistency(user, event, item):
             'the value has already been set to "a1@example.com".') in str(excinfo.value)
 
 
-
 @pytest.mark.django_db
 @scopes_disabled()
 def test_import_line_endings_mix(event, item, user):
@@ -1015,7 +1014,7 @@ def test_import_line_endings_mix(event, item, user):
     cf.save()
 
     import_orders.apply(
-        args=(event.pk, cf.id , settings, 'en', user.pk)
+        args=(event.pk, cf.id, settings, 'en', user.pk)
     )
     assert event.orders.count() == 3
     assert OrderPosition.objects.count() == 3
