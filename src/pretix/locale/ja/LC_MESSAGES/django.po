@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-23 21:00+0000\n"
+"PO-Revision-Date: 2026-04-08 18:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -12939,7 +12939,7 @@ msgstr "企業名を必須にするには、請求先住所を必須にする必
 #: pretix/base/settings.py:4157
 #, python-brace-format
 msgid "VAT-ID is not supported for \"{}\"."
-msgstr ""
+msgstr "VAT-IDは「{}」に対してサポートされていません。"
 
 #: pretix/base/settings.py:4164
 msgid "The last payment date cannot be before the end of presale."
@@ -26796,8 +26796,6 @@ msgid "Add a two-factor authentication device"
 msgstr "2要素認証デバイスを追加してください"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:19
-#, fuzzy
-#| msgid "Smartphone with the Authenticator application"
 msgid "Smartphone with Authenticator app"
 msgstr "Authenticatorアプリを搭載したスマートフォン"
 
@@ -26806,18 +26804,20 @@ msgid ""
 "Use your smartphone with any Time-based One-Time-Password app like freeOTP, "
 "Google Authenticator or Proton Authenticator."
 msgstr ""
+"freeOTP、Google Authenticator、Proton Authenticator などの時間ベースの"
+"ワンタイムパスワードアプリをスマートフォンでご利用ください。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:30
-#, fuzzy
-#| msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token"
-msgstr "WebAuthn対応のハードウェアトークン（例：Yubikey）"
+msgstr "WebAuthn対応のハードウェアトークン"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:32
 msgid ""
 "Use a hardware token like the Yubikey, or other biometric authentication "
 "like fingerprint or face recognition."
 msgstr ""
+"Yubikey などのハードウェアトークンや、指紋や顔認識などの生体認証を使用してく"
+"ださい。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
