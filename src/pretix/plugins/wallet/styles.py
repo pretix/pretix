@@ -4,6 +4,8 @@ import enum
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from i18nfield.strings import LazyI18nString
+
+from pretix.base.pdf import get_images, get_variables
 from .models import WalletLayout
 
 
@@ -34,10 +36,10 @@ class PlaceholderFieldType(enum.Enum):
 class PlaceholderField:
     type: PlaceholderFieldType
     label: LazyI18nString
-    value: str
+    content: str
 
     def asdict(self):
-        return {"type": self.type.value, "label": self.label.data, "value": self.value}
+        return {"type": self.type.value, "label": self.label.data, "value": self.content}
 
 
 @dataclass
@@ -178,10 +180,12 @@ class PassLayout:
         self.style = style
         self.layout = layout
 
-    def validate(self):
-        self.validate_fields()
+    def validate(self, event):
+        self.validate_fields(event)
 
-    def validate_fields(self):
+    def validate_fields(self, event):
+        placeholders = {"text": get_variables(event), "image": get_images(event)}
+
         style_fields = self.style.fields
         if "fields" not in self.layout:
             raise ValidationError(_("Layout did not contain any fields"))
@@ -192,10 +196,16 @@ class PassLayout:
         for fieldgroup in style_fields:
             layout_field_data = layout_fields.get(fieldgroup.identifier, {})
             if fieldgroup.min_entries and fieldgroup.min_entries < len(
-                layout_field_data.get('entries')
+                layout_field_data.get('entries', [])
             ):
                 raise ValidationError(
                     _("At least {min_entries} must be specified for {name}").format(
                         min_entries=fieldgroup.min_entries, name=fieldgroup.name
                     )
                 )
+            # TODO: move field validation to json schema
+            for entry in layout_field_data.get('entries', []):
+                if entry['type'] not in ('placeholder', fieldgroup.entry_type.value):
+                    raise ValidationError(_("Placeholder of wrong type \"{type}\" in {name}").format(type=entry['type'], name="fieldgroup.name"))
+                if entry['type'] == 'placeholder' and entry['content'] not in placeholders[fieldgroup.entry_type.value]:
+                    raise ValidationError(_("Unknown placeholder {name}").format(name=entry['content']))

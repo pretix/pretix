@@ -10,13 +10,14 @@
 {% block title %}{% trans "Wallet layouts" %}{% endblock %}
 
 {% block content %}
-    <h1>{% trans "Edit layout" %}</h1>
+    <h1>{% trans "Edit layout" %} {{ object.name }} </h1>
         {{ styles|json_script:"styles" }}
         {{ variables|json_script:"variables" }}
         {{ form.errors|json_script:"form_errors" }}
+        {{ layout|json_script:"layout" }}
         <form method="post">
             {% csrf_token %}
-            <div id="editor"></div>
+            <div id="editor">This is a test</div>
         </form>
     {% vite_hmr %}
     {% vite_asset "src/pretix/plugins/wallet/static/pretixplugins/wallet/main.ts" %}
