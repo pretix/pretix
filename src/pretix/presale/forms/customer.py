@@ -43,7 +43,6 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
-from pretix.base.templatetags.rich_text import URL_RE
 from pretix.helpers.http import get_client_ip
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -151,7 +150,6 @@ class RegistrationForm(forms.Form):
             "instead."
         ),
         'required': _('This field is required.'),
-        'invalid_characters': _('Please do not use special characters in names.'),
     }
 
     def __init__(self, request=None, *args, **kwargs):
@@ -236,15 +234,6 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError(
                     {'email': self.error_messages['duplicate']},
                     code='duplicate',
-                )
-
-        # Since the name is user-controlled and can end up in emails sent to customers
-        # we want to sanitize for domains and avoid becoming part of a spamming operation.
-        for name_part in self.cleaned_data.get('name_parts', {}).values():
-            if URL_RE.search(name_part):
-                raise forms.ValidationError(
-                    {'name_parts': self.error_messages['invalid_characters']},
-                    code='invalid_characters',
                 )
 
         if self.standalone:
