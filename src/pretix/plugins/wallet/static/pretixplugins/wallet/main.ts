@@ -1,8 +1,9 @@
 import { createApp } from 'vue'
 import App from './components/app.vue'
 
-const app = createApp(App)
-app.mount('#editor')
+const mountEl = document.querySelector<HTMLElement>('#editor')!
+const app = createApp(App, mountEl.dataset)
+app.mount(mountEl)
 
 app.config.errorHandler = (error, _vm, info) => {
 	// vue fatals on errors by default, which is a weird choice
