@@ -1133,6 +1133,65 @@ class WaitingListTest(EventTestMixin, SoupTest):
         assert wle.voucher is None
         assert wle.locale == 'en'
 
+    def test_initial_selection(self):
+        with scopes_disabled():
+            cat = ItemCategory.objects.create(event=self.event, name='Tickets')
+            self.item.category = cat
+            self.item.save()
+
+            item2 = Item.objects.create(
+                event=self.event, name='VIP ticket',
+                default_price=Decimal('25.00'),
+                active=True, category=cat,
+            )
+            self.q.items.add(item2)
+
+        response = self.client.get(
+            '/%s/%s/waitinglist/?item=%d' % (
+                self.orga.slug, self.event.slug, item2.pk
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        doc = BeautifulSoup(response.render().content, "lxml")
+
+        select = doc.find('select', {'name': 'itemvar'})
+        optgroup = select.find('optgroup')
+        self.assertIsNotNone(optgroup, 'Choices should be grouped by category')
+        self.assertEqual(optgroup['label'], 'Tickets')
+
+        selected = select.find_all('option', selected=True)
+        self.assertEqual(len(selected), 1, 'Exactly one option should be pre-selected')
+        self.assertEqual(selected[0]['value'], str(item2.pk))
+
+    def test_initial_selection_with_variation(self):
+        with scopes_disabled():
+            cat = ItemCategory.objects.create(event=self.event, name='Tickets')
+            self.item.category = cat
+            self.item.has_variations = True
+            self.item.save()
+
+            var1 = ItemVariation.objects.create(item=self.item, value='Standard')
+            var2 = ItemVariation.objects.create(item=self.item, value='Premium')
+            self.q.variations.add(var1, var2)
+
+        response = self.client.get(
+            '/%s/%s/waitinglist/?item=%d&var=%d' % (
+                self.orga.slug, self.event.slug,
+                self.item.pk, var2.pk,
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        doc = BeautifulSoup(response.render().content, "lxml")
+
+        select = doc.find('select', {'name': 'itemvar'})
+        optgroup = select.find('optgroup')
+        self.assertIsNotNone(optgroup, 'Choices should be grouped by category')
+        self.assertEqual(optgroup['label'], 'Tickets')
+
+        selected = select.find_all('option', selected=True)
+        self.assertEqual(len(selected), 1, 'Exactly one option should be pre-selected')
+        self.assertEqual(selected[0]['value'], '%d-%d' % (self.item.pk, var2.pk))
+
     def test_subevent_valid(self):
         with scopes_disabled():
             self.event.has_subevents = True
