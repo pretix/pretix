@@ -171,106 +171,108 @@ def process_single_installment(installment: ScheduledInstallment, send_mail: boo
     :param send_mail: Whether to send a failure notification email (default False)
     :return: True if successful, False otherwise
     """
-    plan = installment.plan
-    order = plan.order
-    event = order.event
+    with scopes_disabled():
+        plan = installment.plan
+        order = plan.order
+        event = order.event
 
-    provider = event.get_payment_providers().get(plan.payment_provider)
-    if not provider:
-        return False
+        provider = event.get_payment_providers().get(plan.payment_provider)
+        if not provider:
+            return False
 
-    if not plan.payment_token or plan.payment_token == {}:
-        logger.error(
-            "Cannot process installment %s for order %s: no payment token available.",
-            installment.pk, order.code,
-        )
-        installment.state = ScheduledInstallment.STATE_FAILED
-        installment.failure_reason = "No payment token available"
-        installment.processed_at = now()
-        installment.save(update_fields=['state', 'failure_reason', 'processed_at'])
-        return False
+        if not plan.payment_token or plan.payment_token == {}:
+            logger.error(
+                "Cannot process installment %s for order %s: no payment token available.",
+                installment.pk, order.code,
+            )
+            installment.state = ScheduledInstallment.STATE_FAILED
+            installment.failure_reason = "No payment token available"
+            installment.processed_at = now()
+            installment.save(update_fields=['state', 'failure_reason', 'processed_at'])
+            return False
 
-    success = False
-    try:
-        success = provider.execute_installment(plan, installment)
-    except Exception:
-        logger.exception(
-            "Failed to execute installment %s for order %s",
-            installment.pk, order.code,
-        )
+        success = False
+        try:
+            success = provider.execute_installment(plan, installment)
+        except Exception:
+            logger.exception(
+                "Failed to execute installment %s for order %s",
+                installment.pk, order.code,
+            )
 
-    if success:
-        payment = OrderPayment.objects.create(
-            order=order,
-            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
-            amount=installment.amount,
-            payment_date=now(),
-            provider=plan.payment_provider,
-            installment_plan=plan
-        )
+        if success:
+            payment = OrderPayment.objects.create(
+                order=order,
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=installment.amount,
+                payment_date=now(),
+                provider=plan.payment_provider,
+                installment_plan=plan
+            )
 
-        installment.state = ScheduledInstallment.STATE_PAID
-        installment.payment = payment
-        installment.processed_at = now()
-        installment.save(update_fields=['state', 'payment', 'processed_at'])
+            installment.state = ScheduledInstallment.STATE_PAID
+            installment.payment = payment
+            installment.processed_at = now()
+            installment.save(update_fields=['state', 'payment', 'processed_at'])
 
-        completed = plan.record_successful_payment()
+            completed = plan.record_successful_payment()
 
-        if completed:
-            try:
-                provider.revoke_payment_token(plan)
-            except Exception:
-                logger.warning(
-                    "Failed to revoke payment token for completed plan %s",
-                    plan.pk,
-                )
-            plan.payment_token = {}
-            plan.save(update_fields=['payment_token'])
-
-    else:
-        installment.state = ScheduledInstallment.STATE_FAILED
-        installment.save(update_fields=['state'])
-
-        if not plan.grace_period_end:
-            days = provider.settings.get('installments_grace_period_days', as_type=int, default=7)
-            plan.grace_period_end = now() + timedelta(days=days)
-            plan.save(update_fields=['grace_period_end'])
-
-        if send_mail:
-            with language(order.locale, event.settings.region):
-                context = get_email_context(event=event, order=order)
-                context.update({
-                    'failure_reason': installment.failure_reason or '',
-                    'expire_date': plan.grace_period_end,
-                    'url': build_absolute_uri(
-                        event, 'presale:event.order.installment.recovery',
-                        kwargs={'order': order.code, 'secret': order.secret}
-                    ),
-                })
+            if completed:
                 try:
-                    order.send_mail(
-                        event.settings.mail_subject_installment_failed,
-                        event.settings.mail_text_installment_failed,
-                        context,
-                        'pretix.event.order.installment.failed',
-                    )
+                    provider.revoke_payment_token(plan)
                 except Exception:
                     logger.warning(
-                        "Failed to send installment failure email for order %s",
-                        order.code,
+                        "Failed to revoke payment token for completed plan %s",
+                        plan.pk,
                     )
+                plan.payment_token = {}
+                plan.save(update_fields=['payment_token'])
 
-    return success
+        else:
+            installment.state = ScheduledInstallment.STATE_FAILED
+            installment.save(update_fields=['state'])
+
+            if not plan.grace_period_end:
+                days = provider.settings.get('installments_grace_period_days', as_type=int, default=7)
+                plan.grace_period_end = now() + timedelta(days=days)
+                plan.save(update_fields=['grace_period_end'])
+
+            if send_mail:
+                with language(order.locale, event.settings.region):
+                    context = get_email_context(event=event, order=order)
+                    context.update({
+                        'failure_reason': installment.failure_reason or '',
+                        'expire_date': plan.grace_period_end,
+                        'url': build_absolute_uri(
+                            event, 'presale:event.order.installment.recovery',
+                            kwargs={'order': order.code, 'secret': order.secret}
+                        ),
+                    })
+                    try:
+                        order.send_mail(
+                            event.settings.mail_subject_installment_failed,
+                            event.settings.mail_text_installment_failed,
+                            context,
+                            'pretix.event.order.installment.failed',
+                        )
+                    except Exception:
+                        logger.warning(
+                            "Failed to send installment failure email for order %s",
+                            order.code,
+                        )
+
+        return success
 
 
 def process_due_installments():
     """
     Processes all scheduled installments that are due and pending.
     """
-    qs = ScheduledInstallment.objects.filter(
-        state=ScheduledInstallment.STATE_PENDING,
-        due_date__lte=now()
-    ).select_related('plan', 'plan__order', 'plan__order__event')
+    with scopes_disabled():
+        qs = ScheduledInstallment.objects.filter(
+            state=ScheduledInstallment.STATE_PENDING,
+            due_date__lte=now()
+        ).select_related('plan', 'plan__order', 'plan__order__event')
 
     for installment in qs:
         try:
@@ -287,10 +289,11 @@ def process_expired_plans():
     Processes all installment plans where the grace period has expired.
     Cancels the order and sends notification emails.
     """
-    qs = InstallmentPlan.objects.filter(
-        status=InstallmentPlan.STATUS_ACTIVE,
-        grace_period_end__lt=now()
-    ).select_related('order', 'order__event')
+    with scopes_disabled():
+        qs = InstallmentPlan.objects.filter(
+            status=InstallmentPlan.STATUS_ACTIVE,
+            grace_period_end__lt=now()
+        ).select_related('order', 'order__event')
 
     for plan in qs:
         try:
@@ -325,12 +328,13 @@ def send_installment_reminders():
     """
     Sends reminder emails for upcoming installments.
     """
-    qs = ScheduledInstallment.objects.filter(
-        state=ScheduledInstallment.STATE_PENDING,
-        reminder_sent=False,
-        due_date__gte=now(),
-        due_date__lte=now() + timedelta(days=30)
-    ).select_related('plan', 'plan__order', 'plan__order__event')
+    with scopes_disabled():
+        qs = ScheduledInstallment.objects.filter(
+            state=ScheduledInstallment.STATE_PENDING,
+            reminder_sent=False,
+            due_date__gte=now(),
+            due_date__lte=now() + timedelta(days=30)
+        ).select_related('plan', 'plan__order', 'plan__order__event')
 
     for installment in qs:
         order = installment.plan.order
@@ -372,13 +376,14 @@ def send_grace_period_warnings():
     """
     Sends warnings for installment plans where the grace period is about to expire.
     """
-    qs = InstallmentPlan.objects.filter(
-        status=InstallmentPlan.STATUS_ACTIVE,
-        grace_period_end__isnull=False,
-        grace_period_end__lte=now() + timedelta(hours=24),
-        grace_period_end__gt=now(),
-        grace_warning_sent=False
-    ).select_related('order', 'order__event')
+    with scopes_disabled():
+        qs = InstallmentPlan.objects.filter(
+            status=InstallmentPlan.STATUS_ACTIVE,
+            grace_period_end__isnull=False,
+            grace_period_end__lte=now() + timedelta(hours=24),
+            grace_period_end__gt=now(),
+            grace_warning_sent=False
+        ).select_related('order', 'order__event')
 
     for plan in qs:
         order = plan.order
@@ -418,42 +423,43 @@ def cancel_installment_plan(plan: InstallmentPlan, cancel_order: bool = False, u
     :param log: Whether to log the cancellation action (default True)
     :param send_mail: Whether to send order cancellation email (only used if cancel_order=True)
     """
-    if plan.status == InstallmentPlan.STATUS_CANCELLED:
-        return
+    with scopes_disabled():
+        if plan.status == InstallmentPlan.STATUS_CANCELLED:
+            return
 
-    order = plan.order
-    event = order.event
+        order = plan.order
+        event = order.event
 
-    provider = event.get_payment_providers().get(plan.payment_provider)
-    if provider:
-        try:
-            provider.revoke_payment_token(plan)
-        except Exception:
-            logger.warning(
-                "Failed to revoke payment token for cancelled plan %s", plan.pk,
+        provider = event.get_payment_providers().get(plan.payment_provider)
+        if provider:
+            try:
+                provider.revoke_payment_token(plan)
+            except Exception:
+                logger.warning(
+                    "Failed to revoke payment token for cancelled plan %s", plan.pk,
+                )
+
+        plan.status = InstallmentPlan.STATUS_CANCELLED
+        plan.payment_token = {}
+        plan.save(update_fields=['status', 'payment_token'])
+
+        ScheduledInstallment.objects.filter(
+            plan=plan,
+            state__in=[ScheduledInstallment.STATE_PENDING, ScheduledInstallment.STATE_FAILED]
+        ).update(state=ScheduledInstallment.STATE_CANCELLED)
+
+        if log:
+            order.log_action(
+                'pretix.event.order.installment_plan.canceled',
+                data={'installment_plan_id': plan.pk},
+                user=user
             )
 
-    plan.status = InstallmentPlan.STATUS_CANCELLED
-    plan.payment_token = {}
-    plan.save(update_fields=['status', 'payment_token'])
-
-    ScheduledInstallment.objects.filter(
-        plan=plan,
-        state__in=[ScheduledInstallment.STATE_PENDING, ScheduledInstallment.STATE_FAILED]
-    ).update(state=ScheduledInstallment.STATE_CANCELLED)
-
-    if log:
-        order.log_action(
-            'pretix.event.order.installment_plan.canceled',
-            data={'installment_plan_id': plan.pk},
-            user=user
-        )
-
-    if cancel_order:
-        from pretix.base.services.orders import (
-            cancel_order as cancel_order_service,
-        )
-        cancel_order_service(order.pk, user=user.pk if user else None, send_mail=send_mail)
+        if cancel_order:
+            from pretix.base.services.orders import (
+                cancel_order as cancel_order_service,
+            )
+            cancel_order_service(order.pk, user=user.pk if user else None, send_mail=send_mail)
 
 
 @receiver(signal=order_canceled)

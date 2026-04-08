@@ -176,6 +176,21 @@ class TestProcessDueInstallments:
         assert plan.installments_paid == 2
         provider.revoke_payment_token.assert_called_with(plan)
 
+    def test_management_command_runs_without_scope(self, event, order, plan):
+        inst = ScheduledInstallment.objects.create(
+            plan=plan, installment_number=2, amount=Decimal('100.00'),
+            due_date=now() - timedelta(days=1), state=ScheduledInstallment.STATE_PENDING,
+        )
+
+        with _patch_providers(_mock_provider()):
+            call_command('process_installments')
+
+        inst.refresh_from_db()
+        plan.refresh_from_db()
+        assert inst.state == ScheduledInstallment.STATE_PAID
+        assert inst.payment is not None
+        assert plan.installments_paid == 2
+
 
 @pytest.mark.django_db
 class TestProcessExpiredPlans:
