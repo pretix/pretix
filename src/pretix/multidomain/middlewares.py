@@ -303,7 +303,7 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
         ):
             raise ValueError("Usage of djangos CsrfViewMiddleware detected (legacy cookie found in response). "
                              "This may be caused by using csrf_project or requires_csrf_token from django.views.decorators.csrf. "
-                             "Use the pretix.multidomain.middlewares equivalents instead.")
+                             "Use the pretix.multidomain.middlewares equivalent instead.")
 
         return super().process_response(request, response)
 
