@@ -162,9 +162,9 @@ class WaitingListFormWithSms(WaitingListForm):
         except Customer.DoesNotExist:
             return instance
 
-        # Update customer.phone if empty and we have a phone from the form
+        # Keep customer.phone in sync with the latest waitlist submission.
         phone_value = instance.phone or self.cleaned_data.get("sms_phone")
-        if phone_value and not customer.phone:
+        if phone_value and customer.phone != phone_value:
             customer.phone = phone_value
             customer.save(update_fields=["phone"])
 
