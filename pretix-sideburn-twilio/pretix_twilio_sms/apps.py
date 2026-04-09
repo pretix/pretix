@@ -67,7 +67,15 @@ class PluginApp(PluginConfig):
                 getattr(self.event, "id", None),
                 self.pk,
             )
-            queue_waiting_list_sms_for_entry(entry=self)
+            try:
+                queue_waiting_list_sms_for_entry(entry=self)
+            except Exception:
+                _log.exception(
+                    "pretix_twilio_sms: failed queuing waiting list SMS "
+                    "event_id=%s entry_id=%s",
+                    getattr(self.event, "id", None),
+                    self.pk,
+                )
             return result
 
         WaitingListEntry.send_voucher = send_voucher_with_queued_sms
