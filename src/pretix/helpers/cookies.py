@@ -22,7 +22,7 @@
 import itertools
 import re
 from http.cookies import Morsel
-import logging
+
 from django.conf import settings
 
 

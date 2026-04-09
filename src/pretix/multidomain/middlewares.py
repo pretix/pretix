@@ -51,6 +51,7 @@ from django.middleware.csrf import (
 from django.shortcuts import render
 from django.urls import set_urlconf
 from django.utils.cache import patch_vary_headers
+from django.utils.decorators import decorator_from_middleware
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.http import http_date
 from django_scopes import scopes_disabled
@@ -216,7 +217,8 @@ class SessionMiddleware(BaseSessionMiddleware):
                         request.session.save()
                         if is_secure and settings.SESSION_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
                             # response.delete_cookie does not work as we might have set a partitioned cookie
-                            thoroughly_delete_cookie(response,
+                            thoroughly_delete_cookie(
+                                response,
                                 settings.SESSION_COOKIE_NAME,
                                 path=settings.SESSION_COOKIE_PATH,
                                 secure=is_secure,
@@ -278,12 +280,13 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
 
             # remove legacy cookie
             if request.is_secure() and settings.CSRF_COOKIE_NAME in request.COOKIES:
-                thoroughly_delete_cookie(response,
-                                         settings.CSRF_COOKIE_NAME,
-                                         path=settings.CSRF_COOKIE_PATH,
-                                         secure=request.is_secure(),
-                                         httponly=settings.CSRF_COOKIE_HTTPONLY
-                                        )
+                thoroughly_delete_cookie(
+                    response,
+                    settings.CSRF_COOKIE_NAME,
+                    path=settings.CSRF_COOKIE_PATH,
+                    secure=request.is_secure(),
+                    httponly=settings.CSRF_COOKIE_HTTPONLY
+                )
 
             handle_duplicated_csrftoken(request, response)
 
@@ -298,6 +301,19 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
             )
             # Content varies with the CSRF cookie, so set the Vary header.
             patch_vary_headers(response, ('Cookie',))
+
+    def process_response(self, request, response):
+        if (
+            not settings.CSRF_USE_SESSIONS
+            and request.is_secure()
+            and settings.CSRF_COOKIE_NAME in response.cookies
+            and response.cookies[settings.CSRF_COOKIE_NAME].value
+        ):
+            logger.warning("Usage of djangos CsrfViewMiddleware detected (legacy cookie found in response). "
+                           "This may be caused by using csrf_project or requires_csrf_token from django.views.decorators.csrf. "
+                           "Use the pretix.multidomain.middlewares equivalent instead.")
+
+        return super().process_response(request, response)
 
 
 def handle_duplicated_csrftoken(request, response):
@@ -318,3 +334,15 @@ def handle_duplicated_csrftoken(request, response):
                 path=settings.CSRF_COOKIE_PATH,
                 httponly=settings.CSRF_COOKIE_HTTPONLY
             )
+
+
+csrf_protect = decorator_from_middleware(CsrfViewMiddleware)
+
+
+class _EnsureCsrfToken(CsrfViewMiddleware):
+    # Behave like CsrfViewMiddleware but don't reject requests or log warnings.
+    def _reject(self, request, reason):
+        return None
+
+
+requires_csrf_token = decorator_from_middleware(_EnsureCsrfToken)

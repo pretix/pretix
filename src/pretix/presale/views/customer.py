@@ -44,7 +44,6 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import FormView, ListView, View
 
@@ -101,7 +100,6 @@ class LoginView(RedirectBackMixin, FormView):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -213,7 +211,6 @@ class RegistrationView(RedirectBackMixin, FormView):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -257,7 +254,6 @@ class SetPasswordView(FormView):
     template_name = 'pretixpresale/organizers/customer_setpassword.html'
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -301,7 +297,6 @@ class ResetPasswordView(FormView):
     template_name = 'pretixpresale/organizers/customer_resetpw.html'
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -527,7 +522,6 @@ class ChangePasswordView(CustomerAccountBaseMixin, FormView):
     form_class = ChangePasswordForm
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -561,7 +555,6 @@ class ChangeInformationView(CustomerAccountBaseMixin, FormView):
     form_class = ChangeInfoForm
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -669,7 +662,6 @@ class SSOLoginView(RedirectBackMixin, View):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
@@ -732,7 +724,6 @@ class SSOLoginReturnView(RedirectBackMixin, View):
     redirect_authenticated_user = True
 
     @method_decorator(sensitive_post_parameters())
-    @method_decorator(csrf_protect)
     @method_decorator(never_cache)
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
