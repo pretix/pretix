@@ -168,16 +168,17 @@ class WaitingListFormWithSms(WaitingListForm):
             customer.phone = phone_value
             customer.save(update_fields=["phone"])
 
-        # Create or update CustomerSmsPreference when user opted in
-        if self.cleaned_data.get("sms_opt_in"):
-            from .models import CustomerSmsPreference
+        # Always persist CustomerSmsPreference for waitlist submissions so the
+        # latest explicit choice is reflected and timestamped.
+        from .models import CustomerSmsPreference
 
-            pref, _ = CustomerSmsPreference.objects.get_or_create(
-                customer=customer,
-                defaults={"sms_opt_in": True},
-            )
-            if not pref.sms_opt_in:
-                pref.sms_opt_in = True
-                pref.save(update_fields=["sms_opt_in", "last_changed"])
+        sms_opt_in = bool(self.cleaned_data.get("sms_opt_in"))
+        pref, created = CustomerSmsPreference.objects.get_or_create(
+            customer=customer,
+            defaults={"sms_opt_in": sms_opt_in},
+        )
+        if not created:
+            pref.sms_opt_in = sms_opt_in
+            pref.save(update_fields=["sms_opt_in", "last_changed"])
 
         return instance
