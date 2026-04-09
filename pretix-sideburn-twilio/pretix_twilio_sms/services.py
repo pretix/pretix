@@ -1,5 +1,5 @@
 """
-Twilio SMS plugin services: waiting list voucher SMS (queued after email).
+Twilio SMS plugin services: waiting list voucher SMS (queued with email).
 """
 import logging
 import re
@@ -233,69 +233,41 @@ def send_waiting_list_sms_dummy(
 _sms_sender = send_sms_to_customer
 
 
-def queue_waiting_list_sms_after_mail(*, event_id, order, customer, to):
+def queue_waiting_list_sms_for_entry(*, entry):
     """
-    If this mail run was a waiting list voucher email, find the entry and
-    queue the SMS Celery task (runs after email has been sent).
+    Queue waiting-list SMS task for an entry whose voucher has been sent.
     """
-    logger.info(
-        "pretix_twilio_sms: queue_waiting_list_sms_after_mail called "
-        "event_id=%s order=%s customer=%s to=%s",
-        event_id,
-        order,
-        customer,
-        to,
-    )
-    if not event_id or order is not None or customer is not None:
-        logger.info(
-            "pretix_twilio_sms: queue_waiting_list_sms_after_mail skip: "
-            "not waiting-list mail (need event, no order, no customer)"
-        )
-        return
-    if not to or not isinstance(to, (list, tuple)) or len(to) < 1:
-        logger.info(
-            "pretix_twilio_sms: queue_waiting_list_sms_after_mail skip: no to"
-        )
-        return
-
-    recipient = (to[0] or "").strip()
-    if not recipient or "@" not in recipient:
-        logger.info(
-            "pretix_twilio_sms: queue_waiting_list_sms_after_mail skip: "
-            "no valid recipient"
-        )
-        return
-
-    from pretix.base.models import Event
-    from pretix.base.models.waitinglist import WaitingListEntry
-
-    with scopes_disabled():
-        try:
-            event = Event.objects.get(pk=event_id)
-        except Event.DoesNotExist:
-            logger.info(
-                "pretix_twilio_sms: queue_waiting_list_sms_after_mail skip: "
-                "event_id=%s not found",
-                event_id,
-            )
-            return
-
-    with scope(organizer=event.organizer):
-        entry = (
-            WaitingListEntry.objects.filter(
-                event_id=event_id,
-                email__iexact=recipient,
-                voucher__isnull=False,
-            )
-            .order_by("-pk")
-            .first()
-        )
     if not entry:
+        logger.info("pretix_twilio_sms: queue_waiting_list_sms_for_entry skip: no entry")
+        return
+
+    event = getattr(entry, "event", None)
+    voucher = getattr(entry, "voucher", None)
+    event_id = getattr(event, "id", None)
+    recipient = (getattr(entry, "email", None) or "").strip()
+
+    logger.info(
+        "pretix_twilio_sms: queue_waiting_list_sms_for_entry called "
+        "event_id=%s entry_id=%s email=%s voucher_id=%s",
+        event_id,
+        entry.pk,
+        recipient,
+        getattr(voucher, "pk", None),
+    )
+    error_message = None
+    if not event_id:
+        error_message = "missing event"
+    elif not voucher:
+        error_message = "missing voucher"
+    elif not recipient:
+        error_message = "no recipient email"
+    elif "@" not in recipient:
+        error_message = "no valid recipient"
+
+    if error_message:
         logger.info(
-            "pretix_twilio_sms: queue_waiting_list_sms_after_mail skip: "
-            "no waiting list entry with voucher for event_id=%s recipient=%s",
-            event_id,
-            recipient,
+            "pretix_twilio_sms: queue_waiting_list_sms_for_entry skip: %s",
+            error_message,
         )
         return
 
@@ -313,7 +285,7 @@ def queue_waiting_list_sms_after_mail(*, event_id, order, customer, to):
             "customer_id": customer.pk if customer else None,
             "phone": phone,
             "sms_opt_in": sms_opt_in,
-            "message": _build_waiting_list_sms_message(event, entry.voucher),
+            "message": _build_waiting_list_sms_message(event, voucher),
         }
     )
 
@@ -330,8 +302,8 @@ def send_waiting_list_sms_task(
 ):
     """
     Celery task: run waiting list SMS with pre-resolved data.
-    Queued only after the voucher email has been sent; receives data from
-    queue_waiting_list_sms_after_mail so no DB lookups are needed.
+    Queued after waiting-list voucher processing; receives data from
+    queue_waiting_list_sms_for_entry so no DB lookups are needed.
     Uses _sms_sender (send_sms_to_customer by default; tests can patch to
     send_waiting_list_sms_dummy to avoid hitting Twilio).
     """
