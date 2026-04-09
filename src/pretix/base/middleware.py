@@ -24,6 +24,7 @@ from urllib.parse import urlparse, urlsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from django.conf import settings
+from django.core.exceptions import BadRequest
 from django.http import Http404, HttpRequest, HttpResponse
 from django.middleware.common import CommonMiddleware
 from django.urls import get_script_prefix, resolve
@@ -345,6 +346,15 @@ class SecurityMiddleware(MiddlewareMixin):
             del resp['Content-Security-Policy']
 
         return resp
+
+    def process_request(self, request):
+        # Nullbytes in GET/POST parameters are mostly harmless, as they will later fail on database insertion, but it
+        # keeps spamming our error logs whenever someone tries to run a vulnerability scanner.
+        if "\x00" in request.META['QUERY_STRING'] or "%00" in request.META['QUERY_STRING']:
+            raise BadRequest("Invalid characters in input.")
+        if request.method in ('POST', 'PUT', 'PATCH') and request.POST:
+            if any("\x00" in value for key, value_list in request.POST.lists() for value in value_list):
+                raise BadRequest("Invalid characters in input.")
 
 
 class CustomCommonMiddleware(CommonMiddleware):
