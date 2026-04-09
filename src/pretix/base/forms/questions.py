@@ -235,6 +235,7 @@ class NamePartsFormField(forms.MultiValueField):
                 )
             ]
         }
+        self.max_length = defaults['max_length']
         self.scheme_name = kwargs.pop('scheme')
         self.titles = kwargs.pop('titles')
         self.scheme = PERSON_NAME_SCHEMES.get(self.scheme_name)
@@ -292,7 +293,7 @@ class NamePartsFormField(forms.MultiValueField):
         if self.require_all_fields and not all(v for v in value):
             raise forms.ValidationError(self.error_messages['incomplete'], code='required')
 
-        if sum(len(v) for v in value.values() if v) > 250:
+        if sum(len(v) for v in value.values() if v) > (self.max_length or 250):
             raise forms.ValidationError(_('Please enter a shorter name.'), code='max_length')
 
         if value.get("salutation") == "empty":

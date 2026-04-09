@@ -172,7 +172,7 @@ class RegistrationForm(forms.Form):
             )
 
         self.fields['name_parts'] = NamePartsFormField(
-            max_length=35,
+            max_length=70,
             required=True,
             scheme=request.organizer.settings.name_scheme,
             titles=request.organizer.settings.name_scheme_titles,
