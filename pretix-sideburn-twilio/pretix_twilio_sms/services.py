@@ -3,23 +3,53 @@ Twilio SMS plugin services: waiting list voucher SMS (queued after email).
 """
 import logging
 import re
+from urllib.parse import urlencode
 
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.celery_app import app
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 from pretix_twilio_sms.models import CustomerSmsPreference
 
 logger = logging.getLogger(__name__)
 
-# Message sent when a waiting list voucher email has been sent (and SMS opt-in is true).
+# Common footer for SMS opt-out compliance.
+SMS_OPT_OUT_FOOTER = "Reply STOP to opt out."
+
+# Message sent when we cannot resolve a waiting-list voucher URL.
 WAITING_LIST_SMS_MESSAGE = (
-    "Your Sideburn waitlist number is up! Please check your email for details."
+    f"Your Sideburn waitlist number is up! {SMS_OPT_OUT_FOOTER}"
 )
 
 # Minimum number of digits for a plausible phone number (E.164 allows 10–15).
 MIN_PHONE_DIGITS = 10
+
+
+def _build_waiting_list_redeem_url(event, voucher):
+    """
+    Build the absolute voucher redemption URL for waiting-list SMS messages.
+    """
+    if not event or not voucher:
+        return None
+    url_params = {"voucher": voucher.code}
+    if voucher.subevent_id:
+        url_params["subevent"] = voucher.subevent_id
+    return build_absolute_uri(event, "presale:event.redeem") + "?" + urlencode(url_params)
+
+
+def _build_waiting_list_sms_message(event, voucher):
+    """
+    Build waiting-list SMS text with direct redeem link + opt-out footer.
+    """
+    redeem_url = _build_waiting_list_redeem_url(event, voucher)
+    if not redeem_url:
+        return WAITING_LIST_SMS_MESSAGE
+    return (
+        f"Your Sideburn waitlist number is up! Use your voucher now: {redeem_url} "
+        f"{SMS_OPT_OUT_FOOTER}"
+    )
 
 
 def _get_twilio_config():
@@ -283,7 +313,7 @@ def queue_waiting_list_sms_after_mail(*, event_id, order, customer, to):
             "customer_id": customer.pk if customer else None,
             "phone": phone,
             "sms_opt_in": sms_opt_in,
-            "message": WAITING_LIST_SMS_MESSAGE,
+            "message": _build_waiting_list_sms_message(event, entry.voucher),
         }
     )
 
