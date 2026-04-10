@@ -83,7 +83,7 @@ class AuthenticationForm(forms.Form):
         self.request = request
         self.customer_cache = None
         super().__init__(*args, **kwargs)
-        self.fields['password'].help_text = "<a href='{}'>{}</a>".format(
+        self.fields['password'].help_text = "<a target='_blank' href='{}'>{}</a>".format(
             build_absolute_uri(False, 'presale:organizer.customer.resetpw', kwargs={
                 'organizer': request.organizer.slug,
             }),
