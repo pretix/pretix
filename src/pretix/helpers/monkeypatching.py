@@ -114,7 +114,7 @@ def monkeypatch_urllib3_ssrf_protection():
 
     This does not work when a global http(s) proxy is used, but in that scenario the proxy can perform the validation.
     """
-    if settings.ALLOW_HTTP_TO_PRIVATE_NETWORKS:
+    if getattr(settings, "ALLOW_HTTP_TO_PRIVATE_NETWORKS", False):
         # Settings are not supposed to change during runtime, so we can optimize performance and complexity by skipping
         # this if not needed.
         return
@@ -144,7 +144,7 @@ def monkeypatch_urllib3_ssrf_protection():
         for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
             af, socktype, proto, canonname, sa = res
 
-            if not settings.ALLOW_HTTP_TO_PRIVATE_NETWORKS:
+            if not getattr(settings, "ALLOW_HTTP_TO_PRIVATE_NETWORKS", False):
                 ip_addr = ipaddress.ip_address(sa[0])
                 if ip_addr.is_multicast:
                     raise HTTPError(f"Request to multicast address {sa[0]} blocked")
