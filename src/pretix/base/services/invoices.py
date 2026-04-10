@@ -58,6 +58,7 @@ from pretix.base.invoicing.transmission import (
 from pretix.base.models import (
     ExchangeRate, Invoice, InvoiceAddress, InvoiceLine, Order, OrderFee,
 )
+from pretix.base.models.orders import OrderPayment
 from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.tasks import (
     TransactionAwareProfiledEventTask, TransactionAwareTask,
@@ -102,7 +103,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         introductory = invoice.event.settings.get('invoice_introductory_text', as_type=LazyI18nString)
         additional = invoice.event.settings.get('invoice_additional_text', as_type=LazyI18nString)
         footer = invoice.event.settings.get('invoice_footer_text', as_type=LazyI18nString)
-        if lp and lp.payment_provider:
+        if lp and lp.payment_provider and lp.state not in (OrderPayment.PAYMENT_STATE_FAILED, OrderPayment.PAYMENT_STATE_CANCELED):
             if 'payment' in inspect.signature(lp.payment_provider.render_invoice_text).parameters:
                 payment = str(lp.payment_provider.render_invoice_text(invoice.order, lp))
             else:
