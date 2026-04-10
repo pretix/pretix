@@ -844,7 +844,7 @@ class AnswerDownload(EventViewMixin, View):
         filename = '{}-cart-{}'.format(
             self.request.event.slug.upper(),
             os.path.basename(answer.file.name).split('.', 1)[1]
-        ).encode("ascii", "ignore")
+        )
         resp = FileResponse(
             answer.file,
             filename=filename,

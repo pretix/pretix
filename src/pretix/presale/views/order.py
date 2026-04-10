@@ -1236,7 +1236,8 @@ class OrderDownloadMixin:
             else:
                 return FileResponse(
                     value.file.file,
-                    filename="-".join(self.request.event.slug.upper(), self.order.code, self.output.identifier) + value.extension,
+                    filename="{}-{}-{}{}".format(
+                        self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension),
                     content_type=value.type
                 )
         else:
