@@ -251,7 +251,7 @@ def create_connection(address, timeout=socket.getdefaulttimeout(),
     for res in socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM):
         af, socktype, proto, canonname, sa = res
 
-        if not settings.get("MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS", False):
+        if not getattr(settings, "MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS", False):
             ip_addr = ipaddress.ip_address(sa[0])
             if ip_addr.is_multicast:
                 raise socket.error(f"Request to multicast address {sa[0]} blocked")

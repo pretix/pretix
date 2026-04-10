@@ -610,7 +610,7 @@ PRIVATE_IPS_RES = [
 
 
 @contextmanager
-def test_mail_connection(res, should_connect, use_ssl):
+def assert_mail_connection(res, should_connect, use_ssl):
     with (
         mock.patch('socket.socket') as mock_socket,
         mock.patch('socket.getaddrinfo', return_value=res),
@@ -638,14 +638,14 @@ def test_mail_connection(res, should_connect, use_ssl):
 def test_private_smtp_ip(res, use_ssl, settings):
     settings.EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
     settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = False
-    with test_mail_connection(res=res, should_connect=False, use_ssl=use_ssl), pytest.raises(match="Request to .* blocked"):
+    with assert_mail_connection(res=res, should_connect=False, use_ssl=use_ssl), pytest.raises(match="Request to .* blocked"):
         connection = djmail.get_connection(backend=settings.EMAIL_CUSTOM_SMTP_BACKEND,
                                            host="localhost",
                                            use_ssl=use_ssl)
         connection.open()
 
     settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = True
-    with test_mail_connection(res=res, should_connect=True, use_ssl=use_ssl):
+    with assert_mail_connection(res=res, should_connect=True, use_ssl=use_ssl):
         connection = djmail.get_connection(backend=settings.EMAIL_CUSTOM_SMTP_BACKEND,
                                            host="localhost",
                                            use_ssl=use_ssl)
@@ -662,7 +662,7 @@ def test_public_smtp_ip(use_ssl, allow_private, settings):
     settings.EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
     settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = allow_private
 
-    with test_mail_connection(res=[(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('8.8.8.8', 443))], should_connect=True, use_ssl=use_ssl):
+    with assert_mail_connection(res=[(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('8.8.8.8', 443))], should_connect=True, use_ssl=use_ssl):
         connection = djmail.get_connection(backend=settings.EMAIL_CUSTOM_SMTP_BACKEND,
                                            host="localhost",
                                            use_ssl=use_ssl)
@@ -702,7 +702,7 @@ def test_send_mail_private_ip(res, use_ssl, allow_private_networks, env):
         m.refresh_from_db()
         return m
 
-    with test_mail_connection(res=res, should_connect=allow_private_networks, use_ssl=use_ssl):
+    with assert_mail_connection(res=res, should_connect=allow_private_networks, use_ssl=use_ssl):
         m = send_mail()
         if allow_private_networks:
             assert m.status == OutgoingMail.STATUS_SENT
