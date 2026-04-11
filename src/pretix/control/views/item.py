@@ -41,21 +41,22 @@ from json.decoder import JSONDecodeError
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
-from django.db import transaction
+from django.db import models, transaction
 from django.db.models import (
-    Count, Exists, F, OuterRef, Prefetch, ProtectedError, Q,
+    Count, Exists, F, OuterRef, Prefetch, ProtectedError, Q, Subquery, Value,
 )
+from django.db.models.functions import Cast, Concat
 from django.forms.models import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
 )
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView
+from django.views.generic import FormView, ListView, View
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django_countries.fields import Country
 
@@ -65,7 +66,7 @@ from pretix.api.serializers.item import (
 )
 from pretix.base.forms import I18nFormSet
 from pretix.base.models import (
-    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation,
+    CartPosition, Item, ItemCategory, ItemProgramTime, ItemVariation, LogEntry,
     OrderPosition, Question, QuestionAnswer, QuestionOption, Quota,
     SeatCategoryMapping, Voucher,
 )
@@ -74,12 +75,15 @@ from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tickets import invalidate_cache
 from pretix.base.signals import quota_availability
-from pretix.control.forms.filter import QuestionAnswerFilterForm
+from pretix.control.forms.filter import (
+    QuestionAnswerFilterForm, QuotaFilterForm,
+)
 from pretix.control.forms.item import (
     CategoryForm, ItemAddOnForm, ItemAddOnsFormSet, ItemBundleForm,
     ItemBundleFormSet, ItemCreateForm, ItemMetaValueForm, ItemProgramTimeForm,
     ItemProgramTimeFormSet, ItemUpdateForm, ItemVariationForm,
-    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaForm,
+    ItemVariationsFormSet, QuestionForm, QuestionOptionForm, QuotaBulkEditForm,
+    QuotaForm,
 )
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -87,6 +91,7 @@ from pretix.control.permissions import (
 from pretix.control.signals import item_forms, item_formsets
 from pretix.helpers.models import modelcopy
 
+from ...helpers import GroupConcat
 from ...helpers.compat import CompatDeleteView
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
@@ -831,13 +836,38 @@ class QuestionCreate(EventPermissionRequiredMixin, QuestionMixin, CreateView):
         return ret
 
 
-class QuotaList(PaginationMixin, ListView):
+class QuotaQueryMixin:
+
+    @cached_property
+    def request_data(self):
+        if self.request.method == "POST":
+            return self.request.POST
+        return self.request.GET
+
+    def get_queryset(self):
+        qs = self.request.event.quotas
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
+        if 'quota' in self.request_data and '__ALL' not in self.request_data:
+            qs = qs.filter(
+                id__in=self.request_data.getlist('quota')
+            )
+
+        return qs
+
+    @cached_property
+    def filter_form(self):
+        return QuotaFilterForm(data=self.request_data, prefix='filter', event=self.request.event)
+
+
+class QuotaList(PaginationMixin, QuotaQueryMixin, ListView):
     model = Quota
     context_object_name = 'quotas'
     template_name = 'pretixcontrol/items/quotas.html'
 
     def get_queryset(self):
-        qs = self.request.event.quotas.prefetch_related(
+        return super().get_queryset().prefetch_related(
             Prefetch(
                 "items",
                 queryset=Item.objects.annotate(
@@ -852,28 +882,10 @@ class QuotaList(PaginationMixin, ListView):
                 queryset=self.request.event.subevents.all()
             )
         )
-        if self.request.GET.get("subevent", "") != "":
-            s = self.request.GET.get("subevent", "")
-            qs = qs.filter(subevent_id=s)
-
-        valid_orders = {
-            '-date': ('-subevent__date_from', 'name', 'pk'),
-            'date': ('subevent__date_from', '-name', '-pk'),
-            'size': ('size', 'name', 'pk'),
-            '-size': ('-size', '-name', '-pk'),
-            'name': ('name', 'pk'),
-            '-name': ('-name', '-pk'),
-        }
-
-        if self.request.GET.get("ordering", "-date") in valid_orders:
-            qs = qs.order_by(*valid_orders[self.request.GET.get("ordering", "-date")])
-        else:
-            qs = qs.order_by('name', 'subevent__date_from', 'pk')
-
-        return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
+        ctx['filter_form'] = self.filter_form
 
         qa = QuotaAvailability()
         qa.queue(*ctx['quotas'])
@@ -882,6 +894,165 @@ class QuotaList(PaginationMixin, ListView):
             quota.cached_avail = qa.results[quota]
 
         return ctx
+
+
+class QuotaBulkAction(QuotaQueryMixin, EventPermissionRequiredMixin, View):
+    permission = 'event.items:write'
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('action') == 'delete':
+            return render(request, 'pretixcontrol/items/quota_delete_bulk.html', {
+                'allowed': self.get_queryset().select_related("subevent"),
+            })
+        elif request.POST.get('action') == 'delete_confirm':
+            log_entries = []
+            to_delete = []
+            for obj in self.get_queryset():
+                log_entries.append(obj.log_action('pretix.event.quota.deleted', user=self.request.user, save=False))
+                to_delete.append(obj.pk)
+
+            if to_delete:
+                LogEntry.bulk_create_and_postprocess(log_entries)
+                Quota.objects.filter(pk__in=to_delete).delete()
+            messages.success(request, _('The selected quotas have been deleted or disabled.'))
+        return redirect(self.get_success_url())
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.items.quotas', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+
+class QuotaBulkUpdateView(QuotaQueryMixin, EventPermissionRequiredMixin, FormView):
+    template_name = 'pretixcontrol/items/quota_bulk_edit.html'
+    permission = 'event.items:write'
+    context_object_name = 'quota'
+    form_class = QuotaBulkEditForm
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related(None).order_by()
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(status=405)
+
+    @cached_property
+    def is_submitted(self):
+        # Usually, django considers a form "bound" / "submitted" on every POST request. However, this view is always
+        # called with POST method, even if just to pass the selection of objects to work on, so we want to modify
+        # that behaviour
+        return '_bulk' in self.request.POST
+
+    def get_form_kwargs(self):
+        initial = {}
+        mixed_values = set()
+        qs = self.get_queryset().annotate(
+            items_list=Subquery(
+                Quota.items.through.objects.filter(
+                    quota_id=OuterRef('pk'),
+                    item__variations__isnull=True,
+                ).order_by().values('quota_id').annotate(
+                    g=GroupConcat('item_id', separator=',', ordered=True)
+                ).values('g')
+            ),
+            vars_list=Subquery(
+                Quota.variations.through.objects.filter(
+                    quota_id=OuterRef('pk')
+                ).order_by().values('quota_id').annotate(
+                    g=GroupConcat(
+                        Concat(
+                            Cast(F('itemvariation__item_id'), output_field=models.TextField()),
+                            Value('-', output_field=models.TextField()),
+                            Cast(F('itemvariation_id'), output_field=models.TextField()),
+                        ),
+                        separator=',',
+                        ordered=True
+                    )
+                ).values('g')
+            ),
+        )
+
+        fields = {
+            'name': 'name',
+            'size': 'size',
+            'subevent': 'subevent',
+            'close_when_sold_out': 'close_when_sold_out',
+            'release_after_exit': 'release_after_exit',
+            'ignore_for_event_availability': 'ignore_for_event_availability',
+        }
+        for k, f in fields.items():
+            existing_values = list(qs.order_by(f).values(f).annotate(c=Count('*')))
+            if len(existing_values) == 1:
+                initial[k] = existing_values[0][f]
+            elif len(existing_values) > 1:
+                mixed_values.add(k)
+                initial[k] = None
+
+        item_values = list(qs.order_by("items_list").values("items_list").annotate(c=Count('*')))
+        var_values = list(qs.order_by("vars_list").values("vars_list").annotate(c=Count('*')))
+        if len(item_values) > 1 or len(var_values) > 1:
+            mixed_values.add("itemvars")
+        else:
+            initial["itemvars"] = [iv for iv in (item_values[0]["items_list"] or "").split(",") + (var_values[0]["vars_list"] or "").split(",") if iv]
+
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        kwargs['prefix'] = 'bulkedit'
+        kwargs['initial'] = initial
+        kwargs['queryset'] = self.get_queryset()
+        kwargs['mixed_values'] = mixed_values
+        if not self.is_submitted:
+            kwargs['data'] = None
+            kwargs['files'] = None
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('control:event.items.quotas', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        log_entries = []
+
+        # Main form
+        form.save()
+        data = {
+            k: v
+            for k, v in form.cleaned_data.items()
+            if k in form.changed_data
+        }
+        data['_raw_bulk_data'] = self.request.POST.dict()
+        for obj in self.get_queryset():
+            log_entries.append(
+                obj.log_action('pretix.event.quota.changed', data=data, user=self.request.user, save=False)
+            )
+
+        LogEntry.bulk_create_and_postprocess(log_entries)
+
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['quotas'] = self.get_queryset()
+        ctx['bulk_selected'] = self.request.POST.getlist("_bulk")
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        is_valid = (
+            self.is_submitted and
+            form.is_valid()
+        )
+        if is_valid:
+            return self.form_valid(form)
+        else:
+            if self.is_submitted:
+                messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.form_invalid(form)
 
 
 class QuotaCreate(EventPermissionRequiredMixin, CreateView):

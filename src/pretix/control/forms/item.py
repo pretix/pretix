@@ -43,6 +43,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Max, Q
 from django.forms import ChoiceField, RadioSelect
 from django.forms.formsets import DELETION_FIELD_NAME
+from django.forms.utils import ErrorDict
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
@@ -373,6 +374,49 @@ class QuotaForm(I18nModelForm):
         self.instance.variations.remove(*[i for i in current_variations if i not in selected_variations])
         self.instance.variations.add(*[i for i in selected_variations if i not in current_variations])
         return inst
+
+
+class QuotaBulkEditForm(QuotaForm):
+
+    def __init__(self, *args, **kwargs):
+        self.mixed_values = kwargs.pop('mixed_values')
+        self.queryset = kwargs.pop('queryset')
+        super().__init__(**kwargs)
+        self.fields.pop("subevent", None)  # Would add extra complexity and it's hard to imagine a use case for that
+
+    def save(self, commit=True):
+        objs = list(self.queryset)
+        fields = set()
+
+        for k in self.fields:
+            cb_val = self.prefix + k
+            if cb_val not in self.data.getlist('_bulk'):
+                continue
+
+            fields.add(k)
+            for obj in objs:
+                if k == 'itemvars':
+                    selected_items = set(list(self.event.items.filter(id__in=[
+                        i.split('-')[0] for i in self.cleaned_data['itemvars']
+                    ])))
+                    selected_variations = list(ItemVariation.objects.filter(item__event=self.event, id__in=[
+                        i.split('-')[1] for i in self.cleaned_data['itemvars'] if '-' in i
+                    ]))
+                    obj.items.set(selected_items)
+                    obj.variations.set(selected_variations)
+                else:
+                    setattr(obj, k, self.cleaned_data[k])
+
+        fields = [f for f in fields if f != 'itemvars']
+        if fields:
+            Quota.objects.bulk_update(objs, fields, 200)
+
+    def full_clean(self):
+        if len(self.data) == 0:
+            # form wasn't submitted
+            self._errors = ErrorDict()
+            return
+        super().full_clean()
 
 
 class ItemCreateForm(I18nModelForm):

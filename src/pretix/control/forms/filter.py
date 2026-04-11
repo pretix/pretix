@@ -1528,6 +1528,130 @@ class SubEventFilterForm(FilterForm):
         return self.event.organizer.meta_properties.filter(filter_allowed=True)
 
 
+class QuotaFilterForm(FilterForm):
+    orders = {
+        '-date': ('-subevent__date_from', 'name', 'pk'),
+        'date': ('subevent__date_from', '-name', '-pk'),
+        'size': ('size', 'name', 'pk'),
+        '-size': ('-size', '-name', '-pk'),
+        'name': ('name', 'pk'),
+        '-name': ('-name', '-pk'),
+    }
+    subevent = forms.ModelChoiceField(
+        label=pgettext_lazy('subevent', 'Date'),
+        queryset=SubEvent.objects.none(),
+        required=False,
+        empty_label=pgettext_lazy('subevent', 'All dates')
+    )
+    date_from = forms.DateField(
+        label=_('Date from'),
+        required=False,
+        widget=DatePickerWidget({
+            'placeholder': _('Date from'),
+        }),
+    )
+    date_until = forms.DateField(
+        label=_('Date until'),
+        required=False,
+        widget=DatePickerWidget({
+            'placeholder': _('Date until'),
+        }),
+    )
+    time_from = forms.TimeField(
+        label=_('Start time from'),
+        required=False,
+        widget=TimePickerWidget({}),
+    )
+    time_until = forms.TimeField(
+        label=_('Start time until'),
+        required=False,
+        widget=TimePickerWidget({}),
+    )
+    weekday = forms.MultipleChoiceField(
+        label=_('Weekday'),
+        choices=(
+            ('2', _('Monday')),
+            ('3', _('Tuesday')),
+            ('4', _('Wednesday')),
+            ('5', _('Thursday')),
+            ('6', _('Friday')),
+            ('7', _('Saturday')),
+            ('1', _('Sunday')),
+        ),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+    query = forms.CharField(
+        label=_('Quota name'),
+        widget=forms.TextInput(),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+        if self.event.has_subevents:
+            self.fields['date_from'].widget = DatePickerWidget()
+            self.fields['date_until'].widget = DatePickerWidget()
+            self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        else:
+            del self.fields['subevent']
+            del self.fields['date_from']
+            del self.fields['date_until']
+            del self.fields['time_from']
+            del self.fields['time_until']
+            del self.fields['weekday']
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('weekday'):
+            qs = qs.annotate(wday=ExtractWeekDay('subevent__date_from')).filter(wday__in=fdata.get('weekday'))
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(name__icontains=query)
+
+        if fdata.get('date_until'):
+            date_end = make_aware(datetime.combine(
+                fdata.get('date_until') + timedelta(days=1),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(
+                Q(subevent__date_to__isnull=True, subevent__date_from__lt=date_end) |
+                Q(subevent__date_to__isnull=False, subevent__date_to__lt=date_end)
+            )
+        if fdata.get('date_from'):
+            date_start = make_aware(datetime.combine(
+                fdata.get('date_from'),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(subevent__date_from__gte=date_start)
+
+        if fdata.get('time_until'):
+            qs = qs.filter(subevent__date_from__time__lte=fdata.get('time_until'))
+        if fdata.get('time_from'):
+            qs = qs.filter(subevent__date_from__time__gte=fdata.get('time_from'))
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(*get_deterministic_ordering(Quota, self.get_order_by()))
+        else:
+            qs = qs.order_by('-subevent__date_from', 'name', 'pk')
+
+        return qs
+
+
 class OrganizerFilterForm(FilterForm):
     orders = {
         'slug': 'slug',
