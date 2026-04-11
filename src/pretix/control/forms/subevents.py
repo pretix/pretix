@@ -28,7 +28,7 @@ from django.forms import formset_factory
 from django.forms.utils import ErrorDict
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.forms import I18nInlineFormSet
 
 from pretix.base.forms import I18nModelForm
@@ -101,6 +101,16 @@ class SubEventBulkForm(SubEventForm):
                     'will end after the end date of your event.'),
         required=False,
         limit_choices=('date_from', 'date_to'),
+    )
+    skip_if_overlap = forms.BooleanField(
+        label=pgettext_lazy('subevent', 'Skip dates that overlap with any existing date'),
+        help_text=pgettext_lazy(
+            'subevent',
+            'This can be useful if all your dates happen in the same location and no repeated dates should '
+            'be created in conflict with existing special events. This respects even inactive dates and works best if '
+            'all dates have both a start and end time.'
+        ),
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):

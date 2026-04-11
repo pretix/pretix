@@ -917,6 +917,27 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
             if len(subevents) > 100_000:
                 raise ValidationError(_('Please do not create more than 100.000 dates at once.'))
 
+        if form.cleaned_data.get("skip_if_overlap") and subevents:
+            date_min = min(se.date_from for se in subevents)
+            date_max = max(se.date_to or se.date_from for se in subevents)
+            dates_existing = list(self.request.event.subevents.annotate(
+                date_fromto=Coalesce('date_to', 'date_from'),
+            ).filter(
+                date_from__lte=date_max,
+                date_fromto__gte=date_min,
+            ).values('date_from', 'date_fromto'))
+            subevents = [
+                se for se in subevents if not any(
+                    (se.date_from <= other['date_from'] <= (se.date_to or se.date_from))
+                    or (se.date_from <= other['date_fromto'] <= (se.date_to or se.date_from))
+                    or (other['date_from'] <= se.date_from <= other['date_fromto'])
+                    or (other['date_from'] <= (se.date_to or se.date_from) <= other['date_fromto'])
+                    for other in dates_existing
+                )
+            ]
+            if not subevents:
+                raise ValidationError(_('All dates would be skipped because they conflict with existing dates.'))
+
         for i, se in enumerate(subevents):
             se.save(clear_cache=False)
             if i % 100 == 0:
