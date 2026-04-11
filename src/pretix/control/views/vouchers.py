@@ -80,7 +80,35 @@ from pretix.helpers.models import modelcopy
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 
-class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
+class VoucherQueryMixin:
+
+    @cached_property
+    def request_data(self):
+        if self.request.method == "POST":
+            return self.request.POST
+        return self.request.GET
+
+    @scopes_disabled()  # we have an event check here, and we can save some performance on subqueries
+    def get_queryset(self):
+        qs = self.request.event.vouchers.exclude(
+            Exists(WaitingListEntry.objects.filter(voucher_id=OuterRef('pk')))
+        )
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+
+        if 'voucher' in self.request_data and '__ALL' not in self.request_data:
+            qs = qs.filter(
+                id__in=self.request_data.getlist('voucher')
+            )
+
+        return qs
+
+    @cached_property
+    def filter_form(self):
+        return VoucherFilterForm(data=self.request_data, prefix='filter', event=self.request.event)
+
+
+class VoucherList(VoucherQueryMixin, PaginationMixin, EventPermissionRequiredMixin, ListView):
     model = Voucher
     context_object_name = 'vouchers'
     template_name = 'pretixcontrol/vouchers/index.html'
@@ -88,24 +116,14 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
 
     @scopes_disabled()  # we have an event check here, and we can save some performance on subqueries
     def get_queryset(self):
-        qs = Voucher.annotate_budget_used(self.request.event.vouchers.exclude(
-            Exists(WaitingListEntry.objects.filter(voucher_id=OuterRef('pk')))
-        ).select_related(
+        return Voucher.annotate_budget_used(super().get_queryset().select_related(
             'item', 'variation', 'seat'
         ))
-        if self.filter_form.is_valid():
-            qs = self.filter_form.filter_qs(qs)
-
-        return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
         return ctx
-
-    @cached_property
-    def filter_form(self):
-        return VoucherFilterForm(data=self.request.GET, event=self.request.event)
 
     def get(self, request, *args, **kwargs):
         if request.GET.get("download", "") == "yes":
@@ -603,26 +621,21 @@ class VoucherRNG(EventPermissionRequiredMixin, View):
         })
 
 
-class VoucherBulkAction(EventPermissionRequiredMixin, View):
+class VoucherBulkAction(VoucherQueryMixin, EventPermissionRequiredMixin, View):
     permission = 'event.vouchers:write'
-
-    @cached_property
-    def objects(self):
-        return self.request.event.vouchers.filter(
-            id__in=self.request.POST.getlist('voucher')
-        )
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         if request.POST.get('action') == 'delete':
             return render(request, 'pretixcontrol/vouchers/delete_bulk.html', {
-                'allowed': self.objects.filter(redeemed=0),
-                'forbidden': self.objects.exclude(redeemed=0),
+                'allowed': self.get_queryset().filter(redeemed=0),
+                'forbidden': self.get_queryset().exclude(redeemed=0),
             })
         elif request.POST.get('action') == 'delete_confirm':
             log_entries = []
             to_delete = []
-            for obj in self.objects:
+            to_update = []
+            for obj in self.get_queryset():
                 if obj.allow_delete():
                     log_entries.append(obj.log_action('pretix.voucher.deleted', user=self.request.user, save=False))
                     to_delete.append(obj.pk)
@@ -632,12 +645,14 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
                         'bulk': True
                     }, save=False))
                     obj.max_usages = min(obj.redeemed, obj.max_usages)
-                    obj.save(update_fields=['max_usages'])
+                    to_update.append(obj)
 
             if to_delete:
                 CartPosition.objects.filter(addon_to__voucher_id__in=to_delete).delete()
                 CartPosition.objects.filter(voucher_id__in=to_delete).delete()
                 Voucher.objects.filter(pk__in=to_delete).delete()
+            if to_update:
+                Voucher.objects.bulk_update(to_update, ['max_usages'])
 
             LogEntry.bulk_create_and_postprocess(log_entries)
             messages.success(request, _('The selected vouchers have been deleted or disabled.'))

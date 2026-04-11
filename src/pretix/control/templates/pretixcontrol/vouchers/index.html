@@ -144,6 +144,18 @@
                         {% endif %}
                         <th></th>
                     </tr>
+                    {% if "event.vouchers:write" in request.eventpermset and page_obj.paginator.num_pages > 1 %}
+                        <tr class="table-select-all warning hidden">
+                            <td>
+                                <input type="checkbox" name="__ALL" id="__all" data-results-total="{{ page_obj.paginator.count }}">
+                            </td>
+                            <td colspan="5">
+                                <label for="__all">
+                                    {% trans "Select all results on other pages as well" %}
+                                </label>
+                            </td>
+                        </tr>
+                    {% endif %}
                     </thead>
                     <tbody>
                     {% for v in vouchers %}
