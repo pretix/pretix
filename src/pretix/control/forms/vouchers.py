@@ -40,6 +40,7 @@ from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import EmailValidator
 from django.db.models.functions import Upper
+from django.forms.utils import ErrorDict
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelChoiceField
@@ -263,6 +264,49 @@ class VoucherForm(I18nModelForm):
 
     def save(self, commit=True):
         return super().save(commit)
+
+
+class VoucherBulkEditForm(VoucherForm):
+    # TODO: clean quota changes!
+
+    def __init__(self, *args, **kwargs):
+        self.mixed_values = kwargs.pop('mixed_values')
+        self.queryset = kwargs.pop('queryset')
+        super().__init__(**kwargs)
+
+    def save(self, commit=True):
+        objs = list(self.queryset)
+        fields = set()
+
+        for k in self.fields:
+            cb_val = self.prefix + k
+            if cb_val not in self.data.getlist('_bulk'):
+                continue
+
+            fields.add(k)
+            for obj in objs:
+                if k == 'itemvar':
+                    selected_items = set(list(self.event.items.filter(id__in=[
+                        i.split('-')[0] for i in self.cleaned_data['itemvars']
+                    ])))
+                    selected_variations = list(ItemVariation.objects.filter(item__event=self.event, id__in=[
+                        i.split('-')[1] for i in self.cleaned_data['itemvars'] if '-' in i
+                    ]))
+                    obj.items.set(selected_items)
+                    obj.variations.set(selected_variations)
+                else:
+                    setattr(obj, k, self.cleaned_data[k])
+
+        fields = [f for f in fields if f != 'itemvars']
+        if fields:
+            Voucher.objects.bulk_update(objs, fields, 200)
+
+    def full_clean(self):
+        if len(self.data) == 0:
+            # form wasn't submitted
+            self._errors = ErrorDict()
+            return
+        super().full_clean()
 
 
 class VoucherBulkForm(VoucherForm):

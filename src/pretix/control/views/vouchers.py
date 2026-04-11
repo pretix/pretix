@@ -42,7 +42,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import connection, transaction
-from django.db.models import Exists, OuterRef, Sum
+from django.db.models import Exists, OuterRef, Sum, Subquery
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
@@ -55,7 +55,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
-    CreateView, ListView, TemplateView, UpdateView, View,
+    CreateView, ListView, TemplateView, UpdateView, View, FormView,
 )
 from django_scopes import scopes_disabled
 
@@ -663,3 +663,110 @@ class VoucherBulkAction(VoucherQueryMixin, EventPermissionRequiredMixin, View):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
+
+
+
+class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, FormView):
+    template_name = 'pretixcontrol/vouchers/bulk_edit.html'
+    permission = 'event.vouchers:write'
+    context_object_name = 'voucher'
+    form_class = VoucherBulkEditForm
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related(None).order_by()
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(status=405)
+
+    @cached_property
+    def is_submitted(self):
+        # Usually, django considers a form "bound" / "submitted" on every POST request. However, this view is always
+        # called with POST method, even if just to pass the selection of objects to work on, so we want to modify
+        # that behaviour
+        return '_bulk' in self.request.POST
+
+    def get_form_kwargs(self):
+        initial = {}
+        mixed_values = set()
+        qs = self.get_queryset().annotate()
+
+        fields = {
+            'name': 'name',
+            'size': 'size',
+            'subevent': 'subevent',
+            'close_when_sold_out': 'close_when_sold_out',
+            'release_after_exit': 'release_after_exit',
+            'ignore_for_event_availability': 'ignore_for_event_availability',
+        }
+        for k, f in fields.items():
+            existing_values = list(qs.order_by(f).values(f).annotate(c=Count('*')))
+            if len(existing_values) == 1:
+                initial[k] = existing_values[0][f]
+            elif len(existing_values) > 1:
+                mixed_values.add(k)
+                initial[k] = None
+
+        item_values = list(qs.order_by("items_list").values("items_list").annotate(c=Count('*')))
+        var_values = list(qs.order_by("vars_list").values("vars_list").annotate(c=Count('*')))
+        if len(item_values) > 1 or len(var_values) > 1:
+            mixed_values.add("itemvars")
+        else:
+            initial["itemvars"] = [iv for iv in (item_values[0]["items_list"] or "").split(",") + (var_values[0]["vars_list"] or "").split(",") if iv]
+
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        kwargs['prefix'] = 'bulkedit'
+        kwargs['initial'] = initial
+        kwargs['queryset'] = self.get_queryset()
+        kwargs['mixed_values'] = mixed_values
+        if not self.is_submitted:
+            kwargs['data'] = None
+            kwargs['files'] = None
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('control:event.items.quotas', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        log_entries = []
+
+        # Main form
+        form.save()
+        data = {
+            k: v
+            for k, v in form.cleaned_data.items()
+            if k in form.changed_data
+        }
+        data['_raw_bulk_data'] = self.request.POST.dict()
+        for obj in self.get_queryset():
+            log_entries.append(
+                obj.log_action('pretix.event.quota.changed', data=data, user=self.request.user, save=False)
+            )
+
+        LogEntry.bulk_create_and_postprocess(log_entries)
+
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['quotas'] = self.get_queryset()
+        ctx['bulk_selected'] = self.request.POST.getlist("_bulk")
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        is_valid = (
+            self.is_submitted and
+            form.is_valid()
+        )
+        if is_valid:
+            return self.form_valid(form)
+        else:
+            if self.is_submitted:
+                messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.form_invalid(form)
