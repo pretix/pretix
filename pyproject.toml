@@ -33,7 +33,7 @@ dependencies = [
   "bleach==6.3.*",
   "celery==5.6.*",
   "chardet==5.2.*",
-  "cryptography>=44.0.0",
+  "cryptography>=46.0.7",
   "css-inline==0.20.*",
   "defusedcsv>=1.1.0",
   "dnspython==2.*",
