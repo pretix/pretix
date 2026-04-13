@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-05 20:00+0000\n"
+"PO-Revision-Date: 2026-04-13 14:01+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
+"da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -36078,7 +36078,6 @@ msgstr "Book nu"
 #: pretix/presale/templates/pretixpresale/fragment_event_list_status.html:38
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:74
 #: pretix/presale/views/widget.py:463
-#, fuzzy
 msgid "Fully booked"
 msgstr "Fuldt booket"
 
