@@ -24,29 +24,36 @@ class GooglePlatform(WalletPlatform):
     name = _("Google")
 
 
-class PlaceholderFieldType(enum.Enum):
+class FieldType(enum.Enum):
     TEXT = "text"
     CODE = "qr"
     IMAGE = "image"
     PREDEFINED = "predefined"
     # TODO: POWERED_BY ?
 
-
-@dataclass
-class PlaceholderField:
-    type: PlaceholderFieldType
+class BaseField:
+    type: str
     label: LazyI18nString
     content: str
 
-    def asdict(self):
-        return {"type": self.type.value, "label": self.label.data, "value": self.content}
+    def __init__(self, label: LazyI18nString, content: str):
+        self.label = label
+        self.content = content 
 
+    def asdict(self):
+        return {"type": self.type, "label": self.label.data, "content": self.content}
+
+class PlaceholderField(BaseField):
+    type = "placeholder"
+
+class TextField(BaseField):
+    type = "text"
 
 @dataclass
 class FieldGroupDefinition:
     name: str
     identifier: str
-    entry_type: PlaceholderFieldType
+    entry_type: FieldType
     min_entries: int | None = None
     max_entries: int | None = None
 
@@ -62,8 +69,8 @@ class FieldGroupDefinition:
 
 @dataclass
 class PlaceholderFieldGroup(FieldGroupDefinition):
-    entry_type: PlaceholderFieldType = PlaceholderFieldType.TEXT
-    default_entries: list[PlaceholderField] = field(default_factory=list)
+    entry_type: FieldType = FieldType.TEXT
+    default_entries: list[PlaceholderField | TextField] = field(default_factory=list) # TODO: TextField seems wrong here
 
     def asdict(self):
         asdict = super().asdict()
@@ -73,7 +80,7 @@ class PlaceholderFieldGroup(FieldGroupDefinition):
 
 @dataclass
 class PredefinedFieldGroup(FieldGroupDefinition):
-    entry_type: PlaceholderFieldType = PlaceholderFieldType.PREDEFINED
+    entry_type: FieldType = FieldType.PREDEFINED
     min_entries = 0
     max_entries = 1
 
@@ -107,9 +114,9 @@ class AppleWalletEventTicket(PassStyle):
             min_entries=1,
             max_entries=1,
             default_entries=[
-                PlaceholderField(PlaceholderFieldType.IMAGE, LazyI18nString("logo"), "event:image")
+                PlaceholderField(LazyI18nString("logo"), "event:image")
             ],
-            entry_type=PlaceholderFieldType.IMAGE,
+            entry_type=FieldType.IMAGE,
         ),
         PlaceholderFieldGroup(
             identifier="primary",
@@ -117,7 +124,7 @@ class AppleWalletEventTicket(PassStyle):
             min_entries=1,
             max_entries=1,
             default_entries=[
-                PlaceholderField(PlaceholderFieldType.TEXT, LazyI18nString("Ticket type"), "item")
+                PlaceholderField(LazyI18nString("Ticket type"), "item")
             ],
         ),
         PlaceholderFieldGroup(
@@ -141,7 +148,7 @@ class GoogleWalletEventTicket(PassStyle):
     fields = [
         PredefinedFieldGroup(identifier="seating", name=_("Seating")),
         PlaceholderFieldGroup(
-            identifier="qrcode", name=_("QR-Code"), entry_type=PlaceholderFieldType.CODE
+            identifier="qrcode", name=_("QR-Code"), entry_type=FieldType.CODE
         ),
     ]
 
