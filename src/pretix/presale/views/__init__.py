@@ -114,8 +114,10 @@ class CartMixin:
         return cached_invoice_address(self.request)
 
     def get_cart(self, answers=False, queryset=None, order=None, downloads=False, payments=None):
-        if not self.request.session.session_key and not order:
-            # The user has not even a session ID yet, so they can't have a cart and we can save a lot of work
+        from pretix.presale.views.cart import get_or_create_cart_id
+
+        if not get_or_create_cart_id(self.request, create=False) and not order:
+            # The user has no cart, so we can save a lot of work
             return {
                 'positions': [],
                 # Other keys are not used on non-checkout pages
@@ -377,9 +379,13 @@ def cart_exists(request):
     from pretix.presale.views.cart import get_or_create_cart_id
 
     if not hasattr(request, '_cart_cache'):
-        return CartPosition.objects.filter(
-            cart_id=get_or_create_cart_id(request), event=request.event
-        ).exists()
+        cid = get_or_create_cart_id(request, create=False)
+        if cid:
+            return CartPosition.objects.filter(
+                cart_id=cid, event=request.event
+            ).exists()
+        else:
+            return False
     return bool(request._cart_cache)
 
 

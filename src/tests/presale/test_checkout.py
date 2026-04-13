@@ -33,7 +33,7 @@ from django.conf import settings
 from django.core import mail as djmail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.signing import dumps
-from django.test import TestCase, TransactionTestCase
+from django.test import Client, TestCase, TransactionTestCase
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django_countries.fields import Country
@@ -4412,6 +4412,18 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             _perform_order(self.event, self._manual_payment(), [cp1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
             assert len(djmail.outbox) == 1
             assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
+
+    def test_checkout_empty_session_valid_cart(self):
+        client = Client()
+        with scopes_disabled():
+            api_cid = "{}@api".format(get_random_string(48))
+            CartPosition.objects.create(
+                event=self.event, cart_id=api_cid, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        response = client.get('/%s/%s/w/1234567890abcdef/checkout/questions/' % (self.orga.slug, self.event.slug), query_params={"take_cart_id": api_cid})
+        assert '€23.00' in response.content.decode()
 
 
 class CheckoutTransactionTestCase(BaseCheckoutTestCase, TransactionTestCase):
