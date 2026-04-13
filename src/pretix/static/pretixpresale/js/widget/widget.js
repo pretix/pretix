@@ -2449,7 +2449,7 @@ var create_button = function (element, html_id=null) {
                 widget_id: 'pretix-widget-' + widget_id,
                 html_id: html_id,
                 button_text: button_text,
-                keep_cart: keep_cart,
+                keep_cart: keep_cart || items.length > 0,
             }
         },
         created: function () {
