@@ -1,31 +1,32 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
-import Select from './input/select.vue'
-import Input from './input/input.vue'
-import TextContent from './text-content.vue'
+import { computed, reactive } from "vue";
+import Select from "./input/select.vue";
+import Input from "./input/input.vue";
+import TextContent from "./text-content.vue";
 
-const gettext = (window as any).gettext
+const gettext = (window as any).gettext;
 
 const props = defineProps<{
-	field: FieldGroupDefinition
-	overflows: FieldGroupDefinition[],
-	variables: Variables
-}>()
-const fieldConfig = defineModel<FieldConfig>({ required: true })
+	field: FieldGroupDefinition;
+	overflows: FieldGroupDefinition[];
+	variables: Variables;
+}>();
+const fieldConfig = defineModel<FieldConfig>({ required: true });
 
-const overflowOptions = computed((): Array<[string|null, string]> => {
+const overflowOptions = computed((): Array<[string | null, string]> => {
 	if (props.overflows.length) {
-		return [...props.overflows.map((x): [string, string] => [x.identifier, x.name]), [null, "Do not overflow"]]
+		return [
+			...props.overflows.map((x): [string, string] => [x.identifier, x.name]),
+			[null, "Do not overflow"],
+		];
 	} else {
-		return []
+		return [];
 	}
-})
-
+});
 
 function addVariable() {
-	fieldConfig.value.entries.push({"type": "placeholder", "label": null, "content": null})
+	fieldConfig.value.entries.push({ type: "placeholder" });
 }
-
 </script>
 
 <template lang="pug">
