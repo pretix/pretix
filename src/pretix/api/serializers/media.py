@@ -31,7 +31,7 @@ from pretix.api.serializers.order import OrderPositionSerializer
 from pretix.api.serializers.organizer import (
     CustomerSerializer, GiftCardSerializer,
 )
-from pretix.base.models import Order, OrderPosition, ReusableMedium
+from pretix.base.models import Device, Order, OrderPosition, ReusableMedium, TeamAPIToken, User
 
 logger = logging.getLogger(__name__)
 
@@ -80,8 +80,7 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             )
 
         if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
-            # No additional permission check performed, documented limitation of the permission system
-            # Would get to complex/unusable otherwise since the permission depends on the event
+            # Permission Check performed in to_representation
             self.fields['linked_orderposition'] = NestedOrderPositionSerializer(read_only=True)
         else:
             self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
@@ -116,6 +115,40 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                     {'identifier': _('A medium with the same identifier and type already exists in your organizer account.')}
                 )
         return data
+
+    def to_representation(self, instance):
+        request = self.context.get('request')
+
+        # late permission evaluations for checks that depend on the actual linked events
+        if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
+            if instance.linked_orderposition is not None:
+                event = instance.linked_orderposition.order.event
+                if not (
+                    request.user if request.user and request.user.is_authenticated else request.auth
+                ).has_event_permission(organizer=event.organizer, event=event, perm_name='event.orders:read', request=request):
+                    pos_serializer = self.fields['linked_orderposition']
+                    allowed = {'id'}
+                    for field_name in list(pos_serializer.fields.keys()):
+                        if field_name not in allowed:
+                            pos_serializer.fields.pop(field_name)
+
+        if 'linked_giftcard.owner_ticket' in self.context['request'].query_params.getlist('expand'):
+            gc = instance.linked_giftcard
+            if gc is not None and gc.owner_ticket is not None:
+                event = gc.owner_ticket.order.event
+                if not (
+                    request.user if request.user and request.user.is_authenticated else request.auth
+                ).has_event_permission(organizer=event.organizer, event=event, perm_name='event.orders:read', request=request):
+                    ticket_serializer = self.fields['linked_giftcard'].fields['owner_ticket']
+                    allowed = {'id'}
+                    for field_name in list(ticket_serializer.fields.keys()):
+                        if field_name not in allowed:
+                            ticket_serializer.fields.pop(field_name)
+
+
+        return super().to_representation(instance)
+
+
 
     class Meta:
         model = ReusableMedium
