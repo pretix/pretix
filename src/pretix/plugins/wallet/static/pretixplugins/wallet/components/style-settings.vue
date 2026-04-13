@@ -5,27 +5,22 @@ import FieldSettings from "./field-settings.vue";
 const gettext = (window as any).gettext;
 
 const props = defineProps<{
-	styles: Styles;
 	variables: VariableConfig
-	style?: string;
+	style?: Style;
 }>();
 
 const layout = defineModel<LayoutData>();
 
-const styleData = computed(() => {
-	if (!props.style || !(props.style in props.styles)) {
-		return null;
-	}
-	return props.styles[props.style];
-});
 
 watchEffect(() => {
-	// TODO: this seems wrooong
-	if (!("fields" in layout.value)) {
+	if (layout.value === undefined) {
+		return
+	}
+	if (layout.value.fields === undefined) {
 		layout.value.fields = {};
 	}
 	if (props.style) {
-		for (const field of props.styles[props.style].fields) {
+		for (const field of props.style.fields) {
 			if (!(field.identifier in layout.value.fields)) {
 				layout.value.fields[field.identifier] = {
 					entries: JSON.parse(JSON.stringify(field.default_entries)),
@@ -39,11 +34,11 @@ watchEffect(() => {
 
 <template lang="pug">
     h2.h3 {{ gettext("Field Groups") }}
-    FieldSettings(v-if="styleData"
-                  v-for="(field, fieldId) in styleData.fields"
+    FieldSettings(v-if="props.style"
+                  v-for="(field, fieldId) in props.style.fields"
                   v-model="layout.fields[field.identifier]"
                   :field="field"
-                  :overflows="styleData.fields.slice(fieldId + 1).filter(x => x.entry_type === field.entry_type)"
+                  :overflows="props.style.fields.slice(fieldId + 1).filter(x => x.entry_type === field.entry_type)"
                   :variables="variables[field.entry_type]"
                 )
 </template>
