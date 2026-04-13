@@ -19,10 +19,12 @@ type Styles = Record<string, Style>;
 type Variables = Record<string, Variable>;
 type VariableConfig = Record<string, Variables>;
 
+type I18nString = string | Record<string, string>
+
 type FieldEntry = {
     type: 'placeholder' | 'text';
-    label: string; // TODO i18n
-    content: string;
+    label?: I18nString; // TODO i18n
+    content?: string;
 }
 
 type FieldConfig = {
