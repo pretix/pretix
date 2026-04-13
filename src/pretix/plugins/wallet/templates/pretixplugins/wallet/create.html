@@ -1,0 +1,35 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load money %}
+{% load bootstrap3 %}
+{% load vite %}
+{% load static %}
+{% load compress %}
+
+
+{% block title %}{% trans "Wallet layouts" %}{% endblock %}
+
+{% block content %}
+    <h1>{% trans "New layout" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form form layout="control" %}
+        <div class="form-group">
+            <label class="col-md-3 control-label">
+                {% trans "Ticket design" %}
+            </label>
+            <div class="col-md-9 form-control-static">
+                <p>
+                    {% blocktrans trimmed %}
+                        You can modify the design after you saved this page.
+                    {% endblocktrans %}
+                </p>
+            </div>
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
