@@ -23,6 +23,7 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 import pytest
+from django.contrib.messages.storage.fallback import FallbackStorage
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
@@ -250,6 +251,78 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "owner_ticket": resp.data["linked_orderposition"],
             "issuer": "dummy",
         }
+
+@pytest.mark.django_db
+def test_medium_detail_event_permission_missing(token_client, organizer, event, medium, giftcard, customer, team):
+    team.all_organizer_permissions = False
+    team.limit_organizer_permissions = {
+        "organizer.reusablemedia:read": True,
+        "organizer.customers:read": True,
+        "organizer.giftcards:read": True,
+    }
+    team.all_event_permissions = False
+    team.save()
+
+    with scopes_disabled():
+        o = Order.objects.create(
+            code='FOO', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+            total=14, locale='en'
+        )
+        ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
+                                    personalized=True)
+        op = o.positions.create(item=ticket, price=Decimal("14"))
+        medium.linked_orderposition = op
+        medium.linked_giftcard = giftcard
+        medium.customer = customer
+        medium.save()
+        giftcard.owner_ticket = op
+        giftcard.save()
+
+        resp = token_client.get(
+            '/api/v1/organizers/{}/reusablemedia/{}/?expand=linked_giftcard&expand='
+            'linked_giftcard.owner_ticket&expand=linked_orderposition&expand=customer'.format(
+                organizer.slug, medium.pk
+            )
+        )
+        assert resp.status_code == 200
+
+        assert resp.data["linked_orderposition"] == {
+            "id": op.pk,
+        }
+
+        assert resp.data["linked_giftcard"] == {
+            "id": giftcard.pk,
+            "secret": "ABCDEF",
+            "issuance": giftcard.issuance.isoformat().replace("+00:00", "Z"),
+            "value": "23.00",
+            "currency": "EUR",
+            "testmode": False,
+            "expires": None,
+            "conditions": None,
+            "owner_ticket": {"id": op.pk },
+            "issuer": "dummy",
+        }
+
+        assert resp.data["customer"] == {
+            "identifier": customer.identifier,
+            "external_identifier": None,
+            "email": "foo@example.org",
+            "phone": None,
+            "name": "Foo",
+            "name_parts": {"_legacy": "Foo"},
+            "is_active": True,
+            "is_verified": False,
+            "last_login": None,
+            "date_joined": customer.date_joined.isoformat().replace("+00:00", "Z"),
+            "locale": "en",
+            "last_modified": customer.last_modified.isoformat().replace("+00:00", "Z"),
+            "notes": None
+        }
+
+
+
 
 
 TEST_MEDIUM_CREATE_PAYLOAD = {
