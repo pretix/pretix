@@ -918,6 +918,17 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
                 raise ValidationError(_('Please do not create more than 100.000 dates at once.'))
 
         if form.cleaned_data.get("skip_if_overlap") and subevents:
+            def overlaps(a_from, a_to, b_from, b_to):
+                if a_from == b_from:
+                    return True
+                if a_from > b_from:
+                    # a starts after b
+                    # check if it starts before b ends
+                    return b_to and a_from < b_to
+                # a starts before b
+                # check if it ends before b starts
+                return a_to and a_to > b_from
+
             date_min = min(se.date_from for se in subevents)
             date_max = max(se.date_to or se.date_from for se in subevents)
             dates_existing = list(self.request.event.subevents.annotate(
@@ -925,13 +936,10 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
             ).filter(
                 date_from__lte=date_max,
                 date_fromto__gte=date_min,
-            ).values('date_from', 'date_fromto'))
+            ).values('date_from', 'date_to'))
             subevents = [
                 se for se in subevents if not any(
-                    (se.date_from <= other['date_from'] <= (se.date_to or se.date_from))
-                    or (se.date_from <= other['date_fromto'] <= (se.date_to or se.date_from))
-                    or (other['date_from'] <= se.date_from <= other['date_fromto'])
-                    or (other['date_from'] <= (se.date_to or se.date_from) <= other['date_fromto'])
+                    overlaps(se.date_from, se.date_to, other['date_from'], other['date_to'])
                     for other in dates_existing
                 )
             ]
