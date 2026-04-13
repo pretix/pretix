@@ -923,7 +923,7 @@ class Renderer:
 
             # We do not use str.format like in emails so we (a) can evaluate lazily and (b) can re-implement this
             # 1:1 on other platforms that render PDFs through our API (libpretixprint)
-            return re.sub(r'\{([a-zA-Z0-9:_]+)\}', replace, text)
+            return re.sub(r'\{([-a-zA-Z0-9:_]+)\}', replace, text)
 
         elif o['content'].startswith('itemmeta:'):
             if op.variation_id:
