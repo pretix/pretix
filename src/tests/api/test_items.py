@@ -2063,6 +2063,59 @@ def test_program_times_create(token_client, organizer, event, item):
 
 
 @pytest.mark.django_db
+def test_program_times_create_location(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/program_times/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "start": "2017-12-27T00:00:00Z",
+            "end": "2017-12-28T00:00:00Z",
+            "location": {
+                "en": "Testlocation",
+                "de": "Testort"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        program_time = ItemProgramTime.objects.get(pk=resp.data['id'])
+    assert "Testlocation" == program_time.location.localize("en")
+    assert "Testort" == program_time.location.localize("de")
+
+
+@pytest.mark.django_db
+def test_program_times_create_without_location(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/program_times/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "start": "2017-12-27T00:00:00Z",
+            "end": "2017-12-28T00:00:00Z"
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    assert resp.data['location'] is None
+    with scopes_disabled():
+        program_time = ItemProgramTime.objects.get(pk=resp.data['id'])
+    assert str(program_time.location) == ""
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/{}/program_times/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "start": "2017-12-27T00:00:00Z",
+            "end": "2017-12-28T00:00:00Z",
+            "location": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    assert resp.data['location'] is None
+    with scopes_disabled():
+        program_time = ItemProgramTime.objects.get(pk=resp.data['id'])
+    assert str(program_time.location) == ""
+
+
+@pytest.mark.django_db
 def test_program_times_update(token_client, organizer, event, item, program_time):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/program_times/{}/'.format(organizer.slug, event.slug, item.pk,
