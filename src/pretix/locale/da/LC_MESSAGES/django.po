@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-13 23:00+0000\n"
-"Last-Translator: pajowu <pajowu@pajowu.de>\n"
+"PO-Revision-Date: 2026-04-14 15:02+0000\n"
+"Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
 "Language: da\n"
@@ -85,7 +85,7 @@ msgstr "Græsk"
 
 #: pretix/_base_settings.py:104
 msgid "Hebrew"
-msgstr ""
+msgstr "hebræisk"
 
 #: pretix/_base_settings.py:105
 msgid "Indonesian"
@@ -141,7 +141,7 @@ msgstr "Spansk"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "Spansk (Latinamerika)"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -289,40 +289,28 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "Den grupperede enhed må ikke selv have pakker."
 
 #: pretix/api/serializers/item.py:235
-#, fuzzy
-#| msgid "Your cart is now empty."
 msgid "The program start must not be empty."
-msgstr "Din kurv tom."
+msgstr "Start på programmet må ikke stå tomt."
 
 #: pretix/api/serializers/item.py:239
 msgid "The program end must not be empty."
-msgstr ""
+msgstr "Programmets slutning må ikke være tom."
 
 #: pretix/api/serializers/item.py:242 pretix/base/models/items.py:2322
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The program end must not be before the program start."
-msgstr "Maksimumsantallet skal være større end minimumsantallet."
+msgstr "Programmets slutning må ikke ligge før programmets start."
 
 #: pretix/api/serializers/item.py:247 pretix/base/models/items.py:2316
-#, fuzzy
-#| msgid "You can not select a subevent if your event is not an event series."
 msgid "You cannot use program times on an event series."
-msgstr ""
-"Du kan ikke vælge et delarrangement hvis dit arrangement ikke er en "
-"arrangementsrække."
+msgstr "Du kan ikke bruge programtider i en begivenhedsserie."
 
 #: pretix/api/serializers/item.py:337
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
-#| "Please use the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, program times or variations via PATCH/PUT is not "
 "supported. Please use the dedicated nested endpoint."
 msgstr ""
-"Opdatering af add-ons, pakker eller variationer via PATCH/PUT bliver ikke "
-"understøttet. Brug venligst det dedicerede, indlejrede slutpunkt."
+"Opdatering af add-ons, pakker, program-tider eller variationer via PATCH/PUT "
+"bliver ikke understøttet. Brug venligst det dedicerede, indlejrede slutpunkt."
 
 #: pretix/api/serializers/item.py:345
 msgid "Only admission products can currently be personalized."
@@ -415,9 +403,8 @@ msgstr ""
 
 #: pretix/api/serializers/organizer.py:482
 #: pretix/control/views/organizer.py:1039
-#, fuzzy
 msgid "Account invitation"
-msgstr "Kontoinformationer"
+msgstr "Invitation til oprettelse af konto"
 
 #: pretix/api/serializers/organizer.py:503
 #: pretix/control/views/organizer.py:1138
@@ -582,22 +569,16 @@ msgid "Event series date deleted"
 msgstr "Dato på arrangementsserien slettet"
 
 #: pretix/api/webhooks.py:407
-#, fuzzy
-#| msgid "Product name"
 msgid "Product changed"
-msgstr "Produktnavn"
+msgstr "Produktet er ændret"
 
 #: pretix/api/webhooks.py:408
-#, fuzzy
-#| msgid ""
-#| "Product changed (including product added or deleted and including changes "
-#| "to nested objects like variations or bundles)"
 msgid ""
 "This includes product added or deleted and changes to nested objects like "
 "variations or bundles."
 msgstr ""
-"Produkt ændret (omfatter også ændring eller sletning af produktet og "
-"ændringer til indlejrede objekter som variationer og grupperinger)"
+"Dette omfatter produkter, der er tilføjet eller slettet, samt ændringer af "
+"underordnede objekter som f.eks. varianter eller pakker."
 
 #: pretix/api/webhooks.py:413
 msgid "Shop taken live"
@@ -632,28 +613,24 @@ msgid "Waiting list entry received voucher"
 msgstr "Post på ventelisten har modtaget voucher"
 
 #: pretix/api/webhooks.py:445
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "Voucherkode"
+msgstr "Rabatkoden er tilføjet"
 
 #: pretix/api/webhooks.py:449
-#, fuzzy
-#| msgid "Voucher assigned"
 msgid "Voucher changed"
-msgstr "Rabatkode tildelt"
+msgstr "Rabatkode ændret"
 
 #: pretix/api/webhooks.py:450
 msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
 msgstr ""
+"Omfatter kun eksplicitte ændringer af kuponen, ikke f.eks. en forhøjelse af "
+"antallet af indløsninger."
 
 #: pretix/api/webhooks.py:454
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "Voucher indløst"
+msgstr "Kuponen er slettet"
 
 #: pretix/api/webhooks.py:458
 msgid "Customer account created"
@@ -668,22 +645,16 @@ msgid "Customer account anonymized"
 msgstr "Kondekonto anonymiseret"
 
 #: pretix/api/webhooks.py:470
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card added"
-msgstr "Gavekort-kode"
+msgstr "Gavekort tilføjet"
 
 #: pretix/api/webhooks.py:474
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "Gavekort-kode"
+msgstr "Gavekort ændret"
 
 #: pretix/api/webhooks.py:478
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card used in transaction"
-msgstr "Gavekortoverførsler"
+msgstr "Gavekort anvendt i transaktionen"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1054
@@ -747,16 +718,18 @@ msgstr "Adgangskode"
 
 #: pretix/base/auth.py:176 pretix/base/auth.py:183
 msgid "Your password must contain both numeric and alphabetic characters."
-msgstr ""
+msgstr "Din adgangskode skal indeholde både tal og bogstaver."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
-#, python-format
+#, fuzzy, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "Din adgangskode må ikke være den samme som din tidligere adgangskode."
 msgstr[1] ""
+"Din adgangskode må ikke være den samme som en af dine %(history_length) "
+"foregående adgangskoder."
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -775,16 +748,14 @@ msgstr ""
 "til skræddersyede integrationer."
 
 #: pretix/base/context.py:38
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr "drevet af {name} baseret på <a {a_attr}>pretix</a>"
+msgstr "<a {a_name_attr}>drevet af {name}</a> <a {a_attr}>baseret på pretix</a>"
 
 #: pretix/base/context.py:48
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "drevet af {name} baseret på <a {a_attr}>pretix</a>"
+msgstr "<a {a_attr}>drevet af {name} baseret på pretix</a>"
 
 #: pretix/base/context.py:55
 #, python-format
@@ -841,6 +812,8 @@ msgid ""
 "Field \"{field_name}\" does not exist. Please check your {provider_name} "
 "settings."
 msgstr ""
+"Feltet »{field_name}« findes ikke. Kontroller venligst dine {provider_name}-"
+"indstillinger."
 
 #: pretix/base/datasync/datasync.py:274
 #, python-brace-format
@@ -848,6 +821,8 @@ msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
+"Feltet »{field_name}« kræver {required_input}, men der er kun indtastet "
+"{available_inputs}. Kontroller venligst dine {provider_name}-indstillinger."
 
 #: pretix/base/datasync/datasync.py:285
 #, python-brace-format
@@ -855,18 +830,16 @@ msgid ""
 "Please update value mapping for field \"{field_name}\" - option \"{val}\" "
 "not assigned"
 msgstr ""
+"Opdater venligst værditilordningen for feltet \"{field_name}\" – "
+"indstillingen \"{val}\" er ikke tildelt"
 
 #: pretix/base/datasync/sourcefields.py:128
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "Bestillingsposter"
+msgstr "Oplysninger om ordreposition"
 
 #: pretix/base/datasync/sourcefields.py:129
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "E-mailadresse"
+msgstr "Deltageroplysninger"
 
 #: pretix/base/datasync/sourcefields.py:130 pretix/base/exporters/answers.py:66
 #: pretix/base/models/items.py:1767 pretix/control/navigation.py:185
@@ -876,10 +849,8 @@ msgid "Questions"
 msgstr "Spørgsmål"
 
 #: pretix/base/datasync/sourcefields.py:131
-#, fuzzy
-#| msgid "Product data"
 msgid "Product details"
-msgstr "Produktdata"
+msgstr "Produktoplysninger"
 
 #: pretix/base/datasync/sourcefields.py:132
 #: pretix/control/templates/pretixcontrol/event/settings.html:279
@@ -904,17 +875,13 @@ msgid "Invoice address"
 msgstr "Faktureringsadresse"
 
 #: pretix/base/datasync/sourcefields.py:134
-#, fuzzy
-#| msgid "Meta information"
 msgid "Event information"
-msgstr "Metaoplysninger"
+msgstr "Oplysninger om arrangementet"
 
 #: pretix/base/datasync/sourcefields.py:135
-#, fuzzy
-#| msgid "Send recovery information"
 msgctxt "subevent"
 msgid "Event or date information"
-msgstr "Send oplysninger om genoprettelse"
+msgstr "Oplysninger om begivenhed eller dato"
 
 #: pretix/base/datasync/sourcefields.py:175
 #: pretix/base/exporters/orderlist.py:640
@@ -939,10 +906,8 @@ msgstr "Navn på deltager"
 #: pretix/base/datasync/sourcefields.py:187
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:628
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee"
-msgstr "Navn på deltager"
+msgstr "Deltager"
 
 #: pretix/base/datasync/sourcefields.py:207
 #: pretix/base/exporters/orderlist.py:647 pretix/base/forms/questions.py:693
@@ -956,10 +921,8 @@ msgid "Attendee email"
 msgstr "E-mailadresse"
 
 #: pretix/base/datasync/sourcefields.py:219
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee or order email"
-msgstr "E-mailadresse"
+msgstr "Deltager- eller ordrebekræftelsesmail"
 
 #: pretix/base/datasync/sourcefields.py:232
 #: pretix/base/exporters/orderlist.py:648 pretix/base/pdf.py:188
@@ -972,28 +935,20 @@ msgid "Attendee company"
 msgstr "Deltagerens virksomhed"
 
 #: pretix/base/datasync/sourcefields.py:241
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address street"
-msgstr "Deltagerens postadresse"
+msgstr "Deltagerens adresse (gade)"
 
 #: pretix/base/datasync/sourcefields.py:250
-#, fuzzy
-#| msgid "Attendee ZIP code"
 msgid "Attendee address ZIP code"
-msgstr "Deltagerens postnummer"
+msgstr "Deltagerens adresse (postnummer)"
 
 #: pretix/base/datasync/sourcefields.py:259
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address city"
-msgstr "Deltagerens postadresse"
+msgstr "Deltagerens adresse (by)"
 
 #: pretix/base/datasync/sourcefields.py:268
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee address country"
-msgstr "Deltagerens postadresse"
+msgstr "Deltagerens postadresse (land)"
 
 #: pretix/base/datasync/sourcefields.py:279
 #: pretix/base/exporters/orderlist.py:690 pretix/base/pdf.py:346
@@ -1029,16 +984,12 @@ msgid "Invoice address country"
 msgstr "Faktureringsadresse (land)"
 
 #: pretix/base/datasync/sourcefields.py:353
-#, fuzzy
-#| msgid "Order details"
 msgid "Order email"
-msgstr "Bestillingsdetaljer"
+msgstr "Bestillings-e-mail"
 
 #: pretix/base/datasync/sourcefields.py:362
-#, fuzzy
-#| msgid "Organizer name"
 msgid "Order email domain"
-msgstr "Navn"
+msgstr "Bestillingens e-mail-domæne"
 
 #: pretix/base/datasync/sourcefields.py:371
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:332
@@ -1070,10 +1021,8 @@ msgid "Order code"
 msgstr "Bestillingsnr."
 
 #: pretix/base/datasync/sourcefields.py:380
-#, fuzzy
-#| msgid "Order date"
 msgid "Event and order code"
-msgstr "Bestillingsdato"
+msgstr "Begivenheds- og ordrekode"
 
 #: pretix/base/datasync/sourcefields.py:389
 #: pretix/base/exporters/orderlist.py:283 pretix/base/notifications.py:201
@@ -1085,10 +1034,8 @@ msgid "Order total"
 msgstr "I alt"
 
 #: pretix/base/datasync/sourcefields.py:398
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Product and variation name"
-msgstr "Produktnavn og variant"
+msgstr "Produkt- og variantnavn"
 
 #: pretix/base/datasync/sourcefields.py:410 pretix/base/exporters/items.py:57
 #: pretix/base/exporters/orderlist.py:633
@@ -1098,14 +1045,12 @@ msgid "Product ID"
 msgstr "Produkt ID"
 
 #: pretix/base/datasync/sourcefields.py:419
-#, fuzzy
 msgid "Product is admission product"
-msgstr "Alle produkter"
+msgstr "Produktet er et adgangsprodukt"
 
 #: pretix/base/datasync/sourcefields.py:428
-#, fuzzy
 msgid "Event short form"
-msgstr "Navn"
+msgstr "Kort beskrivelse af arrangementet"
 
 #: pretix/base/datasync/sourcefields.py:437 pretix/base/exporters/events.py:57
 #: pretix/base/exporters/orderlist.py:283
@@ -1148,9 +1093,8 @@ msgid "Order code and position number"
 msgstr "Bestillingens kode og nr. på placering"
 
 #: pretix/base/datasync/sourcefields.py:482
-#, fuzzy
 msgid "Ticket price"
-msgstr "Billetnavn"
+msgstr "Billetpris"
 
 #: pretix/base/datasync/sourcefields.py:491 pretix/base/notifications.py:204
 #: pretix/control/forms/filter.py:221 pretix/control/forms/filter.py:1243
@@ -1159,21 +1103,16 @@ msgid "Order status"
 msgstr "Bestillingsstatus"
 
 #: pretix/base/datasync/sourcefields.py:500
-#, fuzzy
 msgid "Ticket status"
-msgstr "Enhedsnavn"
+msgstr "Billetstatus"
 
 #: pretix/base/datasync/sourcefields.py:509
-#, fuzzy
-#| msgid "Purchase date and time"
 msgid "Order date and time"
-msgstr "Købsdato og -tidspunkt"
+msgstr "Bestillingsdato og -tidspunkt"
 
 #: pretix/base/datasync/sourcefields.py:518
-#, fuzzy
-#| msgid "Printing date and time"
 msgid "Payment date and time"
-msgstr "Dato og tidspunkt for udskriften"
+msgstr "Betalingsdato og -tidspunkt"
 
 #: pretix/base/datasync/sourcefields.py:527
 #: pretix/base/exporters/orderlist.py:292
@@ -1184,34 +1123,27 @@ msgid "Order locale"
 msgstr "Sprog"
 
 #: pretix/base/datasync/sourcefields.py:536
-#, fuzzy
-#| msgid "Order position"
 msgid "Order position ID"
-msgstr "Bestillingspost"
+msgstr "Ordrepositionens ID"
 
 #: pretix/base/datasync/sourcefields.py:545
 #: pretix/base/exporters/orderlist.py:312
-#, fuzzy
-#| msgid "Order time"
 msgid "Order link"
-msgstr "Bestillingstidspunkt"
+msgstr "Bestillingslink"
 
 #: pretix/base/datasync/sourcefields.py:560
-#, fuzzy
 msgid "Ticket link"
-msgstr "Standardtidszone"
+msgstr "Link til billetter"
 
 #: pretix/base/datasync/sourcefields.py:578
-#, fuzzy, python-brace-format
-#| msgid "Check-in list"
+#, python-brace-format
 msgid "Check-in datetime on list {}"
-msgstr "Tjek-ind-liste"
+msgstr "Indtjekningsdato og -tid på listen {}"
 
 #: pretix/base/datasync/sourcefields.py:590
-#, fuzzy, python-brace-format
-#| msgid "Question: %(name)s"
+#, python-brace-format
 msgid "Question: {name}"
-msgstr "Spørgsmål: %(name)s"
+msgstr "Spørgsmål: {name}"
 
 #: pretix/base/datasync/sourcefields.py:604
 #: pretix/base/datasync/sourcefields.py:614 pretix/base/settings.py:3775
@@ -2372,6 +2304,9 @@ msgid ""
 "contain at least one position of this product. The order totals etc. still "
 "include all products contained in the order."
 msgstr ""
+"Hvis der ikke er valgt nogen, medtages alle produkter. Ordrer medtages, hvis "
+"de indeholder mindst én varepost af dette produkt. Ordretotalerne m.m. "
+"omfatter stadig alle produkter, der indgår i ordren."
 
 #: pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:479
@@ -2638,15 +2573,12 @@ msgid "Voucher"
 msgstr "Rabatkode"
 
 #: pretix/base/exporters/orderlist.py:655
-#, fuzzy
-#| msgid "Voucher code used:"
 msgid "Voucher budget usage"
-msgstr "Voucherkode anvendt:"
+msgstr "Forbrug af budget for rabatkoder"
 
 #: pretix/base/exporters/orderlist.py:656
-#, fuzzy
 msgid "Voucher tag"
-msgstr "Voucherdetaljer"
+msgstr "Tag for rabatkode"
 
 #: pretix/base/exporters/orderlist.py:657
 msgid "Pseudonymization ID"
@@ -2719,10 +2651,8 @@ msgid "Order comment"
 msgstr "Ordrekommentar"
 
 #: pretix/base/exporters/orderlist.py:669
-#, fuzzy
-#| msgid "Add-On to position #%(posid)s"
 msgid "Add-on to position ID"
-msgstr "Tilføjelse til position #%(posid)s"
+msgstr "Tillæg til positions-ID"
 
 #: pretix/base/exporters/orderlist.py:699
 msgctxt "address"
@@ -2740,10 +2670,8 @@ msgid "Check-in lists"
 msgstr "Tjek-ind-lister"
 
 #: pretix/base/exporters/orderlist.py:709
-#, fuzzy
-#| msgid "Resend order link"
 msgid "Position order link"
-msgstr "Gensend link til bestilling"
+msgstr "Link til posternes rækkefølge"
 
 #: pretix/base/exporters/orderlist.py:880
 msgid "Order transaction data"
@@ -3394,23 +3322,18 @@ msgid "Repeat password"
 msgstr "Gentag adgangskode"
 
 #: pretix/base/forms/auth.py:219 pretix/base/forms/user.py:99
-#, fuzzy
-#| msgid "Your address"
 msgid "Your email address"
-msgstr "Din adresse"
+msgstr "Din e-mailadresse"
 
 #: pretix/base/forms/auth.py:326 pretix/control/forms/orders.py:1041
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
-#, fuzzy
 msgid "Confirmation code"
-msgstr "Bekræftelsestekst"
+msgstr "Bekræftelseskode"
 
 #: pretix/base/forms/questions.py:139 pretix/base/forms/questions.py:266
-#, fuzzy
-#| msgid "No country specified."
 msgctxt "name_salutation"
 msgid "not specified"
-msgstr "Intet land angivet."
+msgstr "ikke angivet"
 
 #: pretix/base/forms/questions.py:229
 msgid "Please do not use special characters in names."
@@ -3471,38 +3394,36 @@ msgid "Street and Number"
 msgstr "Gadenavn og nummer"
 
 #: pretix/base/forms/questions.py:893
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date between {min} and {max}."
-msgstr "Indtast venligst et kortere navn."
+msgstr "Indtast venligst en dato mellem {min} og {max}."
 
 #: pretix/base/forms/questions.py:899
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date no earlier than {min}."
-msgstr "Indtast venligst en gyldig salgskanal."
+msgstr "Indtast venligst en dato, der ikke ligger tidligere end {min}."
 
 #: pretix/base/forms/questions.py:904
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date no later than {max}."
-msgstr "Indtast venligst et kortere navn."
+msgstr "Indtast venligst en dato, der ikke ligger senere end {max}."
 
 #: pretix/base/forms/questions.py:942
 #, python-brace-format
 msgid "Please enter a date and time between {min} and {max}."
-msgstr ""
+msgstr "Indtast venligst en dato og et klokkeslæt mellem {min} og {max}."
 
 #: pretix/base/forms/questions.py:948
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date and time no earlier than {min}."
-msgstr "Indtast venligst en gyldig salgskanal."
+msgstr ""
+"Indtast venligst en dato og et klokkeslæt, der ikke ligger tidligere end "
+"{min}."
 
 #: pretix/base/forms/questions.py:953
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Please enter a date and time no later than {max}."
-msgstr "Indtast venligst dit navn."
+msgstr "Please enter a date and time no later than {max}."
 
 #: pretix/base/forms/questions.py:1172
 msgid ""
@@ -3522,13 +3443,12 @@ msgstr ""
 "din faktura afhængig af, i hvilket land du eller sælgeren befinder sig."
 
 #: pretix/base/forms/questions.py:1185
-#, fuzzy
 msgid "No invoice requested"
-msgstr "Afbestillingsgebyr"
+msgstr "Der ønskes ingen faktura"
 
 #: pretix/base/forms/questions.py:1187
 msgid "Invoice transmission method"
-msgstr ""
+msgstr "Metode til fremsendelse af fakturaer"
 
 #: pretix/base/forms/questions.py:1333
 msgid "You need to provide a company name."
@@ -3543,24 +3463,28 @@ msgid ""
 "If you enter an invoice address, you also need to select an invoice "
 "transmission method."
 msgstr ""
+"Hvis du indtaster en fakturaadresse, skal du også vælge en metode til "
+"fremsendelse af fakturaen."
 
 #: pretix/base/forms/questions.py:1403
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid ""
 "The selected transmission type is not available in your country or for your "
 "type of address."
-msgstr "Den valgte medietype er ikke aktiveret i dine arrangør-indstillinger."
+msgstr ""
+"Den valgte forsendelsestype er ikke tilgængelig i dit land eller for din "
+"adressetype."
 
 #: pretix/base/forms/questions.py:1412
 msgid ""
 "The selected type of invoice transmission requires a field that is currently "
 "not available, please reach out to the organizer."
 msgstr ""
+"Den valgte metode til fremsendelse af fakturaer kræver et felt, der i "
+"øjeblikket ikke er tilgængeligt. Kontakt venligst arrangøren."
 
 #: pretix/base/forms/questions.py:1416
 msgid "This field is required for the selected type of invoice transmission."
-msgstr ""
+msgstr "Dette felt er obligatorisk for den valgte type fakturaforsendelse."
 
 #: pretix/base/forms/user.py:54 pretix/control/forms/organizer.py:576
 #: pretix/control/forms/users.py:58
@@ -3576,10 +3500,8 @@ msgstr ""
 "arrangementer bruges arrangementets tidszone."
 
 #: pretix/base/forms/user.py:77
-#, fuzzy
-#| msgid "Attendee email address"
 msgid "Change email address"
-msgstr "Deltagerens mailadresse"
+msgstr "Skift e-mailadresse"
 
 #: pretix/base/forms/user.py:83
 msgid "Device name"
@@ -3629,16 +3551,12 @@ msgstr ""
 "Der findes allerede en konto med denne e-mailadresse. Vælg venligt en anden."
 
 #: pretix/base/forms/user.py:179
-#, fuzzy
-#| msgid "Email address"
 msgid "Old email address"
-msgstr "E-mailadresse"
+msgstr "Gammel e-mailadresse"
 
 #: pretix/base/forms/user.py:180
-#, fuzzy
-#| msgid "Email address"
 msgid "New email address"
-msgstr "E-mailadresse"
+msgstr "Ny e-mailadresse"
 
 #: pretix/base/forms/validators.py:51
 msgid ""
@@ -3684,55 +3602,48 @@ msgstr "Privatkunde"
 
 #: pretix/base/invoicing/email.py:49
 msgid "Email invoice directly to accounting department"
-msgstr ""
+msgstr "Send fakturaen direkte til regnskabsafdelingen via e-mail"
 
 #: pretix/base/invoicing/email.py:50
-#, fuzzy
 msgid ""
 "If not selected, the invoice will be sent to you using the email address "
 "listed above."
-msgstr "Indtast venligst den samme e-mailadresse to gange."
+msgstr ""
+"Hvis du ikke vælger noget, vil fakturaen blive sendt til dig via den e-"
+"mailadresse, der er angivet ovenfor."
 
 #: pretix/base/invoicing/email.py:54
-#, fuzzy
-#| msgid "Email address verified"
 msgid "Email address for invoice"
-msgstr "E-Mail-adresse verificeret"
+msgstr "E-mailadresse til faktura"
 
 #: pretix/base/invoicing/email.py:90
-#, fuzzy
-#| msgid "Preview email"
 msgid "PDF via email"
-msgstr "Forhåndsvis e-mail"
+msgstr "PDF via e-mail"
 
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr ""
+msgstr "Det italienske udvekslingssystem (SdI)"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
 msgid "Exchange System (SdI)"
-msgstr ""
+msgstr "Udvekslingssystem (SdI)"
 
 #: pretix/base/invoicing/national.py:51
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "italian_invoice"
 msgid "Fiscal code"
-msgstr "Gavekort-kode"
+msgstr "Skattenummer"
 
 #: pretix/base/invoicing/national.py:55
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
-msgstr ""
+msgstr "Adresse til certificeret e-post"
 
 #: pretix/base/invoicing/national.py:59
-#, fuzzy
-#| msgid "Recipient"
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr "Modtager"
+msgstr "Modtagerkode"
 
 #: pretix/base/invoicing/national.py:83
 msgctxt "italian_invoice"
@@ -3742,6 +3653,11 @@ msgid ""
 "in accordance with the procedures and terms set forth in No. 89757/2018 of "
 "April 30, 2018, issued by the Director of the Revenue Agency."
 msgstr ""
+"Dette PDF-dokument er en visuel kopi af fakturaen og udgør ikke en faktura i "
+"momsforhold. Fakturaen udstedes i XML-format og fremsendes i "
+"overensstemmelse med de procedurer og betingelser, der er fastsat i "
+"bekendtgørelse nr. 89757/2018 af 30. april 2018, udstedt af direktøren for "
+"Skattevæsenet."
 
 #: pretix/base/invoicing/pdf.py:142
 #, python-format
@@ -3922,12 +3838,10 @@ msgid "Remaining amount"
 msgstr "Resterende antal"
 
 #: pretix/base/invoicing/pdf.py:1012
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Event date: {date_range}"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Invoice period: {daterange}"
-msgstr "Arrangementsdato: {date_range}"
+msgstr "Fakturaperiode: {daterange}"
 
 #: pretix/base/invoicing/pdf.py:1043
 msgctxt "invoice"
@@ -3992,6 +3906,8 @@ msgstr "Arrangementsdato: {date_range}"
 msgid ""
 "A Peppol participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
+"Et Peppol-deltager-id starter altid med et præfiks efterfulgt af et kolon (:)"
+"."
 
 #: pretix/base/invoicing/peppol.py:140
 #, python-format
@@ -3999,6 +3915,8 @@ msgid ""
 "The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"Peppol-deltager-ID-præfikset %(number)s er ukendt for vores system. Kontakt "
+"os venligst, hvis du er sikker på, at dette ID er korrekt."
 
 #: pretix/base/invoicing/peppol.py:144
 #, python-format
@@ -4006,25 +3924,25 @@ msgid ""
 "The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"Peppol-deltager-id'et overholder ikke valideringsreglerne for præfikset %"
+"(number)s. Kontakt os venligst, hvis du er sikker på, at dette id er korrekt."
 
 #: pretix/base/invoicing/peppol.py:166
 msgid "The Peppol participant ID is not registered on the Peppol network."
-msgstr ""
+msgstr "Peppol-deltager-id'et er ikke registreret i Peppol-netværket."
 
 #: pretix/base/invoicing/peppol.py:192
 msgid "Peppol participant ID"
-msgstr ""
+msgstr "Peppol-deltager-ID"
 
 #: pretix/base/invoicing/peppol.py:211
 msgid "The Peppol participant ID does not match your VAT ID."
-msgstr ""
+msgstr "Peppol-deltager-id'et stemmer ikke overens med dit momsnummer."
 
 #: pretix/base/invoicing/peppol.py:214
-#, fuzzy
-#| msgid "Gift card code"
 msgctxt "peppol_invoice"
 msgid "Visual copy"
-msgstr "Gavekort-kode"
+msgstr "Synlig kopi"
 
 #: pretix/base/invoicing/peppol.py:219
 msgctxt "peppol_invoice"
@@ -4033,24 +3951,25 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
+"Dette PDF-dokument er en visuel kopi af fakturaen og udgør ikke en faktura i "
+"momsforhold. Den originale faktura udstedes i XML-format og sendes via "
+"Peppol-netværket."
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"Det pågældende plugin er i øjeblikket ikke aktiveret. Klik her for at gå til "
+"plugin-indstillingerne og aktivere det."
 
 #: pretix/base/logentrytype_registry.py:53
-#, fuzzy
-#| msgid "This product is currently not available."
 msgid "The relevant plugin is currently not active."
-msgstr "Dette produkt er pt. ikke tilgængeligt."
+msgstr "Det pågældende plugin er i øjeblikket ikke aktivt."
 
 #: pretix/base/logentrytypes.py:49
-#, fuzzy
-#| msgid "Delete"
 msgid "(deleted)"
-msgstr "Slet"
+msgstr "(slettet)"
 
 #: pretix/base/logentrytypes.py:78
 #, python-brace-format
@@ -4149,7 +4068,7 @@ msgstr "Der blev fundet flere passende datoer."
 
 #: pretix/base/modelimport_orders.py:73
 msgid "Grouping"
-msgstr ""
+msgstr "Gruppering"
 
 #: pretix/base/modelimport_orders.py:75
 msgid ""
@@ -4157,6 +4076,9 @@ msgid ""
 "together...\". Lines with the same grouping value will be put in the same "
 "order, but MUST be consecutive lines of the input file."
 msgstr ""
+"Dette gælder kun, når \"Importtilstand\" er indstillet til \"Gruppér flere "
+"linjer sammen...\". Linjer med samme grupperingsværdi placeres i samme "
+"rækkefølge, men SKAL være på hinanden følgende linjer i inputfilen."
 
 #: pretix/base/modelimport_orders.py:101
 msgid "Enter a valid phone number."
@@ -4168,6 +4090,9 @@ msgid ""
 "The date can be specified through its full name, full date and time, or "
 "internal ID, provided only one date in the system matches the input."
 msgstr ""
+"Datoen kan angives ved hjælp af dets fuldstændige navn, den fuldstændige "
+"dato og klokkeslæt eller det interne ID, forudsat at der kun er én dato i "
+"systemet, der matcher den indtastede dato."
 
 #: pretix/base/modelimport_orders.py:120 pretix/presale/views/waiting.py:157
 msgctxt "subevent"
@@ -4178,6 +4103,8 @@ msgstr "Du skal vælge en dato."
 msgid ""
 "The product can be specified by its internal ID, full name or internal name."
 msgstr ""
+"Produktet kan angives ved hjælp af dets interne ID, fulde navn eller interne "
+"navn."
 
 #: pretix/base/modelimport_orders.py:149
 #: pretix/base/modelimport_vouchers.py:194
@@ -4197,7 +4124,7 @@ msgstr "Produktvariation"
 
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
-msgstr ""
+msgstr "Variationen kan angives ved hjælp af dens interne ID eller fulde navn."
 
 #: pretix/base/modelimport_orders.py:181
 #: pretix/base/modelimport_vouchers.py:225
@@ -4216,10 +4143,8 @@ msgid "You need to select a variation for this product."
 msgstr "Du skal vælge en variation for dette produkt."
 
 #: pretix/base/modelimport_orders.py:265 pretix/base/modelimport_orders.py:417
-#, fuzzy
-#| msgid "The count needs to be equal to or greater than zero."
 msgid "The country needs to be specified using a two-letter country code."
-msgstr "Antallet skal være lig med eller større end nul."
+msgstr "Landet skal angives ved hjælp af en to-bogstavs landekode."
 
 #: pretix/base/modelimport_orders.py:281 pretix/base/modelimport_orders.py:432
 msgid "Please enter a valid country code."
@@ -4227,7 +4152,7 @@ msgstr "Indtast venligt en gyldig landekode."
 
 #: pretix/base/modelimport_orders.py:290 pretix/base/modelimport_orders.py:441
 msgid "The state can be specified by its short form or full name."
-msgstr ""
+msgstr "Staten kan angives med sin forkortelse eller sit fulde navn."
 
 #: pretix/base/modelimport_orders.py:300 pretix/base/modelimport_orders.py:450
 msgid "States are not supported for this country."
@@ -4284,6 +4209,8 @@ msgid ""
 "The sales channel can be specified by it's internal identifier or its full "
 "name."
 msgstr ""
+"Salgskanalen kan angives ved hjælp af dens interne identifikator eller dens "
+"fulde navn."
 
 #: pretix/base/modelimport_orders.py:599 pretix/base/modelimport_orders.py:601
 msgid "Please enter a valid sales channel."
@@ -4291,7 +4218,7 @@ msgstr "Indtast venligst en gyldig salgskanal."
 
 #: pretix/base/modelimport_orders.py:611
 msgid "The seat needs to be specified by its internal ID."
-msgstr ""
+msgstr "Sædet skal angives ved hjælp af dets interne ID."
 
 #: pretix/base/modelimport_orders.py:626
 #: pretix/base/modelimport_vouchers.py:291
@@ -4382,21 +4309,20 @@ msgid "Price effect"
 msgstr "Effekt på pris"
 
 #: pretix/base/modelimport_vouchers.py:150
-#, fuzzy, python-brace-format
-#| msgid "Could not parse {value} as a price mode, use one of {options}."
+#, python-brace-format
 msgid "Could not parse {value} as a price effect, use one of {options}."
 msgstr ""
-"Kunne ikke genkende {value} som en prismodus. Brug en af disse {options}."
+"Det var ikke muligt at fortolke {value} som en prisændring. Brug en af "
+"{options}."
 
 #: pretix/base/modelimport_vouchers.py:160 pretix/base/models/vouchers.py:248
 msgid "Voucher value"
 msgstr "Voucherværdi"
 
 #: pretix/base/modelimport_vouchers.py:165
-#, fuzzy
-#| msgid "It is pointless to set a value without a price mode."
 msgid "It is pointless to set a value without a price effect."
-msgstr "Det giver ingen mening at vælge en værdi uden en prismodus."
+msgstr ""
+"Det giver ingen mening at fastsætte en værdi uden at det påvirker prisen."
 
 #: pretix/base/modelimport_vouchers.py:237 pretix/base/models/items.py:2121
 #: pretix/base/models/vouchers.py:275
@@ -4505,6 +4431,8 @@ msgid ""
 "to confirm changing your email address from {old_email}\n"
 "to {new_email}, use the following code:"
 msgstr ""
+"For at bekræfte ændringen af din e-mailadresse fra {old_email}\n"
+"til {new_email} skal du bruge følgende kode:"
 
 #: pretix/base/models/auth.py:398
 #, python-brace-format
@@ -4512,11 +4440,12 @@ msgid ""
 "to confirm that your email address {email} belongs to your pretix account, "
 "use the following code:"
 msgstr ""
+"For at bekræfte, at din e-mailadresse {email} hører til din pretix-konto, "
+"skal du bruge følgende kode:"
 
 #: pretix/base/models/auth.py:412
-#, fuzzy
 msgid "pretix confirmation code"
-msgstr "Bekræftelsestekst"
+msgstr "Pretix-bekræftelseskode"
 
 #: pretix/base/models/auth.py:456
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:7
@@ -4678,10 +4607,8 @@ msgid "Ticket not valid at this time"
 msgstr "Billetten er ikke gyldig på dette tidspunkt"
 
 #: pretix/base/models/checkin.py:368
-#, fuzzy
-#| msgid "Check-in status"
 msgid "Check-in annulled"
-msgstr "Tjek-ind-status"
+msgstr "Check-in annulleret"
 
 #: pretix/base/models/customers.py:63
 msgid "Provider name"
@@ -4720,7 +4647,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:56
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:135
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:33
-#, fuzzy
 msgid "disabled"
 msgstr "Deaktiveret"
 
@@ -4772,10 +4698,8 @@ msgid "Grant type"
 msgstr "Bevillingstype"
 
 #: pretix/base/models/customers.py:464
-#, fuzzy
-#| msgid "Required question"
 msgid "Require PKCE extension"
-msgstr "Påkrævet spørgsmål"
+msgstr "Kræver PKCE-udvidelse"
 
 #: pretix/base/models/customers.py:476
 msgid "Allowed access scopes"
@@ -4787,21 +4711,19 @@ msgstr "Separer flere værdier med mellemrum"
 
 #: pretix/base/models/datasync.py:53
 msgid "Temporary error, auto-retry limit exceeded"
-msgstr ""
+msgstr "Midlertidig fejl, grænsen for automatisk gentagelse er overskredet"
 
 #: pretix/base/models/datasync.py:54
-#, fuzzy
-#| msgid "Stripe reported an event: {}"
 msgid "Provider reported a permanent error"
-msgstr "Stripe rapporterede en hændelse: {}"
+msgstr "Udbyderen har rapporteret en vedvarende fejl"
 
 #: pretix/base/models/datasync.py:55
 msgid "Misconfiguration, please check provider settings"
-msgstr ""
+msgstr "Forkert konfiguration – kontroller venligst udbyderindstillingerne"
 
 #: pretix/base/models/datasync.py:56 pretix/base/models/datasync.py:57
 msgid "System error, needs manual intervention"
-msgstr ""
+msgstr "Systemfejl, kræver manuel indgriben"
 
 #: pretix/base/models/devices.py:73 pretix/base/models/items.py:1675
 msgid "Internal identifier"
@@ -8669,19 +8591,16 @@ msgid "Integrations"
 msgstr "Faktureringsoplysninger"
 
 #: pretix/base/plugins.py:141
-#, fuzzy
 msgid "Customizations"
-msgstr "Kundehandlinger"
+msgstr "Tilpasninger"
 
 #: pretix/base/plugins.py:142
-#, fuzzy
 msgid "Output and export formats"
-msgstr "Kort navn"
+msgstr "Udskrifts- og eksportformater"
 
 #: pretix/base/plugins.py:143
-#, fuzzy
 msgid "API features"
-msgstr "Funktioner"
+msgstr "API-funktioner"
 
 #: pretix/base/reldate.py:38
 msgid "Event start"
@@ -8745,10 +8664,8 @@ msgid "Event canceled"
 msgstr "Arrangement aflyst"
 
 #: pretix/base/services/cancelevent.py:380
-#, fuzzy
-#| msgid "Create configuration"
 msgid "Bulk-refund confirmation"
-msgstr "Opret konfiguration"
+msgstr "Bekræftelse af samlet refusion"
 
 #: pretix/base/services/cart.py:106 pretix/base/services/modelimport.py:247
 #: pretix/base/services/orders.py:161
@@ -8782,6 +8699,8 @@ msgid ""
 "Some products can no longer be purchased and have been removed from your "
 "cart for the following reason: %s"
 msgstr ""
+"Nogle varer kan ikke længere købes og er blevet fjernet fra din indkøbskurv "
+"af følgende årsag: %s"
 
 #: pretix/base/services/cart.py:117
 msgid ""
