@@ -191,7 +191,7 @@ class InlineItemAddOnSerializer(serializers.ModelSerializer):
 class InlineItemProgramTimeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemProgramTime
-        fields = ('start', 'end')
+        fields = ('start', 'end', 'location')
 
 
 class ItemBundleSerializer(serializers.ModelSerializer):

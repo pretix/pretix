@@ -530,6 +530,7 @@ def test_item_detail_program_times(token_client, organizer, event, team, item, c
     res["program_times"] = [{
         "start": "2017-12-27T00:00:00Z",
         "end": "2017-12-28T00:00:00Z",
+        "location": None
     }]
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
                                                                                item.pk))
@@ -1983,15 +1984,17 @@ TEST_PROGRAM_TIMES_RES = {
     0: {
         "start": "2017-12-27T00:00:00Z",
         "end": "2017-12-28T00:00:00Z",
+        "location": None,
     },
     1: {
         "start": "2017-12-29T00:00:00Z",
         "end": "2017-12-30T00:00:00Z",
+        "location": None,
     },
     2: {
         "start": "2017-12-30T00:00:00Z",
         "end": "2017-12-31T00:00:00Z",
-        "location": "Testlocation",
+        "location": {"en": "Testlocation"},
     }
 }
 
@@ -2008,11 +2011,11 @@ def test_program_times_list(token_client, organizer, event, item, program_time, 
     assert res[0]['start'] == resp.data['results'][0]['start']
     assert res[0]['end'] == resp.data['results'][0]['end']
     assert res[0]['id'] == resp.data['results'][0]['id']
-    # assert res[0] == resp.data['results'][0]
+    assert res[0] == resp.data['results'][0]
     assert res[1]['start'] == resp.data['results'][1]['start']
     assert res[1]['end'] == resp.data['results'][1]['end']
     assert res[1]['id'] == resp.data['results'][1]['id']
-    # assert res[1] == resp.data['results'][1]
+    assert res[1] == resp.data['results'][1]
     assert res[2]['start'] == resp.data['results'][2]['start']
     assert res[2]['end'] == resp.data['results'][2]['end']
     assert res[2]['location'] == resp.data['results'][2]['location']
