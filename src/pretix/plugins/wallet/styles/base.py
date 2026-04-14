@@ -1,0 +1,269 @@
+import enum
+from i18nfield.strings import LazyI18nString
+import jsonschema
+
+class WalletPlatform:
+    identifier: str
+    name: str
+
+
+class FieldGroupType(enum.Enum):
+    PLACEHOLDER = "placeholder"
+    PREDEFINED = "predefined"
+
+
+class FieldGroup:
+    type: FieldGroupType
+    identifier: str
+    name: str
+    description: str
+    required: bool = False
+
+    def __init__(self, identifier: str, name: str, description=None, required=False):
+        self.identifier = identifier
+        self.name = name
+        self.required = required
+        self.description = description or ""
+
+    def layout_schema(
+        self,
+        remaining_fields: list["FieldGroup"],
+        context: dict,
+    ) -> dict:
+        raise NotImplemented()
+
+    def asdict(self):
+        return {
+            "type": self.type.value,
+            "identifier": self.identifier,
+            "name": self.name,
+            "description": self.description,
+            "required": self.required,
+        }
+
+
+class FieldContentType(enum.Enum):
+    IMAGE = "image"
+    TEXT = "text"
+
+
+class FieldEntryContentType(enum.Enum):
+    IMAGE = "image"
+    TEXT = "text"
+    PLACEHOLDER = "placeholder"
+
+
+class FieldEntry:
+    type: FieldEntryContentType
+    label: LazyI18nString | None
+    content: str
+
+    def __init__(
+        self, type: FieldEntryContentType, label: LazyI18nString | None, content: str
+    ):
+        self.type = type
+        self.label = label
+        self.content = content
+
+    def asdict(self) -> dict:
+        return {"type": self.type.value, "content": self.content, "label": self.label.data if self.label else None}
+
+
+class PredefinedFieldGroup(FieldGroup):
+    type = FieldGroupType.PREDEFINED
+    
+    def layout_schema(
+        self,
+        remaining_fields: list["FieldGroup"],
+        context: dict,
+    ):
+        return {
+            "type": "object"
+        }
+    
+class PlaceholderFieldGroup(FieldGroup):
+    type = FieldGroupType.PLACEHOLDER
+    content_type: FieldContentType
+    default_entries: list[FieldEntry]
+    labels: bool
+    min_entries: int | None
+    max_entries: int | None
+
+    def __init__(
+        self,
+        identifier: str,
+        name: str,
+        content_type: FieldContentType,
+        description: str=None,
+        required=False,
+        default_entries=None,
+        min_entries=None,
+        max_entries=None,
+        labels=True,
+    ):
+        super().__init__(identifier, name, description, required)
+        self.content_type = content_type
+        self.default_entries = default_entries or []
+        self.min_entries = min_entries
+        self.max_entries = max_entries
+        self.labels = labels
+
+        if self.required and (self.min_entries is None or self.min_entries < 1):
+            self.min_entries = 1
+
+    def asdict(self):
+        return {
+            **super().asdict(),
+            "content_type": self.content_type.value,
+            "default_entries": [x.asdict() for x in self.default_entries],
+            "labels": self.labels,
+            "min_entries": self.min_entries,
+            "max_entries": self.max_entries,
+        }
+
+    def layout_schema(
+        self,
+        remaining_fields: list["FieldGroup"],
+        context: dict,
+    ):
+        placeholders = context.get("placeholders", {}).get(self.content_type.value, [])
+        return {
+            "type": "object",
+            "properties": {
+                "entries": self.entries_schema(placeholders=placeholders),
+                "overflow": {
+                    "oneOf": [
+                        {"type": "null"},
+                        {
+                            "type": "string",
+                            "enum": [
+                                f.identifier
+                                for f in remaining_fields
+                                if isinstance(f, PlaceholderFieldGroup)
+                                and f.content_type == self.content_type
+                            ],
+                        },
+                    ]
+                },
+            },
+            "required": ["entries"],
+        }
+
+    def entries_schema(self, placeholders: list[str]):
+        baseprops = {}
+        if self.labels:
+            baseprops["label"] = {"$ref": "#/$defs/I18nString"}
+
+        schema = {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "oneOf": [
+                    {
+                        "properties": {
+                            **baseprops,
+                            "type": {"const": "placeholder"},
+                            "content": {"enum": placeholders},
+                        }
+                    },
+                    {
+                        "properties": {
+                            **baseprops,
+                            "type": {"const": self.content_type.value},
+                            "content": {"type": "string"},
+                        }
+                    },
+                ],
+                "required": ["type", "content"],
+            },
+        }
+        if self.labels:
+            schema["items"]["required"].append("label")
+        if self.min_entries is not None:
+            schema["minItems"] = self.min_entries
+        # max_entries is not enforced here, as the layout can have more fields than that (null-fields are removed, rest is overspilled)
+        return schema
+
+
+
+class TextFieldGroup(PlaceholderFieldGroup):
+    content_type = FieldContentType.TEXT
+
+    def __init__(self, **kwargs):
+        super().__init__(content_type=self.content_type, **kwargs)
+
+
+class ImageFieldGroup(PlaceholderFieldGroup):
+    content_type = FieldContentType.IMAGE
+
+    def __init__(self, **kwargs):
+        super().__init__(content_type=self.content_type, **kwargs)
+
+
+class PassStyle:
+    platform: type[WalletPlatform]
+    identifier: str  # unique within platform
+    name: str
+    # order here limits in what order users can configure field "overspilling" (if too many fields are defined, where should the rest go) -> can only go down in the list
+    # we evaluate the fields in this order, so they overspill in this order as well (fields from primary are appended to the overspilling field before fields from secondary are etc)
+
+    fieldgroups: list[FieldGroup]
+
+    def asdict(self):
+        return {
+            "platform": self.platform.identifier,
+            "identifier": self.identifier,
+            "name": self.name,
+            "fieldgroups": [x.asdict() for x in self.fieldgroups],
+        }
+
+    def layout_schema(self, context):
+        schema = {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            # TODO: $id
+            "title": self.name,
+            "type": "object",
+            "properties": {
+                "fieldgroups": {
+                    "description": "Layout Field Groups",
+                    "type": "object",
+                    "properties": {
+                        group.identifier: group.layout_schema(
+                            context=context, remaining_fields=self.fieldgroups[i:]
+                        )
+                        for (i, group) in enumerate(self.fieldgroups)
+                    },
+                    "required": [
+                        group.identifier for group in self.fieldgroups if group.required
+                    ],
+                }
+            },
+            "$defs": {
+                "I18nString": {
+                    "oneOf": [
+                        {"type": "string"},
+                        {"type": "object", "additionalProperties": {"type": "string"}},
+                    ]
+                }
+            },
+        }
+        if any(group.required for group in self.fieldgroups):
+            schema["required"] = ["fieldgroups"]
+
+        return schema
+
+
+class PassLayout:
+    style: PassStyle
+    layout: dict
+
+    def __init__(self, style, layout):
+        self.style = style
+        self.layout = layout
+
+    def validate(self, context):
+        schema = self.style.layout_schema(context)
+        try:
+            jsonschema.validate(self.layout, schema)
+        except jsonschema.ValidationError as e:
+            raise ValidationError("Invalid layout: {}".format(str(e)))
