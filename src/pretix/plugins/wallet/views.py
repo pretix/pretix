@@ -5,14 +5,26 @@ from django import forms
 from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import (
-    CreateView, DetailView, ListView
-)
+from django.views.generic import CreateView, DetailView, ListView
 from pretix.base.pdf import get_images, get_variables
 from pretix.control.permissions import EventPermissionRequiredMixin
-
+from django.conf import settings
 from .models import WalletLayout
-from .styles import get_platform_styles, get_platforms
+from .styles import AVAILABLE_STYLES, AVAILABLE_PLATFORMS
+
+
+def get_layout_variables(event):
+    return {
+        "text": {
+            varname: {"label": var["label"], "editor_sample": var["editor_sample"]}
+            for varname, var in get_variables(event).items()
+        },
+        "image": {
+            varname: {"label": var["label"]}
+            for varname, var in get_images(event).items()
+        }
+        | {"poweredby": {"label": _("pretix-Logo")}},  # TODO: image upload
+    }
 
 
 # TODO: should this even be a list view?
@@ -27,7 +39,7 @@ class LayoutListView(EventPermissionRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         ctx = super().get_context_data(**kwargs)
-        ctx["platforms"] = get_platforms()
+        ctx["platforms"] = AVAILABLE_PLATFORMS
         return ctx
 
 
@@ -38,33 +50,28 @@ class LayoutEditorView(DetailView):
     pk_url_kwarg = "layout"
 
     def get_platform_styles(self):
-        if self.object.platform not in get_platforms():
+        if self.object.platform not in AVAILABLE_STYLES:
             raise Http404(
                 _("Unknown platform '{platform}'").format(platform=self.object.platform)
             )
-        return get_platform_styles(self.object.platform)
+        return AVAILABLE_STYLES[self.object.platform]
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context["styles"] = {
-            id: style.asdict() for id, style in self.get_platform_styles().items()
+            style.identifier: style.asdict() for style in self.get_platform_styles()
         }
-        context["variables"] = {
-            "text": {
-                varname: {"label": var["label"], "editor_sample": var["editor_sample"]}
-                for varname, var in get_variables(self.request.event).items()
-            },
-            "image": {
-                varname: {"label": var['label']} for varname, var in get_images(self.request.event).items()
-            } | {"poweredby": {"label": _("pretix-Logo")}} # TODO: image upload
-        }
+        context["variables"] = get_layout_variables(self.request.event)
+        context['locales'] = {l: dict(settings.LANGUAGES).get(l, l) for l in self.request.event.settings.get('locales')}
+
         return context
+
 
 class WalletLayoutCreateForm(forms.ModelForm):
     class Meta:
         model = WalletLayout
         fields = ("name",)
-    
+
     def __init__(self, *args, platform, event, **kwargs):
         super().__init__(*args, **kwargs)
         self.platform = platform
@@ -74,7 +81,8 @@ class WalletLayoutCreateForm(forms.ModelForm):
         self.instance.platform = self.platform
         self.instance.event = self.event
         return super().save(*args, **kwargs)
-    
+
+
 class LayoutCreateView(CreateView):
     template_name = "pretixplugins/wallet/create.html"
     form_class = WalletLayoutCreateForm
@@ -82,19 +90,17 @@ class LayoutCreateView(CreateView):
 
     @property
     def platform(self):
-        platform = self.kwargs['platform']
-        if platform not in get_platforms():
-            raise Http404(
-                _("Unknown platform '{platform}'").format(platform=platform)
-            )
+        platform = self.kwargs["platform"]
+        if platform not in AVAILABLE_PLATFORMS:
+            raise Http404(_("Unknown platform '{platform}'").format(platform=platform))
         return platform
-    
+
     def get_form_kwargs(self) -> dict[str, Any]:
         kwargs = super().get_form_kwargs()
-        kwargs['platform'] = self.platform
-        kwargs['event'] = self.request.event
+        kwargs["platform"] = self.platform
+        kwargs["event"] = self.request.event
         return kwargs
-    
+
     def get_success_url(self) -> str:
         return reverse(
             "plugins:wallet:edit",
