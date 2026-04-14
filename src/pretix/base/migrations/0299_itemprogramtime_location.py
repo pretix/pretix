@@ -7,7 +7,7 @@ import i18nfield.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0296_invoice_invoice_from_state"),
+        ("pretixbase", "0298_pluggable_permissions"),
     ]
 
     operations = [

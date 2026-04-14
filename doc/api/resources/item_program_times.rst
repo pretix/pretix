@@ -16,6 +16,7 @@ Field                                 Type                       Description
 id                                    integer                    Internal ID of the program time
 start                                 datetime                   The start date time for this program time slot.
 end                                   datetime                   The end date time for this program time slot.
+location                              multi-lingual string       The program time slot's location (or ``null``)
 ===================================== ========================== =======================================================
 
 .. versionchanged:: TODO
@@ -54,17 +55,20 @@ Endpoints
             {
                "id": 2,
                "start": "2025-08-14T22:00:00Z",
-               "end": "2025-08-15T00:00:00Z"
+               "end": "2025-08-15T00:00:00Z",
+               "location": null
             },
             {
                "id": 3,
                "start": "2025-08-12T22:00:00Z",
-               "end": "2025-08-13T22:00:00Z"
+               "end": "2025-08-13T22:00:00Z",
+               "location": null
             },
             {
                "id": 14,
                "start": "2025-08-15T22:00:00Z",
-               "end": "2025-08-17T22:00:00Z"
+               "end": "2025-08-17T22:00:00Z",
+               "location": null
             }
         ]
       }
@@ -99,7 +103,8 @@ Endpoints
       {
          "id": 1,
          "start": "2025-08-15T22:00:00Z",
-         "end": "2025-10-27T23:00:00Z"
+         "end": "2025-10-27T23:00:00Z",
+         "location": null
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -125,7 +130,8 @@ Endpoints
 
       {
         "start": "2025-08-15T10:00:00Z",
-        "end": "2025-08-15T22:00:00Z"
+        "end": "2025-08-15T22:00:00Z",
+        "location": null
       }
 
    **Example response**:
@@ -139,7 +145,8 @@ Endpoints
       {
         "id": 17,
         "start": "2025-08-15T10:00:00Z",
-        "end": "2025-08-15T22:00:00Z"
+        "end": "2025-08-15T22:00:00Z",
+        "location": null
       }
 
    :param organizer: The ``slug`` field of the organizer of the event/item to create a program time for
