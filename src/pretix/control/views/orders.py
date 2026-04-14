@@ -79,9 +79,9 @@ from pretix.base.email import get_email_context
 from pretix.base.exporter import MultiSheetListExporter
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, Checkin, Invoice,
-    InvoiceAddress, Item, ItemVariation, LogEntry, Order, QuestionAnswer,
-    Quota, ScheduledEventExport, generate_secret,
+    CachedFile, CachedTicket, Checkin, Invoice, InvoiceAddress, Item,
+    ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
+    ScheduledEventExport, generate_secret,
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
