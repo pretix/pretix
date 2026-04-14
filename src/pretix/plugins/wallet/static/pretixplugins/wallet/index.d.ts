@@ -1,14 +1,41 @@
-type FieldGroupDefinition = {
+type BaseFieldGroupDefinition = {
+	type: string;
 	identifier: string;
-	entry_type: string;
 	name: string;
-	default_entries: FieldConfig[];
-};
+	required: boolean;
+}
+
+type FieldGroupDefinition = PlaceholderFieldGroupDefinition | PredefinedFieldGroup;
+
+type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
+	type: 'placeholder';
+	content_type: FieldContentType;
+	default_entries: FieldEntry[];
+	labels: boolean;
+	min_entries: number|null;
+	max_entries: number|null;
+}
+
+type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
+	type: 'predefined';
+}
+
+type I18nString = string | Record<string, string>
+
+type FieldContentType = 'text' | 'image';
+
+type FieldEntry = {
+    type: 'placeholder' | FieldContentType;
+    label?: I18nString;
+    content?: string;
+}
+
+
 
 type Style = {
 	identifier: string;
 	name: string;
-	fields: FieldGroupDefinition[];
+	fieldgroups: FieldGroupDefinition[];
 };
 
 type Variable = {
@@ -19,21 +46,19 @@ type Styles = Record<string, Style>;
 type Variables = Record<string, Variable>;
 type VariableConfig = Record<string, Variables>;
 
-type I18nString = string | Record<string, string>
 
-type FieldEntry = {
-    type: 'placeholder' | 'text';
-    label?: I18nString; // TODO i18n
-    content?: string;
-}
 
-type FieldConfig = {
+type PlaceholderFieldGroupConfig = {
 	entries: Array<FieldEntry>;
 	overflow: string | null;
 };
 
+type PredefinedFieldGroupConfig = {};
+
+type FieldGroupConfig = PlaceholderFieldGroupConfig | PredefinedFieldGroupConfig;
+
 type LayoutData = {
-	fields?: Record<string, FieldConfig>;
+	fieldgroups: Record<string, FieldGroupConfig>;
 };
 
 type Layout = {
@@ -41,3 +66,4 @@ type Layout = {
 	style?: string;
 	layout?: LayoutData;
 };
+
