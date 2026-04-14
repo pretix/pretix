@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load statici18n %}
+{% load vite %}
 {% load eventsignal %}
 {% load eventurl %}
 {% load dialog %}
@@ -84,6 +85,7 @@
         <meta name="theme-color" content="#3b1c4a">
         <meta name="referrer" content="origin">
 
+        {% vite_importmap %}
         {% block custom_header %}{% endblock %}
 	</head>
 	<body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}"
