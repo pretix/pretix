@@ -79,7 +79,7 @@ from pretix.base.email import get_email_context
 from pretix.base.exporter import MultiSheetListExporter
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedCombinedTicket, CachedFile, CachedTicket, Checkin, Invoice,
+    CachedFile, CachedTicket, Checkin, Invoice,
     InvoiceAddress, Item, ItemVariation, LogEntry, Order, QuestionAnswer,
     Quota, ScheduledEventExport, generate_secret,
 )
