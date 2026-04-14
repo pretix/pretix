@@ -97,7 +97,7 @@ dependencies = [
   "sepaxml==2.7.*",
   "stripe==7.9.*",
   "text-unidecode==1.*",
-  "tlds>=2020041600",
+  "tlds>=2026021400",
   "tqdm==4.*",
   "ua-parser==1.0.*",
   "vobject==0.9.*",
