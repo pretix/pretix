@@ -718,30 +718,13 @@ class OrderDownload(AsyncAction, OrderView):
                     ),
                     content_type=value.type
                 )
-        elif isinstance(value, CachedCombinedTicket):
-            if value.type == 'text/uri-list':
-                resp = HttpResponseRedirect(value.file.file.read())
-                return resp
-            else:
-                return FileResponse(
-                    value.file.file,
-                    filename='{}-{}-{}{}'.format(
-                        self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
-                    ),
-                    content_type=value.type
-                )
         else:
             return redirect(self.get_self_url())
 
     def get_last_ct(self):
-        if 'position' in self.kwargs:
-            ct = CachedTicket.objects.filter(
-                order_position=self.order_position, provider=self.output.identifier, file__isnull=False
-            ).last()
-        else:
-            ct = CachedCombinedTicket.objects.filter(
-                order=self.order, provider=self.output.identifier, file__isnull=False
-            ).last()
+        ct = CachedTicket.objects.filter(
+            order_position=self.order_position, provider=self.output.identifier, file__isnull=False
+        ).last()
         if not ct or not ct.file:
             return None
         return ct
