@@ -13,6 +13,7 @@
     <h1>{% trans "Edit layout" %} {{ object.name }} </h1>
     {{ styles|json_script:"styles" }}
     {{ variables|json_script:"variables" }}
+    {{ locales|json_script:"locales" }}
     <div id="editor" data-layout-id="{{ object.pk }}"></div>
     {% vite_hmr %}
     {% vite_asset "src/pretix/plugins/wallet/static/pretixplugins/wallet/main.ts" %}

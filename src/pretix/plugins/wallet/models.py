@@ -23,6 +23,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import LoggedModel
+from django_scopes import ScopedManager
 
 
 class WalletLayout(LoggedModel):
@@ -37,11 +38,26 @@ class WalletLayout(LoggedModel):
     )
     platform = models.CharField(max_length=10)
     style = models.CharField(max_length=255)
-    layout = models.JSONField(default={})
+    layout = models.JSONField(default=dict)
+
+    objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
         ordering = ("name",)
 
     def __str__(self):
         return self.name
-    # TODO:ScopedManager
+
+
+class WalletLayoutItem(models.Model):
+    item = models.ForeignKey('pretixbase.Item', null=True, blank=True, related_name='walletlayout_assignments',
+                             on_delete=models.CASCADE)
+    layout = models.ForeignKey(WalletLayout, on_delete=models.CASCADE, related_name='item_assignments')
+    sales_channel = models.ForeignKey(
+        "pretixbase.SalesChannel",
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        unique_together = (('item', 'layout', 'sales_channel'),)
+        ordering = ("id",)

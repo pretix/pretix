@@ -25,7 +25,7 @@ watchEffect(() => {
 <template lang="pug">
     template(v-if="choices.length >= 1")
         label.control-label(:for="id") {{ props.label }}
-        select.form-control(:id="id" v-model="modelValue" v-bind="$attrs")
+        select.form-control(:id="id" v-model="modelValue" v-bind="$attrs" required)
             option(v-for="choice in props.choices" :key="choice[0]" :value="choice[0]") {{ choice[1] }}
         .help-block(v-if="props.errors" v-for="error in props.errors") {{ error }}
 </template>

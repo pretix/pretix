@@ -10,52 +10,55 @@ const isLoading = ref<boolean>(true);
 const wallet_layout = ref<Layout | null>(null);
 
 const STYLES: Styles = JSON.parse(
-	document.querySelector("#styles")?.textContent ?? "{}",
+    document.querySelector("#styles")?.textContent ?? "{}",
 );
 const VARIABLES: VariableConfig = JSON.parse(
-	document.querySelector("#variables")?.textContent ?? "{}",
+    document.querySelector("#variables")?.textContent ?? "{}",
+);
+const LOCALES: Record<string, string> = JSON.parse(
+    document.querySelector("#locales")?.textContent ?? "{}",
 );
 const CSRF_TOKEN =
-	document.querySelector<HTMLInputElement>("input[name=csrfmiddlewaretoken]")
-		?.value ?? "";
+    document.querySelector<HTMLInputElement>("input[name=csrfmiddlewaretoken]")
+        ?.value ?? "";
 
 const props = defineProps<{
-	layoutId: string;
+    layoutId: string;
 }>();
 
 watchEffect(() => {
-	// TODO: error handling / proper api client
-	isLoading.value = true;
-	fetch(
-		`/api/v1/organizers/demo/events/wallet/walletlayouts/${props.layoutId}/`,
-	)
-		.then((x) => x.json())
-		.then((x) => {
-			wallet_layout.value = x;
-			isLoading.value = false;
-		});
+    // TODO: error handling / proper api client
+    isLoading.value = true;
+    fetch(
+        `/api/v1/organizers/demo/events/wallet/walletlayouts/${props.layoutId}/`,
+    )
+        .then((x) => x.json())
+        .then((x) => {
+            wallet_layout.value = x;
+            isLoading.value = false;
+        });
 });
 
 function saveLayout(e: SubmitEvent) {
-	e.preventDefault();
-	isLoading.value = true;
-	// TODO: error handling / proper api client
-	fetch(
-		`/api/v1/organizers/demo/events/wallet/walletlayouts/${props.layoutId}/`,
-		{
-			method: "PUT",
-			headers: {
-				"content-type": "application/json",
-				"X-CSRFToken": CSRF_TOKEN,
-			},
-			body: JSON.stringify(wallet_layout.value),
-		},
-	)
-		.then((x) => x.json())
-		.then((x) => {
-			wallet_layout.value = x;
-			isLoading.value = false;
-		});
+    e.preventDefault();
+    isLoading.value = true;
+    // TODO: error handling / proper api client
+    fetch(
+        `/api/v1/organizers/demo/events/wallet/walletlayouts/${props.layoutId}/`,
+        {
+            method: "PUT",
+            headers: {
+                "content-type": "application/json",
+                "X-CSRFToken": CSRF_TOKEN,
+            },
+            body: JSON.stringify(wallet_layout.value),
+        },
+    )
+        .then((x) => x.json())
+        .then((x) => {
+            wallet_layout.value = x;
+            isLoading.value = false;
+        });
 }
 </script>
 
@@ -73,7 +76,7 @@ function saveLayout(e: SubmitEvent) {
                 .form-group()
                     Select(label="Style" v-model="wallet_layout.style" :choices="Object.values(STYLES).map(x => [x.identifier, x.name])")
 
-                StyleSettings(v-if="wallet_layout.style" v-model="wallet_layout.layout" :style="STYLES[wallet_layout.style]" :variables="VARIABLES")
+                StyleSettings(v-if="wallet_layout.style" v-model="wallet_layout.layout" :style="STYLES[wallet_layout.style]" :variables="VARIABLES" :locales="LOCALES")
             .col-md-4
                 .panel.panel-default
                     .panel-heading Preview
@@ -81,6 +84,8 @@ function saveLayout(e: SubmitEvent) {
                         // TODO: Preview
                         pre
                             code {{ wallet_layout }}
+                        pre(v-if="wallet_layout.style")
+                            code {{ STYLES[wallet_layout.style] }}
         .form-group.submit-group
             button.btn.btn-primary.btn-save(type="submit") Submit
 </template>
