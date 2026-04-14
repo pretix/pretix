@@ -1,44 +1,41 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
-import FieldSettings from "./field-settings.vue";
+import PlaceholderFieldSettings from "./placeholder-field-settings.vue";
+import PredefinedFieldSettings from "./predefined-field-settings.vue";
 
 const gettext = (window as any).gettext;
 
 const props = defineProps<{
-	variables: VariableConfig
-	style?: Style;
+    variables: VariableConfig
+    style?: Style;
+    locales: Record<string, string>;
 }>();
 
 const layout = defineModel<LayoutData>();
 
-
 watchEffect(() => {
-	if (layout.value === undefined) {
-		return
-	}
-	if (layout.value.fields === undefined) {
-		layout.value.fields = {};
-	}
-	if (props.style) {
-		for (const field of props.style.fields) {
-			if (!(field.identifier in layout.value.fields)) {
-				layout.value.fields[field.identifier] = {
-					entries: JSON.parse(JSON.stringify(field.default_entries)),
-					overflow: null,
-				};
-			}
-		}
-	}
+    if (layout.value === undefined) {
+        return
+    }
+    if (layout.value.fieldgroups === undefined) {
+        layout.value.fieldgroups = {};
+    }
 });
 </script>
 
 <template lang="pug">
     h2.h3 {{ gettext("Field Groups") }}
-    FieldSettings(v-if="props.style"
-                  v-for="(field, fieldId) in props.style.fields"
-                  v-model="layout.fields[field.identifier]"
-                  :field="field"
-                  :overflows="props.style.fields.slice(fieldId + 1).filter(x => x.entry_type === field.entry_type)"
-                  :variables="variables[field.entry_type]"
-                )
+    template(v-if="props.style && layout.fieldgroups"
+             v-for="(fieldgroup, fieldgroupId) in props.style.fieldgroups")
+        PlaceholderFieldSettings(
+            v-if="fieldgroup.type == 'placeholder'"
+            v-model="layout.fieldgroups[fieldgroup.identifier]"
+            :fieldgroup="fieldgroup"
+            :overflows="props.style.fieldgroups.slice(fieldgroupId + 1).filter(x => x.type == 'placeholder' && x.content_type === fieldgroup.content_type)"
+            :variables="variables[fieldgroup.content_type]"
+            :locales="locales"
+        )
+        PredefinedFieldSettings(v-else-if="fieldgroup.type == 'predefined'"
+                    v-model="layout.fieldgroups[fieldgroup.identifier]"
+                    :fieldgroup="fieldgroup")
 </template>
