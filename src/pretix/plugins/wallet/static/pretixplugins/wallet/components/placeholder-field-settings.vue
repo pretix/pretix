@@ -8,7 +8,7 @@ import TextContent from "./text-content.vue";
 const gettext = (window as any).gettext;
 
 const props = defineProps<{
-	fieldgroup: FieldGroupDefinition;
+	fieldgroup: PlaceholderFieldGroupDefinition;
 	overflows: FieldGroupDefinition[];
 	variables: Variables;
     locales: Record<string, string>;
@@ -48,26 +48,33 @@ watchEffect(() => {
             .form-group()
                 span.text-muted(v-if="fieldgroup.description") {{ fieldgroup.description }}
                 h4 {{ gettext("Content") }}
-                .row.form-group(v-for="n in fieldConfig.entries.length")
-                    .col-md-5(v-if="fieldgroup.labels")
-                        I18nInput(:label="gettext('Label')" v-model="fieldConfig.entries[n-1].label" :locales="locales")
-                    div(:class="'col-md-' + (fieldgroup.labels ? '6' : '11')")
-                        TextContent(v-if='fieldgroup.content_type == "text"'
-                                    v-model="fieldConfig.entries[n-1]"
-                                    :variables="props.variables")
-                        Select(:label="gettext('Content')"
-                                v-else-if='fieldgroup.content_type == "image"'
-                                v-model="fieldConfig.entries[n-1].content"
-                                :choices="Object.entries(props.variables).map(([k,v]) => [k, v.label])"
-                            )
-                    .col-md-1
-                        label.control-label &nbsp;
-                            span.sr-only {{ gettext('Delete')}}
-                        button.btn.btn-danger(type="button" @click="fieldConfig.entries.splice(n-1, 1)")
-                            i.fa.fa-trash
-                            span.sr-only {{ gettext('Delete')}}
+                table.table.table-hover
+                    thead
+                        tr
+                            th.col-md-5(v-if="fieldgroup.labels") {{ gettext('Label') }}
+                            th(:class="'col-md-' + (fieldgroup.labels ? '6' : '11')") {{ gettext('Content') }}
+                            th.col-xs-1
+                    tbody
+                        tr(v-for="n,i in fieldConfig.entries.length" :key="i")
+                            td(v-if="fieldgroup.labels")
+                                .i18n-form-group
+                                    I18nInput(v-model="fieldConfig.entries[n-1].label" :locales="locales")
+                            td
+                                TextContent(v-if='fieldgroup.content_type == "text"'
+                                            v-model="fieldConfig.entries[n-1]"
+                                            :variables="props.variables"
+                                            :locales="locales")
+                                Select(v-else-if='fieldgroup.content_type == "image"'
+                                        v-model="fieldConfig.entries[n-1].content"
+                                        :choices="Object.entries(props.variables).map(([k,v]) => [k, v.label])"
+                                    )
+                            td.text-right
+                                button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n-1, 1)")
+                                    i.fa.fa-trash
+                                    span.sr-only {{ gettext('Delete')}}
+
                 button.btn.btn-default(type="button" @click="addVariable")
                     i.fa.fa-plus
-                    span.sr-only {{ gettext("Add field") }}
+                    |  {{ gettext("Add field") }}
             Select(:label="gettext('Overflow to …')" :choices="overflowOptions" v-model="fieldConfig.overflow")
 </template>
