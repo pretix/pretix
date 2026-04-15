@@ -26,6 +26,9 @@ def get_layout_variables(event):
         | {"poweredby": {"label": _("pretix-Logo")}},  # TODO: image upload
     }
 
+def get_editor_variables(event):
+    return {t: {vid: {"label": v.get("label"), "editor_sample": v.get("editor_sample")} for vid,v in vs.items()} for t,vs in get_layout_variables(event).items()}
+
 
 # TODO: should this even be a list view?
 class LayoutListView(EventPermissionRequiredMixin, ListView):
@@ -61,7 +64,7 @@ class LayoutEditorView(DetailView):
         context["styles"] = {
             style.identifier: style.asdict() for style in self.get_platform_styles()
         }
-        context["variables"] = get_layout_variables(self.request.event)
+        context["variables"] = get_editor_variables(self.request.event)
         context['locales'] = {l: dict(settings.LANGUAGES).get(l, l) for l in self.request.event.settings.get('locales')}
 
         return context
