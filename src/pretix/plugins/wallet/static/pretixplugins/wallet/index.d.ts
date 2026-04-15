@@ -5,7 +5,7 @@ type BaseFieldGroupDefinition = {
 	required: boolean;
 }
 
-type FieldGroupDefinition = PlaceholderFieldGroupDefinition | PredefinedFieldGroup;
+type FieldGroupDefinition = PlaceholderFieldGroupDefinition | PredefinedFieldGroupDefinition;
 
 type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 	type: 'placeholder';
@@ -24,13 +24,19 @@ type I18nString = string | Record<string, string>
 
 type FieldContentType = 'text' | 'image';
 
-type FieldEntry = {
-    type: 'placeholder' | FieldContentType;
+type PlaceholderFieldEntry = {
+    type: 'placeholder';
     label?: I18nString;
     content?: string;
 }
 
+type ContentFieldEntry = {
+    type: FieldContentType;
+    label?: I18nString;
+    content?: I18nString;
+}
 
+type FieldEntry = PlaceholderFieldEntry | ContentFieldEntry;
 
 type Style = {
 	identifier: string;
