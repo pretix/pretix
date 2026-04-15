@@ -1,6 +1,7 @@
 import enum
 from i18nfield.strings import LazyI18nString
 import jsonschema
+from django.core.exceptions import ValidationError
 
 class WalletPlatform:
     identifier: str
@@ -47,19 +48,19 @@ class FieldContentType(enum.Enum):
     TEXT = "text"
 
 
-class FieldEntryContentType(enum.Enum):
+class FieldEntryType(enum.Enum):
     IMAGE = "image"
     TEXT = "text"
     PLACEHOLDER = "placeholder"
 
 
-class FieldEntry:
-    type: FieldEntryContentType
+class FieldEntry[T]:
+    type: FieldEntryType
     label: LazyI18nString | None
-    content: str
+    content: T
 
     def __init__(
-        self, type: FieldEntryContentType, label: LazyI18nString | None, content: str
+        self, type: FieldEntryType, content: T, label: LazyI18nString | None = None
     ):
         self.type = type
         self.label = label
@@ -67,6 +68,27 @@ class FieldEntry:
 
     def asdict(self) -> dict:
         return {"type": self.type.value, "content": self.content, "label": self.label.data if self.label else None}
+
+class PlaceholderFieldEntry(FieldEntry[str]):
+    type = FieldEntryType.PLACEHOLDER
+    label: LazyI18nString | None
+    content: str
+
+    def __init__(
+        self, content: str, label: LazyI18nString | None = None
+    ):
+        self.label = label
+        self.content = content
+
+
+class CustomFieldEntry(FieldEntry[LazyI18nString]):
+    type: FieldEntryType
+    label: LazyI18nString | None
+    content: LazyI18nString
+
+    def asdict(self) -> dict:
+        return {"type": self.type.value, "content": self.content.data, "label": self.label.data if self.label else None}
+
 
 
 class PredefinedFieldGroup(FieldGroup):
@@ -126,13 +148,13 @@ class PlaceholderFieldGroup(FieldGroup):
         remaining_fields: list["FieldGroup"],
         context: dict,
     ):
-        placeholders = context.get("placeholders", {}).get(self.content_type.value, [])
+        placeholders = list(context.get("placeholders", {}).get(self.content_type.value, {}).keys())
         return {
             "type": "object",
             "properties": {
                 "entries": self.entries_schema(placeholders=placeholders),
                 "overflow": {
-                    "oneOf": [
+                    "anyOf": [
                         {"type": "null"},
                         {
                             "type": "string",
@@ -158,7 +180,7 @@ class PlaceholderFieldGroup(FieldGroup):
             "type": "array",
             "items": {
                 "type": "object",
-                "oneOf": [
+                "anyOf": [
                     {
                         "properties": {
                             **baseprops,
@@ -170,7 +192,7 @@ class PlaceholderFieldGroup(FieldGroup):
                         "properties": {
                             **baseprops,
                             "type": {"const": self.content_type.value},
-                            "content": {"type": "string"},
+                            "content": {"$ref": "#/$defs/I18nString"},
                         }
                     },
                 ],
@@ -252,6 +274,8 @@ class PassStyle:
 
         return schema
 
+    def generate(self, layout, context):
+        raise NotImplementedError()
 
 class PassLayout:
     style: PassStyle
@@ -267,3 +291,7 @@ class PassLayout:
             jsonschema.validate(self.layout, schema)
         except jsonschema.ValidationError as e:
             raise ValidationError("Invalid layout: {}".format(str(e)))
+
+    def generate(self, context):
+        self.validate(context)
+        return self.style.generate(self.layout, context)
