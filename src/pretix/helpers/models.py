@@ -23,6 +23,7 @@ import copy
 
 from django.core.files import File
 from django.db import models
+from django.db.models.fields import DecimalField
 
 
 class Thumbnail(models.Model):
@@ -54,3 +55,15 @@ def flatten_choices(choices):
             yield from label_or_nested
         else:
             yield value_or_group, label_or_nested
+
+
+class NormalizedDecimalField(DecimalField):
+    """
+    Variant of DecimalField that never outputs the trailing zeros, so we always have normalized decimals internally.
+    Use this only for fields where the trailing zeros are pointless (e.g. percentages), not for monetary amounts.
+    """
+
+    def from_db_value(self, value, expression, connection):
+        if value is not None:
+            value = value.normalize()
+        return value

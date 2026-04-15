@@ -87,6 +87,7 @@ from pretix.base.timemachine import time_machine_now
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
+from ...helpers.models import NormalizedDecimalField
 from ...helpers.names import build_name
 from ...testutils.middleware import debugflags_var
 from ._transactions import (
@@ -2334,8 +2335,8 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
     )
     description = models.CharField(max_length=190, blank=True)
     internal_type = models.CharField(max_length=255, blank=True)
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -2533,8 +2534,8 @@ class OrderPosition(AbstractPosition):
         max_digits=13, decimal_places=2, null=True, blank=True,
     )
 
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -3052,8 +3053,8 @@ class Transaction(models.Model):
     price_includes_rounding_correction = models.DecimalField(
         max_digits=13, decimal_places=2, default=Decimal("0.00")
     )
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2,
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4,
         verbose_name=_('Tax rate')
     )
     tax_rule = models.ForeignKey(
@@ -3168,8 +3169,8 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Limit for extending expiration date"),
         null=True
     )
-    tax_rate = models.DecimalField(
-        max_digits=7, decimal_places=2, default=Decimal('0.00'),
+    tax_rate = NormalizedDecimalField(
+        max_digits=7, decimal_places=4, default=Decimal('0'),
         verbose_name=_('Tax rate')
     )
     tax_code = models.CharField(

@@ -41,7 +41,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
-from pretix.api.serializers import CompatibleJSONField
+from pretix.api.serializers import CompatDecimalField, CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.forms import form_field_to_serializer_field
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -591,6 +591,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     country = CompatibleCountryField(source='*')
     attendee_name = serializers.CharField(required=False)
     plugin_data = OrderPositionPluginDataField(source='*', allow_null=True, read_only=True)
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         list_serializer_class = OrderPositionListSerializer
@@ -747,6 +748,8 @@ class OrderPaymentDateField(serializers.DateField):
 
 
 class OrderFeeSerializer(I18nAwareModelSerializer):
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
+
     class Meta:
         model = OrderFee
         fields = ('id', 'fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule',
@@ -1897,6 +1900,7 @@ class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
     position = LinePositionField(read_only=True)
     event_date_from = serializers.DateTimeField(read_only=True, source="period_start")
     event_date_to = serializers.DateTimeField(read_only=True, source="period_end")
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         model = InvoiceLine
@@ -1980,6 +1984,7 @@ class BlockedTicketSecretSerializer(I18nAwareModelSerializer):
 
 class TransactionSerializer(I18nAwareModelSerializer):
     order = serializers.SlugRelatedField(slug_field="code", read_only=True)
+    tax_rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         model = Transaction
