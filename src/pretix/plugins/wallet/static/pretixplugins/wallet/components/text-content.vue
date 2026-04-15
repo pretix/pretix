@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import Select from './input/select.vue'
-import Input from './input/input.vue'
+import I18nInput from './input/i18ninput.vue'
 
 const gettext = (window as any).gettext
 
 const props = defineProps<{
 	variables: Variables
+    locales: Record<string, string>;
 }>()
 const entry = defineModel<FieldEntry>({ required: true })
 
@@ -29,7 +30,7 @@ const selection = computed({
     set(newValue) { 
         if (newValue == "other") {
             entry.value.type = "text"
-            entry.value.content = "";
+            entry.value.content = {};
         } else {
             entry.value.type = "placeholder"
             entry.value.content = newValue
@@ -55,9 +56,10 @@ const textContent = computed({
 </script>
 
 <template lang="pug">
-    Select(:label="gettext('Content')"
-        v-model="selection"
-        :choices="selectChoices"
-    )
-    Input(v-model="textContent" v-if="selection === 'other'")
+    .i18n-form-group
+        Select(
+            v-model="selection"
+            :choices="selectChoices"
+        )
+        I18nInput(v-model="textContent" v-if="selection === 'other'" :locales="locales")
 </template>
