@@ -287,8 +287,8 @@ class GiftCardSerializer(I18nAwareModelSerializer):
         return data
 
     def to_representation(self, instance):
+        r = super().to_representation(instance)
         request = self.context.get('request')
-
         # late permission evaluations for checks that depend on the actual linked events
         if 'owner_ticket' in self.context['request'].query_params.getlist('expand'):
             owner_ticket = instance.owner_ticket
@@ -297,13 +297,8 @@ class GiftCardSerializer(I18nAwareModelSerializer):
                 if not (
                     request.user if request.user and request.user.is_authenticated else request.auth
                 ).has_event_permission(organizer=event.organizer, event=event, perm_name='event.orders:read', request=request):
-                    ticket_serializer = self.fields['owner_ticket'].read
-                    allowed = {'id'}
-                    for field_name in list(ticket_serializer.fields.keys()):
-                        if field_name not in allowed:
-                            ticket_serializer.fields.pop(field_name)
-
-        return super().to_representation(instance)
+                    r['owner_ticket'] = {'id': instance.owner_ticket.id}
+        return r
 
     class Meta:
         model = GiftCard

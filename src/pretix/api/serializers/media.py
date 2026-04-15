@@ -117,8 +117,8 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
         return data
 
     def to_representation(self, instance):
+        r = super().to_representation(instance)
         request = self.context.get('request')
-
         # late permission evaluations for checks that depend on the actual linked events
         if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
             if instance.linked_orderposition is not None:
@@ -126,11 +126,7 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                 if not (
                     request.user if request.user and request.user.is_authenticated else request.auth
                 ).has_event_permission(organizer=event.organizer, event=event, perm_name='event.orders:read', request=request):
-                    pos_serializer = self.fields['linked_orderposition']
-                    allowed = {'id'}
-                    for field_name in list(pos_serializer.fields.keys()):
-                        if field_name not in allowed:
-                            pos_serializer.fields.pop(field_name)
+                    r['linked_orderposition'] = {'id': instance.linked_orderposition.id}
 
         if 'linked_giftcard.owner_ticket' in self.context['request'].query_params.getlist('expand'):
             gc = instance.linked_giftcard
@@ -139,14 +135,9 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                 if not (
                     request.user if request.user and request.user.is_authenticated else request.auth
                 ).has_event_permission(organizer=event.organizer, event=event, perm_name='event.orders:read', request=request):
-                    ticket_serializer = self.fields['linked_giftcard'].fields['owner_ticket']
-                    allowed = {'id'}
-                    for field_name in list(ticket_serializer.fields.keys()):
-                        if field_name not in allowed:
-                            ticket_serializer.fields.pop(field_name)
+                    r['linked_giftcard']['owner_ticket'] = {'id': instance.linked_giftcard.owner_ticket.id}
 
-
-        return super().to_representation(instance)
+        return r
 
 
 
