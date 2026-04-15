@@ -31,7 +31,9 @@ from pretix.api.serializers.order import OrderPositionSerializer
 from pretix.api.serializers.organizer import (
     CustomerSerializer, GiftCardSerializer,
 )
-from pretix.base.models import Order, OrderPosition, ReusableMedium
+from pretix.base.models import (
+    Device, Order, OrderPosition, ReusableMedium, TeamAPIToken,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -120,21 +122,19 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
         r = super().to_representation(instance)
         request = self.context.get('request')
         # late permission evaluations for checks that depend on the actual linked events
-        if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
+        expand_nested = self.context['request'].query_params.getlist('expand')
+        perm_holder = request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user
+        if 'linked_orderposition' in expand_nested:
             if instance.linked_orderposition is not None:
                 event = instance.linked_orderposition.order.event
-                if not (
-                    request.user if request.user and request.user.is_authenticated else request.auth
-                ).has_event_permission(organizer=event.organizer, event=event, perm_name='event.orders:read', request=request):
+                if not perm_holder.has_event_permission(event.organizer, event, 'event.orders:read', request):
                     r['linked_orderposition'] = {'id': instance.linked_orderposition.id}
 
-        if 'linked_giftcard.owner_ticket' in self.context['request'].query_params.getlist('expand'):
+        if 'linked_giftcard.owner_ticket' in expand_nested:
             gc = instance.linked_giftcard
             if gc is not None and gc.owner_ticket is not None:
                 event = gc.owner_ticket.order.event
-                if not (
-                    request.user if request.user and request.user.is_authenticated else request.auth
-                ).has_event_permission(organizer=event.organizer, event=event, perm_name='event.orders:read', request=request):
+                if not perm_holder.has_event_permission(event.organizer, event, 'event.orders:read', request):
                     r['linked_giftcard']['owner_ticket'] = {'id': instance.linked_giftcard.owner_ticket.id}
 
         return r

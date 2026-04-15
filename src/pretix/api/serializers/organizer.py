@@ -294,9 +294,8 @@ class GiftCardSerializer(I18nAwareModelSerializer):
             owner_ticket = instance.owner_ticket
             if owner_ticket:
                 event = owner_ticket.order.event
-                if not (
-                    request.user if request.user and request.user.is_authenticated else request.auth
-                ).has_event_permission(organizer=event.organizer, event=event, perm_name='event.orders:read', request=request):
+                perm_holder = request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user
+                if not perm_holder.has_event_permission(event.organizer, event, 'event.orders:read', request):
                     r['owner_ticket'] = {'id': instance.owner_ticket.id}
         return r
 
