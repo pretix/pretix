@@ -23,7 +23,6 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 import pytest
-from django.contrib.messages.storage.fallback import FallbackStorage
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
@@ -252,6 +251,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "issuer": "dummy",
         }
 
+
 @pytest.mark.django_db
 def test_medium_detail_event_permission_missing(token_client, organizer, event, medium, giftcard, customer, team):
     team.all_organizer_permissions = False
@@ -301,7 +301,7 @@ def test_medium_detail_event_permission_missing(token_client, organizer, event, 
             "testmode": False,
             "expires": None,
             "conditions": None,
-            "owner_ticket": {"id": op.pk },
+            "owner_ticket": {"id": op.pk},
             "issuer": "dummy",
         }
 
@@ -320,9 +320,6 @@ def test_medium_detail_event_permission_missing(token_client, organizer, event, 
             "last_modified": customer.last_modified.isoformat().replace("+00:00", "Z"),
             "notes": None
         }
-
-
-
 
 
 TEST_MEDIUM_CREATE_PAYLOAD = {

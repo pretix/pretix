@@ -170,6 +170,7 @@ def test_giftcard_detail_expand(token_client, organizer, event, giftcard):
         "blocked": None
     }
 
+
 @pytest.mark.django_db
 def test_giftcard_detail_expand_without_permissions(team, token_client, organizer, event, giftcard):
     with scopes_disabled():

@@ -31,7 +31,7 @@ from pretix.api.serializers.order import OrderPositionSerializer
 from pretix.api.serializers.organizer import (
     CustomerSerializer, GiftCardSerializer,
 )
-from pretix.base.models import Device, Order, OrderPosition, ReusableMedium, TeamAPIToken, User
+from pretix.base.models import Order, OrderPosition, ReusableMedium
 
 logger = logging.getLogger(__name__)
 
@@ -138,8 +138,6 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                     r['linked_giftcard']['owner_ticket'] = {'id': instance.linked_giftcard.owner_ticket.id}
 
         return r
-
-
 
     class Meta:
         model = ReusableMedium
