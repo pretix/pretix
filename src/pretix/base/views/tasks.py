@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import re
 from collections import defaultdict
 from datetime import timedelta
 from importlib import import_module
@@ -133,6 +134,8 @@ class AsyncMixin:
     def get_result(self, request):
         if not request.GET.get('async_id'):
             raise BadRequest("No async_id given")
+        if not re.match(r"^[a-zA-Z0-9\-]+$", request.GET.get('async_id')):
+            raise BadRequest("Invalid async_id given")
         res = AsyncResult(request.GET.get('async_id'))
         if 'ajax' in self.request.GET:
             return JsonResponse(self._return_ajax_result(res, timeout=0.25))
