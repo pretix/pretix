@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-16 09:10+0000\n"
+"PO-Revision-Date: 2026-04-16 18:00+0000\n"
 "Last-Translator: Tim <plicnetwork@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -4150,7 +4150,7 @@ msgstr "Se encontraron varios productos coincidentes."
 #: pretix/base/modelimport_vouchers.py:205 pretix/base/models/items.py:1257
 #: pretix/base/models/vouchers.py:266 pretix/base/models/waitinglist.py:99
 msgid "Product variation"
-msgstr "Variación del producto"
+msgstr "Variante de producto"
 
 #: pretix/base/modelimport_orders.py:161
 msgid "The variation can be specified by its internal ID or full name."
@@ -4340,7 +4340,7 @@ msgstr "Permitir omitir la cuota"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:70
 #: pretix/control/views/vouchers.py:121
 msgid "Price effect"
-msgstr "Efecto sobre los precios"
+msgstr "Efecto en el precio"
 
 #: pretix/base/modelimport_vouchers.py:150
 #, python-brace-format
@@ -4351,7 +4351,7 @@ msgstr ""
 
 #: pretix/base/modelimport_vouchers.py:160 pretix/base/models/vouchers.py:248
 msgid "Voucher value"
-msgstr "Valor del vale de compra"
+msgstr "Valor del vale"
 
 #: pretix/base/modelimport_vouchers.py:165
 msgid "It is pointless to set a value without a price effect."
@@ -4394,7 +4394,7 @@ msgstr "Etiqueta"
 
 #: pretix/base/modelimport_vouchers.py:334 pretix/base/models/vouchers.py:300
 msgid "Shows hidden products that match this voucher"
-msgstr "Mostrar los ocultados productos válidos con este vale de compra"
+msgstr "Muestra los productos ocultos vinculados a este vale"
 
 #: pretix/base/modelimport_vouchers.py:343 pretix/base/models/vouchers.py:304
 msgid "Offer all add-on products for free when redeeming this voucher"
@@ -7338,14 +7338,14 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:268
 msgid "This variation of the product select above is being used."
-msgstr "Esta variación del producto seleccionado arriba está siendo utilizada."
+msgstr "Se aplica a la variante del producto seleccionado arriba."
 
 #: pretix/base/models/vouchers.py:277
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
 msgstr ""
-"Si está habilitado, el vale de compra es válido para cualquier producto "
-"afectado por esta cuota."
+"Si se activa, el vale será válido para cualquier producto incluido en esta "
+"cuota."
 
 #: pretix/base/models/vouchers.py:284
 msgid "Specific seat"
@@ -7357,16 +7357,16 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
-"Puede utilizar este campo para agrupar múltiples vales de compra. Si "
-"introduce el mismo valor para varios vales de compra, puede obtener "
-"estadísticas sobre cuántos de ellos se han canjeado, etc."
+"Puedes usar este campo para agrupar varios vales. Si introduces el mismo "
+"valor en distintos vales, podrás obtener estadísticas sobre cuántos se han "
+"canjeado, etc."
 
 #: pretix/base/models/vouchers.py:316 pretix/base/permissions.py:242
 #: pretix/control/navigation.py:289
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:8
 msgid "Vouchers"
-msgstr "Vales de compra"
+msgstr "Vales"
 
 #: pretix/base/models/vouchers.py:342
 msgid "You cannot select a quota that belongs to a different event."
@@ -13365,7 +13365,7 @@ msgstr "Esto eliminará todos los números de teléfono de los pedidos."
 
 #: pretix/base/shredder.py:290
 msgid "Emails"
-msgstr "Correos electrónicos"
+msgstr "Correos"
 
 #: pretix/base/shredder.py:292
 msgid ""
@@ -28697,8 +28697,7 @@ msgstr "Se ha creado la nueva lista de asistentes."
 #: pretix/plugins/stripe/views.py:702
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
-msgstr ""
-"No hemos podido guardar los cambios. Consulte los detalles a continuación."
+msgstr "No se pudieron guardar los cambios. Consulta los detalles abajo."
 
 #: pretix/control/views/checkin.py:421 pretix/control/views/checkin.py:458
 msgid "The requested list does not exist."
@@ -30864,7 +30863,7 @@ msgstr ""
 
 #: pretix/plugins/badges/forms.py:33
 msgid "Template"
-msgstr "Plantilla"
+msgstr "Template"
 
 #: pretix/plugins/badges/forms.py:34
 msgid ""
