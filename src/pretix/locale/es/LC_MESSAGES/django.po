@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-16 18:00+0000\n"
+"PO-Revision-Date: 2026-04-17 03:00+0000\n"
 "Last-Translator: Tim <plicnetwork@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -21474,7 +21474,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/views.py:172
 #: pretix/presale/views/customer.py:544 pretix/presale/views/customer.py:597
 msgid "Your changes have been saved."
-msgstr "Los cambios se han guardado."
+msgstr "Se han guardado los cambios."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:34
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html:34
@@ -28697,7 +28697,8 @@ msgstr "Se ha creado la nueva lista de asistentes."
 #: pretix/plugins/stripe/views.py:702
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
-msgstr "No se pudieron guardar los cambios. Consulta los detalles abajo."
+msgstr ""
+"No se pudieron guardar los cambios. Consulta los detalles a continuación."
 
 #: pretix/control/views/checkin.py:421 pretix/control/views/checkin.py:458
 msgid "The requested list does not exist."
