@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-14 15:02+0000\n"
-"Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
+"PO-Revision-Date: 2026-04-16 09:00+0000\n"
+"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
 "Language: da\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 5.17\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -11573,6 +11573,9 @@ msgid ""
 "empty if you want pretix to automatically generate the terms of cancellation "
 "based on your settings."
 msgstr ""
+"Denne tekst vises, når annullering er tilladt for en betalt bestilling. Lad "
+"feltet stå tomt, hvis du ønsker, at Pretix automatisk genererer "
+"annulleringsbetingelserne baseret på dine indstillinger."
 
 #: pretix/base/settings.py:2260
 msgid ""
@@ -11580,6 +11583,9 @@ msgid ""
 "order. Leave empty if you want pretix to automatically generate the terms of "
 "cancellation based on your settings."
 msgstr ""
+"Denne tekst vises, når annullering er tilladt for en ubetalt eller gratis "
+"bestilling. Lad feltet stå tomt, hvis du ønsker, at Pretix automatisk "
+"genererer annulleringsbetingelserne baseret på dine indstillinger."
 
 #: pretix/base/settings.py:2270 pretix/control/forms/event.py:1898
 msgid "Contact address"
@@ -15887,6 +15893,14 @@ msgid ""
 "deadline arrives, since we expect that you want to collect the amount "
 "somehow and not auto-cancel the order."
 msgstr ""
+"Hvis du markerer dette felt, vil denne bestilling opføre sig som en betalt "
+"bestilling i de fleste tilfælde, selvom den endnu ikke er betalt. Det "
+"betyder, at kunden allerede kan downloade og bruge billetter uanset dine "
+"eventindstillinger, og bestillingen kan blive behandlet som betalt af nogle "
+"plugins. Hvis du markerer dette, vil denne bestilling ikke automatisk blive "
+"markeret som \"udløbet\", hvis betalingsfristen udløber, da vi forventer, at "
+"du ønsker at opkræve beløbet på en eller anden måde og ikke automatisk "
+"annullere bestillingen."
 
 #: pretix/control/forms/orders.py:94
 msgid "Overbook quota"
@@ -15927,6 +15941,10 @@ msgid ""
 "be canceled as well, so include them in your cancellation fee if you want to "
 "keep them."
 msgstr ""
+"Hvis du beholder et gebyr, vil alle positioner i denne bestilling blive "
+"annulleret, og bestillingen vil blive reduceret til et annulleringsgebyr. "
+"Betalings- og forsendelsesgebyrer vil også blive annulleret, så inkluder dem "
+"i dit annulleringsgebyr, hvis du vil beholde dem."
 
 #: pretix/control/forms/orders.py:180
 #, fuzzy
@@ -16274,7 +16292,7 @@ msgid "Canceled: {event}"
 msgstr "Kan oprette arrangementer"
 
 #: pretix/control/forms/orders.py:966
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -16292,9 +16310,11 @@ msgid ""
 msgstr ""
 "Hej\n"
 "\n"
-"Din bestilling til {event} er blevet ændret.\n"
+"Vi måde desværre meddele, at {event} er blevet aflyst.\n"
 "\n"
-"Du kan se status for din bestilling på\n"
+"Vi refunderer dig {refund_amount} til din oprindelige betalingsmetode.\n"
+"\n"
+"Du kan se den nuværende status for din bestilling på:\n"
 "{url}\n"
 "\n"
 "Venlig hilsen  \n"
@@ -20182,6 +20202,10 @@ msgid ""
 "take manual action. However, you have currently turned off notifications for "
 "this event."
 msgstr ""
+"Hvis en bruger anmoder om at annullere en betalt bestilling, og pengene ikke "
+"kan refunderes automatisk, f.eks. på grund af den valgte betalingsmetode, "
+"skal du foretage en manuel handling. Du har dog i øjeblikket deaktiveret "
+"notifikationer for denne begivenhed."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:46
 #: pretix/control/templates/pretixcontrol/user/settings.html:47
@@ -23081,7 +23105,7 @@ msgstr "Annuller bestilling"
 #: pretix/control/templates/pretixcontrol/order/deny.html:11
 msgid "Do you really want to cancel this order? You cannot revert this action."
 msgstr ""
-"Er du sikker på at du vil annullere denne bestilling? Du kan ikke fortryde "
+"Er du sikker på, at du vil annullere denne bestilling? Du kan ikke fortryde "
 "denne handling."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:16
@@ -23097,6 +23121,9 @@ msgid ""
 "%(fee)s for this order, but for a cancellation performed by you, you need to "
 "set the cancellation fee here:"
 msgstr ""
+"Det konfigurerede afbestillingsgebyr for en selvbetjeningsafbestilling ville "
+"være %(fee)s for denne ordre, men for en afbestilling udført af dig skal du "
+"indstille afbestillingsgebyret her:"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:220
@@ -23157,6 +23184,11 @@ msgid ""
 "implications, e.g. the payment method fee might change or additional "
 "questions can be added to the order that need to be answered by the user."
 msgstr ""
+"Du kan bruge dette værktøj til at ændre de bestilte produkter eller til "
+"delvist at annullere bestillingen. Vær opmærksom på, at ændring af en "
+"bestilling kan have flere konsekvenser, f.eks. kan gebyret for "
+"betalingsmetoden ændres, eller der kan tilføjes yderligere spørgsmål til "
+"bestillingen, som brugeren skal besvare."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:31
 msgid ""
@@ -23184,6 +23216,12 @@ msgid ""
 "not be able to exist otherwise. In most cases it is easier to cancel the "
 "order completely and create a new one."
 msgstr ""
+"Brug venligst dette værktøj forsigtigt. Ændringer, du foretager her, kan "
+"ikke fortrydes. Hvis du ændrer en bestilling manuelt, vil ikke alle "
+"begrænsninger (f.eks. på nødvendige tilføjelser) blive kontrolleret. Derfor "
+"kan du oprette en bestilling, der ellers ikke ville kunne eksistere. I de "
+"fleste tilfælde er det nemmere at annullere bestillingen helt og oprette en "
+"ny."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:68
 #, python-format
@@ -23846,6 +23884,10 @@ msgid ""
 "products in the order are still available. If the order is pending payment, "
 "the expiry date will be reset."
 msgstr ""
+"Ved at genaktivere bestillingen fortryder du annulleringen og konverterer "
+"den tilbage til en afventende eller betalt ordre. Dette er kun muligt, så "
+"længe alle produkter i bestillingen stadig er tilgængelige. Hvis "
+"bestillingen afventer betaling, nulstilles udløbsdatoen."
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:34
 #, fuzzy
@@ -24112,6 +24154,11 @@ msgid ""
 "orders can be created. Make sure that you check afterwards for any overpaid "
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
+"Du kan bruge denne side til at annullere og refundere alle bestillinger på "
+"én gang, hvis du har brug for at aflyse dit arrangement. Dette vil også "
+"deaktivere alle produkter, så der ikke kan oprettes nye bestillinger. Sørg "
+"for at tjekke bagefter for eventuelle overbetalte bestillinger eller "
+"ventende refusioner, som du skal håndtere manuelt."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:15
 msgid ""
@@ -24679,6 +24726,8 @@ msgid ""
 "This sum includes canceled orders. For your ticket revenue, look at the "
 "\"order overview\"."
 msgstr ""
+"Dette beløb inkluderer annullerede bestillinger. Se din billetindtægt i "
+"\"ordreoversigten\"."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:290
 #, fuzzy
@@ -35501,9 +35550,8 @@ msgstr "Ret din ordre"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:386
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
-#, fuzzy
 msgid "You can request to cancel this order."
-msgstr "Du kan ikke annullere denne bestilling."
+msgstr "Du kan anmode om at annullere denne bestilling."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:389
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
@@ -35539,13 +35587,12 @@ msgstr "Dette vil annullere alle billetter i ordren."
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
 msgstr ""
-"Du kan anmode om at annullere denne ordre, men du ville ikke få pengene "
+"Du kan anmode om at annullere denne bestilling, men du vil ikke få pengene "
 "tilbage."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:410
-#, fuzzy
 msgid "You can cancel this order, but you will not receive a refund."
-msgstr "Du kan annullere din bestilling ved at bruge knappen nedenfor."
+msgstr "Du kan annullere denne bestilling, men du vil ikke få pengene tilbage."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:419
 #, python-format
@@ -35554,6 +35601,9 @@ msgid ""
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
+"Du kan anmode om at annullere denne bestilling. Hvis din anmodning "
+"godkendes, vil et annulleringsgebyr på <strong>%(fee)s</strong> blive "
+"tilbageholdt, og du vil modtage en refusion af det resterende beløb."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:425
 #, python-format
@@ -35562,17 +35612,21 @@ msgid ""
 "<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
 "remainder."
 msgstr ""
+"Du kan annullere denne bestilling. I dette tilfælde vil et annulleringsgebyr "
+"på <strong>%(fee)s</strong> blive tilbageholdt, og du vil modtage en "
+"refusion af det resterende beløb."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:442
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr ""
+"Du kan anmode om at annullere denne bestilling. Hvis din anmodning "
+"godkendes, får du fuld refusion."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:447
-#, fuzzy
 msgid "You can cancel this order and receive a full refund."
-msgstr "Du kan annullere din bestilling ved at bruge knappen nedenfor."
+msgstr "Du kan annullere denne bestilling og modtage fuld refusion."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:466
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
@@ -35581,10 +35635,12 @@ msgid ""
 "You can cancel this order. As per our cancellation policy, you will still be "
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
+"Du kan annullere denne bestilling. I henhold til vores annulleringspolitik "
+"skal du stadig betale et annulleringsgebyr på <strong>%(fee)s</strong>."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:472
 msgid "You can cancel this order using the following button."
-msgstr "Du kan annullere din bestilling ved at bruge knappen nedenfor."
+msgstr "Du kan annullere denne bestilling ved hjælp af følgende knap."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, fuzzy, python-format
@@ -35602,15 +35658,18 @@ msgid ""
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
 msgstr ""
+"Du kan anmode om annullering af din bestilling på denne side. Arrangøren vil "
+"derefter træffe afgørelse om din anmodning. Hvis de godkender, vil din ordre "
+"blive annulleret, og alle billetter vil blive gjort ugyldige."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:46
 msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
-"Hvis du annullerer denne ordre vil alle billetter blive ugyldige og du kan "
-"ikke længere bruge dem. Du kan ikke fortryde denne handling på et senere "
-"tidspunkt."
+"Hvis du annullerer denne bestilling, vil alle billetter blive ugyldige, og "
+"du kan ikke længere bruge dem. Du kan ikke fortryde denne handling på et "
+"senere tidspunkt."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:62
 #, python-format
@@ -35754,6 +35813,9 @@ msgid ""
 "This order is managed for you by %(email)s. Please contact them for any "
 "questions regarding payment, cancellation or changes to this order."
 msgstr ""
+"Denne bestilling administreres for dig af %(email)s. Kontakt dem venligst, "
+"hvis du har spørgsmål vedrørende betaling, annullering eller ændringer af "
+"denne bestilling."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:63
 msgctxt "action"
