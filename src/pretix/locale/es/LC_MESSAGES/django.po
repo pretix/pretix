@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-31 17:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"PO-Revision-Date: 2026-04-16 09:10+0000\n"
+"Last-Translator: Tim <plicnetwork@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 5.17\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -4312,7 +4312,7 @@ msgstr "Ya existe un vale de compra con este código."
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:121
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:52
 msgid "Maximum usages"
-msgstr "Usos máximos"
+msgstr "Número máximo de usos"
 
 #: pretix/base/modelimport_vouchers.py:79
 msgid "The maximum number of usages must be set."
@@ -4333,7 +4333,7 @@ msgstr "Reservar entrada con cargo a la cuota"
 
 #: pretix/base/modelimport_vouchers.py:127 pretix/base/models/vouchers.py:236
 msgid "Allow to bypass quota"
-msgstr "Permitir que se anule la cuota"
+msgstr "Permitir omitir la cuota"
 
 #: pretix/base/modelimport_vouchers.py:135 pretix/base/models/vouchers.py:242
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:44
@@ -7322,8 +7322,8 @@ msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
-"Si se activa, un titular de este vale de compra puede comprar entradas, "
-"incluso si no queda ninguna."
+"Si se activa, el poseedor de este código de vale podrá comprar entradas "
+"incluso si no quedan existencias."
 
 #: pretix/base/models/vouchers.py:257 pretix/control/forms/vouchers.py:69
 msgid ""
@@ -15170,7 +15170,7 @@ msgstr "Todos los productos"
 #: pretix/control/views/typeahead.py:780
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr "{product} - Cualquier variación"
+msgstr "{product} – Cualquier variación"
 
 #: pretix/control/forms/filter.py:566 pretix/control/forms/orders.py:862
 msgctxt "subevent"
@@ -15469,7 +15469,7 @@ msgstr "Buscar vale de compra"
 #: pretix/control/views/vouchers.py:133
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr "Cualquier producto del contingente \"{quota}\""
+msgstr "Cualquier producto en la cuota \"{quota}\""
 
 #: pretix/control/forms/filter.py:2440
 msgid "Refund status"
@@ -17068,15 +17068,15 @@ msgstr "ID de butaca específico"
 
 #: pretix/control/forms/vouchers.py:200 pretix/presale/forms/waitinglist.py:103
 msgid "Invalid product selected."
-msgstr "Producto no válido seleccionado."
+msgstr "Se ha seleccionado un producto no válido."
 
 #: pretix/control/forms/vouchers.py:225
 msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
 msgstr ""
-"El vale de compra solo coincide con productos ocultos pero no has "
-"seleccionado que los muestre."
+"El vale solo coincide con productos ocultos, pero no has seleccionado que "
+"deba mostrarlos."
 
 #: pretix/control/forms/vouchers.py:271
 msgid "Codes"
