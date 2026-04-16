@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-16 09:00+0000\n"
-"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
+"PO-Revision-Date: 2026-04-16 18:00+0000\n"
+"Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
 "Language: da\n"
@@ -721,14 +721,14 @@ msgid "Your password must contain both numeric and alphabetic characters."
 msgstr "Din adgangskode skal indeholde både tal og bogstaver."
 
 #: pretix/base/auth.py:202 pretix/base/auth.py:212
-#, fuzzy, python-format
+#, python-format
 msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
 msgstr[0] "Din adgangskode må ikke være den samme som din tidligere adgangskode."
 msgstr[1] ""
-"Din adgangskode må ikke være den samme som en af dine %(history_length) "
+"Din adgangskode må ikke være den samme som en af dine %(history_length)s  "
 "foregående adgangskoder."
 
 #: pretix/base/channels.py:168
@@ -4882,14 +4882,12 @@ msgstr ""
 #: pretix/base/models/discount.py:177
 msgctxt "subevent"
 msgid "Available for dates starting from"
-msgstr ""
+msgstr "Kan bookes fra"
 
 #: pretix/base/models/discount.py:182
-#, fuzzy
-#| msgid "Available until"
 msgctxt "subevent"
 msgid "Available for dates starting until"
-msgstr "Tilgængelig indtil"
+msgstr "Kan bookes til og med"
 
 #: pretix/base/models/discount.py:214
 msgid ""
@@ -4986,13 +4984,15 @@ msgstr "Valgfri. Ingen produkter vil blive solgt før denne dato."
 
 #: pretix/base/models/event.py:644
 msgid "This event is remote or partially remote."
-msgstr ""
+msgstr "Dette arrangement afholdes online eller delvist online."
 
 #: pretix/base/models/event.py:645
 msgid ""
 "This will be used to let users know if the event is in a different timezone "
 "and let’s us calculate users’ local times."
 msgstr ""
+"Dette vil blive brugt til at informere brugerne om, hvorvidt begivenheden "
+"finder sted i en anden tidszone, og til at beregne brugernes lokale tid."
 
 #: pretix/base/models/event.py:665 pretix/base/models/organizer.py:102
 #: pretix/control/navigation.py:70 pretix/control/navigation.py:526
@@ -5265,9 +5265,8 @@ msgid "Owned by ticket holder"
 msgstr "Tilhører billettens indehaver"
 
 #: pretix/base/models/giftcards.py:88
-#, fuzzy
 msgid "Owned by customer account"
-msgstr "Intern kommentar"
+msgstr "Tilhører kundekonto"
 
 #: pretix/base/models/giftcards.py:100
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
@@ -5285,39 +5284,32 @@ msgid "Manual transaction"
 msgstr "Manuel overførsel"
 
 #: pretix/base/models/invoices.py:122
-#, fuzzy
-#| msgid "Pending amount"
 msgid "pending transmission"
-msgstr "Udestående beløb"
+msgstr "venter på overførsel"
 
 #: pretix/base/models/invoices.py:123
 msgid "currently being transmitted"
-msgstr ""
+msgstr "bliver i øjeblikket sendt"
 
 #: pretix/base/models/invoices.py:124
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "transmitted"
-msgstr "Ingen dato valgt."
+msgstr "overført"
 
 #: pretix/base/models/invoices.py:125 pretix/base/models/mail.py:56
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:44
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:145
 #: pretix/plugins/sendmail/models.py:51
 msgid "failed"
-msgstr ""
+msgstr "mislykket"
 
 #: pretix/base/models/invoices.py:126
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:56
-#, fuzzy
 msgid "unknown"
-msgstr "(ukendt)"
+msgstr "ukendt"
 
 #: pretix/base/models/invoices.py:127
-#, fuzzy
 msgid "not transmitted due to test mode"
-msgstr "Generer widget-kode"
+msgstr "ikke overført på grund af testtilstand"
 
 #: pretix/base/models/invoices.py:221
 #, python-format
@@ -5362,41 +5354,38 @@ msgstr ""
 
 #: pretix/base/models/items.py:114 pretix/base/models/items.py:159
 #: pretix/control/forms/item.py:98
-#, fuzzy
 msgid "Normal category"
-msgstr "Produktkategori"
+msgstr "Normal kategori"
 
 #: pretix/base/models/items.py:115 pretix/control/forms/item.py:111
 msgid "Normal + cross-selling category"
-msgstr ""
+msgstr "Normal + cross-selling-kategori"
 
 #: pretix/base/models/items.py:116 pretix/control/forms/item.py:106
-#, fuzzy
 msgid "Cross-selling category"
-msgstr "Produktkategori"
+msgstr "Cross-selling-kategori"
 
 #: pretix/base/models/items.py:124
 msgid "Always show in cross-selling step"
-msgstr ""
+msgstr "Vis altid i cross-selling-trinet"
 
 #: pretix/base/models/items.py:125
 msgid ""
 "Only show products that qualify for a discount according to discount rules"
 msgstr ""
+"Vis kun produkter, der er berettiget til rabat i henhold til rabatreglerne"
 
 #: pretix/base/models/items.py:126
 msgid "Only show if the cart contains one of the following products"
-msgstr ""
+msgstr "Vis kun, hvis indkøbskurven indeholder et af følgende produkter"
 
 #: pretix/base/models/items.py:129
 msgid "Cross-selling condition"
-msgstr ""
+msgstr "Betingelser for cross-selling"
 
 #: pretix/base/models/items.py:137
-#, fuzzy
-#| msgid "Count add-on products"
 msgid "Cross-selling condition products"
-msgstr "Tæl add-on-produkter"
+msgstr "Produkter, der svarer til cross-selling-betingelserne"
 
 #: pretix/base/models/items.py:143
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
@@ -5408,12 +5397,11 @@ msgstr "Produktkategorier"
 #: pretix/base/models/items.py:149
 #, python-brace-format
 msgid "{category} ({category_type})"
-msgstr ""
+msgstr "{category} ({category_type})"
 
 #: pretix/base/models/items.py:155
-#, fuzzy
 msgid "Add-on category"
-msgstr "Produktkategori"
+msgstr "Tilvalgskategori"
 
 #: pretix/base/models/items.py:222 pretix/base/models/items.py:278
 msgid "Disable product for this date"
@@ -5448,9 +5436,8 @@ msgstr "Skjul produkt, hvis ikke til rådighed"
 
 #: pretix/base/models/items.py:445 pretix/control/forms/item.py:672
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
-#, fuzzy
 msgid "Show product with info on why it’s unavailable"
-msgstr "Produktet \"{item}\" er ikke længere tilgængeligt."
+msgstr "Vis produktet med oplysninger om, hvorfor det ikke er tilgængeligt"
 
 #: pretix/base/models/items.py:456 pretix/base/models/items.py:781
 msgid "Don't use re-usable media, use regular one-off tickets"
@@ -5495,24 +5482,16 @@ msgstr ""
 "særlig pris eller hvis du ikke har variationer, vil denne pris blive brugt."
 
 #: pretix/base/models/items.py:506
-#, fuzzy
-#| msgid ""
-#| "If this option is active, your users can choose the price themselves. The "
-#| "price configured above is then interpreted as the minimum price a user "
-#| "has to enter. You could use this e.g. to collect additional donations for "
-#| "your event. This is currently not supported for products that are bought "
-#| "as an add-on to other products."
 msgid ""
 "If this option is active, your users can choose the price themselves. The "
 "price configured above is then interpreted as the minimum price a user has "
 "to enter. You could use this e.g. to collect additional donations for your "
 "event."
 msgstr ""
-"Hvis denne option er valgt, kan dine brugere selv vælge prisen. Prisen "
-"konfigureret foroven vil så blive anset som minimumsprisen, som en bruger "
-"skal indtaste. Dette kunne du f.eks. bruge til at indsamle yderligere "
-"donationer for dit arrangement. Denne indstilling understøttes for tiden "
-"ikke for produkter, som er købt som et add-on for andre produkter."
+"Hvis denne indstilling er aktiveret, kan brugerne selv vælge prisen. Den "
+"pris, der er angivet ovenfor, betragtes da som den mindste pris, en bruger "
+"skal indtaste. Du kan f.eks. bruge denne funktion til at indsamle ekstra "
+"donationer til dit arrangement."
 
 #: pretix/base/models/items.py:511 pretix/base/models/items.py:1176
 msgid "Suggested price"
@@ -5592,14 +5571,6 @@ msgid "Only show after sellout of"
 msgstr "Vis kun, når disse er udsolgt"
 
 #: pretix/base/models/items.py:596
-#, fuzzy
-#| msgid ""
-#| "If you select a product here, this product will only be shown when that "
-#| "product is sold out. If combined with the option to hide sold-out "
-#| "products, this allows you to swap out products for more expensive ones "
-#| "once the cheaper option is sold out. There might be a short period in "
-#| "which both products are visible while all tickets of the referenced "
-#| "product are reserved, but not yet sold."
 msgid ""
 "If you select a product here, this product will only be shown when that "
 "product is no longer available. This will happen either because the other "
@@ -5610,12 +5581,14 @@ msgid ""
 "products are visible while all tickets of the referenced product are "
 "reserved, but not yet sold."
 msgstr ""
-"Hvis du vælger et produkt her, vises det kun, når produktet er udsolgt. Hvis "
-"dette kombineres med optionen om at skjule udsolgte produkter, tillades det "
-"at du skifter produkter ud til andre, dyrere produkter, så snart det "
-"billigere alternativ er udsolgt. Der kan opstå et kort tidsrum, inden for "
-"hvilket begge produkter er synlige, mens alle billetter fra det "
-"referencerede produkt er reserverede, men ikke solgt endnu."
+"Hvis du vælger et produkt her, vises dette produkt kun, når det andet "
+"produkt ikke længere er tilgængeligt. Dette sker enten, fordi det andet "
+"produkt er udsolgt, eller fordi det ikke længere er i salgsperioden for det "
+"andet produkt. Hvis du kombinerer dette med muligheden for at skjule "
+"udsolgte produkter, kan du udskifte produkter med dyrere varianter, når den "
+"billigere variant er udsolgt. Der kan være en kort periode, hvor begge "
+"produkter er synlige, mens alle billetter til det refererede produkt er "
+"reserveret, men endnu ikke solgt."
 
 #: pretix/base/models/items.py:611
 msgid ""
@@ -6238,20 +6211,12 @@ msgid "Unknown country code."
 msgstr "Ukendt landekode."
 
 #: pretix/base/models/items.py:1921 pretix/base/models/items.py:1923
-#, fuzzy
-#| msgid "The maximum count needs to be greater than the minimum count."
 msgid "The maximum date must not be before the minimum value."
-msgstr "Maksimumsantallet skal være større end minimumsantallet."
+msgstr "Den maksimale værdi for datoen må ikke ligge før den mindste værdi."
 
 #: pretix/base/models/items.py:1925
-#, fuzzy
-#| msgid ""
-#| "The maximum number of usages may not be lower than the minimum number of "
-#| "usages."
 msgid "The maximum value must not be lower than the minimum value."
-msgstr ""
-"Det maksimale antal af anvendelser må ikke være lavere end det minimale "
-"antal anvendelser."
+msgstr "Den maksimale værdi må ikke være lavere end den minimale værdi."
 
 #: pretix/base/models/items.py:1943
 msgid ""
@@ -6259,6 +6224,9 @@ msgid ""
 "with changing the type of question without data loss. Consider hiding this "
 "question and creating a new one instead."
 msgstr ""
+"Systemet indeholder allerede svar på dette spørgsmål, som kunne gå tabt, "
+"hvis du ændrer spørgsmålstypen. Overvej at skjule dette spørgsmål og oprette "
+"et nyt i stedet."
 
 #: pretix/base/models/items.py:1961
 #: pretix/control/templates/pretixcontrol/items/question.html:87
@@ -6399,29 +6367,25 @@ msgstr ""
 "en mulig værdi for hver række."
 
 #: pretix/base/models/items.py:2311
-#, fuzzy
-#| msgctxt "timeframe"
-#| msgid "Start"
 msgid "Start"
-msgstr "Starttidspunkt"
+msgstr "Start"
 
 #: pretix/base/models/items.py:2312
 #: pretix/plugins/reports/accountingreport.py:129
-#, fuzzy
 msgid "End"
-msgstr "Aktiveret"
+msgstr "Slut"
 
 #: pretix/base/models/mail.py:52
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:38
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:139
 msgid "queued"
-msgstr ""
+msgstr "i kø"
 
 #: pretix/base/models/mail.py:53
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:40
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:141
 msgid "being sent"
-msgstr ""
+msgstr "bliver sendt"
 
 #: pretix/base/models/mail.py:54
 #, fuzzy
@@ -7059,6 +7023,8 @@ msgid ""
 "Exempt based on article {article}, section {section} ({letter}) of Council "
 "Directive 2006/112/EC"
 msgstr ""
+"Undtaget i henhold til artikel {article}, stk. {section} ({letter}) i Rådets "
+"direktiv 2006/112/EF"
 
 #: pretix/base/models/tax.py:230
 #, python-brace-format
@@ -7067,36 +7033,38 @@ msgid ""
 "Exempt based on article {article}, section ({letter}) of Council Directive "
 "2006/112/EC"
 msgstr ""
+"Undtaget i henhold til artikel {article}, stk. ({letter}) i Rådets direktiv "
+"2006/112/EF"
 
 #: pretix/base/models/tax.py:251
 msgctxt "tax_code"
 msgid "Exempt based on article 309 of Council Directive 2006/112/EC"
-msgstr ""
+msgstr "Fritaget i henhold til artikel 309 i Rådets direktiv 2006/112/EF"
 
 #: pretix/base/models/tax.py:253
 msgctxt "tax_code"
 msgid "Intra-Community acquisition from second hand means of transport"
-msgstr ""
+msgstr "Erhvervelse af brugte transportmidler inden for EU"
 
 #: pretix/base/models/tax.py:255
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of second hand goods"
-msgstr ""
+msgstr "Erhvervelse af brugte varer inden EU"
 
 #: pretix/base/models/tax.py:257
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of works of art"
-msgstr ""
+msgstr "Erhvervelse af kunstværker inden for EU"
 
 #: pretix/base/models/tax.py:259
 msgctxt "tax_code"
 msgid "Intra-Community acquisition of collectors items and antiques"
-msgstr ""
+msgstr "Indkøb af samlerobjekter og antikviteter inden for EU"
 
 #: pretix/base/models/tax.py:261
 msgctxt "tax_code"
 msgid "France domestic VAT franchise in base"
-msgstr ""
+msgstr "France domestic VAT franchise in base"
 
 #: pretix/base/models/tax.py:263
 msgctxt "tax_code"
@@ -7104,6 +7072,8 @@ msgid ""
 "France domestic Credit Notes without VAT, due to supplier forfeit of VAT for "
 "discount"
 msgstr ""
+"Franske interne kreditnotaer uden moms, da leverandøren har afstået fra at "
+"opkræve moms til gengæld for rabatten"
 
 #: pretix/base/models/tax.py:315
 #, python-brace-format
@@ -7120,16 +7090,17 @@ msgstr "Bør være kort, fx \"moms\""
 
 #: pretix/base/models/tax.py:331 pretix/control/forms/event.py:1698
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
-#, fuzzy
-#| msgid "Status code"
 msgid "Tax code"
-msgstr "Statuskode"
+msgstr "Skattelov"
 
 #: pretix/base/models/tax.py:332
 msgid ""
 "If you help us understand what this tax rules legally is, we can use this "
 "information for eInvoices, exporting to accounting system, etc."
 msgstr ""
+"Hvis du kan hjælpe os med at forstå, hvad disse skatteregler juridisk set "
+"går ud på, kan vi bruge disse oplysninger til e-fakturaer, eksport til "
+"regnskabssystemet osv."
 
 #: pretix/base/models/tax.py:352
 msgid "The configured product prices include the tax amount"
@@ -7153,10 +7124,13 @@ msgid ""
 "business customers in other EU countries in a way that works for all "
 "organizers. Use custom rules instead."
 msgstr ""
+"Denne funktion vil blive fjernet på et senere tidspunkt, da den ikke "
+"håndterer moms for ikke-erhvervskunder i andre EU-lande på en måde, der "
+"fungerer for alle arrangører. Brug i stedet brugerdefinerede regler."
 
 #: pretix/base/models/tax.py:366
 msgid "DEPRECATED"
-msgstr ""
+msgstr "UDGÅET"
 
 #: pretix/base/models/tax.py:367
 msgid ""
@@ -7195,11 +7169,15 @@ msgstr "Du skal angive landet du bor i for at bruge omvendt betalingspligt."
 msgid ""
 "A combination of this tax code with a non-zero tax rate does not make sense."
 msgstr ""
+"En kombination af denne skatteregel med en skattesats, der ikke er nul, "
+"giver ingen mening."
 
 #: pretix/base/models/tax.py:433 pretix/control/forms/event.py:1752
 msgid ""
 "A combination of this tax code with a zero tax rate does not make sense."
 msgstr ""
+"Det giver ingen mening at kombinere denne skatteregel med en skattesats på "
+"nul."
 
 #: pretix/base/models/tax.py:438
 #, python-brace-format
@@ -7813,10 +7791,10 @@ msgid "The payment for this invoice has already been received."
 msgstr "Betalingen for denne faktura er allerede modtaget."
 
 #: pretix/base/payment.py:1024
-#, fuzzy
 msgid ""
 "This payment is already being processed and can not be canceled any more."
-msgstr "Dette produkt vil ikke blive solgt efter denne dato."
+msgstr ""
+"Denne betaling er allerede under behandling og kan ikke længere annulleres."
 
 #: pretix/base/payment.py:1038
 msgid "Automatic refunds are not supported by this payment provider."
@@ -8002,16 +7980,12 @@ msgid "123.45 EUR"
 msgstr "123,45 EUR"
 
 #: pretix/base/pdf.py:165
-#, fuzzy
-#| msgid "Price including add-ons"
 msgid "Price including bundled products"
-msgstr "Pris inkl. add-ons"
+msgstr "Pris inklusive medfølgende produkter"
 
 #: pretix/base/pdf.py:174
-#, fuzzy
-#| msgid "Price including add-ons"
 msgid "Price including add-ons and bundled products"
-msgstr "Pris inkl. add-ons"
+msgstr "Pris inklusive tilvalg og medfølgende produkter"
 
 #: pretix/base/pdf.py:184 pretix/base/pdf.py:342
 #: pretix/base/services/invoices.py:594
@@ -8271,17 +8245,19 @@ msgid "Validity end time"
 msgstr "Sluttidspunkt for gyldighed"
 
 #: pretix/base/pdf.py:494
-#, fuzzy
-#| msgid "Printing date and time"
 msgid "Program times: date and time"
-msgstr "Dato og tidspunkt for udskriften"
+msgstr "Programtider: dato og klokkeslæt"
 
 #: pretix/base/pdf.py:496
+#, fuzzy
 msgid ""
 "2017-05-31 10:00 – 12:00\n"
 "2017-05-31 14:00 – 16:00\n"
 "2017-05-31 14:00 – 2017-06-01 14:00"
 msgstr ""
+"2017-05-31 10:00 – 12:00\n"
+"2017-05-31 14:00 – 16:00\n"
+"2017-05-31 14:00 – 2017-06-01 14:00"
 
 #: pretix/base/pdf.py:500
 msgid "Reusable Medium ID"
@@ -8378,34 +8354,32 @@ msgstr "Din layout-fil er ikke noget gyldigt layout. Fejlbesked: {}"
 #: pretix/base/permissions.py:314 pretix/base/permissions.py:331
 msgctxt "permission_level"
 msgid "View"
-msgstr ""
+msgstr "Vis"
 
 #: pretix/base/permissions.py:164 pretix/base/permissions.py:169
 #: pretix/base/permissions.py:174 pretix/base/permissions.py:179
 #: pretix/base/permissions.py:286 pretix/base/permissions.py:315
-#, fuzzy
 msgctxt "permission_level"
 msgid "View and change"
-msgstr "Gem og vis forhåndsvisning"
+msgstr "Se og rediger"
 
 #: pretix/base/permissions.py:168
-#, fuzzy
-#| msgid "API tokens"
 msgid "API only"
-msgstr "API-token"
+msgstr "Kun API"
 
 #: pretix/base/permissions.py:173
 msgid ""
 "Menu item will only show up if the user has permission for general settings."
 msgstr ""
+"Menupunktet vises kun, hvis brugeren har adgang til de generelle "
+"indstillinger."
 
 #: pretix/base/permissions.py:177 pretix/base/permissions.py:231
 #: pretix/base/permissions.py:285 pretix/base/permissions.py:313
 #: pretix/base/permissions.py:330
-#, fuzzy
 msgctxt "permission_level"
 msgid "No access"
-msgstr "Fuldt navn"
+msgstr "Ingen adgang"
 
 #: pretix/base/permissions.py:188
 #: pretix/control/templates/pretixcontrol/event/settings.html:7
@@ -8419,6 +8393,8 @@ msgid ""
 "This includes access to all settings not listed explicitly below, including "
 "plugin settings."
 msgstr ""
+"Dette omfatter adgang til alle indstillinger, der ikke udtrykkeligt er "
+"anført nedenfor, herunder plugin-indstillinger."
 
 #: pretix/base/permissions.py:197
 #: pretix/control/templates/pretixcontrol/event/payment.html:6
@@ -8428,101 +8404,83 @@ msgstr "Betalingsindstillinger"
 
 #: pretix/base/permissions.py:203
 #: pretix/control/templates/pretixcontrol/event/tax.html:120
-#, fuzzy
-#| msgid "Base settings"
 msgid "Tax settings"
-msgstr "Basisindstillinger"
+msgstr "Skatteindstillinger"
 
 #: pretix/base/permissions.py:209
-#, fuzzy
 msgid "Invoicing settings"
-msgstr "Prisindstillinger"
+msgstr "Indstillinger for fakturering"
 
 #: pretix/base/permissions.py:215
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date added"
 msgid "Event series dates"
-msgstr "Dato for arrangementsserien tilføjet"
+msgstr "Datoer for begivenhedsserien"
 
 #: pretix/base/permissions.py:221
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Products, quotas and questions"
-msgstr "Produktnavn og variant"
+msgstr "Produkter, kvoter og spørgsmål"
 
 #: pretix/base/permissions.py:224
 msgid "Also includes related objects like categories or discounts."
-msgstr ""
+msgstr "Omfatter også relaterede elementer som kategorier eller rabatter."
 
 #: pretix/base/permissions.py:232
-#, fuzzy
 msgctxt "permission_level"
 msgid "Only check-in"
-msgstr "Tjek-ind-lister"
+msgstr "Kun indtjekning"
 
 #: pretix/base/permissions.py:233
-#, fuzzy
-#| msgid "Show all"
 msgctxt "permission_level"
 msgid "View all"
-msgstr "Vis alle"
+msgstr "Se alle"
 
 #: pretix/base/permissions.py:234
-#, fuzzy
 msgctxt "permission_level"
 msgid "View all and check-in"
-msgstr "Tjek-ind-lister"
+msgstr "Se alle og tjek ind"
 
 #: pretix/base/permissions.py:235
-#, fuzzy
-#| msgid "View all upcoming events"
 msgctxt "permission_level"
 msgid "View all and change"
-msgstr "Vis alle kommende arrangementer"
+msgstr "Vis alle og rediger"
 
 #: pretix/base/permissions.py:236
 msgid "Includes the ability to cancel and refund individual orders."
-msgstr ""
+msgstr "Omfatter muligheden for at annullere og refundere enkelte ordrer."
 
 #: pretix/base/permissions.py:238
-#, fuzzy
 msgid "Also includes related objects like the waiting list."
-msgstr "En bruger er føjet til gruppen."
+msgstr "Omfatter også relaterede elementer som f.eks. ventelisten."
 
 #: pretix/base/permissions.py:248
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Full event or date cancellation"
-msgstr "Generér afbestilling"
+msgstr "Aflysning af hele arrangementet eller datoen"
 
 #: pretix/base/permissions.py:252
-#, fuzzy
-#| msgid "Sale not allowed"
 msgctxt "permission_level"
 msgid "Not allowed"
-msgstr "Filtype ikke tilladt"
+msgstr "Ikke tilladt"
 
 #: pretix/base/permissions.py:253
-#, fuzzy
 msgctxt "permission_level"
 msgid "Allowed"
-msgstr "Samlet værdi"
+msgstr "Tilladt"
 
 #: pretix/base/permissions.py:268
 msgctxt "permission_level"
 msgid "Access existing events"
-msgstr ""
+msgstr "Få adgang til eksisterende begivenheder"
 
 #: pretix/base/permissions.py:269
 msgctxt "permission_level"
 msgid "Access existing and create new events"
-msgstr ""
+msgstr "Få adgang til eksisterende og opret nye begivenheder"
 
 #: pretix/base/permissions.py:271
 msgid ""
 "The level of access to events is determined in detail by the settings below."
 msgstr ""
+"Adgangsrettighederne til begivenhederne fastlægges i detaljer via "
+"nedenstående indstillinger."
 
 #: pretix/base/permissions.py:275 pretix/control/navigation.py:143
 #: pretix/control/navigation.py:462 pretix/control/navigation.py:512
@@ -8541,19 +8499,22 @@ msgid ""
 "This includes access to all organizer-level functionality not listed "
 "explicitly below, including plugin settings."
 msgstr ""
+"Dette omfatter adgang til alle funktioner på arrangørniveau, der ikke er "
+"nævnt eksplicit nedenfor, herunder plugin-indstillinger."
 
 #: pretix/base/permissions.py:287
 msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
 msgstr ""
+"Giver mulighed for at tildele en person (herunder sig selv) yderligere "
+"rettigheder."
 
 #: pretix/base/permissions.py:298 pretix/control/navigation.py:608
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
-#, fuzzy
 msgid "Customers"
-msgstr "Kundehandlinger"
+msgstr "Kunder"
 
 #: pretix/base/permissions.py:310 pretix/control/navigation.py:666
 #: pretix/control/navigation.py:673
@@ -16383,7 +16344,7 @@ msgstr "Den indtastede bekræftelseskode var forkert."
 
 #: pretix/control/forms/organizer.py:96
 msgid "This slug is already in use. Please choose a different one."
-msgstr "Dette korte navn er allerede i brug. Vælg et andet."
+msgstr "Dette slug er allerede i brug. Vælg venligst et andet."
 
 #: pretix/control/forms/organizer.py:175
 #, fuzzy
@@ -31195,12 +31156,14 @@ msgstr "Betalingsprocessen er startet i et nyt vindue."
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
+"Blev vinduet til indtastning af dine betalingsoplysninger ikke åbnet, eller "
+"blev det lukket?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:25
 msgid "Click here in order to open the window."
-msgstr "Tryk her for at åbne vinduet."
+msgstr "Klik her for at åbne vinduet."
 
 #: pretix/plugins/paypal/views.py:107 pretix/plugins/paypal2/views.py:322
 msgid "Invalid response from PayPal received."
@@ -33420,6 +33383,8 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"Beklager, der opstod en fejl under betalingsprocessen. Klik på linket i din "
+"e-mail for at fortsætte."
 
 #: pretix/plugins/stripe/views.py:576
 msgid ""
