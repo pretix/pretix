@@ -53,34 +53,34 @@
                         <dd>
                             {% if medium.customer %}
                                 <span class="helper-display-block">
-                                <span class="fa fa-user fa-fw"></span>
-                                {% if "organizer.customers:read" in request.orgapermset %}
-                                    <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=medium.customer.identifier %}">
+                                    <span class="fa fa-user fa-fw"></span>
+                                    {% if "organizer.customers:read" in request.orgapermset %}
+                                        <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=medium.customer.identifier %}">
+                                            {{ medium.customer }}
+                                        </a>
+                                    {% else %}
                                         {{ medium.customer }}
-                                    </a>
-                                {% else %}
-                                    {{ medium.customer }}
-                                {% endif %}
-                            </span>
+                                    {% endif %}
+                                </span>
                             {% endif %}
                             {% for op in medium.linked_orderpositions.all %}
                                 <span class="helper-display-block">
-                                <span class="fa fa-ticket fa-fw"></span>
-                                <a href="{% url "control:event.order" event=op.order.event.slug organizer=request.organizer.slug code=op.order.code %}">
-                                    {{ op.order.code }}</a>-{{ op.positionid }}
-                            </span>
+                                    <span class="fa fa-ticket fa-fw"></span>
+                                    <a href="{% url "control:event.order" event=op.order.event.slug organizer=request.organizer.slug code=op.order.code %}">
+                                        {{ op.order.code }}</a>-{{ op.positionid }}
+                                </span>
                             {% endfor %}
                             {% if medium.linked_giftcard %}
                                 <span class="helper-display-block">
-                                <span class="fa fa-credit-card fa-fw"></span>
-                                {% if "organizer.giftcards:read" in request.orgapermset %}
-                                    <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=medium.linked_giftcard.id %}">
-                                        {{ medium.linked_giftcard.secret }}
-                                    </a>
-                                {% else %}
-                                    {{ medium.linked_giftcard.secret|slice:":3" }}…
-                                {% endif %}
-                            </span>
+                                    <span class="fa fa-credit-card fa-fw"></span>
+                                    {% if "organizer.giftcards:read" in request.orgapermset %}
+                                        <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=medium.linked_giftcard.id %}">
+                                            {{ medium.linked_giftcard.secret }}
+                                        </a>
+                                    {% else %}
+                                        {{ medium.linked_giftcard.secret|slice:":3" }}…
+                                    {% endif %}
+                                </span>
                             {% endif %}
                         </dd>
                         {% if medium.notes %}
