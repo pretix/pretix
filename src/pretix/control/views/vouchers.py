@@ -42,7 +42,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import connection, transaction
-from django.db.models import Exists, OuterRef, Sum, Subquery
+from django.db.models import Exists, OuterRef, Sum, Subquery, Count
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
@@ -70,7 +70,7 @@ from pretix.base.services.vouchers import vouchers_send
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncFormView
 from pretix.control.forms.filter import VoucherFilterForm, VoucherTagFilterForm
-from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
+from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm, VoucherBulkEditForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
 from pretix.control.views import PaginationMixin
@@ -310,6 +310,12 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
             for f in form.fields.values():
                 f.disabled = True
         return form
+
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            "event": self.request.event,
+        }
 
     def get_object(self, queryset=None) -> VoucherForm:
         url = resolve(self.request.path_info)
@@ -669,7 +675,7 @@ class VoucherBulkAction(VoucherQueryMixin, EventPermissionRequiredMixin, View):
 class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, FormView):
     template_name = 'pretixcontrol/vouchers/bulk_edit.html'
     permission = 'event.vouchers:write'
-    context_object_name = 'voucher'
+    context_object_name = 'vouchers'
     form_class = VoucherBulkEditForm
 
     def get_queryset(self):
@@ -690,28 +696,36 @@ class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, For
         mixed_values = set()
         qs = self.get_queryset().annotate()
 
-        fields = {
-            'name': 'name',
-            'size': 'size',
-            'subevent': 'subevent',
-            'close_when_sold_out': 'close_when_sold_out',
-            'release_after_exit': 'release_after_exit',
-            'ignore_for_event_availability': 'ignore_for_event_availability',
-        }
-        for k, f in fields.items():
+        fields = (
+            'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag', 'comment', 'max_usages',
+            'min_usages', 'price_mode', 'subevent', 'show_hidden_items', 'all_addons_included', 'all_bundles_included',
+            'budget',
+        )
+        for f in fields:
             existing_values = list(qs.order_by(f).values(f).annotate(c=Count('*')))
             if len(existing_values) == 1:
-                initial[k] = existing_values[0][f]
+                initial[f] = existing_values[0][f]
             elif len(existing_values) > 1:
-                mixed_values.add(k)
-                initial[k] = None
+                mixed_values.add(f)
+                if f == "max_usages":
+                    initial[f] = 1
+                else:
+                    initial[f] = None
 
-        item_values = list(qs.order_by("items_list").values("items_list").annotate(c=Count('*')))
-        var_values = list(qs.order_by("vars_list").values("vars_list").annotate(c=Count('*')))
-        if len(item_values) > 1 or len(var_values) > 1:
-            mixed_values.add("itemvars")
-        else:
-            initial["itemvars"] = [iv for iv in (item_values[0]["items_list"] or "").split(",") + (var_values[0]["vars_list"] or "").split(",") if iv]
+        existing_values = list(qs.order_by("item", "variation", "quota").values("item", "variation", "quota").annotate(c=Count('*')))
+        if len(existing_values) == 1:
+            i = existing_values[0]
+            if i["quota"]:
+                initial["itemvar"] = f'q-{i["quota"]}'
+            elif i["variation"]:
+                initial["itemvar"] = f'{i["item"]}-{i["variation"]}'
+            elif i["item"]:
+                initial["itemvar"] = f'{i["item"]}'
+            else:
+                initial["itemvar"] = None
+        elif len(existing_values) > 1:
+            mixed_values.add("itemvar")
+            initial["itemvar"] = None
 
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
@@ -725,7 +739,7 @@ class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, For
         return kwargs
 
     def get_success_url(self):
-        return reverse('control:event.items.quotas', kwargs={
+        return reverse('control:event.vouchers', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
@@ -754,7 +768,7 @@ class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, For
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['quotas'] = self.get_queryset()
+        ctx['vouchers'] = self.get_queryset()
         ctx['bulk_selected'] = self.request.POST.getlist("_bulk")
         return ctx
 

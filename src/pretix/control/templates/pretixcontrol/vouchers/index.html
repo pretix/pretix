@@ -224,7 +224,7 @@
                         {% trans "Delete selected" %}
                     </button>
                     <button type="submit" class="btn btn-primary btn-save" name="action" value="edit"
-                            formaction="{% url "control:event.subevents.bulkedit"  organizer=request.event.organizer.slug event=request.event.slug %}">
+                            formaction="{% url "control:event.vouchers.bulkedit"  organizer=request.event.organizer.slug event=request.event.slug %}">
                         <i class="fa fa-edit"></i>{% trans "Edit selected" %}
                     </button>
                 </div>
