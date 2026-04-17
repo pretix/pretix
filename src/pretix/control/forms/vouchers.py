@@ -128,8 +128,9 @@ class VoucherForm(I18nModelForm):
             del self.fields['subevent']
 
         choices = []
-        if 'itemvar' in initial or (self.data and 'itemvar' in self.data):
-            iv = self.data.get('itemvar') or initial.get('itemvar', '')
+        prefix = (self.prefix + '-') if self.prefix else ''
+        if 'itemvar' in initial or (self.data and prefix + 'itemvar' in self.data):
+            iv = self.data.get(prefix + 'itemvar') or initial.get('itemvar', '')
             if iv.startswith('q-'):
                 q = self.event.quotas.get(pk=iv[2:])
                 choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q)))
@@ -289,7 +290,7 @@ class VoucherBulkEditForm(VoucherForm):
         if self.prefix + "itemvar" in self.data.getlist('_bulk'):
             try:
                 itemid = quotaid = None
-                iv = self.data.get('itemvar', '')
+                iv = data.get('itemvar', '')
                 if iv.startswith('q-'):
                     quotaid = iv[2:]
                 elif '-' in iv:
@@ -331,7 +332,8 @@ class VoucherBulkEditForm(VoucherForm):
             quota_diff = Counter()
 
             current_vouchers = self.queryset.order_by().values(
-                "item", "variation", "quota", "block_quota", "valid_until", "subevent", "redeemed", "max_usages"
+                "item", "variation", "quota", "block_quota", "valid_until", "subevent", "redeemed", "max_usages",
+                "allow_ignore_quota",
             ).annotate(c=Count("*"))
             item_cache = {i.pk: i for i in Item.objects.filter(pk__in=[c["item"] for c in current_vouchers])}
             var_cache = {v.pk: v for v in ItemVariation.objects.filter(pk__in=[c["variation"] for c in current_vouchers])}
