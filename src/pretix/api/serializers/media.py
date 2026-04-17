@@ -160,12 +160,12 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                     ops_noperm.append(lop.id)
             if ops_noperm:
                 ops = [
-                    {'id': op['id']} if op['id'] in ops_noperm 
+                    {'id': op['id']} if op['id'] in ops_noperm
                     else op
                     for op in ops
                 ]
                 r['linked_orderpositions'] = ops
-        
+
         # add linked_orderposition (singular) for backwards compatibility
         if len(ops) < 2:
             r['linked_orderposition'] = ops[0] if ops else None
