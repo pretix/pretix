@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-16 18:00+0000\n"
+"PO-Revision-Date: 2026-04-17 17:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
@@ -11294,19 +11294,22 @@ msgid "Both the attendee and the person who ordered can make changes"
 msgstr ""
 
 #: pretix/base/settings.py:1929
-#, fuzzy
 msgid "Allow customers to modify their information"
-msgstr "Automatisk ved betaling"
+msgstr "Giv kunderne mulighed for at ændre deres oplysninger"
 
 #: pretix/base/settings.py:1944
 msgid "Allow customers to modify their information after they checked in."
 msgstr ""
+"Giv kunderne mulighed for at ændre deres oplysninger, efter at de har "
+"tjekket ind."
 
 #: pretix/base/settings.py:1945
 msgid ""
 "By default, no more modifications are possible for an order as soon as one "
 "of the tickets in the order has been checked in."
 msgstr ""
+"Som standard kan der ikke foretages yderligere ændringer i en ordre, så "
+"snart en af billetterne i ordren er blevet indtjekket."
 
 #: pretix/base/settings.py:1955
 msgid "Last date of modifications"
@@ -11324,55 +11327,56 @@ msgstr ""
 "billetter for flere datoer, så vil den tidligste dato blive brugt."
 
 #: pretix/base/settings.py:1967
-#, fuzzy
 msgid "Customers can change the variation of the products they purchased"
-msgstr "Tillad brugere at annullere ubetalte bestillinger"
+msgstr "Kunderne kan ændre varianten af de produkter, de har købt"
 
 #: pretix/base/settings.py:1976
-#, fuzzy
 msgid "Customers can change their selected add-on products"
-msgstr "Tillad brugere at annullere ubetalte bestillinger"
+msgstr "Kunderne kan ændre de valgte tilvalgsprodukter"
 
 #: pretix/base/settings.py:1986 pretix/base/settings.py:1997
 msgid ""
 "Only allow changes if the resulting price is higher or equal than the "
 "previous price."
 msgstr ""
+"Tillad kun ændringer, hvis den nye pris er højere eller lig med den "
+"tidligere pris."
 
 #: pretix/base/settings.py:1987 pretix/base/settings.py:1998
 msgid ""
 "Only allow changes if the resulting price is higher than the previous price."
 msgstr ""
+"Tillad kun ændringer, hvis den nye pris er højere end den tidligere pris."
 
 #: pretix/base/settings.py:1988 pretix/base/settings.py:1999
 msgid ""
 "Only allow changes if the resulting price is equal to the previous price."
 msgstr ""
+"Tillad kun ændringer, hvis den nye pris er den samme som den tidligere pris."
 
 #: pretix/base/settings.py:1989 pretix/base/settings.py:2000
 msgid ""
 "Allow changes regardless of price, as long as no refund is required (i.e. "
 "the resulting price is not lower than what has already been paid)."
 msgstr ""
+"Tillad ændringer uanset pris, så længe der ikke kræves refusion (dvs. den "
+"endelige pris ikke er lavere end det beløb, der allerede er betalt)."
 
 #: pretix/base/settings.py:1991 pretix/base/settings.py:2002
 msgid "Allow changes regardless of price, even if this results in a refund."
-msgstr ""
+msgstr "Tillad ændringer uanset pris, selvom det medfører en tilbagebetaling."
 
 #: pretix/base/settings.py:1995
-#, fuzzy
 msgid "Requirement for changed prices"
-msgstr "Påkræv e-mailadresse pr. billet"
+msgstr "Krav om prisændringer"
 
 #: pretix/base/settings.py:2013
-#, fuzzy
 msgid "Do not allow changes after"
-msgstr "Tillad ikke afbestilling efter"
+msgstr "Tillad ikke ændringer efter"
 
 #: pretix/base/settings.py:2022
-#, fuzzy
 msgid "Allow change even though the ticket has already been checked in"
-msgstr "Betalingen for denne faktura er allerede modtaget."
+msgstr "Tillad ændringer, selvom billetten allerede er indtjekket"
 
 #: pretix/base/settings.py:2023
 msgid ""
@@ -11382,10 +11386,15 @@ msgid ""
 "in individually. Use with care, and preferably only in combination with a "
 "limitation on price changes above."
 msgstr ""
+"Som standard er ændringer af ordrer deaktiveret, når en billet i ordren er "
+"blevet indtjekket. Hvis du markerer dette felt, ophæves dette krav. Det er "
+"dog stadig ikke muligt at fjerne et tilvalgsprodukt, der allerede er blevet "
+"indtjekket separat. Brug denne funktion med forsigtighed og helst kun i "
+"kombination med ovenstående begrænsning for prisændringer."
 
 #: pretix/base/settings.py:2035
 msgid "Allow individual attendees to change their ticket"
-msgstr ""
+msgstr "Giv de enkelte deltagere mulighed for at ændre deres billet"
 
 #: pretix/base/settings.py:2036
 msgid ""
@@ -11395,16 +11404,19 @@ msgid ""
 "total price of the order. Such changes can always only be made by the main "
 "customer."
 msgstr ""
+"Som standard er det kun den person, der har bestilt billetterne, der kan "
+"foretage ændringer. Hvis du markerer dette felt, kan de enkelte deltagere "
+"også foretage ændringer. De enkelte deltagere kan dog kun foretage "
+"ændringer, der ikke ændrer den samlede pris for bestillingen. Sådanne "
+"ændringer kan kun foretages af hovedkunden."
 
 #: pretix/base/settings.py:2048
-#, fuzzy
 msgid "Customers can cancel their unpaid orders"
-msgstr "Tillad brugere at annullere ubetalte bestillinger"
+msgstr "Kunder kan annullere deres ubetalte ordrer"
 
 #: pretix/base/settings.py:2060
-#, fuzzy
 msgid "Charge a fixed cancellation fee"
-msgstr "Hold et fast afbestillingsgebyr"
+msgstr "Opkræv et fast afbestillingsgebyr"
 
 #: pretix/base/settings.py:2061 pretix/base/settings.py:2072
 #: pretix/base/settings.py:2086
@@ -11413,6 +11425,9 @@ msgid ""
 "never charged. Note that it will be your responsibility to claim the "
 "cancellation fee from the user."
 msgstr ""
+"Dette gælder kun for ordrer, hvor betalingen endnu ikke er gennemført; der "
+"opkræves aldrig et afbestillingsgebyr for gratis ordrer. Bemærk, at det er "
+"dit ansvar at opkræve afbestillingsgebyret fra brugeren."
 
 #: pretix/base/settings.py:2071
 msgid "Charge payment, shipping and service fees"
@@ -11558,34 +11573,39 @@ msgstr ""
 
 #: pretix/base/settings.py:2279 pretix/control/forms/event.py:1892
 msgid "Imprint URL"
-msgstr ""
+msgstr "URL til kolofon"
 
 #: pretix/base/settings.py:2280 pretix/control/forms/event.py:1893
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
 msgstr ""
+"Dette bør f.eks. henvise til en del af din hjemmeside, hvor man kan finde "
+"dine kontaktoplysninger og juridiske oplysninger."
 
 #: pretix/base/settings.py:2290
 msgid "Privacy Policy URL"
-msgstr ""
+msgstr "URL til privatlivspolitik"
 
 #: pretix/base/settings.py:2291
 msgid ""
 "This should point e.g. to a part of your website that explains how you use "
 "data gathered in your ticket shop."
 msgstr ""
+"Dette bør f.eks. henvise til en del af din hjemmeside, hvor det forklares, "
+"hvordan du bruger de data, der indsamles i din billetshop."
 
 #: pretix/base/settings.py:2302
-#, fuzzy
 msgid "Accessibility information URL"
-msgstr "Kontoinformationer"
+msgstr "URL med oplysninger om tilgængelighed"
 
 #: pretix/base/settings.py:2303
 msgid ""
 "This should point e.g. to a part of your website that explains how your "
 "ticket shop complies with accessibility regulation."
 msgstr ""
+"Dette bør f.eks. henvise til en del af din hjemmeside, hvor det forklares, "
+"hvordan din billetshop overholder reglerne om tilgængelighed."
 
 #: pretix/base/settings.py:2310
 #: pretix/presale/templates/pretixpresale/event/base.html:229
@@ -11593,24 +11613,20 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/accessibility.html:6
 #: pretix/presale/templates/pretixpresale/organizers/base.html:107
 #: pretix/presale/templates/pretixpresale/organizers/base.html:112
-#, fuzzy
 msgid "Accessibility information"
-msgstr "Kontoinformationer"
+msgstr "Oplysninger om tilgængelighed"
 
 #: pretix/base/settings.py:2314
-#, fuzzy
 msgid "Accessibility information title"
-msgstr "Kontoinformationer"
+msgstr "Overskrift til information om tilgængelighed"
 
 #: pretix/base/settings.py:2324
-#, fuzzy
 msgid "Accessibility information text"
-msgstr "Kontoinformationer"
+msgstr "Tekst med oplysninger om tilgængelighed"
 
 #: pretix/base/settings.py:2345
-#, fuzzy
 msgid "Attach ticket files"
-msgstr "Opret billettyper"
+msgstr "Vedhæft billetfiler"
 
 #: pretix/base/settings.py:2347
 #, python-brace-format
@@ -11618,34 +11634,39 @@ msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
 msgstr ""
+"Billetter vedhæftes aldrig, hvis de er større end {size}, for at undgå "
+"problemer med e-mail-leveringen."
 
 #: pretix/base/settings.py:2358 pretix/plugins/sendmail/forms.py:201
 #: pretix/plugins/sendmail/models.py:263
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:66
-#, fuzzy
 msgid "Attach calendar files"
-msgstr "Opret billettyper"
+msgstr "Vedhæft kalenderfiler"
 
 #: pretix/base/settings.py:2359
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr ""
+"Hvis denne funktion er aktiveret, vedhæfter vi en .ics-kalenderfil til "
+"ordrebekræftelses-e-mails."
 
 #: pretix/base/settings.py:2368
 msgid "Attach calendar files only after order has been paid"
-msgstr ""
+msgstr "Vedhæft kun kalenderfiler, når ordren er betalt"
 
 #: pretix/base/settings.py:2369
 msgid ""
 "Use this if you e.g. put a private access link into the calendar file to "
 "make sure people only receive it after their payment was confirmed."
 msgstr ""
+"Brug denne funktion, hvis du f.eks. indsætter et link med privat adgang i "
+"kalenderfilen for at sikre, at folk først modtager det, når deres betaling "
+"er bekræftet."
 
 #: pretix/base/settings.py:2378
-#, fuzzy
 msgid "Event description"
-msgstr "Produktbeskrivelse"
+msgstr "Beskrivelse af arrangementet"
 
 #: pretix/base/settings.py:2381
 msgid ""
@@ -11656,6 +11677,12 @@ msgid ""
 "data as calendar entries are often shared with an unspecified number of "
 "people."
 msgstr ""
+"Du kan bruge dette felt til at dele oplysninger med dine deltagere, f.eks. "
+"rejseoplysninger eller et link til et digitalt arrangement. Hvis du lader "
+"feltet stå tomt, indsætter vi et link til arrangementsbutikken, "
+"adgangstidspunktet og dit arrangørnavn. Vi tillader ikke brug af "
+"pladsholdere med følsomme, personlige oplysninger, da kalenderposter ofte "
+"deles med et ubestemt antal personer."
 
 #: pretix/base/settings.py:2394
 msgid "Subject prefix"
@@ -11682,15 +11709,16 @@ msgid "Sender address for outgoing emails"
 msgstr "Afsenderadresse for udgående e-mails"
 
 #: pretix/base/settings.py:2419
-#, fuzzy
 msgid "Sender name"
-msgstr "Navn på deltager"
+msgstr "Afsenderens navn"
 
 #: pretix/base/settings.py:2420
 msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
 msgstr ""
+"Afsenderens navn, der bruges sammen med afsenderadressen i udgående e-mails. "
+"Standardindstillingen er navnet på din begivenhed."
 
 #: pretix/base/settings.py:2438 pretix/base/settings.py:2495
 #: pretix/base/settings.py:2512 pretix/base/settings.py:2530
@@ -11701,9 +11729,9 @@ msgstr "Din bestilling: {code}"
 #: pretix/base/settings.py:2442 pretix/base/settings.py:2475
 #: pretix/base/settings.py:2580 pretix/base/settings.py:2813
 #: pretix/base/settings.py:2850
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your event registration: {code}"
-msgstr "Din bestilling: {code}"
+msgstr "Din tilmelding til arrangementet {code}"
 
 #: pretix/base/settings.py:2446
 #, python-brace-format
@@ -11758,7 +11786,7 @@ msgstr ""
 "Arrangøren af {event}"
 
 #: pretix/base/settings.py:2479
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -11770,15 +11798,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej {attendee_name},\n"
 "\n"
-"Din bestilling {code} til {event} er blevet annulleret.\n"
+"Du er nu tilmeldt arrangementet {event}.\n"
 "\n"
-"Du kan se detaljerne for din bestilling på\n"
+"Du kan se detaljer og status for din billet her:\n"
+"\n"
 "{url}\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"Med venlig hilsen,\n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2499
 #, python-brace-format
@@ -11805,7 +11835,7 @@ msgstr ""
 "Arrangøren af {event}"
 
 #: pretix/base/settings.py:2516
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -11819,15 +11849,20 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Vi har modtaget din bestilling til {event}. Din bestilling indeholder kun "
-"gratis produkter og kræver derfor ingen betaling.\n"
+"vi har modtaget din bestilling til arrangementet {event}. Da du har bestilt\n"
+"et produkt, der kræver godkendelse fra arrangøren, beder vi dig om\n"
+"at være tålmodig og afvente vores næste e-mail.\n"
 "\n"
-"Du kan ændre informationer og se status på din bestilling på {url}\n"
+"Du kan ændre dine bestillingsoplysninger og se status på din bestilling "
+"her:\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangører af {event}"
+"{url}\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2534
 #, python-brace-format
@@ -11859,9 +11894,8 @@ msgstr ""
 "Arrangøren af {event}"
 
 #: pretix/base/settings.py:2552
-#, fuzzy
 msgid "Attachment for new orders"
-msgstr "Split i ny bestilling"
+msgstr "Vedhæftet fil til nye ordrer"
 
 #: pretix/base/settings.py:2557
 #, python-brace-format
@@ -11874,9 +11908,17 @@ msgid ""
 "sent before payment is confirmed or the order is approved. To avoid this "
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
+"Denne fil vedhæftes den første e-mail, vi sender for hver ny ordre. Den vil "
+"derfor blive kombineret med teksterne »Afgivet ordre«, »Gratis ordre« eller »"
+"Modtaget ordre« fra ovenstående. Den sendes til både ordrekontakter og "
+"deltagere. Du kan f.eks. bruge denne til at sende dine servicevilkår. Brug "
+"den ikke til at sende ikke-offentlige oplysninger, da denne fil muligvis "
+"sendes, før betalingen er bekræftet, eller ordren er godkendt. For at undgå, "
+"at denne vigtige e-mail havner i spam, kan du kun uploade PDF-filer på op "
+"til {size} MB."
 
 #: pretix/base/settings.py:2584
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -11888,15 +11930,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej {attendee_name},\n"
 "\n"
-"Din bestilling til {event} er blevet ændret.\n"
+"Der er bestilt en billet til arrangementet {event} til dig.\n"
 "\n"
-"Du kan se status for din bestilling på\n"
+"Du kan se oplysninger og status for din billet her:\n"
+"\n"
 "{url}\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2596
 #, python-brace-format
@@ -11958,12 +12002,12 @@ msgstr ""
 "Arrangøren af {event}"
 
 #: pretix/base/settings.py:2634
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Event registration confirmed: {code}"
-msgstr "Bestilling annulleret: {code}"
+msgstr "Tilmelding til arrangementet bekræftet: {code}"
 
 #: pretix/base/settings.py:2638
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -11975,15 +12019,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej {attendee_name},\n"
 "\n"
-"Din bestilling til {event} er blevet ændret.\n"
+"Den billet til arrangementet {event}, der er bestilt til dig, er nu betalt.\n"
 "\n"
-"Du kan se status for din bestilling på\n"
+"Du kan se detaljer og status for din billet her:\n"
+"\n"
 "{url}\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2655 pretix/control/forms/event.py:1294
 #: pretix/control/forms/event.py:1416 pretix/plugins/sendmail/models.py:268
@@ -12035,7 +12081,7 @@ msgid "Your order is pending payment: {code}"
 msgstr "Din bestilling afventer betaling: {code}"
 
 #: pretix/base/settings.py:2687
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12048,24 +12094,28 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Vi har ikke modtaget betaling af din bestilling til {event}.\n"
-"Husk at vi kun kan garantere bestillingen, hvis du betaler inden "
-"{expire_date}.\n"
+"vi har endnu ikke modtaget den fulde betaling for din bestilling til "
+"arrangementet {event}.\n"
 "\n"
-"Du kan se betalingsoplysninger og status for din bestilling på {url}\n"
+"Husk, at du skal betale inden {expire_date}.\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"Du kan se betalingsoplysningerne og status for din bestilling her:\n"
+"\n"
+"{url}\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2700
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Incomplete payment received: {code}"
-msgstr "Betaling modtaget for din bestilling: {code}"
+msgstr "Der er modtaget en ufuldstændig betaling: {code}"
 
 #: pretix/base/settings.py:2704
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12081,24 +12131,31 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Vi har ikke modtaget betaling af din bestilling til {event}.\n"
-"Husk at vi kun kan garantere bestillingen, hvis du betaler inden "
-"{expire_date}.\n"
+"vi har modtaget en betaling for din bestilling til arrangementet {event}.\n"
 "\n"
-"Du kan se betalingsoplysninger og status for din bestilling på {url}\n"
+"Desværre er det modtagne beløb mindre end det fulde beløb,\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"der kræves. Din bestilling betragtes derfor stadig som ubetalt, da der\n"
+"\n"
+"mangler en yderligere betaling på **{pending_sum}**.\n"
+"\n"
+"Du kan se betalingsoplysningerne og status for din bestilling her:\n"
+"\n"
+"{url}\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event} team"
 
 #: pretix/base/settings.py:2720
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr "Betaling modtaget for din bestilling: {code}"
+msgstr "Betalingen for din ordre mislykkedes: {code}"
 
 #: pretix/base/settings.py:2724
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12114,16 +12171,22 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Vi har ikke modtaget betaling af din bestilling til {event}.\n"
-"Husk at vi kun kan garantere bestillingen, hvis du betaler inden "
+"dit betalingsforsøg for din bestilling til arrangementet {event} "
+"mislykkedes.\n"
+"\n"
+"Din bestilling er stadig gyldig, og du kan prøve at betale igen med samme "
+"eller en anden betalingsmetode. Du bedes gennemføre betalingen inden "
 "{expire_date}.\n"
 "\n"
-"Du kan se betalingsoplysninger og status for din bestilling på {url}\n"
+"Du kan prøve at betale igen og se status på din bestilling her:\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"{url}\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2738
 #, python-brace-format
