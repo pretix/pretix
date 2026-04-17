@@ -276,7 +276,7 @@ def test_medium_detail_event_permission_missing(token_client, organizer, event, 
         ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
                                     personalized=True)
         op = o.positions.create(item=ticket, price=Decimal("14"))
-        medium.linked_orderposition = op
+        medium.linked_orderpositions.add(op)
         medium.linked_giftcard = giftcard
         medium.customer = customer
         medium.save()
