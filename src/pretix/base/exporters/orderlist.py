@@ -1103,13 +1103,25 @@ class PaymentListExporter(ListExporter):
     def iterate_list(self, form_data):
         provider_names = dict(get_all_payment_providers())
 
+        i_numbers = Invoice.objects.filter(
+            order=OuterRef('order_id'),
+        ).values('order').annotate(
+            m=GroupConcat('full_invoice_no', delimiter=', ')
+        ).values(
+            'm'
+        ).order_by()
+
         payments = OrderPayment.objects.filter(
             order__event__in=self.events,
             state__in=form_data.get('payment_states', [])
+        ).annotate(
+            order_invoice_numbers=Subquery(i_numbers, output_field=CharField()),
         ).select_related('order').prefetch_related('order__event').order_by('created')
         refunds = OrderRefund.objects.filter(
             order__event__in=self.events,
             state__in=form_data.get('refund_states', [])
+        ).annotate(
+            order_invoice_numbers=Subquery(i_numbers, output_field=CharField()),
         ).select_related('order').prefetch_related('order__event').order_by('created')
 
         if form_data.get('end_date_range'):
@@ -1135,6 +1147,7 @@ class PaymentListExporter(ListExporter):
         headers = [
             _('Event slug'), _('Order'), _('Payment ID'), _('Creation date'), _('Completion date'), _('Status'),
             _('Status code'), _('Amount'), _('Payment method'), _('Comment'), _('Matching ID'), _('Payment details'),
+            _('Invoice numbers'),
         ]
         yield headers
 
@@ -1172,6 +1185,7 @@ class PaymentListExporter(ListExporter):
                 obj.comment if isinstance(obj, OrderRefund) else "",
                 matching_id,
                 payment_details,
+                obj.order_invoice_numbers,
             ]
             yield row
 
