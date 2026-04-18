@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-08 18:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2026-04-18 22:00+0000\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 5.17\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -12855,7 +12855,7 @@ msgstr "Dr"
 
 #: pretix/base/settings.py:3819 pretix/base/settings.py:3836
 msgid "First name"
-msgstr "名(First Name)"
+msgstr "名"
 
 #: pretix/base/settings.py:3820 pretix/base/settings.py:3837
 msgid "Middle name"
@@ -23636,8 +23636,8 @@ msgid ""
 "this product was part of the discount calculation for a different product in "
 "this order."
 msgstr ""
-"この製品の価格は自動割引により減額されたか、この製品がこの注文の別の製品の割"
-"引計算の一部になっています。"
+"自動割引によりこの商品の価格が引き下げられたか、同じ注文内の別の商品に対する"
+"割引計算の対象になっています。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:496
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:103
@@ -25008,7 +25008,7 @@ msgstr "デバイスの概要"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:6
 msgid "Device:"
-msgstr "デバイス:"
+msgstr "デバイス："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:8
 msgid "Connect a new device"
