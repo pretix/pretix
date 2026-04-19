@@ -64,6 +64,7 @@ from pretix.base.services.cart import (
     CartError, add_items_to_cart, apply_voucher, clear_cart, error_messages,
     extend_cart_reservation, remove_cart_position,
 )
+from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.timemachine import time_machine_now
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
@@ -790,6 +791,11 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
             context = {}
             context['cart'] = self.get_cart()
             context['show_cart'] = context['cart']['positions']
+            templating_context = PlaceholderContext(event=request.event)
+            context['texts'] = {
+                field: templating_context.format(str(request.event.settings[field]))
+                for field in ('banner_text', 'banner_text_bottom', 'voucher_explanation_text')
+            }
             return render(request, 'pretixpresale/event/voucher_form.html', context)
 
         if request.event.presale_has_ended or (
