@@ -55,6 +55,7 @@ from pretix.base.models import (
     QuestionAnswer, QuestionOption, TaxRule,
 )
 from pretix.base.services.cart import get_fees
+from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.services.pricing import apply_rounding
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.cookies import set_cookie_without_samesite
@@ -502,6 +503,11 @@ class EventViewMixin:
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['event'] = self.request.event
+        templating_context = PlaceholderContext(event=self.request.event)
+        context['texts'] = {
+            field: templating_context.format(str(self.request.event.settings[field]))
+            for field in ('banner_text', 'banner_text_bottom', 'voucher_explanation_text')
+        }
         return context
 
     def get_index_url(self):

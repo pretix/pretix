@@ -58,9 +58,9 @@
                     {{ event.name }}
                 </h2>
             {% endif %}
-            {% if frontpage_text %}
+            {% if texts.frontpage_text %}
                 <div>
-                    {{ frontpage_text|rich_text }}
+                    {{ texts.frontpage_text|rich_text }}
                 </div>
             {% endif %}
 
@@ -123,9 +123,9 @@
 
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
-            {% if frontpage_text %}
+            {% if texts.frontpage_text %}
                 <div>
-                    {{ frontpage_text|rich_text }}
+                    {{ texts.frontpage_text|rich_text }}
                 </div>
             {% endif %}
         {% endif %}
@@ -138,9 +138,9 @@
                 {% endif %}
             </h2>
         {% endif %}
-        {% if frontpage_text %}
+        {% if texts.frontpage_text %}
             <div>
-                {{ frontpage_text|rich_text }}
+                {{ texts.frontpage_text|rich_text }}
             </div>
         {% endif %}
     {% endif %}
@@ -149,8 +149,8 @@
         {% if not ev.presale_is_running %}
             <div class="alert alert-info">
                 {% if ev.presale_has_ended %}
-                    {% if event.settings.presale_has_ended_text %}
-                        {{ event.settings.presale_has_ended_text|rich_text }}
+                    {% if texts.presale_has_ended_text %}
+                        {{ texts.presale_has_ended_text|rich_text }}
                     {% else %}
                         {% blocktrans trimmed %}
                             The booking period for this event is over.

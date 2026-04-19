@@ -799,7 +799,7 @@ class WidgetAPIProductList(EventListMixin, View):
             data['vouchers_exist'] = False
             if ev.presale_has_ended:
                 if request.event.settings.presale_has_ended_text:
-                    data['error'] = str(request.event.settings.presale_has_ended_text)
+                    data['error'] = templating_context.format(str(request.event.settings.presale_has_ended_text))
                 else:
                     data['error'] = gettext('The booking period for this event is over.')
             elif request.event.settings.presale_start_show_date:
