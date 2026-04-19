@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-18 22:00+0000\n"
+"PO-Revision-Date: 2026-04-19 18:00+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -664,7 +664,7 @@ msgstr "ギフトカードを取引で使用済み"
 #: pretix/plugins/banktransfer/payment.py:483
 #: pretix/presale/forms/customer.py:152
 msgid "This field is required."
-msgstr "この項目は必須です。"
+msgstr "このフィールドは必須です。"
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
@@ -8206,7 +8206,7 @@ msgstr "参加者の呼びかけに使う名前"
 #: pretix/base/services/placeholders.py:732
 #: pretix/control/forms/organizer.py:799
 msgid "Mr Doe"
-msgstr "山田様"
+msgstr "山田 太郎"
 
 #: pretix/base/pdf.py:672 pretix/base/pdf.py:679
 #: pretix/plugins/badges/exporters.py:501
@@ -11001,7 +11001,7 @@ msgstr ""
 #: pretix/base/settings.py:1869 pretix/base/settings.py:1877
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:8
 msgid "List"
-msgstr "リスト"
+msgstr "一覧"
 
 #: pretix/base/settings.py:1870 pretix/base/settings.py:1878
 msgid "Week calendar"
@@ -19423,7 +19423,7 @@ msgstr "カスタムチェックインルール"
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:117
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:85
 msgid "Edit"
-msgstr "編集する"
+msgstr "編集"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:89
 msgid "Visualize"
@@ -33303,7 +33303,7 @@ msgstr "本当にStripeアカウントを切断しますか？"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
 msgid "Disconnect"
-msgstr "切断します"
+msgstr "切断"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:6
 msgid "Payment instructions"
