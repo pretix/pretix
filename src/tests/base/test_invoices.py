@@ -123,6 +123,8 @@ def env():
             ExchangeRate.objects.create(source_date=date.today(), source='eu:ecb:eurofxref-daily', source_currency='EUR', other_currency=currency, rate=rate)
         ExchangeRate.objects.create(source_date=date.today(), source='cz:cnb:rate-fixing-daily', source_currency='EUR',
                                     other_currency='CZK', rate=Decimal('25.0000'))
+        ExchangeRate.objects.create(source_date=date.today(), source='pl:nbp:table-a', source_currency='EUR',
+                                    other_currency='PLN', rate=Decimal('4.2355'))
         yield event, o
 
 
@@ -345,6 +347,23 @@ def test_invoice_indirect_currency_conversion(env):
     assert inv.foreign_currency_rate == Decimal("0.4423")
     assert inv.foreign_currency_rate_date == date.today()
     assert inv.foreign_currency_source == 'eu:ecb:eurofxref-daily'
+
+
+@pytest.mark.django_db
+def test_invoice_pln_currency_conversion(env):
+    event, order = env
+    event.settings.invoice_eu_currencies = 'PLN'
+
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street', zipcode='12345', city='Warsaw',
+                                  country=Country('PL'), vat_id='PL123456780', vat_id_validated=True, order=order,
+                                  is_business=True)
+
+    inv = generate_invoice(order)
+    assert inv.foreign_currency_display == "PLN"
+    assert inv.foreign_currency_rate == Decimal("4.2355")
+    assert inv.foreign_currency_rate_date == date.today()
+    assert inv.foreign_currency_source == 'pl:nbp:table-a'
 
 
 @pytest.mark.django_db

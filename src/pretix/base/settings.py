@@ -574,6 +574,7 @@ DEFAULTS = {
                 ('True', _('Based on European Central Bank daily rates, whenever the invoice recipient is in an EU '
                            'country that uses a different currency.')),
                 ('CZK', _('Based on Czech National Bank daily rates, whenever the invoice amount is not in CZK.')),
+                ('PLN', _('Based on National Bank of Poland daily rates, whenever the invoice amount is not in PLN.')),
             ),
         ),
         'serializer_kwargs': dict(
@@ -582,6 +583,7 @@ DEFAULTS = {
                 ('True', _('Based on European Central Bank daily rates, whenever the invoice recipient is in an EU '
                            'country that uses a different currency.')),
                 ('CZK', _('Based on Czech National Bank daily rates, whenever the invoice amount is not in CZK.')),
+                ('PLN', _('Based on National Bank of Poland daily rates, whenever the invoice amount is not in PLN.')),
             ),
         ),
     },
