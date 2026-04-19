@@ -110,6 +110,8 @@ class VoucherForm(I18nModelForm):
             except Item.DoesNotExist:
                 pass
         super().__init__(*args, **kwargs)
+        if not self.event and self.instance:
+            self.event = self.instance.event
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
@@ -130,7 +132,7 @@ class VoucherForm(I18nModelForm):
         choices = []
         prefix = (self.prefix + '-') if self.prefix else ''
         if 'itemvar' in initial or (self.data and prefix + 'itemvar' in self.data):
-            iv = self.data.get(prefix + 'itemvar') or initial.get('itemvar', '')
+            iv = self.data.get(prefix + 'itemvar', '') or initial.get('itemvar', '') or ''
             if iv.startswith('q-'):
                 q = self.event.quotas.get(pk=iv[2:])
                 choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q)))
@@ -303,7 +305,7 @@ class VoucherBulkEditForm(VoucherForm):
                 if itemid:
                     data["item"] = self.event.items.get(pk=itemid)
                     if varid:
-                        data["variation"] = self.instance.item.variations.get(pk=varid)
+                        data["variation"] = data["item"].variations.get(pk=varid)
                     else:
                         data["variation"] = None
                     data["quota"] = None
@@ -321,7 +323,7 @@ class VoucherBulkEditForm(VoucherForm):
 
         if self.prefix + "max_usages" in self.data.getlist('_bulk'):
             max_redeemed = self.queryset.aggregate(m=Max("redeemed"))["m"]
-            if data["max_usages"] > max_redeemed:
+            if data["max_usages"] < max_redeemed:
                 raise ValidationError(_(
                     "You cannot reduce the maximum number of redemptions to %(max_usages)s, because at least one "
                     "of the selected vouchers has already been redeemed %(max_redeemed)s times."
@@ -369,7 +371,7 @@ class VoucherBulkEditForm(VoucherForm):
                             )
                         else:
                             old_quotas |= set(current["item"].quotas.filter(subevent=current["subevent"]))
-                old_amount = max(current["max_usages"] - current["redeemed"], 0)
+                old_amount = max(current["max_usages"] - current["redeemed"], 0) * current["c"]
 
                 # Predict state after change
                 after_change = dict(current)
@@ -426,21 +428,20 @@ class VoucherBulkEditForm(VoucherForm):
                         else:
                             new_quotas |= set(after_change["item"].quotas.filter(subevent=after_change["subevent"]))
 
-                    new_amount = max(current["max_usages"] - current["redeemed"], 0)
-
+                new_amount = max(current["max_usages"] - current["redeemed"], 0)
                 if new_quotas != old_quotas or new_amount != old_amount:
                     for q in old_quotas:
                         quota_diff[q] -= old_amount
                     for q in new_quotas:
-                        quota_diff[q] += new_quotas
+                        quota_diff[q] += new_amount
 
             if any(v > 0 for q, v in quota_diff.items()):
-                lock_objects([q for q,  in quota_diff.items() if q.size is not None and v > 0], shared_lock_objects=[self.event])
+                lock_objects([q for q, v in quota_diff.items() if q.size is not None and v > 0], shared_lock_objects=[self.event])
                 qa = QuotaAvailability(count_waitinglist=False)
                 qa.queue(*(q for q, v in quota_diff.items() if v > 0))
                 qa.compute()
 
-                if any(r[0] != Quota.AVAILABILITY_OK or (r[1] is not None and r[1] < cnt) for r in qa.results.values()):
+                if any(qa.results[q][0] != Quota.AVAILABILITY_OK or (qa.results[q][1] is not None and qa.results[q][1] < required) for q, required in quota_diff.items() if required > 0):
                     raise ValidationError(_(
                         'There is no sufficient quota available to perform this change.'
                     ))
@@ -473,7 +474,7 @@ class VoucherBulkEditForm(VoucherForm):
                     )
                     if self.event.has_subevents:
                         conflicts = currently_not_blocked_seats.exclude(
-                            seat_id__in=self.event.free_seats.values(pk)
+                            seat_id__in=self.event.free_seats.values("pk")
                         )
                         if conflicts:
                             raise ValidationError(_(
@@ -486,7 +487,7 @@ class VoucherBulkEditForm(VoucherForm):
                             conflicts = currently_not_blocked_seats.filter(
                                 subevent=se
                             ).exclude(
-                                seat_id__in=se.free_seats.values(pk)
+                                seat_id__in=se.free_seats.values("pk")
                             )
                             if conflicts:
                                 raise ValidationError(_(

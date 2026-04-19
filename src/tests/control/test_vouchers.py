@@ -35,6 +35,7 @@
 import datetime
 import decimal
 import json
+from decimal import Decimal
 
 from django.core import mail as djmail
 from django.test import TransactionTestCase
@@ -771,3 +772,200 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
 
         assert len(doc.select('.alert-warning ul li')) == 1  # Check that there's exactly 1 item in the warning list
         assert doc.text.count('Order DEDUP') == 1  # Check that the order is listed exactly once
+
+
+class VoucherBulkEditFormTest(SoupTestMixin, TransactionTestCase):
+    @scopes_disabled()
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+        self.orga = Organizer.objects.create(name='CCC', slug='ccc')
+        self.event = Event.objects.create(
+            organizer=self.orga, name='30C3', slug='30c3',
+            date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+        )
+        t = Team.objects.create(organizer=self.orga, all_event_permissions=True)
+        t.members.add(self.user)
+        t.limit_events.add(self.event)
+        self.client.login(email='dummy@dummy.dummy', password='dummy')
+
+        self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
+        self.shirt = Item.objects.create(event=self.event, name='T-Shirt', default_price=12)
+        self.quota_shirts.items.add(self.shirt)
+        self.shirt_red = ItemVariation.objects.create(item=self.shirt, default_price=14, value='Red')
+        self.shirt_blue = ItemVariation.objects.create(item=self.shirt, value='Blue')
+        self.quota_shirts.variations.add(self.shirt_red)
+        self.quota_shirts.variations.add(self.shirt_blue)
+        self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=2)
+        self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
+                                          default_price=23)
+        self.quota_tickets.items.add(self.ticket)
+        self.url = f'/control/event/{self.orga.slug}/{self.event.slug}/vouchers/bulk_edit'
+
+    def test_simple_edit(self):
+        with scopes_disabled():
+            self.event.vouchers.create(
+                quota=self.quota_tickets,
+                max_usages=10,
+                price_mode="set",
+                value=13,
+            )
+            self.event.vouchers.create(
+                item=self.ticket,
+                max_usages=10,
+                price_mode="set",
+                value=12,
+            )
+
+        doc = self.post_doc(self.url, {
+            '__ALL': 'on',
+        }, follow=True)
+        fields = extract_form_fields(doc)
+        assert fields.get('bulkedit-max_usages') == '10'
+        assert fields.get('bulkedit-price_mode') == 'set'
+        assert not fields.get('bulkedit-value')
+        fields.update({
+            '_bulk': ['bulkedit__price', 'bulkeditmin_usages', 'bulkedittag', 'bulkeditshow_hidden_items'],
+            'bulkedit-price_mode': 'percent',
+            'bulkedit-value': '15',
+            'bulkedit-min_usages': '3',
+            'bulkedit-tag': 'tagged',
+            'bulkedit-comment': 'This is a comment',  # will be ignored, as not included in _bulk
+            'bulkedit-show_hidden_items': '',
+        })
+        doc = self.post_doc(self.url, fields, follow=True)
+        assert doc.select(".alert-success")
+        with scopes_disabled():
+            for v in self.event.vouchers.all():
+                assert v.price_mode == "percent"
+                assert v.value == Decimal("15.00")
+                assert v.min_usages == 3
+                assert v.tag == "tagged"
+                assert v.comment == ""
+                assert v.show_hidden_items is False
+
+    def _update_all(self, data: dict, expect_error: str=None):
+        doc = self.post_doc(self.url, {
+            '__ALL': 'on',
+        }, follow=True)
+        fields = extract_form_fields(doc)
+        fields.update(data)
+        doc = self.post_doc(self.url, fields, follow=True)
+        if expect_error:
+            assert doc.select(".alert-danger")
+            assert any(expect_error in el.text for el in doc.select(".alert-danger"))
+        else:
+            assert doc.select(".alert-success")
+
+    def test_change_itemvar_to_product(self):
+        with scopes_disabled():
+            self.event.vouchers.create(quota=self.quota_tickets)
+            self.event.vouchers.create(item=self.ticket)
+
+        self._update_all({
+            '_bulk': ['bulkedititemvar'],
+            'bulkedit-itemvar': f'{self.ticket.pk}',
+        })
+        with scopes_disabled():
+            for v in self.event.vouchers.all():
+                assert v.item == self.ticket
+                assert not v.variation
+                assert not v.quota
+
+    def test_change_itemvar_to_variation(self):
+        with scopes_disabled():
+            self.event.vouchers.create(quota=self.quota_tickets)
+            self.event.vouchers.create(item=self.ticket)
+
+        self._update_all({
+            '_bulk': ['bulkedititemvar'],
+            'bulkedit-itemvar': f'{self.shirt.pk}-{self.shirt_red.pk}',
+        })
+        with scopes_disabled():
+            for v in self.event.vouchers.all():
+                assert v.item == self.shirt
+                assert v.variation == self.shirt_red
+                assert not v.quota
+
+    def test_change_itemvar_to_quota(self):
+        with scopes_disabled():
+            self.event.vouchers.create(quota=self.quota_tickets)
+            self.event.vouchers.create(item=self.ticket)
+
+        self._update_all({
+            '_bulk': ['bulkedititemvar'],
+            'bulkedit-itemvar': f'q-{self.quota_tickets.pk}',
+        })
+        with scopes_disabled():
+            for v in self.event.vouchers.all():
+                assert not v.item
+                assert not v.variation
+                assert v.quota == self.quota_tickets
+
+    def test_change_max_usages(self):
+        with scopes_disabled():
+            self.event.vouchers.create(quota=self.quota_tickets, max_usages=15, redeemed=4)
+            self.event.vouchers.create(item=self.ticket, max_usages=15, redeemed=2)
+
+        self._update_all({
+            '_bulk': ['bulkeditmax_usages'],
+            'bulkedit-max_usages': '3',
+        }, expect_error="already been redeemed 4 times")
+        self._update_all({
+            '_bulk': ['bulkeditmax_usages'],
+            'bulkedit-max_usages': '4',
+        })
+        with scopes_disabled():
+            for v in self.event.vouchers.all():
+                assert v.max_usages == 4
+
+    def _requires_one_more_quota(self, data: dict, expect_error: str=None):
+        self._update_all(data, expect_error="no sufficient quota")
+        self.quota_tickets.size += 1
+        self.quota_tickets.save()
+        self._update_all(data)
+
+    def test_quota_check_change_item(self):
+        with scopes_disabled():
+            self.event.vouchers.create(item=self.shirt, block_quota=True, max_usages=2, redeemed=1)
+            self.event.vouchers.create(item=self.shirt, block_quota=True, max_usages=3, redeemed=1)
+        self._requires_one_more_quota({
+            '_bulk': ['bulkedititemvar'],
+            'bulkedit-itemvar': f'{self.ticket.pk}',
+        })
+        with scopes_disabled():
+            for v in self.event.vouchers.all():
+                assert v.item == self.ticket
+
+    def test_quota_check_change_expired_to_valid(self):
+        with scopes_disabled():
+            self.event.vouchers.create(item=self.shirt, block_quota=True, max_usages=2)
+            self.event.vouchers.create(item=self.shirt, block_quota=True, max_usages=1, valid_until=now() - datetime.timedelta(days=1))
+        self._requires_one_more_quota({
+            '_bulk': ['bulkeditvalid_until'],
+            'bulkedit-valid_until_0': '',
+            'bulkedit-valid_until_1': '',
+        })
+        with scopes_disabled():
+            for v in self.event.vouchers.all():
+                assert not v.valid_until
+
+    def test_quota_check_change_max_usages(self):
+        with scopes_disabled():
+            self.event.vouchers.create(item=self.shirt, block_quota=True, max_usages=2)
+            self.event.vouchers.create(item=self.shirt, block_quota=True, max_usages=1, redeemed=1)
+        self._requires_one_more_quota({
+            '_bulk': ['bulkeditmax_usages'],
+            'bulkedit-max_usages': '',
+        })
+        with scopes_disabled():
+            for v in self.event.vouchers.all():
+                assert v.max_usages == 2
+
+    # test quota use existing credit
+    # test quota changed subevent
+    # test quota changed subevent to mismatch quota
+    # test quota changed subevent to none
+    # test quota changed block quota, ignore
+    # test change seat properties
+    # test seats still available after validity change

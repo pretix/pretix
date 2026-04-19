@@ -688,7 +688,7 @@ class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, For
     def is_submitted(self):
         # Usually, django considers a form "bound" / "submitted" on every POST request. However, this view is always
         # called with POST method, even if just to pass the selection of objects to work on, so we want to modify
-        # that behaviour
+        # that behavior
         return '_bulk' in self.request.POST
 
     def get_form_kwargs(self):
@@ -744,7 +744,6 @@ class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, For
             'event': self.request.event.slug,
         })
 
-    @transaction.atomic()
     def form_valid(self, form):
         log_entries = []
 
@@ -772,6 +771,7 @@ class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, For
         ctx['bulk_selected'] = self.request.POST.getlist("_bulk")
         return ctx
 
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         is_valid = (
