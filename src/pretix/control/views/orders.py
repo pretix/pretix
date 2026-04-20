@@ -1949,8 +1949,11 @@ class OrderChange(OrderView):
 
     @cached_property
     def other_form(self):
-        return OtherOperationsForm(prefix='other', order=self.order,
+        form = OtherOperationsForm(prefix='other', order=self.order,
                                    data=self.request.POST if self.request.method == "POST" else None)
+        ocm = OrderChangeManager(self.order)
+        form.fields['reissue_invoice'].initial = ocm.invoice_should_be_generated_now()
+        return form
 
     @cached_property
     def add_position_formset(self):
@@ -2177,6 +2180,8 @@ class OrderChange(OrderView):
             notify=notify,
             reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else True,
             allow_blocked_seats=True,
+            force_reissue_invoice=self.other_form.cleaned_data['reissue_invoice'] if self.other_form.is_valid() else False,
+
         )
         form_valid = (self._process_add_fees(ocm) and
                       self._process_add_positions(ocm) and

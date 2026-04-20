@@ -1651,7 +1651,7 @@ class OrderChangeManager:
                 raise RuntimeError("Order position has not been created yet. Call commit() first on OrderChangeManager.")
             return self._positions
 
-    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True, allow_blocked_seats=False):
+    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True, allow_blocked_seats=False, force_reissue_invoice=False):
         self.order = order
         self.user = user
         self.auth = auth
@@ -1659,6 +1659,7 @@ class OrderChangeManager:
         self.split_order = None
         self.reissue_invoice = reissue_invoice
         self.allow_blocked_seats = allow_blocked_seats
+        self.force_reissue_invoice = force_reissue_invoice
         self._committed = False
         self._totaldiff_guesstimate = 0
         self._quotadiff = Counter()
@@ -2902,25 +2903,29 @@ class OrderChangeManager:
                 }
             )
 
+    def invoice_should_be_generated_now(self):
+        i = self.order.invoices.filter(is_cancellation=False).last()
+        return (
+            self.event.settings.invoice_generate == "True" or (
+                self.event.settings.invoice_generate == "paid" and
+                self.open_payment is not None and
+                self.open_payment.payment_provider.requires_invoice_immediately
+            ) or (
+                self.event.settings.invoice_generate == "paid" and
+                self.order.status == Order.STATUS_PAID
+            ) or (
+                # Backwards-compatible behaviour
+                (self.event.settings.invoice_generate not in ("True", "paid") or self.force_reissue_invoice) and
+                i and
+                not i.canceled
+            )
+        )
+
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
         if self.reissue_invoice and self._invoice_dirty:
             order_now_qualified = invoice_qualified(self.order)
-            invoice_should_be_generated_now = (
-                self.event.settings.invoice_generate == "True" or (
-                    self.event.settings.invoice_generate == "paid" and
-                    self.open_payment is not None and
-                    self.open_payment.payment_provider.requires_invoice_immediately
-                ) or (
-                    self.event.settings.invoice_generate == "paid" and
-                    self.order.status == Order.STATUS_PAID
-                ) or (
-                    # Backwards-compatible behaviour
-                    self.event.settings.invoice_generate not in ("True", "paid") and
-                    i and
-                    not i.canceled
-                )
-            )
+            invoice_should_be_generated_now = self.invoice_should_be_generated_now()
             invoice_should_be_generated_later = not invoice_should_be_generated_now and (
                 self.event.settings.invoice_generate in ("True", "paid")
             )
