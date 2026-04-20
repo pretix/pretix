@@ -35,7 +35,7 @@ dependencies = [
   "chardet==5.2.*",
   "cryptography>=46.0.7",
   "css-inline==0.20.*",
-  "defusedcsv>=1.1.0",
+  "defusedcsv>=3.0.0",
   "dnspython==2.*",
   "Django[argon2]==5.2.*",
   "django-bootstrap3==26.1",
