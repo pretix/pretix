@@ -117,12 +117,17 @@ class GroupConcat(Aggregate):
             template = "%(function)s(%(distinct)s%(field)s::text, '%(separator)s' ORDER BY %(field)s::text ASC)"
         else:
             template = "%(function)s(%(distinct)s%(field)s::text, '%(separator)s')"
-        return super().as_sql(
+
+        template, params = super().as_sql(
             compiler, connection,
             function='string_agg',
             template=template,
             **extra_context,
         )
+        if self.ordered:
+            # ordered statement requires field parameters twice
+            params = params + params
+        return template, params
 
 
 class ReplicaRouter:
