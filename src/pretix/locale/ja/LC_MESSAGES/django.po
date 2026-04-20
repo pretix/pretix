@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-19 18:00+0000\n"
+"PO-Revision-Date: 2026-04-20 08:07+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -3800,7 +3800,7 @@ msgstr "単価：{net_price} 税抜 / {gross_price} 税込"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "単価：{price}"
+msgstr "単価: {price}"
 
 #: pretix/base/invoicing/pdf.py:947 pretix/base/invoicing/pdf.py:952
 msgctxt "invoice"
@@ -20280,7 +20280,7 @@ msgstr "地理座標"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:271
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:275
 msgid "Optional"
-msgstr "オプション（必須でない項目）"
+msgstr "任意"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:22
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:58
@@ -25897,7 +25897,7 @@ msgstr "二要素認証が無効です"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:57
 msgid "invited, pending response"
-msgstr "招待済み、返答待ち"
+msgstr "招待済み、応答待ち"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:59
 msgid "resend invite"
