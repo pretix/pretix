@@ -26,6 +26,11 @@ from pretix.base.models import Event
 from pretix.base.settings import SettingsSandbox
 from django.template.loader import render_to_string
 
+from .styles import AVAILABLE_STYLES_DICT
+
+from .models import WalletLayout
+from .views import get_layout_variables
+
 
 logger = logging.getLogger("pretix.plugins.wallet")
 
@@ -66,6 +71,61 @@ class AppleWalletTicketOutput(WalletOutput):
     identifier = "wallet_apple"
     verbose_name = _("Apple")
     download_button_text = "Add to Apple Wallet"
+
+    def generate(self, op):
+        order = op.order
+        event = order.event
+        filename = "{}-{}.pkpass".format(order.event.slug, order.code)
+
+        # layout = self.override_layout_signal.send_chained(
+        #     order.event, 'layout', orderposition=op, layout=self.layout_map.get(
+        #         (op.item_id, self.override_channel or order.sales_channel.identifier),
+        #         self.layout_map.get(
+        #             (op.item_id, 'web'),
+        #             self.default_layout
+        #         )
+        #     )
+        # )
+        layout = WalletLayout.objects.get(pk=1)
+
+        ticket = str(op.item.name)
+        if op.variation:
+            ticket += " - " + str(op.variation)
+        
+        serialNumber = "%s-%s-%s-%d" % (
+            order.event.organizer.slug,
+            order.event.slug,
+            order.code,
+            op.pk,
+        )
+
+        context = {
+            "placeholders": get_layout_variables(op.order.event),
+            "evaluation_context": [op, order, order.event],
+            "ca_certificate": open(
+                "/Users/engelhardt/code/tmp/wallet/apple/ca_cert.pem", "rb"
+            ).read(),
+            "certificate": open(
+                "/Users/engelhardt/code/tmp/wallet/apple/cert.pem", "rb"
+            ).read(),
+            "key": open(
+                "/Users/engelhardt/code/tmp/wallet/apple/secret_key.pem", "rb"
+            ).read(),
+            "password": None,
+            "description": _("Ticket for {event} ({product})").format( # TODO: i18n
+                event=event.name, product=ticket
+            ),
+            "organizationName": event.organizer.name,
+            "passTypeIdentifier": "pass.test.test",
+            "teamIdentifier": "TEST123456",
+            "serialNumber": serialNumber,
+            "locales": event.settings.locales
+        }
+        assert layout.platform == "apple"
+        data = AVAILABLE_STYLES_DICT[layout.platform][layout.style].generate(
+            layout.layout, context
+        )
+        return filename, "application/vnd.apple.pkpass", data
 
 
 OUTPUTS = [WalletSettingsHolder, GoogleWalletTicketOutput, AppleWalletTicketOutput]

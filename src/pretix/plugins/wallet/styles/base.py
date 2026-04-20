@@ -293,5 +293,6 @@ class PassLayout:
             raise ValidationError("Invalid layout: {}".format(str(e)))
 
     def generate(self, context):
+        # TODO: how to handle nonexisting placeholders here?
         self.validate(context)
         return self.style.generate(self.layout, context)
