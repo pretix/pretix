@@ -42,7 +42,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import connection, transaction
-from django.db.models import Exists, OuterRef, Sum, Subquery, Count
+from django.db.models import Count, Exists, OuterRef, Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
@@ -55,7 +55,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
-    CreateView, ListView, TemplateView, UpdateView, View, FormView,
+    CreateView, FormView, ListView, TemplateView, UpdateView, View,
 )
 from django_scopes import scopes_disabled
 
@@ -70,7 +70,9 @@ from pretix.base.services.vouchers import vouchers_send
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncFormView
 from pretix.control.forms.filter import VoucherFilterForm, VoucherTagFilterForm
-from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm, VoucherBulkEditForm
+from pretix.control.forms.vouchers import (
+    VoucherBulkEditForm, VoucherBulkForm, VoucherForm,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
 from pretix.control.views import PaginationMixin
@@ -671,7 +673,6 @@ class VoucherBulkAction(VoucherQueryMixin, EventPermissionRequiredMixin, View):
         })
 
 
-
 class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, FormView):
     template_name = 'pretixcontrol/vouchers/bulk_edit.html'
     permission = 'event.vouchers:write'
@@ -757,7 +758,7 @@ class VoucherBulkUpdateView(VoucherQueryMixin, EventPermissionRequiredMixin, For
         data['_raw_bulk_data'] = self.request.POST.dict()
         for obj in self.get_queryset():
             log_entries.append(
-                obj.log_action('pretix.event.quota.changed', data=data, user=self.request.user, save=False)
+                obj.log_action('pretix.voucher.changed', data=data, user=self.request.user, save=False)
             )
 
         LogEntry.bulk_create_and_postprocess(log_entries)

@@ -33,13 +33,13 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import csv
-from collections import namedtuple, Counter
+from collections import Counter, namedtuple
 from io import StringIO
 
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import EmailValidator
-from django.db.models import Max, Sum, Count, Q, F
+from django.db.models import Count, F, Max
 from django.db.models.functions import Upper
 from django.forms.utils import ErrorDict
 from django.urls import reverse
@@ -53,7 +53,7 @@ from pretix.base.forms import (
 )
 from pretix.base.forms.widgets import format_placeholders_help_text
 from pretix.base.i18n import language
-from pretix.base.models import Item, Voucher, Quota, SubEvent, ItemVariation
+from pretix.base.models import Item, ItemVariation, Quota, SubEvent, Voucher
 from pretix.base.services.locking import lock_objects
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
@@ -283,10 +283,10 @@ class VoucherBulkEditForm(VoucherForm):
 
     def clean(self):
         # We skip the parent class because it's not suited for bulk editing and implement custom validation here.
-        # This does not validate everything we validate in VoucherForm. For example, we skip validation that one does
-        # not create a voucher for an add-on product to save on complexity. This is a UX validation only anyways, since
-        # one could first create the voucher and then make the product an add-on product. However, we need to validate
-        # everything that we don't want violated in the database.
+        # This does not validate *everything* we validate in VoucherForm. For example, we skip validation that one does
+        # not create a voucher for an add-on product or that the seat matches the product to save on complexity.
+        # This is a UX validation only anyway, since one could first create the voucher and then make the product an
+        # add-on product. However, we need to validate everything that we don't want violated in the database.
         data = super(VoucherForm, self).clean()
 
         if self.prefix + "itemvar" in self.data.getlist('_bulk'):
@@ -321,7 +321,7 @@ class VoucherBulkEditForm(VoucherForm):
             except ObjectDoesNotExist:
                 raise ValidationError(_("Invalid product selected."))
 
-        if self.prefix + "max_usages" in self.data.getlist('_bulk'):
+        if self.prefix + "max_usages" in self.data.getlist('_bulk') and "max_usages" in data:
             max_redeemed = self.queryset.aggregate(m=Max("redeemed"))["m"]
             if data["max_usages"] < max_redeemed:
                 raise ValidationError(_(
@@ -375,26 +375,26 @@ class VoucherBulkEditForm(VoucherForm):
 
                 # Predict state after change
                 after_change = dict(current)
-                if self.prefix + "itemvar" in self.data.getlist('_bulk'):
+                if self.prefix + "itemvar" in self.data.getlist('_bulk') and "itemvar" in data:
                     after_change["item"] = data["item"]
                     after_change["variation"] = data["variation"]
                     after_change["quota"] = data["quota"]
-                if self.prefix + "subevent" in self.data.getlist('_bulk'):
+                if self.prefix + "subevent" in self.data.getlist('_bulk') and "subevent" in data:
                     after_change["subevent"] = data["subevent"]
-                if self.prefix + "max_usages" in self.data.getlist('_bulk'):
+                if self.prefix + "max_usages" in self.data.getlist('_bulk') and "max_usages" in data:
                     after_change["max_usages"] = data["max_usages"]
-                if self.prefix + "block_quota" in self.data.getlist('_bulk'):
+                if self.prefix + "block_quota" in self.data.getlist('_bulk') and "block_quota" in data:
                     after_change["block_quota"] = data["block_quota"]
-                if self.prefix + "valid_until" in self.data.getlist('_bulk'):
+                if self.prefix + "valid_until" in self.data.getlist('_bulk') and "valid_until" in data:
                     after_change["valid_until"] = data["valid_until"]
-                if self.prefix + "allow_ignore_quota" in self.data.getlist('_bulk'):
+                if self.prefix + "allow_ignore_quota" in self.data.getlist('_bulk') and "allow_ignore_quota" in data:
                     after_change["allow_ignore_quota"] = data["allow_ignore_quota"]
 
                 if after_change["quota"] and self.event.has_subevents and not after_change["subevent"]:
-                    raise _("You cannot create a voucher that allows selection of a quota but has no date selected.")
+                    raise ValidationError(_("You cannot create a voucher that allows selection of a quota but has no date selected."))
 
                 if after_change["quota"] and after_change["subevent"] and after_change["quota"].subevent_id != after_change["subevent"].pk:
-                    raise _("The selected quota does not match the selected subevent.")
+                    raise ValidationError(_("The selected quota does not match the selected subevent."))
 
                 if after_change["block_quota"] and self.event.has_subevents and not after_change["subevent"]:
                     raise ValidationError(
@@ -410,7 +410,7 @@ class VoucherBulkEditForm(VoucherForm):
                     # todo: is this the most useful way to do this?
                     continue
 
-                will_be_valid = current["valid_until"] is None or current["valid_until"] >= now()
+                will_be_valid = after_change["valid_until"] is None or after_change["valid_until"] >= now()
                 new_quotas = set()
                 if will_be_valid and after_change["block_quota"] and after_change["max_usages"] > current["redeemed"]:
                     if after_change["quota"]:
@@ -428,7 +428,7 @@ class VoucherBulkEditForm(VoucherForm):
                         else:
                             new_quotas |= set(after_change["item"].quotas.filter(subevent=after_change["subevent"]))
 
-                new_amount = max(current["max_usages"] - current["redeemed"], 0)
+                new_amount = max(after_change["max_usages"] - after_change["redeemed"], 0) * current["c"]
                 if new_quotas != old_quotas or new_amount != old_amount:
                     for q in old_quotas:
                         quota_diff[q] -= old_amount
@@ -441,7 +441,8 @@ class VoucherBulkEditForm(VoucherForm):
                 qa.queue(*(q for q, v in quota_diff.items() if v > 0))
                 qa.compute()
 
-                if any(qa.results[q][0] != Quota.AVAILABILITY_OK or (qa.results[q][1] is not None and qa.results[q][1] < required) for q, required in quota_diff.items() if required > 0):
+                if any(qa.results[q][0] != Quota.AVAILABILITY_OK or (qa.results[q][1] is not None and qa.results[q][1] < required)
+                       for q, required in quota_diff.items() if required > 0):
                     raise ValidationError(_(
                         'There is no sufficient quota available to perform this change.'
                     ))
@@ -473,27 +474,27 @@ class VoucherBulkEditForm(VoucherForm):
                         valid_until__lt=now(),
                     )
                     if self.event.has_subevents:
-                        conflicts = currently_not_blocked_seats.exclude(
-                            seat_id__in=self.event.free_seats.values("pk")
-                        )
-                        if conflicts:
-                            raise ValidationError(_(
-                                'This change cannot be completed because not all assigned seats of the vouchers are '
-                                'still available'
-                            ))
-                    else:
                         subevents = self.event.subevents.filter(pk__in=currently_not_blocked_seats.values_list("subevent"))
                         for se in subevents:
                             conflicts = currently_not_blocked_seats.filter(
                                 subevent=se
                             ).exclude(
-                                seat_id__in=se.free_seats.values("pk")
+                                seat_id__in=se.free_seats().values("pk")
                             )
                             if conflicts:
                                 raise ValidationError(_(
                                     'This change cannot be completed because not all assigned seats of the vouchers are '
                                     'still available'
                                 ))
+                    else:
+                        conflicts = currently_not_blocked_seats.exclude(
+                            seat_id__in=self.event.free_seats().values("pk")
+                        )
+                        if conflicts:
+                            raise ValidationError(_(
+                                'This change cannot be completed because not all assigned seats of the vouchers are '
+                                'still available'
+                            ))
 
         return data
 
