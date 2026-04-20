@@ -747,6 +747,92 @@ class SubEventsTest(SoupTest):
         assert ses[1].date_from.isoformat() == "2018-04-12T11:29:31+00:00"
         assert ses[-1].date_from.isoformat() == "2019-03-28T12:29:31+00:00"
 
+    def test_create_bulk_skip_existing(self):
+        with scopes_disabled():
+            self.event1.subevents.all().delete()
+            # SubEvent ends at rrule start time
+            self.event1.subevents.create(
+                date_from=datetime.datetime(2018, 4, 4, 9, 0, tzinfo=datetime.timezone.utc),
+                date_to=datetime.datetime(2018, 4, 4, 10, 0, tzinfo=datetime.timezone.utc),
+            )
+            # SubEvent overlaps rrule start
+            self.event1.subevents.create(
+                date_from=datetime.datetime(2018, 4, 5, 9, 30, tzinfo=datetime.timezone.utc),
+                date_to=datetime.datetime(2018, 4, 5, 10, 30, tzinfo=datetime.timezone.utc),
+            )
+            # SubEvent times are same as rrule
+            self.event1.subevents.create(
+                date_from=datetime.datetime(2018, 4, 6, 10, 0, tzinfo=datetime.timezone.utc),
+                date_to=datetime.datetime(2018, 4, 6, 11, 0, tzinfo=datetime.timezone.utc),
+            )
+            # SubEvent starts at rrule end time
+            self.event1.subevents.create(
+                date_from=datetime.datetime(2018, 4, 7, 11, 0, tzinfo=datetime.timezone.utc),
+                date_to=datetime.datetime(2018, 4, 7, 12, 0, tzinfo=datetime.timezone.utc),
+            )
+            # SubEvent overlaps entire rrule time
+            self.event1.subevents.create(
+                date_from=datetime.datetime(2018, 4, 8, 9, 0, tzinfo=datetime.timezone.utc),
+                date_to=datetime.datetime(2018, 4, 8, 12, 0, tzinfo=datetime.timezone.utc),
+            )
+            # SubEvent has before rrule time and no end
+            self.event1.subevents.create(
+                date_from=datetime.datetime(2018, 4, 9, 9, 0, tzinfo=datetime.timezone.utc),
+            )
+            existing_events = list(self.event1.subevents.values_list('pk', flat=True))
+
+        self.event1.settings.timezone = 'Europe/Berlin'
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-end': 'count',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-interval': '1',
+            'rruleformset-0-freq': 'weekly',
+            'rruleformset-0-dtstart': '2018-04-03',
+            'rruleformset-0-weekly_byweekday': ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'],
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-monthly_same': 'on',
+            'timeformset-TOTAL_FORMS': '1',
+            'timeformset-INITIAL_FORMS': '0',
+            'timeformset-MIN_NUM_FORMS': '1',
+            'timeformset-MAX_NUM_FORMS': '1000',
+            'timeformset-0-time_from': '12:00:00',
+            'timeformset-0-time_to': '13:00:00',
+            'rruleformset-0-until': '2019-04-03',
+            'skip_if_overlap': 'on',
+            'name_0': 'Foo',
+            'active': 'on',
+            'frontpage_text_0': '',
+            'quotas-TOTAL_FORMS': '1',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'quotas-0-name': 'Q1',
+            'quotas-0-size': '50',
+            'quotas-0-itemvars': str(self.ticket.pk),
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        with scopes_disabled():
+            ses = list(self.event1.subevents.exclude(pk__in=existing_events).order_by('date_from'))
+
+        assert len(ses) == 7
+        assert [s.date_from.date().isoformat() for s in ses] == [
+            '2018-04-03',
+            '2018-04-04',
+            '2018-04-07',
+            '2018-04-09',
+            '2018-04-10',
+            '2018-04-11',
+            '2018-04-12'
+        ]
+
     def test_delete_bulk(self):
         self.subevent2.active = True
         self.subevent2.save()
