@@ -1,14 +1,12 @@
 from .base import (
-    FieldEntry,
     FieldEntryType,
-    FieldContentType,
     ImageFieldGroup,
     PlaceholderFieldGroup,
+    PredefinedFieldGroup,
     TextFieldGroup,
     WalletPlatform,
     PassStyle,
     PlaceholderFieldEntry,
-    CustomFieldEntry,
 )
 from django.utils.translation import gettext as _
 from i18nfield.strings import LazyI18nString
@@ -17,10 +15,10 @@ import hashlib
 import zipfile
 import cryptography
 import cryptography.hazmat.primitives.serialization.pkcs7
-# from cryptography import x509
-# from cryptography.hazmat.primitives import hashes, serialization
-# from cryptography.hazmat.primitives.serialization import pkcs7
 import json
+from django.contrib.staticfiles import finders
+
+
 
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
@@ -36,32 +34,39 @@ class StringResource:
         self.entries = {}
         self.locales = set(locales)
 
-    def add_entry(self, key: str, value: LazyI18nString): # TODO: replace LazyI18nString with dict or handle strings where data == ""
+    def add_entry(self, key: str, value: LazyI18nString):
         if key in self.entries:
             raise ValueError(f"{key} already exists in this StringResource")
         self.entries[key] = value
-        if isinstance(value.data, dict):
-            self.locales |= value.data.keys()
 
     def escape(self, string):
-        return string.translate(str.maketrans({"\"": "\\\"", "\r": "\\r", "\n": "\\n", "\\": "\\\\"}))
+        return string.translate(
+            str.maketrans({'"': '\\"', "\r": "\\r", "\n": "\\n", "\\": "\\\\"})
+        )
+
     def generate_resource(self, language):
         output = ""
         for key, entry in self.entries.items():
-            output += f'"{self.escape(key)}" = "{self.escape(entry.localize(language))}";\n'
+            output += (
+                f'"{self.escape(key)}" = "{self.escape(entry.localize(language))}";\n'
+            )
         return output.strip()
-    
+
     def generate(self):
         return {language: self.generate_resource(language) for language in self.locales}
-            
 
 
 class SignedZipFile:
-    """ Generates a zip-file with manifest and signature as apple expects a pkpass file to be """
+    """Generates a zip-file with manifest and signature as apple expects a pkpass file to be"""
+
     def __init__(self, ca_certificate, certificate, key, password):
-        self.ca_certificate = cryptography.x509.load_pem_x509_certificate(ca_certificate)
+        self.ca_certificate = cryptography.x509.load_pem_x509_certificate(
+            ca_certificate
+        )
         self.certificate = cryptography.x509.load_pem_x509_certificate(certificate)
-        self.key = cryptography.hazmat.primitives.serialization.load_pem_private_key(key, password)
+        self.key = cryptography.hazmat.primitives.serialization.load_pem_private_key(
+            key, password
+        )
         self.password = password
 
         self.file = io.BytesIO()
@@ -107,22 +112,45 @@ class SignedZipFile:
 class AppleWalletStyle(PassStyle):
     platform = ApplePlatform
 
-    def generate_pass_json(self, layout, context):
-        pass_json = {}
+    def pass_content(self, layout, context, strings):
+        raise NotImplementedError()
+
+    def generate_pass_json(self, layout, context, strings):
+        def add_from_context(key):
+            value = context.get(key)
+            if not value:
+                raise ValueError(f"{key} must be set to a truthy value")
+            return value
+
+        pass_json = {
+            "formatVersion": 1,
+            "description": add_from_context("description"),
+            "organizationName": add_from_context("organizationName"),
+            "passTypeIdentifier": add_from_context("passTypeIdentifier"),
+            "teamIdentifier": add_from_context("teamIdentifier"),
+            "serialNumber": add_from_context("serialNumber"),
+            **self.pass_content(layout, context, strings),
+        }
         return pass_json
-    
+
     def generate(self, layout, context):
-        for key in ["certificate", "key", "wwdr_certificate", "password"]:
+        for key in ["ca_certificate", "certificate", "key", "password", "locales"]:
             if key not in context:
                 raise ValueError(f"{key} missing from context")
         pkpass = SignedZipFile(
+            context["ca_certificate"],
             context["certificate"],
             context["key"],
-            context["wwdr_certificate"],
             context["password"],
         )
+        strings = StringResource(locales=context['locales'])
 
-        pass_json = self.generate_pass_json()
+        pass_json = self.generate_pass_json(layout, context, strings)
+        print(pass_json)
+        pkpass.add_file(
+                "icon.png", open(finders.find("pretix_passbook/icon.png"), "rb").read()
+            )
+
         pkpass.add_file("pass.json", json.dumps(pass_json))
         return pkpass.finish()
 
@@ -134,7 +162,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
         ImageFieldGroup(
             identifier="logo",
             name=_("Logo"),
-            min_entries=1,
+            min_entries=0,
             max_entries=1,
             labels=False,
             default_entries=[
@@ -166,3 +194,63 @@ class AppleWalletEventTicket(AppleWalletStyle):
         TextFieldGroup(identifier="back", name=_("Back")),
     ]
     # preview_image = "apple/event_ticket.svg"
+
+    def get_pass_fields(self, layout, context):
+        fields = {}
+        for group in self.fieldgroups:
+            if isinstance(group, PredefinedFieldGroup):
+                pass
+            elif isinstance(group, PlaceholderFieldGroup):
+                group_fields = []
+                if group.identifier in layout["fieldgroups"]:
+                    for field in layout["fieldgroups"][group.identifier]["entries"]:
+                        field_entry = {}
+                        if group.labels:
+                            field_entry["label"] = LazyI18nString(field["label"])
+                        if field["type"] == FieldEntryType.PLACEHOLDER.value:
+                            placeholder = (
+                                context.get("placeholders")
+                                .get(group.content_type.value, {})
+                                .get(field["content"])
+                            )
+                            if placeholder:
+                                placeholder_value = placeholder["evaluate"](
+                                    *context.get("evaluation_context", [])
+                                )
+                                if placeholder_value:
+                                    field_entry["value"] = placeholder_value
+                        elif field["type"] == FieldEntryType.TEXT.value:
+                            placeholder_value = LazyI18nString(field["content"])
+                        elif field["type"] == FieldEntryType.IMAGE.value:
+                            raise NotImplementedError(
+                                "Image placeholders not implemented"
+                            )
+                        if "value" in field_entry and field_entry["value"]:
+                            group_fields.append(field_entry)
+                if group.min_entries and len(group_fields) < group.min_entries:
+                    raise ValueError(
+                        f"Group {group.identifier} needs at least {group.min_entries} entries, but only {len(group_fields)} were provided"
+                    )
+                fields[group.identifier] = group_fields[: group.max_entries]
+            else:
+                raise ValueError("Unknown field group")
+        return fields
+
+    def convert_fields(self, strings, fields):
+        converted = []
+        for i,f in enumerate(fields):
+            converted_field = {**f, "key": f"primary-{i}"}
+            if "label" in converted_field and isinstance(converted_field['label'], LazyI18nString):
+                strings.add_entry(f"primary-{i}-label", converted_field['label'])
+                converted_field['label'] = f"primary-{i}-label"
+
+            converted.append(converted_field)
+        return converted
+
+    def pass_content(self, layout, context, strings):
+        fields = self.get_pass_fields(layout, context)
+        return {
+            "eventTicket": {
+                "primaryFields": self.convert_fields(strings, fields['primary'])
+            }
+        }

@@ -49,7 +49,7 @@ class WalletLayoutSerializer(I18nAwareModelSerializer):
             style = platform_styles[data["style"]]
 
             layout = PassLayout(style=style, layout=data["layout"])
-            context = {"placeholders": {k: {"content": v['content']} for k,v in get_layout_variables(self.context['event']).items()}}
+            context = {"placeholders": get_layout_variables(self.context['event'])}
             layout.validate(context=context)
         return data
 
