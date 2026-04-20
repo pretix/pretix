@@ -15,19 +15,20 @@ from .styles import AVAILABLE_STYLES, AVAILABLE_PLATFORMS
 
 def get_layout_variables(event):
     return {
-        "text": {
-            varname: {"label": var["label"], "editor_sample": var["editor_sample"]}
-            for varname, var in get_variables(event).items()
-        },
-        "image": {
-            varname: {"label": var["label"]}
-            for varname, var in get_images(event).items()
-        }
+        "text": get_variables(event),
+        "image": get_images(event)
         | {"poweredby": {"label": _("pretix-Logo")}},  # TODO: image upload
     }
 
+
 def get_editor_variables(event):
-    return {t: {vid: {"label": v.get("label"), "editor_sample": v.get("editor_sample")} for vid,v in vs.items()} for t,vs in get_layout_variables(event).items()}
+    return {
+        t: {
+            vid: {"label": v.get("label"), "editor_sample": v.get("editor_sample")}
+            for vid, v in vs.items()
+        }
+        for t, vs in get_layout_variables(event).items()
+    }
 
 
 # TODO: should this even be a list view?
@@ -65,7 +66,10 @@ class LayoutEditorView(DetailView):
             style.identifier: style.asdict() for style in self.get_platform_styles()
         }
         context["variables"] = get_editor_variables(self.request.event)
-        context['locales'] = {l: dict(settings.LANGUAGES).get(l, l) for l in self.request.event.settings.get('locales')}
+        context["locales"] = {
+            l: dict(settings.LANGUAGES).get(l, l)
+            for l in self.request.event.settings.get("locales")
+        }
 
         return context
 
