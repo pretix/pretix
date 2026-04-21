@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-03-02 21:00+0000\n"
+"PO-Revision-Date: 2026-04-21 08:45+0000\n"
 "Last-Translator: Sandra Rial Pérez <sandrarial@gestiontickets.online>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 5.17\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -15838,14 +15838,12 @@ msgid "Has valid membership"
 msgstr "Membresía del equipo"
 
 #: pretix/control/forms/filter.py:1827
-#, fuzzy
 msgid "Shop live"
 msgstr "Tienda en vivo"
 
 #: pretix/control/forms/filter.py:1829
-#, fuzzy
 msgid "Shop not live"
-msgstr "Tienda no en vivo"
+msgstr "Non mercar en directo"
 
 #: pretix/control/forms/filter.py:1832
 #, fuzzy
@@ -16095,9 +16093,8 @@ msgid "Device status"
 msgstr "Dispositivos"
 
 #: pretix/control/forms/filter.py:2771
-#, fuzzy
 msgid "Active devices"
-msgstr "Todas las facturas"
+msgstr "Dispositivos activos"
 
 #: pretix/control/forms/filter.py:2772
 #, fuzzy
@@ -16181,7 +16178,6 @@ msgid "Perform update checks"
 msgstr "Realizar verificaciones de actualización"
 
 #: pretix/control/forms/global_settings.py:123
-#, fuzzy
 msgid ""
 "During the update check, pretix will report an anonymous, unique "
 "installation ID, the current version of pretix and your installed plugins "
@@ -16190,13 +16186,12 @@ msgid ""
 "any IP addresses and we will not know who you are or where to find your "
 "instance. You can disable this behavior here at any time."
 msgstr ""
-"Durante el chequeo de actualización, pretix reportará un ID de instalación "
-"único y anónimo, la versión actual de pretix y sus plugins instalados y el "
-"número de eventos activos e inactivos en su instalación a los servidores "
-"operados por los desarrolladores de pretix. Sólo almacenaremos datos "
-"anónimos, nunca direcciones IP y no sabremos quién es usted ni dónde "
-"encontrar su instancia. Puede desactivar este comportamiento en cualquier "
-"momento."
+"Durante a comprobación de actualizacións, pretix informará aos servidores "
+"operados polos desenvolvedores de pretix dun ID de instalación único e "
+"anónimo, a versión actual de pretix e os complementos instalados, así como o "
+"número de eventos activos e inactivos na instalación. Só almacenaremos datos "
+"anónimos, nunca enderezos IP, e non saberemos quen es nin onde atopar a túa "
+"instancia. Podes desactivar este comportamento aquí en calquera momento."
 
 #: pretix/control/forms/global_settings.py:131
 #, fuzzy
@@ -16554,15 +16549,15 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/item.py:927
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The variation \"%s\" cannot be deleted because it has already been ordered "
 "by a user or currently is in a user's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
-"La variación \"%s\" no se puede borrar porque ya ha sido pedida por un "
-"usuario o está actualmente en la cesta de un usuario. En su lugar, configure "
-"la variación como \"inactiva\"."
+"A variación \"%s\" non se pode eliminar porque xa foi solicitada por un "
+"usuario ou está actualmente no carriño dun usuario. Defina a variación como "
+"\"inactiva\"."
 
 #: pretix/control/forms/item.py:1004
 #, fuzzy
@@ -16607,7 +16602,6 @@ msgstr "Agregar producto"
 
 #: pretix/control/forms/item.py:1246 pretix/control/forms/orders.py:379
 #: pretix/control/forms/orders.py:568
-#, fuzzy
 msgid "inactive"
 msgstr "inactivo"
 
@@ -16770,6 +16764,13 @@ msgid ""
 "deadline arrives, since we expect that you want to collect the amount "
 "somehow and not auto-cancel the order."
 msgstr ""
+"Se marcas esta caixa, este pedido comportarase como un pedido pagado para a "
+"maioría dos fins, mesmo que aínda non estea pagado. Isto significa que o "
+"cliente xa pode descargar e usar entradas independentemente da configuración "
+"do evento e que algúns complementos poden tratar o pedido como pagado. Se "
+"marcas isto, este pedido non se marcará como \"caducado\" automaticamente se "
+"chega a data límite de pago, xa que agardamos que queiras cobrar o importe "
+"dalgún xeito e non cancelar automaticamente o pedido."
 
 #: pretix/control/forms/orders.py:94
 #, fuzzy
@@ -16843,6 +16844,9 @@ msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
 msgstr ""
+"Incluirase no correo electrónico de notificación cando o marcador de "
+"posición respectivo estea presente no texto do correo electrónico "
+"configurado."
 
 #: pretix/control/forms/orders.py:204
 msgid ""
@@ -17071,6 +17075,8 @@ msgid ""
 "Will be ignored if tickets exceed a given size limit to ensure email "
 "deliverability."
 msgstr ""
+"Ignorarase se os tíckets superan un límite de tamaño determinado para "
+"garantir a entrega por correo electrónico."
 
 #: pretix/control/forms/orders.py:742
 #, fuzzy
@@ -17112,9 +17118,9 @@ msgid "Do nothing and keep the order as it is."
 msgstr "No hagas nada y mantén el orden como está."
 
 #: pretix/control/forms/orders.py:836
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The refund amount needs to be positive and less than {}."
-msgstr "El importe del reembolso debe ser positivo e inferior a {}."
+msgstr "O importe do reembolso debe ser positivo e inferior a {}."
 
 #: pretix/control/forms/orders.py:842
 #, fuzzy
@@ -17334,6 +17340,8 @@ msgstr ""
 #: pretix/control/forms/organizer.py:706
 msgid "Sensitive emails like password resets will not be sent in Bcc."
 msgstr ""
+"Os correos electrónicos confidenciais, como os de restablecemento de "
+"contrasinal, non se enviarán en Cco."
 
 #: pretix/control/forms/organizer.py:716
 #, fuzzy
@@ -17432,6 +17440,9 @@ msgid ""
 "verified to really belong the the user. If this can't be guaranteed, "
 "security issues might arise."
 msgstr ""
+"Asumiremos que todos os enderezos de correo electrónico recibidos do "
+"provedor de SSO se verifican para que realmente pertenzan ao usuario. Se "
+"isto non se pode garantir, poderían xurdir problemas de seguridade."
 
 #: pretix/control/forms/organizer.py:1222
 #, fuzzy
@@ -17496,7 +17507,7 @@ msgstr "Xa existe un recibo con este código."
 
 #: pretix/control/forms/organizer.py:1391
 msgid "Events with active plugin"
-msgstr ""
+msgstr "Eventos con plugin activo"
 
 #: pretix/control/forms/renderers.py:56
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:139
@@ -17804,9 +17815,8 @@ msgid "Select a valid choice."
 msgstr "Por favor, seleccione una cuota."
 
 #: pretix/control/forms/waitinglist.py:107
-#, fuzzy
 msgid "Only includes active products."
-msgstr "Productos activos"
+msgstr "Só inclúe produtos activos."
 
 #: pretix/control/forms/waitinglist.py:115
 #, fuzzy
@@ -17815,9 +17825,8 @@ msgid "A voucher for this waiting list entry was already sent out."
 msgstr "Xa existe un recibo con este código."
 
 #: pretix/control/forms/waitinglist.py:125
-#, fuzzy
 msgid "The selected product is not active."
-msgstr "El producto seleccionado ha sido desactivado."
+msgstr "O produto seleccionado non está activo."
 
 #: pretix/control/logdisplay.py:73 pretix/control/logdisplay.py:83
 #, fuzzy
@@ -30357,7 +30366,6 @@ msgid "Regular ticket"
 msgstr "ticket regular"
 
 #: pretix/control/views/event.py:1722
-#, fuzzy
 msgid "Reduced ticket"
 msgstr "Entrada reducida"
 
@@ -37416,7 +37424,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:265
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:338
 msgid "The price of this product was reduced because of an automatic discount."
-msgstr ""
+msgstr "O prezo deste produto reduciuse debido a un desconto automático."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:269
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:342
