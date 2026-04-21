@@ -352,7 +352,7 @@ class SecurityMiddleware(MiddlewareMixin):
         # keeps spamming our error logs whenever someone tries to run a vulnerability scanner.
         if "\x00" in request.META['QUERY_STRING'] or "%00" in request.META['QUERY_STRING']:
             raise BadRequest("Invalid characters in input.")
-        if request.method in ('POST', 'PUT', 'PATCH') and request.POST:
+        if request.method in ('POST', 'PUT', 'PATCH') and request.content_type == "application/x-www-form-urlencoded":
             if any("\x00" in value for key, value_list in request.POST.lists() for value in value_list):
                 raise BadRequest("Invalid characters in input.")
 
