@@ -45,6 +45,15 @@ from pretix.base.models import (
     CartPosition, Event, Item, Order, OrderPosition, Organizer,
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
+from pretix.base.services.installments import (
+    get_max_installments_for_event, installments_available_for_event,
+)
+
+
+class InstallmentDummyPaymentProvider(DummyPaymentProvider):
+    @property
+    def installments_supported(self):
+        return True
 
 
 @pytest.fixture
@@ -91,6 +100,32 @@ def test_payment_fee_reverse_percent_and_abs_default(event):
     prov.settings.set('_fee_abs', Decimal('0.30'))
     prov.settings.set('_fee_percent', Decimal('2.90'))
     assert prov.calculate_fee(Decimal('100.00')) == Decimal('3.30')
+
+
+@pytest.mark.django_db
+def test_installments_available_uses_event_settings(event):
+    event.settings.set('installments_enabled', True)
+    event.settings.set('installments_count', 4)
+    event.settings.set('installments_min_order_value', Decimal('50.00'))
+
+    prov = InstallmentDummyPaymentProvider(event)
+
+    assert installments_available_for_event(event, prov, Decimal('100.00'))
+    assert not installments_available_for_event(event, prov, Decimal('49.99'))
+    assert not installments_available_for_event(event, DummyPaymentProvider(event), Decimal('100.00'))
+
+
+@pytest.mark.django_db
+def test_get_max_installments_for_event_uses_event_settings(event):
+    event.settings.set('installments_count', 5)
+    event.settings.set('installments_limit_by_event_date', True)
+    event.date_from = datetime.datetime(2026, 6, 15, tzinfo=datetime.timezone.utc)
+    event.save(update_fields=['date_from'])
+
+    assert get_max_installments_for_event(
+        event,
+        reference_date=datetime.datetime(2026, 1, 1, tzinfo=datetime.timezone.utc)
+    ) == 5
 
 
 @pytest.mark.django_db

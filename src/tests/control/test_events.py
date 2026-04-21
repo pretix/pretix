@@ -463,15 +463,28 @@ class EventsTest(SoupTest):
         assert self.event1.settings.get('payment_banktransfer__fee_abs', as_type=Decimal) == Decimal('12.23')
 
     def test_payment_settings(self):
-        self.get_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug))
+        doc = self.get_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug))
+        assert 'Installments' in doc.text
         self.post_doc('/control/event/%s/%s/settings/payment' % (self.orga1.slug, self.event1.slug), {
             'payment_term_days': '2',
             'payment_term_minutes': '30',
             'payment_term_mode': 'days',
+            'installments_enabled': 'on',
+            'installments_count': '6',
+            'installments_min_order_value': '50.00',
+            'installments_grace_period_days': '9',
+            'installments_reminder_days': '4',
+            'installments_limit_by_event_date': 'on',
             'tax_rule_payment': 'default',
         })
         self.event1.settings.flush()
         assert self.event1.settings.get('payment_term_days', as_type=int) == 2
+        assert self.event1.settings.get('installments_enabled', as_type=bool)
+        assert self.event1.settings.get('installments_count', as_type=int) == 6
+        assert self.event1.settings.get('installments_min_order_value', as_type=Decimal) == Decimal('50.00')
+        assert self.event1.settings.get('installments_grace_period_days', as_type=int) == 9
+        assert self.event1.settings.get('installments_reminder_days', as_type=int) == 4
+        assert self.event1.settings.get('installments_limit_by_event_date', as_type=bool)
 
     def test_payment_settings_last_date_payment_after_presale_end(self):
         self.event1.presale_end = now()

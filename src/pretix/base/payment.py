@@ -45,7 +45,6 @@ from zoneinfo import ZoneInfo
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured, ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import transaction
 from django.dispatch import receiver
 from django.forms import Form
@@ -518,59 +517,6 @@ class BasePaymentProvider:
                  required=False,
              )),
         ])
-
-        if self.installments_supported:
-            d.update([
-                ('installments_enabled',
-                 forms.BooleanField(
-                     label=_('Enable installment payments'),
-                     help_text=_('Allow customers to pay in monthly installments using this payment method.'),
-                     required=False,
-                 )),
-                ('installments_count',
-                 forms.IntegerField(
-                     label=_('Maximum number of installments'),
-                     help_text=_('Number of monthly payments allowed (2-12)'),
-                     min_value=2,
-                     max_value=12,
-                     required=False,
-                     validators=[MinValueValidator(2), MaxValueValidator(12)],
-                     initial=3,
-                 )),
-                ('installments_min_order_value',
-                 forms.DecimalField(
-                     label=_('Minimum order value for installments'),
-                     help_text=_('Minimum cart total required to enable installments'),
-                     decimal_places=2,
-                     required=False,
-                     validators=[MinValueValidator(Decimal('0.00'))],
-                 )),
-                ('installments_grace_period_days',
-                 forms.IntegerField(
-                     label=_('Grace period (days)'),
-                     help_text=_('Days after failed installment before cancelling order'),
-                     min_value=1,
-                     max_value=14,
-                     required=False,
-                     validators=[MinValueValidator(1), MaxValueValidator(14)],
-                     initial=7,
-                 )),
-                ('installments_reminder_days',
-                 forms.IntegerField(
-                     label=_('Reminder days'),
-                     help_text=_('Days before installment due to send reminder email'),
-                     min_value=1,
-                     required=False,
-                     validators=[MinValueValidator(1)],
-                     initial=3,
-                 )),
-                ('installments_limit_by_event_date',
-                 forms.BooleanField(
-                     label=_('Limit by event date'),
-                     help_text=_('Reduce maximum installments based on how close the event is'),
-                     required=False,
-                 )),
-            ])
 
         d['_restricted_countries']._as_type = list
         d['_restrict_to_sales_channels']._as_type = list
@@ -1231,63 +1177,6 @@ class BasePaymentProvider:
             "This payment provider does not support tokenized installment payments. "
             "Set `installments_supported = True` and implement this method to enable installments."
         )
-
-    def installments_available(self, cart_total: Decimal) -> bool:
-        """
-        Check if installment payments are available for this provider and cart total.
-
-        :param cart_total: The total cart/order value
-        :return: True if installments are available
-        """
-        if not self.installments_supported:
-            return False
-
-        if not self.settings.get('installments_enabled', as_type=bool, default=False):
-            return False
-
-        min_value = self.settings.get('installments_min_order_value', as_type=Decimal)
-        if min_value and cart_total < min_value:
-            return False
-
-        if self.get_max_installments_for_cart() == 0:
-            return False
-
-        return True
-
-    def get_max_installments_for_cart(self, reference_date=None) -> int:
-        """
-        Calculate maximum number of installments based on event date and provider settings.
-
-        :param reference_date: Reference date (defaults to now())
-        :return: Maximum allowed installments (0 means not allowed)
-        """
-        if not self.settings.get('installments_limit_by_event_date', as_type=bool):
-            return self.settings.get('installments_count', as_type=int, default=3)
-
-        if reference_date is None:
-            reference_date = now()
-
-        event_date = self.event.date_from
-        if not event_date:
-            return self.settings.get('installments_count', as_type=int, default=3)
-
-        # Ensure both dates are timezone-aware and in same timezone
-        if event_date.tzinfo:
-            current_date = reference_date.astimezone(event_date.tzinfo)
-        else:
-            current_date = reference_date
-
-        months_diff = (event_date.year - current_date.year) * 12 + (event_date.month - current_date.month)
-
-        # Adjust for day-of-month: if we're on or past the event's day in the current month,
-        # we're "within" that many months, not "past" them
-        if current_date.day >= event_date.day:
-            months_diff -= 1
-
-        if months_diff <= 0:
-            return 0
-
-        return min(months_diff, self.settings.get('installments_count', as_type=int, default=3))
 
 
 class PaymentException(Exception):

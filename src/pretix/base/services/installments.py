@@ -44,6 +44,67 @@ from pretix.multidomain.urlreverse import build_absolute_uri
 logger = logging.getLogger(__name__)
 
 
+def get_max_installments_for_event(event, reference_date=None) -> int:
+    """
+    Calculate the maximum number of installments allowed by event settings.
+
+    :param event: The event to evaluate
+    :param reference_date: Reference date (defaults to now())
+    :return: Maximum allowed installments (0 means not allowed)
+    """
+    max_installments = event.settings.get('installments_count', as_type=int, default=3)
+
+    if not event.settings.get('installments_limit_by_event_date', as_type=bool):
+        return max_installments
+
+    if reference_date is None:
+        reference_date = now()
+
+    event_date = event.date_from
+    if not event_date:
+        return max_installments
+
+    # Ensure both dates are timezone-aware and in same timezone
+    if event_date.tzinfo:
+        current_date = reference_date.astimezone(event_date.tzinfo)
+    else:
+        current_date = reference_date
+
+    months_diff = (event_date.year - current_date.year) * 12 + (event_date.month - current_date.month)
+
+    # Adjust for day-of-month: if we're on or past the event's day in the current month,
+    # we're "within" that many months, not "past" them
+    if current_date.day >= event_date.day:
+        months_diff -= 1
+
+    if months_diff <= 0:
+        return 0
+
+    return min(months_diff, max_installments)
+
+
+def installments_available_for_event(event, provider, cart_total: Decimal) -> bool:
+    """
+    Check if installments are available for an event, provider, and cart total.
+
+    :param event: The event to evaluate
+    :param provider: The payment provider instance
+    :param cart_total: The total cart/order value
+    :return: True if installments are available
+    """
+    if not provider or not getattr(provider, 'installments_supported', False):
+        return False
+
+    if not event.settings.get('installments_enabled', as_type=bool, default=False):
+        return False
+
+    min_value = event.settings.get('installments_min_order_value', as_type=Decimal)
+    if min_value and cart_total < min_value:
+        return False
+
+    return get_max_installments_for_event(event) > 1
+
+
 def calculate_installment_amounts(total_amount: Decimal, count: int) -> List[Decimal]:
     """
     Calculates the amounts for each installment payment.
@@ -101,7 +162,7 @@ def create_installment_plan(
     if not provider or not getattr(provider, 'installments_supported', False):
         raise ValueError(f"Provider '{provider_name}' does not support installments or is not active.")
 
-    max_allowed = provider.get_max_installments_for_cart(reference_date=order.datetime)
+    max_allowed = get_max_installments_for_event(event, reference_date=order.datetime)
     if installments_count > max_allowed:
         raise ValueError(
             f"Requested {installments_count} installments exceeds the maximum of {max_allowed} "
@@ -233,7 +294,7 @@ def process_single_installment(installment: ScheduledInstallment, send_mail: boo
             installment.save(update_fields=['state'])
 
             if not plan.grace_period_end:
-                days = provider.settings.get('installments_grace_period_days', as_type=int, default=7)
+                days = event.settings.get('installments_grace_period_days', as_type=int, default=7)
                 plan.grace_period_end = now() + timedelta(days=days)
                 plan.save(update_fields=['grace_period_end'])
 
@@ -344,7 +405,7 @@ def send_installment_reminders():
         if not provider:
             continue
 
-        days = provider.settings.get('installments_reminder_days', as_type=int, default=3)
+        days = event.settings.get('installments_reminder_days', as_type=int, default=3)
 
         if now() >= installment.due_date - timedelta(days=days):
             with language(order.locale, event.settings.region):

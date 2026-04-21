@@ -846,6 +846,12 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'payment_term_expire_delay_days',
         'payment_term_accept_late',
         'payment_pending_hidden',
+        'installments_enabled',
+        'installments_count',
+        'installments_min_order_value',
+        'installments_grace_period_days',
+        'installments_reminder_days',
+        'installments_limit_by_event_date',
         'payment_explanation',
         'tax_rule_payment',
     ]

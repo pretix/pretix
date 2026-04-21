@@ -62,9 +62,42 @@
             {% if event.settings.payment_explanation %}
                 {{ event.settings.payment_explanation|rich_text }}
             {% endif %}
+            {% if installments_available %}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="checkbox" style="margin-top: 0; margin-bottom: 15px;">
+                            <label for="pay_in_installments">
+                                <input type="checkbox" name="pay_in_installments" id="pay_in_installments"
+                                       {% if pay_in_installments %}checked="checked"{% endif %}>
+                                <strong>{% trans "Pay in installments" %}</strong>
+                            </label>
+                        </div>
+                        <div id="installments_count_group" {% if not pay_in_installments %}hidden{% endif %}>
+                            <label for="installments_count">
+                                <strong>{% trans "Payment plan" %}</strong>
+                            </label>
+                            <select name="installments_count"
+                                    id="installments_count"
+                                    class="form-control"
+                                    style="max-width: 400px;"
+                                    {% if not pay_in_installments %}disabled{% endif %}>
+                                {% for option in installment_options %}
+                                    <option value="{{ option.count }}" {% if selected_installments_count == option.count %}selected{% endif %}>
+                                        {% blocktrans with count=option.count amount=option.amount|money:request.event.currency %}
+                                            {{ count }} monthly installments of approx. {{ amount }}
+                                        {% endblocktrans %}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
             <div class="panel-group" id="payment_accordion">
                 {% for p in providers %}
-                    <fieldset class="panel panel-default accordion-panel">
+                    <fieldset class="panel panel-default accordion-panel"
+                              data-payment-provider
+                              data-installments-available="{{ p.installments_available|yesno:'true,false' }}">
                         <legend class="accordion-radio">
                             <label class="panel-heading">
                                 <span class="panel-title">
@@ -115,28 +148,6 @@
                                         </p>
                                     </div>
                                 {% endif %}
-                            {% endif %}
-                            {% if p.installments_available %}
-                                <div style="margin-bottom: 15px;">
-                                    <label for="installments_count_{{ p.provider.identifier }}">
-                                        <strong>{% trans "Payment plan" %}</strong>
-                                    </label>
-                                    <select name="installments_count_{{ p.provider.identifier }}"
-                                            id="installments_count_{{ p.provider.identifier }}"
-                                            class="form-control"
-                                            style="max-width: 400px;">
-                                        <option value="0" {% if p.selected_installments == 0 %}selected{% endif %}>
-                                            {% trans "Pay in full" %}
-                                        </option>
-                                        {% for option in p.installment_options %}
-                                            <option value="{{ option.count }}" {% if p.selected_installments == option.count %}selected{% endif %}>
-                                                {% blocktrans with count=option.count amount=option.amount|money:request.event.currency %}
-                                                    {{ count }} monthly installments of approx. {{ amount }}
-                                                {% endblocktrans %}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
                             {% endif %}
                             {{ p.form }}
                         </div>

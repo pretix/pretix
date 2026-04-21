@@ -85,22 +85,18 @@ def cart_position(event, item, quota):
     )
 
 
-def _mock_provider(max_installments=10):
+def _mock_provider():
     p = MagicMock()
     p.installments_supported = True
-    p.get_max_installments_for_cart.return_value = max_installments
     return p
 
 
-def _mock_order_provider(default_count=3, max_installments=10):
+def _mock_order_provider():
     p = MagicMock()
     p.installments_supported = True
     p.calculate_fee.return_value = Decimal('0.00')
     p.payment_form_fields = {}
     p.is_implicit = lambda x: False
-    p.installments_available.return_value = True
-    p.settings.get.return_value = default_count
-    p.get_max_installments_for_cart.return_value = max_installments
     return p
 
 
@@ -154,13 +150,17 @@ class TestCreateInstallmentPlan:
                 create_installment_plan(order, 'banktransfer', installments_count=3)
 
     def test_exceeds_max_installments_raises(self, event, order):
+        event.settings.set('installments_count', 2)
+
         with scope(organizer=event.organizer):
-            with patch.object(event, 'get_payment_providers', return_value={'dummy': _mock_provider(max_installments=1)}):
+            with patch.object(event, 'get_payment_providers', return_value={'dummy': _mock_provider()}):
                 with pytest.raises(ValueError, match="exceeds the maximum"):
                     create_installment_plan(order, 'dummy', installments_count=3)
 
     def test_calendar_month_due_dates(self, event, order):
         from freezegun import freeze_time
+
+        event.settings.set('installments_count', 4)
 
         with freeze_time("2025-01-31 12:00:00"):
             with scope(organizer=event.organizer):
@@ -194,6 +194,8 @@ class TestCreateInstallmentPlan:
 class TestPerformOrderWithInstallments:
 
     def _perform(self, event, cart_position, provider, installments_count=None):
+        event.settings.set('installments_enabled', True)
+
         payment_request = {
             'provider': 'dummy',
             'payment_amount': Decimal('100.00'),
@@ -222,7 +224,19 @@ class TestPerformOrderWithInstallments:
             assert order.installment_plan.total_installments == 3
             assert order.payments.first().amount == Decimal('33.33')
 
+    def test_uses_event_default_count(self, event, cart_position):
+        event.settings.set('installments_count', 4)
+
+        with scope(organizer=event.organizer):
+            result = self._perform(event, cart_position, _mock_order_provider())
+            order = Order.objects.get(pk=result['order_id'])
+
+            assert order.installment_plan.total_installments == 4
+            assert order.payments.first().amount == Decimal('25.00')
+
     def test_uses_user_selected_count(self, event, cart_position):
+        event.settings.set('installments_count', 5)
+
         with scope(organizer=event.organizer):
             result = self._perform(event, cart_position, _mock_order_provider(), installments_count=5)
             order = Order.objects.get(pk=result['order_id'])
@@ -230,11 +244,13 @@ class TestPerformOrderWithInstallments:
             assert order.installment_plan.total_installments == 5
             assert order.payments.first().amount == Decimal('20.00')
 
-    def test_caps_at_provider_max(self, event, cart_position):
+    def test_caps_at_event_max(self, event, cart_position):
+        event.settings.set('installments_count', 4)
+
         with scope(organizer=event.organizer):
             result = self._perform(
                 event, cart_position,
-                _mock_order_provider(max_installments=4),
+                _mock_order_provider(),
                 installments_count=10,
             )
             order = Order.objects.get(pk=result['order_id'])
@@ -243,6 +259,8 @@ class TestPerformOrderWithInstallments:
             assert order.payments.first().amount == Decimal('25.00')
 
     def test_with_multi_use_payment(self, event, cart_position):
+        event.settings.set('installments_enabled', True)
+
         provider = _mock_order_provider()
         gc_provider = MagicMock()
         gc_provider.calculate_fee.return_value = Decimal('0.00')

@@ -82,7 +82,10 @@ from pretix.base.payment import GiftCardPayment, PaymentException
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import cart, tickets
-from pretix.base.services.installments import create_installment_plan
+from pretix.base.services.installments import (
+    create_installment_plan, get_max_installments_for_event,
+    installments_available_for_event,
+)
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
     invoice_transmission_separately, order_invoice_transmission_separately,
@@ -1110,11 +1113,11 @@ def _create_order(event: Event, *, email: str, positions: List[CartPosition], no
         if installment_payment:
             installment_amount = installment_payment['payment_amount']
             provider = event.get_payment_providers().get(installment_payment['provider'])
-            if provider and provider.installments_available(installment_amount):
+            if installments_available_for_event(event, provider, installment_amount):
                 installments_count = installment_payment.get('installments_count')
                 if not installments_count or installments_count < 2:
-                    installments_count = provider.settings.get('installments_count', as_type=int, default=3)
-                max_allowed = provider.get_max_installments_for_cart()
+                    installments_count = event.settings.get('installments_count', as_type=int, default=3)
+                max_allowed = get_max_installments_for_event(event)
                 installments_count = min(installments_count, max_allowed)
                 try:
                     plan = create_installment_plan(

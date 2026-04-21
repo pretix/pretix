@@ -68,7 +68,10 @@ from pretix.base.services.cart import (
     set_cart_addons,
 )
 from pretix.base.services.cross_selling import CrossSellingService
-from pretix.base.services.installments import calculate_installment_amounts
+from pretix.base.services.installments import (
+    calculate_installment_amounts, get_max_installments_for_event,
+    installments_available_for_event,
+)
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
 from pretix.base.services.pricing import get_price
@@ -1309,32 +1312,64 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                 'provider': provider,
                 'fee': fee,
                 'total': self._total_order_value + fee,
-                'form': form
+                'form': form,
+                'installments_available': False,
             }
 
-            if provider.installments_supported:
-                provider_dict['installments_available'] = provider.installments_available(self._total_order_value)
-                if provider_dict['installments_available']:
-                    max_installments = provider.get_max_installments_for_cart()
-                    provider_dict['installments_count'] = max_installments
-
-                    # Generate all available installment options (2 to max)
-                    provider_dict['installment_options'] = []
-                    for count in range(2, max_installments + 1):
-                        amounts = calculate_installment_amounts(self._total_order_value, count)
-                        provider_dict['installment_options'].append({
-                            'count': count,
-                            'amount': amounts[0],
-                        })
-
-                    provider_dict['selected_installments'] = 0
-                    for payment in self.cart_session.get('payments', []):
-                        if payment.get('provider') == provider.identifier:
-                            provider_dict['selected_installments'] = payment.get('installments_count', 0)
-                            break
+            provider_dict['installments_available'] = installments_available_for_event(
+                self.request.event, provider, self._total_order_value
+            )
 
             providers.append(provider_dict)
         return providers
+
+    @cached_property
+    def installment_providers(self):
+        return [p for p in self.provider_forms if p['installments_available']]
+
+    @cached_property
+    def installment_options(self):
+        if not self.installment_providers:
+            return []
+
+        max_installments = get_max_installments_for_event(self.request.event)
+        if max_installments < 2:
+            return []
+
+        options = []
+        for count in range(2, max_installments + 1):
+            amounts = calculate_installment_amounts(self._total_order_value, count)
+            options.append({
+                'count': count,
+                'amount': amounts[0],
+            })
+        return options
+
+    @cached_property
+    def selected_installments_count(self):
+        if self.request.method == 'POST' and self.request.POST.get('pay_in_installments'):
+            try:
+                count = int(self.request.POST.get('installments_count', '0'))
+            except (ValueError, TypeError):
+                count = 0
+            if count >= 2:
+                return count
+
+        for payment in self.cart_session.get('payments', []):
+            if payment.get('pay_in_installments') and payment.get('installments_count', 0) >= 2:
+                return payment.get('installments_count', 0)
+
+        return 0
+
+    @cached_property
+    def pay_in_installments_selected(self):
+        if self.request.method == 'POST':
+            return self.request.POST.get('pay_in_installments') == 'on'
+
+        return any(
+            payment.get('pay_in_installments') and payment.get('installments_count', 0) >= 2
+            for payment in self.cart_session.get('payments', [])
+        )
 
     @cached_property
     def single_use_payment(self):
@@ -1362,6 +1397,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
     def post(self, request):
         self.request = request
         self.request.pci_dss_payment_page = True
+        pay_in_installments = request.POST.get('pay_in_installments') == 'on'
 
         if "remove_payment" in request.POST:
             self._remove_payment(request.POST["remove_payment"])
@@ -1375,11 +1411,20 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                     simulated_payments = self.cart_session.get('payments', {})
                     simulated_payments = [p for p in simulated_payments if p.get('multi_use_supported')]
 
-                    installments_count_str = request.POST.get(f'installments_count_{pprov.identifier}', '0')
-                    try:
-                        installments_count = int(installments_count_str)
-                    except (ValueError, TypeError):
-                        installments_count = 0
+                    installments_count = 0
+                    if pay_in_installments:
+                        if not p['installments_available']:
+                            messages.error(self.request, _('Please select a payment method that supports installments.'))
+                            return self.render()
+
+                        try:
+                            installments_count = int(request.POST.get('installments_count', '0'))
+                        except (ValueError, TypeError):
+                            installments_count = 0
+
+                        if installments_count < 2 or installments_count > get_max_installments_for_event(self.request.event):
+                            messages.error(self.request, _('Please select a valid installment plan.'))
+                            return self.render()
 
                     simulated_payments.append({
                         'provider': pprov.identifier,
@@ -1459,6 +1504,10 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         ctx['remaining'] = self._total_order_value - sum(p['payment_amount'] for p in ctx['current_payments']) + sum(p['fee'] for p in ctx['current_payments'])
         ctx['providers'] = self.provider_forms
         ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
+        ctx['installments_available'] = bool(self.installment_options)
+        ctx['pay_in_installments'] = ctx['installments_available'] and self.pay_in_installments_selected
+        ctx['installment_options'] = self.installment_options
+        ctx['selected_installments_count'] = self.selected_installments_count
 
         if len(self.provider_forms) == 1:
             ctx['selected'] = self.provider_forms[0]['provider'].identifier

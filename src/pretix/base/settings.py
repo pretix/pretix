@@ -1091,6 +1091,102 @@ DEFAULTS = {
                         "themselves.")
         )
     },
+    'installments_enabled': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.payment:write',
+        'form_kwargs': dict(
+            label=_('Enable installment payments'),
+            help_text=_(
+                'Allow customers to pay in monthly installments. This will only be offered if you also enable at '
+                'least one payment provider that supports installments.'
+            ),
+        )
+    },
+    'installments_count': {
+        'default': '3',
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'write_permission': 'event.settings.payment:write',
+        'form_kwargs': dict(
+            label=_('Maximum number of installments'),
+            help_text=_('Number of monthly payments allowed (2-12)'),
+            min_value=2,
+            max_value=12,
+            validators=[MinValueValidator(2), MaxValueValidator(12)],
+        ),
+        'serializer_kwargs': dict(
+            min_value=2,
+            max_value=12,
+        ),
+    },
+    'installments_min_order_value': {
+        'default': None,
+        'type': Decimal,
+        'form_class': forms.DecimalField,
+        'serializer_class': serializers.DecimalField,
+        'write_permission': 'event.settings.payment:write',
+        'form_kwargs': dict(
+            label=_('Minimum order value for installments'),
+            help_text=_('Minimum cart total required to enable installments'),
+            decimal_places=2,
+            max_digits=13,
+            validators=[MinValueValidator(Decimal('0.00'))],
+        ),
+        'serializer_kwargs': dict(
+            decimal_places=2,
+            max_digits=13,
+            min_value=Decimal('0.00'),
+        ),
+    },
+    'installments_grace_period_days': {
+        'default': '7',
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'write_permission': 'event.settings.payment:write',
+        'form_kwargs': dict(
+            label=_('Grace period'),
+            help_text=_('Days after a failed installment before the order is cancelled'),
+            min_value=1,
+            max_value=14,
+            validators=[MinValueValidator(1), MaxValueValidator(14)],
+        ),
+        'serializer_kwargs': dict(
+            min_value=1,
+            max_value=14,
+        ),
+    },
+    'installments_reminder_days': {
+        'default': '3',
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'write_permission': 'event.settings.payment:write',
+        'form_kwargs': dict(
+            label=_('Reminder days'),
+            help_text=_('Days before an installment due date to send a reminder email'),
+            min_value=1,
+            validators=[MinValueValidator(1)],
+        ),
+        'serializer_kwargs': dict(
+            min_value=1,
+        ),
+    },
+    'installments_limit_by_event_date': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'write_permission': 'event.settings.payment:write',
+        'form_kwargs': dict(
+            label=_('Limit by event date'),
+            help_text=_('Reduce the maximum number of installments based on how close the event date is'),
+        )
+    },
     'payment_giftcard__enabled': {
         'default': 'True',
         'type': bool,

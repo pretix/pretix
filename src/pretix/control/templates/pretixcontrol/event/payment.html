@@ -81,6 +81,17 @@
                 {% bootstrap_field form.payment_pending_hidden layout="control" %}
             </fieldset>
             <fieldset>
+                <legend>{% trans "Installments" %}</legend>
+                {% bootstrap_form_errors form layout="control" %}
+                {% bootstrap_field form.installments_enabled layout="control" %}
+                {% bootstrap_field form.installments_count layout="control" %}
+                {% bootstrap_field form.installments_min_order_value layout="control" %}
+                {% trans "days" context "unit" as days %}
+                {% bootstrap_field form.installments_grace_period_days layout="control" addon_after=days %}
+                {% bootstrap_field form.installments_reminder_days layout="control" addon_after=days %}
+                {% bootstrap_field form.installments_limit_by_event_date layout="control" %}
+            </fieldset>
+            <fieldset>
                 <legend>{% trans "Advanced" %}</legend>
                 {% bootstrap_form_errors form layout="control" %}
                 {% bootstrap_field form.tax_rule_payment layout="control" %}
