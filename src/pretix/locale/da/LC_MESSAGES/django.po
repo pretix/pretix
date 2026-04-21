@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-20 17:00+0000\n"
+"PO-Revision-Date: 2026-04-21 08:45+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
@@ -9174,7 +9174,7 @@ msgid "Please complete your payment before {expire_date}."
 msgstr "Gennemfør venligst betaling inden {expire_date}."
 
 #: pretix/base/services/invoices.py:129
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "{i.company}\n"
@@ -9186,7 +9186,7 @@ msgstr ""
 "{i.company}\n"
 "{i.name}\n"
 "{i.street}\n"
-"{i.zipcode} {i.city}\n"
+"{i.zipcode} {i.city} {state}\n"
 "{country}"
 
 #: pretix/base/services/invoices.py:239 pretix/base/services/invoices.py:282
@@ -12272,7 +12272,7 @@ msgid "Order approved and awaiting payment: {code}"
 msgstr "Ordre godkendt og afventer betaling: {code}"
 
 #: pretix/base/settings.py:2793
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12288,20 +12288,24 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Vi har modtaget din bestilling til {event} med en samlet pris på "
-"{total_with_currency}. Gennemfør venligst betalingen før {date}.\n"
+"vi har godkendt din bestilling til arrangementet  {event} og glæder os til "
+"at byde dig velkommen\n"
+"til vores arrangement.\n"
 "\n"
-"{payment_info}\n"
+"Fortsæt venligst ved at betale for din bestilling inden {expire_date}.\n"
 "\n"
-"Du kan ændre din bestilling og dens status på {url}\n"
+"Du kan vælge en betalingsmetode og gennemføre betalingen her:\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"{url}\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2817 pretix/base/settings.py:2854
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12313,23 +12317,26 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Din bestilling til {event} er blevet ændret.\n"
+"vi har godkendt en billet, der er bestilt til dig til arrangementet {event}"
+".\n"
 "\n"
-"Du kan se status for din bestilling på\n"
+"Du kan se detaljerne og status for din billet her:\n"
+"\n"
 "{url}\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2829
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Order approved and confirmed: {code}"
-msgstr "Bestilling annulleret: {code}"
+msgstr "Ordre godkendt og bekræftet: {code}"
 
 #: pretix/base/settings.py:2833
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12342,23 +12349,29 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Vi har modtaget din bestilling til {event}. Din bestilling indeholder kun "
-"gratis produkter og kræver derfor ingen betaling.\n"
+"vi har godkendt din bestilling til arrangementet {event} og glæder os til at "
+"byde dig velkommen\n"
+"til vores arrangement. Da du udelukkende har bestilt gratis produkter, skal "
+"du ikke betale noget.\n"
 "\n"
-"Du kan ændre informationer og se status på din bestilling på {url}\n"
+"Du kan ændre dine bestillingsoplysninger og se status på din bestilling "
+"her:\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangører af {event}"
+"{url}\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2866
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Order denied: {code}"
-msgstr "Bestillingsdetaljer: {code}"
+msgstr "Bestilling afvist: {code}"
 
 #: pretix/base/settings.py:2870
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12373,15 +12386,19 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Din bestilling {code} til {event} er blevet annulleret.\n"
+"desværre har vi afvist din bestillingsanmodning til arrangementet {event}.\n"
 "\n"
-"Du kan se detaljerne for din bestilling på\n"
+"{comment}\n"
+"\n"
+"Du kan se detaljerne for din bestilling her:\n"
+"\n"
 "{url}\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2885
 #, python-brace-format
@@ -12403,22 +12420,12 @@ msgstr ""
 "Arrangøren af {event}"
 
 #: pretix/base/settings.py:2895
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invoice {invoice_number}"
-msgstr "Fakturanummer"
+msgstr "Faktura {invoice_number}"
 
 #: pretix/base/settings.py:2899
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "somebody requested a list of your orders for {event}.\n"
-#| "The list is as follows:\n"
-#| "\n"
-#| "{orders}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12429,15 +12436,14 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Nogen har bedt om en liste af dine bestillinger til {event}.\n"
-"Listen er følgende:\n"
+"vedhæftet finder du en ny faktura for ordre {code} til arrangementet {event}"
+". Denne ordre er afgivet af {order_email}.\n"
 "\n"
-"{orders}\n"
+"Med venlig hilsen,  \n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2917 pretix/base/settings.py:2933
 #, python-brace-format
@@ -12445,7 +12451,7 @@ msgid "Your ticket is ready for download: {code}"
 msgstr "Din billet er klar til download: {code}"
 
 #: pretix/base/settings.py:2921
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -12457,15 +12463,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej {attendee_name},\n"
 "\n"
-"Du har købt en billet til {event}.\n"
+"du er tilmeldt arrangementet {event}.\n"
 "\n"
-"Hvis du ikke allerede har gjort det, så kan du hente din billet her:\n"
+"Hvis du ikke allerede har gjort det, kan du downloade din billet her:\n"
+"\n"
 "{url}\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/base/settings.py:2937
 #, python-brace-format
@@ -12493,7 +12501,7 @@ msgstr ""
 #: pretix/base/settings.py:2949
 #, python-brace-format
 msgid "Activate your account at {organizer}"
-msgstr ""
+msgstr "Aktivér din konto hos {organizer}"
 
 #: pretix/base/settings.py:2953
 #, python-brace-format
@@ -12514,11 +12522,26 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Hej {name},\n"
+"\n"
+"tak, fordi du har oprettet en konto hos {organizer}!\n"
+"\n"
+"Klik her for at aktivere din konto og oprette en adgangskode:\n"
+"\n"
+"{url}\n"
+"\n"
+"Dette link er gyldigt i én dag.\n"
+"\n"
+"Hvis du ikke selv har oprettet kontoen, bedes du ignorere denne e-mail.\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {organizer}-team"
 
 #: pretix/base/settings.py:2971
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
-msgstr "Offentligt e-mailadresse der kan bruges til at kontakte arrangøren"
+msgstr "Bekræft e-mailadressen til din konto hos {organizer}"
 
 #: pretix/base/settings.py:2975
 #, python-brace-format
@@ -12539,11 +12562,26 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Hej {name},\n"
+"\n"
+"du har anmodet om at ændre e-mailadressen på din konto hos {organizer}!\n"
+"\n"
+"Klik her for at bekræfte ændringen:\n"
+"\n"
+"{url}\n"
+"\n"
+"Dette link er gyldigt i én dag.\n"
+"\n"
+"Hvis du ikke har anmodet om dette, bedes du ignorere denne e-mail.\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {organizer}-team"
 
 #: pretix/base/settings.py:2993
 #, python-brace-format
 msgid "Set a new password for your account at {organizer}"
-msgstr ""
+msgstr "Opret en ny adgangskode til din konto hos {organizer}"
 
 #: pretix/base/settings.py:2997
 #, python-brace-format
@@ -12564,11 +12602,27 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Hej {name},\n"
+"\n"
+"du har anmodet om en ny adgangskode til din konto hos {organizer}!\n"
+"\n"
+"Klik her for at oprette en ny adgangskode:\n"
+"\n"
+"{url}\n"
+"\n"
+"Dette link er gyldigt i én dag.\n"
+"\n"
+"Hvis du ikke har anmodet om en ny adgangskode, bedes du ignorere denne e-"
+"mail.\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {organizer}-team"
 
 #: pretix/base/settings.py:3015
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Changes to your account at {organizer}"
-msgstr "Offentligt e-mailadresse der kan bruges til at kontakte arrangøren"
+msgstr "Ændringer på din konto hos {organizer}"
 
 #: pretix/base/settings.py:3019
 #, python-brace-format
@@ -12589,6 +12643,21 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Hej {name},\n"
+"\n"
+"der er foretaget følgende ændring på din konto hos {organizer}:\n"
+"\n"
+"{message}\n"
+"\n"
+"Du kan se og ændre dine kontoindstillinger her:\n"
+"\n"
+"{url}\n"
+"\n"
+"Hvis du ikke selv har foretaget denne ændring, bedes du straks kontakte os.\n"
+"\n"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {organizer}-team"
 
 #: pretix/base/settings.py:3071 pretix/base/settings.py:3078
 #: pretix/base/settings.py:3092 pretix/base/settings.py:3100
@@ -12603,33 +12672,35 @@ msgstr "Primær farve"
 
 #: pretix/base/settings.py:3096
 msgid "Accent color for success"
-msgstr ""
+msgstr "En fremhævningsfarve, der skaber succes"
 
 #: pretix/base/settings.py:3097
 msgid "We strongly suggest to use a shade of green."
-msgstr ""
+msgstr "Vi anbefaler på det kraftigste, at man vælger en grøn nuance."
 
 #: pretix/base/settings.py:3118
 msgid "Accent color for errors"
-msgstr ""
+msgstr "Fremhævningsfarve for fejl"
 
 #: pretix/base/settings.py:3119
 msgid "We strongly suggest to use a shade of red."
-msgstr ""
+msgstr "Vi anbefaler på det kraftigste, at du vælger en rød nuance."
 
 #: pretix/base/settings.py:3140
 msgid "Page background color"
-msgstr ""
+msgstr "Sidens baggrundsfarve"
 
 #: pretix/base/settings.py:3155
 msgid "Use round edges"
-msgstr ""
+msgstr "Brug afrundede kanter"
 
 #: pretix/base/settings.py:3164
 msgid ""
 "Use native spinners in the widget instead of custom ones for numeric inputs "
 "such as quantity."
 msgstr ""
+"Brug de indbyggede drejeknapper i widgeten i stedet for brugerdefinerede til "
+"numeriske indtastninger, f.eks. antal."
 
 #: pretix/base/settings.py:3175
 msgid "Only respected by modern browsers."
@@ -12637,9 +12708,8 @@ msgstr "Virker kun i moderne browsere."
 
 #: pretix/base/settings.py:3186 pretix/base/settings.py:3230
 #: pretix/control/forms/organizer.py:642
-#, fuzzy
 msgid "Header image"
-msgstr "Navn på deltager"
+msgstr "Billedet øverst på siden"
 
 #: pretix/base/settings.py:3189
 msgid ""
@@ -12649,18 +12719,25 @@ msgid ""
 "pixels. You can increase the size with the setting below. We recommend not "
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
+"Hvis du uploader et logo, viser vi som standard ikke dit arrangements navn "
+"og dato i sidehovedet. Hvis du bruger en hvid baggrund, vises dit logo i en "
+"størrelse på op til 1140x120 pixels. I alle andre tilfælde er den maksimale "
+"størrelse 1120x120 pixels. Du kan øge størrelsen ved hjælp af indstillingen "
+"nedenfor. Vi anbefaler, at du undgår små detaljer på billedet, da det bliver "
+"skaleret på mindre skærme."
 
 #: pretix/base/settings.py:3210 pretix/base/settings.py:3253
 msgid "Use header image in its full size"
-msgstr ""
+msgstr "Vis headerbilledet i fuld størrelse"
 
 #: pretix/base/settings.py:3211 pretix/base/settings.py:3254
 msgid "We recommend to upload a picture at least 1170 pixels wide."
 msgstr ""
+"Vi anbefaler, at du uploader et billede, der er mindst 1170 pixels bredt."
 
 #: pretix/base/settings.py:3220
 msgid "Show event title even if a header image is present"
-msgstr ""
+msgstr "Vis begivenhedens titel, selvom der er et overskriftsbillede"
 
 #: pretix/base/settings.py:3221
 msgid ""
@@ -12668,6 +12745,10 @@ msgid ""
 "uploaded for the event, but the header image from the organizer profile is "
 "used, this option will be ignored and the event title will always be shown."
 msgstr ""
+"Titlen vises kun på begivenhedens forside. Hvis der ikke uploades et "
+"headerbillede til begivenheden, men i stedet bruges headerbilledet fra "
+"arrangørens profil, ignoreres denne indstilling, og begivenhedens titel "
+"vises altid."
 
 #: pretix/base/settings.py:3233 pretix/control/forms/organizer.py:646
 msgid ""
@@ -12677,24 +12758,35 @@ msgid ""
 "pixels. You can increase the size with the setting below. We recommend not "
 "using small details on the picture as it will be resized on smaller screens."
 msgstr ""
+"Hvis du uploader et logo, viser vi som standard ikke din organisations navn "
+"i sidehovedet. Hvis du bruger en hvid baggrund, vises dit logo i en "
+"størrelse på op til 1140x120 pixels. I alle andre tilfælde er den maksimale "
+"størrelse 1120x120 pixels. Du kan øge størrelsen ved hjælp af indstillingen "
+"nedenfor. Vi anbefaler, at du undgår små detaljer på billedet, da det bliver "
+"skaleret på mindre skærme."
 
 #: pretix/base/settings.py:3263
 msgid "Use header image also for events without an individually uploaded logo"
 msgstr ""
+"Brug også headerbilledet til begivenheder, hvor der ikke er uploadet et "
+"særskilt logo"
 
 #: pretix/base/settings.py:3271
 msgid "Favicon"
-msgstr ""
+msgstr "Favicon"
 
 #: pretix/base/settings.py:3274
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
 "icon. We recommend a size of at least 200x200px to accommodate most devices."
 msgstr ""
+"Hvis du stiller et favicon til rådighed, viser vi det i stedet for "
+"standardikonet fra Pretix. Vi anbefaler en størrelse på mindst 200x200 px, "
+"så det passer til de fleste enheder."
 
 #: pretix/base/settings.py:3290
 msgid "Social media image"
-msgstr ""
+msgstr "Billede til sociale medier"
 
 #: pretix/base/settings.py:3293
 msgid ""
@@ -12704,6 +12796,12 @@ msgid ""
 "preview, so we recommend to make sure it still looks good if only the center "
 "square is shown. If you do not fill this, we will use the logo given above."
 msgstr ""
+"Dette billede vil blive brugt som forhåndsvisning, hvis du deler links til "
+"din billetshop på sociale medier. Facebook anbefaler at bruge et billede i "
+"størrelsen 1200 x 630 pixels, men nogle platforme som WhatsApp og Reddit "
+"viser kun en firkantet forhåndsvisning. Vi anbefaler derfor, at du sikrer "
+"dig, at det stadig ser godt ud, hvis kun den midterste firkant vises. Hvis "
+"du ikke udfylder dette felt, vil vi bruge det ovenstående logo."
 
 #: pretix/base/settings.py:3311
 msgid "Logo image"
@@ -12725,23 +12823,27 @@ msgstr "Vises som standard ikke, men kan fx bruges i billetskabeloner."
 
 #: pretix/base/settings.py:3354
 msgid "Banner text (top)"
-msgstr ""
+msgstr "Bannertekst (øverst)"
 
 #: pretix/base/settings.py:3357
 msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
+"Denne tekst vises øverst på alle sider i din webshop. Brug den kun til meget "
+"vigtige meddelelser."
 
 #: pretix/base/settings.py:3367
 msgid "Banner text (bottom)"
-msgstr ""
+msgstr "Bannertekst (nederst)"
 
 #: pretix/base/settings.py:3370
 msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
+"Denne tekst vises nederst på hver side i din webshop. Brug den kun til meget "
+"vigtige meddelelser."
 
 #: pretix/base/settings.py:3380
 msgid "Voucher explanation"
@@ -12752,32 +12854,37 @@ msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
+"Denne tekst vises ved siden af indtastningsfeltet til en rabatkode. Du kan "
+"f.eks. bruge den til at forklare, hvordan man får fat i en rabatkode."
 
 #: pretix/base/settings.py:3393
-#, fuzzy
 msgid "Attendee data explanation"
-msgstr "Navn på deltager"
+msgstr "Forklaring til deltageroplysninger"
 
 #: pretix/base/settings.py:3396
 msgid ""
 "This text will be shown above the questions asked for every personalized "
 "product. You can use it e.g. to explain why you need information from them."
 msgstr ""
+"Denne tekst vises over de spørgsmål, der stilles i forbindelse med hvert "
+"personligt tilpasset produkt. Du kan f.eks. bruge den til at forklare, "
+"hvorfor du har brug for oplysninger fra dem."
 
 #: pretix/base/settings.py:3406
-#, fuzzy
 msgid "Additional success message"
-msgstr "Yderligere gebyr"
+msgstr "Yderligere succesmeddelelse"
 
 #: pretix/base/settings.py:3407
 msgid ""
 "This message will be shown after an order has been created successfully. It "
 "will be shown in additional to the default text."
 msgstr ""
+"Denne besked vises, når en ordre er oprettet. Den vises ud over "
+"standardteksten."
 
 #: pretix/base/settings.py:3419
 msgid "Help text of the phone number field"
-msgstr ""
+msgstr "Hjælpetekst til telefonnummer-feltet"
 
 #: pretix/base/settings.py:3426
 msgid ""
@@ -12789,11 +12896,11 @@ msgstr ""
 
 #: pretix/base/settings.py:3433
 msgid "Help text of the email field"
-msgstr ""
+msgstr "Hjælpetekst til e-mail-feltet"
 
 #: pretix/base/settings.py:3459
 msgid "Allow creating a new team during event creation"
-msgstr ""
+msgstr "Giv mulighed for at oprette et nyt hold, når man opretter en begivenhed"
 
 #: pretix/base/settings.py:3460
 msgid ""
@@ -12802,26 +12909,28 @@ msgid ""
 "allows users to create an event-specified team on-the-fly, even when they do "
 "not have \"Can change teams and permissions\" permission."
 msgstr ""
+"Brugere, der ikke har adgang til alle begivenheder under denne arrangør, "
+"skal vælge et af deres hold for at få adgang til den oprettede begivenhed. "
+"Denne indstilling giver brugerne mulighed for at oprette et "
+"begivenhedsspecifikt hold på farten, selvom de ikke har tilladelsen \"Kan "
+"ændre hold og tilladelser\"."
 
 #: pretix/base/settings.py:3532 pretix/base/settings.py:3542
-#, fuzzy
 msgid "Event start time (descending)"
-msgstr "Starttidspunkt"
+msgstr "Arrangementets starttidspunkt (faldende rækkefølge)"
 
 #: pretix/base/settings.py:3534 pretix/base/settings.py:3544
-#, fuzzy
 msgid "Name (descending)"
-msgstr "Afventer betaling"
+msgstr "Navn (faldende rækkefølge)"
 
 #: pretix/base/settings.py:3539
-#, fuzzy
 msgctxt "subevent"
 msgid "Date ordering"
-msgstr "Dato tilmeldt"
+msgstr "Sortering efter dato"
 
 #: pretix/base/settings.py:3555
 msgid "Link back to organizer overview on all event pages"
-msgstr ""
+msgstr "Link tilbage til arrangør-oversigten på alle begivenhedssider"
 
 #: pretix/base/settings.py:3564
 msgid "Homepage text"
@@ -12832,9 +12941,8 @@ msgid "This will be displayed on the organizer homepage."
 msgstr "Dette vises på arrangørerens side."
 
 #: pretix/base/settings.py:3581
-#, fuzzy
 msgid "Length of gift card codes"
-msgstr "Gavekort"
+msgstr "Længden af gavekortkoder"
 
 #: pretix/base/settings.py:3582
 #, python-brace-format
@@ -12842,11 +12950,12 @@ msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
 msgstr ""
+"Systemet genererer som standard gavekortkoder, der består af {}-tegn. Hvis "
+"der imidlertid er behov for en anden længde, kan dette indstilles her."
 
 #: pretix/base/settings.py:3598
-#, fuzzy
 msgid "Validity of gift card codes in years"
-msgstr "Gavekort"
+msgstr "Gavekortkoders gyldighedsperiode i år"
 
 #: pretix/base/settings.py:3599
 msgid ""
@@ -12860,18 +12969,19 @@ msgstr ""
 
 #: pretix/base/settings.py:3610
 msgid "Enable cookie consent management features"
-msgstr ""
+msgstr "Aktivér funktioner til administration af samtykke til cookies"
 
 #: pretix/base/settings.py:3616
 msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
 msgstr ""
+"Ved at klikke på \"Accepter alle cookies\" giver du samtykke til, at der "
+"gemmes cookies og anvendes lignende teknologier på din enhed."
 
 #: pretix/base/settings.py:3623
-#, fuzzy
 msgid "Dialog text"
-msgstr "Tekst"
+msgstr "Dialogtekst"
 
 #: pretix/base/settings.py:3630
 msgid ""
@@ -12880,43 +12990,42 @@ msgid ""
 "use cookies if they are essential to providing the services this website "
 "offers."
 msgstr ""
+"Vi bruger cookies og lignende teknologier til at indsamle data, der gør det "
+"muligt for os at forbedre denne hjemmeside og vores tilbud. Hvis du ikke "
+"giver dit samtykke, vil vi kun bruge cookies, hvor de er nødvendige for at "
+"levere de tjenester, som denne hjemmeside tilbyder."
 
 #: pretix/base/settings.py:3638
 msgid "Secondary dialog text"
-msgstr ""
+msgstr "Tekst til den sekundære dialogboks"
 
 #: pretix/base/settings.py:3644
-#, fuzzy
 msgid "Privacy settings"
-msgstr "Prisindstillinger"
+msgstr "Privatlivsindstillinger"
 
 #: pretix/base/settings.py:3649
 msgid "Dialog title"
-msgstr ""
+msgstr "Dialogtitel"
 
 #: pretix/base/settings.py:3655
 msgid "Accept all cookies"
-msgstr ""
+msgstr "Accepter alle cookies"
 
 #: pretix/base/settings.py:3660
-#, fuzzy
 msgid "\"Accept\" button description"
-msgstr "Produktbeskrivelse"
+msgstr "Beskrivelse af knappen \"Accepter\""
 
 #: pretix/base/settings.py:3666
-#, fuzzy
 msgid "Required cookies only"
-msgstr "Påkrævet spørgsmål"
+msgstr "Kun nødvendige cookies"
 
 #: pretix/base/settings.py:3671
-#, fuzzy
 msgid "\"Reject\" button description"
-msgstr "Produktbeskrivelse"
+msgstr "Beskrivelse af knappen \"Afvis\""
 
 #: pretix/base/settings.py:3681
-#, fuzzy
 msgid "Customers can choose their own seats"
-msgstr "Tillad brugere at annullere ubetalte bestillinger"
+msgstr "Kunderne kan selv vælge deres pladser"
 
 #: pretix/base/settings.py:3682
 msgid ""
@@ -12924,33 +13033,36 @@ msgid ""
 "that this can mean people will not know their seat after their purchase and "
 "it might not be written on their ticket."
 msgstr ""
+"Hvis denne funktion er deaktiveret, skal du manuelt tildele pladser i "
+"administrationssystemet. Bemærk, at det kan betyde, at gæsterne ikke kender "
+"deres plads efter købet, og at den muligvis ikke er angivet på deres billet."
 
 #: pretix/base/settings.py:3708
 msgid "Show button to copy user input from other products"
-msgstr ""
+msgstr "Vis knap til kopiering af brugerindtastninger fra andre produkter"
 
 #: pretix/base/settings.py:3718
 msgid "Most common English titles"
-msgstr ""
+msgstr "De mest almindelige engelske titler"
 
 #: pretix/base/settings.py:3728
 msgid "Most common German titles"
-msgstr ""
+msgstr "De mest almindelige tyske titler"
 
 #: pretix/base/settings.py:3741
 msgctxt "person_name_salutation"
 msgid "Ms"
-msgstr ""
+msgstr "Fru"
 
 #: pretix/base/settings.py:3742
 msgctxt "person_name_salutation"
 msgid "Mr"
-msgstr ""
+msgstr "Hr."
 
 #: pretix/base/settings.py:3743
 msgctxt "person_name_salutation"
 msgid "Mx"
-msgstr ""
+msgstr "Mx"
 
 #: pretix/base/settings.py:3780 pretix/base/settings.py:3796
 #: pretix/base/settings.py:3812 pretix/base/settings.py:3827
@@ -12958,10 +13070,9 @@ msgstr ""
 #: pretix/base/settings.py:3890 pretix/base/settings.py:3914
 #: pretix/base/settings.py:3946 pretix/base/settings.py:3968
 #: pretix/base/settings.py:3999
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "John"
-msgstr "Anders And"
+msgstr "Peter"
 
 #: pretix/base/settings.py:3781 pretix/base/settings.py:3797
 #: pretix/base/settings.py:3813 pretix/base/settings.py:3829
@@ -12970,91 +13081,82 @@ msgstr "Anders And"
 #: pretix/base/settings.py:3969 pretix/base/settings.py:4000
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr ""
+msgstr "Hansen"
 
 #: pretix/base/settings.py:3787 pretix/base/settings.py:3803
 #: pretix/base/settings.py:3835 pretix/base/settings.py:3954
 #: pretix/base/settings.py:3976
 msgctxt "person_name"
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: pretix/base/settings.py:3795 pretix/base/settings.py:3811
 #: pretix/base/settings.py:3844 pretix/base/settings.py:3967
 #: pretix/base/settings.py:3998
 msgctxt "person_name_sample"
 msgid "Dr"
-msgstr ""
+msgstr "dr."
 
 #: pretix/base/settings.py:3819 pretix/base/settings.py:3836
-#, fuzzy
 msgid "First name"
-msgstr "Billetnavn"
+msgstr "Fornavn"
 
 #: pretix/base/settings.py:3820 pretix/base/settings.py:3837
-#, fuzzy
 msgid "Middle name"
-msgstr "Enhedsnavn"
+msgstr "Mellemnavn"
 
 #: pretix/base/settings.py:3901 pretix/base/settings.py:3913
 #: pretix/control/forms/organizer.py:793
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "John Doe"
-msgstr "Anders And"
+msgstr "Peter Hansen"
 
 #: pretix/base/settings.py:3907
-#, fuzzy
 msgid "Calling name"
-msgstr "Fuldt navn"
+msgstr "Kaldenavn"
 
 #: pretix/base/settings.py:3921
-#, fuzzy
 msgid "Latin transcription"
-msgstr "Beskrivelse"
+msgstr "Transskription til latinske bogstaver"
 
 #: pretix/base/settings.py:3933 pretix/base/settings.py:3953
 #: pretix/base/settings.py:3975
-#, fuzzy
 msgctxt "person_name"
 msgid "Salutation"
-msgstr "Afbestilling"
+msgstr "Hilsen"
 
 #: pretix/base/settings.py:3945 pretix/base/settings.py:3966
 #: pretix/base/settings.py:3997
 msgctxt "person_name_sample"
 msgid "Mr"
-msgstr ""
+msgstr "Hr."
 
 #: pretix/base/settings.py:3979
-#, fuzzy
 msgctxt "person_name"
 msgid "Degree (after name)"
-msgstr "Kundenavn påkrævet"
+msgstr "Titel (efter navnet)"
 
 #: pretix/base/settings.py:4001
 msgctxt "person_name_sample"
 msgid "MA"
-msgstr ""
+msgstr "cand.mag."
 
 #: pretix/base/settings.py:4027 pretix/base/settings.py:4029
-#, fuzzy
-#| msgid "Provider name"
 msgctxt "address"
 msgid "Province"
-msgstr "Udbyderens navn"
+msgstr "Provins"
 
 #: pretix/base/settings.py:4028
-#, fuzzy
-#| msgid "Use feature"
 msgctxt "address"
 msgid "Prefecture"
-msgstr "Brug funktion"
+msgstr "Præfektur"
 
 #: pretix/base/settings.py:4119 pretix/control/forms/event.py:242
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
+"Din standardindstilling for lokalitet skal også være aktiveret for din "
+"begivenhed (se boksen ovenfor)."
 
 #: pretix/base/settings.py:4123
 msgid ""
@@ -13070,58 +13172,54 @@ msgstr ""
 "påkrævede."
 
 #: pretix/base/settings.py:4131
-#, fuzzy
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
-msgstr ""
-"Du skal spørge efter deltageres e-mailadresser hvis du vil gøre dem "
-"påkrævede."
+msgstr "Du skal anmode om fakturaadresser, hvis du vil gøre dem obligatoriske."
 
 #: pretix/base/settings.py:4135
 msgid "You have to require invoice addresses to require for company names."
 msgstr ""
+"Du skal kræve, at der angives en fakturaadresse for at kunne kræve, at der "
+"angives et firmanavn."
 
 #: pretix/base/settings.py:4157
 #, python-brace-format
 msgid "VAT-ID is not supported for \"{}\"."
-msgstr ""
+msgstr "Momsnummer understøttes ikke for \"{}\"."
 
 #: pretix/base/settings.py:4164
 msgid "The last payment date cannot be before the end of presale."
 msgstr "Seneste betalingsdato kan ikke ligge før slutningen på forsalget."
 
 #: pretix/base/settings.py:4172
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "The value \"{identifier}\" is not a valid sales channel."
-msgstr "Indtast venligst en gyldig salgskanal."
+msgstr "Værdien \"{identifier}\" er ikke en gyldig salgskanal."
 
 #: pretix/base/settings.py:4187
 msgid "This needs to be disabled if other NFC-based types are active."
 msgstr ""
+"Denne funktion skal deaktiveres, hvis andre NFC-baserede typer er aktive."
 
 #: pretix/base/shredder.py:74 pretix/base/shredder.py:77
-#, fuzzy
 msgid "Your event needs to be over to use this feature."
-msgstr "Du skal angive landet du bor i for at bruge omvendt betalingspligt."
+msgstr "Dit arrangement skal være afsluttet, før du kan bruge denne funktion."
 
 #: pretix/base/shredder.py:79
 msgid "Your ticket shop needs to be offline to use this feature."
-msgstr ""
+msgstr "Din billetshop skal være offline for at kunne bruge denne funktion."
 
 #: pretix/base/shredder.py:257
-#, fuzzy
 msgid "Phone numbers"
-msgstr "Minimum antal"
+msgstr "Telefonnumre"
 
 #: pretix/base/shredder.py:259
 msgid "This will remove all phone numbers from orders."
 msgstr "Dette vil fjerne alle emailadresser fra ventelisten."
 
 #: pretix/base/shredder.py:290
-#, fuzzy
 msgid "Emails"
-msgstr "E-mailadresse"
+msgstr "E-mails"
 
 #: pretix/base/shredder.py:292
 msgid ""
@@ -13140,9 +13238,8 @@ msgstr ""
 "Dette vil fjerne alle navne, mailadresser og telefonnumre fra ventelisten."
 
 #: pretix/base/shredder.py:425
-#, fuzzy
 msgid "Attendee info"
-msgstr "Navn på deltager"
+msgstr "Oplysninger om deltagere"
 
 #: pretix/base/shredder.py:427
 msgid ""
@@ -13153,25 +13250,27 @@ msgstr ""
 "det også fjerner de ændringer vi har logget ifm. disse oplysninger."
 
 #: pretix/base/shredder.py:505
-#, fuzzy
 msgid "Invoice addresses"
-msgstr "Faktureringsadresse: navn"
+msgstr "Fakturaadresser"
 
 #: pretix/base/shredder.py:508
 msgid ""
 "This will remove all invoice addresses from orders, as well as logged "
 "changes to them."
 msgstr ""
+"Dette vil slette alle fakturaadresser fra ordrer samt de ændringer, der er "
+"gemt for disse."
 
 #: pretix/base/shredder.py:542
-#, fuzzy
 msgid "Question answers"
-msgstr "Spørgsmål"
+msgstr "Svar på spørgsmål"
 
 #: pretix/base/shredder.py:544
 msgid ""
 "This will remove all answers to questions, as well as logged changes to them."
 msgstr ""
+"Dette vil slette alle svar på spørgsmål samt de registrerede ændringer til "
+"dem."
 
 #: pretix/base/shredder.py:586
 msgid ""
@@ -13179,15 +13278,19 @@ msgid ""
 "might contain personal data from the database. Invoice numbers and totals "
 "will be conserved."
 msgstr ""
+"Dette vil fjerne alle PDF-filer med fakturaer samt alt tekstindhold heri, "
+"der måtte indeholde personoplysninger fra databasen. Fakturanumre og samlede "
+"beløb bevares."
 
 #: pretix/base/shredder.py:616
-#, fuzzy
 msgid "Cached ticket files"
-msgstr "Opret billettyper"
+msgstr "Cachelagrede billetfiler"
 
 #: pretix/base/shredder.py:618
 msgid "This will remove all cached ticket files. No download will be offered."
 msgstr ""
+"Dette vil slette alle billetfiler, der er gemt i cachen. Der vil ikke blive "
+"tilbudt nogen download."
 
 #: pretix/base/shredder.py:640
 msgid ""
@@ -13195,6 +13298,9 @@ msgid ""
 "method, all data will be removed or personal data only. No download will be "
 "offered."
 msgstr ""
+"Dette vil slette betalingsoplysninger. Afhængigt af betalingsmetoden slettes "
+"enten alle data eller kun personoplysninger. Der tilbydes ingen mulighed for "
+"at downloade oplysningerne."
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
@@ -13220,9 +13326,8 @@ msgstr "Prøv igen"
 
 #: pretix/base/templates/400_hostname.html:4
 #: pretix/base/templates/400_hostname.html:8
-#, fuzzy
 msgid "Unknown host"
-msgstr "Ukendt billet"
+msgstr "Ukendt host"
 
 #: pretix/base/templates/400_hostname.html:10
 #, python-format
@@ -13230,6 +13335,8 @@ msgid ""
 "Your browser told us that you want to access \"%(header_host)s\". "
 "Unfortunately, we don't have any content for this domain."
 msgstr ""
+"Din browser har oplyst, at du ønsker at få adgang til \"%(header_host)s\". "
+"Desværre har vi ikke noget indhold til dette domæne."
 
 #: pretix/base/templates/400_hostname.html:17
 msgid ""
@@ -13237,30 +13344,33 @@ msgid ""
 "probably caused due to the fact that either your configuration includes the "
 "wrong site URL or your reverse proxy is sending the wrong header."
 msgstr ""
+"Det ser ud til, at dette er en ny installation af pretix. Denne "
+"fejlmeddelelse skyldes sandsynligvis, at din konfiguration enten indeholder "
+"en forkert side-URL, eller at din reverse proxy sender en forkert header."
 
 #: pretix/base/templates/400_hostname.html:24
-#, fuzzy
 msgid "Expected host according to configuration"
-msgstr "Eksisterende app-konfigurationer"
+msgstr "Forventet host i henhold til konfigurationen"
 
 #: pretix/base/templates/400_hostname.html:26
-#, fuzzy
 msgid "Received headers"
-msgstr "Gennemse bestilling"
+msgstr "Modtagne overskrifter"
 
 #: pretix/base/templates/400_hostname.html:32
 msgid "ignored"
-msgstr ""
+msgstr "ignoreret"
 
 #: pretix/base/templates/400_hostname.html:35
 msgid "Derived host from headers"
-msgstr ""
+msgstr "Udledt hostnavn fra overskrifter"
 
 #: pretix/base/templates/400_hostname.html:40
 msgid ""
 "If you just configured this as a domain for your ticket shop, you now need "
 "to set this up as a \"custom domain\" in your organizer account."
 msgstr ""
+"Hvis du netop har konfigureret dette som et domæne til din billetshop, skal "
+"du nu indstille det som et \"brugerdefineret domæne\" på din arrangørkonto."
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
 msgid "Permission denied"
@@ -13338,17 +13448,20 @@ msgstr ""
 msgid ""
 "You have requested us to cancel an event which includes a larger bulk-refund:"
 msgstr ""
+"Du har bedt os om at aflyse et arrangement, der indebærer en større samlet "
+"refusion:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:6
-#, fuzzy
 msgid "Estimated refund amount"
-msgstr "Tilbagebetal bestilling"
+msgstr "Anslået refusionsbeløb"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt:8
 msgid ""
 "Please confirm that you want to proceed by coping the following confirmation "
 "code into the cancellation form:"
 msgstr ""
+"Bekræft venligst, at du ønsker at fortsætte ved at indsætte følgende "
+"bekræftelseskode i afmeldingsformularen:"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -13356,44 +13469,45 @@ msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "drevet af <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:2
-#, fuzzy
 msgid "Your export failed."
-msgstr "Opret ny momsregel"
+msgstr "Din eksport mislykkedes."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:4
-#, fuzzy
 msgid "Reason:"
-msgstr "Tilbagebetal bestilling"
+msgstr "Begrundelse:"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:7
 msgid "If your export fails five times in a row, it will no longer be sent."
 msgstr ""
+"Hvis din eksport mislykkes fem gange i træk, vil den ikke længere blive "
+"sendt."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:10
-#, fuzzy
 msgid "Configuration link:"
-msgstr "Bekræftelse afventer"
+msgstr "Link til konfiguration:"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
 msgid "You receive these emails based on your notification settings."
 msgstr ""
+"Du modtager disse e-mails i henhold til dine indstillinger for "
+"notifikationer."
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
-msgstr ""
+msgstr "Klik her for at se og ændre dine notifikationsindstillinger"
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
-msgstr ""
+msgstr "Klik her for straks at deaktivere alle notifikationer."
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
-msgstr ""
+msgstr "Klik her for at se og ændre dine notifikationsindstillinger:"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
-msgstr ""
+msgstr "Klik her for straks at deaktivere alle notifikationer:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:7
 msgid ""
@@ -13447,10 +13561,8 @@ msgstr "Bestillingsdetaljer"
 #: pretix/base/templates/pretixbase/email/order_details.html:136
 #: pretix/presale/templates/pretixpresale/event/base.html:223
 #: pretix/presale/templates/pretixpresale/organizers/base.html:101
-#, fuzzy
-#| msgid "Contact:"
 msgid "Contact"
-msgstr "Kontakt:"
+msgstr "Kontakt"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt:2
 #, python-format
