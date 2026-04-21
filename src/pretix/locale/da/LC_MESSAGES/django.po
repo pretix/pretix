@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-21 09:33+0000\n"
+"PO-Revision-Date: 2026-04-22 01:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
@@ -14676,67 +14676,64 @@ msgstr ""
 "modtager du i stedet skabelonen til gratis ordrer nedenfor."
 
 #: pretix/control/forms/event.py:1463
-#, fuzzy
 msgid "Subject for approved free order"
-msgstr "Marker bestilling som udløbet"
+msgstr "Emne for godkendt gratis ordre"
 
 #: pretix/control/forms/event.py:1468
-#, fuzzy
 msgid "Text for approved free order"
-msgstr "Marker bestilling som udløbet"
+msgstr "Tekst til godkendt gratis ordre"
 
 #: pretix/control/forms/event.py:1471 pretix/control/forms/event.py:1489
 msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
 msgstr ""
+"Dette sendes kun ud ved gratis ordrer. Ved ordrer, der ikke er gratis, "
+"modtager du i stedet skabelonen til ikke-gratis ordrer ovenfor."
 
 #: pretix/control/forms/event.py:1493
-#, fuzzy
 msgid "Subject for denied order"
-msgstr "Gennemse bestilling"
+msgstr "Emne for afvist ordre"
 
 #: pretix/control/forms/event.py:1498
-#, fuzzy
 msgid "Text for denied order"
-msgstr "Tilbagebetal bestilling"
+msgstr "Tekst ved afvist ordre"
 
 #: pretix/control/forms/event.py:1596
-#, fuzzy
 msgid "Ticket code generator"
-msgstr "Billetdesign"
+msgstr "Generator til billetkoder"
 
 #: pretix/control/forms/event.py:1597
 msgid "For advanced users, usually does not need to be changed."
-msgstr ""
+msgstr "For erfarne brugere, normalt ikke nødvendigt at ændre på dette."
 
 #: pretix/control/forms/event.py:1654
 msgid "Any country"
-msgstr ""
+msgstr "Ethvert land"
 
 #: pretix/control/forms/event.py:1655
 msgid "European Union"
-msgstr ""
+msgstr "Den Europæiske Union"
 
 #: pretix/control/forms/event.py:1681
 msgid "Any customer"
-msgstr ""
+msgstr "Enhver kunde"
 
 #: pretix/control/forms/event.py:1682
 msgid "Individual"
-msgstr ""
+msgstr "Individuel"
 
 #: pretix/control/forms/event.py:1683
 msgid "Business"
-msgstr ""
+msgstr "Erhverv"
 
 #: pretix/control/forms/event.py:1684
 msgid "Business with valid VAT ID"
-msgstr ""
+msgstr "Virksomhed med gyldigt momsnummer"
 
 #: pretix/control/forms/event.py:1690
 msgid "Charge VAT"
-msgstr ""
+msgstr "Opkræv moms"
 
 #: pretix/control/forms/event.py:1692
 msgid "No VAT"
