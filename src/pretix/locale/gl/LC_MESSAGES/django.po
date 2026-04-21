@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-21 09:33+0000\n"
+"PO-Revision-Date: 2026-04-21 11:05+0000\n"
 "Last-Translator: Sandra Rial Pérez <sandrarial@gestiontickets.online>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -37761,15 +37761,14 @@ msgid "Please check your email account, we've sent you an email."
 msgstr "Por favor, revisa tu correo, te hemos enviando un correo."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:21
-#, fuzzy
 msgid ""
 "You can download your tickets right here as soon as the person who placed "
 "the order clicked the link in the email they received to confirm the email "
 "address is valid."
 msgstr ""
-"Puede descargar sus boletos aquí mismo tan pronto como la persona que "
-"realizó el pedido hizo clic en el enlace del correo electrónico que recibió "
-"para confirmar que la dirección de correo electrónico es válida."
+"Podes descargar as túas entradas aquí mesmo en canto a persoa que realizou o "
+"pedido fixo clic na ligazón do correo electrónico que recibiu para confirmar "
+"que o enderezo de correo electrónico é válido.."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:26
 #, fuzzy
@@ -38117,7 +38116,7 @@ msgstr "O seu pedido foi procesado con éxito! Ver abaixo para máis detalles."
 #: pretix/presale/templates/pretixpresale/event/order.html:51
 msgid "We successfully received your payment. See below for details."
 msgstr ""
-"Recibimos o teu pagamento correctamente. Consulta os detalles a continuación."
+"Recibimos o seu pagamento correctamente. Vexa os detalles a continuación."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:36
 #, fuzzy
@@ -38185,13 +38184,12 @@ msgid "Re-try payment or choose another payment method"
 msgstr "Volva tentar o pago ou escolla outro método de pago"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:126
-#, fuzzy
 msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
-"No puedes cancelar esta orden por ti mismo. Por favor contacta al "
-"organizador del evento para más información."
+"Recibimos a túa solicitude para cancelar este pedido. Ten paciencia mentres "
+"o organizador do evento decide sobre a cancelación."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:144
 #, fuzzy, python-format
@@ -38310,6 +38308,9 @@ msgid ""
 "receive a full refund or if a cancellation fee is deducted according to "
 "their cancellation policy."
 msgstr ""
+"Se a túa solicitude é aprobada, o organizador determinará se recibirás un "
+"reembolso completo ou se se deducirá unha taxa de cancelación segundo a súa "
+"política de cancelación."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:397
 #: pretix/presale/templates/pretixpresale/event/order.html:433
@@ -38337,37 +38338,36 @@ msgid "This will invalidate all tickets in this order."
 msgstr "Esto invalidará todos os tickets de este pedido."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:406
-#, fuzzy
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
-msgstr "Puedes cancelar esta orden usando el siguiente botón."
+msgstr ""
+"Podes solicitar a cancelación deste pedido, pero non recibirás ningún "
+"reembolso."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:410
-#, fuzzy
 msgid "You can cancel this order, but you will not receive a refund."
-msgstr "Puedes cancelar esta orden usando el siguiente botón."
+msgstr "Podes cancelar este pedido, pero non recibirás ningún reembolso."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:419
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can request to cancel this order. If your request is approved, a "
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
-"Puede cancelar esta orden. En este caso, una tarifa de cancelación de "
-"<strong>%(fee)s</strong> será retenida y recibirá un retorno del resto a su "
-"método de pago original."
+"Podes solicitar a cancelación deste pedido. Se a túa solicitude é aprobada, "
+"manterase unha taxa de cancelación de <strong>%(fee)s</strong> e recibirás "
+"un reembolso do resto."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:425
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can cancel this order. In this case, a cancellation fee of "
 "<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
 "remainder."
 msgstr ""
-"Puede cancelar esta orden. En este caso, una tarifa de cancelación de "
-"<strong>%(fee)s</strong> será retenida y recibirá un retorno del resto a su "
-"método de pago original."
+"Podes cancelar este pedido. Neste caso, manterase unha taxa de cancelación "
+"de <strong>%(fee)s</strong> e recibirás un reembolso do resto."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:442
 msgid ""
@@ -38377,9 +38377,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:447
 msgid "You can cancel this order and receive a full refund."
-msgstr ""
-"Podes cancelar esta orde e recibir un reembolso completo ao teu método de "
-"pago."
+msgstr "Podes cancelar este pedido e recibir un reembolso completo."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:466
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
@@ -38723,10 +38721,9 @@ msgid ""
 "you need to add yourself to the waiting list multiple times. There is no "
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
-"Repare en que só recibirá un só billete. Se necesitase varios, debe "
-"adherirse á listaxe de agarda varias veces con diferentes enderezos de "
-"correo electrónico. Aínda que isto non garante que recibas un número "
-"concreto de entradas."
+"Ten en conta que só recibirás unha entrada. Se necesitas varias entradas, "
+"terás que engadirte á lista de espera varias veces. Non hai garantía de que "
+"recibas un determinado número de entradas."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:32
 msgid ""
@@ -38735,10 +38732,10 @@ msgid ""
 "email addresses. There is no guarantee that you will receive a certain "
 "number of tickets."
 msgstr ""
-"Repare en que só recibirá un só billete. Se necesitase varios, debe "
-"adherirse á listaxe de agarda varias veces con diferentes enderezos de "
-"correo electrónico. Aínda que isto non garante que recibas un número "
-"concreto de entradas."
+"Ten en conta que só recibirás unha entrada. Se necesitas varias entradas, "
+"debes engadirte á lista de espera varias veces con diferentes enderezos de "
+"correo electrónico. Non hai garantía de que recibas un determinado número de "
+"entradas."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:38
 msgid ""
@@ -38746,6 +38743,9 @@ msgid ""
 "been added to the waiting list. We will only contact you once a spot opens "
 "up."
 msgstr ""
+"<strong>Non</strong> recibirás un correo electrónico de confirmación despois "
+"de ser engadido á lista de espera. Só contactaremos contigo unha vez que se "
+"libere unha praza."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:44
 msgid "Add me to the list"
@@ -39283,9 +39283,8 @@ msgid "Multiple dates"
 msgstr "Crear varias fechas"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:105
-#, fuzzy
 msgid "No archived events found."
-msgstr "No se han encontrado eventos archivados."
+msgstr "Non se atoparon eventos arquivados."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:105
 #, fuzzy
@@ -39336,9 +39335,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/cart.py:202
-#, fuzzy
 msgid "Please enter positive numbers only."
-msgstr "Por favor, introduzca sólo números positivos."
+msgstr "Introduza só números positivos."
 
 #: pretix/presale/views/cart.py:441
 msgid "We applied the voucher to as many products in your cart as we could."
@@ -39610,14 +39608,19 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Se o enderezo de correo electrónico que introduciches é válido e está "
+"asociado a un tícket, xa che enviamos un correo electrónico cunha ligazón ao "
+"teu tícket nas últimas {number} horas. Se o correo electrónico non chegou, "
+"comproba o teu cartafol de correo non desexado e comproba que usaches o "
+"enderezo de correo electrónico correcto."
 
 #: pretix/presale/views/user.py:86
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
 msgstr ""
-"Se houbese algún pedido por parte deste usuario, recibirá un correo "
-"electrónico cos seus códigos de pedido."
+"Se houbo algún pedido deste usuario, recibirá un correo electrónico cos seus "
+"códigos de pedido."
 
 #: pretix/presale/views/waiting.py:127
 msgid ""
