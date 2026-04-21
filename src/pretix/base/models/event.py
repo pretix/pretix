@@ -1863,6 +1863,8 @@ class EventMetaValue(LoggedModel):
             self.event.cache.clear()
 
     def save(self, *args, **kwargs):
+        if self.event and self.event.organizer != self.property.organizer:
+            raise ValidationError(_("Property and event must belong to the same organizer."))
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
