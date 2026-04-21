@@ -27,7 +27,7 @@ class PluginApp(PluginConfig):
     def ready(self):
         from . import signals  # NOQA
         self._patch_customer_views()
-        self._patch_mail_send_task()
+        self._patch_waitinglist_send_voucher()
 
     def _patch_customer_views(self):
         from django.apps import apps
@@ -45,37 +45,37 @@ class PluginApp(PluginConfig):
         presale_customer.ProfileView.get_template_names = profile_get_template_names
         presale_customer.ChangeInformationView.form_class = ChangeInfoFormWithSms
 
-    def _patch_mail_send_task(self):
+    def _patch_waitinglist_send_voucher(self):
         from django.apps import apps
 
         if not apps.is_installed("pretix_twilio_sms"):
             return
 
-        from pretix.base.services import mail as mail_module
+        from pretix.base.models.waitinglist import WaitingListEntry
 
         import logging
-        from pretix_twilio_sms.services import queue_waiting_list_sms_after_mail
+        from pretix_twilio_sms.services import queue_waiting_list_sms_for_entry
 
-        mail_send_task = mail_module.mail_send_task
-        original_run = mail_send_task.run
+        original_send_voucher = WaitingListEntry.send_voucher
         _log = logging.getLogger("pretix_twilio_sms.apps")
 
-        def run_with_post_send_sms(*args, **kwargs):
-            from celery import current_task
-            result = original_run(current_task, *args, **kwargs)
+        def send_voucher_with_queued_sms(self, *args, **kwargs):
+            result = original_send_voucher(self, *args, **kwargs)
             _log.info(
-                "pretix_twilio_sms: mail_send_task finished, checking for waiting list SMS "
-                "event_id=%s order=%s customer=%s",
-                kwargs.get("event"),
-                kwargs.get("order"),
-                kwargs.get("customer"),
+                "pretix_twilio_sms: waiting list voucher handled, checking for SMS "
+                "event_id=%s entry_id=%s",
+                getattr(self.event, "id", None),
+                self.pk,
             )
-            queue_waiting_list_sms_after_mail(
-                event_id=kwargs.get("event"),
-                order=kwargs.get("order"),
-                customer=kwargs.get("customer"),
-                to=kwargs.get("to"),
-            )
+            try:
+                queue_waiting_list_sms_for_entry(entry=self)
+            except Exception:
+                _log.exception(
+                    "pretix_twilio_sms: failed queuing waiting list SMS "
+                    "event_id=%s entry_id=%s",
+                    getattr(self.event, "id", None),
+                    self.pk,
+                )
             return result
 
-        mail_send_task.run = run_with_post_send_sms
+        WaitingListEntry.send_voucher = send_voucher_with_queued_sms
