@@ -44,6 +44,7 @@
     "globals": "^17.4.0",
     "pug": "^3.0.3",
     "sass-embedded": "^1.98.0",
+    "smol-toml": "^1.6.1",
     "stylus": "^0.64.0",
     "typescript-eslint": "^8.57.0",
     "vite": "^8.0.0"

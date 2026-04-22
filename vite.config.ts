@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 import { execSync } from 'child_process'
 import { readFileSync } from 'fs'
+import { parse as parseToml } from 'smol-toml'
 
 // Shared dependencies exposed to plugins via import map.
 // Adding a dep here auto-generates a _vendor/{name} entry and
@@ -89,10 +90,10 @@ function sharedDepsPlugin (): Plugin {
 
 // TODO move to separate file?
 function discoverPretixPlugins (): { entries: Record<string, string> } {
-	let entryFiles: string[] = []
+	let manifestFiles: string[] = []
 	try {
 		const raw = execSync(`python -c "
-import importlib_metadata as metadata, json, pathlib
+import importlib_metadata as metadata, json, pathlib, tomllib
 result = []
 for ep in metadata.entry_points(group='pretix.plugin'):
     dist = ep.dist
@@ -101,22 +102,27 @@ for ep in metadata.entry_points(group='pretix.plugin'):
         url_info = json.loads(dist.read_text('direct_url.json') or '{}')
         if not url_info.get('dir_info', {}).get('editable'):
             continue  # non-editable plugins build their own assets
-        p = pathlib.Path(url_info['url'].replace('file://', '')) / 'pretixplugin.vite.json'
-        if p.exists():
-            result.append(str(p))
+        p = pathlib.Path(url_info['url'].replace('file://', '')) / 'pretixplugin.toml'
+        if not p.exists():
+            continue
+        with p.open('rb') as f:
+            if 'vite' in tomllib.load(f):
+                result.append(str(p))
     except Exception:
         pass
 print(json.dumps(result))
 "`, { stdio: ['pipe', 'pipe', 'inherit'] }).toString().trim()
-		entryFiles = JSON.parse(raw)
+		manifestFiles = JSON.parse(raw)
 	} catch (error) {
 		console.error('Failed to discover pretix plugins, skipping plugin entries:', error)
 	}
 	const entries: Record<string, string> = {}
-	for (const entriesFile of entryFiles) {
-		const packageRoot = entriesFile.replace(/[/\\]pretixplugin\.vite\.json$/, '')
-		const { entries: pluginEntries } = JSON.parse(readFileSync(entriesFile, 'utf8'))
-		for (const [name, rel] of Object.entries<string>(pluginEntries)) {
+	for (const manifestFile of manifestFiles) {
+		const packageRoot = manifestFile.replace(/[/\\]pretixplugin\.toml$/, '')
+		const parsed = parseToml(readFileSync(manifestFile, 'utf8')) as {
+			vite: { entries: Record<string, string> }
+		}
+		for (const [name, rel] of Object.entries(parsed.vite.entries)) {
 			entries[name] = path.join(packageRoot, rel)
 		}
 	}
