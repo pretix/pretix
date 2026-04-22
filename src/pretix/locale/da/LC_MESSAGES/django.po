@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-22 01:00+0000\n"
+"PO-Revision-Date: 2026-04-22 18:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
@@ -14737,7 +14737,7 @@ msgstr "Opkræv moms"
 
 #: pretix/control/forms/event.py:1692
 msgid "No VAT"
-msgstr ""
+msgstr "Ingen moms"
 
 #: pretix/control/forms/event.py:1693
 msgid "Sale not allowed"
@@ -14748,32 +14748,28 @@ msgid "Order requires approval"
 msgstr "Bestilling kræver godkendelse"
 
 #: pretix/control/forms/event.py:1699
-#, fuzzy
-#| msgid "Default price"
 msgid "Default tax code"
-msgstr "Standardpris"
+msgstr "Standardskattekode"
 
 #: pretix/control/forms/event.py:1703 pretix/control/forms/event.py:1707
-#, fuzzy
 msgid "Deviating tax rate"
-msgstr "Momssats"
+msgstr "Afvigende skattesats"
 
 #: pretix/control/forms/event.py:1711 pretix/control/forms/event.py:1715
-#, fuzzy
 msgid "Text on invoice"
-msgstr "Tekst på faktura"
+msgstr "Tekst på fakturaen"
 
 #: pretix/control/forms/event.py:1735
 msgid ""
 "A combination of this calculation mode with a non-zero tax rate does not "
 "make sense."
 msgstr ""
+"Det giver ikke mening at kombinere denne beregningsmetode med en skattesats, "
+"der ikke er nul."
 
 #: pretix/control/forms/event.py:1740 pretix/control/forms/event.py:1744
-#, fuzzy
-#| msgid "This combination of credentials is not known to our system."
 msgid "This combination of calculation mode and tax code does not make sense."
-msgstr "Denne kombination af oplysninger er ikke kendt af vores system."
+msgstr "Denne kombination af beregningsmetode og skattekode giver ikke mening."
 
 #: pretix/control/forms/event.py:1809
 msgid "Pre-selected voucher"
@@ -14786,6 +14782,10 @@ msgid ""
 "can for example be used to provide widgets that give discounts or unlock "
 "secret products."
 msgstr ""
+"Hvis denne indstilling er aktiveret, viser widgeten produkterne, som om "
+"denne rabatkode allerede er indtastet, og når et produkt købes via widgeten, "
+"vil denne rabatkode blive anvendt. Dette kan f.eks. bruges til at oprette "
+"widgets, der giver rabat eller låser hemmelige produkter op."
 
 #: pretix/control/forms/event.py:1816
 msgid "Compatibility mode"
@@ -14796,6 +14796,8 @@ msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
 msgstr ""
+"Vores almindelige widget fungerer ikke i alle hjemmesidebyggere. Hvis du "
+"støder på problemer, kan du prøve at bruge denne kompatibilitetstilstand."
 
 #: pretix/control/forms/event.py:1839
 msgid "The given voucher code does not exist."
@@ -14804,7 +14806,7 @@ msgstr "Den angivne rabatkode eksisterer ikke."
 #: pretix/control/forms/event.py:1846 pretix/control/forms/organizer.py:115
 #: pretix/control/views/shredder.py:182
 msgid "The slug you entered was not correct."
-msgstr ""
+msgstr "Det indtastede slug var forkert."
 
 #: pretix/control/forms/event.py:1881
 msgid "Ticket downloads"
@@ -14837,6 +14839,10 @@ msgid ""
 "up an account with them, which takes less than five minutes using their "
 "simple interface."
 msgstr ""
+"Stripe er en onlinebetalingsudbyder, der understøtter kreditkort og mange "
+"andre betalingsmetoder. For at kunne modtage betalinger via Stripe skal du "
+"oprette en konto hos dem, hvilket tager mindre end fem minutter takket være "
+"deres brugervenlige grænseflade."
 
 #: pretix/control/forms/event.py:1920
 msgid "Payment by bank transfer"
@@ -14848,6 +14854,9 @@ msgid ""
 "then import your bank statements to process the payments within pretix, or "
 "mark them as paid manually."
 msgstr ""
+"Dine kunder vil blive bedt om at overføre pengene til din konto. Du kan "
+"derefter importere dine kontoudtog for at behandle betalingerne i pretix "
+"eller manuelt markere dem som betalt."
 
 #: pretix/control/forms/event.py:1964
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:45
@@ -14864,9 +14873,8 @@ msgstr "Tilgængeligt antal"
 
 #: pretix/control/forms/exports.py:56 pretix/control/forms/exports.py:62
 #: pretix/control/forms/exports.py:68
-#, fuzzy
 msgid "Please enter less than 25 recipients."
-msgstr "Indtast venligst dit navn."
+msgstr "Indtast venligst færre end 25 modtagere."
 
 #: pretix/control/forms/filter.py:207 pretix/control/forms/filter.py:209
 #: pretix/control/forms/filter.py:1023 pretix/control/forms/filter.py:1025
@@ -14879,18 +14887,16 @@ msgid "All orders"
 msgstr "Alle bestillinger"
 
 #: pretix/control/forms/filter.py:224
-#, fuzzy
 msgid "Valid orders"
-msgstr "Betalte bestillinger"
+msgstr "Gyldige ordrer"
 
 #: pretix/control/forms/filter.py:225
 msgid "Paid (or canceled with paid fee)"
-msgstr ""
+msgstr "Betalt (eller annulleret mod betaling)"
 
 #: pretix/control/forms/filter.py:226 pretix/control/forms/filter.py:1231
-#, fuzzy
 msgid "Paid or confirmed"
-msgstr "Bestilling bekræftet"
+msgstr "Betalt eller bekræftet"
 
 #: pretix/control/forms/filter.py:227 pretix/control/forms/filter.py:1232
 #: pretix/control/templates/pretixcontrol/datasync/control_order_info.html:49
@@ -14902,41 +14908,35 @@ msgstr "Afventer"
 
 #: pretix/control/forms/filter.py:228 pretix/control/forms/filter.py:1233
 msgid "Pending or paid"
-msgstr ""
+msgstr "Uafklaret eller betalt"
 
 #: pretix/control/forms/filter.py:230
-#, fuzzy
 msgid "Cancellations"
-msgstr "Afbestilling"
+msgstr "Aflysninger"
 
 #: pretix/control/forms/filter.py:231
-#, fuzzy
 msgid "Canceled (fully)"
-msgstr "Annuller og genudsted"
+msgstr "Aflyst (helt)"
 
 #: pretix/control/forms/filter.py:232
-#, fuzzy
 msgid "Canceled (fully or with paid fee)"
-msgstr "Annuller og genudsted"
+msgstr "Aflyst (helt eller mod betaling)"
 
 #: pretix/control/forms/filter.py:233
-#, fuzzy
 msgid "Canceled (at least one position)"
-msgstr "Annullering"
+msgstr "Aflyst (mindst én stilling)"
 
 #: pretix/control/forms/filter.py:234
-#, fuzzy
 msgid "Cancellation requested"
-msgstr "Afbestillingsgebyr"
+msgstr "Anmodning om aflysning"
 
 #: pretix/control/forms/filter.py:235
 msgid "Fully canceled but invoice not canceled"
-msgstr ""
+msgstr "Helt annulleret, men fakturaen er ikke annulleret"
 
 #: pretix/control/forms/filter.py:237
-#, fuzzy
 msgid "Payment process"
-msgstr "Betalingsleverandører"
+msgstr "Betalingsforløb"
 
 #: pretix/control/forms/filter.py:239 pretix/control/forms/filter.py:1236
 msgid "Pending or expired"
@@ -14947,37 +14947,32 @@ msgid "Pending (overdue)"
 msgstr "Afventer (overskredet)"
 
 #: pretix/control/forms/filter.py:241
-#, fuzzy
 msgid "Overpaid"
-msgstr "betalt"
+msgstr "For meget betalt"
 
 #: pretix/control/forms/filter.py:242
-#, fuzzy
 msgid "Partially paid"
-msgstr "Marker som betalt"
+msgstr "Delvist betalt"
 
 #: pretix/control/forms/filter.py:243
-#, fuzzy
 msgid "Underpaid (but confirmed)"
-msgstr "Bestilling bekræftet"
+msgstr "Underbetalt (men bekræftet)"
 
 #: pretix/control/forms/filter.py:244
 msgid "Pending (but fully paid)"
-msgstr ""
+msgstr "Afventer (men fuldt betalt)"
 
 #: pretix/control/forms/filter.py:245
 msgid "Pending (but no current payment)"
-msgstr ""
+msgstr "Afventer (men ingen aktuel betaling)"
 
 #: pretix/control/forms/filter.py:247
-#, fuzzy
 msgid "Approval process"
-msgstr "afventer"
+msgstr "Godkendelsesproces"
 
 #: pretix/control/forms/filter.py:248
-#, fuzzy
 msgid "Approved, payment pending"
-msgstr "afventer"
+msgstr "Godkendt, betaling afventes"
 
 #: pretix/control/forms/filter.py:249
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:8
@@ -14989,11 +14984,11 @@ msgstr "Godkendelse afventer"
 
 #: pretix/control/forms/filter.py:252
 msgid "Follow-up configured"
-msgstr ""
+msgstr "Opfølgning konfigureret"
 
 #: pretix/control/forms/filter.py:253
 msgid "Follow-up due"
-msgstr ""
+msgstr "Der skal følges op"
 
 #: pretix/control/forms/filter.py:483 pretix/control/forms/filter.py:1267
 #: pretix/control/forms/filter.py:2053 pretix/control/forms/filter.py:2308
@@ -15015,40 +15010,36 @@ msgstr "{product} – Vilkårlig variant"
 #: pretix/control/forms/filter.py:566 pretix/control/forms/orders.py:862
 msgctxt "subevent"
 msgid "All dates starting at or after"
-msgstr ""
+msgstr "Alle datoer fra og med"
 
 #: pretix/control/forms/filter.py:572 pretix/control/forms/orders.py:869
 msgctxt "subevent"
 msgid "All dates starting before"
-msgstr ""
+msgstr "Alle datoer, der begynder før"
 
 #: pretix/control/forms/filter.py:578
 msgid "Order placed at or after"
-msgstr ""
+msgstr "Bestilling afgivet den eller senere"
 
 #: pretix/control/forms/filter.py:584
-#, fuzzy
 msgid "Order placed before"
-msgstr "Ny bestilling afgivet"
+msgstr "Bestilling afgivet før"
 
 #: pretix/control/forms/filter.py:613
-#, fuzzy
 msgid "Minimal sum of payments and refunds"
-msgstr "Bestillingsliste (CSV)"
+msgstr "Mindste samlede beløb for betalinger og refusioner"
 
 #: pretix/control/forms/filter.py:618
-#, fuzzy
 msgid "Maximal sum of payments and refunds"
-msgstr "Bestillingsliste (CSV)"
+msgstr "Den maximale sum af betalinger og refusioner"
 
 #: pretix/control/forms/filter.py:629
 msgid "At least one ticket with check-in"
-msgstr ""
+msgstr "Mindst én billet med check-in"
 
 #: pretix/control/forms/filter.py:633
-#, fuzzy
 msgid "Affected quota"
-msgstr "Slet kvote"
+msgstr "Den berørte kvote"
 
 #: pretix/control/forms/filter.py:670 pretix/control/forms/filter.py:675
 #: pretix/control/forms/filter.py:701 pretix/control/forms/filter.py:706
@@ -15056,7 +15047,7 @@ msgstr "Slet kvote"
 #: pretix/control/forms/filter.py:774 pretix/control/forms/filter.py:784
 #: pretix/control/forms/filter.py:791
 msgid "Exact matches only"
-msgstr ""
+msgstr "Kun nøjagtige søgeresultater"
 
 #: pretix/control/forms/filter.py:927 pretix/control/forms/filter.py:932
 #: pretix/control/forms/filter.py:1045 pretix/control/forms/filter.py:1050
@@ -15070,29 +15061,24 @@ msgid "All events"
 msgstr "Alle arrangementer"
 
 #: pretix/control/forms/filter.py:1057
-#, fuzzy
 msgid "All payments"
-msgstr "Alle"
+msgstr "Alle betalinger"
 
 #: pretix/control/forms/filter.py:1067
-#, fuzzy
 msgid "Payment created from"
-msgstr "Betalingsdato"
+msgstr "Betaling oprettet fra"
 
 #: pretix/control/forms/filter.py:1072
-#, fuzzy
 msgid "Payment created until"
-msgstr "Betalingsdato"
+msgstr "Betaling oprettet indtil"
 
 #: pretix/control/forms/filter.py:1077
-#, fuzzy
 msgid "Paid from"
-msgstr "Gyldig"
+msgstr "Betalt fra"
 
 #: pretix/control/forms/filter.py:1082
-#, fuzzy
 msgid "Paid until"
-msgstr "Gyldig indtil"
+msgstr "Betalt indtil"
 
 #: pretix/control/forms/filter.py:1230
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:31
@@ -15107,7 +15093,7 @@ msgstr "Betalt"
 #: pretix/control/forms/filter.py:1305
 msgctxt "subevent"
 msgid "Date doesn't start in selected date range."
-msgstr ""
+msgstr "Datoen ligger ikke inden for det valgte datointerval."
 
 #: pretix/control/forms/filter.py:1361 pretix/control/forms/filter.py:1828
 msgid "Shop live and presale running"
@@ -15145,14 +15131,12 @@ msgid "Date until"
 msgstr "Dato til"
 
 #: pretix/control/forms/filter.py:1383
-#, fuzzy
 msgid "Start time from"
-msgstr "Dato"
+msgstr "Starttidspunkt fra"
 
 #: pretix/control/forms/filter.py:1388
-#, fuzzy
 msgid "Start time until"
-msgstr "Dato og tidspunkt"
+msgstr "Starttidspunkt til"
 
 #: pretix/control/forms/filter.py:1393 pretix/control/forms/rrule.py:112
 #: pretix/control/forms/rrule.py:151
@@ -15166,7 +15150,7 @@ msgstr "Ugedag"
 #: pretix/control/forms/filter.py:2180 pretix/control/forms/filter.py:2182
 #: pretix/control/forms/filter.py:2748 pretix/control/forms/filter.py:2750
 msgid "Search query"
-msgstr ""
+msgstr "Søgeforespørgsel"
 
 #: pretix/control/forms/filter.py:1656 pretix/control/forms/filter.py:1728
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:47
@@ -15175,39 +15159,33 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:126
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:133
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:37
-#, fuzzy
 msgid "active"
-msgstr "Inaktive"
+msgstr "aktiv"
 
 #: pretix/control/forms/filter.py:1658
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:45
-#, fuzzy
 msgid "not yet activated"
-msgstr "Deaktiver"
+msgstr "endnu ikke aktiveret"
 
 #: pretix/control/forms/filter.py:1662
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:113
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:12
 #: pretix/presale/views/customer.py:368
-#, fuzzy
 msgid "Memberships"
-msgstr "Medlemmer"
+msgstr "Medlemskaber"
 
 #: pretix/control/forms/filter.py:1666
-#, fuzzy
 msgid "Has no memberships"
-msgstr "Team medlemskaber"
+msgstr "Har ingen medlemskaber"
 
 #: pretix/control/forms/filter.py:1667
-#, fuzzy
 msgid "Has any membership"
-msgstr "Team medlemskaber"
+msgstr "Har et medlemskab"
 
 #: pretix/control/forms/filter.py:1668
-#, fuzzy
 msgid "Has valid membership"
-msgstr "Team medlemskaber"
+msgstr "Har et gyldigt medlemskab"
 
 #: pretix/control/forms/filter.py:1827
 msgid "Shop live"
@@ -15219,11 +15197,11 @@ msgstr "Butik ikke i luften"
 
 #: pretix/control/forms/filter.py:1832
 msgid "Single event running or in the future"
-msgstr ""
+msgstr "Enkeltstående begivenhed, der afholdes nu eller i fremtiden"
 
 #: pretix/control/forms/filter.py:1833
 msgid "Single event in the past"
-msgstr ""
+msgstr "En enkelt begivenhed i fortiden"
 
 #: pretix/control/forms/filter.py:2032 pretix/control/forms/filter.py:2034
 msgid "Search attendee…"
@@ -15249,17 +15227,15 @@ msgstr "Tjekket ind"
 
 #: pretix/control/forms/filter.py:2043
 #: pretix/plugins/checkinlists/exporters.py:110
-#, fuzzy
 msgctxt "checkin state"
 msgid "Present"
-msgstr "Forsalgs sluttidspunkt"
+msgstr "Nu"
 
 #: pretix/control/forms/filter.py:2044
 #: pretix/plugins/checkinlists/exporters.py:111
-#, fuzzy
 msgctxt "checkin state"
 msgid "Checked in but left"
-msgstr "Tjekket ind – {list}"
+msgstr "Tjekket ind, men taget afsted"
 
 #: pretix/control/forms/filter.py:2045
 #: pretix/control/templates/pretixcontrol/checkin/index.html:178
@@ -15268,10 +15244,9 @@ msgid "Not checked in"
 msgstr "Ikke tjekket ind"
 
 #: pretix/control/forms/filter.py:2064
-#, fuzzy
 msgctxt "subevent"
 msgid "Date start from"
-msgstr "Dato"
+msgstr "Startdato fra"
 
 #: pretix/control/forms/filter.py:2070
 msgctxt "subevent"
@@ -15281,11 +15256,11 @@ msgstr "Startdato til"
 #: pretix/control/forms/filter.py:2171 pretix/control/forms/filter.py:2174
 #: pretix/control/templates/pretixcontrol/users/index.html:52
 msgid "Administrator"
-msgstr ""
+msgstr "Administrator"
 
 #: pretix/control/forms/filter.py:2175
 msgid "No administrator"
-msgstr ""
+msgstr "Ingen administrator"
 
 #: pretix/control/forms/filter.py:2245
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html:51
@@ -15294,27 +15269,27 @@ msgstr "Gyldig"
 
 #: pretix/control/forms/filter.py:2246
 msgid "Unredeemed"
-msgstr ""
+msgstr "Ikke indløst"
 
 #: pretix/control/forms/filter.py:2247
 msgid "Redeemed at least once"
-msgstr ""
+msgstr "Indløst mindst én gang"
 
 #: pretix/control/forms/filter.py:2248
 msgid "Fully redeemed"
-msgstr ""
+msgstr "Fuldstændig indløst"
 
 #: pretix/control/forms/filter.py:2250
 msgid "Redeemed and checked in with ticket"
-msgstr ""
+msgstr "Indløst og checket ind med billet"
 
 #: pretix/control/forms/filter.py:2255
 msgid "Quota handling"
-msgstr ""
+msgstr "Håndtering af kvoter"
 
 #: pretix/control/forms/filter.py:2259
 msgid "Allow to ignore quota"
-msgstr ""
+msgstr "Tillad at ignorere kvoten"
 
 #: pretix/control/forms/filter.py:2264 pretix/control/forms/filter.py:2266
 msgid "Filter by tag"
@@ -15332,92 +15307,76 @@ msgid "Any product in quota \"{quota}\""
 msgstr "Vilkårligt produkt i kvoten \"{quota}\""
 
 #: pretix/control/forms/filter.py:2440
-#, fuzzy
 msgid "Refund status"
-msgstr "Tjek-ind-status"
+msgstr "Status for refusion"
 
 #: pretix/control/forms/filter.py:2442
-#, fuzzy
 msgid "All open refunds"
-msgstr "Alle"
+msgstr "Alle åbne refusioner"
 
 #: pretix/control/forms/filter.py:2443
-#, fuzzy
 msgid "All refunds"
-msgstr "Alle bestillinger"
+msgstr "Alle refusioner"
 
 #: pretix/control/forms/filter.py:2481 pretix/plugins/reports/exporters.py:704
-#, fuzzy
 msgid "Date filter"
-msgstr "Datohistorik"
+msgstr "Datofilter"
 
 #: pretix/control/forms/filter.py:2483 pretix/plugins/reports/exporters.py:706
-#, fuzzy
 msgid "Filter by…"
-msgstr "Filtrer efter tag"
+msgstr "Filtrer efter…"
 
 #: pretix/control/forms/filter.py:2485 pretix/plugins/reports/exporters.py:708
-#, fuzzy
 msgid "Date of last successful payment"
-msgstr "Seneste betalingsdato"
+msgstr "Dato for seneste vellykkede betaling"
 
 #: pretix/control/forms/filter.py:2525
-#, fuzzy
 msgid "All check-ins"
-msgstr "Tjek-ind-lister"
+msgstr "Alle indtjekninger"
 
 #: pretix/control/forms/filter.py:2526
-#, fuzzy
 msgid "Successful check-ins"
-msgstr "Gennemførte betalinger"
+msgstr "Vellykkede indtjekninger"
 
 #: pretix/control/forms/filter.py:2527
-#, fuzzy
 msgid "Unsuccessful check-ins"
-msgstr "Gennemførte betalinger"
+msgstr "Mislykkede indtjekninger"
 
 #: pretix/control/forms/filter.py:2532
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
 #: pretix/plugins/checkinlists/exporters.py:759
-#, fuzzy
 msgid "Scan type"
-msgstr "Korttype"
+msgstr "Scannetype"
 
 #: pretix/control/forms/filter.py:2534
-#, fuzzy
 msgid "All directions"
-msgstr "Alle handlinger"
+msgstr "Alle retninger"
 
 #: pretix/control/forms/filter.py:2543 pretix/control/forms/filter.py:2583
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
 #: pretix/plugins/checkinlists/exporters.py:765
-#, fuzzy
 msgid "Device"
-msgstr "Enhedsnavn"
+msgstr "Enhed"
 
 #: pretix/control/forms/filter.py:2544 pretix/control/forms/filter.py:2579
 #: pretix/control/forms/filter.py:2770
-#, fuzzy
 msgid "All devices"
-msgstr "Alle fakturaer"
+msgstr "Alle enheder"
 
 #: pretix/control/forms/filter.py:2558
-#, fuzzy
 msgctxt "filter"
 msgid "Start date"
-msgstr "Starttidspunkt"
+msgstr "Startdato"
 
 #: pretix/control/forms/filter.py:2564
-#, fuzzy
 msgctxt "filter"
 msgid "End date"
-msgstr "Sluttidspunkt"
+msgstr "Slutdato"
 
 #: pretix/control/forms/filter.py:2606
 #: pretix/plugins/checkinlists/exporters.py:883
-#, fuzzy
 msgid "All check-in lists"
-msgstr "Tjek-ind-lister"
+msgstr "Alle check-in-lister"
 
 #: pretix/control/forms/filter.py:2610
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
@@ -15437,28 +15396,23 @@ msgstr "Tjek-ind-liste"
 #: pretix/control/forms/filter.py:2761
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:86
 msgid "Software"
-msgstr ""
+msgstr "Software"
 
 #: pretix/control/forms/filter.py:2768
-#, fuzzy
 msgid "Device status"
-msgstr "Enhedsnavn"
+msgstr "Enhedsstatus"
 
 #: pretix/control/forms/filter.py:2771
-#, fuzzy
 msgid "Active devices"
-msgstr "Alle fakturaer"
+msgstr "Aktive enheder"
 
 #: pretix/control/forms/filter.py:2772
-#, fuzzy
 msgid "Revoked devices"
-msgstr "Registrerede enheder"
+msgstr "Spærrede enheder"
 
 #: pretix/control/forms/filter.py:2827 pretix/control/forms/filter.py:2829
-#, fuzzy
-#| msgid "Require email addresses per ticket"
 msgid "Search email address or subject"
-msgstr "Påkræv e-mailadresse pr. billet"
+msgstr "Søg efter e-mailadresse eller emne"
 
 #: pretix/control/forms/global_settings.py:62
 msgid "Additional footer text"
@@ -15478,37 +15432,37 @@ msgstr "Vises som linket i den yderligere tekst i sidenfoden."
 
 #: pretix/control/forms/global_settings.py:74
 msgid "Global message banner"
-msgstr ""
+msgstr "Banner med global besked"
 
 #: pretix/control/forms/global_settings.py:79
 msgid "Global message banner detail text"
-msgstr ""
+msgstr "Detaljeret tekst til globalt meddelelsesbanner"
 
 #: pretix/control/forms/global_settings.py:83
 msgid "OpenCage API key for geocoding"
-msgstr ""
+msgstr "OpenCage API-nøgle til geokodning"
 
 #: pretix/control/forms/global_settings.py:87
 msgid "MapQuest API key for geocoding"
-msgstr ""
+msgstr "MapQuest API-nøgle til geokodning"
 
 #: pretix/control/forms/global_settings.py:91
 msgid "Leaflet tiles URL pattern"
-msgstr ""
+msgstr "URL-mønster for fliser i foldere"
 
 #: pretix/control/forms/global_settings.py:92
 #: pretix/control/forms/global_settings.py:97
 #, python-brace-format
 msgid "e.g. {sample}"
-msgstr ""
+msgstr "f.eks. {sample}"
 
 #: pretix/control/forms/global_settings.py:96
 msgid "Leaflet tiles attribution"
-msgstr ""
+msgstr "Kildeangivelse for fliser til folder"
 
 #: pretix/control/forms/global_settings.py:103
 msgid "ApplePay MerchantID Domain Association"
-msgstr ""
+msgstr "Kobling af Apple Pay MerchantID til domæne"
 
 #: pretix/control/forms/global_settings.py:104
 #, python-brace-format
@@ -15516,6 +15470,8 @@ msgid ""
 "Will be served at {domain}/.well-known/apple-developer-merchantid-domain-"
 "association"
 msgstr ""
+"Vil blive leveret på {domain}/.well-known/apple-developer-merchantid-domain-"
+"association"
 
 #: pretix/control/forms/global_settings.py:122
 msgid "Perform update checks"
@@ -15530,6 +15486,12 @@ msgid ""
 "any IP addresses and we will not know who you are or where to find your "
 "instance. You can disable this behavior here at any time."
 msgstr ""
+"Under opdateringskontrollen sender pretix et anonymt, unikt installations-"
+"id, den aktuelle version af pretix, dine installerede plugins samt antallet "
+"af aktive og inaktive begivenheder i din installation til servere, der "
+"drives af pretix-udviklerne. Vi gemmer udelukkende anonyme data, aldrig IP-"
+"adresser, og vi ved ikke, hvem du er, eller hvor din instans befinder sig. "
+"Du kan til enhver tid deaktivere denne funktion her."
 
 #: pretix/control/forms/global_settings.py:131
 msgid "Email notifications"
@@ -15546,32 +15508,37 @@ msgstr ""
 "blive sent fra denne server."
 
 #: pretix/control/forms/global_settings.py:145
-#, fuzzy
 msgid "Changes to pretix"
-msgstr "Skift dato til"
+msgstr "Ændringer i pretix"
 
 #: pretix/control/forms/global_settings.py:148
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
 msgstr ""
+"Denne installation af pretix kører uden nogen brugerdefinerede ændringer "
+"eller udvidelser (bortset fra installerede plugins)."
 
 #: pretix/control/forms/global_settings.py:150
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
 msgstr ""
+"Denne installation af pretix indeholder ændringer eller udvidelser, der er "
+"foretaget i kildekoden."
 
 #: pretix/control/forms/global_settings.py:155
-#, fuzzy
 msgid "Usage of pretix"
-msgstr "Overblik over brug"
+msgstr "Anvendelse af pretix"
 
 #: pretix/control/forms/global_settings.py:158
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
 msgstr ""
+"Jeg bruger kun pretix til at arrangere begivenheder, der afholdes af mit "
+"eget firma eller dets tilknyttede virksomheder, eller til at sælge "
+"produkter, der forhandles af mit eget firma."
 
 #: pretix/control/forms/global_settings.py:160
 msgid ""
@@ -15579,14 +15546,17 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
+"Jeg bruger pretix til at sælge billetter for andre arrangører (f.eks. et "
+"billetselskab) eller jeg stiller pretix' funktioner til rådighed for andre "
+"(f.eks. et Software-as-a-Service-firma)."
 
 #: pretix/control/forms/global_settings.py:162
 msgid "I'm not sure which option applies."
-msgstr ""
+msgstr "Jeg er ikke sikker på, hvilken mulighed der gælder."
 
 #: pretix/control/forms/global_settings.py:167
 msgid "License choice"
-msgstr ""
+msgstr "Valg af licens"
 
 #: pretix/control/forms/global_settings.py:170
 msgid ""
@@ -15594,6 +15564,9 @@ msgid ""
 "the copyright holders which allows me to not share modifications if I only "
 "use pretix internally."
 msgstr ""
+"Jeg ønsker at bruge Pretix i henhold til den ekstra tilladelse, som "
+"ophavsretsindehaverne har givet alle, og som giver mig mulighed for ikke at "
+"dele ændringer, hvis jeg kun bruger Pretix internt."
 
 #: pretix/control/forms/global_settings.py:173
 msgid ""
@@ -15601,29 +15574,40 @@ msgid ""
 "restriction on the scope of usage and therefore without making use of any "
 "additional permission."
 msgstr ""
+"Jeg ønsker at anvende pretix i henhold til betingelserne i AGPLv3-licensen "
+"uden begrænsninger i anvendelsesomfanget og dermed uden at skulle indhente "
+"yderligere tilladelse."
 
 #: pretix/control/forms/global_settings.py:175
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
+"Jeg har erhvervet en betalt pretix Enterprise-licens, som i øjeblikket er "
+"gyldig."
 
 #: pretix/control/forms/global_settings.py:180
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
 msgstr ""
+"Denne installation af pretix indeholder plugins, der er frit tilgængelige "
+"under en non-copyleft-licens (Apache-licens, MIT-licens, BSD-licens osv.)."
 
 #: pretix/control/forms/global_settings.py:185
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
 msgstr ""
+"Denne installation af pretix indeholder plugins, der er frit tilgængelige "
+"under en licens med stærk copyleft (GPL, AGPL, …)."
 
 #: pretix/control/forms/global_settings.py:190
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
 msgstr ""
+"Denne installation af pretix indeholder plugins, der er udviklet internt "
+"eller erhvervet under en proprietær licens fra en tredjepart."
 
 #: pretix/control/forms/global_settings.py:195
 msgid ""
