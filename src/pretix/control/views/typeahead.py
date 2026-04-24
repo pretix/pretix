@@ -619,7 +619,7 @@ def checkinlist_select2(request, **kwargs):
 
     qs = request.event.checkin_lists.select_related('subevent').filter(
         qf
-    ).order_by('name')
+    ).order_by('subevent__date_from', 'name', 'pk')
 
     total = qs.count()
     pagesize = 20
