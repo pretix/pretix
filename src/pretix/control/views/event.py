@@ -234,13 +234,25 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             self.request.event.log_action('pretix.event.footerlinks.changed', user=self.request.user, data={
                 'data': self.footer_links_formset.cleaned_data
             })
-        if form.has_changed():
-            self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
-                k: (form.cleaned_data.get(k).name
-                    if isinstance(form.cleaned_data.get(k), File)
-                    else form.cleaned_data.get(k))
-                for k in form.changed_data
+
+        change_data = {
+            k: (form.cleaned_data.get(k).name
+                if isinstance(form.cleaned_data.get(k), File)
+                else form.cleaned_data.get(k))
+            for k in form.changed_data
+        }
+        meta_changed = {}
+        for f in self.meta_forms:
+            meta_changed.update({
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.changed_data
             })
+        if meta_changed:
+            change_data['meta_data'] = meta_changed
+        if change_data:
+            self.request.event.log_action('pretix.event.changed', user=self.request.user, data=change_data)
 
         tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk})
         messages.success(self.request, _('Your changes have been saved.'))

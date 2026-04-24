@@ -540,20 +540,35 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
             # TODO: LogEntry?
 
         messages.success(self.request, _('Your changes have been saved.'))
-        if form.has_changed() or any(f.has_changed() for f in self.plugin_forms):
-            data = {
-                k: form.cleaned_data.get(k) for k in form.changed_data
-            }
-            for f in self.plugin_forms:
-                data.update({
-                    k: (f.cleaned_data.get(k).name
-                        if isinstance(f.cleaned_data.get(k), File)
-                        else f.cleaned_data.get(k))
-                    for k in f.changed_data
-                })
+
+        change_data = {
+            k: (form.cleaned_data.get(k).name
+                if isinstance(form.cleaned_data.get(k), File)
+                else form.cleaned_data.get(k))
+            for k in form.changed_data
+        }
+        meta_changed = {}
+        for f in self.meta_forms:
+            meta_changed.update({
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.changed_data
+            })
+        if meta_changed:
+            change_data['meta_data'] = meta_changed
+        for f in self.plugin_forms:
+            change_data.update({
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.changed_data
+            })
+        if change_data:
             self.object.log_action(
-                'pretix.subevent.changed', user=self.request.user, data=data
+                'pretix.subevent.changed', user=self.request.user, data=change_data
             )
+
         for f in self.plugin_forms:
             f.subevent = self.object
             f.save()
@@ -628,6 +643,18 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
                     else f.cleaned_data.get(k))
                 for k in f.cleaned_data
             })
+
+        meta_changed = {}
+        for f in self.meta_forms:
+            meta_changed.update({
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.cleaned_data
+            })
+        if meta_changed:
+            data['meta_data'] = meta_changed
+
         form.instance.log_action('pretix.subevent.added', data=dict(data), user=self.request.user)
 
         self.save_formset(form.instance)
