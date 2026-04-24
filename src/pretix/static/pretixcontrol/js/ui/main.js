@@ -71,6 +71,7 @@ $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
 });
 
 var form_handlers = function (el) {
+    el.trigger("rescan.areYouSure");
     el.find("[data-formset]").formset(
         {
             animateForms: true,
