@@ -1658,6 +1658,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                         count_waitinglist=False,
                         force=request.data.get('force', False),
                         send_mail=send_mail,
+                        ignore_date=True,
                     )
                 except Quota.QuotaExceededException:
                     pass
@@ -1693,7 +1694,8 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                             auth=self.request.auth,
                             count_waitinglist=False,
                             send_mail=send_mail,
-                            force=force)
+                            force=force,
+                            ignore_date=True)
         except Quota.QuotaExceededException as e:
             return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except PaymentException as e:

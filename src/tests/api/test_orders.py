@@ -731,6 +731,34 @@ def test_payment_create_confirmed(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_payment_create_confirmed_after_expiry(token_client, organizer, event, order):
+    djmail.outbox = []
+    order.expires = now() - datetime.timedelta(days=2)
+    order.save()
+    event.settings.payment_term_last = (now() - datetime.timedelta(days=2)).strftime('%Y-%m-%d')
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(
+        organizer.slug, event.slug, order.code
+    ), format='json', data={
+        'provider': 'banktransfer',
+        'state': 'confirmed',
+        'amount': order.total,
+        'send_email': False,
+        'info': {
+            'foo': 'bar'
+        }
+    })
+    with scopes_disabled():
+        p = order.payments.last()
+    assert resp.status_code == 201
+    assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+    assert p.info_data == {'foo': 'bar'}
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_PAID
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
 def test_payment_create_pending(token_client, organizer, event, order):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(
         organizer.slug, event.slug, order.code
