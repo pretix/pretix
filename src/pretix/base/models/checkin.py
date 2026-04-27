@@ -351,6 +351,7 @@ class Checkin(models.Model):
     REASON_UNAPPROVED = 'unapproved'
     REASON_INVALID_TIME = 'invalid_time'
     REASON_ANNULLED = 'annulled'
+    REASON_ALREADY_EXCHANGED = 'already_exchanged'
     REASONS = (
         (REASON_CANCELED, _('Order canceled')),
         (REASON_INVALID, _('Unknown ticket')),
@@ -366,6 +367,7 @@ class Checkin(models.Model):
         (REASON_UNAPPROVED, _('Order not approved')),
         (REASON_INVALID_TIME, _('Ticket not valid at this time')),
         (REASON_ANNULLED, _('Check-in annulled')),
+        (REASON_ALREADY_EXCHANGED, _('Ticket already exchanged')),
     )
 
     successful = models.BooleanField(

@@ -867,6 +867,15 @@ class RequiredQuestionsError(Exception):
         super().__init__(msg)
 
 
+class RequiredMediaExchangeError(Exception):
+    def __init__(self, msg, code, media_policy, media_type):
+        self.msg = msg
+        self.code = code
+        self.media_policy = media_policy
+        self.media_type = media_type
+        super().__init__(msg)
+
+
 def _save_answers(op, answers, given_answers):
     def _create_answer(question, answer):
         try:
@@ -939,7 +948,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
                     raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False,
-                    gate=None):
+                    gate=None, media_exchange_supported=False, reusable_media=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -951,6 +960,8 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         questions are not filled out.
     :param ignore_unpaid: When set to True, this will succeed even when the order is unpaid.
     :param questions_supported: When set to False, questions are ignored
+    :param media_exchange_supported: When set to False, media exchanges are ignored and access with un-exchanged media
+        might be permitted
     :param nonce: A random nonce to prevent race conditions.
     :param datetime: The datetime of the checkin, defaults to now.
     :param simulate: If true, the check-in is not saved.
@@ -1100,6 +1111,34 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'incomplete',
                 require_answers
             )
+        media_exchange_supported = True
+
+        required_media_policy = op.item.media_policy
+        required_media_type = op.item.media_type
+        linked_media = op.linked_media
+        require_media_exchange = required_media_policy and required_media_type and not linked_media.exists()
+        if require_media_exchange and not force and media_exchange_supported:
+            raise RequiredMediaExchangeError(
+                _('You need to exchange your ticket to complete this check-in.'),
+                'exchange',
+                required_media_policy,
+                required_media_type
+            )
+
+        require_reusable_media_usage = required_media_policy and required_media_type and op.organizer.settings.reusable_media_usage_enforced
+        if require_reusable_media_usage and not force:
+            if not reusable_media and not linked_media.exists() and media_exchange_supported:
+                raise RequiredMediaExchangeError(
+                    _('You need to exchange your ticket to complete this check-in.'),
+                    'exchange',
+                    required_media_policy,
+                    required_media_type
+                )
+            elif not reusable_media and linked_media.exists():
+                raise CheckInError(
+                    _('This ticket has already been exchanged - use the reusable media instead.'),
+                    'already_exchanged',
+                )
 
         device = None
         if isinstance(auth, Device):

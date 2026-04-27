@@ -871,6 +871,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'og_image',
         'name_scheme',
         'reusable_media_active',
+        'reusable_media_usage_enforced',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
         'reusable_media_type_nfc_uid',
@@ -885,6 +886,7 @@ class EventSettingsSerializer(SettingsSerializer):
     readonly_fields = [
         # These are read-only since they are currently only settable on organizers, not events
         'reusable_media_active',
+        'reusable_media_usage_enforced',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
         'reusable_media_type_nfc_uid',

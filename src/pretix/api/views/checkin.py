@@ -69,7 +69,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import PrintLog
 from pretix.base.permissions import AnyPermissionOf
 from pretix.base.services.checkin import (
-    CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
+    CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin, RequiredMediaExchangeError,
 )
 from pretix.base.signals import checkin_annulled
 from pretix.helpers import OF_SELF
@@ -454,7 +454,8 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
-                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False):
+                    media_exchange_supported, source_type='barcode', legacy_url_support=False, simulate=False,
+                    gate=None, use_order_locale=False):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -463,6 +464,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
 
     device = auth if isinstance(auth, Device) else None
     gate = gate or (auth.gate if isinstance(auth, Device) else None)
+    media = None
 
     context = {
         'request': request,
@@ -811,6 +813,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 datetime=datetime,
                 questions_supported=questions_supported,
                 canceled_supported=canceled_supported,
+                media_exchange_supported=media_exchange_supported,
                 user=user,
                 auth=auth,
                 type=checkin_type,
@@ -819,6 +822,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 from_revoked_secret=from_revoked_secret,
                 simulate=simulate,
                 gate=gate,
+                reusable_media=media,
             )
         except RequiredQuestionsError as e:
             return Response({
@@ -829,6 +833,16 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'questions': [
                     QuestionSerializer(q).data for q in e.questions
                 ],
+                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
+            }, status=400)
+        except RequiredMediaExchangeError as e:
+            return Response({
+                'status': 'exchange',
+                'require_attention': op.require_checkin_attention,
+                'checkin_texts': op.checkin_texts,
+                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
+                'media_policy': e.media_policy,
+                'media_type': e.media_type,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         except CheckInError as e:
@@ -980,6 +994,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             questions_supported=self.request.data.get('questions_supported', True),
             canceled_supported=self.request.data.get('canceled_supported', False),
+            media_exchange_supported=self.request.data.get('media_exchange_supported', False),
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=True,
         )
@@ -1016,6 +1031,7 @@ class CheckinRPCRedeemView(views.APIView):
             questions_supported=s.validated_data['questions_supported'],
             use_order_locale=s.validated_data['use_order_locale'],
             canceled_supported=True,
+            media_exchange_supported=s.validated_data.get('media_exchange_supported', False),
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=False,
         )

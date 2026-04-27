@@ -89,7 +89,7 @@ class NfcUidMediaType(BaseMediaType):
     icon = 'pretixbase/img/media/nfc_uid.svg'
     medium_created_by_server = False
     supports_giftcard = True
-    supports_orderposition = False
+    supports_orderposition = True
 
     def handle_unknown(self, organizer, identifier, user, auth):
         from pretix.base.models import GiftCard, ReusableMedium
@@ -129,7 +129,7 @@ class NfcMf0aesMediaType(BaseMediaType):
     icon = 'pretixbase/img/media/nfc_secure.svg'
     medium_created_by_server = False
     supports_giftcard = True
-    supports_orderposition = False
+    supports_orderposition = True
 
     def handle_new(self, organizer, medium, user, auth):
         from pretix.base.models import GiftCard
