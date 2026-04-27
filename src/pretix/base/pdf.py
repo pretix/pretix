@@ -501,7 +501,7 @@ DEFAULT_VARIABLES = OrderedDict((
     ("program_times", {
         "label": _("Program times"),
         "editor_sample": _(
-            "2017-05-31 10:00 – 12:00 Room 1\n2017-05-31 14:00 – 16:00 Room 2\n2017-05-31 14:00 – 2017-06-01 14:00 Building A"),
+            "2017-05-31 10:00 – 12:00, Room 1\n2017-05-31 14:00 – 16:00, Room 2\n2017-05-31 14:00 – 2017-06-01 14:00, Building A"),
         "evaluate": lambda op, order, ev: get_program_times(op, ev)
     }),
     ("medium_identifier", {
