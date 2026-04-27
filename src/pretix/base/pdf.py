@@ -60,7 +60,6 @@ from django.dispatch import receiver
 from django.utils.deconstruct import deconstructible
 from django.utils.formats import date_format
 from django.utils.html import conditional_escape
-from django.utils.text import normalize_newlines
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.strings import LazyI18nString
@@ -757,7 +756,7 @@ def get_program_times(op: OrderPosition, ev: Event):
                 pt.end.astimezone(ev.timezone),
                 as_html=False
             ),
-            (', ' + normalize_newlines(str(pt.location)).replace('\n', ', ')) if pt.location else '',
+            ', '.join(l.strip() for l in str(pt.location).splitlines() if l.strip())
         ])
     return '\n'.join(''.join(l) for l in ptstr)
 
