@@ -224,7 +224,7 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Enforce the usage of issued re-usable media for check-in"),
-            help_text=_("If enabled, a ticket barcode will not be accepted anymore, if a re-usable media has been "
+            help_text=_("If enabled, a ticket barcode will not be accepted anymore, if a re-usable medium has been "
                         "created and linked to a ticket. Keeping this option turned off will treat the re-usable "
                         "medium and ticket as equals."),
             widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-reusable_media_active'}),

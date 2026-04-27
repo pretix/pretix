@@ -86,7 +86,7 @@
                     <h3 class="nomargin-top">{% trans "Media exchange required" %}</h3>
                     <p>
                         {% blocktrans trimmed with media_policy=media_policies|getitem:result.media_policy media_type=media_types|getitem:result.media_type %}
-                            This ticket needs to be exchanged into a <strong>{{ media_type }}</strong> re-usable media.
+                            This ticket needs to be exchanged into a <strong>{{ media_type }}</strong> re-usable medium.
                             <strong>{{ media_policy }}</strong>.
                         {% endblocktrans %}
                     </p>

@@ -1135,7 +1135,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 )
             elif not reusable_media and linked_media.exists():
                 raise CheckInError(
-                    _('This ticket has already been exchanged - use the reusable media instead.'),
+                    _('This ticket has already been exchanged - use the reusable medium instead.'),
                     'already_exchanged',
                 )
 
