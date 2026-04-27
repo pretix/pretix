@@ -717,7 +717,6 @@ class Event(EventMixin, LoggedModel):
         self.settings.low_availability_percentage = 10
         self.settings.mail_send_order_free_attendee = True
         self.settings.mail_send_order_placed_attendee = True
-        self.settings.mail_send_order_placed_attendee = True
         self.settings.mail_send_order_paid_attendee = True
         self.settings.mail_send_order_approved_attendee = True
         self.settings.mail_send_order_approved_free_attendee = True
