@@ -347,6 +347,9 @@ class SecurityMiddleware(MiddlewareMixin):
 
         return resp
 
+
+class RejectInvalidInputMiddleware(MiddlewareMixin):
+
     def process_request(self, request):
         # Nullbytes in GET/POST parameters are mostly harmless, as they will later fail on database insertion, but it
         # keeps spamming our error logs whenever someone tries to run a vulnerability scanner.
