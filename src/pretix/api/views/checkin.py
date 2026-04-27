@@ -69,7 +69,8 @@ from pretix.base.models import (
 from pretix.base.models.orders import PrintLog
 from pretix.base.permissions import AnyPermissionOf
 from pretix.base.services.checkin import (
-    CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin, RequiredMediaExchangeError,
+    CheckInError, RequiredMediaExchangeError, RequiredQuestionsError, SQLLogic,
+    perform_checkin,
 )
 from pretix.base.signals import checkin_annulled
 from pretix.helpers import OF_SELF

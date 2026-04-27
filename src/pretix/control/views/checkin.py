@@ -50,7 +50,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
 from pretix.base.media import MEDIA_TYPES
-from pretix.base.models import Checkin, LogEntry, Order, OrderPosition, Item
+from pretix.base.models import Checkin, Item, LogEntry, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.orders import PrintLog
 from pretix.base.permissions import AnyPermissionOf
