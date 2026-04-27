@@ -1111,7 +1111,6 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'incomplete',
                 require_answers
             )
-        media_exchange_supported = True
 
         required_media_policy = op.item.media_policy
         required_media_type = op.item.media_type
