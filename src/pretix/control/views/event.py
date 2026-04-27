@@ -243,12 +243,8 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
         }
         meta_changed = {}
         for f in self.meta_forms:
-            meta_changed.update({
-                k: (f.cleaned_data.get(k).name
-                    if isinstance(f.cleaned_data.get(k), File)
-                    else f.cleaned_data.get(k))
-                for k in f.changed_data
-            })
+            if f.has_changed():
+                meta_changed[f.property.name] = f.cleaned_data["value"]
         if meta_changed:
             change_data['meta_data'] = meta_changed
         if change_data:
