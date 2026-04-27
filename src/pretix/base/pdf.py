@@ -60,6 +60,7 @@ from django.dispatch import receiver
 from django.utils.deconstruct import deconstructible
 from django.utils.formats import date_format
 from django.utils.html import conditional_escape
+from django.utils.text import normalize_newlines
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.strings import LazyI18nString
@@ -498,9 +499,9 @@ DEFAULT_VARIABLES = OrderedDict((
         ) if op.valid_until else ""
     }),
     ("program_times", {
-        "label": _("Program times: date and time"),
+        "label": _("Program times"),
         "editor_sample": _(
-            "2017-05-31 10:00 – 12:00\n2017-05-31 14:00 – 16:00\n2017-05-31 14:00 – 2017-06-01 14:00"),
+            "2017-05-31 10:00 – 12:00 Room 1\n2017-05-31 14:00 – 16:00 Room 2\n2017-05-31 14:00 – 2017-06-01 14:00 Building A"),
         "evaluate": lambda op, order, ev: get_program_times(op, ev)
     }),
     ("medium_identifier", {
@@ -748,13 +749,17 @@ def get_seat(op: OrderPosition):
 
 
 def get_program_times(op: OrderPosition, ev: Event):
-    return '\n'.join([
-        datetimerange(
-            pt.start.astimezone(ev.timezone),
-            pt.end.astimezone(ev.timezone),
-            as_html=False
-        ) for pt in op.item.program_times.all()
-    ])
+    ptstr = []
+    for pt in op.item.program_times.all():
+        ptstr.append([
+            datetimerange(
+                pt.start.astimezone(ev.timezone),
+                pt.end.astimezone(ev.timezone),
+                as_html=False
+            ),
+            ', ' + normalize_newlines(str(pt.location)).replace('\n', ', ') if pt.location else '',
+        ])
+    return '\n'.join(''.join(l) for l in ptstr)
 
 
 def generate_compressed_addon_list(op, order, event, only_checked_in=False):
