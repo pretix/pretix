@@ -756,7 +756,9 @@ def get_program_times(op: OrderPosition, ev: Event):
                 pt.end.astimezone(ev.timezone),
                 as_html=False
             ),
-            ', '.join(l.strip() for l in str(pt.location).splitlines() if l.strip())
+            (', ' + ', '.join(
+                l.strip() for l in str(pt.location).splitlines() if l.strip())
+             ) if str(pt.location).strip() else ''
         ])
     return '\n'.join(''.join(l) for l in ptstr)
 
