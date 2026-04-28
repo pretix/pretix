@@ -28,7 +28,7 @@ created                               datetime                   Date of creatio
 updated                               datetime                   Date of last modification
 expires                               datetime                   Expiry date (or ``null``)
 customer                              string                     Identifier of a customer account this medium belongs to.
-linked_orderpositions                 list of integer            Internal IDs of tickets this medium is linked to.
+linked_orderpositions                 list of integers           Internal IDs of tickets this medium is linked to.
 linked_orderposition                  integer                    **DEPRECATED.** ID of the ticket the medium is linked to, if it is linked to 
                                                                  only one ticket. ``null``, if the medium is linked to none or multiple tickets.
 linked_giftcard                       integer                    Internal ID of a gift card this medium is linked to.
@@ -106,7 +106,7 @@ Endpoints
    :query string created_since: Only show media created since a given date.
    :query string updated_since: Only show media updated since a given date.
    :query integer linked_orderpositions: Only show media linked to the given tickets. Note: you can pass multiple ticket IDs by passing
-                         ``linked_orderpositions`` multiple times. Any medium matching any linked orderposition will be returned.
+                                         ``linked_orderpositions`` multiple times. Any medium matching any linked orderposition will be returned.
    :query integer linked_orderposition: Only show media linked to the given ticket.
    :query integer linked_giftcard: Only show media linked to the given gift card.
    :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderpositions"``,
