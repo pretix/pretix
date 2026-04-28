@@ -1727,7 +1727,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         )
                     use_reusable_medium.linked_orderpositions.set([pos])
                     use_reusable_medium.log_action(
-                        'pretix.reusable_medium.linked_orderposition.changed',
+                        'pretix.reusable_medium.linked_orderposition.added',
                         data={
                             'by_order': order.code,
                             'linked_orderposition': pos.pk,
