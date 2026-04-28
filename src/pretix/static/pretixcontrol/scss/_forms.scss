@@ -149,6 +149,18 @@ td > .form-group > .checkbox {
   padding: 5px 0;
 }
 
+.question-option-actions {
+  white-space: nowrap;
+}
+
+.question-option-drag-handle {
+  cursor: move;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
 .i18n-form-group .i18n-field-markdown-note {
   border: 1px solid $input-border;
   color: $text-muted;

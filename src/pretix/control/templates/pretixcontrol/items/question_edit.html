@@ -76,13 +76,11 @@
                                             {% bootstrap_form_errors form %}
                                             {% bootstrap_field form.answer layout='inline' form_group_class="" %}
                                         </div>
-                                        <div class="col-xs-2 text-right flip">
+                                        <div class="col-xs-2 text-right flip question-option-actions">
                                             <span>&nbsp;</span><br>
-                                            <button type="button" class="btn btn-default" data-formset-move-up-button>
-                                                <i class="fa fa-arrow-up"></i></button>
-                                            <button type="button" class="btn btn-default" data-formset-move-down-button>
-                                                <i class="fa fa-arrow-down"></i></button>
-                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                            <button type="button" class="btn btn-default btn-sm question-option-drag-handle">
+                                                <i class="fa fa-arrows"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-formset-delete-button>
                                                 <i class="fa fa-trash"></i></button>
                                         </div>
                                     </div>
@@ -104,13 +102,11 @@
                                     </span>
                                             {% bootstrap_field formset.empty_form.answer layout='inline' form_group_class="" %}
                                         </div>
-                                        <div class="col-xs-2 text-right flip">
+                                        <div class="col-xs-2 text-right flip question-option-actions">
                                             <span>&nbsp;</span><br>
-                                            <button type="button" class="btn btn-default" data-formset-move-up-button>
-                                                <i class="fa fa-arrow-up"></i></button>
-                                            <button type="button" class="btn btn-default" data-formset-move-down-button>
-                                                <i class="fa fa-arrow-down"></i></button>
-                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                            <button type="button" class="btn btn-default btn-sm question-option-drag-handle">
+                                                <i class="fa fa-arrows"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-formset-delete-button>
                                                 <i class="fa fa-trash"></i></button>
                                         </div>
                                     </div>
