@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-03-30 11:50+0000\n"
+"PO-Revision-Date: 2026-04-28 09:22+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 5.17\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8219,10 +8219,8 @@ msgstr ""
 "2x Workshop 2"
 
 #: pretix/base/pdf.py:383
-#, fuzzy
-#| msgid "List of Add-Ons"
 msgid "List of Checked-In Add-Ons"
-msgstr "Liste der Zusatz-Produkte"
+msgstr "Liste der eingecheckten Zusatzprodukte"
 
 #: pretix/base/pdf.py:390 pretix/control/forms/filter.py:1537
 #: pretix/control/forms/filter.py:1539
@@ -9226,10 +9224,8 @@ msgid "Czech National Bank"
 msgstr "Tschechische Nationalbank"
 
 #: pretix/base/services/currencies.py:41
-#, fuzzy
-#| msgid "Czech National Bank"
 msgid "National Bank of Poland"
-msgstr "Tschechische Nationalbank"
+msgstr "Nationalbank von Polen"
 
 #: pretix/base/services/export.py:95 pretix/base/services/export.py:155
 msgid ""
@@ -10318,16 +10314,12 @@ msgstr ""
 "Rechnungsbetrag nicht in CZK ist."
 
 #: pretix/base/settings.py:577 pretix/base/settings.py:586
-#, fuzzy
-#| msgid ""
-#| "Based on Czech National Bank daily rates, whenever the invoice amount is "
-#| "not in CZK."
 msgid ""
 "Based on National Bank of Poland daily rates, whenever the invoice amount is "
 "not in PLN."
 msgstr ""
-"Basierend auf den Kursen der Tschechischen Nationalbank, immer wenn der "
-"Rechnungsbetrag nicht in CZK ist."
+"Basierend auf den Kursen der Nationalbank von Polen, immer wenn der "
+"Rechnungsbetrag nicht in PLN ist."
 
 #: pretix/base/settings.py:597
 msgid "Require invoice address"
@@ -16417,10 +16409,8 @@ msgid "Allow to overbook quotas when performing this operation"
 msgstr "Überbuchen von Kontingenten bei dieser Aktion erlauben"
 
 #: pretix/control/forms/orders.py:335
-#, fuzzy
-#| msgid "Number of orders"
 msgid "Number of products to add"
-msgstr "Anzahl Bestellungen"
+msgstr "Anzahl hinzuzufügender Produkt"
 
 #: pretix/control/forms/orders.py:344
 msgid "Add-on to"
@@ -16452,10 +16442,10 @@ msgstr ""
 "Produktes."
 
 #: pretix/control/forms/orders.py:441
-#, fuzzy
-#| msgid "You can not select the same seat multiple times."
 msgid "You can not choose a seat when adding multiple products at once."
-msgstr "Du kannst den gleichen Sitzplatz nicht mehrfach auswählen."
+msgstr ""
+"Du kannst keinen Sitzplatz auswählen, wenn mehrere Produkte auf einmal "
+"hinzugefügt werden."
 
 #: pretix/control/forms/orders.py:478 pretix/control/forms/orders.py:482
 #: pretix/control/forms/orders.py:510 pretix/control/forms/orders.py:552
@@ -17075,7 +17065,7 @@ msgstr "Wochenendtag"
 #: pretix/control/forms/subevents.py:106
 msgctxt "subevent"
 msgid "Skip dates that overlap with any existing date"
-msgstr ""
+msgstr "Überspringe Termine, die mit einem bestehenden Termin überlappen"
 
 #: pretix/control/forms/subevents.py:109
 msgctxt "subevent"
@@ -17085,6 +17075,10 @@ msgid ""
 "This respects even inactive dates and works best if all dates have both a "
 "start and end time."
 msgstr ""
+"Dies kann nützlich sein, wenn alle Termine am selben Ort stattfinden und "
+"wiederholte Termine nicht in Konflikt mit existierenden Sonderterminen "
+"geraten sollen. Dies berücksichtigt auch inaktive Termine und funktioniert "
+"am besten, wenn alle Termine eine Start- und Endzeit haben."
 
 #: pretix/control/forms/subevents.py:128
 msgid "Keep the current values"
@@ -30232,6 +30226,8 @@ msgstr "Bitte erstelle maximal 100.000 Termine auf einmal."
 #: pretix/control/views/subevents.py:966
 msgid "All dates would be skipped because they conflict with existing dates."
 msgstr ""
+"Alle Termine würden übersprungen werden, weil sie mit existierenden Terminen "
+"überlappen."
 
 #: pretix/control/views/subevents.py:1102
 #, python-brace-format
