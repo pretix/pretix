@@ -408,6 +408,12 @@ def register_default_webhook_events(sender, **kwargs):
             _('This includes product added or deleted and changes to nested objects like '
               'variations or bundles.'),
         ),
+        ParametrizedItemWebhookEvent(
+            'pretix.event.quota.*',
+            _('Quota changed'),
+            _('This includes related events like creation, deletion, opening or closing of quotas. '
+              'No webhook is sent for changes to the resulting availability.'),
+        ),
         ParametrizedEventWebhookEvent(
             'pretix.event.live.activated',
             _('Shop taken live'),
