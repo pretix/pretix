@@ -3467,6 +3467,7 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 
     @transaction.atomic
     def form_valid(self, form):
+        prev_linked_ops_pks = list(getattr(self.object, "linked_orderpositions").values_list("pk", flat=True))
         result = super().form_valid(form)
         if form.has_changed():
             data = {
@@ -3475,7 +3476,29 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
             }
             if "linked_orderpositions" in data:
                 data["linked_orderpositions"] = data["linked_orderpositions"].values_list("pk", flat=True)
-            self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data=data)
+                if prev_linked_ops_pks:
+                    for op_pk in prev_linked_ops_pks:
+                        if op_pk not in data["linked_orderpositions"]:
+                            self.object.log_action(
+                                'pretix.reusable_medium.linked_orderposition.removed',
+                                user=self.request.user,
+                                data={
+                                    'linked_orderposition': op_pk,
+                                }
+                            )
+                for op_pk in data["linked_orderpositions"]:
+                    if op_pk not in prev_linked_ops_pks:
+                        self.object.log_action(
+                            'pretix.reusable_medium.linked_orderposition.added',
+                            user=self.request.user,
+                            data={
+                                'linked_orderposition': op_pk,
+                            }
+                        )
+            if any(k != "linked_orderpositions" for k in form.changed_data):
+                # log change-action only for changes other than linked_orderpositions
+                del data["linked_orderpositions"]
+                self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
         return result
 
