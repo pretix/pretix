@@ -44,7 +44,7 @@ Existing media types are:
 - ``nfc_mf0aes``
 
 
-.. versionchanged:: 2025.11
+.. versionchanged:: 2026.5
 
    The ``claim_token``, ``label``, ``linked_orderpositions`` attributes have been added, the ``linked_orderposition`` attribute has been
    deprecated. Note: To maintain backwards compatibility ``linked_orderposition`` contains the internal ID of the linked order position
