@@ -3467,6 +3467,7 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 
     @transaction.atomic
     def form_valid(self, form):
+        result = super().form_valid(form)
         if form.has_changed():
             data = {
                 k: getattr(self.object, k)
@@ -3476,7 +3477,7 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
                 data["linked_orderpositions"] = data["linked_orderpositions"].values_list("pk", flat=True)
             self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
-        return super().form_valid(form)
+        return result
 
     def get_success_url(self):
         return reverse('control:organizer.reusable_medium', kwargs={
