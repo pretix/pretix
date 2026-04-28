@@ -138,7 +138,7 @@ class OrderQuerySet(models.QuerySet):
         from .invoices import Invoice
 
         if not isinstance(status, list):
-            raise ValueError("`status` needs to be a list of strings")
+            raise TypeError("`status` needs to be a list of strings")
 
         filter = Q()
 
@@ -155,7 +155,7 @@ class OrderQuerySet(models.QuerySet):
             filter |= Q(status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
         if 'pv' in status:
             filter |= Q(status=Order.STATUS_PAID) | Q(status=Order.STATUS_PENDING, valid_if_pending=True)
-        for s in ('p', 'n', 'e', 'c', 'r'):
+        for s in ('p', 'n', 'e', 'c'):
             if s in status:
                 filter |= Q(status=s)
         if 'overpaid' in status:
