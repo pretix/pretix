@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { i18n_any, QUESTION_TYPE, QUESTION_TYPE_LABEL, SYSTEM_DATAFIELDS } from './helper';
 import NativeDialog from './NativeDialog.vue';
 import I18nTextField from './I18nTextField.vue';
@@ -6,12 +6,13 @@ import { useId, ref } from 'vue'
 const id = useId();
 const props = defineProps(['question', 'datafields', 'editable'])
 const emit = defineEmits(['removeSelf']);
+const gettext = (window as any).gettext;
 
 const df = typeof props.question.question === 'number' ?
 		props.datafields.find(el => el.id === props.question.question) :
 	typeof props.question.question === 'string' ?
 		SYSTEM_DATAFIELDS[props.question.question] :
-		{};
+		null;
 
 if (!props.question.label) props.question.label = {};
 if (!props.question.help_text) props.question.help_text = {};
@@ -25,28 +26,35 @@ const editor = ref();
       <button class="btn btn-default"><i class="fa fa-arrows"></i></button>
       <button class="btn btn-default" @click="editor.show()"><i class="fa fa-edit"></i></button>
     </div></div>
-    <label class="col-md-3 control-label" :for="id" v-if="df.type !== QUESTION_TYPE.BOOLEAN">
-      {{ i18n_any(question.label) }}
-    </label>
-    <div v-else class="col-md-3 control-label label-empty"></div>
-    <div class="col-md-9">
-      <input :id="id" type="text" v-if="df.type === QUESTION_TYPE.STRING" class="form-control">
-			<textarea :id="id" v-if="df.type === QUESTION_TYPE.TEXT" class="form-control"></textarea>
-      <div class="checkbox" v-if="df.type === QUESTION_TYPE.BOOLEAN">
-        <label :for="id">
-          <input :id="id" type="checkbox"> {{ i18n_any(question.label) }}
-        </label>
-      </div>
-      <input :id="id" type="number" v-if="df.type === QUESTION_TYPE.NUMBER" class="form-control">
-      <input :id="id" type="file" v-if="df.type === QUESTION_TYPE.FILE" class="form-control">
-      <select :id="id"
-        v-if="df.type === QUESTION_TYPE.CHOICE || df.type === QUESTION_TYPE.CHOICE_MULTIPLE"
-        :multiple="df.type === QUESTION_TYPE.CHOICE_MULTIPLE" class="form-control">
-        <option></option>
-        <option v-for="opt in question.options">{{ i18n_any(opt.answer) }}</option>
-      </select>
-      <div class="help-block">{{ i18n_any(question.help_text) }}</div>
-    </div>
+
+		<template v-if="df">
+			<label class="col-md-3 control-label" :for="id" v-if="df.type !== QUESTION_TYPE.BOOLEAN">
+				{{ i18n_any(question.label) }}
+			</label>
+			<div v-else class="col-md-3 control-label label-empty"></div>
+			<div class="col-md-9">
+				<input :id="id" type="text" v-if="df.type === QUESTION_TYPE.STRING" class="form-control">
+				<textarea :id="id" v-if="df.type === QUESTION_TYPE.TEXT" class="form-control"></textarea>
+				<div class="checkbox" v-if="df.type === QUESTION_TYPE.BOOLEAN">
+					<label :for="id">
+						<input :id="id" type="checkbox"> {{ i18n_any(question.label) }}
+					</label>
+				</div>
+				<input :id="id" type="number" v-if="df.type === QUESTION_TYPE.NUMBER" class="form-control">
+				<input :id="id" type="file" v-if="df.type === QUESTION_TYPE.FILE" class="form-control">
+				<select :id="id"
+					v-if="df.type === QUESTION_TYPE.CHOICE || df.type === QUESTION_TYPE.CHOICE_MULTIPLE"
+					:multiple="df.type === QUESTION_TYPE.CHOICE_MULTIPLE" class="form-control">
+					<option></option>
+					<option v-for="opt in question.options">{{ i18n_any(opt.answer) }}</option>
+				</select>
+				<div class="help-block">{{ i18n_any(question.help_text) }}</div>
+			</div>
+		</template>
+		<div v-else class="col-md-12">
+			<h3>{{ i18n_any(question.label) }}</h3>
+			<p>{{ i18n_any(question.help_text) }}</p>
+		</div>
 
   </div>
 
@@ -55,7 +63,7 @@ const editor = ref();
                   title="Edit question">
         <div class="form-group">
           <label class="col-md-3 control-label">
-            Question
+            {{ gettext('Question') }}
           </label>
           <div class="col-md-9">
             <I18nTextField :value="question.label"/>
@@ -63,7 +71,7 @@ const editor = ref();
         </div>
         <div class="form-group">
           <label class="col-md-3 control-label">
-            Help text
+            {{ gettext('Help text') }}
           </label>
           <div class="col-md-9">
             <I18nTextField :value="question.help_text"/>

@@ -4,6 +4,14 @@ import Question from "./Question.vue";
 import {i18n_any, QUESTION_TYPE, QUESTION_TYPE_LABEL} from "./helper";
 import I18nTextField from "./I18nTextField.vue";
 import NativeDialog from "./NativeDialog.vue";
+
+const dlgEditor = ref();
+const dlgAddExisting = ref();
+const dlgAddTextblock = ref();
+
+const newTextblockTitle = ref();
+const newTextblockText = ref();
+
 const id = useId();
 const props = defineProps(['questionnaire', 'datafields', 'selected_product', 'items'])
 const gettext = (window as any).gettext
@@ -29,11 +37,26 @@ function addExistingDatafield(field) {
 	dlgAddExisting.value.close();
 }
 
+function showAddTextblockDialog() {
+	newTextblockTitle.value = {};
+	newTextblockText.value = {};
+	dlgAddTextblock.value.show();
+}
+
+function addTextblock() {
+	props.questionnaire.children.push({
+		question: null,
+		required: false,
+		label: newTextblockTitle.value,
+		help_text: newTextblockText.value,
+		dependency_question: null,
+		dependency_values: [],
+	});
+	dlgAddTextblock.value.close();
+}
+
 const isHidden = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) === -1);
 const isEditable = computed(() => props.selected_product && props.questionnaire.items.indexOf(props.selected_product) !== -1);
-
-const dlgEditor = ref();
-const dlgAddExisting = ref();
 
 </script>
 
@@ -62,10 +85,9 @@ const dlgAddExisting = ref();
 
       </div>
 			<p v-if="true">
-					<button class="btn btn-default" @click="dlgAddExisting.show()"><i class="fa fa-plus"></i> Bestehendes Datenfeld hinzufügen</button>
-					<button class="btn btn-default" @click="newDatafield()"><i class="fa fa-plus"></i> Neues Datenfeld</button>
-					<button class="btn btn-default" @click="addSubtitle()"><i class="fa fa-plus"></i> Zwischenüberschrift</button>
-					<button class="btn btn-default" @click="addTextBlock()"><i class="fa fa-plus"></i> Text</button>
+					<button class="btn btn-default" @click="dlgAddExisting.show()"><i class="fa fa-plus"></i> {{ gettext('Existing data field') }}</button>
+					<button class="btn btn-default" @click="newDatafield()"><i class="fa fa-plus"></i> {{ gettext('New data field') }}</button>
+					<button class="btn btn-default" @click="showAddTextblockDialog()"><i class="fa fa-plus"></i> {{ gettext('Text') }}</button>
 			</p>
     </div>
   </details>
@@ -94,7 +116,7 @@ const dlgAddExisting = ref();
           </div>
         </div>
         <button @click="dlgEditor.close()" class="btn btn-primary pull-right"><span class="fa fa-check"></span> {{ gettext('Save and close') }}</button>
-        <button class="btn btn-default">Delete</button>
+        <button class="btn btn-default">{{ gettext('Delete') }}</button>
     </NativeDialog>
 
     <NativeDialog ref="dlgAddExisting" class="modal-card"
@@ -104,7 +126,31 @@ const dlgAddExisting = ref();
 					<a href="javascript:" @click="addExistingDatafield(field)" v-for="field in datafields" class="list-group-item">{{ field.internal_name }}</a>
 				</div>
 
-        <button @click="dlgAddExisting.close()" class="btn btn-default pull-right">Cancel</button>
+        <button @click="dlgAddExisting.close()" class="btn btn-default pull-right">{{ gettext('Cancel') }}</button>
+    </NativeDialog>
+
+    <NativeDialog ref="dlgAddTextblock" class="modal-card"
+                  :title="gettext('Add sub heading')">
+
+        <div class="form-group">
+          <label class="col-md-3 control-label">
+            {{ gettext('Title') }}
+          </label>
+          <div class="col-md-9">
+            <I18nTextField :value="newTextblockTitle"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">
+            {{ gettext('Text') }}
+          </label>
+          <div class="col-md-9">
+            <I18nTextField :value="newTextblockText"/>
+          </div>
+        </div>
+
+        <button @click="addTextblock()" class="btn btn-default pull-right">{{ gettext('OK') }}</button>
+        <button @click="dlgAddTextblock.close()" class="btn btn-default pull-right">{{ gettext('Cancel') }}</button>
     </NativeDialog>
   </Teleport>
 </template>

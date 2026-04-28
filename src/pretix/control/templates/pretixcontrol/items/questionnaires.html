@@ -23,6 +23,8 @@
         {% endblocktrans %}
     </p>
 
+    {{ request.event.settings.locales|json_script:"event_locales" }}
+
     <div id="questionnaires-editor">
         <!-- Vue app mount point -->
     </div>

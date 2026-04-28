@@ -12,3 +12,11 @@ export async function get_questionnaires() {
 export async function get_items() {
 	return await (await fetch(`/api/v1/organizers/${organizer_slug}/events/${event_slug}/items/`)).json();
 }
+
+function get_json_script_value(id) {
+	return JSON.parse(document.getElementById(id).innerText);
+}
+
+export function get_event_locales() {
+	return get_json_script_value('event_locales');
+}
