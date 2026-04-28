@@ -122,11 +122,11 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             # backwards-compatibility
             if 'linked_orderpositions' in data:
                 raise ValidationError({
-                    'linked_orderposition': _('You cannot use linked_orderposition and linked_orderpositions at the same time.')
+                    'linked_orderposition': 'You cannot use linked_orderposition and linked_orderpositions at the same time.'
                 })
             if self.instance and self.instance.linked_orderpositions.count() > 1:
                 raise ValidationError({
-                    'linked_orderposition': _('There are more than one linked_orderposition. You need to use linked_orderpositions.')
+                    'linked_orderposition': 'There are more than one linked_orderposition. You need to use linked_orderpositions.'
                 })
 
             data['linked_orderpositions'] = [linked_orderposition] if linked_orderposition else []
