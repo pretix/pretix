@@ -309,7 +309,8 @@ def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event
             identifier="abcdef",
             organizer=organizer,
         )
-        rm.linked_orderpositions.add(order.positions.first())
+        op_item_first = order.positions.first()
+        rm.linked_orderpositions.add(op_item_first)
         op_item_other = order.positions.all()[1]
         rm.linked_orderpositions.add(op_item_other)
 
@@ -341,6 +342,28 @@ def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event
         assert resp.status_code == 400
         assert resp.data['status'] == 'error'
         assert resp.data['reason'] == 'already_redeemed'
+
+    with scopes_disabled():
+        op_item_first.valid_from = datetime.datetime(2020, 1, 1, 10, 0, 0, tzinfo=event.timezone)
+        op_item_first.valid_until = datetime.datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
+        op_item_first.save()
+
+    with freeze_time("2020-01-01 15:45:00"):
+        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 400
+        assert resp.data['status'] == 'error'
+        assert resp.data['reason'] == 'invalid_time'
+
+    with scopes_disabled():
+        op_item_first.canceled = True
+        op_item_first.save()
+        op_item_other.canceled = True
+        op_item_other.save()
+
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'canceled'
 
 
 @pytest.mark.django_db
