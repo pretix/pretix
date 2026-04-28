@@ -13,12 +13,12 @@ def fix_cross_organizer_eventmetavalues(apps, schema_editor):
 
     cross_org_values = EventMetaValue.objects.filter(event__organizer__pk__ne=F('property__organizer__pk'))
     for emv in cross_org_values:
-        logger.info(f'Fixup {emv.event.organizer.slug}/{emv.event.slug}\n  before: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {emv.value}')
+        logger.info(f"Fixup cross-organizer value {emv.event.organizer.slug}/{emv.event.slug}\n  before: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {emv.value}")
         try:
             emv.property = emv.event.organizer.meta_properties.filter(name=emv.property.name).first()
-            logger.info(f'  found existing EventMetaProperty in {emv.event.organizer.slug}')
+            logger.info(f"  found existing EventMetaProperty in {emv.event.organizer.slug}")
             if EventMetaValue.objects.filter(event=emv.event, property=emv.property).exists():
-                logger.info(f'  EventMetaValue with property in correct organizer already exists, deleting the cross-organizer one')
+                logger.info(f"  EventMetaValue with property in correct organizer already exists, deleting the cross-organizer one")
                 emv.delete()
                 continue
         except EventMetaProperty.DoesNotExist:
@@ -26,9 +26,9 @@ def fix_cross_organizer_eventmetavalues(apps, schema_editor):
             meta_prop.pk = None
             meta_prop.organizer = emv.event.organizer
             meta_prop.save(force_insert=True)
-            logger.info(f'  created new EventMetaProperty')
+            logger.info(f"  created new EventMetaProperty")
             emv.property = meta_prop
-        logger.info(f'  after: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {emv.value}')
+        logger.info(f"  after: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {emv.value}")
         emv.save()
 
 
@@ -38,7 +38,7 @@ def make_eventmetaproperties_unique(apps, schema_editor):
 
     duplicates = EventMetaProperty.objects.values('organizer', 'organizer__slug', 'name').annotate(count=Count('id')).filter(count__gt=1)
     for dup in duplicates:
-        logger.info(f'Fixup {dup['organizer__slug']} {dup['name']}')
+        logger.info(f"Fixup duplicate property {dup['organizer__slug']} {dup['name']}")
         props = list(EventMetaProperty.objects.filter(organizer=dup['organizer'], name=dup['name']))
 
         # TODO: any better idea than picking the property to keep more or less randomly (first in database order)?
@@ -52,20 +52,20 @@ def make_eventmetaproperties_unique(apps, schema_editor):
                 ).update(
                     property=target
                 )
-                logger.info(f'  Switching {affected} value(s) over to {target.name}({target.id}@{target.organizer.slug})')
+                logger.info(f"  Switching {affected} value(s) over to {target.name}({target.id}@{target.organizer.slug})")
 
         except IntegrityError as e:
-            logger.info(f'  Failed to switch all value(s) over to {target.name}({target.id}@{target.organizer.slug})')
-            logger.info(f'  {e}')
+            logger.info(f"  Failed to switch all value(s) over to {target.name}({target.id}@{target.organizer.slug})")
+            logger.info(f"  {e}")
             for prop in invalid:
                 newname = f'{prop.name}_DUPLICATE_{prop.id}'
-                logger.info(f'  Renaming {prop.name}({prop.id}@{prop.organizer.slug}) to {newname}({prop.id}@{prop.organizer.slug})')
+                logger.info(f"  Renaming {prop.name}({prop.id}@{prop.organizer.slug}) to {newname}({prop.id}@{prop.organizer.slug})")
                 prop.name = newname
                 prop.save()
 
         else:
             for prop in invalid:
-                logger.info(f'  Deleting {prop.name}({prop.id}@{prop.organizer.slug})')
+                logger.info(f"  Deleting {prop.name}({prop.id}@{prop.organizer.slug})")
                 prop.delete()
 
 
