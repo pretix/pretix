@@ -629,7 +629,8 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
                 }, status=400)
         else:
-            linked_event_ids = media.linked_orderpositions.values_list("order__event_id", flat=True).order_by().distinct()
+            linked_ops = media.linked_orderpositions.all().select_related("order").prefetch_related("addons")
+            linked_event_ids = {op.order.event_id for op in linked_ops}
             if not any(event_id in list_by_event for event_id in linked_event_ids):
                 # Medium exists but connected ticket is for the wrong event
                 if not simulate:
@@ -657,7 +658,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(checkinlists[0]).data,
                 }, status=404)
             op_candidates = []
-            for op in media.linked_orderpositions.all().select_related("order"):
+            for op in linked_ops:
                 op_candidates.append(op)
                 if list_by_event[op.order.event_id].addon_match:
                     op_candidates += list(op.addons.all())
