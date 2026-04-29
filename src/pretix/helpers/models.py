@@ -66,11 +66,14 @@ def _normalize_decimal(d: Decimal) -> Decimal:
     20.010 → 20.01
     20.100 → 20.1
 
-    But unlike of Decimal.normalize(), 20.000 will not become 2e+1
+    But unlike of Decimal.normalize(), 20.000 will not become 2e+1. Very small decimals might still be represented
+    in scientific notation when printed.
     """
     normalized = d.normalize()
     sign, digit, exponent = normalized.as_tuple()
-    return normalized if exponent <= 0 else normalized.quantize(1)
+    if exponent > 0:
+        return normalized.quantize(1)
+    return normalized
 
 
 class NormalizedDecimalField(DecimalField):
