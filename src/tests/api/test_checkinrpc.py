@@ -302,7 +302,7 @@ def test_by_medium(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
-def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event, order):
+def test_by_medium_multiple_orderpositions(token_client, organizer, clist_all, event, order):
     with scopes_disabled():
         rm = ReusableMedium.objects.create(
             type="barcode",
@@ -315,7 +315,7 @@ def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event
         rm.linked_orderpositions.add(op_item_other)
 
     # multiple tickets are valid => no check-in
-    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 400
     assert resp.data['status'] == 'error'
     assert resp.data['reason'] == 'ambiguous'
@@ -327,18 +327,18 @@ def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event
 
     with freeze_time("2020-01-01 13:45:00"):
         # multiple tickets are valid => no check-in
-        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
         assert resp.status_code == 400
         assert resp.data['status'] == 'error'
         assert resp.data['reason'] == 'ambiguous'
 
     with freeze_time("2020-01-01 10:45:00"):
-        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
         assert resp.status_code == 201
         assert resp.data['status'] == 'ok'
 
     with freeze_time("2020-01-01 15:45:00"):
-        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
         assert resp.status_code == 400
         assert resp.data['status'] == 'error'
         assert resp.data['reason'] == 'already_redeemed'
@@ -349,7 +349,7 @@ def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event
         op_item_first.save()
 
     with freeze_time("2020-01-01 15:45:00"):
-        resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+        resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
         assert resp.status_code == 400
         assert resp.data['status'] == 'error'
         assert resp.data['reason'] == 'invalid_time'
@@ -360,7 +360,7 @@ def test_by_medium_multiple_orderpositions(token_client, organizer, clist, event
         op_item_other.canceled = True
         op_item_other.save()
 
-    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 400
     assert resp.data['status'] == 'error'
     assert resp.data['reason'] == 'canceled'

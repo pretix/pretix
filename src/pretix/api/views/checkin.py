@@ -665,20 +665,15 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
 
     # 3. Handle the "multiple options found" case: Except for the unlikely case of a secret being also a valid primary
     #    key on the same list, we're probably dealing with multiple linked_orderpositions or the ``addon_match`` case 
-    #    here and in the latter case need to figure out which add-on has the right product.
+    #    here and need to figure out which op has the right product. This basically is a valid-for-checkin-test on every op.
     if len(op_candidates) > 1:
         today = now()
-        # when we have addons and non-addons, we need to match the product as well
-        match_product = any([op.addon_to for op in op_candidates]) and any([not op.addon_to for op in op_candidates])
         op_candidates_matching_product = [
             op for op in op_candidates
             if (
                 (not op.valid_from or op.valid_from < today) and
                 (not op.valid_until or op.valid_until > today) and
-                (not match_product or (
-                    (list_by_event[op.order.event_id].addon_match or op.secret == raw_barcode or legacy_url_support) and 
-                    (list_by_event[op.order.event_id].all_products or op.item_id in {i.pk for i in list_by_event[op.order.event_id].limit_products.all()})
-                ))
+                (list_by_event[op.order.event_id].all_products or op.item_id in {i.pk for i in list_by_event[op.order.event_id].limit_products.all()})
             )
         ]
 
