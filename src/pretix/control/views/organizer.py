@@ -3475,18 +3475,19 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
                 for k in form.changed_data
             }
             if "linked_orderpositions" in data:
-                data["linked_orderpositions"] = data["linked_orderpositions"].values_list("pk", flat=True)
-                if prev_linked_ops_pks:
-                    for op_pk in prev_linked_ops_pks:
-                        if op_pk not in data["linked_orderpositions"]:
-                            self.object.log_action(
-                                'pretix.reusable_medium.linked_orderposition.removed',
-                                user=self.request.user,
-                                data={
-                                    'linked_orderposition': op_pk,
-                                }
-                            )
-                for op_pk in data["linked_orderpositions"]:
+                # handle changes to linked_orderpositions separately
+                linked_ops_pks = data["linked_orderpositions"].values_list("pk", flat=True)
+                del data["linked_orderpositions"]
+                for op_pk in prev_linked_ops_pks:
+                    if op_pk not in linked_ops_pks:
+                        self.object.log_action(
+                            'pretix.reusable_medium.linked_orderposition.removed',
+                            user=self.request.user,
+                            data={
+                                'linked_orderposition': op_pk,
+                            }
+                        )
+                for op_pk in linked_ops_pks:
                     if op_pk not in prev_linked_ops_pks:
                         self.object.log_action(
                             'pretix.reusable_medium.linked_orderposition.added',
@@ -3495,9 +3496,8 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
                                 'linked_orderposition': op_pk,
                             }
                         )
-            if any(k != "linked_orderpositions" for k in form.changed_data):
+            if data:
                 # log change-action only for changes other than linked_orderpositions
-                del data["linked_orderpositions"]
                 self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
         return result
