@@ -22,7 +22,7 @@
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 from reportlab.lib import pagesizes
-from reportlab.lib.units import mm
+from reportlab.lib.units import inch, mm
 
 
 def _simple_template(w, h):
@@ -260,5 +260,10 @@ TEMPLATES = {
         ),
         "pagesize": (88.9 * mm, 33.87 * mm),
         "layout": _simple_template(88.9 * mm, 33.87 * mm),
+    },
+    "4inx3in": {
+        "label": format_lazy(_("{width} x {height} inch label"), width=4, height=3),
+        "pagesize": (4 * inch, 3 * inch),
+        "layout": _simple_template(4 * inch, 3 * inch),
     },
 }
