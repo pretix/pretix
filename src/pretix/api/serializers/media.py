@@ -154,7 +154,7 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
         perm_holder = request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user
         if ops and 'linked_orderposition' in expand_nested or 'linked_orderpositions' in expand_nested:
             ops_noperm = []
-            for lop in instance.linked_orderpositions.all().prefetch_related('order__event', 'order__event__organizer'):
+            for lop in instance.linked_orderpositions.all():
                 event = lop.order.event
                 if not perm_holder.has_event_permission(event.organizer, event, 'event.orders:read', request):
                     ops_noperm.append(lop.id)
