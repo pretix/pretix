@@ -119,14 +119,38 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic()
     def perform_update(self, serializer):
-        ReusableMedium.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
+        rm = ReusableMedium.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
+        prev_linked_ops_pks = list(rm.linked_orderpositions.values_list("pk", flat=True))
         inst = serializer.save(identifier=serializer.instance.identifier, type=serializer.instance.type)
-        inst.log_action(
-            'pretix.reusable_medium.changed',
-            user=self.request.user,
-            auth=self.request.auth,
-            data=self.request.data,
-        )
+        linked_ops_pks = inst.linked_orderpositions.values_list("pk", flat=True)
+        for op_pk in prev_linked_ops_pks:
+            if op_pk not in linked_ops_pks:
+                inst.log_action(
+                    'pretix.reusable_medium.linked_orderposition.removed',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'linked_orderposition': op_pk,
+                    }
+                )
+        for op_pk in linked_ops_pks:
+            if op_pk not in prev_linked_ops_pks:
+                inst.log_action(
+                    'pretix.reusable_medium.linked_orderposition.added',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'linked_orderposition': op_pk,
+                    }
+                )
+        data = {k: v for k, v in self.request.data.items() if k not in ('linked_orderposition', 'linked_orderpositions')}
+        if data:
+            inst.log_action(
+                'pretix.reusable_medium.changed',
+                user=self.request.user,
+                auth=self.request.auth,
+                data=data,
+            )
         return inst
 
     def perform_destroy(self, instance):

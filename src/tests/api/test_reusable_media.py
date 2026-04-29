@@ -529,6 +529,7 @@ def test_medium_patch(token_client, organizer, event, medium, giftcard, customer
     medium.refresh_from_db()
     with scopes_disabled():
         assert list(medium.linked_orderpositions.values_list('pk', flat=True)) == [op.pk]
+        assert medium.all_logentries().count() == 2
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/reusablemedia/{}/'.format(organizer.slug, medium.pk),
@@ -541,6 +542,20 @@ def test_medium_patch(token_client, organizer, event, medium, giftcard, customer
     medium.refresh_from_db()
     with scopes_disabled():
         assert list(medium.linked_orderpositions.values_list('pk', flat=True)) == [op.pk, op2.pk]
+        assert medium.all_logentries().count() == 3
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/reusablemedia/{}/'.format(organizer.slug, medium.pk),
+        {
+            'linked_orderpositions': [op2.pk],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    medium.refresh_from_db()
+    with scopes_disabled():
+        assert list(medium.linked_orderpositions.values_list('pk', flat=True)) == [op2.pk]
+        assert medium.all_logentries().count() == 4
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/reusablemedia/{}/'.format(organizer.slug, medium.pk),
