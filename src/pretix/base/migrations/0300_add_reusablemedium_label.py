@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0298_pluggable_permissions"),
+        ("pretixbase", "0299_itemprogramtime_location"),
     ]
 
     operations = [
