@@ -133,7 +133,7 @@ OPTIONS = OrderedDict([
         'offsets': [66.1 * mm, 29.6 * mm],
         'pagesize': pagesizes.A4,
     }),
-    ('avery_3inx4in', {
+    ('avery_4inx3in', {
         'name': 'Avery 4" x 3" (74459)',
         'cols': 2,
         'rows': 3,
