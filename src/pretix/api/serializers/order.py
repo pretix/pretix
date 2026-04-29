@@ -1733,7 +1733,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                             'linked_orderposition': pos.pk,
                         }
                     )
-                if add_to_reusable_medium:
+                elif add_to_reusable_medium:
                     add_to_reusable_medium.linked_orderpositions.add(pos)
                     add_to_reusable_medium.log_action(
                         'pretix.reusable_medium.linked_orderposition.added',
