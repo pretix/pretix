@@ -664,7 +664,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     op_candidates += list(op.addons.all())
 
     # 3. Handle the "multiple options found" case: Except for the unlikely case of a secret being also a valid primary
-    #    key on the same list, we're probably dealing with multiple linked_orderpositions or the ``addon_match`` case 
+    #    key on the same list, we're probably dealing with multiple linked_orderpositions or the ``addon_match`` case
     #    here and need to figure out which op has the right product. This basically is a valid-for-checkin-test on every op.
     if len(op_candidates) > 1:
         today = now()
