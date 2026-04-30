@@ -10323,7 +10323,7 @@ msgstr ""
 "การตั้งค่านี้ไม่มีผลกับการแก้ไขผ่านระบบหลังบ้าน"
 
 #: pretix/base/settings.py:1266
-msgid "Allow to update existing invoices"
+msgid "Allow updating existing invoices"
 msgstr "อนุญาตให้แก้ไขใบแจ้งหนี้ที่มีอยู่เดิม"
 
 #: pretix/base/settings.py:1267

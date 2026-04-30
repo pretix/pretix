@@ -10586,7 +10586,7 @@ msgstr ""
 "발행됩니다. 이 설정은 백엔드를 통한 변경 사항에 영향을 미치지 않습니다."
 
 #: pretix/base/settings.py:1266
-msgid "Allow to update existing invoices"
+msgid "Allow updating existing invoices"
 msgstr "기존 송장 업데이트 허용"
 
 #: pretix/base/settings.py:1267
