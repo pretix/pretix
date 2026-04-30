@@ -394,17 +394,18 @@ class QuotaBulkEditForm(QuotaForm):
                 continue
 
             fields.add(k)
-            for obj in objs:
-                if k == 'itemvars':
-                    selected_items = set(list(self.event.items.filter(id__in=[
-                        i.split('-')[0] for i in self.cleaned_data['itemvars']
-                    ])))
-                    selected_variations = list(ItemVariation.objects.filter(item__event=self.event, id__in=[
-                        i.split('-')[1] for i in self.cleaned_data['itemvars'] if '-' in i
-                    ]))
+            if k == 'itemvars':
+                selected_items = set(list(self.event.items.filter(id__in=[
+                    i.split('-')[0] for i in self.cleaned_data['itemvars']
+                ])))
+                selected_variations = list(ItemVariation.objects.filter(item__event=self.event, id__in=[
+                    i.split('-')[1] for i in self.cleaned_data['itemvars'] if '-' in i
+                ]))
+                for obj in objs:
                     obj.items.set(selected_items)
                     obj.variations.set(selected_variations)
-                else:
+            else:
+                for obj in objs:
                     setattr(obj, k, self.cleaned_data[k])
 
         fields = [f for f in fields if f != 'itemvars']
