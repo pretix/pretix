@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
 "PO-Revision-Date: 2026-04-30 18:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"Last-Translator: Paul Berschick <paul@plainschwarz.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -34922,7 +34922,7 @@ msgstr "tiene errores"
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
 msgctxt "form"
 msgid "required"
-msgstr "requerido"
+msgstr "obligatorio"
 
 #: pretix/presale/ical.py:87 pretix/presale/ical.py:146
 #: pretix/presale/ical.py:182
