@@ -1413,17 +1413,25 @@ def test_event_create_with_seating_maps(token_client, organizer, event, meta_pro
 @pytest.mark.django_db
 def test_get_event_settings(token_client, organizer, event):
     event.settings.imprint_url = "https://example.org"
+    event.settings.contact_url = "https://example.org/contact"
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
     )
     assert resp.status_code == 200
     assert resp.data['imprint_url'] == "https://example.org"
+    assert resp.data['contact_url'] == "https://example.org/contact"
     assert resp.data['seating_allow_blocked_seats_for_channel'] == []
 
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/settings/?explain=true'.format(organizer.slug, event.slug),
     )
     assert resp.status_code == 200
+    assert resp.data['contact_url'] == {
+        "value": "https://example.org/contact",
+        "label": "Contact URL",
+        "help_text": "If you set this, the footer contact link will point here instead of using the email address above.",
+        "readonly": False,
+    }
     assert resp.data['imprint_url'] == {
         "value": "https://example.org",
         "label": "Imprint URL",
@@ -1443,9 +1451,11 @@ def test_patch_event_settings(token_client, organizer, event, team):
     team.save()
 
     organizer.settings.imprint_url = 'https://example.org'
+    organizer.settings.contact_url = 'https://example.org/contact'
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
+            'contact_url': 'https://example.com/contact',
             'imprint_url': 'https://example.com',
             'confirm_texts': [
                 {
@@ -1458,10 +1468,12 @@ def test_patch_event_settings(token_client, organizer, event, team):
         format='json'
     )
     assert resp.status_code == 200
+    assert resp.data['contact_url'] == "https://example.com/contact"
     assert resp.data['imprint_url'] == "https://example.com"
     assert resp.data['seating_allow_blocked_seats_for_channel'] == ['web']
     assert not resp.data['reusable_media_active']
     event.settings.flush()
+    assert event.settings.contact_url == 'https://example.com/contact'
     assert event.settings.imprint_url == 'https://example.com'
     assert event.settings.seating_allow_blocked_seats_for_channel == ['web']
     assert not event.settings.reusable_media_active
@@ -1471,6 +1483,7 @@ def test_patch_event_settings(token_client, organizer, event, team):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
+            'contact_url': 'https://example.com/contact',
             'imprint_url': 'https://example.com',
             'confirm_texts': [
                 {
@@ -1513,13 +1526,16 @@ def test_patch_event_settings(token_client, organizer, event, team):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {
+            'contact_url': None,
             'imprint_url': None,
         },
         format='json'
     )
     assert resp.status_code == 200
+    assert resp.data['contact_url'] == "https://example.org/contact"
     assert resp.data['imprint_url'] == "https://example.org"
     event.settings.flush()
+    assert event.settings.contact_url == 'https://example.org/contact'
     assert event.settings.imprint_url == 'https://example.org'
 
     resp = token_client.put(
@@ -1583,6 +1599,18 @@ def test_patch_event_settings(token_client, organizer, event, team):
 
 @pytest.mark.django_db
 def test_patch_event_settings_validation(token_client, organizer, event):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'contact_url': 'invalid',
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {
+        'contact_url': ['Enter a valid URL.']
+    }
+
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
         {

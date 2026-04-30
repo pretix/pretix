@@ -2273,6 +2273,16 @@ DEFAULTS = {
             help_text=_("We'll show this publicly to allow attendees to contact you.")
         )
     },
+    'contact_url': {
+        'default': None,
+        'type': str,
+        'serializer_class': serializers.URLField,
+        'form_class': forms.URLField,
+        'form_kwargs': dict(
+            label=_("Contact URL"),
+            help_text=_("If you set this, the footer contact link will point here instead of using the email address above.")
+        )
+    },
     'imprint_url': {
         'default': None,
         'type': str,

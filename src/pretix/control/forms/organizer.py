@@ -595,6 +595,7 @@ class OrganizerSettingsForm(SettingsForm):
         'customer_accounts_require_login_for_order_access',
         'invoice_regenerate_allowed',
         'contact_mail',
+        'contact_url',
         'imprint_url',
         'organizer_info_text',
         'event_list_type',

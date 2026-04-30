@@ -625,6 +625,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'max_items_per_order',
         'reservation_time',
         'contact_mail',
+        'contact_url',
         'show_variations_expanded',
         'hide_sold_out',
         'meta_noindex',
@@ -1898,6 +1899,11 @@ class QuickSetupForm(I18nForm):
         label=_("Contact address"),
         required=False,
         help_text=_("We'll show this publicly to allow attendees to contact you.")
+    )
+    contact_url = forms.URLField(
+        label=_("Contact URL"),
+        required=False,
+        help_text=_("If you set this, the footer contact link will point here instead of using the email address above.")
     )
     total_quota = forms.IntegerField(
         label=_("Total capacity"),
