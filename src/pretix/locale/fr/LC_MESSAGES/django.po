@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-03-31 17:00+0000\n"
+"PO-Revision-Date: 2026-04-30 18:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
-"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
-">\n"
+"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 5.17\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8279,10 +8279,8 @@ msgstr ""
 "2x Add-on 2"
 
 #: pretix/base/pdf.py:383
-#, fuzzy
-#| msgid "List of Add-Ons"
 msgid "List of Checked-In Add-Ons"
-msgstr "Liste des Addons"
+msgstr "Liste des modules complémentaires enregistrés"
 
 #: pretix/base/pdf.py:390 pretix/control/forms/filter.py:1537
 #: pretix/control/forms/filter.py:1539
@@ -9296,10 +9294,8 @@ msgid "Czech National Bank"
 msgstr "Banque nationale tchèque"
 
 #: pretix/base/services/currencies.py:41
-#, fuzzy
-#| msgid "Czech National Bank"
 msgid "National Bank of Poland"
-msgstr "Banque nationale tchèque"
+msgstr "Banque nationale de Pologne"
 
 #: pretix/base/services/export.py:95 pretix/base/services/export.py:155
 msgid ""
@@ -10396,16 +10392,12 @@ msgstr ""
 "que le montant de la facture n’est pas en CZK."
 
 #: pretix/base/settings.py:577 pretix/base/settings.py:586
-#, fuzzy
-#| msgid ""
-#| "Based on Czech National Bank daily rates, whenever the invoice amount is "
-#| "not in CZK."
 msgid ""
 "Based on National Bank of Poland daily rates, whenever the invoice amount is "
 "not in PLN."
 msgstr ""
-"Sur la base des taux journaliers de la Banque nationale tchèque, chaque fois "
-"que le montant de la facture n’est pas en CZK."
+"Sur la base des taux quotidiens de la Banque nationale de Pologne, lorsque "
+"le montant de la facture n'est pas libellé en PLN."
 
 #: pretix/base/settings.py:597
 msgid "Require invoice address"
@@ -16569,10 +16561,8 @@ msgstr ""
 "Autoriser à surbooker les quotas lors de l’exécution de cette opération"
 
 #: pretix/control/forms/orders.py:335
-#, fuzzy
-#| msgid "Number of orders"
 msgid "Number of products to add"
-msgstr "Nombre de commandes"
+msgstr "Nombre d'articles à ajouter"
 
 #: pretix/control/forms/orders.py:344
 msgid "Add-on to"
@@ -16604,10 +16594,10 @@ msgstr ""
 "produit"
 
 #: pretix/control/forms/orders.py:441
-#, fuzzy
-#| msgid "You can not select the same seat multiple times."
 msgid "You can not choose a seat when adding multiple products at once."
-msgstr "Vous ne pouvez pas sélectionner le même siège plusieurs fois."
+msgstr ""
+"Vous ne pouvez pas choisir de siège lorsque vous ajoutez plusieurs produits "
+"à la fois."
 
 #: pretix/control/forms/orders.py:478 pretix/control/forms/orders.py:482
 #: pretix/control/forms/orders.py:510 pretix/control/forms/orders.py:552
@@ -17230,7 +17220,7 @@ msgstr "Jour de fin de semaine"
 #: pretix/control/forms/subevents.py:106
 msgctxt "subevent"
 msgid "Skip dates that overlap with any existing date"
-msgstr ""
+msgstr "Ignorer les dates qui coïncident avec une date existante"
 
 #: pretix/control/forms/subevents.py:109
 msgctxt "subevent"
@@ -17240,6 +17230,11 @@ msgid ""
 "This respects even inactive dates and works best if all dates have both a "
 "start and end time."
 msgstr ""
+"Cette option peut s'avérer utile si toutes vos dates se déroulent au même "
+"endroit et qu'aucune date ne doit être créée en double et entrer en conflit "
+"avec des événements spéciaux existants. Elle prend en compte même les dates "
+"inactives et fonctionne mieux si toutes les dates comportent à la fois une "
+"heure de début et une heure de fin."
 
 #: pretix/control/forms/subevents.py:128
 msgid "Keep the current values"
@@ -30512,6 +30507,8 @@ msgstr "Veuillez ne pas créer plus de 100.000 dates à la fois."
 #: pretix/control/views/subevents.py:966
 msgid "All dates would be skipped because they conflict with existing dates."
 msgstr ""
+"Toutes ces dates seraient ignorées car elles entrent en conflit avec des "
+"dates déjà existantes."
 
 #: pretix/control/views/subevents.py:1102
 #, python-brace-format
