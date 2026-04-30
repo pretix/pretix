@@ -17,13 +17,9 @@
     {% if quotas|length == 0 and not filter_form.filtered %}
         <div class="empty-collection">
             <p>
-                {% if request.GET.subevent %}
-                    {% trans "Your search did not match any quotas." %}
-                {% else %}
-                    {% blocktrans trimmed %}
-                        You haven't created any quotas yet.
-                    {% endblocktrans %}
-                {% endif %}
+                {% blocktrans trimmed %}
+                    You haven't created any quotas yet.
+                {% endblocktrans %}
             </p>
 
             {% if 'event.items:write' in request.eventpermset %}

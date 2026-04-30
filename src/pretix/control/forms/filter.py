@@ -1619,6 +1619,9 @@ class QuotaFilterForm(FilterForm):
         if fdata.get('weekday'):
             qs = qs.annotate(wday=ExtractWeekDay('subevent__date_from')).filter(wday__in=fdata.get('weekday'))
 
+        if fdata.get('subevent'):
+            qs = qs.filter(subevent=fdata["subevent"])
+
         if fdata.get('query'):
             query = fdata.get('query')
             qs = qs.filter(name__icontains=query)
