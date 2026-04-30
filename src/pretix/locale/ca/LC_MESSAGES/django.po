@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2025-09-29 07:39+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2026-04-30 18:00+0000\n"
+"Last-Translator: Paul Berschick <paul@plainschwarz.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 5.17\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -14132,13 +14132,13 @@ msgid "Contact:"
 msgstr "Adreça de contacte"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
-#, fuzzy, python-format
-#| msgid ""
-#| "You are receiving this email because you placed an order for {event}."
+#, python-format
 msgid ""
 "You are receiving this email because you placed an order for "
 "<strong>%(event)s</strong>."
-msgstr "Heu rebut aquest correu perquè heu fet una comanda per {event}."
+msgstr ""
+"Has rebut aquest correu perquè has fet una inscripció a <strong>%(event)s</"
+"strong>."
 
 #: pretix/base/templates/pretixbase/email/order_details.html:93
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:23
@@ -24790,7 +24790,7 @@ msgstr "Data d'inici de l'esdeveniment"
 #: pretix/control/templates/pretixcontrol/order/index.html:465
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:55
 msgid "Voucher code used:"
-msgstr ""
+msgstr "Codi de descompte utilitzat:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:467
 #, fuzzy, python-format
@@ -35206,11 +35206,9 @@ msgstr ""
 
 #: pretix/presale/forms/renderers.py:66
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
-#, fuzzy
-#| msgid "expired"
 msgctxt "form"
 msgid "required"
-msgstr "expirat"
+msgstr "obligatori"
 
 #: pretix/presale/ical.py:87 pretix/presale/ical.py:146
 #: pretix/presale/ical.py:182
@@ -35399,10 +35397,8 @@ msgid "We're now trying to book these add-ons for you!"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
-#, fuzzy
-#| msgid "Meta information"
 msgid "Additional options for"
-msgstr "Informació meta"
+msgstr "Opcions addicionals per a"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:60
 #, fuzzy
@@ -35754,12 +35750,11 @@ msgstr[0] "Heu de triar només una opció d'aquesta categoria."
 msgstr[1] "Heu de triar %(min_count)s d'aquesta categoria."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:26
-#, fuzzy, python-format
-#| msgid "You can choose up to %(max_count)s options from this category."
+#, python-format
 msgid "You can choose one option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] "Podeu triar fins a %(max_count)s opcions d'aquesta categoria."
-msgstr[1] "Podeu triar fins a %(max_count)s opcions d'aquesta categoria."
+msgstr[0] "Pots triar una opció d'aquesta categoria."
+msgstr[1] "Pots escollir fins a %(max_count)s opcions d’aquesta categoria."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:34
 #, python-format
