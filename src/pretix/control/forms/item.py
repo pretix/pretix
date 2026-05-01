@@ -383,6 +383,16 @@ class QuotaBulkEditForm(QuotaForm):
         self.queryset = kwargs.pop('queryset')
         super().__init__(**kwargs)
         self.fields.pop("subevent", None)  # Would add extra complexity and it's hard to imagine a use case for that
+        self.fields["name"].required = False
+        self.fields["itemvars"].required = False
+
+    def clean(self):
+        d = super().clean()
+        if self.prefix + "name" in self.data.getlist('_bulk') and not d.get("name"):
+            raise ValidationError({"name": _("This field is required.")})
+        if self.prefix + "itemvars" in self.data.getlist('_bulk') and not d.get("itemvars"):
+            raise ValidationError({"itemvars": _("This field is required.")})
+        return d
 
     def save(self, commit=True):
         objs = list(self.queryset)
