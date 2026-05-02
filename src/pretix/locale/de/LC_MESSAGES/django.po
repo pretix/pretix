@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-04-28 09:22+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2026-05-02 23:00+0000\n"
+"Last-Translator: Daniel Musketa <daniel@musketa.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
 "de/>\n"
 "Language: de\n"
@@ -4971,7 +4971,7 @@ msgstr ""
 "Sollte kurz sein und darf nur Kleinbuchstaben, Zahlen, Bindestriche und "
 "Punkte enthalten. Muss unter Ihren Veranstaltungen einmalig sein. Wir "
 "empfehlen eine Abkürzung oder ein Datum mit unter 10 Zeichen, das man sich "
-"gut merken kann. Sie können jedoch auch einen zufälligen Wert verwendet. "
+"gut merken kann. Sie können jedoch auch einen zufälligen Wert verwenden. "
 "Dies wird z.B. in Links, Bestellnummern, Rechnungsnummern und "
 "Verwendungszwecken für Banküberweisungen benutzt."
 
@@ -7515,7 +7515,7 @@ msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
 msgstr ""
-"Sie sind bereits auf der Warteliste! Wir benachrichtigen Sie sobald wir ein "
+"Sie sind bereits auf der Warteliste! Wir benachrichtigen Sie, sobald wir ein "
 "verfügbares Ticket für Sie haben."
 
 #: pretix/base/notifications.py:192 pretix/control/navigation.py:205
@@ -8671,8 +8671,8 @@ msgid ""
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
 "pretix Signaturverfahren 1 (für sehr große Veranstaltungen, ändert die "
-"Funktionsweise des Offline-Modus, bitte informiere dich in der Dokumentation "
-"oder beim Support)"
+"Funktionsweise des Offline-Modus, bitte informieren Sie sich in der "
+"Dokumentation oder beim Support)"
 
 #: pretix/base/services/cancelevent.py:265
 #: pretix/base/services/cancelevent.py:351
@@ -9579,8 +9579,8 @@ msgid ""
 "changes are still accurate and try again."
 msgstr ""
 "Diese Bestellung wurde zeitgleich von einem anderen Benutzer bearbeitet. "
-"Bitte prüfe, ob deine Änderungen immer noch zutreffend sind und probiere es "
-"erneut."
+"Bitte prüfen Sie, ob Ihre Änderungen immer noch zutreffend sind und "
+"probieren Sie es erneut."
 
 #: pretix/base/services/orders.py:150
 msgid "Your cart is empty."
@@ -11363,7 +11363,7 @@ msgid ""
 "If your event series has more than 50 dates in the future, only the month or "
 "week calendar can be used."
 msgstr ""
-"Wenn deine Veranstaltungsreihe mehr als 50 zukünftige Termine hat, kann nur "
+"Wenn Ihre Veranstaltungsreihe mehr als 50 zukünftige Termine hat, kann nur "
 "der Monats- oder Wochenkalender verwendet werden."
 
 #: pretix/base/settings.py:1892
@@ -11636,8 +11636,9 @@ msgid ""
 "set this to e.g. 10, they will only be able to choose values in increments "
 "of 10."
 msgstr ""
-"Standardmäßig können Kunden auf einen beliebigen Betrag verzichten. Wenn du "
-"diesen Wert z.B. auf 10 setzt, sind nur noch Werte im Abstand von 10 erlaubt."
+"Standardmäßig können Kunden auf einen beliebigen Betrag verzichten. Wenn Sie "
+"diesen Wert z.B. auf 10 setzen, sind nur noch Werte im Abstand von 10 "
+"erlaubt."
 
 #: pretix/base/settings.py:2193
 msgid ""
@@ -17304,7 +17305,7 @@ msgstr ""
 
 #: pretix/control/forms/vouchers.py:448
 msgid "You need to specify as many seats as voucher codes."
-msgstr "Sie müssen genau so viele Sitze angeben, wie du Gutscheine erzeugst."
+msgstr "Sie müssen genau so viele Sitze angeben, wie Sie Gutscheine erzeugen."
 
 #: pretix/control/forms/waitinglist.py:39
 msgid "Select a valid choice."
@@ -20819,7 +20820,7 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
-"Sie können personenbezogene Daten wie Namen und E-Mail-Adressen aus deiner "
+"Sie können personenbezogene Daten wie Namen und E-Mail-Adressen aus Ihrer "
 "Veranstaltung entfernen und nur finanzielle Infos wie die Anzahl und Art der "
 "verkauften Tickets aufbewahren."
 
@@ -23019,7 +23020,7 @@ msgstr ""
 "Wenn Sie eine Gültigkeit in Tagen, Monaten oder Jahren angeben, endet die "
 "Gültigkeit immer am Ende eines vollen Tages (Mitternacht), plus der "
 "ausgewählten Anzahl an Minuten und Stunden. Der Starttermin wird in die "
-"Berechnung eingeschlossen, d.h. wenn Sie \"1 Tag\" auswählen ist das Ticket "
+"Berechnung eingeschlossen, d.h. wenn Sie \"1 Tag\" auswählen, ist das Ticket "
 "gültig bis zum Ende des Tages, an dem die Gültigkeit beginnt."
 
 #: pretix/control/templates/pretixcontrol/item/index.html:254
@@ -23452,7 +23453,7 @@ msgid ""
 "statistical data on customers who previously selected this option, and when "
 "such customers edit their answers, they need to select a different option."
 msgstr ""
-"Wenn du eine Antwortoption löschst, kannst du anschließend keine "
+"Wenn Sie eine Antwortoption löschen, können Sie anschließend keine "
 "statistischen Daten mehr zur Verwendung dieser Option abrufen und wenn "
 "Kunden, die diese Option gewählt haben, ihre Daten bearbeiten möchten, muss "
 "eine andere Option gewählt werden."
@@ -25961,8 +25962,8 @@ msgid ""
 "Instead of an URL, you can also configure a text that will be shown within "
 "pretix. This will be ignored if a URL is configured."
 msgstr ""
-"Statt einer URL kannst du auch einen Text eingeben, der von pretix angezeigt "
-"wird. Dies wird ignoriert, wenn eine URL konfiguriert wurde."
+"Statt einer URL können Sie auch einen Text eingeben, der von pretix "
+"angezeigt wird. Dies wird ignoriert, wenn eine URL konfiguriert wurde."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:229
 msgid "Barcode media"
@@ -26128,7 +26129,7 @@ msgid ""
 "This feature allows you to configure acceptance of gift cards across "
 "multiple organizer accounts."
 msgstr ""
-"Diese Funktion erlaubt dir, die Akzeptanz von Wertgutscheinen über mehrere "
+"Diese Funktion erlaubt Ihnen, die Akzeptanz von Wertgutscheinen über mehrere "
 "Veranstalterkonten hinweg zu konfigurieren."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:18
@@ -26168,7 +26169,7 @@ msgstr "Ablehnen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:84
 msgid "Other organizers accepting gift cards from you"
-msgstr "Andere Veranstalter, die deine Wertgutscheine akzeptieren"
+msgstr "Andere Veranstalter, die Ihre Wertgutscheine akzeptieren"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:87
 msgid ""
@@ -27156,9 +27157,9 @@ msgid ""
 "use pretixPRINT version %(print_version)s (or newer) or pretixSCAN Desktop "
 "version %(scan_version)s (or newer)."
 msgstr ""
-"Dieses Layout verwendet neue Funktionen. Wenn du mit einem Gerät druckst, "
-"stelle sicher, dass pretixPRINT-Version %(print_version)s (oder neuer) oder "
-"pretixSCAN Desktop Version %(scan_version)s (oder neuer) im Einsatz ist."
+"Dieses Layout verwendet neue Funktionen. Wenn Sie mit einem Gerät drucken, "
+"stellen Sie sicher, dass pretixPRINT-Version %(print_version)s (oder neuer) "
+"oder pretixSCAN Desktop Version %(scan_version)s (oder neuer) im Einsatz ist."
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:16
 msgid "Available placeholders"
@@ -27234,8 +27235,8 @@ msgid ""
 "might be required to keep some of this data on file. You can therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
-"Sie sind dabei, Daten unwiderruflich vom Server zu löschen, auch wenn du "
-"manche dieser Daten ggf. aus gesetzlichen Gründen noch aufheben musst. Wir "
+"Sie sind dabei, Daten unwiderruflich vom Server zu löschen, auch wenn Sie "
+"manche dieser Daten ggf. aus gesetzlichen Gründen noch aufheben müssen. Wir "
 "empfehlen daher, die folgende Datei herunterzuladen und sie sicher "
 "aufzubewahren:"
 
@@ -27284,7 +27285,7 @@ msgid ""
 "while to complete. We will inform you via email once it has been completed."
 msgstr ""
 "Abhängig von der Datenmenge in der Veranstaltung kann der folgende Schritt "
-"eine Weile dauern. Wir informieren dich per E-Mail, sobald er abgeschlossen "
+"eine Weile dauern. Wir informieren Sie per E-Mail, sobald er abgeschlossen "
 "ist."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
@@ -32188,8 +32189,8 @@ msgid ""
 msgstr ""
 "Während die meisten Zahlungsmethoden keinen grundlosen Widerruf vorsehen, "
 "können SEPA-Lastschriften per Mausklick zurückgerufen werden. Aus diesem "
-"Grund - und abhängig von der Art Ihrer Veranstaltung - kann es notwendig "
-"sein SEPA-Lastschriften nicht anzubieten und damit das Risiko von "
+"Grund – und abhängig von der Art Ihrer Veranstaltung – kann es notwendig "
+"sein, SEPA-Lastschriften nicht anzubieten und damit das Risiko von "
 "kostspieligen Rücklastschriften zu vermeiden."
 
 #: pretix/plugins/paypal2/payment.py:182
@@ -33624,8 +33625,8 @@ msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before they work properly."
 msgstr ""
-"Manche Zahlungsmethoden müssen in den Einstellungen deines Stripe-Kontos "
-"aktiviert werden bevor sie funktionieren."
+"Manche Zahlungsmethoden müssen in den Einstellungen Ihres Stripe-Kontos "
+"aktiviert werden, bevor sie funktionieren."
 
 #: pretix/plugins/stripe/payment.py:369 pretix/plugins/stripe/payment.py:1597
 msgid "Alipay"
@@ -33644,8 +33645,8 @@ msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before work properly."
 msgstr ""
-"Manche Zahlungsmethoden müssen in den Einstellungen deines Stripe-Kontos "
-"aktiviert werden bevor sie funktionieren."
+"Manche Zahlungsmethoden müssen in den Einstellungen Ihres Stripe-Kontos "
+"aktiviert werden, bevor sie funktionieren."
 
 #: pretix/plugins/stripe/payment.py:391
 msgid ""
@@ -35338,7 +35339,7 @@ msgstr "Diese Zahlungsmethode unterstützt den Testmodus nicht."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:113
 msgid "If you continue, actual money might be transferred."
-msgstr "Wenn du fortfährst, wird möglicherweise echtes Geld transferiert."
+msgstr "Wenn Sie fortfahren, wird möglicherweise echtes Geld transferiert."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:124
 msgid "There are no payment providers enabled."
@@ -35790,7 +35791,7 @@ msgid ""
 msgstr ""
 "Da Sie eine Firmenadresse eingegeben haben, wurde Ihr Preis aus dem Preis "
 "ohne Umsatzsteuer neu berechnet. Durch geänderte Rundung hat sich der "
-"Endpreis deiner Buchung minimal verändert."
+"Endpreis Ihrer Buchung minimal verändert."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:516
 #, python-format
@@ -37754,8 +37755,8 @@ msgstr ""
 #: pretix/presale/views/order.py:1198
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
-"Bitte klicke den Link, den wir dir per E-Mail geschickt haben, um deine "
-"Tickets herunterzuladen."
+"Bitte klicken Sie den Link, den wir Ihnen per E-Mail geschickt haben, um "
+"Ihre Tickets herunterzuladen."
 
 #: pretix/presale/views/order.py:1689
 #, python-brace-format
