@@ -162,12 +162,12 @@ error_messages = {
     'price_too_high': gettext_lazy('The entered price is to high.'),
     'voucher_invalid': gettext_lazy('This voucher code is not known in our database.'),
     'voucher_min_usages': ngettext_lazy(
-        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products.',
+        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching product.',
         'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products.',
         'number'
     ),
     'voucher_min_usages_removed': ngettext_lazy(
-        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products. '
+        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching product. '
         'We have therefore removed some positions from your cart that can no longer be purchased like this.',
         'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products. '
         'We have therefore removed some positions from your cart that can no longer be purchased like this.',
