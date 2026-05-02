@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-04-28 09:22+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2026-05-02 23:00+0000\n"
+"Last-Translator: Daniel Musketa <daniel@musketa.de>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -829,7 +829,7 @@ msgid ""
 "Field \"{field_name}\" requires {required_input}, but only got "
 "{available_inputs}. Please check your {provider_name} settings."
 msgstr ""
-"Feld \"{field_name}\" erfordert {required_input}, aber hat nur "
+"Feld \"{field_name}\" erfordert {required_input}, aber nur "
 "{available_inputs} sind verfügbar. Bitte prüfe die Einstellungen für "
 "{provider_name}."
 
@@ -1529,8 +1529,8 @@ msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
-"Nur Rechnungen, die in diesem Zeitraum wurden. Achtung: Das Rechnungsdatum "
-"korrespondiert nicht zwingend zum Bestell- oder Zahlungsdatum."
+"Nur Rechnungen, die in diesem Zeitraum ausgestellt wurden. Achtung: Das "
+"Rechnungsdatum korrespondiert nicht zwingend zum Bestell- oder Zahlungsdatum."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
@@ -3540,7 +3540,7 @@ msgstr "Das eingegebene aktuelle Passwort war nicht korrekt."
 
 #: pretix/base/forms/user.py:95
 msgid "Please choose a password different to your current one."
-msgstr "Bitte wählen ein anderes Passwort als das derzeitige."
+msgstr "Bitte wähle ein anderes Passwort als das derzeitige."
 
 #: pretix/base/forms/user.py:105 pretix/presale/forms/customer.py:399
 #: pretix/presale/forms/customer.py:475
@@ -3579,7 +3579,7 @@ msgid ""
 "up. Please note: to use literal \"{\" or \"}\", you need to double them as "
 "\"{{\" and \"}}\"."
 msgstr ""
-"Es ist ein Fehler in deine Platzhalter-Syntax. Bitte prüfe, dass die "
+"Es ist ein Fehler in deiner Platzhalter-Syntax. Bitte prüfe, dass die "
 "öffnenden \"{\" und schließenden \"}\" geschweiften Klammern zusammenpassen. "
 "Um die geschweiften Klammern \"{\" und \"}\" im erzeugten Text zu verwenden, "
 "müssen sie doppelt gesetzt werden als \"{{\" und \"}}\"."
@@ -4217,7 +4217,7 @@ msgstr "Automatisch generieren"
 
 #: pretix/base/modelimport_orders.py:496
 msgid "You cannot assign a position secret that already exists."
-msgstr "Sie können keinen Ticketcode verwenden, der bereits existiert."
+msgstr "Du kannst keinen Ticketcode verwenden, der bereits existiert."
 
 #: pretix/base/modelimport_orders.py:528
 msgid "Please enter a valid language code."
@@ -4971,7 +4971,7 @@ msgstr ""
 "Sollte kurz sein und darf nur Kleinbuchstaben, Zahlen, Bindestriche und "
 "Punkte enthalten. Muss unter deinen Veranstaltungen einmalig sein. Wir "
 "empfehlen eine Abkürzung oder ein Datum mit unter 10 Zeichen, das man sich "
-"gut merken kann. Du kannst jedoch auch einen zufälligen Wert verwendet. Dies "
+"gut merken kann. Du kannst jedoch auch einen zufälligen Wert verwenden. Dies "
 "wird z.B. in Links, Bestellnummern, Rechnungsnummern und Verwendungszwecken "
 "für Banküberweisungen benutzt."
 
@@ -6186,7 +6186,7 @@ msgstr "Minimaler Wert"
 #: pretix/base/models/items.py:1747 pretix/base/models/items.py:1750
 #: pretix/base/models/items.py:1754
 msgid "Currently not supported in our apps and during check-in"
-msgstr "Derzeit nicht von unseren Apps und während dem Check-In unterstützt"
+msgstr "Derzeit nicht von unseren Apps und beim Check-In unterstützt"
 
 #: pretix/base/models/items.py:1737 pretix/base/models/items.py:1743
 #: pretix/base/models/items.py:1749
@@ -6231,7 +6231,7 @@ msgstr "Ungültige Nummerneingabe."
 
 #: pretix/base/models/items.py:1870 pretix/base/models/items.py:1894
 msgid "Please choose a later date."
-msgstr "Bitte wählen Sie ein späteres Datum."
+msgstr "Bitte wähle ein späteres Datum."
 
 #: pretix/base/models/items.py:1872 pretix/base/models/items.py:1896
 msgid "Please choose an earlier date."
@@ -6880,7 +6880,7 @@ msgid ""
 msgstr ""
 "Wenn du dies anschaltest, müssen alle Mitglieder entweder Zwei-Faktor-"
 "Authentifizierung einrichten oder das Team verlassen. Die Einstellung kann "
-"ein paar Minuten benötigen um für alle Benutzer aktiv zu werden."
+"ein paar Minuten benötigen, um für alle Benutzer aktiv zu werden."
 
 #: pretix/base/models/organizer.py:384
 msgid "All event permissions"
@@ -9015,7 +9015,7 @@ msgstr ""
 msgid "One of the products you selected can only be bought part of a bundle."
 msgstr ""
 "Eins der ausgewählten Produkte wird nicht einzeln verkauft, sondern nur als "
-"Teil fester Produktpaketen."
+"Teil fester Produktpakete."
 
 #: pretix/base/services/cart.py:218
 msgid "Please select a valid seat."
@@ -9912,7 +9912,7 @@ msgid ""
 "country is currently not available. We will therefore need to charge you the "
 "same tax rate as if you did not enter a VAT ID."
 msgstr ""
-"Die USt-ID-Nr. konnte nicht geprüft werden, da der Prüfdienst Ihres Landes "
+"Die USt-ID-Nr. konnte nicht geprüft werden, da der Prüfdienst deines Landes "
 "im Moment nicht verfügbar ist. Wir müssen daher den selben Steuersatz "
 "berechnen, wie wenn keine USt-ID-Nr. eingegeben worden wäre."
 
@@ -11535,8 +11535,8 @@ msgid ""
 "cancellation fee from the user."
 msgstr ""
 "Betrifft nur ausstehende Zahlungen, für kostenlose Bestellungen wird nie "
-"eine Stornogebühr erhoben. Bitte beachten Sie, dass Sie für das Eintreiben "
-"der Stornogebühr selbst verantwortlich sind."
+"eine Stornogebühr erhoben. Bitte beachte dass du für das Eintreiben der "
+"Stornogebühr selbst verantwortlich bist."
 
 #: pretix/base/settings.py:2073
 msgid "Charge payment, shipping and service fees"
@@ -19340,8 +19340,8 @@ msgstr ""
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
-"Bitte hinterlassen Sie einen kurzen Kommentar, was Sie in diesen Admin-"
-"Sitzungen gemacht haben:"
+"Bitte hinterlass  einen kurzen Kommentar, was du in diesen Admin-Sitzungen "
+"gemacht hast:"
 
 #: pretix/control/templates/pretixcontrol/base.html:376
 msgid "Read more"
@@ -19427,8 +19427,7 @@ msgstr "im Entwicklermodus"
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
-"Wenn dies länger als einige Minuten dauert, kontaktieren Sie uns bitte."
+msgstr "Wenn dies länger als einige Minuten dauert, kontaktier uns bitte."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:75
@@ -22988,7 +22987,7 @@ msgstr ""
 "Wenn du eine Gültigkeit in Tagen, Monaten oder Jahren angibst, endet die "
 "Gültigkeit immer am Ende eines vollen Tages (Mitternacht), plus der "
 "ausgewählten Anzahl an Minuten und Stunden. Der Starttermin wird in die "
-"Berechnung eingeschlossen, d.h. wenn Sie \"1 Tag\" auswählen ist das Ticket "
+"Berechnung eingeschlossen, d.h. wenn du \"1 Tag\" auswählst, ist das Ticket "
 "gültig bis zum Ende des Tages, an dem die Gültigkeit beginnt."
 
 #: pretix/control/templates/pretixcontrol/item/index.html:254
@@ -23662,8 +23661,8 @@ msgid ""
 "Are you sure you want to generate a new client secret for the application "
 "<strong>%(application)s</strong>?"
 msgstr ""
-"Möchten Sie wirklich einen neuen Schlüssel für die App "
-"<strong>%(application)s</strong> generieren?"
+"Möchtest du wirklich einen neuen Schlüssel für die App <strong>%(application)"
+"s</strong> generieren?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:15
 msgid "Roll secret"
@@ -23720,7 +23719,7 @@ msgstr "Bestellung freigeben"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:10
 msgid "Do you really want to approve this order?"
-msgstr "Möchten Sie diese Bestellung wirklich freigeben?"
+msgstr "Möchtest du diese Bestellung wirklich freigeben?"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:20
 #: pretix/control/templates/pretixcontrol/order/cancel.html:46
@@ -25689,8 +25688,8 @@ msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
-"Laden Sie eine App herunter, die mit pretix kompatibel ist, wie z.B. unsere "
-"Check-in-App <strong>pretixSCAN</strong>."
+"Lad eine App herunter, die mit pretix kompatibel ist, wie z.B. unsere Check-"
+"in-App <strong>pretixSCAN</strong>."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
 msgid "Download pretixSCAN"
@@ -25917,7 +25916,7 @@ msgid ""
 "target=\"_blank\">our documentation</a>."
 msgstr ""
 "In einigen Regionen, einschließlich der Europäischen Union, bist du "
-"verpflichtet, Informationen über die Barrierefreiheit Ihres Ticketshops zu "
+"verpflichtet, Informationen über die Barrierefreiheit deines Ticketshops zu "
 "veröffentlichen. Du findest eine Vorlage in <a href=\"https://docs.pretix.eu/"
 "de/trust/accessibility/\" target=\"_blank\">unserer Dokumentation</a>."
 
@@ -26023,7 +26022,7 @@ msgstr "Station löschen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:8
 msgid "Are you sure you want to delete the gate?"
-msgstr "Möchten Sie die Station wirklich löschen?"
+msgstr "Möchtest du die Station wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:6
 msgid "Gate:"
@@ -26389,7 +26388,7 @@ msgid ""
 "The plugin \"%(name)s\" is enabled for your organizer account, but also "
 "needs to be enabled for the specific events you want to use it with."
 msgstr ""
-"Die Erweiterung \"%(name)s\" ist für Ihr Veranstalterkonto aktiv, muss "
+"Die Erweiterung \"%(name)s\" ist für dein Veranstalterkonto aktiv, muss "
 "jedoch auch für die einzelnen Veranstaltungen aktiviert werden, für die sie "
 "benutzt werden soll."
 
@@ -26936,7 +26935,7 @@ msgid ""
 msgstr ""
 "Dieser Editor wurde mit aktuellen Versionen von Google Chrome, Mozilla "
 "Firefox und Opera getestet. Andere Browser, besonders Internet Explorer oder "
-"Microsoft Edge, haben möglicherweise Probleme Ihr Hintergrund-PDF korrekt "
+"Microsoft Edge, haben möglicherweise Probleme, dein Hintergrund-PDF korrekt "
 "darzustellen oder die richtigen Schriftarten zu laden."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:207
@@ -27121,9 +27120,9 @@ msgid ""
 "use pretixPRINT version %(print_version)s (or newer) or pretixSCAN Desktop "
 "version %(scan_version)s (or newer)."
 msgstr ""
-"Dieses Layout verwendet neue Funktionen. Wenn Sie mit einem Gerät drucken, "
-"stellen Sie sicher, dass pretixPRINT-Version %(print_version)s (oder neuer) "
-"oder pretixSCAN Desktop Version %(scan_version)s (oder neuer) im Einsatz ist."
+"Dieses Layout verwendet neue Funktionen. Wenn du mit einem Gerät druckst, "
+"stell sicher, dass pretixPRINT-Version %(print_version)s (oder neuer) oder "
+"pretixSCAN Desktop Version %(scan_version)s (oder neuer) im Einsatz ist."
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:16
 msgid "Available placeholders"
@@ -27397,7 +27396,7 @@ msgid ""
 msgstr ""
 "Du kannst entweder eine oder mehrere Check-in-Listen für jeden Termin deiner "
 "Veranstaltungsreihe einzeln anlegen oder nur eine Check-in-Liste für alle "
-"Ihre Termine verwenden und den Einlass über Check-in-Regeln limitieren. "
+"deine Termine verwenden und den Einlass über Check-in-Regeln limitieren. "
 "Welcher Ansatz besser geeignet ist, hängt von mehreren Faktoren ab, wie z.B. "
 "der Menge an Terminen in deiner Veranstaltungsreihe. Für Reihen mit weniger "
 "als einem Termin pro Tag sind einzelne Check-in-Listen in der Regel "
@@ -29233,7 +29232,7 @@ msgid ""
 "participants won't be able to buy the bundle unless you remove this item "
 "from it."
 msgstr ""
-"Sie haben dieses Produkt deaktiviert, obwohl es Teil eines Paketes ist. "
+"Du hast dieses Produkt deaktiviert, obwohl es Teil eines Paketes ist. "
 "Solange dies so ist, kann auch das Paket nicht mehr gekauft werden."
 
 #: pretix/control/views/item.py:1622
@@ -30396,7 +30395,7 @@ msgid ""
 "and requested a reset of the credentials."
 msgstr ""
 "Ein Zwei-Faktor-Notfall-Token wurde von einem Systemadministrator generiert. "
-"Dies passiert üblicherweise, wenn du den Zugriff auf Ihren zweiten Faktor "
+"Dies passiert üblicherweise, wenn du den Zugriff auf deinen zweiten Faktor "
 "verloren und ein Zurücksetzen der Zugangsdaten angefordert hast."
 
 #: pretix/control/views/users.py:169
@@ -32143,8 +32142,8 @@ msgid ""
 msgstr ""
 "Während die meisten Zahlungsmethoden keinen grundlosen Widerruf vorsehen, "
 "können SEPA-Lastschriften per Mausklick zurückgerufen werden. Aus diesem "
-"Grund - und abhängig von der Art Ihrer Veranstaltung - kann es notwendig "
-"sein SEPA-Lastschriften nicht anzubieten und damit das Risiko von "
+"Grund – und abhängig von der Art deiner Veranstaltung – kann es notwendig "
+"sein, SEPA-Lastschriften nicht anzubieten und damit das Risiko von "
 "kostspieligen Rücklastschriften zu vermeiden."
 
 #: pretix/plugins/paypal2/payment.py:182
@@ -32474,7 +32473,7 @@ msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
-"Ihr PayPal-Konto ist nun mit pretix verbunden. Auf dieser Seite können Sie "
+"Dein PayPal-Konto ist nun mit pretix verbunden. Auf dieser Seite kannst du "
 "die Einstellungen im Detail anpassen."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
@@ -33051,7 +33050,8 @@ msgstr "Neue Regel erstellen"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
 msgid "Scheduled emails are not sent as long as your ticket shop is offline."
 msgstr ""
-"Geplante E-Mails werden nicht verschickt, solange Ihr Ticketshop offline ist."
+"Geplante E-Mails werden nicht verschickt, solange dein Ticketshop offline "
+"ist."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:63
@@ -33383,7 +33383,7 @@ msgid ""
 "methods such as iDEAL, Alipay,and many more."
 msgstr ""
 "Akzeptiere Zahlungen über Stripe, einen weltweit beliebten "
-"Zahlungsdienstleister. PayPal unterstützt Zahlungen per Kreditkarte sowie "
+"Zahlungsdienstleister. Stripe unterstützt Zahlungen per Kreditkarte sowie "
 "viele lokale Zahlungsarten wie z.B. iDEAL, Alipay, und viele mehr."
 
 #: pretix/plugins/stripe/forms.py:40
@@ -33968,8 +33968,8 @@ msgid ""
 "Pay by bank allows you to authorize a secure Open Banking payment from your "
 "banking app. Currently available only with a UK bank account."
 msgstr ""
-"Zahlung per Onlinebanking erlaubt die sichere Zahlung über Ihre Banking-App. "
-"Derzeit nur für britische Bankkonten verfügbar."
+"Zahlung per Onlinebanking erlaubt die sichere Zahlung über deine Banking-"
+"App. Derzeit nur für britische Bankkonten verfügbar."
 
 #: pretix/plugins/stripe/payment.py:1886
 msgid "PayPal via Stripe"
@@ -34356,7 +34356,7 @@ msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
-"Ihr Stripe-Konto ist nun mit pretix verbunden. Auf dieser Seite können Sie "
+"Dein Stripe-Konto ist nun mit pretix verbunden. Auf dieser Seite kannst du "
 "die Einstellungen im Detail anpassen."
 
 #: pretix/plugins/stripe/views.py:488
