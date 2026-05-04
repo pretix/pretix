@@ -1,0 +1,49 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block content %}
+    <h1>
+        {% trans "Change multiple quotas" %}
+        <small>
+            {% blocktrans trimmed with number=quotas.count %}
+                {{ number }} selected
+            {% endblocktrans %}
+        </small>
+    </h1>
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <div class="hidden">
+            {% for d in quotas %}
+                <input type="hidden" name="quota" value="{{ d.pk }}">
+            {% endfor %}
+        </div>
+        <fieldset>
+            <legend>{% trans "General information" %}</legend>
+            {% bootstrap_field form.name layout="bulkedit" %}
+            {% bootstrap_field form.size layout="bulkedit" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Items" %}</legend>
+            <p>
+                {% blocktrans trimmed %}
+                    Please select the products or product variations this quota should be applied to. If you apply two
+                    quotas to the same product, it will only be available if <strong>both</strong> quotas have capacity
+                    left.
+                {% endblocktrans %}
+            </p>
+            {% bootstrap_field form.itemvars layout="bulkedit" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Advanced options" %}</legend>
+            {% bootstrap_field form.close_when_sold_out layout="bulkedit" %}
+            {% bootstrap_field form.release_after_exit layout="bulkedit" %}
+            {% bootstrap_field form.ignore_for_event_availability layout="bulkedit" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

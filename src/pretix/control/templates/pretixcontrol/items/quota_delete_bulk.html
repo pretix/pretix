@@ -1,0 +1,34 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete quotas" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Delete quotas" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% if allowed %}
+            <p>{% blocktrans trimmed count num=allowed|length %}
+                Are you sure you want to delete the following quota?
+            {% plural %}
+                Are you sure you want to delete the following {{ num }} quotas?
+            {% endblocktrans %}</p>
+            <ul>
+                {% for q in allowed %}
+                    <li>
+                        {{ q }} {% if q.subevent %}({{ q.subevent }}){% endif %}
+                        <input type="hidden" name="quota" value="{{ q.pk }}">
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <div class="form-group submit-group">
+            <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}"
+               class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save" value="delete_confirm" name="action">
+                {% trans "Delete" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
