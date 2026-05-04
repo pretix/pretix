@@ -471,7 +471,9 @@
                                 {% endif %}
                                 {% if line.subevent %}
                                     <br/>
-                                    <span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display_with_times }}
+                                    <span class="fa fa-calendar fa-fw"></span>
+                                    <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=line.subevent_id %}">{{ line.subevent.name }}</a>
+                                    &middot; {{ line.subevent.get_date_range_display_with_times }}
                                 {% endif %}
                                 {% if line.used_membership %}
                                     <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span>
