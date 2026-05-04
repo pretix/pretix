@@ -1,3 +1,6 @@
 [submodule "pretix-regex-validation"]
 	path = pretix-regex-validation
 	url = https://github.com/pretix-unofficial/pretix-regex-validation
+[submodule "pretix-passbook"]
+	path = pretix-passbook
+	url = https://github.com/pretix/pretix-passbook.git

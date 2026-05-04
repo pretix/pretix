@@ -51,6 +51,7 @@ COPY _build /pretix/_build
 COPY src /pretix/src
 COPY pretix-regex-validation /pretix/pretix-regex-validation
 COPY pretix-sideburn-twilio /pretix/pretix-sideburn-twilio
+COPY pretix-passbook /pretix/pretix-passbook
 
 RUN pip3 install -U \
         pip \
@@ -75,6 +76,11 @@ RUN chmod +x /usr/local/bin/pretix && \
 
 RUN cd /pretix/pretix-regex-validation && \
     ls -al && \
+    pip install -e . && \
+    make && \
+    cd ..
+
+RUN cd /pretix/pretix-passbook && \
     pip install -e . && \
     make && \
     cd ..
