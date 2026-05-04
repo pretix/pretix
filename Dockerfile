@@ -31,7 +31,7 @@ RUN apt-get update && \
     mkdir /etc/pretix && \
     mkdir /data && \
     useradd -ms /bin/bash -d /pretix -u 15371 pretixuser && \
-    chmod 0755 /pretix \
+    chmod 0755 /pretix && \
     echo 'pretixuser ALL=(ALL) NOPASSWD:SETENV: /usr/bin/supervisord' >> /etc/sudoers && \
     mkdir /static && \
     mkdir /etc/supervisord
