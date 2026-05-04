@@ -115,10 +115,10 @@ class PluginsField(serializers.Field):
 
     def to_representation(self, obj):
         from pretix.base.plugins import get_all_plugins
-
+        active_plugins = set(obj.get_plugins())
         return sorted([
             p.module for p in get_all_plugins()
-            if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in obj.get_plugins()
+            if not p.name.startswith('.') and getattr(p, 'visible', True) and p.module in active_plugins
         ])
 
     def to_internal_value(self, data):
