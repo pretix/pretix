@@ -114,8 +114,13 @@ var setCookie = function (cname, cvalue, exdays) {
         var expires = "expires=Thu, 01 Jan 1970 00:00:00 GMT";
         cvalue = "";
     }
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    var same_site = "";
+    if (site_is_secure()) {
+        same_site = ";SameSite=None;Secure"
+    }
+    document.cookie = cname + "=" + cvalue + ";" + expires + same_site + ";path=/";
 };
+
 var getCookie = function (name) {
     var value = "; " + document.cookie;
     var parts = value.split("; " + name + "=");
@@ -2052,11 +2057,16 @@ var shared_root_methods = {
         })
     },
     get_cart_id: function() {
-        if (this.$root.keep_cart) {
-            return getCookie(this.$root.cookieName);
+        if (!this.$root.keep_cart) {
+            return null
         }
+        if (this.$root.cart_id) {
+            return this.$root.cart_id
+        }
+        return getCookie(this.$root.cookieName);
     },
     set_cart_id: function(newValue) {
+        this.$root.cart_id = newValue
         setCookie(this.$root.cookieName, newValue, 30);
     },
 };
@@ -2359,6 +2369,7 @@ var create_widget = function (element, html_id=null) {
                 has_seating_plan_waitinglist: false,
                 meta_filter_fields: [],
                 keep_cart: true,
+                cart_id: null
             }
         },
         created: function () {
@@ -2450,6 +2461,7 @@ var create_button = function (element, html_id=null) {
                 html_id: html_id,
                 button_text: button_text,
                 keep_cart: keep_cart || items.length > 0,
+                cart_id: null
             }
         },
         created: function () {
@@ -2525,7 +2537,8 @@ window.PretixWidget.open = function (target_url, voucher, subevent, items, widge
                 widget_data: all_widget_data,
                 widget_id: 'pretix-widget-' + widget_id,
                 button_text: "",
-                keep_cart: true
+                keep_cart: true,
+                cart_id: null
             }
         },
         created: function () {
