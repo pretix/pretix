@@ -679,7 +679,7 @@ class WidgetAPIProductList(EventListMixin, View):
         else:
             try:
                 offset = int(self.request.GET.get("offset", 0))
-            except ValueError as e:
+            except ValueError:
                 raise BadRequest('GET parameter "offset" must be an integer.')
             limit = 50
             if hasattr(self.request, 'event'):
