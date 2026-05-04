@@ -34,6 +34,7 @@ from compressor.filters.jsmin import rJSMinFilter
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.cache import cache
+from django.core.exceptions import BadRequest
 from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.db.models import Q
@@ -676,7 +677,10 @@ class WidgetAPIProductList(EventListMixin, View):
             for d in data['days']:
                 d['events'] = self._serialize_events(d['events'] or [])
         else:
-            offset = int(self.request.GET.get("offset", 0))
+            try:
+                offset = int(self.request.GET.get("offset", 0))
+            except ValueError:
+                raise BadRequest('GET parameter "offset" must be an integer.')
             limit = 50
             if hasattr(self.request, 'event'):
                 evs = filter_qs_by_attr(
