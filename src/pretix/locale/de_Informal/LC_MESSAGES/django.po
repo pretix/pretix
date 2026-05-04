@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-05-02 23:00+0000\n"
-"Last-Translator: Daniel Musketa <daniel@musketa.de>\n"
+"PO-Revision-Date: 2026-05-04 07:42+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -19340,7 +19340,7 @@ msgstr ""
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
-"Bitte hinterlass  einen kurzen Kommentar, was du in diesen Admin-Sitzungen "
+"Bitte hinterlasse einen kurzen Kommentar, was du in diesen Admin-Sitzungen "
 "gemacht hast:"
 
 #: pretix/control/templates/pretixcontrol/base.html:376
@@ -19427,7 +19427,7 @@ msgstr "im Entwicklermodus"
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:42
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr "Wenn dies länger als einige Minuten dauert, kontaktier uns bitte."
+msgstr "Wenn dies länger als einige Minuten dauert, kontaktiere uns bitte."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:75
@@ -25688,7 +25688,7 @@ msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
-"Lad eine App herunter, die mit pretix kompatibel ist, wie z.B. unsere Check-"
+"Lade eine App herunter, die mit pretix kompatibel ist, wie z.B. unsere Check-"
 "in-App <strong>pretixSCAN</strong>."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
