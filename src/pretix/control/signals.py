@@ -213,6 +213,16 @@ quota as argument in the ``quota`` keyword argument.
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+subevent_detail_html = EventPluginSignal()
+"""
+Arguments: 'subevent'
+
+This signal allows you to append HTML to a SubEvent's detail view. You receive the
+subevent as argument in the ``subevent`` keyword argument.
+
+As with all event plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 organizer_edit_tabs = DeprecatedSignal()
 """
 Arguments: 'organizer', 'request'

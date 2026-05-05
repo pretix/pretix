@@ -1,0 +1,293 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load formset_tags %}
+{% load eventsignal %}
+{% load static %}
+{% block title %}{% trans "Date" context "subevent" %}{% endblock %}
+{% block content %}
+    {% if not subevent.pk %}
+        <h1>{% trans "Create date" context "subevent" %}</h1>
+    {% else %}
+        <h1>{% trans "Date" context "subevent" %}</h1>
+    {% endif %}
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% for f in itemvar_forms %}
+            {% bootstrap_form_errors f %}
+        {% endfor %}
+        <div class="row">
+            <div class="col-xs-12 {% if subevent.pk %}col-lg-10{% endif %}">
+                <fieldset>
+                    <legend>{% trans "General information" %}</legend>
+                    {% bootstrap_field form.name layout="control" %}
+                    {% bootstrap_field form.active layout="control" %}
+                    {% bootstrap_field form.date_from layout="control" %}
+                    {% bootstrap_field form.date_to layout="control" %}
+                    {% include "pretixcontrol/event/fragment_geodata.html" %}
+                    {% bootstrap_field form.date_admission layout="control" %}
+                    {% bootstrap_field form.frontpage_text layout="control" %}
+                    {% bootstrap_field form.is_public layout="control" %}
+                    {% bootstrap_field form.comment layout="control" %}
+                    {% if meta_forms %}
+                        <div class="form-group metadata-group">
+                            <label class="col-md-3 control-label">{% trans "Meta data" %}</label>
+                            <div class="col-md-9">
+                                {% for form in meta_forms %}
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <label for="{{ form.value.id_for_label }}">
+                                                {{ form.property.name }}
+                                            </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            {% bootstrap_form form layout="inline" error_types="all" %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Timeline" %}</legend>
+                    {% bootstrap_field form.presale_start layout="control" %}
+                    {% bootstrap_field form.presale_end layout="control" %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Quotas" %}</legend>
+                    <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                        {{ formset.management_form }}
+                        {% bootstrap_formset_errors formset %}
+                        <div data-formset-body>
+                            {% for form in formset %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ form.id }}
+                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_form_errors form %}
+                                        {% bootstrap_field form.size layout="control" %}
+                                        {% bootstrap_field form.itemvars layout="control" %}
+                                        {% bootstrap_field form.release_after_exit layout="control" %}
+                                        {% bootstrap_field form.ignore_for_event_availability layout="control" %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <script type="form-template" data-formset-empty-form>
+                            {% escapescript %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ formset.empty_form.id }}
+                                        {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field formset.empty_form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_field formset.empty_form.size layout="control" %}
+                                        {% bootstrap_field formset.empty_form.itemvars layout="control" %}
+                                        {% bootstrap_field formset.empty_form.release_after_exit layout="control" %}
+                                        {% bootstrap_field formset.empty_form.ignore_for_event_availability layout="control" %}
+                                    </div>
+                                </div>
+                            {% endescapescript %}
+                        </script>
+                        <p>
+                            <button type="button" class="btn btn-default" data-formset-add>
+                                <i class="fa fa-plus"></i> {% trans "Add a new quota" %}</button>
+                        </p>
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Product settings" %}</legend>
+                    <p class="text-muted">
+                        {% trans "These settings are optional, if you leave them empty, the default values from the product settings will be used." %}
+                    </p>
+                    {% for f in itemvar_forms %}
+                        <div data-itemvar="{{ f.item.id }}{% if f.variation %}-{{ f.variation.id }}{% endif %}">
+                            {% bootstrap_form_errors f %}
+                            <div class="form-group subevent-itemvar-group">
+                                <label class="col-md-3 control-label" for="id_{{ f.prefix }}-price">
+                                    {% if f.variation %}{{ f.item }} – {{ f.variation }}{% else %}{{ f.item }}{% endif %}
+                                </label>
+                                <div class="col-md-4">
+                                    <label for="{{ f.price.id_for_label }}" class="text-muted">{% trans "Price" %}</label><br>
+                                    {% bootstrap_field f.price addon_after=request.event.currency form_group_class="" layout="inline" %}
+                                </div>
+                                <div class="col-md-4">
+                                    <br>
+                                    {% bootstrap_field f.disabled layout="inline" form_group_class="" %}
+                                </div>
+                            </div>
+                            <div class="form-group subevent-itemvar-group">
+                                <div class="col-md-4 col-md-offset-3">
+                                    <label for="{{ f.available_from.id_for_label }}" class="text-muted">{% trans "Available from" %}</label>
+                                    {% include "pretixcontrol/subevents/fragment_unavail_mode_indicator.html" with mode=f.available_from_mode %}<br>
+                                    {% bootstrap_field f.available_from form_group_class="foo" layout="inline" %}
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="{{ f.available_until.id_for_label }}" class="text-muted">{% trans "Available until" %}</label>
+                                    {% include "pretixcontrol/subevents/fragment_unavail_mode_indicator.html" with mode=f.available_until_mode %}<br>
+                                    {% bootstrap_field f.available_until form_group_class="" layout="inline" %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Check-in lists" %}</legend>
+                    <p class="help-block">
+                        {% blocktrans trimmed %}
+                            You can choose to either add one or more check-in lists for every date in your series individually,
+                            or use just one check-in list for all your dates and limit admission through check-in rules. Which
+                            approach is better depends on multiple factors, such as the number of dates in your series. For a
+                            series with one or less event date per day, individual lists are usually more helpful. If you
+                            use dates to represent many time slots on the same day, or even overlapping time slots, working with
+                            just one large check-in list will be easier.
+                        {% endblocktrans %}
+                    </p>
+                    <div class="formset" data-formset data-formset-prefix="{{ cl_formset.prefix }}">
+                        {{ cl_formset.management_form }}
+                        {% bootstrap_formset_errors cl_formset %}
+                        <div data-formset-body>
+                            {% for form in cl_formset %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ form.id }}
+                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_form_errors form %}
+                                        {% bootstrap_field form.include_pending layout="control" %}
+                                        {% bootstrap_field form.all_products layout="control" %}
+                                        {% bootstrap_field form.limit_products layout="control" %}
+                                        {% bootstrap_field form.allow_entry_after_exit layout="control" %}
+                                        {% if form.gates %}
+                                            {% bootstrap_field form.gates layout="control" %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <script type="form-template" data-formset-empty-form>
+                            {% escapescript %}
+                                <div class="panel panel-default" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ cl_formset.empty_form.id }}
+                                        {% bootstrap_field cl_formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    {% bootstrap_field cl_formset.empty_form.name layout='inline' form_group_class="" %}
+                                                </div>
+                                                <div class="col-md-2 text-right flip">
+                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                        <i class="fa fa-trash"></i></button>
+                                                </div>
+                                            </div>
+                                        </h4>
+                                    </div>
+                                    <div class="panel-body form-horizontal">
+                                        {% bootstrap_field cl_formset.empty_form.include_pending layout="control" %}
+                                        {% bootstrap_field cl_formset.empty_form.all_products layout="control" %}
+                                        {% bootstrap_field cl_formset.empty_form.limit_products layout="control" %}
+                                        {% bootstrap_field cl_formset.empty_form.allow_entry_after_exit layout="control" %}
+                                        {% if cl_formset.empty_form.gates %}
+                                            {% bootstrap_field cl_formset.empty_form.gates layout="control" %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endescapescript %}
+                        </script>
+                        <p>
+                            <button type="button" class="btn btn-default" data-formset-add>
+                                <i class="fa fa-plus"></i> {% trans "Add a new check-in list" %}
+                            </button>
+                        </p>
+                </fieldset>
+                {% for f in plugin_forms %}
+                    {% if f.title %}
+                        <fieldset>
+                            <legend>{{ f.title }}</legend>
+                            {% if f.template %}
+                                {% include f.template with form=f %}
+                            {% else %}
+                                {% bootstrap_form f layout="control" %}
+                            {% endif %}
+                        </fieldset>
+                    {% endif %}
+                {% endfor %}
+                <fieldset>
+                    <legend>{% trans "Additional settings" %}</legend>
+                    {% for f in plugin_forms %}
+                        {% if not f.title %}
+                            {% if f.template %}
+                                {% include f.template with form=f %}
+                            {% else %}
+                                {% bootstrap_form f layout="control" %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </fieldset>
+            </div>
+            {% if subevent.pk %}
+                <div class="col-xs-12 col-lg-2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% trans "Date history" context "subevent" %}
+                            </h3>
+                        </div>
+                        {% include "pretixcontrol/includes/logs.html" with obj=subevent %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group submit-group submit-group-sticky">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

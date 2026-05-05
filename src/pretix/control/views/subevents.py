@@ -41,7 +41,9 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, F, Prefetch, ProtectedError
+from django.db.models import (
+    Count, Exists, F, OuterRef, Prefetch, ProtectedError, Subquery,
+)
 from django.db.models.functions import Coalesce, TruncDate, TruncTime
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -52,14 +54,17 @@ from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
-from django.views.generic import CreateView, FormView, ListView, UpdateView
+from django.views.generic import (
+    CreateView, DetailView, FormView, ListView, UpdateView,
+)
 
-from pretix.base.models import CartPosition, LogEntry
+from pretix.base.models import CartPosition, LogEntry, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.event import SubEvent, SubEventMetaValue
 from pretix.base.models.items import (
-    ItemVariation, Quota, SubEventItem, SubEventItemVariation,
+    Item, ItemVariation, Quota, SubEventItem, SubEventItemVariation,
 )
+from pretix.base.models.orders import CancellationRequest
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services import tickets
 from pretix.base.services.quotas import QuotaAvailability
@@ -505,9 +510,67 @@ class SubEventEditorMixin(MetaDataEditorMixin):
         ) and self.cl_formset.is_valid() and all(f.is_valid() for f in self.plugin_forms)
 
 
-class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateView):
+class SubEventDetail(EventPermissionRequiredMixin, DetailView):
     model = SubEvent
     template_name = 'pretixcontrol/subevents/detail.html'
+    permission = None
+    context_object_name = 'subevent'
+
+    def get_object(self, queryset=None) -> SubEvent:
+        try:
+            return self.request.event.subevents.get(
+                id=self.kwargs['subevent']
+            )
+        except SubEvent.DoesNotExist:
+            raise Http404(pgettext_lazy("subevent", "The requested date does not exist."))
+
+    def get_context_data(self, **kwargs):
+        oqs = self.request.event.orders.filter(
+            Exists(
+                OrderPosition.all.filter(
+                    subevent=self.object,
+                )
+            )
+        ).annotate(
+            pcnt=Subquery(
+                OrderPosition.objects.filter(
+                    subevent=self.object,
+                ).values("subevent").annotate(c=Count("*")).values("c")
+            ),
+            has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef("pk"))),
+        ).select_related("invoice_address").prefetch_related("sales_channel")
+        ctx = {
+            "quotas": self.object.quotas.prefetch_related(
+                Prefetch(
+                    "items",
+                    queryset=Item.objects.annotate(
+                        has_variations=Exists(ItemVariation.objects.filter(item=OuterRef("pk")))
+                    ),
+                    to_attr="cached_items"
+                ),
+                "variations",
+                "variations__item",
+            ).order_by("name", "pk"),
+            "checkinlists": self.object.checkinlist_set.prefetch_related("limit_products"),
+            "orders": oqs[:11],
+            "order_count": oqs.count(),
+        }
+
+        qa = QuotaAvailability()
+        qa.queue(*ctx["quotas"])
+        qa.compute()
+        for quota in ctx["quotas"]:
+            quota.cached_avail = qa.results[quota]
+
+        return super().get_context_data(
+            **kwargs,
+            **ctx,
+        )
+
+
+class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateView):
+    model = SubEvent
+    template_name = 'pretixcontrol/subevents/edit.html'
     permission = 'event.subevents:write'
     context_object_name = 'subevent'
     form_class = SubEventForm
@@ -586,7 +649,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
 
 class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateView):
     model = SubEvent
-    template_name = 'pretixcontrol/subevents/detail.html'
+    template_name = 'pretixcontrol/subevents/edit.html'
     permission = 'event.subevents:write'
     context_object_name = 'subevent'
     form_class = SubEventForm
