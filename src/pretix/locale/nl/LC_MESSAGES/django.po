@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-03-31 17:00+0000\n"
+"PO-Revision-Date: 2026-05-05 13:26+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8209,10 +8209,8 @@ msgstr ""
 "2x Add-on 2"
 
 #: pretix/base/pdf.py:383
-#, fuzzy
-#| msgid "List of Add-Ons"
 msgid "List of Checked-In Add-Ons"
-msgstr "Lijst met add-ons"
+msgstr "Lijst met ingecheckte add-ons"
 
 #: pretix/base/pdf.py:390 pretix/control/forms/filter.py:1537
 #: pretix/control/forms/filter.py:1539
@@ -9206,10 +9204,8 @@ msgid "Czech National Bank"
 msgstr "Tsjechische Nationale Bank"
 
 #: pretix/base/services/currencies.py:41
-#, fuzzy
-#| msgid "Czech National Bank"
 msgid "National Bank of Poland"
-msgstr "Tsjechische Nationale Bank"
+msgstr "Nationale Bank van Polen"
 
 #: pretix/base/services/export.py:95 pretix/base/services/export.py:155
 msgid ""
@@ -10296,16 +10292,12 @@ msgstr ""
 "wanneer het factuurbedrag niet in CZK is."
 
 #: pretix/base/settings.py:577 pretix/base/settings.py:586
-#, fuzzy
-#| msgid ""
-#| "Based on Czech National Bank daily rates, whenever the invoice amount is "
-#| "not in CZK."
 msgid ""
 "Based on National Bank of Poland daily rates, whenever the invoice amount is "
 "not in PLN."
 msgstr ""
-"Gebaseerd op de dagelijkse tarieven van de Tsjechische Nationale Bank, "
-"wanneer het factuurbedrag niet in CZK is."
+"Op basis van de dagkoersen van de Nationale Bank van Polen, wanneer het "
+"factuurbedrag niet in PLN is uitgedrukt."
 
 #: pretix/base/settings.py:597
 msgid "Require invoice address"
@@ -16375,10 +16367,8 @@ msgid "Allow to overbook quotas when performing this operation"
 msgstr "Quota overboeken bij deze handeling toestaan"
 
 #: pretix/control/forms/orders.py:335
-#, fuzzy
-#| msgid "Number of orders"
 msgid "Number of products to add"
-msgstr "Aantal bestellingen"
+msgstr "Aantal producten dat moet worden toegevoegd"
 
 #: pretix/control/forms/orders.py:344
 msgid "Add-on to"
@@ -16410,10 +16400,9 @@ msgstr ""
 "standaardprijs van het product"
 
 #: pretix/control/forms/orders.py:441
-#, fuzzy
-#| msgid "You can not select the same seat multiple times."
 msgid "You can not choose a seat when adding multiple products at once."
-msgstr "U kunt dezelfde stoel niet meerdere keren kiezen."
+msgstr ""
+"U kunt geen zitplaats kiezen wanneer u meerdere producten tegelijk toevoegt."
 
 #: pretix/control/forms/orders.py:478 pretix/control/forms/orders.py:482
 #: pretix/control/forms/orders.py:510 pretix/control/forms/orders.py:552
@@ -17027,7 +17016,7 @@ msgstr "Weekenddag"
 #: pretix/control/forms/subevents.py:106
 msgctxt "subevent"
 msgid "Skip dates that overlap with any existing date"
-msgstr ""
+msgstr "Sla data over die samenvallen met bestaande data"
 
 #: pretix/control/forms/subevents.py:109
 msgctxt "subevent"
@@ -17037,6 +17026,11 @@ msgid ""
 "This respects even inactive dates and works best if all dates have both a "
 "start and end time."
 msgstr ""
+"Dit kan handig zijn als alle afspraken op dezelfde locatie plaatsvinden en "
+"je wilt voorkomen dat terugkerende afspraken in conflict komen met bestaande "
+"speciale afspraken. Hierbij wordt ook rekening gehouden met inactieve "
+"afspraken en het werkt het beste als alle afspraken een begin- en eindtijd "
+"hebben."
 
 #: pretix/control/forms/subevents.py:128
 msgid "Keep the current values"
@@ -30168,6 +30162,8 @@ msgstr "U kunt maximaal 100.000 datums tegelijk aanmaken."
 #: pretix/control/views/subevents.py:966
 msgid "All dates would be skipped because they conflict with existing dates."
 msgstr ""
+"Alle afspraken zouden worden overgeslagen omdat ze samenvallen met bestaande "
+"afspraken."
 
 #: pretix/control/views/subevents.py:1102
 #, python-brace-format
