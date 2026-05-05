@@ -939,7 +939,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     help_text=help_text,
                     initial=_initial,
-                    widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
+                    widget=TimePickerWidget(without_seconds=True),
                 )
             elif q.type == Question.TYPE_DATETIME:
                 if not help_text:

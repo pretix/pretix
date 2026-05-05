@@ -79,6 +79,7 @@ from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
 from pretix.helpers import GroupConcat
 from pretix.helpers.compat import CompatDeleteView
+from pretix.helpers.i18n import get_format_without_seconds
 from pretix.helpers.models import modelcopy
 
 
@@ -803,7 +804,7 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
         ctx['rrule_formset'] = self.rrule_formset
         ctx['time_formset'] = self.time_formset
 
-        tf = get_format('TIME_INPUT_FORMATS')[0]
+        tf = get_format_without_seconds('TIME_INPUT_FORMATS')
         ctx['time_admission_sample'] = time(8, 30, 0).strftime(tf)
         ctx['time_begin_sample'] = time(9, 0, 0).strftime(tf)
         ctx['time_end_sample'] = time(18, 0, 0).strftime(tf)

@@ -770,7 +770,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
                 )
             elif q.type == Question.TYPE_TIME:
                 self.fields[fname] = forms.TimeField(
-                    widget=TimePickerWidget(time_format=get_format_without_seconds('TIME_INPUT_FORMATS')),
+                    widget=TimePickerWidget(without_seconds=True),
                     help_text=_('Exact matches only'),
                     **kwargs,
                 )

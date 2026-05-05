@@ -245,8 +245,8 @@ class QuestionForm(I18nModelForm):
             'valid_string_length_max',
         ]
         widgets = {
-            'valid_datetime_min': SplitDateTimePickerWidget(),
-            'valid_datetime_max': SplitDateTimePickerWidget(),
+            'valid_datetime_min': SplitDateTimePickerWidget(without_seconds=True),
+            'valid_datetime_max': SplitDateTimePickerWidget(without_seconds=True),
             'valid_date_min': DatePickerWidget(),
             'valid_date_max': DatePickerWidget(),
             'items': forms.CheckboxSelectMultiple(
@@ -1372,6 +1372,6 @@ class ItemProgramTimeForm(I18nModelForm):
             'end': forms.SplitDateTimeField,
         }
         widgets = {
-            'start': SplitDateTimePickerWidget(),
-            'end': SplitDateTimePickerWidget(),
+            'start': SplitDateTimePickerWidget(without_seconds=True),
+            'end': SplitDateTimePickerWidget(without_seconds=True),
         }
