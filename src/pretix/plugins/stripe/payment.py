@@ -386,7 +386,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      disabled=self.event.currency != 'EUR',
                      help_text=(
                          _('Some payment methods might need to be enabled in the settings of your Stripe account '
-                           'before work properly.') +
+                           'before they work properly.') +
                          '<div class="alert alert-warning">%s</div>' % _(
                              'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
                              'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
