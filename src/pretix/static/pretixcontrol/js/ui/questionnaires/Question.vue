@@ -3,6 +3,8 @@ import { i18n_any, QUESTION_TYPE, QUESTION_TYPE_LABEL, SYSTEM_DATAFIELDS } from 
 import NativeDialog from './NativeDialog.vue';
 import I18nTextField from './I18nTextField.vue';
 import { useId, ref } from 'vue'
+import { DragHandle } from 'vue-slicksort';
+
 const id = useId();
 const props = defineProps(['question', 'datafields', 'editable'])
 const emit = defineEmits(['removeSelf']);
@@ -23,7 +25,7 @@ const editor = ref();
 <template>
   <div class="form-group">
     <div class="question-edit-buttons" v-if="editable"><div>
-      <button class="btn btn-default"><i class="fa fa-arrows"></i></button>
+			<DragHandle tag="button" class="btn btn-default"><i class="fa fa-arrows"></i></DragHandle>
       <button class="btn btn-default" @click="editor.show()"><i class="fa fa-edit"></i></button>
     </div></div>
 

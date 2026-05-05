@@ -3,6 +3,7 @@ import Questionnaire from './Questionnaire.vue';
 import {get_datafields, get_items, get_questionnaires} from './api';
 import { i18n_any, QUESTION_TYPE } from './helper';
 import { ref } from 'vue';
+import { SlickList, SlickItem } from 'vue-slicksort';
 
 const datafields_response = await get_datafields();
 const questionnaires_response = await get_questionnaires();
@@ -56,14 +57,16 @@ export default {
 		</select>
 	</p>
 	<div class="question-editor">
+		<SlickList axis="y" v-model:list="questionnaires" useDragHandle appendTo="#questionnaireListParent" id="questionnaireListParent">
+			<SlickItem v-for="(questionnaire, index) in questionnaires" :key="questionnaire.id" :index="index">
         <Questionnaire
-          v-for="questionnaire in questionnaires"
           :questionnaire="questionnaire"
           :datafields="datafields"
           :items="items"
           :selected_product="selected_product" />
+			</SlickItem>
+		</SlickList>
 	</div>
-
   <p>
       <button class="btn btn-default" @click="addQuestionnaire()"><i class="fa fa-plus"></i> Neuen Fragebogen erstellen</button>
   </p>

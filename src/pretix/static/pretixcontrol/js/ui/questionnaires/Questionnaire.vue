@@ -4,6 +4,7 @@ import Question from "./Question.vue";
 import {i18n_any, QUESTION_TYPE, QUESTION_TYPE_LABEL} from "./helper";
 import I18nTextField from "./I18nTextField.vue";
 import NativeDialog from "./NativeDialog.vue";
+import { SlickList, SlickItem, DragHandle } from 'vue-slicksort';
 
 const dlgEditor = ref();
 const dlgAddExisting = ref();
@@ -62,11 +63,11 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 
 
 <template>
-		<div class="question-edit-buttons"><div>
-      <button class="btn btn-default"><i class="fa fa-arrows"></i></button>
-      <button class="btn btn-default" @click="dlgEditor.show()"><i class="fa fa-edit"></i></button>
-      <button class="btn btn-default" @click="toggleItem()" v-if="selected_product"><i :class="`fa fa-eye${isHidden ? '-slash':''}`"></i></button>
-    </div></div>
+	<div class="question-edit-buttons"><div>
+		<DragHandle tag="button" class="btn btn-default"><i class="fa fa-arrows"></i></DragHandle>
+		<button class="btn btn-default" @click="dlgEditor.show()"><i class="fa fa-edit"></i></button>
+		<button class="btn btn-default" @click="toggleItem()" v-if="selected_product"><i :class="`fa fa-eye${isHidden ? '-slash':''}`"></i></button>
+	</div></div>
 
   <details class="panel panel-default " :open="!!isEditable"
     :class="{ 'hidden-question': isHidden }">
@@ -74,14 +75,17 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 			{{ props.questionnaire.internal_name }}
     </summary>
     <div class="panel-body" v-if="!isHidden">
-      <div class="form-horizontal">
+      <div class="form-horizontal" :id="`questionListParent${props.questionnaire.id}`">
 
-				<Question
-								v-for="(child, index) in props.questionnaire.children" :key="index"
-          			:datafields="props.datafields"
-								:question="child"
-								:editable="true"
-								@remove-self="questionnaire.children.splice(index, 1)" />
+				<SlickList axis="y" v-model:list="props.questionnaire.children" useDragHandle :appendTo="`#questionListParent${props.questionnaire.id}`">
+					<SlickItem v-for="(child, index) in props.questionnaire.children" :key="child.id" :index="index">
+						<Question
+										:datafields="props.datafields"
+										:question="child"
+										:editable="true"
+										@remove-self="questionnaire.children.splice(index, 1)" />
+					</SlickItem>
+				</SlickList>
 
       </div>
 			<p v-if="true">
