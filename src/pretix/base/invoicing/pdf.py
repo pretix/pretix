@@ -1160,7 +1160,7 @@ class Modern1Renderer(ClassicInvoiceRenderer):
         return stylesheet
 
     def _draw_invoice_from(self, canvas):
-        if not self.invoice.invoice_from:
+        if not self.invoice.address_invoice_from:
             return
         c = [
             self._clean_text(l)
