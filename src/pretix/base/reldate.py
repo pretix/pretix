@@ -34,13 +34,18 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-BASE_CHOICES = (
+EVENT_CHOICES = (
     ('date_from', _('Event start')),
     ('date_to', _('Event end')),
     ('date_admission', _('Event admission')),
     ('presale_start', _('Presale start')),
     ('presale_end', _('Presale end')),
 )
+
+ORDER_CHOICES = (
+    ('datetime', _('Moment of order')),
+)
+ORDER_CHOICES_KEYS = [choice[0] for choice in ORDER_CHOICES]
 
 RelativeDate = namedtuple('RelativeDate', ['days', 'minutes', 'time', 'is_after', 'base_date_name'], defaults=(0, None, None, False, 'date_from'))
 
@@ -52,15 +57,15 @@ class RelativeDateWrapper:
     time to calculate the date based on a base point.
 
     The base point can be the date_from, date_to, date_admission, presale_start or presale_end
-    attribute of an event or subevent. If the respective attribute is not set, ``date_from``
-    will be used.
+    attribute of an event or subevent, as well as a time of order.
+    If the respective attribute is not set, ``date_from`` will be used.
     """
 
     def __init__(self, data: Union[datetime.datetime, RelativeDate]):
         self.data = data
 
-    def date(self, event) -> datetime.date:
-        from .models import SubEvent
+    def date(self, reference) -> datetime.date:
+        from .models import SubEvent, Event, Order
 
         if isinstance(self.data, datetime.datetime):
             return self.data.date()
@@ -70,15 +75,27 @@ class RelativeDateWrapper:
             if self.data.minutes is not None:
                 raise ValueError('A minute-based relative datetime can not be used as a date')
 
-            tz = ZoneInfo(event.settings.timezone)
-            if isinstance(event, SubEvent):
+            if self.data.base_date_name in ORDER_CHOICES_KEYS:
+                if not isinstance(reference, Order):
+                    raise ValueError('A order-based relative datetime choice must be used with an order object')
+                order = reference
+                event = order.event
+                base_date = getattr(order, self.data.base_date_name)
+            elif isinstance(reference, SubEvent):
+                subevent = reference
+                event = subevent
                 base_date = (
-                    getattr(event, self.data.base_date_name)
-                    or getattr(event.event, self.data.base_date_name)
-                    or event.date_from
+                    getattr(subevent, self.data.base_date_name)
+                    or getattr(subevent.event, self.data.base_date_name)
+                    or subevent.date_from
                 )
-            else:
+            elif isinstance(reference, Event):
+                event = reference
                 base_date = getattr(event, self.data.base_date_name) or event.date_from
+            else:
+                raise ValueError("Only event, subevent or order objects are supported")
+
+            tz = ZoneInfo(event.settings.timezone)
 
             if self.data.is_after:
                 new_date = base_date.astimezone(tz) + datetime.timedelta(days=self.data.days)
@@ -86,21 +103,33 @@ class RelativeDateWrapper:
                 new_date = base_date.astimezone(tz) - datetime.timedelta(days=self.data.days)
             return new_date.date()
 
-    def datetime(self, event) -> datetime.datetime:
-        from .models import SubEvent
+    def datetime(self, reference) -> datetime.datetime:
+        from .models import SubEvent, Event, Order
 
         if isinstance(self.data, (datetime.datetime, datetime.date)):
             return self.data
         else:
-            tz = ZoneInfo(event.settings.timezone)
-            if isinstance(event, SubEvent):
+            if self.data.base_date_name in ORDER_CHOICES_KEYS:
+                if not isinstance(reference, Order):
+                    raise ValueError('A order-based relative datetime choice must be used with an order object')
+                order = reference
+                event = order.event
+                base_date = getattr(order, self.data.base_date_name)
+            elif isinstance(reference, SubEvent):
+                subevent = reference
+                event = subevent
                 base_date = (
-                    getattr(event, self.data.base_date_name)
-                    or getattr(event.event, self.data.base_date_name)
-                    or event.date_from
+                    getattr(subevent, self.data.base_date_name)
+                    or getattr(subevent.event, self.data.base_date_name)
+                    or subevent.date_from
                 )
-            else:
+            elif isinstance(reference, Event):
+                event = reference
                 base_date = getattr(event, self.data.base_date_name) or event.date_from
+            else:
+                raise ValueError("Only event, subevent or order objects are supported")
+
+            tz = ZoneInfo(event.settings.timezone)
 
             if self.data.minutes is not None:
                 if self.data.is_after:
@@ -172,7 +201,7 @@ class RelativeDateWrapper:
                         minutes=None,
                         is_after=len(parts) > 4 and parts[4] == "after",
                     )
-            if data.base_date_name not in [k[0] for k in BASE_CHOICES]:
+            if data.base_date_name not in [k[0] for k in EVENT_CHOICES + ORDER_CHOICES]:
                 raise ValueError('{} is not a valid base date'.format(data.base_date_name))
         else:
             data = parser.parse(input)
@@ -311,11 +340,17 @@ class RelativeDateTimeField(forms.MultiValueField):
         ]
         if kwargs.get('limit_choices'):
             limit = kwargs.pop('limit_choices')
-            choices = [(k, v) for k, v in BASE_CHOICES if k in limit]
+            choices = [(k, v) for k, v in EVENT_CHOICES if k in limit]
         else:
-            choices = BASE_CHOICES
+            choices = EVENT_CHOICES
+
+        self.relative_to_order = kwargs.pop('relative_to_order', False)
+        if self.relative_to_order:
+            choices += ORDER_CHOICES
+
         if not kwargs.get('required', True):
             status_choices.insert(0, ('unset', _('Not set')))
+
         fields = reldatetimeparts(
             status=forms.ChoiceField(
                 choices=status_choices,
@@ -359,12 +394,13 @@ class RelativeDateTimeField(forms.MultiValueField):
         )
 
     def set_event(self, event):
-        self.widget.widgets[reldatetimeparts.indizes.rel_days_relationto].choices = [
-            (k, v) for k, v in BASE_CHOICES if getattr(event, k, None)
+        choices = [
+            (k, v) for k, v in EVENT_CHOICES if getattr(event, k, None)
         ]
-        self.widget.widgets[reldatetimeparts.indizes.rel_mins_relationto].choices = [
-            (k, v) for k, v in BASE_CHOICES if getattr(event, k, None)
-        ]
+        if self.relative_to_order:
+            choices += ORDER_CHOICES
+        self.widget.widgets[reldateparts.indizes.rel_days_relationto].choices = choices
+        self.widget.widgets[reldatetimeparts.indizes.rel_mins_relationto].choices = choices
 
     def compress(self, data_list):
         if not data_list:
@@ -404,6 +440,10 @@ class RelativeDateTimeField(forms.MultiValueField):
             raise ValidationError(self.error_messages['incomplete'])
         elif data.status == 'relative_minutes' and (data.rel_mins_number is None or not data.rel_mins_relationto):
             raise ValidationError(self.error_messages['incomplete'])
+        elif data.status == 'relative' and data.rel_days_relationto in ORDER_CHOICES_KEYS and data.rel_days_relation == 'before':
+            raise ValidationError(_('A relative date in relation to an order can only be after the order has been placed'))
+        elif data.status == 'relative' and data.rel_mins_relationto in ORDER_CHOICES_KEYS and data.rel_mins_relation == 'before':
+            raise ValidationError(_('A relative date in relation to an order can only be after the order has been placed'))
 
         return super().clean(value)
 
@@ -424,13 +464,14 @@ class RelativeDateWidget(RelativeDateTimeWidget):
 
     def __init__(self, *args, **kwargs):
         self.status_choices = kwargs.pop('status_choices')
+        base_choices = kwargs.pop('base_choices')
         widgets = reldateparts(
             status=forms.RadioSelect(choices=self.status_choices),
             absolute=forms.DateInput(
                 attrs={'class': 'datepickerfield'}
             ),
             rel_days_number=forms.NumberInput(),
-            rel_days_relationto=forms.Select(choices=kwargs.pop('base_choices')),
+            rel_days_relationto=forms.Select(choices=base_choices),
             rel_days_relation=forms.Select(choices=BEFORE_AFTER_CHOICE),
         )
         forms.MultiWidget.__init__(self, widgets=widgets, *args, **kwargs)
@@ -474,6 +515,12 @@ class RelativeDateField(RelativeDateTimeField):
         ]
         if not kwargs.get('required', True):
             status_choices.insert(0, ('unset', _('Not set')))
+
+        choices = EVENT_CHOICES
+        self.relative_to_order = kwargs.pop('relative_to_order', False)
+        if self.relative_to_order:
+            choices += ORDER_CHOICES
+
         fields = reldateparts(
             status=forms.ChoiceField(
                 choices=status_choices,
@@ -486,7 +533,7 @@ class RelativeDateField(RelativeDateTimeField):
                 required=False
             ),
             rel_days_relationto=forms.ChoiceField(
-                choices=BASE_CHOICES,
+                choices=choices,
                 required=False
             ),
             rel_days_relation=forms.ChoiceField(
@@ -495,15 +542,18 @@ class RelativeDateField(RelativeDateTimeField):
             ),
         )
         if 'widget' not in kwargs:
-            kwargs['widget'] = RelativeDateWidget(status_choices=status_choices, base_choices=BASE_CHOICES)
+            kwargs['widget'] = RelativeDateWidget(status_choices=status_choices, base_choices=choices)
         forms.MultiValueField.__init__(
             self, fields=fields, require_all_fields=False, *args, **kwargs
         )
 
     def set_event(self, event):
-        self.widget.widgets[reldateparts.indizes.rel_days_relationto].choices = [
-            (k, v) for k, v in BASE_CHOICES if getattr(event, k, None)
+        choices = [
+            (k, v) for k, v in EVENT_CHOICES if getattr(event, k, None)
         ]
+        if self.relative_to_order:
+            choices += ORDER_CHOICES
+        self.widget.widgets[reldateparts.indizes.rel_days_relationto].choices = choices
 
     def compress(self, data_list):
         if not data_list:
@@ -527,6 +577,9 @@ class RelativeDateField(RelativeDateTimeField):
             raise ValidationError(self.error_messages['incomplete'])
         elif data.status == 'relative' and (data.rel_days_number is None or not data.rel_days_relationto):
             raise ValidationError(self.error_messages['incomplete'])
+        elif data.status == 'relative' and data.rel_days_relationto in ORDER_CHOICES_KEYS and data.rel_days_relation == 'before':
+            raise ValidationError(_('A relative date in relation to an order can only be after the order has been placed'))
+
 
         return forms.MultiValueField.clean(self, value)
 

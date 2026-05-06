@@ -19,13 +19,13 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
 import pytest
 from django_scopes import scope
 
-from pretix.base.models import Event, Organizer
+from pretix.base.models import Event, Organizer, Order
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 
 TOKYO = ZoneInfo('Asia/Tokyo')
@@ -44,6 +44,7 @@ def event():
     )
     event.settings.timezone = "Asia/Tokyo"
     return event
+
 
 
 @pytest.mark.django_db
@@ -147,3 +148,25 @@ def test_unserialize():
 
     rdw = RelativeDateWrapper.from_string('RELDATE/minutes/60/date_from/')
     assert rdw.data == RelativeDate(days=0, time=None, base_date_name='date_from', minutes=60)
+
+@pytest.mark.django_db
+def test_relative_to_order(event):
+    with scope(organizer=event.organizer):
+        order_moment = datetime(2020, 3, 29, 18, 0, 0, tzinfo=TOKYO)
+
+        order = Order.objects.create(
+            code='FOO', event=event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
+            datetime=order_moment,
+            expires=order_moment + timedelta(days=10),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+            total=23, locale='en'
+        )
+
+        rdw = RelativeDateWrapper(RelativeDate(days=1, time=None, base_date_name='datetime', minutes=None))
+        assert rdw.datetime(order).astimezone(TOKYO) == datetime(2020, 3, 28, 18, 0, 0, tzinfo=TOKYO)
+        assert rdw.to_string() == 'RELDATE/1/-/datetime/'
+
+        rdw = RelativeDateWrapper(RelativeDate(days=1, time=None, base_date_name='datetime', minutes=None, is_after=True))
+        assert rdw.datetime(order).astimezone(TOKYO) == datetime(2020, 3, 30, 18, 0, 0, tzinfo=TOKYO)
+        assert rdw.to_string() == 'RELDATE/1/-/datetime/after'
