@@ -1079,3 +1079,18 @@ def test_event_edit_restrictions(client, event, organizer, user, team):
     assert _get_and_patch_event_export(user2_client, s2)
     assert _get_and_patch_event_export(team1_client, s2)
     assert _get_and_patch_event_export(user1_client, s2)
+
+
+@pytest.mark.django_db
+def test_event_checkinlist_patch(user_client, organizer, event, user, event_scheduled_export, clist):
+    event_scheduled_export.export_identifier = "checkinlistpdf"
+    event_scheduled_export.save()
+
+    resp = user_client.patch(
+        '/api/v1/organizers/{}/events/{}/scheduled_exports/{}/'.format(organizer.slug, event.slug, event_scheduled_export.id),
+        data={
+            "export_form_data": {"list": clist.pk},
+        },
+        format='json',
+    )
+    assert resp.status_code == 200

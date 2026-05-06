@@ -252,19 +252,6 @@ TEST_HISTORY_RES = {
 }
 
 
-@pytest.fixture
-def clist(event, item):
-    c = event.checkin_lists.create(name="Default", all_products=False)
-    c.limit_products.add(item)
-    return c
-
-
-@pytest.fixture
-def clist_all(event, item):
-    c = event.checkin_lists.create(name="Default", all_products=True)
-    return c
-
-
 @pytest.mark.django_db
 def test_list_list(token_client, organizer, event, clist, item, subevent, django_assert_num_queries):
     res = dict(TEST_LIST_RES)
