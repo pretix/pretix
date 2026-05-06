@@ -160,7 +160,7 @@ class OrderListExporter(MultiSheetListExporter):
 
     def _get_all_payment_methods(self, qs):
         pps = dict(get_all_payment_providers())
-        return sorted([(pp, pps[pp]) for pp in set(
+        return sorted([(pp, pps.get(pp, pp)) for pp in set(
             OrderPayment.objects.exclude(provider='free').filter(order__event__in=self.events).values_list(
                 'provider', flat=True
             ).distinct()
