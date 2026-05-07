@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-04-30 18:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"PO-Revision-Date: 2026-05-08 04:00+0000\n"
+"Last-Translator: corentin-spec <corentin@spectentaculaire.fr>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
 "fr/>\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -37884,7 +37884,7 @@ msgstr "Votre panier a été mis à jour."
 
 #: pretix/presale/views/cart.py:525 pretix/presale/views/cart.py:551
 msgid "Your cart is now empty."
-msgstr "Votre panier à été vidé."
+msgstr "Votre panier a été vidé."
 
 #: pretix/presale/views/cart.py:584
 msgid ""
