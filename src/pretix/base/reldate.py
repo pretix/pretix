@@ -21,7 +21,7 @@
 #
 import datetime
 from collections import namedtuple
-from typing import Union
+from typing import Tuple, Union
 from zoneinfo import ZoneInfo
 
 from dateutil import parser
@@ -42,6 +42,7 @@ EVENT_CHOICES = (
     ('presale_end', _('Presale end')),
 )
 
+# extend NO_BEFORE_VALUES in reldate.js if changed
 ORDER_CHOICES = (
     ('datetime', _('Moment of order')),
 )
