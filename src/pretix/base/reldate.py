@@ -71,20 +71,18 @@ class RelativeDateWrapper:
         :param reference:
         :return:
         """
-        from .models import SubEvent, Event, Order
+        from .models import Event, Order, SubEvent
 
         if self.data.base_date_name in ORDER_CHOICES_KEYS:
             if not isinstance(reference, Order):
                 raise ValueError('A order-based relative datetime choice must be used with an order object')
             event = reference.event
-            base_date = getattr(order, self.data.base_date_name)
+            base_date = getattr(reference, self.data.base_date_name)
         elif isinstance(reference, SubEvent):
             event = reference.event
-            base_date = (
-                    getattr(reference, self.data.base_date_name)
-                    or getattr(reference.event, self.data.base_date_name)
-                    or reference.date_from
-            )
+            base_date = (getattr(reference, self.data.base_date_name) or
+                         getattr(reference.event, self.data.base_date_name) or
+                         reference.date_from)
         elif isinstance(reference, Event):
             event = reference
             base_date = getattr(reference, self.data.base_date_name) or event.date_from
@@ -188,7 +186,7 @@ class RelativeDateWrapper:
                         minutes=None,
                         is_after=len(parts) > 4 and parts[4] == "after",
                     )
-            if data.base_date_name in [k[0] for k in ORDER_CHOICES] and parts[4] == "before":
+            if data.base_date_name in [k[0] for k in ORDER_CHOICES] and parts[4] != "after":
                 raise ValueError('ORDER_CHOICE: {} cannot be combined with "before"'.format(data.base_date_name))
             if data.base_date_name not in [k[0] for k in EVENT_CHOICES + ORDER_CHOICES]:
                 raise ValueError('{} is not a valid base date'.format(data.base_date_name))
@@ -568,7 +566,6 @@ class RelativeDateField(RelativeDateTimeField):
             raise ValidationError(self.error_messages['incomplete'])
         elif data.status == 'relative' and data.rel_days_relationto in ORDER_CHOICES_KEYS and data.rel_days_relation == 'before':
             raise ValidationError(_('A relative date in relation to an order can only be after the order has been placed'))
-
 
         return forms.MultiValueField.clean(self, value)
 

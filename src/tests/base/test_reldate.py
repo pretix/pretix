@@ -25,7 +25,7 @@ from zoneinfo import ZoneInfo
 import pytest
 from django_scopes import scope
 
-from pretix.base.models import Event, Organizer, Order
+from pretix.base.models import Event, Order, Organizer
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 
 TOKYO = ZoneInfo('Asia/Tokyo')
@@ -44,7 +44,6 @@ def event():
     )
     event.settings.timezone = "Asia/Tokyo"
     return event
-
 
 
 @pytest.mark.django_db
@@ -149,6 +148,7 @@ def test_unserialize():
     rdw = RelativeDateWrapper.from_string('RELDATE/minutes/60/date_from/')
     assert rdw.data == RelativeDate(days=0, time=None, base_date_name='date_from', minutes=60)
 
+
 @pytest.mark.django_db
 def test_relative_to_order(event):
     with scope(organizer=event.organizer):
@@ -166,6 +166,9 @@ def test_relative_to_order(event):
         rdw = RelativeDateWrapper(RelativeDate(days=1, time=None, base_date_name='datetime', minutes=None))
         assert rdw.datetime(order).astimezone(TOKYO) == datetime(2020, 3, 28, 18, 0, 0, tzinfo=TOKYO)
         assert rdw.to_string() == 'RELDATE/1/-/datetime/'
+        # this is expressible as a RelativeDate but the Wrapper should catch it as invalid when parsing
+        with pytest.raises(ValueError):
+            rdw.from_string(rdw.to_string())
 
         rdw = RelativeDateWrapper(RelativeDate(days=1, time=None, base_date_name='datetime', minutes=None, is_after=True))
         assert rdw.datetime(order).astimezone(TOKYO) == datetime(2020, 3, 30, 18, 0, 0, tzinfo=TOKYO)
