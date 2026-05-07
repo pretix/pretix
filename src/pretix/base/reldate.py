@@ -56,17 +56,45 @@ class RelativeDateWrapper:
     that the underlying data is either a fixed date or a number of days and a wall clock
     time to calculate the date based on a base point.
 
-    The base point can be the date_from, date_to, date_admission, presale_start or presale_end
-    attribute of an event or subevent, as well as a time of order.
+    The base point can be the ``date_from``, ``date_to``, ``date_admission``, ``presale_start``
+    or ``presale_end`` attribute of an event or subevent, as well as a ``datetime`` of an order.
     If the respective attribute is not set, ``date_from`` will be used.
     """
 
     def __init__(self, data: Union[datetime.datetime, RelativeDate]):
         self.data = data
 
-    def date(self, reference) -> datetime.date:
+    def _resolve_base_date(self, reference) -> Tuple[datetime.datetime, ZoneInfo]:
+        """
+
+        :param reference:
+        :return:
+        """
         from .models import SubEvent, Event, Order
 
+        if self.data.base_date_name in ORDER_CHOICES_KEYS:
+            if not isinstance(reference, Order):
+                raise ValueError('A order-based relative datetime choice must be used with an order object')
+            event = reference.event
+            base_date = getattr(order, self.data.base_date_name)
+        elif isinstance(reference, SubEvent):
+            event = reference.event
+            base_date = (
+                    getattr(reference, self.data.base_date_name)
+                    or getattr(reference.event, self.data.base_date_name)
+                    or reference.date_from
+            )
+        elif isinstance(reference, Event):
+            event = reference
+            base_date = getattr(reference, self.data.base_date_name) or event.date_from
+        else:
+            raise ValueError("Only event, subevent or order objects are supported")
+
+        tz = ZoneInfo(event.settings.timezone)
+
+        return base_date, tz
+
+    def date(self, reference) -> datetime.date:
         if isinstance(self.data, datetime.datetime):
             return self.data.date()
         elif isinstance(self.data, datetime.date):
@@ -75,27 +103,7 @@ class RelativeDateWrapper:
             if self.data.minutes is not None:
                 raise ValueError('A minute-based relative datetime can not be used as a date')
 
-            if self.data.base_date_name in ORDER_CHOICES_KEYS:
-                if not isinstance(reference, Order):
-                    raise ValueError('A order-based relative datetime choice must be used with an order object')
-                order = reference
-                event = order.event
-                base_date = getattr(order, self.data.base_date_name)
-            elif isinstance(reference, SubEvent):
-                subevent = reference
-                event = subevent
-                base_date = (
-                    getattr(subevent, self.data.base_date_name)
-                    or getattr(subevent.event, self.data.base_date_name)
-                    or subevent.date_from
-                )
-            elif isinstance(reference, Event):
-                event = reference
-                base_date = getattr(event, self.data.base_date_name) or event.date_from
-            else:
-                raise ValueError("Only event, subevent or order objects are supported")
-
-            tz = ZoneInfo(event.settings.timezone)
+            base_date, tz = self._resolve_base_date(reference)
 
             if self.data.is_after:
                 new_date = base_date.astimezone(tz) + datetime.timedelta(days=self.data.days)
@@ -104,32 +112,10 @@ class RelativeDateWrapper:
             return new_date.date()
 
     def datetime(self, reference) -> datetime.datetime:
-        from .models import SubEvent, Event, Order
-
         if isinstance(self.data, (datetime.datetime, datetime.date)):
             return self.data
         else:
-            if self.data.base_date_name in ORDER_CHOICES_KEYS:
-                if not isinstance(reference, Order):
-                    raise ValueError('A order-based relative datetime choice must be used with an order object')
-                order = reference
-                event = order.event
-                base_date = getattr(order, self.data.base_date_name)
-            elif isinstance(reference, SubEvent):
-                subevent = reference
-                event = subevent
-                base_date = (
-                    getattr(subevent, self.data.base_date_name)
-                    or getattr(subevent.event, self.data.base_date_name)
-                    or subevent.date_from
-                )
-            elif isinstance(reference, Event):
-                event = reference
-                base_date = getattr(event, self.data.base_date_name) or event.date_from
-            else:
-                raise ValueError("Only event, subevent or order objects are supported")
-
-            tz = ZoneInfo(event.settings.timezone)
+            base_date, tz = self._resolve_base_date(reference)
 
             if self.data.minutes is not None:
                 if self.data.is_after:
@@ -201,6 +187,8 @@ class RelativeDateWrapper:
                         minutes=None,
                         is_after=len(parts) > 4 and parts[4] == "after",
                     )
+            if data.base_date_name in [k[0] for k in ORDER_CHOICES] and parts[4] == "before":
+                raise ValueError('ORDER_CHOICE: {} cannot be combined with "before"'.format(data.base_date_name))
             if data.base_date_name not in [k[0] for k in EVENT_CHOICES + ORDER_CHOICES]:
                 raise ValueError('{} is not a valid base date'.format(data.base_date_name))
         else:
