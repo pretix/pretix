@@ -1,9 +1,9 @@
 import { nextTick, type InjectionKey } from 'vue'
 import { createStore } from '~/lib/store'
-import { fetchProductList, submitCart, checkAsyncTask, ApiError } from '~/api'
+import { fetchProductList, submitCart, checkAsyncTask, ApiError, createCart } from '~/api'
 import type { CartResponse } from '~/api'
 import { STRINGS } from '~/i18n'
-import { setCookie, getCookie, makeid } from '~/utils'
+import { setCookie, getCookie, makeid, siteIsSecure } from '~/utils'
 import type { Category, DayEntry, EventEntry, LightboxState, MetaFilterField, WidgetData } from '~/types'
 
 export const globalWidgetId = makeid(16)
@@ -28,6 +28,7 @@ export function createWidgetStore (config: {
 	variations?: string | null
 	widgetData: WidgetData
 	htmlId: string
+	keepCart: boolean
 	// Button-specific
 	buttonItems?: { item: string; count: string }[]
 	buttonText?: string
@@ -54,6 +55,7 @@ export function createWidgetStore (config: {
 			widgetData: config.widgetData,
 			widgetId: `pretix-widget-${globalWidgetId}`,
 			htmlId: config.htmlId,
+			keepCart: config.keepCart,
 
 			// View state
 			view: null as 'event' | 'events' | 'weeks' | 'days' | null,
@@ -74,7 +76,7 @@ export function createWidgetStore (config: {
 			displayAddToCart: false,
 			waitingListEnabled: false,
 			showVariationsExpanded: !!config.variations,
-			cartId: null as string | null,
+			_cartId: null as string | null,
 			cartExists: false,
 			vouchersExist: false,
 			hasSeatingPlan: false,
@@ -123,13 +125,18 @@ export function createWidgetStore (config: {
 		getters: {
 			useIframe (): boolean {
 				if ((window as any).crossOriginIsolated === true) return false
-				return !this.disableIframe && (this.skipSsl || /https.*/.test(document.location.protocol))
+				return !this.disableIframe && (this.skipSsl || siteIsSecure())
 			},
 			cookieName (): string {
 				return `pretix_widget_${this.targetUrl.replace(/[^a-zA-Z0-9]+/g, '_')}`
 			},
-			cartIdFromCookie (): string | null {
-				return getCookie(this.cookieName) ?? null
+			cartId (): string | null {
+				if (this._cartId) {
+					return this._cartId
+				}
+				if (this.keepCart) {
+					return getCookie(this.cookieName) ?? null
+				}
 			},
 			widgetDataJson (): string {
 				const cloned = { ...this.widgetData }
@@ -187,12 +194,12 @@ export function createWidgetStore (config: {
 				}
 
 				let formTarget = `${this.targetUrl}w/${globalWidgetId}/cart/add?iframe=1&next=${encodeURIComponent(checkoutUrl)}`
-				if (this.cartIdFromCookie) {
-					formTarget += `&take_cart_id=${this.cartIdFromCookie}`
+				if (this.cartId) {
+					formTarget += `&take_cart_id=${this.cartId}`
 				}
 				formTarget += this.consentParameter
 				return formTarget
-			},
+			}
 		},
 		actions: {
 			triggerLoadCallback () {
@@ -219,8 +226,7 @@ export function createWidgetStore (config: {
 				if (this.variationFilter) url += `&variations=${encodeURIComponent(this.variationFilter)}`
 				if (this.voucherCode) url += `&voucher=${encodeURIComponent(this.voucherCode)}`
 
-				const cartIdCookie = this.cartIdFromCookie
-				if (cartIdCookie) url += `&cart_id=${encodeURIComponent(cartIdCookie)}`
+				if (this.cartId) url += `&cart_id=${encodeURIComponent(this.cartId)}`
 				if (this.date !== null) {
 					url += `&date=${this.date.substring(0, 7)}`
 				} else if (this.week !== null) {
@@ -291,7 +297,6 @@ export function createWidgetStore (config: {
 						this.displayAddToCart = data.display_add_to_cart ?? false
 						this.waitingListEnabled = data.waiting_list_enabled ?? false
 						this.showVariationsExpanded = data.show_variations_expanded || !!this.variationFilter
-						this.cartId = cartIdCookie
 						this.cartExists = data.cart_exists ?? false
 						this.vouchersExist = data.vouchers_exist ?? false
 						this.hasSeatingPlan = data.has_seating_plan ?? false
@@ -335,12 +340,13 @@ export function createWidgetStore (config: {
 						this.loading--
 						this.triggerLoadCallback()
 					}
+					throw e
 				}
 			},
 			getVoucherFormTarget (): string {
 				let formTarget = `${this.targetUrl}w/${globalWidgetId}/redeem?iframe=1&locale=${LANG}`
-				if (this.cartIdFromCookie) {
-					formTarget += `&take_cart_id=${this.cartIdFromCookie}`
+				if (this.cartId) {
+					formTarget += `&take_cart_id=${this.cartId}`
 				}
 				if (this.subevent) {
 					formTarget += `&subevent=${this.subevent}`
@@ -357,8 +363,7 @@ export function createWidgetStore (config: {
 			handleCartResponse (data: CartResponse) {
 				if (data.redirect) {
 					if (data.cart_id) {
-						this.cartId = data.cart_id
-						setCookie(this.cookieName, data.cart_id, 30)
+						this.setCartId(data.cart_id)
 					}
 
 					let url = data.redirect
@@ -448,6 +453,20 @@ export function createWidgetStore (config: {
 					this.overlay.frameLoading = false
 				}
 			},
+			async createCart () {
+				const url = `${this.targetUrl}w/${globalWidgetId}/cart/create?ajax=1`
+
+				try {
+					this.overlay.frameLoading = true
+					const data = await createCart(url)
+					this.setCartId(data.cart_id)
+				} catch (e) {
+					if (e instanceof ApiError && (e.status === 200 || (e.status >= 400 && e.status < 500))) {
+						this.overlay.errorMessage = STRINGS.cart_error
+						this.overlay.frameLoading = false
+					}
+				}
+			},
 			redeem (voucherCode: string, event?: Event) {
 				if (!this.useIframe) return
 				if (event) event.preventDefault()
@@ -462,15 +481,24 @@ export function createWidgetStore (config: {
 					window.open(redirectUrl)
 				}
 			},
-			resume () {
+			async resume () {
+				if (!this.cartId && this.keepCart) {
+					// create an empty cart whose id we can persist
+					await this.createCart()
+				}
 				let redirectUrl = `${this.targetUrl}w/${globalWidgetId}/`
+				if (this.subevent && this.isButton && this.items.length === 0) {
+					// button with subevent but no items
+					redirectUrl += `${this.subevent}/`
+				}
 				if (this.subevent && !this.cartId) {
 					// button with subevent but no items
 					redirectUrl += `${this.subevent}/`
 				}
 				redirectUrl += `?iframe=1&locale=${LANG}`
 				if (this.cartId) {
-					redirectUrl += `&take_cart_id=${this.cartId}`
+					// ajax to make sure the cart-id is used, even if the cart is currently empty
+					redirectUrl += `&take_cart_id=${this.cartId}&ajax=1`
 				}
 				if (this.widgetData) {
 					redirectUrl += `&widget_data=${encodeURIComponent(this.widgetDataJson)}`
@@ -523,6 +551,10 @@ export function createWidgetStore (config: {
 				} else {
 					window.open(redirectUrl)
 				}
+			},
+			setCartId (cartId: string) {
+				this._cartId = cartId
+				setCookie(this.cookieName, cartId, 30)
 			}
 		}
 	})

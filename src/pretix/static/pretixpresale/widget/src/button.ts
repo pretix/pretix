@@ -39,7 +39,8 @@ export function createButtonInstance (element: Element, htmlId?: string): App {
 		htmlId: htmlId || element.id || makeid(16),
 		isButton: true,
 		buttonItems,
-		buttonText: element.innerHTML
+		buttonText: element.innerHTML,
+		keepCart: 'keep-cart' in element.attributes || buttonItems.length > 0,
 	})
 
 	const observer = new MutationObserver((mutationList) => {

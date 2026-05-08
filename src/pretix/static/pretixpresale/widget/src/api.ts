@@ -83,3 +83,11 @@ export async function checkAsyncTask (url: string) {
 	}
 	return await response.json() as CartResponse
 }
+
+export async function createCart (url: string) {
+	const response = await fetch(url)
+	if (!response.ok) {
+		throw new ApiError(response.status, response.url)
+	}
+	return await response.json() as CartResponse
+}

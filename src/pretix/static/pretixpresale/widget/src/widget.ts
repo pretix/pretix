@@ -38,6 +38,7 @@ export function createWidgetInstance (element: Element, htmlId?: string): App {
 		variations: element.attributes.variations?.value || null,
 		widgetData,
 		htmlId: htmlId || element.id || makeid(16),
+		keepCart: true
 	})
 
 	const observer = new MutationObserver((mutationList) => {

@@ -92,6 +92,7 @@ function openWidget (
 		isButton: true,
 		buttonItems: items ?? [],
 		buttonText: '',
+		keepCart: true
 	})
 
 	const app = createApp(ButtonComponent)
