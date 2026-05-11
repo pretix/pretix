@@ -442,7 +442,7 @@ class AttendeeState(ImportColumn):
 
     @property
     def verbose_name(self):
-        return _('Attendee address') + ': ' + _('State')
+        return _('Attendee address') + ': ' + pgettext('address', 'State')
 
     def clean(self, value, previous_values):
         if value:
