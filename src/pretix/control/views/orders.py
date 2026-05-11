@@ -554,6 +554,9 @@ class OrderDetail(OrderView):
         ctx['download_buttons'] = self.download_buttons
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = self.order.pending_sum
+        ctx['uncancelled_invoice'] = self.order.invoices.exclude(
+            Exists(self.order.invoices.filter(refers=OuterRef('pk'), is_cancellation=True))
+        ).exclude(is_cancellation=True).first()
 
         return ctx
 
