@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-03-27 09:03+0000\n"
-"Last-Translator: Ivano Voghera <ivano.voghera@gmail.com>\n"
+"PO-Revision-Date: 2026-05-12 04:00+0000\n"
+"Last-Translator: Stefano Campus <stefano.campus@regione.piemonte.it>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8598,6 +8598,8 @@ msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
 msgstr ""
+"Consente di assegnare a qualcuno (compreso se stessi) autorizzazioni "
+"aggiuntive."
 
 #: pretix/base/permissions.py:298 pretix/control/navigation.py:608
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
@@ -8609,13 +8611,14 @@ msgstr "Indirizzi Email (file di testo)"
 #: pretix/base/permissions.py:310 pretix/control/navigation.py:666
 #: pretix/control/navigation.py:673
 msgid "Devices"
-msgstr ""
+msgstr "Dispositivi"
 
 #: pretix/base/permissions.py:316
 msgid ""
 "Includes the ability to give access to events and data oneself does not have "
 "access to."
 msgstr ""
+"Consente di concedere l'accesso a eventi e dati a cui non si ha accesso."
 
 #: pretix/base/permissions.py:321
 #, fuzzy
@@ -8747,6 +8750,8 @@ msgid ""
 "Some products can no longer be purchased and have been removed from your "
 "cart for the following reason: %s"
 msgstr ""
+"Alcuni prodotti non sono più disponibili e sono stati rimossi dal tuo "
+"carrello per il seguente motivo: %s"
 
 #: pretix/base/services/cart.py:117
 msgid ""
@@ -10060,6 +10065,8 @@ msgid ""
 "For business customers, compute taxes based on net total. For individuals, "
 "use line-based rounding"
 msgstr ""
+"Per i clienti aziendali, calcolare le imposte sul totale al netto. Per i "
+"privati, applicare l'arrotondamento per singola voce"
 
 #: pretix/base/settings.py:85
 msgid "Compute taxes based on net total with stable gross prices"
@@ -10096,6 +10103,8 @@ msgstr ""
 #: pretix/base/settings.py:190
 msgid "Require login to access order confirmation pages"
 msgstr ""
+"È necessario effettuare l'accesso per visualizzare le pagine di conferma "
+"dell'ordine"
 
 #: pretix/base/settings.py:191
 msgid ""
