@@ -721,8 +721,29 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         if len(op_candidates_filtered) == 0:
             # None of the ops is valid today or has the correct product, too bad! We could just error out here, but
             # instead we just continue with *any* product and have it rejected by the check in perform_checkin.
-            # This has the advantage of a better error message.
-            op_candidates = [op_candidates[0]]
+            # To improve the error message, we select the op that will "work next" or - if none matches - "worked last".
+            now_dt = now()
+            op_candidate = None
+            for op in op_candidates:
+                if (
+                    op.valid_from and op.valid_from > now_dt and
+                    (not op_candidate or op.valid_from < op_candidate.valid_from)
+                ):
+                    op_candidate = op
+
+            if not op_candidate:
+                # no candidate in the future, get closest in the past
+                for op in op_candidates:
+                    if (
+                        op.valid_until and op.valid_until < now_dt and
+                        (not op_candidate or op.valid_from > op_candidate.valid_from)
+                    ):
+                        op_candidate = op
+
+            if not op_candidate:
+                op_candidate = op_candidates[0]
+
+            op_candidates = [op_candidate]
         elif len(op_candidates_filtered) > 1:
             # It's still ambiguous, we'll error out.
             # We choose the first match (regardless of product) for the logging since it's most likely to be the
