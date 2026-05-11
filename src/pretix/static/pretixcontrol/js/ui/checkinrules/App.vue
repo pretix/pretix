@@ -75,10 +75,14 @@ const missingItems = computed(() => {
 			li.active(role="presentation")
 				a(href="#rules-edit", role="tab", data-toggle="tab")
 					span.fa.fa-edit
+					// space between icon and string
+					|
 					| {{ gettext("Edit") }}
 			li(role="presentation")
 				a(href="#rules-viz", role="tab", data-toggle="tab")
 					span.fa.fa-eye
+					// space between icon and string
+					|
 					| {{ gettext("Visualize") }}
 
 		//- Tab panes

@@ -17,7 +17,7 @@ export const rules = ref<any>({})
 // grab rules from hidden input
 const rulesInput = document.querySelector<HTMLInputElement>('#id_rules')
 if (rulesInput?.value) {
-	rules.value = JSON.parse(rulesInput.value)
+	rules.value = JSON.parse(rulesInput.value) ?? {}
 }
 
 // sync back to hidden input
