@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-04-20 08:07+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2026-05-11 09:00+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8059,10 +8059,8 @@ msgstr ""
 "2x アドオン2"
 
 #: pretix/base/pdf.py:383
-#, fuzzy
-#| msgid "List of Add-Ons"
 msgid "List of Checked-In Add-Ons"
-msgstr "アドオンのリスト"
+msgstr "チェックイン済みアドオン一覧"
 
 #: pretix/base/pdf.py:390 pretix/control/forms/filter.py:1537
 #: pretix/control/forms/filter.py:1539
@@ -9019,10 +9017,8 @@ msgid "Czech National Bank"
 msgstr "チェコ国立銀行"
 
 #: pretix/base/services/currencies.py:41
-#, fuzzy
-#| msgid "Czech National Bank"
 msgid "National Bank of Poland"
-msgstr "チェコ国立銀行"
+msgstr "ポーランド国立銀行"
 
 #: pretix/base/services/export.py:95 pretix/base/services/export.py:155
 msgid ""
@@ -10068,14 +10064,10 @@ msgid ""
 msgstr "チェコ国立銀行の日次レートに基づいて、請求書の金額がCZK以外の場合。"
 
 #: pretix/base/settings.py:577 pretix/base/settings.py:586
-#, fuzzy
-#| msgid ""
-#| "Based on Czech National Bank daily rates, whenever the invoice amount is "
-#| "not in CZK."
 msgid ""
 "Based on National Bank of Poland daily rates, whenever the invoice amount is "
 "not in PLN."
-msgstr "チェコ国立銀行の日次レートに基づいて、請求書の金額がCZK以外の場合。"
+msgstr "ポーランド国立銀行の日次レートに基づいて、請求書の金額がPLN以外の場合。"
 
 #: pretix/base/settings.py:597
 msgid "Require invoice address"
@@ -15956,10 +15948,8 @@ msgid "Allow to overbook quotas when performing this operation"
 msgstr "この操作を実行する際にクォータの超過予約を許可する"
 
 #: pretix/control/forms/orders.py:335
-#, fuzzy
-#| msgid "Number of orders"
 msgid "Number of products to add"
-msgstr "注文数"
+msgstr "追加する商品の数"
 
 #: pretix/control/forms/orders.py:344
 msgid "Add-on to"
@@ -15991,10 +15981,8 @@ msgstr ""
 "さい"
 
 #: pretix/control/forms/orders.py:441
-#, fuzzy
-#| msgid "You can not select the same seat multiple times."
 msgid "You can not choose a seat when adding multiple products at once."
-msgstr "同じ席を複数回選択することはできません。"
+msgstr "複数の商品を同時に追加する場合、座席を選択することはできません。"
 
 #: pretix/control/forms/orders.py:478 pretix/control/forms/orders.py:482
 #: pretix/control/forms/orders.py:510 pretix/control/forms/orders.py:552
@@ -16596,7 +16584,7 @@ msgstr "週末の日"
 #: pretix/control/forms/subevents.py:106
 msgctxt "subevent"
 msgid "Skip dates that overlap with any existing date"
-msgstr ""
+msgstr "既存の日付と重複する日付をスキップする"
 
 #: pretix/control/forms/subevents.py:109
 msgctxt "subevent"
@@ -16606,6 +16594,9 @@ msgid ""
 "This respects even inactive dates and works best if all dates have both a "
 "start and end time."
 msgstr ""
+"これは、すべての日付が同じ場所で行われ、既存の特別イベントと競合して重複した"
+"日付が作成されない場合に有用です。これは、非アクティブな日付さえも尊重し、す"
+"べての日付に開始時刻と終了時刻の両方がある場合に最も効果的です。"
 
 #: pretix/control/forms/subevents.py:128
 msgid "Keep the current values"
@@ -29425,7 +29416,7 @@ msgstr "一度に10万以上の日付を作成しないでください。"
 
 #: pretix/control/views/subevents.py:966
 msgid "All dates would be skipped because they conflict with existing dates."
-msgstr ""
+msgstr "すべての日付は、既存の日付と衝突するため、スキップされます。"
 
 #: pretix/control/views/subevents.py:1102
 #, python-brace-format
