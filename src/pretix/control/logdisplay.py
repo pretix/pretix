@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from collections import defaultdict
+from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
@@ -248,7 +249,7 @@ class OrderValidFromChanged(OrderChangeLogEntryType):
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         return _('The validity start date for position #{posid} has been changed to {value}.').format(
             posid=data.get('positionid', '?'),
-            value=date_format(dateutil.parser.parse(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get(
+            value=date_format(datetime.fromisoformat(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get(
                 'new_value') else '–'
         )
 
