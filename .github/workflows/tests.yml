@@ -72,7 +72,7 @@ jobs:
         run: make all compress
       - name: Run tests
         working-directory: ./src
-        run: PRETIX_CONFIG_FILE=tests/ci_${{ matrix.database }}.cfg py.test -n 3 -p no:sugar --cov=./ --cov-report=xml tests --maxfail=100
+        run: PRETIX_CONFIG_FILE=tests/ci_${{ matrix.database }}.cfg py.test -n 3 -p no:sugar --cov=./ --cov-report=xml tests --ignore=tests/e2e --maxfail=100
       - name: Run concurrency tests
         working-directory: ./src
         run: PRETIX_CONFIG_FILE=tests/ci_${{ matrix.database }}.cfg py.test tests/concurrency_tests/ --reuse-db
@@ -84,3 +84,46 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
         if: matrix.database == 'postgres' && matrix.python-version == '3.13'
+  e2e:
+    runs-on: ubuntu-22.04
+    name: E2E Tests
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: pretix
+        options: >-
+          --health-cmd "pg_isready -U postgres -d pretix"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install system dependencies
+        run: sudo apt update && sudo apt install -y gettext
+      - name: Install Python dependencies
+        run: pip3 install uv && uv pip install --system -e ".[dev]" psycopg2-binary
+      - name: Install JS dependencies
+        working-directory: ./src
+        run: make npminstall
+      - name: Compile
+        working-directory: ./src
+        run: make all compress
+      - name: Install Playwright browsers
+        run: npx playwright install
+      - name: Run E2E tests
+        working-directory: ./src
+        run: PRETIX_CONFIG_FILE=tests/ci_postgres.cfg py.test tests/e2e/ -v --maxfail=10

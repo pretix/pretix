@@ -1,355 +1,365 @@
-<template>
-    <div v-bind:class="classObject">
-        <div class="btn-group pull-right">
-            <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="duplicate"
-                  v-if="level > 0" data-toggle="tooltip" :title="texts.duplicate">
-              <span class="fa fa-copy"></span>
-            </button>
-            <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="wrapWithOR">OR
-            </button>
-            <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="wrapWithAND">AND
-            </button>
-            <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="cutOut"
-                    v-if="operands && operands.length === 1 && (operator === 'or' || operator === 'and')"><span
-                    class="fa fa-cut"></span></button>
-            <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="remove"
-                    v-if="level > 0"><span class="fa fa-trash"></span></button>
-        </div>
-        <select v-bind:value="variable" v-on:input="setVariable" required class="form-control">
-            <option value="and">{{texts.and}}</option>
-            <option value="or">{{texts.or}}</option>
-            <option v-for="(v, name) in vars" :value="name">{{ v.label }}</option>
-        </select>
-        <select v-bind:value="operator" v-on:input="setOperator" required class="form-control"
-                v-if="operator !== 'or' && operator !== 'and' && vartype !== 'int_by_datetime'">
-            <option></option>
-            <option v-for="(v, name) in operators" :value="name">{{ v.label }}</option>
-        </select>
-        <select v-bind:value="timeType" v-on:input="setTimeType" required class="form-control"
-                v-if="vartype === 'datetime' || vartype === 'int_by_datetime'">
-            <option value="date_from">{{texts.date_from}}</option>
-            <option value="date_to">{{texts.date_to}}</option>
-            <option value="date_admission">{{texts.date_admission}}</option>
-            <option value="custom">{{texts.date_custom}}</option>
-            <option value="customtime">{{texts.date_customtime}}</option>
-        </select>
-        <datetimefield v-if="(vartype === 'datetime' || vartype === 'int_by_datetime') && timeType === 'custom'" :value="timeValue"
-                       v-on:input="setTimeValue"></datetimefield>
-        <timefield v-if="(vartype === 'datetime' || vartype === 'int_by_datetime') && timeType === 'customtime'" :value="timeValue"
-                   v-on:input="setTimeValue"></timefield>
-        <input class="form-control" required type="number"
-               v-if="vartype === 'datetime' && timeType && timeType !== 'customtime' && timeType !== 'custom'" v-bind:value="timeTolerance"
-               v-on:input="setTimeTolerance" :placeholder="texts.date_tolerance">
-        <select v-bind:value="operator" v-on:input="setOperator" required class="form-control"
-                v-if="vartype === 'int_by_datetime'">
-          <option></option>
-          <option v-for="(v, name) in operators" :value="name">{{ v.label }}</option>
-        </select>
-        <input class="form-control" required type="number" v-if="(vartype === 'int' || vartype === 'int_by_datetime') && cardinality > 1"
-               v-bind:value="rightoperand" v-on:input="setRightOperandNumber">
-        <lookup-select2 required v-if="vartype === 'product' && operator === 'inList'" :multiple="true"
-                        :value="rightoperand" v-on:input="setRightOperandProductList"
-                        :url="productSelectURL"></lookup-select2>
-        <lookup-select2 required v-if="vartype === 'variation' && operator === 'inList'" :multiple="true"
-                        :value="rightoperand" v-on:input="setRightOperandVariationList"
-                        :url="variationSelectURL"></lookup-select2>
-        <lookup-select2 required v-if="vartype === 'gate' && operator === 'inList'" :multiple="true"
-                        :value="rightoperand" v-on:input="setRightOperandGateList"
-                        :url="gateSelectURL"></lookup-select2>
-        <select required v-if="vartype === 'enum_entry_status' && operator === '=='"
-                :value="rightoperand" v-on:input="setRightOperandEnum" class="form-control">
-          <option value="absent">{{ texts.status_absent }}</option>
-          <option value="present">{{ texts.status_present }}</option>
-        </select>
-        <div class="checkin-rule-childrules" v-if="operator === 'or' || operator === 'and'">
-            <div v-for="(op, opi) in operands">
-                <checkin-rule :rule="op" :index="opi" :level="level + 1" v-if="typeof op === 'object'"></checkin-rule>
-            </div>
-            <button type="button" class="checkin-rule-addchild btn btn-xs btn-default" @click.prevent="addOperand"><span
-                    class="fa fa-plus-circle"></span> {{ texts.condition_add }}
-            </button>
-        </div>
-    </div>
-</template>
-<script>
-  export default {
-    components: {
-      LookupSelect2: LookupSelect2.default,
-      Datetimefield: Datetimefield.default,
-      Timefield: Timefield.default,
-    },
-    props: {
-      rule: Object,
-      level: Number,
-      index: Number,
-    },
-    computed: {
-      texts: function () {
-        return this.$root.texts;
-      },
-      variable: function () {
-        var op = this.operator;
-        if (op === "and" || op === "or") {
-          return op;
-        } else if (this.rule[op] && this.rule[op][0]) {
-          if (this.rule[op][0]["entries_since"]) {
-            return "entries_since";
-          }
-          if (this.rule[op][0]["entries_before"]) {
-            return "entries_before";
-          }
-          if (this.rule[op][0]["entries_days_since"]) {
-            return "entries_days_since";
-          }
-          if (this.rule[op][0]["entries_days_before"]) {
-            return "entries_days_before";
-          }
-          return this.rule[op][0]["var"];
-        } else {
-          return null;
-        }
-      },
-      rightoperand: function () {
-        var op = this.operator;
-        if (op === "and" || op === "or") {
-          return null;
-        } else if (this.rule[op] && typeof this.rule[op][1] !== "undefined") {
-          return this.rule[op][1];
-        } else {
-          return null;
-        }
-      },
-      operator: function () {
-        return Object.keys(this.rule)[0];
-      },
-      operands: function () {
-        return this.rule[this.operator];
-      },
-      classObject: function () {
-        var c = {
-          'checkin-rule': true
-        };
-        c['checkin-rule-' + this.variable] = true;
-        return c;
-      },
-      vartype: function () {
-        if (this.variable && this.$root.VARS[this.variable]) {
-          return this.$root.VARS[this.variable]['type'];
-        }
-      },
-      timeType: function () {
-        if (this.vartype === 'int_by_datetime') {
-          if (this.rule[this.operator][0][this.variable] && this.rule[this.operator][0][this.variable][0]['buildTime']) {
-            return this.rule[this.operator][0][this.variable][0]['buildTime'][0];
-          }
-        } else if (this.rightoperand && this.rightoperand['buildTime']) {
-          return this.rightoperand['buildTime'][0];
-        }
-      },
-      timeTolerance: function () {
-        var op = this.operator;
-        if ((op === "isBefore" || op === "isAfter") && this.rule[op] && typeof this.rule[op][2] !== "undefined") {
-          return this.rule[op][2];
-        } else {
-          return null;
-        }
-      },
-      timeValue: function () {
-        if (this.vartype === 'int_by_datetime') {
-          if (this.rule[this.operator][0][this.variable][0]['buildTime']) {
-            return this.rule[this.operator][0][this.variable][0]['buildTime'][1];
-          }
-        } else if (this.rightoperand && this.rightoperand['buildTime']) {
-          return this.rightoperand['buildTime'][1];
-        }
-      },
-      cardinality: function () {
-        if (this.vartype && this.$root.TYPEOPS[this.vartype] && this.$root.TYPEOPS[this.vartype][this.operator]) {
-          return this.$root.TYPEOPS[this.vartype][this.operator]['cardinality'];
-        }
-      },
-      operators: function () {
-        return this.$root.TYPEOPS[this.vartype];
-      },
-      productSelectURL: function () {
-        return $("#product-select2").text();
-      },
-      variationSelectURL: function () {
-        return $("#variations-select2").text();
-      },
-      gateSelectURL: function () {
-        return $("#gates-select2").text();
-      },
-      vars: function () {
-        return this.$root.VARS;
-      },
-    },
-    methods: {
-      setVariable: function (event) {
-        var current_op = Object.keys(this.rule)[0];
-        var current_val = this.rule[current_op];
+<script setup lang="ts">
+/* eslint-disable vue/no-mutating-props */
+import { computed } from 'vue'
+import { TEXTS, VARS, TYPEOPS } from './constants'
+import { productSelectURL, variationSelectURL, gateSelectURL } from './django-interop'
+import LookupSelect2 from './lookup-select2.vue'
+import Datetimefield from './datetimefield.vue'
+import Timefield from './timefield.vue'
 
-        if (event.target.value === "and" || event.target.value === "or") {
-          if (current_val[0] && current_val[0]["var"]) {
-            current_val = [];
-          }
-          this.$set(this.rule, event.target.value, current_val);
-          this.$delete(this.rule, current_op);
-        } else {
-          if (current_val !== "and" && current_val !== "or" && current_val[0] && this.$root.VARS[event.target.value]['type'] === this.vartype) {
-            if (this.vartype === "int_by_datetime") {
-              var current_data = this.rule[current_op][0][this.variable];
-              var new_lhs = {};
-              new_lhs[event.target.value] = JSON.parse(JSON.stringify(current_data));
-              this.$set(this.rule[current_op], 0, new_lhs);
-            } else {
-              this.$set(this.rule[current_op][0], "var", event.target.value);
-            }
-          } else if (this.$root.VARS[event.target.value]['type'] === 'int_by_datetime') {
-            this.$delete(this.rule, current_op);
-            var o = {};
-            o[event.target.value] = [{"buildTime": [null, null]}]
-            this.$set(this.rule, "!!", [o]);
-          } else {
-            this.$delete(this.rule, current_op);
-            this.$set(this.rule, "!!", [{"var": event.target.value}]);
-          }
-        }
-      },
-      setOperator: function (event) {
-        var current_op = Object.keys(this.rule)[0];
-        var current_val = this.rule[current_op];
-        this.$delete(this.rule, current_op);
-        this.$set(this.rule, event.target.value, current_val);
-      },
-      setRightOperandNumber: function (event) {
-        if (this.rule[this.operator].length === 1) {
-          this.rule[this.operator].push(parseInt(event.target.value));
-        } else {
-          this.$set(this.rule[this.operator], 1, parseInt(event.target.value));
-        }
-      },
-      setTimeTolerance: function (event) {
-        if (this.rule[this.operator].length === 2) {
-          this.rule[this.operator].push(parseInt(event.target.value));
-        } else {
-          this.$set(this.rule[this.operator], 2, parseInt(event.target.value));
-        }
-      },
-      setTimeType: function (event) {
-        var time = {
-          "buildTime": [event.target.value]
-        };
-        if (this.vartype === "int_by_datetime") {
-          this.$set(this.rule[this.operator][0][this.variable], 0, time);
-        } else {
-          if (this.rule[this.operator].length === 1) {
-            this.rule[this.operator].push(time);
-          } else {
-            this.$set(this.rule[this.operator], 1, time);
-          }
-          if (event.target.value === "custom") {
-            this.$set(this.rule[this.operator], 2, 0);
-          }
-        }
-      },
-      setTimeValue: function (val) {
-        if (this.vartype === "int_by_datetime") {
-          this.$set(this.rule[this.operator][0][this.variable][0]["buildTime"], 1, val);
-        } else {
-          this.$set(this.rule[this.operator][1]["buildTime"], 1, val);
-        }
-      },
-      setRightOperandProductList: function (val) {
-        var products = {
-          "objectList": []
-        };
-        for (var i = 0; i < val.length; i++) {
-          products["objectList"].push({
-            "lookup": [
-              "product",
-              val[i].id,
-              val[i].text
-            ]
-          });
-        }
-        if (this.rule[this.operator].length === 1) {
-          this.rule[this.operator].push(products);
-        } else {
-          this.$set(this.rule[this.operator], 1, products);
-        }
-      },
-      setRightOperandVariationList: function (val) {
-        var products = {
-          "objectList": []
-        };
-        for (var i = 0; i < val.length; i++) {
-          products["objectList"].push({
-            "lookup": [
-              "variation",
-              val[i].id,
-              val[i].text
-            ]
-          });
-        }
-        if (this.rule[this.operator].length === 1) {
-          this.rule[this.operator].push(products);
-        } else {
-          this.$set(this.rule[this.operator], 1, products);
-        }
-      },
-      setRightOperandGateList: function (val) {
-        var products = {
-          "objectList": []
-        };
-        for (var i = 0; i < val.length; i++) {
-          products["objectList"].push({
-            "lookup": [
-              "gate",
-              val[i].id,
-              val[i].text
-            ]
-          });
-        }
-        if (this.rule[this.operator].length === 1) {
-          this.rule[this.operator].push(products);
-        } else {
-          this.$set(this.rule[this.operator], 1, products);
-        }
-      },
-      setRightOperandEnum: function (event) {
-        if (this.rule[this.operator].length === 1) {
-          this.rule[this.operator].push(event.target.value);
-        } else {
-          this.$set(this.rule[this.operator], 1, event.target.value);
-        }
-      },
-      addOperand: function () {
-        this.rule[this.operator].push({"": []});
-      },
-      wrapWithOR: function () {
-        var r = JSON.parse(JSON.stringify(this.rule));
-        this.$delete(this.rule, this.operator);
-        this.$set(this.rule, "or", [r]);
-      },
-      wrapWithAND: function () {
-        var r = JSON.parse(JSON.stringify(this.rule));
-        this.$delete(this.rule, this.operator);
-        this.$set(this.rule, "and", [r]);
-      },
-      cutOut: function () {
-        var cop = Object.keys(this.operands[0])[0];
-        var r = this.operands[0][cop];
-        this.$delete(this.rule, this.operator);
-        this.$set(this.rule, cop, r);
-      },
-      remove: function () {
-        this.$parent.rule[this.$parent.operator].splice(this.index, 1);
-      },
-      duplicate: function () {
-        var r = JSON.parse(JSON.stringify(this.rule));
-        this.$parent.rule[this.$parent.operator].splice(this.index, 0, r);
-      },
-    }
-  }
+const props = defineProps<{
+	rule: any
+	level: number
+	index: number
+}>()
+
+const emit = defineEmits<{
+	remove: []
+	duplicate: []
+}>()
+
+const operator = computed(() => Object.keys(props.rule)[0])
+const operands = computed(() => props.rule[operator.value])
+
+const variable = computed(() => {
+	const op = operator.value
+	if (op === 'and' || op === 'or') {
+		return op
+	} else if (props.rule[op]?.[0]) {
+		if (props.rule[op][0]['entries_since']) return 'entries_since'
+		if (props.rule[op][0]['entries_before']) return 'entries_before'
+		if (props.rule[op][0]['entries_days_since']) return 'entries_days_since'
+		if (props.rule[op][0]['entries_days_before']) return 'entries_days_before'
+		return props.rule[op][0]['var']
+	}
+	return null
+})
+
+const rightoperand = computed(() => {
+	const op = operator.value
+	if (op === 'and' || op === 'or') return null
+	return props.rule[op]?.[1] ?? null
+})
+
+const classObject = computed(() => ({
+	'checkin-rule': true,
+	['checkin-rule-' + variable.value]: true
+}))
+
+const vartype = computed(() => VARS[variable.value]?.type)
+
+const timeType = computed(() => {
+	if (vartype.value === 'int_by_datetime') {
+		return props.rule[operator.value]?.[0]?.[variable.value]?.[0]?.buildTime?.[0]
+	}
+	return rightoperand.value?.buildTime?.[0]
+})
+
+const timeTolerance = computed(() => {
+	const op = operator.value
+	if ((op === 'isBefore' || op === 'isAfter') && props.rule[op]?.[2] !== undefined) {
+		return props.rule[op][2]
+	}
+	return null
+})
+
+const timeValue = computed(() => {
+	if (vartype.value === 'int_by_datetime') {
+		return props.rule[operator.value]?.[0]?.[variable.value]?.[0]?.buildTime?.[1]
+	}
+	return rightoperand.value?.buildTime?.[1]
+})
+
+const cardinality = computed(() => TYPEOPS[vartype.value]?.[operator.value]?.cardinality)
+const operators = computed(() => TYPEOPS[vartype.value])
+
+function setVariable (event: Event) {
+	const target = event.target as HTMLSelectElement
+	const currentOp = Object.keys(props.rule)[0]
+	let currentVal = props.rule[currentOp]
+
+	if (target.value === 'and' || target.value === 'or') {
+		if (currentVal[0]?.var) currentVal = []
+		props.rule[target.value] = currentVal
+		delete props.rule[currentOp]
+	} else {
+		if (currentVal !== 'and' && currentVal !== 'or' && currentVal[0] && VARS[target.value]?.type === vartype.value) {
+			if (vartype.value === 'int_by_datetime') {
+				const currentData = props.rule[currentOp][0][variable.value]
+				props.rule[currentOp][0] = { [target.value]: JSON.parse(JSON.stringify(currentData)) }
+			} else {
+				props.rule[currentOp][0].var = target.value
+			}
+		} else if (VARS[target.value]?.type === 'int_by_datetime') {
+			delete props.rule[currentOp]
+			props.rule['!!'] = [{ [target.value]: [{ buildTime: [null, null] }] }]
+		} else {
+			delete props.rule[currentOp]
+			props.rule['!!'] = [{ var: target.value }]
+		}
+	}
+}
+
+function setOperator (event: Event) {
+	const target = event.target as HTMLSelectElement
+	const currentOp = Object.keys(props.rule)[0]
+	const currentVal = props.rule[currentOp]
+	delete props.rule[currentOp]
+	props.rule[target.value] = currentVal
+}
+
+function setRightOperandNumber (event: Event) {
+	const val = parseInt((event.target as HTMLInputElement).value)
+	if (props.rule[operator.value].length === 1) {
+		props.rule[operator.value].push(val)
+	} else {
+		props.rule[operator.value][1] = val
+	}
+}
+
+function setTimeTolerance (event: Event) {
+	const val = parseInt((event.target as HTMLInputElement).value)
+	if (props.rule[operator.value].length === 2) {
+		props.rule[operator.value].push(val)
+	} else {
+		props.rule[operator.value][2] = val
+	}
+}
+
+function setTimeType (event: Event) {
+	const val = (event.target as HTMLSelectElement).value
+	const time = { buildTime: [val] }
+	if (vartype.value === 'int_by_datetime') {
+		props.rule[operator.value][0][variable.value][0] = time
+	} else {
+		if (props.rule[operator.value].length === 1) {
+			props.rule[operator.value].push(time)
+		} else {
+			props.rule[operator.value][1] = time
+		}
+		if (val === 'custom') {
+			props.rule[operator.value][2] = 0
+		}
+	}
+}
+
+function setTimeValue (val: string) {
+	if (vartype.value === 'int_by_datetime') {
+		props.rule[operator.value][0][variable.value][0]['buildTime'][1] = val
+	} else {
+		props.rule[operator.value][1]['buildTime'][1] = val
+	}
+}
+
+function setRightOperandProductList (val: { id: any; text: string }[]) {
+	const products = { objectList: val.map(item => ({ lookup: ['product', item.id, item.text] })) }
+	if (props.rule[operator.value].length === 1) {
+		props.rule[operator.value].push(products)
+	} else {
+		props.rule[operator.value][1] = products
+	}
+}
+
+function setRightOperandVariationList (val: { id: any; text: string }[]) {
+	const products = { objectList: val.map(item => ({ lookup: ['variation', item.id, item.text] })) }
+	if (props.rule[operator.value].length === 1) {
+		props.rule[operator.value].push(products)
+	} else {
+		props.rule[operator.value][1] = products
+	}
+}
+
+function setRightOperandGateList (val: { id: any; text: string }[]) {
+	const products = { objectList: val.map(item => ({ lookup: ['gate', item.id, item.text] })) }
+	if (props.rule[operator.value].length === 1) {
+		props.rule[operator.value].push(products)
+	} else {
+		props.rule[operator.value][1] = products
+	}
+}
+
+function setRightOperandEnum (event: Event) {
+	const val = (event.target as HTMLSelectElement).value
+	if (props.rule[operator.value].length === 1) {
+		props.rule[operator.value].push(val)
+	} else {
+		props.rule[operator.value][1] = val
+	}
+}
+
+function addOperand () {
+	props.rule[operator.value].push({ '': [] })
+}
+
+function wrapWithOR () {
+	const r = JSON.parse(JSON.stringify(props.rule))
+	delete props.rule[operator.value]
+	props.rule.or = [r]
+}
+
+function wrapWithAND () {
+	const r = JSON.parse(JSON.stringify(props.rule))
+	delete props.rule[operator.value]
+	props.rule.and = [r]
+}
+
+function cutOut () {
+	const cop = Object.keys(operands.value[0])[0]
+	const r = operands.value[0][cop]
+	delete props.rule[operator.value]
+	props.rule[cop] = r
+}
+
+function remove () {
+	emit('remove')
+}
+
+function duplicate () {
+	emit('duplicate')
+}
+
+function removeChild (index: number) {
+	props.rule[operator.value].splice(index, 1)
+}
+
+function duplicateChild (index: number) {
+	const r = JSON.parse(JSON.stringify(props.rule[operator.value][index]))
+	props.rule[operator.value].splice(index, 0, r)
+}
 </script>
+<template lang="pug">
+div(:class="classObject")
+	.btn-group.pull-right
+		button.checkin-rule-remove.btn.btn-xs.btn-default(
+			v-if="level > 0",
+			type="button",
+			data-toggle="tooltip",
+			:title="TEXTS.duplicate",
+			@click.prevent="duplicate"
+		)
+			span.fa.fa-copy
+		button.checkin-rule-remove.btn.btn-xs.btn-default(
+			type="button",
+			@click.prevent="wrapWithOR"
+		) OR
+		button.checkin-rule-remove.btn.btn-xs.btn-default(
+			type="button",
+			@click.prevent="wrapWithAND"
+		) AND
+		button.checkin-rule-remove.btn.btn-xs.btn-default(
+			v-if="operands && operands.length === 1 && (operator === 'or' || operator === 'and')",
+			type="button",
+			@click.prevent="cutOut"
+		)
+			span.fa.fa-cut
+		button.checkin-rule-remove.btn.btn-xs.btn-default(
+			v-if="level > 0",
+			type="button",
+			@click.prevent="remove"
+		)
+			span.fa.fa-trash
+	select.form-control(:value="variable", required, @input="setVariable")
+		option(value="and") {{ TEXTS.and }}
+		option(value="or") {{ TEXTS.or }}
+		option(v-for="(v, name) in VARS", :key="name", :value="name") {{ v.label }}
+	select.form-control(
+		v-if="operator !== 'or' && operator !== 'and' && vartype !== 'int_by_datetime'",
+		:value="operator",
+		required,
+		@input="setOperator"
+	)
+		option
+		option(v-for="(v, name) in operators", :key="name", :value="name") {{ v.label }}
+	select.form-control(
+		v-if="vartype === 'datetime' || vartype === 'int_by_datetime'",
+		:value="timeType",
+		required,
+		@input="setTimeType"
+	)
+		option(value="date_from") {{ TEXTS.date_from }}
+		option(value="date_to") {{ TEXTS.date_to }}
+		option(value="date_admission") {{ TEXTS.date_admission }}
+		option(value="custom") {{ TEXTS.date_custom }}
+		option(value="customtime") {{ TEXTS.date_customtime }}
+	Datetimefield(
+		v-if="(vartype === 'datetime' || vartype === 'int_by_datetime') && timeType === 'custom'",
+		:value="timeValue",
+		@input="setTimeValue"
+	)
+	Timefield(
+		v-if="(vartype === 'datetime' || vartype === 'int_by_datetime') && timeType === 'customtime'",
+		:value="timeValue",
+		@input="setTimeValue"
+	)
+	input.form-control(
+		v-if="vartype === 'datetime' && timeType && timeType !== 'customtime' && timeType !== 'custom'",
+		required,
+		type="number",
+		:value="timeTolerance",
+		:placeholder="TEXTS.date_tolerance",
+		@input="setTimeTolerance"
+	)
+	select.form-control(
+		v-if="vartype === 'int_by_datetime'",
+		:value="operator",
+		required,
+		@input="setOperator"
+	)
+		option
+		option(v-for="(v, name) in operators", :key="name", :value="name") {{ v.label }}
+	input.form-control(
+		v-if="(vartype === 'int' || vartype === 'int_by_datetime') && cardinality > 1",
+		required,
+		type="number",
+		:value="rightoperand",
+		@input="setRightOperandNumber"
+	)
+	LookupSelect2(
+		v-if="vartype === 'product' && operator === 'inList'",
+		required,
+		:multiple="true",
+		:value="rightoperand",
+		:url="productSelectURL",
+		@input="setRightOperandProductList"
+	)
+	LookupSelect2(
+		v-if="vartype === 'variation' && operator === 'inList'",
+		required,
+		:multiple="true",
+		:value="rightoperand",
+		:url="variationSelectURL",
+		@input="setRightOperandVariationList"
+	)
+	LookupSelect2(
+		v-if="vartype === 'gate' && operator === 'inList'",
+		required,
+		:multiple="true",
+		:value="rightoperand",
+		:url="gateSelectURL",
+		@input="setRightOperandGateList"
+	)
+	select.form-control(
+		v-if="vartype === 'enum_entry_status' && operator === '=='",
+		required,
+		:value="rightoperand",
+		@input="setRightOperandEnum"
+	)
+		option(value="absent") {{ TEXTS.status_absent }}
+		option(value="present") {{ TEXTS.status_present }}
+	.checkin-rule-childrules(v-if="operator === 'or' || operator === 'and'")
+		div(v-for="(op, opi) in operands", :key="opi")
+			CheckinRule(
+				v-if="typeof op === 'object'",
+				:rule="op",
+				:index="opi",
+				:level="level + 1",
+				@remove="removeChild(opi)",
+				@duplicate="duplicateChild(opi)"
+			)
+		button.checkin-rule-addchild.btn.btn-xs.btn-default(
+			type="button",
+			@click.prevent="addOperand"
+		)
+			span.fa.fa-plus-circle
+			| {{ TEXTS.condition_add }}
+</template>
