@@ -1,29 +1,28 @@
-<script>
-import Questionnaire from './Questionnaire.vue';
+<script lang="ts">
+import QuestionnaireElement from './QuestionnaireElement.vue';
 import {create_questionnaire, get_datafields, get_items, get_questionnaires, update_questionnaire} from './api';
+import { Questionnaire } from './model';
 import { i18n_any, QUESTION_TYPE } from './helper';
-import { ref } from 'vue';
+import {Ref, ref} from 'vue';
 import { SlickList, SlickItem } from 'vue-slicksort';
 
-const datafields_response = await get_datafields();
-const questionnaires_response = await get_questionnaires();
-const items_response = await get_items();
+const items_list = await get_items();
 
-const questionnaires = ref(questionnaires_response.results);
-const datafields = ref(datafields_response.results);
+const questionnaires: Ref<(Omit<Questionnaire, 'id'> & { _new_id?: number, id?: number })[]> = ref(await get_questionnaires());
+const datafields = ref(await get_datafields());
 
 export default {
   components: {
-    Questionnaire, SlickList, SlickItem
+    QuestionnaireElement, SlickList, SlickItem,
   },
   methods: {
     i18n_any,
     addQuestionnaire() {
       questionnaires.value.push({
-        items: [], internal_name: "Unnamed questionnaire",
-        type: 'PS',
-				_new_id: Date.now(),
-      });
+	      all_sales_channels: false, children: [], limit_sales_channels: [], position: 0,
+				items: [], internal_name: "Unnamed questionnaire",
+				_new_id: Date.now()
+			});
     },
 		saveData() {
 			console.log(JSON.parse(JSON.stringify(questionnaires.value)));
@@ -40,7 +39,7 @@ export default {
     return {
       questionnaires,
       datafields,
-      items: items_response.results,
+      items: items_list,
       selected_product: ref(""),
     }
   }
@@ -72,7 +71,7 @@ export default {
 	<div class="question-editor">
 		<SlickList axis="y" v-model:list="questionnaires" useDragHandle appendTo="#questionnaireListParent" id="questionnaireListParent">
 			<SlickItem v-for="(questionnaire, index) in questionnaires" :key="questionnaire.id || questionnaire._new_id" :index="index">
-        <Questionnaire
+        <QuestionnaireElement
           :questionnaire="questionnaire"
           :datafields="datafields"
           :items="items"

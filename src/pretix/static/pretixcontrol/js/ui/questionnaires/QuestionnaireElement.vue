@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useId, ref, computed} from 'vue'
-import Question from "./Question.vue";
+import QuestionElement from "./QuestionElement.vue";
 import {i18n_any, QUESTION_TYPE, QUESTION_TYPE_LABEL} from "./helper";
 import I18nTextField from "./I18nTextField.vue";
 import NativeDialog from "./NativeDialog.vue";
@@ -79,7 +79,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
       <div class="form-horizontal" :id="`questionListParent${props.questionnaire.id}`">
 				<SlickList axis="y" v-model:list="props.questionnaire.children" useDragHandle :appendTo="`#questionListParent${props.questionnaire.id}`">
 					<SlickItem v-for="(child, index) in props.questionnaire.children" :key="child.id" :index="index">
-						<Question
+						<QuestionElement
 										:datafields="props.datafields"
 										:question="child"
 										:editable="true"
