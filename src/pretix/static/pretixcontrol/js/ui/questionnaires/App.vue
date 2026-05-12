@@ -1,6 +1,6 @@
 <script>
 import Questionnaire from './Questionnaire.vue';
-import {get_datafields, get_items, get_questionnaires} from './api';
+import {create_questionnaire, get_datafields, get_items, get_questionnaires, update_questionnaire} from './api';
 import { i18n_any, QUESTION_TYPE } from './helper';
 import { ref } from 'vue';
 import { SlickList, SlickItem } from 'vue-slicksort';
@@ -11,18 +11,30 @@ const items_response = await get_items();
 
 const questionnaires = ref(questionnaires_response.results);
 const datafields = ref(datafields_response.results);
+
 export default {
   components: {
-    Questionnaire
+    Questionnaire, SlickList, SlickItem
   },
   methods: {
     i18n_any,
-    addQuestionnaire: function() {
+    addQuestionnaire() {
       questionnaires.value.push({
         items: [], internal_name: "Unnamed questionnaire",
         type: 'PS',
+				_new_id: Date.now(),
       });
-    }
+    },
+		saveData() {
+			console.log(JSON.parse(JSON.stringify(questionnaires.value)));
+			for (const questionnaire of questionnaires.value) {
+				if (questionnaire.id) {
+					update_questionnaire(questionnaire.id, questionnaire);
+				} else {
+					create_questionnaire(questionnaire);
+				}
+			}
+		},
   },
   data() {
     return {
@@ -44,10 +56,11 @@ export default {
 .question-edit-buttons div { position: absolute; margin-left: 10px; }
 .question-edit-buttons button {  }
 .form-group { margin-bottom: 30px }
+
+.filter-row { background: #fffee6; border: 1px solid #ecead5; padding: 10px; }
 </style>
 <template>
-
-	<p>
+	<p class="filter-row">
 		Questionnaires for product:
 		<select v-model="selected_product">
 			<option value="">(all)</option>
@@ -58,7 +71,7 @@ export default {
 	</p>
 	<div class="question-editor">
 		<SlickList axis="y" v-model:list="questionnaires" useDragHandle appendTo="#questionnaireListParent" id="questionnaireListParent">
-			<SlickItem v-for="(questionnaire, index) in questionnaires" :key="questionnaire.id" :index="index">
+			<SlickItem v-for="(questionnaire, index) in questionnaires" :key="questionnaire.id || questionnaire._new_id" :index="index">
         <Questionnaire
           :questionnaire="questionnaire"
           :datafields="datafields"
@@ -68,6 +81,7 @@ export default {
 		</SlickList>
 	</div>
   <p>
-      <button class="btn btn-default" @click="addQuestionnaire()"><i class="fa fa-plus"></i> Neuen Fragebogen erstellen</button>
+		<button class="btn btn-default" @click="addQuestionnaire()"><i class="fa fa-plus"></i> Neuen Fragebogen erstellen</button>
+		<button class="btn btn-default" @click="saveData()"><i class="fa fa-save"></i> Speichern</button>
   </p>
 </template>
