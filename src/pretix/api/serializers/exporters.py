@@ -133,36 +133,42 @@ class JobRunSerializer(serializers.Serializer):
         return not bool(self._errors)
 
 
+class ExportFormDataField(serializers.Field):
+    def get_attribute(self, instance):
+        return (instance.export_identifier, instance.export_form_data)
+
+    def to_representation(self, value):
+        export_identifier, export_form_data = value
+        exporter = self.context['exporters'].get(export_identifier)
+        if exporter:
+            return JobRunSerializer(exporter=exporter).to_representation(export_form_data)
+        else:
+            return export_form_data
+
+    def get_value(self, dictionary):
+        return dictionary
+
+    def to_internal_value(self, data):
+        if "export_form_data" in data:
+            identifier = data.get('export_identifier', self.parent.instance.export_identifier if self.parent.instance else None)
+            exporter = self.context['exporters'].get(identifier)
+            if exporter:
+                return JobRunSerializer(exporter=exporter).to_internal_value(data["export_form_data"])
+            else:
+                return data['export_form_data']
+
+
 class ScheduledExportSerializer(serializers.ModelSerializer):
     schedule_next_run = serializers.DateTimeField(read_only=True)
     export_identifier = serializers.ChoiceField(choices=[])
     locale = serializers.ChoiceField(choices=settings.LANGUAGES, default='en')
     owner = serializers.SlugRelatedField(slug_field='email', read_only=True)
     error_counter = serializers.IntegerField(read_only=True)
+    export_form_data = ExportFormDataField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['export_identifier'].choices = [(e, e) for e in self.context['exporters']]
-
-    def validate(self, attrs):
-        if attrs.get("export_form_data"):
-            identifier = attrs.get('export_identifier', self.instance.export_identifier if self.instance else None)
-            exporter = self.context['exporters'].get(identifier)
-            if exporter:
-                try:
-                    attrs["export_form_data"] = JobRunSerializer(exporter=exporter).to_internal_value(attrs["export_form_data"])
-                except ValidationError as e:
-                    raise ValidationError({"export_form_data": e.detail})
-            else:
-                raise ValidationError({"export_identifier": ["Unknown exporter."]})
-        return attrs
-
-    def to_representation(self, instance):
-        repr = super().to_representation(instance)
-        exporter = self.context['exporters'].get(instance.export_identifier)
-        if exporter:
-            repr["export_form_data"] = JobRunSerializer(exporter=exporter).to_representation(repr["export_form_data"])
-        return repr
 
     def validate_mail_additional_recipients(self, value):
         d = value.replace(' ', '')
