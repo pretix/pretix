@@ -123,7 +123,7 @@ jobs:
         working-directory: ./src
         run: make all compress
       - name: Install Playwright browsers
-        run: npx playwright install
+        run: npx playwright install --with-deps
       - name: Run E2E tests
         working-directory: ./src
         run: PRETIX_CONFIG_FILE=tests/ci_postgres.cfg py.test tests/e2e/ -v --maxfail=10
