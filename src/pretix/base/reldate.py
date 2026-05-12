@@ -44,7 +44,7 @@ EVENT_CHOICES = (
 
 # extend NO_BEFORE_VALUES in reldate.js if changed
 ORDER_CHOICES = (
-    ('datetime', _('Moment of order')),
+    ('datetime', _('Order creation')),
 )
 ORDER_CHOICES_KEYS = [choice[0] for choice in ORDER_CHOICES]
 
