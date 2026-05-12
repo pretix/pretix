@@ -122,7 +122,7 @@ jobs:
       - name: Compile
         working-directory: ./src
         run: make all compress
-      - name: Install Playwright
+      - name: Install Playwright browsers
         run: playwright install
       - name: Run E2E tests
         working-directory: ./src
