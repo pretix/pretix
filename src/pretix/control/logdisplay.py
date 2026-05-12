@@ -34,11 +34,11 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from collections import defaultdict
+from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 
 import bleach
-import dateutil.parser
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -248,7 +248,7 @@ class OrderValidFromChanged(OrderChangeLogEntryType):
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         return _('The validity start date for position #{posid} has been changed to {value}.').format(
             posid=data.get('positionid', '?'),
-            value=date_format(dateutil.parser.parse(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get(
+            value=date_format(datetime.fromisoformat(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get(
                 'new_value') else '–'
         )
 
@@ -260,7 +260,7 @@ class OrderValidUntilChanged(OrderChangeLogEntryType):
     def display_prefixed(self, event: Event, logentry: LogEntry, data):
         return _('The validity end date for position #{posid} has been changed to {value}.').format(
             posid=data.get('positionid', '?'),
-            value=date_format(dateutil.parser.parse(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get('new_value') else '–'
+            value=date_format(datetime.fromisoformat(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get('new_value') else '–'
         )
 
 
@@ -364,7 +364,7 @@ class CheckinErrorLogEntryType(OrderLogEntryType):
         data['posid'] = logentry.parsed_data.get('positionid', '?')
 
         if 'datetime' in data:
-            dt = dateutil.parser.parse(data.get('datetime'))
+            dt = datetime.fromisoformat(data.get('datetime'))
             if abs((logentry.datetime - dt).total_seconds()) > 5 or data.get('forced'):
                 if event:
                     data['datetime'] = date_format(dt.astimezone(event.timezone), "SHORT_DATETIME_FORMAT")
@@ -430,7 +430,7 @@ class OrderPrintLogEntryType(OrderLogEntryType):
         return _('Position #{posid} has been printed at {datetime} with type "{type}".').format(
             posid=data.get('positionid'),
             datetime=date_format(
-                dateutil.parser.parse(data["datetime"]).astimezone(logentry.event.timezone),
+                datetime.fromisoformat(data["datetime"]).astimezone(logentry.event.timezone),
                 "SHORT_DATETIME_FORMAT"
             ) if logentry.event else data["datetime"],
             type=dict(PrintLog.PRINT_TYPES)[data["type"]],
@@ -985,7 +985,7 @@ class LegacyCheckinLogEntryType(OrderLogEntryType):
 
     def display(self, logentry, data):
         # deprecated
-        dt = dateutil.parser.parse(data.get('datetime'))
+        dt = datetime.fromisoformat(data.get('datetime'))
         tz = logentry.event.timezone
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
         if 'list' in data:
