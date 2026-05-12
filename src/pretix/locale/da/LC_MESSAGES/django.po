@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-05-04 14:19+0000\n"
-"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
+"PO-Revision-Date: 2026-05-12 12:55+0000\n"
+"Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
 "Language: da\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -8160,10 +8160,8 @@ msgstr ""
 "2x Add-on 2"
 
 #: pretix/base/pdf.py:383
-#, fuzzy
-#| msgid "List of Add-Ons"
 msgid "List of Checked-In Add-Ons"
-msgstr "Tilføjelser"
+msgstr "Liste over indtjekkede tilvalg"
 
 #: pretix/base/pdf.py:390 pretix/control/forms/filter.py:1537
 #: pretix/control/forms/filter.py:1539
@@ -9152,10 +9150,8 @@ msgid "Czech National Bank"
 msgstr "Den tjekkiske nationalbank"
 
 #: pretix/base/services/currencies.py:41
-#, fuzzy
-#| msgid "Czech National Bank"
 msgid "National Bank of Poland"
-msgstr "Den tjekkiske nationalbank"
+msgstr "Polens Nationalbank"
 
 #: pretix/base/services/export.py:95 pretix/base/services/export.py:155
 msgid ""
@@ -10224,16 +10220,12 @@ msgstr ""
 "i CZK."
 
 #: pretix/base/settings.py:577 pretix/base/settings.py:586
-#, fuzzy
-#| msgid ""
-#| "Based on Czech National Bank daily rates, whenever the invoice amount is "
-#| "not in CZK."
 msgid ""
 "Based on National Bank of Poland daily rates, whenever the invoice amount is "
 "not in PLN."
 msgstr ""
-"Baseret på den tjekkiske nationalbanks dagskurs, når fakturabeløbet ikke er "
-"i CZK."
+"Baseret på Polens Nationalbanks dagskurser, når fakturabeløbet ikke er "
+"angivet i PLN."
 
 #: pretix/base/settings.py:597
 msgid "Require invoice address"
@@ -16259,9 +16251,8 @@ msgid "Allow to overbook quotas when performing this operation"
 msgstr "Tillad overbooking af kvoter, når denne handling udføres"
 
 #: pretix/control/forms/orders.py:335
-#, fuzzy
 msgid "Number of products to add"
-msgstr "Antal dage"
+msgstr "Antal produkter, der skal tilføjes"
 
 #: pretix/control/forms/orders.py:344
 msgid "Add-on to"
@@ -16293,10 +16284,8 @@ msgstr ""
 "standardpris"
 
 #: pretix/control/forms/orders.py:441
-#, fuzzy
-#| msgid "You can not select the same seat multiple times."
 msgid "You can not choose a seat when adding multiple products at once."
-msgstr "Du kan ikke vælge den samme plads flere gange."
+msgstr "Du kan ikke vælge en plads, når du tilføjer flere produkter på én gang."
 
 #: pretix/control/forms/orders.py:478 pretix/control/forms/orders.py:482
 #: pretix/control/forms/orders.py:510 pretix/control/forms/orders.py:552
@@ -16662,24 +16651,26 @@ msgid ""
 msgstr "Din enhed har ikke adgang til noget. Vælg venligst nogle begivenheder."
 
 #: pretix/control/forms/organizer.py:677 pretix/plugins/stripe/payment.py:330
-#, fuzzy
 msgid "experimental"
-msgstr "Funktioner"
+msgstr "eksperimentel"
 
 #: pretix/control/forms/organizer.py:683
 msgid ""
 "This feature is currently in an experimental stage. It only supports very "
 "limited use cases and might change at any point."
 msgstr ""
+"Denne funktion er i øjeblikket på forsøgsstadiet. Den understøtter kun meget "
+"få anvendelsessituationer og kan ændres når som helst."
 
 #: pretix/control/forms/organizer.py:706
 msgid "Sensitive emails like password resets will not be sent in Bcc."
 msgstr ""
+"Følsomme e-mails, såsom dem om nulstilling af adgangskoder, vil ikke blive "
+"sendt som Bcc."
 
 #: pretix/control/forms/organizer.py:716
-#, fuzzy
 msgid "This will be attached to every email."
-msgstr "Bliver tilføjet alle e-mails. Tilgængelige pladsholdere: {event}"
+msgstr "Dette vil blive vedhæftet til hver eneste e-mail."
 
 #: pretix/control/forms/organizer.py:790 pretix/control/logdisplay.py:671
 #: pretix/control/views/user.py:850 pretix/presale/views/customer.py:289
@@ -16688,63 +16679,58 @@ msgid "Your password has been changed."
 msgstr "Din adgangskode er blevet ændret."
 
 #: pretix/control/forms/organizer.py:823
-#, fuzzy
 msgctxt "webhooks"
 msgid "Event types"
-msgstr "Arrangementsdato"
+msgstr "Begivenhedstyper"
 
 #: pretix/control/forms/organizer.py:857
-#, fuzzy
 msgid "Gift card value"
-msgstr "Gavekort"
+msgstr "Gavekortets værdi"
 
 #: pretix/control/forms/organizer.py:961
-#, fuzzy
 msgid "An medium with this type and identifier is already registered."
-msgstr "Denne bestilling er allerede blevet tilbagebetalt."
+msgstr ""
+"Der findes allerede et medie med denne type og dette identifikationsnummer."
 
 #: pretix/control/forms/organizer.py:1059
-#, fuzzy
 msgid "An account with this customer ID is already registered."
-msgstr "Denne bestilling er allerede blevet tilbagebetalt."
+msgstr "Der findes allerede en konto med dette kunde-id."
 
 #: pretix/control/forms/organizer.py:1076
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:62
 #: pretix/presale/forms/customer.py:169 pretix/presale/forms/customer.py:507
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: pretix/control/forms/organizer.py:1190
 msgctxt "sso_oidc"
 msgid "Base URL"
-msgstr ""
+msgstr "Grund-URL"
 
 #: pretix/control/forms/organizer.py:1194
-#, fuzzy
 msgctxt "sso_oidc"
 msgid "Client ID"
-msgstr "Klient-id"
+msgstr "Kunde-ID"
 
 #: pretix/control/forms/organizer.py:1198
-#, fuzzy
 msgctxt "sso_oidc"
 msgid "Client secret"
-msgstr "Arrangementsrække"
+msgstr "Kundens sikkerhedsnøgle"
 
 #: pretix/control/forms/organizer.py:1202
 msgctxt "sso_oidc"
 msgid "Scope"
-msgstr ""
+msgstr "Omfang"
 
 #: pretix/control/forms/organizer.py:1203
 msgctxt "sso_oidc"
 msgid "Multiple scopes separated with spaces."
-msgstr ""
+msgstr "Flere omfang adskilt med mellemrum."
 
 #: pretix/control/forms/organizer.py:1207
 msgctxt "sso_oidc"
 msgid "User ID field"
-msgstr ""
+msgstr "Feltet Bruger-ID"
 
 #: pretix/control/forms/organizer.py:1208
 msgctxt "sso_oidc"
@@ -16752,12 +16738,13 @@ msgid ""
 "We will assume that the contents of the user ID fields are unique and can "
 "never change for a user."
 msgstr ""
+"Vi antager, at indholdet i felterne til bruger-id er unikt og aldrig kan "
+"ændres for en bruger."
 
 #: pretix/control/forms/organizer.py:1214
-#, fuzzy
 msgctxt "sso_oidc"
 msgid "Email field"
-msgstr "Alle fakturaer"
+msgstr "E-mail-felt"
 
 #: pretix/control/forms/organizer.py:1215
 msgctxt "sso_oidc"
@@ -16766,17 +16753,19 @@ msgid ""
 "verified to really belong the the user. If this can't be guaranteed, "
 "security issues might arise."
 msgstr ""
+"Vi går ud fra, at alle e-mailadresser, vi modtager fra SSO-udbyderen, er "
+"verificeret, så vi kan være sikre på, at de tilhører brugeren. Hvis dette "
+"ikke kan garanteres, kan der opstå sikkerhedsproblemer."
 
 #: pretix/control/forms/organizer.py:1222
-#, fuzzy
 msgctxt "sso_oidc"
 msgid "Phone field"
-msgstr "Telefonnummer"
+msgstr "Feltet \"Telefon\""
 
 #: pretix/control/forms/organizer.py:1226
 msgctxt "sso_oidc"
 msgid "Query parameters"
-msgstr ""
+msgstr "Forespørgselsparametre"
 
 #: pretix/control/forms/organizer.py:1227
 #, python-brace-format
@@ -16785,20 +16774,20 @@ msgid ""
 "Optional query parameters, that will be added to calls to the authorization "
 "endpoint. Enter as: {example}"
 msgstr ""
+"Valgfrie forespørgselsparametre, der tilføjes til opkald til "
+"godkendelsesendepunktet. Indtast som: {example}"
 
 #: pretix/control/forms/organizer.py:1288
 msgid "Invalidate old client secret and generate a new one"
-msgstr ""
+msgstr "Ugyldiggør den gamle klient-sikkerhedsnøgle og generer en ny"
 
 #: pretix/control/forms/organizer.py:1321
-#, fuzzy
 msgid "Organizer short name"
-msgstr "Navn"
+msgstr "Arrangørens korte navn"
 
 #: pretix/control/forms/organizer.py:1325
-#, fuzzy
 msgid "Allow access to reusable media"
-msgstr "Deaktiveret"
+msgstr "Tillad adgang til genbrugsmedier"
 
 #: pretix/control/forms/organizer.py:1326
 msgid ""
@@ -16808,26 +16797,27 @@ msgid ""
 "will grant the other organizer access to cryptographic key material required "
 "to interact with the media type."
 msgstr ""
+"Dette er nødvendigt, hvis du ønsker, at den anden arrangør skal deltage i et "
+"fælles system med f.eks. NFC-betalingschips. Du bør kun benytte denne "
+"mulighed for arrangører, du stoler på, da dette (afhængigt af de aktiverede "
+"medietyper) giver den anden arrangør adgang til det kryptografiske "
+"nøglemateriale, der er nødvendigt for at kunne interagere med medietypen."
 
 #: pretix/control/forms/organizer.py:1342
-#, fuzzy
 msgid "The selected organizer does not exist or cannot be invited."
-msgstr "Delarrangementet tilhører ikke dette arrangement."
+msgstr "Den valgte arrangør findes ikke eller kan ikke inviteres."
 
 #: pretix/control/forms/organizer.py:1344
-#, fuzzy
 msgid "The selected organizer has already been invited."
-msgstr "Den valgt arrangør findes ikke."
+msgstr "Den valgte arrangør er allerede blevet inviteret."
 
 #: pretix/control/forms/organizer.py:1379
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "A sales channel with the same identifier already exists."
-msgstr "En rabatkode med denne kode findes allerede."
+msgstr "Der findes allerede en salgskanal med samme identifikator."
 
 #: pretix/control/forms/organizer.py:1391
 msgid "Events with active plugin"
-msgstr ""
+msgstr "Begivenheder med aktivt plugin"
 
 #: pretix/control/forms/renderers.py:56
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:139
@@ -16840,22 +16830,21 @@ msgstr "Valgfrit"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:49
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:192
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:286
-#, fuzzy
 msgctxt "form_bulk"
 msgid "change"
-msgstr "Gem ændringer"
+msgstr "ændring"
 
 #: pretix/control/forms/rrule.py:35
 msgid "year(s)"
-msgstr ""
+msgstr "år"
 
 #: pretix/control/forms/rrule.py:36
 msgid "month(s)"
-msgstr ""
+msgstr "måned(er)"
 
 #: pretix/control/forms/rrule.py:37
 msgid "week(s)"
-msgstr ""
+msgstr "uge(r)"
 
 #: pretix/control/forms/rrule.py:38
 msgid "day(s)"
@@ -16863,7 +16852,7 @@ msgstr "dag(e)"
 
 #: pretix/control/forms/rrule.py:43
 msgid "Interval"
-msgstr ""
+msgstr "Interval"
 
 #: pretix/control/forms/rrule.py:69
 msgid "Number of repetitions"
@@ -16876,22 +16865,22 @@ msgstr "Seneste dato"
 #: pretix/control/forms/rrule.py:87 pretix/control/forms/rrule.py:134
 msgctxt "rrule"
 msgid "first"
-msgstr ""
+msgstr "første"
 
 #: pretix/control/forms/rrule.py:88 pretix/control/forms/rrule.py:135
 msgctxt "rrule"
 msgid "second"
-msgstr ""
+msgstr "anden"
 
 #: pretix/control/forms/rrule.py:89 pretix/control/forms/rrule.py:136
 msgctxt "rrule"
 msgid "third"
-msgstr ""
+msgstr "tredje"
 
 #: pretix/control/forms/rrule.py:90 pretix/control/forms/rrule.py:137
 msgctxt "rrule"
 msgid "last"
-msgstr ""
+msgstr "sidste"
 
 #: pretix/control/forms/rrule.py:111 pretix/control/forms/rrule.py:150
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:20
@@ -16905,7 +16894,7 @@ msgstr "Weekend dag"
 #: pretix/control/forms/subevents.py:106
 msgctxt "subevent"
 msgid "Skip dates that overlap with any existing date"
-msgstr ""
+msgstr "Spring datoer over, der overlapper med eksisterende datoer"
 
 #: pretix/control/forms/subevents.py:109
 msgctxt "subevent"
@@ -16915,20 +16904,24 @@ msgid ""
 "This respects even inactive dates and works best if all dates have both a "
 "start and end time."
 msgstr ""
+"Dette kan være nyttigt, hvis alle dine datoer finder sted på samme sted, og "
+"der ikke må oprettes gentagne datoer, der er i konflikt med eksisterende "
+"særlige begivenheder. Dette gælder også for inaktive datoer og fungerer "
+"bedst, hvis alle datoer har både en start- og en sluttid."
 
 #: pretix/control/forms/subevents.py:128
-#, fuzzy
 msgid "Keep the current values"
-msgstr "Aktuelle problemer"
+msgstr "Bevar de nuværende værdier"
 
 #: pretix/control/forms/subevents.py:145 pretix/control/forms/subevents.py:151
 msgid "Selection contains various values"
-msgstr ""
+msgstr "Udvalget indeholder forskellige værdier"
 
 #: pretix/control/forms/subevents.py:298 pretix/control/forms/subevents.py:327
-#, fuzzy
 msgid "The end of availability should be after the start of availability."
-msgstr "Arrangementets sluttidspunkt skal være efter starttidspunktet."
+msgstr ""
+"Slutdatoen for tilgængeligheden bør ligge efter startdatoen for "
+"tilgængeligheden."
 
 #: pretix/control/forms/subevents.py:360
 #, fuzzy
