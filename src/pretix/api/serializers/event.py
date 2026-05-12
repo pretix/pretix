@@ -701,7 +701,7 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
         return super().save(**kwargs)
 
     def validate_default(self, value):
-        if not value and self.instance.default:
+        if not value and (not self.instance or self.instance.default):
             raise ValidationError("You can't remove the default property, instead set it on another tax rule.")
         return value
 
