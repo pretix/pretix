@@ -29,7 +29,7 @@ def fix_cross_organizer_eventmetavalues(apps, schema_editor):
             logger.info(f"  created new EventMetaProperty")
             emv.property = meta_prop
         logger.info(f"  after: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {emv.value}")
-        emv.save()
+        emv.save(update_fields=["property"])
 
 
 def make_eventmetaproperties_unique(apps, schema_editor):
