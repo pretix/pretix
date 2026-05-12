@@ -46,7 +46,7 @@ EVENT_CHOICES = (
 ORDER_CHOICES = (
     ('datetime', _('Order creation')),
 )
-ORDER_CHOICES_KEYS = [choice[0] for choice in ORDER_CHOICES]
+ORDER_CHOICES_KEYS = {choice[0] for choice in ORDER_CHOICES}
 
 RelativeDate = namedtuple('RelativeDate', ['days', 'minutes', 'time', 'is_after', 'base_date_name'], defaults=(0, None, None, False, 'date_from'))
 
@@ -87,7 +87,7 @@ class RelativeDateWrapper:
             event = reference
             base_date = getattr(reference, self.data.base_date_name) or event.date_from
         else:
-            raise ValueError("Only event, subevent or order objects are supported")
+            raise TypeError("Only event, subevent or order objects are supported")
 
         tz = ZoneInfo(event.settings.timezone)
 
@@ -186,7 +186,7 @@ class RelativeDateWrapper:
                         minutes=None,
                         is_after=len(parts) > 4 and parts[4] == "after",
                     )
-            if data.base_date_name in [k[0] for k in ORDER_CHOICES] and parts[4] != "after":
+            if data.base_date_name in ORDER_CHOICES_KEYS and parts[4] != "after":
                 raise ValueError('ORDER_CHOICE: {} cannot be combined with "before"'.format(data.base_date_name))
             if data.base_date_name not in [k[0] for k in EVENT_CHOICES + ORDER_CHOICES]:
                 raise ValueError('{} is not a valid base date'.format(data.base_date_name))
