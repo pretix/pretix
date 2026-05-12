@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-05-11 09:00+0000\n"
-"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
+"PO-Revision-Date: 2026-05-12 06:34+0000\n"
+"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -4441,7 +4441,7 @@ msgstr "全ての製品（新規に作成されたものを含む）"
 #: pretix/base/models/checkin.py:56 pretix/plugins/badges/exporters.py:436
 #: pretix/plugins/checkinlists/exporters.py:854
 msgid "Limit to products"
-msgstr "商品の上限"
+msgstr "対象製品を限定"
 
 #: pretix/base/models/checkin.py:60
 msgid ""
@@ -6896,8 +6896,8 @@ msgstr "免税輸出品目、VAT非課税"
 msgctxt "tax_code"
 msgid "VAT exempt for EEA intra-community supply of goods and services"
 msgstr ""
-"EEA（欧州経済領域）域内事業者間取引における商品・サービス供給のVAT(付加価値"
-"税）免税"
+"EEA(欧州経済領域)域内事業者間取引における物品・サービス供給のVAT(付加価値税)"
+"免税"
 
 #: pretix/base/models/tax.py:186
 msgid "Special cases"
@@ -7144,10 +7144,10 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
-"複数（1を超える値）に設定した場合、バウチャーは初回使用時にこの数の製品と引き"
-"換える必要があります。その後の使用では、より少ない数の製品にも使用できます。"
-"ただし、キャンセルなどの場合には、合計使用回数がこの制限を下回ることがありま"
-"す。"
+"1より大きい値を設定すると、バウチャーを最初に使用する際に、この数の製品に対し"
+"て引き換える必要があります。2回目以降の使用では、これより少ない数の製品に対し"
+"ても使用できます。この場合、キャンセルなどにより、合計の使用回数がこの上限を"
+"下回ることがある点にご注意ください。"
 
 #: pretix/base/models/vouchers.py:217
 msgid ""
@@ -15949,7 +15949,7 @@ msgstr "この操作を実行する際にクォータの超過予約を許可す
 
 #: pretix/control/forms/orders.py:335
 msgid "Number of products to add"
-msgstr "追加する商品の数"
+msgstr "追加する製品の数"
 
 #: pretix/control/forms/orders.py:344
 msgid "Add-on to"
@@ -15982,7 +15982,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:441
 msgid "You can not choose a seat when adding multiple products at once."
-msgstr "複数の商品を同時に追加する場合、座席を選択することはできません。"
+msgstr "複数の製品を同時に追加する場合、座席を選択することはできません。"
 
 #: pretix/control/forms/orders.py:478 pretix/control/forms/orders.py:482
 #: pretix/control/forms/orders.py:510 pretix/control/forms/orders.py:552
@@ -22954,12 +22954,11 @@ msgid ""
 "total number of tickets sold and the number of a specific ticket type at the "
 "same time."
 msgstr ""
-"製品を実際に利用可能にするには、クォータも必要です。クォータは、pretixが製品"
-"のインスタンスをいくつ販売するかを定義します。これにより、イベントが無制限の"
-"参加者を受け入れることができるか、参加者数が制限されるかを設定できます。より"
-"複雑な要件を満たすために、製品を複数のクォータに割り当てることができます。例"
-"えば、販売されるチケットの総数と特定のチケット種別の数を同時に制限したい場合"
-"などです。"
+"製品を実際に販売可能にするには、クォータも必要です。クォータは、製品をどれだ"
+"けpretixが販売するかを定義します。これにより、イベントの参加者数を無制限にす"
+"るか、人数を制限するかを設定できます。1つの製品を複数のクォータに割り当てるこ"
+"とで、より複雑な要件にも対応できます。たとえば、販売するチケットの総数と特定"
+"のチケット種別の数を同時に制限したい場合などです。"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:25
 msgid "Your search did not match any quotas."
@@ -23676,7 +23675,7 @@ msgid ""
 "this product was part of the discount calculation for a different product in "
 "this order."
 msgstr ""
-"自動割引によりこの商品の価格が引き下げられたか、同じ注文内の別の商品に対する"
+"自動割引によりこの製品の価格が引き下げられたか、同じ注文内の別の製品に対する"
 "割引計算の対象になっています。"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:496
@@ -34604,7 +34603,7 @@ msgid ""
 "changed because they are not on sale:"
 msgstr ""
 "このアドオンカテゴリで選択された製品の中には、現在セール対象外のため変更でき"
-"ない商品があります："
+"ない製品があります:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:392
 msgid "There are no add-ons available for this product."
