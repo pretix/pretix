@@ -736,7 +736,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 for op in op_candidates:
                     if (
                         op.valid_until and op.valid_until < now_dt and
-                        (not op_candidate or op.valid_from > op_candidate.valid_from)
+                        (not op_candidate or op.valid_until > op_candidate.valid_until)
                     ):
                         op_candidate = op
 
