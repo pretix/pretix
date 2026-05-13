@@ -709,12 +709,11 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             # it could in theory also happen with two add-ons being on the same check-in list but without overlapping
             # validity. It makes sense to filter this "after" the previous checks since it is not "intentional" filtering
             # configured by the admin but "accidental" filtering that depends on the time of execution.
-            now_dt = now()
             op_candidates_filtered = [
                 op for op in op_candidates_filtered
                 if (
-                    (not op.valid_from or op.valid_from <= now_dt) and
-                    (not op.valid_until or op.valid_until > now_dt)
+                    (not op.valid_from or op.valid_from <= datetime) and
+                    (not op.valid_until or op.valid_until > datetime)
                 )
             ]
 
@@ -722,11 +721,10 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             # None of the ops is valid today or has the correct product, too bad! We could just error out here, but
             # instead we just continue with *any* product and have it rejected by the check in perform_checkin.
             # To improve the error message, we select the op that will "work next" or - if none matches - "worked last".
-            now_dt = now()
             op_candidate = None
             for op in op_candidates:
                 if (
-                    op.valid_from and op.valid_from > now_dt and
+                    op.valid_from and op.valid_from > datetime and
                     (not op_candidate or op.valid_from < op_candidate.valid_from)
                 ):
                     op_candidate = op
@@ -735,7 +733,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 # no candidate in the future, get closest in the past
                 for op in op_candidates:
                     if (
-                        op.valid_until and op.valid_until < now_dt and
+                        op.valid_until and op.valid_until < datetime and
                         (not op_candidate or op.valid_until > op_candidate.valid_until)
                     ):
                         op_candidate = op
