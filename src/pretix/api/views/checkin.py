@@ -713,7 +713,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             op_candidates_filtered = [
                 op for op in op_candidates_filtered
                 if (
-                    (not op.valid_from or op.valid_from < now_dt) and
+                    (not op.valid_from or op.valid_from <= now_dt) and
                     (not op.valid_until or op.valid_until > now_dt)
                 )
             ]
