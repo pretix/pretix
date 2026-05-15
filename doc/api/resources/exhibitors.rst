@@ -844,3 +844,153 @@ You can also fetch existing leads (if you are authorized to do so):
    :statuscode 200: No error
    :statuscode 401: Invalid authentication code
    :statuscode 403: Not permitted to access bulk data
+
+.. http:get:: /exhibitors/api/v1/vouchers/
+
+   Returns a list of all vouchers connected to the exhibitor. The response contains similar data as described in
+   :ref:`rest-vouchers` as well as for each voucher an additional list field ``redemptions``.
+
+   The ``redemptions``-list will contain ``redemption_date``, ``subevent``, and ``attendee_fields``.
+
+   Note that the ``attendee_fields`` array can contain any number of dynamic keys!
+   Depending on the exhibitors permission and event configuration this might be empty, or contain lots of details.
+   The app should dynamically show these values (read-only) with the labels sent by the server.
+
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /exhibitors/api/v1/vouchers/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "code": "43K6LKM37FBVR2YG",
+            "max_usages": 1,
+            "redeemed": 0,
+            "valid_until": null,
+            "subevent": null,
+            "tag": "testvoucher",
+            "comment": "",
+            "items": [
+                "All"
+            ],
+            "price_mode": "set",
+            "value": "12.00",
+            "redemptions": [
+              {
+                "attendee_fields": [
+                  {
+                    "id": "attendee_name",
+                    "label": "Name",
+                    "value": "Jon Doe",
+                    "details": [
+                      {"label": "Given name", "value": "John"},
+                      {"label": "Family name", "value": "Doe"},
+                    ]
+                  },
+                  {
+                    "id": "attendee_email",
+                    "label": "Email",
+                    "value": "test@example.com",
+                    "details": []
+                  }
+                ],
+                "redemption_date": "2026-05-06",
+                "subevent": null
+              },
+            ]
+          }
+        ]
+      }
+
+   :statuscode 200: No error
+   :statuscode 401: Invalid authentication code
+   :statuscode 403: Not permitted to access bulk data
+
+.. http:get:: /exhibitors/api/v1/vouchers/(id)/
+
+   Returns the details of a single, specific voucher connected to the exhibitor. The response contains similar data as
+   described in :ref:`rest-vouchers` as well as an additional list field ``redemptions``.
+
+   The ``redemptions``-list will contain ``redemption_date``, ``subevent``, and ``attendee_fields``.
+
+   Note that the ``attendee_fields`` array can contain any number of dynamic keys!
+   Depending on the exhibitors permission and event configuration this might be empty, or contain lots of details.
+   The app should dynamically show these values (read-only) with the labels sent by the server.
+
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /exhibitors/api/v1/vouchers/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "code": "43K6LKM37FBVR2YG",
+        "max_usages": 1,
+        "redeemed": 0,
+        "valid_until": null,
+        "subevent": null,
+        "tag": "testvoucher",
+        "comment": "",
+        "items": [
+            "All"
+        ],
+        "price_mode": "set",
+        "value": "12.00",
+        "redemptions": [
+          {
+            "attendee_fields": [
+              {
+                "id": "attendee_name",
+                "label": "Name",
+                "value": "Jon Doe",
+                "details": [
+                  {"label": "Given name", "value": "John"},
+                  {"label": "Family name", "value": "Doe"},
+                ]
+              },
+              {
+                "id": "attendee_email",
+                "label": "Email",
+                "value": "test@example.com",
+                "details": []
+              }
+            ],
+            "redemption_date": "2026-05-06",
+            "subevent": null
+          },
+        ]
+      }
+
+   :param id: The ``id`` field of the voucher to fetch
+   :statuscode 200: No error
+   :statuscode 401: Invalid authentication code
+   :statuscode 403: Not permitted to access bulk data
