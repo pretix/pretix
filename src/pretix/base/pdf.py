@@ -1222,9 +1222,7 @@ class Renderer:
 
             for i, page in enumerate(fg_pdf.pages):
                 bg_page = self.bg_pdf.pages[i]
-                _correct_page_media_box(bg_page)
-                page.merge_page(bg_page, over=False)
-                output.add_page(page)
+                _merge_with_correct_page_media_box(output, page, bg_page)
 
             # pdf_header is a string like "%pdf-X.X"
             if float(self.bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
@@ -1291,8 +1289,7 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
     else:
         for i, page in enumerate(fg_pdf.pages):
             bg_page = bg_pdf.pages[i]
-            _correct_page_media_box(bg_page)
-            page.merge_page(bg_page, over=False)
+            _merge_with_correct_page_media_box(fg_pdf, page, bg_page)
 
         # pdf_header is a string like "%pdf-X.X"
         if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
@@ -1301,27 +1298,18 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
         fg_pdf.write(out_file)
 
 
-def _correct_page_media_box(page: pypdf.PageObject):
-    if page.rotation != 0:
-        page.transfer_rotation_to_content()
-    media_box = page.mediabox
+def _merge_with_correct_page_media_box(output: pypdf.PdfWriter, fg_page: pypdf.PageObject, bg_page: pypdf.PageObject):
+    if bg_page.rotation != 0:
+        bg_page.transfer_rotation_to_content()
+    media_box = bg_page.mediabox
     trsf = pypdf.Transformation()
     if media_box.bottom != 0:
         trsf = trsf.translate(0, -media_box.bottom)
     if media_box.left != 0:
         trsf = trsf.translate(-media_box.left, 0)
-    page.add_transformation(trsf, False)
-    for b in ["/MediaBox", "/CropBox", "/BleedBox", "/TrimBox", "/ArtBox"]:
-        if b in page:
-            rr = pypdf.generic.RectangleObject(page[b])
-            pt1 = trsf.apply_on(rr.lower_left)
-            pt2 = trsf.apply_on(rr.upper_right)
-            page[pypdf.generic.NameObject(b)] = pypdf.generic.RectangleObject((
-                min(pt1[0], pt2[0]),
-                min(pt1[1], pt2[1]),
-                max(pt1[0], pt2[0]),
-                max(pt1[1], pt2[1]),
-            ))
+
+    fg_page = output.add_page(fg_page)
+    fg_page.merge_transformed_page(bg_page, trsf, over=False, expand=False)
 
 
 @deconstructible
