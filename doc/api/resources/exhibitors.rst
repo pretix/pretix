@@ -845,12 +845,48 @@ You can also fetch existing leads (if you are authorized to do so):
    :statuscode 401: Invalid authentication code
    :statuscode 403: Not permitted to access bulk data
 
+Retrieving Vouchers
+"""""""""""""""""""
+
+Vouchers returned by the App API use a different format than described in :ref:`rest-vouchers`.
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+id                                    integer                    Internal ID of the voucher
+code                                  string                     The voucher code that is required to redeem the voucher
+max_usages                            integer                    The maximum number of times this voucher can be
+                                                                 redeemed (default: 1).
+redeemed                              integer                    The number of times this voucher already has been
+                                                                 redeemed.
+valid_until                           datetime                   The voucher expiration date (or ``null``).
+subevent                              string                     Name of the date inside an event series this voucher belongs to (or ``null``).
+tag                                   string                     A string that is used for grouping vouchers
+comment                               string                     An internal exhibitor comment on the voucher.
+items                                 list of strings            A list of items this voucher is restricted to (or ``null``).
+price_mode                            string                     Determines how this voucher affects product prices.
+                                                                 Possible values:
+
+                                                                 * ``none`` – No effect on price
+                                                                 * ``set`` – The product price is set to the given ``value``
+                                                                 * ``subtract`` – The product price is determined by the original price *minus* the given ``value``
+                                                                 * ``percent`` – The product price is determined by the original price reduced by the percentage given in ``value``
+value                                 decimal (string)           The value (see ``price_mode``)
+redemptions                           list of objects            A list of objects, where each object represents an order position that has been purchased using the voucher.
+                                                                 Each entry will contains the fields ``attendee_fields``, ``redemption_date`` and ``subevent``.
+
+                                                                 The attendee data in the ``attendee_fields`` that is shown is based on the event's configuration, and each entry
+                                                                 contains the fields ``id``, ``label``, ``value``, and ``details``. ``details`` is usually empty
+                                                                 except in a few cases where it contains an additional list of objects
+                                                                 with ``value`` and ``label`` keys (e.g. splitting of names).
+===================================== ========================== =======================================================
+
+
 .. http:get:: /exhibitors/api/v1/vouchers/
 
-   Returns a list of all vouchers connected to the exhibitor. The response contains similar data as described in
-   :ref:`rest-vouchers` as well as for each voucher an additional list field ``redemptions``.
-
-   The ``redemptions``-list will contain ``redemption_date``, ``subevent``, and ``attendee_fields``.
+   Returns a list of all vouchers connected to the exhibitor.
 
    Note that the ``attendee_fields`` array can contain any number of dynamic keys!
    Depending on the exhibitors permission and event configuration this might be empty, or contain lots of details.
@@ -925,10 +961,7 @@ You can also fetch existing leads (if you are authorized to do so):
 
 .. http:get:: /exhibitors/api/v1/vouchers/(id)/
 
-   Returns the details of a single, specific voucher connected to the exhibitor. The response contains similar data as
-   described in :ref:`rest-vouchers` as well as an additional list field ``redemptions``.
-
-   The ``redemptions``-list will contain ``redemption_date``, ``subevent``, and ``attendee_fields``.
+   Returns the details of a single, specific voucher connected to the exhibitor.
 
    Note that the ``attendee_fields`` array can contain any number of dynamic keys!
    Depending on the exhibitors permission and event configuration this might be empty, or contain lots of details.
@@ -994,3 +1027,4 @@ You can also fetch existing leads (if you are authorized to do so):
    :statuscode 200: No error
    :statuscode 401: Invalid authentication code
    :statuscode 403: Not permitted to access bulk data
+   :statuscode 404: Voucher not found in system
