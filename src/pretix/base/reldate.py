@@ -21,7 +21,7 @@
 #
 import datetime
 from collections import namedtuple
-from typing import Tuple, Union
+from typing import Tuple, Union, TYPE_CHECKING
 from zoneinfo import ZoneInfo
 
 from dateutil import parser
@@ -33,6 +33,9 @@ from django.utils.functional import lazy
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+
+if TYPE_CHECKING:
+    from .models import Event, Order, SubEvent
 
 EVENT_CHOICES = (
     ('date_from', _('Event start')),
@@ -65,7 +68,7 @@ class RelativeDateWrapper:
     def __init__(self, data: Union[datetime.datetime, RelativeDate]):
         self.data = data
 
-    def _resolve_base_date(self, reference) -> Tuple[datetime.datetime, ZoneInfo]:
+    def _resolve_base_date(self, reference: "Event | Order | SubEvent") -> Tuple[datetime.datetime, ZoneInfo]:
         """
 
         :param reference:
@@ -93,7 +96,7 @@ class RelativeDateWrapper:
 
         return base_date, tz
 
-    def date(self, reference) -> datetime.date:
+    def date(self, reference: "datetime.date | datetime.datetime | Event | Order | SubEvent" ) -> datetime.date:
         if isinstance(self.data, datetime.datetime):
             return self.data.date()
         elif isinstance(self.data, datetime.date):
@@ -110,7 +113,7 @@ class RelativeDateWrapper:
                 new_date = base_date.astimezone(tz) - datetime.timedelta(days=self.data.days)
             return new_date.date()
 
-    def datetime(self, reference) -> datetime.datetime:
+    def datetime(self, reference: "datetime.date | datetime.datetime | Event | Order | SubEvent" ) -> datetime.datetime:
         if isinstance(self.data, (datetime.datetime, datetime.date)):
             return self.data
         else:
