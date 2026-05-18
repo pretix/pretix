@@ -1,6 +1,5 @@
 {% load i18n %}
 {% load static %}
-<script src="{% static 'pretixbase/js/reldate.js' %}" defer></script>
 <div class="reldatetime">
     {% for group_name, group_choices, group-index in widget.subwidgets.0.optgroups %}
         {% for selopt in group_choices %}
