@@ -58,8 +58,8 @@ function async_task_on_success(data) {
             // e.g. pretix-reseller embeds order-page in iframe, which would cause ticket-PDFs to be displayed inline
             var a = document.createElement("a");
             a.href = data.redirect;
-            a.download = ""
-            a.target = '_blank';
+            a.download = "";
+            a.target = "_blank";
             a.click();
         } else {
             location.href = data.redirect;
