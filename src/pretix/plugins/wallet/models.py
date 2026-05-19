@@ -24,6 +24,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import LoggedModel
 from django_scopes import ScopedManager
+from django.core.exceptions import ValidationError
 
 
 class WalletLayout(LoggedModel):
@@ -36,28 +37,31 @@ class WalletLayout(LoggedModel):
         max_length=190,
         verbose_name=_('Name')
     )
+
+    objects = ScopedManager(organizer='event__organizer')
+
+
+class WalletPlatformLayout(LoggedModel):
+    parent = models.ForeignKey(WalletLayout, on_delete=models.CASCADE, related_name="platform_layouts")
+
     platform = models.CharField(max_length=10)
     style = models.CharField(max_length=255)
     layout = models.JSONField(default=dict)
 
-    objects = ScopedManager(organizer='event__organizer')
+    objects = ScopedManager(organizer='parent__event__organizer')
 
     class Meta:
-        ordering = ("name",)
-
-    def __str__(self):
-        return self.name
+        unique_together = (('parent', 'platform'),)
 
 
 class WalletLayoutItem(models.Model):
     item = models.ForeignKey('pretixbase.Item', null=True, blank=True, related_name='walletlayout_assignments',
                              on_delete=models.CASCADE)
     layout = models.ForeignKey(WalletLayout, on_delete=models.CASCADE, related_name='item_assignments')
-    sales_channel = models.ForeignKey(
-        "pretixbase.SalesChannel",
-        on_delete=models.CASCADE,
-    )
 
     class Meta:
-        unique_together = (('item', 'layout', 'sales_channel'),)
-        ordering = ("id",)
+        unique_together = (('item', 'layout'),)
+
+    def clean(self):
+        if self.item.event != self.layout.event:
+            raise ValidationError("cannot bind layout to item of different event")
