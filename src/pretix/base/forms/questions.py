@@ -296,8 +296,9 @@ class NamePartsFormField(forms.MultiValueField):
                     },
                 )
             # URL_RE checks for valid domain names, including one special TLD med, which can be part of a title
-            # correct spelling for URL-matching, but keep original spelling in user-provided value
-            v = v.replace(".med", ". med")
+            if ".med" in v:
+                v = v.replace(".med", ". med")
+                value[fname] = v
             url_matched = URL_RE.match(v)
             if url_matched:
                 raise forms.ValidationError(
