@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-05-12 12:55+0000\n"
+"PO-Revision-Date: 2026-05-19 09:36+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.5\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -16924,13 +16924,12 @@ msgstr ""
 "tilgængeligheden."
 
 #: pretix/control/forms/subevents.py:360
-#, fuzzy
 msgid "Available_until"
-msgstr "Tilgængelig indtil"
+msgstr "Tilgængelig_indtil"
 
 #: pretix/control/forms/subevents.py:480
 msgid "Exclude these dates instead of adding them."
-msgstr ""
+msgstr "Udelad disse datoer i stedet for at tilføje dem."
 
 #: pretix/control/forms/users.py:123 pretix/control/views/user.py:236
 msgid "Your changes could not be saved. See below for details."
@@ -16938,7 +16937,7 @@ msgstr "Dine ændringer kunne ikke gemmes. Se detaljer nedenfor."
 
 #: pretix/control/forms/vouchers.py:159
 msgid "Specific seat ID"
-msgstr ""
+msgstr "Specifikt plads-ID"
 
 #: pretix/control/forms/vouchers.py:200 pretix/presale/forms/waitinglist.py:103
 msgid "Invalid product selected."
@@ -16949,6 +16948,8 @@ msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
 msgstr ""
+"Kuponen matcher kun skjulte produkter, men du har ikke valgt, at de skal "
+"vises."
 
 #: pretix/control/forms/vouchers.py:271
 msgid "Codes"
@@ -16963,17 +16964,16 @@ msgstr ""
 "gemmer den i en fil."
 
 #: pretix/control/forms/vouchers.py:278
-#, fuzzy
 msgid "Send vouchers via email"
-msgstr "Send rabatkoder"
+msgstr "Send gavekort via e-mail"
 
 #: pretix/control/forms/vouchers.py:285
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your voucher for {event}"
-msgstr "Dine bestillinger af {}"
+msgstr "Din billet til {event}"
 
 #: pretix/control/forms/vouchers.py:291
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -16988,29 +16988,32 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hej\n"
+"Hej,\n"
 "\n"
-"Din bestilling {code} til {event} er blevet annulleret.\n"
+"med denne e-mail sender vi dig en eller flere gavekort til arrangementet "
+"{event}:\n"
 "\n"
-"Du kan se detaljerne for din bestilling på\n"
+"{voucher_list}\n"
+"\n"
+"Du kan indløse dem her i vores billetbutik:\n"
+"\n"
 "{url}\n"
 "\n"
-"Venlig hilsen  \n"
-"Arrangøren af {event}"
+"Med venlig hilsen,  \n"
+"\n"
+"Dit {event}-team"
 
 #: pretix/control/forms/vouchers.py:297
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:62
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:28
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:42
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:25
-#, fuzzy
 msgid "Recipients"
-msgstr "Modtager"
+msgstr "Modtagere"
 
 #: pretix/control/forms/vouchers.py:301
-#, fuzzy
 msgid "or"
-msgstr "Port"
+msgstr "eller"
 
 #: pretix/control/forms/vouchers.py:305
 msgid ""
@@ -17018,6 +17021,9 @@ msgid ""
 "line, or the contents of a CSV file with a title row and one or more of the "
 "columns \"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
+"Du kan enten indtaste en liste med e-mailadresser, hvor der er én e-"
+"mailadresse pr. linje, eller indholdet af en CSV-fil med en overskriftsrække "
+"og en eller flere af kolonnerne »e-mail«, »nummer«, »navn« eller »tag«."
 
 #: pretix/control/forms/vouchers.py:339
 msgid "Maximum usages per voucher"
@@ -17029,46 +17035,48 @@ msgstr "Antal gange HVER af disse vouchere kan anvendes."
 
 #: pretix/control/forms/vouchers.py:356
 msgid "Specific seat IDs"
-msgstr ""
+msgstr "Specifikke plads-ID'er"
 
 #: pretix/control/forms/vouchers.py:373
 msgid "CSV input needs to contain a header row in the first line."
-msgstr ""
+msgstr "CSV-filen skal indeholde en overskriftsrække i den første linje."
 
 #: pretix/control/forms/vouchers.py:378
 #, python-brace-format
 msgid "CSV parsing failed: {error}."
-msgstr ""
+msgstr "CSV-parsing mislykkedes: {error}."
 
 #: pretix/control/forms/vouchers.py:380
 msgid ""
 "CSV input was not recognized to have multiple columns, maybe you have some "
 "invalid quoted field in your input."
 msgstr ""
+"CSV-filen blev ikke genkendt som havende flere kolonner. Måske indeholder "
+"din indtastning et felt med ugyldige anførselstegn."
 
 #: pretix/control/forms/vouchers.py:382
 #, python-brace-format
 msgid "CSV input needs to contain a field with the header \"{header}\"."
-msgstr ""
+msgstr "CSV-filen skal indeholde et felt med overskriften \"{header}\"."
 
 #: pretix/control/forms/vouchers.py:385
 #, python-brace-format
 msgid "CSV input contains an unknown field with the header \"{header}\"."
-msgstr ""
+msgstr "CSV-filen indeholder et ukendt felt med overskriften \"{header}\"."
 
 #: pretix/control/forms/vouchers.py:390 pretix/control/forms/vouchers.py:405
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{value} is not a valid email address."
-msgstr "Indtast venligt en gyldig e-mailadresse."
+msgstr "{value} er ikke en gyldig e-mailadresse."
 
 #: pretix/control/forms/vouchers.py:399
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid value in row {number}."
-msgstr "Ugyldig datoindtastning."
+msgstr "Ugyldig værdi i række {number}."
 
 #: pretix/control/forms/vouchers.py:418
 msgid "A voucher with one of these codes already exists."
-msgstr ""
+msgstr "Der findes allerede et kupon med en af disse koder."
 
 #: pretix/control/forms/vouchers.py:425
 #, python-brace-format
@@ -17076,53 +17084,49 @@ msgid ""
 "The voucher code {code} is too short. Make sure all voucher codes are at "
 "least {min_length} characters long."
 msgstr ""
+"Kuponkoden {code} er for kort. Sørg for, at alle kuponkoder er mindst "
+"{min_length} tegn lange."
 
 #: pretix/control/forms/vouchers.py:432
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The voucher code {code} appears in your list twice."
-msgstr "Den angivne rabatkode eksisterer ikke."
+msgstr "Kuponkoden {code} vises to gange på din liste."
 
 #: pretix/control/forms/vouchers.py:436
 msgid ""
 "If vouchers should be sent by email, subject, message and recipients need to "
 "be specified."
 msgstr ""
+"Hvis kuponer skal sendes via e-mail, skal emnefeltet, meddelelsen og "
+"modtagerne angives."
 
 #: pretix/control/forms/vouchers.py:443
 #, python-brace-format
 msgid ""
 "You generated {codes} vouchers, but entered recipients for {recp} vouchers."
 msgstr ""
+"Du har genereret {codes} kuponer, men har angivet modtagere til {recp} "
+"kuponer."
 
 #: pretix/control/forms/vouchers.py:448
-#, fuzzy
 msgid "You need to specify as many seats as voucher codes."
-msgstr "Du skal angive enten en kvote eller et produkt."
+msgstr "Du skal angive lige så mange pladser, som der er rabatkoder."
 
 #: pretix/control/forms/waitinglist.py:39
-#, fuzzy
-#| msgid "Please select a valid seat."
 msgid "Select a valid choice."
-msgstr "Vælg venligst en gyldig plads."
+msgstr "Vælg en gyldig valgmulighed."
 
 #: pretix/control/forms/waitinglist.py:107
-#, fuzzy
-#| msgid "Active products"
 msgid "Only includes active products."
-msgstr "Aktive produkter"
+msgstr "Indeholder kun aktive produkter."
 
 #: pretix/control/forms/waitinglist.py:115
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "A voucher for this waiting list entry was already sent out."
-msgstr "En rabatkode med denne kode findes allerede."
+msgstr "Der er allerede blevet sendt en kupon for denne plads på ventelisten."
 
 #: pretix/control/forms/waitinglist.py:125
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected event date is not active."
 msgid "The selected product is not active."
-msgstr "Den valgte arrangementsdato er ikke aktiv."
+msgstr "Det valgte produkt er ikke aktivt."
 
 #: pretix/control/logdisplay.py:73 pretix/control/logdisplay.py:83
 msgid "The order has been changed:"
@@ -17134,16 +17138,18 @@ msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
 "({new_price})."
 msgstr ""
+"Post #{posid}: {old_item} ({old_price}) er ændret til {new_item} ("
+"{new_price})."
 
 #: pretix/control/logdisplay.py:111
 #, python-brace-format
 msgid "Position #{posid}: Used membership changed."
-msgstr ""
+msgstr "Post #{posid}: Det anvendte medlemskab er ændret."
 
 #: pretix/control/logdisplay.py:117
 #, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
-msgstr ""
+msgstr "Post #{posid}: Plads \"{old_seat}\" er ændret til \"{new_seat}\"."
 
 #: pretix/control/logdisplay.py:127
 #, python-brace-format
@@ -17151,50 +17157,48 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
+"Post #{posid}: Begivenhedsdatoen \"{old_event}\" ({old_price}) er ændret til "
+"\"{new_event}\" ({new_price})."
 
 #: pretix/control/logdisplay.py:141
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr ""
+msgstr "Prisen på post #{posid} er ændret fra {old_price} til {new_price}."
 
 #: pretix/control/logdisplay.py:154
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax rule of position #{posid} changed from {old_rule} to {new_rule}."
-msgstr ""
-"E-mailadressen er blevet ændret fra \"{old_email}\" til \"{new_email}\"."
+msgstr "Skattereglen for post #{posid} er ændret fra {old_rule} til {new_rule}."
 
 #: pretix/control/logdisplay.py:160
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Tax rule of fee #{fee} changed from {old_rule} to {new_rule}."
 msgstr ""
-"E-mailadressen er blevet ændret fra \"{old_email}\" til \"{new_email}\"."
+"Skattebestemmelsen for gebyret #{fee} er ændret fra {old_rule} til {new_rule}"
+"."
 
 #: pretix/control/logdisplay.py:170
-#, fuzzy
 msgid "A fee has been added"
-msgstr "Kvoten er blevet tilføjet."
+msgstr "Der er blevet tilføjet et gebyr"
 
 #: pretix/control/logdisplay.py:176
-#, fuzzy
-#| msgid "The new vouchers have been created."
 msgid "Taxes and rounding have been recomputed"
-msgstr "De nye vouchere er blevet oprettet."
+msgstr "Skatter og afrundinger er blevet genberegnet"
 
 #: pretix/control/logdisplay.py:184
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A fee was changed from {old_price} to {new_price}."
-msgstr ""
-"E-mailadressen er blevet ændret fra \"{old_email}\" til \"{new_email}\"."
+msgstr "Et gebyr er ændret fra {old_price} til {new_price}."
 
 #: pretix/control/logdisplay.py:195
 #, python-brace-format
 msgid "A fee of {old_price} was removed."
-msgstr ""
+msgstr "Et gebyr på {old_price} er blevet fjernet."
 
 #: pretix/control/logdisplay.py:208
 #, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr ""
+msgstr "Post  #{posid} ({old_item}, {old_price}) er annulleret."
 
 #: pretix/control/logdisplay.py:225
 #, python-brace-format
@@ -17202,44 +17206,47 @@ msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
 msgstr ""
+"Post #{posid} oprettet: {item} ({price}) som et tilvalg til post #{addon_to}."
 
 #: pretix/control/logdisplay.py:231
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr ""
+msgstr "Post {posid} oprettet: {item} ({price})."
 
 #: pretix/control/logdisplay.py:241
 #, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr ""
+msgstr "Der er genereret en ny sikkerhedsnøgle til post #{posid}."
 
 #: pretix/control/logdisplay.py:249
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The validity start date for position #{posid} has been changed to {value}."
-msgstr "Bestillingen er blevet annulleret."
+msgstr "Gyldighedsperioden for post #{posid} er blevet ændret til {value}."
 
 #: pretix/control/logdisplay.py:261
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The validity end date for position #{posid} has been changed to {value}."
-msgstr "Bestillingen er blevet annulleret."
+msgstr ""
+"Slutdatoen for gyldigheden for post #{posid} er blevet ændret til {value}."
 
 #: pretix/control/logdisplay.py:270
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A block has been added for position #{posid}."
-msgstr "En tilføjelse er blevet føjet til dette produkt."
+msgstr "Der er tilføjet en blok til post #{posid}."
 
 #: pretix/control/logdisplay.py:276
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "A block has been removed for position #{posid}."
-msgstr "En tilføjelse er blevet fjernet fra dette produkt."
+msgstr "Der er blevet fjernet en blok for post #{posid}."
 
 #: pretix/control/logdisplay.py:293
 #, python-brace-format
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
+"Post #{posid} ({old_item}, {old_price}) er opdelt i en ny ordre: {order}"
 
 #: pretix/control/logdisplay.py:312
 #, python-brace-format
@@ -17252,26 +17259,34 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
+"Ukendt scanning af koden \"{barcode}…\" kl. {datetime} for listen \"{list}"
+"\", type \"{type}\"."
 
 #: pretix/control/logdisplay.py:320
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr ""
+"Ukendt scanning af koden \"{barcode}…\" for listen \"{list}\", typen \"{type}"
+"\"."
 
 #: pretix/control/logdisplay.py:323
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\", was uploaded."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr ""
+"En scanning af den tilbagetrukkede kode \"{barcode}…\" den {datetime} for "
+"listen \"{list}\", type \"{type}\", er blevet uploadet."
 
 #: pretix/control/logdisplay.py:324
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr ""
+"En scanning af den tilbagetrukne kode \"{barcode}\" for listen \"{list}\", "
+"type \"{type}\" er blevet uploadet."
 
 #: pretix/control/logdisplay.py:327
 #, python-brace-format
@@ -17279,44 +17294,56 @@ msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
+"Scanning af post #{posid} den {datetime} for listen \"{list}\", type \"{type}"
+"\", fejlkode \"{errorcode}\" blev afvist."
 
 #: pretix/control/logdisplay.py:328
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr ""
+"Scanning af post #{posid} for listen \"{list}\", type \"{type}\" blev "
+"afvist. Fejlkode \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:331
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\"."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr ""
+"Scanning af post #{posid} den  {datetime} for listen \"{list}\", type \""
+"{type}\", er blevet annulleret."
 
 #: pretix/control/logdisplay.py:332
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Annulled scan of position #{posid} for list \"{list}\", type \"{type}\"."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr ""
+"Scanning af post #{posid} for listen \"{list}\" type \"{type}\" er blevet "
+"annulleret."
 
 #: pretix/control/logdisplay.py:335
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} at {datetime} for list \"{list}\", "
 "type \"{type}\"."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr ""
+"Annullering af post #{posid} den {datetime} for listen \"{list}\", type \""
+"{type}\" er blevet ignoreret."
 
 #: pretix/control/logdisplay.py:336
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Ignored annulment of position #{posid} for list \"{list}\", type \"{type}\"."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr ""
+"Annullering af post #{posid} for listen \"{list}\", type \"{type}\", er "
+"blevet ignoreret."
 
 #: pretix/control/logdisplay.py:338 pretix/control/logdisplay.py:339
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr "Tjek-ind af post #{posid} på listen \"{list}\" er blevet annulleret."
 
 #: pretix/control/logdisplay.py:359 pretix/control/logdisplay.py:361
 #: pretix/control/logdisplay.py:995 pretix/control/logdisplay.py:997
@@ -17328,22 +17355,24 @@ msgstr "(ukendt)"
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
 msgstr ""
+"Post #{posid} er blevet tjekket ud den {datetime} for listen \"{list}\"."
 
 #: pretix/control/logdisplay.py:382
 #, python-brace-format
 msgid "Position #{posid} has been checked out for list \"{list}\"."
-msgstr ""
+msgstr "Post #{posid} er blevet tjekket ud for listen \"{list}\"."
 
 #: pretix/control/logdisplay.py:386
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
 msgstr ""
+"Post #{posid} er blevet tjekket ind den {datetime} for listen \"{list}\"."
 
 #: pretix/control/logdisplay.py:387
 #, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
-msgstr ""
+msgstr "Post #{posid} er blevet tjekket ind for listen \"{list}\"."
 
 #: pretix/control/logdisplay.py:391
 #, python-brace-format
@@ -17351,6 +17380,8 @@ msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
 "uploaded even though it has been scanned already."
 msgstr ""
+"En scanning af post # {posid} den {datetime} for listen \"{list}\" er blevet "
+"uploadet, selvom den allerede er blevet scannet."
 
 #: pretix/control/logdisplay.py:397
 #, python-brace-format
@@ -17358,16 +17389,18 @@ msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
 msgstr ""
+"Post #{posid} er blevet scannet og afvist, da den allerede er blevet scannet "
+"tidligere for listen \"{list}\"."
 
 #: pretix/control/logdisplay.py:408
 #, python-brace-format
 msgid "The user confirmed the following message: \"{}\""
-msgstr ""
+msgstr "Brugeren bekræftede følgende besked: \"{}\""
 
 #: pretix/control/logdisplay.py:420
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The order has been canceled (comment: \"{comment}\")."
-msgstr "Bestillingen er blevet tilbagebetalt."
+msgstr "Ordren er blevet annulleret (kommentar: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:422 pretix/control/views/orders.py:1556
 #: pretix/presale/views/order.py:1138
@@ -17377,12 +17410,12 @@ msgstr "Bestillingen er blevet annulleret."
 #: pretix/control/logdisplay.py:430
 #, python-brace-format
 msgid "Position #{posid} has been printed at {datetime} with type \"{type}\"."
-msgstr ""
+msgstr "Post #{posid} er blevet printet den {datetime} med typen \"{type}\"."
 
 #: pretix/control/logdisplay.py:452
 #, python-brace-format
 msgid "Data successfully transferred to {provider_display_name}."
-msgstr ""
+msgstr "Dataene er blevet overført til {provider_display_name}."
 
 #: pretix/control/logdisplay.py:471
 #, python-brace-format
@@ -17390,6 +17423,8 @@ msgid ""
 "Transferring data to {provider_display_name} failed due to invalid "
 "configuration:"
 msgstr ""
+"Overførslen af data til {provider_display_name} mislykkedes på grund af en "
+"ugyldig konfiguration:"
 
 #: pretix/control/logdisplay.py:472
 #, python-brace-format
@@ -17397,16 +17432,21 @@ msgid ""
 "Maximum number of retries exceeded while transferring data to "
 "{provider_display_name}:"
 msgstr ""
+"Det maksimale antal forsøg er overskredet under overførsel af data til "
+"{provider_display_name}:"
 
 #: pretix/control/logdisplay.py:473
 #, python-brace-format
 msgid "Error while transferring data to {provider_display_name}:"
 msgstr ""
+"Der opstod en fejl under overførslen af data til {provider_display_name}:"
 
 #: pretix/control/logdisplay.py:474 pretix/control/logdisplay.py:475
 #, python-brace-format
 msgid "Internal error while transferring data to {provider_display_name}."
 msgstr ""
+"Der opstod en intern fejl under overførslen af data til "
+"{provider_display_name}."
 
 #: pretix/control/logdisplay.py:489 pretix/control/logdisplay.py:842
 msgid "The settings of a payment provider have been changed."
@@ -17414,15 +17454,15 @@ msgstr "Indstillingerne for en betalingsudbyder er blevet ændret."
 
 #: pretix/control/logdisplay.py:492 pretix/control/logdisplay.py:841
 msgid "The settings of a ticket output provider have been changed."
-msgstr ""
+msgstr "Indstillingerne for en udbyder af billetudskrivning er blevet ændret."
 
 #: pretix/control/logdisplay.py:498
 msgid "Blocked manually"
-msgstr ""
+msgstr "Blokeret manuelt"
 
 #: pretix/control/logdisplay.py:500
 msgid "Blocked because of an API integration"
-msgstr ""
+msgstr "Blokeret på grund af en API-integration"
 
 #: pretix/control/logdisplay.py:504
 #, python-brace-format
@@ -17447,14 +17487,14 @@ msgid "The order's expiry date has been changed."
 msgstr "Bestillingens udløbsdato er blevet ændret."
 
 #: pretix/control/logdisplay.py:509
-#, fuzzy
 msgid "The order has been set to be usable before it is paid."
-msgstr "Bestillingen er blevet markeret som betalt."
+msgstr "Ordrens status er sat til »klar til brug«, før den er betalt."
 
 #: pretix/control/logdisplay.py:510
-#, fuzzy
 msgid "The order has been set to require payment before use."
-msgstr "Voucheren er blevet oprettet."
+msgstr ""
+"Indstillingen for ordren er blevet ændret således, at betaling kræves før "
+"brug."
 
 #: pretix/control/logdisplay.py:511 pretix/control/views/orders.py:1561
 msgid "The order has been marked as expired."
@@ -17465,18 +17505,16 @@ msgid "The order has been marked as paid."
 msgstr "Bestillingen er blevet markeret som betalt."
 
 #: pretix/control/logdisplay.py:513
-#, fuzzy
 msgid "The cancellation request has been deleted."
-msgstr "Det valgte spørgsmål er blevet slettet."
+msgstr "Anmodningen om annullering er blevet slettet."
 
 #: pretix/control/logdisplay.py:514
 msgid "The order has been refunded."
 msgstr "Bestillingen er blevet tilbagebetalt."
 
 #: pretix/control/logdisplay.py:515 pretix/control/views/orders.py:1901
-#, fuzzy
 msgid "The order has been reactivated."
-msgstr "Bestilling oprettet."
+msgstr "Ordren er blevet genaktiveret."
 
 #: pretix/control/logdisplay.py:516
 msgid "The order has been created."
@@ -17484,22 +17522,20 @@ msgstr "Bestillingen er oprettet"
 
 #: pretix/control/logdisplay.py:518
 msgid "The order requires approval before it can continue to be processed."
-msgstr ""
+msgstr "Ordren skal godkendes, før den kan behandles videre."
 
 #: pretix/control/logdisplay.py:519 pretix/control/views/orders.py:783
-#, fuzzy
 msgid "The order has been approved."
-msgstr "Bestilling oprettet."
+msgstr "Ordren er blevet godkendt."
 
 #: pretix/control/logdisplay.py:520
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The order has been denied (comment: \"{comment}\")."
-msgstr "Bestillingen er blevet tilbagebetalt."
+msgstr "Bestillingen er blevet afvist (kommentar: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:521
-#, fuzzy
 msgid "The customer VAT ID has been verified."
-msgstr "Bestilling oprettet."
+msgstr "Kundens momsnummer er blevet verificeret."
 
 #: pretix/control/logdisplay.py:522
 #, python-brace-format
@@ -17513,22 +17549,23 @@ msgid ""
 "The email address has been confirmed to be working (the user clicked on a "
 "link in the email for the first time)."
 msgstr ""
+"Det er bekræftet, at e-mailadressen fungerer (brugeren har klikket på et "
+"link i e-mailen for første gang)."
 
 #: pretix/control/logdisplay.py:527
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
 msgstr ""
-"E-mailadressen er blevet ændret fra \"{old_email}\" til \"{new_email}\"."
+"Telefonnummeret er blevet ændret fra \"{old_phone}\" til \"{new_phone}\"."
 
 #: pretix/control/logdisplay.py:529
-#, fuzzy
 msgid "The customer account has been changed."
-msgstr "Spørgsmålet er blevet ændret."
+msgstr "Kundekontoen er blevet ændret."
 
 #: pretix/control/logdisplay.py:530
 msgid "The order locale has been changed."
-msgstr ""
+msgstr "Lokaliteten for ordren er blevet ændret."
 
 #: pretix/control/logdisplay.py:531 pretix/control/views/orders.py:1600
 #: pretix/presale/views/order.py:797 pretix/presale/views/order.py:877
@@ -17536,10 +17573,8 @@ msgid "The invoice has been generated."
 msgstr "Fakturaen er blevet genereret."
 
 #: pretix/control/logdisplay.py:532
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "The invoice could not be generated."
-msgstr "Fakturaen er blevet genereret."
+msgstr "Fakturaen kunne ikke udfærdiges."
 
 #: pretix/control/logdisplay.py:533 pretix/control/views/orders.py:1681
 msgid "The invoice has been regenerated."
@@ -17551,14 +17586,14 @@ msgid "The invoice has been reissued."
 msgstr "Fakturaen er blevet genudstedt."
 
 #: pretix/control/logdisplay.py:535
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The invoice {full_invoice_no} has been sent."
-msgstr "Fakturaen er blevet genudstedt."
+msgstr "Fakturaen {full_invoice_no} er blevet sendt."
 
 #: pretix/control/logdisplay.py:536
 #, python-brace-format
 msgid "The transmission of invoice {full_invoice_no} has failed."
-msgstr ""
+msgstr "Overførslen af faktura {full_invoice_no} mislykkedes."
 
 #: pretix/control/logdisplay.py:537
 #, python-brace-format
@@ -17566,39 +17601,44 @@ msgid ""
 "Invoice {full_invoice_no} has not been transmitted because the transmission "
 "provider does not support test mode invoices."
 msgstr ""
+"Faktura {full_invoice_no} er ikke blevet sendt, da udbyderen ikke "
+"understøtter fakturaer i testtilstand."
 
 #: pretix/control/logdisplay.py:539
 #, python-brace-format
 msgid "The invoice {full_invoice_no} has been scheduled for retransmission."
-msgstr ""
+msgstr "Fakturaen {full_invoice_no} er sat til at blive sendt igen."
 
 #: pretix/control/logdisplay.py:540
 msgid "The order's internal comment has been updated."
 msgstr "Bestillingens interne kommentar er blevet opdateret."
 
 #: pretix/control/logdisplay.py:541
-#, fuzzy
 msgid "The order's follow-up date has been updated."
-msgstr "Rækkefølgen af elementerne er blevet opdateret."
+msgstr "Opfølgningsdatoen for ordren er blevet opdateret."
 
 #: pretix/control/logdisplay.py:542
 msgid "The order's flag to require attention at check-in has been toggled."
 msgstr ""
+"Ordrens markering for, at ordren skal fremhæves ved check-in, er blevet "
+"aktiveret."
 
 #: pretix/control/logdisplay.py:544
-#, fuzzy
 msgid "The order's check-in text has been changed."
-msgstr "Bestillingens hemmelighed er blevet ændret."
+msgstr "Ordrens tjek-ind-tekst er blevet ændret."
 
 #: pretix/control/logdisplay.py:545
 msgid ""
 "The order's flag to be considered valid even if unpaid has been toggled."
 msgstr ""
+"Ordrens markering for, at ordren skal betragtes som gyldig, selvom den ikke "
+"er betalt, er blevet aktiveret."
 
 #: pretix/control/logdisplay.py:547
 #, python-brace-format
 msgid "A new payment {local_id} has been started instead of the previous one."
 msgstr ""
+"En ny betaling {local_id} er blevet påbegyndt i stedet for den tidligere."
 
 #: pretix/control/logdisplay.py:548
 msgid "An unidentified type email has been sent."
@@ -17607,16 +17647,15 @@ msgstr "En e-mail af ukendt type er blevet sendt."
 #: pretix/control/logdisplay.py:549 pretix/control/logdisplay.py:742
 #: pretix/control/logdisplay.py:748 pretix/control/logdisplay.py:776
 msgid "Sending of an email has failed."
-msgstr ""
+msgstr "Forsendelse af en e-mail er mislykket."
 
 #: pretix/control/logdisplay.py:550
-#, fuzzy
 msgid ""
 "The email has been sent without attached tickets since they would have been "
 "too large to be likely to arrive."
 msgstr ""
-"En e-mail er blevet sendt for at fortælle brugeren at bestillingen er "
-"modtaget."
+"E-mailen er blevet sendt uden vedhæftede billetter, da de sandsynligvis "
+"ville have været for store til at kunne leveres."
 
 #: pretix/control/logdisplay.py:552
 #, fuzzy
