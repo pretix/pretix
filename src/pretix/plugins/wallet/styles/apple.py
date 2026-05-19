@@ -19,7 +19,6 @@ import json
 from django.contrib.staticfiles import finders
 
 
-
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
     name = _("Apple")
@@ -236,13 +235,13 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 raise ValueError("Unknown field group")
         return fields
 
-    def convert_fields(self, strings, fields):
+    def convert_fields(self, strings, fields, prefix):
         converted = []
         for i,f in enumerate(fields):
-            converted_field = {**f, "key": f"primary-{i}"}
+            converted_field = {**f, "key": f"{prefix}-{i}"}
             if "label" in converted_field and isinstance(converted_field['label'], LazyI18nString):
-                strings.add_entry(f"primary-{i}-label", converted_field['label'])
-                converted_field['label'] = f"primary-{i}-label"
+                strings.add_entry(f"{prefix}-{i}-label", converted_field['label'])
+                converted_field['label'] = f"{prefix}-{i}-label"
 
             converted.append(converted_field)
         return converted
@@ -251,6 +250,6 @@ class AppleWalletEventTicket(AppleWalletStyle):
         fields = self.get_pass_fields(layout, context)
         return {
             "eventTicket": {
-                "primaryFields": self.convert_fields(strings, fields['primary'])
+                "primaryFields": self.convert_fields(strings, fields['primary'], 'primary')
             }
         }
