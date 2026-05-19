@@ -32,7 +32,7 @@ from .api import WalletLayoutViewSet
 urlpatterns = [
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/$',
         LayoutListView.as_view(), name='index'),
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/add/(?P<platform>[^/]+)/$',
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/add/$',
         LayoutCreateView.as_view(), name='add'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/edit/(?P<layout>[^/]+)/$',
         LayoutEditorView.as_view(), name='edit'),
