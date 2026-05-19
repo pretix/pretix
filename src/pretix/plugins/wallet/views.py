@@ -31,7 +31,6 @@ def get_editor_variables(event):
     }
 
 
-# TODO: should this even be a list view?
 class LayoutListView(EventPermissionRequiredMixin, ListView):
     model = WalletLayout
     permission = "can_change_event_settings"
@@ -39,12 +38,7 @@ class LayoutListView(EventPermissionRequiredMixin, ListView):
     context_object_name = "layouts"
 
     def get_queryset(self):
-        return self.request.event.wallet_layouts
-
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        ctx = super().get_context_data(**kwargs)
-        ctx["platforms"] = AVAILABLE_PLATFORMS
-        return ctx
+        return self.request.event.wallet_layouts.all()
 
 
 class LayoutEditorView(DetailView):
@@ -53,18 +47,19 @@ class LayoutEditorView(DetailView):
     permission = "event.settings.general:write"
     pk_url_kwarg = "layout"
 
-    def get_platform_styles(self):
-        if self.object.platform not in AVAILABLE_STYLES:
-            raise Http404(
-                _("Unknown platform '{platform}'").format(platform=self.object.platform)
-            )
-        return AVAILABLE_STYLES[self.object.platform]
-
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["styles"] = {
-            style.identifier: style.asdict() for style in self.get_platform_styles()
-        }
+        context['platforms'] = [{
+                "identifier": platform.identifier,
+                "name": platform.name,
+                "styles": {
+                    style.identifier: style.asdict() for style in AVAILABLE_STYLES.get(platform.identifier)
+                }
+            } for platform in AVAILABLE_PLATFORMS
+        ]
+        # context["styles"] = {
+        #     style.identifier: style.asdict() for style in self.get_platform_styles()
+        # }
         context["variables"] = get_editor_variables(self.request.event)
         context["locales"] = {
             l: dict(settings.LANGUAGES).get(l, l)
@@ -79,13 +74,11 @@ class WalletLayoutCreateForm(forms.ModelForm):
         model = WalletLayout
         fields = ("name",)
 
-    def __init__(self, *args, platform, event, **kwargs):
+    def __init__(self, *args, event, **kwargs):
         super().__init__(*args, **kwargs)
-        self.platform = platform
         self.event = event
 
     def save(self, *args, **kwargs) -> Any:
-        self.instance.platform = self.platform
         self.instance.event = self.event
         return super().save(*args, **kwargs)
 
@@ -95,16 +88,8 @@ class LayoutCreateView(CreateView):
     form_class = WalletLayoutCreateForm
     permission = "event.settings.general:write"
 
-    @property
-    def platform(self):
-        platform = self.kwargs["platform"]
-        if platform not in AVAILABLE_PLATFORMS:
-            raise Http404(_("Unknown platform '{platform}'").format(platform=platform))
-        return platform
-
     def get_form_kwargs(self) -> dict[str, Any]:
         kwargs = super().get_form_kwargs()
-        kwargs["platform"] = self.platform
         kwargs["event"] = self.request.event
         return kwargs
 
