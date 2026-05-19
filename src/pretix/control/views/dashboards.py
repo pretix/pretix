@@ -61,7 +61,8 @@ from pretix.base.models import (
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.timeline import timeline_for_event
 from pretix.control.signals import (
-    event_dashboard_widgets, user_dashboard_widgets,
+    event_dashboard_widgets, event_dashboard_widgets_override,
+    user_dashboard_widgets,
 )
 from pretix.helpers.daterange import daterange
 
@@ -74,7 +75,9 @@ NUM_WIDGET = '<div class="numwidget"><span class="num">{num}</span><span class="
 
 
 @receiver(signal=event_dashboard_widgets)
-def base_widgets(sender, subevent=None, lazy=False, **kwargs):
+def base_widgets(sender, subevent=None, lazy=False, widgets_override_active=False, **kwargs):
+    if widgets_override_active:
+        return []
     if not lazy:
         prodc = Item.objects.filter(
             event=sender, active=True,
@@ -369,12 +372,20 @@ def event_index(request, organizer, event):
                                                                   'event.settings.general:write', request=request)
 
     widgets = []
+    widgets_override = ''
     if can_view_orders:
-        for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=True):
+        for r, result in event_dashboard_widgets_override.send(sender=request.event, subevent=subevent, request=request):
+            if result:
+                widgets_override += result
+        for r, result in event_dashboard_widgets.send(
+            sender=request.event, subevent=subevent, lazy=True,
+            widgets_override_active=bool(widgets_override),
+        ):
             widgets.extend(result)
 
     ctx = {
         'widgets': rearrange(widgets),
+        'widgets_override': widgets_override,
         'subevent': subevent,
         'comment_form': CommentForm(initial={'comment': request.event.comment}, readonly=not can_change_event_settings),
     }

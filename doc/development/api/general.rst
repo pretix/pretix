@@ -83,7 +83,7 @@ Dashboards
 
 .. automodule:: pretix.control.signals
    :no-index:
-   :members: event_dashboard_widgets, user_dashboard_widgets, event_dashboard_top
+   :members: event_dashboard_widgets, event_dashboard_widgets_override, user_dashboard_widgets, event_dashboard_top
 
 Ticket designs
 """"""""""""""
