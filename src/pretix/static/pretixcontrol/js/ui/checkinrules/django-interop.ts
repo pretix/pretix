@@ -65,4 +65,4 @@ if (itemsEl?.textContent) {
 
 export const productSelectURL = ref(document.querySelector('#product-select2')?.textContent)
 export const variationSelectURL = ref(document.querySelector('#variations-select2')?.textContent)
-export const gateSelectURL = ref(document.querySelector('#gate-select2')?.textContent)
+export const gateSelectURL = ref(document.querySelector('#gates-select2')?.textContent)
