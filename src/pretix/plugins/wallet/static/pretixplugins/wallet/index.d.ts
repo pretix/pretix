@@ -48,10 +48,16 @@ type Variable = {
     label: string
 };
 
+type Platform = {
+	identifier: string;
+	name: string;
+	styles: Styles;
+};
+
 type Styles = Record<string, Style>;
 type Variables = Record<string, Variable>;
 type VariableConfig = Record<string, Variables>;
-
+type Platforms = Record<string, Platform>;
 
 
 type PlaceholderFieldGroupConfig = {
