@@ -1,35 +1,21 @@
 from rest_framework import viewsets
 from django.db import transaction
-from .styles import PassLayout, AVAILABLE_STYLES_DICT
-from .models import WalletLayout
+from .styles import PassLayout, AVAILABLE_STYLES_DICT, AVAILABLE_PLATFORMS
+from .models import WalletLayout, WalletPlatformLayout
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
-import django_filters.rest_framework
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from .views import get_layout_variables
+from rest_framework import serializers
 
 
-class WalletLayoutSerializer(I18nAwareModelSerializer):
+class WalletPlatformLayoutSerializer(I18nAwareModelSerializer):
+    platform = serializers.ChoiceField(choices=[p.identifier for p in AVAILABLE_PLATFORMS])
+    style = serializers.CharField(allow_null=True, required=False)
+
     class Meta:
-        model = WalletLayout
-        fields = ("id", "platform", "name", "style", "layout")
-        read_only_fields = ("id",)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance:
-            self.fields['platform'].read_only = True
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs, event=self.context["event"])
-
-    def validate_platform(self, value):
-        if self.instance and value != self.instance.platform:
-            raise ValidationError(_("Platform cannot be changed"))
-
-        if value not in AVAILABLE_STYLES_DICT:
-            raise ValidationError(_("Invalid platform"))
-        return value
+        model = WalletPlatformLayout
+        fields = ("platform", "style", "layout")
 
     def validate_layout(self, value):
         if not isinstance(value, dict):
@@ -37,11 +23,10 @@ class WalletLayoutSerializer(I18nAwareModelSerializer):
         return value
 
     def validate(self, data):
-        if self.instance:
-            platform = self.instance.platform
-        else:
-            platform = data.get('platform', None)
-        if "style" in data and "layout" in data and platform:
+        platform = data.get('platform')
+        style = data.get('style')
+        layout = data.get('layout')
+        if platform and style and layout:
             platform_styles = AVAILABLE_STYLES_DICT[platform]
 
             if data["style"] not in platform_styles:
@@ -54,19 +39,37 @@ class WalletLayoutSerializer(I18nAwareModelSerializer):
         return data
 
 
+class WalletLayoutSerializer(I18nAwareModelSerializer):
+    platform_layouts = WalletPlatformLayoutSerializer(many=True)
+
+    class Meta:
+        model = WalletLayout
+        fields = ("id", "name", "platform_layouts")
+        read_only_fields = ("id",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs, event=self.context["event"])
+
+    def update(self, instance, validated_data):
+        platform_layouts = validated_data.pop('platform_layouts')
+        for layout in platform_layouts:
+            if layout['style']:
+                instance.platform_layouts.update_or_create(platform=layout['platform'], defaults=layout)
+        instance.platform_layouts.exclude(platform__in={layout['platform'] for layout in platform_layouts if layout['style'] is not None}).delete()
+        return super().update(instance, validated_data)
+
+
 class WalletLayoutViewSet(viewsets.ModelViewSet):
     model = WalletLayout
     queryset = WalletLayout.objects.none()
     serializer_class = WalletLayoutSerializer
-    filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-    filterset_fields = ["platform"]
     permission = "event.settings.general:write"
 
     def get_queryset(self):
         return self.request.event.wallet_layouts.all()
-
-    def get_serializer(self, *args, **kwargs):
-        return super().get_serializer(*args, **kwargs)
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()

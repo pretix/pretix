@@ -8,7 +8,8 @@ defineOptions({
 const props = defineProps<{
 	label?: string
 	choices: Array<[string, string]>
-    errors?: string[]
+    errors?: string[],
+    class: string
 }>()
 const modelValue = defineModel<string|null>();
 const id = useId()
@@ -23,7 +24,7 @@ watchEffect(() => {
 </script>
 
 <template lang="pug">
-    template(v-if="choices.length >= 1")
+    template(v-if="choices.length >= 1" :class="props.class")
         label.control-label(v-if="props.label" :for="id") {{ props.label }}
         select.form-control(:id="id" v-model="modelValue" v-bind="$attrs" required)
             option(v-for="choice in props.choices" :key="choice[0]" :value="choice[0]") {{ choice[1] }}
