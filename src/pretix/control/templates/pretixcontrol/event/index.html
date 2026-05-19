@@ -43,37 +43,42 @@
     {% if not request.event.has_subevents or subevent %}
         {% include "pretixcontrol/event/fragment_timeline.html" %}
     {% endif %}
-    <div class="dashboard">
-        {% for w in widgets %}
-            <div class="widget-container widget-{{ w.display_size|default:"small" }} {% if w.lazy %}widget-lazy-loading{% endif %}" data-lazy-id="{{ w.lazy }}">
-                {% if w.url %}{# backwards compatibility #}
-                    <a href="{{ w.url }}" class="widget">
-                        {% if w.lazy %}
-                            <span class="fa fa-cog fa-4x"></span>
-                        {% else %}
-                            {{ w.content }}
-                        {% endif %}
-                    </a>
-                {% elif w.link %}
-                    <a href="{{ w.link }}" class="widget">
-                        {% if w.lazy %}
-                            <span class="fa fa-cog fa-4x´"></span>
-                        {% else %}
-                            {{ w.content }}
-                        {% endif %}
-                    </a>
-                {% else %}
-                    <div class="widget">
-                        {% if w.lazy %}
-                            <span class="fa fa-cog fa-4x"></span>
-                        {% else %}
-                            {{ w.content }}
-                        {% endif %}
-                    </div>
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
+    {% if widgets_override %}
+        {{ widgets_override|safe }}
+    {% endif %}
+    {% if widgets %}
+        <div class="dashboard">
+            {% for w in widgets %}
+                <div class="widget-container widget-{{ w.display_size|default:"small" }} {% if w.lazy %}widget-lazy-loading{% endif %}" data-lazy-id="{{ w.lazy }}">
+                    {% if w.url %}{# backwards compatibility #}
+                        <a href="{{ w.url }}" class="widget">
+                            {% if w.lazy %}
+                                <span class="fa fa-cog fa-4x"></span>
+                            {% else %}
+                                {{ w.content }}
+                            {% endif %}
+                        </a>
+                    {% elif w.link %}
+                        <a href="{{ w.link }}" class="widget">
+                            {% if w.lazy %}
+                                <span class="fa fa-cog fa-4x´"></span>
+                            {% else %}
+                                {{ w.content }}
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        <div class="widget">
+                            {% if w.lazy %}
+                                <span class="fa fa-cog fa-4x"></span>
+                            {% else %}
+                                {{ w.content }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <p>&nbsp;</p>
     <div class="panel panel-default items">
