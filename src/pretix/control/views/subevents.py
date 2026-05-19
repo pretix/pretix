@@ -424,7 +424,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
         days = (self.copy_from.date_from.astimezone(tz).date() - value.astimezone(tz).date()).days
         return RelativeDateWrapper(RelativeDate(
             days=abs(days),
-            base_date_name='date_from',
+            base_date_name='event__date_from',
             time=value.astimezone(tz).time(),
             minutes=None,
             is_after=days < 0,

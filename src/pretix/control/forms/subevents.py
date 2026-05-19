@@ -93,14 +93,14 @@ class SubEventBulkForm(SubEventForm):
         label=_('Start of presale'),
         help_text=_('Optional. No products will be sold before this date.'),
         required=False,
-        limit_choices=('date_from', 'date_to'),
+        limit_choices=('event__date_from', 'event__date_to'),
     )
     rel_presale_end = RelativeDateTimeField(
         label=_('End of presale'),
         help_text=_('Optional. No products will be sold after this date. If you do not set this value, the presale '
                     'will end after the end date of your event.'),
         required=False,
-        limit_choices=('date_from', 'date_to'),
+        limit_choices=('event__date_from', 'event__date_to'),
     )
     skip_if_overlap = forms.BooleanField(
         label=pgettext_lazy('subevent', 'Skip dates that overlap with any existing date'),
@@ -332,12 +332,12 @@ class BulkSubEventItemForm(SubEventItemForm):
     rel_available_from = RelativeDateTimeField(
         label=_('Available from'),
         required=False,
-        limit_choices=('date_from', 'date_to'),
+        limit_choices=('event__date_from', 'event__date_to'),
     )
     rel_available_until = RelativeDateTimeField(
         label=_('Available until'),
         required=False,
-        limit_choices=('date_from', 'date_to'),
+        limit_choices=('event__date_from', 'event__date_to'),
     )
 
     def __init__(self, *args, **kwargs):
@@ -354,12 +354,12 @@ class BulkSubEventItemVariationForm(SubEventItemVariationForm):
     rel_available_from = RelativeDateTimeField(
         label=_('Available from'),
         required=False,
-        limit_choices=('date_from', 'date_to'),
+        limit_choices=('event__date_from', 'event__date_to'),
     )
     rel_available_until = RelativeDateTimeField(
         label=_('Available_until'),
         required=False,
-        limit_choices=('date_from', 'date_to'),
+        limit_choices=('event__date_from', 'event__date_to'),
     )
 
     def __init__(self, *args, **kwargs):
