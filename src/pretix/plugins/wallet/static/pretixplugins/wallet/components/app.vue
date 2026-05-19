@@ -9,8 +9,8 @@ const gettext = (window as any).gettext;
 const isLoading = ref<boolean>(true);
 const wallet_layout = ref<Layout | null>(null);
 
-const STYLES: Styles = JSON.parse(
-    document.querySelector("#styles")?.textContent ?? "{}",
+const PLATFORMS: Platforms = JSON.parse(
+    document.querySelector("#platforms")?.textContent ?? "{}",
 );
 const VARIABLES: VariableConfig = JSON.parse(
     document.querySelector("#variables")?.textContent ?? "{}",
@@ -55,11 +55,36 @@ function saveLayout(e: SubmitEvent) {
         },
     )
         .then((x) => x.json())
+        .catch((x) => alert(x))
         .then((x) => {
             wallet_layout.value = x;
             isLoading.value = false;
         });
 }
+
+const currentPlatform = ref(PLATFORMS[0].identifier);
+const currentLayout = computed(() => ({}));
+const platformStyles = computed(() => {
+    for (const platform of PLATFORMS) {
+        if (platform.identifier === currentPlatform.value) {
+            return platform.styles
+        }
+    }
+});
+const platformLayout = computed(() => {
+    for (const layout of wallet_layout.value.platform_layouts) {
+        if (layout.platform === currentPlatform.value) {
+            return layout
+        }
+    }
+    const newLayout = {platform: currentPlatform, style: null, layout: {}};
+    wallet_layout.value.platform_layouts.push(newLayout);
+    return newLayout
+});
+const platformChoices = computed(() => {
+    return [[null, "Do not generate pass"], ...Object.values(platformStyles.value).map(x => [x.identifier, x.name])]
+});
+
 </script>
 
 <template lang="pug">
@@ -68,24 +93,29 @@ function saveLayout(e: SubmitEvent) {
     // TODO: proper spinner
     template(v-if="isLoading") {{ gettext("Loading...") }}
     form(v-else @submit="saveLayout")
-        .row
-            .col-md-8
-                .form-group()
-                    Input(label="Name" v-model="wallet_layout.name")
+        .form-group
+            Input(label="Name" v-model="wallet_layout.name")
+        nav
+            ul.nav.nav-tabs
+                li(v-for="platform in PLATFORMS" :class="{'active': currentPlatform === platform.identifier}")
+                    a(role="tab" @click="currentPlatform = platform.identifier") {{ platform.name }}
+        .tabbed-form.tab-content
+            .tab-pane.active.row
+                .col-md-8
+                    Select.form-group(label="Style" v-model="platformLayout.style" :choices="platformChoices")
 
-                .form-group()
-                    Select(label="Style" v-model="wallet_layout.style" :choices="Object.values(STYLES).map(x => [x.identifier, x.name])")
-
-                StyleSettings(v-if="wallet_layout.style" v-model="wallet_layout.layout" :style="STYLES[wallet_layout.style]" :variables="VARIABLES" :locales="LOCALES")
-            .col-md-4
-                .panel.panel-default
-                    .panel-heading Preview
-                    .panel-body
-                        // TODO: Preview
-                        pre
-                            code {{ wallet_layout }}
-                        pre(v-if="wallet_layout.style")
-                            code {{ STYLES[wallet_layout.style] }}
+                    StyleSettings(v-if="platformLayout.style" v-model="platformLayout.layout" :style="platformStyles[platformLayout.style]" :variables="VARIABLES" :locales="LOCALES")
+                .col-md-4
+                    .panel.panel-default
+                        .panel-heading Preview
+                        .panel-body
+                            // TODO: Preview
+                            pre
+                                code {{ platformLayout }}
+                            pre(v-if="wallet_layout.style")
+                                code {{ platformStyles[wallet_layout.style] }}
+                            pre
+                                code {{ wallet_layout }}
         .form-group.submit-group
             button.btn.btn-primary.btn-save(type="submit") Submit
 </template>
