@@ -299,7 +299,7 @@ class NamePartsFormField(forms.MultiValueField):
             if ".med" in v:
                 v = v.replace(".med", ". med")
                 value[fname] = v
-            url_matched = URL_RE.match(v)
+            url_matched = URL_RE.search(v)
             if url_matched:
                 raise forms.ValidationError(
                     _('The field "%(label)s" may not contain an URL (%(url)s).'),
