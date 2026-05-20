@@ -25,6 +25,19 @@ import text_unidecode
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+EPC_QR_ALLOWED_CHARS = set(
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz"
+    "0123456789/-?:().,'+ "
+)
+
+
+def epc_qr_field(value):
+    return ''.join(
+        char for char in text_unidecode.unidecode(str(value or ''))
+        if char in EPC_QR_ALLOWED_CHARS
+    )
+
 
 def dotdecimal(value):
     return str(value).replace(",", ".")
@@ -77,7 +90,7 @@ def euro_epc_qr(
     return {
         "id": "girocode",
         "label": "EPC-QR",
-        "qr_data": "\n".join(text_unidecode.unidecode(str(d or '')) for d in [
+        "qr_data": mark_safe("\n".join(epc_qr_field(d) for d in [
             "BCD",   # Service Tag: ‘BCD’
             "002",   # Version: V2
             "2",     # Character set: ISO 8859-1
@@ -91,7 +104,7 @@ def euro_epc_qr(
             code,    # AT-05 Remittance Information (Unstructured)
             "",      # Beneficiary to originator information
             "",
-        ]),
+        ])),
     }
 
 
