@@ -20,7 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 from datetime import datetime, time, timedelta
-from pprint import pprint
 from zoneinfo import ZoneInfo
 
 import pytest
@@ -142,8 +141,6 @@ def test_unserialize():
 
     rdw = RelativeDateWrapper.from_string('RELDATE/1/-/date_from/')
     x = RelativeDate(days=1, time=None, base_date_name='date_from', minutes=None)
-    pprint(rdw.data)
-    pprint(x)
     assert rdw.data == RelativeDate(days=1, time=None, base_date_name='date_from', minutes=None)
 
     rdw = RelativeDateWrapper.from_string('RELDATE/1/18:05:13/date_from/')
@@ -152,6 +149,28 @@ def test_unserialize():
     rdw = RelativeDateWrapper.from_string('RELDATE/minutes/60/date_from/')
     assert rdw.data == RelativeDate(days=0, time=None, base_date_name='date_from', minutes=60)
 
+def test_backwards_compatibility():
+    d = datetime(2017, 12, 25, 10, 0, 0, tzinfo=TOKYO)
+    rdw = RelativeDateWrapper.from_string(d.isoformat())
+    assert rdw.data == d
+
+    # preexisting base_date_names without __ should continue to work and upgrade to event__???
+    rdw = RelativeDateWrapper.from_string('RELDATE/1/-/date_from/')
+    assert rdw.to_string() == 'RELDATE/1/-/event__date_from/'
+    rdw = RelativeDateWrapper.from_string('RELDATE/1/-/date_to/')
+    assert rdw.to_string() == 'RELDATE/1/-/event__date_to/'
+    rdw = RelativeDateWrapper.from_string('RELDATE/1/-/date_admission/')
+    assert rdw.to_string() == 'RELDATE/1/-/event__date_admission/'
+    rdw = RelativeDateWrapper.from_string('RELDATE/1/-/presale_start/')
+    assert rdw.to_string() == 'RELDATE/1/-/event__presale_start/'
+    rdw = RelativeDateWrapper.from_string('RELDATE/1/-/presale_end/')
+    assert rdw.to_string() == 'RELDATE/1/-/event__presale_end/'
+
+    # new order base_date_names should not work without __
+    with pytest.raises(TypeError):
+        RelativeDateWrapper.from_string('RELDATE/1/-/datetime/')
+    with pytest.raises(TypeError):
+        RelativeDateWrapper.from_string('RELDATE/1/-/expires/')
 
 @pytest.mark.django_db
 def test_relative_to_order(event):
