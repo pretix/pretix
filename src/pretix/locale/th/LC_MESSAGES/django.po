@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-02-14 06:10+0000\n"
-"Last-Translator: Nate Horst <nate@agcthailand.org>\n"
-"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/"
-">\n"
+"PO-Revision-Date: 2026-05-20 10:58+0000\n"
+"Last-Translator: Phumraphee Sae-tang <phumraphee@gmail.com>\n"
+"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
+"\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.5\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -395,10 +395,8 @@ msgstr "มีบัตรของขวัญที่มีรหัสลั
 
 #: pretix/api/serializers/organizer.py:495
 #: pretix/control/views/organizer.py:1039
-#, fuzzy
-#| msgid "Account information"
 msgid "Account invitation"
-msgstr "ข้อมูลบัญชี"
+msgstr "คำเชิญเข้าร่วมบัญชี"
 
 #: pretix/api/serializers/organizer.py:516
 #: pretix/control/views/organizer.py:1138
@@ -634,22 +632,16 @@ msgid "Customer account anonymized"
 msgstr "กำหนดบัญชีลูกค้าเป็นแบบไม่ระบุตัวตนแล้ว"
 
 #: pretix/api/webhooks.py:470
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card added"
-msgstr "รหัสบัตรของขวัญ"
+msgstr "บัตรของขวัญได้ถูกเพิ่มแล้ว"
 
 #: pretix/api/webhooks.py:474
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "รหัสบัตรของขวัญ"
+msgstr "บัตรของขวัญได้ถูกแก้ไขแล้ว"
 
 #: pretix/api/webhooks.py:478
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card used in transaction"
-msgstr "ธุรกรรมบัตรของขวัญ"
+msgstr "บัตรของขวัญที่ถูกใช้ในธุรกรรม"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1060
@@ -721,7 +713,7 @@ msgid "Your password may not be the same as your previous password."
 msgid_plural ""
 "Your password may not be the same as one of your %(history_length)s previous "
 "passwords."
-msgstr[0] ""
+msgstr[0] "รหัสผ่านของคุณอาจจะไม่เหมือนกับรหัสผ่านเก่าของคุณ  %(history_length)s"
 
 #: pretix/base/channels.py:168
 msgid "Online shop"
@@ -2548,10 +2540,8 @@ msgid "Voucher budget usage"
 msgstr "ยอดการใช้เวาเชอร์"
 
 #: pretix/base/exporters/orderlist.py:656
-#, fuzzy
-#| msgid "Voucher"
 msgid "Voucher tag"
-msgstr "เวาเชอร์"
+msgstr "ป้ายคูปอง"
 
 #: pretix/base/exporters/orderlist.py:657
 msgid "Pseudonymization ID"
@@ -3351,39 +3341,34 @@ msgid "Street and Number"
 msgstr "ถนนและบ้านเลขที่"
 
 #: pretix/base/forms/questions.py:899
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date between {min} and {max}."
-msgstr "โปรดระบุชื่อที่สั้นกว่านี้"
+msgstr "กรุณาระบุวันที่ระหว่าง {min} และ {max}"
 
 #: pretix/base/forms/questions.py:905
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date no earlier than {min}."
-msgstr "โปรดระบุช่องทางการขายที่ถูกต้อง"
+msgstr "โปรดระบุวันที่ตั้งแต่ {min} เป็นต้นไป"
 
 #: pretix/base/forms/questions.py:910
-#, fuzzy, python-brace-format
-#| msgid "Please enter a shorter name."
+#, python-brace-format
 msgid "Please enter a date no later than {max}."
-msgstr "โปรดระบุชื่อที่สั้นกว่านี้"
+msgstr "กรุณาระบุวันที่ก่อนวันที่ {max}"
 
 #: pretix/base/forms/questions.py:948
 #, python-brace-format
 msgid "Please enter a date and time between {min} and {max}."
-msgstr ""
+msgstr "กรุณาระบุวันที่และเวลาระหว่าง {min} และ {max}"
 
 #: pretix/base/forms/questions.py:954
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid sales channel."
+#, python-brace-format
 msgid "Please enter a date and time no earlier than {min}."
-msgstr "โปรดระบุช่องทางการขายที่ถูกต้อง"
+msgstr "กรุณาระบุวันที่และเวลาตั้งแต่ {min} เป็นต้นไป"
 
 #: pretix/base/forms/questions.py:959
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid state."
+#, python-brace-format
 msgid "Please enter a date and time no later than {max}."
-msgstr "โปรดระบุรัฐ/จังหวัดที่ถูกต้อง"
+msgstr "กรุณาระบวันที่และเวลาก่อน {max}"
 
 #: pretix/base/forms/questions.py:1178
 msgid ""
@@ -3570,27 +3555,27 @@ msgstr "รับไฟล์ PDF ทางอีเมล"
 #: pretix/base/invoicing/national.py:37
 msgctxt "italian_invoice"
 msgid "Italian Exchange System (SdI)"
-msgstr ""
+msgstr "Italian Exchange System (SdI)"
 
 #: pretix/base/invoicing/national.py:38
 msgctxt "italian_invoice"
 msgid "Exchange System (SdI)"
-msgstr ""
+msgstr "Exchange System (SdI)"
 
 #: pretix/base/invoicing/national.py:51
 msgctxt "italian_invoice"
 msgid "Fiscal code"
-msgstr ""
+msgstr "Fiscal code"
 
 #: pretix/base/invoicing/national.py:55
 msgctxt "italian_invoice"
 msgid "Address for certified electronic mail"
-msgstr ""
+msgstr "อีเมลสำหรับการติดต่อทางอิเล็กทรอนิกส์แบบรับรอง"
 
 #: pretix/base/invoicing/national.py:59
 msgctxt "italian_invoice"
 msgid "Recipient code"
-msgstr ""
+msgstr "รหัสผู้รับปลายทาง"
 
 #: pretix/base/invoicing/national.py:83
 msgctxt "italian_invoice"
@@ -3600,6 +3585,10 @@ msgid ""
 "in accordance with the procedures and terms set forth in No. 89757/2018 of "
 "April 30, 2018, issued by the Director of the Revenue Agency."
 msgstr ""
+"เอกสาร PDF นี้เป็นเพียงสำเนาเพื่อการแสดงผลของใบแจ้งหนี้ และไม่ใช่ใบแจ้งหนี้ที่ใช้เพื่อวัตถุประสงค์ด้"
+"านภาษีมูลค่าเพิ่ม (VAT)ใบแจ้งหนี้ฉบับสมบูรณ์ถูกจัดทำในรูปแบบ XML และส่งตามหลักเกณฑ์และวิธีการที่กำ"
+"หนดในประกาศเลขที่ 89757/2018 ลงวันที่ 30 เมษายน 2018 ซึ่งออกโดยผู้อำนวยการสำนักงานสรรพา"
+"กร"
 
 #: pretix/base/invoicing/pdf.py:142
 #, python-format
@@ -3847,6 +3836,7 @@ msgstr "วันที่จัดกิจกรรม: {date_range}"
 msgid ""
 "A Peppol participant ID always starts with a prefix, followed by a colon (:)."
 msgstr ""
+"รหัสผู้เข้าร่วม Peppol ต้องเริ่มต้นด้วย prefix และตามด้วยเครื่องหมาย \":\""
 
 #: pretix/base/invoicing/peppol.py:140
 #, python-format
@@ -3854,6 +3844,8 @@ msgid ""
 "The Peppol participant ID prefix %(number)s is not known to our system. "
 "Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"ระบบของเราไม่รองรับ prefix ของ Peppol participant ID หมายเลข %(number)s หากท่านมั่"
+"นใจว่ารหัสดังกล่าวถูกต้อง กรุณาติดต่อเราเพื่อขอความช่วยเหลือ"
 
 #: pretix/base/invoicing/peppol.py:144
 #, python-format
@@ -3861,23 +3853,25 @@ msgid ""
 "The Peppol participant ID does not match the validation rules for the prefix "
 "%(number)s. Please reach out to us if you are sure this ID is correct."
 msgstr ""
+"รหัส Peppol participant ID ไม่ถูกต้องตามรูปแบบของ prefix 1%(number)s หากรหัสดังกล่าวถู"
+"กต้อง กรุณาติดต่อเรา"
 
 #: pretix/base/invoicing/peppol.py:166
 msgid "The Peppol participant ID is not registered on the Peppol network."
-msgstr ""
+msgstr "Peppol participant ID นี้ไม่ได้ลงทะเบียนอยู่ในเครือข่าย Peppol"
 
 #: pretix/base/invoicing/peppol.py:192
 msgid "Peppol participant ID"
-msgstr ""
+msgstr "Peppol participant ID นี้ไม่ได้ลงทะเบียนอยู่ในเครือข่าย Peppol"
 
 #: pretix/base/invoicing/peppol.py:211
 msgid "The Peppol participant ID does not match your VAT ID."
-msgstr ""
+msgstr "Peppol participant ID ไม่ตรงกับหมายเลข VAT ID ของคุณ"
 
 #: pretix/base/invoicing/peppol.py:214
 msgctxt "peppol_invoice"
 msgid "Visual copy"
-msgstr ""
+msgstr "สำเนาเพื่อแสดงผล"
 
 #: pretix/base/invoicing/peppol.py:219
 msgctxt "peppol_invoice"
@@ -3886,12 +3880,16 @@ msgid ""
 "invoice for VAT purposes. The original invoice is issued in XML format and "
 "transmitted through the Peppol network."
 msgstr ""
+"เอกสาร PDF นี้เป็นเพียงสำเนาเพื่อการแสดงผลของใบแจ้งหนี้ และไม่ถือเป็นใบแจ้งหนี้เพื่อวัตถุประสงค์ด้"
+"านภาษีมูลค่าเพิ่ม (VAT) ใบแจ้งหนี้ต้นฉบับถูกจัดทำในรูปแบบ XML และส่งผ่านเครือข่าย Peppol"
 
 #: pretix/base/logentrytype_registry.py:43
 msgid ""
 "The relevant plugin is currently not active. To activate it, click here to "
 "go to the plugin settings."
 msgstr ""
+"ปลั๊กอินที่เกี่ยวข้องยังไม่ได้เปิดใช้งานในขณะนี้ หากต้องการเปิดใช้งาน คลิกที่นี่เพื่อไปยังหน้าการตั้งค่าปลั๊ก"
+"อิน"
 
 #: pretix/base/logentrytype_registry.py:53
 msgid "The relevant plugin is currently not active."
@@ -4229,23 +4227,21 @@ msgstr "อนุญาตให้ข้ามการตรวจสอบโ
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:70
 #: pretix/control/views/vouchers.py:121
 msgid "Price effect"
-msgstr ""
+msgstr "ผลต่างด้านราคา"
 
 #: pretix/base/modelimport_vouchers.py:150
-#, fuzzy, python-brace-format
-#| msgid "Could not parse {value} as a price mode, use one of {options}."
+#, python-brace-format
 msgid "Could not parse {value} as a price effect, use one of {options}."
-msgstr "ไม่สามารถประมวลผล {value} เป็นโหมดราคาได้ โปรดใช้ค่าใดค่าหนึ่งจาก {options}"
+msgstr ""
+"ไม่สามารถประมวลผล {value} เป็นค่าผลต่างด้านราคาได้ โปรดใช้ค่าใดค่าหนึ่งจาก {options}"
 
 #: pretix/base/modelimport_vouchers.py:160 pretix/base/models/vouchers.py:248
 msgid "Voucher value"
 msgstr "มูลค่าเวาเชอร์"
 
 #: pretix/base/modelimport_vouchers.py:165
-#, fuzzy
-#| msgid "It is pointless to set a value without a price mode."
 msgid "It is pointless to set a value without a price effect."
-msgstr "การกำหนดมูลค่าจะไม่มีผลหากไม่ได้กำหนดโหมดราคา"
+msgstr "การกำหนดมูลค่าจะไม่มีผลหากไม่ได้กำหนดผลต่างด้านราคา"
 
 #: pretix/base/modelimport_vouchers.py:237 pretix/base/models/items.py:2121
 #: pretix/base/models/vouchers.py:275
@@ -6177,46 +6173,41 @@ msgstr "สิ้นสุด"
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:38
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:139
 msgid "queued"
-msgstr ""
+msgstr "อยู่ในคิว"
 
 #: pretix/base/models/mail.py:53
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:40
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:141
 msgid "being sent"
-msgstr ""
+msgstr "กำลังส่ง"
 
 #: pretix/base/models/mail.py:54
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "awaiting retry"
-msgstr "รายการในรายการรอ"
+msgstr "รอการลองใหม่"
 
 #: pretix/base/models/mail.py:55
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:48
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:149
 msgid "withheld"
-msgstr ""
+msgstr "ถูกหักไว้"
 
 #: pretix/base/models/mail.py:57
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:50
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:151
 msgid "aborted"
-msgstr ""
+msgstr "ยกเลิกแล้ว"
 
 #: pretix/base/models/mail.py:58
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:52
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:153
-#, fuzzy
-#| msgctxt "checkin state"
-#| msgid "Present"
 msgid "sent"
-msgstr "มา"
+msgstr "ส่งแล้ว"
 
 #: pretix/base/models/mail.py:59
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mail.html:46
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:147
 msgid "bounced"
-msgstr ""
+msgstr "ตีกลับ"
 
 #: pretix/base/models/memberships.py:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:28
@@ -6622,24 +6613,22 @@ msgstr ""
 "ทั้งนี้ การตั้งค่าอาจใช้เวลาสักครู่เพื่อให้มีผลกับผู้ใช้ทุกคน"
 
 #: pretix/base/models/organizer.py:384
-#, fuzzy
-#| msgid "Event admission"
 msgid "All event permissions"
-msgstr "เริ่มเปิดให้เข้างาน"
+msgstr "สิทธิทั้งหมดของกิจกรรม"
 
 #: pretix/base/models/organizer.py:385
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:34
 msgid "Event permissions"
-msgstr ""
+msgstr "สิทธิของกิจกรรม"
 
 #: pretix/base/models/organizer.py:386
 msgid "All organizer permissions"
-msgstr ""
+msgstr "สิทธิขององค์กรทั้งหมด"
 
 #: pretix/base/models/organizer.py:387
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:25
 msgid "Organizer permissions"
-msgstr ""
+msgstr "สิทธิขององค์กร"
 
 #: pretix/base/models/organizer.py:407
 #, python-format
@@ -7889,10 +7878,8 @@ msgstr ""
 "2x สินค้าเพิ่มเติม 2"
 
 #: pretix/base/pdf.py:383
-#, fuzzy
-#| msgid "List of Add-Ons"
 msgid "List of Checked-In Add-Ons"
-msgstr "รายการสินค้าเพิ่มเติม"
+msgstr "รายการส่วนเสริมที่เช็คอินแล้ว"
 
 #: pretix/base/pdf.py:390 pretix/control/forms/filter.py:1537
 #: pretix/control/forms/filter.py:1539
@@ -8073,145 +8060,129 @@ msgstr "ไฟล์เลย์เอาต์ของคุณไม่ถู
 #: pretix/base/permissions.py:314 pretix/base/permissions.py:331
 msgctxt "permission_level"
 msgid "View"
-msgstr ""
+msgstr "แสดงผล"
 
 #: pretix/base/permissions.py:164 pretix/base/permissions.py:169
 #: pretix/base/permissions.py:174 pretix/base/permissions.py:179
 #: pretix/base/permissions.py:286 pretix/base/permissions.py:315
-#, fuzzy
-#| msgid "Voucher changed"
 msgctxt "permission_level"
 msgid "View and change"
-msgstr "แก้ไขรหัสส่วนลดแล้ว"
+msgstr "แสดงและแก้ไข"
 
 #: pretix/base/permissions.py:168
 msgid "API only"
-msgstr ""
+msgstr "API เท่านั้น"
 
 #: pretix/base/permissions.py:173
 msgid ""
 "Menu item will only show up if the user has permission for general settings."
 msgstr ""
+"รายการเมนูนี้จะแสดงเฉพาะผู้ใช้ที่มีสิทธิ์เข้าถึงการตั้งค่าทั่วไปเท่านั้น"
 
 #: pretix/base/permissions.py:177 pretix/base/permissions.py:231
 #: pretix/base/permissions.py:285 pretix/base/permissions.py:313
 #: pretix/base/permissions.py:330
-#, fuzzy
-#| msgid "Read access"
 msgctxt "permission_level"
 msgid "No access"
-msgstr "สิทธิ์ในการอ่านข้อมูล"
+msgstr "ไม่มีสิทธิในการเข้าถึง"
 
 #: pretix/base/permissions.py:188
 #: pretix/control/templates/pretixcontrol/event/settings.html:7
 #: pretix/control/templates/pretixcontrol/event/settings.html:13
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
 msgid "General settings"
-msgstr ""
+msgstr "การตั้งค่าทั่วไป"
 
 #: pretix/base/permissions.py:192
 msgid ""
 "This includes access to all settings not listed explicitly below, including "
 "plugin settings."
 msgstr ""
+"ซึ่งรวมถึงสิทธิ์เข้าถึงการตั้งค่าทั้งหมดที่ไม่ได้ระบุไว้ด้านล่างอย่างชัดเจน รวมถึงการตั้งค่าปลั๊กอินด้วย"
 
 #: pretix/base/permissions.py:197
 #: pretix/control/templates/pretixcontrol/event/payment.html:6
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:5
 msgid "Payment settings"
-msgstr ""
+msgstr "การตั้งค่าการชำระเงิน"
 
 #: pretix/base/permissions.py:203
 #: pretix/control/templates/pretixcontrol/event/tax.html:120
 msgid "Tax settings"
-msgstr ""
+msgstr "การตั้งค่าเกี่ยวกับภาษี"
 
 #: pretix/base/permissions.py:209
-#, fuzzy
-#| msgid "Invoice lines"
 msgid "Invoicing settings"
-msgstr "รายการในใบแจ้งหนี้"
+msgstr "การตั้งค่าที่เกี่ยวกับใบแจ้งหนี้"
 
 #: pretix/base/permissions.py:215
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date added"
 msgid "Event series dates"
-msgstr "เพิ่มวันที่ในชุดกิจกรรมแล้ว"
+msgstr "วันที่จัดงานแต่ละรอบ"
 
 #: pretix/base/permissions.py:221
-#, fuzzy
-#| msgid "Product name and variation"
 msgid "Products, quotas and questions"
-msgstr "ชื่อสินค้าและรูปแบบสินค้า"
+msgstr "สินค้า โควตา และคำถาม"
 
 #: pretix/base/permissions.py:224
 msgid "Also includes related objects like categories or discounts."
-msgstr ""
+msgstr "รวมถึงรายการที่เกี่ยวข้อง เช่น หมวดหมู่หรือส่วนลดด้วย"
 
 #: pretix/base/permissions.py:232
-#, fuzzy
-#| msgid "Web Check-in"
 msgctxt "permission_level"
 msgid "Only check-in"
-msgstr "เว็บเช็คอิน (Web Check-in)"
+msgstr "สิทธิ์สำหรับเช็กอินเท่านั้น"
 
 #: pretix/base/permissions.py:233
 msgctxt "permission_level"
 msgid "View all"
-msgstr ""
+msgstr "ดูทั้งหมด"
 
 #: pretix/base/permissions.py:234
-#, fuzzy
-#| msgid "Web-based check-in"
 msgctxt "permission_level"
 msgid "View all and check-in"
-msgstr "การเช็คอินผ่านเว็บ"
+msgstr "ดูทั้งหมดและเช็คอิน"
 
 #: pretix/base/permissions.py:235
 msgctxt "permission_level"
 msgid "View all and change"
-msgstr ""
+msgstr "ดูทั้งหมดและแก้ไข"
 
 #: pretix/base/permissions.py:236
 msgid "Includes the ability to cancel and refund individual orders."
-msgstr ""
+msgstr "รวมถึงสิทธิ์ในการยกเลิกและคืนเงินสำหรับคำสั่งซื้อแต่ละรายการ"
 
 #: pretix/base/permissions.py:238
 msgid "Also includes related objects like the waiting list."
-msgstr ""
+msgstr "รวมถึงข้อมูลที่เกี่ยวข้อง เช่น รายชื่อผู้รอคิวด้วย"
 
 #: pretix/base/permissions.py:248
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event or date information"
 msgid "Full event or date cancellation"
-msgstr "ข้อมูลกิจกรรมหรือวันที่"
+msgstr "การยกเลิกทั้งงานหรือวันที่จัดงาน"
 
 #: pretix/base/permissions.py:252
 msgctxt "permission_level"
 msgid "Not allowed"
-msgstr ""
+msgstr "ไม่ได้รับอนุญาต"
 
 #: pretix/base/permissions.py:253
 msgctxt "permission_level"
 msgid "Allowed"
-msgstr ""
+msgstr "อนุญาต"
 
 #: pretix/base/permissions.py:268
 msgctxt "permission_level"
 msgid "Access existing events"
-msgstr ""
+msgstr "เข้าถึงกิจกรรมที่มีอยู่"
 
 #: pretix/base/permissions.py:269
 msgctxt "permission_level"
 msgid "Access existing and create new events"
-msgstr ""
+msgstr "เข้าถึงกิจกรรมที่มีอยู่และสร้างกิจกรรมใหม่"
 
 #: pretix/base/permissions.py:271
 msgid ""
 "The level of access to events is determined in detail by the settings below."
-msgstr ""
+msgstr "การตั้งค่าด้านล่างจะกำหนดระดับการเข้าถึงกิจกรรมอย่างละเอียด"
 
 #: pretix/base/permissions.py:275 pretix/control/navigation.py:143
 #: pretix/control/navigation.py:462 pretix/control/navigation.py:512
@@ -8223,47 +8194,48 @@ msgstr ""
 #: pretix/plugins/returnurl/apps.py:40
 #: pretix/plugins/ticketoutputpdf/apps.py:55
 msgid "Settings"
-msgstr ""
+msgstr "การตั้งค่า"
 
 #: pretix/base/permissions.py:278
 msgid ""
 "This includes access to all organizer-level functionality not listed "
 "explicitly below, including plugin settings."
 msgstr ""
+"ซึ่งรวมถึงสิทธิ์เข้าถึงฟังก์ชันทั้งหมดในระดับผู้จัดงานที่ไม่ได้ระบุไว้ด้านล่างอย่างชัดเจน รวมถึงการตั้งค่าปลั๊"
+"กอินด้วย"
 
 #: pretix/base/permissions.py:287
 msgid ""
 "Includes the ability to give someone (including oneself) additional "
 "permissions."
-msgstr ""
+msgstr "รวมถึงสิทธิ์ในการมอบสิทธิ์เพิ่มเติมให้ผู้อื่น (รวมถึงตนเอง)"
 
 #: pretix/base/permissions.py:298 pretix/control/navigation.py:608
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
 msgid "Customers"
-msgstr ""
+msgstr "ลูกค้า"
 
 #: pretix/base/permissions.py:310 pretix/control/navigation.py:666
 #: pretix/control/navigation.py:673
 msgid "Devices"
-msgstr ""
+msgstr "อุปกรณ์"
 
 #: pretix/base/permissions.py:316
 msgid ""
 "Includes the ability to give access to events and data oneself does not have "
 "access to."
 msgstr ""
+"รวมถึงสิทธิ์ในการมอบการเข้าถึงกิจกรรมและข้อมูลที่ตนเองไม่มีสิทธิ์เข้าถึง"
 
 #: pretix/base/permissions.py:321
-#, fuzzy
-#| msgid "Seating plan"
 msgid "Seating plans"
 msgstr "ผังที่นั่ง"
 
 #: pretix/base/permissions.py:327 pretix/control/navigation.py:712
 #: pretix/control/templates/pretixcontrol/organizers/outgoing_mails.html:8
 msgid "Outgoing emails"
-msgstr ""
+msgstr "อีเมลขาออก"
 
 #: pretix/base/plugins.py:138
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
@@ -8418,24 +8390,21 @@ msgstr ""
 #, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "คุณไม่สามารถเลือกได้เกิน %s รายการต่อคำสั่งซื้อ"
 
 #: pretix/base/services/cart.py:138 pretix/base/services/orders.py:1602
 #, python-format
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "คุณไม่สามารถเลือกสินค้า %(product)s ได้เกิน %(max)s รายการ"
 
 #: pretix/base/services/cart.py:143 pretix/base/services/orders.py:1607
 #, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "คุณต้องเลือกสินค้า %(product)s อย่างน้อย %(min)s รายการ"
 
 #: pretix/base/services/cart.py:148
 #, python-format
@@ -8446,7 +8415,8 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
-msgstr[1] ""
+"เราได้นำสินค้า %(product)s ออกจากตะกร้าของคุณ เนื่องจากไม่สามารถซื้อสินค้านี้ต่ำกว่า %(min)s "
+"รายการได้"
 
 #: pretix/base/services/cart.py:152 pretix/base/services/orders.py:164
 #: pretix/presale/templates/pretixpresale/event/index.html:170
@@ -8501,7 +8471,8 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
-msgstr[1] ""
+"สามารถใช้โค้ดส่วนลด “%(voucher)s” ได้ก็ต่อเมื่อเลือกสินค้าที่ร่วมรายการอย่างน้อย %(number)s ร"
+"ายการ"
 
 #: pretix/base/services/cart.py:170
 #, python-format
@@ -8514,7 +8485,8 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
-msgstr[1] ""
+"โค้ดส่วนลด “%(voucher)s” ใช้ได้เมื่อเลือกสินค้าที่เข้าเงื่อนไขอย่างน้อย %(number)s รายการ เรา"
+"จึงนำบางรายการออกจากตะกร้าของคุณ เนื่องจากไม่สามารถสั่งซื้อภายใต้เงื่อนไขนี้ได้อีก"
 
 #: pretix/base/services/cart.py:176
 msgid ""
@@ -8606,7 +8578,7 @@ msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr[0] ""
-msgstr[1] ""
+"สามารถเลือกส่วนเสริมในหมวดหมู่ %(cat)s สำหรับสินค้า %(base)s ได้ไม่เกิน %(max)s รายการ"
 
 #: pretix/base/services/cart.py:210 pretix/base/services/orders.py:199
 #, python-format
@@ -30685,7 +30657,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1572
 msgid "iDEAL | Wero"
-msgstr ""
+msgstr "iDEAL | Wero"
 
 #: pretix/plugins/stripe/payment.py:1575
 msgid ""
