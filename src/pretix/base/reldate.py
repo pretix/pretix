@@ -21,7 +21,6 @@
 #
 import datetime
 import os
-import pprint
 import warnings
 from collections import namedtuple
 from typing import (
@@ -373,10 +372,10 @@ class RelativeDateTimeWidget(forms.MultiWidget):
                 status="relative_minutes",
                 absolute=None,
                 rel_days_number=None,
-                rel_mins_relationto=value.data.base_date_name,
+                rel_mins_relationto=value.data.key,
                 rel_days_timeofday=None,
                 rel_mins_number=value.data.minutes,
-                rel_days_relationto=value.data.base_date_name,
+                rel_days_relationto=value.data.key,
                 rel_mins_relation="after" if value.data.is_after else "before",
                 rel_days_relation="after" if value.data.is_after else "before"
             )
@@ -485,7 +484,7 @@ class RelativeDateTimeField(forms.MultiValueField):
         ]
         if self.relative_to_order:
             choices += [(c.key, c.text) for c in ORDER_BASE_CHOICES]
-        self.widget.widgets[reldateparts.indizes.rel_days_relationto].choices = choices
+        self.widget.widgets[reldatetimeparts.indizes.rel_days_relationto].choices = choices
         self.widget.widgets[reldatetimeparts.indizes.rel_mins_relationto].choices = choices
 
     def compress(self, data_list):
