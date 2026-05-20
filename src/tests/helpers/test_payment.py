@@ -23,6 +23,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 import pytest
+from django.utils.html import conditional_escape
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer
@@ -75,6 +76,23 @@ TESTVERANST-12345
     assert codes[1]['label'] == 'BezahlCode'
     assert codes[1]['qr_data'] == ('bank://singlepaymentsepa?name=Verein%20f%C3%BCr%20Testzwecke%20e.V.&iban=DE37796500000069799047'
                                    '&bic=BYLADEM1MIL&amount=123%2C00&reason=TESTVERANST-12345&currency=EUR')
+
+
+@pytest.mark.django_db
+def test_payment_qr_codes_euro_keeps_allowed_apostrophe_unescaped(env):
+    o, event = env
+    codes = generate_payment_qr_codes(
+        event=event,
+        code='TESTVERANST-12345',
+        amount=Decimal('123.00'),
+        bank_details_sepa_bic='BYLADEM1MIL',
+        bank_details_sepa_iban='DE37796500000069799047',
+        bank_details_sepa_name='Bits\'n"Bugs',
+    )
+
+    qr_data = codes[0]['qr_data']
+    assert '\nBits\'nBugs\n' in qr_data
+    assert conditional_escape(qr_data) == qr_data
 
 
 @pytest.mark.django_db
