@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-01-26 22:00+0000\n"
+"PO-Revision-Date: 2026-05-21 15:08+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.5\n"
 
 #: pretix/_base_settings.py:87
 msgid "English"
@@ -145,7 +145,7 @@ msgstr "西班牙語"
 
 #: pretix/_base_settings.py:118
 msgid "Spanish (Latin America)"
-msgstr ""
+msgstr "西班牙語（拉丁美洲）"
 
 #: pretix/_base_settings.py:119
 msgid "Turkish"
@@ -390,10 +390,8 @@ msgstr "您或相關組織帳戶中已存在具有相同密碼的禮品卡。"
 
 #: pretix/api/serializers/organizer.py:495
 #: pretix/control/views/organizer.py:1039
-#, fuzzy
-#| msgid "Account information"
 msgid "Account invitation"
-msgstr "帳戶資訊"
+msgstr "帳戶邀請"
 
 #: pretix/api/serializers/organizer.py:516
 #: pretix/control/views/organizer.py:1138
@@ -612,10 +610,8 @@ msgid ""
 msgstr ""
 
 #: pretix/api/webhooks.py:454
-#, fuzzy
-#| msgid "Voucher redeemed"
 msgid "Voucher deleted"
-msgstr "以兌換的優惠券"
+msgstr "優惠券已刪除"
 
 #: pretix/api/webhooks.py:458
 msgid "Customer account created"
@@ -32257,7 +32253,7 @@ msgstr "iDEAL透過Stripe"
 
 #: pretix/plugins/stripe/payment.py:1572
 msgid "iDEAL | Wero"
-msgstr ""
+msgstr "iDEAL | Wero"
 
 #: pretix/plugins/stripe/payment.py:1575
 msgid ""
