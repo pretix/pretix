@@ -863,6 +863,9 @@ def test_event_name_prefix_contains_dash(env, orga_job):
 @pytest.mark.xfail
 @pytest.mark.django_db
 def test_event_name_prefix_multiple_dashes(env, orga_job):
+    # We decided to ignore the case of multiple events where the event slugs only differ in dashes
+    # for now. If we change that, switch this test case from xfail to regular test.
+
     event, user, o1, o2 = env
     slugs = ['dummy-2', 'dummy--2', 'dummy2345']
     for slug in slugs:
