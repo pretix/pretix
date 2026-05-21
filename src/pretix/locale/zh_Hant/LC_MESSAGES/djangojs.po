@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:04+0000\n"
-"PO-Revision-Date: 2025-11-18 17:00+0000\n"
+"PO-Revision-Date: 2026-05-21 15:08+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix-js/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 2026.5\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -60,7 +60,7 @@ msgstr "PayPal Pay Later"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
 msgid "iDEAL | Wero"
-msgstr ""
+msgstr "iDEAL | Wero"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
@@ -162,12 +162,12 @@ msgstr "已付款訂單"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (ordered)"
-msgstr ""
+msgstr "出席者（已訂購的）"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (paid)"
-msgstr ""
+msgstr "出席者（已付款的）"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
 msgid "Total revenue"
@@ -418,7 +418,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:276
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "如果這需要超過幾分鐘的時間，請與我們聯繫。"
 
 #: pretix/static/pretixbase/js/asynctask.js:331
 msgid "Close message"
