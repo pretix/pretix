@@ -282,7 +282,7 @@ def handle_duplicated_csrftoken(request, response):
 
     cookie_name = '__Host-' + settings.CSRF_COOKIE_NAME
 
-    if request.scheme == 'https' and cookie_name:
+    if request.scheme == 'https' and cookie_name in request.COOKIES:
         values = get_all_values_of_cookie(request.headers.get('Cookie'), cookie_name)
         if len(values) > 1:
             logger.info('Trying to remove duplicated %s cookies: %r', cookie_name, values)
