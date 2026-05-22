@@ -32,6 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import logging
 import time
 from datetime import datetime
 from http.cookies import Morsel
@@ -59,6 +60,8 @@ from django_scopes import scopes_disabled
 from pretix.base.models import Event, Organizer
 from pretix.helpers.cookies import set_cookie_without_samesite
 from pretix.multidomain.models import KnownDomain
+
+logger = logging.getLogger(__name__)
 
 LOCAL_HOST_NAMES = ('testserver', 'localhost')
 
@@ -277,16 +280,22 @@ def handle_duplicated_csrftoken(request, response):
     # exist: one unpartitioned, one partitioned. This function generates an additional
     # Set-Cookie header to get rid of the unpartitioned one.
 
-    if request.scheme == 'https' and '__Host-' + settings.CSRF_COOKIE_NAME and has_duplicated_csrftoken(request):
-        # Make sure the set_cookie_without_samesite below will add a new item in the dictionary, placing
-        # it below our deletion header.
-        response.cookies.pop('__Host-' + settings.CSRF_COOKIE_NAME, None)
+    cookie_name = '__Host-' + settings.CSRF_COOKIE_NAME
 
-        # Add the deletion Set-Cookie header to the cookie dict under a wrong name, so it doesn't get
-        # overwritten by the set_cookie_without_samesite call below.  This works because the code in
-        # django.core.handlers.wsgi/asgi, that generates the actual Set-Cookie headers, only iterates
-        # over cookie.values(), ignoring the keys.
-        response.cookies['___DELETECOOKIE___' + '__Host-' + settings.CSRF_COOKIE_NAME] = make_delete_morsel('__Host-' + settings.CSRF_COOKIE_NAME)
+    if request.scheme == 'https' and cookie_name:
+        values = get_all_values_of_cookie(request.headers.get('Cookie'), cookie_name)
+        if len(values) > 1:
+            logger.info('Trying to remove duplicated %s cookies: %r', cookie_name, values)
+
+            # Make sure the set_cookie_without_samesite below will add a new item in the dictionary, placing
+            # it below our deletion header.
+            response.cookies.pop(cookie_name, None)
+
+            # Add the deletion Set-Cookie header to the cookie dict under a wrong name, so it doesn't get
+            # overwritten by the set_cookie_without_samesite call below.  This works because the code in
+            # django.core.handlers.wsgi/asgi, that generates the actual Set-Cookie headers, only iterates
+            # over cookie.values(), ignoring the keys.
+            response.cookies['___DELETECOOKIE___' + cookie_name] = make_delete_morsel(cookie_name)
 
 
 def get_all_values_of_cookie(cookie_header, cookie_name):
