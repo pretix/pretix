@@ -115,24 +115,24 @@ def multimail_validate(val):
     return s
 
 
-class RegexValidatorWithMatchParam(RegexValidator):
+class RegexValidatorInverseMatchAndParam(RegexValidator):
+    inverse_match = True
+
     def __call__(self, value):
         regex_matches = self.regex.search(str(value))
-        invalid_input = regex_matches if self.inverse_match else not regex_matches
-        if invalid_input:
+        if regex_matches:
             raise ValidationError(
                 self.message,
                 code=self.code,
                 params={
                     "value": value,
-                    "match": regex_matches.group(0),
+                    "match": regex_matches.group(0) if regex_matches else "",
                 }
             )
 
 
-class NoUrlValidator(RegexValidatorWithMatchParam):
+class NoUrlValidator(RegexValidatorInverseMatchAndParam):
     regex = URL_RE
-    inverse_match = True
 
     def __init__(self, **kwargs):
         if not kwargs.get("message"):
