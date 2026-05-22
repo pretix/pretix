@@ -55,7 +55,9 @@ from django.utils.http import http_date
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Organizer
-from pretix.helpers.cookies import set_cookie_without_samesite
+from pretix.helpers.cookies import (
+    delete_cookie_without_samesite, set_cookie_without_samesite,
+)
 from pretix.multidomain.models import KnownDomain
 
 LOCAL_HOST_NAMES = ('testserver', 'localhost')
@@ -176,9 +178,23 @@ class SessionMiddleware(BaseSessionMiddleware):
             # The session should be deleted only if the session is entirely empty
             is_secure = request.scheme == 'https'
             if '__Host-' + settings.SESSION_COOKIE_NAME in request.COOKIES and empty:
-                response.delete_cookie('__Host-' + settings.SESSION_COOKIE_NAME)
+                # response.delete_cookie does not work as we might have set a partitioned cookie
+                delete_cookie_without_samesite(
+                    request, response,
+                    '__Host-' + settings.SESSION_COOKIE_NAME,
+                    path=settings.SESSION_COOKIE_PATH,
+                    secure=is_secure,
+                    httponly=settings.SESSION_COOKIE_HTTPONLY or None
+                )
             elif settings.SESSION_COOKIE_NAME in request.COOKIES and empty:
-                response.delete_cookie(settings.SESSION_COOKIE_NAME)
+                # response.delete_cookie does not work as we might have set a partitioned cookie
+                delete_cookie_without_samesite(
+                    request, response,
+                    settings.SESSION_COOKIE_NAME,
+                    path=settings.SESSION_COOKIE_PATH,
+                    secure=is_secure,
+                    httponly=settings.SESSION_COOKIE_HTTPONLY or None
+                )
             else:
                 if accessed:
                     patch_vary_headers(response, ('Cookie',))
@@ -195,15 +211,21 @@ class SessionMiddleware(BaseSessionMiddleware):
                     if response.status_code != 500:
                         request.session.save()
                         if is_secure and settings.SESSION_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
-                            response.delete_cookie(settings.SESSION_COOKIE_NAME)
-                            response.delete_cookie(settings.SESSION_COOKIE_NAME, samesite="None")
+                            # response.delete_cookie does not work as we might have set a partitioned cookie
+                            delete_cookie_without_samesite(
+                                request, response,
+                                settings.SESSION_COOKIE_NAME,
+                                path=settings.SESSION_COOKIE_PATH,
+                                secure=is_secure,
+                                httponly=settings.SESSION_COOKIE_HTTPONLY or None
+                            )
                         set_cookie_without_samesite(
                             request, response,
                             '__Host-' + settings.SESSION_COOKIE_NAME if is_secure else settings.SESSION_COOKIE_NAME,
                             request.session.session_key, max_age=max_age,
                             expires=expires,
                             path=settings.SESSION_COOKIE_PATH,
-                            secure=request.scheme == 'https',
+                            secure=is_secure,
                             httponly=settings.SESSION_COOKIE_HTTPONLY or None
                         )
         return response
@@ -252,8 +274,14 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
             # Set the CSRF cookie even if it's already set, so we renew
             # the expiry timer.
             if is_secure and settings.CSRF_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
-                response.delete_cookie(settings.CSRF_COOKIE_NAME)
-                response.delete_cookie(settings.CSRF_COOKIE_NAME, samesite="None")
+                # response.delete_cookie does not work as we might have set a partitioned cookie
+                delete_cookie_without_samesite(
+                    request, response,
+                    settings.CSRF_COOKIE_NAME,
+                    path=settings.CSRF_COOKIE_PATH,
+                    secure=is_secure,
+                    httponly=settings.CSRF_COOKIE_HTTPONLY
+                )
             set_cookie_without_samesite(
                 request, response,
                 '__Host-' + settings.CSRF_COOKIE_NAME if is_secure else settings.CSRF_COOKIE_NAME,
