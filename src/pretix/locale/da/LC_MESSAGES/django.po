@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-28 09:03+0000\n"
-"PO-Revision-Date: 2026-05-19 09:36+0000\n"
+"PO-Revision-Date: 2026-05-22 07:03+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
 "da/>\n"
@@ -17658,25 +17658,23 @@ msgstr ""
 "ville have været for store til at kunne leveres."
 
 #: pretix/control/logdisplay.py:552
-#, fuzzy
-#| msgid "A custom email has been sent."
 msgid "An invoice email has been sent."
-msgstr "Din besked er blevet sendt."
+msgstr "Der er sendt en faktura via e-mail."
 
 #: pretix/control/logdisplay.py:553
 msgid "A custom email has been sent."
 msgstr "Din besked er blevet sendt."
 
 #: pretix/control/logdisplay.py:554
-#, fuzzy
 msgid "A custom email has been sent to an attendee."
-msgstr "Din besked er blevet sendt."
+msgstr "Der er sendt en personlig e-mail til en deltager."
 
 #: pretix/control/logdisplay.py:555
 msgid ""
 "An email has been sent with a reminder that the ticket is available for "
 "download."
 msgstr ""
+"Der er sendt en e-mail med en påmindelse om, at billetten nu kan downloades."
 
 #: pretix/control/logdisplay.py:557
 msgid ""
@@ -17693,12 +17691,11 @@ msgstr ""
 "annulleret."
 
 #: pretix/control/logdisplay.py:561
-#, fuzzy
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
 msgstr ""
-"En e-mail er blevet sendt for at fortælle brugeren at bestillingen er "
-"annulleret."
+"Der er sendt en e-mail for at informere brugeren om, at arrangementet er "
+"blevet aflyst."
 
 #: pretix/control/logdisplay.py:564
 msgid ""
@@ -17720,12 +17717,11 @@ msgstr ""
 "En e-mail er blevet sendt for at fortælle brugeren at betaling er modtaget."
 
 #: pretix/control/logdisplay.py:570
-#, fuzzy
 msgid ""
 "An email has been sent to notify the user that the order has been denied."
 msgstr ""
-"En e-mail er blevet sendt for at fortælle brugeren at bestillingen er "
-"modtaget."
+"Der er sendt en e-mail for at informere brugeren om, at ordren er blevet "
+"afvist."
 
 #: pretix/control/logdisplay.py:571
 #, fuzzy
