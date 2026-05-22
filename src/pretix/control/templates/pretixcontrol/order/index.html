@@ -1078,7 +1078,7 @@
                                         <dt>{% trans "VAT ID" %}</dt>
                                         <dd>
                                             {{ order.invoice_address.vat_id }}
-                                            {% if order.invoice_address.vat_id_validated %}
+                                            {% if order.invoice_address.vat_id and order.invoice_address.vat_id_validated %}
                                                 <span class="fa fa-check" data-toggle="tooltip" title="{% blocktrans trimmed %}Valid EU VAT ID{% endblocktrans %}"></span>
                                             {% elif order.invoice_address.vat_id %}
                                                 <form class="form-inline helper-display-inline" method="post"
