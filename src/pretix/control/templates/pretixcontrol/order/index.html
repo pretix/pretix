@@ -134,6 +134,39 @@
         </div>
     {% endif %}
 
+    {% if invoice_qualified and order.invoice_dirty %}
+        <div class="alert alert-warning">
+            <p>
+                {% blocktrans trimmed %}
+                    This order was changed after the last invoice was generated. A new invoice was not generated yet, because invoices are configured to be generated on payment or if required by the payment method.
+                    A new invoice will be generated once the customer pays the invoice or selects a payment method that requires an invoice.
+                {% endblocktrans %}
+            </p>
+            {% if "event.orders:write" in request.eventpermset %}
+                <p>
+                    {% if uncancelled_invoice %}
+                        <form action="{% url "control:event.order.reissueinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=uncancelled_invoice.pk %}"
+                                method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-default" type="submit">
+                                {% blocktrans trimmed %}
+                                    Reissue invoice
+                                {% endblocktrans %}
+                            </button>
+                        </form>
+                    {% elif can_generate_invoice %}
+                        <form method="post" action="{% url "control:event.order.geninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                            {% csrf_token %}
+                            <button class="btn btn-default">
+                                {% trans "Generate invoice" %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
+
     <div class="row">
         <div class="col-xs-12 col-lg-10">
             {% for cr in order.cancellation_requests.all %}
