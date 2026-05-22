@@ -531,6 +531,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
 
     @transaction.atomic
     def form_valid(self, form):
+        self.object = form.save()
         self.save_formset(self.object)
         self.save_cl_formset(self.object)
         self.save_meta()
@@ -569,7 +570,7 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
             f.subevent = self.object
             f.save()
         tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk})
-        return super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self) -> str:
         return reverse('control:event.subevents', kwargs={
