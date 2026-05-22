@@ -316,11 +316,6 @@ def get_all_values_of_cookie(cookie_header, cookie_name):
     return values
 
 
-def has_duplicated_csrftoken(request):
-    values = get_all_values_of_cookie(request.headers.get('Cookie'), '__Host-' + settings.CSRF_COOKIE_NAME)
-    return len(values) > 1
-
-
 def make_delete_morsel(name):
     m = Morsel()
     m.set(name, '', '')
