@@ -135,7 +135,33 @@ class OrderQuerySet(models.QuerySet):
         return order
 
 
-class Order(LockModel, LoggedModel):
+class SearchIndexModelMixin:
+    search_index_fields = []
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if "update_fields" in kwargs:
+            update_fields = kwargs["update_fields"]
+            if any(f in update_fields for f in self.search_index_fields):
+                self._update_search_index()
+        else:
+            self._update_search_index()
+
+    def get_search_index_content(self):
+        for f in self.search_index_fields:
+            val = getattr(self, f)
+            if val is not None:
+                yield str(val)
+
+    def _update_search_index(self):
+        from .search import OrderSearchIndex
+
+        contents = list(self.get_search_index_content())
+        print(self, contents)
+        OrderSearchIndex.update_for(self, contents)
+
+
+class Order(LockModel, SearchIndexModelMixin, LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
     several OrderPositions and is connected to a user. It has an
@@ -330,6 +356,12 @@ class Order(LockModel, LoggedModel):
     )
 
     objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='event__organizer')
+    search_index_fields = [
+        "code",
+        "comment",
+        "email",
+        "phone",
+    ]
 
     class Meta:
         verbose_name = _("Order")
@@ -350,6 +382,10 @@ class Order(LockModel, LoggedModel):
         super().__init__(*args, **kwargs)
         if 'require_approval' not in self.get_deferred_fields() and 'status' not in self.get_deferred_fields():
             self._transaction_key_reset()
+
+    def get_search_index_content(self):
+        yield from super().get_search_index_content()
+        yield self.event.slug.upper() + "-" + self.code
 
     def _transaction_key_reset(self):
         self.__initial_status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
@@ -1690,7 +1726,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
         return False
 
 
-class OrderPayment(models.Model):
+class OrderPayment(SearchIndexModelMixin, models.Model):
     """
     Represents a payment or payment attempt for an order.
 
@@ -1774,12 +1810,23 @@ class OrderPayment(models.Model):
     )
 
     objects = ScopedManager(organizer='order__event__organizer')
+    search_index_fields = [
+        "info",  # only for triggering the right updates
+    ]
 
     class Meta:
         ordering = ('local_id',)
 
     def __str__(self):
         return self.full_id
+
+    def get_search_index_content(self):
+        try:
+            return [
+                self.payment_provider.matching_id(self)
+            ]
+        except:
+            pass
 
     @property
     def info_data(self):
@@ -2093,7 +2140,7 @@ class OrderPayment(models.Model):
         return r
 
 
-class OrderRefund(models.Model):
+class OrderRefund(SearchIndexModelMixin, models.Model):
     """
     Represents a refund or refund attempt for an order.
 
@@ -2195,12 +2242,23 @@ class OrderRefund(models.Model):
     )
 
     objects = ScopedManager(organizer='order__event__organizer')
+    search_index_fields = [
+        "info",  # only for triggering the right updates
+    ]
 
     class Meta:
         ordering = ('local_id',)
 
     def __str__(self):
         return self.full_id
+
+    def get_search_index_content(self):
+        try:
+            return [
+                self.payment_provider.refund_matching_id(self)
+            ]
+        except:
+            pass
 
     @property
     def info_data(self):
@@ -2472,7 +2530,7 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
         self.value_includes_rounding_correction = value
 
 
-class OrderPosition(AbstractPosition):
+class OrderPosition(SearchIndexModelMixin, AbstractPosition):
     """
     An OrderPosition is one line of an order, representing one ordered item
     of a specified type (or variation). This has all properties of
@@ -2579,6 +2637,13 @@ class OrderPosition(AbstractPosition):
 
     all = ScopedManager(organizer='order__event__organizer')
     objects = ActivePositionManager()
+    search_index_fields = [
+        "attendee_name_cached",
+        "attendee_email",
+        "company",
+        "secret",
+        "pseudonymization_id",
+    ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -3335,7 +3400,7 @@ class CartPosition(AbstractPosition):
         return self.predicted_validity[1]
 
 
-class InvoiceAddress(models.Model):
+class InvoiceAddress(SearchIndexModelMixin, models.Model):
     last_modified = models.DateTimeField(auto_now=True)
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
     customer = models.ForeignKey(
@@ -3373,6 +3438,10 @@ class InvoiceAddress(models.Model):
 
     objects = ScopedManager(organizer='order__event__organizer')
     profiles = ScopedManager(organizer='customer__organizer')
+    search_index_fields = [
+        "name_cached",
+        "company",
+    ]
 
     def save(self, **kwargs):
         if self.order:

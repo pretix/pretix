@@ -56,6 +56,7 @@ from .organizer import (
     Organizer, Organizer_SettingsStore, SalesChannel, Team, TeamAPIToken,
     TeamInvite,
 )
+from .search import OrderSearchIndex
 from .seating import Seat, SeatCategoryMapping, SeatingPlan
 from .tax import TaxRule
 from .vouchers import Voucher

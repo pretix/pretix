@@ -47,6 +47,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django_scopes import ScopedManager
 
+from pretix.base.models.orders import SearchIndexModelMixin
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.helpers.countries import FastCountryField
 
@@ -64,7 +65,7 @@ def today():
     return timezone.now().date()
 
 
-class Invoice(models.Model):
+class Invoice(SearchIndexModelMixin, models.Model):
     """
     Represents an invoice that is issued because of an order. Because invoices are legally required
     not to change, this object duplicates a lot of data (e.g. the invoice address).
@@ -206,6 +207,10 @@ class Invoice(models.Model):
     plugin_data = models.JSONField(default=dict)
 
     objects = ScopedManager(organizer='event__organizer')
+    search_index_fields = [
+        "invoice_no",
+        "full_invoice_no",
+    ]
 
     @staticmethod
     def _to_numeric_invoice_number(number, places):

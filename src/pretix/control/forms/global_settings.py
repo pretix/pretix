@@ -110,7 +110,11 @@ class GlobalSettingsForm(SettingsForm):
                 required=False,
                 label=_("Vite widget origins"),
                 help_text=_("One origin per line (e.g. https://example.com). Requests from these origins will be served the new vite-based widget."),
-            ))
+            )),
+            ('use_fts_beta', forms.BooleanField(
+                required=False,
+                label=_("Use full-text search beta"),
+            )),
         ])
         responses = register_global_settings.send(self)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
