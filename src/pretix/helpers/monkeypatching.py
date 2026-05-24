@@ -29,8 +29,8 @@ from django.conf import settings
 from PIL import Image
 from requests.adapters import HTTPAdapter
 from urllib3 import poolmanager
-from urllib3.contrib.resolver.system import SystemResolver
 from urllib3.connectionpool import HTTPConnectionPool, HTTPSConnectionPool
+from urllib3.contrib.resolver.system import SystemResolver
 from urllib3.exceptions import HTTPError
 
 
