@@ -44,7 +44,7 @@ from django.conf import settings
 from django.utils.crypto import get_random_string
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from pretix.base.i18n import language
 from pretix.base.models import CachedFile, Event, User, cachedfile_name
@@ -171,15 +171,16 @@ def shred(self, event: Event, fileid: str, confirm_code: str, user: int=None, lo
 
     if user:
         with language(user.locale):
+            event_name = str(event.name)
             mail(
                 user.email,
-                _('Data shredding completed'),
+                gettext('Data shredding completed for %(event)s') % {'event': event_name},
                 'pretixbase/email/shred_completed.txt',
                 {
                     'instance': settings.PRETIX_INSTANCE_NAME,
                     'user': user,
                     'organizer': event.organizer.name,
-                    'event': str(event.name),
+                    'event': event_name,
                     'start_time': date_format(parse(indexdata['time']).astimezone(event.timezone), 'SHORT_DATETIME_FORMAT'),
                     'shredders': ', '.join([str(s.verbose_name) for s in shredders])
                 },

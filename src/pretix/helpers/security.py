@@ -169,7 +169,7 @@ def handle_login_source(user, request):
             with language(user.locale):
                 mail(
                     user.email,
-                    _('Login from new source detected'),
+                    _('New sign-in to your account'),
                     'pretixcontrol/email/login_notice.txt',
                     {
                         'source': src,

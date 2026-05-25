@@ -377,7 +377,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
         confirmation_code = get_random_string(8, allowed_chars="01234567890")
         mail(
             user.email,
-            subject=gettext('Bulk-refund confirmation'),
+            subject=gettext('Confirm event cancellation and bulk refund'),
             template='pretixbase/email/cancel_confirm.txt',
             context={
                 "event": str(event),
