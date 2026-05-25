@@ -11,6 +11,6 @@ You can review and change your account settings here:
 
 {{ url }}
 
-Best regards,  
-Your {{ instance }} team
+Thanks,  
+The {{ instance }} Team
 {% endblocktrans %}

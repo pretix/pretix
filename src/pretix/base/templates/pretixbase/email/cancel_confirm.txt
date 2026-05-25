@@ -8,3 +8,6 @@
 {% trans "Please confirm that you want to proceed by coping the following confirmation code into the cancellation form:" %}
 
 **{{ confirmation_code }}**
+
+{% blocktrans with instance=instance %}Thanks,  
+The {{ instance }} Team{% endblocktrans %}

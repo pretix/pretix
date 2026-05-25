@@ -10,3 +10,6 @@
 {% trans "Configuration link:" %}
 
 {{ configuration_url }}
+
+{% blocktrans with instance=instance %}Thanks,  
+The {{ instance }} Team{% endblocktrans %}

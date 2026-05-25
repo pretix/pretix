@@ -4,6 +4,6 @@ you requested a new password. Please go to the following page to reset your pass
 
 {{ url }}
 
-Best regards,  
-Your {{ instance }} team
+Thanks,  
+The {{ instance }} Team
 {% endblocktrans %}

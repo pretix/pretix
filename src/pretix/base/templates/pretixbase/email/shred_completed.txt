@@ -11,7 +11,6 @@ Data selection: {{ shredders }}
 
 Start time: {{ start_time }} (new data added after this time might not have been deleted)
 
-Best regards,
-
-Your {{ instance }} team
+Thanks,  
+The {{ instance }} Team
 {% endblocktrans %}

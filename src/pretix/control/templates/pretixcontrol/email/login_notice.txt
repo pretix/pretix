@@ -8,6 +8,6 @@ If this was not you, we recommend that you change your password in your account 
 
 {{ url }}
 
-Best regards,  
-Your {{ instance }} team
+Thanks,  
+The {{ instance }} Team
 {% endblocktrans %}
