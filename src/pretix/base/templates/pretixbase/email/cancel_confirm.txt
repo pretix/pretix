@@ -9,5 +9,7 @@
 
 **{{ confirmation_code }}**
 
+{% blocktrans with instance=instance %}Don't share this code with anyone. The {{ instance }} team will never ask you for it.{% endblocktrans %}
+
 {% blocktrans with instance=instance %}Thanks,  
 The {{ instance }} Team{% endblocktrans %}

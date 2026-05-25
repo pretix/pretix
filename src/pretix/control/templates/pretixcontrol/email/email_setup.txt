@@ -6,6 +6,8 @@ If that was you, please enter the following confirmation code:
 
 {{ code }}
 
+Don't share this code with anyone. The {{ instance }} team will never ask you for it.
+
 If this was not requested by you, you can safely ignore this email.
 
 
