@@ -1,8 +1,10 @@
 {% load i18n %}{% blocktrans with url=url|safe %}Hello,
 
-you requested a new password. Please go to the following page to reset your password:
+We received a request to reset the password for your {{ instance }} account. To choose a new password, follow the link below:
 
 {{ url }}
+
+If you didn't request this, you can safely ignore this email — your password won't change.
 
 Thanks,  
 The {{ instance }} Team

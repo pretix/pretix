@@ -1,13 +1,12 @@
 {% load i18n %}{% blocktrans with url=url|safe messages=messages|safe %}Hello,
 
-this is to inform you that the account information of your {{ instance }} account has been
-changed. In particular, the following changes have been performed:
+The following changes were made to your {{ instance }} account:
 
 {{ messages }}
 
-If this change was not performed by you, please contact us immediately.
+If you didn't make these changes, please contact the {{ instance }} support team immediately.
 
-You can review and change your account settings here:
+You can review your account settings here:
 
 {{ url }}
 

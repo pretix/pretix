@@ -1,16 +1,15 @@
 {% load i18n %}{% blocktrans with url=url|safe %}Hello,
 
-you have been invited to a team on {{ instance }}, a platform to perform event
-ticket sales.
+You've been invited to join a team on {{ instance }}, an event ticket sales platform.
 
-Organizer: {{ organizer }}
-Team: {{ team }}
+- Organizer: {{ organizer }}
+- Team: {{ team }}
 
-If you want to join that team, just click on the following link:
+To accept, follow the link below:
+
 {{ url }}
 
-If you do not want to join, you can safely ignore or delete this email.
-
+If you don't want to join, you can safely ignore this email.
 
 Thanks,  
 The {{ instance }} Team
