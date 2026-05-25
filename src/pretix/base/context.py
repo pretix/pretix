@@ -30,39 +30,81 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.safelink import safelink as sl
 
 
-def get_powered_by(request, safelink=True):
+def _get_powered_by_data(request=None, safelink=True):
+    """
+    Look up the configured attribution settings used by `get_powered_by()`
+    and `get_email_powered_by()`. Centralising this avoids drift between the
+    website and email renderings.
+    """
     gs = GlobalSettingsObject()
     d = gs.settings.license_check_input
-    if d.get('poweredby_name'):
-        if d.get('poweredby_url'):
+
+    pretix_url = sl('https://pretix.eu') if safelink else 'https://pretix.eu'
+    name = d.get('poweredby_name')
+
+    name_url = None
+    if name and d.get('poweredby_url'):
+        name_url = sl(d['poweredby_url']) if safelink else d['poweredby_url']
+
+    source_url = None
+    if d.get('base_license') == 'agpl' and request is not None:
+        source_url = request.build_absolute_uri(reverse('source'))
+
+    return name, name_url, pretix_url, source_url
+
+
+def _anchor_attrs(url):
+    return 'href="{}" target="_blank" rel="noopener"'.format(url)
+
+
+def _anchor(url, text):
+    return '<a {}>{}</a>'.format(_anchor_attrs(url), text)
+
+
+def get_powered_by(request, safelink=True):
+    name, name_url, pretix_url, source_url = _get_powered_by_data(request, safelink)
+    if name:
+        if name_url:
             msg = gettext('<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>').format(
-                name=d['poweredby_name'],
-                a_name_attr='href="{}" target="_blank" rel="noopener"'.format(
-                    sl(d['poweredby_url']) if safelink else d['poweredby_url'],
-                ),
-                a_attr='href="{}" target="_blank" rel="noopener"'.format(
-                    sl('https://pretix.eu') if safelink else 'https://pretix.eu',
-                )
+                name=name,
+                a_name_attr=_anchor_attrs(name_url),
+                a_attr=_anchor_attrs(pretix_url),
             )
         else:
             msg = gettext('<a {a_attr}>powered by {name} based on pretix</a>').format(
-                name=d['poweredby_name'],
-                a_attr='href="{}" target="_blank" rel="noopener"'.format(
-                    sl('https://pretix.eu') if safelink else 'https://pretix.eu',
-                )
+                name=name,
+                a_attr=_anchor_attrs(pretix_url),
             )
+
     else:
         msg = gettext('<a %(a_attr)s>ticketing powered by pretix</a>') % {
-            'a_attr': 'href="{}" target="_blank" rel="noopener"'.format(
-                sl('https://pretix.eu') if safelink else 'https://pretix.eu',
-            )
+            'a_attr': _anchor_attrs(pretix_url),
         }
 
-    if d.get('base_license') == 'agpl':
-        msg += ' (<a href="{}" target="_blank" rel="noopener">{}</a>)'.format(
-            request.build_absolute_uri(reverse('source')),
-            gettext('source code')
+    if source_url:
+        msg += ' ({})'.format(_anchor(source_url, gettext('source code')))
+
+    return mark_safe(msg)
+
+
+def get_email_powered_by():
+    """
+    Like `get_powered_by()` but renders narrower links: only the configured
+    name and the word "pretix" are anchors, the surrounding text stays plain.
+    A full-width hyperlinked footer looks visually heavy in HTML emails, and
+    the license attribution requirement applies to generated web pages only,
+    so this variant is unconstrained.
+    """
+    name, name_url, pretix_url, _ = _get_powered_by_data(safelink=False)
+    pretix_link = _anchor(pretix_url, 'pretix')
+
+    if name:
+        name_part = _anchor(name_url, name) if name_url else name
+        msg = gettext('powered by {name} based on {pretix}').format(
+            name=name_part, pretix=pretix_link,
         )
+    else:
+        msg = gettext('ticketing powered by {pretix}').format(pretix=pretix_link)
 
     return mark_safe(msg)
 

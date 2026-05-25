@@ -36,6 +36,7 @@ from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.translation import get_language, gettext_lazy as _
 
+from pretix.base.context import get_email_powered_by
 from pretix.base.models import Event
 from pretix.base.signals import register_html_mail_renderers
 from pretix.base.templatetags.rich_text import (
@@ -167,6 +168,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
             'subject': str(subject),
             'color': settings.PRETIX_PRIMARY_COLOR,
             'rtl': get_language() in settings.LANGUAGES_RTL or get_language().split('-')[0] in settings.LANGUAGES_RTL,
+            'poweredby': get_email_powered_by(),
         }
         if self.organizer:
             htmlctx['organizer'] = self.organizer
