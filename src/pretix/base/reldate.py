@@ -73,7 +73,7 @@ BASE_CHOICES: List[BaseChoice] = [
     BaseChoice('event', 'presale_start', _('Presale start'), True, True),
     BaseChoice('event', 'presale_end', _('Presale end'), True, True),
     BaseChoice('order', 'datetime', _('Order creation'), False, True),
-    BaseChoice('order', 'expires', _('Order expiry'), True, False),
+    BaseChoice('order', 'expires', _('Order expiry'), True, True),
 ]
 
 LIMIT_FALLBACKS = ['date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end']
@@ -105,7 +105,8 @@ class RelativeDate:
 
         if is_after and not choice.supports_after:
             raise ValueError(
-                "The selected base date and attribute combination does not support relative dates placed after the base date")
+                "The selected base date and attribute combination does not support relative dates placed after the base date"
+            )
         if not is_after and not choice.supports_before:
             raise ValueError(
                 "The selected base date and attribute combination does not support relative dates placed before the base date")
@@ -418,7 +419,7 @@ class RelativeDateTimeField(forms.MultiValueField):
 
         if kwargs.get('limit_choices'):
             limit = kwargs.pop('limit_choices')
-            if any(["__" not in l for l in limit]):
+            if any("__" not in l for l in limit):
                 _warn_skips = (os.path.dirname(__file__),)
                 warnings.warn(
                     "Please prefix limit_choices with the base the attributes refer to, for example event__date_from",
