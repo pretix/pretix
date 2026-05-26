@@ -36,8 +36,6 @@ def _get_key(key, parameters):
 
 
 def _get_ip(request):
-    if not settings.HAS_REDIS:
-        return None
     client_ip = get_client_ip(request)
     if not client_ip:
         return None
@@ -46,7 +44,7 @@ def _get_ip(request):
     except ValueError:
         # Web server not set up correctly
         return None
-    if client_ip.is_private:
+    if client_ip.is_private and not settings.DEBUG:
         # This is the private IP of the server, web server not set up correctly
         return None
     return str(client_ip)
