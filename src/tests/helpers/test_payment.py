@@ -23,7 +23,8 @@ from datetime import timedelta
 from decimal import Decimal
 
 import pytest
-from django.utils.html import conditional_escape
+from django.template.loader import render_to_string
+from django.utils.safestring import SafeData
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Organizer
@@ -92,7 +93,15 @@ def test_payment_qr_codes_euro_keeps_allowed_apostrophe_unescaped(env):
 
     qr_data = codes[0]['qr_data']
     assert '\nBits\'nBugs\n' in qr_data
-    assert conditional_escape(qr_data) == qr_data
+    assert not isinstance(qr_data, SafeData)
+
+    html = render_to_string(
+        'pretixpresale/event/payment_qr_codes.html',
+        {'payment_qr_codes': codes},
+    )
+    assert 'type="application/json"' in html
+    assert "\\nBits'nBugs\\n" in html
+    assert '&#x27;' not in html
 
 
 @pytest.mark.django_db

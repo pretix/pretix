@@ -131,10 +131,12 @@ var form_handlers = function (el) {
 
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");
+        var qrText = this.getAttribute("type") === "application/json" ?
+            JSON.parse(this.textContent) : $(this).html();
         $div.insertBefore($(this));
         $div.qrcode(
             {
-                text: $(this).html(),
+                text: qrText,
                 correctLevel: 0,  // M
                 width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
                 height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
