@@ -57,10 +57,11 @@ from pretix.base.forms.widgets import (
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
     Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
-    OrderRefund, Organizer, OutgoingMail, Question, QuestionAnswer, Quota,
-    SalesChannel, SubEvent, SubEventMetaValue, Team, TeamAPIToken, TeamInvite,
-    Voucher,
+    OrderRefund, OrderSearchIndex, Organizer, OutgoingMail, Question,
+    QuestionAnswer, Quota, SalesChannel, SubEvent, SubEventMetaValue, Team,
+    TeamAPIToken, TeamInvite, Voucher,
 )
+from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import register_payment_providers
 from pretix.base.timeframes import (
     DateFrameField,
@@ -262,52 +263,61 @@ class OrderFilterForm(FilterForm):
 
         if fdata.get('query'):
             u = fdata.get('query')
-
-            if "-" in u:
-                code = (Q(event__slug__icontains=u.rsplit("-", 1)[0])
-                        & Q(code__icontains=Order.normalize_code(u.rsplit("-", 1)[1])))
+            fts_beta = (
+                self.event.settings.use_fts_beta
+                if hasattr(self, 'event')
+                else GlobalSettingsObject().settings.use_fts_beta
+            )
+            if fts_beta:
+                qs = qs.filter(
+                    pk__in=OrderSearchIndex.objects.search_for(u).values_list("order_id", flat=True)
+                )
             else:
-                code = Q(code__icontains=Order.normalize_code(u))
+                if "-" in u:
+                    code = (Q(event__slug__icontains=u.rsplit("-", 1)[0])
+                            & Q(code__icontains=Order.normalize_code(u.rsplit("-", 1)[1])))
+                else:
+                    code = Q(code__icontains=Order.normalize_code(u))
 
-            invoice_nos = {u, u.upper()}
-            if u.isdigit():
-                for i in range(2, 12):
-                    invoice_nos.add(u.zfill(i))
+                invoice_nos = {u, u.upper()}
+                if u.isdigit():
+                    for i in range(2, 12):
+                        invoice_nos.add(u.zfill(i))
 
-            matching_invoices = Invoice.objects.filter(
-                Q(invoice_no__in=invoice_nos)
-                | Q(full_invoice_no__iexact=u)
-            ).values_list('order_id', flat=True)
-            matching_positions = OrderPosition.all.filter(
-                Q(
-                    Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
-                    | Q(company__icontains=u)
-                    | Q(secret__istartswith=u)
-                    | Q(pseudonymization_id__istartswith=u)
+                matching_invoices = Invoice.objects.filter(
+                    Q(invoice_no__in=invoice_nos)
+                    | Q(full_invoice_no__iexact=u)
+                ).values_list('order_id', flat=True)
+                matching_positions = OrderPosition.all.filter(
+                    Q(
+                        Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
+                        | Q(company__icontains=u)
+                        | Q(secret__istartswith=u)
+                        | Q(pseudonymization_id__istartswith=u)
+                    )
+                ).values_list('order_id', flat=True)
+                matching_invoice_addresses = InvoiceAddress.objects.filter(
+                    Q(
+                        Q(name_cached__icontains=u) | Q(company__icontains=u)
+                    )
+                ).values_list('order_id', flat=True)
+                matching_orders = Order.objects.filter(
+                    code
+                    | Q(email__icontains=u)
+                    | Q(comment__icontains=u)
+                ).values_list('id', flat=True)
+
+                mainq = (
+                    Q(pk__in=matching_orders)
+                    | Q(pk__in=matching_invoices)
+                    | Q(pk__in=matching_positions)
+                    | Q(pk__in=matching_invoice_addresses)
                 )
-            ).values_list('order_id', flat=True)
-            matching_invoice_addresses = InvoiceAddress.objects.filter(
-                Q(
-                    Q(name_cached__icontains=u) | Q(company__icontains=u)
+                for recv, q in order_search_filter_q.send(sender=getattr(self, 'event', None), query=u):
+                    mainq = mainq | q
+                qs = qs.filter(
+                    mainq
                 )
-            ).values_list('order_id', flat=True)
-            matching_orders = Order.objects.filter(
-                code
-                | Q(email__icontains=u)
-                | Q(comment__icontains=u)
-            ).values_list('id', flat=True)
-
-            mainq = (
-                Q(pk__in=matching_orders)
-                | Q(pk__in=matching_invoices)
-                | Q(pk__in=matching_positions)
-                | Q(pk__in=matching_invoice_addresses)
-            )
-            for recv, q in order_search_filter_q.send(sender=getattr(self, 'event', None), query=u):
-                mainq = mainq | q
-            qs = qs.filter(
-                mainq
-            )
 
         if fdata.get('status'):
             s = fdata.get('status')

@@ -3719,6 +3719,10 @@ Your {organizer} team"""))  # noqa: W291
         'default': '',
         'type': str,
     },
+    'use_fts_beta': {
+        'default': 'False',
+        'type': bool,
+    }
 }
 PERSON_NAME_TITLE_GROUPS = OrderedDict([
     ('english_common', (_('Most common English titles'), (
