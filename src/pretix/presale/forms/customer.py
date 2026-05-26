@@ -20,8 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 import functools
-import hashlib
-import ipaddress
 import random
 
 from django import forms
@@ -32,7 +30,6 @@ from django.contrib.auth.password_validation import (
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import signing
-from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
@@ -44,6 +41,7 @@ from pretix.base.forms.questions import (
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
 from pretix.helpers.http import get_client_ip
+from pretix.helpers.ratelimit import rate_limit
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 
@@ -205,23 +203,6 @@ class RegistrationForm(forms.Form):
                 min_value=0,
             )
 
-    @cached_property
-    def ratelimit_key(self):
-        if not settings.HAS_REDIS:
-            return None
-        client_ip = get_client_ip(self.request)
-        if not client_ip:
-            return None
-        try:
-            client_ip = ipaddress.ip_address(client_ip)
-        except ValueError:
-            # Web server not set up correctly
-            return None
-        if client_ip.is_private:
-            # This is the private IP of the server, web server not set up correctly
-            return None
-        return 'pretix_customer_registration_{}'.format(hashlib.sha1(str(client_ip).encode()).hexdigest())
-
     def clean(self):
         email = self.cleaned_data.get('email')
 
@@ -255,17 +236,11 @@ class RegistrationForm(forms.Form):
                 code='incomplete'
             )
         else:
-            if self.ratelimit_key:
-                from django_redis import get_redis_connection
-
-                rc = get_redis_connection("redis")
-                cnt = rc.incr(self.ratelimit_key)
-                rc.expire(self.ratelimit_key, 600)
-                if cnt > 10:
-                    raise forms.ValidationError(
-                        self.error_messages['rate_limit'],
-                        code='rate_limit',
-                    )
+            if rate_limit("customer_signup", include_ip_from_request=self.request, max_num=10, expire_time=600):
+                raise forms.ValidationError(
+                    self.error_messages['rate_limit'],
+                    code='rate_limit',
+                )
         return self.cleaned_data
 
     def create(self):
@@ -370,13 +345,8 @@ class ResetPasswordForm(forms.Form):
 
     def clean(self):
         d = super().clean()
-        if d.get('email') and settings.HAS_REDIS:
-            from django_redis import get_redis_connection
-
-            rc = get_redis_connection("redis")
-            cnt = rc.incr('pretix_pwreset_customer_%s' % self.customer.pk)
-            rc.expire('pretix_pwreset_customer_%s' % self.customer.pk, 600)
-            if cnt > 2:
+        if d.get('email'):
+            if rate_limit("customer_pwreset", self.customer.pk, max_num=2, expire_time=600):
                 raise forms.ValidationError(
                     self.error_messages['rate_limit'],
                     code='rate_limit',
@@ -445,13 +415,8 @@ class ChangePasswordForm(forms.Form):
     def clean_password_current(self):
         old_pw = self.cleaned_data.get('password_current')
 
-        if old_pw and settings.HAS_REDIS:
-            from django_redis import get_redis_connection
-
-            rc = get_redis_connection("redis")
-            cnt = rc.incr('pretix_pwchange_customer_%s' % self.customer.pk)
-            rc.expire('pretix_pwchange_customer_%s' % self.customer.pk, 300)
-            if cnt > 10:
+        if old_pw:
+            if rate_limit("customer_pwchange", self.customer.pk, max_num=10, expire_time=300):
                 raise forms.ValidationError(
                     self.error_messages['rate_limit'],
                     code='rate_limit',
@@ -521,17 +486,11 @@ class ChangeInfoForm(forms.ModelForm):
         old_pw = self.cleaned_data.get('password_current')
 
         if old_pw:
-            if settings.HAS_REDIS:
-                from django_redis import get_redis_connection
-
-                rc = get_redis_connection("redis")
-                cnt = rc.incr('pretix_pwchange_customer_%s' % self.instance.pk)
-                rc.expire('pretix_pwchange_customer_%s' % self.instance.pk, 300)
-                if cnt > 10:
-                    raise forms.ValidationError(
-                        self.error_messages['rate_limit'],
-                        code='rate_limit',
-                    )
+            if rate_limit("customer_pwchange", self.instance.pk, max_num=10, expire_time=300):
+                raise forms.ValidationError(
+                    self.error_messages['rate_limit'],
+                    code='rate_limit',
+                )
 
             if not check_password(old_pw, self.instance.password):
                 raise forms.ValidationError(

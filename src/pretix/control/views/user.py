@@ -80,6 +80,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.auth import get_u2f_appid, get_webauthn_rp_id
 from pretix.helpers.http import redirect_to_url
+from pretix.helpers.ratelimit import rate_limit
 from pretix.helpers.security import session_reauth
 from pretix.helpers.u2f import websafe_encode
 
@@ -906,6 +907,10 @@ class UserEmailVerifyView(View):
     def post(self, request, *args, **kwargs):
         if self.request.user.is_verified:
             messages.success(self.request, _('Your email address was already verified.'))
+            return redirect(reverse('control:user.settings', kwargs={}))
+
+        if rate_limit("emailverify", self.request.user.pk, max_num=2, expire_time=300):
+            messages.error(self.request, _("For security reasons, please wait 5 minutes before you try again."))
             return redirect(reverse('control:user.settings', kwargs={}))
 
         self.request.user.send_confirmation_code(

@@ -65,6 +65,7 @@ from pretix.base.forms.auth import (
 from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
 from pretix.helpers.http import get_client_ip, redirect_to_url
+from pretix.helpers.ratelimit import rate_limit, rate_limit_reset
 from pretix.helpers.security import handle_login_source, session_login
 
 logger = logging.getLogger(__name__)
@@ -318,19 +319,12 @@ class Forgot(TemplateView):
         if self.form.is_valid():
             email = self.form.cleaned_data['email']
 
-            has_redis = settings.HAS_REDIS
-
             try:
                 user = User.objects.get(is_active=True, auth_backend='native', email__iexact=email)
 
-                if has_redis:
-                    from django_redis import get_redis_connection
-                    rc = get_redis_connection("redis")
-                    if rc.exists('pretix_pwreset_%s' % (user.id)):
-                        user.log_action('pretix.control.auth.user.forgot_password.denied.repeated')
-                        raise RepeatedResetDenied()
-                    else:
-                        rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
+                if rate_limit("pwreset", user.pk, max_num=1, expire_time=3600 * 24):
+                    user.log_action('pretix.control.auth.user.forgot_password.denied.repeated')
+                    raise RepeatedResetDenied()
 
             except User.DoesNotExist:
                 logger.warning('Backend password reset for unregistered e-mail \"' + email + '\" requested.')
@@ -343,6 +337,7 @@ class Forgot(TemplateView):
                 user.log_action('pretix.control.auth.user.forgot_password.mail_sent')
 
             finally:
+                has_redis = settings.HAS_REDIS
                 if has_redis:
                     messages.info(request, _('If the address is registered to valid account, then we have sent you an email containing further instructions. '
                                              'Please note that we will send at most one email every 24 hours.'))
@@ -411,11 +406,7 @@ class Recover(TemplateView):
             messages.success(request, _('You can now login using your new password.'))
             user.log_action('pretix.control.auth.user.forgot_password.recovered')
 
-            has_redis = settings.HAS_REDIS
-            if has_redis:
-                from django_redis import get_redis_connection
-                rc = get_redis_connection("redis")
-                rc.delete('pretix_pwreset_%s' % user.id)
+            rate_limit_reset("pwreset", user.pk)
             return redirect('control:auth.login')
         else:
             return self.get(request, *args, **kwargs)

@@ -33,8 +33,6 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import hashlib
-import ipaddress
 import logging
 
 from django import forms
@@ -42,13 +40,12 @@ from django.conf import settings
 from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
 )
-from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.metrics import pretix_failed_logins
 from pretix.base.models import User
 from pretix.helpers.dicts import move_to_end
-from pretix.helpers.http import get_client_ip
+from pretix.helpers.ratelimit import rate_limit, rate_limit_reset
 
 logger = logging.getLogger(__name__)
 
@@ -85,38 +82,14 @@ class LoginForm(forms.Form):
         else:
             move_to_end(self.fields, 'keep_logged_in')
 
-    @cached_property
-    def ratelimit_key(self):
-        if not settings.HAS_REDIS:
-            return None
-        client_ip = get_client_ip(self.request)
-        if not client_ip:
-            return None
-        try:
-            client_ip = ipaddress.ip_address(client_ip)
-        except ValueError:
-            # Web server not set up correctly
-            return None
-        if client_ip.is_private:
-            # This is the private IP of the server, web server not set up correctly
-            return None
-        return 'pretix_login_{}'.format(hashlib.sha1(str(client_ip).encode()).hexdigest())
-
     def clean(self):
         if all(k in self.cleaned_data for k, f in self.fields.items() if f.required):
-            if self.ratelimit_key:
-                from django_redis import get_redis_connection
-                rc = get_redis_connection("redis")
-                cnt = rc.get(self.ratelimit_key)
-                if cnt and int(cnt) > 10:
-                    pretix_failed_logins.inc(1, reason="ratelimit")
-                    logger.info("Backend login rejected due to rate limit.")
-                    raise forms.ValidationError(self.error_messages['rate_limit'], code='rate_limit')
+            if rate_limit("login", include_ip_from_request=self.request, max_num=10, expire_time=300):
+                pretix_failed_logins.inc(1, reason="ratelimit")
+                logger.info("Backend login rejected due to rate limit.")
+                raise forms.ValidationError(self.error_messages['rate_limit'], code='rate_limit')
             self.user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
             if self.user_cache is None:
-                if self.ratelimit_key:
-                    rc.incr(self.ratelimit_key)
-                    rc.expire(self.ratelimit_key, 300)
                 logger.info("Backend login invalid.")
                 pretix_failed_logins.inc(1, reason="invalid")
                 raise forms.ValidationError(
@@ -124,6 +97,7 @@ class LoginForm(forms.Form):
                     code='invalid_login'
                 )
             else:
+                rate_limit_reset("login", include_ip_from_request=self.request)
                 self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data

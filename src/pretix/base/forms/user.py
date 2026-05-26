@@ -33,7 +33,6 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from django import forms
-from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
@@ -46,6 +45,7 @@ from pytz import common_timezones
 from pretix.base.models import User
 from pretix.control.forms import SingleLanguageWidget
 from pretix.helpers.format import format_map
+from pretix.helpers.ratelimit import rate_limit
 
 
 class UserSettingsForm(forms.ModelForm):
@@ -128,16 +128,11 @@ class UserPasswordChangeForm(forms.Form):
     def clean_old_pw(self):
         old_pw = self.cleaned_data.get('old_pw')
 
-        if settings.HAS_REDIS:
-            from django_redis import get_redis_connection
-            rc = get_redis_connection("redis")
-            cnt = rc.incr('pretix_pwchange_%s' % self.user.pk)
-            rc.expire('pretix_pwchange_%s' % self.user.pk, 300)
-            if cnt > 10:
-                raise forms.ValidationError(
-                    self.error_messages['rate_limit'],
-                    code='rate_limit',
-                )
+        if rate_limit("pwchange", self.user.pk, max_num=10, expire_time=300):
+            raise forms.ValidationError(
+                self.error_messages['rate_limit'],
+                code='rate_limit',
+            )
 
         if not check_password(old_pw, self.user.password):
             raise forms.ValidationError(
@@ -175,6 +170,7 @@ class UserEmailChangeForm(forms.Form):
     error_messages = {
         'duplicate_identifier': _("There already is an account associated with this email address. "
                                   "Please choose a different one."),
+        'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
     }
     old_email = forms.EmailField(label=_('Old email address'), disabled=True)
     new_email = forms.EmailField(label=_('New email address'))
@@ -189,5 +185,11 @@ class UserEmailChangeForm(forms.Form):
             raise forms.ValidationError(
                 self.error_messages['duplicate_identifier'],
                 code='duplicate_identifier',
+            )
+
+        if rate_limit("emailchange", self.user.pk, max_num=1, expire_time=300):
+            raise forms.ValidationError(
+                self.error_messages['rate_limit'],
+                code='rate_limit',
             )
         return email
