@@ -40,6 +40,8 @@ from urllib3.util.connection import (
 )
 from urllib3.util.timeout import _DEFAULT_TIMEOUT
 
+_cgnat_net = ipaddress.ip_network('100.64.0.0/10')
+
 
 def monkeypatch_vobject_performance():
     """
@@ -152,6 +154,8 @@ def monkeypatch_urllib3_ssrf_protection():
                     raise HTTPError(f"Request to local address {sa[0]} blocked")
                 if ip_addr.is_private:
                     raise HTTPError(f"Request to private address {sa[0]} blocked")
+                if ip_addr in _cgnat_net:
+                    raise HTTPError(f"Request to RFC 6598 address {sa[0]} blocked")
 
             sock = None
             try:
