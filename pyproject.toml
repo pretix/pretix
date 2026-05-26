@@ -74,7 +74,7 @@ dependencies = [
   "packaging",
   "paypalrestsdk==1.13.*",
   "paypal-checkout-serversdk==1.0.*",
-  "PyJWT==2.12.*",
+  "PyJWT==2.13.*",
   "phonenumberslite==9.0.*",
   "Pillow==12.2.*",
   "pretix-plugin-build",
