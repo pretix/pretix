@@ -90,7 +90,7 @@ def euro_epc_qr(
     return {
         "id": "girocode",
         "label": "EPC-QR",
-        "qr_data": mark_safe("\n".join(epc_qr_field(d) for d in [
+        "qr_data": "\n".join(epc_qr_field(d) for d in [
             "BCD",   # Service Tag: ‘BCD’
             "002",   # Version: V2
             "2",     # Character set: ISO 8859-1
@@ -104,7 +104,7 @@ def euro_epc_qr(
             code,    # AT-05 Remittance Information (Unstructured)
             "",      # Beneficiary to originator information
             "",
-        ])),
+        ]),
     }
 
 
