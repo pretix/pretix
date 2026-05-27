@@ -1,40 +1,43 @@
 if (!window.__reldateInitialized) {
     window.__reldateInitialized = true;
     document.addEventListener('DOMContentLoaded', () => {
-         const NO_BEFORE_VALUES = ['datetime'];
 
         document.querySelectorAll('.reldatetime, .reldate').forEach(container => {
             const groups = container.querySelectorAll('.radio');
 
             groups.forEach(group => {
-                const selects = group.querySelectorAll('select');
-                if (selects.length < 2) return;
-
-                let referenceSelect = null;
-                let beforeAfterSelect = null;
-
-                selects.forEach(sel => {
-                    const values = Array.from(sel.options).map(o => o.value);
-                    // only attach to selects that contain problematic values
-                    if (NO_BEFORE_VALUES.some(v => values.includes(v))) {
-                        referenceSelect = sel;
-                    } else if (values.includes('before') && values.includes('after')) {
-                        beforeAfterSelect = sel;
-                    }
-                });
+                const referenceSelect = group.querySelector('select[data-relative-choice]');
+                const beforeAfterSelect = group.querySelector('select[data-relation-choice]');
                 if (!referenceSelect || !beforeAfterSelect) return;
 
                 const beforeOption = beforeAfterSelect.querySelector('option[value="before"]');
+                const afterOption = beforeAfterSelect.querySelector('option[value="after"]');
+
                 const updateBeforeOption = () => {
-                    if (NO_BEFORE_VALUES.includes(referenceSelect.value)) {
-                        beforeOption.disabled = true;
-                        if (beforeAfterSelect.value === 'before') {
-                            beforeAfterSelect.value = 'after';
-                            beforeAfterSelect.dispatchEvent(new Event('change', { bubbles: true }));
-                        }
-                    } else {
-                        beforeOption.disabled = false;
+                    let supportsBefore = referenceSelect.selectedOptions[0].hasAttribute('data-supports-before')
+                    if (beforeOption){
+                        beforeOption.disabled = !beforeOption.disabled && !supportsBefore;
                     }
+
+                    let supportsAfter = referenceSelect.selectedOptions[0].hasAttribute('data-supports-after')
+                    if (afterOption){
+                        afterOption.disabled = !afterOption.disabled && !supportsAfter;
+                    }
+
+                    let dirty = false;
+                    if (beforeOption.disabled && beforeAfterSelect.value === 'before') {
+                        beforeAfterSelect.value = 'after';
+                        dirty = true;
+                    }
+                    if (afterOption.disabled && beforeAfterSelect.value === 'after'){
+                        beforeAfterSelect.value = 'before';
+                        dirty = true;
+                    }
+
+                    if (dirty){
+                        beforeAfterSelect.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+
                 };
                 referenceSelect.addEventListener('change', updateBeforeOption);
                 updateBeforeOption();
