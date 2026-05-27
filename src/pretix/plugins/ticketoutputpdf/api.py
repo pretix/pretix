@@ -229,6 +229,11 @@ class TicketRendererViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['GET'], url_name='download', url_path='download/(?P<asyncid>[^/]+)/(?P<cfid>[^/]+)')
     def download(self, *args, **kwargs):
         cf = get_object_or_404(CachedFile, id=kwargs['cfid'])
+        if not cf.allowed_for_session(self.request, "ticketoutputpdf-api"):
+            return Response(
+                {'status': 'failed', 'message': 'Unknown file ID or export failed'},
+                status=status.HTTP_410_GONE
+            )
         if cf.file:
             resp = ChunkBasedFileResponse(cf.file.file, content_type=cf.type)
             resp['Content-Disposition'] = 'attachment; filename="{}"'.format(cf.filename).encode("ascii", "ignore")
@@ -265,6 +270,7 @@ class TicketRendererViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
 
         cf = CachedFile(web_download=False)
+        cf.bind_to_session(self.request, "ticketoutputpdf-api")
         cf.date = now()
         cf.expires = now() + timedelta(hours=24)
         cf.save()
