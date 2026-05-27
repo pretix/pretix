@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:45+0000\n"
+"POT-Creation-Date: 2026-05-27 15:47+0000\n"
 "PO-Revision-Date: 2026-01-29 19:42+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
@@ -15508,21 +15508,11 @@ msgid ""
 "association"
 msgstr ""
 
-#: pretix/control/forms/global_settings.py:111
-msgid "Vite widget origins"
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:112
-msgid ""
-"One origin per line (e.g. https://example.com). Requests from these origins "
-"will be served the new vite-based widget."
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:128
+#: pretix/control/forms/global_settings.py:129
 msgid "Perform update checks"
 msgstr "Provádět kontrolu aktualizací"
 
-#: pretix/control/forms/global_settings.py:129
+#: pretix/control/forms/global_settings.py:130
 msgid ""
 "During the update check, pretix will report an anonymous, unique "
 "installation ID, the current version of pretix and your installed plugins "
@@ -15537,11 +15527,11 @@ msgstr ""
 "ukládat pouze anonymní údaje, nikdy žádné IP adresy a nebudeme vědět, kdo "
 "jste ani kde najít vaši instanci. Toto chování můžete kdykoli zakázat zde."
 
-#: pretix/control/forms/global_settings.py:137
+#: pretix/control/forms/global_settings.py:138
 msgid "Email notifications"
 msgstr "E-mailové oznámení"
 
-#: pretix/control/forms/global_settings.py:138
+#: pretix/control/forms/global_settings.py:139
 msgid ""
 "We will notify you at this address if we detect that a new update is "
 "available. This address will not be transmitted to pretix.eu, the emails "
@@ -15551,11 +15541,11 @@ msgstr ""
 "aktualizace. Tato adresa nebude přenášena na pretix.eu, e-maily budou "
 "odesílány tímto serverem lokálně."
 
-#: pretix/control/forms/global_settings.py:151
+#: pretix/control/forms/global_settings.py:152
 msgid "Changes to pretix"
 msgstr "Změny v systému pretix"
 
-#: pretix/control/forms/global_settings.py:154
+#: pretix/control/forms/global_settings.py:155
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
@@ -15563,17 +15553,17 @@ msgstr ""
 "Tato instalace pretixu je spuštěna bez jakýchkoli vlastních úprav nebo "
 "rozšíření (kromě nainstalovaných pluginů)."
 
-#: pretix/control/forms/global_settings.py:156
+#: pretix/control/forms/global_settings.py:157
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
 msgstr "Tato instalace pretixu obsahuje změny nebo rozšíření zdrojového kódu."
 
-#: pretix/control/forms/global_settings.py:161
+#: pretix/control/forms/global_settings.py:162
 msgid "Usage of pretix"
 msgstr "Použití pretixu"
 
-#: pretix/control/forms/global_settings.py:164
+#: pretix/control/forms/global_settings.py:165
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
@@ -15582,7 +15572,7 @@ msgstr ""
 "společnost nebo její spojené společnosti, nebo k prodeji produktů "
 "prodávaných mou vlastní společností."
 
-#: pretix/control/forms/global_settings.py:166
+#: pretix/control/forms/global_settings.py:167
 msgid ""
 "I use pretix to sell tickets of other event organizers (e.g. a ticketing "
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
@@ -15592,15 +15582,15 @@ msgstr ""
 "společnosti prodávající vstupenky) nebo nabízím funkce pretixu jiným (např. "
 "společnost poskytující software jako službu)."
 
-#: pretix/control/forms/global_settings.py:168
+#: pretix/control/forms/global_settings.py:169
 msgid "I'm not sure which option applies."
 msgstr "Nejsem si jistý, která možnost platí."
 
-#: pretix/control/forms/global_settings.py:173
+#: pretix/control/forms/global_settings.py:174
 msgid "License choice"
 msgstr "Výběr licence"
 
-#: pretix/control/forms/global_settings.py:176
+#: pretix/control/forms/global_settings.py:177
 msgid ""
 "I want to use pretix under the additional permission granted to everyone by "
 "the copyright holders which allows me to not share modifications if I only "
@@ -15610,7 +15600,7 @@ msgstr ""
 "držitelům autorských práv, které mi umožňuje nesdílet modifikace, pokud "
 "pretix používám pouze interně."
 
-#: pretix/control/forms/global_settings.py:179
+#: pretix/control/forms/global_settings.py:180
 msgid ""
 "I want to use pretix under the terms of the AGPLv3 license without "
 "restriction on the scope of usage and therefore without making use of any "
@@ -15619,14 +15609,14 @@ msgstr ""
 "Rád/a bych pretix používal/a za podmínek AGPLv3 bez omezení rozsahu a druhů "
 "použití, a proto nevyužívám dodatečnou autorizaci."
 
-#: pretix/control/forms/global_settings.py:181
+#: pretix/control/forms/global_settings.py:182
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
 "Mám zakoupenou placenou licenci pretix Enterprise, která je v současné době "
 "platná."
 
-#: pretix/control/forms/global_settings.py:186
+#: pretix/control/forms/global_settings.py:187
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
@@ -15635,7 +15625,7 @@ msgstr ""
 "dostupné pod licencí, která není copyleftová (Apache licence, MIT licence, "
 "BSD licence, ...)."
 
-#: pretix/control/forms/global_settings.py:191
+#: pretix/control/forms/global_settings.py:192
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
@@ -15643,7 +15633,7 @@ msgstr ""
 "V této instalaci pretixu jsou nainstalovány zásuvné moduly, které jsou volně "
 "dostupné pod licencí se silným copyleftem (GPL, AGPL, ...)."
 
-#: pretix/control/forms/global_settings.py:196
+#: pretix/control/forms/global_settings.py:197
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
@@ -15652,7 +15642,7 @@ msgstr ""
 "byly vytvořeny interně nebo získány na základě proprietární licence třetí "
 "stranou."
 
-#: pretix/control/forms/global_settings.py:201
+#: pretix/control/forms/global_settings.py:202
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
@@ -15660,11 +15650,11 @@ msgstr ""
 "Tato instalace pretixu má nainstalované zásuvné moduly pretix Enterprise s "
 "platnou licencí."
 
-#: pretix/control/forms/global_settings.py:205
+#: pretix/control/forms/global_settings.py:206
 msgid "Footer: \"powered by\" name (optional)"
 msgstr "Zápatí: \"powered by\" název (nepovinné)"
 
-#: pretix/control/forms/global_settings.py:206
+#: pretix/control/forms/global_settings.py:207
 msgid ""
 "If you want the \"powered by\" message in the page footer to include the "
 "name of your company or organization (if you made any changes to pretix), "
@@ -15674,22 +15664,22 @@ msgstr ""
 "vaší společnosti nebo organizace (pokud jste v systému pretix provedli "
 "nějaké změny), nastavte tento název zde."
 
-#: pretix/control/forms/global_settings.py:211
+#: pretix/control/forms/global_settings.py:212
 msgid "Link for powered by name"
 msgstr "Odkaz pro název powered by"
 
-#: pretix/control/forms/global_settings.py:212
+#: pretix/control/forms/global_settings.py:213
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
 "Pokud jste použili předchozí možnost, můžete nastavit adresu URL, na kterou "
 "se má odkazovat v zápatí."
 
-#: pretix/control/forms/global_settings.py:216
+#: pretix/control/forms/global_settings.py:217
 msgid "Source code instructions"
 msgstr "Instrukce ke zdrojovému kódu"
 
-#: pretix/control/forms/global_settings.py:218
+#: pretix/control/forms/global_settings.py:219
 msgid ""
 "If you use pretix under AGPLv3 terms, describe exactly how to download the "
 "current source code of the site including all modifications and installed "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:45+0000\n"
+"POT-Creation-Date: 2026-05-27 15:47+0000\n"
 "PO-Revision-Date: 2025-11-14 06:00+0000\n"
 "Last-Translator: Andrii Andriiashyn <andr_andrey@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -16154,21 +16154,11 @@ msgid ""
 "association"
 msgstr ""
 
-#: pretix/control/forms/global_settings.py:111
-msgid "Vite widget origins"
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:112
-msgid ""
-"One origin per line (e.g. https://example.com). Requests from these origins "
-"will be served the new vite-based widget."
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:128
+#: pretix/control/forms/global_settings.py:129
 msgid "Perform update checks"
 msgstr "Виконати перевірку оновлень"
 
-#: pretix/control/forms/global_settings.py:129
+#: pretix/control/forms/global_settings.py:130
 msgid ""
 "During the update check, pretix will report an anonymous, unique "
 "installation ID, the current version of pretix and your installed plugins "
@@ -16184,11 +16174,11 @@ msgstr ""
 "не зберігаємо IP-адреси, і ми не будемо знати, хто ви і де вас знайти. Ви "
 "можете будь-коли вимкнути цю опцію тут."
 
-#: pretix/control/forms/global_settings.py:137
+#: pretix/control/forms/global_settings.py:138
 msgid "Email notifications"
 msgstr "Повідомлення електронною поштою"
 
-#: pretix/control/forms/global_settings.py:138
+#: pretix/control/forms/global_settings.py:139
 msgid ""
 "We will notify you at this address if we detect that a new update is "
 "available. This address will not be transmitted to pretix.eu, the emails "
@@ -16197,11 +16187,11 @@ msgstr ""
 "Ми повідомимо на цю електронну адресу, якщо з'явиться оновлення. Ця адреса "
 "не передається на pretix.eu, імейл буде насліно локально цим сервером."
 
-#: pretix/control/forms/global_settings.py:151
+#: pretix/control/forms/global_settings.py:152
 msgid "Changes to pretix"
 msgstr "Зміни до pretix"
 
-#: pretix/control/forms/global_settings.py:154
+#: pretix/control/forms/global_settings.py:155
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
@@ -16209,18 +16199,18 @@ msgstr ""
 "Ця інсталяція pretix не використовує жодних спеціальних модифікацій або "
 "розширень (за винятком встановлених плагінів)."
 
-#: pretix/control/forms/global_settings.py:156
+#: pretix/control/forms/global_settings.py:157
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
 msgstr ""
 "Ця інсталяція pretix включає зміни або розширення, внесені до вихідного коду."
 
-#: pretix/control/forms/global_settings.py:161
+#: pretix/control/forms/global_settings.py:162
 msgid "Usage of pretix"
 msgstr "Використання pretix"
 
-#: pretix/control/forms/global_settings.py:164
+#: pretix/control/forms/global_settings.py:165
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
@@ -16229,7 +16219,7 @@ msgstr ""
 "власна компанія або її афілійовані компанії, або для продажу продукції моєї "
 "власної компанії."
 
-#: pretix/control/forms/global_settings.py:166
+#: pretix/control/forms/global_settings.py:167
 msgid ""
 "I use pretix to sell tickets of other event organizers (e.g. a ticketing "
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
@@ -16239,15 +16229,15 @@ msgstr ""
 "(наприклад, компанії з продажу квитків) або пропоную функції pretix іншим "
 "(наприклад, компанії, що займається програмним забезпеченням як послугою)."
 
-#: pretix/control/forms/global_settings.py:168
+#: pretix/control/forms/global_settings.py:169
 msgid "I'm not sure which option applies."
 msgstr "Я не впевнений(-а), яка опція мене стосується."
 
-#: pretix/control/forms/global_settings.py:173
+#: pretix/control/forms/global_settings.py:174
 msgid "License choice"
 msgstr "Вибір ліцензії"
 
-#: pretix/control/forms/global_settings.py:176
+#: pretix/control/forms/global_settings.py:177
 msgid ""
 "I want to use pretix under the additional permission granted to everyone by "
 "the copyright holders which allows me to not share modifications if I only "
@@ -16257,7 +16247,7 @@ msgstr ""
 "власниками авторських прав, що дозволяє мені не ділитися змінами, якщо я "
 "використовую pretix лише внутрішньо."
 
-#: pretix/control/forms/global_settings.py:179
+#: pretix/control/forms/global_settings.py:180
 msgid ""
 "I want to use pretix under the terms of the AGPLv3 license without "
 "restriction on the scope of usage and therefore without making use of any "
@@ -16266,12 +16256,12 @@ msgstr ""
 "Я хочу використовувати pretix на умовах ліцензії AGPLv3 без обмежень обсягу "
 "користування та відповідно без використання будь-яких дозволів."
 
-#: pretix/control/forms/global_settings.py:181
+#: pretix/control/forms/global_settings.py:182
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr "Я отримав платну ліцензію Pretix Enterprise, яка наразі дійсна."
 
-#: pretix/control/forms/global_settings.py:186
+#: pretix/control/forms/global_settings.py:187
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
@@ -16280,13 +16270,13 @@ msgstr ""
 "ліцензією без права авторського права (ліцензія Apache, ліцензія MIT, "
 "ліцензія BSD, …)."
 
-#: pretix/control/forms/global_settings.py:191
+#: pretix/control/forms/global_settings.py:192
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
 msgstr ""
 
-#: pretix/control/forms/global_settings.py:196
+#: pretix/control/forms/global_settings.py:197
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
@@ -16294,7 +16284,7 @@ msgstr ""
 "У цій інсталяції pretix були встановлені плагіни, які були створені "
 "внутрішньо або отримані за власною ліцензією третьою стороною."
 
-#: pretix/control/forms/global_settings.py:201
+#: pretix/control/forms/global_settings.py:202
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
@@ -16302,11 +16292,11 @@ msgstr ""
 "Ця інсталяція pretix встановила плагіни pretix Enterprise з дійсною "
 "ліцензією."
 
-#: pretix/control/forms/global_settings.py:205
+#: pretix/control/forms/global_settings.py:206
 msgid "Footer: \"powered by\" name (optional)"
 msgstr "Нижній колонтитул: Назва \"Під управлінням\" (опціонально)"
 
-#: pretix/control/forms/global_settings.py:206
+#: pretix/control/forms/global_settings.py:207
 msgid ""
 "If you want the \"powered by\" message in the page footer to include the "
 "name of your company or organization (if you made any changes to pretix), "
@@ -16316,22 +16306,22 @@ msgstr ""
 "назву Вашої компанії чи організації (якщо Ви бажаєте внести будь-які зміни "
 "до pretix), то вкажіть назву тут."
 
-#: pretix/control/forms/global_settings.py:211
+#: pretix/control/forms/global_settings.py:212
 msgid "Link for powered by name"
 msgstr "Посилання до назви під управлінням"
 
-#: pretix/control/forms/global_settings.py:212
+#: pretix/control/forms/global_settings.py:213
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
 "Якщо ви використовували попередній варіант, ви можете встановити URL-адресу "
 "для посилання в нижньому колонтитулі."
 
-#: pretix/control/forms/global_settings.py:216
+#: pretix/control/forms/global_settings.py:217
 msgid "Source code instructions"
 msgstr "Інструкції з вихідного коду"
 
-#: pretix/control/forms/global_settings.py:218
+#: pretix/control/forms/global_settings.py:219
 msgid ""
 "If you use pretix under AGPLv3 terms, describe exactly how to download the "
 "current source code of the site including all modifications and installed "

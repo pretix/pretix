@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:45+0000\n"
+"POT-Creation-Date: 2026-05-27 15:47+0000\n"
 "PO-Revision-Date: 2025-06-11 02:00+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
@@ -14877,21 +14877,11 @@ msgid ""
 "association"
 msgstr "Sẽ được phục vụ tại {domain}/."
 
-#: pretix/control/forms/global_settings.py:111
-msgid "Vite widget origins"
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:112
-msgid ""
-"One origin per line (e.g. https://example.com). Requests from these origins "
-"will be served the new vite-based widget."
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:128
+#: pretix/control/forms/global_settings.py:129
 msgid "Perform update checks"
 msgstr "Thực hiện kiểm tra cập nhật"
 
-#: pretix/control/forms/global_settings.py:129
+#: pretix/control/forms/global_settings.py:130
 msgid ""
 "During the update check, pretix will report an anonymous, unique "
 "installation ID, the current version of pretix and your installed plugins "
@@ -14905,11 +14895,11 @@ msgstr ""
 "lượng các sự kiện hoạt động và không hoạt động trong cài đặt của bạn cho các "
 "máy chủ được vận hành bởi các nhà phát triển Pretix."
 
-#: pretix/control/forms/global_settings.py:137
+#: pretix/control/forms/global_settings.py:138
 msgid "Email notifications"
 msgstr "Thông báo qua email"
 
-#: pretix/control/forms/global_settings.py:138
+#: pretix/control/forms/global_settings.py:139
 msgid ""
 "We will notify you at this address if we detect that a new update is "
 "available. This address will not be transmitted to pretix.eu, the emails "
@@ -14918,11 +14908,11 @@ msgstr ""
 "Chúng tôi sẽ thông báo cho bạn tại địa chỉ này nếu chúng tôi phát hiện ra "
 "rằng một bản cập nhật mới có sẵn."
 
-#: pretix/control/forms/global_settings.py:151
+#: pretix/control/forms/global_settings.py:152
 msgid "Changes to pretix"
 msgstr "Thay đổi thành Pretix"
 
-#: pretix/control/forms/global_settings.py:154
+#: pretix/control/forms/global_settings.py:155
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
@@ -14930,7 +14920,7 @@ msgstr ""
 "Việc cài đặt Pretix này đang chạy mà không có bất kỳ sửa đổi hoặc tiện ích "
 "mở rộng tùy chỉnh nào (ngoại trừ các plugin đã cài đặt)."
 
-#: pretix/control/forms/global_settings.py:156
+#: pretix/control/forms/global_settings.py:157
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
@@ -14938,11 +14928,11 @@ msgstr ""
 "Việc cài đặt Pretix này bao gồm các thay đổi hoặc tiện ích mở rộng được thực "
 "hiện cho mã nguồn."
 
-#: pretix/control/forms/global_settings.py:161
+#: pretix/control/forms/global_settings.py:162
 msgid "Usage of pretix"
 msgstr "Sử dụng Pretix"
 
-#: pretix/control/forms/global_settings.py:164
+#: pretix/control/forms/global_settings.py:165
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
@@ -14951,7 +14941,7 @@ msgstr ""
 "riêng của tôi hoặc các công ty liên kết của nó, hoặc để bán các sản phẩm "
 "được bán bởi công ty riêng của tôi."
 
-#: pretix/control/forms/global_settings.py:166
+#: pretix/control/forms/global_settings.py:167
 msgid ""
 "I use pretix to sell tickets of other event organizers (e.g. a ticketing "
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
@@ -14961,15 +14951,15 @@ msgstr ""
 "công ty bán vé) hoặc tôi cung cấp chức năng của Pretix cho những người khác "
 "(ví dụ: một công ty phần mềm như một dịch vụ)."
 
-#: pretix/control/forms/global_settings.py:168
+#: pretix/control/forms/global_settings.py:169
 msgid "I'm not sure which option applies."
 msgstr "Tôi không chắc chắn tùy chọn nào được áp dụng."
 
-#: pretix/control/forms/global_settings.py:173
+#: pretix/control/forms/global_settings.py:174
 msgid "License choice"
 msgstr "Lựa chọn giấy phép"
 
-#: pretix/control/forms/global_settings.py:176
+#: pretix/control/forms/global_settings.py:177
 msgid ""
 "I want to use pretix under the additional permission granted to everyone by "
 "the copyright holders which allows me to not share modifications if I only "
@@ -14979,7 +14969,7 @@ msgstr ""
 "người nắm giữ bản quyền cho phép tôi không chia sẻ sửa đổi nếu tôi chỉ sử "
 "dụng Pretix trong nội bộ."
 
-#: pretix/control/forms/global_settings.py:179
+#: pretix/control/forms/global_settings.py:180
 msgid ""
 "I want to use pretix under the terms of the AGPLv3 license without "
 "restriction on the scope of usage and therefore without making use of any "
@@ -14989,13 +14979,13 @@ msgstr ""
 "hạn chế phạm vi sử dụng và do đó mà không sử dụng bất kỳ sự cho phép bổ sung "
 "nào."
 
-#: pretix/control/forms/global_settings.py:181
+#: pretix/control/forms/global_settings.py:182
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
 "Tôi đã có được giấy phép Pretix Enterprise có giá trị hiện đang có giá trị."
 
-#: pretix/control/forms/global_settings.py:186
+#: pretix/control/forms/global_settings.py:187
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
@@ -15003,7 +14993,7 @@ msgstr ""
 "Việc cài đặt Pretix này đã cài đặt các plugin có sẵn tự do theo giấy phép "
 "không phải là bản sao (Giấy phép Apache, Giấy phép MIT, Giấy phép BSD, Mạnh)."
 
-#: pretix/control/forms/global_settings.py:191
+#: pretix/control/forms/global_settings.py:192
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
@@ -15011,7 +15001,7 @@ msgstr ""
 "Việc cài đặt Pretix này đã cài đặt các plugin có sẵn tự do theo giấy phép "
 "với copyleft mạnh (GPL, AGPL, Hồi)."
 
-#: pretix/control/forms/global_settings.py:196
+#: pretix/control/forms/global_settings.py:197
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
@@ -15019,7 +15009,7 @@ msgstr ""
 "Việc cài đặt Pretix này đã cài đặt các plugin đã được tạo nội bộ hoặc có "
 "được theo giấy phép độc quyền của bên thứ ba."
 
-#: pretix/control/forms/global_settings.py:201
+#: pretix/control/forms/global_settings.py:202
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
@@ -15027,11 +15017,11 @@ msgstr ""
 "Việc cài đặt Pretix này đã cài đặt các plugin Pretix Enterprise với giấy "
 "phép hợp lệ."
 
-#: pretix/control/forms/global_settings.py:205
+#: pretix/control/forms/global_settings.py:206
 msgid "Footer: \"powered by\" name (optional)"
 msgstr "Footer:  \"Được cung cấp bởi \" Tên (Tùy chọn)"
 
-#: pretix/control/forms/global_settings.py:206
+#: pretix/control/forms/global_settings.py:207
 msgid ""
 "If you want the \"powered by\" message in the page footer to include the "
 "name of your company or organization (if you made any changes to pretix), "
@@ -15041,22 +15031,22 @@ msgstr ""
 "tên của công ty hoặc tổ chức của bạn (nếu bạn thực hiện bất kỳ thay đổi nào "
 "đối với Pretix), hãy đặt tên ở đây."
 
-#: pretix/control/forms/global_settings.py:211
+#: pretix/control/forms/global_settings.py:212
 msgid "Link for powered by name"
 msgstr "Liên kết để được cung cấp bởi tên"
 
-#: pretix/control/forms/global_settings.py:212
+#: pretix/control/forms/global_settings.py:213
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
 "Nếu bạn sử dụng tùy chọn trước đó, bạn có thể đặt URL để liên kết đến chân "
 "trang."
 
-#: pretix/control/forms/global_settings.py:216
+#: pretix/control/forms/global_settings.py:217
 msgid "Source code instructions"
 msgstr "Hướng dẫn mã nguồn"
 
-#: pretix/control/forms/global_settings.py:218
+#: pretix/control/forms/global_settings.py:219
 msgid ""
 "If you use pretix under AGPLv3 terms, describe exactly how to download the "
 "current source code of the site including all modifications and installed "

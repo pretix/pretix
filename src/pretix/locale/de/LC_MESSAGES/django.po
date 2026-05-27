@@ -4,11 +4,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:45+0000\n"
+"POT-Creation-Date: 2026-05-27 15:47+0000\n"
 "PO-Revision-Date: 2026-05-27 15:20+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
-"de/>\n"
+"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14248,8 +14248,8 @@ msgid ""
 "You entered an URL, which is not allowed. Please remove %(match)s from your "
 "input."
 msgstr ""
-"Sie haben eine URL eingegeben, was nicht erlaubt ist. Bitte entfernen Sie %"
-"(match)s aus Ihrer Eingabe."
+"Sie haben eine URL eingegeben, was nicht erlaubt ist. Bitte entfernen Sie "
+"%(match)s aus Ihrer Eingabe."
 
 #: pretix/base/views/errors.py:48
 msgid ""
@@ -15735,23 +15735,11 @@ msgstr ""
 "Wird unter {domain}/.well-known/apple-developer-merchantid-domain-"
 "association ausgeliefert"
 
-#: pretix/control/forms/global_settings.py:111
-msgid "Vite widget origins"
-msgstr "Vite-Widget-Origins"
-
-#: pretix/control/forms/global_settings.py:112
-msgid ""
-"One origin per line (e.g. https://example.com). Requests from these origins "
-"will be served the new vite-based widget."
-msgstr ""
-"Ein Origin pro Zeile (z.B. https://example.com). Requests von diesen Origins "
-"werden mit dem neuen Vite-basierten Widget ausgeliefert."
-
-#: pretix/control/forms/global_settings.py:128
+#: pretix/control/forms/global_settings.py:129
 msgid "Perform update checks"
 msgstr "Update-Checks durchführen"
 
-#: pretix/control/forms/global_settings.py:129
+#: pretix/control/forms/global_settings.py:130
 msgid ""
 "During the update check, pretix will report an anonymous, unique "
 "installation ID, the current version of pretix and your installed plugins "
@@ -15768,11 +15756,11 @@ msgstr ""
 "wissen nicht, wer Sie sind oder wo Ihre pretix-Installation zu finden ist. "
 "Sie können diese Funktion hier jederzeit abstellen."
 
-#: pretix/control/forms/global_settings.py:137
+#: pretix/control/forms/global_settings.py:138
 msgid "Email notifications"
 msgstr "E-Mail-Benachrichtigungen"
 
-#: pretix/control/forms/global_settings.py:138
+#: pretix/control/forms/global_settings.py:139
 msgid ""
 "We will notify you at this address if we detect that a new update is "
 "available. This address will not be transmitted to pretix.eu, the emails "
@@ -15782,11 +15770,11 @@ msgstr ""
 "gibt. Diese Adresse wird nicht an pretix.eu übermittelt, die Mails werden "
 "von diesem Server lokal verschickt."
 
-#: pretix/control/forms/global_settings.py:151
+#: pretix/control/forms/global_settings.py:152
 msgid "Changes to pretix"
 msgstr "Änderungen an pretix"
 
-#: pretix/control/forms/global_settings.py:154
+#: pretix/control/forms/global_settings.py:155
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
@@ -15794,7 +15782,7 @@ msgstr ""
 "Diese Installation von pretix läuft ohne eigene Modifikationen oder "
 "Erweiterungen (mit Ausnahme installierter Plugins)."
 
-#: pretix/control/forms/global_settings.py:156
+#: pretix/control/forms/global_settings.py:157
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
@@ -15802,11 +15790,11 @@ msgstr ""
 "Die Installation von pretix enthält Änderungen oder Erweiterungen des Source-"
 "Codes."
 
-#: pretix/control/forms/global_settings.py:161
+#: pretix/control/forms/global_settings.py:162
 msgid "Usage of pretix"
 msgstr "Nutzung von pretix"
 
-#: pretix/control/forms/global_settings.py:164
+#: pretix/control/forms/global_settings.py:165
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
@@ -15815,7 +15803,7 @@ msgstr ""
 "eigenen Institution oder verbundenen Unternehmen durchgeführt werden, oder "
 "um Produkte zu verkaufen, die von meiner eigenen Institution verkauft werden."
 
-#: pretix/control/forms/global_settings.py:166
+#: pretix/control/forms/global_settings.py:167
 msgid ""
 "I use pretix to sell tickets of other event organizers (e.g. a ticketing "
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
@@ -15825,15 +15813,15 @@ msgstr ""
 "Ticketing-Firma/-Agentur) oder ich biete die Funktionen von pretix Dritten "
 "an (z.B. als Software as a Service)."
 
-#: pretix/control/forms/global_settings.py:168
+#: pretix/control/forms/global_settings.py:169
 msgid "I'm not sure which option applies."
 msgstr "Ich bin mir nicht sicher, welche Option auf mich zutrifft."
 
-#: pretix/control/forms/global_settings.py:173
+#: pretix/control/forms/global_settings.py:174
 msgid "License choice"
 msgstr "Lizenzwahl"
 
-#: pretix/control/forms/global_settings.py:176
+#: pretix/control/forms/global_settings.py:177
 msgid ""
 "I want to use pretix under the additional permission granted to everyone by "
 "the copyright holders which allows me to not share modifications if I only "
@@ -15843,7 +15831,7 @@ msgstr ""
 "erlaubt Änderungen nicht zu veröffentlichen, wenn pretix nur intern bzw. für "
 "den eigenen Bedarf verwendet wird."
 
-#: pretix/control/forms/global_settings.py:179
+#: pretix/control/forms/global_settings.py:180
 msgid ""
 "I want to use pretix under the terms of the AGPLv3 license without "
 "restriction on the scope of usage and therefore without making use of any "
@@ -15853,14 +15841,14 @@ msgstr ""
 "und Art der Nutzung beschränkt zu sein und mache daher von der zusätzlichen "
 "Berechtigung keinen Gebrauch."
 
-#: pretix/control/forms/global_settings.py:181
+#: pretix/control/forms/global_settings.py:182
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
 "Ich habe eine bezahlte pretix-Enterprise-Lizenz erworben, die derzeit gültig "
 "ist."
 
-#: pretix/control/forms/global_settings.py:186
+#: pretix/control/forms/global_settings.py:187
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
@@ -15869,7 +15857,7 @@ msgstr ""
 "Lizenzen ohne Copyleft verfügbar sind (Apache-Lizenz, MIT-Lizenz, BSD-"
 "Lizenz, …)."
 
-#: pretix/control/forms/global_settings.py:191
+#: pretix/control/forms/global_settings.py:192
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
@@ -15877,7 +15865,7 @@ msgstr ""
 "Diese Installation von pretix hat installierte Plugins, die unter freien "
 "Lizenzen mit starkem Copyleft verfügbar sind (GPL, AGPL, …)."
 
-#: pretix/control/forms/global_settings.py:196
+#: pretix/control/forms/global_settings.py:197
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
@@ -15886,7 +15874,7 @@ msgstr ""
 "entwickelt wurden oder die wir unter einer proprietären Lizenz von einer "
 "dritten Partei erhalten haben."
 
-#: pretix/control/forms/global_settings.py:201
+#: pretix/control/forms/global_settings.py:202
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
@@ -15894,11 +15882,11 @@ msgstr ""
 "Diese Installation von pretix hat installierte pretix-Enterprise-Plugins mit "
 "gültiger Lizenz."
 
-#: pretix/control/forms/global_settings.py:205
+#: pretix/control/forms/global_settings.py:206
 msgid "Footer: \"powered by\" name (optional)"
 msgstr "Fußzeile: \"powered by\"-Name (optional)"
 
-#: pretix/control/forms/global_settings.py:206
+#: pretix/control/forms/global_settings.py:207
 msgid ""
 "If you want the \"powered by\" message in the page footer to include the "
 "name of your company or organization (if you made any changes to pretix), "
@@ -15908,22 +15896,22 @@ msgstr ""
 "Namen Ihrer Firma oder Organisation aufzunehmen (wenn Sie Änderungen an "
 "pretix vorgenommen haben), können Sie hier den Namen eintragen."
 
-#: pretix/control/forms/global_settings.py:211
+#: pretix/control/forms/global_settings.py:212
 msgid "Link for powered by name"
 msgstr "Verlinkung des Namens"
 
-#: pretix/control/forms/global_settings.py:212
+#: pretix/control/forms/global_settings.py:213
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
 "Wenn Sie die vorherige Option benutzt haben, können Sie hier eine URL für "
 "den Link in der Fußzeile eintragen."
 
-#: pretix/control/forms/global_settings.py:216
+#: pretix/control/forms/global_settings.py:217
 msgid "Source code instructions"
 msgstr "Quellcode-Hinweise"
 
-#: pretix/control/forms/global_settings.py:218
+#: pretix/control/forms/global_settings.py:219
 msgid ""
 "If you use pretix under AGPLv3 terms, describe exactly how to download the "
 "current source code of the site including all modifications and installed "
@@ -30049,7 +30037,8 @@ msgstr ""
 #: pretix/control/views/organizer.py:832
 #, python-brace-format
 msgid "This plugin cannot be activated for event {}."
-msgstr "Diese Erweiterung kann für die Veranstaltung {} nicht aktiviert werden."
+msgstr ""
+"Diese Erweiterung kann für die Veranstaltung {} nicht aktiviert werden."
 
 #: pretix/control/views/organizer.py:901
 msgid "The team has been created. You can now add members to the team."
@@ -38036,6 +38025,16 @@ msgstr "Schreibzugriff"
 #: pretix/settings.py:875
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid "Vite widget origins"
+#~ msgstr "Vite-Widget-Origins"
+
+#~ msgid ""
+#~ "One origin per line (e.g. https://example.com). Requests from these "
+#~ "origins will be served the new vite-based widget."
+#~ msgstr ""
+#~ "Ein Origin pro Zeile (z.B. https://example.com). Requests von diesen "
+#~ "Origins werden mit dem neuen Vite-basierten Widget ausgeliefert."
 
 #~ msgid "Please do not use special characters in names."
 #~ msgstr "Bitte verwenden Sie keine Sonderzeichen in Namen."

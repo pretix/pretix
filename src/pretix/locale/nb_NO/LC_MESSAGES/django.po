@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:45+0000\n"
+"POT-Creation-Date: 2026-05-27 15:47+0000\n"
 "PO-Revision-Date: 2026-05-02 23:00+0000\n"
 "Last-Translator: Daniel Musketa <daniel@musketa.de>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -15980,21 +15980,11 @@ msgstr ""
 "Vil bli servert på {domain}/.well-known/apple-developer-merchantid-domain-"
 "association."
 
-#: pretix/control/forms/global_settings.py:111
-msgid "Vite widget origins"
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:112
-msgid ""
-"One origin per line (e.g. https://example.com). Requests from these origins "
-"will be served the new vite-based widget."
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:128
+#: pretix/control/forms/global_settings.py:129
 msgid "Perform update checks"
 msgstr "Utfør oppdateringssjekker."
 
-#: pretix/control/forms/global_settings.py:129
+#: pretix/control/forms/global_settings.py:130
 msgid ""
 "During the update check, pretix will report an anonymous, unique "
 "installation ID, the current version of pretix and your installed plugins "
@@ -16010,11 +16000,11 @@ msgstr ""
 "adresser, og vi vil ikke vite hvem du er eller hvor vi kan finne din "
 "instans. Du kan når som helst deaktivere denne funksjonaliteten her."
 
-#: pretix/control/forms/global_settings.py:137
+#: pretix/control/forms/global_settings.py:138
 msgid "Email notifications"
 msgstr "E-postvarsler"
 
-#: pretix/control/forms/global_settings.py:138
+#: pretix/control/forms/global_settings.py:139
 msgid ""
 "We will notify you at this address if we detect that a new update is "
 "available. This address will not be transmitted to pretix.eu, the emails "
@@ -16024,11 +16014,11 @@ msgstr ""
 "tilgjengelig. Denne adressen vil ikke bli overført til pretix.eu, e-postene "
 "vil bli sendt av denne serveren lokalt."
 
-#: pretix/control/forms/global_settings.py:151
+#: pretix/control/forms/global_settings.py:152
 msgid "Changes to pretix"
 msgstr "Endringer i pretix"
 
-#: pretix/control/forms/global_settings.py:154
+#: pretix/control/forms/global_settings.py:155
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
@@ -16036,7 +16026,7 @@ msgstr ""
 "Denne installasjonen av pretix kjører uten noen tilpassede endringer eller "
 "utvidelser (bortsett fra installerte tillegg)."
 
-#: pretix/control/forms/global_settings.py:156
+#: pretix/control/forms/global_settings.py:157
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
@@ -16044,11 +16034,11 @@ msgstr ""
 "Denne installasjonen av pretix inkluderer endringer eller utvidelser som er "
 "gjort i kildekoden."
 
-#: pretix/control/forms/global_settings.py:161
+#: pretix/control/forms/global_settings.py:162
 msgid "Usage of pretix"
 msgstr "Bruk av pretix"
 
-#: pretix/control/forms/global_settings.py:164
+#: pretix/control/forms/global_settings.py:165
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
@@ -16057,7 +16047,7 @@ msgstr ""
 "eget selskap eller tilknyttede selskaper, eller for å selge produkter som "
 "selges av mitt eget selskap."
 
-#: pretix/control/forms/global_settings.py:166
+#: pretix/control/forms/global_settings.py:167
 msgid ""
 "I use pretix to sell tickets of other event organizers (e.g. a ticketing "
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
@@ -16067,15 +16057,15 @@ msgstr ""
 "eksempel et billettselskap), eller jeg tilbyr funksjonaliteten til pretix "
 "til andre (for eksempel et Software-as-a-Service-selskap)."
 
-#: pretix/control/forms/global_settings.py:168
+#: pretix/control/forms/global_settings.py:169
 msgid "I'm not sure which option applies."
 msgstr "Jeg er usikker på hvilket alternativ som gjelder."
 
-#: pretix/control/forms/global_settings.py:173
+#: pretix/control/forms/global_settings.py:174
 msgid "License choice"
 msgstr "Valg av lisens"
 
-#: pretix/control/forms/global_settings.py:176
+#: pretix/control/forms/global_settings.py:177
 msgid ""
 "I want to use pretix under the additional permission granted to everyone by "
 "the copyright holders which allows me to not share modifications if I only "
@@ -16085,7 +16075,7 @@ msgstr ""
 "av opphavsrettshaverne, som tillater meg å ikke dele endringer hvis jeg bare "
 "bruker pretix internt."
 
-#: pretix/control/forms/global_settings.py:179
+#: pretix/control/forms/global_settings.py:180
 msgid ""
 "I want to use pretix under the terms of the AGPLv3 license without "
 "restriction on the scope of usage and therefore without making use of any "
@@ -16095,14 +16085,14 @@ msgstr ""
 "begrensninger på bruksområdet og derfor uten å benytte meg av noen ekstra "
 "tillatelser."
 
-#: pretix/control/forms/global_settings.py:181
+#: pretix/control/forms/global_settings.py:182
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
 "Jeg har skaffet meg en betalt pretix Enterprise-lisens som for øyeblikket er "
 "gyldig."
 
-#: pretix/control/forms/global_settings.py:186
+#: pretix/control/forms/global_settings.py:187
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
@@ -16111,7 +16101,7 @@ msgstr ""
 "tilgjengelige fritt under en ikke-copyleft lisens (Apache License, MIT "
 "License, BSD lisens, ...)."
 
-#: pretix/control/forms/global_settings.py:191
+#: pretix/control/forms/global_settings.py:192
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
@@ -16119,7 +16109,7 @@ msgstr ""
 "Denne installasjonen av pretix har installert tilleggsprogrammer som er "
 "tilgjengelige fritt under en lisens med sterk kopyleft (GPL, AGPL, ...)."
 
-#: pretix/control/forms/global_settings.py:196
+#: pretix/control/forms/global_settings.py:197
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
@@ -16128,7 +16118,7 @@ msgstr ""
 "blitt opprettet internt eller er blitt anskaffet under en proprietær lisens "
 "fra en tredjepart."
 
-#: pretix/control/forms/global_settings.py:201
+#: pretix/control/forms/global_settings.py:202
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
@@ -16136,11 +16126,11 @@ msgstr ""
 "Denne installasjonen av pretix har installert pretix Enterprise-plugins med "
 "en gyldig lisens."
 
-#: pretix/control/forms/global_settings.py:205
+#: pretix/control/forms/global_settings.py:206
 msgid "Footer: \"powered by\" name (optional)"
 msgstr "Bunntekst: Navnet på \"powered by\" (valgfritt)"
 
-#: pretix/control/forms/global_settings.py:206
+#: pretix/control/forms/global_settings.py:207
 msgid ""
 "If you want the \"powered by\" message in the page footer to include the "
 "name of your company or organization (if you made any changes to pretix), "
@@ -16150,22 +16140,22 @@ msgstr ""
 "på ditt selskap eller organisasjon (hvis du har gjort endringer i pretix), "
 "kan du angi navnet her."
 
-#: pretix/control/forms/global_settings.py:211
+#: pretix/control/forms/global_settings.py:212
 msgid "Link for powered by name"
 msgstr "Lenke for \"Powered by\" navn"
 
-#: pretix/control/forms/global_settings.py:212
+#: pretix/control/forms/global_settings.py:213
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
 "Hvis du brukte forrige alternativ, kan du angi en URL som skal lenkes til i "
 "bunnteksten."
 
-#: pretix/control/forms/global_settings.py:216
+#: pretix/control/forms/global_settings.py:217
 msgid "Source code instructions"
 msgstr "Instruksjoner for kildekode"
 
-#: pretix/control/forms/global_settings.py:218
+#: pretix/control/forms/global_settings.py:219
 msgid ""
 "If you use pretix under AGPLv3 terms, describe exactly how to download the "
 "current source code of the site including all modifications and installed "

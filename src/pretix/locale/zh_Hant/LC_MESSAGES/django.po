@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:45+0000\n"
+"POT-Creation-Date: 2026-05-27 15:47+0000\n"
 "PO-Revision-Date: 2026-05-21 15:08+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
@@ -14950,21 +14950,11 @@ msgstr ""
 "將在 {domain}/.well-known/apple-developer-merchantid-domain-association 上提"
 "供"
 
-#: pretix/control/forms/global_settings.py:111
-msgid "Vite widget origins"
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:112
-msgid ""
-"One origin per line (e.g. https://example.com). Requests from these origins "
-"will be served the new vite-based widget."
-msgstr ""
-
-#: pretix/control/forms/global_settings.py:128
+#: pretix/control/forms/global_settings.py:129
 msgid "Perform update checks"
 msgstr "執行更新檢查"
 
-#: pretix/control/forms/global_settings.py:129
+#: pretix/control/forms/global_settings.py:130
 msgid ""
 "During the update check, pretix will report an anonymous, unique "
 "installation ID, the current version of pretix and your installed plugins "
@@ -14978,11 +14968,11 @@ msgstr ""
 "們只會儲存匿名數據，絕不會存儲任何IP位址，我們不會知道你是誰或在哪裡可以找到"
 "你的實例。你可以隨時在此處禁用此行為。"
 
-#: pretix/control/forms/global_settings.py:137
+#: pretix/control/forms/global_settings.py:138
 msgid "Email notifications"
 msgstr "郵件通知"
 
-#: pretix/control/forms/global_settings.py:138
+#: pretix/control/forms/global_settings.py:139
 msgid ""
 "We will notify you at this address if we detect that a new update is "
 "available. This address will not be transmitted to pretix.eu, the emails "
@@ -14991,28 +14981,28 @@ msgstr ""
 "如果我們檢測到有新的更新可用，我們將通過此位址通知你。此位址不會傳輸到 "
 "pretix.eu，電子郵件將由此伺服器在本地發送。"
 
-#: pretix/control/forms/global_settings.py:151
+#: pretix/control/forms/global_settings.py:152
 msgid "Changes to pretix"
 msgstr "對 pretix 的更改"
 
-#: pretix/control/forms/global_settings.py:154
+#: pretix/control/forms/global_settings.py:155
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
 msgstr ""
 "此 pretix 安裝無需任何自定義修改或擴展即可運行（已安裝的插件程式除外）。"
 
-#: pretix/control/forms/global_settings.py:156
+#: pretix/control/forms/global_settings.py:157
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
 msgstr "pretix 的此安裝包括對原始程式碼所做的更改或擴展。"
 
-#: pretix/control/forms/global_settings.py:161
+#: pretix/control/forms/global_settings.py:162
 msgid "Usage of pretix"
 msgstr "pretix的使用"
 
-#: pretix/control/forms/global_settings.py:164
+#: pretix/control/forms/global_settings.py:165
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
@@ -15020,7 +15010,7 @@ msgstr ""
 "我只使用pretix來組織由我自己的公司或其附屬公司執行的活動，或銷售我自己公司銷"
 "售的商品。"
 
-#: pretix/control/forms/global_settings.py:166
+#: pretix/control/forms/global_settings.py:167
 msgid ""
 "I use pretix to sell tickets of other event organizers (e.g. a ticketing "
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
@@ -15029,15 +15019,15 @@ msgstr ""
 "我使用 pretix 出售其他活動召集人（例如票據公司）的門票，或者向其他人（例如軟"
 "體即服務公司）提供 pretix 的功能。"
 
-#: pretix/control/forms/global_settings.py:168
+#: pretix/control/forms/global_settings.py:169
 msgid "I'm not sure which option applies."
 msgstr "我不確定哪個選項適用。"
 
-#: pretix/control/forms/global_settings.py:173
+#: pretix/control/forms/global_settings.py:174
 msgid "License choice"
 msgstr "許可證選擇"
 
-#: pretix/control/forms/global_settings.py:176
+#: pretix/control/forms/global_settings.py:177
 msgid ""
 "I want to use pretix under the additional permission granted to everyone by "
 "the copyright holders which allows me to not share modifications if I only "
@@ -15046,7 +15036,7 @@ msgstr ""
 "我想在版權擁有者授予每個人的額外許可下使用 pretix，如果我只在內部使用 "
 "pretix，我就可以不共用修改。"
 
-#: pretix/control/forms/global_settings.py:179
+#: pretix/control/forms/global_settings.py:180
 msgid ""
 "I want to use pretix under the terms of the AGPLv3 license without "
 "restriction on the scope of usage and therefore without making use of any "
@@ -15055,12 +15045,12 @@ msgstr ""
 "我想在AGPLv3許可證的條款下使用pretix，而不受使用範圍的限制，因此無需使用任何"
 "其他許可。"
 
-#: pretix/control/forms/global_settings.py:181
+#: pretix/control/forms/global_settings.py:182
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr "我已經獲得目前有效的付費pretix企業許可證。"
 
-#: pretix/control/forms/global_settings.py:186
+#: pretix/control/forms/global_settings.py:187
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
@@ -15068,7 +15058,7 @@ msgstr ""
 "pretix的安裝程式安裝插件程式，這些外掛程式可以在非copyleft許可證（Apache許可"
 "證，MIT許可證，BSD許可證等）下免費獲得。"
 
-#: pretix/control/forms/global_settings.py:191
+#: pretix/control/forms/global_settings.py:192
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
@@ -15076,23 +15066,23 @@ msgstr ""
 "pretix的這個安裝已經安裝插件程式，這些外掛程式可以在具有強大copyleft（GPL，"
 "AGPL,...）的許可證下免費獲得。"
 
-#: pretix/control/forms/global_settings.py:196
+#: pretix/control/forms/global_settings.py:197
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
 msgstr "此次安裝的 pretix 已安裝內部創建或由第三方根據專有許可獲得的插件。"
 
-#: pretix/control/forms/global_settings.py:201
+#: pretix/control/forms/global_settings.py:202
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
 msgstr "此本次安裝的 pretix 已安裝具有有效授權的 pretix Enterprise 插件程式。"
 
-#: pretix/control/forms/global_settings.py:205
+#: pretix/control/forms/global_settings.py:206
 msgid "Footer: \"powered by\" name (optional)"
 msgstr "頁面腳註：「動能源自」名稱（可選）"
 
-#: pretix/control/forms/global_settings.py:206
+#: pretix/control/forms/global_settings.py:207
 msgid ""
 "If you want the \"powered by\" message in the page footer to include the "
 "name of your company or organization (if you made any changes to pretix), "
@@ -15101,20 +15091,20 @@ msgstr ""
 "如果你希望頁面頁腳中的「動力來源」消息包含你的公司或組織的名稱（如果你對 "
 "pretix 進行任何更改），請在此處設定名稱。"
 
-#: pretix/control/forms/global_settings.py:211
+#: pretix/control/forms/global_settings.py:212
 msgid "Link for powered by name"
 msgstr "按名稱提供支援的連結"
 
-#: pretix/control/forms/global_settings.py:212
+#: pretix/control/forms/global_settings.py:213
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr "如果使用上一個選項，則可以在頁面腳註中設定要連結到的URL。"
 
-#: pretix/control/forms/global_settings.py:216
+#: pretix/control/forms/global_settings.py:217
 msgid "Source code instructions"
 msgstr "原始來源程式碼說明"
 
-#: pretix/control/forms/global_settings.py:218
+#: pretix/control/forms/global_settings.py:219
 msgid ""
 "If you use pretix under AGPLv3 terms, describe exactly how to download the "
 "current source code of the site including all modifications and installed "
