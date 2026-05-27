@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
 "PO-Revision-Date: 2025-10-31 17:00+0000\n"
 "Last-Translator: Núria Masclans <nuriamasclansserrat@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -131,7 +131,6 @@ msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "Continua"
@@ -185,172 +184,6 @@ msgstr "Total"
 msgid "Contacting your bank …"
 msgstr "Contactant amb el teu banc…"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "Selecciona una llista d'acreditació"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "No s'ha trobat cap lllista d'acreditació activa."
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "Canvia la llista d'acreditació"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "Resultats de la cerca"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "No s'han trobat entrades"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "Resultat"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "Aquesta entrada requereix atenció especial"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "Canvia la direcció"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "Entrada"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "Sortida"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "Escaneja l'entrada o cerca i prem Retorn…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "Mostra'n més"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "Vàlid"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "No pagat"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "Cancel·lat"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr "Confirmat"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr "Pendent d'aprovació"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "Reemborsat"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "Cancel·lar"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "Entrada no pagada"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr "Aquesta entrada no està pagada. Vols continuar igualment?"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "Cal informació addicional"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "Entrada vàlida"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "Sortida registrada"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "Entrada ja utilitzada"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "Informació requerida"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Unknown ticket"
-msgstr "Entrada desconeguda"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Ticket type not allowed here"
-msgstr "Tipus d'entrada no permès aquí"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "Entrada no permesa"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "Codi d’entrada anul·lat o modificat"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Ticket blocked"
-msgstr "Entrada bloquejada"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket not valid at this time"
-msgstr "Entrada no vàlida en aquest moment"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "S'ha cancel·lat la comanda"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr "Codi de l’entrada ambigu a la llista"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr "Comanda no aprovada"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "Entrades registrades"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "Entrades vàlides"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "Actualment dins"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "Sí"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "No"
-
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "Tanca"
@@ -383,14 +216,14 @@ msgstr ""
 "Si aquesta acció triga més de 2 minuts, contacta'ns o torna enrere al "
 "navegador i prova-ho de nou."
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "S'ha produït un error de tipus {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -398,23 +231,23 @@ msgstr ""
 "Actualment no podem connectar amb el servidor, però seguim intentant-ho. "
 "Últim codi d’error: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "Temps d’espera esgotat. Torna-ho a provar."
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "No es pot connectar amb el servidor. Torna-ho a provar. Codi d’error: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "Estem processant la vostra sol·licitud …"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -423,11 +256,11 @@ msgstr ""
 "Hem enviat la teva petició al servidor. Si triga més d'1 minut, comprova la "
 "connexió, recarrega la pàgina i torna-ho a provar."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "Si triga més de pocs minuts, contacta'ns."
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "Tanca el missatge"
 
@@ -438,146 +271,6 @@ msgstr "Copiat!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Prem Ctrl-C per copiar!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "forma part de"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "abans de"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "després de"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr "="
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "Producte"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "Variació del producte"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr "Porta"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "Data i hora actuals"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "Dia actual de la setmana (1 = Dilluns, 7 = Diumenge)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr "Estat actual de l'entrada"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "Nombre d'entrades anteriors"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "Nombre d’entrades anteriors des de la mitjanit"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-msgid "Number of previous entries since"
-msgstr "Nombre d’entrades anteriors des de"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-msgid "Number of previous entries before"
-msgstr "Nombre d’entrades anteriors abans de"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "Nombre de dies amb una entrada anterior"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-msgid "Number of days with a previous entry since"
-msgstr "Nombre de dies amb una entrada anterior des de"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-msgid "Number of days with a previous entry before"
-msgstr "Nombre de dies amb una entrada anterior abans de"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr "Minuts des de l'última entrada (-1 per la primera entrada)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr "Minuts des de la primera entrada (-1 a la primera entrada)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "Complir totes les condicions següents"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "Complir almenys una de les condicions següents"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "Inici de l'esdeveniment"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "Finalització de l'esdeveniment"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "Admissió de l'esdeveniment"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "Data i hora personalitzades"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "Hora personalitzada"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "Tolerància (minuts)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "Afegeix condició"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "en minuts"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr "Duplicat"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr "present"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr "absent"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr "Error: Producte no trobat!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr "Error: Variació no trobada!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -716,6 +409,16 @@ msgstr "Altres"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "Quantitat"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "Sí"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "No"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1192,6 +895,224 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr ""
+
+#~ msgid "Select a check-in list"
+#~ msgstr "Selecciona una llista d'acreditació"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "No s'ha trobat cap lllista d'acreditació activa."
+
+#~ msgid "Switch check-in list"
+#~ msgstr "Canvia la llista d'acreditació"
+
+#~ msgid "Search results"
+#~ msgstr "Resultats de la cerca"
+
+#~ msgid "No tickets found"
+#~ msgstr "No s'han trobat entrades"
+
+#~ msgid "Result"
+#~ msgstr "Resultat"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "Aquesta entrada requereix atenció especial"
+
+#~ msgid "Switch direction"
+#~ msgstr "Canvia la direcció"
+
+#~ msgid "Entry"
+#~ msgstr "Entrada"
+
+#~ msgid "Exit"
+#~ msgstr "Sortida"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "Escaneja l'entrada o cerca i prem Retorn…"
+
+#~ msgid "Load more"
+#~ msgstr "Mostra'n més"
+
+#~ msgid "Valid"
+#~ msgstr "Vàlid"
+
+#~ msgid "Unpaid"
+#~ msgstr "No pagat"
+
+#~ msgid "Canceled"
+#~ msgstr "Cancel·lat"
+
+#~ msgid "Confirmed"
+#~ msgstr "Confirmat"
+
+#~ msgid "Approval pending"
+#~ msgstr "Pendent d'aprovació"
+
+#~ msgid "Redeemed"
+#~ msgstr "Reemborsat"
+
+#~ msgid "Cancel"
+#~ msgstr "Cancel·lar"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "Entrada no pagada"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr "Aquesta entrada no està pagada. Vols continuar igualment?"
+
+#~ msgid "Additional information required"
+#~ msgstr "Cal informació addicional"
+
+#~ msgid "Valid ticket"
+#~ msgstr "Entrada vàlida"
+
+#~ msgid "Exit recorded"
+#~ msgstr "Sortida registrada"
+
+#~ msgid "Ticket already used"
+#~ msgstr "Entrada ja utilitzada"
+
+#~ msgid "Information required"
+#~ msgstr "Informació requerida"
+
+#~ msgid "Unknown ticket"
+#~ msgstr "Entrada desconeguda"
+
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "Tipus d'entrada no permès aquí"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "Entrada no permesa"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "Codi d’entrada anul·lat o modificat"
+
+#~ msgid "Ticket blocked"
+#~ msgstr "Entrada bloquejada"
+
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "Entrada no vàlida en aquest moment"
+
+#~ msgid "Order canceled"
+#~ msgstr "S'ha cancel·lat la comanda"
+
+#~ msgid "Ticket code is ambiguous on list"
+#~ msgstr "Codi de l’entrada ambigu a la llista"
+
+#~ msgid "Order not approved"
+#~ msgstr "Comanda no aprovada"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "Entrades registrades"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "Entrades vàlides"
+
+#~ msgid "Currently inside"
+#~ msgstr "Actualment dins"
+
+#~ msgid "is one of"
+#~ msgstr "forma part de"
+
+#~ msgid "is before"
+#~ msgstr "abans de"
+
+#~ msgid "is after"
+#~ msgstr "després de"
+
+#~ msgid "="
+#~ msgstr "="
+
+#~ msgid "Product"
+#~ msgstr "Producte"
+
+#~ msgid "Product variation"
+#~ msgstr "Variació del producte"
+
+#~ msgid "Gate"
+#~ msgstr "Porta"
+
+#~ msgid "Current date and time"
+#~ msgstr "Data i hora actuals"
+
+#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+#~ msgstr "Dia actual de la setmana (1 = Dilluns, 7 = Diumenge)"
+
+#~ msgid "Current entry status"
+#~ msgstr "Estat actual de l'entrada"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "Nombre d'entrades anteriors"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "Nombre d’entrades anteriors des de la mitjanit"
+
+#~ msgid "Number of previous entries since"
+#~ msgstr "Nombre d’entrades anteriors des de"
+
+#~ msgid "Number of previous entries before"
+#~ msgstr "Nombre d’entrades anteriors abans de"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "Nombre de dies amb una entrada anterior"
+
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "Nombre de dies amb una entrada anterior des de"
+
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "Nombre de dies amb una entrada anterior abans de"
+
+#~ msgid "Minutes since last entry (-1 on first entry)"
+#~ msgstr "Minuts des de l'última entrada (-1 per la primera entrada)"
+
+#~ msgid "Minutes since first entry (-1 on first entry)"
+#~ msgstr "Minuts des de la primera entrada (-1 a la primera entrada)"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "Complir totes les condicions següents"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "Complir almenys una de les condicions següents"
+
+#~ msgid "Event start"
+#~ msgstr "Inici de l'esdeveniment"
+
+#~ msgid "Event end"
+#~ msgstr "Finalització de l'esdeveniment"
+
+#~ msgid "Event admission"
+#~ msgstr "Admissió de l'esdeveniment"
+
+#~ msgid "custom date and time"
+#~ msgstr "Data i hora personalitzades"
+
+#~ msgid "custom time"
+#~ msgstr "Hora personalitzada"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "Tolerància (minuts)"
+
+#~ msgid "Add condition"
+#~ msgstr "Afegeix condició"
+
+#~ msgid "minutes"
+#~ msgstr "en minuts"
+
+#~ msgid "Duplicate"
+#~ msgstr "Duplicat"
+
+#~ msgctxt "entry_status"
+#~ msgid "present"
+#~ msgstr "present"
+
+#~ msgctxt "entry_status"
+#~ msgid "absent"
+#~ msgstr "absent"
+
+#~ msgid "Error: Product not found!"
+#~ msgstr "Error: Producte no trobat!"
+
+#~ msgid "Error: Variation not found!"
+#~ msgstr "Error: Variació no trobada!"
 
 #~ msgid "iDEAL"
 #~ msgstr "iDEAL"

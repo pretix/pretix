@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
 "PO-Revision-Date: 2026-02-09 21:00+0000\n"
 "Last-Translator: roi belotsercovsky <rbelotsercovsky@gmail.com>\n"
 "Language-Team: Hebrew <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -132,7 +132,6 @@ msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "המשך"
@@ -186,172 +185,6 @@ msgstr "סה\"כ"
 msgid "Contacting your bank …"
 msgstr "יוצר קשר עם הבנק שלך…"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "רשימת צ'ק-אין"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "לא נמצאו רשימות צ'ק-אין פעילות."
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "החלפת צ'ק-אין"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "תוצאות חיפוש"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "לא נמצאו כרטיסים"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "תוצאות"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "כרטיס זה דורש התייחסות מיוחדת"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "החלף כיוון"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "כניסה"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "יציאה"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "סרוק כרטיס או חפש…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "טען עוד"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "תקף"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "לא שולם"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "בוטל"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr "מאושר"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr "ממתין לאישור"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "מומש"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "בטל"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "כרטיס לא שולם"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr "הכרטיס עדיין לא שולם. רוצה להמשיך בכל זאת?"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "מידע נוסף"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "כרטיס תקף"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "יציאה נרשמה"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "כרטיס כבר שומש"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "נדרש מידע"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Unknown ticket"
-msgstr "כרטיס לא מזוהה"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Ticket type not allowed here"
-msgstr "סוג כרטיס לא מאושר כאן"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "כניסה לא מאושרת"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "קוד כרטיס נשלל/שונה"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Ticket blocked"
-msgstr "כרטיס נחסם"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket not valid at this time"
-msgstr "כרטיס לא תקף בזמן זה"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "הזמנה בוטלה"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr "קוד כרטיס מעורפל ברשימה"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr "הזמנה לא מאושרת"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "כרטיסים רשומים"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "כרטיסים תקפים"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "כרגע בפנים"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "כן"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "לא"
-
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "סגור"
@@ -380,35 +213,35 @@ msgstr ""
 "הבקשה שלך הגיעה לשרת אבל עדיין לא התחילה. אם זה לוקח יותר משתי דקות, אנא צור "
 "איתנו קשר או נסה שנית."
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "שגיאה {code} התרחשה."
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr "אנחנו לא מצליחים לגשת לשרת, אבל ממשיכים לנסות. שגיאה אחרונה: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "הבקשה לקחה יותר מידי זמן. נסה שנית."
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "אירעה שגיאה. אנא נסה שנית. שגיאה: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "הבקשה שלך מתבצעת…"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -417,11 +250,11 @@ msgstr ""
 "אנחנו כרגע שולחים את הבקשה שלך לשרת. במידה והתהליך נמשך יותר מדקה, בדוק "
 "בבקשה את חיבור הרשת שלך, רענן את הדף ונסה שוב."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "במידה וזה לוקח יותר מכמה דקות, צור עימנו קשר."
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "סגור הודעה"
 
@@ -432,146 +265,6 @@ msgstr "הועתק!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "לחץ Ctrl-C להעתיק!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "הוא אחד מ"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "לפני"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "אחרי"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr "="
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "מוצר"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "וריאצית מוצר"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr "שער"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "זמן ותאריך נוכחי"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "יום נוכחי בשבוע (1 = יום שני, 7 = יום ראשון)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr "סטטוס כניסה נוכחי"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "מספר כניסות קודמות"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "מספר כניסות קודמות מחצות"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-msgid "Number of previous entries since"
-msgstr "מספר כניסות קודמות מ"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-msgid "Number of previous entries before"
-msgstr "מספר כניסות קודמות לפני"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "מספר ימים עם כניסה קודמת"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-msgid "Number of days with a previous entry since"
-msgstr "מספר ימים עם כניסה קודמת מאז"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-msgid "Number of days with a previous entry before"
-msgstr "מספר ימים עם כניסה קודמת לפני"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr "דקות מאז כניסה אחרונה (-1 לכניסה הראשונה)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr "דקות מאז הכניסה הראשונה (-1 לכניסה הראשונה)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "כל התנאים מטה (ו)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "לפחות אחד מהתנאים מטה (או)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "תחילת אירוע"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "סוף אירוע"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "כניסה לאירוע"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "תאריך ושעה מותאמים אישית"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "שעה מותאמת אישית"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "סבילות (דקות)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "הוסף תנאי"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "דקות"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr "שכפול"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr "נוכח"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr "נעדר"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr "תקלה: מוצר לא נמצא!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr "תקלה: וריאציה לא נמצאה!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -706,6 +399,16 @@ msgstr "אחרים"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "ספירה"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "כן"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "לא"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1191,6 +894,224 @@ msgstr "נובמבר"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "דצמבר"
+
+#~ msgid "Select a check-in list"
+#~ msgstr "רשימת צ'ק-אין"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "לא נמצאו רשימות צ'ק-אין פעילות."
+
+#~ msgid "Switch check-in list"
+#~ msgstr "החלפת צ'ק-אין"
+
+#~ msgid "Search results"
+#~ msgstr "תוצאות חיפוש"
+
+#~ msgid "No tickets found"
+#~ msgstr "לא נמצאו כרטיסים"
+
+#~ msgid "Result"
+#~ msgstr "תוצאות"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "כרטיס זה דורש התייחסות מיוחדת"
+
+#~ msgid "Switch direction"
+#~ msgstr "החלף כיוון"
+
+#~ msgid "Entry"
+#~ msgstr "כניסה"
+
+#~ msgid "Exit"
+#~ msgstr "יציאה"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "סרוק כרטיס או חפש…"
+
+#~ msgid "Load more"
+#~ msgstr "טען עוד"
+
+#~ msgid "Valid"
+#~ msgstr "תקף"
+
+#~ msgid "Unpaid"
+#~ msgstr "לא שולם"
+
+#~ msgid "Canceled"
+#~ msgstr "בוטל"
+
+#~ msgid "Confirmed"
+#~ msgstr "מאושר"
+
+#~ msgid "Approval pending"
+#~ msgstr "ממתין לאישור"
+
+#~ msgid "Redeemed"
+#~ msgstr "מומש"
+
+#~ msgid "Cancel"
+#~ msgstr "בטל"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "כרטיס לא שולם"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr "הכרטיס עדיין לא שולם. רוצה להמשיך בכל זאת?"
+
+#~ msgid "Additional information required"
+#~ msgstr "מידע נוסף"
+
+#~ msgid "Valid ticket"
+#~ msgstr "כרטיס תקף"
+
+#~ msgid "Exit recorded"
+#~ msgstr "יציאה נרשמה"
+
+#~ msgid "Ticket already used"
+#~ msgstr "כרטיס כבר שומש"
+
+#~ msgid "Information required"
+#~ msgstr "נדרש מידע"
+
+#~ msgid "Unknown ticket"
+#~ msgstr "כרטיס לא מזוהה"
+
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "סוג כרטיס לא מאושר כאן"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "כניסה לא מאושרת"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "קוד כרטיס נשלל/שונה"
+
+#~ msgid "Ticket blocked"
+#~ msgstr "כרטיס נחסם"
+
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "כרטיס לא תקף בזמן זה"
+
+#~ msgid "Order canceled"
+#~ msgstr "הזמנה בוטלה"
+
+#~ msgid "Ticket code is ambiguous on list"
+#~ msgstr "קוד כרטיס מעורפל ברשימה"
+
+#~ msgid "Order not approved"
+#~ msgstr "הזמנה לא מאושרת"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "כרטיסים רשומים"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "כרטיסים תקפים"
+
+#~ msgid "Currently inside"
+#~ msgstr "כרגע בפנים"
+
+#~ msgid "is one of"
+#~ msgstr "הוא אחד מ"
+
+#~ msgid "is before"
+#~ msgstr "לפני"
+
+#~ msgid "is after"
+#~ msgstr "אחרי"
+
+#~ msgid "="
+#~ msgstr "="
+
+#~ msgid "Product"
+#~ msgstr "מוצר"
+
+#~ msgid "Product variation"
+#~ msgstr "וריאצית מוצר"
+
+#~ msgid "Gate"
+#~ msgstr "שער"
+
+#~ msgid "Current date and time"
+#~ msgstr "זמן ותאריך נוכחי"
+
+#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+#~ msgstr "יום נוכחי בשבוע (1 = יום שני, 7 = יום ראשון)"
+
+#~ msgid "Current entry status"
+#~ msgstr "סטטוס כניסה נוכחי"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "מספר כניסות קודמות"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "מספר כניסות קודמות מחצות"
+
+#~ msgid "Number of previous entries since"
+#~ msgstr "מספר כניסות קודמות מ"
+
+#~ msgid "Number of previous entries before"
+#~ msgstr "מספר כניסות קודמות לפני"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "מספר ימים עם כניסה קודמת"
+
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "מספר ימים עם כניסה קודמת מאז"
+
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "מספר ימים עם כניסה קודמת לפני"
+
+#~ msgid "Minutes since last entry (-1 on first entry)"
+#~ msgstr "דקות מאז כניסה אחרונה (-1 לכניסה הראשונה)"
+
+#~ msgid "Minutes since first entry (-1 on first entry)"
+#~ msgstr "דקות מאז הכניסה הראשונה (-1 לכניסה הראשונה)"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "כל התנאים מטה (ו)"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "לפחות אחד מהתנאים מטה (או)"
+
+#~ msgid "Event start"
+#~ msgstr "תחילת אירוע"
+
+#~ msgid "Event end"
+#~ msgstr "סוף אירוע"
+
+#~ msgid "Event admission"
+#~ msgstr "כניסה לאירוע"
+
+#~ msgid "custom date and time"
+#~ msgstr "תאריך ושעה מותאמים אישית"
+
+#~ msgid "custom time"
+#~ msgstr "שעה מותאמת אישית"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "סבילות (דקות)"
+
+#~ msgid "Add condition"
+#~ msgstr "הוסף תנאי"
+
+#~ msgid "minutes"
+#~ msgstr "דקות"
+
+#~ msgid "Duplicate"
+#~ msgstr "שכפול"
+
+#~ msgctxt "entry_status"
+#~ msgid "present"
+#~ msgstr "נוכח"
+
+#~ msgctxt "entry_status"
+#~ msgid "absent"
+#~ msgstr "נעדר"
+
+#~ msgid "Error: Product not found!"
+#~ msgstr "תקלה: מוצר לא נמצא!"
+
+#~ msgid "Error: Variation not found!"
+#~ msgstr "תקלה: וריאציה לא נמצאה!"
 
 #~ msgid "iDEAL"
 #~ msgstr "iDEAL"

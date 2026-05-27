@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
 "PO-Revision-Date: 2025-12-14 00:00+0000\n"
 "Last-Translator: Lachlan Struthers <lachlan.struthers@om.org>\n"
 "Language-Team: Albanian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -151,7 +151,6 @@ msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "Vazhdoni"
@@ -205,172 +204,6 @@ msgstr "Shuma totale"
 msgid "Contacting your bank …"
 msgstr "Duke e kontaktuar bankën tuaj …"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "Zgjidhni një listë check-in"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "Nuk u gjet asnjë listë check-in."
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "Shkëmbeni listë check-in"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "Rezultatet e kërkimit"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "Nuk u gjetën bileta"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "Rezultati"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "Kjo biletë duhet kujdes të veçantë"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "Ndryshoni drejtimin"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "Hyrje"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "Dalje"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "Skanoni një biletë ose kërkoni dhe shtypni butonin 'Enter'…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "Ngarkoni më shumë"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "e vlefshme"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "e papaguar"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "e anuluar"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr "e konfirmuar"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr "Duke pritur aprovimin"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "e përdorur"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "Anuloni"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "Bileta nuk është paguar"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr "Kjo biletë ende nuk është paguar. A dëshironi të vazhdoni gjithsesi?"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "Më shumë informacione kërkohen"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "Biletë të vlefshme"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "Dalja u regjistrua"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "Bileta tashmë është përdorur"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "Informacion i domosdoshëm"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Unknown ticket"
-msgstr "Biletë e panjohur"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Ticket type not allowed here"
-msgstr "Ky lloj bilete nuk lejohet këtu"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "Hyrja nuk lejohet"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "Kodi i biletës është anuluar/ndryshuar"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Ticket blocked"
-msgstr "Bileta u bllokua"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket not valid at this time"
-msgstr "Bileta nuk është e vlefshme për momentin"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "Porositja ësthë anuluar"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr "Kodi i biletës është e paqartë në listë"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr "Porositje nuk është aprovuar"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "Bileta të regjistruara"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "Bileta të vlefshme"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "Aktualisht brenda"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "Po"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "Jo"
-
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "Mbyllni"
@@ -403,14 +236,14 @@ msgstr ""
 "shumë se dy minuta, ju lutemi t'na kontaktoni ose të ktheheni më përpara dhe "
 "të provoni përsëri."
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Një gabim të llojit {kodi} ka ndodhur."
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -418,12 +251,12 @@ msgstr ""
 "Nuk mund t'a kontaktojmë serverin për momentin, por vazhdojmë t'a provojmë. "
 "Kodi gabimi i fundit: {kodi}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "Kërkesa juaj kërkonte tepër kohë. Ju lutemi të provoni përsëri."
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -431,11 +264,11 @@ msgstr ""
 "Nuk mund t'a kontaktojmë serverin për momentin. Ju lutemi, provoni përsëri. "
 "Kodi gabimi i fundit: {kodi}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "Ne po e proçesojmë kërkesën tuaj …"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -445,11 +278,11 @@ msgstr ""
 "minutë, ju lutemi t'a kontrolloni lidhjen tuaj në internet dhe pastak t'a "
 "rifreskoni këtë faqe që të provoni përsëri."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "Nëse kalon më shumë se disa minuta, ju lutemi t'na kontaktoni."
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "Mbyllni mesazhin"
 
@@ -460,146 +293,6 @@ msgstr "E kopjuar!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Shtypni Ctrl+C për të kopjuar!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "është një nga"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "është para"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "është pas"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr "="
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "Produkti"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "Varianti i produktit"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr "Porta"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "Datë dhe orë aktuale"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "Dita aktuale e javës (1 = Të hënën, 7 = Të dielën)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr "Gjendja aktuale e hyrjes"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "Shuma e hyrjeve të mëparshme"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "Shuma e hyrjeve të mëparshme nga mesnata"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-msgid "Number of previous entries since"
-msgstr "Shuma e hyrjeve të mëparshme nga"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-msgid "Number of previous entries before"
-msgstr "Shuma e hyrjeve të mëparshme përpara"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "Shuma e ditëve me një hyrje të mëparshme"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-msgid "Number of days with a previous entry since"
-msgstr "Shuma e ditëve me një hyrje të mëparshme nga"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-msgid "Number of days with a previous entry before"
-msgstr "Shuma e ditëve me një hyrje të mëparshme përpara"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr "Minuta nga hyrja e fundit (-1 në hyrjen e parë)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr "Minuta nga hyrja e parë (-1 në hyrjen e parë)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "Të gjitha gjendjet më poshtë (DHE)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "Të paktën një nga gjendjet më poshtë (OSE)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "Fillimi i eventit"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "Mbarimi i eventit"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "Hyrja në event"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "datë dhe orë e kustomizuar"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "orë e kustomizuar"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "Toleranca (minuta)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "Shtoni gjendje"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "minuta"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr "Kopjoni"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr "pranishëm"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr "munguar"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr "Gabim: Produkti nuk u gjet!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr "Gabim: Varianti nuk u gjet!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -741,6 +434,16 @@ msgstr "Të tjera"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "Sasia"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "Po"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "Jo"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1227,6 +930,225 @@ msgstr "Nëntor"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "Dhjetor"
+
+#~ msgid "Select a check-in list"
+#~ msgstr "Zgjidhni një listë check-in"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "Nuk u gjet asnjë listë check-in."
+
+#~ msgid "Switch check-in list"
+#~ msgstr "Shkëmbeni listë check-in"
+
+#~ msgid "Search results"
+#~ msgstr "Rezultatet e kërkimit"
+
+#~ msgid "No tickets found"
+#~ msgstr "Nuk u gjetën bileta"
+
+#~ msgid "Result"
+#~ msgstr "Rezultati"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "Kjo biletë duhet kujdes të veçantë"
+
+#~ msgid "Switch direction"
+#~ msgstr "Ndryshoni drejtimin"
+
+#~ msgid "Entry"
+#~ msgstr "Hyrje"
+
+#~ msgid "Exit"
+#~ msgstr "Dalje"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "Skanoni një biletë ose kërkoni dhe shtypni butonin 'Enter'…"
+
+#~ msgid "Load more"
+#~ msgstr "Ngarkoni më shumë"
+
+#~ msgid "Valid"
+#~ msgstr "e vlefshme"
+
+#~ msgid "Unpaid"
+#~ msgstr "e papaguar"
+
+#~ msgid "Canceled"
+#~ msgstr "e anuluar"
+
+#~ msgid "Confirmed"
+#~ msgstr "e konfirmuar"
+
+#~ msgid "Approval pending"
+#~ msgstr "Duke pritur aprovimin"
+
+#~ msgid "Redeemed"
+#~ msgstr "e përdorur"
+
+#~ msgid "Cancel"
+#~ msgstr "Anuloni"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "Bileta nuk është paguar"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr ""
+#~ "Kjo biletë ende nuk është paguar. A dëshironi të vazhdoni gjithsesi?"
+
+#~ msgid "Additional information required"
+#~ msgstr "Më shumë informacione kërkohen"
+
+#~ msgid "Valid ticket"
+#~ msgstr "Biletë të vlefshme"
+
+#~ msgid "Exit recorded"
+#~ msgstr "Dalja u regjistrua"
+
+#~ msgid "Ticket already used"
+#~ msgstr "Bileta tashmë është përdorur"
+
+#~ msgid "Information required"
+#~ msgstr "Informacion i domosdoshëm"
+
+#~ msgid "Unknown ticket"
+#~ msgstr "Biletë e panjohur"
+
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "Ky lloj bilete nuk lejohet këtu"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "Hyrja nuk lejohet"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "Kodi i biletës është anuluar/ndryshuar"
+
+#~ msgid "Ticket blocked"
+#~ msgstr "Bileta u bllokua"
+
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "Bileta nuk është e vlefshme për momentin"
+
+#~ msgid "Order canceled"
+#~ msgstr "Porositja ësthë anuluar"
+
+#~ msgid "Ticket code is ambiguous on list"
+#~ msgstr "Kodi i biletës është e paqartë në listë"
+
+#~ msgid "Order not approved"
+#~ msgstr "Porositje nuk është aprovuar"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "Bileta të regjistruara"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "Bileta të vlefshme"
+
+#~ msgid "Currently inside"
+#~ msgstr "Aktualisht brenda"
+
+#~ msgid "is one of"
+#~ msgstr "është një nga"
+
+#~ msgid "is before"
+#~ msgstr "është para"
+
+#~ msgid "is after"
+#~ msgstr "është pas"
+
+#~ msgid "="
+#~ msgstr "="
+
+#~ msgid "Product"
+#~ msgstr "Produkti"
+
+#~ msgid "Product variation"
+#~ msgstr "Varianti i produktit"
+
+#~ msgid "Gate"
+#~ msgstr "Porta"
+
+#~ msgid "Current date and time"
+#~ msgstr "Datë dhe orë aktuale"
+
+#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+#~ msgstr "Dita aktuale e javës (1 = Të hënën, 7 = Të dielën)"
+
+#~ msgid "Current entry status"
+#~ msgstr "Gjendja aktuale e hyrjes"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "Shuma e hyrjeve të mëparshme"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "Shuma e hyrjeve të mëparshme nga mesnata"
+
+#~ msgid "Number of previous entries since"
+#~ msgstr "Shuma e hyrjeve të mëparshme nga"
+
+#~ msgid "Number of previous entries before"
+#~ msgstr "Shuma e hyrjeve të mëparshme përpara"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "Shuma e ditëve me një hyrje të mëparshme"
+
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "Shuma e ditëve me një hyrje të mëparshme nga"
+
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "Shuma e ditëve me një hyrje të mëparshme përpara"
+
+#~ msgid "Minutes since last entry (-1 on first entry)"
+#~ msgstr "Minuta nga hyrja e fundit (-1 në hyrjen e parë)"
+
+#~ msgid "Minutes since first entry (-1 on first entry)"
+#~ msgstr "Minuta nga hyrja e parë (-1 në hyrjen e parë)"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "Të gjitha gjendjet më poshtë (DHE)"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "Të paktën një nga gjendjet më poshtë (OSE)"
+
+#~ msgid "Event start"
+#~ msgstr "Fillimi i eventit"
+
+#~ msgid "Event end"
+#~ msgstr "Mbarimi i eventit"
+
+#~ msgid "Event admission"
+#~ msgstr "Hyrja në event"
+
+#~ msgid "custom date and time"
+#~ msgstr "datë dhe orë e kustomizuar"
+
+#~ msgid "custom time"
+#~ msgstr "orë e kustomizuar"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "Toleranca (minuta)"
+
+#~ msgid "Add condition"
+#~ msgstr "Shtoni gjendje"
+
+#~ msgid "minutes"
+#~ msgstr "minuta"
+
+#~ msgid "Duplicate"
+#~ msgstr "Kopjoni"
+
+#~ msgctxt "entry_status"
+#~ msgid "present"
+#~ msgstr "pranishëm"
+
+#~ msgctxt "entry_status"
+#~ msgid "absent"
+#~ msgstr "munguar"
+
+#~ msgid "Error: Product not found!"
+#~ msgstr "Gabim: Produkti nuk u gjet!"
+
+#~ msgid "Error: Variation not found!"
+#~ msgstr "Gabim: Varianti nuk u gjet!"
 
 #, fuzzy
 #~ msgid "iDEAL"

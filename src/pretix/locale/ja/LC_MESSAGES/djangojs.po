@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
 "PO-Revision-Date: 2026-05-12 06:34+0000\n"
 "Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -131,7 +131,6 @@ msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "続ける"
@@ -185,172 +184,6 @@ msgstr "合計"
 msgid "Contacting your bank …"
 msgstr "銀行へ問い合わせ中…"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "チェックインリストを選択してください"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "有効なチェックインリストが見つかりません。"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "チェックインリストを切り替え"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "検索結果"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "チケットが見つかりません"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "結果"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "このチケットは特別な対応が必要です"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "向きを切り替え"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "入場"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "退場"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "チケットのスキャン又は検索を行い、リターンを押す…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "もっと見る"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "有効"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "未払い"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "キャンセル済み"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr "確認済み"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr "承認保留中"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "引き換え済み"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "キャンセル"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "チケット未払い"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr "チケットの支払いが完了していません。このまま続けますか？"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "追加情報が必要です"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "有効なチケット"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "退出を記録しました"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "使用済みのチケット"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "情報が必要"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Unknown ticket"
-msgstr "不明なチケット"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Ticket type not allowed here"
-msgstr "この種類のチケットはここでは使用できません"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "入場できません"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "チケットコードが取り消し/変更されました"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Ticket blocked"
-msgstr "チケットがブロックされました"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket not valid at this time"
-msgstr "現時点で無効なチケット"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "注文がキャンセルされました"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr "リスト上でチケットコードが一意に特定できません"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr "未承認の注文"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "チェックイン済みのチケット"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "有効なチケット"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "現在入場中"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "はい"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "いいえ"
-
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "閉じる"
@@ -383,37 +216,37 @@ msgstr ""
 "経っても応答がない場合は、弊社へお問い合わせいただくか、ブラウザを一つ前に戻"
 "して再度お試しください。"
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "{code} のエラーが発生しました。"
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
 "現在サーバへの接続ができませんが、接続試行中です。最新のエラーコード: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "リクエストの時間切れです。再試行してください。"
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "現在サーバが応答していません。再試行してください。エラーコード： {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "リクエストを処理中です …"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -422,11 +255,11 @@ msgstr ""
 "現在リクエストをサーバへ送信中です。１分以上経っても応答がない場合は、イン"
 "ターネット接続を確認し、このページを再読み込みして再試行してください。"
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "数分以上かかる場合は、お問い合わせください。"
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "メッセージを閉じる"
 
@@ -437,146 +270,6 @@ msgstr "コピー完了！"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Ctrl-Cを押してコピー！"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "次のいずれか"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "の前"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "の後"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr "="
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "製品"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "製品バリエーション"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr "ゲート"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "現在の日時"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "現在の曜日 (1 = 月曜日, 7 = 日曜日)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr "現在の入場状態"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "これまでの入場回数"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "０時から現在までの入場回数"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-msgid "Number of previous entries since"
-msgstr "この時点から今までの入場回数"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-msgid "Number of previous entries before"
-msgstr "この時点より前の入場回数"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "これまでの入場日数"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-msgid "Number of days with a previous entry since"
-msgstr "この時点より後に入場があった日数"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-msgid "Number of days with a previous entry before"
-msgstr "この時点より前に入場があった日数"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr "最後の入場からの経過分数（最初の入場は-1）"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr "最初の入場からの経過分数（最初の入場は-1）"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "以下のすべての条件（AND）"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "以下の条件のうち、最低１つ（OR）"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "イベント開始"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "イベント終了"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "イベントの入場"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "カスタム日時"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "カスタム時刻"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "許容誤差（分）"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "条件を追加"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "分"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr "複製"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr "入場中"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr "未入場"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr "エラー:製品が見つかりません!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr "エラー:バリエーションが見つかりません!"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -717,6 +410,16 @@ msgstr "その他"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "カウント"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "はい"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "いいえ"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1199,6 +902,224 @@ msgstr "１１月"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "１２月"
+
+#~ msgid "Select a check-in list"
+#~ msgstr "チェックインリストを選択してください"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "有効なチェックインリストが見つかりません。"
+
+#~ msgid "Switch check-in list"
+#~ msgstr "チェックインリストを切り替え"
+
+#~ msgid "Search results"
+#~ msgstr "検索結果"
+
+#~ msgid "No tickets found"
+#~ msgstr "チケットが見つかりません"
+
+#~ msgid "Result"
+#~ msgstr "結果"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "このチケットは特別な対応が必要です"
+
+#~ msgid "Switch direction"
+#~ msgstr "向きを切り替え"
+
+#~ msgid "Entry"
+#~ msgstr "入場"
+
+#~ msgid "Exit"
+#~ msgstr "退場"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "チケットのスキャン又は検索を行い、リターンを押す…"
+
+#~ msgid "Load more"
+#~ msgstr "もっと見る"
+
+#~ msgid "Valid"
+#~ msgstr "有効"
+
+#~ msgid "Unpaid"
+#~ msgstr "未払い"
+
+#~ msgid "Canceled"
+#~ msgstr "キャンセル済み"
+
+#~ msgid "Confirmed"
+#~ msgstr "確認済み"
+
+#~ msgid "Approval pending"
+#~ msgstr "承認保留中"
+
+#~ msgid "Redeemed"
+#~ msgstr "引き換え済み"
+
+#~ msgid "Cancel"
+#~ msgstr "キャンセル"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "チケット未払い"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr "チケットの支払いが完了していません。このまま続けますか？"
+
+#~ msgid "Additional information required"
+#~ msgstr "追加情報が必要です"
+
+#~ msgid "Valid ticket"
+#~ msgstr "有効なチケット"
+
+#~ msgid "Exit recorded"
+#~ msgstr "退出を記録しました"
+
+#~ msgid "Ticket already used"
+#~ msgstr "使用済みのチケット"
+
+#~ msgid "Information required"
+#~ msgstr "情報が必要"
+
+#~ msgid "Unknown ticket"
+#~ msgstr "不明なチケット"
+
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "この種類のチケットはここでは使用できません"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "入場できません"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "チケットコードが取り消し/変更されました"
+
+#~ msgid "Ticket blocked"
+#~ msgstr "チケットがブロックされました"
+
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "現時点で無効なチケット"
+
+#~ msgid "Order canceled"
+#~ msgstr "注文がキャンセルされました"
+
+#~ msgid "Ticket code is ambiguous on list"
+#~ msgstr "リスト上でチケットコードが一意に特定できません"
+
+#~ msgid "Order not approved"
+#~ msgstr "未承認の注文"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "チェックイン済みのチケット"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "有効なチケット"
+
+#~ msgid "Currently inside"
+#~ msgstr "現在入場中"
+
+#~ msgid "is one of"
+#~ msgstr "次のいずれか"
+
+#~ msgid "is before"
+#~ msgstr "の前"
+
+#~ msgid "is after"
+#~ msgstr "の後"
+
+#~ msgid "="
+#~ msgstr "="
+
+#~ msgid "Product"
+#~ msgstr "製品"
+
+#~ msgid "Product variation"
+#~ msgstr "製品バリエーション"
+
+#~ msgid "Gate"
+#~ msgstr "ゲート"
+
+#~ msgid "Current date and time"
+#~ msgstr "現在の日時"
+
+#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+#~ msgstr "現在の曜日 (1 = 月曜日, 7 = 日曜日)"
+
+#~ msgid "Current entry status"
+#~ msgstr "現在の入場状態"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "これまでの入場回数"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "０時から現在までの入場回数"
+
+#~ msgid "Number of previous entries since"
+#~ msgstr "この時点から今までの入場回数"
+
+#~ msgid "Number of previous entries before"
+#~ msgstr "この時点より前の入場回数"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "これまでの入場日数"
+
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "この時点より後に入場があった日数"
+
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "この時点より前に入場があった日数"
+
+#~ msgid "Minutes since last entry (-1 on first entry)"
+#~ msgstr "最後の入場からの経過分数（最初の入場は-1）"
+
+#~ msgid "Minutes since first entry (-1 on first entry)"
+#~ msgstr "最初の入場からの経過分数（最初の入場は-1）"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "以下のすべての条件（AND）"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "以下の条件のうち、最低１つ（OR）"
+
+#~ msgid "Event start"
+#~ msgstr "イベント開始"
+
+#~ msgid "Event end"
+#~ msgstr "イベント終了"
+
+#~ msgid "Event admission"
+#~ msgstr "イベントの入場"
+
+#~ msgid "custom date and time"
+#~ msgstr "カスタム日時"
+
+#~ msgid "custom time"
+#~ msgstr "カスタム時刻"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "許容誤差（分）"
+
+#~ msgid "Add condition"
+#~ msgstr "条件を追加"
+
+#~ msgid "minutes"
+#~ msgstr "分"
+
+#~ msgid "Duplicate"
+#~ msgstr "複製"
+
+#~ msgctxt "entry_status"
+#~ msgid "present"
+#~ msgstr "入場中"
+
+#~ msgctxt "entry_status"
+#~ msgid "absent"
+#~ msgstr "未入場"
+
+#~ msgid "Error: Product not found!"
+#~ msgstr "エラー:製品が見つかりません!"
+
+#~ msgid "Error: Variation not found!"
+#~ msgstr "エラー:バリエーションが見つかりません!"
 
 #~ msgid "iDEAL"
 #~ msgstr "iDEAL"
