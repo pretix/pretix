@@ -19,10 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import copy
 import datetime
 import os
 import warnings
 from collections import namedtuple
+from dataclasses import dataclass
 from typing import (
     TYPE_CHECKING, Iterable, List, Literal, Tuple, Union,
 )
@@ -41,16 +43,21 @@ from rest_framework import serializers
 if TYPE_CHECKING:
     from .models import Event, Order, SubEvent
 
-
+@dataclass(frozen=True)
 class BaseChoice:
-    def __init__(self, base: Literal["event", "order"], attribute: str, text: Promise, supports_before: bool,
-                 supports_after: bool) -> None:
-        self.base = base
-        self.attribute = attribute
-        self.text = text
-        self.supports_before = supports_before
-        self.supports_after = supports_after
-        self.key = f"{self.base}__{self.attribute}"
+    base: Literal["event", "order", "order.subevents"]
+    attribute: str
+    modifier: str
+    text: Promise
+    supports_before: bool
+    supports_after: bool
+
+    @property
+    def key(self) -> str:
+        key = f"{self.base}__{self.attribute}"
+        if self.modifier:
+            key += f"__{self.modifier}"
+        return key
 
     @staticmethod
     def find(objects: Iterable["BaseChoice"], key: str) -> "BaseChoice":
@@ -67,13 +74,19 @@ class BaseChoice:
 
 
 BASE_CHOICES: List[BaseChoice] = [
-    BaseChoice('event', 'date_from', _('Event start'), True, True),
-    BaseChoice('event', 'date_to', _('Event end'), True, True),
-    BaseChoice('event', 'date_admission', _('Event admission'), True, True),
-    BaseChoice('event', 'presale_start', _('Presale start'), True, True),
-    BaseChoice('event', 'presale_end', _('Presale end'), True, True),
-    BaseChoice('order', 'datetime', _('Order creation'), False, True),
-    BaseChoice('order', 'expires', _('Order expiry'), True, True),
+    BaseChoice('event', 'date_from', "", _('Event start'), True, True),
+    BaseChoice('event', 'date_to', "", _('Event end'), True, True),
+    BaseChoice('event', 'date_admission', "", _('Event admission'), True, True),
+    BaseChoice('event', 'presale_start', "", _('Presale start'), True, True),
+    BaseChoice('event', 'presale_end', "", _('Presale end'), True, True),
+    BaseChoice('order', 'datetime', "", _('Order creation'), False, True),
+    BaseChoice('order', 'expires', "", _('Order expiry'), True, True),
+    BaseChoice('order.subevents', 'date_from', "first", _('Subevent start (first subevent in order)'), True, True),
+    BaseChoice('order.subevents', 'date_from', "last", _('Subevent start (last subevent in order)'), True, True),
+    BaseChoice('order.subevents', 'date_to', "first", _('Subevent end (first subevent in order)'), True, True),
+    BaseChoice('order.subevents', 'date_to', "last", _('Subevent end (last subevent in order)'), True, True),
+    BaseChoice('order.subevents', 'date_admission', "first", _('Subevent admission (first subevent in order)'), True, True),
+    BaseChoice('order.subevents', 'date_admission', "last", _('Subevent admission (last subevent in order)'), True, True),
 ]
 
 LIMIT_FALLBACKS = ['date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end']
@@ -86,7 +99,11 @@ ORDER_BASE_CHOICES = [
     x for x in BASE_CHOICES if x.base == 'order'
 ]
 
+SUBEVENT_BASE_CHOICES = [
+    x for x in BASE_CHOICES if x.base == 'order.subevents'
+]
 
+@dataclass(frozen=True)
 class RelativeDate:
     """
     This contains information on a date that is defined in relation to a fixed base point.
@@ -97,25 +114,28 @@ class RelativeDate:
     If the base_date_key is not set, the date_from attribute of Event is used.
     """
 
-    def __init__(self, days: int = 0, minutes: int = None, time: datetime.time = None, is_after: bool = False,
-                 base_date_name: str = 'event__date_from') -> None:
-        choice = BaseChoice.find(BASE_CHOICES, base_date_name)
-        self.base = choice.base
-        self.attribute = choice.attribute
+    days: int = 0
+    minutes: int = None
+    time: datetime.time = None
+    is_after: bool = False
+    base_date_name: str = 'event__date_from__'
 
-        if is_after and not choice.supports_after:
+    def __post_init__(self) -> None:
+        if self.is_after and not self._choice.supports_after:
             raise ValueError(
                 "The selected base date and attribute combination does not support relative dates placed after the base date"
             )
-        if not is_after and not choice.supports_before:
+        if not self.is_after and not self._choice.supports_before:
             raise ValueError(
                 "The selected base date and attribute combination does not support relative dates placed before the base date")
-        self.is_after = is_after
 
-        self.days = days
-        self.minutes = minutes
-        self.time = time
-        self.key = choice.key
+    @property
+    def _choice(self):
+        return BaseChoice.find(BASE_CHOICES, self.base_date_name)
+
+    @property
+    def key(self):
+        return self._choice.key
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, RelativeDate):
@@ -130,17 +150,35 @@ class RelativeDate:
         """
         from .models import Event, Order, SubEvent
 
-        if self.base == "order" and isinstance(base, Order):
+        choice = self._choice
+
+        if choice.base == "order" and isinstance(base, Order):
             event = base.event
-            base_date = getattr(base, self.attribute)
-        elif self.base == "event" and isinstance(base, SubEvent):
+            base_date = getattr(base, choice.attribute)
+        elif choice.base == "order.subevent" and isinstance(base, Order):
+            if not base.event.has_subevents:
+                raise ValueError("The order is for an event without subevents")
+            if choice.modifier == "first":
+                op = base.all_positions.order_by(f"subevent__{choice.attribute}").first()
+                if op is None:
+                    raise ValueError("The order has no positions for subevents")
+                event = op.event
+                base_date = getattr(base, choice.attribute)
+            elif choice.modifier == "last":
+                op = base.all_positions.order_by(f"subevent__{choice.attribute}").last()
+                if op is None:
+                    raise ValueError("The order has no positions for subevents")
+                base_date = getattr(base, choice.attribute)
+            else:
+                raise ValueError("The selected modifier does not exist")
+        elif choice.base == "event" and isinstance(base, SubEvent):
             event = base.event
             base_date = (getattr(base, self.attribute) or
                          getattr(base.event, self.attribute) or
                          base.date_from)
-        elif self.base == "event" and isinstance(base, Event):
+        elif choice.base == "event" and isinstance(base, Event):
             event = base
-            base_date = getattr(base, self.attribute) or event.date_from
+            base_date = getattr(base, choice.attribute) or event.date_from
         else:
             raise TypeError("The base defined by data does not match the passed in base")
 
@@ -189,13 +227,13 @@ class RelativeDate:
         if self.minutes is not None:
             return 'RELDATE/minutes/{}/{}/{}'.format(  #
                 self.minutes,
-                self.key,
+                self._choice.key,
                 'after' if self.is_after else '',
             )
         return 'RELDATE/{}/{}/{}/{}'.format(  #
             self.days,
             self.time.strftime('%H:%M:%S') if self.time else '-',
-            self.key,
+            self._choice.key,
             'after' if self.is_after else '',
         )
 
@@ -304,13 +342,20 @@ reldatetimeparts = namedtuple('reldatetimeparts', (
 reldatetimeparts.indizes = reldatetimeparts(*range(9))
 
 
+def _get_choices(choices: List[BaseChoice])->List[Tuple[str, Promise]]:
+    return  [(c.key, c.text) for c in choices]
+
+def _get_choice_validation_obj(choices: List[BaseChoice]):
+    return {c.key: {"data-supports-before": c.supports_before, "data-supports-after": c.supports_after} for c in choices}
+
+
 class RelativeDateTimeWidget(forms.MultiWidget):
     template_name = 'pretixbase/forms/widgets/reldatetime.html'
     parts = reldatetimeparts
 
     def __init__(self, *args, **kwargs):
         self.status_choices = kwargs.pop('status_choices')
-        base_choices = kwargs.pop('base_choices')
+        self.base_choices = kwargs.pop('base_choices')
 
         def placeholder_datetime_format():
             df = get_format('DATETIME_INPUT_FORMATS')[0]
@@ -328,14 +373,14 @@ class RelativeDateTimeWidget(forms.MultiWidget):
                 attrs={'placeholder': lazy(placeholder_datetime_format, str), 'class': 'datetimepicker'}
             ),
             rel_days_number=forms.NumberInput(),
-            rel_mins_relationto=forms.Select(choices=base_choices),
+            rel_mins_relationto=OptionAttrsSelect(attrs={'data-relative-choice': True}, choices=self.base_choices, option_attrs=_get_choice_validation_obj(self.base_choices)),
             rel_days_timeofday=forms.TimeInput(
                 attrs={'placeholder': lazy(placeholder_time_format, str), 'class': 'timepickerfield'}
             ),
             rel_mins_number=forms.NumberInput(),
-            rel_days_relationto=forms.Select(choices=base_choices),
-            rel_mins_relation=forms.Select(choices=BEFORE_AFTER_CHOICE),
-            rel_days_relation=forms.Select(choices=BEFORE_AFTER_CHOICE),
+            rel_days_relationto=OptionAttrsSelect(attrs={'data-relative-choice': True}, choices=self.base_choices, option_attrs=_get_choice_validation_obj(self.base_choices)),
+            rel_mins_relation=forms.Select(attrs={'data-relation-choice': True}, choices=BEFORE_AFTER_CHOICE),
+            rel_days_relation=forms.Select(attrs={'data-relation-choice': True},choices=BEFORE_AFTER_CHOICE),
         )
         super().__init__(widgets=widgets, *args, **kwargs)
 
@@ -401,6 +446,8 @@ class RelativeDateTimeWidget(forms.MultiWidget):
             for w in ctx['widget']['subwidgets']
         ))._asdict()
 
+        ctx['choice_validation'] = _get_choice_validation_obj(self.base_choices)
+        ctx['choice_validation_name'] = f'{name}_val'
         return ctx
 
 
@@ -412,30 +459,33 @@ class RelativeDateTimeField(forms.MultiValueField):
             ('relative_minutes', _('Relative time:')),
         ]
         self.relative_to_order = kwargs.pop('relative_to_order', False)
+        self.relative_to_subevent_positions = kwargs.pop('relative_to_subevent_positions', False)
 
-        all_choices = EVENT_BASE_CHOICES
+        possible_choices = copy.deepcopy(EVENT_BASE_CHOICES)
         if self.relative_to_order:
-            all_choices.extend(ORDER_BASE_CHOICES)
+            possible_choices.extend(ORDER_BASE_CHOICES)
+        if self.relative_to_subevent_positions:
+            possible_choices.extend(SUBEVENT_BASE_CHOICES)
 
         if kwargs.get('limit_choices'):
             limit = kwargs.pop('limit_choices')
-            if any("__" not in l for l in limit):
+            if any(["__" not in l for l in limit]):
                 _warn_skips = (os.path.dirname(__file__),)
                 warnings.warn(
                     "Please prefix limit_choices with the base the attributes refer to, for example event__date_from",
                     skip_file_prefixes=_warn_skips)
 
-            choices = [(c.key, c.text) for c in all_choices if
+            possible_choices = [c for c in possible_choices if
                        # new base case as we want limit_choices to be expressed as base__attribute
                        (c.key in limit) or
                        # fallback for old event based entries
                        # if the base is an event, then using only attribute is fine
                        (c.base == "event" and c.attribute in limit)]
-        else:
-            choices = [(c.key, c.text) for c in all_choices]
 
         if not kwargs.get('required', True):
             status_choices.insert(0, ('unset', _('Not set')))
+
+        choices = _get_choices(possible_choices)
 
         fields = reldatetimeparts(
             status=forms.ChoiceField(
@@ -471,8 +521,9 @@ class RelativeDateTimeField(forms.MultiValueField):
                 required=False
             ),
         )
+
         if 'widget' not in kwargs:
-            kwargs['widget'] = RelativeDateTimeWidget(status_choices=status_choices, base_choices=choices)
+            kwargs['widget'] = RelativeDateTimeWidget(status_choices=status_choices, base_choices=possible_choices)
         kwargs.pop('max_length', 0)
         kwargs.pop('empty_value', 0)
         super().__init__(
@@ -480,11 +531,15 @@ class RelativeDateTimeField(forms.MultiValueField):
         )
 
     def set_event(self, event):
-        choices = [
-            (c.key, c.text) for c in EVENT_BASE_CHOICES if getattr(event, c.attribute, None)
-        ]
+        possible_choices = copy.deepcopy(EVENT_BASE_CHOICES)
         if self.relative_to_order:
-            choices += [(c.key, c.text) for c in ORDER_BASE_CHOICES]
+            possible_choices.extend(ORDER_BASE_CHOICES)
+        if self.relative_to_subevent_positions and event.has_subevents:
+            possible_choices.extend(SUBEVENT_BASE_CHOICES)
+
+        possible_choices = possible_choices
+        choices = _get_choices(possible_choices)
+
         self.widget.widgets[reldatetimeparts.indizes.rel_days_relationto].choices = choices
         self.widget.widgets[reldatetimeparts.indizes.rel_mins_relationto].choices = choices
 
@@ -529,15 +584,15 @@ class RelativeDateTimeField(forms.MultiValueField):
         elif data.status == 'relative':
             choice = BaseChoice.find(BASE_CHOICES, data.rel_days_relationto)
             if data.rel_days_relation == "before" and not choice.supports_before:
-                raise ValidationError(_("A relative date cannot be expressed as 'before' for '{}'".format(choice.text)))
+                raise ValidationError(_('A relative date cannot be expressed as "before" for "{}"'.format(choice.text)))
             elif data.status == 'relative' and data.rel_days_relation == "after" and not choice.supports_after:
-                raise ValidationError(_("A relative date cannot be expressed as 'after' for '{}'".format(choice.text)))
+                raise ValidationError(_('A relative date cannot be expressed as "after" for "{}"'.format(choice.text)))
         elif data.status == 'relative_minutes':
             choice = BaseChoice.find(BASE_CHOICES, data.rel_days_relationto)
             if data.rel_days_relation == "before" and not choice.supports_before:
-                raise ValidationError(_("A relative time cannot be expressed as 'before' for '{}'".format(choice.text)))
+                raise ValidationError(_('A relative time cannot be expressed as "before" for "{}"'.format(choice.text)))
             elif data.rel_days_relation == "after" and not choice.supports_after:
-                raise ValidationError(_("A relative time cannot be expressed as 'after' for '{}'".format(choice.text)))
+                raise ValidationError(_('A relative time cannot be expressed as "after" for "{}"'.format(choice.text)))
 
         return super().clean(value)
 
@@ -558,15 +613,20 @@ class RelativeDateWidget(RelativeDateTimeWidget):
 
     def __init__(self, *args, **kwargs):
         self.status_choices = kwargs.pop('status_choices')
-        base_choices = kwargs.pop('base_choices')
+        self.base_choices = kwargs.pop('base_choices')
+
         widgets = reldateparts(
             status=forms.RadioSelect(choices=self.status_choices),
             absolute=forms.DateInput(
                 attrs={'class': 'datepickerfield'}
             ),
             rel_days_number=forms.NumberInput(),
-            rel_days_relationto=forms.Select(choices=base_choices),
-            rel_days_relation=forms.Select(choices=BEFORE_AFTER_CHOICE),
+            rel_days_relationto=OptionAttrsSelect(
+                choices=self.base_choices,
+                option_attrs=_get_choice_validation_obj(self.base_choices),
+                attrs={'data-relative-choice': True},
+            ),
+            rel_days_relation=forms.Select(choices=BEFORE_AFTER_CHOICE, attrs={'data-relation-choice': True},),
         )
         forms.MultiWidget.__init__(self, widgets=widgets, *args, **kwargs)
 
@@ -598,6 +658,13 @@ class RelativeDateWidget(RelativeDateTimeWidget):
             rel_days_relationto=value.data.base_date_name,
             rel_days_relation="after" if value.data.is_after else "before"
         )
+
+    def get_context(self, name, value, attrs):
+        ctx = super().get_context(name, value, attrs)
+
+        ctx['choice_validation'] = _get_choice_validation_obj(self.base_choices)
+        ctx['choice_validation_name'] = f'{name}_val'
+        return ctx
 
 
 class RelativeDateField(RelativeDateTimeField):
