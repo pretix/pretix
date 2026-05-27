@@ -286,6 +286,9 @@ class VoucherBulkEditForm(VoucherForm):
         del self.fields["code"]
         self.fields.pop("seat", None)
 
+    def is_bulk_checked(self, fieldname):
+        return self.prefix + fieldname in self.data.getlist('_bulk')
+
     def clean(self):
         # We skip the parent class because it's not suited for bulk editing and implement custom validation here.
         # This does not validate *everything* we validate in VoucherForm. For example, we skip validation that one does
@@ -294,10 +297,10 @@ class VoucherBulkEditForm(VoucherForm):
         # add-on product. However, we need to validate everything that we don't want violated in the database.
         data = super(VoucherForm, self).clean()
 
-        if self.prefix + "itemvar" in self.data.getlist('_bulk'):
+        if self.is_bulk_checked("itemvar"):
             data["item"], data["variation"], data["quota"] = self.parse_itemvar(data)
 
-        if self.prefix + "max_usages" in self.data.getlist('_bulk') and "max_usages" in data:
+        if self.is_bulk_checked("max_usages") and "max_usages" in data:
             max_redeemed = self.queryset.aggregate(m=Max("redeemed"))["m"]
             if data["max_usages"] < max_redeemed:
                 raise ValidationError(_(
@@ -306,7 +309,7 @@ class VoucherBulkEditForm(VoucherForm):
                 ) % {"max_usages": data["max_usages"], "max_redeemed": max_redeemed})
 
         # Check diff on product and quota usage based on old groups of vouchers
-        if any(self.prefix + k in self.data.getlist('_bulk') for k in ("max_usages", "itemvar", "block_quota", "valid_until", "subevent")):
+        if any(self.is_bulk_checked(k) for k in ("max_usages", "itemvar", "block_quota", "valid_until", "subevent")):
             quota_diff = Counter()
 
             current_vouchers = self.queryset.order_by().values(
@@ -351,19 +354,19 @@ class VoucherBulkEditForm(VoucherForm):
 
                 # Predict state after change
                 after_change = dict(current)
-                if self.prefix + "itemvar" in self.data.getlist('_bulk') and "itemvar" in data:
+                if self.is_bulk_checked("itemvar") and "itemvar" in data:
                     after_change["item"] = data["item"]
                     after_change["variation"] = data["variation"]
                     after_change["quota"] = data["quota"]
-                if self.prefix + "subevent" in self.data.getlist('_bulk') and "subevent" in data:
+                if self.is_bulk_checked("subevent") and "subevent" in data:
                     after_change["subevent"] = data["subevent"]
-                if self.prefix + "max_usages" in self.data.getlist('_bulk') and "max_usages" in data:
+                if self.is_bulk_checked("max_usages") and "max_usages" in data:
                     after_change["max_usages"] = data["max_usages"]
-                if self.prefix + "block_quota" in self.data.getlist('_bulk') and "block_quota" in data:
+                if self.is_bulk_checked("block_quota") and "block_quota" in data:
                     after_change["block_quota"] = data["block_quota"]
-                if self.prefix + "valid_until" in self.data.getlist('_bulk') and "valid_until" in data:
+                if self.is_bulk_checked("valid_until") and "valid_until" in data:
                     after_change["valid_until"] = data["valid_until"]
-                if self.prefix + "allow_ignore_quota" in self.data.getlist('_bulk') and "allow_ignore_quota" in data:
+                if self.is_bulk_checked("allow_ignore_quota") and "allow_ignore_quota" in data:
                     after_change["allow_ignore_quota"] = data["allow_ignore_quota"]
 
                 if after_change["quota"] and self.event.has_subevents and not after_change["subevent"]:
@@ -425,24 +428,24 @@ class VoucherBulkEditForm(VoucherForm):
 
         has_seat = self.queryset.filter(seat__isnull=False).exists()
         if has_seat:
-            if self.prefix + "max_usages" in self.data.getlist('_bulk'):
+            if self.is_bulk_checked("max_usages"):
                 raise ValidationError(_(
                     'Changing the maximum number of usages in bulk is not supported if any of the selected vouchers '
                     'is assigned a seat.'
                 ))
-            if self.prefix + "subevent" in self.data.getlist('_bulk'):
+            if self.is_bulk_checked("subevent"):
                 raise ValidationError(pgettext_lazy(
                     'subevent',
                     'Changing the date in bulk is not supported if any of the selected vouchers '
                     'is assigned a seat.'
                 ))
-            if self.prefix + "itemvar" in self.data.getlist('_bulk') and data["quota"]:
+            if self.is_bulk_checked("itemvar") and data["quota"]:
                 raise ValidationError(_(
                     'Changing the product to a quota is not supported if any of the selected vouchers '
                     'is assigned a seat.'
                 ))
 
-            if self.prefix + "valid_until" in self.data.getlist('_bulk'):
+            if self.is_bulk_checked("valid_until"):
                 if data["valid_until"] is None or data["valid_until"] >= now():
                     currently_not_blocked_seats = self.queryset.filter(
                         seat__isnull=False,
@@ -483,8 +486,7 @@ class VoucherBulkEditForm(VoucherForm):
             'value': '__price',
         }
         for k in self.fields:
-            cb_val = self.prefix + check_map.get(k, k)
-            if cb_val not in self.data.getlist('_bulk'):
+            if not self.is_bulk_checked(check_map.get(k, k)):
                 continue
 
             if k == 'itemvar':
