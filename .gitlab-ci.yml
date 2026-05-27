@@ -10,9 +10,10 @@ tests:
         - cd src
         - python manage.py check
         - make all compress
+        - playwright install
         - PRETIX_CONFIG_FILE=tests/ci_sqlite.cfg py.test -n 3 tests --maxfail=100
     except:
-        - pypi
+        - '/^v.*$/'
 pypi:
     stage: release
     image:
@@ -35,7 +36,7 @@ pypi:
         - twine check dist/*
         - twine upload dist/*
     only:
-        - pypi
+        - '/^v.*$/'
     artifacts:
         paths:
             - src/dist/
