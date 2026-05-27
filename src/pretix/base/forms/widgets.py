@@ -269,3 +269,18 @@ class BusinessBooleanRadio(forms.RadioSelect):
             'False': False,
             False: False,
         }.get(value)
+
+
+class OptionAttrsSelect(forms.Select):
+    def __init__(self, *args, option_attrs=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.option_attrs = option_attrs or {}
+
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        option = super().create_option(
+            name, value, label, selected, index, subindex=subindex, attrs=attrs
+        )
+        extra = self.option_attrs.get(str(value))
+        if extra:
+            option["attrs"].update(extra)
+        return option
