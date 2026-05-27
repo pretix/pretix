@@ -796,6 +796,7 @@ class VoucherBulkEditFormTest(SoupTestMixin, TransactionTestCase):
         self.shirt_blue = ItemVariation.objects.create(item=self.shirt, value='Blue')
         self.quota_shirts.variations.add(self.shirt_red)
         self.quota_shirts.variations.add(self.shirt_blue)
+
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=2)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           default_price=23)

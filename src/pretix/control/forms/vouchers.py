@@ -172,40 +172,45 @@ class VoucherForm(I18nModelForm):
                 help_text=str(self.instance.seat) if self.instance.seat else '',
             )
 
+    def parse_itemvar(self, data):
+        try:
+            itemid = quotaid = None
+            iv = data.get('itemvar', '')
+            if iv.startswith('q-'):
+                quotaid = iv[2:]
+            elif '-' in iv:
+                itemid, varid = iv.split('-')
+            elif iv:
+                itemid, varid = iv, None
+            else:
+                itemid, varid = None, None
+
+            if itemid:
+                item = self.event.items.get(pk=itemid)
+                if varid:
+                    variation = item.variations.get(pk=varid)
+                else:
+                    variation = None
+                quota = None
+            elif quotaid:
+                quota = self.event.quotas.get(pk=quotaid)
+                item = None
+                variation = None
+            else:
+                quota = None
+                item = None
+                variation = None
+
+            return (item, variation, quota)
+
+        except ObjectDoesNotExist:
+            raise ValidationError(_("Invalid product selected."))
+
     def clean(self):
         data = super().clean()
 
         if not self._errors:
-            try:
-                itemid = quotaid = None
-                iv = self.data.get('itemvar', '')
-                if iv.startswith('q-'):
-                    quotaid = iv[2:]
-                elif '-' in iv:
-                    itemid, varid = iv.split('-')
-                elif iv:
-                    itemid, varid = iv, None
-                else:
-                    itemid, varid = None, None
-
-                if itemid:
-                    self.instance.item = self.event.items.get(pk=itemid)
-                    if varid:
-                        self.instance.variation = self.instance.item.variations.get(pk=varid)
-                    else:
-                        self.instance.variation = None
-                    self.instance.quota = None
-                elif quotaid:
-                    self.instance.quota = self.event.quotas.get(pk=quotaid)
-                    self.instance.item = None
-                    self.instance.variation = None
-                else:
-                    self.instance.quota = None
-                    self.instance.item = None
-                    self.instance.variation = None
-
-            except ObjectDoesNotExist:
-                raise ValidationError(_("Invalid product selected."))
+            self.instance.item, self.instance.variation, self.instance.quota = self.parse_itemvar(self.data)
 
         if 'codes' in data:
             data['codes'] = [a.strip() for a in data.get('codes', '').strip().split("\n") if a]
@@ -290,36 +295,7 @@ class VoucherBulkEditForm(VoucherForm):
         data = super(VoucherForm, self).clean()
 
         if self.prefix + "itemvar" in self.data.getlist('_bulk'):
-            try:
-                itemid = quotaid = None
-                iv = data.get('itemvar', '')
-                if iv.startswith('q-'):
-                    quotaid = iv[2:]
-                elif '-' in iv:
-                    itemid, varid = iv.split('-')
-                elif iv:
-                    itemid, varid = iv, None
-                else:
-                    itemid, varid = None, None
-
-                if itemid:
-                    data["item"] = self.event.items.get(pk=itemid)
-                    if varid:
-                        data["variation"] = data["item"].variations.get(pk=varid)
-                    else:
-                        data["variation"] = None
-                    data["quota"] = None
-                elif quotaid:
-                    data["quota"] = self.event.quotas.get(pk=quotaid)
-                    data["item"] = None
-                    data["variation"] = None
-                else:
-                    data["quota"] = None
-                    data["item"] = None
-                    data["variation"] = None
-
-            except ObjectDoesNotExist:
-                raise ValidationError(_("Invalid product selected."))
+            data["item"], data["variation"], data["quota"] = self.parse_itemvar(data)
 
         if self.prefix + "max_usages" in self.data.getlist('_bulk') and "max_usages" in data:
             max_redeemed = self.queryset.aggregate(m=Max("redeemed"))["m"]
