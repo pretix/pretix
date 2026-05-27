@@ -134,35 +134,53 @@ def test_relative_date_with_time_around_dst(event):
     assert rdw.datetime(event) == datetime(2020, 10, 25, 2, 30, 0, tzinfo=BERLIN)
 
 
-def test_unserialize():
+def test_unserialize_backwards_compatibility():
     d = datetime(2017, 12, 25, 10, 0, 0, tzinfo=TOKYO)
     rdw = RelativeDateWrapper.from_string(d.isoformat())
     assert rdw.data == d
 
+    # keeping the test for the old from_string_format to ensure that we don't break anything
     rdw = RelativeDateWrapper.from_string('RELDATE/1/-/date_from/')
     x = RelativeDate(days=1, time=None, base_date_name='date_from', minutes=None)
     assert rdw.data == RelativeDate(days=1, time=None, base_date_name='date_from', minutes=None)
 
+    # keeping the test for the old from_string_format to ensure that we don't break anything
     rdw = RelativeDateWrapper.from_string('RELDATE/1/18:05:13/date_from/')
     assert rdw.data == RelativeDate(days=1, time=time(18, 5, 13), base_date_name='date_from', minutes=None)
 
+    # keeping the test for the old from_string_format to ensure that we don't break anything
     rdw = RelativeDateWrapper.from_string('RELDATE/minutes/60/date_from/')
     assert rdw.data == RelativeDate(days=0, time=None, base_date_name='date_from', minutes=60)
 
 def test_backwards_compatibility():
+    # the data model of RelativeDate had to be extended to support other models as relation target
+    # previously only:
+    # - date_from
+    # - date_to
+    # - date_admission
+    # - presale_start
+    # - presale_end
+    # where valid values for the fourth slot (base_date_names) of the serialized form.
+    # the relationship in this case always pointed at event
+    # so any preexisting base_date_names without __ should continue to work and upgrade to event__{old_base_date_name}
+
+
     d = datetime(2017, 12, 25, 10, 0, 0, tzinfo=TOKYO)
     rdw = RelativeDateWrapper.from_string(d.isoformat())
     assert rdw.data == d
 
-    # preexisting base_date_names without __ should continue to work and upgrade to event__???
     rdw = RelativeDateWrapper.from_string('RELDATE/1/-/date_from/')
     assert rdw.to_string() == 'RELDATE/1/-/event__date_from/'
+
     rdw = RelativeDateWrapper.from_string('RELDATE/1/-/date_to/')
     assert rdw.to_string() == 'RELDATE/1/-/event__date_to/'
+
     rdw = RelativeDateWrapper.from_string('RELDATE/1/-/date_admission/')
     assert rdw.to_string() == 'RELDATE/1/-/event__date_admission/'
+
     rdw = RelativeDateWrapper.from_string('RELDATE/1/-/presale_start/')
     assert rdw.to_string() == 'RELDATE/1/-/event__presale_start/'
+
     rdw = RelativeDateWrapper.from_string('RELDATE/1/-/presale_end/')
     assert rdw.to_string() == 'RELDATE/1/-/event__presale_end/'
 
