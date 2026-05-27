@@ -141,7 +141,6 @@ def test_unserialize_backwards_compatibility():
 
     # keeping the test for the old from_string_format to ensure that we don't break anything
     rdw = RelativeDateWrapper.from_string('RELDATE/1/-/date_from/')
-    x = RelativeDate(days=1, time=None, base_date_name='date_from', minutes=None)
     assert rdw.data == RelativeDate(days=1, time=None, base_date_name='date_from', minutes=None)
 
     # keeping the test for the old from_string_format to ensure that we don't break anything
@@ -151,6 +150,7 @@ def test_unserialize_backwards_compatibility():
     # keeping the test for the old from_string_format to ensure that we don't break anything
     rdw = RelativeDateWrapper.from_string('RELDATE/minutes/60/date_from/')
     assert rdw.data == RelativeDate(days=0, time=None, base_date_name='date_from', minutes=60)
+
 
 def test_backwards_compatibility():
     # the data model of RelativeDate had to be extended to support other models as relation target
@@ -163,8 +163,6 @@ def test_backwards_compatibility():
     # where valid values for the fourth slot (base_date_names) of the serialized form.
     # the relationship in this case always pointed at event
     # so any preexisting base_date_names without __ should continue to work and upgrade to event__{old_base_date_name}
-
-
     d = datetime(2017, 12, 25, 10, 0, 0, tzinfo=TOKYO)
     rdw = RelativeDateWrapper.from_string(d.isoformat())
     assert rdw.data == d
@@ -189,6 +187,7 @@ def test_backwards_compatibility():
         RelativeDateWrapper.from_string('RELDATE/1/-/datetime/')
     with pytest.raises(TypeError):
         RelativeDateWrapper.from_string('RELDATE/1/-/expires/')
+
 
 @pytest.mark.django_db
 def test_relative_to_order(event):
