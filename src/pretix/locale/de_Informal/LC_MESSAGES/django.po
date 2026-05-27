@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-27 14:45+0000\n"
-"PO-Revision-Date: 2026-05-04 10:44+0000\n"
-"Last-Translator: Daniel Musketa <daniel@musketa.de>\n"
+"PO-Revision-Date: 2026-05-27 15:20+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 2026.5\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html:670
 #: pretix/control/templates/pretixcontrol/events/index.html:166
@@ -617,16 +617,17 @@ msgstr ""
 "Unterobjekten wie z.B. Varianten oder enthaltenen Produkten) ein."
 
 #: pretix/api/webhooks.py:413
-#, fuzzy
-#| msgid "Quota handling"
 msgid "Quota changed"
-msgstr "Kontingent-Einstellungen"
+msgstr "Kontingent verändert"
 
 #: pretix/api/webhooks.py:414
 msgid ""
 "This includes related events like creation, deletion, opening or closing of "
 "quotas. No webhook is sent for changes to the resulting availability."
 msgstr ""
+"Dies enthält zugehörige Änderungen wie Erstellung, Löschung, Öffnung oder "
+"Schließung von Kontingenten. Es werden keine Webhooks für Änderungen der "
+"resultierenden Verfügbarkeit verschickt."
 
 #: pretix/api/webhooks.py:419
 msgid "Shop taken live"
@@ -3408,11 +3409,12 @@ msgid ""
 "The field \"%(label)s\" may not contain special characters such as "
 "\"%(chars)s\"."
 msgstr ""
+"Das Feld \"%(label)s\" darf keine Sonderzeichen wie \"%(chars)s\" enthalten."
 
 #: pretix/base/forms/questions.py:305
 #, python-format
 msgid "The field \"%(label)s\" may not contain an URL (%(url)s)."
-msgstr ""
+msgstr "Das Feld \"%(label)s\" darf keine Links enthalten (%(url)s)."
 
 #: pretix/base/forms/questions.py:338
 msgctxt "phonenumber"
@@ -8349,19 +8351,14 @@ msgid "Program times"
 msgstr "Programmzeiten"
 
 #: pretix/base/pdf.py:503
-#, fuzzy
-#| msgid ""
-#| "2017-05-31 10:00 – 12:00\n"
-#| "2017-05-31 14:00 – 16:00\n"
-#| "2017-05-31 14:00 – 2017-06-01 14:00"
 msgid ""
 "2017-05-31 10:00 – 12:00, Room 1\n"
 "2017-05-31 14:00 – 16:00, Room 2\n"
 "2017-05-31 14:00 – 2017-06-01 14:00, Building A"
 msgstr ""
-"31.05.2017 10:00 – 12:00\n"
-"31.05.2017 14:00 – 16:00\n"
-"31.05.2017 14:00 – 31.05.2017 14:00"
+"31.05.2017 10:00 – 12:00, Raum 1\n"
+"31.05.2017 14:00 – 16:00, Raum 2\n"
+"31.05.2017 14:00 – 31.05.2017 14:00, Gebäude A"
 
 #: pretix/base/pdf.py:507
 msgid "Reusable Medium ID"
@@ -8894,13 +8891,7 @@ msgid "This voucher code is not known in our database."
 msgstr "Dieser Gutscheincode ist uns nicht bekannt."
 
 #: pretix/base/services/cart.py:165
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products."
-#| msgid_plural ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching product."
@@ -8909,21 +8900,13 @@ msgid_plural ""
 "%(number)s matching products."
 msgstr[0] ""
 "Der Gutscheincode \"%(voucher)s\" kann nur verwendet werden, wenn du "
-"mindestens %(number)s passende Produkte auswählst."
+"mindestens ein passendes Produkt auswählst."
 msgstr[1] ""
 "Der Gutscheincode \"%(voucher)s\" kann nur verwendet werden, wenn du "
 "mindestens %(number)s passendes Produkt auswählst."
 
 #: pretix/base/services/cart.py:170
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products. We have therefore removed some positions "
-#| "from your cart that can no longer be purchased like this."
-#| msgid_plural ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products. We have therefore removed some positions "
-#| "from your cart that can no longer be purchased like this."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching product. We have therefore removed some positions from "
@@ -14242,6 +14225,8 @@ msgid ""
 "You entered an URL, which is not allowed. Please remove %(match)s from your "
 "input."
 msgstr ""
+"Du hast eine URL eingegeben, was nicht erlaubt ist. Bitte entfernen %(match)"
+"s aus deiner Eingabe."
 
 #: pretix/base/views/errors.py:48
 msgid ""
@@ -15728,13 +15713,15 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py:111
 msgid "Vite widget origins"
-msgstr ""
+msgstr "Vite-Widget-Origins"
 
 #: pretix/control/forms/global_settings.py:112
 msgid ""
 "One origin per line (e.g. https://example.com). Requests from these origins "
 "will be served the new vite-based widget."
 msgstr ""
+"Ein Origin pro Zeile (z.B. https://example.com). Requests von diesen Origins "
+"werden mit dem neuen Vite-basierten Widget ausgeliefert."
 
 #: pretix/control/forms/global_settings.py:128
 msgid "Perform update checks"
@@ -16188,14 +16175,8 @@ msgid "inactive"
 msgstr "inaktiv"
 
 #: pretix/control/forms/item.py:1414
-#, fuzzy
-#| msgid ""
-#| "Sample Conference Center\n"
-#| "Heidelberg, Germany"
 msgid "Sample Conference Center, Heidelberg, Germany"
-msgstr ""
-"Beispiel-Konferenzzentrum\n"
-"Heidelberg, Deutschland"
+msgstr "Beispiel-Konferenzzentrum, Heidelberg, Deutschland"
 
 #: pretix/control/forms/mailsetup.py:42
 msgid "Hostname"
@@ -23622,11 +23603,8 @@ msgid "Quota history"
 msgstr "Kontingent-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html:6
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Change multiple dates"
 msgid "Change multiple quotas"
-msgstr "Mehrere Termine bearbeiten"
+msgstr "Mehrere Kontingente bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:8
@@ -23674,18 +23652,15 @@ msgstr "Die folgenden Produkte stehen möglicherweise nicht mehr zum Verkauf:"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html:6
-#, fuzzy
-#| msgid "Delete quota"
 msgid "Delete quotas"
-msgstr "Kontingent löschen"
+msgstr "Kontingente löschen"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html:10
-#, fuzzy, python-format
-#| msgid "Are you sure you want to delete the following dates?"
+#, python-format
 msgid "Are you sure you want to delete the following quota?"
 msgid_plural "Are you sure you want to delete the following %(num)s quotas?"
-msgstr[0] "Möchtest du die folgenden Termine wirklich löschen?"
-msgstr[1] "Möchtest du die folgenden Termine wirklich löschen?"
+msgstr[0] "Möchtest du das folgende Kontingent wirklich löschen?"
+msgstr[1] "Möchtest du die folgenden %(num)s Kontingente wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:9
 msgid ""
@@ -24292,12 +24267,15 @@ msgid ""
 "generated once the customer pays the invoice or selects a payment method "
 "that requires an invoice."
 msgstr ""
+"Diese Bestellung wurde geändert, seit zuletzt eine Rechnung erzeugt wurde. "
+"Eine neue Rechnung wurde noch nicht erzeugt, da Rechnungen erst nach Zahlung "
+"oder nach Auswahl einer passenden Zahlungsmethode erzeugt werden sollen. "
+"Eine neue Rechnung wird erzeugt, sobald der Kunde die Rechnung bezahlt oder "
+"eine Zahlungsmethode auswählt, die eine Rechnung erfordert."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:152
-#, fuzzy
-#| msgid "Request invoice"
 msgid "Reissue invoice"
-msgstr "Rechnung anfragen"
+msgstr "Rechnung neu ausstellen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:161
 #: pretix/control/templates/pretixcontrol/order/index.html:413
@@ -24733,13 +24711,6 @@ msgid "How should the refund be sent?"
 msgstr "Wie soll die Erstattung durchgeführt werden?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:25
-#, fuzzy
-#| msgid ""
-#| "Any payments that you selected for automatical refunds will be "
-#| "immediately communicate the refund request to the respective payment "
-#| "provider. Manual refunds will be created as pending refunds, you can then "
-#| "later mark them as done once you actually transferred the money back to "
-#| "the customer."
 msgid ""
 "Any payments you selected for automatic refunds will have the refund request "
 "sent immediately to the respective payment provider. Manual refunds will be "
@@ -29297,11 +29268,8 @@ msgid "The new question has been created."
 msgstr "Eine neue Frage wurde erstellt."
 
 #: pretix/control/views/item.py:918
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been deleted or disabled."
 msgid "The selected quotas have been deleted or disabled."
-msgstr "Die ausgewählten Termine wurden gelöscht oder deaktiviert."
+msgstr "Die ausgewählten Kontingente wurden gelöscht oder deaktiviert."
 
 #: pretix/control/views/item.py:1074
 msgid "The new quota has been created."
@@ -30033,12 +30001,9 @@ msgstr ""
 "Diese Erweiterung ist derzeit in diesem Veranstalterkonto nicht erlaubt."
 
 #: pretix/control/views/organizer.py:832
-#, fuzzy, python-brace-format
-#| msgid "This plugin can be enabled or disabled for events individually."
+#, python-brace-format
 msgid "This plugin cannot be activated for event {}."
-msgstr ""
-"Diese Erweiterung kann für Veranstaltungen einzeln aktiviert oder "
-"deaktiviert werden."
+msgstr "Diese Erweiterung kann für die Veranstaltung {} nicht aktiviert werden."
 
 #: pretix/control/views/organizer.py:901
 msgid "The team has been created. You can now add members to the team."
@@ -31054,7 +31019,7 @@ msgstr "A7 Hochformat"
 #: pretix/plugins/badges/templates.py:104
 #, python-brace-format
 msgid "{width} x {height} mm butterfly badge"
-msgstr "{width} x {height} Butterfly-Badge"
+msgstr "{width}mm x {height}mm Butterfly-Badge"
 
 #: pretix/plugins/badges/templates.py:203
 #: pretix/plugins/badges/templates.py:208
@@ -31070,13 +31035,12 @@ msgstr "{width} x {height} Butterfly-Badge"
 #: pretix/plugins/badges/templates.py:259
 #, python-brace-format
 msgid "{width} x {height} mm label"
-msgstr "{width} x {height} Etikett"
+msgstr "{width}mm x {height}mm Etikett"
 
 #: pretix/plugins/badges/templates.py:265
-#, fuzzy, python-brace-format
-#| msgid "{width} x {height} mm label"
+#, python-brace-format
 msgid "{width} x {height} inch label"
-msgstr "{width} x {height} Etikett"
+msgstr "{width}\" x {height}\" Etikett"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
