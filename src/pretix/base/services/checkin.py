@@ -1115,25 +1115,15 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         required_media_policy = op.item.media_policy
         required_media_type = op.item.media_type
         linked_media = op.linked_media
-        require_media_exchange = required_media_policy and required_media_type and not linked_media.exists()
-        if require_media_exchange and not force and media_exchange_supported:
-            raise RequiredMediaExchangeError(
-                _('You need to exchange your ticket to complete this check-in.'),
-                'exchange',
-                required_media_policy,
-                required_media_type
-            )
-
-        require_reusable_media_usage = required_media_policy and required_media_type and op.organizer.settings.reusable_media_usage_enforced
-        if require_reusable_media_usage and not force:
-            if not reusable_media and not linked_media.exists() and media_exchange_supported:
+        if not reusable_media and required_media_policy and required_media_type and not force:
+            if not linked_media.exists() and media_exchange_supported:
                 raise RequiredMediaExchangeError(
                     _('You need to exchange your ticket to complete this check-in.'),
                     'exchange',
                     required_media_policy,
                     required_media_type
                 )
-            elif not reusable_media and linked_media.exists():
+            elif op.organizer.settings.reusable_media_usage_enforced:
                 raise CheckInError(
                     _('This ticket has already been exchanged - use the reusable medium instead.'),
                     'already_exchanged',
