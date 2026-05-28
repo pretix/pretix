@@ -359,7 +359,8 @@ class RelativeDateTimeWidget(forms.MultiWidget):
 
     def __init__(self, *args, **kwargs):
         self.status_choices = kwargs.pop('status_choices')
-        self.base_choices = kwargs.pop('base_choices')
+        base_choices = kwargs.pop('base_choices')
+        choices = _get_choices(base_choices)
 
         def placeholder_datetime_format():
             df = get_format('DATETIME_INPUT_FORMATS')[0]
@@ -379,8 +380,8 @@ class RelativeDateTimeWidget(forms.MultiWidget):
             rel_days_number=forms.NumberInput(),
             rel_mins_relationto=OptionAttrsSelect(
                 attrs={'data-relative-choice': True},
-                choices=self.base_choices,
-                option_attrs=_get_choice_validation_obj(self.base_choices)
+                choices=choices,
+                option_attrs=_get_choice_validation_obj(base_choices)
             ),
             rel_days_timeofday=forms.TimeInput(
                 attrs={'placeholder': lazy(placeholder_time_format, str), 'class': 'timepickerfield'}
@@ -388,8 +389,8 @@ class RelativeDateTimeWidget(forms.MultiWidget):
             rel_mins_number=forms.NumberInput(),
             rel_days_relationto=OptionAttrsSelect(
                 attrs={'data-relative-choice': True},
-                choices=self.base_choices,
-                option_attrs=_get_choice_validation_obj(self.base_choices)
+                choices=choices,
+                option_attrs=_get_choice_validation_obj(base_choices)
             ),
             rel_mins_relation=forms.Select(attrs={'data-relation-choice': True}, choices=BEFORE_AFTER_CHOICE),
             rel_days_relation=forms.Select(attrs={'data-relation-choice': True}, choices=BEFORE_AFTER_CHOICE),
@@ -458,8 +459,6 @@ class RelativeDateTimeWidget(forms.MultiWidget):
             for w in ctx['widget']['subwidgets']
         ))._asdict()
 
-        ctx['choice_validation'] = _get_choice_validation_obj(self.base_choices)
-        ctx['choice_validation_name'] = f'{name}_val'
         return ctx
 
 
@@ -673,13 +672,6 @@ class RelativeDateWidget(RelativeDateTimeWidget):
             rel_days_relationto=value.data.key,
             rel_days_relation="after" if value.data.is_after else "before"
         )
-
-    def get_context(self, name, value, attrs):
-        ctx = super().get_context(name, value, attrs)
-
-        ctx['choice_validation'] = _get_choice_validation_obj(self.base_choices)
-        ctx['choice_validation_name'] = f'{name}_val'
-        return ctx
 
 
 class RelativeDateField(RelativeDateTimeField):
