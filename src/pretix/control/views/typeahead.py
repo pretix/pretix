@@ -145,11 +145,21 @@ def event_list(request):
     if 'can_copy' in request.GET:
         qs = EventWizardCopyForm.copy_from_queryset(request.user, request.session)
     else:
-        qs = request.user.get_events_with_any_permission(request)
+        permission = request.GET.get('permission')
+        if permission:
+            qs = request.user.get_events_with_permission(permission, request)
+        else:
+            qs = request.user.get_events_with_any_permission(request)
+    
+    name_slug_q = Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
+    organizer = request.GET.get('organizer')
+    if organizer:
+        qs = qs.filter(organizer__slug=organizer)
+    else:
+        name_slug_q |= Q(organizer__name__icontains=i18ncomp(query)) | Q(organizer__slug__icontains=query)
 
     qs = qs.filter(
-        Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query) |
-        Q(organizer__name__icontains=i18ncomp(query)) | Q(organizer__slug__icontains=query)
+        name_slug_q
     ).annotate(
         min_from=Min('subevents__date_from'),
         max_from=Max('subevents__date_from'),
@@ -162,10 +172,19 @@ def event_list(request):
     total = qs.count()
     pagesize = 20
     offset = (page - 1) * pagesize
+    results = []
+    if page == 1 and 'include_none' in request.GET:
+        results.append({
+            'id': "_none",
+            'text': _("No event"),
+            'name': _("No event"),
+            'type': "event",
+        })
+    results += [
+        serialize_event(e) for e in qs.select_related('organizer')[offset:offset + pagesize]
+    ]
     doc = {
-        'results': [
-            serialize_event(e) for e in qs.select_related('organizer')[offset:offset + pagesize]
-        ],
+        'results': results,
         'pagination': {
             "more": total >= (offset + pagesize)
         }
