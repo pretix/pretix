@@ -441,14 +441,13 @@ class Voucher(LoggedModel):
             return set()
 
     @staticmethod
-    def clean_quota_get_ignored(old_instance):
-        was_valid = old_instance and (
-            old_instance.valid_until is None or old_instance.valid_until >= now()
-        )
-        if old_instance and old_instance.block_quota and was_valid:
-            return Voucher.get_affected_quotas(old_instance.quota, old_instance.item, old_instance.variation, old_instance.subevent)
-        else:
-            return set()
+    def clean_quota_get_ignored(voucher_data):
+        if voucher_data:
+            valid = voucher_data.valid_until is None or voucher_data.valid_until >= now()
+            if valid and voucher_data.block_quota and voucher_data.max_usages > voucher_data.redeemed:
+                return Voucher.get_affected_quotas(voucher_data.quota, voucher_data.item, voucher_data.variation, voucher_data.subevent)
+
+        return set()
 
     @staticmethod
     def clean_quota_check(data, cnt, old_instance, event, quota, item, variation):

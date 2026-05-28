@@ -32,8 +32,11 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import copy
 import csv
+import datetime
 from collections import Counter, namedtuple
+from dataclasses import dataclass
 from io import StringIO
 
 from django import forms
@@ -278,6 +281,19 @@ class VoucherForm(I18nModelForm):
         return super().save(commit)
 
 
+@dataclass
+class VoucherBulkData:
+    item: object
+    variation: object
+    quota: object
+    block_quota: bool
+    valid_until: datetime.datetime
+    subevent: object
+    redeemed: int
+    max_usages: int
+    allow_ignore_quota: bool
+
+
 class VoucherBulkEditForm(VoucherForm):
     def __init__(self, *args, **kwargs):
         self.mixed_values = kwargs.pop('mixed_values')
@@ -322,67 +338,61 @@ class VoucherBulkEditForm(VoucherForm):
             subevent_cache = {s.pk: s for s in SubEvent.objects.filter(pk__in=[c["subevent"] for c in current_vouchers])}
 
             for current in current_vouchers:
+                bulk_count = current.pop('c')
+                current = VoucherBulkData(**current)
                 # Get quotas that are currently used
-                if current["item"]:
-                    current["item"] = item_cache[current["item"]]
-                if current["variation"]:
-                    current["variation"] = var_cache[current["variation"]]
-                if current["quota"]:
-                    current["quota"] = quota_cache[current["quota"]]
-                if current["subevent"]:
-                    current["subevent"] = subevent_cache[current["subevent"]]
+                if current.item:
+                    current.item = item_cache[current.item]
+                if current.variation:
+                    current.variation = var_cache[current.variation]
+                if current.quota:
+                    current.quota = quota_cache[current.quota]
+                if current.subevent:
+                    current.subevent = subevent_cache[current.subevent]
 
-                was_valid = current["valid_until"] is None or current["valid_until"] >= now()
-                if was_valid and current["block_quota"] and current["max_usages"] > current["redeemed"]:
-                    old_quotas = Voucher.get_affected_quotas(current["quota"], current["item"], current["variation"], current["subevent"])
-                else:
-                    old_quotas = set()
-                old_amount = max(current["max_usages"] - current["redeemed"], 0) * current["c"]
+                old_quotas = Voucher.clean_quota_get_ignored(current)
+                old_amount = max(current.max_usages - current.redeemed, 0) * bulk_count
 
                 # Predict state after change
-                after_change = dict(current)
+                after_change = copy.copy(current)
                 if self.is_bulk_checked("itemvar") and "itemvar" in data:
-                    after_change["item"] = data["item"]
-                    after_change["variation"] = data["variation"]
-                    after_change["quota"] = data["quota"]
+                    after_change.item = data["item"]
+                    after_change.variation = data["variation"]
+                    after_change.quota = data["quota"]
                 if self.is_bulk_checked("subevent") and "subevent" in data:
-                    after_change["subevent"] = data["subevent"]
+                    after_change.subevent = data["subevent"]
                 if self.is_bulk_checked("max_usages") and "max_usages" in data:
-                    after_change["max_usages"] = data["max_usages"]
+                    after_change.max_usages = data["max_usages"]
                 if self.is_bulk_checked("block_quota") and "block_quota" in data:
-                    after_change["block_quota"] = data["block_quota"]
+                    after_change.block_quota = data["block_quota"]
                 if self.is_bulk_checked("valid_until") and "valid_until" in data:
-                    after_change["valid_until"] = data["valid_until"]
+                    after_change.valid_until = data["valid_until"]
                 if self.is_bulk_checked("allow_ignore_quota") and "allow_ignore_quota" in data:
-                    after_change["allow_ignore_quota"] = data["allow_ignore_quota"]
+                    after_change.allow_ignore_quota = data["allow_ignore_quota"]
 
-                if after_change["quota"] and self.event.has_subevents and not after_change["subevent"]:
+                if after_change.quota and self.event.has_subevents and not after_change.subevent:
                     raise ValidationError(_("You cannot create a voucher that allows selection of a quota but has no date selected."))
 
-                if after_change["quota"] and after_change["subevent"] and after_change["quota"].subevent_id != after_change["subevent"].pk:
+                if after_change.quota and after_change.subevent and after_change.quota.subevent_id != after_change.subevent.pk:
                     raise ValidationError(_("The selected quota does not match the selected subevent."))
 
-                if after_change["block_quota"] and self.event.has_subevents and not after_change["subevent"]:
+                if after_change.block_quota and self.event.has_subevents and not after_change.subevent:
                     raise ValidationError(
                         _('If you want this voucher to block quota, you need to select a specific date.'))
 
-                if after_change["block_quota"] and not after_change["item"] and not after_change["quota"]:
+                if after_change.block_quota and not after_change.item and not after_change.quota:
                     raise ValidationError(
                         _('You need to select a specific product or quota if this voucher should reserve '
                           'tickets.')
                     )
 
-                if after_change["allow_ignore_quota"]:
+                if after_change.allow_ignore_quota:
                     # todo: is this the most useful way to do this?
                     continue
 
-                will_be_valid = after_change["valid_until"] is None or after_change["valid_until"] >= now()
-                if will_be_valid and after_change["block_quota"] and after_change["max_usages"] > current["redeemed"]:
-                    new_quotas = Voucher.get_affected_quotas(after_change["quota"], after_change["item"], after_change["variation"], after_change["subevent"])
-                else:
-                    new_quotas = set()
+                new_quotas = Voucher.clean_quota_get_ignored(after_change)
+                new_amount = max(after_change.max_usages - after_change.redeemed, 0) * bulk_count
 
-                new_amount = max(after_change["max_usages"] - after_change["redeemed"], 0) * current["c"]
                 if new_quotas != old_quotas or new_amount != old_amount:
                     for q in old_quotas:
                         quota_diff[q] -= old_amount
