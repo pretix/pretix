@@ -157,7 +157,7 @@ class RelativeDate:
         if choice.base == "order" and isinstance(base, Order):
             event = base.event
             base_date = getattr(base, choice.attribute)
-        elif choice.base == "order.subevent" and isinstance(base, Order):
+        elif choice.base == "order.subevents" and isinstance(base, Order):
             if not base.event.has_subevents:
                 raise ValueError("The order is for an event without subevents")
             if choice.modifier == "first":
@@ -165,12 +165,13 @@ class RelativeDate:
                 if op is None:
                     raise ValueError("The order has no positions for subevents")
                 event = op.event
-                base_date = getattr(base, choice.attribute)
+                base_date = getattr(op.subevent, choice.attribute)
             elif choice.modifier == "last":
                 op = base.all_positions.order_by(f"subevent__{choice.attribute}").last()
                 if op is None:
                     raise ValueError("The order has no positions for subevents")
-                base_date = getattr(base, choice.attribute)
+                event = op.event
+                base_date = getattr(op.subevent, choice.attribute)
             else:
                 raise ValueError("The selected modifier does not exist")
         elif choice.base == "event" and isinstance(base, SubEvent):
