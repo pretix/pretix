@@ -322,8 +322,6 @@ class VoucherBulkEditForm(VoucherForm):
             subevent_cache = {s.pk: s for s in SubEvent.objects.filter(pk__in=[c["subevent"] for c in current_vouchers])}
 
             for current in current_vouchers:
-                was_valid = current["valid_until"] is None or current["valid_until"] >= now()
-
                 # Get quotas that are currently used
                 if current["item"]:
                     current["item"] = item_cache[current["item"]]
@@ -334,22 +332,11 @@ class VoucherBulkEditForm(VoucherForm):
                 if current["subevent"]:
                     current["subevent"] = subevent_cache[current["subevent"]]
 
-                old_quotas = set()
+                was_valid = current["valid_until"] is None or current["valid_until"] >= now()
                 if was_valid and current["block_quota"] and current["max_usages"] > current["redeemed"]:
-                    if current["quota"]:
-                        old_quotas.add(current["quota"])
-                    elif current["variation"]:
-                        old_quotas |= set(current["variation"].quotas.filter(subevent=current["subevent"]))
-                    elif current["item"]:
-                        if current["item"].has_variations:
-                            old_quotas |= set(
-                                Quota.objects.filter(pk__in=Quota.variations.through.objects.filter(
-                                    itemvariation__item=current["item"],
-                                    quota__subevent=current["subevent"],
-                                ).values('quota_id'))
-                            )
-                        else:
-                            old_quotas |= set(current["item"].quotas.filter(subevent=current["subevent"]))
+                    old_quotas = Voucher.get_affected_quotas(current["quota"], current["item"], current["variation"], current["subevent"])
+                else:
+                    old_quotas = set()
                 old_amount = max(current["max_usages"] - current["redeemed"], 0) * current["c"]
 
                 # Predict state after change
@@ -390,22 +377,10 @@ class VoucherBulkEditForm(VoucherForm):
                     continue
 
                 will_be_valid = after_change["valid_until"] is None or after_change["valid_until"] >= now()
-                new_quotas = set()
                 if will_be_valid and after_change["block_quota"] and after_change["max_usages"] > current["redeemed"]:
-                    if after_change["quota"]:
-                        new_quotas.add(after_change["quota"])
-                    elif after_change["variation"]:
-                        new_quotas |= set(after_change["variation"].quotas.filter(subevent=after_change["subevent"]))
-                    elif after_change["item"]:
-                        if after_change["item"].has_variations:
-                            new_quotas |= set(
-                                Quota.objects.filter(pk__in=Quota.variations.through.objects.filter(
-                                    itemvariation__item=after_change["item"],
-                                    quota__subevent=after_change["subevent"],
-                                ).values('quota_id'))
-                            )
-                        else:
-                            new_quotas |= set(after_change["item"].quotas.filter(subevent=after_change["subevent"]))
+                    new_quotas = Voucher.get_affected_quotas(after_change["quota"], after_change["item"], after_change["variation"], after_change["subevent"])
+                else:
+                    new_quotas = set()
 
                 new_amount = max(after_change["max_usages"] - after_change["redeemed"], 0) * current["c"]
                 if new_quotas != old_quotas or new_amount != old_amount:
