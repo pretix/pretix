@@ -936,7 +936,7 @@ class VoucherBulkEditFormTest(SoupTestMixin, TransactionTestCase):
             for v in self.event.vouchers.all():
                 assert v.max_usages == 4
 
-    def _requires_one_more_quota(self, data: dict, quota=None, expect_error: str=None):
+    def _requires_one_more_quota(self, data: dict, quota=None):
         self._update_all(data, expect_error="no sufficient quota")
         quota = quota or self.quota_tickets
         quota.size += 1
