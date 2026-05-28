@@ -15,6 +15,11 @@
     </h1>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
+        <div class="hidden">
+            {% for v in vouchers %}
+                <input type="hidden" name="voucher" value="{{ v.pk }}">
+            {% endfor %}
+        </div>
         {% bootstrap_form_errors form %}
             <fieldset>
                 <legend>{% trans "Voucher details" %}</legend>
