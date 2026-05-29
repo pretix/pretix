@@ -173,7 +173,7 @@ def event_list(request):
     pagesize = 20
     offset = (page - 1) * pagesize
     results = []
-    if page == 1 and 'include_none' in request.GET:
+    if page == 1 and 'include_none' in request.GET and not query:
         results.append({
             'id': "_none",
             'text': _("No event"),
