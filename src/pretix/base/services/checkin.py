@@ -1118,14 +1118,14 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         if not reusable_media and required_media_policy and required_media_type and not force:
             if not linked_media.exists() and media_exchange_supported:
                 raise RequiredMediaExchangeError(
-                    _('You need to exchange your ticket to complete this check-in.'),
+                    _('Ticket needs to be exchanged to a suitable medium.'),
                     'exchange',
                     required_media_policy,
                     required_media_type
                 )
             elif op.organizer.settings.reusable_media_usage_enforced:
                 raise CheckInError(
-                    _('This ticket has already been exchanged - use the reusable medium instead.'),
+                    _('This ticket has already been exchanged for a reusable medium that now needs to be used instead.'),
                     'already_exchanged',
                 )
 
