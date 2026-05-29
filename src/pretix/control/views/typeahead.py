@@ -150,7 +150,7 @@ def event_list(request):
             qs = request.user.get_events_with_permission(permission, request)
         else:
             qs = request.user.get_events_with_any_permission(request)
-    
+
     name_slug_q = Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
     organizer = request.GET.get('organizer')
     if organizer:
