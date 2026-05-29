@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
-"PO-Revision-Date: 2025-11-18 17:00+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"PO-Revision-Date: 2026-05-21 15:08+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix-js/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.3\n"
+"X-Generator: Weblate 2026.5\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -60,7 +60,7 @@ msgstr "PayPal Pay Later"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
 msgid "iDEAL | Wero"
-msgstr ""
+msgstr "iDEAL | Wero"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
@@ -131,7 +131,6 @@ msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "繼續"
@@ -162,12 +161,12 @@ msgstr "已付款訂單"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (ordered)"
-msgstr ""
+msgstr "出席者（已訂購的）"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Attendees (paid)"
-msgstr ""
+msgstr "出席者（已付款的）"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
 msgid "Total revenue"
@@ -184,172 +183,6 @@ msgstr "全部"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
 msgid "Contacting your bank …"
 msgstr "聯繫你的銀行當中…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "選擇報到清單"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "在有效的報到清單當中沒找到。"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "切換報到清單"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "搜尋結果"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "沒有找到票券"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "結果"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "這張票券需要特別留意"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "切換方向"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "進場"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "出場"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "掃描或是搜尋票券然後按返回…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "載入更多"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "有效"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "未付款"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "已取消"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr "已確認"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr "等待批准"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "已兌換"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "取消"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "票券還未付款"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr "這張票券還沒有付款，你想要繼續嗎？"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "需要額外的資訊"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "有效票券"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "已經記錄離場了"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "票券已經使用了"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "需要資訊"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Unknown ticket"
-msgstr "不知名的票券"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Ticket type not allowed here"
-msgstr "這裡不允這種票券類型"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "不允許入場"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "票券代碼已經取消/改變"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Ticket blocked"
-msgstr "票券已經封銷"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket not valid at this time"
-msgstr "在這時間票券仍未有效"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "訂單已取消"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr "清單上的票券代碼不清楚"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr "票券未確認"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "已經入場的票券"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "有效票券"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "目前在場內"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "是"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "否"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
@@ -379,35 +212,35 @@ msgstr ""
 "你的請求已經送達伺服器，但仍需要等待處理。如果超過兩分鐘的話，請聯絡我們或是"
 "回到瀏覽器再試一次。"
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "發生 {code} 類型錯誤。"
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr "我們目前無法連到伺服器，但我們會持續嘗試，最後的錯誤代碼：{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "請求花太長時間，請再試一次。"
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "我們目前無法連到伺服器，請再試一次，錯誤代碼：{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "我們正在處理你的請求…"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -416,11 +249,11 @@ msgstr ""
 "我們目前正在傳送你的要求到伺服器，如果花超過一分鐘，請檢查你的網路連線，並且"
 "重新整理頁面再試一次。"
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "如果這需要超過幾分鐘的時間，請與我們聯繫。"
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "關閉訊息"
 
@@ -431,146 +264,6 @@ msgstr "複製！"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "按 Ctrl-C 來複製！"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "其中一個"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "是之前"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "是之後"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr "="
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "產品"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "產品變體"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr "閘口"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "目前日期與時間"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "目前一週當中的星期幾(1=星期一，7=星期天)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr "當前入場狀態"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "先前入場的數量"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "自從深夜時先前入場的數量"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-msgid "Number of previous entries since"
-msgstr "之前入場的數量"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-msgid "Number of previous entries before"
-msgstr "先前的入場的數量"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "先前入場的天數數量"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-msgid "Number of days with a previous entry since"
-msgstr "自上次入場以來的天數"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-msgid "Number of days with a previous entry before"
-msgstr "先前自上次入場以來的天數"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr "自從最後入場之後的分鐘(-1是第一次入場)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr "自從第一次入場的分鐘(-1是第一次入場)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "以下所有的條件 (和)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "以下至少其中一個條件 (或)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "活動開始"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "活動結束"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "活動管理"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "客製化日期與時間"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "客製化時間"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "容忍度 (分鐘)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "增加條件"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "分鐘"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr "重覆"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr "出席"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr "缺席"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -705,6 +398,16 @@ msgstr "其他人"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "計數"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "是"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "否"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1189,6 +892,218 @@ msgstr "十一月"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "十二月"
+
+#~ msgid "Select a check-in list"
+#~ msgstr "選擇報到清單"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "在有效的報到清單當中沒找到。"
+
+#~ msgid "Switch check-in list"
+#~ msgstr "切換報到清單"
+
+#~ msgid "Search results"
+#~ msgstr "搜尋結果"
+
+#~ msgid "No tickets found"
+#~ msgstr "沒有找到票券"
+
+#~ msgid "Result"
+#~ msgstr "結果"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "這張票券需要特別留意"
+
+#~ msgid "Switch direction"
+#~ msgstr "切換方向"
+
+#~ msgid "Entry"
+#~ msgstr "進場"
+
+#~ msgid "Exit"
+#~ msgstr "出場"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "掃描或是搜尋票券然後按返回…"
+
+#~ msgid "Load more"
+#~ msgstr "載入更多"
+
+#~ msgid "Valid"
+#~ msgstr "有效"
+
+#~ msgid "Unpaid"
+#~ msgstr "未付款"
+
+#~ msgid "Canceled"
+#~ msgstr "已取消"
+
+#~ msgid "Confirmed"
+#~ msgstr "已確認"
+
+#~ msgid "Approval pending"
+#~ msgstr "等待批准"
+
+#~ msgid "Redeemed"
+#~ msgstr "已兌換"
+
+#~ msgid "Cancel"
+#~ msgstr "取消"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "票券還未付款"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr "這張票券還沒有付款，你想要繼續嗎？"
+
+#~ msgid "Additional information required"
+#~ msgstr "需要額外的資訊"
+
+#~ msgid "Valid ticket"
+#~ msgstr "有效票券"
+
+#~ msgid "Exit recorded"
+#~ msgstr "已經記錄離場了"
+
+#~ msgid "Ticket already used"
+#~ msgstr "票券已經使用了"
+
+#~ msgid "Information required"
+#~ msgstr "需要資訊"
+
+#~ msgid "Unknown ticket"
+#~ msgstr "不知名的票券"
+
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "這裡不允這種票券類型"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "不允許入場"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "票券代碼已經取消/改變"
+
+#~ msgid "Ticket blocked"
+#~ msgstr "票券已經封銷"
+
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "在這時間票券仍未有效"
+
+#~ msgid "Order canceled"
+#~ msgstr "訂單已取消"
+
+#~ msgid "Ticket code is ambiguous on list"
+#~ msgstr "清單上的票券代碼不清楚"
+
+#~ msgid "Order not approved"
+#~ msgstr "票券未確認"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "已經入場的票券"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "有效票券"
+
+#~ msgid "Currently inside"
+#~ msgstr "目前在場內"
+
+#~ msgid "is one of"
+#~ msgstr "其中一個"
+
+#~ msgid "is before"
+#~ msgstr "是之前"
+
+#~ msgid "is after"
+#~ msgstr "是之後"
+
+#~ msgid "="
+#~ msgstr "="
+
+#~ msgid "Product"
+#~ msgstr "產品"
+
+#~ msgid "Product variation"
+#~ msgstr "產品變體"
+
+#~ msgid "Gate"
+#~ msgstr "閘口"
+
+#~ msgid "Current date and time"
+#~ msgstr "目前日期與時間"
+
+#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+#~ msgstr "目前一週當中的星期幾(1=星期一，7=星期天)"
+
+#~ msgid "Current entry status"
+#~ msgstr "當前入場狀態"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "先前入場的數量"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "自從深夜時先前入場的數量"
+
+#~ msgid "Number of previous entries since"
+#~ msgstr "之前入場的數量"
+
+#~ msgid "Number of previous entries before"
+#~ msgstr "先前的入場的數量"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "先前入場的天數數量"
+
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "自上次入場以來的天數"
+
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "先前自上次入場以來的天數"
+
+#~ msgid "Minutes since last entry (-1 on first entry)"
+#~ msgstr "自從最後入場之後的分鐘(-1是第一次入場)"
+
+#~ msgid "Minutes since first entry (-1 on first entry)"
+#~ msgstr "自從第一次入場的分鐘(-1是第一次入場)"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "以下所有的條件 (和)"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "以下至少其中一個條件 (或)"
+
+#~ msgid "Event start"
+#~ msgstr "活動開始"
+
+#~ msgid "Event end"
+#~ msgstr "活動結束"
+
+#~ msgid "Event admission"
+#~ msgstr "活動管理"
+
+#~ msgid "custom date and time"
+#~ msgstr "客製化日期與時間"
+
+#~ msgid "custom time"
+#~ msgstr "客製化時間"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "容忍度 (分鐘)"
+
+#~ msgid "Add condition"
+#~ msgstr "增加條件"
+
+#~ msgid "minutes"
+#~ msgstr "分鐘"
+
+#~ msgid "Duplicate"
+#~ msgstr "重覆"
+
+#~ msgctxt "entry_status"
+#~ msgid "present"
+#~ msgstr "出席"
+
+#~ msgctxt "entry_status"
+#~ msgid "absent"
+#~ msgstr "缺席"
 
 #~ msgid "iDEAL"
 #~ msgstr "iDEAL"

@@ -834,3 +834,56 @@ def test_ambigious_date_with_region(env, job):
 
     with scopes_disabled():
         assert env[2].payments.last().info_data["date"] == "2016-05-03"
+
+
+@pytest.mark.django_db
+def test_event_name_prefix_contains_dash(env, orga_job):
+    event, user, o1, o2 = env
+    slugs = ['dummy-2', 'dummy2345']
+    for slug in slugs:
+        event = Event.objects.create(
+            organizer=event.organizer, name=slug.upper(), slug=slug,
+            date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
+        )
+    with scopes_disabled():
+        o1.event = Event.objects.get(slug="dummy2345")
+        o1.save()
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': f'DUMMY2345-{o1.code}',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    with scopes_disabled():
+        job = BankImportJob.objects.last()
+        t = job.transactions.last()
+        assert t.state == BankTransaction.STATE_VALID
+
+
+@pytest.mark.xfail
+@pytest.mark.django_db
+def test_event_name_prefix_multiple_dashes(env, orga_job):
+    # We decided to ignore the case of multiple events where the event slugs only differ in dashes
+    # for now. If we change that, switch this test case from xfail to regular test.
+
+    event, user, o1, o2 = env
+    slugs = ['dummy-2', 'dummy--2', 'dummy2345']
+    for slug in slugs:
+        event = Event.objects.create(
+            organizer=event.organizer, name=slug.upper(), slug=slug,
+            date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
+        )
+
+    with scopes_disabled():
+        o1.event = Event.objects.get(slug="dummy-2")
+        o1.save()
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': f'DUMMY2-{o1.code}',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    with scopes_disabled():
+        job = BankImportJob.objects.last()
+        t = job.transactions.last()
+        assert t.state == BankTransaction.STATE_VALID

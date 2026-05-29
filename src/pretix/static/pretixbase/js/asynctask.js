@@ -53,7 +53,17 @@ function async_task_on_success(data) {
             // hide waitingDialog when using browser's history back
             waitingDialog.hide();
         });
-        location.href = data.redirect;
+        if (async_task_is_download && window.self !== window.top) {
+            // if in an iframe, force to download an async_task_is_download
+            // e.g. pretix-reseller embeds order-page in iframe, which would cause ticket-PDFs to be displayed inline
+            var a = document.createElement("a");
+            a.href = data.redirect;
+            a.download = "";
+            a.target = "_blank";
+            a.click();
+        } else {
+            location.href = data.redirect;
+        }
     }
     $(this).trigger('pretix:async-task-success', data);
 }

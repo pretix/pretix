@@ -19,4 +19,14 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-__version__ = "2026.6.0.dev0"
+from django import template
+from django.conf import settings
+
+register = template.Library()
+
+
+@register.filter
+def human_readable_locale(value):
+    if not value:
+        return ''
+    return dict(settings.LANGUAGES).get(value, '')
