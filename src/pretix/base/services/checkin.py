@@ -960,8 +960,8 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         questions are not filled out.
     :param ignore_unpaid: When set to True, this will succeed even when the order is unpaid.
     :param questions_supported: When set to False, questions are ignored
-    :param media_exchange_supported: When set to False, media exchanges are ignored and access with un-exchanged media
-        might be permitted
+    :param media_exchange_supported: When set to False, required media exchanges are ignored; but access will still be
+        denied
     :param nonce: A random nonce to prevent race conditions.
     :param datetime: The datetime of the checkin, defaults to now.
     :param simulate: If true, the check-in is not saved.
@@ -1116,13 +1116,19 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         required_media_type = op.item.media_type
         linked_media = op.linked_media
         if not reusable_media and required_media_policy and required_media_type and not force:
-            if not linked_media.exists() and media_exchange_supported:
-                raise RequiredMediaExchangeError(
-                    _('Ticket needs to be exchanged to a suitable medium.'),
-                    'exchange',
-                    required_media_policy,
-                    required_media_type
-                )
+            if not linked_media.exists():
+                if media_exchange_supported:
+                    raise RequiredMediaExchangeError(
+                        _('Ticket needs to be exchanged to a suitable medium.'),
+                        'exchange',
+                        required_media_policy,
+                        required_media_type
+                    )
+                else:
+                    raise CheckInError(
+                        _('Ticket needs to be exchanged to a suitable medium.'),
+                        'product'
+                    )
             elif op.organizer.settings.reusable_media_usage_enforced:
                 raise CheckInError(
                     _('This ticket has already been exchanged for a reusable medium that now needs to be used instead.'),
