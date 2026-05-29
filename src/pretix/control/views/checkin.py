@@ -553,7 +553,6 @@ class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
             pdf_data=False,
             questions_supported=form.cleaned_data["questions_supported"],
             canceled_supported=False,
-            media_exchange_supported=form.cleaned_data["media_exchange_supported"],
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=False,
             simulate=True,

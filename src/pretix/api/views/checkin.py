@@ -455,8 +455,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
-                    media_exchange_supported, source_type='barcode', legacy_url_support=False, simulate=False,
-                    gate=None, use_order_locale=False):
+                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -814,7 +813,6 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 datetime=datetime,
                 questions_supported=questions_supported,
                 canceled_supported=canceled_supported,
-                media_exchange_supported=media_exchange_supported,
                 user=user,
                 auth=auth,
                 type=checkin_type,
@@ -995,7 +993,6 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             pdf_data=self.request.query_params.get('pdf_data', 'false').lower() == 'true',
             questions_supported=self.request.data.get('questions_supported', True),
             canceled_supported=self.request.data.get('canceled_supported', False),
-            media_exchange_supported=self.request.data.get('media_exchange_supported', False),
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=True,
         )
@@ -1032,7 +1029,6 @@ class CheckinRPCRedeemView(views.APIView):
             questions_supported=s.validated_data['questions_supported'],
             use_order_locale=s.validated_data['use_order_locale'],
             canceled_supported=True,
-            media_exchange_supported=s.validated_data.get('media_exchange_supported', False),
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=False,
         )

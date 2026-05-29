@@ -192,11 +192,6 @@ class CheckinListSimulatorForm(forms.Form):
         initial=True,
         required=False,
     )
-    media_exchange_supported = forms.BooleanField(
-        label=_("Support for media exchange"),
-        initial=True,
-        required=False,
-    )
     gate = SafeModelChoiceField(
         label=_('Gate'),
         empty_label=_('All gates'),
