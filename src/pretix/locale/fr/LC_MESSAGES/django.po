@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-27 15:47+0000\n"
-"PO-Revision-Date: 2026-05-08 04:00+0000\n"
-"Last-Translator: corentin-spec <corentin@spectentaculaire.fr>\n"
-"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
-">\n"
+"PO-Revision-Date: 2026-05-29 17:00+0000\n"
+"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.5\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html:670
 #: pretix/control/templates/pretixcontrol/events/index.html:166
@@ -618,16 +618,17 @@ msgstr ""
 "aux objets imbriqués tels que les variantes ou les lots."
 
 #: pretix/api/webhooks.py:413
-#, fuzzy
-#| msgid "Quota handling"
 msgid "Quota changed"
-msgstr "Traitement des quotas"
+msgstr "Quota modifié"
 
 #: pretix/api/webhooks.py:414
 msgid ""
 "This includes related events like creation, deletion, opening or closing of "
 "quotas. No webhook is sent for changes to the resulting availability."
 msgstr ""
+"Cela inclut les événements associés, tels que la création, la suppression, "
+"l'ouverture ou la suppression de quotas. Aucun webhook n'est envoyé en cas "
+"de modification de la disponibilité qui en résulte."
 
 #: pretix/api/webhooks.py:419
 msgid "Shop taken live"
@@ -3422,11 +3423,13 @@ msgid ""
 "The field \"%(label)s\" may not contain special characters such as "
 "\"%(chars)s\"."
 msgstr ""
+"Le champ « %(label)s » ne doit pas contenir de caractères spéciaux tels que "
+"«%(chars)s »."
 
 #: pretix/base/forms/questions.py:305
 #, python-format
 msgid "The field \"%(label)s\" may not contain an URL (%(url)s)."
-msgstr ""
+msgstr "Le champ « %(label)s » ne doit pas contenir d'URL (%(url)s)."
 
 #: pretix/base/forms/questions.py:338
 msgctxt "phonenumber"
@@ -8409,19 +8412,14 @@ msgid "Program times"
 msgstr "Horaires du programme"
 
 #: pretix/base/pdf.py:503
-#, fuzzy
-#| msgid ""
-#| "2017-05-31 10:00 – 12:00\n"
-#| "2017-05-31 14:00 – 16:00\n"
-#| "2017-05-31 14:00 – 2017-06-01 14:00"
 msgid ""
 "2017-05-31 10:00 – 12:00, Room 1\n"
 "2017-05-31 14:00 – 16:00, Room 2\n"
 "2017-05-31 14:00 – 2017-06-01 14:00, Building A"
 msgstr ""
-"2017-05-31 10:00 – 12:00\n"
-"2017-05-31 14:00 – 16:00\n"
-"2017-05-31 14:00 – 2017-06-01 14:00"
+"31 mai 2017, de 10 h à 12 h, salle 1\n"
+"31 mai 2017, de 14 h à 16 h, salle 2\n"
+"Du 31 mai 2017 à 1 h du matin au 1er juin 2017 à 14 h, bâtiment A"
 
 #: pretix/base/pdf.py:507
 msgid "Reusable Medium ID"
@@ -8957,13 +8955,7 @@ msgid "This voucher code is not known in our database."
 msgstr "Ce code promotionnel n'est pas connu dans notre base de données."
 
 #: pretix/base/services/cart.py:165
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products."
-#| msgid_plural ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching product."
@@ -8971,22 +8963,14 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
-"Le code promo \"%(voucher)s\" ne peut être utilisé que si vous sélectionnez "
+"Le code promo « %(voucher)s » ne peut être utilisé que si vous sélectionnez "
 "au moins %(number)s produit correspondant."
 msgstr[1] ""
-"Le code promo \"%(voucher)s\" ne peut être utilisé que si vous sélectionnez "
+"Le code promo « %(voucher)s » ne peut être utilisé que si vous sélectionnez "
 "au moins %(number)s produits correspondants."
 
 #: pretix/base/services/cart.py:170
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products. We have therefore removed some positions "
-#| "from your cart that can no longer be purchased like this."
-#| msgid_plural ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products. We have therefore removed some positions "
-#| "from your cart that can no longer be purchased like this."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching product. We have therefore removed some positions from "
@@ -14379,6 +14363,8 @@ msgid ""
 "You entered an URL, which is not allowed. Please remove %(match)s from your "
 "input."
 msgstr ""
+"Vous avez saisi une URL, ce qui n'est pas autorisé. Veuillez supprimer %"
+"(match)s de votre saisie."
 
 #: pretix/base/views/errors.py:48
 msgid ""
@@ -16328,14 +16314,8 @@ msgid "inactive"
 msgstr "inactif"
 
 #: pretix/control/forms/item.py:1414
-#, fuzzy
-#| msgid ""
-#| "Sample Conference Center\n"
-#| "Heidelberg, Germany"
 msgid "Sample Conference Center, Heidelberg, Germany"
-msgstr ""
-"Exemple de centre de conférence\n"
-"Centre des Congrès, France"
+msgstr "Centre de conférences d'exemple, Heidelberg, Allemagne"
 
 #: pretix/control/forms/mailsetup.py:42
 msgid "Hostname"
@@ -23831,11 +23811,8 @@ msgid "Quota history"
 msgstr "Historique des quotas"
 
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html:6
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Change multiple dates"
 msgid "Change multiple quotas"
-msgstr "Modifier plusieurs dates"
+msgstr "Modifier plusieurs quotas"
 
 #: pretix/control/templates/pretixcontrol/items/quota_bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:8
@@ -23883,18 +23860,15 @@ msgstr "Les produits suivants pourraient ne plus être disponibles à la vente�
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html:6
-#, fuzzy
-#| msgid "Delete quota"
 msgid "Delete quotas"
-msgstr "Supprimer le quota"
+msgstr "Supprimer les quotas"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete_bulk.html:10
-#, fuzzy, python-format
-#| msgid "Are you sure you want to delete the following dates?"
+#, python-format
 msgid "Are you sure you want to delete the following quota?"
 msgid_plural "Are you sure you want to delete the following %(num)s quotas?"
-msgstr[0] "Voulez-vous vraiment supprimer les dates suivantes ?"
-msgstr[1] "Voulez-vous vraiment supprimer les dates suivantes ?"
+msgstr[0] "Êtes-vous sûr de vouloir supprimer le quota suivant ?"
+msgstr[1] "Êtes-vous sûr de vouloir supprimer les %(num)s quotas suivants ?"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:9
 msgid ""
@@ -24503,12 +24477,15 @@ msgid ""
 "generated once the customer pays the invoice or selects a payment method "
 "that requires an invoice."
 msgstr ""
+"Cette commande a été modifiée après l'émission de la dernière facture. "
+"Aucune nouvelle facture n'a encore été générée, car les factures sont "
+"configurées pour être émises lors du paiement ou si le mode de paiement "
+"l'exige. Une nouvelle facture sera générée dès que le client aura réglé la "
+"facture ou choisi un mode de paiement nécessitant une facture."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:152
-#, fuzzy
-#| msgid "Request invoice"
 msgid "Reissue invoice"
-msgstr "Demande de facture"
+msgstr "Réémettre une facture"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:161
 #: pretix/control/templates/pretixcontrol/order/index.html:413
@@ -24942,25 +24919,17 @@ msgid "How should the refund be sent?"
 msgstr "Comment le remboursement doit-il être envoyé ?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:25
-#, fuzzy
-#| msgid ""
-#| "Any payments that you selected for automatical refunds will be "
-#| "immediately communicate the refund request to the respective payment "
-#| "provider. Manual refunds will be created as pending refunds, you can then "
-#| "later mark them as done once you actually transferred the money back to "
-#| "the customer."
 msgid ""
 "Any payments you selected for automatic refunds will have the refund request "
 "sent immediately to the respective payment provider. Manual refunds will be "
 "created as pending refunds, which you can later mark as done once you have "
 "actually transferred the money back to the customer."
 msgstr ""
-"Tous les paiements que vous avez sélectionnés pour des remboursements "
-"automatiques seront immédiatement communiqués à la demande de remboursement "
-"au fournisseur de paiement respectif. Les remboursements manuels seront "
-"créés en tant que remboursements en attente, vous pourrez ensuite les "
-"marquer comme terminés une fois que vous aurez effectivement transféré "
-"l’argent au client."
+"Pour tous les paiements que vous avez sélectionnés pour un remboursement "
+"automatique, la demande de remboursement sera immédiatement transmise au "
+"prestataire de paiement concerné. Les remboursements manuels seront "
+"enregistrés comme remboursements en attente ; vous pourrez les marquer comme "
+"effectués une fois que vous aurez effectivement reversé l'argent au client."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:32
 msgid "Refund to original payment method"
@@ -29558,11 +29527,8 @@ msgid "The new question has been created."
 msgstr "La nouvelle question a été créée."
 
 #: pretix/control/views/item.py:918
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The selected dates have been deleted or disabled."
 msgid "The selected quotas have been deleted or disabled."
-msgstr "Les dates sélectionnées ont été supprimées ou désactivées."
+msgstr "Les quotas sélectionnés ont été supprimés ou désactivés."
 
 #: pretix/control/views/item.py:1074
 msgid "The new quota has been created."
@@ -30302,12 +30268,9 @@ msgstr ""
 "Ce plugin n'est actuellement pas autorisé pour ce compte d'organisateur."
 
 #: pretix/control/views/organizer.py:832
-#, fuzzy, python-brace-format
-#| msgid "This plugin can be enabled or disabled for events individually."
+#, python-brace-format
 msgid "This plugin cannot be activated for event {}."
-msgstr ""
-"Ce plugin peut être activé ou désactivé individuellement pour chaque "
-"événement."
+msgstr "Ce plugin ne peut pas être activé pour l'événement {}."
 
 #: pretix/control/views/organizer.py:901
 msgid "The team has been created. You can now add members to the team."
@@ -31362,10 +31325,9 @@ msgid "{width} x {height} mm label"
 msgstr "{width} x {height} mm étiquette"
 
 #: pretix/plugins/badges/templates.py:265
-#, fuzzy, python-brace-format
-#| msgid "{width} x {height} mm label"
+#, python-brace-format
 msgid "{width} x {height} inch label"
-msgstr "{width} x {height} mm étiquette"
+msgstr "{width} x {height} pouce étiquette"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
