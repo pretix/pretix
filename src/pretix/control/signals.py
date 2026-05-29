@@ -261,6 +261,16 @@ As with all event plugin signals, the ``sender`` keyword argument will contain t
 Additionally, the argument ``order`` and ``request`` are available.
 """
 
+order_approve_info = EventPluginSignal()
+"""
+Arguments: ``order``, ``request``
+
+This signal is sent out to display additional information on the order approve page
+
+As with all event plugin signals, the ``sender`` keyword argument will contain the event.
+Additionally, the argument ``order`` and ``request`` are available.
+"""
+
 order_position_buttons = EventPluginSignal()
 """
 Arguments: ``order``, ``position``, ``request``
