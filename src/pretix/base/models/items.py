@@ -453,8 +453,8 @@ class Item(LoggedModel):
     MEDIA_POLICY_NEW = 'new'
     MEDIA_POLICY_REUSE_OR_NEW = 'reuse_or_new'
     MEDIA_POLICIES = (
-        (None, _("Don't use re-usable media, use regular one-off tickets")),
-        (MEDIA_POLICY_REUSE, _('Require an existing medium to be re-used')),
+        (None, _("Don't use reusable media, use regular one-off tickets")),
+        (MEDIA_POLICY_REUSE, _('Require an existing medium to be reused')),
         (MEDIA_POLICY_NEW, _('Require a previously unknown medium to be newly added')),
         (MEDIA_POLICY_REUSE_OR_NEW, _('Require either an existing or a new medium to be used')),
     )
@@ -769,7 +769,7 @@ class Item(LoggedModel):
         null=True, blank=True, max_length=16,
         verbose_name=_('Reusable media policy'),
         help_text=_(
-            'If this product should be stored on a re-usable physical medium, you can attach a physical media policy. '
+            'If this product should be stored on a reusable physical medium, you can attach a physical media policy. '
             'This is not required for regular tickets, which just use a one-time barcode, but only for products like '
             'renewable season tickets or re-chargeable gift card wristbands. '
             'This is an advanced feature that also requires specific configuration of ticketing and printing settings.'
@@ -778,7 +778,7 @@ class Item(LoggedModel):
     media_type = models.CharField(
         max_length=100,
         null=True, blank=True,
-        choices=[(None, _("Don't use re-usable media, use regular one-off tickets"))] + [(k, v) for k, v in MEDIA_TYPES.items()],
+        choices=[(None, _("Don't use reusable media, use regular one-off tickets"))] + [(k, v) for k, v in MEDIA_TYPES.items()],
         verbose_name=_('Reusable media type'),
         help_text=_(
             'Select the type of physical medium that should be used for this product. Note that not all media types '
@@ -2220,7 +2220,7 @@ class Quota(LoggedModel):
 class ItemMetaProperty(LoggedModel):
     """
     An event can have ItemMetaProperty objects attached to define meta information fields
-    for its items. This information can be re-used for example in ticket layouts.
+    for its items. This information can be reused for example in ticket layouts.
 
     :param event: The event this property is defined for.
     :type event: Event
