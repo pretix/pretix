@@ -138,6 +138,9 @@ class ReusableMedium(LoggedModel):
         ]
         ordering = "identifier", "type", "organizer"
 
+    class DuplicateEntry(Exception):
+        pass
+
 
 class MediumKeySet(models.Model):
     organizer = models.ForeignKey('Organizer', on_delete=models.CASCADE, related_name='medium_key_sets')

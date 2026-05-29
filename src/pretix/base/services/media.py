@@ -25,8 +25,8 @@ from django.db import IntegrityError
 from django.db.models import Q
 from django_scopes import scopes_disabled
 
-from pretix.base.models import GiftCardAcceptance
-from pretix.base.models.media import MediumKeySet
+from pretix.base.models import GiftCardAcceptance, Item
+from pretix.base.models.media import MediumKeySet, ReusableMedium
 
 
 def create_nfc_mf0aes_keyset(organizer):
@@ -70,3 +70,36 @@ def get_keysets_for_organizer(organizer):
         if new_set:
             sets.append(new_set)
     return sets
+
+
+def perform_media_exchange(organizer, media_type, media_identifier, media_policy, media_action, op):
+    medium = None
+
+    if media_policy in [Item.MEDIA_POLICY_REUSE, Item.MEDIA_POLICY_REUSE_OR_NEW]:
+        try:
+            medium = ReusableMedium.objects.get(
+                type=media_type,
+                identifier=media_identifier,
+                organizer=organizer,
+            )
+        except ReusableMedium.DoesNotExist:
+            pass
+
+    if not medium and media_policy in [Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW]:
+        try:
+            medium = ReusableMedium.objects.create(
+                type=media_type,
+                identifier=media_identifier,
+                organizer=organizer,
+            )
+        except IntegrityError:
+            raise ReusableMedium.DuplicateEntry()
+
+    if medium:
+        if media_action == 'append':
+            medium.linked_orderpositions.add(*[op])
+        elif media_action == 'replace':
+            medium.linked_orderpositions.set([op])
+        medium.save()
+
+    return medium

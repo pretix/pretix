@@ -26,7 +26,7 @@ from rest_framework.exceptions import ValidationError
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.media import MEDIA_TYPES
-from pretix.base.models import Checkin, CheckinList
+from pretix.base.models import Checkin, CheckinList, Item
 
 
 class CheckinListSerializer(I18nAwareModelSerializer):
@@ -88,6 +88,13 @@ class CheckinRPCRedeemInputSerializer(serializers.Serializer):
     nonce = serializers.CharField(required=False, allow_null=True)
     datetime = serializers.DateTimeField(required=False, allow_null=True)
     answers = serializers.JSONField(required=False, allow_null=True)
+    media_type = serializers.ChoiceField(required=False, choices=MEDIA_TYPES)
+    media_identifier = serializers.CharField(required=False)
+    media_policy = serializers.ChoiceField(required=False, choices=Item.MEDIA_POLICIES)
+    media_action = serializers.ChoiceField(required=False, choices=[
+        ('append', 'append'),
+        ('replace', 'replace'),
+    ])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

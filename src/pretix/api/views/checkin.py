@@ -72,6 +72,7 @@ from pretix.base.services.checkin import (
     CheckInError, RequiredMediaExchangeError, RequiredQuestionsError, SQLLogic,
     perform_checkin,
 )
+from pretix.base.services.media import perform_media_exchange
 from pretix.base.signals import checkin_annulled
 from pretix.helpers import OF_SELF
 
@@ -455,7 +456,8 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
-                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False):
+                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False,
+                    media_type=None, media_identifier=None, media_policy=None, media_action=None):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -803,26 +805,59 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         locale = op.order.event.settings.locale
     with language(locale):
         try:
-            perform_checkin(
-                op=op,
-                clist=list_by_event[op.order.event_id],
-                given_answers=given_answers,
-                force=force,
-                ignore_unpaid=ignore_unpaid,
-                nonce=nonce,
-                datetime=datetime,
-                questions_supported=questions_supported,
-                canceled_supported=canceled_supported,
-                user=user,
-                auth=auth,
-                type=checkin_type,
-                raw_barcode=raw_barcode_for_checkin,
-                raw_source_type=source_type,
-                from_revoked_secret=from_revoked_secret,
-                simulate=simulate,
-                gate=gate,
-                reusable_media=media,
-            )
+            if all(k is not None for k in [media_type, media_identifier, media_policy, media_action]) and not media:
+                with transaction.atomic():
+                    media = perform_media_exchange(
+                        organizer=request.organizer,
+                        media_type=media_type,
+                        media_identifier=media_identifier,
+                        media_policy=media_policy,
+                        media_action=media_action,
+                        op=op,
+                    )
+                    source_type = media.media_type.identifier
+
+                    perform_checkin(
+                        op=op,
+                        clist=list_by_event[op.order.event_id],
+                        given_answers=given_answers,
+                        force=force,
+                        ignore_unpaid=ignore_unpaid,
+                        nonce=nonce,
+                        datetime=datetime,
+                        questions_supported=questions_supported,
+                        canceled_supported=canceled_supported,
+                        user=user,
+                        auth=auth,
+                        type=checkin_type,
+                        raw_barcode=raw_barcode_for_checkin,
+                        raw_source_type=source_type,
+                        from_revoked_secret=from_revoked_secret,
+                        simulate=simulate,
+                        gate=gate,
+                        reusable_media=media,
+                    )
+            else:
+                perform_checkin(
+                    op=op,
+                    clist=list_by_event[op.order.event_id],
+                    given_answers=given_answers,
+                    force=force,
+                    ignore_unpaid=ignore_unpaid,
+                    nonce=nonce,
+                    datetime=datetime,
+                    questions_supported=questions_supported,
+                    canceled_supported=canceled_supported,
+                    user=user,
+                    auth=auth,
+                    type=checkin_type,
+                    raw_barcode=raw_barcode_for_checkin,
+                    raw_source_type=source_type,
+                    from_revoked_secret=from_revoked_secret,
+                    simulate=simulate,
+                    gate=gate,
+                    reusable_media=media,
+                )
         except RequiredQuestionsError as e:
             return Response({
                 'status': 'incomplete',
@@ -842,6 +877,17 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'media_policy': e.media_policy,
                 'media_type': e.media_type,
+                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
+                'reason_explanation': e.msg,
+            }, status=400)
+        except ReusableMedium.DuplicateEntry:
+            return Response({
+                'status': 'error',
+                'reason': Checkin.REASON_AMBIGUOUS,
+                'reason_explanation': 'Reusable medium identifier is ambigous',
+                'require_attention': op.require_checkin_attention,
+                'checkin_texts': op.checkin_texts,
+                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         except CheckInError as e:
@@ -1031,6 +1077,10 @@ class CheckinRPCRedeemView(views.APIView):
             canceled_supported=True,
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=False,
+            media_type=s.validated_data.get('media_type'),
+            media_identifier=s.validated_data.get('media_identifier'),
+            media_policy=s.validated_data.get('media_policy'),
+            media_action=s.validated_data.get('media_action'),
         )
 
 
