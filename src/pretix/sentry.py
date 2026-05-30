@@ -19,12 +19,18 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import re
+import typing
 import weakref
 
 from celery.exceptions import Retry
 from sentry_sdk import Hub
 from sentry_sdk.integrations import django as djangosentry
-from sentry_sdk.utils import capture_internal_exceptions
+from sentry_sdk.scrubber import EventScrubber
+from sentry_sdk.utils import AnnotatedValue, capture_internal_exceptions
+
+if typing.TYPE_CHECKING:
+    from sentry_sdk._types import Event
 
 
 def _make_event_processor(weak_request, integration):
@@ -96,3 +102,32 @@ def setup_custom_filters():
     hub = Hub.current
     with hub.configure_scope() as scope:
         scope.add_event_processor(ignore_retry)
+
+
+class PretixEventScrubber(EventScrubber):
+    secret_re = re.compile(
+        '.*(pretixsecret|ramiiosecret|PRIVATE KEY|://[^/@:]*:[^/@:]+@).*',
+        re.IGNORECASE
+    )
+
+    def scrub_dict(self, d: object) -> None:
+        if not isinstance(d, dict):
+            return
+
+        super().scrub_dict(d)
+        self._scrub_dict_for_known_secrets(d)
+
+    def _scrub_dict_for_known_secrets(self, d: dict):
+        for k, v in d.items():
+            if isinstance(v, str) and self.secret_re.match(v):
+                d[k] = AnnotatedValue.substituted_because_contains_sensitive_data()
+
+    def scrub_exception(self, event: "Event") -> None:
+        with capture_internal_exceptions():
+            if "exception" in event:
+                self.scrub_dict(event["exception"])
+
+    def scrub_event(self, event: "Event") -> None:
+        super().scrub_event(event)
+        self.scrub_exception(event)
+        print(event)

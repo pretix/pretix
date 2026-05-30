@@ -704,9 +704,9 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
     from sentry_sdk.integrations.logging import (
         LoggingIntegration, ignore_logger,
     )
-    from sentry_sdk.scrubber import EventScrubber, DEFAULT_DENYLIST
+    from sentry_sdk.scrubber import DEFAULT_DENYLIST
 
-    from .sentry import PretixSentryIntegration, setup_custom_filters
+    from .sentry import PretixSentryIntegration, PretixEventScrubber, setup_custom_filters
 
     SENTRY_TOKEN = config.get('sentry', 'traces_sample_token', fallback='')
     pretix_denylist = DEFAULT_DENYLIST + [
@@ -739,7 +739,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
         traces_sampler=traces_sampler,
         environment=urlparse(SITE_URL).netloc,
         release=__version__,
-        event_scrubber=EventScrubber(denylist=pretix_denylist, recursive=True),
+        event_scrubber=PretixEventScrubber(denylist=pretix_denylist, recursive=True),
         send_default_pii=False,
         propagate_traces=False,  # see https://github.com/getsentry/sentry-python/issues/1717
     )
