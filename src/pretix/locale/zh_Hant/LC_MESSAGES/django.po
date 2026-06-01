@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-27 15:47+0000\n"
-"PO-Revision-Date: 2026-05-21 15:08+0000\n"
+"PO-Revision-Date: 2026-06-01 09:00+0000\n"
 "Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://translate.pretix.eu/"
 "projects/pretix/pretix/zh_Hant/>\n"
@@ -595,16 +595,16 @@ msgid ""
 msgstr "這包括新增或刪除的產品，以及對變體或捆綁等巢狀物件的更改。"
 
 #: pretix/api/webhooks.py:413
-#, fuzzy
-#| msgid "Quota handling"
 msgid "Quota changed"
-msgstr "額度處理"
+msgstr "配額改變了"
 
 #: pretix/api/webhooks.py:414
 msgid ""
 "This includes related events like creation, deletion, opening or closing of "
 "quotas. No webhook is sent for changes to the resulting availability."
 msgstr ""
+"這包括建立、刪除、開啟或關閉配額等相關事件。 沒有傳送webhook來更改結果的可用"
+"性。"
 
 #: pretix/api/webhooks.py:419
 msgid "Shop taken live"
@@ -650,7 +650,7 @@ msgstr "優惠券已更改"
 msgid ""
 "Only includes explicit changes to the voucher, not e.g. an increase of the "
 "number of redemptions."
-msgstr ""
+msgstr "僅包括對代金券的明確更改，例如不包括兌換次數的增加。"
 
 #: pretix/api/webhooks.py:460
 msgid "Voucher deleted"
@@ -669,22 +669,16 @@ msgid "Customer account anonymized"
 msgstr "客戶帳戶已匿名化"
 
 #: pretix/api/webhooks.py:476
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card added"
-msgstr "禮品卡代碼"
+msgstr "添加了禮品卡"
 
 #: pretix/api/webhooks.py:480
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "禮品卡代碼"
+msgstr "禮品卡修改了"
 
 #: pretix/api/webhooks.py:484
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card used in transaction"
-msgstr "禮品卡交易"
+msgstr "交易中使用的禮品卡"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:1074
