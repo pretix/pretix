@@ -92,7 +92,7 @@ class CustomFieldEntry(FieldEntry[LazyI18nString]):
 
 class PredefinedFieldGroup(FieldGroup):
     type = FieldGroupType.PREDEFINED
-    
+
     def layout_schema(
         self,
         remaining_fields: list["FieldGroup"],
@@ -101,7 +101,7 @@ class PredefinedFieldGroup(FieldGroup):
         return {
             "type": "object"
         }
-    
+
 class PlaceholderFieldGroup(FieldGroup):
     type = FieldGroupType.PLACEHOLDER
     content_type: FieldContentType
@@ -275,7 +275,7 @@ class PassStyle:
 
     def generate(self, layout, context):
         raise NotImplementedError()
-    
+
     def render_placeholder(self, context, content_type, content):
         placeholder = (
             context.get("placeholders")
@@ -287,7 +287,10 @@ class PassStyle:
                 *context.get("evaluation_context", [])
             )
             if placeholder_value:
-                return placeholder_value
+                return placeholder["label"], placeholder_value
+
+        return None, None
+
     def get_pass_fields(self, layout, context):
         fields = {}
         for group in self.fieldgroups:
@@ -301,7 +304,10 @@ class PassStyle:
                         if group.labels:
                             field_entry["label"] = LazyI18nString(field["label"])
                         if field["type"] == FieldEntryType.PLACEHOLDER.value:
-                            field_entry["value"] = self.render_placeholder(context, group.content_type.value, field['content'])
+                            label, field_entry["value"] = self.render_placeholder(context, group.content_type.value, field['content'])
+                            if group.labels and not str(field_entry['label']) and label:
+                                field_entry['label'] = LazyI18nString(label)
+
                         elif field["type"] == FieldEntryType.CUSTOM.value:
                             field_entry["value"] = LazyI18nString(field["content"])
                         if "value" in field_entry and field_entry["value"]:
