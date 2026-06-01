@@ -49,8 +49,7 @@ class FieldContentType(enum.Enum):
 
 
 class FieldEntryType(enum.Enum):
-    IMAGE = "image"
-    TEXT = "text"
+    CUSTOM = "custom"
     PLACEHOLDER = "placeholder"
 
 
@@ -191,7 +190,7 @@ class PlaceholderFieldGroup(FieldGroup):
                     {
                         "properties": {
                             **baseprops,
-                            "type": {"const": self.content_type.value},
+                            "type": {"const": "custom"},
                             "content": {"$ref": "#/$defs/I18nString"},
                         }
                     },
@@ -276,6 +275,49 @@ class PassStyle:
 
     def generate(self, layout, context):
         raise NotImplementedError()
+    
+    def render_placeholder(self, context, content_type, content):
+        placeholder = (
+            context.get("placeholders")
+            .get(content_type, {})
+            .get(content)
+        )
+        if placeholder:
+            placeholder_value = placeholder["evaluate"](
+                *context.get("evaluation_context", [])
+            )
+            if placeholder_value:
+                return placeholder_value
+    def get_pass_fields(self, layout, context):
+        fields = {}
+        for group in self.fieldgroups:
+            if isinstance(group, PredefinedFieldGroup):
+                pass
+            elif isinstance(group, PlaceholderFieldGroup):
+                group_fields = fields.get(group.identifier, [])
+                if group.identifier in layout["fieldgroups"]:
+                    for field in layout["fieldgroups"][group.identifier]["entries"]:
+                        field_entry = {}
+                        if group.labels:
+                            field_entry["label"] = LazyI18nString(field["label"])
+                        if field["type"] == FieldEntryType.PLACEHOLDER.value:
+                            field_entry["value"] = self.render_placeholder(context, group.content_type.value, field['content'])
+                        elif field["type"] == FieldEntryType.CUSTOM.value:
+                            field_entry["value"] = LazyI18nString(field["content"])
+                        if "value" in field_entry and field_entry["value"]:
+                            group_fields.append(field_entry)
+                if group.min_entries and len(group_fields) < group.min_entries:
+                    raise ValueError(
+                        f"Group {group.identifier} needs at least {group.min_entries} entries, but only {len(group_fields)} were provided"
+                    )
+                fields[group.identifier] = group_fields[: group.max_entries]
+                if (overflow_group := layout["fieldgroups"][group.identifier]['overflow']):
+                    fields.setdefault(overflow_group, [])
+                    fields[overflow_group] += group_fields[group.max_entries:]
+            else:
+                raise ValueError("Unknown field group")
+        return fields
+
 
 class PassLayout:
     style: PassStyle
