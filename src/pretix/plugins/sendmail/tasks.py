@@ -85,8 +85,6 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                     )
                 ),
             ).prefetch_related('addons', 'subevent'):
-                if p.addon_to_id is not None:
-                    continue
 
                 if p.item_id not in items and not any(a.item_id in items for a in p.addons.all()):
                     continue
@@ -106,6 +104,10 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
 
                 if p.attendee_email == o.email and send_to_order:
                     continue
+                # the amount of mails could be further restricted if we filter out those where the addon-attendee-email
+                # is the same as the main-product-attendee-email, however, that bears many issues, e.g. if one of
+                # those mail-addresses was only a placeholder or if restrictions are set and the main-product is
+                # excluded -- for now it seems best not to filter them at this point in time
 
                 if subevent and p.subevent_id != subevent:
                     continue
