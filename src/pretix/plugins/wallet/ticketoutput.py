@@ -27,6 +27,8 @@ from pretix.base.settings import SettingsSandbox
 from django.template.loader import render_to_string
 
 from .styles import AVAILABLE_STYLES_DICT
+from .styles.apple import ApplePlatform
+from .styles.google import GooglePlatform
 
 from .models import WalletLayout
 from .views import get_layout_variables
@@ -65,12 +67,14 @@ class GoogleWalletTicketOutput(WalletOutput):
     identifier = "wallet_google"
     verbose_name = _("Google")
     download_button_text = "Add to Google Wallet"
+    platform = GooglePlatform
 
 
 class AppleWalletTicketOutput(WalletOutput):
     identifier = "wallet_apple"
     verbose_name = _("Apple")
     download_button_text = "Add to Apple Wallet"
+    platform = ApplePlatform
 
     def generate(self, op):
         order = op.order
@@ -87,6 +91,7 @@ class AppleWalletTicketOutput(WalletOutput):
         #     )
         # )
         layout = WalletLayout.objects.get(pk=1)
+        platform_layout = layout.platform_layouts.get(platform=self.platform.identifier)
 
         ticket = str(op.item.name)
         if op.variation:
@@ -121,9 +126,9 @@ class AppleWalletTicketOutput(WalletOutput):
             "serialNumber": serialNumber,
             "locales": event.settings.locales
         }
-        assert layout.platform == "apple"
-        data = AVAILABLE_STYLES_DICT[layout.platform][layout.style].generate(
-            layout.layout, context
+
+        data = AVAILABLE_STYLES_DICT[self.platform.identifier][platform_layout.style].generate(
+            platform_layout.layout, context
         )
         return filename, "application/vnd.apple.pkpass", data
 
