@@ -21,7 +21,7 @@ const selection = computed({
     get() {
         if (entry.value.type === 'placeholder') {
             return entry.value.content
-        } else if (entry.value.type === 'text') {
+        } else if (entry.value.type === 'custom') {
             return "other"
         } else {
             throw new Error(`Unknown entry type "${entry.value.type}"`);
@@ -29,7 +29,7 @@ const selection = computed({
     },
     set(newValue) { 
         if (newValue == "other") {
-            entry.value.type = "text"
+            entry.value.type = "custom"
             entry.value.content = {};
         } else {
             entry.value.type = "placeholder"
@@ -42,7 +42,7 @@ const textContent = computed({
     get() {
         if (entry.value.type === 'placeholder') {
             return ""
-        } else if (entry.value.type === 'text') {
+        } else if (entry.value.type === 'custom') {
             return entry.value.content
         } else {
             throw new Error(`Unknown entry type "${entry.value.type}"`);
