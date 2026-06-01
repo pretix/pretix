@@ -111,10 +111,10 @@ class SignedZipFile:
 class AppleWalletStyle(PassStyle):
     platform = ApplePlatform
 
-    def pass_content(self, layout, context, strings):
+    def pass_content(self, fields, strings):
         raise NotImplementedError()
 
-    def generate_pass_json(self, layout, context, strings):
+    def generate_pass_json(self, fields, context, strings):
         def add_from_context(key):
             value = context.get(key)
             if not value:
@@ -128,7 +128,7 @@ class AppleWalletStyle(PassStyle):
             "passTypeIdentifier": add_from_context("passTypeIdentifier"),
             "teamIdentifier": add_from_context("teamIdentifier"),
             "serialNumber": add_from_context("serialNumber"),
-            **self.pass_content(layout, context, strings),
+            **self.pass_content(fields, strings),
         }
         return pass_json
 
@@ -136,6 +136,9 @@ class AppleWalletStyle(PassStyle):
         for key in ["ca_certificate", "certificate", "key", "password", "locales"]:
             if key not in context:
                 raise ValueError(f"{key} missing from context")
+
+        fields = self.get_pass_fields(layout, context)
+
         pkpass = SignedZipFile(
             context["ca_certificate"],
             context["certificate"],
@@ -144,12 +147,23 @@ class AppleWalletStyle(PassStyle):
         )
         strings = StringResource(locales=context['locales'])
 
-        pass_json = self.generate_pass_json(layout, context, strings)
+        pass_json = self.generate_pass_json(fields, context, strings)
         print(pass_json)
-        pkpass.add_file(
-                "icon.png", open(finders.find("pretix_passbook/icon.png"), "rb").read()
-            )
+        if fields['logo']:
+            logo = fields['logo'][0]['value']
+        else:
+            logo = open(finders.find("pretix_passbook/logo.png"), "rb")
 
+        if fields['icon']:
+            icon = fields['icon'][0]['value']
+        else:
+            icon = open(finders.find("pretix_passbook/icon.png"), "rb")
+
+        pkpass.add_file("icon.png", icon.read())
+        pkpass.add_file("logo.png", logo.read())
+
+        for lang, content in strings.generate().items():
+            pkpass.add_file(f"{lang}.lproj/pass.strings", content)
         pkpass.add_file("pass.json", json.dumps(pass_json))
         return pkpass.finish()
 
@@ -158,6 +172,18 @@ class AppleWalletEventTicket(AppleWalletStyle):
     identifier = "event_1"
     name = _("Event Ticket Layout 1")
     fieldgroups = [
+        ImageFieldGroup(
+            identifier="icon",
+            name=_("Icon"),
+            min_entries=0,
+            max_entries=1,
+            labels=False,
+            default_entries=[
+                PlaceholderFieldEntry(
+                    content="poweredby",
+                )
+            ],
+        ),
         ImageFieldGroup(
             identifier="logo",
             name=_("Logo"),
@@ -194,47 +220,6 @@ class AppleWalletEventTicket(AppleWalletStyle):
     ]
     # preview_image = "apple/event_ticket.svg"
 
-    def get_pass_fields(self, layout, context):
-        fields = {}
-        for group in self.fieldgroups:
-            if isinstance(group, PredefinedFieldGroup):
-                pass
-            elif isinstance(group, PlaceholderFieldGroup):
-                group_fields = []
-                if group.identifier in layout["fieldgroups"]:
-                    for field in layout["fieldgroups"][group.identifier]["entries"]:
-                        field_entry = {}
-                        if group.labels:
-                            field_entry["label"] = LazyI18nString(field["label"])
-                        if field["type"] == FieldEntryType.PLACEHOLDER.value:
-                            placeholder = (
-                                context.get("placeholders")
-                                .get(group.content_type.value, {})
-                                .get(field["content"])
-                            )
-                            if placeholder:
-                                placeholder_value = placeholder["evaluate"](
-                                    *context.get("evaluation_context", [])
-                                )
-                                if placeholder_value:
-                                    field_entry["value"] = placeholder_value
-                        elif field["type"] == FieldEntryType.TEXT.value:
-                            placeholder_value = LazyI18nString(field["content"])
-                        elif field["type"] == FieldEntryType.IMAGE.value:
-                            raise NotImplementedError(
-                                "Image placeholders not implemented"
-                            )
-                        if "value" in field_entry and field_entry["value"]:
-                            group_fields.append(field_entry)
-                if group.min_entries and len(group_fields) < group.min_entries:
-                    raise ValueError(
-                        f"Group {group.identifier} needs at least {group.min_entries} entries, but only {len(group_fields)} were provided"
-                    )
-                fields[group.identifier] = group_fields[: group.max_entries]
-            else:
-                raise ValueError("Unknown field group")
-        return fields
-
     def convert_fields(self, strings, fields, prefix):
         converted = []
         for i,f in enumerate(fields):
@@ -243,13 +228,18 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 strings.add_entry(f"{prefix}-{i}-label", converted_field['label'])
                 converted_field['label'] = f"{prefix}-{i}-label"
 
+            if isinstance(converted_field['value'], LazyI18nString):
+                strings.add_entry(f"{prefix}-{i}-value", converted_field['value'])
+                converted_field['value'] = f"{prefix}-{i}-value"
             converted.append(converted_field)
         return converted
 
-    def pass_content(self, layout, context, strings):
-        fields = self.get_pass_fields(layout, context)
+    def pass_content(self, fields, strings):
         return {
             "eventTicket": {
-                "primaryFields": self.convert_fields(strings, fields['primary'], 'primary')
+                "primaryFields": self.convert_fields(strings, fields['primary'], 'primary'),
+                "secondaryFields": self.convert_fields(strings, fields['secondary'], 'secondary'),
+                "auxillaryFields": self.convert_fields(strings, fields['auxillary'], 'auxillary'),
+                "backFields": self.convert_fields(strings, fields['back'], 'back'),
             }
         }
