@@ -457,7 +457,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
                     source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False,
-                    media_type=None, media_identifier=None, media_policy=None, media_action=None):
+                    media_type=None, media_identifier=None, media_action=None):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -805,13 +805,12 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         locale = op.order.event.settings.locale
     with language(locale):
         try:
-            if all(k is not None for k in [media_type, media_identifier, media_policy, media_action]) and not media:
+            if all(k is not None for k in [media_type, media_identifier, media_action]) and not media:
                 with transaction.atomic():
                     media = perform_media_exchange(
                         organizer=request.organizer,
                         media_type=media_type,
                         media_identifier=media_identifier,
-                        media_policy=media_policy,
                         media_action=media_action,
                         op=op,
                     )
@@ -1079,7 +1078,6 @@ class CheckinRPCRedeemView(views.APIView):
             legacy_url_support=False,
             media_type=s.validated_data.get('media_type'),
             media_identifier=s.validated_data.get('media_identifier'),
-            media_policy=s.validated_data.get('media_policy'),
             media_action=s.validated_data.get('media_action'),
         )
 

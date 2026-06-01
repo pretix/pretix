@@ -72,8 +72,9 @@ def get_keysets_for_organizer(organizer):
     return sets
 
 
-def perform_media_exchange(organizer, media_type, media_identifier, media_policy, media_action, op):
+def perform_media_exchange(organizer, media_type, media_identifier, media_action, op):
     medium = None
+    media_policy = op.item.media_policy
 
     if media_policy in [Item.MEDIA_POLICY_REUSE, Item.MEDIA_POLICY_REUSE_OR_NEW]:
         try:

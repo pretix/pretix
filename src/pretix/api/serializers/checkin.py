@@ -90,7 +90,6 @@ class CheckinRPCRedeemInputSerializer(serializers.Serializer):
     answers = serializers.JSONField(required=False, allow_null=True)
     media_type = serializers.ChoiceField(required=False, choices=MEDIA_TYPES)
     media_identifier = serializers.CharField(required=False)
-    media_policy = serializers.ChoiceField(required=False, choices=Item.MEDIA_POLICIES)
     media_action = serializers.ChoiceField(required=False, choices=[
         ('append', 'append'),
         ('replace', 'replace'),
