@@ -12,12 +12,14 @@ from django.conf import settings
 from .models import WalletLayout
 from .styles import AVAILABLE_STYLES, AVAILABLE_PLATFORMS
 
+from django.contrib.staticfiles import finders
 
 def get_layout_variables(event):
     return {
         "text": get_variables(event),
         "image": get_images(event)
-        | {"poweredby": {"label": _("pretix-Logo")}},  # TODO: image upload
+        | {"poweredby": {"label": _("pretix-Logo"), "evaluate": lambda *_: open(finders.find("pretix_passbook/logo.png"), "rb")},
+           "poweredby_icon": {"label": _("pretix-Icon"), "evaluate": lambda *_: open(finders.find("pretix_passbook/icon.png"), "rb")}},  # TODO: image upload
     }
 
 
