@@ -87,7 +87,7 @@ const missingItems = computed(() => {
 
 		//- Tab panes
 		.tab-content
-			#rules-edit.tab-pane.active(v-if="items", role="tabpanel")
+			#rules-edit.tab-pane.active(v-if="allItems", role="tabpanel")
 				RulesEditor
 			#rules-viz.tab-pane(role="tabpanel")
 				RulesVisualization
