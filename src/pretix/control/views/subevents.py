@@ -528,8 +528,9 @@ class SubEventDetail(EventPermissionRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         oqs = self.request.event.orders.filter(
             Exists(
-                OrderPosition.all.filter(
+                OrderPosition.objects.filter(
                     subevent=self.object,
+                    order_id=OuterRef("id"),
                 )
             )
         ).annotate(
