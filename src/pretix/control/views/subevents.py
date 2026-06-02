@@ -51,6 +51,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.formats import get_format
 from django.utils.functional import cached_property
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
@@ -636,15 +637,23 @@ class SubEventUpdate(EventPermissionRequiredMixin, SubEventEditorMixin, UpdateVi
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self) -> str:
-        return reverse('control:event.subevents', kwargs={
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
+            return self.request.GET.get("next")
+        return reverse('control:event.subevent', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
-        }) + ('?' + self.request.GET.get('returnto') if 'returnto' in self.request.GET else '')
+            'subevent': self.object.pk,
+        })
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            next_url=self.get_success_url()
+        )
 
 
 class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateView):
