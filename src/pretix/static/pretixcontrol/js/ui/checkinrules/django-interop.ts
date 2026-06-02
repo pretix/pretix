@@ -31,8 +31,8 @@ export const allItems = ref<any[]>([])
 
 const itemsEl = document.querySelector('#items')
 if (itemsEl?.textContent) {
-	allItems.value = JSON.parse(itemsEl.textContent || '[]');
-	activeItems.value = allItems.value.filter(item => item.active);
+	allItems.value = JSON.parse(itemsEl.textContent || '[]')
+	activeItems.value = allItems.value.filter(item => item.active)
 
 	function checkForInvalidIds (validProducts: Record<string, string>, validVariations: Record<string, string>, rule: any) {
 		if (rule['and']) {
