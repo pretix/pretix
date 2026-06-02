@@ -84,7 +84,9 @@ class LoginForm(forms.Form):
 
     def clean(self):
         if all(k in self.cleaned_data for k, f in self.fields.items() if f.required):
-            if rate_limit("login", include_ip_from_request=self.request, max_num=10, expire_time=300):
+            rate_limit_kwargs = dict(include_ip_from_request=self.request, max_num=10, expire_time=300)
+            if rate_limit("login", **rate_limit_kwargs, increase=False):
+                # Check rate limit without counting up, we increase below only on failed logins
                 pretix_failed_logins.inc(1, reason="ratelimit")
                 logger.info("Backend login rejected due to rate limit.")
                 raise forms.ValidationError(self.error_messages['rate_limit'], code='rate_limit')
@@ -92,6 +94,8 @@ class LoginForm(forms.Form):
             if self.user_cache is None:
                 logger.info("Backend login invalid.")
                 pretix_failed_logins.inc(1, reason="invalid")
+                # Count towards rate limit (result is ignored, we are checking above)
+                rate_limit("login", **rate_limit_kwargs)
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],
                     code='invalid_login'

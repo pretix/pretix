@@ -177,10 +177,19 @@ class UserEmailChangeForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
+        self.request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
 
     def clean_new_email(self):
         email = self.cleaned_data['new_email']
+
+        if rate_limit("emailchange_attempt", include_ip_from_request=self.request, max_num=5, expire_time=300):
+            # Rate limit lookup for conflicting email addresses to make enumeration harder
+            raise forms.ValidationError(
+                self.error_messages['rate_limit'],
+                code='rate_limit',
+            )
+
         if User.objects.filter(Q(email__iexact=email) & ~Q(pk=self.user.pk)).exists():
             raise forms.ValidationError(
                 self.error_messages['duplicate_identifier'],

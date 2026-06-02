@@ -50,16 +50,18 @@ def _get_ip(request):
     return str(client_ip)
 
 
-def rate_limit(key: str, *parameters, include_ip_from_request: HttpRequest=None, max_num: int, expire_time: int):
+def rate_limit(key: str, *parameters, include_ip_from_request: HttpRequest=None, max_num: int, expire_time: int, increase: bool = True):
     """
     This is a shared utility to implement simple rate limiting in operations like
-    password resets. This is by far no perfect implementation of rate limiting, as
-    it the window is prolonge
+    password resets.
 
-    :param key: The key refering to the feature like "pwreset"
+    :param key: The key referring to the feature like "pwreset"
     :param parameters: Any number of things to be hashed as the bucket key
+    :param include_ip_from_request: Add IP address from request to the bucket key. If IP address cannot be determined,
+                                    rate limit is not applied.
     :param max_num: The maximum number of actions to performed within expire_time of the first action
     :param expire_time: The length of the time window in seconds
+    :param increase: Whether to count the call as an event counted towards the rate, or just check
     :return:
     """
     if not settings.HAS_REDIS:
@@ -77,10 +79,14 @@ def rate_limit(key: str, *parameters, include_ip_from_request: HttpRequest=None,
         parameters = (*parameters, ip)
 
     redis_key = _get_key(key, parameters)
-    p = rc.pipeline()
-    p.set(redis_key, 0, nx=True, ex=expire_time)  # Start a rate limit window if none is running
-    p.incr(redis_key)
-    new_counter = p.execute()[1]
+
+    if increase:
+        p = rc.pipeline()
+        p.set(redis_key, 0, nx=True, ex=expire_time)  # Start a rate limit window if none is running
+        p.incr(redis_key)
+        new_counter = p.execute()[1]
+    else:
+        new_counter = int(rc.get(redis_key) or 0)
 
     if new_counter > max_num:
         return True

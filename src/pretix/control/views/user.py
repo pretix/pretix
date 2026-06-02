@@ -880,6 +880,7 @@ class UserEmailChangeView(RecentAuthenticationRequiredMixin, FormView):
 
         return {
             **super().get_form_kwargs(),
+            "request": self.request,
             "user": self.request.user,
         }
 
