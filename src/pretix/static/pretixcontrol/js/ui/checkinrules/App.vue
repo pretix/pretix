@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { rules as rawRules, active_items, allProducts, limitProducts } from './django-interop'
+import { rules as rawRules, allItems, activeItems, allProducts, limitProducts } from './django-interop'
 import { convertToDNF } from './jsonlogic-boolalg'
 
 import RulesEditor from './checkin-rules-editor.vue'
@@ -53,7 +53,7 @@ const missingItems = computed(() => {
 	}
 
 	let missing = []
-	for (const item of active_items.value) {
+	for (const item of activeItems.value) {
 		if (productsSeen[item.id]) continue
 		if (!allProducts.value && !limitProducts.value.includes(item.id)) continue
 		if (item.variations.length > 0) {

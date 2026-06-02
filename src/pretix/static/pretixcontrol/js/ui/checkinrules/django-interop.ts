@@ -26,13 +26,13 @@ watch(rules, (newVal) => {
 	rulesInput.value = JSON.stringify(newVal)
 }, { deep: true })
 
-export const active_items = ref<any[]>([])
-export const all_items = ref<any[]>([])
+export const activeItems = ref<any[]>([])
+export const allItems = ref<any[]>([])
 
 const itemsEl = document.querySelector('#items')
 if (itemsEl?.textContent) {
-	all_items.value = JSON.parse(itemsEl.textContent || '[]');
-	active_items.value = all_items.value.filter(item => item.active);
+	allItems.value = JSON.parse(itemsEl.textContent || '[]');
+	activeItems.value = allItems.value.filter(item => item.active);
 
 	function checkForInvalidIds (validProducts: Record<string, string>, validVariations: Record<string, string>, rule: any) {
 		if (rule['and']) {
@@ -59,8 +59,8 @@ if (itemsEl?.textContent) {
 	}
 
 	checkForInvalidIds(
-		Object.fromEntries(all_items.value.map(p => [p.id, p.name])),
-		Object.fromEntries(all_items.value.flatMap(p => p.variations?.map(v => [v.id, p.name + ' – ' + v.name]) ?? [])),
+		Object.fromEntries(allItems.value.map(p => [p.id, p.name])),
+		Object.fromEntries(allItems.value.flatMap(p => p.variations?.map(v => [v.id, p.name + ' – ' + v.name]) ?? [])),
 		rules.value
 	)
 }
