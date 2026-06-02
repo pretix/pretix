@@ -10,7 +10,7 @@
 {% block title %}{% trans "Wallet layouts" %}{% endblock %}
 
 {% block content %}
-    <h1>{% trans "Edit layout" %} {{ object.name }} </h1>
+    <h1>{% trans "Edit layout" %}</h1>
     {{ platforms|json_script:"platforms" }}
     {{ variables|json_script:"variables" }}
     {{ locales|json_script:"locales" }}
