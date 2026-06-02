@@ -70,36 +70,39 @@ reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
 }))
 
 
+def font_supports_text(text, font_name):
+    if not text:
+        return True
+    font = pdfmetrics.getFont(font_name)
+    return all(
+        ord(c) in font.face.charToGlyph or not c.isprintable()
+        for c in text
+    )
+
+
+def find_font_supporting_text(fonts, text, preferred_font):
+    if font_supports_text(text, preferred_font):
+        return preferred_font
+    for family, styles in fonts.items():
+        if font_supports_text(text, family):
+            if (preferred_font.endswith("It") or preferred_font.endswith(" I")) and "italic" in styles:
+                return family + " I"
+            if (preferred_font.endswith("Bd") or preferred_font.endswith(" B")) and "bold" in styles:
+                return family + " B"
+            return family
+    return preferred_font
+
+
 class FontFallbackParagraph(Paragraph):
     def __init__(self, text, style=None, *args, **kwargs):
         if style is None:
             style = ParagraphStyle(name='paragraphImplicitDefaultStyle')
 
-        if not self._font_supports_text(text, style.fontName):
-            newFont = self._find_font(text, style.fontName)
-            if newFont:
-                logger.debug(f"replacing {style.fontName} with {newFont} for {text!r}")
-                style = style.clone(name=style.name + '_' + newFont, fontName=newFont)
-
+        supporting_font = find_font_supporting_text(get_fonts(pdf_support_required=True), text, style.fontName)
+        if supporting_font != style.fontName:
+            logger.debug(f"replacing {style.fontName} with {supporting_font} for {text!r}")
+            style = style.clone(name=style.name + '_' + supporting_font, fontName=supporting_font)
         super().__init__(text, style, *args, **kwargs)
-
-    def _font_supports_text(self, text, font_name):
-        if not text:
-            return True
-        font = pdfmetrics.getFont(font_name)
-        return all(
-            ord(c) in font.face.charToGlyph or not c.isprintable()
-            for c in text
-        )
-
-    def _find_font(self, text, original_font):
-        for family, styles in get_fonts(pdf_support_required=True).items():
-            if self._font_supports_text(text, family):
-                if (original_font.endswith("It") or original_font.endswith(" I")) and "italic" in styles:
-                    return family + " I"
-                if (original_font.endswith("Bd") or original_font.endswith(" B")) and "bold" in styles:
-                    return family + " B"
-                return family
 
 
 def register_ttf_font_if_new(name, path):

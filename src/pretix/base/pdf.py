@@ -83,7 +83,8 @@ from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.helpers.daterange import datetimerange
 from pretix.helpers.reportlab import (
-    ThumbnailingImageReader, register_ttf_font_if_new, reshaper,
+    ThumbnailingImageReader, find_font_supporting_text,
+    register_ttf_font_if_new, reshaper,
 )
 from pretix.presale.style import get_fonts
 
@@ -805,7 +806,10 @@ class Renderer:
         else:
             self.bg_bytes = None
             self.bg_pdf = None
-        self.event_fonts = list(get_fonts(event, pdf_support_required=True).keys()) + ['Open Sans']
+
+        event_fonts = get_fonts(event, pdf_support_required=True) | {'Open Sans': {"bold", "italic", "bolditalic"}}
+        # sorted by font name to match ordering of libpretixprint
+        self.event_fonts = dict(sorted(event_fonts.items(), key=lambda x: x[0]))
 
     @classmethod
     def _register_fonts(cls, event: Event = None):
@@ -1004,7 +1008,25 @@ class Renderer:
             )
             canvas.restoreState()
 
-    def _text_paragraph(self, op: OrderPosition, order: Order, o: dict, legacy_lineheight=False, override_fontsize=None):
+    def _prepare_text_paragraph_text(self, op: OrderPosition, order: Order, o: dict):
+        # add an almost-invisible space &hairsp; after hyphens as word-wrap in ReportLab only works on space chars
+        text = conditional_escape(
+            self._get_text_content(op, order, o) or "",
+        ).replace("\n", "<br/>\n").replace("-", "-&hairsp;")
+
+        # reportlab does not support unicode combination characters
+        # It's important we do this before we use ArabicReshaper
+        text = unicodedata.normalize("NFC", text)
+
+        # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
+        # to resolve all ligatures and python-bidi to switch RTL texts.
+        try:
+            text = "<br/>".join(get_display(reshaper.reshape(l)) for l in text.split("<br/>"))
+        except:
+            logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
+        return text
+
+    def _get_text_paragraph_font(self, o: dict, text: str):
         font = o['fontfamily']
 
         # Since pdfmetrics.registerFont is global, we want to make sure that no one tries to sneak in a font, they
@@ -1017,6 +1039,14 @@ class Renderer:
             font += ' B'
         if o['italic']:
             font += ' I'
+
+        font = find_font_supporting_text(self.event_fonts, text, font)
+
+        return font
+
+    def _text_paragraph(self, op: OrderPosition, order: Order, o: dict, legacy_lineheight=False, override_fontsize=None):
+        text = self._prepare_text_paragraph_text(op, order, o)
+        font = self._get_text_paragraph_font(o, text)
 
         fontsize = override_fontsize if override_fontsize is not None else float(o['fontsize'])
         try:
@@ -1046,21 +1076,6 @@ class Renderer:
             alignment=align_map[o['align']],
             splitLongWords=o.get('splitlongwords', True),
         )
-        # add an almost-invisible space &hairsp; after hyphens as word-wrap in ReportLab only works on space chars
-        text = conditional_escape(
-            self._get_text_content(op, order, o) or "",
-        ).replace("\n", "<br/>\n").replace("-", "-&hairsp;")
-
-        # reportlab does not support unicode combination characters
-        # It's important we do this before we use ArabicReshaper
-        text = unicodedata.normalize("NFC", text)
-
-        # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
-        # to resolve all ligatures and python-bidi to switch RTL texts.
-        try:
-            text = "<br/>".join(get_display(reshaper.reshape(l)) for l in text.split("<br/>"))
-        except:
-            logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
 
         p = Paragraph(text, style=style)
         return p, ad, lineheight
