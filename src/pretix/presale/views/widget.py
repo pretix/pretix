@@ -128,6 +128,9 @@ def _use_vite(request):
     origin = request.META.get('HTTP_ORIGIN', '')
     gs = GlobalSettingsObject()
     vite_origins = gs.settings.get('widget_vite_origins', as_type=str, default='')
+    if vite_origins and not origin:
+        referer = request.META.get('HTTP_REFERER', '')
+        origin = '/'.join(referer.split('/', 3)[:3])
     if origin and vite_origins:
         origins_list = [o.strip() for o in vite_origins.strip().splitlines() if o.strip()]
         return origin in origins_list
