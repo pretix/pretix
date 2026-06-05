@@ -194,7 +194,7 @@
                         </table>
                 </fieldset>
             {% endif %}
-            {% eventsignal request.event "pretix.control.signals.subevent_detail_html" quota=quota %}
+            {% eventsignal request.event "pretix.control.signals.subevent_detail_html" subevent=subevent %}
         </div>
         {% if "event.orders:read" in request.eventpermset %}
             <div class="col-md-5 col-xs-12">
