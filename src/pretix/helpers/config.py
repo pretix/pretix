@@ -40,44 +40,32 @@ class EnvOrParserConfig:
 
     def get(self, section, option, *, raw=False, vars=None, fallback=_UNSET):
         if self._file_envkey(section, option) in os.environ:
-            try:
-                with open(os.environ[self._file_envkey(section, option)], "r") as f:
-                    return f.read().strip()
-            except Exception:
-                pass  # If the file cannot be read, we fall back to the normal config value
+            with open(os.environ[self._file_envkey(section, option)], "r") as f:
+                return f.read().strip()
         if self._envkey(section, option) in os.environ:
             return os.environ[self._envkey(section, option)]
         return self.cp.get(section, option, raw=raw, vars=vars, fallback=fallback)
 
     def getint(self, section, option, *, raw=False, vars=None, fallback=_UNSET):
         if self._file_envkey(section, option) in os.environ:
-            try:
-                with open(os.environ[self._file_envkey(section, option)], "r") as f:
-                    return int(f.read().strip())
-            except Exception:
-                pass  # If the file cannot be read, we fall back to the normal config value
+            with open(os.environ[self._file_envkey(section, option)], "r") as f:
+                return int(f.read().strip())
         if self._envkey(section, option) in os.environ:
             return int(os.environ[self._envkey(section, option)])
         return self.cp.getint(section, option, raw=raw, vars=vars, fallback=fallback)
 
     def getfloat(self, section, option, *, raw=False, vars=None, fallback=_UNSET):
         if self._file_envkey(section, option) in os.environ:
-            try:
-                with open(os.environ[self._file_envkey(section, option)], "r") as f:
-                    return float(f.read().strip())
-            except Exception:
-                pass  # If the file cannot be read, we fall back to the normal config value
+            with open(os.environ[self._file_envkey(section, option)], "r") as f:
+                return float(f.read().strip())
         if self._envkey(section, option) in os.environ:
             return float(os.environ[self._envkey(section, option)])
         return self.cp.getfloat(section, option, raw=raw, vars=vars, fallback=fallback)
 
     def getboolean(self, section, option, *, raw=False, vars=None, fallback=_UNSET):
         if self._file_envkey(section, option) in os.environ:
-            try:
-                with open(os.environ[self._file_envkey(section, option)], "r") as f:
-                    return self.cp._convert_to_boolean(f.read().strip())
-            except Exception:
-                pass  # If the file cannot be read, we fall back to the normal config value
+            with open(os.environ[self._file_envkey(section, option)], "r") as f:
+                return self.cp._convert_to_boolean(f.read().strip())
         if self._envkey(section, option) in os.environ:
             return self.cp._convert_to_boolean(
                 os.environ[self._envkey(section, option)]
