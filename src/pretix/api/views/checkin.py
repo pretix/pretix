@@ -457,7 +457,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
                     source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False,
-                    media_type=None, media_identifier=None, media_action=None):
+                    exchange_medium_type=None, exchange_medium_identifier=None, exchange_link_action=None):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -526,7 +526,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     #    with respecting the force option), or it's a reusable medium (-> proceed with that)
     if not op_candidates:
         try:
-            media = ReusableMedium.objects.active().filter(
+            medium = ReusableMedium.objects.active().filter(
                 Exists(ReusableMedium.linked_orderpositions.through.objects.filter(reusablemedium_id=OuterRef('pk')))
             ).get(
                 organizer_id=checkinlists[0].event.organizer_id,
@@ -634,7 +634,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
                 }, status=400)
         else:
-            linked_ops = media.linked_orderpositions.all().select_related("order").prefetch_related("addons")
+            linked_ops = medium.linked_orderpositions.all().select_related("order").prefetch_related("addons")
             linked_event_ids = {op.order.event_id for op in linked_ops}
             if not any(event_id in list_by_event for event_id in linked_event_ids):
                 # Medium exists but connected ticket is for the wrong event
@@ -665,7 +665,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             op_candidates = []
             for op in linked_ops:
                 if op.order.event_id in list_by_event:
-                    reusable_medium_used = media
+                    reusable_medium_used = medium
                     op_candidates.append(op)
                     if list_by_event[op.order.event_id].addon_match:
                         op_candidates += list(op.addons.all())
@@ -805,58 +805,56 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         locale = op.order.event.settings.locale
     with language(locale):
         try:
-            if all(k is not None for k in [media_type, media_identifier, media_action]) and not media:
-                with transaction.atomic():
-                    media = perform_media_exchange(
-                        organizer=request.organizer,
-                        media_type=media_type,
-                        media_identifier=media_identifier,
-                        media_action=media_action,
-                        op=op,
-                    )
-                    source_type = media.media_type.identifier
+            exchange_requested = any(k is not None for k in [exchange_medium_type, exchange_medium_identifier, exchange_link_action])
 
-                    perform_checkin(
-                        op=op,
-                        clist=list_by_event[op.order.event_id],
-                        given_answers=given_answers,
-                        force=force,
-                        ignore_unpaid=ignore_unpaid,
-                        nonce=nonce,
-                        datetime=datetime,
-                        questions_supported=questions_supported,
-                        canceled_supported=canceled_supported,
+            if exchange_requested:
+                if any(k is None for k in [exchange_medium_type, exchange_medium_identifier, exchange_link_action]):
+                    raise ValidationError("If you set any of exchange_medium_type, exchange_medium_identifier, or "
+                                          "èxchange_link_action, you need to set all of them.")
+                if medium:
+                    # Cannot scan a medium and then request to exchange it
+                    raise ReusableMedium.DuplicateEntry()
+
+            checkin_args = dict(
+                op=op,
+                clist=list_by_event[op.order.event_id],
+                given_answers=given_answers,
+                force=force,
+                ignore_unpaid=ignore_unpaid,
+                nonce=nonce,
+                datetime=datetime,
+                questions_supported=questions_supported,
+                canceled_supported=canceled_supported,
+                user=user,
+                auth=auth,
+                type=checkin_type,
+                raw_barcode=raw_barcode_for_checkin,
+                raw_source_type=source_type,
+                from_revoked_secret=from_revoked_secret,
+                simulate=simulate,
+                gate=gate,
+                reusable_medium=medium,
+            )
+
+            if exchange_requested:
+                with transaction.atomic():
+                    # Do exchange and check-in atomically, i.e. both succeed or both fail
+                    medium = perform_media_exchange(
+                        organizer=request.organizer,
+                        media_type=exchange_medium_type,
+                        identifier=exchange_medium_identifier,
+                        link_action=exchange_link_action,
+                        link_orderposition=op,
                         user=user,
                         auth=auth,
-                        type=checkin_type,
-                        raw_barcode=raw_barcode_for_checkin,
-                        raw_source_type=source_type,
-                        from_revoked_secret=from_revoked_secret,
-                        simulate=simulate,
-                        gate=gate,
+                    )
+                    source_type = media.media_type.identifier
+                    checkin_args['medium'] = medium
+                    perform_checkin(
                         reusable_media=media,
                     )
             else:
-                perform_checkin(
-                    op=op,
-                    clist=list_by_event[op.order.event_id],
-                    given_answers=given_answers,
-                    force=force,
-                    ignore_unpaid=ignore_unpaid,
-                    nonce=nonce,
-                    datetime=datetime,
-                    questions_supported=questions_supported,
-                    canceled_supported=canceled_supported,
-                    user=user,
-                    auth=auth,
-                    type=checkin_type,
-                    raw_barcode=raw_barcode_for_checkin,
-                    raw_source_type=source_type,
-                    from_revoked_secret=from_revoked_secret,
-                    simulate=simulate,
-                    gate=gate,
-                    reusable_media=media,
-                )
+                perform_checkin(**checkin_args)
         except RequiredQuestionsError as e:
             return Response({
                 'status': 'incomplete',
@@ -879,11 +877,21 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
                 'reason_explanation': e.msg,
             }, status=400)
+        except ReusableMedium.DoesNotExist:
+            return Response({
+                'status': 'error',
+                'reason': Checkin.REASON_MEDIUM_INVALID,
+                'reason_explanation': 'Reusable medium identifier not found',
+                'require_attention': op.require_checkin_attention,
+                'checkin_texts': op.checkin_texts,
+                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
+                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
+            }, status=400)
         except ReusableMedium.DuplicateEntry:
             return Response({
                 'status': 'error',
-                'reason': Checkin.REASON_AMBIGUOUS,
-                'reason_explanation': 'Reusable medium identifier is ambigous',
+                'reason': Checkin.REASON_MEDIUM_EXISTS,
+                'reason_explanation': 'Reusable medium identifier already exists',
                 'require_attention': op.require_checkin_attention,
                 'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
@@ -1076,9 +1084,9 @@ class CheckinRPCRedeemView(views.APIView):
             canceled_supported=True,
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=False,
-            media_type=s.validated_data.get('media_type'),
-            media_identifier=s.validated_data.get('media_identifier'),
-            media_action=s.validated_data.get('media_action'),
+            exchange_medium_type=s.validated_data.get('exchange_medium_type'),
+            exchange_medium_identifier=s.validated_data.get('exchange_medium_identifier'),
+            exchange_link_action=s.validated_data.get('exchange_link_action'),
         )
 
 

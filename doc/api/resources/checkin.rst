@@ -46,12 +46,15 @@ Checking a ticket in
                         this request twice with the same nonce, the second request will also succeed but will always
                         create only one check-in object even when the previous request was successful as well. This
                         allows for a certain level of idempotency and enables you to re-try after a connection failure.
+   :<json string exchange_medium_type: To perform an exchange to a reusable medium, pass the type of the new reusable medium
+   :<json string exchange_medium_identifier: To perform an exchange to a reusable media, pass the identifier of the new medium
+   :<json string exchange_link_action: To perform an exchange to a reusable media, pass `"append"` or `"replace"` depending on whether any previous ticket links of the medium should be kept
    :<json boolean use_order_locale: Specifies that pretix should use the customer's language (``locale`` field from the
                                     order) when building texts (currently only the ``reason_explanation`` response field).
                                     Defaults to ``false`` in which case the server will determine the language (currently
                                     the event default language, might change in the future with support for the
                                     ``Accept-Language`` header).
-   :>json string status: ``"ok"``, ``"incomplete"``, or ``"error"``
+   :>json string status: ``"ok"``, ``"incomplete"``, ``"exchange"``, or ``"error"``
    :>json string reason: Reason code, only set on status ``"error"``, see below for possible values.
    :>json string reason_explanation: Human-readable explanation, only set on status ``"error"`` and reason ``"rules"``, can be null.
    :>json object position: Copy of the matching order position (if any was found). The contents are the same as the
@@ -67,6 +70,8 @@ Checking a ticket in
    :>json object list: Excerpt of information about the matching :ref:`check-in list <rest-checkinlists>` (if any was found),
                        including the attributes ``id``, ``name``, ``event``, ``subevent``, and ``include_pending``.
    :>json object questions: List of questions to be answered for check-in, only set on status ``"incomplete"``.
+   :>json object media_policy: Reusable media policy (see documentation on items), only set on status ``"exchange"``.
+   :>json object media_type: Reusable media type (see documentation on items), only set on status ``"exchange"``.
 
    **Example request**:
 
@@ -224,6 +229,9 @@ Checking a ticket in
    * ``ambiguous`` - Multiple tickets match scan, rejected.
    * ``revoked`` - Ticket code has been revoked.
    * ``unapproved`` - Order has not yet been approved.
+   * ``already_exchanged`` - Ticket already has been exchanged for a reusable medium that must now be used for check-in.
+   * ``medium_invalid`` - Reusable medium identifier given was not found and could not be automatically created.
+   * ``medium_exists`` - Reusable medium identifier already exists, but expected to be new.
    * ``error`` - Internal error.
 
    In case of reason ``rules`` and ``invalid_time``, there might be an additional response field ``reason_explanation``

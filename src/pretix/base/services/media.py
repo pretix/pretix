@@ -72,35 +72,62 @@ def get_keysets_for_organizer(organizer):
     return sets
 
 
-def perform_media_exchange(organizer, media_type, media_identifier, media_action, op):
+def perform_media_exchange(organizer, media_type, identifier, link_action, link_orderposition, user, auth):
+    """
+    Create or retrieve a medium
+
+    :param organizer: Organizer to operate in
+    :param media_type: Type of medium to operate with
+    :param identifier: Identifier of the medium
+    :param link_action: one of `"append"` or `"replace"`
+    :param link_orderposition: Position to link to the medium
+    :return: ReusableMedium
+    """
     medium = None
-    media_policy = op.item.media_policy
+    media_policy = link_orderposition.item.media_policy
+    if link_action not in ('append', 'replace'):
+        raise ValueError("Invalid link_action")
 
-    if media_policy in [Item.MEDIA_POLICY_REUSE, Item.MEDIA_POLICY_REUSE_OR_NEW]:
-        try:
-            medium = ReusableMedium.objects.get(
-                type=media_type,
-                identifier=media_identifier,
-                organizer=organizer,
+    if media_policy == Item.MEDIA_POLICY_REUSE:
+        # Will and should raise ReusableMedium.DoesNotExist if not found
+        medium = ReusableMedium.objects.get(
+            type=media_type,
+            identifier=identifier,
+            organizer=organizer,
+        )
+
+    elif media_policy == Item.MEDIA_POLICY_REUSE_OR_NEW:
+        medium, created = ReusableMedium.objects.get_or_create(
+            type=media_type,
+            identifier=identifier,
+            organizer=organizer,
+        )
+        if created:
+            medium.log_action(
+                'pretix.reusable_medium.created.auto',
+                user=user,
+                auth=auth,
             )
-        except ReusableMedium.DoesNotExist:
-            pass
 
-    if not medium and media_policy in [Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW]:
+    elif media_policy == Item.MEDIA_POLICY_NEW:
         try:
             medium = ReusableMedium.objects.create(
                 type=media_type,
-                identifier=media_identifier,
+                identifier=identifier,
                 organizer=organizer,
             )
         except IntegrityError:
             raise ReusableMedium.DuplicateEntry()
+        else:
+            medium.log_action(
+                'pretix.reusable_medium.created.auto',
+                user=user,
+                auth=auth,
+            )
 
-    if medium:
-        if media_action == 'append':
-            medium.linked_orderpositions.add(*[op])
-        elif media_action == 'replace':
-            medium.linked_orderpositions.set([op])
-        medium.save()
+    if link_action == 'append':
+        medium.linked_orderpositions.add(link_orderposition)
+    elif link_action == 'replace':
+        medium.linked_orderpositions.set([link_orderposition])
 
     return medium

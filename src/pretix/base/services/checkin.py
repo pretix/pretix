@@ -948,7 +948,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
                     raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False,
-                    gate=None, reusable_media=None):
+                    gate=None, reusable_medium=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -964,6 +964,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     :param datetime: The datetime of the checkin, defaults to now.
     :param simulate: If true, the check-in is not saved.
     :param gate: The gate the check-in was performed at.
+    :param reusable_medium: The medium that is available for an exchange
     """
 
     # !!!!!!!!!
@@ -1112,8 +1113,9 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
 
         required_media_policy = op.item.media_policy
         required_media_type = op.item.media_type
+        require_a_medium = required_media_policy and required_media_type
         linked_media = op.linked_media
-        if not reusable_media and required_media_policy and required_media_type and not force:
+        if require_a_medium and not reusable_medium and not force:
             if not linked_media.exists():
                 raise RequiredMediaExchangeError(
                     _('Ticket needs to be exchanged to a suitable medium.'),

@@ -346,6 +346,8 @@ class Checkin(models.Model):
     REASON_INCOMPLETE = 'incomplete'
     REASON_ALREADY_REDEEMED = 'already_redeemed'
     REASON_AMBIGUOUS = 'ambiguous'
+    REASON_MEDIUM_INVALID = 'medium_invalid'
+    REASON_MEDIUM_EXISTS = 'medium_exists'
     REASON_ERROR = 'error'
     REASON_BLOCKED = 'blocked'
     REASON_UNAPPROVED = 'unapproved'
@@ -368,6 +370,8 @@ class Checkin(models.Model):
         (REASON_INVALID_TIME, _('Ticket not valid at this time')),
         (REASON_ANNULLED, _('Check-in annulled')),
         (REASON_ALREADY_EXCHANGED, _('Ticket already exchanged')),
+        (REASON_MEDIUM_INVALID, _('Reusable medium invalid')),
+        (REASON_MEDIUM_EXISTS, _('Reusable medium already exists')),
     )
 
     successful = models.BooleanField(
