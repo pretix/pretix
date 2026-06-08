@@ -788,7 +788,10 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             if str(q.pk) in answers_data:
                 try:
                     if q.type == Question.TYPE_FILE:
-                        given_answers[q] = _handle_file_upload(answers_data[str(q.pk)], user, auth)
+                        if answers_data[str(q.pk)]:
+                            given_answers[q] = _handle_file_upload(answers_data[str(q.pk)], user, auth)
+                        else:
+                            given_answers[q] = None
                     else:
                         given_answers[q] = q.clean_answer(answers_data[str(q.pk)])
                 except (ValidationError, BaseValidationError):
