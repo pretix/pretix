@@ -10,6 +10,11 @@ export function createButtonInstance (element: Element, htmlId?: string): App {
 		targetUrl += '/'
 	}
 
+	const displayEventInfoAttr = element.attributes['display-event-info']?.value
+	// null means "auto" (as before), everything other than "false" is true
+	const displayEventInfo: boolean | null
+		= 'display-event-info' in element.attributes && displayEventInfoAttr !== 'auto' ? displayEventInfoAttr !== 'false' : null
+
 	const widgetData: WidgetData = JSON.parse(JSON.stringify(window.PretixWidget.widget_data))
 
 	for (const attr of Array.from(element.attributes)) {
@@ -35,6 +40,7 @@ export function createButtonInstance (element: Element, htmlId?: string): App {
 		subevent: element.attributes.subevent?.value || null,
 		skipSsl: 'skip-ssl-check' in element.attributes,
 		disableIframe: 'disable-iframe' in element.attributes,
+		displayEventInfo,
 		widgetData,
 		htmlId: htmlId || element.id || makeid(16),
 		isButton: true,
