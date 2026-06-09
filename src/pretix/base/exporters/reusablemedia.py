@@ -64,7 +64,13 @@ class ReusableMediaExporter(OrganizerLevelExportMixin, ListExporter):
         yield headers
         yield self.ProgressSetTotal(total=media.count())
 
+        can_read_giftcards = self.permission_holder.has_organizer_permission(self.organizer, 'organizer.giftcards:read')
+
         for medium in media.iterator(chunk_size=1000):
+            giftcard_secret = medium.linked_giftcard.secret if medium.linked_giftcard_id else ''
+            if giftcard_secret and not can_read_giftcards:
+                giftcard_secret = giftcard_secret[:3] + "…"
+
             yield [
                 medium.type,
                 medium.identifier,
@@ -72,7 +78,7 @@ class ReusableMediaExporter(OrganizerLevelExportMixin, ListExporter):
                 date_format(medium.expires, 'SHORT_DATETIME_FORMAT') if medium.expires else '',
                 medium.customer.identifier if medium.customer_id else '',
                 ', '.join([f"{op.order.code}-{op.positionid}" for op in medium.linked_orderpositions.all()]),
-                medium.linked_giftcard.secret if medium.linked_giftcard_id else '',
+                giftcard_secret,
                 medium.notes,
             ]
 
