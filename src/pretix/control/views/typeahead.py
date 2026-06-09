@@ -200,7 +200,7 @@ def giftcard_select2(request, **kwargs):
     except ValueError:
         page = 1
 
-    if request.user.has_organizer_permission(request.organizer, 'organizer.giftcards:write', request):
+    if request.user.has_organizer_permission(request.organizer, 'organizer.giftcards:read', request):
         qs = request.organizer.issued_gift_cards.filter(
             Q(secret__icontains=query)
         ).order_by('secret')
