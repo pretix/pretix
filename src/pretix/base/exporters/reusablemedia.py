@@ -69,7 +69,9 @@ class ReusableMediaExporter(OrganizerLevelExportMixin, ListExporter):
                 date_format(medium.expires, 'SHORT_DATETIME_FORMAT') if medium.expires else '',
                 medium.customer.identifier if medium.customer_id else '',
                 f"{medium.linked_orderposition.order.code}-{medium.linked_orderposition.positionid}" if medium.linked_orderposition_id else '',
-                medium.linked_giftcard.secret if medium.linked_giftcard_id else '',
+                # we cannot determine here whether user has permission organizer.giftcards:read
+                # so default to not showing giftcard secret
+                medium.linked_giftcard.secret[:3] + "…" if medium.linked_giftcard_id else '',
                 medium.notes,
             ]
             yield row
