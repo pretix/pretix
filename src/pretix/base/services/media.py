@@ -77,7 +77,7 @@ def get_keysets_for_organizer(organizer):
 
 def perform_media_exchange(organizer, media_type, identifier, link_action, link_orderposition, user, auth):
     """
-    Create or retrieve a medium
+    Create or retrieve a medium, then link the order position to it. Expected to be called in a transaction.
 
     :param organizer: Organizer to operate in
     :param media_type: Type of medium to operate with
@@ -187,7 +187,47 @@ def perform_media_exchange(organizer, media_type, identifier, link_action, link_
 
     if link_action == 'append':
         medium.linked_orderpositions.add(link_orderposition)
+        medium.log_action(
+            'pretix.reusable_medium.linked_orderposition.added',
+            user=user,
+            auth=auth,
+            data={
+                'linked_orderposition': link_orderposition,
+            }
+        )
     elif link_action == 'replace':
-        medium.linked_orderpositions.set([link_orderposition])
+        already_found = False
+        for op_pk in medium.linked_orderpositions.values_list('pk', flat=True):
+            if op_pk == link_orderposition.pk:
+                already_found = True
+                continue
+            else:
+                medium.log_action(
+                    'pretix.reusable_medium.linked_orderposition.removed',
+                    data={
+                        'linked_orderposition': op_pk,
+                    }
+                )
+        if not already_found:
+            medium.linked_orderpositions.set([link_orderposition])
+            medium.log_action(
+                'pretix.reusable_medium.linked_orderposition.added',
+                user=user,
+                auth=auth,
+                data={
+                    'linked_orderposition': link_orderposition,
+                }
+            )
+
+    link_orderposition.order.log_action(
+        'pretix.reusable_medium.exchanged',
+        data={
+            'position': link_orderposition.pk,
+            'positionid': link_orderposition.positionid,
+            'medium': medium.pk,
+            'medium_identifier': medium.identifier,
+            'medium_type': medium.media_type.identifier,
+        }
+    )
 
     return medium
