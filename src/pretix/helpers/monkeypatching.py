@@ -24,7 +24,10 @@ from datetime import datetime
 from http import cookies
 
 from PIL import Image
+from django.core.exceptions import SuspiciousFileOperation
 from requests.adapters import HTTPAdapter
+
+from pretix.helpers.reportlab import ThumbnailingImageReader
 
 
 def monkeypatch_vobject_performance():
@@ -95,8 +98,26 @@ def monkeypatch_cookie_morsel():
     cookies.Morsel._reserved.setdefault("partitioned", "Partitioned")
 
 
+def monkeypatch_reportlab_imagereader():
+    from reportlab.lib import utils
+    old_init = utils.ImageReader.__init__
+
+    def new_init(self, fileName, ident=None):  # noqa
+        if not isinstance(fileName, Image.Image) and not hasattr(fileName, 'read') and not hasattr(fileName, 'str'):
+            if not isinstance(self, ThumbnailingImageReader):
+                # ThumbnailingImageReader is only used by us explicitly and not by using <img> in html, so it is safe
+                raise SuspiciousFileOperation("reportlab should not be reading images from disk")
+
+        return types.MethodType(old_init, self)(
+            fileName, ident
+        )
+
+    utils.ImageReader.__init__ = new_init
+
+
 def monkeypatch_all_at_ready():
     monkeypatch_vobject_performance()
     monkeypatch_pillow_safer()
     monkeypatch_requests_timeout()
     monkeypatch_cookie_morsel()
+    monkeypatch_reportlab_imagereader()
