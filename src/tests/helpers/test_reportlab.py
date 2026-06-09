@@ -19,18 +19,34 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.apps import AppConfig
+import pytest
+from reportlab.platypus import Paragraph
 
 
-class PretixHelpersConfig(AppConfig):
-    name = 'pretix.helpers'
-    label = 'pretixhelpers'
+def test_http_access_disabled(monkeypatch):
+    def guard(*args, **kwargs):
+        pytest.fail("No internet wanted!")
 
-    def ready(self):
-        from .monkeypatching import monkeypatch_all_at_ready
-        monkeypatch_all_at_ready()
+    monkeypatch.setattr('socket.socket', guard)
 
-        # Ensure reportlab does not make any calls to the internet
-        from reportlab import rl_config
-        rl_config.trustedHosts = []
-        rl_config.trustedSchemes = ['data']
+    with pytest.raises(OSError, match="Cannot open resource"):
+        Paragraph(
+            '<img src="https://static.pretix.cloud/static/pretixeu/img/opengraph.png"/>',
+        )
+
+
+def test_file_access_disabled_scheme(monkeypatch):
+    with pytest.raises(OSError, match="Cannot open resource"):
+        Paragraph(
+            '<img src="file:///etc/passwd" />',
+        )
+
+
+@pytest.mark.xfail
+def test_file_access_disabled_direct(monkeypatch):
+    # Unfortunately this is not prevented by the reprotlab config, but the risk is low since only valid images
+    # can be used.
+    with pytest.raises(OSError, match="Cannot open resource"):
+        Paragraph(
+            '<img src="/etc/passwd" />',
+        )
