@@ -23,10 +23,13 @@ import secrets
 
 from django.db import IntegrityError
 from django.db.models import Q
+from django.utils.translation import gettext as _
 from django_scopes import scopes_disabled
 
-from pretix.base.models import GiftCardAcceptance, Item
+from pretix.base.media import MEDIA_TYPES
+from pretix.base.models import Checkin, GiftCardAcceptance, Item
 from pretix.base.models.media import MediumKeySet, ReusableMedium
+from pretix.base.services.checkin import CheckInError
 
 
 def create_nfc_mf0aes_keyset(organizer):
@@ -88,13 +91,46 @@ def perform_media_exchange(organizer, media_type, identifier, link_action, link_
     if link_action not in ('append', 'replace'):
         raise ValueError("Invalid link_action")
 
-    if media_policy == Item.MEDIA_POLICY_REUSE:
-        # Will and should raise ReusableMedium.DoesNotExist if not found
-        medium = ReusableMedium.objects.get(
-            type=media_type,
-            identifier=identifier,
-            organizer=organizer,
+    if media_type not in MEDIA_TYPES:  # should be caught by serializer already
+        raise CheckInError(
+            _('Invalid medium type.'),
+            Checkin.REASON_ERROR,
+            reason=_('Invalid medium type.'),
         )
+
+    if not MEDIA_TYPES[media_type].is_active(organizer):
+        raise CheckInError(
+            _('Medium type is not enabled for organizer.'),
+            Checkin.REASON_ERROR,
+            reason=_('Medium type is not enabled for organizer.'),
+        )
+
+    if link_orderposition.item.media_type != media_type:
+        raise CheckInError(
+            _('Incorrect medium type for product.'),
+            Checkin.REASON_PRODUCT,
+            reason=_('Incorrect medium type for product.'),
+        )
+
+    if link_orderposition.linked_media.exists():
+        raise CheckInError(
+            _('Ticket is already exchanged for reusable medium.'),
+            Checkin.REASON_ALREADY_EXCHANGED,
+            reason=_('Ticket is already exchanged for reusable medium.'),
+        )
+
+    if media_policy == Item.MEDIA_POLICY_REUSE:
+        try:
+            medium = ReusableMedium.objects.get(
+                type=media_type,
+                identifier=identifier,
+                organizer=organizer,
+            )
+        except ReusableMedium.DoesNotExist:
+            raise CheckInError(
+                _('Reusable medium not found.'),
+                Checkin.REASON_MEDIUM_INVALID,
+            )
 
     elif media_policy == Item.MEDIA_POLICY_REUSE_OR_NEW:
         medium, created = ReusableMedium.objects.get_or_create(
@@ -117,13 +153,23 @@ def perform_media_exchange(organizer, media_type, identifier, link_action, link_
                 organizer=organizer,
             )
         except IntegrityError:
-            raise ReusableMedium.DuplicateEntry()
+            raise CheckInError(
+                _('Reusable medium already exists.'),
+                Checkin.REASON_MEDIUM_EXISTS,
+            )
         else:
             medium.log_action(
                 'pretix.reusable_medium.created.auto',
                 user=user,
                 auth=auth,
             )
+
+    else:
+        raise CheckInError(
+            _('Product does not support medium exchange.'),
+            Checkin.REASON_PRODUCT,
+            reason=_('Product does not support medium exchange.'),
+        )
 
     if link_action == 'append':
         medium.linked_orderpositions.add(link_orderposition)

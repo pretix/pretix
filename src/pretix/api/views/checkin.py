@@ -466,7 +466,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
 
     device = auth if isinstance(auth, Device) else None
     gate = gate or (auth.gate if isinstance(auth, Device) else None)
-    media = None
+    medium = None
 
     context = {
         'request': request,
@@ -805,15 +805,12 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         locale = op.order.event.settings.locale
     with language(locale):
         try:
-            exchange_requested = any(k is not None for k in [exchange_medium_type, exchange_medium_identifier, exchange_link_action])
-
-            if exchange_requested:
-                if any(k is None for k in [exchange_medium_type, exchange_medium_identifier, exchange_link_action]):
-                    raise ValidationError("If you set any of exchange_medium_type, exchange_medium_identifier, or "
-                                          "èxchange_link_action, you need to set all of them.")
-                if medium:
-                    # Cannot scan a medium and then request to exchange it
-                    raise ReusableMedium.DuplicateEntry()
+            if exchange_link_action and medium:
+                # Cannot scan a medium and then request to exchange it
+                raise CheckInError(
+                    gettext('You cannot exchange a medium for a medium.'),
+                    'error'
+                )
 
             checkin_args = dict(
                 op=op,
@@ -836,7 +833,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 reusable_medium=medium,
             )
 
-            if exchange_requested:
+            if exchange_link_action:  # other fields are filled, see CheckinRPCRedeemInputSerializer.validate
                 with transaction.atomic():
                     # Do exchange and check-in atomically, i.e. both succeed or both fail
                     medium = perform_media_exchange(
@@ -848,11 +845,9 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                         user=user,
                         auth=auth,
                     )
-                    source_type = media.media_type.identifier
-                    checkin_args['medium'] = medium
-                    perform_checkin(
-                        reusable_media=media,
-                    )
+                    source_type = medium.media_type.identifier
+                    checkin_args['reusable_medium'] = medium
+                    perform_checkin(**checkin_args)
             else:
                 perform_checkin(**checkin_args)
         except RequiredQuestionsError as e:
@@ -876,26 +871,6 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'media_type': e.media_type,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
                 'reason_explanation': e.msg,
-            }, status=400)
-        except ReusableMedium.DoesNotExist:
-            return Response({
-                'status': 'error',
-                'reason': Checkin.REASON_MEDIUM_INVALID,
-                'reason_explanation': 'Reusable medium identifier not found',
-                'require_attention': op.require_checkin_attention,
-                'checkin_texts': op.checkin_texts,
-                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
-                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
-            }, status=400)
-        except ReusableMedium.DuplicateEntry:
-            return Response({
-                'status': 'error',
-                'reason': Checkin.REASON_MEDIUM_EXISTS,
-                'reason_explanation': 'Reusable medium identifier already exists',
-                'require_attention': op.require_checkin_attention,
-                'checkin_texts': op.checkin_texts,
-                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
-                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         except CheckInError as e:
             if not simulate:

@@ -99,6 +99,13 @@ class CheckinRPCRedeemInputSerializer(serializers.Serializer):
         super().__init__(*args, **kwargs)
         self.fields['lists'].child_relation.queryset = CheckinList.objects.filter(event__in=self.context['events']).select_related('event')
 
+    def validate(self, attrs):
+        exchange_fields = ["exchange_medium_type", "exchange_medium_identifier", "exchange_link_action"]
+        if any(attrs.get(k) is None for k in exchange_fields) and not all(attrs.get(k) is None for k in exchange_fields):
+            raise ValidationError("If you set any of exchange_medium_type, exchange_medium_identifier, or "
+                                  "exchange_link_action, you need to set all of them.")
+        return attrs
+
 
 class MiniCheckinListSerializer(I18nAwareModelSerializer):
     event = serializers.SlugRelatedField(slug_field='slug', read_only=True)
