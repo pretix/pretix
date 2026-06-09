@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.db.models import Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.urls import resolve, reverse
@@ -76,10 +77,18 @@ def control_nav_import(sender, request=None, **kwargs):
 @receiver(nav_organizer, dispatch_uid="payment_banktransfer_organav")
 def control_nav_orga_import(sender, request=None, **kwargs):
     url = resolve(request.path_info)
-    has_any_event_perm = request.user.get_events_with_permission(
-        "event.orders:write", request=request
-    ).filter(organizer=request.organizer).exists()
-    if not has_any_event_perm:
+
+    events_without_permission = request.organizer.events.filter(
+        ~Exists(
+            request.user.teams.with_event_permission(
+                "event.orders:read"
+            ).filter(
+                Q(all_events=True) | Q(limit_events=OuterRef("pk")),
+                organizer_id=OuterRef("organizer_id"),
+            )
+        )
+    ).exists()
+    if events_without_permission:
         return []
     return [
         {

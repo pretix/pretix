@@ -10,7 +10,7 @@
                 Therefore, you won't be able to mark any order as paid here.
             {% endblocktrans %}
         </div>
-    {% else %}
+    {% elif can_write %}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">{% trans "Upload a new file" %}</h3>
@@ -93,7 +93,7 @@
                         </div>
                     </form>
                     <div class="col-md-2">
-                        {% if not filter_form.is_valid %}
+                        {% if not filter_form.is_valid and can_write %}
                             <form action="" method="post" class="helper-display-inline pull-right flip">
                                 {% csrf_token %}
                                 <button class="btn btn-danger" type="submit" name="discard" value="all">

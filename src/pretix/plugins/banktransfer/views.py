@@ -46,7 +46,7 @@ from django import forms
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import Count, Q, QuerySet
+from django.db.models import Count, Exists, OuterRef, Q, QuerySet
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -586,6 +586,7 @@ class ImportView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['job_running'] = self.job_running
+        ctx['can_write'] = self.can_write
         ctx['no_more_payments'] = False
         ctx['filter_form'] = BankTransactionFilterForm(self.request.GET or None)
 
@@ -623,45 +624,94 @@ class ImportView(ListView):
         return ctx
 
 
-class OrganizerBanktransferView:
+class EventPermissionOnAllEventsRequiredMixin:
+    @cached_property
+    def can_write(self):
+        perm_name = self.event_permission
+        if hasattr(self, 'write_event_permission'):
+            perm_name = self.write_event_permission
+
+        events_without_permission = self.request.organizer.events.filter(
+            ~Exists(
+                self.request.user.teams.with_event_permission(
+                    perm_name
+                ).filter(
+                    Q(all_events=True) | Q(limit_events=OuterRef("pk")),
+                    organizer_id=OuterRef("organizer_id"),
+                )
+            )
+        ).exists()
+        return not events_without_permission
+
     def dispatch(self, request, *args, **kwargs):
-        has_any_event_perm = request.user.get_events_with_permission(
-            "event.orders:write", request=request
-        ).filter(organizer=request.organizer).exists()
-        if not has_any_event_perm:
+        perm_name = self.event_permission
+        if request.method not in ("GET", "HEAD") and hasattr(self, 'write_event_permission'):
+            perm_name = self.write_event_permission
+
+        events_without_permission = self.request.organizer.events.filter(
+            ~Exists(
+                self.request.user.teams.with_event_permission(
+                    perm_name
+                ).filter(
+                    Q(all_events=True) | Q(limit_events=OuterRef("pk")),
+                    organizer_id=OuterRef("organizer_id"),
+                )
+            )
+        ).exists()
+        if events_without_permission:
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
 
-class EventImportView(EventPermissionRequiredMixin, ImportView):
+class PostEventPermissionRequiredMixin(EventPermissionRequiredMixin):
+    @cached_property
+    def can_write(self):
+        return self.request.user.has_event_permission(
+            self.request.organizer, self.request.event, self.write_permission, request=self.request
+        )
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.method not in ("GET", "HEAD"):
+            if not self.can_write:
+                raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class EventImportView(PostEventPermissionRequiredMixin, ImportView):
     permission = 'event.orders:write'
+    write_permission = 'event.orders:write'
 
 
-class OrganizerImportView(OrganizerBanktransferView, OrganizerDetailViewMixin,
+class OrganizerImportView(EventPermissionOnAllEventsRequiredMixin, OrganizerDetailViewMixin,
                           ImportView):
-    pass
+    event_permission = 'event.orders:read'
+    write_event_permission = 'event.orders:write'
 
 
 class EventJobDetailView(EventPermissionRequiredMixin, JobDetailView):
-    permission = 'event.orders:write'
+    permission = 'event.orders:read'
 
 
-class OrganizerJobDetailView(OrganizerBanktransferView, OrganizerDetailViewMixin,
+class OrganizerJobDetailView(EventPermissionOnAllEventsRequiredMixin, OrganizerDetailViewMixin,
                              JobDetailView):
-    pass
+    event_permission = 'event.orders:read'
 
 
-class EventActionView(EventPermissionRequiredMixin, ActionView):
-    permission = 'event.orders:write'
+class EventActionView(PostEventPermissionRequiredMixin, ActionView):
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
 
 
-class OrganizerActionView(OrganizerBanktransferView, OrganizerDetailViewMixin,
+class OrganizerActionView(EventPermissionOnAllEventsRequiredMixin, OrganizerDetailViewMixin,
                           ActionView):
+    event_permission = "event.orders:read"
+    write_event_permission = "event.orders:write"
 
     def order_qs(self):
+        # The filters here are basically pointless with EventPermissionOnAllEventsRequiredMixin
+        # but let's keep them for safety with future refactorings
         all = self.request.user.teams.filter(
             TeamQuerySet.event_permission_q("event.orders:read"),
-            TeamQuerySet.event_permission_q("event.orders:write"),
             all_events=True,
             organizer=self.request.organizer,
         ).exists()
@@ -671,7 +721,6 @@ class OrganizerActionView(OrganizerBanktransferView, OrganizerDetailViewMixin,
             return Order.objects.filter(
                 event_id__in=self.request.user.teams.filter(
                     TeamQuerySet.event_permission_q("event.orders:read"),
-                    TeamQuerySet.event_permission_q("event.orders:write"),
                     organizer=self.request.organizer,
                 ).values_list('limit_events__id', flat=True)
             )
@@ -712,6 +761,7 @@ class RefundExportListView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['num_new'] = self.get_unexported().count()
+        ctx['can_write'] = self.can_write
         ctx['basetpl'] = "pretixcontrol/event/base.html"
         if not hasattr(self.request, 'event'):
             ctx['basetpl'] = "pretixcontrol/organizers/base.html"
@@ -764,8 +814,9 @@ class RefundExportListView(ListView):
         return redirect(self.get_success_url())
 
 
-class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListView):
-    permission = 'event.orders:write'
+class EventRefundExportListView(PostEventPermissionRequiredMixin, RefundExportListView):
+    permission = 'event.orders:read'
+    write_permission = 'event.orders:write'
 
     def get_success_url(self):
         return reverse('plugins:banktransfer:refunds.list', kwargs={
@@ -787,7 +838,9 @@ class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListVi
         )
 
 
-class OrganizerRefundExportListView(OrganizerBanktransferView, RefundExportListView):
+class OrganizerRefundExportListView(EventPermissionOnAllEventsRequiredMixin, RefundExportListView):
+    event_permission = 'event.orders:read'
+    write_event_permission = 'event.orders:write'
 
     def get_success_url(self):
         return reverse('plugins:banktransfer:refunds.list', kwargs={
@@ -820,7 +873,7 @@ class DownloadRefundExportView(DetailView):
 
 
 class EventDownloadRefundExportView(EventPermissionRequiredMixin, DownloadRefundExportView):
-    permission = 'event.orders:write'
+    permission = 'event.orders:read'
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(
@@ -830,7 +883,8 @@ class EventDownloadRefundExportView(EventPermissionRequiredMixin, DownloadRefund
         )
 
 
-class OrganizerDownloadRefundExportView(OrganizerBanktransferView, OrganizerDetailViewMixin, DownloadRefundExportView):
+class OrganizerDownloadRefundExportView(EventPermissionOnAllEventsRequiredMixin, OrganizerDetailViewMixin, DownloadRefundExportView):
+    event_permission = 'event.orders:read'
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(
@@ -877,7 +931,7 @@ class SepaXMLExportView(SingleObjectMixin, FormView):
 
 
 class EventSepaXMLExportView(EventPermissionRequiredMixin, SepaXMLExportView):
-    permission = 'event.orders:write'
+    permission = 'event.orders:read'
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(
@@ -892,7 +946,8 @@ class EventSepaXMLExportView(EventPermissionRequiredMixin, SepaXMLExportView):
         return form
 
 
-class OrganizerSepaXMLExportView(OrganizerBanktransferView, OrganizerDetailViewMixin, SepaXMLExportView):
+class OrganizerSepaXMLExportView(EventPermissionOnAllEventsRequiredMixin, OrganizerDetailViewMixin, SepaXMLExportView):
+    permission = 'event.orders:read'
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(

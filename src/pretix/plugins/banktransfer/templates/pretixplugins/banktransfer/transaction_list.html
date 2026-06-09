@@ -20,24 +20,24 @@
         {% for trans in list %}
             <tr data-id="{{ trans.id }}">
                 <td class="actions">
-                    {% if trans.order and trans.state == 'invalid' %}
+                    {% if trans.order and trans.state == 'invalid' and can_write %}
                         <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="accept"
                                 data-toggle="tooltip" title="{% trans "Accept anyway" %}" data-placement="right">
                             <span class="fa fa-check"></span>
                         </button>
-                    {% elif trans.state == 'nomatch' %}
+                    {% elif trans.state == 'nomatch' and can_write %}
                         <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
                         <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
                                 value="assign" data-toggle="tooltip" title="{% trans "Assign to order" %}"
                                 data-placement="right">
                             <span class="fa fa-check"></span>
                         </button>
-                    {% elif trans.state == 'error' %}
+                    {% elif trans.state == 'error' and can_write %}
                         <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="retry"
                                 data-toggle="tooltip" title="{% trans "Retry" %}" data-placement="right">
                             <span class="fa fa-refresh"></span>
                         </button>
-                    {% elif trans.state == 'already' %}
+                    {% elif trans.state == 'already' and can_write %}
                         <input type="text" class="form-control" placeholder="{% trans "Order code" %}">
                         <div class="btn-group" role="group">
                             <button class="btn btn-default" type="button" name="action_{{ trans.id }}"
@@ -76,13 +76,15 @@
                         {% endif %}
                     </div>
                     {{ trans.reference }}
-                    <div class="comment-box" data-plain="{{ trans.comment }}">
-                        <strong>{% trans "Comment:" %}</strong>
-                        <span class="comment">{{ trans.comment|rich_text }}</span>
-                        <a href="#" class="comment-modify btn btn-default btn-xs">
-                            <span class="fa fa-edit"></span>
-                        </a>
-                    </div>
+                    {% if can_write %}
+                        <div class="comment-box" data-plain="{{ trans.comment }}">
+                            <strong>{% trans "Comment:" %}</strong>
+                            <span class="comment">{{ trans.comment|rich_text }}</span>
+                            <a href="#" class="comment-modify btn btn-default btn-xs">
+                                <span class="fa fa-edit"></span>
+                            </a>
+                        </div>
+                    {% endif %}
                 </td>
                 <td>
                     {% if trans.currency %}
@@ -119,10 +121,12 @@
                     {% endif %}
                 </td>
                 <td class="discard">
-                    <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
-                            data-toggle="tooltip" title="{% trans "Discard" %}">
-                        <span class="fa fa-trash"></span>
-                    </button>
+                    {% if can_write %}
+                        <button type="button" class="btn btn-default" name="action_{{ trans.id }}" value="discard"
+                                data-toggle="tooltip" title="{% trans "Discard" %}">
+                            <span class="fa fa-trash"></span>
+                        </button>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
