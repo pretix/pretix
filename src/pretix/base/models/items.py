@@ -1000,6 +1000,11 @@ class Item(LoggedModel):
                 raise ValidationError(_('The selected media type does not support usage for tickets currently.'))
             if not mt.supports_giftcard and issue_giftcard:
                 raise ValidationError(_('The selected media type does not support usage for gift cards currently.'))
+            if media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_APPEND_OR_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
+                if not mt.medium_created_by_server and not mt.medium_created_from_unknown_supported:
+                    raise ValidationError(_('The selected media type requires all media to be registered in the system '
+                                            'prior to their usage. Therefore, the selected media policy does not make '
+                                            'sense for this media type.'))
             if issue_giftcard:
                 raise ValidationError(_('You currently cannot create gift cards with a reusable media policy. Instead, '
                                         'gift cards for some reusable media types can be created or re-charged directly '
