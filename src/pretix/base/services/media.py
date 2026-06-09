@@ -75,21 +75,18 @@ def get_keysets_for_organizer(organizer):
     return sets
 
 
-def perform_media_exchange(organizer, media_type, identifier, link_action, link_orderposition, user, auth):
+def perform_media_exchange(organizer, media_type, identifier, link_orderposition, user, auth):
     """
     Create or retrieve a medium, then link the order position to it. Expected to be called in a transaction.
 
     :param organizer: Organizer to operate in
     :param media_type: Type of medium to operate with
     :param identifier: Identifier of the medium
-    :param link_action: one of `"append"` or `"replace"`
     :param link_orderposition: Position to link to the medium
     :return: ReusableMedium
     """
     medium = None
     media_policy = link_orderposition.item.media_policy
-    if link_action not in ('append', 'replace'):
-        raise ValueError("Invalid link_action")
 
     if media_type not in MEDIA_TYPES:  # should be caught by serializer already
         raise CheckInError(
@@ -119,7 +116,12 @@ def perform_media_exchange(organizer, media_type, identifier, link_action, link_
             reason=_('Ticket is already exchanged for reusable medium.'),
         )
 
-    if media_policy == Item.MEDIA_POLICY_REUSE:
+    if media_policy in (Item.MEDIA_POLICY_APPEND, Item.MEDIA_POLICY_APPEND_OR_NEW, Item.MEDIA_POLICY_NEW):
+        link_action = "append"
+    else:
+        link_action = "replace"
+
+    if media_policy in (Item.MEDIA_POLICY_REUSE, Item.MEDIA_POLICY_APPEND):
         try:
             medium = ReusableMedium.objects.get(
                 type=media_type,
@@ -140,19 +142,28 @@ def perform_media_exchange(organizer, media_type, identifier, link_action, link_
                     reason=_('Reusable medium is inactive or expired.'),
                 )
 
-    elif media_policy == Item.MEDIA_POLICY_REUSE_OR_NEW:
-        medium, created = ReusableMedium.objects.get_or_create(
-            type=media_type,
-            identifier=identifier,
-            organizer=organizer,
-        )
-        if created:
-            medium.log_action(
-                'pretix.reusable_medium.created.auto',
-                user=user,
-                auth=auth,
+    elif media_policy in (Item.MEDIA_POLICY_REUSE_OR_NEW, Item.MEDIA_POLICY_APPEND_OR_NEW):
+        try:
+            medium = ReusableMedium.objects.get(
+                type=media_type,
+                identifier=identifier,
+                organizer=organizer,
             )
-        elif medium.is_expired or not medium.active:
+        except ReusableMedium.DoesNotExist:
+            if not MEDIA_TYPES[media_type].medium_created_from_unknown_supported:
+                raise CheckInError(
+                    _('Reusable medium not found and could not be created.'),
+                    Checkin.REASON_MEDIUM_INVALID,
+                )
+
+            medium = MEDIA_TYPES[media_type].handle_unknown(organizer, identifier, user, auth, force_create=True)
+            if not medium:
+                raise CheckInError(
+                    _('Reusable medium not found and could not be created.'),
+                    Checkin.REASON_MEDIUM_INVALID,
+                )
+
+        if medium.is_expired or not medium.active:
             raise CheckInError(
                 _('Reusable medium is inactive or expired.'),
                 Checkin.REASON_MEDIUM_INVALID,
@@ -160,23 +171,24 @@ def perform_media_exchange(organizer, media_type, identifier, link_action, link_
             )
 
     elif media_policy == Item.MEDIA_POLICY_NEW:
-        try:
-            medium = ReusableMedium.objects.create(
-                type=media_type,
-                identifier=identifier,
-                organizer=organizer,
+        if not MEDIA_TYPES[media_type].medium_created_from_unknown_supported:
+            raise CheckInError(
+                _('Reusable medium not found and could not be created.'),
+                Checkin.REASON_MEDIUM_INVALID,
             )
+        try:
+            medium = MEDIA_TYPES[media_type].handle_unknown(organizer, identifier, user, auth, force_create=True)
         except IntegrityError:
             raise CheckInError(
                 _('Reusable medium already exists.'),
                 Checkin.REASON_MEDIUM_EXISTS,
             )
         else:
-            medium.log_action(
-                'pretix.reusable_medium.created.auto',
-                user=user,
-                auth=auth,
-            )
+            if not medium:
+                raise CheckInError(
+                    _('Reusable medium could not be created.'),
+                    Checkin.REASON_MEDIUM_INVALID,
+                )
 
     else:
         raise CheckInError(

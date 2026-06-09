@@ -452,11 +452,16 @@ class Item(LoggedModel):
     MEDIA_POLICY_REUSE = 'reuse'
     MEDIA_POLICY_NEW = 'new'
     MEDIA_POLICY_REUSE_OR_NEW = 'reuse_or_new'
+    MEDIA_POLICY_APPEND = 'append'
+    MEDIA_POLICY_APPEND_OR_NEW = 'append_or_new'
     MEDIA_POLICIES = (
         (None, _("Don't use reusable media, use regular one-off tickets")),
-        (MEDIA_POLICY_REUSE, _('Require an existing medium to be reused')),
         (MEDIA_POLICY_NEW, _('Require a previously unknown medium to be newly added')),
-        (MEDIA_POLICY_REUSE_OR_NEW, _('Require either an existing or a new medium to be used')),
+        (MEDIA_POLICY_REUSE, _('Require an existing medium to be reused, replacing any previous tickets')),
+        (MEDIA_POLICY_REUSE_OR_NEW, _('Require either an existing or a new medium to be used, replacing any previous tickets')),
+        (MEDIA_POLICY_APPEND, _('Require an existing medium to be reused, adding to any previous tickets')),
+        (MEDIA_POLICY_APPEND_OR_NEW,
+         _('Require either an existing or a new medium to be used, adding to any previous tickets')),
     )
 
     objects = ItemQuerySetManager()

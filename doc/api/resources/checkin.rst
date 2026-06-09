@@ -48,7 +48,6 @@ Checking a ticket in
                         allows for a certain level of idempotency and enables you to re-try after a connection failure.
    :<json string exchange_medium_type: To perform an exchange to a reusable medium, pass the type of the new reusable medium
    :<json string exchange_medium_identifier: To perform an exchange to a reusable media, pass the identifier of the new medium
-   :<json string exchange_link_action: To perform an exchange to a reusable media, pass `"append"` or `"replace"` depending on whether any previous ticket links of the medium should be kept
    :<json boolean use_order_locale: Specifies that pretix should use the customer's language (``locale`` field from the
                                     order) when building texts (currently only the ``reason_explanation`` response field).
                                     Defaults to ``false`` in which case the server will determine the language (currently

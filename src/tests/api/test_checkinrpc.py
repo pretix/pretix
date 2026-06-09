@@ -1263,8 +1263,7 @@ def test_exchange_incomplete_body(token_client, organizer, clist, event, order):
     })
     assert resp.status_code == 400
     assert resp.data == {
-        'non_field_errors': ['If you set any of exchange_medium_type, exchange_medium_identifier, or '
-                             'exchange_link_action, you need to set all of them.']
+        'non_field_errors': ['If you set any of exchange_medium_type or exchange_medium_identifier, you need to set both of them.']
     }
 
 
@@ -1281,7 +1280,6 @@ def test_exchange_medium_for_medium(token_client, organizer, clist, event, order
         "source_type": "barcode",
         "exchange_medium_type": "barcode",
         "exchange_medium_identifier": "hijkl",
-        "exchange_link_action": "replace",
     })
     assert resp.status_code == 400
     assert resp.data['status'] == 'error'
@@ -1294,7 +1292,6 @@ def test_exchange_unknown_media_type(token_client, organizer, clist, event, orde
         "source_type": "barcode",
         "exchange_medium_type": "unknown",
         "exchange_medium_identifier": "hijkl",
-        "exchange_link_action": "replace",
     })
     assert resp.status_code == 400
     assert resp.data == {"exchange_medium_type": ["\"unknown\" is not a valid choice."]}
@@ -1306,7 +1303,6 @@ def test_exchange_disabled_media_type(token_client, organizer, clist, event, ord
         "source_type": "barcode",
         "exchange_medium_type": "nfc_uid",
         "exchange_medium_identifier": "hijkl",
-        "exchange_link_action": "replace",
     })
     assert resp.status_code == 400
     assert resp.data['status'] == 'error'
@@ -1323,7 +1319,6 @@ def test_exchange_mismatch_media_type(token_client, organizer, clist, event, ord
         "source_type": "barcode",
         "exchange_medium_type": "nfc_uid",
         "exchange_medium_identifier": "12345678",
-        "exchange_link_action": "replace",
     })
     assert resp.status_code == 400
     assert resp.data['status'] == 'error'
@@ -1340,7 +1335,6 @@ def test_exchange_no_item_policy(token_client, organizer, clist, event, order, i
         "source_type": "barcode",
         "exchange_medium_type": "nfc_uid",
         "exchange_medium_identifier": "12345678",
-        "exchange_link_action": "replace",
     })
     assert resp.status_code == 400
     assert resp.data['status'] == 'error'
@@ -1352,13 +1346,12 @@ def test_exchange_no_item_policy(token_client, organizer, clist, event, order, i
 def test_exchange_reuse_or_new_new(token_client, organizer, clist, event, order, item):
     organizer.settings.reusable_media_type_nfc_uid = True
     item.media_type = "nfc_uid"
-    item.media_policy = Item.MEDIA_POLICY_NEW
+    item.media_policy = Item.MEDIA_POLICY_REUSE_OR_NEW
     item.save()
     resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
         "source_type": "barcode",
         "exchange_medium_type": "nfc_uid",
         "exchange_medium_identifier": "12345678",
-        "exchange_link_action": "replace",
     })
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
@@ -1388,7 +1381,6 @@ def test_exchange_reuse_or_new_reuse_replace(token_client, organizer, clist, eve
         "source_type": "barcode",
         "exchange_medium_type": "nfc_uid",
         "exchange_medium_identifier": "12345678",
-        "exchange_link_action": "replace",
     })
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
@@ -1401,7 +1393,7 @@ def test_exchange_reuse_or_new_reuse_replace(token_client, organizer, clist, eve
 def test_exchange_reuse_or_new_reuse_append(token_client, organizer, clist, event, order, item):
     organizer.settings.reusable_media_type_nfc_uid = True
     item.media_type = "nfc_uid"
-    item.media_policy = Item.MEDIA_POLICY_REUSE_OR_NEW
+    item.media_policy = Item.MEDIA_POLICY_APPEND_OR_NEW
     item.save()
     with scopes_disabled():
         rm = ReusableMedium.objects.create(
@@ -1414,7 +1406,6 @@ def test_exchange_reuse_or_new_reuse_append(token_client, organizer, clist, even
         "source_type": "barcode",
         "exchange_medium_type": "nfc_uid",
         "exchange_medium_identifier": "12345678",
-        "exchange_link_action": "append",
     })
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
@@ -1428,7 +1419,7 @@ def test_exchange_reuse_or_new_reuse_append(token_client, organizer, clist, even
 def test_exchange_reuse_exists_append(token_client, organizer, clist, event, order, item):
     organizer.settings.reusable_media_type_nfc_uid = True
     item.media_type = "nfc_uid"
-    item.media_policy = Item.MEDIA_POLICY_REUSE_OR_NEW
+    item.media_policy = Item.MEDIA_POLICY_APPEND_OR_NEW
     item.save()
     with scopes_disabled():
         rm = ReusableMedium.objects.create(
@@ -1441,7 +1432,6 @@ def test_exchange_reuse_exists_append(token_client, organizer, clist, event, ord
         "source_type": "barcode",
         "exchange_medium_type": "nfc_uid",
         "exchange_medium_identifier": "12345678",
-        "exchange_link_action": "append",
     })
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
@@ -1469,7 +1459,6 @@ def test_exchange_reuse_expired(token_client, organizer, clist, event, order, it
         "source_type": "barcode",
         "exchange_medium_type": "nfc_uid",
         "exchange_medium_identifier": "12345678",
-        "exchange_link_action": "replace",
     })
     assert resp.status_code == 400
     assert resp.data['status'] == 'error'
@@ -1486,7 +1475,6 @@ def test_exchange_reuse_not_exists(token_client, organizer, clist, event, order,
         "source_type": "barcode",
         "exchange_medium_type": "nfc_uid",
         "exchange_medium_identifier": "12345678",
-        "exchange_link_action": "replace",
     })
     assert resp.status_code == 400
     assert resp.data['status'] == 'error'
@@ -1672,3 +1660,82 @@ def test_exchanged_double_exchange(token_client, organizer, clist, event, order,
     assert resp.status_code == 400
     assert resp.data['status'] == 'error'
     assert resp.data['reason'] == 'already_exchanged'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "media_policy,media_type",
+    [
+        (Item.MEDIA_POLICY_NEW, "nfc_mf0aes"),
+        (Item.MEDIA_POLICY_REUSE_OR_NEW, "nfc_mf0aes"),
+        (Item.MEDIA_POLICY_APPEND_OR_NEW, "nfc_mf0aes"),
+        (Item.MEDIA_POLICY_NEW, "barcode"),
+        (Item.MEDIA_POLICY_REUSE_OR_NEW, "barcode"),
+        (Item.MEDIA_POLICY_APPEND_OR_NEW, "barcode"),
+    ]
+)
+def test_exchange_unsupported_media_type_for_new(token_client, organizer, clist, event, order, item, media_policy, media_type):
+    organizer.settings.set(f'reusable_media_type_{media_type}', True)
+    # Shouldn't be configurable, but test that the logic is solid anyway
+    item.media_type = media_type
+    item.media_policy = media_policy
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": media_type,
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'medium_invalid'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "media_policy",
+    [
+        Item.MEDIA_POLICY_NEW,
+        Item.MEDIA_POLICY_REUSE_OR_NEW,
+        Item.MEDIA_POLICY_APPEND_OR_NEW,
+    ]
+)
+def test_exchange_rejected_media_identifier(token_client, organizer, clist, event, order, item, media_policy):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = media_policy
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "08RANDOM",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'medium_invalid'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "media_policy",
+    [
+        Item.MEDIA_POLICY_NEW,
+        Item.MEDIA_POLICY_REUSE_OR_NEW,
+        Item.MEDIA_POLICY_APPEND_OR_NEW,
+    ]
+)
+def test_exchange_create_gift_card(token_client, organizer, clist, event, order, item, media_policy):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    organizer.settings.reusable_media_type_nfc_uid_autocreate_giftcard = True
+    organizer.settings.reusable_media_type_nfc_uid_autocreate_giftcard_currency = "EUR"
+    item.media_type = "nfc_uid"
+    item.media_policy = media_policy
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "0412345",
+    })
+    assert resp.status_code == 201
+    with scopes_disabled():
+        rm = ReusableMedium.objects.get(identifier="0412345")
+        assert rm.linked_giftcard.currency == "EUR"

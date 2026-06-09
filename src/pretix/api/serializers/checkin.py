@@ -90,20 +90,15 @@ class CheckinRPCRedeemInputSerializer(serializers.Serializer):
     answers = serializers.JSONField(required=False, allow_null=True)
     exchange_medium_type = serializers.ChoiceField(required=False, choices=MEDIA_TYPES)
     exchange_medium_identifier = serializers.CharField(required=False)
-    exchange_link_action = serializers.ChoiceField(required=False, choices=[
-        ('append', 'append'),
-        ('replace', 'replace'),
-    ])
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['lists'].child_relation.queryset = CheckinList.objects.filter(event__in=self.context['events']).select_related('event')
 
     def validate(self, attrs):
-        exchange_fields = ["exchange_medium_type", "exchange_medium_identifier", "exchange_link_action"]
+        exchange_fields = ["exchange_medium_type", "exchange_medium_identifier"]
         if any(attrs.get(k) is None for k in exchange_fields) and not all(attrs.get(k) is None for k in exchange_fields):
-            raise ValidationError("If you set any of exchange_medium_type, exchange_medium_identifier, or "
-                                  "exchange_link_action, you need to set all of them.")
+            raise ValidationError("If you set any of exchange_medium_type or exchange_medium_identifier, you need to set both of them.")
         return attrs
 
 

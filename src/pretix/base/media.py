@@ -26,6 +26,7 @@ from django.utils.translation import gettext_lazy as _
 
 class BaseMediaType:
     medium_created_by_server = False
+    medium_created_from_unknown_supported = False
     supports_orderposition = False
     supports_giftcard = False
 
@@ -56,7 +57,7 @@ class BaseMediaType:
     def is_active(self, organizer):
         return organizer.settings.get(f'reusable_media_type_{self.identifier}', as_type=bool, default=False)
 
-    def handle_unknown(self, organizer, identifier, user, auth):
+    def handle_unknown(self, organizer, identifier, user, auth, force_create=False):
         pass
 
     def handle_new(self, organizer, medium, user, auth):
@@ -88,23 +89,32 @@ class NfcUidMediaType(BaseMediaType):
     verbose_name = _('NFC UID-based')
     icon = 'pretixbase/img/media/nfc_uid.svg'
     medium_created_by_server = False
+    medium_created_from_unknown_supported = True
     supports_giftcard = True
     supports_orderposition = True
 
-    def handle_unknown(self, organizer, identifier, user, auth):
+    def handle_unknown(self, organizer, identifier, user, auth, force_create=False):
         from pretix.base.models import GiftCard, ReusableMedium
 
-        if organizer.settings.get(f'reusable_media_type_{self.identifier}_autocreate_giftcard', as_type=bool):
+        create_giftcard = organizer.settings.get(f'reusable_media_type_{self.identifier}_autocreate_giftcard', as_type=bool)
+        if create_giftcard or force_create:
             if identifier.startswith("08"):
                 # Don't create gift cards for NFC UIDs that start with 08, which represents NFC cards that issue random
                 # UIDs on every read, so they won't be useful.
                 return
             with transaction.atomic():
-                gc = GiftCard.objects.create(
-                    issuer=organizer,
-                    expires=organizer.default_gift_card_expiry,
-                    currency=organizer.settings.get(f'reusable_media_type_{self.identifier}_autocreate_giftcard_currency'),
-                )
+                if create_giftcard:
+                    gc = GiftCard.objects.create(
+                        issuer=organizer,
+                        expires=organizer.default_gift_card_expiry,
+                        currency=organizer.settings.get(f'reusable_media_type_{self.identifier}_autocreate_giftcard_currency'),
+                    )
+                    gc.log_action(
+                        'pretix.giftcards.created',
+                        user=user, auth=auth,
+                    )
+                else:
+                    gc = None
                 m = ReusableMedium.objects.create(
                     type=self.identifier,
                     identifier=identifier,
@@ -114,10 +124,6 @@ class NfcUidMediaType(BaseMediaType):
                 )
                 m.log_action(
                     'pretix.reusable_medium.created.auto',
-                    user=user, auth=auth,
-                )
-                gc.log_action(
-                    'pretix.giftcards.created',
                     user=user, auth=auth,
                 )
                 return m

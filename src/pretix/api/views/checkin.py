@@ -457,7 +457,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
                     source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False,
-                    exchange_medium_type=None, exchange_medium_identifier=None, exchange_link_action=None):
+                    exchange_medium_type=None, exchange_medium_identifier=None):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -805,7 +805,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         locale = op.order.event.settings.locale
     with language(locale):
         try:
-            if exchange_link_action and medium:
+            if exchange_medium_identifier and medium:
                 # Cannot scan a medium and then request to exchange it
                 raise CheckInError(
                     gettext('You cannot exchange a medium for a medium.'),
@@ -833,14 +833,13 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 reusable_medium=medium,
             )
 
-            if exchange_link_action:  # other fields are filled, see CheckinRPCRedeemInputSerializer.validate
+            if exchange_medium_identifier:  # other fields are filled, see CheckinRPCRedeemInputSerializer.validate
                 with transaction.atomic():
                     # Do exchange and check-in atomically, i.e. both succeed or both fail
                     medium = perform_media_exchange(
                         organizer=request.organizer,
                         media_type=exchange_medium_type,
                         identifier=exchange_medium_identifier,
-                        link_action=exchange_link_action,
                         link_orderposition=op,
                         user=user,
                         auth=auth,
@@ -1061,7 +1060,6 @@ class CheckinRPCRedeemView(views.APIView):
             legacy_url_support=False,
             exchange_medium_type=s.validated_data.get('exchange_medium_type'),
             exchange_medium_identifier=s.validated_data.get('exchange_medium_identifier'),
-            exchange_link_action=s.validated_data.get('exchange_link_action'),
         )
 
 
