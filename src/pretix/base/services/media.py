@@ -130,7 +130,15 @@ def perform_media_exchange(organizer, media_type, identifier, link_action, link_
             raise CheckInError(
                 _('Reusable medium not found.'),
                 Checkin.REASON_MEDIUM_INVALID,
+                reason=_('Reusable medium not found.'),
             )
+        else:
+            if medium.is_expired or not medium.active:
+                raise CheckInError(
+                    _('Reusable medium is inactive or expired.'),
+                    Checkin.REASON_MEDIUM_INVALID,
+                    reason=_('Reusable medium is inactive or expired.'),
+                )
 
     elif media_policy == Item.MEDIA_POLICY_REUSE_OR_NEW:
         medium, created = ReusableMedium.objects.get_or_create(
@@ -143,6 +151,12 @@ def perform_media_exchange(organizer, media_type, identifier, link_action, link_
                 'pretix.reusable_medium.created.auto',
                 user=user,
                 auth=auth,
+            )
+        elif medium.is_expired or not medium.active:
+            raise CheckInError(
+                _('Reusable medium is inactive or expired.'),
+                Checkin.REASON_MEDIUM_INVALID,
+                reason=_('Reusable medium is inactive or expired.'),
             )
 
     elif media_policy == Item.MEDIA_POLICY_NEW:

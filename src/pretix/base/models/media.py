@@ -129,7 +129,7 @@ class ReusableMedium(LoggedModel):
 
     @property
     def is_expired(self):
-        return self.expires and self.expires > now()
+        return self.expires and self.expires < now()
 
     class Meta:
         unique_together = (("identifier", "type", "organizer"),)

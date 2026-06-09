@@ -230,7 +230,7 @@ Checking a ticket in
    * ``revoked`` - Ticket code has been revoked.
    * ``unapproved`` - Order has not yet been approved.
    * ``already_exchanged`` - Ticket already has been exchanged for a reusable medium that must now be used for check-in.
-   * ``medium_invalid`` - Reusable medium identifier given was not found and could not be automatically created.
+   * ``medium_invalid`` - Reusable medium identifier given was not found or is not valid.
    * ``medium_exists`` - Reusable medium identifier already exists, but expected to be new.
    * ``error`` - Internal error.
 

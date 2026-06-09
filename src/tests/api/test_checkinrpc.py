@@ -1452,6 +1452,31 @@ def test_exchange_reuse_exists_append(token_client, organizer, clist, event, ord
 
 
 @pytest.mark.django_db
+def test_exchange_reuse_expired(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_REUSE
+    item.save()
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+            expires=now() - datetime.timedelta(hours=2),
+        )
+        rm.linked_orderpositions.add(order.positions.last())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+        "exchange_link_action": "replace",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'medium_invalid'
+
+
+@pytest.mark.django_db
 def test_exchange_reuse_not_exists(token_client, organizer, clist, event, order, item):
     organizer.settings.reusable_media_type_nfc_uid = True
     item.media_type = "nfc_uid"
