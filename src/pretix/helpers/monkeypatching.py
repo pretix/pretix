@@ -27,6 +27,7 @@ from datetime import datetime
 from http import cookies
 
 from django.conf import settings
+from django.core.exceptions import SuspiciousFileOperation
 from PIL import Image
 from requests.adapters import HTTPAdapter
 from urllib3.connection import HTTPConnection, HTTPSConnection
@@ -39,6 +40,8 @@ from urllib3.util.connection import (
     _TYPE_SOCKET_OPTIONS, _set_socket_options, allowed_gai_family,
 )
 from urllib3.util.timeout import _DEFAULT_TIMEOUT
+
+from pretix.helpers.reportlab import ThumbnailingImageReader
 
 _cgnat_net = ipaddress.ip_network('100.64.0.0/10')
 
@@ -230,9 +233,27 @@ def monkeypatch_cookie_morsel():
     cookies.Morsel._reserved.setdefault("partitioned", "Partitioned")
 
 
+def monkeypatch_reportlab_imagereader():
+    from reportlab.lib import utils
+    old_init = utils.ImageReader.__init__
+
+    def new_init(self, fileName, ident=None):  # noqa
+        if not isinstance(fileName, Image.Image) and not hasattr(fileName, 'read') and not hasattr(fileName, 'str'):
+            if not isinstance(self, ThumbnailingImageReader):
+                # ThumbnailingImageReader is only used by us explicitly and not by using <img> in html, so it is safe
+                raise SuspiciousFileOperation("reportlab should not be reading images from disk")
+
+        return types.MethodType(old_init, self)(
+            fileName, ident
+        )
+
+    utils.ImageReader.__init__ = new_init
+
+
 def monkeypatch_all_at_ready():
     monkeypatch_vobject_performance()
     monkeypatch_pillow_safer()
     monkeypatch_requests_timeout()
     monkeypatch_urllib3_ssrf_protection()
     monkeypatch_cookie_morsel()
+    monkeypatch_reportlab_imagereader()
