@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pytest
+from django.core.exceptions import SuspiciousFileOperation
 from reportlab.platypus import Paragraph
 
 
@@ -29,24 +30,21 @@ def test_http_access_disabled(monkeypatch):
 
     monkeypatch.setattr('socket.socket', guard)
 
-    with pytest.raises(OSError, match="Cannot open resource"):
+    with pytest.raises(SuspiciousFileOperation, match="should not be reading images from disk"):
         Paragraph(
             '<img src="https://static.pretix.cloud/static/pretixeu/img/opengraph.png"/>',
         )
 
 
 def test_file_access_disabled_scheme(monkeypatch):
-    with pytest.raises(OSError, match="Cannot open resource"):
+    with pytest.raises(SuspiciousFileOperation, match="should not be reading images from disk"):
         Paragraph(
             '<img src="file:///etc/passwd" />',
         )
 
 
-@pytest.mark.xfail
 def test_file_access_disabled_direct(monkeypatch):
-    # Unfortunately this is not prevented by the reprotlab config, but the risk is low since only valid images
-    # can be used.
-    with pytest.raises(OSError, match="Cannot open resource"):
+    with pytest.raises(SuspiciousFileOperation, match="should not be reading images from disk"):
         Paragraph(
             '<img src="/etc/passwd" />',
         )
