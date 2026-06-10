@@ -20,7 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-from pretix.base.signals import register_ticket_outputs
+from pretix.base.signals import register_ticket_outputs, register_global_settings
 from .ticketoutput import OUTPUTS
 
 def connect_signals():
@@ -30,6 +30,8 @@ def connect_signals():
             def register(sender, **kwargs):
                 return o
             return register      
-        register_ticket_outputs.connect(get_register_func(output), dispatch_uid=f"output_{output.identifier}")
+        register_ticket_outputs.connect(get_register_func(output), dispatch_uid=f"wallet_output_{output.identifier}")
+        if hasattr(output, "get_global_settings"):
+            register_global_settings.connect(output.get_global_settings, dispatch_uid=f"wallet_global_settings_{output.identifier}")
 
 connect_signals()
