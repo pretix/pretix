@@ -396,6 +396,7 @@ class OrderDeleteBulkActionView(BaseOrderBulkActionView):
 
     def execute_single(self, instance, form: forms.Form):
         instance.gracefully_delete(user=self.request.user)
+        return True
 
 
 class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):
