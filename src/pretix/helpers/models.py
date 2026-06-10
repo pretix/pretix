@@ -20,10 +20,12 @@
 # <https://www.gnu.org/licenses/>.
 #
 import copy
+import typing
 
 from django.core.files import File
 from django.db import models
 
+T = typing.TypeVar('T', bound=models.Model)
 
 class Thumbnail(models.Model):
     source = models.CharField(max_length=255)
@@ -45,6 +47,13 @@ def modelcopy(obj: models.Model, **kwargs):
             setattr(n, f.name, copy.deepcopy(val))
     return n
 
+def modelclone(obj: T, **kwargs) -> T:
+    new = copy.copy(obj)
+    new.pk = None
+    new._state.adding = True
+    for k,v in kwargs.items():
+        setattr(new, k, v)
+    return new
 
 # django 5 contains this in django.utils.choices.flatten_choices
 def flatten_choices(choices):

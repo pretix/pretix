@@ -62,6 +62,27 @@ function saveLayout(e: SubmitEvent) {
         });
 }
 
+function openForm(url: string, data: Record<string, string>) {
+
+    let form = document.createElement("form");
+    form.target = "_blank";
+    form.method = "POST";
+    form.action = url;
+    form.style.display = "none";
+
+    for (var key in data) {
+       var input = document.createElement("input");
+       input.type = "hidden";
+       input.name = key;
+       input.value = data[key];
+       form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
+
 const currentPlatform = ref(PLATFORMS[0].identifier);
 const currentLayout = computed(() => ({}));
 const platformStyles = computed(() => {
@@ -85,6 +106,10 @@ const platformChoices = computed(() => {
     return [[null, "Do not generate pass"], ...Object.values(platformStyles.value).map(x => [x.identifier, x.name])]
 });
 
+function openPreview(e: SubmitEvent) {
+    e.preventDefault();
+    openForm("../../preview/", {"csrfmiddlewaretoken": CSRF_TOKEN, "platform": currentPlatform.value, "style": platformLayout.value.style, "layout": JSON.stringify(platformLayout.value.layout)})
+}
 </script>
 
 <template lang="pug">
@@ -117,5 +142,7 @@ const platformChoices = computed(() => {
                             pre
                                 code {{ wallet_layout }}
         .form-group.submit-group
+            button.btn.btn-lg.btn-default(type="button" @click="openPreview") Preview
             button.btn.btn-primary.btn-save(type="submit") Submit
+
 </template>
