@@ -7,6 +7,7 @@ from .base import (
     WalletPlatform,
     PassStyle,
     PlaceholderFieldEntry,
+    PassLayout,
 )
 from django.utils.translation import gettext as _
 from i18nfield.strings import LazyI18nString
@@ -14,14 +15,55 @@ import io
 import hashlib
 import zipfile
 import cryptography
+import cryptography.x509
 import cryptography.hazmat.primitives.serialization.pkcs7
 import json
 from django.contrib.staticfiles import finders
-
+from pretix.base.models import OrderPosition
+from django.utils.encoding import force_bytes
 
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
     name = _("Apple")
+
+    @classmethod
+    def generate(cls, layout: PassLayout, op: OrderPosition):
+        from ..views import get_layout_variables
+
+        order = op.order
+        event = order.event
+        filename = "{}-{}.pkpass".format(order.event.slug, order.code)
+
+        ticket = str(op.item.name)
+        if op.variation:
+            ticket += " - " + str(op.variation)
+
+        serialNumber = "%s-%s-%s-%d" % (
+            order.event.organizer.slug,
+            order.event.slug,
+            order.code,
+            op.pk,
+        )
+        breakpoint()
+        context = {
+            "placeholders": get_layout_variables(op.order.event),
+            "evaluation_context": [op, order, order.event],
+            "ca_certificate": order.event.settings.wallet_apple_ca_certificate.read(),
+            "certificate": order.event.settings.wallet_apple_certificate.read(),
+            "key": order.event.settings.wallet_apple_key.read(),
+            "password": order.event.settings.wallet_apple_key_password,
+            "description": _("Ticket for {event} ({product})").format(  # TODO: i18n
+                event=event.name, product=ticket
+            ),
+            "organizationName": event.organizer.name,
+            "passTypeIdentifier": order.event.settings.wallet_apple_pass_type_id,
+            "teamIdentifier": order.event.settings.wallet_apple_team_id,
+            "serialNumber": serialNumber,
+            "locales": event.settings.locales,
+        }
+
+        data = layout.generate(context)
+        return filename, "application/vnd.apple.pkpass", data
 
 
 class StringResource:
@@ -58,13 +100,13 @@ class StringResource:
 class SignedZipFile:
     """Generates a zip-file with manifest and signature as apple expects a pkpass file to be"""
 
-    def __init__(self, ca_certificate, certificate, key, password):
+    def __init__(self, ca_certificate: str | bytes, certificate: str | bytes, key: str | bytes, password):
         self.ca_certificate = cryptography.x509.load_pem_x509_certificate(
-            ca_certificate
+            force_bytes(ca_certificate)
         )
-        self.certificate = cryptography.x509.load_pem_x509_certificate(certificate)
+        self.certificate = cryptography.x509.load_pem_x509_certificate(force_bytes(certificate))
         self.key = cryptography.hazmat.primitives.serialization.load_pem_private_key(
-            key, password
+            force_bytes(key), force_bytes(password) if password else None
         )
         self.password = password
 
@@ -109,8 +151,6 @@ class SignedZipFile:
 
 
 class AppleWalletStyle(PassStyle):
-    platform = ApplePlatform
-
     def pass_content(self, fields, strings):
         raise NotImplementedError()
 
@@ -145,17 +185,17 @@ class AppleWalletStyle(PassStyle):
             context["key"],
             context["password"],
         )
-        strings = StringResource(locales=context['locales'])
+        strings = StringResource(locales=context["locales"])
 
         pass_json = self.generate_pass_json(fields, context, strings)
         print(pass_json)
-        if fields['logo']:
-            logo = fields['logo'][0]['value']
+        if fields["logo"]:
+            logo = fields["logo"][0]["value"]
         else:
             logo = open(finders.find("pretix_passbook/logo.png"), "rb")
 
-        if fields['icon']:
-            icon = fields['icon'][0]['value']
+        if fields["icon"]:
+            icon = fields["icon"][0]["value"]
         else:
             icon = open(finders.find("pretix_passbook/icon.png"), "rb")
 
@@ -214,7 +254,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
         ),  # TODO: validation of max field count if combined "Coupons, store cards, and generic passes with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
         TextFieldGroup(
             identifier="headers", name=_("Header"), max_entries=3
-        ),  # TODO: header image
+        ),
         TextFieldGroup(identifier="auxillary", name=_("Auxillary"), max_entries=4),
         TextFieldGroup(identifier="back", name=_("Back")),
     ]
@@ -222,24 +262,32 @@ class AppleWalletEventTicket(AppleWalletStyle):
 
     def convert_fields(self, strings, fields, prefix):
         converted = []
-        for i,f in enumerate(fields):
+        for i, f in enumerate(fields):
             converted_field = {**f, "key": f"{prefix}-{i}"}
-            if "label" in converted_field and isinstance(converted_field['label'], LazyI18nString):
-                strings.add_entry(f"{prefix}-{i}-label", converted_field['label'])
-                converted_field['label'] = f"{prefix}-{i}-label"
+            if "label" in converted_field and isinstance(
+                converted_field["label"], LazyI18nString
+            ):
+                strings.add_entry(f"{prefix}-{i}-label", converted_field["label"])
+                converted_field["label"] = f"{prefix}-{i}-label"
 
-            if isinstance(converted_field['value'], LazyI18nString):
-                strings.add_entry(f"{prefix}-{i}-value", converted_field['value'])
-                converted_field['value'] = f"{prefix}-{i}-value"
+            if isinstance(converted_field["value"], LazyI18nString):
+                strings.add_entry(f"{prefix}-{i}-value", converted_field["value"])
+                converted_field["value"] = f"{prefix}-{i}-value"
             converted.append(converted_field)
         return converted
 
     def pass_content(self, fields, strings):
         return {
             "eventTicket": {
-                "primaryFields": self.convert_fields(strings, fields['primary'], 'primary'),
-                "secondaryFields": self.convert_fields(strings, fields['secondary'], 'secondary'),
-                "auxillaryFields": self.convert_fields(strings, fields['auxillary'], 'auxillary'),
-                "backFields": self.convert_fields(strings, fields['back'], 'back'),
+                "primaryFields": self.convert_fields(
+                    strings, fields["primary"], "primary"
+                ),
+                "secondaryFields": self.convert_fields(
+                    strings, fields["secondary"], "secondary"
+                ),
+                "auxillaryFields": self.convert_fields(
+                    strings, fields["auxillary"], "auxillary"
+                ),
+                "backFields": self.convert_fields(strings, fields["back"], "back"),
             }
         }

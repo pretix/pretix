@@ -20,11 +20,15 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django.db import models
+from django.db.models import constraints, Q
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import LoggedModel
 from django_scopes import ScopedManager
 from django.core.exceptions import ValidationError
+
+from pretix.plugins.wallet.styles import get_style
+from pretix.plugins.wallet.styles.base import PassLayout
 
 
 class WalletLayout(LoggedModel):
@@ -37,8 +41,17 @@ class WalletLayout(LoggedModel):
         max_length=190,
         verbose_name=_('Name')
     )
+    default = models.BooleanField(
+        verbose_name=_('Default'),
+        default=False,
+    )
 
     objects = ScopedManager(organizer='event__organizer')
+
+    class Meta:
+        constraints = [
+            constraints.UniqueConstraint("event", condition=Q(default=True), name="one_default_wallet_per_event")
+        ]
 
 
 class WalletPlatformLayout(LoggedModel):
@@ -53,14 +66,15 @@ class WalletPlatformLayout(LoggedModel):
     class Meta:
         unique_together = (('parent', 'platform'),)
 
+    @property
+    def pass_layout(self):
+        style = get_style(self.platform, self.style)
+        return PassLayout(style=style, layout=self.layout)
 
 class WalletLayoutItem(models.Model):
-    item = models.ForeignKey('pretixbase.Item', null=True, blank=True, related_name='walletlayout_assignments',
+    item = models.OneToOneField('pretixbase.Item', null=True, blank=True, related_name='walletlayout',
                              on_delete=models.CASCADE)
     layout = models.ForeignKey(WalletLayout, on_delete=models.CASCADE, related_name='item_assignments')
-
-    class Meta:
-        unique_together = (('item', 'layout'),)
 
     def clean(self):
         if self.item.event != self.layout.event:

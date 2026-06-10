@@ -25,14 +25,17 @@ from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.base.models import Event
 from pretix.base.settings import SettingsSandbox
 from django.template.loader import render_to_string
-
+from django.shortcuts import get_object_or_404
 from .styles import AVAILABLE_STYLES_DICT
+from .styles.base import PassLayout, WalletPlatform
 from .styles.apple import ApplePlatform
 from .styles.google import GooglePlatform
-
+from collections import OrderedDict
 from .models import WalletLayout
 from .views import get_layout_variables
-
+from django import forms
+from .forms import CertificateFileField, validate_rsa_privkey
+from pretix.control.forms import ClearableBasenameFileInput
 
 logger = logging.getLogger("pretix.plugins.wallet")
 
@@ -55,12 +58,21 @@ class WalletSettingsHolder(BaseTicketOutput):
 
 class WalletOutput(BaseTicketOutput):
     settings_form_fields = []
+    platform: WalletPlatform
 
     def __init__(self, event: Event):
         super().__init__(event)
         self.settings = SettingsSandbox(
             "ticketoutput", WalletSettingsHolder.identifier, event
         )
+
+    def generate(self, op):
+        if hasattr(op.item, "walletlayout"):
+            wallet_layout = op.item.walletlayout
+        else:
+            wallet_layout = op.event.wallet_layouts.get(default=True)
+        platform_layout = get_object_or_404(wallet_layout.platform_layouts, platform=self.platform.identifier)
+        return self.platform.generate(platform_layout.pass_layout, op)
 
 
 class GoogleWalletTicketOutput(WalletOutput):
@@ -76,61 +88,75 @@ class AppleWalletTicketOutput(WalletOutput):
     download_button_text = "Add to Apple Wallet"
     platform = ApplePlatform
 
-    def generate(self, op):
-        order = op.order
-        event = order.event
-        filename = "{}-{}.pkpass".format(order.event.slug, order.code)
-
-        # layout = self.override_layout_signal.send_chained(
-        #     order.event, 'layout', orderposition=op, layout=self.layout_map.get(
-        #         (op.item_id, self.override_channel or order.sales_channel.identifier),
-        #         self.layout_map.get(
-        #             (op.item_id, 'web'),
-        #             self.default_layout
-        #         )
-        #     )
-        # )
-        layout = WalletLayout.objects.get(pk=1)
-        platform_layout = layout.platform_layouts.get(platform=self.platform.identifier)
-
-        ticket = str(op.item.name)
-        if op.variation:
-            ticket += " - " + str(op.variation)
-        
-        serialNumber = "%s-%s-%s-%d" % (
-            order.event.organizer.slug,
-            order.event.slug,
-            order.code,
-            op.pk,
+    def get_global_settings(sender, **kwargs):
+        return OrderedDict(
+            [
+                (
+                    "wallet_apple_team_id",
+                    forms.CharField(
+                        label=_("Apple Wallet Pass team ID"),
+                        required=False,
+                    ),
+                ),
+                (
+                    "wallet_apple_pass_type_id",
+                    forms.CharField(
+                        label=_("Apple Wallet Pass type"),
+                        required=False,
+                    ),
+                ),
+                (
+                    "wallet_apple_certificate",
+                    CertificateFileField(
+                        label=_("Apple Wallet Pass certificate file"),
+                        required=False,
+                    ),
+                ),
+                (
+                    "wallet_apple_ca_certificate",
+                    CertificateFileField(
+                        label=_("Apple Wallet Pass CA Certificate"),
+                        help_text=_(
+                            "You can download the current CA certificate from apple at "
+                            "https://www.apple.com/certificateauthority/AppleWWDRCAG4.cer"
+                        ),
+                        required=False,
+                    ),
+                ),
+                (
+                    "wallet_apple_key",
+                    forms.FileField(
+                        label=_("Apple Wallet Pass secret key"),
+                        required=False,
+                        validators=[validate_rsa_privkey],
+                        widget=ClearableBasenameFileInput
+                    ),
+                ),
+                (
+                    "wallet_apple_key_password",
+                    forms.CharField(
+                        label=_("Apple Wallet Pass key password"),
+                        widget=forms.PasswordInput(render_value=True),
+                        required=False,
+                        help_text=_(
+                            "Optional, only necessary if the key entered above requires a password to use."
+                        ),
+                    ),
+                ),
+            ]
         )
 
-        context = {
-            "placeholders": get_layout_variables(op.order.event),
-            "evaluation_context": [op, order, order.event],
-            "ca_certificate": open(
-                "/Users/engelhardt/code/tmp/wallet/apple/ca_cert.pem", "rb"
-            ).read(),
-            "certificate": open(
-                "/Users/engelhardt/code/tmp/wallet/apple/cert.pem", "rb"
-            ).read(),
-            "key": open(
-                "/Users/engelhardt/code/tmp/wallet/apple/secret_key.pem", "rb"
-            ).read(),
-            "password": None,
-            "description": _("Ticket for {event} ({product})").format( # TODO: i18n
-                event=event.name, product=ticket
-            ),
-            "organizationName": event.organizer.name,
-            "passTypeIdentifier": "pass.test.test",
-            "teamIdentifier": "TEST123456",
-            "serialNumber": serialNumber,
-            "locales": event.settings.locales
-        }
 
-        data = AVAILABLE_STYLES_DICT[self.platform.identifier][platform_layout.style].generate(
-            platform_layout.layout, context
-        )
-        return filename, "application/vnd.apple.pkpass", data
-
+# settings_hierarkey.add_default("wallet_apple_certificate_file", None, File)
+# settings_hierarkey.add_default("wallet_apple_wwdr_certificate_file", None, File)
+# settings_hierarkey.add_default("ticketoutput_wallet_apple_background", None, File)
+# settings_hierarkey.add_default("ticketoutput_wallet_apple_background2x", None, File)
+# settings_hierarkey.add_default("ticketoutput_wallet_apple_background3x", None, File)
+# settings_hierarkey.add_default("ticketoutput_wallet_apple_icon", None, File)
+# settings_hierarkey.add_default("ticketoutput_wallet_apple_icon2x", None, File)
+# settings_hierarkey.add_default("ticketoutput_wallet_apple_icon3x", None, File)
+# settings_hierarkey.add_default("ticketoutput_wallet_apple_logo", None, File)
+# settings_hierarkey.add_default("ticketoutput_wallet_apple_logo2x", None, File)
+# settings_hierarkey.add_default("ticketoutput_wallet_apple_logo3x", None, File)
 
 OUTPUTS = [WalletSettingsHolder, GoogleWalletTicketOutput, AppleWalletTicketOutput]
