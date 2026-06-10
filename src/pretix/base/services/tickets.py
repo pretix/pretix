@@ -38,6 +38,7 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import register_ticket_outputs
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
+from django.db import transaction
 
 logger = logging.getLogger(__name__)
 
@@ -90,36 +91,43 @@ def generate(model: str, pk: int, provider: str):
 class DummyRollbackException(Exception):
     pass
 
+def get_preview_position(event):
+    connection = transaction.get_connection()
+    if not connection.in_atomic_block:
+        raise RuntimeError("get_preview_position needs to be called in a rolledback_transaction")
+    
+    item = event.items.create(name=_("Sample product"), default_price=Decimal('42.23'),
+                                  description=_("Sample product description"))
+    item2 = event.items.create(name=_("Sample workshop"), default_price=Decimal('23.40'))
 
-def preview(event: int, provider: str):
+    from pretix.base.models import Order
+    order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
+                                email='sample@pretix.eu',
+                                locale=event.settings.locale,
+                                sales_channel=event.organizer.sales_channels.get(identifier="web"),
+                                expires=now(), code="PREVIEW1234", total=119)
+
+    scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
+    sample = {k: str(v) for k, v in scheme['sample'].items()}
+    position = order.positions.create(item=item, attendee_name_parts=sample, price=item.default_price)
+    s = event.subevents.first()
+    order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=position, subevent=s)
+    order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=position, subevent=s)
+
+    InvoiceAddress.objects.create(order=order, name_parts=sample, company=_("Sample company"))
+    return position
+
+def preview(event: int, provider: str, provider_arguments: dict = {}):
     event = Event.objects.get(id=event)
 
     with rolledback_transaction(), language(event.settings.locale, event.settings.region):
-        item = event.items.create(name=_("Sample product"), default_price=Decimal('42.23'),
-                                  description=_("Sample product description"))
-        item2 = event.items.create(name=_("Sample workshop"), default_price=Decimal('23.40'))
-
-        from pretix.base.models import Order
-        order = event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
-                                    email='sample@pretix.eu',
-                                    locale=event.settings.locale,
-                                    sales_channel=event.organizer.sales_channels.get(identifier="web"),
-                                    expires=now(), code="PREVIEW1234", total=119)
-
-        scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
-        sample = {k: str(v) for k, v in scheme['sample'].items()}
-        p = order.positions.create(item=item, attendee_name_parts=sample, price=item.default_price)
-        s = event.subevents.first()
-        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p, subevent=s)
-        order.positions.create(item=item2, attendee_name_parts=sample, price=item.default_price, addon_to=p, subevent=s)
-
-        InvoiceAddress.objects.create(order=order, name_parts=sample, company=_("Sample company"))
+        p = get_preview_position(event)
 
         responses = register_ticket_outputs.send(event)
         for receiver, response in responses:
             prov = response(event)
             if prov.identifier == provider:
-                return prov.generate(p)
+                return prov.generate(p, **provider_arguments)
 
 
 def get_tickets_for_order(order, base_position=None):

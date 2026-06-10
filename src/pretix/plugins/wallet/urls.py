@@ -25,7 +25,10 @@ from pretix.api.urls import event_router
 from .views import (
     LayoutEditorView,
     LayoutCreateView,
-    LayoutListView
+    LayoutListView,
+    LayoutPreviewView,
+    LayoutSetDefault,
+    LayoutDelete
 )
 from .api import WalletLayoutViewSet
 
@@ -36,10 +39,12 @@ urlpatterns = [
         LayoutCreateView.as_view(), name='add'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/edit/(?P<layout>[^/]+)/$',
         LayoutEditorView.as_view(), name='edit'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/preview/$',
+        LayoutPreviewView.as_view(), name='preview'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/default/(?P<layout>[^/]+)/$', # TODO
-        LayoutEditorView.as_view(), name='default'),
+        LayoutSetDefault.as_view(), name='default'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/wallet/delete/(?P<layout>[^/]+)/$', # TODO
-        LayoutEditorView.as_view(), name='delete'),
+        LayoutDelete.as_view(), name='delete'),
 ]
 
 event_router.register('walletlayouts', WalletLayoutViewSet)

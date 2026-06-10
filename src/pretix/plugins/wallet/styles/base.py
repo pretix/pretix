@@ -222,7 +222,6 @@ class ImageFieldGroup(PlaceholderFieldGroup):
 
 
 class PassStyle:
-    platform: type[WalletPlatform]
     identifier: str  # unique within platform
     name: str
     # order here limits in what order users can configure field "overspilling" (if too many fields are defined, where should the rest go) -> can only go down in the list
@@ -232,7 +231,6 @@ class PassStyle:
 
     def asdict(self):
         return {
-            "platform": self.platform.identifier,
             "identifier": self.identifier,
             "name": self.name,
             "fieldgroups": [x.asdict() for x in self.fieldgroups],
