@@ -241,5 +241,6 @@ def perform_media_exchange(organizer, media_type, identifier, link_orderposition
             'medium_type': medium.media_type.identifier,
         }
     )
+    medium.touch()
 
     return medium

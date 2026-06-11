@@ -1722,6 +1722,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                             'linked_orderposition': pos.pk,
                         }
                     )
+                    use_reusable_medium.touch()
 
         if not simulate:
             for cp in delete_cps:
