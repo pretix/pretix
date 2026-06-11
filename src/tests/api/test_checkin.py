@@ -1127,6 +1127,7 @@ def test_store_failed(token_client, organizer, clist, event, order):
         organizer.slug, event.slug, clist.pk,
     ), {
         'raw_barcode': '123456',
+        'raw_source_type': 'nfc_uid',
         'nonce': '4321',
         'error_reason': 'invalid'
     }, format='json')
