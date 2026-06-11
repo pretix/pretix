@@ -139,8 +139,6 @@ build-backend = "backend"
 backend-path = ["_build"]
 requires = [
   "setuptools",
-  "setuptools-rust",
-  "wheel",
   "importlib_metadata",
   "tomli",
 ]
