@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
 "PO-Revision-Date: 2025-06-06 06:09+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
@@ -131,7 +131,6 @@ msgid "Mercado Pago"
 msgstr "Nền tảng Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "Tiếp tục"
@@ -185,172 +184,6 @@ msgstr "Tổng cộng"
 msgid "Contacting your bank …"
 msgstr "Đang kết nối đến ngân hàng…"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "Chọn một danh sách check-in"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "Không có danh sách check-in nào đang kích hoạt."
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "Chuyển danh sách check-in"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "Kết quả tìm kiếm"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "Không có vé nào được tìm thấy"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "Kết quả"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "Vé này cần được chú ý đặc biệt"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "Chuyển hướng"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "Vào"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "Ra"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "Quét mã vé hoặc tìm kiếm và nhấn Enter…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "Tải thêm"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "Hợp lệ"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "Chưa thanh toán"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "Đã huỷ"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr "Đã Xác Nhận"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr "Đang chờ phê duyệt"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "Đã đổi"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "Huỷ"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "Vé chưa thanh toán"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr "Vé này chưa được thanh toán. Tiếp tục thực hiện?"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "Yêu cầu thông tin bổ sung"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "Vé hợp lệ"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "Đã ghi nhận Rời khỏi"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "Vé đã được sử dụng"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "Thông tin được yêu cầu"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Unknown ticket"
-msgstr "Không nhận ra vé"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Ticket type not allowed here"
-msgstr "Loại vé không được chấp nhập ở đây"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "Không cho phép vào"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "Mã vé đã bị thu hồi / thay đổi"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Ticket blocked"
-msgstr "Vé đã bị khoá"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket not valid at this time"
-msgstr "Vé không hợp lệ tại thời điểm này"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "Đơn hàng đã bị hủy"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr "Mã vé không rõ ràng trong danh sách"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr "Đơn hàng không được chấp nhận"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "Vé đã check-in"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "Những vé hợp lệ"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "Hiện đang ở bên trong"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "Có"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "Không"
-
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "đóng"
@@ -381,35 +214,35 @@ msgstr ""
 "Chúng tôi đã nhận được yêu cầu của bạn nhưng chờ để xử lý. Vui lòng liên hệ "
 "cho chúng tôi hoặc thực hiện lại nếu quá trình xử lý kéo dài hơn 2 phút."
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Đã xảy ra lỗi {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr "Mất kết nối đến server, đang kết nối lại. Mã lỗi: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "Yêu cầu quá lâu. Vui lòng thực hiện lại."
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "Không thể kết nối đến máy chủ. Vui lòng thử lại. Mã lỗi: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "Chúng tôi đang xử lý yêu cầu …"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -418,13 +251,13 @@ msgstr ""
 "Đang gửi yêu cầu đến máy chủ. Nếu quá trình này kéo dài hơn 1 phút, vui lòng "
 "kiểm tra lại kết nối Internet, tải lại trang và thử lại."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 "Yêu cầu của bạn hiện đang được xử lý. Tùy theo quy mô sự kiện, quá trình này "
 "có thể mất đến vài phút."
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "Đóng tin nhắn"
 
@@ -435,146 +268,6 @@ msgstr "Đã sao chép!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Nhấn Ctrl-C để sao chép!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "là một trong"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "là trước"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "là sau"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr "="
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "Sản phẩm"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "Biến thể sản phẩm"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr "Cổng"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "Ngày và giờ hiện tại"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "Ngày hiện tại trong tuần (1 = Thứ 2, 7 = Chủ nhật)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr "Trạng thái vào hiện tại"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "Số lượng các mục trước"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "Số mục trước đó tính từ nửa đêm"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-msgid "Number of previous entries since"
-msgstr "Số mục trước từ khi"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-msgid "Number of previous entries before"
-msgstr "Số lượt nhập trước đó"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "Số ngày có lượt nhập trước đó"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-msgid "Number of days with a previous entry since"
-msgstr "Số ngày có lượt nhập trước đó kể từ khi"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-msgid "Number of days with a previous entry before"
-msgstr "Số ngày có lượt nhập trước đó trước"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr "Số phút kể từ lượt nhập cuối cùng (-1 đối với lượt nhập đầu tiên)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr "Số phút kể từ lượt nhập đầu tiên (-1 đối với lượt nhập đầu tiên)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "Tất cả các điều kiện bên dưới (và)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "Tối thiểu một điều kiện bên dưới (hoặc)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "Sự kiện bắt đầu"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "Sự kiện kết thúc"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "Ghi danh sự kiện"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "tuỳ chỉnh ngày và giờ"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "tuỷ chỉnh giờ"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "Tolerance (phút)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "Thêm điều kiện"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "phút"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr "Nhân bản"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr "có mặt"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr "vắng"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -715,6 +408,16 @@ msgstr "Khác"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "Số lượng"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "Có"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "Không"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1196,6 +899,218 @@ msgstr "Tháng 11"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "Tháng 12"
+
+#~ msgid "Select a check-in list"
+#~ msgstr "Chọn một danh sách check-in"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "Không có danh sách check-in nào đang kích hoạt."
+
+#~ msgid "Switch check-in list"
+#~ msgstr "Chuyển danh sách check-in"
+
+#~ msgid "Search results"
+#~ msgstr "Kết quả tìm kiếm"
+
+#~ msgid "No tickets found"
+#~ msgstr "Không có vé nào được tìm thấy"
+
+#~ msgid "Result"
+#~ msgstr "Kết quả"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "Vé này cần được chú ý đặc biệt"
+
+#~ msgid "Switch direction"
+#~ msgstr "Chuyển hướng"
+
+#~ msgid "Entry"
+#~ msgstr "Vào"
+
+#~ msgid "Exit"
+#~ msgstr "Ra"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "Quét mã vé hoặc tìm kiếm và nhấn Enter…"
+
+#~ msgid "Load more"
+#~ msgstr "Tải thêm"
+
+#~ msgid "Valid"
+#~ msgstr "Hợp lệ"
+
+#~ msgid "Unpaid"
+#~ msgstr "Chưa thanh toán"
+
+#~ msgid "Canceled"
+#~ msgstr "Đã huỷ"
+
+#~ msgid "Confirmed"
+#~ msgstr "Đã Xác Nhận"
+
+#~ msgid "Approval pending"
+#~ msgstr "Đang chờ phê duyệt"
+
+#~ msgid "Redeemed"
+#~ msgstr "Đã đổi"
+
+#~ msgid "Cancel"
+#~ msgstr "Huỷ"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "Vé chưa thanh toán"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr "Vé này chưa được thanh toán. Tiếp tục thực hiện?"
+
+#~ msgid "Additional information required"
+#~ msgstr "Yêu cầu thông tin bổ sung"
+
+#~ msgid "Valid ticket"
+#~ msgstr "Vé hợp lệ"
+
+#~ msgid "Exit recorded"
+#~ msgstr "Đã ghi nhận Rời khỏi"
+
+#~ msgid "Ticket already used"
+#~ msgstr "Vé đã được sử dụng"
+
+#~ msgid "Information required"
+#~ msgstr "Thông tin được yêu cầu"
+
+#~ msgid "Unknown ticket"
+#~ msgstr "Không nhận ra vé"
+
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "Loại vé không được chấp nhập ở đây"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "Không cho phép vào"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "Mã vé đã bị thu hồi / thay đổi"
+
+#~ msgid "Ticket blocked"
+#~ msgstr "Vé đã bị khoá"
+
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "Vé không hợp lệ tại thời điểm này"
+
+#~ msgid "Order canceled"
+#~ msgstr "Đơn hàng đã bị hủy"
+
+#~ msgid "Ticket code is ambiguous on list"
+#~ msgstr "Mã vé không rõ ràng trong danh sách"
+
+#~ msgid "Order not approved"
+#~ msgstr "Đơn hàng không được chấp nhận"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "Vé đã check-in"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "Những vé hợp lệ"
+
+#~ msgid "Currently inside"
+#~ msgstr "Hiện đang ở bên trong"
+
+#~ msgid "is one of"
+#~ msgstr "là một trong"
+
+#~ msgid "is before"
+#~ msgstr "là trước"
+
+#~ msgid "is after"
+#~ msgstr "là sau"
+
+#~ msgid "="
+#~ msgstr "="
+
+#~ msgid "Product"
+#~ msgstr "Sản phẩm"
+
+#~ msgid "Product variation"
+#~ msgstr "Biến thể sản phẩm"
+
+#~ msgid "Gate"
+#~ msgstr "Cổng"
+
+#~ msgid "Current date and time"
+#~ msgstr "Ngày và giờ hiện tại"
+
+#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+#~ msgstr "Ngày hiện tại trong tuần (1 = Thứ 2, 7 = Chủ nhật)"
+
+#~ msgid "Current entry status"
+#~ msgstr "Trạng thái vào hiện tại"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "Số lượng các mục trước"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "Số mục trước đó tính từ nửa đêm"
+
+#~ msgid "Number of previous entries since"
+#~ msgstr "Số mục trước từ khi"
+
+#~ msgid "Number of previous entries before"
+#~ msgstr "Số lượt nhập trước đó"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "Số ngày có lượt nhập trước đó"
+
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "Số ngày có lượt nhập trước đó kể từ khi"
+
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "Số ngày có lượt nhập trước đó trước"
+
+#~ msgid "Minutes since last entry (-1 on first entry)"
+#~ msgstr "Số phút kể từ lượt nhập cuối cùng (-1 đối với lượt nhập đầu tiên)"
+
+#~ msgid "Minutes since first entry (-1 on first entry)"
+#~ msgstr "Số phút kể từ lượt nhập đầu tiên (-1 đối với lượt nhập đầu tiên)"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "Tất cả các điều kiện bên dưới (và)"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "Tối thiểu một điều kiện bên dưới (hoặc)"
+
+#~ msgid "Event start"
+#~ msgstr "Sự kiện bắt đầu"
+
+#~ msgid "Event end"
+#~ msgstr "Sự kiện kết thúc"
+
+#~ msgid "Event admission"
+#~ msgstr "Ghi danh sự kiện"
+
+#~ msgid "custom date and time"
+#~ msgstr "tuỳ chỉnh ngày và giờ"
+
+#~ msgid "custom time"
+#~ msgstr "tuỷ chỉnh giờ"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "Tolerance (phút)"
+
+#~ msgid "Add condition"
+#~ msgstr "Thêm điều kiện"
+
+#~ msgid "minutes"
+#~ msgstr "phút"
+
+#~ msgid "Duplicate"
+#~ msgstr "Nhân bản"
+
+#~ msgctxt "entry_status"
+#~ msgid "present"
+#~ msgstr "có mặt"
+
+#~ msgctxt "entry_status"
+#~ msgid "absent"
+#~ msgstr "vắng"
 
 #~ msgid "iDEAL"
 #~ msgstr "Nền tảng iDEAL"

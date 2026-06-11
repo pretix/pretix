@@ -491,6 +491,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     )
     raw_barcode_for_checkin = None
     from_revoked_secret = False
+    reusable_medium_used = None
     if simulate:
         common_checkin_args['__fake_arg_to_prevent_this_from_being_saved'] = True
 
@@ -521,11 +522,12 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     #    with respecting the force option), or it's a reusable medium (-> proceed with that)
     if not op_candidates:
         try:
-            media = ReusableMedium.objects.select_related('linked_orderposition').active().get(
+            media = ReusableMedium.objects.active().filter(
+                Exists(ReusableMedium.linked_orderpositions.through.objects.filter(reusablemedium_id=OuterRef('pk')))
+            ).get(
                 organizer_id=checkinlists[0].event.organizer_id,
                 type=source_type,
                 identifier=raw_barcode,
-                linked_orderposition__isnull=False,
             )
             raw_barcode_for_checkin = raw_barcode
         except ReusableMedium.DoesNotExist:
@@ -628,7 +630,9 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
                 }, status=400)
         else:
-            if media.linked_orderposition.order.event_id not in list_by_event:
+            linked_ops = media.linked_orderpositions.all().select_related("order").prefetch_related("addons")
+            linked_event_ids = {op.order.event_id for op in linked_ops}
+            if not any(event_id in list_by_event for event_id in linked_event_ids):
                 # Medium exists but connected ticket is for the wrong event
                 if not simulate:
                     checkinlists[0].event.log_action('pretix.event.checkin.unknown', data={
@@ -654,28 +658,91 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'checkin_texts': [],
                     'list': MiniCheckinListSerializer(checkinlists[0]).data,
                 }, status=404)
-            op_candidates = [media.linked_orderposition]
-            if list_by_event[media.linked_orderposition.order.event_id].addon_match:
-                op_candidates += list(media.linked_orderposition.addons.all())
+            op_candidates = []
+            for op in linked_ops:
+                if op.order.event_id in list_by_event:
+                    reusable_medium_used = media
+                    op_candidates.append(op)
+                    if list_by_event[op.order.event_id].addon_match:
+                        op_candidates += list(op.addons.all())
 
     # 3. Handle the "multiple options found" case: Except for the unlikely case of a secret being also a valid primary
-    #    key on the same list, we're probably dealing with the ``addon_match`` case here and need to figure out
-    #    which add-on has the right product.
+    #    key on the same list, we're probably dealing with multiple linked_orderpositions or the ``addon_match`` case
+    #    here and need to figure out which op has the right product. This basically is a valid-for-checkin-test on every op.
     if len(op_candidates) > 1:
-        op_candidates_matching_product = [
-            op for op in op_candidates
-            if (
-                (list_by_event[op.order.event_id].addon_match or op.secret == raw_barcode or legacy_url_support) and
-                (list_by_event[op.order.event_id].all_products or op.item_id in {i.pk for i in list_by_event[op.order.event_id].limit_products.all()})
-            )
-        ]
 
-        if len(op_candidates_matching_product) == 0:
-            # None of the found add-ons has the correct product, too bad! We could just error out here, but
+        if not reusable_medium_used:
+            # 3a. First, we clean up that we made an imprecise query above. If a scan is made for multiple check-in lists,
+            # we have queried ``addon_to__secret=raw_barcode``, even if some of the lists in question do not allow addon
+            # matching. So we accept all candidates that match one of these cases:
+            # - Exactly the ticket secret we scanned (because that's always a possible result)
+            # - Exactly the ticket pk we scanned (on legacy endpoints)
+            # - An add-on on a list that allows add-on matching
+            # This is not necessary when a reusable media was used, since in that case we already obeyed list.addon_match
+            # correctly above.
+            op_candidates_filtered = [
+                op for op in op_candidates
+                if (
+                    op.secret == raw_barcode or
+                    list_by_event[op.order.event_id].addon_match or
+                    (str(op.pk) == raw_barcode and legacy_url_support and not untrusted_input)
+                )
+            ]
+        else:
+            op_candidates_filtered = op_candidates
+
+        if len(op_candidates_filtered) > 1:
+            # 3b. If we still have multiple candidates, we filter by product based on the check-in list configuration.
+            # This is relevant for the addon_match scenario where the scanned ticket has multiple add-ons, but only
+            # one is contained in the check-in list used to scan. It makes sense to filter this first, since it is a
+            # "static" check, i.e. scanning the same QR code on the same check-in list will always do the same, no matter
+            # when I scan it, and it is "intentional" filtering in the sense that the admin configured this behaviour
+            # into the check-in list.
+            op_candidates_filtered = [
+                op for op in op_candidates_filtered
+                if list_by_event[op.order.event_id].all_products or op.item_id in {i.pk for i in list_by_event[op.order.event_id].limit_products.all()}
+            ]
+
+        if len(op_candidates_filtered) > 1:
+            # 3c. If we still have multiple candidates, we filter by validity date. This was introduced for the case where
+            # a reusable media refers to two tickets, one currently valid and one expired or in the future. Howeer,
+            # it could in theory also happen with two add-ons being on the same check-in list but without overlapping
+            # validity. It makes sense to filter this "after" the previous checks since it is not "intentional" filtering
+            # configured by the admin but "accidental" filtering that depends on the time of execution.
+            op_candidates_filtered = [
+                op for op in op_candidates_filtered
+                if (
+                    (not op.valid_from or op.valid_from <= datetime) and
+                    (not op.valid_until or op.valid_until > datetime)
+                )
+            ]
+
+        if len(op_candidates_filtered) == 0:
+            # None of the ops is valid today or has the correct product, too bad! We could just error out here, but
             # instead we just continue with *any* product and have it rejected by the check in perform_checkin.
-            # This has the advantage of a better error message.
-            op_candidates = [op_candidates[0]]
-        elif len(op_candidates_matching_product) > 1:
+            # To improve the error message, we select the op that will "work next" or - if none matches - "worked last".
+            op_candidate = None
+            for op in op_candidates:
+                if (
+                    op.valid_from and op.valid_from > datetime and
+                    (not op_candidate or op.valid_from < op_candidate.valid_from)
+                ):
+                    op_candidate = op
+
+            if not op_candidate:
+                # no candidate in the future, get closest in the past
+                for op in op_candidates:
+                    if (
+                        op.valid_until and op.valid_until < datetime and
+                        (not op_candidate or op.valid_until > op_candidate.valid_until)
+                    ):
+                        op_candidate = op
+
+            if not op_candidate:
+                op_candidate = op_candidates[0]
+
+            op_candidates = [op_candidate]
+        elif len(op_candidates_filtered) > 1:
             # It's still ambiguous, we'll error out.
             # We choose the first match (regardless of product) for the logging since it's most likely to be the
             # base product according to our order_by above.
@@ -709,7 +776,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         else:
-            op_candidates = op_candidates_matching_product
+            op_candidates = op_candidates_filtered
 
     op = op_candidates[0]
     common_checkin_args['list'] = list_by_event[op.order.event_id]
@@ -721,7 +788,10 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             if str(q.pk) in answers_data:
                 try:
                     if q.type == Question.TYPE_FILE:
-                        given_answers[q] = _handle_file_upload(answers_data[str(q.pk)], user, auth)
+                        if answers_data[str(q.pk)]:
+                            given_answers[q] = _handle_file_upload(answers_data[str(q.pk)], user, auth)
+                        else:
+                            given_answers[q] = None
                     else:
                         given_answers[q] = q.clean_answer(answers_data[str(q.pk)])
                 except (ValidationError, BaseValidationError):

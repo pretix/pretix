@@ -33,6 +33,8 @@ from urllib3.connectionpool import HTTPConnectionPool, HTTPSConnectionPool
 from urllib3.contrib.resolver.system import SystemResolver
 from urllib3.exceptions import HTTPError
 
+_cgnat_net = ipaddress.ip_network('100.64.0.0/10')
+
 
 def monkeypatch_vobject_performance():
     """
@@ -127,6 +129,8 @@ class ProtectedSystemResolver(SystemResolver):
                     raise HTTPError(f"Request to local address {addr} blocked")
                 if ip_addr.is_private:
                     raise HTTPError(f"Request to private address {addr} blocked")
+                if ip_addr in _cgnat_net:
+                    raise HTTPError(f"Request to RFC 6598 address {addr} blocked")
         return addrs
 
 

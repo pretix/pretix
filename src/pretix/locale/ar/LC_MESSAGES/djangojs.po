@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
 "PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -134,7 +134,6 @@ msgid "Mercado Pago"
 msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "المتابعة"
@@ -188,180 +187,6 @@ msgstr "المجموع"
 msgid "Contacting your bank …"
 msgstr "جاري الاتصال بالبنك الذي تتعامل معه …"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "اختر قائمة الدخول"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "لم يتم العثور على قوائم دخول نشطة."
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "تبديل قائمة الدخول"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "البحث في النتائج"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "لم يتم العثور على تذاكر"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "النتيجة"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "تحتاج هذه التذكرة إلى إهتمام خاص"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "تغيير المسار"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "دخول"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "خروج"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "قم بمسح التذكرة أو إبحث واضغط زر العودة…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "تحميل المزيد"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "ساري المفعول"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "غير مدفوع"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "ملغاة"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr ""
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr ""
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "مستخدم"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "قم بالإلغاء"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "لم يتم دفع قيمة التذكرة"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr "لم يتم دفع قيمة التذكرة بعد، هل تريد المتابعة على أي حال؟"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "مطلوب معلومات إضافية"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "تذكرة سارية المفعول"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "تم تسجيل الخروج"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "تم استخدام التذكرة مسبقا"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "معلومات مطلوبة"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-#, fuzzy
-#| msgid "Unknown error."
-msgid "Unknown ticket"
-msgstr "خطأ غير معروف."
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-#, fuzzy
-#| msgid "Entry not allowed"
-msgid "Ticket type not allowed here"
-msgstr "إدخال غير مسموح"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "إدخال غير مسموح"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "تم إلغاء رمز التذكرة أو تبديله"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-#, fuzzy
-#| msgid "Ticket not paid"
-msgid "Ticket blocked"
-msgstr "لم يتم دفع قيمة التذكرة"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-#, fuzzy
-#| msgid "Ticket not paid"
-msgid "Ticket not valid at this time"
-msgstr "لم يتم دفع قيمة التذكرة"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "تم إلغاء الطلب"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr ""
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr ""
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "تذاكر الدخول"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "تذاكر سارية المفعول"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "حاليا بالداخل"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "نعم"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "لا"
-
 #: pretix/static/lightbox/js/lightbox.js:96
 #, fuzzy
 #| msgctxt "widget"
@@ -395,36 +220,36 @@ msgstr ""
 "وصل طلبك للخادم وننتظر تنفيذه. إذا استغرق الأمر أكثر من دقيقتين تواصل معنا "
 "أو عاود المحاولة مجددا."
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "حدث خطأ من نوع {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr "لم نتمكن من الاتصال بالخادم، لكن سنواصل المحاولة، رمز آخر خطأ: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "استغرقت الطلب فترة طويلة، الرجاء المحاولة مرة أخرى."
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "لا يمكننا الوصول إلى الخادم حاليا، حاول مرة أخرى من فضلك. رمز الخطأ : {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "جاري معالجة طلبك …"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -433,11 +258,11 @@ msgstr ""
 "نعمل الآن على ارسال طلبك إلى الخادم، إذا أستغرقت العملية أكثر من دقيقة، يرجى "
 "التحقق من اتصالك بالإنترنت ثم أعد تحميل الصفحة مرة أخرى."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "أغلق الرسالة"
 
@@ -448,154 +273,6 @@ msgstr "تم النسخ!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "للنسخ اضغط Ctrl + C!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "واحد من"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "قبل"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "بعد"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "منتج"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "نوع المنتج"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "التاريخ والوقت الحالي"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "عدد المدخلات السابقة"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "عدد المدخلات السابقة قبل منتصف الليل"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-#, fuzzy
-#| msgid "Number of previous entries"
-msgid "Number of previous entries since"
-msgstr "عدد المدخلات السابقة"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-#, fuzzy
-#| msgid "Number of previous entries"
-msgid "Number of previous entries before"
-msgstr "عدد المدخلات السابقة"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "عدد الأيام التي تحتوي على مدخل سابق"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-#, fuzzy
-#| msgid "Number of days with a previous entry"
-msgid "Number of days with a previous entry since"
-msgstr "عدد الأيام التي تحتوي على مدخل سابق"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-#, fuzzy
-#| msgid "Number of days with a previous entry"
-msgid "Number of days with a previous entry before"
-msgstr "عدد الأيام التي تحتوي على مدخل سابق"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "جميع الشروط في الأسفل"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "خيار واحد على الأقل"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "بداية الفعالية"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "نهاية الفعالية"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "تسجيل الفعالية"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "تحديد التاريخ والوقت"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "الوقت المحدد"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "القدرة على التحمل (الدقائق)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "أضف شرطا"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "الدقائق"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -740,6 +417,16 @@ msgstr "غير ذلك"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "احسب"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "نعم"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "لا"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1259,6 +946,193 @@ msgstr "نوفمبر"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "ديسمبر"
+
+#~ msgid "Select a check-in list"
+#~ msgstr "اختر قائمة الدخول"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "لم يتم العثور على قوائم دخول نشطة."
+
+#~ msgid "Switch check-in list"
+#~ msgstr "تبديل قائمة الدخول"
+
+#~ msgid "Search results"
+#~ msgstr "البحث في النتائج"
+
+#~ msgid "No tickets found"
+#~ msgstr "لم يتم العثور على تذاكر"
+
+#~ msgid "Result"
+#~ msgstr "النتيجة"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "تحتاج هذه التذكرة إلى إهتمام خاص"
+
+#~ msgid "Switch direction"
+#~ msgstr "تغيير المسار"
+
+#~ msgid "Entry"
+#~ msgstr "دخول"
+
+#~ msgid "Exit"
+#~ msgstr "خروج"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "قم بمسح التذكرة أو إبحث واضغط زر العودة…"
+
+#~ msgid "Load more"
+#~ msgstr "تحميل المزيد"
+
+#~ msgid "Valid"
+#~ msgstr "ساري المفعول"
+
+#~ msgid "Unpaid"
+#~ msgstr "غير مدفوع"
+
+#~ msgid "Canceled"
+#~ msgstr "ملغاة"
+
+#~ msgid "Redeemed"
+#~ msgstr "مستخدم"
+
+#~ msgid "Cancel"
+#~ msgstr "قم بالإلغاء"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "لم يتم دفع قيمة التذكرة"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr "لم يتم دفع قيمة التذكرة بعد، هل تريد المتابعة على أي حال؟"
+
+#~ msgid "Additional information required"
+#~ msgstr "مطلوب معلومات إضافية"
+
+#~ msgid "Valid ticket"
+#~ msgstr "تذكرة سارية المفعول"
+
+#~ msgid "Exit recorded"
+#~ msgstr "تم تسجيل الخروج"
+
+#~ msgid "Ticket already used"
+#~ msgstr "تم استخدام التذكرة مسبقا"
+
+#~ msgid "Information required"
+#~ msgstr "معلومات مطلوبة"
+
+#, fuzzy
+#~| msgid "Unknown error."
+#~ msgid "Unknown ticket"
+#~ msgstr "خطأ غير معروف."
+
+#, fuzzy
+#~| msgid "Entry not allowed"
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "إدخال غير مسموح"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "إدخال غير مسموح"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "تم إلغاء رمز التذكرة أو تبديله"
+
+#, fuzzy
+#~| msgid "Ticket not paid"
+#~ msgid "Ticket blocked"
+#~ msgstr "لم يتم دفع قيمة التذكرة"
+
+#, fuzzy
+#~| msgid "Ticket not paid"
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "لم يتم دفع قيمة التذكرة"
+
+#~ msgid "Order canceled"
+#~ msgstr "تم إلغاء الطلب"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "تذاكر الدخول"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "تذاكر سارية المفعول"
+
+#~ msgid "Currently inside"
+#~ msgstr "حاليا بالداخل"
+
+#~ msgid "is one of"
+#~ msgstr "واحد من"
+
+#~ msgid "is before"
+#~ msgstr "قبل"
+
+#~ msgid "is after"
+#~ msgstr "بعد"
+
+#~ msgid "Product"
+#~ msgstr "منتج"
+
+#~ msgid "Product variation"
+#~ msgstr "نوع المنتج"
+
+#~ msgid "Current date and time"
+#~ msgstr "التاريخ والوقت الحالي"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "عدد المدخلات السابقة"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "عدد المدخلات السابقة قبل منتصف الليل"
+
+#, fuzzy
+#~| msgid "Number of previous entries"
+#~ msgid "Number of previous entries since"
+#~ msgstr "عدد المدخلات السابقة"
+
+#, fuzzy
+#~| msgid "Number of previous entries"
+#~ msgid "Number of previous entries before"
+#~ msgstr "عدد المدخلات السابقة"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "عدد الأيام التي تحتوي على مدخل سابق"
+
+#, fuzzy
+#~| msgid "Number of days with a previous entry"
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "عدد الأيام التي تحتوي على مدخل سابق"
+
+#, fuzzy
+#~| msgid "Number of days with a previous entry"
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "عدد الأيام التي تحتوي على مدخل سابق"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "جميع الشروط في الأسفل"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "خيار واحد على الأقل"
+
+#~ msgid "Event start"
+#~ msgstr "بداية الفعالية"
+
+#~ msgid "Event end"
+#~ msgstr "نهاية الفعالية"
+
+#~ msgid "Event admission"
+#~ msgstr "تسجيل الفعالية"
+
+#~ msgid "custom date and time"
+#~ msgstr "تحديد التاريخ والوقت"
+
+#~ msgid "custom time"
+#~ msgstr "الوقت المحدد"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "القدرة على التحمل (الدقائق)"
+
+#~ msgid "Add condition"
+#~ msgstr "أضف شرطا"
+
+#~ msgid "minutes"
+#~ msgstr "الدقائق"
 
 #~ msgid "Time zone:"
 #~ msgstr "المنطقة الزمنية:"

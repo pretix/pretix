@@ -401,13 +401,14 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
                 {
                     'id': i.pk,
                     'name': str(i),
+                    'active': i.active,
                     'variations': [
                         {
                             'id': v.pk,
                             'name': str(v.value)
                         } for v in i.variations.all()
                     ]
-                } for i in self.request.event.items.filter(active=True).prefetch_related('variations')
+                } for i in self.request.event.items.prefetch_related('variations')
             ],
             **super().get_context_data(),
         }

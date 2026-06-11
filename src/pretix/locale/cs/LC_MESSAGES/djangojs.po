@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
 "PO-Revision-Date: 2026-01-08 04:00+0000\n"
 "Last-Translator: Jiří Pastrňák <jiri@pastrnak.email>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -131,7 +131,6 @@ msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "Pokračovat"
@@ -185,172 +184,6 @@ msgstr "Celkem"
 msgid "Contacting your bank …"
 msgstr "Kontaktuji vaši banku …"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "Zvolte check-in list"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "Žádné aktivní check-in listy."
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "Změnit check-in list"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "Vyhledat výsledky"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "Nenalezeny žádné lístky"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "Výsledek"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "Tato vstupenka vyžaduje speciální pozornost"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "Změnit směr"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "Vstup"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "Výstup"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "Naskenujte vstupenku, nebo ji vyhledejte a zmáčkněte zpět…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "Načíst více"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "Potrvzeno"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "Nezaplaceno"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "Zrušeno"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr "Potvrzeno"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr "Čeká na schválení"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "Uplatněno"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "Zrušit"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "Vstupenka není zaplacena"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr "Vstupenka nebyla zaplacena. Chcete i přesto pokračovat?"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "Potřebné další informace"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "Platná vstupenka"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "Opustit nahrávané"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "Vstupenka již byla použita"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "Informace vyžadována"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Unknown ticket"
-msgstr "Neznámá vstupenka"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Ticket type not allowed here"
-msgstr "Typ vstupenky zde není povolen"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "Vstup není povolen"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "Kód vstupenky změněn"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Ticket blocked"
-msgstr "Vstupenka zablokována"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket not valid at this time"
-msgstr "Vstupenka je v tuto chvíli neplatná"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "Objednávka zrušena"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr "Kód vstupenky je v seznamu nejednoznačný"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr "Objednávka nebyla potvrzena"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "Vyřízené vstupenky"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "Platné vstupenky"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "Aktuálně uvnitř"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "Ano"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "Ne"
-
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "zavřít"
@@ -382,14 +215,14 @@ msgstr ""
 "Pokud to trvá více jak dvě minuty, prosím kontaktuje nás nebo se vraťte do "
 "vašeho prohlížeče a zkuste to znovu."
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Vyskytla se chyba {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -397,12 +230,12 @@ msgstr ""
 "Momentálně nemůžeme kontaktovat server, ale stále se o to pokoušíme. "
 "Poslední chybový kód: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "Zpracování požadavku trvá příliš dlouho. Prosím zkuste to znovu."
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -410,11 +243,11 @@ msgstr ""
 "Momentálně nemůžeme kontaktovat server. Prosím zkuste to znovu. Chybový kód: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "Zpracováváme váš požadavek …"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -424,11 +257,11 @@ msgstr ""
 "prosím zkontrolujte své internetové připojení a znovu načtěte stránku a "
 "zkuste to znovu."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "Pokud akce trvá déle než několik minut, kontaktujte nás."
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "Zavřít zprávu"
 
@@ -439,154 +272,6 @@ msgstr "Zkopírováno!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Stiskněte Ctrl-C pro zkopírování!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "je jedním z"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "je před"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "je po"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr "="
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "Produkt"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "Varianta produktu"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr "Brána"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "Současný čas"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "Aktuální den týdne (1 = pondělí, 7 = neděle)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "Počet předchozích záznamů"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "Počet záznamů od půlnoci"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-#, fuzzy
-#| msgid "Number of previous entries"
-msgid "Number of previous entries since"
-msgstr "Počet předchozích záznamů"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-#, fuzzy
-#| msgid "Number of previous entries"
-msgid "Number of previous entries before"
-msgstr "Počet předchozích záznamů"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "Počet dní bez úprav"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-#, fuzzy
-#| msgid "Number of days with a previous entry"
-msgid "Number of days with a previous entry since"
-msgstr "Počet dní bez úprav"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-#, fuzzy
-#| msgid "Number of days with a previous entry"
-msgid "Number of days with a previous entry before"
-msgstr "Počet dní bez úprav"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr "Minuty od předchozího vstupu (-1 pro první vstup)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr "Minuty od prvního vstupu (-1 pro první vstup)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "Všechny následující podmínky (AND)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "Alespoň jedna z následujících podmínek (OR)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "Začátek akce"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "Konec akce"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "Vstup na akci"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "Pevný termín"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "Pevná doba"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "Tolerance (v minutách)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "Přidat podmínku"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "minuty"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr "Duplikát"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr "přítomen"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr "nepřítomen"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -726,6 +411,16 @@ msgstr "Další"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "Počet"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "Ano"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "Ne"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1219,6 +914,223 @@ msgstr "Listopad"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "Prosinec"
+
+#~ msgid "Select a check-in list"
+#~ msgstr "Zvolte check-in list"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "Žádné aktivní check-in listy."
+
+#~ msgid "Switch check-in list"
+#~ msgstr "Změnit check-in list"
+
+#~ msgid "Search results"
+#~ msgstr "Vyhledat výsledky"
+
+#~ msgid "No tickets found"
+#~ msgstr "Nenalezeny žádné lístky"
+
+#~ msgid "Result"
+#~ msgstr "Výsledek"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "Tato vstupenka vyžaduje speciální pozornost"
+
+#~ msgid "Switch direction"
+#~ msgstr "Změnit směr"
+
+#~ msgid "Entry"
+#~ msgstr "Vstup"
+
+#~ msgid "Exit"
+#~ msgstr "Výstup"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "Naskenujte vstupenku, nebo ji vyhledejte a zmáčkněte zpět…"
+
+#~ msgid "Load more"
+#~ msgstr "Načíst více"
+
+#~ msgid "Valid"
+#~ msgstr "Potrvzeno"
+
+#~ msgid "Unpaid"
+#~ msgstr "Nezaplaceno"
+
+#~ msgid "Canceled"
+#~ msgstr "Zrušeno"
+
+#~ msgid "Confirmed"
+#~ msgstr "Potvrzeno"
+
+#~ msgid "Approval pending"
+#~ msgstr "Čeká na schválení"
+
+#~ msgid "Redeemed"
+#~ msgstr "Uplatněno"
+
+#~ msgid "Cancel"
+#~ msgstr "Zrušit"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "Vstupenka není zaplacena"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr "Vstupenka nebyla zaplacena. Chcete i přesto pokračovat?"
+
+#~ msgid "Additional information required"
+#~ msgstr "Potřebné další informace"
+
+#~ msgid "Valid ticket"
+#~ msgstr "Platná vstupenka"
+
+#~ msgid "Exit recorded"
+#~ msgstr "Opustit nahrávané"
+
+#~ msgid "Ticket already used"
+#~ msgstr "Vstupenka již byla použita"
+
+#~ msgid "Information required"
+#~ msgstr "Informace vyžadována"
+
+#~ msgid "Unknown ticket"
+#~ msgstr "Neznámá vstupenka"
+
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "Typ vstupenky zde není povolen"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "Vstup není povolen"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "Kód vstupenky změněn"
+
+#~ msgid "Ticket blocked"
+#~ msgstr "Vstupenka zablokována"
+
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "Vstupenka je v tuto chvíli neplatná"
+
+#~ msgid "Order canceled"
+#~ msgstr "Objednávka zrušena"
+
+#~ msgid "Ticket code is ambiguous on list"
+#~ msgstr "Kód vstupenky je v seznamu nejednoznačný"
+
+#~ msgid "Order not approved"
+#~ msgstr "Objednávka nebyla potvrzena"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "Vyřízené vstupenky"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "Platné vstupenky"
+
+#~ msgid "Currently inside"
+#~ msgstr "Aktuálně uvnitř"
+
+#~ msgid "is one of"
+#~ msgstr "je jedním z"
+
+#~ msgid "is before"
+#~ msgstr "je před"
+
+#~ msgid "is after"
+#~ msgstr "je po"
+
+#~ msgid "="
+#~ msgstr "="
+
+#~ msgid "Product"
+#~ msgstr "Produkt"
+
+#~ msgid "Product variation"
+#~ msgstr "Varianta produktu"
+
+#~ msgid "Gate"
+#~ msgstr "Brána"
+
+#~ msgid "Current date and time"
+#~ msgstr "Současný čas"
+
+#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+#~ msgstr "Aktuální den týdne (1 = pondělí, 7 = neděle)"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "Počet předchozích záznamů"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "Počet záznamů od půlnoci"
+
+#, fuzzy
+#~| msgid "Number of previous entries"
+#~ msgid "Number of previous entries since"
+#~ msgstr "Počet předchozích záznamů"
+
+#, fuzzy
+#~| msgid "Number of previous entries"
+#~ msgid "Number of previous entries before"
+#~ msgstr "Počet předchozích záznamů"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "Počet dní bez úprav"
+
+#, fuzzy
+#~| msgid "Number of days with a previous entry"
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "Počet dní bez úprav"
+
+#, fuzzy
+#~| msgid "Number of days with a previous entry"
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "Počet dní bez úprav"
+
+#~ msgid "Minutes since last entry (-1 on first entry)"
+#~ msgstr "Minuty od předchozího vstupu (-1 pro první vstup)"
+
+#~ msgid "Minutes since first entry (-1 on first entry)"
+#~ msgstr "Minuty od prvního vstupu (-1 pro první vstup)"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "Všechny následující podmínky (AND)"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "Alespoň jedna z následujících podmínek (OR)"
+
+#~ msgid "Event start"
+#~ msgstr "Začátek akce"
+
+#~ msgid "Event end"
+#~ msgstr "Konec akce"
+
+#~ msgid "Event admission"
+#~ msgstr "Vstup na akci"
+
+#~ msgid "custom date and time"
+#~ msgstr "Pevný termín"
+
+#~ msgid "custom time"
+#~ msgstr "Pevná doba"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "Tolerance (v minutách)"
+
+#~ msgid "Add condition"
+#~ msgstr "Přidat podmínku"
+
+#~ msgid "minutes"
+#~ msgstr "minuty"
+
+#~ msgid "Duplicate"
+#~ msgstr "Duplikát"
+
+#~ msgctxt "entry_status"
+#~ msgid "present"
+#~ msgstr "přítomen"
+
+#~ msgctxt "entry_status"
+#~ msgid "absent"
+#~ msgstr "nepřítomen"
 
 #~ msgid "iDEAL"
 #~ msgstr "iDEAL"
