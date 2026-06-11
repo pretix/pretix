@@ -972,6 +972,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'reusable_media_type_nfc_uid',
         'reusable_media_type_nfc_mf0aes',
         'reusable_media_type_nfc_mf0aes_random_uid',
+        'reusable_media_usage_enforced',
         'system_question_order',
         'tax_rule_payment',
         'tax_rule_cancellation',
