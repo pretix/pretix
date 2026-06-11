@@ -746,6 +746,7 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
     'pretix.reusable_medium.linked_orderposition.added': _('A new ticket has been added to the medium.'),
     'pretix.reusable_medium.linked_orderposition.removed': _('A ticket has been removed from the medium.'),
     'pretix.reusable_medium.linked_orderposition.changed': _('The medium has been connected to a new ticket.'),
+    'pretix.reusable_medium.exchanged': _('The ticket #{positionid} was exchanged for reusable medium {medium_identifier}.'),
     'pretix.reusable_medium.linked_giftcard.changed': _('The medium has been connected to a new gift card.'),
     'pretix.email.error': _('Sending of an email has failed.'),
     'pretix.event.comment': _('The event\'s internal comment has been updated.'),

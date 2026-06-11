@@ -110,6 +110,8 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
         ('POST', 'api-v1:checkinrpc.redeem'),
         ('GET', 'api-v1:checkinrpc.search'),
         ('GET', 'api-v1:reusablemedium-list'),
+        ('POST', 'api-v1:reusablemedium-lookup'),
+        ('PATCH', 'api-v1:reusablemedium-detail')
     )
 
 

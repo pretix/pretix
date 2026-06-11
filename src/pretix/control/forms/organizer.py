@@ -636,6 +636,7 @@ class OrganizerSettingsForm(SettingsForm):
         'cookie_consent_dialog_button_yes',
         'cookie_consent_dialog_button_no',
         'reusable_media_active',
+        'reusable_media_usage_enforced',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
         'reusable_media_type_nfc_uid',

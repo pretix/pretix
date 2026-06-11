@@ -69,8 +69,10 @@ from pretix.base.models import (
 from pretix.base.models.orders import PrintLog
 from pretix.base.permissions import AnyPermissionOf
 from pretix.base.services.checkin import (
-    CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
+    CheckInError, RequiredMediaExchangeError, RequiredQuestionsError, SQLLogic,
+    perform_checkin,
 )
+from pretix.base.services.media import perform_media_exchange
 from pretix.base.signals import checkin_annulled
 from pretix.helpers import OF_SELF
 
@@ -454,7 +456,8 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
-                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False):
+                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None, use_order_locale=False,
+                    exchange_medium_type=None, exchange_medium_identifier=None):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -463,6 +466,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
 
     device = auth if isinstance(auth, Device) else None
     gate = gate or (auth.gate if isinstance(auth, Device) else None)
+    medium = None
 
     context = {
         'request': request,
@@ -522,7 +526,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     #    with respecting the force option), or it's a reusable medium (-> proceed with that)
     if not op_candidates:
         try:
-            media = ReusableMedium.objects.active().filter(
+            medium = ReusableMedium.objects.active().filter(
                 Exists(ReusableMedium.linked_orderpositions.through.objects.filter(reusablemedium_id=OuterRef('pk')))
             ).get(
                 organizer_id=checkinlists[0].event.organizer_id,
@@ -630,7 +634,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
                 }, status=400)
         else:
-            linked_ops = media.linked_orderpositions.all().select_related("order").prefetch_related("addons")
+            linked_ops = medium.linked_orderpositions.all().select_related("order").prefetch_related("addons")
             linked_event_ids = {op.order.event_id for op in linked_ops}
             if not any(event_id in list_by_event for event_id in linked_event_ids):
                 # Medium exists but connected ticket is for the wrong event
@@ -661,7 +665,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             op_candidates = []
             for op in linked_ops:
                 if op.order.event_id in list_by_event:
-                    reusable_medium_used = media
+                    reusable_medium_used = medium
                     op_candidates.append(op)
                     if list_by_event[op.order.event_id].addon_match:
                         op_candidates += list(op.addons.all())
@@ -804,7 +808,14 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         locale = op.order.event.settings.locale
     with language(locale):
         try:
-            perform_checkin(
+            if exchange_medium_identifier and medium:
+                # Cannot scan a medium and then request to exchange it
+                raise CheckInError(
+                    gettext('You cannot exchange a medium for a medium.'),
+                    'error'
+                )
+
+            checkin_args = dict(
                 op=op,
                 clist=list_by_event[op.order.event_id],
                 given_answers=given_answers,
@@ -822,7 +833,25 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 from_revoked_secret=from_revoked_secret,
                 simulate=simulate,
                 gate=gate,
+                reusable_medium=medium,
             )
+
+            if exchange_medium_identifier:  # other fields are filled, see CheckinRPCRedeemInputSerializer.validate
+                with transaction.atomic():
+                    # Do exchange and check-in atomically, i.e. both succeed or both fail
+                    medium = perform_media_exchange(
+                        organizer=request.organizer,
+                        media_type=exchange_medium_type,
+                        identifier=exchange_medium_identifier,
+                        link_orderposition=op,
+                        user=user,
+                        auth=auth,
+                    )
+                    source_type = medium.media_type.identifier
+                    checkin_args['reusable_medium'] = medium
+                    perform_checkin(**checkin_args)
+            else:
+                perform_checkin(**checkin_args)
         except RequiredQuestionsError as e:
             return Response({
                 'status': 'incomplete',
@@ -833,6 +862,17 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     QuestionSerializer(q).data for q in e.questions
                 ],
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
+            }, status=400)
+        except RequiredMediaExchangeError as e:
+            return Response({
+                'status': 'exchange',
+                'require_attention': op.require_checkin_attention,
+                'checkin_texts': op.checkin_texts,
+                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
+                'media_policy': e.media_policy,
+                'media_type': e.media_type,
+                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
+                'reason_explanation': e.msg,
             }, status=400)
         except CheckInError as e:
             if not simulate:
@@ -1021,6 +1061,8 @@ class CheckinRPCRedeemView(views.APIView):
             canceled_supported=True,
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=False,
+            exchange_medium_type=s.validated_data.get('exchange_medium_type'),
+            exchange_medium_identifier=s.validated_data.get('exchange_medium_identifier'),
         )
 
 

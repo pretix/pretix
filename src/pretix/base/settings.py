@@ -211,10 +211,23 @@ DEFAULTS = {
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
-            label=_("Activate re-usable media"),
-            help_text=_("The re-usable media feature allows you to connect tickets and gift cards with physical media "
-                        "such as wristbands or chip cards that may be re-used for different tickets or gift cards "
+            label=_("Activate reusable media"),
+            help_text=_("The reusable media feature allows you to connect tickets and gift cards with physical media "
+                        "such as wristbands or chip cards that may be reused for different tickets or gift cards "
                         "later.")
+        )
+    },
+    'reusable_media_usage_enforced': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Enforce the usage of issued reusable media for check-in"),
+            help_text=_("If enabled, a ticket barcode will not be accepted anymore, if a reusable medium has been "
+                        "created and linked to a ticket. Keeping this option turned off will treat the reusable "
+                        "medium and ticket as equals."),
+            widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-reusable_media_active'}),
         )
     },
     'reusable_media_type_barcode': {
