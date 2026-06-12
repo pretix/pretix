@@ -354,38 +354,59 @@ class Order(LockModel, LoggedModel):
     def _transaction_key_reset(self):
         self.__initial_status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
 
-    def gracefully_delete(self, user=None, auth=None):
-        from . import GiftCard, GiftCardTransaction, Membership, Voucher
-
-        if not self.testmode:
-            raise TypeError("Only test mode orders can be deleted.")
-        self.log_action(
-            'pretix.event.order.deleted', user=user, auth=auth,
-            data={
-                'code': self.code,
-            }
+    @classmethod
+    def gracefully_delete_bulk(cls, event, orders, user=None, auth=None):
+        # Expects to be called in a transaction
+        from . import (
+            GiftCard, GiftCardTransaction, LogEntry, Membership, Voucher,
         )
 
-        order_gracefully_delete.send(self.event, order=self)
+        if not transaction.get_connection().in_atomic_block:
+            raise Exception('gracefully_delete_bulk should only be called in atomic transaction!')
 
-        if self.status != Order.STATUS_CANCELED:
-            for position in self.positions.all():
-                if position.voucher:
-                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+        logs_create = []
+        for o in orders:
+            if not o.testmode:
+                raise TypeError("Only test mode orders can be deleted.")
+            order_gracefully_delete.send(event, order=o)
+            logs_create.append(o.log_action(
+                'pretix.event.order.deleted', user=user, auth=auth,
+                data={
+                    'code': o.code,
+                },
+                save=False,
+            ))
+        LogEntry.bulk_create_and_postprocess(logs_create)
 
-        GiftCardTransaction.objects.filter(payment__in=self.payments.all()).update(payment=None)
-        GiftCardTransaction.objects.filter(refund__in=self.refunds.all()).update(refund=None)
-        GiftCardTransaction.objects.filter(order=self).update(order=None)
-        GiftCard.objects.filter(issued_in__in=self.positions.all()).update(issued_in=None)
-        Membership.objects.filter(granted_in__order=self, testmode=True).update(granted_in=None)
-        OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
-        OrderPosition.all.filter(order=self).delete()
-        OrderFee.all.filter(order=self).delete()
-        Transaction.objects.filter(order=self).delete()
-        self.refunds.all().delete()
-        self.payments.all().delete()
-        self.event.cache.delete('complain_testmode_orders')
-        self.delete()
+        vouchers = OrderPosition.objects.filter(
+            order__in=orders,
+            voucher__isnull=False
+        ).exclude(order__status=Order.STATUS_CANCELED).values_list("voucher_id", flat=True)
+        for v_id in vouchers:
+            Voucher.objects.filter(pk=v_id).update(redeemed=Greatest(0, F('redeemed') - 1))
+
+        GiftCardTransaction.objects.filter(payment__order__in=orders).update(payment=None)
+        GiftCardTransaction.objects.filter(refund__order__in=orders).update(refund=None)
+        GiftCardTransaction.objects.filter(order__in=orders).update(order=None)
+        GiftCard.objects.filter(issued_in__order__in=orders).update(issued_in=None)
+        Membership.objects.filter(granted_in__order__in=orders, testmode=True).update(granted_in=None)
+        OrderPosition.all.filter(order__in=orders, addon_to__isnull=False).delete()
+        OrderPosition.all.filter(order__in=orders).delete()
+        OrderFee.all.filter(order__in=orders).delete()
+        Transaction.objects.filter(order__in=orders).delete()
+        OrderRefund.objects.filter(order__in=orders).delete()
+        OrderPayment.objects.filter(order__in=orders).delete()
+        if isinstance(orders, models.QuerySet):
+            orders.delete()
+        else:
+            Order.objects.filter(pk__in=[o.pk for o in orders]).delete()
+        event.cache.delete('complain_testmode_orders')
+
+    def gracefully_delete(self, user=None, auth=None):
+        if not self.testmode:
+            raise TypeError("Only test mode orders can be deleted.")
+
+        Order.gracefully_delete_bulk(self.event, Order.objects.filter(pk=self.pk), user, auth)
 
     def email_confirm_secret(self):
         return self.tagged_secret("email_confirm", 9)
