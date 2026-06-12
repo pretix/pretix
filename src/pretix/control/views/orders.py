@@ -2313,7 +2313,7 @@ class OrderContactChange(OrderView):
             if self.form.cleaned_data['regenerate_secrets']:
                 changed = True
                 self.order.secret = generate_secret()
-                for op in self.order.all_positions.filter(~Exists(GiftCard.objects.filter(issued_in=OuterRef('pk')))):
+                for op in self.order.all_positions.all():
                     op.web_secret = generate_secret()
                     op.save(update_fields=["web_secret"])
                     assign_ticket_secret(
