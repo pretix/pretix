@@ -4123,8 +4123,8 @@ def test_giftcard_multiple(event):
     for p in order.payments.all():
         p.payment_provider.execute_payment(None, p)
 
-    assert order.payments.get(info__icontains=gc1.pk).amount == Decimal('12.00')
-    assert order.payments.get(info__icontains=gc2.pk).amount == Decimal('11.00')
+    assert order.payments.get(amount=Decimal("12.00")).info_data["gift_card"] == gc1.pk
+    assert order.payments.get(amount=Decimal("11.00")).info_data["gift_card"] == gc2.pk
     gc1 = GiftCard.objects.get(pk=gc1.pk)
     assert gc1.value == 0
     gc2 = GiftCard.objects.get(pk=gc2.pk)

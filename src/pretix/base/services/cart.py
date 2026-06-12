@@ -287,11 +287,11 @@ def _check_position_constraints(
         raise CartPositionError(error_messages['unavailable'])
 
     # Invalid media policy for online sale
-    if item.media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
+    if item.media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW, Item.MEDIA_POLICY_APPEND_OR_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
         mt = MEDIA_TYPES[item.media_type]
         if not mt.medium_created_by_server:
             raise CartPositionError(error_messages['media_usage_not_implemented'])
-    elif item.media_policy == Item.MEDIA_POLICY_REUSE:
+    elif item.media_policy in (Item.MEDIA_POLICY_REUSE, Item.MEDIA_POLICY_APPEND):
         raise CartPositionError(error_messages['media_usage_not_implemented'])
 
     # Item removed from sales channel

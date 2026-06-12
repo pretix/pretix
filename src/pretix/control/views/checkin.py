@@ -50,7 +50,7 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
 from pretix.base.media import MEDIA_TYPES
-from pretix.base.models import Checkin, LogEntry, Order, OrderPosition
+from pretix.base.models import Checkin, Item, LogEntry, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.models.orders import PrintLog
 from pretix.base.permissions import AnyPermissionOf
@@ -533,6 +533,8 @@ class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
             checkinlist=self.list,
             result=self.result,
             reason_labels=dict(Checkin.REASONS),
+            media_policies=dict(Item.MEDIA_POLICIES),
+            media_types=dict(MEDIA_TYPES),
         )
 
     def form_valid(self, form):

@@ -867,6 +867,15 @@ class RequiredQuestionsError(Exception):
         super().__init__(msg)
 
 
+class RequiredMediaExchangeError(Exception):
+    def __init__(self, msg, code, media_policy, media_type):
+        self.msg = msg
+        self.code = code
+        self.media_policy = media_policy
+        self.media_type = media_type
+        super().__init__(msg)
+
+
 def _save_answers(op, answers, given_answers):
     def _create_answer(question, answer):
         try:
@@ -939,7 +948,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
                     raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False,
-                    gate=None):
+                    gate=None, reusable_medium=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -955,6 +964,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     :param datetime: The datetime of the checkin, defaults to now.
     :param simulate: If true, the check-in is not saved.
     :param gate: The gate the check-in was performed at.
+    :param reusable_medium: The medium that is available for an exchange
     """
 
     # !!!!!!!!!
@@ -1035,7 +1045,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
 
     with transaction.atomic():
         # Lock order positions, if it is an entry. We don't need it for exits, as a race condition wouldn't be problematic
-        opqs = OrderPosition.all
+        opqs = OrderPosition.all.select_related("order", "item")
         if type != Checkin.TYPE_EXIT:
             opqs = opqs.select_for_update(of=OF_SELF)
         op = opqs.get(pk=op.pk)
@@ -1100,6 +1110,24 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'incomplete',
                 require_answers
             )
+
+        required_media_policy = op.item.media_policy
+        required_media_type = op.item.media_type
+        require_a_medium = required_media_policy and required_media_type
+        linked_media = op.linked_media
+        if require_a_medium and not reusable_medium and not force:
+            if not linked_media.exists():
+                raise RequiredMediaExchangeError(
+                    _('Ticket needs to be exchanged to a suitable medium.'),
+                    'exchange',
+                    required_media_policy,
+                    required_media_type
+                )
+            elif op.organizer.settings.reusable_media_usage_enforced:
+                raise CheckInError(
+                    _('This ticket has already been exchanged for a reusable medium that now needs to be used instead.'),
+                    'already_exchanged',
+                )
 
         device = None
         if isinstance(auth, Device):

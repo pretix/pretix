@@ -196,7 +196,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
 
             return Response({"result": None})
 
-    @scopes_disabled()  # we are sure enough that get_queryset() is correct, so we save some perforamnce
+    @scopes_disabled()  # we are sure enough that get_queryset() is correct, so we save some performance
     def list(self, request, **kwargs):
         date = serializers.DateTimeField().to_representation(now())
         queryset = self.filter_queryset(self.get_queryset())

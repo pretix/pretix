@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-27 15:47+0000\n"
-"PO-Revision-Date: 2026-05-29 17:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
+"PO-Revision-Date: 2026-06-08 17:00+0000\n"
+"Last-Translator: Sébastien BRUNEAU <s.bruneau@beauvaisis.fr>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
 "fr/>\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.5\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html:670
 #: pretix/control/templates/pretixcontrol/events/index.html:166
@@ -35123,7 +35123,7 @@ msgstr "Vous devez cocher toutes les cases en bas de la page."
 
 #: pretix/presale/forms/checkout.py:67
 msgid "Email address (repeated)"
-msgstr "Adresse de courriel (répété)"
+msgstr "Adresse de courriel (répétée)"
 
 #: pretix/presale/forms/checkout.py:68
 msgid ""

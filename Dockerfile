@@ -57,8 +57,7 @@ COPY vite.config.ts /pretix/vite.config.ts
 
 RUN pip3 install -U \
         pip \
-        setuptools \
-        wheel && \
+        setuptools && \
     cd /pretix && \
     PRETIX_DOCKER_BUILD=TRUE pip3 install \
         -e ".[memcached]" \

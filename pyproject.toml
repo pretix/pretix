@@ -29,11 +29,11 @@ classifiers = [
 dependencies = [
   "arabic-reshaper==3.0.1",  # Support for Arabic in reportlab
   "babel",
-  "BeautifulSoup4==4.14.*",
+  "BeautifulSoup4==4.15.*",
   "bleach==6.4.*",
   "celery==5.6.*",
   "chardet==5.2.*",
-  "cryptography>=48.0.0",
+  "cryptography>=48.0.1",
   "css-inline==0.20.*",
   "defusedcsv>=3.0.0",
   "dnspython==2.*",
@@ -94,7 +94,7 @@ dependencies = [
   "reportlab==4.5.*",
   "requests==2.32.*",
   "urllib3.future==2.20.*",
-  "sentry-sdk==2.61.*",
+  "sentry-sdk==2.62.*",
   "sepaxml==2.7.*",
   "stripe==7.9.*",
   "text-unidecode==1.*",
@@ -140,8 +140,6 @@ build-backend = "backend"
 backend-path = ["_build"]
 requires = [
   "setuptools",
-  "setuptools-rust",
-  "wheel",
   "importlib_metadata",
   "tomli",
 ]
