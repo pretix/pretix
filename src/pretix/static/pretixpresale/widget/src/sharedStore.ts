@@ -441,6 +441,7 @@ export function createWidgetStore (config: {
 							this.overlay.frameLoading = false
 							this.overlay.errorUrlAfter = this.newTabTarget
 							this.overlay.errorUrlAfterNewTab = true
+							return
 						} else if (e.status === 405) {
 							// Likely a redirect!
 							this.targetUrl = e.responseUrl.substring(0, e.responseUrl.indexOf('/cart/add') - 18)
@@ -460,11 +461,18 @@ export function createWidgetStore (config: {
 					this.overlay.frameLoading = true
 					const data = await createCart(url)
 					this.setCartId(data.cart_id)
+					return true
 				} catch (e) {
-					if (e instanceof ApiError && (e.status === 200 || (e.status >= 400 && e.status < 500))) {
+					if (e instanceof ApiError && e.status === 429) {
+						this.overlay.errorMessage = STRINGS.cart_error_429
+						this.overlay.frameLoading = false
+						this.overlay.errorUrlAfter = this.newTabTarget
+						this.overlay.errorUrlAfterNewTab = true
+					} else if (e instanceof ApiError && (e.status === 200 || (e.status >= 400 && e.status < 500))) {
 						this.overlay.errorMessage = STRINGS.cart_error
 						this.overlay.frameLoading = false
 					}
+					return false
 				}
 			},
 			redeem (voucherCode: string, event?: Event) {
@@ -484,7 +492,7 @@ export function createWidgetStore (config: {
 			async resume () {
 				if (!this.cartId && this.keepCart) {
 					// create an empty cart whose id we can persist
-					await this.createCart()
+					if (!await this.createCart()) return
 				}
 				let redirectUrl = `${this.targetUrl}w/${globalWidgetId}/`
 				if (this.subevent && this.isButton && this.items.length === 0) {
