@@ -1599,6 +1599,7 @@ class OrderChangeManager:
         'seat_forbidden': gettext_lazy('The selected product does not allow to select a seat.'),
         'tax_rule_country_blocked': gettext_lazy('The selected country is blocked by your tax rule.'),
         'gift_card_change': gettext_lazy('You cannot change the price of a position that has been used to issue a gift card.'),
+        'gift_card_secret': gettext_lazy('You cannot change the ticket secret of a position that has been used to issue a gift card.'),
         'max_items_per_product': ngettext_lazy(
             "You cannot select more than %(max)s item of the product %(product)s.",
             "You cannot select more than %(max)s items of the product %(product)s.",
@@ -1756,6 +1757,9 @@ class OrderChangeManager:
         self._operations.append(self.RegenerateSecretOperation(position))
 
     def change_ticket_secret(self, position: OrderPosition, new_secret: str):
+        if position.issued_gift_cards.exists():
+            raise OrderError(self.error_messages['gift_card_secret'])
+
         self._operations.append(self.ChangeSecretOperation(position, new_secret))
 
     def change_valid_from(self, position: OrderPosition, new_value: datetime):
