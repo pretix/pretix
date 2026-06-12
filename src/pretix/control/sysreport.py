@@ -38,6 +38,7 @@ from pretix import __version__
 from pretix.base.models import Order, OrderPayment, Transaction
 from pretix.base.plugins import get_all_plugins
 from pretix.base.templatetags.money import money_filter
+from pretix.helpers.reportlab import PlainTextParagraph
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 from pretix.settings import DATA_DIR
 
@@ -79,23 +80,23 @@ class SysReport(ReportlabExportMixin):
         style_small.fontSize = 6
 
         story = [
-            Paragraph("System report", headlinestyle),
+            PlainTextParagraph("System report", headlinestyle),
             Spacer(1, 5 * mm),
-            Paragraph("Usage", subheadlinestyle),
+            PlainTextParagraph("Usage", subheadlinestyle),
             Spacer(1, 5 * mm),
             self._usage_table(),
             Spacer(1, 5 * mm),
-            Paragraph("Installed versions", subheadlinestyle),
+            PlainTextParagraph("Installed versions", subheadlinestyle),
             Spacer(1, 5 * mm),
             self._tech_table(),
             Spacer(1, 5 * mm),
-            Paragraph("Plugins", subheadlinestyle),
+            PlainTextParagraph("Plugins", subheadlinestyle),
             Spacer(1, 5 * mm),
-            Paragraph(self._get_plugin_versions(), style_small),
+            PlainTextParagraph(self._get_plugin_versions(), style_small),
             Spacer(1, 5 * mm),
-            Paragraph("Custom templates", subheadlinestyle),
+            PlainTextParagraph("Custom templates", subheadlinestyle),
             Spacer(1, 5 * mm),
-            Paragraph(self._get_custom_templates(), style_small),
+            PlainTextParagraph(self._get_custom_templates(), style_small),
             Spacer(1, 5 * mm),
         ]
 
@@ -121,13 +122,13 @@ class SysReport(ReportlabExportMixin):
             ("RIGHTPADDING", (-1, 0), (-1, -1), 0),
         ]
         tdata = [
-            [Paragraph("Site URL:", style), Paragraph(settings.SITE_URL, style)],
-            [Paragraph("pretix version:", style), Paragraph(__version__, style)],
-            [Paragraph("Python version:", style), Paragraph(sys.version, style)],
-            [Paragraph("Platform:", style), Paragraph(platform.platform(), style)],
+            [PlainTextParagraph("Site URL:", style), Paragraph(settings.SITE_URL, style)],
+            [PlainTextParagraph("pretix version:", style), Paragraph(__version__, style)],
+            [PlainTextParagraph("Python version:", style), Paragraph(sys.version, style)],
+            [PlainTextParagraph("Platform:", style), Paragraph(platform.platform(), style)],
             [
-                Paragraph("Database engine:", style),
-                Paragraph(settings.DATABASES["default"]["ENGINE"], style),
+                PlainTextParagraph("Database engine:", style),
+                PlainTextParagraph(settings.DATABASES["default"]["ENGINE"], style),
             ],
         ]
         table = Table(tdata, colWidths=colwidths, repeatRows=0)
@@ -206,7 +207,7 @@ class SysReport(ReportlabExportMixin):
         year_last = now().year
         tdata = [
             [
-                Paragraph(l, style_small_head)
+                PlainTextParagraph(l, style_small_head)
                 for l in (
                     "Time frame",
                     "Currency",
@@ -257,19 +258,19 @@ class SysReport(ReportlabExportMixin):
 
                 tdata.append(
                     (
-                        Paragraph(
+                        PlainTextParagraph(
                             date_format(first_day, "M Y")
                             + " – "
                             + date_format(after_day - timedelta(days=1), "M Y"),
                             style_small,
                         ),
-                        Paragraph(c, style_small),
-                        Paragraph(str(orders_count), style_small) if i == 0 else "",
-                        Paragraph(money_filter(revenue_data.get("s_net") or 0, c), style_small),
-                        Paragraph(str(testmode_count), style_small) if i == 0 else "",
-                        Paragraph(str(unconfirmed_count), style_small) if i == 0 else "",
-                        Paragraph(str(revenue_data.get("c") or 0), style_small),
-                        Paragraph(money_filter(revenue_data.get("s_gross") or 0, c), style_small),
+                        PlainTextParagraph(c, style_small),
+                        PlainTextParagraph(str(orders_count), style_small) if i == 0 else "",
+                        PlainTextParagraph(money_filter(revenue_data.get("s_net") or 0, c), style_small),
+                        PlainTextParagraph(str(testmode_count), style_small) if i == 0 else "",
+                        PlainTextParagraph(str(unconfirmed_count), style_small) if i == 0 else "",
+                        PlainTextParagraph(str(revenue_data.get("c") or 0), style_small),
+                        PlainTextParagraph(money_filter(revenue_data.get("s_gross") or 0, c), style_small),
                     )
                 )
 
