@@ -270,7 +270,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
     def _transaction_group_header_label(self):
         return _("Event") + " / " + _("Product")
 
-    def _transaction_group_label(self, form_data, r):
+    def _transaction_group(self, form_data, r):
         if not self.is_multievent and not form_data.get("split_subevents"):
             return None
         if r.get("subevent_id"):
@@ -279,9 +279,9 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 r["subevent__name"],
                 date_format(r["subevent__date_from"]),
                 r["order__event__slug"]
-            )
+            ), f"subevent-{r['subevent_id']}"
         else:
-            return "{} [{}]".format(r["order__event__name"], r["order__event__slug"])
+            return "{} [{}]".format(r["order__event__name"], r["order__event__slug"]), f"event-{r['order__event__slug']}"
 
     def _transaction_row_label(self, r):
         if r["item_id"]:
@@ -343,17 +343,17 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         last_group = None
         last_group_head_idx = 0
         for r in qs:
-            e = self._transaction_group_label(form_data, r)
+            group_label, group_id = self._transaction_group(form_data, r)
 
-            if e != last_group:
-                if last_group_head_idx > 0 and e is not None:
+            if group_id != last_group:
+                if last_group_head_idx > 0 and group_id is not None:
                     tdata[last_group_head_idx][4] = Paragraph(money_filter(sum_price_by_group - sum_tax_by_group, currency), tstyle_bold_right),
                     tdata[last_group_head_idx][5] = Paragraph(money_filter(sum_tax_by_group, currency), tstyle_bold_right),
                     tdata[last_group_head_idx][6] = Paragraph(money_filter(sum_price_by_group, currency), tstyle_bold_right),
                 tdata.append(
                     [
                         FontFallbackParagraph(
-                            e,
+                            group_label,
                             tstyle_bold,
                         ),
                         "",
@@ -367,7 +367,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 tstyledata.append(
                     ("SPAN", (0, len(tdata) - 1), (3, len(tdata) - 1)),
                 )
-                last_group = e
+                last_group = group_id
                 last_group_head_idx = len(tdata) - 1
                 sum_price_by_group = Decimal("0.00")
                 sum_tax_by_group = Decimal("0.00")
