@@ -2149,7 +2149,14 @@ var shared_root_computed = {
         if (this.subevent) {
             target = this.target_url + this.subevent + '/';
         }
-        return target;
+        var parameters = this.$root.consent_parameter
+        if (this.$root.additionalURLParams) {
+          parameters += `&${this.$root.additionalURLParams}`
+        }
+        if (parameters) {
+          target += '?' + parameters.replace(/^&/, '')
+        }
+        return target
     },
     useIframe: function () {
         if (window.crossOriginIsolated === true) {

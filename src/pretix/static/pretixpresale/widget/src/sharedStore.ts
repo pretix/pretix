@@ -162,7 +162,15 @@ export function createWidgetStore (config: {
 				return params.toString()
 			},
 			newTabTarget (): string {
-				return this.subevent ? `${this.targetUrl}${this.subevent}/` : this.targetUrl
+				let url = this.subevent ? `${this.targetUrl}${this.subevent}/` : this.targetUrl
+				let parameters = this.consentParameter
+				if (this.additionalURLParams) {
+					parameters += `&${this.additionalURLParams}`
+				}
+				if (parameters) {
+					url += '?' + parameters.replace(/^&/, '')
+				}
+				return url
 			},
 			formTarget (): string {
 				const isFirefox = navigator.userAgent.toLowerCase().includes('firefox')
