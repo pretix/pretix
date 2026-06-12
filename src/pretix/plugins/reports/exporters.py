@@ -70,7 +70,7 @@ from pretix.base.timeframes import (
 )
 from pretix.control.forms.filter import OverviewFilterForm
 from pretix.helpers.reportlab import (
-    FontFallbackParagraph, register_ttf_font_if_new,
+    PlainTextParagraph, register_ttf_font_if_new,
 )
 from pretix.presale.style import get_fonts
 
@@ -282,7 +282,7 @@ class OverviewReport(Report):
         headlinestyle.fontSize = 15
         headlinestyle.fontName = 'OpenSansBd'
         story = [
-            FontFallbackParagraph(_('Orders by product') + ' ' + (_('(excl. taxes)') if net else _('(incl. taxes)')), headlinestyle),
+            PlainTextParagraph(_('Orders by product') + ' ' + (_('(excl. taxes)') if net else _('(incl. taxes)')), headlinestyle),
             Spacer(1, 5 * mm)
         ]
         return story
@@ -292,7 +292,7 @@ class OverviewReport(Report):
         if form_data.get('date_axis') and form_data.get('date_range'):
             d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), form_data['date_range'], self.timezone)
             story += [
-                FontFallbackParagraph(_('{axis} between {start} and {end}').format(
+                PlainTextParagraph(_('{axis} between {start} and {end}').format(
                     axis=dict(OverviewFilterForm(event=self.event).fields['date_axis'].choices)[form_data.get('date_axis')],
                     start=date_format(d_start, 'SHORT_DATE_FORMAT') if d_start else '–',
                     end=date_format(d_end, 'SHORT_DATE_FORMAT') if d_end else '–',
@@ -305,13 +305,13 @@ class OverviewReport(Report):
                 subevent = self.event.subevents.get(pk=self.form_data.get('subevent'))
             except SubEvent.DoesNotExist:
                 subevent = self.form_data.get('subevent')
-            story.append(FontFallbackParagraph(pgettext('subevent', 'Date: {}').format(subevent), self.get_style()))
+            story.append(PlainTextParagraph(pgettext('subevent', 'Date: {}').format(subevent), self.get_style()))
             story.append(Spacer(1, 5 * mm))
 
         if form_data.get('subevent_date_range'):
             d_start, d_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['subevent_date_range'], self.timezone)
             story += [
-                FontFallbackParagraph(_('{axis} between {start} and {end}').format(
+                PlainTextParagraph(_('{axis} between {start} and {end}').format(
                     axis=_('Event date'),
                     start=date_format(d_start, 'SHORT_DATE_FORMAT') if d_start else '–',
                     end=date_format(d_end - timedelta(hours=1), 'SHORT_DATE_FORMAT') if d_end else '–',
@@ -384,13 +384,13 @@ class OverviewReport(Report):
         tdata = [
             [
                 _('Product'),
-                FontFallbackParagraph(_('Canceled'), tstyle_th),
+                PlainTextParagraph(_('Canceled'), tstyle_th),
                 '',
-                FontFallbackParagraph(_('Expired'), tstyle_th),
+                PlainTextParagraph(_('Expired'), tstyle_th),
                 '',
-                FontFallbackParagraph(_('Approval pending'), tstyle_th),
+                PlainTextParagraph(_('Approval pending'), tstyle_th),
                 '',
-                FontFallbackParagraph(_('Purchased'), tstyle_th),
+                PlainTextParagraph(_('Purchased'), tstyle_th),
                 '', '', '', '', ''
             ],
             [
@@ -421,14 +421,14 @@ class OverviewReport(Report):
         for tup in items_by_category:
             if tup[0]:
                 tdata.append([
-                    FontFallbackParagraph(str(tup[0]), tstyle_bold)
+                    PlainTextParagraph(str(tup[0]), tstyle_bold)
                 ])
                 for l, s in states:
                     tdata[-1].append(str(tup[0].num[l][0]))
                     tdata[-1].append(floatformat(tup[0].num[l][2 if net else 1], places))
             for item in tup[1]:
                 tdata.append([
-                    FontFallbackParagraph(str(item), tstyle)
+                    PlainTextParagraph(str(item), tstyle)
                 ])
                 for l, s in states:
                     tdata[-1].append(str(item.num[l][0]))
@@ -436,7 +436,7 @@ class OverviewReport(Report):
                 if item.has_variations:
                     for var in item.all_variations:
                         tdata.append([
-                            FontFallbackParagraph("          " + str(var), tstyle)
+                            PlainTextParagraph("          " + str(var), tstyle)
                         ])
                         for l, s in states:
                             tdata[-1].append(str(var.num[l][0]))
@@ -568,7 +568,7 @@ class OrderTaxListReportPDF(Report):
             tstyledata.append(('SPAN', (5 + 2 * i, 0), (6 + 2 * i, 0)))
 
         story = [
-            FontFallbackParagraph(_('Orders by tax rate ({currency})').format(currency=self.event.currency), headlinestyle),
+            PlainTextParagraph(_('Orders by tax rate ({currency})').format(currency=self.event.currency), headlinestyle),
             Spacer(1, 5 * mm)
         ]
         tdata = [

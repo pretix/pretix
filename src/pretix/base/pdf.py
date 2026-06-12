@@ -1045,7 +1045,7 @@ class Renderer:
         except:
             logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
 
-        p = Paragraph(text, style=style)
+        p = Paragraph(text, style=style)  # not using AutoEscapeParagraph is safe as we escape above
         return p, ad, lineheight
 
     def _draw_textcontainer(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
