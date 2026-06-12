@@ -1342,7 +1342,13 @@ class QuestionAnswerFilterForm(forms.Form):
             opqs = opqs.filter(canceled=False)
         if fdata.get("item", "") != "":
             i = fdata.get("item", "")
-            opqs = opqs.filter(item_id__in=(i,))
+            if '-' in i:
+                opqs = opqs.filter(
+                    item_id=i.split('-')[0],
+                    variation_id=i.split('-')[1],
+                )
+            else:
+                opqs = opqs.filter(item_id=i)
 
         return opqs
 
