@@ -2051,9 +2051,16 @@ var shared_root_methods = {
             this.$root.set_cart_id(data.cart_id);
             this.$root.overlay.frame_loading = false;
             callback()
-        }, () => {
+        }, (xhr, data) => {
+          if (xhr.status === 429 && typeof xhr.responseURL !== "undefined") {
+            this.$root.overlay.error_message = strings['cart_error_429'];
+            this.$root.overlay.frame_loading = false;
+            this.$root.overlay.error_url_after = this.$root.newTabTarget;
+            this.$root.overlay.error_url_after_new_tab = true;
+          } else {
             this.$root.overlay.error_message = strings['cart_error'];
             this.$root.overlay.frame_loading = false;
+          }
         })
     },
     get_cart_id: function() {
