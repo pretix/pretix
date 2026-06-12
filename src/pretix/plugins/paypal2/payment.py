@@ -56,7 +56,7 @@ from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
-from pretix.helpers.urls import reverse_absolute_url_global_domain
+from pretix.helpers.urls import mainreverse_absolute
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.plugins.paypal2.client.core.environment import (
     LiveEnvironment, SandboxEnvironment,
@@ -264,7 +264,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
             settings_content = "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
                 _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
                   'when payments are refunded externally.'),
-                reverse_absolute_url_global_domain('plugins:paypal2:webhook')
+                mainreverse_absolute('plugins:paypal2:webhook')
             )
 
         if self.event.currency not in SUPPORTED_CURRENCIES:
@@ -321,7 +321,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                 ],
                 "partner_config_override": {
                     "partner_logo_url": urllib.parse.urljoin(settings.SITE_URL, static('pretixbase/img/pretix-logo.svg')),
-                    "return_url": reverse_absolute_url_global_domain('plugins:paypal2:isu.return', kwargs={
+                    "return_url": mainreverse_absolute('plugins:paypal2:isu.return', kwargs={
                         'organizer': self.event.organizer.slug,
                         'event': self.event.slug,
                     })

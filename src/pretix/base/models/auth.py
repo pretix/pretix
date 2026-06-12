@@ -57,7 +57,7 @@ from django_otp.models import Device
 from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
-from pretix.helpers.urls import reverse_absolute_url_global_domain
+from pretix.helpers.urls import eventreverse_absolute
 
 from ...helpers.countries import FastCountryField
 from ...helpers.u2f import pub_key_from_der, websafe_decode
@@ -378,7 +378,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             {
                 'user': self,
                 'messages': msg,
-                'url': reverse_absolute_url_global_domain('control:user.settings'),
+                'url': eventreverse_absolute('control:user.settings'),
                 'instance': settings.PRETIX_INSTANCE_NAME,
             },
             event=None,
@@ -466,7 +466,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             {
                 'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
-                'url': (reverse_absolute_url_global_domain('control:auth.forgot.recover')
+                'url': (eventreverse_absolute('control:auth.forgot.recover')
                         + '?id=%d&token=%s' % (self.id, default_token_generator.make_token(self)))
             },
             None, locale=self.locale, user=self

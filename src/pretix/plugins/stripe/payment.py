@@ -75,7 +75,7 @@ from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.http import get_client_ip
-from pretix.helpers.urls import reverse_absolute_url_global_domain
+from pretix.helpers.urls import mainreverse_absolute
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.plugins.stripe.models import (
@@ -197,7 +197,7 @@ class StripeSettingsHolder(BasePaymentProvider):
         ).format(
             self.settings.connect_client_id,
             request.session['payment_stripe_oauth_token'],
-            urllib.parse.quote(reverse_absolute_url_global_domain('plugins:stripe:oauth.return')),
+            urllib.parse.quote(mainreverse_absolute('plugins:stripe:oauth.return')),
         )
 
     def settings_content_render(self, request):
@@ -229,7 +229,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                 _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
                   'the following endpoint in order to automatically cancel orders when charges are refunded externally '
                   'and to process asynchronous payment methods like SOFORT.'),
-                reverse_absolute_url_global_domain('plugins:stripe:webhook')
+                mainreverse_absolute('plugins:stripe:webhook')
             )
 
     @property

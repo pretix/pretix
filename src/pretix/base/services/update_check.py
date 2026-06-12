@@ -37,7 +37,7 @@ from pretix.base.services.mail import mail
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
-from pretix.helpers.urls import reverse_absolute_url_global_domain
+from pretix.helpers.urls import mainreverse_absolute
 
 
 @receiver(signal=periodic_task)
@@ -121,7 +121,7 @@ def send_update_notification_email():
             )
         ),
         {
-            'url': reverse_absolute_url_global_domain('control:global.update')
+            'url': mainreverse_absolute('control:global.update')
         },
     )
 
