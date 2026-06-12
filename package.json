@@ -18,7 +18,7 @@
     "doc": "doc"
   },
   "scripts": {
-    "dev:control": "vite",
+    "dev:control": "vite --clearScreen=false",
     "dev:widget": "vite src/pretix/static/pretixpresale/widget",
     "build": "npm run build:control -s && npm run build:widget -s",
     "build:control": "vite build",
