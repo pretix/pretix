@@ -65,11 +65,44 @@ def get_supported_language(requested_language, allowed_languages, default_langua
     return language
 
 
-class LocaleMiddleware(MiddlewareMixin):
-
+class BaseLocaleMiddleware(MiddlewareMixin):
     """
-    This middleware sets the correct locale and timezone
-    for a request.
+    This is a reduced LocaleMiddleware that uses only information contained in the WSGI request data
+    to figure out the language (cookie and browser settings). We need it to have a consistent language
+    for error pages that are generated from the middleware stack before we know e.g. which user is logged
+    in or which event is selected.
+    """
+
+    def process_request(self, request: HttpRequest):
+        language = get_language_from_early_request(request)
+        translation.activate(language)
+        set_region(None)
+        request.LANGUAGE_CODE = language
+        timezone.deactivate()
+
+    def process_response(self, request: HttpRequest, response: HttpResponse):
+        language = translation.get_language()
+        patch_vary_headers(response, ('Accept-Language',))
+        if 'Content-Language' not in response:
+            response['Content-Language'] = language
+        return response
+
+
+class LocaleMiddleware(MiddlewareMixin):
+    """
+    This is the full LocaleMiddleware that uses all available information to figure out the correct
+    language for the request using all available sources, in this order of priority:
+
+    - Backend: User settings
+    - Language cookie
+    - Frontend: Customer account settings
+    - Browser settings
+    - Frontend: Event/Organizer settings
+    - System default
+
+    It needs to run late in the middleware stack to have all information available for these steps.
+    For some cases, it is even ran a second time since the event is sometimes only figured out after the
+    middleware stack (can happen for plugin views).
     """
 
     def process_request(self, request: HttpRequest):
@@ -182,6 +215,24 @@ def get_default_language():
         return settings.LANGUAGE_CODE
 
 
+def get_language_from_early_request(request: HttpRequest) -> str:
+    """
+    Analyzes the request to find what language the user wants the system to
+    show using only WSGI-available information. Only languages listed in
+    settings.LANGUAGES are taken into account. If the user requests a sublanguage
+    where we have a main language, we send out the main language.
+    """
+    global _supported
+    if _supported is None:
+        _supported = OrderedDict(settings.LANGUAGES)
+
+    return (
+        get_language_from_cookie(request)
+        or get_language_from_browser(request)
+        or get_default_language()
+    )
+
+
 def get_language_from_request(request: HttpRequest) -> str:
     """
     Analyzes the request to find what language the user wants the system to
@@ -196,7 +247,6 @@ def get_language_from_request(request: HttpRequest) -> str:
     if request.path.startswith(get_script_prefix() + 'control'):
         return (
             get_language_from_user_settings(request)
-            or get_language_from_customer_settings(request)
             or get_language_from_cookie(request)
             or get_language_from_browser(request)
             or get_language_from_event(request)
