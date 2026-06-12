@@ -272,7 +272,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
 
     def _transaction_group(self, form_data, r):
         if not self.is_multievent and not form_data.get("split_subevents"):
-            return None
+            return None, None
         if r.get("subevent_id"):
             return "{} - {} ({}) [{}]".format(
                 r["order__event__name"],
