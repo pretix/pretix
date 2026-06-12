@@ -32,10 +32,10 @@ def build_absolute_uri(urlname, args=None, kwargs=None):
         'Replace this usage with ',
         DeprecationWarning
     )
-    return mainreverse_absolute(urlname, args, kwargs)
+    return reverse_absolute_url_global_domain(urlname, args, kwargs)
 
 
-def mainreverse_absolute(urlname, args=None, kwargs=None):
+def reverse_absolute_url_global_domain(urlname, args=None, kwargs=None):
     from pretix.multidomain import maindomain_urlconf
 
     return urljoin(settings.SITE_URL, reverse(urlname, args=args, kwargs=kwargs, urlconf=maindomain_urlconf))

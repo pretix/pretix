@@ -51,7 +51,7 @@ from pretix.base.signals import (
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF, repeatable_reads_transaction
-from pretix.helpers.urls import mainreverse_absolute
+from pretix.helpers.urls import reverse_absolute_url_global_domain
 
 logger = logging.getLogger(__name__)
 
@@ -455,7 +455,7 @@ def scheduled_organizer_export(self, organizer: Organizer, schedule: int) -> Non
         schedule,
         organizer,
         exporter,
-        mainreverse_absolute(
+        reverse_absolute_url_global_domain(
             'control:organizer.export',
             kwargs={
                 'organizer': organizer.slug,
@@ -481,7 +481,7 @@ def scheduled_event_export(self, event: Event, schedule: int) -> None:
         schedule,
         event,
         exporter,
-        mainreverse_absolute(
+        reverse_absolute_url_global_domain(
             'control:event.orders.export',
             kwargs={
                 'event': event.slug,

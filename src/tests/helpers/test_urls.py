@@ -22,17 +22,17 @@
 from django import urls
 from django.test import override_settings
 
-from pretix.helpers.urls import mainreverse_absolute
+from pretix.helpers.urls import reverse_absolute_url_global_domain
 
 
 def test_site_url_domain():
     with override_settings(SITE_URL='https://example.com'):
-        assert mainreverse_absolute('control:auth.login') == 'https://example.com/control/login'
+        assert reverse_absolute_url_global_domain('control:auth.login') == 'https://example.com/control/login'
 
 
 def test_site_url_subpath():
     with override_settings(SITE_URL='https://example.com/presale'):
         old_prefix = urls.get_script_prefix()
         urls.set_script_prefix('/presale/')
-        assert mainreverse_absolute('control:auth.login') == 'https://example.com/presale/control/login'
+        assert reverse_absolute_url_global_domain('control:auth.login') == 'https://example.com/presale/control/login'
         urls.set_script_prefix(old_prefix)

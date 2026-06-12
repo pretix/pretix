@@ -139,7 +139,7 @@ from pretix.helpers import OF_SELF, GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.format import SafeFormatter, format_map
-from pretix.helpers.urls import mainreverse_absolute
+from pretix.helpers.urls import reverse_absolute_url_global_domain
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.customer import TokenGenerator
 
@@ -1039,7 +1039,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                 'user': self,
                 'organizer': self.request.organizer.name,
                 'team': instance.team.name,
-                'url': mainreverse_absolute('control:auth.invite', kwargs={
+                'url': reverse_absolute_url_global_domain('control:auth.invite', kwargs={
                     'token': instance.token
                 })
             },
