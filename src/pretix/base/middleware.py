@@ -74,6 +74,7 @@ class LocaleMiddleware(MiddlewareMixin):
 
     def process_request(self, request: HttpRequest):
         language = get_language_from_request(request)
+        region = None
         # Normally, this middleware runs *before* the event is set. However, on event frontend pages it
         # might be run a second time by pretix.presale.EventMiddleware and in this case the event is already
         # set and can be taken into account for the decision.
@@ -94,15 +95,16 @@ class LocaleMiddleware(MiddlewareMixin):
                 if '-' not in language and settings_holder.settings.region:
                     language += '-' + settings_holder.settings.region
                 if settings_holder.settings.region:
-                    set_region(settings_holder.settings.region)
+                    region = settings_holder.settings.region
         else:
             gs = global_settings_object(request)
             if '-' not in language and gs.settings.region:
                 language += '-' + gs.settings.region
             if gs.settings.region:
-                set_region(gs.settings.region)
+                region = gs.settings.region
 
         translation.activate(language)
+        set_region(region)
         request.LANGUAGE_CODE = get_language_without_region()
 
         tzname = None
