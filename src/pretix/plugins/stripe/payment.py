@@ -75,8 +75,8 @@ from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.http import get_client_ip
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import reverse_absolute_url_global_domain
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.stripe.forms import StripeKeyValidator
 from pretix.plugins.stripe.models import (
     ReferencedStripeObject, RegisteredApplePayDomain,
@@ -197,7 +197,7 @@ class StripeSettingsHolder(BasePaymentProvider):
         ).format(
             self.settings.connect_client_id,
             request.session['payment_stripe_oauth_token'],
-            urllib.parse.quote(build_global_uri('plugins:stripe:oauth.return')),
+            urllib.parse.quote(reverse_absolute_url_global_domain('plugins:stripe:oauth.return')),
         )
 
     def settings_content_render(self, request):
@@ -229,7 +229,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                 _('Please configure a <a href="https://dashboard.stripe.com/account/webhooks">Stripe Webhook</a> to '
                   'the following endpoint in order to automatically cancel orders when charges are refunded externally '
                   'and to process asynchronous payment methods like SOFORT.'),
-                build_global_uri('plugins:stripe:webhook')
+                reverse_absolute_url_global_domain('plugins:stripe:webhook')
             )
 
     @property
@@ -746,7 +746,7 @@ class StripeMethod(BasePaymentProvider):
     def redirect(self, request, url):
         if request.session.get('iframe_session', False):
             return (
-                build_absolute_uri(request.event, 'plugins:stripe:redirect') +
+                eventreverse_absolute(request.event, 'plugins:stripe:redirect') +
                 '?data=' + signing.dumps({
                     'url': url,
                     'session': {
@@ -941,7 +941,7 @@ class StripeMethod(BasePaymentProvider):
                     },
                     # TODO: Is this sufficient?
                     idempotency_key=str(self.event.id) + payment.order.code + idempotency_key_seed,
-                    return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
+                    return_url=eventreverse_absolute(self.event, 'plugins:stripe:sca.return', kwargs={
                         'order': payment.order.code,
                         'payment': payment.pk,
                         'hash': payment.order.tagged_secret('plugins:stripe'),
@@ -1047,13 +1047,13 @@ class StripeMethod(BasePaymentProvider):
                 raise PaymentException(_('Stripe reported an error: %s') % intent.last_payment_error.message)
 
     def _redirect_to_sca(self, request, payment):
-        url = build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
+        url = eventreverse_absolute(self.event, 'plugins:stripe:sca', kwargs={
             'order': payment.order.code,
             'payment': payment.pk,
             'hash': payment.order.tagged_secret('plugins:stripe'),
         })
         if not self.redirect_in_widget_allowed and request.session.get('iframe_session', False):
-            return build_absolute_uri(self.event, 'plugins:stripe:redirect') + '?data=' + signing.dumps({
+            return eventreverse_absolute(self.event, 'plugins:stripe:redirect') + '?data=' + signing.dumps({
                 'url': url,
                 'session': {},
             }, salt='safe-redirect')
@@ -1068,7 +1068,7 @@ class StripeMethod(BasePaymentProvider):
 
             intent = stripe.PaymentIntent.confirm(
                 payment_info['id'],
-                return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
+                return_url=eventreverse_absolute(self.event, 'plugins:stripe:sca.return', kwargs={
                     'order': payment.order.code,
                     'payment': payment.pk,
                     'hash': payment.order.tagged_secret('plugins:stripe'),

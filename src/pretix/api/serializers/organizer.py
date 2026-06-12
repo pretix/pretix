@@ -58,8 +58,8 @@ from pretix.helpers.permission_migration import (
     OLD_TO_NEW_EVENT_COMPAT, OLD_TO_NEW_EVENT_MIGRATION,
     OLD_TO_NEW_ORGANIZER_COMPAT, OLD_TO_NEW_ORGANIZER_MIGRATION,
 )
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ class OrganizerSerializer(I18nAwareModelSerializer):
     slug = serializers.CharField(read_only=True)
 
     def get_organizer_url(self, organizer):
-        return build_absolute_uri(organizer, 'presale:organizer.index')
+        return eventreverse_absolute(organizer, 'presale:organizer.index')
 
     class Meta:
         model = Organizer
@@ -499,7 +499,7 @@ class TeamInviteSerializer(serializers.ModelSerializer):
                 'user': self,
                 'organizer': self.context['organizer'].name,
                 'team': instance.team.name,
-                'url': build_global_uri('control:auth.invite', kwargs={
+                'url': build_absolute_uri('control:auth.invite', kwargs={
                     'token': instance.token
                 })
             },

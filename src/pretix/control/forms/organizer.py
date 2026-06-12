@@ -88,7 +88,7 @@ from pretix.control.forms.event import (
 )
 from pretix.control.forms.widgets import Select2, Select2Multiple
 from pretix.multidomain.models import KnownDomain
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 class OrganizerForm(I18nModelForm):
@@ -791,7 +791,7 @@ class MailSettingsForm(SettingsForm):
         }
 
         if 'url' in base_parameters:
-            placeholders['url'] = build_absolute_uri(
+            placeholders['url'] = eventreverse_absolute(
                 self.organizer,
                 'presale:organizer.customer.activate'
             ) + '?token=' + get_random_string(30)

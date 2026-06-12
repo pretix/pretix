@@ -327,7 +327,7 @@ def get_best_name(position_or_address, parts=False):
 
 @receiver(register_text_placeholders, dispatch_uid="pretixbase_register_text_placeholders")
 def base_placeholders(sender, **kwargs):
-    from pretix.multidomain.urlreverse import build_absolute_uri
+    from pretix.multidomain.urlreverse import eventreverse_absolute
 
     def _event_sample(event):
         if event.has_subevents:
@@ -388,14 +388,14 @@ def base_placeholders(sender, **kwargs):
             lambda event: LazyDate(now() + timedelta(days=15))
         ),
         SimpleFunctionalTextPlaceholder(
-            'url', ['order', 'event'], lambda order, event: build_absolute_uri(
+            'url', ['order', 'event'], lambda order, event: eventreverse_absolute(
                 event,
                 'presale:event.order.open', kwargs={
                     'order': order.code,
                     'secret': order.secret,
                     'hash': order.email_confirm_secret()
                 }
-            ), lambda event: build_absolute_uri(
+            ), lambda event: eventreverse_absolute(
                 event,
                 'presale:event.order.open', kwargs={
                     'order': 'F8VVL',
@@ -406,7 +406,7 @@ def base_placeholders(sender, **kwargs):
         ),
         SimpleButtonPlaceholder(
             'url_button', ['order', 'event'],
-            url_func=lambda order, event: build_absolute_uri(
+            url_func=lambda order, event: eventreverse_absolute(
                 event,
                 'presale:event.order.open', kwargs={
                     'order': order.code,
@@ -415,7 +415,7 @@ def base_placeholders(sender, **kwargs):
                 }
             ),
             text_func=lambda order, event: _("View order details"),
-            sample_url_func=lambda event: build_absolute_uri(
+            sample_url_func=lambda event: eventreverse_absolute(
                 event,
                 'presale:event.order.open', kwargs={
                     'order': 'F8VVL',
@@ -426,13 +426,13 @@ def base_placeholders(sender, **kwargs):
             sample_text_func=lambda event: _("View order details"),
         ),
         SimpleFunctionalTextPlaceholder(
-            'url_info_change', ['order', 'event'], lambda order, event: build_absolute_uri(
+            'url_info_change', ['order', 'event'], lambda order, event: eventreverse_absolute(
                 event,
                 'presale:event.order.modify', kwargs={
                     'order': order.code,
                     'secret': order.secret,
                 }
-            ), lambda event: build_absolute_uri(
+            ), lambda event: eventreverse_absolute(
                 event,
                 'presale:event.order.modify', kwargs={
                     'order': 'F8VVL',
@@ -441,13 +441,13 @@ def base_placeholders(sender, **kwargs):
             ),
         ),
         SimpleFunctionalTextPlaceholder(
-            'url_products_change', ['order', 'event'], lambda order, event: build_absolute_uri(
+            'url_products_change', ['order', 'event'], lambda order, event: eventreverse_absolute(
                 event,
                 'presale:event.order.change', kwargs={
                     'order': order.code,
                     'secret': order.secret,
                 }
-            ), lambda event: build_absolute_uri(
+            ), lambda event: eventreverse_absolute(
                 event,
                 'presale:event.order.change', kwargs={
                     'order': 'F8VVL',
@@ -456,13 +456,13 @@ def base_placeholders(sender, **kwargs):
             ),
         ),
         SimpleFunctionalTextPlaceholder(
-            'url_cancel', ['order', 'event'], lambda order, event: build_absolute_uri(
+            'url_cancel', ['order', 'event'], lambda order, event: eventreverse_absolute(
                 event,
                 'presale:event.order.cancel', kwargs={
                     'order': order.code,
                     'secret': order.secret,
                 }
-            ), lambda event: build_absolute_uri(
+            ), lambda event: eventreverse_absolute(
                 event,
                 'presale:event.order.cancel', kwargs={
                     'order': 'F8VVL',
@@ -471,7 +471,7 @@ def base_placeholders(sender, **kwargs):
             ),
         ),
         SimpleFunctionalTextPlaceholder(
-            'url', ['event', 'position'], lambda event, position: build_absolute_uri(
+            'url', ['event', 'position'], lambda event, position: eventreverse_absolute(
                 event,
                 'presale:event.order.position',
                 kwargs={
@@ -480,7 +480,7 @@ def base_placeholders(sender, **kwargs):
                     'position': position.positionid
                 }
             ),
-            lambda event: build_absolute_uri(
+            lambda event: eventreverse_absolute(
                 event,
                 'presale:event.order.position', kwargs={
                     'order': 'F8VVL',
@@ -491,7 +491,7 @@ def base_placeholders(sender, **kwargs):
         ),
         SimpleButtonPlaceholder(
             'url_button', ['event', 'position'],
-            url_func=lambda event, position: build_absolute_uri(
+            url_func=lambda event, position: eventreverse_absolute(
                 event,
                 'presale:event.order.position', kwargs={
                     'order': position.order.code,
@@ -500,7 +500,7 @@ def base_placeholders(sender, **kwargs):
                 }
             ),
             text_func=lambda event, position: _("View registration details"),
-            sample_url_func=lambda event: build_absolute_uri(
+            sample_url_func=lambda event: eventreverse_absolute(
                 event,
                 'presale:event.order.position', kwargs={
                     'order': 'F8VVL',
@@ -511,14 +511,14 @@ def base_placeholders(sender, **kwargs):
             sample_text_func=lambda event: _("View registration details"),
         ),
         SimpleFunctionalTextPlaceholder(
-            'url_info_change', ['position', 'event'], lambda position, event: build_absolute_uri(
+            'url_info_change', ['position', 'event'], lambda position, event: eventreverse_absolute(
                 event,
                 'presale:event.order.position.modify', kwargs={
                     'order': position.order.code,
                     'secret': position.web_secret,
                     'position': position.positionid
                 }
-            ), lambda event: build_absolute_uri(
+            ), lambda event: eventreverse_absolute(
                 event,
                 'presale:event.order.position.modify', kwargs={
                     'order': 'F8VVL',
@@ -528,14 +528,14 @@ def base_placeholders(sender, **kwargs):
             ),
         ),
         SimpleFunctionalTextPlaceholder(
-            'url_products_change', ['position', 'event'], lambda position, event: build_absolute_uri(
+            'url_products_change', ['position', 'event'], lambda position, event: eventreverse_absolute(
                 event,
                 'presale:event.order.position.change', kwargs={
                     'order': position.order.code,
                     'secret': position.web_secret,
                     'position': position.positionid
                 }
-            ), lambda event: build_absolute_uri(
+            ), lambda event: eventreverse_absolute(
                 event,
                 'presale:event.order.position.change', kwargs={
                     'order': 'F8VVL',
@@ -581,20 +581,20 @@ def base_placeholders(sender, **kwargs):
         ),
         SimpleFunctionalTextPlaceholder(
             'url_remove', ['waiting_list_voucher', 'event'],
-            lambda waiting_list_voucher, event: build_absolute_uri(
+            lambda waiting_list_voucher, event: eventreverse_absolute(
                 event, 'presale:event.waitinglist.remove'
             ) + '?voucher=' + waiting_list_voucher.code,
-            lambda event: build_absolute_uri(
+            lambda event: eventreverse_absolute(
                 event,
                 'presale:event.waitinglist.remove',
             ) + '?voucher=68CYU2H6ZTP3WLK5',
         ),
         SimpleFunctionalTextPlaceholder(
             'url', ['waiting_list_voucher', 'event'],
-            lambda waiting_list_voucher, event: build_absolute_uri(
+            lambda waiting_list_voucher, event: eventreverse_absolute(
                 event, 'presale:event.redeem'
             ) + '?voucher=' + waiting_list_voucher.code,
-            lambda event: build_absolute_uri(
+            lambda event: eventreverse_absolute(
                 event,
                 'presale:event.redeem',
             ) + '?voucher=68CYU2H6ZTP3WLK5',
@@ -611,7 +611,7 @@ def base_placeholders(sender, **kwargs):
             'orders', ['event', 'orders'], lambda event, orders: '\n' + '\n\n'.join(
                 '* {} - {}'.format(
                     order.full_code,
-                    build_absolute_uri(event, 'presale:event.order.open', kwargs={
+                    eventreverse_absolute(event, 'presale:event.order.open', kwargs={
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'order': order.code,
@@ -623,7 +623,7 @@ def base_placeholders(sender, **kwargs):
             ), lambda event: '\n' + '\n\n'.join(
                 '* {} - {}'.format(
                     '{}-{}'.format(event.slug.upper(), order['code']),
-                    build_absolute_uri(event, 'presale:event.order.open', kwargs={
+                    eventreverse_absolute(event, 'presale:event.order.open', kwargs={
                         'event': event.slug,
                         'organizer': event.organizer.slug,
                         'order': order['code'],
@@ -662,13 +662,13 @@ def base_placeholders(sender, **kwargs):
             # join vouchers with two spaces at end of line so markdown-parser inserts a <br>
             'voucher_url_list', ['event', 'voucher_list'],
             lambda event, voucher_list: '  \n'.join([
-                build_absolute_uri(
+                eventreverse_absolute(
                     event, 'presale:event.redeem'
                 ) + '?voucher=' + c
                 for c in voucher_list
             ]),
             lambda event: '  \n'.join([
-                build_absolute_uri(
+                eventreverse_absolute(
                     event, 'presale:event.redeem'
                 ) + '?voucher=' + c
                 for c in ['68CYU2H6ZTP3WLK5', '7MB94KKPVEPSMVF2']
@@ -676,10 +676,10 @@ def base_placeholders(sender, **kwargs):
             inline=False,
         ),
         SimpleFunctionalTextPlaceholder(
-            'url', ['event', 'voucher_list'], lambda event, voucher_list: build_absolute_uri(event, 'presale:event.index', kwargs={
+            'url', ['event', 'voucher_list'], lambda event, voucher_list: eventreverse_absolute(event, 'presale:event.index', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug,
-            }), lambda event: build_absolute_uri(event, 'presale:event.index', kwargs={
+            }), lambda event: eventreverse_absolute(event, 'presale:event.index', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug,
             })

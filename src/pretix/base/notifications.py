@@ -43,7 +43,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from pretix.base.models import Event, LogEntry
 from pretix.base.signals import register_notification_types
 from pretix.base.templatetags.money import money_filter
-from pretix.helpers.urls import build_absolute_uri
+from pretix.helpers.urls import reverse_absolute_url_global_domain
 
 logger = logging.getLogger(__name__)
 _ALL_TYPES = None
@@ -170,7 +170,7 @@ class ParametrizedOrderNotificationType(NotificationType):
     def build_notification(self, logentry: LogEntry):
         order = logentry.content_object
 
-        order_url = build_absolute_uri(
+        order_url = reverse_absolute_url_global_domain(
             'control:event.order',
             kwargs={
                 'organizer': logentry.event.organizer.slug,

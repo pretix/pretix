@@ -65,7 +65,7 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.daterange import daterange
 from pretix.helpers.thumb import get_thumbnail
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.organizer import meta_filtersets
 from pretix.presale.style import get_theme_vars_css
 from pretix.presale.views.cart import get_or_create_cart_id
@@ -303,7 +303,7 @@ def get_picture(event, picture, size=None):
             logger.exception(f'Failed to create thumbnail of {picture.name}')
     if not thumb:
         thumb = default_storage.url(picture.name)
-    return urljoin(build_absolute_uri(event, 'presale:event.index'), thumb)
+    return urljoin(eventreverse_absolute(event, 'presale:event.index'), thumb)
 
 
 class WidgetAPIProductList(EventListMixin, View):
@@ -547,7 +547,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 'location': str(ev.location),
                 'date_range': self._get_date_range(ev, event, tz=tz),
                 'availability': self._get_availability(ev, event, tz=tz),
-                'event_url': build_absolute_uri(event, 'presale:event.index'),
+                'event_url': eventreverse_absolute(event, 'presale:event.index'),
                 'subevent': ev.pk if isinstance(ev, SubEvent) else None,
             })
         return events
@@ -748,7 +748,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'location': str(ev.location),
                         'date_range': self._get_date_range(ev, ev.event, tz),
                         'availability': self._get_availability(ev, ev.event, tz=tz),
-                        'event_url': build_absolute_uri(ev.event, 'presale:event.index'),
+                        'event_url': eventreverse_absolute(ev.event, 'presale:event.index'),
                         'subevent': ev.pk,
                     } for ev in evs
                 ]
@@ -771,7 +771,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'location': str(event.location),
                         'date_range': dr,
                         'availability': avail,
-                        'event_url': build_absolute_uri(event, 'presale:event.index'),
+                        'event_url': eventreverse_absolute(event, 'presale:event.index'),
                     })
 
         cache.set(cache_key, data, 30)
@@ -796,7 +796,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 return self.response(cached_data)
 
         data = {
-            'target_url': build_absolute_uri(request.event, 'presale:event.index'),
+            'target_url': eventreverse_absolute(request.event, 'presale:event.index'),
             'subevent': self.subevent.pk if self.subevent else None,
             'currency': request.event.currency,
             'display_net_prices': request.event.settings.display_net_prices,

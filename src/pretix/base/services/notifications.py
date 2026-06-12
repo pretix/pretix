@@ -37,7 +37,7 @@ from pretix.base.services.tasks import ProfiledTask, TransactionAwareTask
 from pretix.base.signals import notification
 from pretix.celery_app import app
 from pretix.helpers.celery import get_task_priority
-from pretix.helpers.urls import build_absolute_uri
+from pretix.helpers.urls import reverse_absolute_url_global_domain
 
 
 @app.task(base=TransactionAwareTask, acks_late=True, max_retries=9, default_retry_delay=900)
@@ -136,10 +136,10 @@ def send_notification_mail(notification: Notification, user: User):
         'site_url': settings.SITE_URL,
         'color': settings.PRETIX_PRIMARY_COLOR,
         'notification': notification,
-        'settings_url': build_absolute_uri(
+        'settings_url': reverse_absolute_url_global_domain(
             'control:user.settings.notifications',
         ),
-        'disable_url': build_absolute_uri(
+        'disable_url': reverse_absolute_url_global_domain(
             'control:user.settings.notifications.off',
             kwargs={
                 'token': user.notifications_token,

@@ -80,7 +80,7 @@ from pretix.control.forms.widgets import Select2
 from pretix.helpers.countries import CachedCountries
 from pretix.multidomain.models import AlternativeDomainAssignment, KnownDomain
 from pretix.multidomain.urlreverse import (
-    build_absolute_uri, get_organizer_domain,
+    eventreverse_absolute, get_organizer_domain,
 )
 from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.presale.style import get_fonts
@@ -219,7 +219,7 @@ class EventWizardBasicsForm(I18nModelForm):
         self.fields['location'].widget.attrs['placeholder'] = _(
             'Sample Conference Center\nHeidelberg, Germany'
         )
-        self.fields['slug'].widget.prefix = build_absolute_uri(self.organizer, 'presale:organizer.index')
+        self.fields['slug'].widget.prefix = eventreverse_absolute(self.organizer, 'presale:organizer.index')
         self.fields['tax_rate']._required = True  # Do not render as optional because it is conditionally required
         if self.has_subevents:
             del self.fields['presale_start']

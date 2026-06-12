@@ -73,7 +73,7 @@ from pretix.base.settings import (
     LazyI18nStringList, validate_event_settings,
 )
 from pretix.base.signals import api_event_settings_fields
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -173,7 +173,7 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     )
 
     def get_event_url(self, event):
-        return build_absolute_uri(event, 'presale:event.index')
+        return eventreverse_absolute(event, 'presale:event.index')
 
     class Meta:
         model = Event

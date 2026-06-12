@@ -139,8 +139,8 @@ from pretix.helpers import OF_SELF, GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.format import SafeFormatter, format_map
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import reverse_absolute_url_global_domain
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.customer import TokenGenerator
 
 logger = logging.getLogger(__name__)
@@ -1039,7 +1039,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                 'user': self,
                 'organizer': self.request.organizer.name,
                 'team': instance.team.name,
-                'url': build_global_uri('control:auth.invite', kwargs={
+                'url': reverse_absolute_url_global_domain('control:auth.invite', kwargs={
                     'token': instance.token
                 })
             },
@@ -2851,10 +2851,12 @@ class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['redirect_uri'] = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return',
-                                                 kwargs={
-                                                     'provider': self.object.pk
-                                                 })
+        ctx['redirect_uri'] = eventreverse_absolute(
+            self.request.organizer, 'presale:organizer.customer.login.return',
+            kwargs={
+                'provider': self.object.pk
+            }
+        )
         return ctx
 
     def get_form_kwargs(self):
@@ -3085,7 +3087,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             self.customer.log_action('pretix.customer.password.resetrequested', {}, user=self.request.user)
             ctx = self.customer.get_email_context()
             token = TokenGenerator().make_token(self.customer)
-            ctx['url'] = build_absolute_uri(
+            ctx['url'] = eventreverse_absolute(
                 self.request.organizer,
                 'presale:organizer.customer.recoverpw'
             ) + '?id=' + self.customer.identifier + '&token=' + token

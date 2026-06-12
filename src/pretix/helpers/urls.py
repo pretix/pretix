@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import warnings
 from urllib.parse import urljoin
 
 from django.conf import settings
@@ -26,6 +27,15 @@ from django.urls import reverse
 
 
 def build_absolute_uri(urlname, args=None, kwargs=None):
+    warnings.warn(
+        'Usage of build_absolute_uri is confusing since there are many functions with that name. '
+        'Replace this usage with ',
+        DeprecationWarning
+    )
+    return reverse_absolute_url_global_domain(urlname, args, kwargs)
+
+
+def reverse_absolute_url_global_domain(urlname, args=None, kwargs=None):
     from pretix.multidomain import maindomain_urlconf
 
     return urljoin(settings.SITE_URL, reverse(urlname, args=args, kwargs=kwargs, urlconf=maindomain_urlconf))

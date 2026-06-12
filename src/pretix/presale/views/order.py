@@ -89,7 +89,7 @@ from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.safedownload import check_token
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.forms.order import OrderPositionChangeForm
 from pretix.presale.signals import question_form_fields_overrides
@@ -312,7 +312,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
                 state__in=[OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED]
             ).exists() and self.order.status == Order.STATUS_PENDING:
                 ctx['generate_invoice_requires'] = 'payment'
-        ctx['url'] = build_absolute_uri(
+        ctx['url'] = eventreverse_absolute(
             self.request.event, 'presale:event.order', kwargs={
                 'order': self.order.code,
                 'secret': self.order.secret
