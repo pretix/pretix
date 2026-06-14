@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-27 15:47+0000\n"
-"PO-Revision-Date: 2025-10-17 16:55+0000\n"
-"Last-Translator: fd <fd@denkena-consulting.com>\n"
+"PO-Revision-Date: 2026-06-14 02:00+0000\n"
+"Last-Translator: Nikita Mitasov <me@ch4og.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.13.3\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html:670
 #: pretix/control/templates/pretixcontrol/events/index.html:166
@@ -53,7 +53,7 @@ msgstr "В продаже"
 
 #: pretix/_base_settings.py:89
 msgid "English"
-msgstr "английский язык"
+msgstr "Английский язык"
 
 #: pretix/_base_settings.py:90
 msgid "German"
@@ -565,65 +565,50 @@ msgid "Refund of payment failed"
 msgstr "Возврат платежа не удался"
 
 #: pretix/api/webhooks.py:359
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgid "Payment confirmed"
-msgstr "Заказ подтверждён"
+msgstr "Платёж подтверждён"
 
 #: pretix/api/webhooks.py:363
 msgid "Order approved"
-msgstr ""
+msgstr "Заказ подтверждён"
 
 #: pretix/api/webhooks.py:367
 msgid "Order denied"
-msgstr ""
+msgstr "Заказ отклонён"
 
 #: pretix/api/webhooks.py:371
-#, fuzzy
-#| msgid "Order date"
 msgid "Order deleted"
-msgstr "Дата заказа"
+msgstr "Заказ удалён"
 
 #: pretix/api/webhooks.py:375
 msgid "Ticket checked in"
-msgstr ""
+msgstr "Билет использован"
 
 #: pretix/api/webhooks.py:379
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "Использование билета отменено"
 
 #: pretix/api/webhooks.py:383
-#, fuzzy
-#| msgid "Event date"
 msgid "Event created"
-msgstr "Дата мероприятия"
+msgstr "Мероприятие создано"
 
 #: pretix/api/webhooks.py:387
-#, fuzzy
-#| msgid "Event date range"
 msgid "Event details changed"
-msgstr "Диапазон дат мероприятия"
+msgstr "Данные о мероприятии изменились"
 
 #: pretix/api/webhooks.py:391
-#, fuzzy
-#| msgid "Event date"
 msgid "Event deleted"
-msgstr "Дата мероприятия"
+msgstr "Мероприятие удалено"
 
 #: pretix/api/webhooks.py:395
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "Дата и время начала мероприятия"
+msgstr "Добавлена дата серии мероприятий"
 
 #: pretix/api/webhooks.py:399
-#, fuzzy
-#| msgid "Event date range"
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "Диапазон дат мероприятия"
+msgstr "Изменена дата серии мероприятий"
 
 #: pretix/api/webhooks.py:403
 #, fuzzy
@@ -873,7 +858,7 @@ msgstr "<a %(a_attr)s>event ticketing powered by pretix</a>"
 
 #: pretix/base/context.py:64
 msgid "source code"
-msgstr "Промокод"
+msgstr "исходный код"
 
 #: pretix/base/customersso/oidc.py:61
 #, python-brace-format
@@ -12285,6 +12270,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Здравствуйте,\n"
+"\n"
+"мы успешно получили ваш заказ на мероприятие {event}. Поскольку вы заказали\n"
+"товар, требующий подтверждения со стороны организатора, просим вас\n"
+"подождать нашего следующего письма.\n"
+"\n"
+"Вы можете изменить данные заказа и просмотреть его статус по ссылке:\n"
+"{url}\n"
+"\n"
+"С уважением,  \n"
+"команда {event}"
 
 #: pretix/base/settings.py:2536
 #, python-brace-format
@@ -12303,6 +12299,19 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Здравствуйте,\n"
+"\n"
+"мы успешно получили ваш заказ на сумму {total_with_currency} для мероприятия "
+"{event}.\n"
+"Пожалуйста, завершите оплату до {expire_date}.\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Вы можете изменить данные заказа и просмотреть его статус по ссылке:\n"
+"{url}\n"
+"\n"
+"С уважением,  \n"
+"команда {event}"
 
 #: pretix/base/settings.py:2554
 #, fuzzy
@@ -12375,6 +12384,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Здравствуйте,\n"
+"\n"
+"мы успешно получили вашу оплату за мероприятие {event}. Спасибо!\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Вы можете изменить данные заказа и просмотреть его статус по ссылке:\n"
+"{url}\n"
+"\n"
+"С уважением,  \n"
+"команда {event}"
 
 #: pretix/base/settings.py:2636
 #, python-brace-format
@@ -13648,10 +13668,8 @@ msgid "created by"
 msgstr "создано"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:34
-#, fuzzy
-#| msgid "Bancontact"
 msgid "Contact:"
-msgstr "Bancontact"
+msgstr "Связаться:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:54
 #, fuzzy, python-format
@@ -13684,10 +13702,8 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/order_details.html:136
 #: pretix/presale/templates/pretixpresale/event/base.html:223
 #: pretix/presale/templates/pretixpresale/organizers/base.html:101
-#, fuzzy
-#| msgid "Bancontact"
 msgid "Contact"
-msgstr "Bancontact"
+msgstr "Связаться"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt:2
 #, python-format
@@ -13758,16 +13774,17 @@ msgid "Proceed to %(host)s"
 msgstr "Приступить к оформлению заказа"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Source code"
-msgstr "Код ваучера"
+msgstr "Исходный код"
 
 #: pretix/base/templates/source.html:10
 msgid ""
 "This site is powered by free software. If you want to read the license terms "
 "or obtain the source code, follow these links or instructions:"
 msgstr ""
+"Этот сайт работает на свободном программном обеспечении. Если вы хотите "
+"ознакомиться с условиями лицензии или получить исходный код, перейдите по "
+"следующим ссылкам или следуйте инструкциям:"
 
 #: pretix/base/ticketoutput.py:182
 #, fuzzy
@@ -15702,6 +15719,7 @@ msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
 msgstr ""
+"Данная установка pretix содержит изменения или расширения исходного кода."
 
 #: pretix/control/forms/global_settings.py:162
 msgid "Usage of pretix"
@@ -15792,10 +15810,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/global_settings.py:217
-#, fuzzy
-#| msgid "Your registration"
 msgid "Source code instructions"
-msgstr "Ваша регистрация"
+msgstr "Инструкции для получения исходного кода"
 
 #: pretix/control/forms/global_settings.py:219
 msgid ""
@@ -18812,7 +18828,7 @@ msgstr "Оплата"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:89
 #: pretix/presale/templates/pretixpresale/organizers/index.html:91
 msgid "Tickets"
-msgstr ""
+msgstr "Билеты"
 
 #: pretix/control/navigation.py:97
 #: pretix/control/templates/pretixcontrol/event/tax.html:4
@@ -30761,6 +30777,8 @@ msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
 msgstr ""
+"После завершения покупки, мы попросим вас перевести оплату на следующий "
+"банковский счет, указав персональный код назначения платежа:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
 msgid ""
@@ -30771,23 +30789,27 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:14
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:21
 msgid "Reference code (important):"
-msgstr ""
+msgstr "Код назначения платежа (важно):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:30
 msgid "We will assign you a personal reference code in the next step."
-msgstr ""
+msgstr "Мы присвоим вам персональный код назначения платежа на следующем шаге."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
 msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
 msgstr ""
+"Мы присвоим вам персональный код назначения платежа после завершения "
+"оформления заказа."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:41
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to our "
 "bank account, using a personal reference code."
 msgstr ""
+"После завершения покупки мы попросим вас перевести оплату на следующий "
+"банковский счёт, указав персональный код назначения платежа."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:6
 #, fuzzy
@@ -30810,7 +30832,7 @@ msgstr "Общая сумма"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:38
 msgid "Reference code"
-msgstr ""
+msgstr "Код назначения платежа"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
@@ -30949,7 +30971,7 @@ msgstr "Сумма:"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:34
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:30
 msgid "There is no further action required on this website."
-msgstr ""
+msgstr "Дальнейших действий на этом сайте не требуется."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:35
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:31
@@ -35999,32 +36021,23 @@ msgstr ""
 "завершения процесса."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:56
-#, fuzzy
-#| msgid ""
-#| "Please bookmark or save the link to this exact page if you want to access "
-#| "your order later. We also sent you an email containing the link to the "
-#| "address you specified."
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email to the address you specified "
 "containing the link to this page."
 msgstr ""
-"Пожалуйста, добавьте в закладки или сохраните ссылку именно на эту страницу, "
-"если вы хотите получить доступ к вашему заказу позже. Мы также отправили вам "
-"электронное письмо со ссылкой на указанный вами адрес."
+"Пожалуйста, сохраните закладку или ссылку на эту страницу, если вам "
+"потребуется доступ к заказу позже. Мы также отправили письмо на указанный "
+"вами адрес электронной почты со ссылкой на эту страницу."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:60
-#, fuzzy
-#| msgid ""
-#| "Please save the following link if you want to access your order later. We "
-#| "also sent you an email containing the link to the address you specified."
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email to the address you specified containing the link."
 msgstr ""
-"Пожалуйста, сохраните следующую ссылку, если вы хотите получить доступ к "
-"вашему заказу позже. Мы также отправили вам электронное письмо со ссылкой на "
-"указанный вами адрес."
+"Пожалуйста, сохраните  ссылку на эту страницу, если вам потребуется доступ к "
+"заказу позже. Мы также отправили письмо на указанный вами адрес электронной "
+"почты со ссылкой на эту страницу."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:75
 #: pretix/presale/templates/pretixpresale/event/position.html:18
