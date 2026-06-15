@@ -26,7 +26,8 @@ def test_waitinglist_signup_with_sms_opt_in(client, twilio_env, logged_in_custom
             "email": TEST_EMAIL,
             "itemvar": str(item.pk),
             "sms_opt_in": "on",
-            "sms_phone_0": TEST_PHONE,
+            "sms_phone_0": "+1",
+            "sms_phone_1": "2125552368",
         },
     )
     assert response.status_code == 302

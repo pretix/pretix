@@ -273,6 +273,25 @@ def queue_waiting_list_sms_for_entry(*, entry):
 
     customer, phone, sms_opt_in = _get_customer_and_phone(entry)
 
+    if not sms_opt_in:
+        logger.info(
+            "pretix_twilio_sms: queue_waiting_list_sms_for_entry skip: not opted in "
+            "entry_id=%s event_id=%s",
+            entry.pk,
+            event_id,
+        )
+        return
+
+    if not _is_valid_phone(phone):
+        logger.info(
+            "pretix_twilio_sms: queue_waiting_list_sms_for_entry skip: no valid phone "
+            "entry_id=%s event_id=%s phone=%s",
+            entry.pk,
+            event_id,
+            phone,
+        )
+        return
+
     logger.info(
         "pretix_twilio_sms: queueing waiting list SMS task entry_id=%s event_id=%s",
         entry.pk,

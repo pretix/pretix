@@ -24,13 +24,17 @@ def use_dummy_sms_sender():
 
 @pytest.fixture
 def sms_calls(monkeypatch):
-    """Capture SMS send attempts via the pluggable sender."""
+    """Capture waiting-list SMS task queue attempts (apply_async kwargs)."""
     calls = []
 
-    def _track(**kwargs):
-        calls.append(kwargs)
+    def _capture(*args, **kwargs):
+        calls.append(kwargs.get("kwargs", {}))
 
-    monkeypatch.setattr(twilio_services, "_sms_sender", _track)
+    monkeypatch.setattr(
+        twilio_services.send_waiting_list_sms_task,
+        "apply_async",
+        _capture,
+    )
     return calls
 
 
@@ -43,7 +47,6 @@ def twilio_env():
     organizer = Organizer.objects.create(name="Sideburn Test", slug="sideburntest")
     organizer.settings.customer_accounts = True
     organizer.settings.customer_accounts_native = True
-    organizer.settings.save()
 
     event = Event.objects.create(
         organizer=organizer,
