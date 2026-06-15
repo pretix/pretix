@@ -179,6 +179,12 @@ class EventMixin:
             self.date_to.astimezone(tz), ("D" if short else "l")
         )
 
+    def is_same_day(self):
+        if not self.date_to:
+            return True
+        else:
+            return self.date_from.astimezone(self.timezone).date() == self.date_to.astimezone(self.timezone).date()
+
     def get_date_range_display(self, tz=None, force_show_end=False, as_html=False, try_to_show_times=False) -> str:
         """
         Returns a formatted string containing the start date and the end date
