@@ -382,6 +382,17 @@ because an already-paid order has been split.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+waiting_list_voucher_sent = EventPluginSignal()
+"""
+Arguments: ``entry``, ``user``, ``auth``
+
+This signal is sent after a waiting list entry has been assigned a voucher and the
+notification email has been queued. Receivers may perform side effects such as sending
+SMS notifications.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 order_canceled = EventPluginSignal()
 """
 Arguments: ``order``

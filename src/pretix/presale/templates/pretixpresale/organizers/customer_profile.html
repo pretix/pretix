@@ -4,6 +4,7 @@
 {% load urlreplace %}
 {% load money %}
 {% load bootstrap3 %}
+{% load eventsignal %}
 {% block title %}{% trans "Your account" %}{% endblock %}
 {% block content %}
     <h2>
@@ -33,6 +34,7 @@
                     <dd>{{ customer.phone }}</dd>
                 {% endif %}
                 {% block customer_profile_after_phone %}{% endblock %}
+                {% signal "pretix.presale.signals.customer_profile_extra" request customer=customer %}
             </dl>
             <div class="text-right">
                 <a href="{% eventurl request.organizer "presale:organizer.customer.change" %}"

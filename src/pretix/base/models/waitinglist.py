@@ -299,6 +299,9 @@ class WaitingListEntry(LoggedModel):
                 auth=auth,
             )
 
+        from pretix.base.signals import waiting_list_voucher_sent
+        waiting_list_voucher_sent.send(self.event, entry=self, user=user, auth=auth)
+
     def send_mail(self, subject: Union[str, LazyI18nString], template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.waitinglist.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, auth=None, auto_email=True,

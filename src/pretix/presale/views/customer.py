@@ -61,6 +61,7 @@ from pretix.presale.forms.customer import (
     AuthenticationForm, ChangeInfoForm, ChangePasswordForm, RegistrationForm,
     ResetPasswordForm, SetPasswordForm, TokenGenerator,
 )
+from pretix.presale.signals import change_information_form_class
 from pretix.presale.utils import (
     customer_login, customer_logout, update_customer_session_auth_hash,
 )
@@ -491,6 +492,14 @@ class ChangePasswordView(CustomerRequiredMixin, FormView):
 class ChangeInformationView(CustomerRequiredMixin, FormView):
     template_name = 'pretixpresale/organizers/customer_info.html'
     form_class = ChangeInfoForm
+
+    def get_form_class(self):
+        form_class = ChangeInfoForm
+        for receiver, response in change_information_form_class.send(
+                self.request.organizer, request=self.request):
+            if response is not None:
+                return response
+        return form_class
 
     @method_decorator(sensitive_post_parameters())
     @method_decorator(csrf_protect)

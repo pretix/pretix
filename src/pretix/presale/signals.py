@@ -423,3 +423,24 @@ The first non-None response is used.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+change_information_form_class = Signal()
+"""
+Arguments: ``request``
+
+This signal is sent when the customer change-information form class is resolved on the
+organizer account page. Receivers may return a form class (subclass of
+``pretix.presale.forms.customer.ChangeInfoForm``). The first non-None response is used.
+
+The ``sender`` keyword argument is the organizer.
+"""
+
+customer_profile_extra = Signal()
+"""
+Arguments: ``request``, ``customer``
+
+This signal is sent when rendering the customer profile page. Receivers may return HTML
+to append to the account information block (e.g. after the phone field).
+
+The ``sender`` keyword argument is the HTTP request.
+"""
