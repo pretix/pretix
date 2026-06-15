@@ -14,4 +14,4 @@ const registerErrorLinkHandlers = (reloadAll = false) => {
 
 registerErrorLinkHandlers();
 
-$(document).on("pretix:async_task_replace_page", () => registerErrorLinkHandlers(true));
+$(document).on("pretix:async_task_replace_page:on_error", () => registerErrorLinkHandlers(true));
