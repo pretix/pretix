@@ -1,5 +1,17 @@
-document.getElementById('goback').onclick =
-   function() {window.history.back()};
+const registerErrorLinkHandlers = (reloadAll = false) => {
+  const backwards = document.getElementById('goback');
+  if (backwards) {
+    backwards.onclick = reloadAll
+      ? () => window.location.reload(true)
+      : () => window.history.back();
+  }
 
-document.getElementById('reload').onclick =
- function() {window.location.reload(true)};
+  const reload = document.getElementById('reload');
+  if (reload) {
+    reload.onclick = () => window.location.reload(true);
+  }
+};
+
+registerErrorLinkHandlers();
+
+$(document).on("pretix:async_task_replace_page", () => registerErrorLinkHandlers(true));

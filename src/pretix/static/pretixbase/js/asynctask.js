@@ -107,6 +107,7 @@ function async_task_replace_page(target, new_html) {
     setup_collapsible_details($(target));
     window.setTimeout(function () { $(window).scrollTop(0) }, 200)
     $(document).trigger("pretix:bind-forms");
+		$(document).trigger("pretix:async_task_replace_page");
 }
 
 function async_task_check_error(jqXHR, textStatus, errorThrown) {
