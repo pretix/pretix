@@ -245,7 +245,7 @@ def recv_classic(sender, **kwargs):
 
 
 def assign_ticket_secret(event, position, force_invalidate_if_revokation_list_used=False, force_invalidate=False, save=True):
-    if position.issued_gift_cards.exists():
+    if position.pk and position.issued_gift_cards.exists():
         return
 
     gen = event.ticket_secret_generator
