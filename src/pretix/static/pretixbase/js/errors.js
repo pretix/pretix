@@ -12,6 +12,6 @@ const registerErrorLinkHandlers = (reloadAll = false) => {
   }
 };
 
-registerErrorLinkHandlers();
+document.addEventListener("DOMContentLoaded", () => registerErrorLinkHandlers());
 
-$(document).on("pretix:async_task_replace_page:on_error", () => registerErrorLinkHandlers(true));
+document.addEventListener("pretix:async_task_replace_page:on_error", () => registerErrorLinkHandlers(true));

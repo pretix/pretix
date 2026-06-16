@@ -175,14 +175,15 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
         var c = respdom.filter('.container');
         if (respdom.filter('form') && (respdom.filter('.has-error') || respdom.filter('.alert-danger'))) {
             if (respdom.filter('#page-wrapper') && $('#page-wrapper').length) {
-								// This is a failed form validation, let's just use it
+                // This is a failed form validation, let's just use it
                 async_task_replace_page("#page-wrapper", respdom.find("#page-wrapper").html());
             } else {
                 async_task_replace_page("body", jqXHR.responseText.substring(
                     jqXHR.responseText.indexOf("<body"),
                     jqXHR.responseText.indexOf("</body")
                 ));
-                $(document).trigger("pretix:async_task_replace_page:on_error");
+                document.dispatchEvent(new Event("pretix:async_task_replace_page:on_error"))
+
             }
 
         } else if (c.length > 0) {
