@@ -213,6 +213,17 @@ quota as argument in the ``quota`` keyword argument.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+waitinglist_index_html = EventPluginSignal()
+"""
+Arguments: ``request``
+
+This signal allows plugins to inject HTML into the waiting list admin index page
+(e.g. action buttons for lottery run/revert).
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+Receivers are expected to return HTML.
+"""
+
 organizer_edit_tabs = DeprecatedSignal()
 """
 Arguments: 'organizer', 'request'
