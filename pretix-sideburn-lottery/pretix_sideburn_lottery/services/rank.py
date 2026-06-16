@@ -13,12 +13,9 @@ def get_waiting_list_rank(entry):
         - None if this entry has an expired or fully redeemed voucher
         - int (1-based rank) if this entry has no voucher - position in waiting list
     """
-    # Check if entry has a voucher
     if entry.voucher:
-        # Check if voucher is expired
         if not entry.voucher.is_active():
             return None
-        # Voucher is valid and not fully redeemed - waiting for redemption
         return 0
 
     # No voucher - calculate rank in waiting list
