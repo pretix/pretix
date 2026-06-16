@@ -1,0 +1,36 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, master ]
+    paths-ignore:
+      - 'pretix_sideburn_lottery/locale/**'
+  pull_request:
+    branches: [ main, master ]
+    paths-ignore:
+      - 'pretix_sideburn_lottery/locale/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Tests
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.11
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install system dependencies
+        run: sudo apt update && sudo apt install gettext
+      - name: Install pretix
+        run: pip3 install pretix
+      - name: Install Dependencies
+        run: pip3 install pytest pytest-django -Ue .
+      - name: Run checks
+        run: py.test tests

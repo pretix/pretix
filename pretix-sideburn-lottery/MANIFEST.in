@@ -1,0 +1,5 @@
+recursive-include pretix_sideburn_lottery/static *
+recursive-include pretix_sideburn_lottery/templates *
+recursive-include pretix_sideburn_lottery/locale *
+include LICENSE
+exclude .gitlab-ci.yml

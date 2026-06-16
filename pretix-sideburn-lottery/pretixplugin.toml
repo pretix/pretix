@@ -1,0 +1,4 @@
+[plugin]
+package = "pretix-sideburn-lottery"
+modules = [ "pretix_sideburn_lottery" ]
+marketplace_name = "sideburn-lottery"

@@ -1,0 +1,41 @@
+[project]
+name = "pretix-sideburn-lottery"
+dynamic = ["version"]
+description = "Sideburn waiting-list lottery mechanics for pretix"
+readme = "README.rst"
+license = {text = "Apache"}
+keywords = ["pretix"]
+authors = [
+    {name = "Ryan", email = "rdn0613@hotmail.com"},
+]
+maintainers = [
+    {name = "Ryan", email = "rdn0613@hotmail.com"},
+]
+
+dependencies = []
+
+[project.entry-points."pretix.plugin"]
+pretix_sideburn_lottery = "pretix_sideburn_lottery:PretixPluginMeta"
+
+[project.entry-points."distutils.commands"]
+build = "pretix_plugin_build.build:CustomBuild"
+
+[build-system]
+requires = [
+    "setuptools",
+    "pretix-plugin-build",
+]
+
+[project.urls]
+homepage = "n/a"
+repository = "n/a"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "pretix_sideburn_lottery.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["pretix*"]
+namespaces = false
