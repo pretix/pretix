@@ -34,7 +34,9 @@ from stripe import error
 from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
-from pretix.base.models import InvoiceAddress, Order, OrderPosition, Team
+from pretix.base.models import (
+    CachedTicket, InvoiceAddress, Order, OrderPosition, Team,
+)
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 
 
@@ -1222,6 +1224,31 @@ def test_orderposition_detail_canceled(token_client, organizer, event, order, it
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/?include_canceled_positions=true'.format(
         organizer.slug, event.slug, op.pk))
     assert resp.status_code == 200
+
+
+@pytest.mark.django_db
+def test_orderposition_download_missing_cached_file_returns_retry(token_client, organizer, event, order):
+    order.status = Order.STATUS_PAID
+    order.save()
+    event.settings.ticketoutput_pdf__enabled = True
+
+    with scopes_disabled():
+        op = order.positions.first()
+    CachedTicket.objects.create(
+        order_position=op,
+        provider='pdf',
+        type='application/pdf',
+        extension='.pdf',
+        file='cachedtickets/missing-ticket.pdf',
+    )
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/download/pdf/'.format(
+            organizer.slug, event.slug, op.pk
+        )
+    )
+
+    assert resp.status_code == 409
 
 
 @pytest.mark.django_db

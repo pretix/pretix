@@ -1404,19 +1404,22 @@ class EventOrderPositionViewSet(OrderPositionViewSetMixin, viewsets.ModelViewSet
             generate.apply_async(args=('orderposition', pos.pk, provider.identifier))
             raise RetryException()
         else:
-            if ct.type == 'text/uri-list':
-                resp = HttpResponse(ct.file.file.read(), content_type='text/uri-list')
-                return resp
-            else:
-                return FileResponse(
-                    ct.file.file,
-                    filename='{}-{}-{}-{}{}'.format(
-                        self.request.event.slug.upper(), pos.order.code, pos.positionid,
-                        provider.identifier, ct.extension
-                    ),
-                    as_attachment=True,
-                    content_type=ct.type
-                )
+            try:
+                if ct.type == 'text/uri-list':
+                    resp = HttpResponse(ct.file.file.read(), content_type='text/uri-list')
+                    return resp
+                else:
+                    return FileResponse(
+                        ct.file.file,
+                        filename='{}-{}-{}-{}{}'.format(
+                            self.request.event.slug.upper(), pos.order.code, pos.positionid,
+                            provider.identifier, ct.extension
+                        ),
+                        as_attachment=True,
+                        content_type=ct.type
+                    )
+            except FileNotFoundError:
+                raise RetryException()
 
     @action(detail=True, methods=['POST'])
     def regenerate_secrets(self, request, **kwargs):
