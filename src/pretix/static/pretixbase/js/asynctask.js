@@ -182,7 +182,7 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
                     jqXHR.responseText.indexOf("<body"),
                     jqXHR.responseText.indexOf("</body")
                 ));
-                document.dispatchEvent(new Event("pretix:async_task_replace_page:on_error"))
+                document.dispatchEvent(new Event("pretix:async-task-error"))
 
             }
 
