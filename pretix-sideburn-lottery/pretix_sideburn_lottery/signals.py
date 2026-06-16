@@ -5,8 +5,10 @@ from django.urls import reverse
 from pretix.base.email import SimpleFunctionalMailTextPlaceholder
 from pretix.base.signals import register_mail_placeholders
 from pretix.control.signals import waitinglist_index_html
+from pretix.presale.signals import front_page_bottom
 
 from .services.rank import get_waiting_list_rank
+from .views.presale import get_waiting_list_ranks
 
 
 @receiver(register_mail_placeholders, dispatch_uid="sideburn_lottery_waiting_list_position")
@@ -20,6 +22,31 @@ def register_waiting_list_position_placeholder(sender, **kwargs):
             )
         ),
         "42",
+    )
+
+
+@receiver(front_page_bottom, dispatch_uid="sideburn_lottery_front_page_rank")
+def render_waiting_list_rank(sender, request, subevent=None, **kwargs):
+    if not getattr(request, "customer", None):
+        return ""
+    event = sender
+    if not event.settings.waiting_list_enabled:
+        return ""
+    ev = subevent or event
+    if not ev.presale_is_running:
+        return ""
+
+    template = get_template(
+        "pretix_sideburn_lottery/fragment/waitinglist_rank.html"
+    )
+    return template.render(
+        {
+            "request": request,
+            "waiting_list_ranks": get_waiting_list_ranks(
+                event, request.customer.email
+            ),
+        },
+        request=request,
     )
 
 

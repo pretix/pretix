@@ -20,17 +20,15 @@
 # <https://www.gnu.org/licenses/>.
 #
 from datetime import timedelta
-from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
-from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django.views.generic import FormView, TemplateView, View
+from django.views.generic import FormView, TemplateView
 
 from pretix.base.models import Quota, SubEvent
 from pretix.base.templatetags.urlreplace import url_replace
@@ -43,85 +41,6 @@ from ...base.i18n import get_language_without_region
 from ...base.models import Voucher, WaitingListEntry
 from ..forms.waitinglist import WaitingListForm
 from . import allow_frame_if_namespaced
-
-
-def _get_entry_rank(entry):
-    if "pretix_sideburn_lottery" not in entry.event.get_plugins():
-        return None
-    from pretix_sideburn_lottery.services.rank import get_waiting_list_rank
-
-    return get_waiting_list_rank(entry)
-
-
-def get_waiting_list_ranks(event, customer_email):
-    """
-    Get waiting list ranks for a customer.
-    
-    Returns a list of product data dictionaries with rank information.
-    Each dictionary contains: item_id, item_name, variation_id, variation_name, rank, lottery_run, 
-    and optionally voucher_code, voucher_expired, and voucher_expired_date.
-    """
-    entries = WaitingListEntry.objects.filter(
-        event=event,
-        email__iexact=customer_email
-    ).select_related('item', 'variation', 'voucher').order_by('item', 'variation', '-created', '-pk')
-    
-    # Group entries by product (item + variation combination)
-    products_data = []
-    seen_products = set()
-    
-    for entry in entries:
-        # Create a unique key for this product (item + variation)
-        product_key = (entry.item_id, entry.variation_id if entry.variation else None)
-        
-        # Only process the most recent entry for each product
-        if product_key in seen_products:
-            continue
-        
-        seen_products.add(product_key)
-
-        rank = _get_entry_rank(entry)
-        
-        # Check if this is an expired voucher (rank is None but voucher exists and is expired)
-        voucher_expired = False
-        voucher_expired_date = None
-        if rank is None and entry.voucher and not entry.voucher.is_active():
-            # Check if voucher expired (not just fully redeemed)
-            if entry.voucher.valid_until and entry.voucher.valid_until < now():
-                voucher_expired = True
-                # Convert to event timezone for display
-                tz = ZoneInfo(event.settings.timezone)
-                voucher_expired_date = entry.voucher.valid_until.astimezone(tz)
-        
-        # Skip entries that are no longer active (rank is None) unless they have expired vouchers
-        if rank is None and not voucher_expired:
-            continue
-        
-        # Check if lottery has been run for this product
-        lottery_date = event.settings.get(f'lottery_date_for_item_{entry.item_id}')
-        lottery_run = bool(lottery_date)
-        
-        product_data = {
-            'item_id': entry.item_id,
-            'item_name': str(entry.item),
-            'variation_id': entry.variation_id,
-            'variation_name': str(entry.variation) if entry.variation else None,
-            'rank': rank,
-            'lottery_run': lottery_run
-        }
-        
-        # Include voucher code if rank is 0 (user has an unredeemed voucher)
-        if rank == 0 and entry.voucher:
-            product_data['voucher_code'] = entry.voucher.code
-        
-        # Include expired voucher information
-        if voucher_expired:
-            product_data['voucher_expired'] = True
-            product_data['voucher_expired_date'] = voucher_expired_date
-        
-        products_data.append(product_data)
-    
-    return products_data
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
