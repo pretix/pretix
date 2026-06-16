@@ -5,8 +5,14 @@ from django.urls import reverse
 from pretix.base.email import SimpleFunctionalMailTextPlaceholder
 from pretix.base.signals import register_mail_placeholders
 from pretix.control.signals import waitinglist_index_html
-from pretix.presale.signals import front_page_bottom
+from pretix.presale.signals import (
+    checkout_questions_top,
+    front_page_bottom,
+    sold_out_availability,
+    waitinglist_template_name,
+)
 
+from .services.presale import get_sold_out_label
 from .services.rank import get_waiting_list_rank
 from .views.presale import get_waiting_list_ranks
 
@@ -48,6 +54,47 @@ def render_waiting_list_rank(sender, request, subevent=None, **kwargs):
         },
         request=request,
     )
+
+
+@receiver(waitinglist_template_name, dispatch_uid="sideburn_lottery_waitinglist_template")
+def provide_waitinglist_template(sender, **kwargs):
+    return "pretix_sideburn_lottery/waitinglist.html"
+
+
+@receiver(sold_out_availability, dispatch_uid="sideburn_lottery_sold_out_availability")
+def render_sold_out_availability(
+    sender,
+    item,
+    variation=None,
+    allow_waitinglist=False,
+    cart_namespace=None,
+    subevent=None,
+    compact=False,
+    **kwargs,
+):
+    template = get_template(
+        "pretix_sideburn_lottery/fragment/sold_out_availability.html"
+    )
+    return template.render(
+        {
+            "event": sender,
+            "item": item,
+            "variation": variation,
+            "allow_waitinglist": allow_waitinglist,
+            "cart_namespace": cart_namespace,
+            "subevent": subevent,
+            "compact": compact,
+            "sold_out_label": get_sold_out_label(sender, item.pk),
+        }
+    )
+
+
+@receiver(checkout_questions_top, dispatch_uid="sideburn_lottery_checkout_waiver")
+def render_checkout_waiver(sender, request, **kwargs):
+    template = get_template(
+        "pretix_sideburn_lottery/fragment/checkout_waiver.html"
+    )
+    return template.render({"request": request}, request=request)
 
 
 @receiver(waitinglist_index_html, dispatch_uid="sideburn_lottery_waitinglist_index_html")

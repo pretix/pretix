@@ -1,0 +1,39 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n eventurl bootstrap3 %}
+{% block title %}{% trans "Waiting list" %}{% endblock %}
+{% block content %}
+<h2>{% trans "How do tickets work for SideBurn?" %}</h2>
+<p class="help-block">{% trans "Since demand for SideBurn tickets outnumbers supply," %}<strong> {% trans "the first stage of getting a ticket is registering for the ticket lottery" %}</strong>.</p>
+<p class="help-block">{% trans "The registrations for the general sale are drawn in a lottery, ensuring that everyone registered has an equal chance of being offered a ticket." %}</p>
+<p class="help-block">{% trans "Available tickets are then offered in the order of the lottery, and registrants have three days to buy their available ticket before it’s added back to the pool and offered to the next in the list." %}</p>
+<p class="help-block">{% trans "If you register for a ticket after sales are already in progress, you simply get added to the bottom of the list." %}</p>
+<p class="help-block">&nbsp;</p>
+<p class="help-block"><h3 class="text-danger"><b>{% trans "Register only once per person" %}</b></h3></p>
+<p class="help-block"><h5><b>{% trans "Registering again with another email - or trying again with the same one - could disqualify you from the ticketing lottery!" %}</b></h5></p>
+<p class="help-block">&nbsp;</p>
+    <h3>{% trans "Add me to the list" %}</h3>
+    <form action="{{ request.get_full_path }}" method="post">
+        {% csrf_token %}
+        <div class="form-horizontal">
+            {% if subevent %}
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="input_subevent">{% trans "Event" %}</label>
+                    <div class="col-md-9">
+                        <input id="input_subevent" class="form-control" readonly="readonly"
+                                value="{{ subevent.name }} – {{ subevent.get_date_range_display }}">
+                    </div>
+                </div>
+            {% endif %}
+            {% bootstrap_form form layout="checkout" %}
+            <div class="form-group">
+                <div class="col-md-9 col-md-offset-3">
+                    <p>
+                        <button type="submit" class="btn btn-primary">
+                            {% trans "Add me to the list" %}
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

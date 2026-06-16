@@ -403,6 +403,26 @@ additional text to the description. You are passed the ``item``, ``variation`` a
 expected to return HTML.
 """
 
+sold_out_availability = EventPluginSignal()
+"""
+Arguments: ``item``, ``variation``, ``allow_waitinglist``, ``cart_namespace``, ``subevent``, ``compact``
+
+This signal is sent when rendering the sold-out availability label for a product. Receivers may return HTML
+to replace the default "SOLD OUT" label and optional waiting-list link text.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+checkout_questions_top = EventPluginSignal()
+"""
+Arguments: ``request``
+
+This signal is sent at the top of the checkout questions page, before the question panels.
+Receivers are expected to return HTML.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 register_cookie_providers = EventPluginSignal()
 """
 Arguments: ``request``
@@ -419,6 +439,16 @@ Arguments: (none)
 
 This signal is sent when the waiting list form class is resolved. Receivers may return a form class
 (subclass of ``pretix.presale.forms.waitinglist.WaitingListForm``) to use instead of the default.
+The first non-None response is used.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+waitinglist_template_name = EventPluginSignal()
+"""
+Arguments: (none)
+
+This signal is sent when the waiting list page template is resolved. Receivers may return a template name.
 The first non-None response is used.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.

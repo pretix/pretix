@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load eventurl %}
+<strong{% if compact %} class="gone"{% endif %}>{{ sold_out_label }}</strong>
+{% if allow_waitinglist and item.allow_waitinglist %}
+    <br/>
+    {% if compact %}
+        {% trans "Register here" %}
+    {% else %}
+        <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if variation %}&var={{ variation.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
+            <h2>
+                <span class="fa fa-plus-circle" aria-hidden="true"></span>
+                {% trans "Register here" %}
+            </h2>
+        </a>
+    {% endif %}
+{% endif %}

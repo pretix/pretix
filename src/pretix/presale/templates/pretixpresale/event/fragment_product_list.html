@@ -4,6 +4,7 @@
 {% load money %}
 {% load thumb %}
 {% load eventsignal %}
+{% load availability %}
 {% load rich_text %}
 {% for tup in items_by_category %}
     <section {% if tup.0 %}aria-labelledby="category-{{ tup.0.id }}"{% else %}aria-label="{% trans "Uncategorized items" %}"{% endif %}{% if tup.0.description %} aria-describedby="category-info-{{ tup.0.id }}"{% endif %}>
@@ -70,11 +71,7 @@
                                     {% if not item.min_price %}
                                         <strong class="gone">{% trans "FULLY BOOKED" %}</strong>
                                     {% else %}
-                                        <strong class="gone">placeholder {% trans "Ticket lottery held on " %}</strong>
-                                    {% endif %}
-                                    {% if allow_waitinglist and item.allow_waitinglist %}
-                                        <br/>
-                                        {% trans "Register here" %}
+                                        {% sold_out_availability_tag event item compact=True %}
                                     {% endif %}
                                     <br>
                                 {% elif avail < 100 %}
