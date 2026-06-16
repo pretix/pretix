@@ -45,6 +45,14 @@ from ..forms.waitinglist import WaitingListForm
 from . import allow_frame_if_namespaced
 
 
+def _get_entry_rank(entry):
+    if "pretix_sideburn_lottery" not in entry.event.get_plugins():
+        return None
+    from pretix_sideburn_lottery.services.rank import get_waiting_list_rank
+
+    return get_waiting_list_rank(entry)
+
+
 def get_waiting_list_ranks(event, customer_email):
     """
     Get waiting list ranks for a customer.
@@ -71,8 +79,8 @@ def get_waiting_list_ranks(event, customer_email):
             continue
         
         seen_products.add(product_key)
-        
-        rank = entry.get_rank()
+
+        rank = _get_entry_rank(entry)
         
         # Check if this is an expired voucher (rank is None but voucher exists and is expired)
         voucher_expired = False

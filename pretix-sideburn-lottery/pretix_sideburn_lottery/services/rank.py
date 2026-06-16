@@ -1,0 +1,48 @@
+from django.db.models import F, Q
+from django.utils.timezone import now
+
+from pretix.base.models import WaitingListEntry
+
+
+def get_waiting_list_rank(entry):
+    """
+    Calculate the rank/position of a waiting list entry.
+
+    Returns:
+        - 0 if this entry has a valid, unredeemed voucher (waiting for redemption)
+        - None if this entry has an expired or fully redeemed voucher
+        - int (1-based rank) if this entry has no voucher - position in waiting list
+    """
+    if entry.voucher:
+        if not entry.voucher.is_active():
+            return None
+        return 0
+
+    qs = WaitingListEntry.objects.filter(
+        event=entry.event,
+        item=entry.item,
+        variation=entry.variation,
+        subevent=entry.subevent,
+    )
+
+    valid_voucher_q = Q(voucher__valid_until__isnull=True) | Q(
+        voucher__valid_until__gte=now()
+    )
+    unredeemed_q = Q(voucher__redeemed__lt=F("voucher__max_usages"))
+
+    qs = qs.filter(
+        Q(voucher__isnull=True)
+        | (Q(voucher__isnull=False) & valid_voucher_q & unredeemed_q)
+    )
+
+    before_q = (
+        Q(priority__gt=entry.priority)
+        | Q(priority=entry.priority, created__lt=entry.created)
+        | Q(
+            priority=entry.priority,
+            created=entry.created,
+            pk__lt=entry.pk,
+        )
+    )
+
+    return qs.filter(before_q).count() + 1
