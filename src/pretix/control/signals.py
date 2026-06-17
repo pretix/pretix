@@ -224,6 +224,17 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 Receivers are expected to return HTML.
 """
 
+waitinglist_allow_delete_with_voucher = EventPluginSignal()
+"""
+Arguments: ``request``
+
+This signal allows plugins to permit deleting waiting list entries that already have
+an assigned voucher from the control panel. Receivers should return ``True`` to allow
+deletion of such entries.
+
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 organizer_edit_tabs = DeprecatedSignal()
 """
 Arguments: 'organizer', 'request'

@@ -393,6 +393,38 @@ SMS notifications.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+waitinglist_entry_created = EventPluginSignal()
+"""
+Arguments: ``entry``, ``user``, ``auth``
+
+This signal is sent after a new waiting list entry has been saved, e.g. after a customer
+signs up on the waiting list page or an entry is created through the API. Receivers may
+perform side effects such as sending a confirmation email.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+waitinglist_entry_validate = EventPluginSignal()
+"""
+Arguments: ``entry``
+
+This signal is sent during validation of a waiting list entry. Receivers may return a
+``ValidationError`` instance to reject the entry.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+waiting_list_send_voucher = EventPluginSignal()
+"""
+Arguments: ``entry``, ``user``, ``auth``
+
+This signal is sent at the beginning of ``WaitingListEntry.send_voucher``. Receivers may
+return a dictionary with optional keys such as ``ignore_quota`` (bool) to customize voucher
+assignment behavior.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 order_canceled = EventPluginSignal()
 """
 Arguments: ``order``

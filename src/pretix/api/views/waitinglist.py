@@ -31,6 +31,7 @@ from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.waitinglist import WaitingListSerializer
 from pretix.base.models import WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
+from pretix.base.signals import waitinglist_entry_created
 
 with scopes_disabled():
     class WaitingListFilter(FilterSet):
@@ -69,15 +70,12 @@ class WaitingListViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             auth=self.request.auth,
         )
-        try:
-            self.get_object().send_confirm(
-                user=self.request.user,
-                auth=self.request.auth,
-            )
-        except WaitingListException as e:
-            raise ValidationError(str(e))
-        else:
-            return Response(status=204)
+        waitinglist_entry_created.send(
+            self.request.event,
+            entry=serializer.instance,
+            user=self.request.user,
+            auth=self.request.auth,
+        )
 
     def perform_update(self, serializer):
         if serializer.instance.voucher:

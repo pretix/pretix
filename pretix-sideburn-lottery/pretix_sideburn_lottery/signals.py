@@ -1,10 +1,20 @@
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.urls import reverse
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import SimpleFunctionalMailTextPlaceholder
-from pretix.base.signals import register_mail_placeholders
-from pretix.control.signals import waitinglist_index_html
+from pretix.base.settings import settings_hierarkey
+from pretix.base.signals import (
+    register_mail_placeholders,
+    waiting_list_send_voucher,
+    waitinglist_entry_created,
+    waitinglist_entry_validate,
+)
+from pretix.control.signals import (
+    waitinglist_allow_delete_with_voucher,
+    waitinglist_index_html,
+)
 from pretix.presale.signals import (
     checkout_questions_top,
     front_page_bottom,
@@ -14,7 +24,18 @@ from pretix.presale.signals import (
 
 from .services.presale import get_sold_out_label
 from .services.rank import get_waiting_list_rank
+from .services.waitinglist import (
+    DEFAULT_MAIL_TEXT_WAITING_LIST_CONFIRM,
+    send_signup_confirmation,
+    validate_no_active_voucher_duplicate,
+)
 from .views.presale import get_waiting_list_ranks
+
+settings_hierarkey.add_default(
+    "mail_text_waiting_list_confirm",
+    LazyI18nString.from_gettext(DEFAULT_MAIL_TEXT_WAITING_LIST_CONFIRM),
+    LazyI18nString,
+)
 
 
 @receiver(register_mail_placeholders, dispatch_uid="sideburn_lottery_waiting_list_position")
@@ -116,3 +137,26 @@ def render_waitinglist_lottery_actions(sender, request, **kwargs):
         },
         request=request,
     )
+
+
+@receiver(waitinglist_entry_created, dispatch_uid="sideburn_lottery_signup_confirm")
+def send_waitinglist_signup_confirmation(sender, entry, **kwargs):
+    send_signup_confirmation(entry, user=kwargs.get("user"), auth=kwargs.get("auth"))
+
+
+@receiver(waitinglist_entry_validate, dispatch_uid="sideburn_lottery_validate_duplicate_voucher")
+def validate_waitinglist_duplicate_voucher(sender, entry, **kwargs):
+    validate_no_active_voucher_duplicate(entry)
+
+
+@receiver(waiting_list_send_voucher, dispatch_uid="sideburn_lottery_ignore_quota")
+def allow_waitinglist_ignore_quota(sender, entry, **kwargs):
+    return {"ignore_quota": True}
+
+
+@receiver(
+    waitinglist_allow_delete_with_voucher,
+    dispatch_uid="sideburn_lottery_allow_delete_with_voucher",
+)
+def allow_waitinglist_delete_with_voucher(sender, request, **kwargs):
+    return True

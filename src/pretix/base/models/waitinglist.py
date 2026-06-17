@@ -122,8 +122,17 @@ class WaitingListEntry(LoggedModel):
             WaitingListEntry.clean_duplicate(self.event, self.email, self.item, self.variation, self.subevent, self.pk)
             WaitingListEntry.clean_itemvar(self.event, self.item, self.variation)
             WaitingListEntry.clean_subevent(self.event, self.subevent)
+            WaitingListEntry.run_plugin_validators(self)
         except ObjectDoesNotExist:
             raise ValidationError('Invalid input')
+
+    @staticmethod
+    def run_plugin_validators(entry):
+        from pretix.base.signals import waitinglist_entry_validate
+
+        for receiver, response in waitinglist_entry_validate.send(entry.event, entry=entry):
+            if response:
+                raise response
 
     def save(self, *args, **kwargs):
         update_fields = kwargs.get('update_fields', set())
@@ -150,13 +159,23 @@ class WaitingListEntry(LoggedModel):
         return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=lambda: self.event.settings.name_scheme)
 
     def send_voucher(self, quota_cache=None, user=None, auth=None):
+        from pretix.base.signals import waiting_list_send_voucher
+
+        send_kwargs = {}
+        for receiver, response in waiting_list_send_voucher.send(
+            self.event, entry=self, user=user, auth=auth
+        ):
+            if response:
+                send_kwargs.update(response)
+        ignore_quota = send_kwargs.get('ignore_quota', False)
+
         availability = (
             self.variation.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
             if self.variation
             else self.item.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)
         )
-        # if availability[1] is None or availability[1] < 1:
-        #     raise WaitingListException(_('This product is currently not available.'))
+        if not ignore_quota and (availability[1] is None or availability[1] < 1):
+            raise WaitingListException(_('This product is currently not available.'))
 
         ev = self.subevent or self.event
         if ev.seat_category_mappings.filter(product=self.item).exists():
@@ -205,7 +224,7 @@ class WaitingListEntry(LoggedModel):
                     email=e
                 ),
                 block_quota=True,
-                allow_ignore_quota=True,
+                allow_ignore_quota=ignore_quota,
                 subevent=self.subevent,
             )
             v.log_action('pretix.voucher.added.waitinglist', {
@@ -296,17 +315,6 @@ class WaitingListEntry(LoggedModel):
                     }
                 )
 
-    def send_confirm(self, quota_cache=None, user=None, auth=None):
-        with language(self.locale, self.event.settings.region):
-            mail(
-                self.email,
-                _('You have been added to the lottery waiting list for {event}').format(event=str(self.event)),
-                self.event.settings.mail_text_waiting_list_confirm,
-                get_email_context(event=self.event, waiting_list_entry=self),
-                self.event,
-                locale=self.locale
-            )
-
     @staticmethod
     def clean_itemvar(event, item, variation):
         if event != item.event:
@@ -332,10 +340,3 @@ class WaitingListEntry(LoggedModel):
         ).exclude(pk=pk).count() >= event.settings.waiting_list_limit_per_user:
             raise ValidationError(_('You are already on this waiting list! We will notify '
                                     'you as soon as we have a ticket available for you.'))
-        elif WaitingListEntry.objects.filter(
-            item=item, variation=variation, email__iexact=email, voucher__isnull=False, subevent=subevent
-        ).exclude(pk=pk).filter(
-            Q(voucher__redeemed__gt=0) | Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gte=now())
-        ).exists():
-            raise ValidationError(_('You have already been assigned a ticket! '
-                                    'Contact ticketing@sideburn.ca if this is in error.'))

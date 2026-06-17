@@ -2396,23 +2396,6 @@ Best regards,
 Your {event} team"""))  # noqa: W291
     },
 
-    'mail_text_waiting_list_confirm': {
-        'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
-
-This is to confirm that you have been added to the lottery for {event}.
-
-Once the ticket lottery has taken place, those selected will receive an email with a voucher to purchase a ticket.
-
-If you are not selected in the initial lottery, you will be added to a waiting list
-and will receive an email when a ticket is available for you.
-
-Want to stay in the loop about the latest news about SideBurn? Subscribe to our newsletter here: http://eepurl.com/ij4Off
-
-Best regards,
-Your {event} ticketing team"""))
-    },
-
     'mail_subject_order_canceled': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Order canceled: {code}")),
