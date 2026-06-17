@@ -1997,11 +1997,13 @@ class Questionnaire(LoggedModel):
     TYPE_ORDER_POSITION_SALE = "PS"
     TYPE_ORDER_POSITION_ATTENDEE_ONLY = "PA"
     TYPE_ORDER_POSITION_CHECKIN = "PC"
+    TYPE_ORDER_POSITION_HIDDEN = "PH"
     TYPE_CHOICES = (
         (TYPE_ORDER_SALE, _("Order-wide, before purchase")),
         (TYPE_ORDER_POSITION_SALE, _("Per product, before purchase")),
         (TYPE_ORDER_POSITION_ATTENDEE_ONLY, _("Per product, via attendee link")),
         (TYPE_ORDER_POSITION_CHECKIN, _("Per product, at check-in")),
+        (TYPE_ORDER_POSITION_HIDDEN, _("Per product, hidden")),
     )
     event = models.ForeignKey(
         Event,

@@ -17,12 +17,12 @@ export type Datafield = {
 	//items: number[],
 	options: any[],
 	// position: number,
-	ask_during_checkin: boolean,
+	//ask_during_checkin: boolean,
 	show_during_checkin: boolean,
 	identifier: string,
 	// dependency_question: string | null,
 	// dependency_values	[]
-	hidden: boolean,
+	// hidden: boolean,
 	// dependency_value	null
 	print_on_invoice: boolean,
 	// help_text: I18nString,
@@ -40,6 +40,7 @@ export type Datafield = {
 export type Questionnaire = {
 	id: number,
 	internal_name: string,
+	type: string,
 	items: number[],
 	position: number,
 	all_sales_channels: boolean,

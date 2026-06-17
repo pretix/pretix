@@ -20,8 +20,8 @@ export default {
     addQuestionnaire() {
       questionnaires.value.push({
 	      all_sales_channels: false, children: [], limit_sales_channels: [], position: 0,
-				items: [], internal_name: "Unnamed questionnaire",
-				_new_id: Date.now()
+				items: [], internal_name: "Unnamed questionnaire", type: "PC",
+				_new_id: Date.now(),
 			});
     },
 		saveData() {

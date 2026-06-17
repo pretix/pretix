@@ -49,39 +49,21 @@ def migrate_questions_forward(apps, schema_editor):
     QuestionnaireChild = apps.get_model("pretixbase", "QuestionnaireChild")
     EventSettingsStore = apps.get_model('pretixbase', 'Event_SettingsStore')
 
-    for event in Event.objects.iterator():
-        # get relevant settings
-        settings = {
-            setting.key: setting.value for setting in EventSettingsStore.objects.filter(object_id=event.id, key__in=(
-                'system_question_order', 'attendee_names_asked', 'attendee_names_required', 'attendee_emails_asked', 'attendee_emails_required',
-                'attendee_company_asked', 'attendee_company_required', 'attendee_addresses_asked', 'attendee_addresses_required',
-            ))
-        }
-
-        # get all questions (user-defined and system provided), along with the products for which they're asked
-        questions = event.questions.all()
-        children = sorted(chain((
-            (item, q.position, q.id, q)
-            for q in questions
-            for item in q.items.values_list('id', 'internal_name', 'name')
-        ), (
-            (item, q.position, None, q)
-            for q in get_fake_questions(settings)
-            for item in event.items.filter(personalized=True).values_list('id', 'internal_name', 'name')
-        )), key=lambda t: (t[0], t[1], t[2]))
-
+    def create_grouped_item_questionnaires(event, children, label_prefix, questionnaire_type):
         # group by item, creating a unique questionnaire per item
-        item_questionnaires = (([t[3] for t in children], item_id) for item_id, children in groupby(children, key=lambda t: t[0]))
+        item_questionnaires = (([t[3] for t in children], item_id) for item_id, children in
+                               groupby(children, key=lambda t: t[0]))
 
         # group again, merging all questionnaires with identical children
-        merged_questionnaires = groupby(sorted(item_questionnaires, key=lambda t: [q.id for q in t[0]]), key=lambda t: t[0])
+        merged_questionnaires = groupby(sorted(item_questionnaires, key=lambda t: [q.id for q in t[0]]),
+                                        key=lambda t: t[0])
         for children, iterator in merged_questionnaires:
             items = [item for _c, item in iterator]
 
             # create questionnaires and children
             questionnaire = Questionnaire.objects.create(
-                event=event, type='PS', position=0, all_sales_channels=True,
-                internal_name=', '.join(str(iname or name) for (id, iname, name) in items)
+                event=event, type=questionnaire_type, position=0, all_sales_channels=True,
+                internal_name=label_prefix + ', '.join(str(iname or name) for (id, iname, name) in items)
             )
             questionnaire.items.set([id for (id, iname, name) in items])
             deps = {}
@@ -105,6 +87,37 @@ def migrate_questions_forward(apps, schema_editor):
                         dependency_question=deps[child.dependency_question.id] if child.dependency_question else None,
                         dependency_values=child.dependency_values,
                     )
+
+    for event in Event.objects.iterator():
+        # get relevant settings
+        settings = {
+            setting.key: setting.value for setting in EventSettingsStore.objects.filter(object_id=event.id, key__in=(
+                'system_question_order', 'attendee_names_asked', 'attendee_names_required', 'attendee_emails_asked', 'attendee_emails_required',
+                'attendee_company_asked', 'attendee_company_required', 'attendee_addresses_asked', 'attendee_addresses_required',
+            ))
+        }
+
+        # get all questions (user-defined and system provided), along with the products for which they're asked
+        questions = event.questions.all()
+        children = sorted(chain((
+            (item, q.position, q.id, q)
+            for q in questions.filter(hidden=False)
+            for item in q.items.values_list('id', 'internal_name', 'name')
+        ), (
+            (item, q.position, 0, q)
+            for q in get_fake_questions(settings)
+            for item in event.items.filter(personalized=True).values_list('id', 'internal_name', 'name')
+        )), key=lambda t: (t[0], t[1], t[2]))
+
+        create_grouped_item_questionnaires(event, children, '', 'PS')
+
+        children = sorted(chain((
+            (item, q.position, q.id, q)
+            for q in questions.filter(hidden=True)
+            for item in q.items.values_list('id', 'internal_name', 'name')
+        )), key=lambda t: (t[0], t[1], t[2]))
+
+        create_grouped_item_questionnaires(event, children, 'Hidden questions for ', 'PH')
 
 
 def migrate_questions_backward(apps, schema_editor):
