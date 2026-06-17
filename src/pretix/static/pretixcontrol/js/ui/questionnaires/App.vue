@@ -50,13 +50,17 @@ export default {
 .hidden-question { opacity: 0.3; }
 .hidden-question label { text-decoration: line-through; }
 
-.question-editor { margin-right: 140px; }
-.question-edit-buttons { float:right }
-.question-edit-buttons div { position: absolute; margin-left: 10px; }
+.question-editor { margin-right: 180px; }
+.question-edit-buttons { float:right; }
+.question-edit-buttons div { position: absolute; margin-left: 10px; min-width: 100px; }
 .question-edit-buttons button {  }
 .form-group { margin-bottom: 30px }
 
 .filter-row { background: #fffee6; border: 1px solid #ecead5; padding: 10px; }
+
+.debuginfo { font-size: 70%; background: rgba(200, 200, 200, 0.5); }
+.dependency-info { position: absolute;  }
+.dependency-info > span {  }
 </style>
 <template>
 	<p class="filter-row">

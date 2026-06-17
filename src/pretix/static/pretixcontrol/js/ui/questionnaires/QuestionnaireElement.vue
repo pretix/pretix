@@ -5,7 +5,6 @@ import {i18n_any, QUESTION_TYPE, QUESTION_TYPE_LABEL} from "./helper";
 import I18nTextField from "./I18nTextField.vue";
 import NativeDialog from "./NativeDialog.vue";
 import { SlickList, SlickItem, DragHandle } from 'vue-slicksort';
-import {update_questionnaire} from "./api";
 
 const dlgEditor = ref();
 const dlgAddExisting = ref();
@@ -64,7 +63,7 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 
 
 <template>
-	<div class="question-edit-buttons"><div>
+	<div class="question-edit-buttons"><div class="btn-group">
 		<DragHandle tag="button" class="btn btn-default"><i class="fa fa-arrows"></i></DragHandle>
 		<button class="btn btn-default" @click="dlgEditor.show()"><i class="fa fa-edit"></i></button>
 		<button class="btn btn-default" @click="toggleItem()" v-if="selected_product"><i :class="`fa fa-eye${isHidden ? '-slash':''}`"></i></button>
@@ -83,16 +82,16 @@ const isEditable = computed(() => props.selected_product && props.questionnaire.
 										:datafields="props.datafields"
 										:question="child"
 										:editable="true"
+										:possible_dependencies="props.questionnaire.children.slice(0, index)"
 										@remove-self="questionnaire.children.splice(index, 1)" />
 					</SlickItem>
 				</SlickList>
       </div>
-			<p v-if="true">
+			<p v-if="true" class="btn-group" role="group">
 					<button class="btn btn-default" @click="dlgAddExisting.show()"><i class="fa fa-plus"></i> {{ gettext('Existing data field') }}</button>
 					<button class="btn btn-default" @click="newDatafield()"><i class="fa fa-plus"></i> {{ gettext('New data field') }}</button>
 					<button class="btn btn-default" @click="showAddTextblockDialog()"><i class="fa fa-plus"></i> {{ gettext('Text') }}</button>
 			</p>
-			<button @click="update_questionnaire(questionnaire.id, questionnaire)" class="btn btn-default pull-right">save</button>
     </div>
   </details>
 
