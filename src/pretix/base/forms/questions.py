@@ -705,13 +705,13 @@ class BaseQuestionsForm(forms.Form):
                 scheme=event.settings.name_scheme,
                 titles=event.settings.name_scheme_titles,
                 label=_('Attendee name'),
-                initial=(cartpos.attendee_name_parts if cartpos else orderpos.attendee_name_parts),
+                initial=pos.attendee_name_parts,
             )
         if item.ask_attendee_data and event.settings.attendee_emails_asked:
             add_fields['attendee_email'] = forms.EmailField(
                 required=event.settings.attendee_emails_required and not self.all_optional,
                 label=_('Attendee email'),
-                initial=(cartpos.attendee_email if cartpos else orderpos.attendee_email),
+                initial=pos.attendee_email,
                 widget=forms.EmailInput(
                     attrs={
                         'autocomplete': 'email'
@@ -723,7 +723,7 @@ class BaseQuestionsForm(forms.Form):
                 required=event.settings.attendee_company_required and not self.all_optional,
                 label=_('Company'),
                 max_length=255,
-                initial=(cartpos.company if cartpos else orderpos.company),
+                initial=pos.company,
             )
 
         if item.ask_attendee_data and event.settings.attendee_addresses_asked:
@@ -735,13 +735,13 @@ class BaseQuestionsForm(forms.Form):
                     'placeholder': _('Street and Number'),
                     'autocomplete': 'street-address'
                 }),
-                initial=(cartpos.street if cartpos else orderpos.street),
+                initial=pos.street,
             )
             add_fields['zipcode'] = forms.CharField(
                 required=False,
                 max_length=30,
                 label=_('ZIP code'),
-                initial=(cartpos.zipcode if cartpos else orderpos.zipcode),
+                initial=pos.zipcode,
                 widget=forms.TextInput(attrs={
                     'autocomplete': 'postal-code',
                 }),
@@ -750,12 +750,12 @@ class BaseQuestionsForm(forms.Form):
                 required=False,
                 label=_('City'),
                 max_length=255,
-                initial=(cartpos.city if cartpos else orderpos.city),
+                initial=pos.city,
                 widget=forms.TextInput(attrs={
                     'autocomplete': 'address-level2',
                 }),
             )
-            country = (cartpos.country if cartpos else orderpos.country) or guess_country_from_request(request, event)
+            country = pos.country or guess_country_from_request(request, event)
             add_fields['country'] = CountryField(
                 countries=CachedCountries
             ).formfield(
@@ -779,7 +779,7 @@ class BaseQuestionsForm(forms.Form):
                 types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[cc]
                 statelist = [s for s in pycountry.subdivisions.get(country_code=cc) if s.type in types]
                 c += sorted([(s.code[3:], s.name) for s in statelist], key=lambda s: s[1])
-                state = (cartpos.state if cartpos else orderpos.state)
+                state = pos.state
             elif fprefix + 'state' in self.data:
                 self.data = self.data.copy()
                 del self.data[fprefix + 'state']
