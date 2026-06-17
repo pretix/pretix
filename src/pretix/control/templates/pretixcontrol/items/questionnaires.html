@@ -26,6 +26,9 @@
     {{ request.event.settings.locales|json_script:"event_locales" }}
     {{ questionnaire_type_choices|json_script:"questionnaire_type_choices" }}
 
+    {% url "control:event.items.questions.edit" organizer=request.event.organizer.slug event=request.event.slug question=0 as datafield_edit_url %}
+    {{ datafield_edit_url|json_script:"datafield_edit_url" }}
+
     <div id="questionnaires-editor">
         <!-- Vue app mount point -->
     </div>

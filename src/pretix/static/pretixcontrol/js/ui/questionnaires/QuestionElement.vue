@@ -4,6 +4,7 @@ import NativeDialog from './NativeDialog.vue';
 import I18nTextField from './I18nTextField.vue';
 import { useId, ref } from 'vue'
 import { DragHandle } from 'vue-slicksort';
+import {get_datafield_edit_url} from "./api";
 
 const id = useId();
 const props = defineProps(['question', 'datafields', 'editable'])
@@ -86,8 +87,13 @@ const editor = ref();
           </label>
           <div class="col-md-9">
             <p class="form-control-static">
-							{{ question.question }}
-							<a href="" target="_blank">Manage data field details</a>
+							<template v-if="typeof question.question === 'number'">
+								{{ df.internal_name }}
+								<a :href="get_datafield_edit_url(df.id)" target="_blank">Manage data field details</a>
+							</template>
+							<template v-else>
+								{{ question.question }}
+							</template>
 						</p>
           </div>
         </div>

@@ -57,3 +57,7 @@ function get_json_script_value(id) {
 export function get_event_locales() {
 	return get_json_script_value('event_locales');
 }
+
+export function get_datafield_edit_url(datafield_id) {
+	return get_json_script_value('datafield_edit_url').replace('/0/', `/${datafield_id}/`);
+}
