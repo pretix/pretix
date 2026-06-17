@@ -8,7 +8,7 @@
             {% if page_obj.has_previous %}
                 {% if page_obj.previous_page_number > 1 %}
                     <li>
-                        <a href="?{% url_replace request 'page' page_obj.num_pages %}" title="{% trans "Go to page 1" %}">
+                        <a href="?{% url_replace request 'page' 1 %}" title="{% trans "Go to page 1" %}">
                             <span class="fa fa-angle-double-left"></span>
                         </a>
                     </li>

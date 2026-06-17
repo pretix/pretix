@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-03-17 14:05+0000\n"
-"PO-Revision-Date: 2026-03-17 14:27+0000\n"
+"PO-Revision-Date: 2026-03-18 02:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
 "de/>\n"
@@ -8453,7 +8453,7 @@ msgstr "Zahlungseinstellungen"
 #: pretix/base/permissions.py:203
 #: pretix/control/templates/pretixcontrol/event/tax.html:120
 msgid "Tax settings"
-msgstr "Steuer-Einstellungen"
+msgstr "Steuereinstellungen"
 
 #: pretix/base/permissions.py:209
 msgid "Invoicing settings"
