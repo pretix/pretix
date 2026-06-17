@@ -56,7 +56,6 @@ from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.waitinglist import WaitingListEntryTransferForm
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.control.signals import waitinglist_allow_delete_with_voucher
 from pretix.control.views import PaginationMixin
 
 from ...helpers.compat import CompatDeleteView
@@ -169,15 +168,6 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
     model = WaitingListEntry
     permission = 'can_change_orders'
 
-    def _allow_delete_with_voucher(self):
-        return any(
-            response
-            for receiver, response in waitinglist_allow_delete_with_voucher.send(
-                self.request.event, request=self.request
-            )
-            if response
-        )
-
     def _redirect_back(self):
         if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
@@ -193,10 +183,9 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                 'forbidden': self.get_queryset().filter(voucher__isnull=False),
             })
         elif request.POST.get('action') == 'delete_confirm':
-            allow_with_voucher = self._allow_delete_with_voucher()
             for obj in self.get_queryset():
-                if not allow_with_voucher and obj.voucher_id:
-                    continue
+                # Sideburn: allow bulk-deleting entries that already have an assigned voucher.
+                # if not obj.voucher_id:
                 obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
                 obj.delete()
             messages.success(request, _('The selected entries have been deleted.'))
@@ -393,21 +382,13 @@ class EntryDelete(EventPermissionRequiredMixin, CompatDeleteView):
     permission = 'can_change_orders'
     context_object_name = 'entry'
 
-    def _allow_delete_with_voucher(self):
-        return any(
-            response
-            for receiver, response in waitinglist_allow_delete_with_voucher.send(
-                self.request.event, request=self.request
-            )
-            if response
-        )
-
     def get_object(self, queryset=None) -> WaitingListEntry:
         try:
-            kwargs = {'id': self.kwargs['entry']}
-            if not self._allow_delete_with_voucher():
-                kwargs['voucher__isnull'] = True
-            return self.request.event.waitinglistentries.get(**kwargs)
+            return self.request.event.waitinglistentries.get(
+                id=self.kwargs['entry'],
+                # Sideburn: allow deleting entries that already have an assigned voucher.
+                # voucher__isnull=True,
+            )
         except WaitingListEntry.DoesNotExist:
             raise Http404(_("The requested entry does not exist."))
 

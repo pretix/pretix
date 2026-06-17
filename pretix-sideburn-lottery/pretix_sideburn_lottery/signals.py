@@ -11,10 +11,7 @@ from pretix.base.signals import (
     waitinglist_entry_created,
     waitinglist_entry_validate,
 )
-from pretix.control.signals import (
-    waitinglist_allow_delete_with_voucher,
-    waitinglist_index_html,
-)
+from pretix.control.signals import waitinglist_index_html
 from pretix.presale.signals import (
     checkout_questions_top,
     front_page_bottom,
@@ -152,11 +149,3 @@ def validate_waitinglist_duplicate_voucher(sender, entry, **kwargs):
 @receiver(waiting_list_send_voucher, dispatch_uid="sideburn_lottery_ignore_quota")
 def allow_waitinglist_ignore_quota(sender, entry, **kwargs):
     return {"ignore_quota": True}
-
-
-@receiver(
-    waitinglist_allow_delete_with_voucher,
-    dispatch_uid="sideburn_lottery_allow_delete_with_voucher",
-)
-def allow_waitinglist_delete_with_voucher(sender, request, **kwargs):
-    return True
