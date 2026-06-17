@@ -36,7 +36,7 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
-    QuestionOption,
+    QuestionOption, QuestionnaireChild,
 )
 from pretix.base.models.customers import AttendeeProfile
 from pretix.presale.signals import contact_form_fields_overrides
@@ -307,27 +307,34 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
 
     @cached_property
     def positions(self):
-        qqs = self.request.event.questions.all()
+        qqs = self.request.event.questionnaires.all()
         if self.only_user_visible:
-            qqs = qqs.filter(ask_during_checkin=False, hidden=False)
+            qqs = qqs.filter(type='PS')
+        else:
+            qqs = qqs.filter(type__startswith='P')
         return list(self.order.positions.select_related(
             'item', 'variation'
         ).prefetch_related(
             Prefetch('answers',
                      QuestionAnswer.objects.prefetch_related('options'),
                      to_attr='answerlist'),
-            Prefetch('item__questions',
+            Prefetch('item__questionnaires',
                      qqs.prefetch_related(
-                         Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
-                             # This prefetch statement is utter bullshit, but it actually prevents Django from doing
-                             # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
-                             # a prefetch lookup on this query...
-                             'question',
-                             Question.objects.none(),
-                             to_attr='dummy'
-                         )))
-                     ).select_related('dependency_question'),
-                     to_attr='questions_to_ask')
+                         Prefetch('children', QuestionnaireChild.objects.prefetch_related(
+                             Prefetch('user_question', Question.objects.prefetch_related(
+                                 Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
+                                     # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+                                     # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+                                     # a prefetch lookup on this query...
+                                     'question',
+                                     Question.objects.none(),
+                                     to_attr='dummy'
+                                 )))
+                             ))
+                         ),
+                         to_attr='childlist')
+                     ),
+                     to_attr='relevant_questionnaires')
         ))
 
     @cached_property

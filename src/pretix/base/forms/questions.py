@@ -650,7 +650,7 @@ class BaseQuestionsForm(forms.Form):
         orderpos = self.orderpos = kwargs.pop('orderpos', None)
         pos = cartpos or orderpos
         item = pos.item
-        questions = pos.item.questions_to_ask
+        questionnaires = pos.item.relevant_questionnaires
         event = kwargs.pop('event')
         self.all_optional = kwargs.pop('all_optional', False)
         self.attendee_addresses_required = event.settings.attendee_addresses_required and not self.all_optional
@@ -696,38 +696,13 @@ class BaseQuestionsForm(forms.Form):
                     validators=([MaxDateTimeValidator(max_date)] if max_date else []) + [MinDateTimeValidator(min_date)]
                 )
 
-        add_fields = {}
-
-        if item.ask_attendee_data and event.settings.attendee_names_asked:
-            add_fields['attendee_name_parts'] = self.build_system_question_field(request, event, pos, 'attendee_name_parts')
-        if item.ask_attendee_data and event.settings.attendee_emails_asked:
-            add_fields['attendee_email'] = self.build_system_question_field(request, event, pos, 'attendee_email')
-        if item.ask_attendee_data and event.settings.attendee_company_asked:
-            add_fields['company'] = self.build_system_question_field(request, event, pos, 'company')
-
-        if item.ask_attendee_data and event.settings.attendee_addresses_asked:
-            add_fields['street'] = self.build_system_question_field(request, event, pos, 'street')
-            add_fields['zipcode'] = self.build_system_question_field(request, event, pos, 'zipcode')
-            add_fields['city'] = self.build_system_question_field(request, event, pos, 'city')
-            add_fields['country'] = self.build_system_question_field(request, event, pos, 'country')
-            add_fields['state'] = self.build_system_question_field(request, event, pos, 'state')
-
-        field_positions = list(
-            [
-                (n, event.settings.system_question_order.get(n if n != 'state' else 'country', 0))
-                for n in add_fields.keys()
-            ]
-        )
-
-        for q in questions:
-            field = self.build_user_question_field(request, event, pos, q)
-
-            add_fields['question_%s' % q.id] = field
-            field_positions.append(('question_%s' % q.id, q.position))
-
-        field_positions.sort(key=lambda e: e[1])
-        for fname, p in field_positions:
-            self.fields[fname] = add_fields[fname]
+        for questionnaire in questionnaires:
+            for child in getattr(questionnaire, 'childlist', questionnaire.children.all()):
+                if child.user_question:
+                    q = child.user_question
+                    self.fields['question_%s' % q.id] = self.build_user_question_field(request, event, pos, q)
+                elif child.system_question:
+                    self.fields[child.system_question] = self.build_system_question_field(request, event, pos, child)
 
         responses = question_form_fields.send(sender=event, position=pos)
         data = pos.meta_info_data
@@ -752,20 +727,23 @@ class BaseQuestionsForm(forms.Form):
                 else:
                     v.widget.attrs['autocomplete'] = 'section-{} '.format(self.prefix) + autocomplete
 
-    def build_system_question_field(self, request, event, pos, field_name):
+    def build_system_question_field(self, request, event, pos, qc):
+        field_name = qc.system_question
         if field_name == 'attendee_name_parts':
             return NamePartsFormField(
                 max_length=255,
-                required=event.settings.attendee_names_required and not self.all_optional,
+                required=qc.required and not self.all_optional,
                 scheme=event.settings.name_scheme,
                 titles=event.settings.name_scheme_titles,
-                label=_('Attendee name'),
+                label=qc.label,
+                help_text=qc.help_text,
                 initial=pos.attendee_name_parts,
             )
         if field_name == 'attendee_email':
             return forms.EmailField(
-                required=event.settings.attendee_emails_required and not self.all_optional,
-                label=_('Attendee email'),
+                required=qc.required and not self.all_optional,
+                label=qc.label,
+                help_text=qc.help_text,
                 initial=pos.attendee_email,
                 widget=forms.EmailInput(
                     attrs={
@@ -775,16 +753,18 @@ class BaseQuestionsForm(forms.Form):
             )
         if field_name == 'company':
             return forms.CharField(
-                required=event.settings.attendee_company_required and not self.all_optional,
-                label=_('Company'),
+                required=qc.required and not self.all_optional,
+                label=qc.label,
+                help_text=qc.help_text,
                 max_length=255,
                 initial=pos.company,
             )
 
         if field_name == 'street':
             return forms.CharField(
-                required=self.attendee_addresses_required,
-                label=_('Address'),
+                required=qc.required and not self.all_optional,
+                label=qc.label,
+                help_text=qc.help_text,
                 widget=forms.Textarea(attrs={
                     'rows': 2,
                     'placeholder': _('Street and Number'),
@@ -796,7 +776,8 @@ class BaseQuestionsForm(forms.Form):
             return forms.CharField(
                 required=False,
                 max_length=30,
-                label=_('ZIP code'),
+                label=qc.label,
+                help_text=qc.help_text,
                 initial=pos.zipcode,
                 widget=forms.TextInput(attrs={
                     'autocomplete': 'postal-code',
@@ -805,7 +786,8 @@ class BaseQuestionsForm(forms.Form):
         if field_name == 'city':
             return forms.CharField(
                 required=False,
-                label=_('City'),
+                label=qc.label,
+                help_text=qc.help_text,
                 max_length=255,
                 initial=pos.city,
                 widget=forms.TextInput(attrs={
@@ -817,8 +799,9 @@ class BaseQuestionsForm(forms.Form):
             return CountryField(
                 countries=CachedCountries
             ).formfield(
-                required=self.attendee_addresses_required,
-                label=_('Country'),
+                required=qc.required and not self.all_optional,
+                label=qc.label,
+                help_text=qc.help_text,
                 initial=country,
                 widget=forms.Select(attrs={
                     'autocomplete': 'country',
@@ -845,7 +828,8 @@ class BaseQuestionsForm(forms.Form):
                 del self.data[fprefix + 'state']
 
             field = forms.ChoiceField(
-                label=pgettext_lazy('address', 'State'),
+                label=qc.label,
+                help_text=qc.help_text,
                 required=False,
                 choices=c,
                 initial=state,

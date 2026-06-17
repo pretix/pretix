@@ -54,6 +54,7 @@ from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderFee, Question,
     QuestionAnswer, QuestionOption, TaxRule,
 )
+from pretix.base.models.items import QuestionnaireChild
 from pretix.base.services.cart import get_fees
 from pretix.base.services.pricing import apply_rounding
 from pretix.base.templatetags.money import money_filter
@@ -397,8 +398,8 @@ def get_cart(request):
         if not cart_id:
             request._cart_cache = CartPosition.objects.none()
         else:
-            qqs = request.event.questions.all()
-            qqs = qqs.filter(ask_during_checkin=False, hidden=False)
+            qqs = request.event.questionnaires.all()
+            qqs = qqs.filter(type='PS')
             request._cart_cache = CartPosition.objects.filter(
                 cart_id=cart_id, event=request.event
             ).annotate(
@@ -419,18 +420,23 @@ def get_cart(request):
                 Prefetch('answers',
                          QuestionAnswer.objects.prefetch_related('options'),
                          to_attr='answerlist'),
-                Prefetch('item__questions',
+                Prefetch('item__questionnaires',
                          qqs.prefetch_related(
-                             Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
-                                 # This prefetch statement is utter bullshit, but it actually prevents Django from doing
-                                 # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
-                                 # a prefetch lookup on this query...
-                                 'question',
-                                 Question.objects.none(),
-                                 to_attr='dummy'
-                             )))
-                         ).select_related('dependency_question'),
-                         to_attr='questions_to_ask')
+                             Prefetch('children', QuestionnaireChild.objects.prefetch_related(
+                                 Prefetch('user_question', Question.objects.prefetch_related(
+                                     Prefetch('options', QuestionOption.objects.prefetch_related(Prefetch(
+                                         # This prefetch statement is utter bullshit, but it actually prevents Django from doing
+                                         # a lot of queries since ModelChoiceIterator stops trying to be clever once we have
+                                         # a prefetch lookup on this query...
+                                         'question',
+                                         Question.objects.none(),
+                                         to_attr='dummy'
+                                     )))
+                                 ))
+                             ),
+                             to_attr='childlist')
+                         ),
+                         to_attr='relevant_questionnaires')
             )
             by_id = {cp.pk: cp for cp in request._cart_cache}
             for cp in request._cart_cache:
