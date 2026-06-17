@@ -769,7 +769,11 @@ class PaymentDetailsField(serializers.Field):
         pp = value.payment_provider
         if not pp:
             return {}
-        return pp.api_payment_details(value)
+        try:
+            return pp.api_payment_details(value)
+        except Exception:
+            logger.exception("Failed to retrieve payment_details")
+            return {}
 
 
 class OrderPaymentSerializer(I18nAwareModelSerializer):
@@ -1145,6 +1149,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 {'discount': ['You can only specify a discount if you do the price computation, but price is not set.']}
             )
+
         return data
 
 
@@ -1412,6 +1417,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         qa = QuotaAvailability()
         qa.queue(*[q for q, d in quota_diff_for_locking.items() if d > 0])
         qa.compute()
+        v_avail = {}
 
         # These are not technically correct as diff use due to the time offset applied above, so let's prevent accidental
         # use further down
@@ -1441,11 +1447,13 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
                 voucher_usage[v] += 1
                 if voucher_usage[v] > 0:
-                    redeemed_in_carts = CartPosition.objects.filter(
-                        Q(voucher=pos_data['voucher']) & Q(event=self.context['event']) & Q(expires__gte=now_dt)
-                    ).exclude(pk__in=[cp.pk for cp in delete_cps])
-                    v_avail = v.max_usages - v.redeemed - redeemed_in_carts.count()
-                    if v_avail < voucher_usage[v]:
+                    if v not in v_avail:
+                        v.refresh_from_db(fields=['redeemed'])
+                        redeemed_in_carts = CartPosition.objects.filter(
+                            Q(voucher=v) & Q(event=self.context['event']) & Q(expires__gte=now_dt)
+                        ).exclude(pk__in=[cp.pk for cp in delete_cps])
+                        v_avail[v] = v.max_usages - v.redeemed - redeemed_in_carts.count()
+                    if v_avail[v] < voucher_usage[v]:
                         errs[i]['voucher'] = [
                             'The voucher has already been used the maximum number of times.'
                         ]
@@ -1581,7 +1589,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos_data['attendee_name_parts'] = {
                     '_legacy': attendee_name
                 }
-            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers' and k != '_quotas' and k != 'use_reusable_medium'})
+            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k not in ('answers', '_quotas', 'use_reusable_medium')})
             if simulate:
                 pos.order = order._wrapped
             else:
@@ -1696,15 +1704,25 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         answ.options.add(*options)
 
                 if use_reusable_medium:
-                    use_reusable_medium.linked_orderposition = pos
-                    use_reusable_medium.save(update_fields=['linked_orderposition'])
+                    if pos.item.media_policy not in (Item.MEDIA_POLICY_APPEND, Item.MEDIA_POLICY_APPEND_OR_NEW):
+                        for op_pk in use_reusable_medium.linked_orderpositions.values_list('pk', flat=True):
+                            use_reusable_medium.log_action(
+                                'pretix.reusable_medium.linked_orderposition.removed',
+                                data={
+                                    'linked_orderposition': op_pk,
+                                }
+                            )
+                        use_reusable_medium.linked_orderpositions.set([pos])
+                    else:
+                        use_reusable_medium.linked_orderpositions.add(pos)
                     use_reusable_medium.log_action(
-                        'pretix.reusable_medium.linked_orderposition.changed',
+                        'pretix.reusable_medium.linked_orderposition.added',
                         data={
                             'by_order': order.code,
                             'linked_orderposition': pos.pk,
                         }
                     )
+                    use_reusable_medium.touch()
 
         if not simulate:
             for cp in delete_cps:

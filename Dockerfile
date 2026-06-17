@@ -1,6 +1,7 @@
-FROM python:3.11-bookworm
+FROM python:3.13-trixie
 
-RUN apt-get update && \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
             build-essential \
             gettext \
@@ -20,17 +21,17 @@ RUN apt-get update && \
             supervisor \
             libmaxminddb0 \
             libmaxminddb-dev \
-            zlib1g-dev && \
+            zlib1g-dev \
+            nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash - && \
-    apt-get install -y nodejs && \
     dpkg-reconfigure locales &&  \
     locale-gen C.UTF-8 &&  \
     /usr/sbin/update-locale LANG=C.UTF-8 && \
     mkdir /etc/pretix && \
     mkdir /data && \
     useradd -ms /bin/bash -d /pretix -u 15371 pretixuser && \
+    chmod 0755 /pretix && \
     echo 'pretixuser ALL=(ALL) NOPASSWD:SETENV: /usr/bin/supervisord' >> /etc/sudoers && \
     mkdir /static && \
     mkdir /etc/supervisord
@@ -56,8 +57,7 @@ COPY vite.config.ts /pretix/vite.config.ts
 
 RUN pip3 install -U \
         pip \
-        setuptools \
-        wheel && \
+        setuptools && \
     cd /pretix && \
     PRETIX_DOCKER_BUILD=TRUE pip3 install \
         -e ".[memcached]" \

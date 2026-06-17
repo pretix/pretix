@@ -70,6 +70,10 @@ def parse_csv(file, length=None, mode="strict", charset=None):
         except ImportError:
             charset = file.charset
     data = data.decode(charset or "utf-8", mode)
+
+    # remove stray linebreaks from the end of the file
+    data = data.rstrip("\n")
+
     # If the file was modified on a Mac, it only contains \r as line breaks
     if '\r' in data and '\n' not in data:
         data = data.replace('\r', '\n')

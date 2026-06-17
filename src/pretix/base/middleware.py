@@ -24,6 +24,7 @@ from urllib.parse import urlparse, urlsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from django.conf import settings
+from django.core.exceptions import BadRequest
 from django.http import Http404, HttpRequest, HttpResponse
 from django.middleware.common import CommonMiddleware
 from django.urls import get_script_prefix, resolve
@@ -73,6 +74,7 @@ class LocaleMiddleware(MiddlewareMixin):
 
     def process_request(self, request: HttpRequest):
         language = get_language_from_request(request)
+        region = None
         # Normally, this middleware runs *before* the event is set. However, on event frontend pages it
         # might be run a second time by pretix.presale.EventMiddleware and in this case the event is already
         # set and can be taken into account for the decision.
@@ -93,15 +95,16 @@ class LocaleMiddleware(MiddlewareMixin):
                 if '-' not in language and settings_holder.settings.region:
                     language += '-' + settings_holder.settings.region
                 if settings_holder.settings.region:
-                    set_region(settings_holder.settings.region)
+                    region = settings_holder.settings.region
         else:
             gs = global_settings_object(request)
             if '-' not in language and gs.settings.region:
                 language += '-' + gs.settings.region
             if gs.settings.region:
-                set_region(gs.settings.region)
+                region = gs.settings.region
 
         translation.activate(language)
+        set_region(region)
         request.LANGUAGE_CODE = get_language_without_region()
 
         tzname = None
@@ -280,7 +283,7 @@ class SecurityMiddleware(MiddlewareMixin):
 
         h = {
             'default-src': ["{static}"],
-            'script-src': ["{static}"] + (["http://localhost:5173", "ws://localhost:5173"] if settings.VITE_DEV_MODE else []),
+            'script-src': ["{static}"],
             'object-src': ["'none'"],
             'frame-src': ['{static}'],
             'style-src': ["{static}", "{media}"] + (["'unsafe-inline'"] if settings.VITE_DEV_MODE else []),
@@ -294,6 +297,18 @@ class SecurityMiddleware(MiddlewareMixin):
             # this. However, we'll restrict it to HTTPS.
             'form-action': ["{dynamic}", "https:"] + (['http:'] if settings.SITE_URL.startswith('http://') else []),
         }
+
+        if settings.VITE_DEV_MODE:
+            h['script-src'] += ["http://localhost:5173", "ws://localhost:5173"]
+            h['style-src'] += ["'unsafe-inline'"]
+            h['connect-src'] += ["http://localhost:5173", "ws://localhost:5173"]
+
+        if hasattr(request, 'csp_nonce'):
+            nonce = f"'nonce-{request.csp_nonce}'"
+            h['script-src'].append(nonce)
+            if not settings.VITE_DEV_MODE:
+                # can't have 'unsafe-inline' and nonce at the same time
+                h['style-src'].append(nonce)
         # Only include pay.google.com for wallet detection purposes on the Payment selection page
         if (
                 url.url_name == "event.order.pay.change" or
@@ -345,6 +360,18 @@ class SecurityMiddleware(MiddlewareMixin):
             del resp['Content-Security-Policy']
 
         return resp
+
+
+class RejectInvalidInputMiddleware(MiddlewareMixin):
+
+    def process_request(self, request):
+        # Nullbytes in GET/POST parameters are mostly harmless, as they will later fail on database insertion, but it
+        # keeps spamming our error logs whenever someone tries to run a vulnerability scanner.
+        if "\x00" in request.META['QUERY_STRING'] or "%00" in request.META['QUERY_STRING']:
+            raise BadRequest("Invalid characters in input.")
+        if request.method in ('POST', 'PUT', 'PATCH') and request.content_type == "application/x-www-form-urlencoded":
+            if any("\x00" in value for key, value_list in request.POST.lists() for value in value_list):
+                raise BadRequest("Invalid characters in input.")
 
 
 class CustomCommonMiddleware(CommonMiddleware):

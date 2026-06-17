@@ -71,6 +71,7 @@ $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
 });
 
 var form_handlers = function (el) {
+    el.trigger("rescan.areYouSure");
     el.find("[data-formset]").formset(
         {
             animateForms: true,
@@ -638,11 +639,13 @@ var form_handlers = function (el) {
                         ).append(" ").append($("<div>").text(res.organizer).html())
                     );
                 }
-                $ret.append(
-                    $("<span>").addClass("event-daterange").append(
-                        $("<span>").addClass("fa fa-calendar fa-fw")
-                    ).append(" ").append(res.date_range)
-                );
+                if (res.date_range) {
+                    $ret.append(
+                        $("<span>").addClass("event-daterange").append(
+                            $("<span>").addClass("fa fa-calendar fa-fw")
+                        ).append(" ").append(res.date_range)
+                    );
+                }
                 return $ret;
             },
         }).on("select2:select", function () {

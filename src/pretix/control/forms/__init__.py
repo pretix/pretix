@@ -34,6 +34,7 @@
 
 import datetime
 import os
+from dataclasses import dataclass
 
 from django import forms
 from django.conf import settings
@@ -420,6 +421,11 @@ class SplitDateTimeField(forms.SplitDateTimeField):
 class FontSelect(forms.RadioSelect):
     option_template_name = 'pretixcontrol/font_option.html'
 
+    @dataclass
+    class FontOption:
+        title: str
+        data: str
+
 
 class ItemMultipleChoiceField(SafeModelMultipleChoiceField):
     def label_from_instance(self, obj):
@@ -455,3 +461,31 @@ class SalesChannelCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
             **super().create_option(name, value, label, selected, index, subindex, attrs),
             "plugin_missing": plugin and plugin not in self.event.get_plugins(),
         }
+
+
+class ModelChoiceIteratorWithNone(forms.models.ModelChoiceIterator):
+    # see django.forms.models.ModelChoiceIterator for original implementation
+    def __iter__(self):
+        if self.field.empty_label is not None:
+            yield ("", self.field.empty_label)
+        if self.field.none_label is not None:
+            yield ("_none", self.field.none_label)
+        queryset = self.queryset
+        # Can't use iterator() when queryset uses prefetch_related()
+        if not queryset._prefetch_related_lookups:
+            queryset = queryset.iterator()
+        for obj in queryset:
+            yield self.choice(obj)
+
+
+class ModelChoiceFieldWithNone(forms.ModelChoiceField):
+    iterator = ModelChoiceIteratorWithNone
+
+    def __init__(self, *args, **kwargs):
+        self.none_label = kwargs.pop("none_label", None)
+        super().__init__(*args, **kwargs)
+
+    def to_python(self, value):
+        if value == "_none":
+            return value
+        return super().to_python(value)

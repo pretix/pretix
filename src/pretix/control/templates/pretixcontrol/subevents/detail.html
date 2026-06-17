@@ -4,290 +4,306 @@
 {% load formset_tags %}
 {% load eventsignal %}
 {% load static %}
-{% block title %}{% trans "Date" context "subevent" %}{% endblock %}
+{% load money %}
+{% load icon %}
+{% block title %}{% blocktrans trimmed with name=subevent.name context "subevent" %}Date: {{ name }}
+{% endblocktrans %}{% endblock %}
 {% block content %}
-    {% if not subevent.pk %}
-        <h1>{% trans "Create date" context "subevent" %}</h1>
-    {% else %}
-        <h1>{% trans "Date" context "subevent" %}</h1>
-    {% endif %}
-    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% bootstrap_form_errors form %}
-        {% for f in itemvar_forms %}
-            {% bootstrap_form_errors f %}
-        {% endfor %}
-        <div class="row">
-            <div class="col-xs-12 {% if subevent.pk %}col-lg-10{% endif %}">
-                <fieldset>
-                    <legend>{% trans "General information" %}</legend>
-                    {% bootstrap_field form.name layout="control" %}
-                    {% bootstrap_field form.active layout="control" %}
-                    {% bootstrap_field form.date_from layout="control" %}
-                    {% bootstrap_field form.date_to layout="control" %}
-                    {% include "pretixcontrol/event/fragment_geodata.html" %}
-                    {% bootstrap_field form.date_admission layout="control" %}
-                    {% bootstrap_field form.frontpage_text layout="control" %}
-                    {% bootstrap_field form.is_public layout="control" %}
-                    {% bootstrap_field form.comment layout="control" %}
-                    {% if meta_forms %}
-                        <div class="form-group metadata-group">
-                            <label class="col-md-3 control-label">{% trans "Meta data" %}</label>
-                            <div class="col-md-9">
-                                {% for form in meta_forms %}
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="{{ form.value.id_for_label }}">
-                                                {{ form.property.name }}
-                                            </label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            {% bootstrap_form form layout="inline" error_types="all" %}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
+    <h1>
+        {% blocktrans trimmed with name=subevent.name context "subevent" %}Date: {{ name }}{% endblocktrans %}
+        {% if 'event.subevents:write' in request.eventpermset %}
+            <a href="{% url "control:event.subevent.edit" event=request.event.slug organizer=request.event.organizer.slug subevent=subevent.pk %}"
+               class="btn btn-default">
+                <span class="fa fa-edit"></span>
+                {% trans "Edit" %}
+            </a>
+        {% endif %}
+    </h1>
+    <div class="row">
+        <div class="{% if "event.orders:read" in request.eventpermset %}col-md-5{% else %}col-md-10{% endif %} col-xs-12">
+            <fieldset>
+                <legend>{% trans "General information" %}</legend>
+                <dl class="dl-horizontal">
+                    <dt>{% trans "Name" %}</dt>
+                    <dd>{{ subevent.name }}</dd>
+                    <dt>{% trans "ID" %}</dt>
+                    <dd>#{{ subevent.pk }}</dd>
+                    <dt>{% trans "Status" %}</dt>
+                    <dd>
+                        {% if not subevent.active %}
+                            <span class="label label-danger">{% trans "Disabled" %}</span>
+                        {% elif subevent.presale_has_ended %}
+                            <span class="label label-warning">{% trans "Presale over" %}</span>
+                        {% elif not subevent.presale_is_running %}
+                            <span class="label label-warning">{% trans "Presale not started" %}</span>
+                        {% else %}
+                            <span class="label label-success">{% trans "On sale" %}</span>
+                        {% endif %}
+                    </dd>
+                    <dt>{% trans "Event start time" %}</dt>
+                    <dd>{{ subevent.date_from|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                    <dt>{% trans "Event end time" %}</dt>
+                    <dd>{{ subevent.date_to|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                    {% if subevent.date_admission %}
+                        <dt>{% trans "Admission time" %}</dt>
+                        <dd>{{ subevent.date_admission|date:"SHORT_DATETIME_FORMAT" }}</dd>
                     {% endif %}
-                </fieldset>
-                <fieldset>
-                    <legend>{% trans "Timeline" %}</legend>
-                    {% bootstrap_field form.presale_start layout="control" %}
-                    {% bootstrap_field form.presale_end layout="control" %}
-                </fieldset>
-                <fieldset>
-                    <legend>{% trans "Quotas" %}</legend>
-                    <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
-                        {{ formset.management_form }}
-                        {% bootstrap_formset_errors formset %}
-                        <div data-formset-body>
-                            {% for form in formset %}
-                                <div class="panel panel-default" data-formset-form>
-                                    <div class="sr-only">
-                                        {{ form.id }}
-                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
-                                    </div>
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    {% bootstrap_field form.name layout='inline' form_group_class="" %}
-                                                </div>
-                                                <div class="col-md-2 text-right flip">
-                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                                        <i class="fa fa-trash"></i></button>
-                                                </div>
-                                            </div>
-                                        </h4>
-                                    </div>
-                                    <div class="panel-body form-horizontal">
-                                        {% bootstrap_form_errors form %}
-                                        {% bootstrap_field form.size layout="control" %}
-                                        {% bootstrap_field form.itemvars layout="control" %}
-                                        {% bootstrap_field form.release_after_exit layout="control" %}
-                                        {% bootstrap_field form.ignore_for_event_availability layout="control" %}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <script type="form-template" data-formset-empty-form>
-                            {% escapescript %}
-                                <div class="panel panel-default" data-formset-form>
-                                    <div class="sr-only">
-                                        {{ formset.empty_form.id }}
-                                        {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
-                                    </div>
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    {% bootstrap_field formset.empty_form.name layout='inline' form_group_class="" %}
-                                                </div>
-                                                <div class="col-md-2 text-right flip">
-                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                                        <i class="fa fa-trash"></i></button>
-                                                </div>
-                                            </div>
-                                        </h4>
-                                    </div>
-                                    <div class="panel-body form-horizontal">
-                                        {% bootstrap_field formset.empty_form.size layout="control" %}
-                                        {% bootstrap_field formset.empty_form.itemvars layout="control" %}
-                                        {% bootstrap_field formset.empty_form.release_after_exit layout="control" %}
-                                        {% bootstrap_field formset.empty_form.ignore_for_event_availability layout="control" %}
-                                    </div>
-                                </div>
-                            {% endescapescript %}
-                        </script>
-                        <p>
-                            <button type="button" class="btn btn-default" data-formset-add>
-                                <i class="fa fa-plus"></i> {% trans "Add a new quota" %}</button>
-                        </p>
-                </fieldset>
-                <fieldset>
-                    <legend>{% trans "Product settings" %}</legend>
-                    <p class="text-muted">
-                        {% trans "These settings are optional, if you leave them empty, the default values from the product settings will be used." %}
-                    </p>
-                    {% for f in itemvar_forms %}
-                        <div data-itemvar="{{ f.item.id }}{% if f.variation %}-{{ f.variation.id }}{% endif %}">
-                            {% bootstrap_form_errors f %}
-                            <div class="form-group subevent-itemvar-group">
-                                <label class="col-md-3 control-label" for="id_{{ f.prefix }}-price">
-                                    {% if f.variation %}{{ f.item }} – {{ f.variation }}{% else %}{{ f.item }}{% endif %}
-                                </label>
-                                <div class="col-md-4">
-                                    <label for="{{ f.price.id_for_label }}" class="text-muted">{% trans "Price" %}</label><br>
-                                    {% bootstrap_field f.price addon_after=request.event.currency form_group_class="" layout="inline" %}
-                                </div>
-                                <div class="col-md-4">
-                                    <br>
-                                    {% bootstrap_field f.disabled layout="inline" form_group_class="" %}
-                                </div>
-                            </div>
-                            <div class="form-group subevent-itemvar-group">
-                                <div class="col-md-4 col-md-offset-3">
-                                    <label for="{{ f.available_from.id_for_label }}" class="text-muted">{% trans "Available from" %}</label>
-                                    {% include "pretixcontrol/subevents/fragment_unavail_mode_indicator.html" with mode=f.available_from_mode %}<br>
-                                    {% bootstrap_field f.available_from form_group_class="foo" layout="inline" %}
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="{{ f.available_until.id_for_label }}" class="text-muted">{% trans "Available until" %}</label>
-                                    {% include "pretixcontrol/subevents/fragment_unavail_mode_indicator.html" with mode=f.available_until_mode %}<br>
-                                    {% bootstrap_field f.available_until form_group_class="" layout="inline" %}
-                                </div>
-                            </div>
-                        </div>
+                    {% if subevent.presale_start %}
+                        <dt>{% trans "Start of presale" %}</dt>
+                        <dd>{{ subevent.presale_start|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                    {% endif %}
+                    {% if subevent.presale_end %}
+                        <dt>{% trans "End of presale" %}</dt>
+                        <dd>{{ subevent.presale_end|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                    {% endif %}
+                    {% if subevent.location %}
+                        <dt>{% trans "Location" %}</dt>
+                        <dd>{{ subevent.location|linebreaksbr }}</dd>
+                    {% endif %}
+                    <dt>{% trans "Show in lists" %}</dt>
+                    <dd>{{ subevent.is_public|yesno }}</dd>
+                    {% for k, v in subevent.meta_data.items %}
+                        <dt>{{ k }}</dt>
+                        <dd>{{ v }}</dd>
                     {% endfor %}
-                </fieldset>
+                    {% if subevent.comment %}
+                        <dt>{% trans "Internal comment" %}</dt>
+                        <dd>{{ subevent.comment|linebreaksbr }}</dd>
+                    {% endif %}
+                </dl>
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Quotas" %}</legend>
+                <div class="table-responsive">
+                    <table class="table table-hover table-quotas">
+                        <thead>
+                        <tr>
+                            <th>{% trans "Quota name" %}</th>
+                            <th>{% trans "Products" %}</th>
+                            <th>{% trans "Total capacity" %}</th>
+                            <th>{% trans "Capacity left" %}</th>
+                            <th class="action-col-2"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for q in quotas %}
+                            <tr>
+                                <td>
+                                    <strong><a
+                                            href="{% url "control:event.items.quotas.show" organizer=request.event.organizer.slug event=request.event.slug quota=q.id %}">{{ q.name }}</a></strong>
+                                    {% if q.ignore_for_event_availability %}
+                                        <span class="fa fa-eye-slash text-muted" data-toggle="tooltip"
+                                              title="{% trans "Ignore this quota when determining event availability" %}"></span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <ul>
+                                        {% for item in q.cached_items %}
+                                            {% if not item.has_variations %}
+                                                <li>
+                                                    <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% for v in q.variations.all %}
+                                            <li>
+                                                <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=v.item.id %}#tab-0-3-open">
+                                                    {{ v.item }} – {{ v }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>{% if q.size == None %}Unlimited{% else %}{{ q.size }}{% endif %}</td>
+                                <td>{% include "pretixcontrol/items/fragment_quota_availability.html" with availability=q.cached_avail closed=q.closed %}</td>
+                                <td class="text-right flip">
+                                    {% if 'event.items:write' in request.eventpermset %}
+                                        <a href="{% url "control:event.items.quotas.edit" organizer=request.event.organizer.slug event=request.event.slug quota=q.id %}"
+                                           class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+            {% if checkinlists %}
                 <fieldset>
                     <legend>{% trans "Check-in lists" %}</legend>
-                    <p class="help-block">
-                        {% blocktrans trimmed %}
-                            You can choose to either add one or more check-in lists for every date in your series individually,
-                            or use just one check-in list for all your dates and limit admission through check-in rules. Which
-                            approach is better depends on multiple factors, such as the number of dates in your series. For a
-                            series with one or less event date per day, individual lists are usually more helpful. If you
-                            use dates to represent many time slots on the same day, or even overlapping time slots, working with
-                            just one large check-in list will be easier.
-                        {% endblocktrans %}
-                    </p>
-                    <div class="formset" data-formset data-formset-prefix="{{ cl_formset.prefix }}">
-                        {{ cl_formset.management_form }}
-                        {% bootstrap_formset_errors cl_formset %}
-                        <div data-formset-body>
-                            {% for form in cl_formset %}
-                                <div class="panel panel-default" data-formset-form>
-                                    <div class="sr-only">
-                                        {{ form.id }}
-                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
-                                    </div>
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    {% bootstrap_field form.name layout='inline' form_group_class="" %}
+                    <div class="table-responsive">
+                        <table class="table table-hover table-quotas">
+                            <thead>
+                            <tr>
+                                <th>{% trans "Name" %}</th>
+                                {% if "event.orders:read" in request.eventpermset %}
+                                    <th>{% trans "Checked in" %}</th>
+                                {% endif %}
+                                <th>{% trans "Products" %}</th>
+                                <th class="action-col-2"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for cl in checkinlists %}
+                                <tr>
+                                    <td>
+                                        <strong><a
+                                                href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}">{{ cl.name }}</a></strong>
+                                    </td>
+                                    {% if "event.orders:read" in request.eventpermset %}
+                                        <td>
+                                            <div class="quotabox availability">
+                                                <div class="progress">
+                                                    <div class="progress-bar progress-bar-success progress-bar-{{ cl.percent }}">
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-2 text-right flip">
-                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                                        <i class="fa fa-trash"></i></button>
+                                                <div class="numbers">
+                                                    {{ cl.checkin_count|default_if_none:"0" }} /
+                                                    {{ cl.position_count|default_if_none:"0" }}
                                                 </div>
                                             </div>
-                                        </h4>
-                                    </div>
-                                    <div class="panel-body form-horizontal">
-                                        {% bootstrap_form_errors form %}
-                                        {% bootstrap_field form.include_pending layout="control" %}
-                                        {% bootstrap_field form.all_products layout="control" %}
-                                        {% bootstrap_field form.limit_products layout="control" %}
-                                        {% bootstrap_field form.allow_entry_after_exit layout="control" %}
-                                        {% if form.gates %}
-                                            {% bootstrap_field form.gates layout="control" %}
+                                        </td>
+                                    {% endif %}
+                                    <td>
+                                        {% if cl.all_products %}
+                                            <em>{% trans "All" %}</em>
+                                        {% else %}
+                                            <ul>
+                                                {% for item in cl.limit_products.all %}
+                                                    <li>
+                                                        <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
                                         {% endif %}
-                                    </div>
-                                </div>
+                                    </td>
+                                    <td class="text-right flip">
+                                        {% if "event.orders:read" in request.eventpermset %}
+                                            <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=cl.id %}"
+                                               class="btn btn-default btn-sm"><i class="fa fa-eye"></i></a>
+                                        {% endif %}
+                                        {% if "event.settings.general:write" in request.eventpermset %}
+                                            <a href="{% url "control:event.orders.checkinlists.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ cl.id }}"
+                                               class="btn btn-sm btn-default" title="{% trans "Clone" %}"
+                                               data-toggle="tooltip">
+                                                <span class="fa fa-copy"></span>
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
                             {% endfor %}
-                        </div>
-                        <script type="form-template" data-formset-empty-form>
-                            {% escapescript %}
-                                <div class="panel panel-default" data-formset-form>
-                                    <div class="sr-only">
-                                        {{ cl_formset.empty_form.id }}
-                                        {% bootstrap_field cl_formset.empty_form.DELETE form_group_class="" layout="inline" %}
-                                    </div>
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    {% bootstrap_field cl_formset.empty_form.name layout='inline' form_group_class="" %}
-                                                </div>
-                                                <div class="col-md-2 text-right flip">
-                                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                                        <i class="fa fa-trash"></i></button>
-                                                </div>
-                                            </div>
-                                        </h4>
-                                    </div>
-                                    <div class="panel-body form-horizontal">
-                                        {% bootstrap_field cl_formset.empty_form.include_pending layout="control" %}
-                                        {% bootstrap_field cl_formset.empty_form.all_products layout="control" %}
-                                        {% bootstrap_field cl_formset.empty_form.limit_products layout="control" %}
-                                        {% bootstrap_field cl_formset.empty_form.allow_entry_after_exit layout="control" %}
-                                        {% if cl_formset.empty_form.gates %}
-                                            {% bootstrap_field cl_formset.empty_form.gates layout="control" %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            {% endescapescript %}
-                        </script>
-                        <p>
-                            <button type="button" class="btn btn-default" data-formset-add>
-                                <i class="fa fa-plus"></i> {% trans "Add a new check-in list" %}
-                            </button>
-                        </p>
+                            </tbody>
+                        </table>
                 </fieldset>
-                {% for f in plugin_forms %}
-                    {% if f.title %}
-                        <fieldset>
-                            <legend>{{ f.title }}</legend>
-                            {% if f.template %}
-                                {% include f.template with form=f %}
-                            {% else %}
-                                {% bootstrap_form f layout="control" %}
-                            {% endif %}
-                        </fieldset>
-                    {% endif %}
-                {% endfor %}
+            {% endif %}
+            {% eventsignal request.event "pretix.control.signals.subevent_detail_html" subevent=subevent %}
+        </div>
+        {% if "event.orders:read" in request.eventpermset %}
+            <div class="col-md-5 col-xs-12">
                 <fieldset>
-                    <legend>{% trans "Additional settings" %}</legend>
-                    {% for f in plugin_forms %}
-                        {% if not f.title %}
-                            {% if f.template %}
-                                {% include f.template with form=f %}
-                            {% else %}
-                                {% bootstrap_form f layout="control" %}
-                            {% endif %}
+                    <legend>
+                        {% trans "Orders" %}
+                        <span class="badge">
+                            {{ order_count }}
+                        </span>
+                    </legend>
+                    {% if order_count %}
+                        <div class="table-responsive">
+                            <table class="table table-condensed table-hover table-orders">
+                                <thead>
+                                <tr>
+                                    <th>{% trans "Order code" %}</th>
+                                    <th>{% trans "Details" %}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for o in orders %}
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}">
+                                                    {{ o.code }}
+                                                </a>
+                                            </strong>
+                                            <br>
+                                            {% if o.testmode %}
+                                                <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                            {% endif %}
+                                            {% if o.status == "p" and o.pcnt == 0 %}
+                                                {# Everything related to this subevent is canceled #}
+                                                <span class="label label-danger">
+                                                <span class="fa fa-times"></span>
+                                                {% trans "partially canceled" %}
+                                            </span>
+                                            {% else %}
+                                                {% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if "." in o.sales_channel.icon %}
+                                                <img src="{% static o.sales_channel.icon %}" class="fa-like-image"
+                                                     data-toggle="tooltip" title="{{ o.sales_channel.label }}">
+                                            {% else %}
+                                                <span class="fa fa-fw fa-{{ o.sales_channel.icon }} text-muted"
+                                                      data-toggle="tooltip" title="{{ o.sales_channel.label }}"></span>
+                                            {% endif %}
+                                            {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                                            {% if o.email %}
+                                                <br>{% icon "envelope-o fa-fw text-muted" %}
+                                                {{ o.email|default_if_none:"" }}
+                                            {% endif %}
+                                            {% if o.invoice_address.name %}
+                                                <br>{% icon "user fa-fw text-muted" %} {{ o.invoice_address.name }}
+                                            {% endif %}
+                                            <br>{% icon "ticket text-muted fa-fw" %} {{ o.pcnt }}
+                                            {% if o.comment %}
+                                                <br>
+                                                <span class="text-muted">
+                                                {{ o.comment|linebreaksbr }}
+                                            </span>
+                                            {% endif %}
+                                            {% if o.custom_followup_due %}
+                                                <br>
+                                                <span class="label label-danger">{% blocktrans trimmed with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}
+                                                    TODO {{ date }}{% endblocktrans %}</span>
+                                            {% elif o.custom_followup_at %}
+                                                <br>
+                                                <span class="label label-default">{% blocktrans trimmed with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}
+                                                    TODO {{ date }}{% endblocktrans %}</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if order_count > 10 %}
+                            <p class="text-center">
+                                <a href="{% url "control:event.orders" organizer=request.organizer.slug event=request.event.slug %}?subevent={{ subevent.pk }}"
+                                   class="btn btn-default">
+                                    {% trans "View all" %}
+                                </a>
+                            </p>
                         {% endif %}
-                    {% endfor %}
+                    {% else %}
+                        <div class="empty-collection">
+                            <p>
+                                {% blocktrans trimmed %}
+                                    No orders found.
+                                {% endblocktrans %}
+                            </p>
+                        </div>
+                    {% endif %}
                 </fieldset>
             </div>
-            {% if subevent.pk %}
-                <div class="col-xs-12 col-lg-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                {% trans "Date history" context "subevent" %}
-                            </h3>
-                        </div>
-                        {% include "pretixcontrol/includes/logs.html" with obj=subevent %}
-                    </div>
+        {% endif %}
+        <div class="col-md-2 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Date history" context "subevent" %}
+                    </h3>
                 </div>
-            {% endif %}
+                {% include "pretixcontrol/includes/logs.html" with obj=subevent %}
+            </div>
         </div>
-        <div class="form-group submit-group submit-group-sticky">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
-        </div>
-    </form>
+    </div>
 {% endblock %}

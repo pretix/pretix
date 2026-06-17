@@ -35,8 +35,11 @@
 import datetime
 import os
 import re
+import socket
+from contextlib import contextmanager
 from decimal import Decimal
 from email.mime.text import MIMEText
+from unittest import mock
 
 import pytest
 from django.conf import settings
@@ -591,3 +594,117 @@ def test_attached_ical_localization(env, order):
         assert len(djmail.outbox) == 1
         assert len(djmail.outbox[0].attachments) == 1
         assert description in djmail.outbox[0].attachments[0][1]
+
+
+PRIVATE_IPS_RES = [
+    [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('10.0.0.3', 443))],
+    [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('0.0.0.0', 443))],
+    [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('127.1.1.1', 443))],
+    [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('192.168.5.3', 443))],
+    [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('224.0.0.1', 443))],
+    [(socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('::1', 443, 0, 0))],
+    [(socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('fe80::1', 443, 0, 0))],
+    [(socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('ff00::1', 443, 0, 0))],
+    [(socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('fc00::1', 443, 0, 0))],
+]
+
+
+@contextmanager
+def assert_mail_connection(res, should_connect, use_ssl):
+    with (
+        mock.patch('socket.socket') as mock_socket,
+        mock.patch('socket.getaddrinfo', return_value=res),
+        mock.patch('smtplib.SMTP.getreply', return_value=(220, "")),
+        mock.patch('smtplib.SMTP.sendmail'),
+        mock.patch('ssl.SSLContext.wrap_socket') as mock_ssl
+    ):
+        yield
+
+        if should_connect:
+            mock_socket.assert_called_once()
+            mock_socket.return_value.connect.assert_called_once_with(res[0][-1])
+            if use_ssl:
+                mock_ssl.assert_called_once()
+        else:
+            mock_socket.assert_not_called()
+            mock_socket.return_value.connect.assert_not_called()
+            mock_ssl.assert_not_called()
+
+
+@pytest.mark.parametrize("res", PRIVATE_IPS_RES)
+@pytest.mark.parametrize("use_ssl", [
+    True, False
+])
+def test_private_smtp_ip(res, use_ssl, settings):
+    settings.EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
+    settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = False
+    with assert_mail_connection(res=res, should_connect=False, use_ssl=use_ssl), pytest.raises(match="Request to .* blocked"):
+        connection = djmail.get_connection(backend=settings.EMAIL_CUSTOM_SMTP_BACKEND,
+                                           host="localhost",
+                                           use_ssl=use_ssl)
+        connection.open()
+
+    settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = True
+    with assert_mail_connection(res=res, should_connect=True, use_ssl=use_ssl):
+        connection = djmail.get_connection(backend=settings.EMAIL_CUSTOM_SMTP_BACKEND,
+                                           host="localhost",
+                                           use_ssl=use_ssl)
+        connection.open()
+
+
+@pytest.mark.parametrize("use_ssl", [
+    True, False
+])
+@pytest.mark.parametrize("allow_private", [
+    True, False
+])
+def test_public_smtp_ip(use_ssl, allow_private, settings):
+    settings.EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
+    settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = allow_private
+
+    with assert_mail_connection(res=[(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('8.8.8.8', 443))], should_connect=True, use_ssl=use_ssl):
+        connection = djmail.get_connection(backend=settings.EMAIL_CUSTOM_SMTP_BACKEND,
+                                           host="localhost",
+                                           use_ssl=use_ssl)
+        connection.open()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("use_ssl", [
+    True, False
+])
+@pytest.mark.parametrize("allow_private_networks", [
+    True, False
+])
+@pytest.mark.parametrize("res", PRIVATE_IPS_RES)
+def test_send_mail_private_ip(res, use_ssl, allow_private_networks, env):
+    settings.EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
+    settings.MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS = allow_private_networks
+
+    event, user, organizer = env
+    event.settings.smtp_use_custom = True
+    event.settings.smtp_host = "example.com"
+    event.settings.smtp_use_ssl = use_ssl
+    event.settings.smtp_use_tls = False
+
+    def send_mail():
+        m = OutgoingMail.objects.create(
+            to=['recipient@example.com'],
+            subject='Test',
+            body_plain='Test',
+            sender='sender@example.com',
+            event=event
+        )
+        assert m.status == OutgoingMail.STATUS_QUEUED
+        mail_send_task.apply(kwargs={
+            'outgoing_mail': m.pk,
+        }, max_retries=0)
+        m.refresh_from_db()
+        return m
+
+    with assert_mail_connection(res=res, should_connect=allow_private_networks, use_ssl=use_ssl):
+        m = send_mail()
+        if allow_private_networks:
+            assert m.status == OutgoingMail.STATUS_SENT
+        else:
+            assert m.status == OutgoingMail.STATUS_FAILED

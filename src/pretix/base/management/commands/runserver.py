@@ -44,7 +44,8 @@ class Command(Parent):
             # Start the vite server in the background
             vite_server = subprocess.Popen(
                 ["npm", "run", "dev:control"],
-                cwd=Path(__file__).parent.parent.parent.parent.parent
+                cwd=Path(__file__).parent.parent.parent.parent.parent,
+                stdin=subprocess.DEVNULL
             )
 
             def cleanup():

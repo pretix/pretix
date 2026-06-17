@@ -32,6 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import logging
 import warnings
 from typing import Any, Callable, Generic, List, Tuple, TypeVar
 
@@ -48,6 +49,8 @@ from .plugins import (
     PLUGIN_LEVEL_ORGANIZER,
 )
 
+logger = logging.getLogger(__name__)
+
 app_cache = {}
 T = TypeVar('T')
 
@@ -60,23 +63,25 @@ def _populate_app_cache():
 
 def get_defining_app(o):
     # If sentry packed this in a wrapper, unpack that
-    if "sentry" in o.__module__:
+    module = getattr(o, "__module__", None)
+    if module and "sentry" in module:
         o = o.__wrapped__
 
     if hasattr(o, "__mocked_app"):
         return o.__mocked_app
 
     # Find the Django application this belongs to
-    searchpath = o.__module__
+    searchpath = module or getattr(o.__class__, "__module__", None) or ""
 
     # Core modules are always active
-    if any(searchpath.startswith(cm) for cm in settings.CORE_MODULES):
+    if searchpath and any(searchpath.startswith(cm) for cm in settings.CORE_MODULES):
         return 'CORE'
 
     if not app_cache:
         _populate_app_cache()
 
-    while True:
+    app = None
+    while searchpath:
         app = app_cache.get(searchpath)
         if "." not in searchpath or app:
             break
@@ -157,7 +162,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._sorted_receivers(sender):
+        for receiver in self._live_receivers(sender)[0]:
             if self._is_receiver_active(sender, receiver):
                 response = receiver(signal=self, sender=sender, **named)
                 responses.append((receiver, response))
@@ -179,7 +184,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._sorted_receivers(sender):
+        for receiver in self._live_receivers(sender)[0]:
             if self._is_receiver_active(sender, receiver):
                 named[chain_kwarg_name] = response
                 response = receiver(signal=self, sender=sender, **named)
@@ -204,7 +209,7 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
         if not app_cache:
             _populate_app_cache()
 
-        for receiver in self._sorted_receivers(sender):
+        for receiver in self._live_receivers(sender)[0]:
             if self._is_receiver_active(sender, receiver):
                 try:
                     response = receiver(signal=self, sender=sender, **named)
@@ -214,17 +219,35 @@ class PluginSignal(Generic[T], django.dispatch.Signal):
                     responses.append((receiver, response))
         return responses
 
-    def _sorted_receivers(self, sender):
-        orig_list = self._live_receivers(sender)
+    def asend(self, sender: T, **named):
+        raise NotImplementedError()  # NOQA
+
+    def asend_robust(self, sender: T, **named):
+        raise NotImplementedError()  # NOQA
+
+    def _live_receivers(self, sender):
+        orig_list, orig_async_list = super()._live_receivers(sender)
+
+        if orig_async_list:
+            logger.error('Async receivers are not supported.')
+            raise NotImplementedError
+
+        def _getattr_fallback_to_class(obj, key):
+            return getattr(obj, key, getattr(obj.__class__, key))
+
+        def _is_core_module(receiver):
+            m = _getattr_fallback_to_class(receiver, "__module__")
+            return any(m.startswith(c) for c in settings.CORE_MODULES)
+
         sorted_list = sorted(
             orig_list,
             key=lambda receiver: (
-                0 if any(receiver.__module__.startswith(m) for m in settings.CORE_MODULES) else 1,
-                receiver.__module__,
-                receiver.__name__,
+                0 if _is_core_module(receiver) else 1,
+                _getattr_fallback_to_class(receiver, "__module__"),
+                _getattr_fallback_to_class(receiver, "__name__"),
             )
         )
-        return sorted_list
+        return sorted_list, []
 
 
 class EventPluginSignal(PluginSignal[Event]):
@@ -300,23 +323,41 @@ class GlobalSignal(django.dispatch.Signal):
         if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
             return response
 
-        for receiver in self._live_receivers(sender):
+        for receiver in self._live_receivers(sender)[0]:
             named[chain_kwarg_name] = response
             response = receiver(signal=self, sender=sender, **named)
         return response
 
+    def asend(self, sender: T, **named):
+        raise NotImplementedError()  # NOQA
+
+    def asend_robust(self, sender: T, **named):
+        raise NotImplementedError()  # NOQA
+
     def _live_receivers(self, sender):
         # Ensure consistent sorting of receivers
-        orig_list = super()._live_receivers(sender)
+        orig_list, orig_async_list = super()._live_receivers(sender)
+
+        if orig_async_list:
+            logger.error('Async receivers are not supported.')
+            raise NotImplementedError
+
+        def _getattr_fallback_to_class(obj, key):
+            return getattr(obj, key, getattr(obj.__class__, key))
+
+        def _is_core_module(receiver):
+            m = _getattr_fallback_to_class(receiver, "__module__")
+            return any(m.startswith(c) for c in settings.CORE_MODULES)
+
         sorted_list = sorted(
             orig_list,
             key=lambda receiver: (
-                0 if any(receiver.__module__.startswith(m) for m in settings.CORE_MODULES) else 1,
-                receiver.__module__,
-                receiver.__name__,
+                0 if _is_core_module(receiver) else 1,
+                _getattr_fallback_to_class(receiver, "__module__"),
+                _getattr_fallback_to_class(receiver, "__name__"),
             )
         )
-        return sorted_list
+        return sorted_list, []
 
 
 class DeprecatedSignal(GlobalSignal):

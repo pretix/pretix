@@ -1220,30 +1220,26 @@ class OrderDownloadMixin:
                 resp = HttpResponseRedirect(value.file.file.read())
                 return resp
             else:
-                resp = FileResponse(value.file.file, content_type=value.type)
-                if self.order_position.subevent:
-                    # Subevent date in filename improves accessibility e.g. for screen reader users
-                    resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}-{}{}"'.format(
-                        self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
-                        self.order_position.subevent.date_from.strftime('%Y_%m_%d'),
-                        self.output.identifier, value.extension
-                    )
-                else:
-                    resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
-                        self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
-                        self.output.identifier, value.extension
-                    )
-                return resp
+                name_parts = (
+                    self.request.event.slug.upper(),
+                    self.order.code,
+                    str(self.order_position.positionid),
+                    self.order_position.subevent.date_from.strftime('%Y_%m_%d') if self.order_position.subevent else None,
+                    self.output.identifier
+                )
+                filename = "-".join(filter(None, name_parts)) + value.extension
+                return FileResponse(value.file.file, filename=filename, content_type=value.type)
         elif isinstance(value, CachedCombinedTicket):
             if value.type == 'text/uri-list':
                 resp = HttpResponseRedirect(value.file.file.read())
                 return resp
             else:
-                resp = FileResponse(value.file.file, content_type=value.type)
-                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
+                return FileResponse(
+                    value.file.file,
+                    filename="{}-{}-{}{}".format(
+                        self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension),
+                    content_type=value.type
                 )
-                return resp
         else:
             return redirect(self.get_self_url())
 
@@ -1383,13 +1379,14 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
             return redirect(self.get_order_url())
 
         try:
-            resp = FileResponse(invoice.file.file, content_type='application/pdf')
+            return FileResponse(
+                invoice.file.file,
+                filename='{}.pdf'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", invoice.number)),
+                content_type='application/pdf'
+            )
         except FileNotFoundError:
             invoice_pdf_task.apply(args=(invoice.pk,))
             return self.get(request, *args, **kwargs)
-        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", invoice.number))
-        resp._csp_ignore = True  # Some browser's PDF readers do not work with CSP
-        return resp
 
 
 class OrderChangeMixin:

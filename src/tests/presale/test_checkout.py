@@ -33,7 +33,7 @@ from django.conf import settings
 from django.core import mail as djmail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.signing import dumps
-from django.test import TestCase
+from django.test import Client, TestCase, TransactionTestCase
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django_countries.fields import Country
@@ -60,12 +60,6 @@ from pretix.testutils.sessions import get_cart_session_key
 from .test_timemachine import TimemachineTestMixin
 
 
-@pytest.fixture
-def class_monkeypatch(request, monkeypatch):
-    request.cls.monkeypatch = monkeypatch
-
-
-@pytest.mark.usefixtures("class_monkeypatch")
 class BaseCheckoutTestCase:
     @scopes_disabled()
     def setUp(self):
@@ -104,7 +98,15 @@ class BaseCheckoutTestCase:
         self.workshopquota.items.add(self.workshop2)
         self.workshopquota.variations.add(self.workshop2a)
         self.workshopquota.variations.add(self.workshop2b)
-        self.monkeypatch.setattr("django.db.transaction.on_commit", lambda t: t())
+
+        self.parkingcat = ItemCategory.objects.create(name="Parking", is_addon=True, event=self.event)
+        self.parkingquota = Quota.objects.create(event=self.event, name='Parking', size=5)
+        self.parking1 = Item.objects.create(event=self.event, name='Premium Parking',
+                                            category=self.parkingcat, default_price=Decimal('15.00'))
+        self.parking2 = Item.objects.create(event=self.event, name='Standard Parking',
+                                            category=self.parkingcat, default_price=Decimal('5.00'))
+        self.parkingquota.items.add(self.parking1)
+        self.parkingquota.items.add(self.parking2)
 
     def _set_session(self, key, value):
         session = self.client.session
@@ -4209,6 +4211,58 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
         assert '35.29' in response.content.decode()
         assert '10.08' in response.content.decode()
 
+    def test_set_addons_invalid_initial(self):
+        self.event.settings.locales = ['de', 'en']
+        self.event.settings.locale = 'de'
+        with scopes_disabled():
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1)
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.parkingcat, min_count=1)
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10)
+            )
+            self.workshop1.free_price = True
+            self.workshop1.save()
+            self.workshop2.free_price = True
+            self.workshop2.save()
+
+        ws1_val = 'cp_{}_item_{}'.format(cp1.pk, self.workshop1.pk)
+        ws1_price = 'cp_{}_item_{}_price'.format(cp1.pk, self.workshop1.pk)
+        ws2a_val = 'cp_{}_variation_{}_{}'.format(cp1.pk, self.workshop2.pk, self.workshop2a.pk)
+        ws2a_price = 'cp_{}_variation_{}_{}_price'.format(cp1.pk, self.workshop2.pk, self.workshop2a.pk)
+        p1_val = 'cp_{}_item_{}'.format(cp1.pk, self.parking1.pk)
+        p2_val = 'cp_{}_item_{}'.format(cp1.pk, self.parking2.pk)
+
+        response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
+            ws1_val: '1',
+            ws2a_val: '1',
+        })
+        assert response.status_code == 200
+        with scopes_disabled():
+            assert cp1.addons.count() == 0
+        doc = BeautifulSoup(response.text, 'lxml')
+        assert doc.find('input', {'name': ws1_val}).attrs.get('checked')
+        assert doc.find('input', {'name': ws2a_val}).attrs.get('checked')
+        assert not doc.find('input', {'name': p1_val}).attrs.get('checked')
+        assert not doc.find('input', {'name': p2_val}).attrs.get('checked')
+
+        response = self.client.post('/%s/%s/checkout/addons/' % (self.orga.slug, self.event.slug), {
+            ws1_val: '1',
+            ws1_price: '222,22',
+            ws2a_val: '1',
+            ws2a_price: '333.33',
+        })
+        assert response.status_code == 200
+        with scopes_disabled():
+            assert cp1.addons.count() == 0
+        doc = BeautifulSoup(response.text, 'lxml')
+        assert doc.find('input', {'name': ws1_val}).attrs.get('checked')
+        assert doc.find('input', {'name': ws1_price}).attrs.get('value') in ['222.22', '222,22']
+        assert doc.find('input', {'name': ws2a_val}).attrs.get('checked')
+        assert doc.find('input', {'name': ws2a_price}).attrs.get('value') in ['333.33', '333,33']
+        assert not doc.find('input', {'name': p1_val}).attrs.get('checked')
+        assert not doc.find('input', {'name': p2_val}).attrs.get('checked')
+
     def test_confirm_subevent_presale_not_yet(self):
         with scopes_disabled():
             self.event.has_subevents = True
@@ -4420,6 +4474,20 @@ class CheckoutTestCase(BaseCheckoutTestCase, TimemachineTestMixin, TestCase):
             assert len(djmail.outbox) == 1
             assert any(["Invoice_" in a[0] for a in djmail.outbox[0].attachments])
 
+    def test_checkout_empty_session_valid_cart(self):
+        client = Client()
+        with scopes_disabled():
+            api_cid = "{}@api".format(get_random_string(48))
+            CartPosition.objects.create(
+                event=self.event, cart_id=api_cid, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        response = client.get('/%s/%s/w/1234567890abcdef/checkout/questions/' % (self.orga.slug, self.event.slug), query_params={"take_cart_id": api_cid})
+        assert '€23.00' in response.content.decode()
+
+
+class CheckoutTransactionTestCase(BaseCheckoutTestCase, TransactionTestCase):
     def test_order_confirmation_mail_invoice_sent_somewhere_else(self):
         self.event.settings.invoice_address_asked = True
         self.event.settings.invoice_address_required = True

@@ -234,13 +234,21 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             self.request.event.log_action('pretix.event.footerlinks.changed', user=self.request.user, data={
                 'data': self.footer_links_formset.cleaned_data
             })
-        if form.has_changed():
-            self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
-                k: (form.cleaned_data.get(k).name
-                    if isinstance(form.cleaned_data.get(k), File)
-                    else form.cleaned_data.get(k))
-                for k in form.changed_data
-            })
+
+        change_data = {
+            k: (form.cleaned_data.get(k).name
+                if isinstance(form.cleaned_data.get(k), File)
+                else form.cleaned_data.get(k))
+            for k in form.changed_data
+        }
+        meta_changed = {}
+        for f in self.meta_forms:
+            if f.has_changed():
+                meta_changed[f.property.name] = f.cleaned_data["value"]
+        if meta_changed:
+            change_data['meta_data'] = meta_changed
+        if change_data:
+            self.request.event.log_action('pretix.event.changed', user=self.request.user, data=change_data)
 
         tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk})
         messages.success(self.request, _('Your changes have been saved.'))
@@ -763,12 +771,7 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         fname, ftype, fcontent = build_preview_invoice_pdf(request.event)
         resp = HttpResponse(fcontent, content_type=ftype)
-        if settings.DEBUG:
-            # attachment is more secure as we're dealing with user-generated stuff here, but inline is much more convenient during debugging
-            resp['Content-Disposition'] = 'inline; filename="{}"'.format(fname)
-            resp._csp_ignore = True
-        else:
-            resp['Content-Disposition'] = 'attachment; filename="{}"'.format(fname)
+        resp['Content-Disposition'] = 'inline; filename="{}"'.format(fname)
         return resp
 
 

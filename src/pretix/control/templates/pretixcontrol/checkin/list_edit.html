@@ -89,7 +89,9 @@
             </button>
         </div>
     </form>
-    {{ items|json_script:"items" }}
+    {% if items %}
+        {{ items|json_script:"items" }}
+    {% endif %}
 
     {% compress js %}
         <script type="text/javascript" src="{% static "d3/d3.v6.js" %}"></script>

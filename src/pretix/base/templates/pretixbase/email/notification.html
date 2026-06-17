@@ -55,10 +55,12 @@
                 {% trans "You receive these emails based on your notification settings." %}<br>
                 <a href="{{ settings_url }}">
                     {% trans "Click here to view and change your notification settings" %}
-                </a><br>
-                <a href="{{ disable_url }}">
-                    {% trans "Click here disable all notifications immediately." %}
                 </a>
+                {% if disable_url %}<br>
+                    <a href="{{ disable_url }}">
+                        {% trans "Click here disable all notifications immediately." %}
+                    </a>
+                {% endif %}
             </div>
             <!--[if gte mso 9]>
                     </td></tr></table>

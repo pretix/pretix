@@ -38,6 +38,7 @@ import operator
 import secrets
 from datetime import timedelta
 from functools import reduce
+from typing import Protocol
 
 from django.conf import settings
 from django.contrib.auth.models import (
@@ -65,6 +66,14 @@ from .base import LoggingMixin
 
 class EmailAddressTakenError(IntegrityError):
     pass
+
+
+class PermissionHolder(Protocol):
+    def has_event_permission(self, organizer, event, perm_name=None, request=None, session_key=None) -> bool:
+        ...
+
+    def has_organizer_permission(self, organizer, perm_name=None, request=None):
+        ...
 
 
 class UserManager(BaseUserManager):
@@ -694,6 +703,18 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     @scopes_disabled()
     def is_in_any_teams(self):
         return self.teams.exists()
+
+
+class UserWithStaffSession:
+    # Wrapper around a User object with a staff session, implementing the PermissionHolder Protocol
+    def __init__(self, user):
+        self.user = user
+
+    def has_event_permission(self, organizer, event, perm_name=None, request=None, session_key=None) -> bool:
+        return True
+
+    def has_organizer_permission(self, organizer, perm_name=None, request=None):
+        return True
 
 
 class UserKnownLoginSource(models.Model):

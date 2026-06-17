@@ -160,7 +160,7 @@ class OrderListExporter(MultiSheetListExporter):
 
     def _get_all_payment_methods(self, qs):
         pps = dict(get_all_payment_providers())
-        return sorted([(pp, pps[pp]) for pp in set(
+        return sorted([(pp, pps.get(pp, pp)) for pp in set(
             OrderPayment.objects.exclude(provider='free').filter(order__event__in=self.events).values_list(
                 'provider', flat=True
             ).distinct()
@@ -330,6 +330,7 @@ class OrderListExporter(MultiSheetListExporter):
                 taxsum=Sum('tax_value'), grosssum=Sum('value')
             )
         }
+        payment_methods = None
         if form_data.get('include_payment_amounts'):
             payment_sum_cache = {
                 (o['order__id'], o['provider']): o['grosssum'] for o in
@@ -347,6 +348,7 @@ class OrderListExporter(MultiSheetListExporter):
                     grosssum=Sum('amount')
                 )
             }
+            payment_methods = self._get_all_payment_methods(qs)
         sum_cache = {
             (o['order__id'], o['tax_rate']): o for o in
             OrderPosition.objects.values('tax_rate', 'order__id').order_by().annotate(
@@ -434,7 +436,6 @@ class OrderListExporter(MultiSheetListExporter):
             )
 
             if form_data.get('include_payment_amounts'):
-                payment_methods = self._get_all_payment_methods(qs)
                 for id, vn in payment_methods:
                     row.append(
                         payment_sum_cache.get((order.id, id), Decimal('0.00')) -
@@ -1103,13 +1104,25 @@ class PaymentListExporter(ListExporter):
     def iterate_list(self, form_data):
         provider_names = dict(get_all_payment_providers())
 
+        i_numbers = Invoice.objects.filter(
+            order=OuterRef('order_id'),
+        ).values('order').annotate(
+            m=GroupConcat('full_invoice_no', delimiter=', ')
+        ).values(
+            'm'
+        ).order_by()
+
         payments = OrderPayment.objects.filter(
             order__event__in=self.events,
             state__in=form_data.get('payment_states', [])
+        ).annotate(
+            order_invoice_numbers=Subquery(i_numbers, output_field=CharField()),
         ).select_related('order').prefetch_related('order__event').order_by('created')
         refunds = OrderRefund.objects.filter(
             order__event__in=self.events,
             state__in=form_data.get('refund_states', [])
+        ).annotate(
+            order_invoice_numbers=Subquery(i_numbers, output_field=CharField()),
         ).select_related('order').prefetch_related('order__event').order_by('created')
 
         if form_data.get('end_date_range'):
@@ -1135,6 +1148,7 @@ class PaymentListExporter(ListExporter):
         headers = [
             _('Event slug'), _('Order'), _('Payment ID'), _('Creation date'), _('Completion date'), _('Status'),
             _('Status code'), _('Amount'), _('Payment method'), _('Comment'), _('Matching ID'), _('Payment details'),
+            _('Invoice numbers'),
         ]
         yield headers
 
@@ -1172,6 +1186,7 @@ class PaymentListExporter(ListExporter):
                 obj.comment if isinstance(obj, OrderRefund) else "",
                 matching_id,
                 payment_details,
+                obj.order_invoice_numbers,
             ]
             yield row
 

@@ -82,7 +82,8 @@ class CheckInListMixin(BaseExporter):
                      widget=forms.RadioSelect(
                          attrs={'class': 'scrolling-choice'}
                      ),
-                     initial=self.event.checkin_lists.first()
+                     initial=self.event.checkin_lists.first(),
+                     required=True
                  )),
                 ('date_range',
                  DateFrameField(
@@ -143,7 +144,6 @@ class CheckInListMixin(BaseExporter):
         if not self.event.has_subevents:
             del d['date_range']
 
-        d['list'].queryset = self.event.checkin_lists.all()
         d['list'].widget = Select2(
             attrs={
                 'data-model-select2': 'generic',
@@ -155,7 +155,6 @@ class CheckInListMixin(BaseExporter):
             }
         )
         d['list'].widget.choices = d['list'].choices
-        d['list'].required = True
 
         return d
 

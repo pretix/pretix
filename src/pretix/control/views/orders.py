@@ -79,9 +79,9 @@ from pretix.base.email import get_email_context
 from pretix.base.exporter import MultiSheetListExporter
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedCombinedTicket, CachedFile, CachedTicket, Checkin, Invoice,
-    InvoiceAddress, Item, ItemVariation, LogEntry, Order, QuestionAnswer,
-    Quota, ScheduledEventExport, generate_secret,
+    CachedFile, CachedTicket, Checkin, Invoice, InvoiceAddress, Item,
+    ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
+    ScheduledEventExport, generate_secret,
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
@@ -396,6 +396,7 @@ class OrderDeleteBulkActionView(BaseOrderBulkActionView):
 
     def execute_single(self, instance, form: forms.Form):
         instance.gracefully_delete(user=self.request.user)
+        return True
 
 
 class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):
@@ -554,6 +555,9 @@ class OrderDetail(OrderView):
         ctx['download_buttons'] = self.download_buttons
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = self.order.pending_sum
+        ctx['uncancelled_invoice'] = self.order.invoices.exclude(
+            Exists(self.order.invoices.filter(refers=OuterRef('pk'), is_cancellation=True))
+        ).exclude(is_cancellation=True).first()
 
         return ctx
 
@@ -710,34 +714,21 @@ class OrderDownload(AsyncAction, OrderView):
                 resp = HttpResponseRedirect(value.file.file.read())
                 return resp
             else:
-                resp = FileResponse(value.file.file, content_type=value.type)
-                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
-                    self.output.identifier, value.extension
+                return FileResponse(
+                    value.file.file,
+                    filename='{}-{}-{}-{}{}'.format(
+                        self.request.event.slug.upper(), self.order.code, self.order_position.positionid,
+                        self.output.identifier, value.extension
+                    ),
+                    content_type=value.type
                 )
-                return resp
-        elif isinstance(value, CachedCombinedTicket):
-            if value.type == 'text/uri-list':
-                resp = HttpResponseRedirect(value.file.file.read())
-                return resp
-            else:
-                resp = FileResponse(value.file.file, content_type=value.type)
-                resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}{}"'.format(
-                    self.request.event.slug.upper(), self.order.code, self.output.identifier, value.extension
-                )
-                return resp
         else:
             return redirect(self.get_self_url())
 
     def get_last_ct(self):
-        if 'position' in self.kwargs:
-            ct = CachedTicket.objects.filter(
-                order_position=self.order_position, provider=self.output.identifier, file__isnull=False
-            ).last()
-        else:
-            ct = CachedCombinedTicket.objects.filter(
-                order=self.order, provider=self.output.identifier, file__isnull=False
-            ).last()
+        ct = CachedTicket.objects.filter(
+            order_position=self.order_position, provider=self.output.identifier, file__isnull=False
+        ).last()
         if not ct or not ct.file:
             return None
         return ct
@@ -1831,14 +1822,14 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
             return redirect(self.get_order_url())
 
         try:
-            resp = FileResponse(self.invoice.file.file, content_type='application/pdf')
+            return FileResponse(
+                self.invoice.file.file,
+                filename='{}.pdf'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", self.invoice.number)),
+                content_type='application/pdf'
+            )
         except FileNotFoundError:
             invoice_pdf_task.apply(args=(self.invoice.pk,))
             return self.get(request, *args, **kwargs)
-
-        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", self.invoice.number))
-        resp._csp_ignore = True  # Some browser's PDF readers do not work with CSP
-        return resp
 
 
 class OrderExtend(OrderView):
@@ -2059,12 +2050,13 @@ class OrderChange(OrderView):
                 else:
                     variation = None
                 try:
-                    ocm.add_position(item, variation,
-                                     f.cleaned_data['price'],
-                                     f.cleaned_data.get('addon_to'),
-                                     f.cleaned_data.get('subevent'),
-                                     f.cleaned_data.get('seat'),
-                                     f.cleaned_data.get('used_membership'))
+                    for i in range(f.cleaned_data.get("count", 1)):
+                        ocm.add_position(item, variation,
+                                         f.cleaned_data['price'],
+                                         f.cleaned_data.get('addon_to'),
+                                         f.cleaned_data.get('subevent'),
+                                         f.cleaned_data.get('seat'),
+                                         f.cleaned_data.get('used_membership'))
                 except OrderError as e:
                     f.custom_error = str(e)
                     return False

@@ -36,6 +36,7 @@
 import datetime
 import re
 from decimal import Decimal
+from importlib import import_module
 from json import loads
 from zoneinfo import ZoneInfo
 
@@ -79,6 +80,34 @@ class EventMiddlewareTest(EventTestMixin, SoupTest):
     def test_event_header(self):
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn(str(self.event.name), doc.find("h1").text)
+
+    def test_no_session_cookie_set_on_event_index_view(self):
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(resp.status_code, 200)
+        assert settings.SESSION_COOKIE_NAME not in self.client.cookies
+
+    def test_no_cart_session_added_on_event_index_view(self):
+        # Make sure a session is present by doing a cart op on another event
+        event2 = Event.objects.create(
+            organizer=self.orga, name='30C3b', slug='30c3b',
+            date_from=datetime.datetime(now().year + 1, 12, 26, 14, 0, tzinfo=datetime.timezone.utc),
+            live=True,
+        )
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, event2.slug), {
+            'item_%d' % 1337: '1',  # item does not need to exist
+            'ajax': 1
+        })
+        assert settings.SESSION_COOKIE_NAME in self.client.cookies
+
+        # Visit shop, make sure no session is created
+        resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertEqual(resp.status_code, 200)
+
+        SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+        session = SessionStore(self.client.cookies[settings.SESSION_COOKIE_NAME].value).load()
+        assert set(session.keys()) == {
+            f"current_cart_event_{event2.pk}", "carts"
+        }
 
     def test_not_found(self):
         resp = self.client.get('/%s/%s/' % ('foo', 'bar'))
@@ -1132,6 +1161,65 @@ class WaitingListTest(EventTestMixin, SoupTest):
         assert wle.variation is None
         assert wle.voucher is None
         assert wle.locale == 'en'
+
+    def test_initial_selection(self):
+        with scopes_disabled():
+            cat = ItemCategory.objects.create(event=self.event, name='Tickets')
+            self.item.category = cat
+            self.item.save()
+
+            item2 = Item.objects.create(
+                event=self.event, name='VIP ticket',
+                default_price=Decimal('25.00'),
+                active=True, category=cat,
+            )
+            self.q.items.add(item2)
+
+        response = self.client.get(
+            '/%s/%s/waitinglist/?item=%d' % (
+                self.orga.slug, self.event.slug, item2.pk
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        doc = BeautifulSoup(response.render().content, "lxml")
+
+        select = doc.find('select', {'name': 'itemvar'})
+        optgroup = select.find('optgroup')
+        self.assertIsNotNone(optgroup, 'Choices should be grouped by category')
+        self.assertEqual(optgroup['label'], 'Tickets')
+
+        selected = select.find_all('option', selected=True)
+        self.assertEqual(len(selected), 1, 'Exactly one option should be pre-selected')
+        self.assertEqual(selected[0]['value'], str(item2.pk))
+
+    def test_initial_selection_with_variation(self):
+        with scopes_disabled():
+            cat = ItemCategory.objects.create(event=self.event, name='Tickets')
+            self.item.category = cat
+            self.item.has_variations = True
+            self.item.save()
+
+            var1 = ItemVariation.objects.create(item=self.item, value='Standard')
+            var2 = ItemVariation.objects.create(item=self.item, value='Premium')
+            self.q.variations.add(var1, var2)
+
+        response = self.client.get(
+            '/%s/%s/waitinglist/?item=%d&var=%d' % (
+                self.orga.slug, self.event.slug,
+                self.item.pk, var2.pk,
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        doc = BeautifulSoup(response.render().content, "lxml")
+
+        select = doc.find('select', {'name': 'itemvar'})
+        optgroup = select.find('optgroup')
+        self.assertIsNotNone(optgroup, 'Choices should be grouped by category')
+        self.assertEqual(optgroup['label'], 'Tickets')
+
+        selected = select.find_all('option', selected=True)
+        self.assertEqual(len(selected), 1, 'Exactly one option should be pre-selected')
+        self.assertEqual(selected[0]['value'], '%d-%d' % (self.item.pk, var2.pk))
 
     def test_subevent_valid(self):
         with scopes_disabled():

@@ -19,7 +19,10 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import ipaddress
 import logging
+import smtplib
+import socket
 from itertools import groupby
 from smtplib import SMTPResponseException
 from typing import TypeVar
@@ -237,3 +240,80 @@ def base_renderers(sender, **kwargs):
 
 def get_email_context(**kwargs):
     return PlaceholderContext(**kwargs).render_all()
+
+
+def create_connection(address, timeout=socket.getdefaulttimeout(),
+                      source_address=None, *, all_errors=False):
+    # Taken from the python stdlib, extended with a check for local ips
+
+    host, port = address
+    exceptions = []
+    for res in socket.getaddrinfo(host, port, 0, socket.SOCK_STREAM):
+        af, socktype, proto, canonname, sa = res
+
+        if not getattr(settings, "MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS", False):
+            ip_addr = ipaddress.ip_address(sa[0])
+            if ip_addr.is_multicast:
+                raise socket.error(f"Request to multicast address {sa[0]} blocked")
+            if ip_addr.is_loopback or ip_addr.is_link_local:
+                raise socket.error(f"Request to local address {sa[0]} blocked")
+            if ip_addr.is_private:
+                raise socket.error(f"Request to private address {sa[0]} blocked")
+
+        sock = None
+        try:
+            sock = socket.socket(af, socktype, proto)
+            if timeout is not socket.getdefaulttimeout():
+                sock.settimeout(timeout)
+            if source_address:
+                sock.bind(source_address)
+            sock.connect(sa)
+            # Break explicitly a reference cycle
+            exceptions.clear()
+            return sock
+
+        except socket.error as exc:
+            if not all_errors:
+                exceptions.clear()  # raise only the last error
+            exceptions.append(exc)
+            if sock is not None:
+                sock.close()
+
+    if len(exceptions):
+        try:
+            if not all_errors:
+                raise exceptions[0]
+            raise ExceptionGroup("create_connection failed", exceptions)
+        finally:
+            # Break explicitly a reference cycle
+            exceptions.clear()
+    else:
+        raise socket.error("getaddrinfo returns an empty list")
+
+
+class CheckPrivateNetworkMixin:
+    # _get_socket taken 1:1 from smtplib, just with a call to our own create_connection
+    def _get_socket(self, host, port, timeout):
+        # This makes it simpler for SMTP_SSL to use the SMTP connect code
+        # and just alter the socket connection bit.
+        if timeout is not None and not timeout:
+            raise ValueError('Non-blocking socket (timeout=0) is not supported')
+        if self.debuglevel > 0:
+            self._print_debug('connect: to', (host, port), self.source_address)
+        return create_connection((host, port), timeout, self.source_address)
+
+
+class SMTP(CheckPrivateNetworkMixin, smtplib.SMTP):
+    pass
+
+
+# SMTP used here instead of mixin, because smtp.SMTP_SSL._get_socket calls super()._get_socket and then wraps this socket
+# super()._get_socket needs to be our version from the mixin
+class SMTP_SSL(smtplib.SMTP_SSL, SMTP):  # noqa: N801
+    pass
+
+
+class CheckPrivateNetworkSmtpBackend(EmailBackend):
+    @property
+    def connection_class(self):
+        return SMTP_SSL if self.use_ssl else SMTP

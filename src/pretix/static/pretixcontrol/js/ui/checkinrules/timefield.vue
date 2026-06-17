@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { DATETIME_OPTIONS } from './constants'
+import { TIME_OPTIONS } from './constants'
 
 const props = defineProps<{
 	required?: boolean
@@ -20,7 +20,7 @@ watch(() => props.value, (val) => {
 onMounted(() => {
 	$(input.value)
 		.datetimepicker({
-			...DATETIME_OPTIONS,
+			...TIME_OPTIONS,
 			showClear: props.required,
 		})
 		.trigger('change')

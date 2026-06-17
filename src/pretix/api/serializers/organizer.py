@@ -286,6 +286,19 @@ class GiftCardSerializer(I18nAwareModelSerializer):
                 )
         return data
 
+    def to_representation(self, instance):
+        r = super().to_representation(instance)
+        request = self.context.get('request')
+        # late permission evaluations for checks that depend on the actual linked events
+        if 'owner_ticket' in self.context['request'].query_params.getlist('expand'):
+            owner_ticket = instance.owner_ticket
+            if owner_ticket:
+                event = owner_ticket.order.event
+                perm_holder = request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user
+                if not perm_holder.has_event_permission(event.organizer, event, 'event.orders:read', request):
+                    r['owner_ticket'] = {'id': instance.owner_ticket.id}
+        return r
+
     class Meta:
         model = GiftCard
         fields = ('id', 'secret', 'issuance', 'value', 'currency', 'testmode', 'expires', 'conditions', 'owner_ticket',
@@ -592,6 +605,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'cookie_consent_dialog_button_yes',
         'cookie_consent_dialog_button_no',
         'reusable_media_active',
+        'reusable_media_usage_enforced',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
         'reusable_media_type_nfc_uid',

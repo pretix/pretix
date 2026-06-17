@@ -63,7 +63,7 @@ from pretix.base.forms import (
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.models.organizer import TeamQuerySet
-from pretix.base.models.tax import TAX_CODE_LISTS
+from pretix.base.models.tax import TAX_CODE_LISTS, VAT_ID_COUNTRIES
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.settings import (
@@ -73,8 +73,8 @@ from pretix.base.settings import (
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
-    MultipleLanguagesWidget, SalesChannelCheckboxSelectMultiple, SlugWidget,
-    SplitDateTimeField, SplitDateTimePickerWidget,
+    FontSelect, MultipleLanguagesWidget, SalesChannelCheckboxSelectMultiple,
+    SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.countries import CachedCountries
@@ -531,6 +531,13 @@ class EventUpdateForm(I18nModelForm):
 
 class EventSettingsValidationMixin:
 
+    def clean_invoice_address_from_vat_id(self):
+        value = self.cleaned_data.get('invoice_address_from_vat_id')
+        country = self.cleaned_data.get('invoice_address_from_country')
+        if value and country and country not in VAT_ID_COUNTRIES:
+            return None
+        return value
+
     def clean(self):
         data = super().clean()
         settings_dict = self.obj.settings.freeze()
@@ -722,7 +729,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
             del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
         self.fields['primary_font'].choices = [('Open Sans', 'Open Sans')] + sorted([
-            (a, {"title": a, "data": v}) for a, v in get_fonts(self.event, pdf_support_required=False).items()
+            (a, FontSelect.FontOption(title=a, data=v)) for a, v in get_fonts(self.event, pdf_support_required=False).items()
         ], key=lambda a: a[0])
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields

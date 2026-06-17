@@ -34,6 +34,7 @@ from compressor.filters.jsmin import rJSMinFilter
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.cache import cache
+from django.core.exceptions import BadRequest
 from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.db.models import Q
@@ -49,7 +50,7 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.gzip import gzip_page
 from django.views.decorators.http import condition
 from django.views.i18n import (
-    JavaScriptCatalog, get_formats, js_catalog_template,
+    JavaScriptCatalog, builtin_template_path, get_formats,
 )
 from lxml import html
 
@@ -127,6 +128,9 @@ def _use_vite(request):
     origin = request.META.get('HTTP_ORIGIN', '')
     gs = GlobalSettingsObject()
     vite_origins = gs.settings.get('widget_vite_origins', as_type=str, default='')
+    if vite_origins and not origin:
+        referer = request.META.get('HTTP_REFERER', '')
+        origin = '/'.join(referer.split('/', 3)[:3])
     if origin and vite_origins:
         origins_list = [o.strip() for o in vite_origins.strip().splitlines() if o.strip()]
         return origin in origins_list
@@ -186,7 +190,8 @@ def generate_widget_js(version, lang, use_vite=False):
             'September', 'October', 'November', 'December'
         )
         catalog = dict((k, v) for k, v in catalog.items() if k.startswith('widget\u0004') or k in str_wl)
-        template = Engine().from_string(js_catalog_template)
+        with builtin_template_path("i18n_catalog.js").open(encoding="utf-8") as fh:
+            template = Engine().from_string(fh.read())
         context = Context({
             'catalog_str': indent(json.dumps(
                 catalog, sort_keys=True, indent=2)) if catalog else None,
@@ -557,12 +562,10 @@ class WidgetAPIProductList(EventListMixin, View):
         ]
 
         if hasattr(self.request, 'event') and data['list_type'] not in ("calendar", "week"):
-            # only allow list-view of more than 50 subevents if ordering is by data as this can be done in the database
+            # only allow list-view of more than 50 subevents if ordering is by date as this can be done in the database
             # ordering by name is currently not supported in database due to I18NField-JSON
             ordering = self.request.event.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
             if ordering not in ("date_ascending", "date_descending") and self.request.event.subevents.filter(date_from__gt=now()).count() > 50:
-                if self.request.event.settings.event_list_type not in ("calendar", "week"):
-                    self.request.event.settings.event_list_type = "calendar"
                 data['list_type'] = list_type = 'calendar'
 
         if hasattr(self.request, 'event'):
@@ -705,7 +708,10 @@ class WidgetAPIProductList(EventListMixin, View):
             for d in data['days']:
                 d['events'] = self._serialize_events(d['events'] or [])
         else:
-            offset = int(self.request.GET.get("offset", 0))
+            try:
+                offset = int(self.request.GET.get("offset", 0))
+            except ValueError:
+                raise BadRequest('GET parameter "offset" must be an integer.')
             limit = 50
             if hasattr(self.request, 'event'):
                 evs = filter_qs_by_attr(
