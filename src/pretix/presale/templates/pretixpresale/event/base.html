@@ -26,7 +26,6 @@
     {% if event.settings.google_site_verification %}
         <meta name="google-site-verification" content="{{ event.settings.google_site_verification }}" />
     {% endif %}
-    <script type="text/javascript" src="{% static "pretixpresale/js/csrfcookieretry.js" %}"></script>
     {{ block.super }}
 {% endblock %}
 {% block above %}
