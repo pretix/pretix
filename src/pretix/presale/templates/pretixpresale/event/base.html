@@ -9,7 +9,7 @@
 {% load anonymize_email %}
 {% block thetitle %}
     {% if messages %}
-        {{ messages|join:" " }} :: 
+        {{ messages|join:" " }} ::
     {% endif %}
     {% block title %}{% endblock %}{% if request.resolver_match.url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}
@@ -26,6 +26,7 @@
     {% if event.settings.google_site_verification %}
         <meta name="google-site-verification" content="{{ event.settings.google_site_verification }}" />
     {% endif %}
+    <script type="text/javascript" src="{% static "pretixpresale/js/csrfcookieretry.js" %}"></script>
     {{ block.super }}
 {% endblock %}
 {% block above %}
