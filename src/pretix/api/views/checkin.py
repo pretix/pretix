@@ -872,6 +872,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'media_policy': e.media_policy,
                 'media_type': e.media_type,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
+                'reason': e.code,
                 'reason_explanation': e.msg,
             }, status=400)
         except CheckInError as e:
