@@ -51,6 +51,7 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
+from django.utils.html import conditional_escape
 from django.utils.translation import (
     get_language, gettext_lazy as _, pgettext_lazy,
 )
@@ -1634,7 +1635,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         meta_info = {
             'contact_form_data': self.cart_session.get('contact_form_data', {}),
             'confirm_messages': [
-                str(m) for m in self.confirm_messages.values()
+                conditional_escape(str(m)) for m in self.confirm_messages.values()
             ]
         }
         api_meta = {}
