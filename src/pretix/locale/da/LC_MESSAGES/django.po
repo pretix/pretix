@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-27 15:47+0000\n"
-"PO-Revision-Date: 2026-05-22 07:03+0000\n"
+"PO-Revision-Date: 2026-06-20 17:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
-"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
-">\n"
+"Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/"
+"da/>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html:670
 #: pretix/control/templates/pretixcontrol/events/index.html:166
@@ -612,16 +612,17 @@ msgstr ""
 "underordnede objekter som f.eks. varianter eller pakker."
 
 #: pretix/api/webhooks.py:413
-#, fuzzy
-#| msgid "Quota handling"
 msgid "Quota changed"
-msgstr "Håndtering af kvoter"
+msgstr "Kvoten er ændret"
 
 #: pretix/api/webhooks.py:414
 msgid ""
 "This includes related events like creation, deletion, opening or closing of "
 "quotas. No webhook is sent for changes to the resulting availability."
 msgstr ""
+"Dette omfatter relaterede hændelser såsom oprettelse, sletning, åbning eller "
+"lukning af kvoter. Der sendes ingen webhook ved ændringer i den deraf "
+"følgende tilgængelighed."
 
 #: pretix/api/webhooks.py:419
 msgid "Shop taken live"
@@ -3394,12 +3395,12 @@ msgstr "Indtast venligst et kortere navn."
 msgid ""
 "The field \"%(label)s\" may not contain special characters such as "
 "\"%(chars)s\"."
-msgstr ""
+msgstr "Feltet \"%(label)s\" må ikke indeholde specialtegn såsom \"%(chars)s\"."
 
 #: pretix/base/forms/questions.py:305
 #, python-format
 msgid "The field \"%(label)s\" may not contain an URL (%(url)s)."
-msgstr ""
+msgstr "Feltet \"%(label)s\" må ikke indeholde en URL (%(url)s)."
 
 #: pretix/base/forms/questions.py:338
 msgctxt "phonenumber"
@@ -8290,19 +8291,14 @@ msgid "Program times"
 msgstr "Programtider"
 
 #: pretix/base/pdf.py:503
-#, fuzzy
-#| msgid ""
-#| "2017-05-31 10:00 – 12:00\n"
-#| "2017-05-31 14:00 – 16:00\n"
-#| "2017-05-31 14:00 – 2017-06-01 14:00"
 msgid ""
 "2017-05-31 10:00 – 12:00, Room 1\n"
 "2017-05-31 14:00 – 16:00, Room 2\n"
 "2017-05-31 14:00 – 2017-06-01 14:00, Building A"
 msgstr ""
-"31. maj 2017 kl. 10.00 – 12.00\n"
-"31. maj 2017 kl. 14.00 – 16.00\n"
-"31. maj 2017 kl. 14.00 – 1. juni 2017 kl. 14.00"
+"31. maj 2017 kl. 10.00 – 12.00, lokale 1\n"
+"31. maj 2017 kl. 14.00 – 16.00, lokale 2\n"
+"31. maj 2017 kl. 14.00 – 1. juni 2017 kl. 14.00, bygning A"
 
 #: pretix/base/pdf.py:507
 msgid "Reusable Medium ID"
@@ -8827,13 +8823,7 @@ msgid "This voucher code is not known in our database."
 msgstr "Denne voucherkode genkendes ikke."
 
 #: pretix/base/services/cart.py:165
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products."
-#| msgid_plural ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching product."
@@ -8841,22 +8831,14 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
-"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst "
-"%(number)s passende produkter."
+"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst %"
+"(number)s passende produkter."
 msgstr[1] ""
-"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst "
-"%(number)s passende produkter."
+"Voucherkoderne \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst %"
+"(number)s passende produkter."
 
 #: pretix/base/services/cart.py:170
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products. We have therefore removed some positions "
-#| "from your cart that can no longer be purchased like this."
-#| msgid_plural ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products. We have therefore removed some positions "
-#| "from your cart that can no longer be purchased like this."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching product. We have therefore removed some positions from "
@@ -8866,12 +8848,12 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
-"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst "
-"%(number)s passende produkter. Vi har derfor fjernet nogle poster fra din "
+"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst %"
+"(number)s passende produkter. Vi har derfor fjernet nogle poster fra din "
 "indkøbskurv, som ikke længere kan blive købt på denne måde."
 msgstr[1] ""
-"Voucherkoden \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst "
-"%(number)s passende produkter. Vi har derfor fjernet nogle poster fra din "
+"Voucherkoderne \"%(voucher)s\" kan kun blive brugt, hvis du vælger mindst %"
+"(number)s passende produkter. Vi har derfor fjernet nogle poster fra din "
 "indkøbskurv, som ikke længere kan blive købt på denne måde."
 
 #: pretix/base/services/cart.py:176
@@ -14105,6 +14087,8 @@ msgid ""
 "You entered an URL, which is not allowed. Please remove %(match)s from your "
 "input."
 msgstr ""
+"Du har indtastet en URL, som ikke er tilladt. Fjern venligst %(match)s fra "
+"din indtastning."
 
 #: pretix/base/views/errors.py:48
 msgid ""
@@ -16027,14 +16011,8 @@ msgid "inactive"
 msgstr "inaktiv"
 
 #: pretix/control/forms/item.py:1414
-#, fuzzy
-#| msgid ""
-#| "Sample Conference Center\n"
-#| "Heidelberg, Germany"
 msgid "Sample Conference Center, Heidelberg, Germany"
-msgstr ""
-"Eksempelkonferencecenter\n"
-"Andeby, Danmark"
+msgstr "Eksempelkonferencecenter, Århus, Danmark"
 
 #: pretix/control/forms/mailsetup.py:42
 msgid "Hostname"
@@ -17819,12 +17797,11 @@ msgstr ""
 "afvist."
 
 #: pretix/control/logdisplay.py:571
-#, fuzzy
 msgid ""
 "An email has been sent to notify the user that the order has been approved."
 msgstr ""
-"En e-mail er blevet sendt for at fortælle brugeren at bestillingen er "
-"modtaget."
+"Der er sendt en e-mail for at informere brugeren om, at ordren er blevet "
+"godkendt."
 
 #: pretix/control/logdisplay.py:574
 msgid ""
@@ -17835,13 +17812,12 @@ msgstr ""
 "modtaget og kræver betaling."
 
 #: pretix/control/logdisplay.py:575
-#, fuzzy
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
 msgstr ""
-"En e-mail er blevet sendt for at fortælle brugeren at bestillingen er "
-"modtaget og kræver betaling."
+"Der er sendt en e-mail for at informere brugeren om, at ordren er modtaget "
+"og skal godkendes."
 
 #: pretix/control/logdisplay.py:578
 msgid ""
@@ -17851,21 +17827,22 @@ msgstr ""
 "bestillingsdetaljer."
 
 #: pretix/control/logdisplay.py:579
-#, fuzzy
 msgid "An email has been sent to notify the user that the payment failed."
 msgstr ""
-"En e-mail er blevet sendt for at fortælle brugeren at betaling er modtaget."
+"Der er sendt en e-mail for at informere brugeren om, at betalingen "
+"mislykkedes."
 
 #: pretix/control/logdisplay.py:586
 msgid "The voucher has been created."
 msgstr "Voucheren er blevet oprettet."
 
 #: pretix/control/logdisplay.py:589
-#, fuzzy
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
-msgstr "En rabatkode er blevet sendt til en person på ventelisten."
+msgstr ""
+"Kuponen er sat til at udløbe, fordi modtageren har fjernet sig selv fra "
+"ventelisten."
 
 #: pretix/control/logdisplay.py:590
 msgid "The voucher has been changed."
@@ -17876,16 +17853,13 @@ msgid "The voucher has been deleted."
 msgstr "Voucheren er blevet slettet."
 
 #: pretix/control/logdisplay.py:592
-#, fuzzy
-#| msgid "The selected voucher has been deleted."
 msgid "Cart positions including the voucher have been deleted."
-msgstr "Den valgte rabatkode er blevet slettet."
+msgstr "Indkøbskurvens varer, herunder gavekortet, er blevet slettet."
 
 #: pretix/control/logdisplay.py:593
-#, fuzzy, python-brace-format
-#| msgid "A voucher has been sent to a person on the waiting list."
+#, python-brace-format
 msgid "The voucher has been assigned to {email} through the waiting list."
-msgstr "En rabatkode er blevet sendt til en person på ventelisten."
+msgstr "Kuponen er blevet tildelt {email} via ventelisten."
 
 #: pretix/control/logdisplay.py:602
 #, python-brace-format
@@ -17905,9 +17879,8 @@ msgid "The category has been changed."
 msgstr "Kategorien er blevet ændret."
 
 #: pretix/control/logdisplay.py:620
-#, fuzzy
 msgid "The category has been reordered."
-msgstr "Kategorien er blevet slettet."
+msgstr "Kategorien er blevet omorganiseret."
 
 #: pretix/control/logdisplay.py:627
 msgid "The tax rule has been added."
@@ -17937,14 +17910,14 @@ msgid "{user} has been invited to the team."
 msgstr "{user} er blevet inviteret med i gruppen."
 
 #: pretix/control/logdisplay.py:644
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invite for {user} has been deleted."
-msgstr "Invitationen til {user} er blevet trukket tilbage."
+msgstr "Invitationen til {user} er blevet slettet."
 
 #: pretix/control/logdisplay.py:645
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr "Invitationen til {user} er blevet trukket tilbage."
+msgstr "Invitationen til {user} er blevet sendt igen."
 
 #: pretix/control/logdisplay.py:656
 #, python-brace-format
@@ -17962,294 +17935,245 @@ msgstr "Din e-mailadresse er blevet ændret til {email}."
 
 #: pretix/control/logdisplay.py:673
 msgid "Your account has been enabled."
-msgstr ""
+msgstr "Din konto er nu aktiveret."
 
 #: pretix/control/logdisplay.py:675
 msgid "Your account has been disabled."
-msgstr ""
+msgstr "Din konto er blevet deaktiveret."
 
 #: pretix/control/logdisplay.py:680 pretix/presale/views/customer.py:642
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The email address has been changed from \"{old_email}\" to \"{new_email}"
-#| "\"."
+#, python-brace-format
 msgid "Your email address has been changed from {old_email} to {email}."
-msgstr ""
-"E-mailadressen er blevet ændret fra \"{old_email}\" til \"{new_email}\"."
+msgstr "Din e-mailadresse er blevet ændret fra {old_email} til {email}."
 
 #: pretix/control/logdisplay.py:681
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your email address {email} has been confirmed."
-msgstr "Din kurv er blevet opdateret."
+msgstr "Din e-mailadresse {email} er blevet bekræftet."
 
 #: pretix/control/logdisplay.py:693
 #, python-brace-format
 msgid "You impersonated {}."
-msgstr ""
+msgstr "Du udgav dig for at være {}."
 
 #: pretix/control/logdisplay.py:694
 #, python-brace-format
 msgid "You stopped impersonating {}."
-msgstr ""
+msgstr "Du er holdt op med at udgive dig for at være {}."
 
 #: pretix/control/logdisplay.py:701
 msgid "This object has been created by cloning."
 msgstr "Dette objekt er blevet oprettet ved kloning"
 
 #: pretix/control/logdisplay.py:702
-#, fuzzy
 msgid "The organizer has been changed."
-msgstr "Bestillingen er blevet ændret."
+msgstr "Arrangøren er blevet ændret."
 
 #: pretix/control/logdisplay.py:703
-#, fuzzy
 msgid "The organizer settings have been changed."
-msgstr "Gruppeindstillingerne er blevet ændret."
+msgstr "Indstillingerne for arrangøren er blevet ændret."
 
 #: pretix/control/logdisplay.py:704 pretix/control/logdisplay.py:849
-#, fuzzy
 msgid "The footer links have been changed."
-msgstr "Bestillingsdetaljerne er blevet ændret."
+msgstr "Linkene i sidefoden er blevet ændret."
 
 #: pretix/control/logdisplay.py:705 pretix/control/logdisplay.py:754
-#, fuzzy
 msgid "A scheduled export has been added."
-msgstr "Kvoten er blevet tilføjet."
+msgstr "Der er tilføjet en planlagt eksport."
 
 #: pretix/control/logdisplay.py:706 pretix/control/logdisplay.py:755
-#, fuzzy
 msgid "A scheduled export has been changed."
-msgstr "Produktet er blevet ændret."
+msgstr "En planlagt eksport er blevet ændret."
 
 #: pretix/control/logdisplay.py:707 pretix/control/logdisplay.py:756
-#, fuzzy
 msgid "A scheduled export has been deleted."
-msgstr "Det valgte produkt er blevet slettet."
+msgstr "En planlagt eksport er blevet slettet."
 
 #: pretix/control/logdisplay.py:708 pretix/control/logdisplay.py:757
-#, fuzzy
 msgid "A scheduled export has been executed."
-msgstr "Det valgte produkt er blevet slettet."
+msgstr "En planlagt eksport er blevet udført."
 
 #: pretix/control/logdisplay.py:709 pretix/control/logdisplay.py:758
 #, python-brace-format
 msgid "A scheduled export has failed: {reason}."
-msgstr ""
+msgstr "En planlagt eksport er mislykket: {reason}."
 
 #: pretix/control/logdisplay.py:710
-#, fuzzy
-#| msgid "The email has been queued to be sent."
 msgid "Failed emails have been scheduled to be retried."
-msgstr "Denne e-mail er sat i udsendelseskøen."
+msgstr ""
+"Der er planlagt et nyt forsøg på at sende de e-mails, der ikke kunne leveres."
 
 #: pretix/control/logdisplay.py:711
-#, fuzzy
-#| msgid "The order details have been changed."
 msgid "Queued emails have been aborted."
-msgstr "Bestillingsdetaljerne er blevet ændret."
+msgstr "E-mails i køen er blevet afbrudt."
 
 #: pretix/control/logdisplay.py:712
-#, fuzzy
 msgid "Gift card acceptance for another organizer has been added."
-msgstr "Den nye arrangør er blevet oprettet."
+msgstr ""
+"Der er nu tilføjet mulighed for at acceptere gavekort fra en anden arrangør."
 
 #: pretix/control/logdisplay.py:713
-#, fuzzy
 msgid "Gift card acceptance for another organizer has been removed."
-msgstr "Den nye arrangør er blevet oprettet."
+msgstr ""
+"Muligheden for at modtage gavekort fra en anden arrangør er blevet fjernet."
 
 #: pretix/control/logdisplay.py:714
-#, fuzzy
 msgid "A new gift card acceptor has been invited."
-msgstr "Gruppen er blevet oprettet."
+msgstr "Der er blevet inviteret en ny modtager af gavekort."
 
 #: pretix/control/logdisplay.py:715
-#, fuzzy
 msgid "A gift card acceptor has been removed."
-msgstr "Gruppen er blevet oprettet."
+msgstr "En gavekort-modtager er blevet fjernet."
 
 #: pretix/control/logdisplay.py:716
-#, fuzzy
 msgid "A gift card issuer has been removed or declined."
-msgstr "Den valgte kategorien er blevet slettet."
+msgstr "En udsteder af gavekort er blevet fjernet eller afvist."
 
 #: pretix/control/logdisplay.py:717
-#, fuzzy
 msgid "A new gift card issuer has been accepted."
-msgstr "Den valgte kategorien er blevet slettet."
+msgstr "En ny udsteder af gavekort er blevet godkendt."
 
 #: pretix/control/logdisplay.py:718
-#, fuzzy
 msgid "The webhook has been created."
-msgstr "Gruppen er blevet oprettet."
+msgstr "Webhooken er blevet oprettet."
 
 #: pretix/control/logdisplay.py:719
-#, fuzzy
 msgid "The webhook has been changed."
-msgstr "Kategorien er blevet ændret."
+msgstr "Webhooken er blevet ændret."
 
 #: pretix/control/logdisplay.py:720
 msgid "The webhook call retry jobs have been manually expedited."
 msgstr ""
+"Opgaverne vedrørende gentagelse af webhook-kald er blevet fremskyndet "
+"manuelt."
 
 #: pretix/control/logdisplay.py:721
-#, fuzzy
 msgid "The webhook call retry jobs have been dropped."
-msgstr "Gruppen er blevet oprettet."
+msgstr "Opgaverne til gentagelse af webhook-kald er blevet annulleret."
 
 #: pretix/control/logdisplay.py:722
-#, fuzzy
 msgid "The SSO provider has been created."
-msgstr "Bestilling oprettet."
+msgstr "SSO-udbyderen er blevet oprettet."
 
 #: pretix/control/logdisplay.py:723
-#, fuzzy
 msgid "The SSO provider has been changed."
-msgstr "Bestillingen er blevet ændret."
+msgstr "SSO-udbyderen er blevet skiftet."
 
 #: pretix/control/logdisplay.py:724
-#, fuzzy
 msgid "The SSO provider has been deleted."
-msgstr "Bestillingen er blevet tilbagebetalt."
+msgstr "SSO-udbyderen er blevet slettet."
 
 #: pretix/control/logdisplay.py:725
-#, fuzzy
 msgid "The SSO client has been created."
-msgstr "Arrangementsdatoen er blevet oprettet."
+msgstr "SSO-klienten er oprettet."
 
 #: pretix/control/logdisplay.py:726
-#, fuzzy
 msgid "The SSO client has been changed."
-msgstr "Kategorien er blevet ændret."
+msgstr "SSO-klienten er blevet ændret."
 
 #: pretix/control/logdisplay.py:727
-#, fuzzy
 msgid "The SSO client has been deleted."
-msgstr "Produktet er blevet slettet."
+msgstr "SSO-klienten er blevet slettet."
 
 #: pretix/control/logdisplay.py:728 pretix/control/views/organizer.py:2715
-#, fuzzy
 msgid "The membership type has been created."
-msgstr "Arrangementsdatoen er blevet oprettet."
+msgstr "Medlemskabstypen er oprettet."
 
 #: pretix/control/logdisplay.py:729
-#, fuzzy
 msgid "The membership type has been changed."
-msgstr "Arrangementsdatoen er blevet ændret."
+msgstr "Medlemskabstypen er blevet ændret."
 
 #: pretix/control/logdisplay.py:730
-#, fuzzy
 msgid "The membership type has been deleted."
-msgstr "Arrangementsdatoen er blevet slettet."
+msgstr "Medlemskabstypen er blevet slettet."
 
 #: pretix/control/logdisplay.py:731 pretix/control/views/organizer.py:3556
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The new date has been created."
 msgid "The sales channel has been created."
-msgstr "Den nye dato er blevet oprettet."
+msgstr "Salgskanalen er oprettet."
 
 #: pretix/control/logdisplay.py:732
-#, fuzzy
 msgid "The sales channel has been changed."
-msgstr "Voucheren er blevet ændret."
+msgstr "Salgskanalen er blevet ændret."
 
 #: pretix/control/logdisplay.py:733
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "The sales channel has been deleted."
-msgstr "Den valgte lister er blevet slettet."
+msgstr "Salgskanalen er blevet slettet."
 
 #: pretix/control/logdisplay.py:734
-#, fuzzy
 msgid "The account has been created."
-msgstr "Gruppen er blevet oprettet."
+msgstr "Kontoen er oprettet."
 
 #: pretix/control/logdisplay.py:735
-#, fuzzy
 msgid "The account has been changed."
-msgstr "Kategorien er blevet ændret."
+msgstr "Kontoen er blevet ændret."
 
 #: pretix/control/logdisplay.py:736
-#, fuzzy
 msgid "A membership for this account has been added."
-msgstr "Den valgte konfiguration er blevet slettet."
+msgstr "Der er tilføjet et medlemskab til denne konto."
 
 #: pretix/control/logdisplay.py:737
-#, fuzzy
 msgid "A membership of this account has been changed."
-msgstr "En svarmulighed er blevet ændret."
+msgstr "Et medlemskab på denne konto er blevet ændret."
 
 #: pretix/control/logdisplay.py:738
-#, fuzzy
 msgid "A membership of this account has been deleted."
-msgstr "Den valgte konfiguration er blevet slettet."
+msgstr "Et medlemskab tilknyttet denne konto er blevet slettet."
 
 #: pretix/control/logdisplay.py:739
-#, fuzzy
 msgid "The account has been disabled and anonymized."
-msgstr "Bestillingen er blevet tilbagebetalt."
+msgstr "Kontoen er blevet deaktiveret og anonymiseret."
 
 #: pretix/control/logdisplay.py:740
-#, fuzzy
 msgid "A new password has been requested."
-msgstr "Adgangskoden er blevet nulstillet."
+msgstr "Der er anmodet om en ny adgangskode."
 
 #: pretix/control/logdisplay.py:741
-#, fuzzy
 msgid "A new password has been set."
-msgstr "Adgangskoden er blevet nulstillet."
+msgstr "Der er blevet oprettet en ny adgangskode."
 
 #: pretix/control/logdisplay.py:743
-#, fuzzy
 msgid "The reusable medium has been created."
-msgstr "Gruppen er blevet oprettet."
+msgstr "Det genanvendelige medie er blevet oprettet."
 
 #: pretix/control/logdisplay.py:744
-#, fuzzy
 msgid "The reusable medium has been created automatically."
-msgstr "Arrangementsdatoen er blevet oprettet."
+msgstr "Det genanvendelige medie er blevet oprettet automatisk."
 
 #: pretix/control/logdisplay.py:745
-#, fuzzy
 msgid "The reusable medium has been changed."
-msgstr "Momsreglen er blevet ændret."
+msgstr "Det genanvendelige medie er blevet udskiftet."
 
 #: pretix/control/logdisplay.py:746
-#, fuzzy
 msgid "The medium has been connected to a new ticket."
-msgstr "Denne e-mail er sat i udsendelseskøen."
+msgstr "Mediet er blevet knyttet til en ny sag."
 
 #: pretix/control/logdisplay.py:747
-#, fuzzy
 msgid "The medium has been connected to a new gift card."
-msgstr "Denne e-mail er sat i udsendelseskøen."
+msgstr "Mediet er blevet knyttet til et nyt gavekort."
 
 #: pretix/control/logdisplay.py:749
 msgid "The event's internal comment has been updated."
 msgstr "Intern kommentar opdateret."
 
 #: pretix/control/logdisplay.py:750
-#, fuzzy
 msgid "The event has been canceled."
-msgstr "Bestillingen er blevet annulleret."
+msgstr "Arrangementet er blevet aflyst."
 
 #: pretix/control/logdisplay.py:751
-#, fuzzy
 msgid "An event has been deleted."
-msgstr "Arrangementsdatoen er blevet slettet."
+msgstr "En begivenhed er blevet slettet."
 
 #: pretix/control/logdisplay.py:752
 msgid "A removal process for personal data has been started."
-msgstr ""
+msgstr "Der er iværksat en sletningsproces for personoplysninger."
 
 #: pretix/control/logdisplay.py:753
 msgid "A removal process for personal data has been completed."
-msgstr ""
+msgstr "En sletning af personoplysninger er blevet gennemført."
 
 #: pretix/control/logdisplay.py:759
 msgid "The user has been created."
-msgstr ""
+msgstr "Brugeren er blevet oprettet."
 
 #: pretix/control/logdisplay.py:760
 #, python-brace-format
@@ -18257,6 +18181,8 @@ msgid ""
 "A first login using {agent_type} on {os_type} from {country} has been "
 "detected."
 msgstr ""
+"Der er registreret en første login med {agent_type} på {os_type} fra "
+"{country}."
 
 #: pretix/control/logdisplay.py:762 pretix/control/views/user.py:474
 #: pretix/control/views/user.py:534 pretix/control/views/user.py:593
@@ -18273,9 +18199,8 @@ msgid "Your two-factor emergency codes have been regenerated."
 msgstr "Dine sikkerhedskoder til tofaktorgodkendelse er blevet genoprettet."
 
 #: pretix/control/logdisplay.py:765
-#, fuzzy
 msgid "A two-factor emergency code has been generated."
-msgstr "Dine sikkerhedskoder til tofaktorgodkendelse er blevet genoprettet."
+msgstr "Der er genereret en tofaktorkode til nødsituationer."
 
 #: pretix/control/logdisplay.py:766
 #, python-brace-format
@@ -18295,20 +18220,19 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:770
 msgid "Notifications have been enabled."
-msgstr ""
+msgstr "Notifikationer er blevet aktiveret."
 
 #: pretix/control/logdisplay.py:771
 msgid "Notifications have been disabled."
-msgstr ""
+msgstr "Notifikationer er blevet deaktiveret."
 
 #: pretix/control/logdisplay.py:772
 msgid "Your notification settings have been changed."
-msgstr ""
+msgstr "Dine notifikationsindstillinger er blevet ændret."
 
 #: pretix/control/logdisplay.py:773
-#, fuzzy
 msgid "This user has been anonymized."
-msgstr "Bestillingen er blevet tilbagebetalt."
+msgstr "Denne bruger er blevet anonymiseret."
 
 #: pretix/control/logdisplay.py:777
 msgid "Password reset mail sent."
@@ -18323,20 +18247,21 @@ msgid ""
 "A repeated password reset has been denied, as the last request was less than "
 "24 hours ago."
 msgstr ""
+"En gentagen anmodning om nulstilling af adgangskode er blevet afvist, da den "
+"seneste anmodning blev fremsat for mindre end 24 timer siden."
 
 #: pretix/control/logdisplay.py:781
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
-msgstr "Varianten \"{value}\" er blevet slettet."
+msgstr "Arrangøren \"{name}\" er blevet slettet."
 
 #: pretix/control/logdisplay.py:782 pretix/control/logdisplay.py:1013
 msgid "A voucher has been sent to a person on the waiting list."
 msgstr "En rabatkode er blevet sendt til en person på ventelisten."
 
 #: pretix/control/logdisplay.py:783
-#, fuzzy
 msgid "An entry has been transferred to another waiting list."
-msgstr "En bruger er føjet til gruppen."
+msgstr "En ansøgning er blevet flyttet til en anden venteliste."
 
 #: pretix/control/logdisplay.py:784
 msgid "The team has been created."
@@ -18351,19 +18276,16 @@ msgid "The team has been deleted."
 msgstr "Gruppen er blevet slettet."
 
 #: pretix/control/logdisplay.py:787 pretix/control/views/organizer.py:2381
-#, fuzzy
 msgid "The gate has been created."
-msgstr "Gruppen er blevet oprettet."
+msgstr "Porten er blevet oprettet."
 
 #: pretix/control/logdisplay.py:788
-#, fuzzy
 msgid "The gate has been changed."
-msgstr "Kategorien er blevet ændret."
+msgstr "Porten er blevet ændret."
 
 #: pretix/control/logdisplay.py:789
-#, fuzzy
 msgid "The gate has been deleted."
-msgstr "Gruppen er blevet slettet."
+msgstr "Porten er blevet slettet."
 
 #: pretix/control/logdisplay.py:790
 msgctxt "subevent"
@@ -18371,10 +18293,9 @@ msgid "The event date has been deleted."
 msgstr "Arrangementsdatoen er blevet slettet."
 
 #: pretix/control/logdisplay.py:791
-#, fuzzy
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr "Arrangementsdatoen er blevet ændret."
+msgstr "Begivenhedsdatoen er blevet aflyst."
 
 #: pretix/control/logdisplay.py:792
 msgctxt "subevent"
@@ -18402,58 +18323,50 @@ msgid "A quota has been removed from the event date."
 msgstr "En kvote er blevet fjernet fra arrangementsdatoen."
 
 #: pretix/control/logdisplay.py:797
-#, fuzzy
 msgid "The device has been created."
-msgstr "Arrangementsdatoen er blevet oprettet."
+msgstr "Enheden er blevet oprettet."
 
 #: pretix/control/logdisplay.py:798
-#, fuzzy
 msgid "The device has been changed."
-msgstr "Voucheren er blevet ændret."
+msgstr "Enheden er blevet udskiftet."
 
 #: pretix/control/logdisplay.py:799
-#, fuzzy
 msgid "Access of the device has been revoked."
-msgstr "Enheden er blevet fjernet."
+msgstr "Adgangen til enheden er blevet tilbagekaldt."
 
 #: pretix/control/logdisplay.py:800
-#, fuzzy
 msgid "The device has been initialized."
-msgstr "Enheden er blevet fjernet."
+msgstr "Enheden er blevet initialiseret."
 
 #: pretix/control/logdisplay.py:801
-#, fuzzy
 msgid "The access token of the device has been regenerated."
-msgstr "Fakturaen er blevet genereret igen."
+msgstr "Enhedens adgangstoken er blevet genereret på ny."
 
 #: pretix/control/logdisplay.py:802
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
+"Enheden har meddelt serveren, at der er en hardware- eller "
+"softwareopdatering."
 
 #: pretix/control/logdisplay.py:803
-#, fuzzy
 msgid "The gift card has been created."
-msgstr "Gruppen er blevet oprettet."
+msgstr "Gavekortet er oprettet."
 
 #: pretix/control/logdisplay.py:804 pretix/control/views/organizer.py:1943
-#, fuzzy
 msgid "The gift card has been changed."
-msgstr "Gruppen er blevet oprettet."
+msgstr "Gavekortet er blevet ændret."
 
 #: pretix/control/logdisplay.py:805
-#, fuzzy
 msgid "A manual transaction has been performed."
-msgstr "Spørgsmålet er blevet tilføjet."
+msgstr "Der er udført en manuel overførsel."
 
 #: pretix/control/logdisplay.py:806
-#, fuzzy
 msgid "A payment has been performed."
-msgstr "Betalingsbetingelser er blevet ændret."
+msgstr "Der er blevet foretaget en betaling."
 
 #: pretix/control/logdisplay.py:807
-#, fuzzy
 msgid "A refund has been performed. "
-msgstr "Bestilling oprettet."
+msgstr "Der er blevet foretaget en tilbagebetaling. "
 
 #: pretix/control/logdisplay.py:808
 #, python-brace-format
@@ -18466,44 +18379,34 @@ msgid "The token \"{name}\" has been revoked."
 msgstr "Token \"{name}\" slettet."
 
 #: pretix/control/logdisplay.py:810
-#, fuzzy
-#| msgid "The check-in list has been deleted."
 msgid "The check-in and print log state has been reset."
-msgstr "Tjek-ind-listen er blevet slettet."
+msgstr "Status for indtjeknings- og udskriftsloggen er blevet nulstillet."
 
 #: pretix/control/logdisplay.py:817 pretix/control/logdisplay.py:876
-#, fuzzy
-#| msgid "A plugin has been enabled."
 msgid "The plugin has been enabled."
-msgstr "En plugin er blevet aktiveret."
+msgstr "Plugin'et er blevet aktiveret."
 
 #: pretix/control/logdisplay.py:818 pretix/control/logdisplay.py:877
 #: pretix/control/views/event.py:497 pretix/control/views/organizer.py:757
-#, fuzzy
-#| msgid "A plugin has been disabled."
 msgid "The plugin has been disabled."
-msgstr "En plugin er blevet deaktiveret."
+msgstr "Plugin'et er blevet deaktiveret."
 
 #: pretix/control/logdisplay.py:821 pretix/control/logdisplay.py:880
-#, fuzzy, python-brace-format
-#| msgid "Question {val}"
+#, python-brace-format
 msgid "Plugin {val}"
-msgstr "Spørgsmål {val}"
+msgstr "Plugin {val}"
 
 #: pretix/control/logdisplay.py:836
-#, fuzzy
 msgid "A meta property has been added to this event."
-msgstr "En bruger er føjet til gruppen."
+msgstr "Der er tilføjet en metaegenskab til denne begivenhed."
 
 #: pretix/control/logdisplay.py:837
-#, fuzzy
 msgid "A meta property has been removed from this event."
-msgstr "En bruger er blevet fjernet fra gruppen."
+msgstr "En metaegenskab er blevet fjernet fra denne begivenhed."
 
 #: pretix/control/logdisplay.py:838
-#, fuzzy
 msgid "A meta property has been changed on this event."
-msgstr "En kvote er blevet ændret på arrangementsdatoen."
+msgstr "En metaegenskab er blevet ændret i forbindelse med denne begivenhed."
 
 #: pretix/control/logdisplay.py:839
 msgid "The event settings have been changed."
@@ -18515,31 +18418,27 @@ msgstr "Indstillingerne for download af billet er blevet ændret."
 
 #: pretix/control/logdisplay.py:843
 msgid "The shop has been taken live."
-msgstr ""
+msgstr "Butikken er nu gået live."
 
 #: pretix/control/logdisplay.py:844
 msgid "The shop has been taken offline."
-msgstr ""
+msgstr "Butikken er blevet taget offline."
 
 #: pretix/control/logdisplay.py:845
-#, fuzzy
 msgid "The shop has been taken into test mode."
-msgstr "Bestillingen er blevet tilbagebetalt."
+msgstr "Butikken er nu sat i testtilstand."
 
 #: pretix/control/logdisplay.py:846
-#, fuzzy
 msgid "The test mode has been disabled."
-msgstr "Den valgte dato er blevet slettet."
+msgstr "Testtilstanden er blevet deaktiveret."
 
 #: pretix/control/logdisplay.py:847
-#, fuzzy
 msgid "The event has been created."
-msgstr "Arrangementsdatoen er blevet oprettet."
+msgstr "Begivenheden er blevet oprettet."
 
 #: pretix/control/logdisplay.py:848
-#, fuzzy
 msgid "The event details have been changed."
-msgstr "Indstillingerne for arrangementet er blevet ændret."
+msgstr "Begivenhedens oplysninger er blevet ændret."
 
 #: pretix/control/logdisplay.py:850
 msgid "An answer option has been added to the question."
@@ -18582,10 +18481,9 @@ msgid "The check-in list has been changed."
 msgstr "Tjek-ind-listen er blevet ændret."
 
 #: pretix/control/logdisplay.py:869
-#, fuzzy, python-brace-format
-#| msgid "Check-in list"
+#, python-brace-format
 msgid "Check-in list {val}"
-msgstr "Tjek-ind-liste"
+msgstr "Tjek-ind-liste {val}"
 
 #: pretix/control/logdisplay.py:896
 msgid "The product has been created."
@@ -18596,9 +18494,8 @@ msgid "The product has been changed."
 msgstr "Produktet er blevet ændret."
 
 #: pretix/control/logdisplay.py:898
-#, fuzzy
 msgid "The product has been reordered."
-msgstr "Produktet er blevet oprettet."
+msgstr "Produktet er blevet genbestilt."
 
 #: pretix/control/logdisplay.py:899
 msgid "The product has been deleted."
@@ -18617,37 +18514,28 @@ msgid "An add-on has been changed on this product."
 msgstr "En tilføjelse er blevet ændret på dette produkt."
 
 #: pretix/control/logdisplay.py:903
-#, fuzzy
 msgid "A bundled item has been added to this product."
-msgstr "En tilføjelse er blevet føjet til dette produkt."
+msgstr "Der er blevet tilføjet en medfølgende vare til dette produkt."
 
 #: pretix/control/logdisplay.py:904
-#, fuzzy
 msgid "A bundled item has been removed from this product."
-msgstr "En tilføjelse er blevet fjernet fra dette produkt."
+msgstr "En medfølgende vare er blevet fjernet fra dette produkt."
 
 #: pretix/control/logdisplay.py:905
-#, fuzzy
 msgid "A bundled item has been changed on this product."
-msgstr "En tilføjelse er blevet ændret på dette produkt."
+msgstr "En medfølgende vare er blevet ændret for dette produkt."
 
 #: pretix/control/logdisplay.py:906
-#, fuzzy
-#| msgid "An add-on has been added to this product."
 msgid "A program time has been added to this product."
-msgstr "En tilføjelse er blevet føjet til dette produkt."
+msgstr "Der er blevet tilføjet en programtid til dette produkt."
 
 #: pretix/control/logdisplay.py:907
-#, fuzzy
-#| msgid "An add-on has been changed on this product."
 msgid "A program time has been changed on this product."
-msgstr "En tilføjelse er blevet ændret på dette produkt."
+msgstr "En programtid for dette produkt er blevet ændret."
 
 #: pretix/control/logdisplay.py:908
-#, fuzzy
-#| msgid "An add-on has been removed from this product."
 msgid "A program time has been removed from this product."
-msgstr "En tilføjelse er blevet fjernet fra dette produkt."
+msgstr "En programtid er blevet fjernet fra dette produkt."
 
 #: pretix/control/logdisplay.py:915
 #, python-brace-format
@@ -18665,9 +18553,9 @@ msgid "The variation \"{value}\" has been changed."
 msgstr "Varianten \"{value}\" er blevet ændret."
 
 #: pretix/control/logdisplay.py:934
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment {local_id} has been confirmed."
-msgstr "Betalingsmetoden er blevet ændret."
+msgstr "Betalingen {local_id} er blevet bekræftet."
 
 #: pretix/control/logdisplay.py:935
 #, fuzzy, python-brace-format
