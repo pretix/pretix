@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-27 15:47+0000\n"
-"PO-Revision-Date: 2026-06-14 02:00+0000\n"
+"PO-Revision-Date: 2026-06-20 08:00+0000\n"
 "Last-Translator: Nikita Mitasov <me@ch4og.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
@@ -9893,6 +9893,12 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"Здравствуйте,\n"
+"\n"
+"новый счет для заказа {order} на {event} создан, смотрите вложение.\n"
+"\n"
+"Вы получили это письмо, поскольку в настройках мероприятия была включена "
+"отправка таких уведомлений."
 
 #: pretix/base/services/mail.py:144
 #, fuzzy
@@ -12206,6 +12212,16 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Здравствуйте,\n"
+"\n"
+"вы получили это письмо, потому что запросили ссылку\n"
+"на ваш заказ для мероприятия {event}.\n"
+"\n"
+"Вы можете изменить данные заказа и просмотреть его статус по ссылке:\n"
+"{url}\n"
+"\n"
+"С уважением,  \n"
+"Команда мероприятия {event}"
 
 #: pretix/base/settings.py:2461
 #, python-brace-format
@@ -12225,6 +12241,15 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Здравствуйте,\n"
+"\n"
+"кто-то запросил список ваших заказов для мероприятия {event}.\n"
+"Список заказов::\n"
+"\n"
+"{orders}\n"
+"\n"
+"С уважением,  \n"
+"Команда мероприятия {event}"
 
 #: pretix/base/settings.py:2481
 #, python-brace-format
@@ -12254,6 +12279,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Здравствуйте,\n"
+"\n"
+"ваш заказ для мероприятия {event} прошел успешно. Поскольку ваш заказ "
+"состоит только из бесплатных позиций,\n"
+"оплата не требуется.\n"
+"\n"
+"Вы можете изменить детали заказа и посмотреть его статус по ссылке:\n"
+"{url}\n"
+"\n"
+"С уважением,  \n"
+"Команда мероприятия {event}"
 
 #: pretix/base/settings.py:2518
 #, python-brace-format
@@ -12272,7 +12308,8 @@ msgid ""
 msgstr ""
 "Здравствуйте,\n"
 "\n"
-"мы успешно получили ваш заказ на мероприятие {event}. Поскольку вы заказали\n"
+"мы успешно получили ваш заказ для мероприятия {event}. Поскольку вы "
+"заказали\n"
 "товар, требующий подтверждения со стороны организатора, просим вас\n"
 "подождать нашего следующего письма.\n"
 "\n"
@@ -12280,7 +12317,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "С уважением,  \n"
-"команда {event}"
+"Команда мероприятия {event}"
 
 #: pretix/base/settings.py:2536
 #, python-brace-format
@@ -12311,7 +12348,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "С уважением,  \n"
-"команда {event}"
+"Команда мероприятия {event}"
 
 #: pretix/base/settings.py:2554
 #, fuzzy
@@ -12363,6 +12400,15 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Здравствуйте,\n"
+"\n"
+"ваш заказ для мероприятия {event} был изменен.\n"
+"\n"
+"Вы можете посмотреть статус своего заказа по ссылке:\n"
+"{url}\n"
+"\n"
+"С уважением,  \n"
+"Команда мероприятия {event}"
 
 #: pretix/base/settings.py:2614
 #, python-brace-format
@@ -12394,7 +12440,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "С уважением,  \n"
-"команда {event}"
+"Команда мероприятия {event}"
 
 #: pretix/base/settings.py:2636
 #, python-brace-format
@@ -12446,6 +12492,17 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
+"Здравствуйте,\n"
+"\n"
+"мы не получили полной оплаты вашего заказа для мероприятия {event}.\n"
+"Обратите внимание: мы можем гарантировать ваш заказ только в том случае,\n"
+"если оплата поступит до {expire_date}.\n"
+"\n"
+"Информацию об оплате и статус заказа можно посмотреть по ссылке:\n"
+"{url}\n"
+"\n"
+"С уважением,  \n"
+"Команда мероприятия {event}"
 
 #: pretix/base/settings.py:2685
 #, python-brace-format
@@ -34581,10 +34638,8 @@ msgid "We're now trying to book these add-ons for you!"
 msgstr "Сейчас мы пытаемся забронировать эти дополнительные продукты для вас!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:28
-#, fuzzy
-#| msgid "Additional information"
 msgid "Additional options for"
-msgstr "Дополнительная информация"
+msgstr "Дополнительные опции"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:60
 #, fuzzy
@@ -34971,21 +35026,12 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:26
-#, fuzzy, python-format
-#| msgid ""
-#| "You can choose between %(min_count)s and %(max_count)s options from this "
-#| "category."
+#, python-format
 msgid "You can choose one option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] ""
-"Вы можете выбрать между вариантами %(min_count)s и %(max_count)s из этой "
-"категории."
-msgstr[1] ""
-"Вы можете выбрать между вариантами %(min_count)s и %(max_count)s из этой "
-"категории."
-msgstr[2] ""
-"Вы можете выбрать между вариантами %(min_count)s и %(max_count)s из этой "
-"категории."
+msgstr[0] "Вы можете выбрать не более %(max_count)s варианта из этой категории."
+msgstr[1] "Вы можете выбрать не более %(max_count)s вариантов из этой категории."
+msgstr[2] "Вы можете выбрать не более %(max_count)s вариантов из этой категории."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:34
 #, python-format
@@ -35385,8 +35431,7 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:516
-#, fuzzy, python-format
-#| msgid "The items in your cart are reserved for you for %(minutes)s minutes."
+#, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr "Позиции в вашей корзине зарезервированы для вас на %(minutes)s минут."
 
