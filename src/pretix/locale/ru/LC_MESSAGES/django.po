@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-27 15:47+0000\n"
-"PO-Revision-Date: 2026-06-20 08:00+0000\n"
+"PO-Revision-Date: 2026-06-20 17:00+0000\n"
 "Last-Translator: Nikita Mitasov <me@ch4og.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
@@ -466,7 +466,7 @@ msgstr "Этот пользователь уже имеет разрешения
 #: pretix/api/views/cart.py:209
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr "Указанный ваучер уже использован максимальное количество раз."
+msgstr "Указанный промокод уже использован максимальное количество раз."
 
 #: pretix/api/views/checkin.py:645 pretix/api/views/checkin.py:652
 msgid "Medium connected to other event"
@@ -851,10 +851,9 @@ msgid "<a {a_attr}>powered by {name} based on pretix</a>"
 msgstr "на базе <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/context.py:55
-#, fuzzy, python-format
-#| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr "<a %(a_attr)s>event ticketing powered by pretix</a>"
+msgstr "<a %(a_attr)s>продажа билетов на базе pretix</a>"
 
 #: pretix/base/context.py:64
 msgid "source code"
@@ -2762,10 +2761,8 @@ msgid "Voucher"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:656
-#, fuzzy
-#| msgid "Voucher code used:"
 msgid "Voucher budget usage"
-msgstr "Использованный код ваучера:"
+msgstr "Использовано по промокоду"
 
 #: pretix/base/exporters/orderlist.py:657
 #, fuzzy
@@ -3161,7 +3158,7 @@ msgstr "Заказы в ожидании"
 
 #: pretix/base/exporters/orderlist.py:1209
 msgid "Blocking vouchers"
-msgstr "Блокирующие ваучеры"
+msgstr "Блокирующие промокоды"
 
 #: pretix/base/exporters/orderlist.py:1210 pretix/control/views/item.py:1149
 msgid "Current user's carts"
@@ -4591,7 +4588,7 @@ msgstr "Архивные события не найдены."
 
 #: pretix/base/modelimport_vouchers.py:50 pretix/base/models/vouchers.py:491
 msgid "A voucher with this code already exists."
-msgstr "Ваучер с этим кодом уже существует."
+msgstr "Промокод с этим кодом уже существует."
 
 #: pretix/base/modelimport_vouchers.py:68 pretix/base/models/memberships.py:57
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:121
@@ -4693,7 +4690,7 @@ msgstr ""
 
 #: pretix/base/modelimport_vouchers.py:334 pretix/base/models/vouchers.py:300
 msgid "Shows hidden products that match this voucher"
-msgstr "Показывает скрытые продукты, которые соответствуют этому ваучеру"
+msgstr "Показывает скрытые продукты, которые соответствуют этому промокоду"
 
 #: pretix/base/modelimport_vouchers.py:343 pretix/base/models/vouchers.py:304
 msgid "Offer all add-on products for free when redeeming this voucher"
@@ -4945,11 +4942,8 @@ msgid "Order not approved"
 msgstr "Срок действия заказа истёк"
 
 #: pretix/base/models/checkin.py:367
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "Ticket not valid at this time"
-msgstr "Этот ваучер не действителен на эту дату мероприятия."
+msgstr "Билет не действителен в это время"
 
 #: pretix/base/models/checkin.py:368
 #, fuzzy
@@ -7746,9 +7740,9 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
-"Вы можете использовать это поле для группировки нескольких ваучеров. Если вы "
-"введёте одно и то же значение для нескольких ваучеров, вы сможете получить "
-"статистику о том, сколько из них было использовано и т. д."
+"Вы можете использовать это поле для группировки нескольких промокодов. Если "
+"вы введёте одно и то же значение для нескольких промокодов, вы сможете "
+"получить статистику о том, сколько из них было использовано и т. д."
 
 #: pretix/base/models/vouchers.py:316 pretix/base/permissions.py:242
 #: pretix/control/navigation.py:289
@@ -7793,7 +7787,7 @@ msgstr "Этот вариант не относится к этому проду
 #: pretix/base/models/vouchers.py:358
 msgid "It is currently not possible to create vouchers for add-on products."
 msgstr ""
-"В настоящее время невозможно создать ваучеры для дополнительных продуктов."
+"В настоящее время невозможно создать промокоды для дополнительных продуктов."
 
 #: pretix/base/models/vouchers.py:360 pretix/base/models/vouchers.py:472
 #, fuzzy
@@ -7809,7 +7803,7 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"Этот ваучер уже был использован %(redeemed)s раз. Вы не можете уменьшить "
+"Этот промокод уже был использован %(redeemed)s раз. Вы не можете уменьшить "
 "максимальное количество использований ниже этого числа."
 
 #: pretix/base/models/vouchers.py:379
@@ -7828,7 +7822,7 @@ msgstr ""
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
-"Если вы хотите, чтобы этот ваучер блокировал квоту, вы должны выбрать "
+"Если вы хотите, чтобы этот промокод блокировал квоту, вы должны выбрать "
 "конкретную дату."
 
 #: pretix/base/models/vouchers.py:387
@@ -7842,7 +7836,7 @@ msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
-"Вы не можете создать ваучер, который блокирует квоту, поскольку выбранный "
+"Вы не можете создать промокод, который блокирует квоту, поскольку выбранный "
 "продукт или квота в настоящее время распроданы или полностью зарезервированы."
 
 #: pretix/base/models/vouchers.py:507
@@ -7864,7 +7858,7 @@ msgstr "В листе ожидания с"
 
 #: pretix/base/models/waitinglist.py:84
 msgid "Assigned voucher"
-msgstr "Присвоенный ваучер"
+msgstr "Присвоенный промокод"
 
 #: pretix/base/models/waitinglist.py:93
 msgid "The product the user waits for."
@@ -7898,7 +7892,7 @@ msgstr "Эта запись анонимизирована и больше не 
 
 #: pretix/base/models/waitinglist.py:197
 msgid "A voucher has already been sent to this person."
-msgstr "Ваучер уже отправлен данному лицу."
+msgstr "Промокод уже отправлен данному лицу."
 
 #: pretix/base/models/waitinglist.py:208
 #, python-brace-format
@@ -8068,8 +8062,8 @@ msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
-"Вы ввели ваучер вместо подарочного сертификата. Ваучеры можно вводить только "
-"на первой странице магазина под ассортиментом продуктов."
+"Вы ввели промокод вместо подарочного сертификата. Промокод можно вводить "
+"только на первой странице магазина под ассортиментом продуктов."
 
 #: pretix/base/payment.py:151
 msgid "This gift card is not known."
@@ -9358,7 +9352,7 @@ msgstr "Введённая цена слишком высока."
 
 #: pretix/base/services/cart.py:163
 msgid "This voucher code is not known in our database."
-msgstr "Этот код ваучера не известен в нашей базе данных."
+msgstr "Этот промокод не известен в нашей базе данных."
 
 #: pretix/base/services/cart.py:165
 #, fuzzy, python-format
@@ -9392,7 +9386,7 @@ msgstr[2] ""
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
 msgstr ""
-"Этот код ваучера уже был использован максимально допустимое количество раз."
+"Этот промокод уже был использован максимально допустимое количество раз."
 
 #: pretix/base/services/cart.py:178
 #, python-format
@@ -9402,15 +9396,16 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
-"Этот код ваучера в настоящее время заблокирован, так как он уже содержится в "
+"Этот промокод в настоящее время заблокирован, так как он уже содержится в "
 "корзине. Это может означать, что кто-то другой сейчас использует этот "
-"ваучер, или что вы пытались его использовать ранее, но не завершили процесс "
-"оформления. Вы можете попробовать использовать его снова через %d минут."
+"промокод, или что вы пытались его использовать ранее, но не завершили "
+"процесс оформления. Вы можете попробовать использовать его снова через %d "
+"минут."
 
 #: pretix/base/services/cart.py:183
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "Этот код ваучера можно использовать только ещё %d раз."
+msgstr "Этот промокод можно использовать ещё %d раз."
 
 #: pretix/base/services/cart.py:184
 msgid ""
@@ -9423,23 +9418,20 @@ msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
-"Вы уже использовали этот код ваучера. Удалите связанную строку из вашей "
+"Вы уже использовали этот промокод. Удалите связанную строку из вашей "
 "корзины, если вы хотите использовать его для другого продукта."
 
 #: pretix/base/services/cart.py:189
 msgid "This voucher is expired."
-msgstr "Срок действия этого ваучера истёк."
+msgstr "Срок действия этого промокода истёк."
 
 #: pretix/base/services/cart.py:190
 msgid "This voucher is not valid for this product."
-msgstr "Этот ваучер недействителен для данного продукта."
+msgstr "Этот промокод недействителен для данного продукта."
 
 #: pretix/base/services/cart.py:191
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This voucher is not valid for this seat."
-msgstr "Этот ваучер не действителен на эту дату мероприятия."
+msgstr "Этот промокод не действителен для данного места."
 
 #: pretix/base/services/cart.py:193
 msgid ""
@@ -9451,16 +9443,17 @@ msgstr ""
 #: pretix/base/services/cart.py:198
 msgid "Your voucher is valid for a product that is currently not for sale."
 msgstr ""
-"Ваш ваучер действителен для продукта, который в настоящее время не продаётся."
+"Ваш промокод действителен для продукта, который в настоящее время не "
+"продаётся."
 
 #: pretix/base/services/cart.py:199
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr "Этот ваучер не действителен на эту дату мероприятия."
+msgstr "Этот промокод не действителен на эту дату мероприятия."
 
 #: pretix/base/services/cart.py:200
 msgid "You need a valid voucher code to order this product."
-msgstr "Необходим действительный код ваучера для заказа этого продукта."
+msgstr "Необходим действительный промокод для заказа этого продукта."
 
 #: pretix/base/services/cart.py:201
 msgctxt "subevent"
@@ -9563,8 +9556,8 @@ msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
 msgstr ""
-"Вы ввели подарочный сертификат вместо ваучера. Подарочные сертификаты можно "
-"ввести позже, когда вас попросят указать реквизиты для оплаты."
+"Вы ввели подарочный сертификат вместо промокода. Подарочные сертификаты "
+"можно ввести позже, когда вас попросят указать реквизиты для оплаты."
 
 #: pretix/base/services/cart.py:224
 msgid ""
@@ -9731,11 +9724,9 @@ msgid "This order is not yet approved."
 msgstr "Этот заказ не ожидает утверждения."
 
 #: pretix/base/services/checkin.py:999 pretix/base/services/checkin.py:1003
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
+#, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr "Этот ваучер не действителен на эту дату мероприятия."
+msgstr "Этот билет действителен только после {datetime}."
 
 #: pretix/base/services/checkin.py:1013 pretix/base/services/checkin.py:1017
 #, fuzzy, python-brace-format
@@ -10154,8 +10145,8 @@ msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
-"Код ваучера, использованный для одной из позиций в вашей корзине, неизвестен "
-"в нашей базе данных."
+"Промокод, использованный для одной из позиций в вашей корзине, неизвестен в "
+"нашей базе данных."
 
 #: pretix/base/services/orders.py:173
 msgid ""
@@ -10163,30 +10154,24 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
-"Код ваучера, использованный для одной из позиций в вашей корзине, уже был "
+"Промокод, использованный для одной из позиций в вашей корзине, уже был "
 "использован максимально допустимое количество раз. Мы удалили эту позицию из "
 "вашей корзины."
 
 #: pretix/base/services/orders.py:177
-#, fuzzy
-#| msgid ""
-#| "The voucher code used for one of the items in your cart has already been "
-#| "used the maximum number of times allowed. We removed this item from your "
-#| "cart."
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"Код ваучера, использованный для одной из позиций в вашей корзине, уже был "
-"использован максимально допустимое количество раз. Мы удалили эту позицию из "
-"вашей корзины."
+"Промокод, применённый к одному из товаров в вашей корзине, был использован "
+"слишком много раз. Мы скорректировали цену товара в вашей корзине."
 
 #: pretix/base/services/orders.py:181
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
-"Срок действия кода ваучера, использованного для одной из позиций в вашей "
+"Срок действия промокода, использованного для одной из позиций в вашей "
 "корзине, истёк. Мы удалили эту позицию из вашей корзины."
 
 #: pretix/base/services/orders.py:184
@@ -10194,14 +10179,12 @@ msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
-"Код ваучера, использованный для одной из позиций в вашей корзине, "
+"Промокод, использованный для одной из позиций в вашей корзине, "
 "недействителен для этой позиции. Мы удалили эту позицию из вашей корзины."
 
 #: pretix/base/services/orders.py:186
-#, fuzzy
-#| msgid "You need a valid voucher code to order this product."
 msgid "You need a valid voucher code to order one of the products."
-msgstr "Необходим действительный код ваучера для заказа этого продукта."
+msgstr "Необходим действительный промокод для одного из продуктов."
 
 #: pretix/base/services/orders.py:187
 msgid ""
@@ -16834,10 +16817,8 @@ msgid "An medium with this type and identifier is already registered."
 msgstr "Ваучер с этим кодом уже существует."
 
 #: pretix/control/forms/organizer.py:1059
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "An account with this customer ID is already registered."
-msgstr "Ваучер с этим кодом уже существует."
+msgstr "Аккаунт с таким ID клиента уже существует."
 
 #: pretix/control/forms/organizer.py:1076
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:62
@@ -16960,10 +16941,8 @@ msgid "The selected organizer has already been invited."
 msgstr "Выбранный организатор не найден."
 
 #: pretix/control/forms/organizer.py:1379
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "A sales channel with the same identifier already exists."
-msgstr "Ваучер с этим кодом уже существует."
+msgstr "Канал продаж с таким идентификатором уже существует."
 
 #: pretix/control/forms/organizer.py:1391
 msgid "Events with active plugin"
@@ -17246,10 +17225,8 @@ msgid "Only includes active products."
 msgstr ""
 
 #: pretix/control/forms/waitinglist.py:115
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "A voucher for this waiting list entry was already sent out."
-msgstr "Ваучер с этим кодом уже существует."
+msgstr "Промокод для данного места в листе ожидания уже отправлен."
 
 #: pretix/control/forms/waitinglist.py:125
 #, fuzzy
@@ -22177,7 +22154,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
 #, python-format
 msgid "Currently available: %(num)s"
-msgstr ""
+msgstr "Сейчас доступно: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:8
 msgid ""
@@ -24100,7 +24077,7 @@ msgstr "Начальная дата мероприятия"
 #: pretix/control/templates/pretixcontrol/order/index.html:498
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:55
 msgid "Voucher code used:"
-msgstr "Использованный код ваучера:"
+msgstr "Использованный промокод:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:500
 #, fuzzy, python-format
@@ -27897,10 +27874,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:81
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:94
-#, fuzzy
-#| msgid "Blocking vouchers"
 msgid "Import vouchers"
-msgstr "Блокирующие ваучеры"
+msgstr "Импорт промокодов"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:10
 msgid ""
@@ -34442,11 +34417,9 @@ msgstr ""
 
 #: pretix/presale/forms/renderers.py:66
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
-#, fuzzy
-#| msgid "expired"
 msgctxt "form"
 msgid "required"
-msgstr "истекло"
+msgstr "обязательно"
 
 #: pretix/presale/ical.py:87 pretix/presale/ical.py:146
 #: pretix/presale/ical.py:182
@@ -34691,10 +34664,8 @@ msgid "Cart expired"
 msgstr "Срок действия корзины истёк"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show full cart"
-msgstr "Показать варианты"
+msgstr "Показать полную корзину"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:52
 #: pretix/presale/templates/pretixpresale/event/index.html:86
@@ -35480,7 +35451,7 @@ msgstr "Очистить корзину"
 #: pretix/presale/templates/pretixpresale/event/index.html:248
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:16
 msgid "Redeem a voucher"
-msgstr "Использовать ваучер/промокод"
+msgstr "Использовать промокод"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:71
 msgid "We're applying this voucher to your cart..."
@@ -35489,7 +35460,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:79
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:27
 msgid "Redeem voucher"
-msgstr "Использовать ваучер"
+msgstr "Активировать промокод"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:10
 #, fuzzy
@@ -35813,7 +35784,7 @@ msgstr "Изменить цену для %(item)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr ""
+msgstr "%(num)s доступно сейчас"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:5
@@ -36609,14 +36580,11 @@ msgstr "Включить вебхук"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:36
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:9
 msgid "Voucher redemption"
-msgstr "Использование ваучера"
+msgstr "Активация промокода"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:20
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This voucher is valid only for the following specific date and time."
-msgstr "Этот ваучер не действителен на эту дату мероприятия."
+msgstr "Этот промокод действителен только на указанную дату и время."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:43
 msgid ""
@@ -36635,8 +36603,8 @@ msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
-"Вы ввели код ваучера, который позволяет вам купить один из следующих "
-"продуктов по указанной цене:"
+"Вы ввели промокод, который позволяет вам купить один из следующих продуктов "
+"по указанной цене:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:112
 #, python-format
