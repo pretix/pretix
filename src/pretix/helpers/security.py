@@ -27,6 +27,7 @@ from django.conf import settings
 from django.contrib.auth import login as auth_login
 from django.contrib.gis import geoip2
 from django.core.cache import cache
+from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_countries.fields import Country
@@ -169,13 +170,17 @@ def handle_login_source(user, request):
             with language(user.locale):
                 mail(
                     user.email,
-                    _('Login from new source detected'),
+                    _('New sign-in to your account'),
                     'pretixcontrol/email/login_notice.txt',
                     {
-                        'source': src,
-                        'country': Country(str(country)).name if country else _('Unknown country'),
+                        'when': date_format(src.last_seen, 'DATETIME_FORMAT'),
+                        'agent': src.agent_type,
+                        'os': src.os_type,
+                        # ua-parser returns "Other" for unidentified desktop devices.
+                        'device': src.device_type if src.device_type and src.device_type != 'Other' else None,
+                        'country': Country(str(country)).name if country else None,
                         'instance': settings.PRETIX_INSTANCE_NAME,
-                        'url': build_absolute_uri('control:user.settings')
+                        'url': build_absolute_uri('control:user.settings'),
                     },
                     event=None,
                     user=user,

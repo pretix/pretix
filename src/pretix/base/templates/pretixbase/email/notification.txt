@@ -1,19 +1,21 @@
 {% load i18n %}
 {{ notification.title }}{% if notification.detail %}
 
-{{ notification.detail }}
-{% endif %}{% if notification.url %}
+{{ notification.detail }}{% endif %}{% if notification.url %}
 
-{{ notification.url }}{% endif %}{% for attr in notification.attributes %}
+{{ notification.url }}{% endif %}{% if notification.attributes %}
 
-{{ attr.title }}: {{ attr.value }}{% endfor %}{% for action in notification.actions %}
+{% for attr in notification.attributes %}- {{ attr.title }}: {{ attr.value }}
+{% endfor %}{% endif %}{% for action in notification.actions %}
 
-{{ action.label }}
-    {{ action.url }}{% endfor %}
+{{ action.label }}:
 
-{% trans "You receive these emails based on your notification settings." %}
-{% trans "Click here to view and change your notification settings:" %}
-{{ settings_url }}
-{% if disable_url %}{% trans "Click here disable all notifications immediately:" %}
-{{ disable_url }}
+{{ action.url }}{% endfor %}
+
+---
+
+{% trans "You're receiving this email based on your notification settings." %}
+
+- {% trans "Manage settings" %}: {{ settings_url }}
+{% if disable_url %}- {% trans "Disable all notifications" %}: {{ disable_url }}
 {% endif %}

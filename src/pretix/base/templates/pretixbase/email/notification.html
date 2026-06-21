@@ -52,13 +52,13 @@
                     <table cellpadding="20"><tr><td>
             <![endif]-->
             <div class="content">
-                {% trans "You receive these emails based on your notification settings." %}<br>
+                {% trans "You're receiving this email based on your notification settings." %}<br>
                 <a href="{{ settings_url }}">
-                    {% trans "Click here to view and change your notification settings" %}
+                    {% trans "Manage settings" %}
                 </a>
                 {% if disable_url %}<br>
                     <a href="{{ disable_url }}">
-                        {% trans "Click here disable all notifications immediately." %}
+                        {% trans "Disable all notifications" %}
                     </a>
                 {% endif %}
             </div>

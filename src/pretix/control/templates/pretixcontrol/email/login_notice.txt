@@ -1,13 +1,19 @@
-{% load i18n %}{% blocktrans with url=url|safe os=source.os_type agent=source.agent_type %}Hello,
+{% load i18n %}{% blocktrans %}Hello,
 
-a login to your {{ instance }} account from an unusual or new location was detected. The login was performed using {{ agent }} on {{ os }} from {{ country }}.
+We noticed a new sign-in to your {{ instance }} account:
+{% endblocktrans %}
+- {% trans "Time" %}: {{ when }}
+- {% trans "Browser" %}: {{ agent }}
+- {% trans "Operating system" %}: {{ os }}
+{% if device %}- {% trans "Device" %}: {{ device }}
+{% endif %}{% if country %}- {% trans "Country" %}: {{ country }}
+{% endif %}
+{% blocktrans with url=url|safe %}If it was you, no action is needed.
 
-If this was you, you can safely ignore this email.
-
-If this was not you, we recommend that you change your password in your account settings:
+If you don't recognise this sign-in, please change your password immediately:
 
 {{ url }}
 
-Best regards,  
-Your {{ instance }} team
+Thanks,  
+The {{ instance }} Team
 {% endblocktrans %}
