@@ -120,6 +120,7 @@ def fakeredis_client(monkeypatch):
         redis = get_redis_connection("default", True)
         redis.flushall()
         monkeypatch.setattr('django_redis.get_redis_connection', get_redis_connection, raising=False)
+        monkeypatch.setattr('pretix.base.metrics.redis', redis, raising=False)
         yield redis
 
 
