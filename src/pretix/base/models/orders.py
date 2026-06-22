@@ -386,7 +386,6 @@ class Order(LockModel, LoggedModel):
         for v_id, usage_count in voucher_usages.items():
             Voucher.objects.filter(pk=v_id).update(redeemed=Greatest(0, F('redeemed') - usage_count))
 
-
         GiftCardTransaction.objects.filter(payment__order__in=orders).update(payment=None)
         GiftCardTransaction.objects.filter(refund__order__in=orders).update(refund=None)
         GiftCardTransaction.objects.filter(order__in=orders).update(order=None)
