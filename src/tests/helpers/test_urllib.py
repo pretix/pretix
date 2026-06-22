@@ -75,7 +75,7 @@ def test_dns_remote_allowed():
     def side_effect(*args, **kwargs):
         raise SocketOk
 
-    with mock.patch('socket.getaddrinfo') as mock_addr, mock.patch('socket.socket') as mock_socket:
+    with mock.patch('socket.getaddrinfo') as mock_addr, mock.patch('urllib3.contrib.resolver.protocols._with_attr_sock') as mock_socket:
         mock_addr.return_value = [(AF_INET, SOCK_STREAM, 6, '', ('8.8.8.8', 443))]
         mock_socket.side_effect = side_effect
         with pytest.raises(SocketOk):
@@ -90,7 +90,7 @@ def test_local_is_allowed():
     def side_effect(*args, **kwargs):
         raise SocketOk
 
-    with mock.patch('socket.getaddrinfo') as mock_addr, mock.patch('socket.socket') as mock_socket:
+    with mock.patch('socket.getaddrinfo') as mock_addr, mock.patch('urllib3.contrib.resolver.protocols._with_attr_sock') as mock_socket:
         mock_addr.return_value = [(AF_INET, SOCK_STREAM, 6, '', ('10.0.0.1', 443))]
         mock_socket.side_effect = side_effect
         with pytest.raises(SocketOk):
