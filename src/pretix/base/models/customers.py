@@ -167,7 +167,7 @@ class Customer(LoggedModel):
 
     def send_security_notice(self, message, email=None):
         from pretix.base.services.mail import SendMailException, mail
-        from pretix.multidomain.urlreverse import build_absolute_uri
+        from pretix.multidomain.urlreverse import eventreverse_absolute
 
         try:
             with language(self.locale):
@@ -178,7 +178,7 @@ class Customer(LoggedModel):
                     {
                         **self.get_email_context(),
                         'message': str(message),
-                        'url': build_absolute_uri(self.organizer, 'presale:organizer.customer.index')
+                        'url': eventreverse_absolute(self.organizer, 'presale:organizer.customer.index')
                     },
                     customer=self,
                     organizer=self.organizer,
@@ -299,12 +299,12 @@ class Customer(LoggedModel):
 
     def send_activation_mail(self):
         from pretix.base.services.mail import mail
-        from pretix.multidomain.urlreverse import build_absolute_uri
+        from pretix.multidomain.urlreverse import eventreverse_absolute
         from pretix.presale.forms.customer import TokenGenerator
 
         ctx = self.get_email_context()
         token = TokenGenerator().make_token(self)
-        ctx['url'] = build_absolute_uri(
+        ctx['url'] = eventreverse_absolute(
             self.organizer,
             'presale:organizer.customer.activate'
         ) + '?id=' + self.identifier + '&token=' + token

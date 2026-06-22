@@ -32,6 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import warnings
 from urllib.parse import urljoin, urlsplit
 
 from django.conf import settings
@@ -190,6 +191,15 @@ def eventreverse(obj, name, kwargs=None):
 
 
 def build_absolute_uri(obj, urlname, kwargs=None):
+    warnings.warn(
+        'Usage of build_absolute_uri is confusing since there are many functions with that name. '
+        'Replace this usage with eventreverse_absolute',
+        DeprecationWarning
+    )
+    return eventreverse_absolute(obj, urlname, kwargs)
+
+
+def eventreverse_absolute(obj, urlname, kwargs=None):
     """
     Works similar to ``eventreverse`` but always returns an absolute URL.
 

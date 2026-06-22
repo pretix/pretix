@@ -58,7 +58,7 @@ from pretix.base.forms import SecretKeySettingsField
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.settings import SettingsSandbox
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.paypal.api import Api
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 
@@ -268,8 +268,8 @@ class Paypal(BasePaymentProvider):
                     "payment_method": "paypal",
                 },
                 "redirect_urls": {
-                    "return_url": build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
-                    "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
+                    "return_url": eventreverse_absolute(request.event, 'plugins:paypal:return', kwargs=kwargs),
+                    "cancel_url": eventreverse_absolute(request.event, 'plugins:paypal:abort', kwargs=kwargs),
                 },
                 "transactions": [
                     {
@@ -351,7 +351,7 @@ class Paypal(BasePaymentProvider):
                     if request.session.get('iframe_session', False):
                         signer = signing.Signer(salt='safe-redirect')
                         return (
-                            build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
+                            eventreverse_absolute(request.event, 'plugins:paypal:redirect') + '?url=' +
                             urllib.parse.quote(signer.sign(link.href))
                         )
                     else:
@@ -613,8 +613,8 @@ class Paypal(BasePaymentProvider):
                     "payment_method": "paypal",
                 },
                 "redirect_urls": {
-                    "return_url": build_absolute_uri(request.event, 'plugins:paypal:return'),
-                    "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort'),
+                    "return_url": eventreverse_absolute(request.event, 'plugins:paypal:return'),
+                    "cancel_url": eventreverse_absolute(request.event, 'plugins:paypal:abort'),
                 },
                 "transactions": [
                     {

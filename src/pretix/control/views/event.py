@@ -97,7 +97,9 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
-from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
+from pretix.multidomain.urlreverse import (
+    eventreverse_absolute, get_event_domain,
+)
 from pretix.presale.views.widget import (
     version_default as widget_version_default,
 )
@@ -1734,7 +1736,7 @@ class EventQRCode(EventPermissionRequiredMixin, View):
     permission = None
 
     def get(self, request, *args, filetype, **kwargs):
-        url = build_absolute_uri(request.event, 'presale:event.index')
+        url = eventreverse_absolute(request.event, 'presale:event.index')
 
         if "url" in request.GET:
             if url_has_allowed_host_and_scheme(request.GET["url"], allowed_hosts=[urlparse(url).netloc]):

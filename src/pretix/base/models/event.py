@@ -724,7 +724,7 @@ class Event(EventMixin, LoggedModel):
 
     @property
     def social_image(self):
-        from pretix.multidomain.urlreverse import build_absolute_uri
+        from pretix.multidomain.urlreverse import eventreverse_absolute
 
         img = None
         logo_file = self.settings.get('logo_image', as_type=str, default='')[7:]
@@ -742,7 +742,7 @@ class Event(EventMixin, LoggedModel):
                 logger.exception(f'Failed to create thumbnail of {logo_file}')
                 img = default_storage.url(logo_file)
         if img:
-            return urljoin(build_absolute_uri(self, 'presale:event.index'), img)
+            return urljoin(eventreverse_absolute(self, 'presale:event.index'), img)
 
     def _seats(self, ignore_voucher=None):
         from .seating import Seat

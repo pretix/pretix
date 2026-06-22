@@ -44,7 +44,7 @@ from pretix.base.forms.questions import (
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
 from pretix.helpers.http import get_client_ip
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 class TokenGenerator(PasswordResetTokenGenerator):
@@ -84,7 +84,7 @@ class AuthenticationForm(forms.Form):
         self.customer_cache = None
         super().__init__(*args, **kwargs)
         self.fields['password'].help_text = "<a target='_blank' href='{}'>{}</a>".format(
-            build_absolute_uri(False, 'presale:organizer.customer.resetpw', kwargs={
+            eventreverse_absolute(False, 'presale:organizer.customer.resetpw', kwargs={
                 'organizer': request.organizer.slug,
             }),
             _('Forgot your password?')

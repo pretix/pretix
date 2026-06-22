@@ -64,7 +64,7 @@ from pretix.control.views.event import DecoupleMixin
 from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.helpers import OF_SELF
 from pretix.helpers.http import redirect_to_url
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
 from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.tasks import (
@@ -90,7 +90,7 @@ def redirect_view(request, *args, **kwargs):
         params = request.GET.copy()
         params['go'] = '1'
         r = render(request, 'pretixplugins/stripe/redirect.html', {
-            'url': build_absolute_uri(request.event, 'plugins:stripe:redirect') + '?' + urllib.parse.urlencode(params),
+            'url': eventreverse_absolute(request.event, 'plugins:stripe:redirect') + '?' + urllib.parse.urlencode(params),
         })
         r._csp_ignore = True
         return r

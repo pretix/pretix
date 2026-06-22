@@ -77,7 +77,7 @@ from pretix.control.views import PaginationMixin
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.models import modelcopy
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
@@ -338,7 +338,7 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
         }
         if self.object.subevent_id:
             url_params['subevent'] = self.object.subevent_id
-        ctx['url'] = build_absolute_uri(self.request.event, "presale:event.redeem") + "?" + urlencode(url_params)
+        ctx['url'] = eventreverse_absolute(self.request.event, "presale:event.redeem") + "?" + urlencode(url_params)
         return ctx
 
 
