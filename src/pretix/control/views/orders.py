@@ -139,6 +139,7 @@ from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
+from pretix.helpers.iter import chunked_iterable
 from pretix.helpers.json import CustomJSONEncoder
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
@@ -240,7 +241,7 @@ class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, As
         raise NotImplementedError()
 
     def execute_bulk(self, queryset: QuerySet, form: forms.Form):
-        qs = self.allowed_for(self.allowed_for(self.get_queryset()))
+        qs = self.allowed_for(self.get_queryset())
         total = qs.count()
         orders_with_successful_action = 0
         for i, o in enumerate(qs):
@@ -394,9 +395,21 @@ class OrderDeleteBulkActionView(BaseOrderBulkActionView):
             testmode=True,
         )
 
-    def execute_single(self, instance, form: forms.Form):
-        instance.gracefully_delete(user=self.request.user)
-        return True
+    def execute_bulk(self, queryset: QuerySet, form: forms.Form):
+        qs = self.allowed_for(self.get_queryset())
+        total = qs.count()
+        all_ids = list(qs.values_list("id", flat=True))
+
+        orders_with_successful_action = 0
+        for chunk in chunked_iterable(all_ids, 1000):
+            Order.gracefully_delete_bulk(
+                self.request.event,
+                qs.filter(id__in=chunk),
+                user=self.request.user,
+            )
+            orders_with_successful_action += len(chunk)
+            self.async_set_progress(orders_with_successful_action / total * 100)
+        return orders_with_successful_action, total
 
 
 class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):

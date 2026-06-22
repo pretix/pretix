@@ -1150,8 +1150,11 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
             if request.POST.get("delete") == "yes":
                 try:
                     with transaction.atomic():
-                        for order in request.event.orders.filter(testmode=True):
-                            order.gracefully_delete(user=self.request.user)
+                        Order.gracefully_delete_bulk(
+                            request.event,
+                            request.event.orders.filter(testmode=True),
+                            user=self.request.user
+                        )
                 except ProtectedError:
                     messages.error(self.request, _('An order could not be deleted as some constraints (e.g. data '
                                                    'created by plug-ins) do not allow it.'))
