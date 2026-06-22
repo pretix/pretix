@@ -378,12 +378,14 @@ class Order(LockModel, LoggedModel):
             ))
         LogEntry.bulk_create_and_postprocess(logs_create)
 
-        vouchers = OrderPosition.objects.filter(
+        voucher_ids = OrderPosition.objects.filter(
             order__in=orders,
             voucher__isnull=False
         ).exclude(order__status=Order.STATUS_CANCELED).values_list("voucher_id", flat=True)
-        for v_id in vouchers:
-            Voucher.objects.filter(pk=v_id).update(redeemed=Greatest(0, F('redeemed') - 1))
+        voucher_usages = Counter(voucher_ids)
+        for v_id, usage_count in voucher_usages.items():
+            Voucher.objects.filter(pk=v_id).update(redeemed=Greatest(0, F('redeemed') - usage_count))
+
 
         GiftCardTransaction.objects.filter(payment__order__in=orders).update(payment=None)
         GiftCardTransaction.objects.filter(refund__order__in=orders).update(refund=None)
