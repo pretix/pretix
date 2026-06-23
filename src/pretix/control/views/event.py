@@ -41,7 +41,7 @@ from collections import OrderedDict, defaultdict
 from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
-from urllib.parse import urlparse, urlsplit
+from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
 import bleach
@@ -64,7 +64,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import NoReverseMatch, reverse
 from django.utils.functional import cached_property
 from django.utils.html import conditional_escape, format_html
-from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
@@ -1742,7 +1741,7 @@ class EventQRCode(EventPermissionRequiredMixin, View):
         url = eventreverse_absolute(request.event, 'presale:event.index')
 
         if "url" in request.GET:
-            if url_has_allowed_host_and_scheme(request.GET["url"], allowed_hosts=[urlparse(url).netloc]):
+            if request.GET["url"].startswith(url):
                 url = request.GET["url"]
             else:
                 raise PermissionDenied("Untrusted URL")
