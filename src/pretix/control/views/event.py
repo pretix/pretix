@@ -41,7 +41,7 @@ from collections import OrderedDict, defaultdict
 from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
-from urllib.parse import urlparse, urlsplit
+from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
 import bleach
