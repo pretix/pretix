@@ -91,7 +91,9 @@ from pretix.base.models import (
     ReusableMedium, ScheduledOrganizerExport, Team, TeamInvite, User,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
-from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue, SubEvent, SubEventMetaValue
+from pretix.base.models.event import (
+    Event, EventMetaProperty, EventMetaValue, SubEvent, SubEventMetaValue,
+)
 from pretix.base.models.giftcards import (
     GiftCardAcceptance, GiftCardTransaction, gen_giftcard_secret,
 )
@@ -2489,24 +2491,28 @@ class EventMetaPropertyEditorMixin:
     @cached_property
     def event_value_counts(self):
         if self.object:
-            return {d['attr_value']: d['count']
-                    for d in self.request.organizer.events.annotate(
-                        attr_value=Subquery(EventMetaValue.objects.filter(
-                            event=OuterRef('pk'),
-                            property__name=self.object.name
-                        ).values('value')), count=Count('attr_value')
-                    ).values('attr_value', 'count')}
+            return {
+                d['attr_value']: d['count']
+                for d in self.request.organizer.events.annotate(
+                    attr_value=Subquery(EventMetaValue.objects.filter(
+                        event=OuterRef('pk'),
+                        property__name=self.object.name
+                    ).values('value')), count=Count('attr_value')
+                ).values('attr_value', 'count')
+            }
 
     @cached_property
     def subevent_value_counts(self):
         if self.object:
-            return {d['attr_value']: d['count']
-                    for d in SubEvent.objects.filter(event__organizer=self.request.organizer).annotate(
-                        attr_value=Subquery(SubEventMetaValue.objects.filter(
-                            subevent=OuterRef('pk'),
-                            property__name=self.object.name,
-                        ).values('value')), count=Count('attr_value')
-                    ).values('attr_value', 'count')}
+            return {
+                d['attr_value']: d['count']
+                for d in SubEvent.objects.filter(event__organizer=self.request.organizer).annotate(
+                    attr_value=Subquery(SubEventMetaValue.objects.filter(
+                        subevent=OuterRef('pk'),
+                        property__name=self.object.name,
+                    ).values('value')), count=Count('attr_value')
+                ).values('attr_value', 'count')
+            }
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -2540,7 +2546,10 @@ class EventMetaPropertyEditorMixin:
         existing_values = (self.event_value_counts.keys() | self.subevent_value_counts.keys()) - {None}
         missing_choices = existing_values - choice_keys
         if missing_choices:
-            messages.error(self.request, _("When restricting the allowed values, you need to allow all values that already exist on your events. Missing values: %s") % (", ".join(missing_choices)))
+            messages.error(self.request, _(
+                "When restricting the allowed values, you need to allow all values that already exist "
+                "on your events. Missing values: %s"
+            ) % (", ".join(missing_choices)))
             return False
         return True
 
