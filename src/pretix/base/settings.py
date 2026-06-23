@@ -181,6 +181,19 @@ DEFAULTS = {
             widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
         )
     },
+    'customer_accounts_to_oidc': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Convert existing customers to single-sign-on accounts when logging in through single-sign-on provider"),
+            help_text=_(
+                "If disabled, pretix does not allow to log in through a single-sign-on provider if the customer is registered with email and password."
+            ),
+            widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
+        )
+    },
     'customer_accounts_require_login_for_order_access': {
         'default': 'False',
         'type': bool,

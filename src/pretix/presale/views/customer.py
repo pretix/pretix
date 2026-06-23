@@ -864,11 +864,36 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                         identifier=identifier,
                     )
                 except Customer.DoesNotExist:
-                    return self._fail(
-                        _('We were unable to use your login since the email address {email} is already used for a '
-                          'different account in this system.').format(email=profile['email']),
-                        popup_origin,
-                    )
+                    # no race-condition, try to convert to oidc?
+                    if self.request.organizer.settings.customer_accounts_to_oidc:
+                        try:
+                            customer = self.request.organizer.customers.get(
+                                email=profile['email'],
+                            )
+                            update_fields = {
+                                'provider': self.provider.pk,
+                                'external_identifier': str(profile['uid']),
+                                'identifier': identifier,
+                                'is_active': True,
+                                'is_verified': True,
+                            }
+                            if name_parts:
+                                update_fields['name_parts'] = name_parts
+                            if profile.get('phone'):
+                                update_fields['phone'] = profile.get('phone')
+                            customer.update(**update_fields)
+                        except Customer.DoesNotExist:
+                            # should actually never happen
+                            return self._fail(
+                                _('We were unable to use your login since either the email address is unknown in this system.'),
+                                popup_origin,
+                            )
+                    else:
+                        return self._fail(
+                            _('We were unable to use your login since the email address {email} is already used for a '
+                              'different account in this system.').format(email=profile['email']),
+                            popup_origin,
+                        )
         else:
             if customer.is_active and customer.email != profile['email']:
                 customer.email = profile['email']
