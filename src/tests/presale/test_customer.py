@@ -440,7 +440,7 @@ def test_org_sso_login_new_customer_email_conflict(env, client, provider):
 
 @pytest.mark.django_db(transaction=True)
 def test_org_sso_convert_customer_on_login(env, client, provider):
-    organizer=env[0]
+    organizer = env[0]
     organizer.settings.customer_accounts_to_oidc = True
     with scopes_disabled():
         customer = organizer.customers.create(email='new@example.net', is_verified=True, is_active=False)
