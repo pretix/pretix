@@ -438,6 +438,23 @@ def test_org_sso_login_new_customer_email_conflict(env, client, provider):
     _sso_login(client, provider, 'new@example.net', expect_fail=True)
 
 
+@pytest.mark.django_db(transaction=True)
+def test_org_sso_convert_customer_on_login(env, client, provider):
+    organizer=env[0]
+    organizer.settings.customer_accounts_to_oidc = True
+    with scopes_disabled():
+        customer = organizer.customers.create(email='new@example.net', is_verified=True, is_active=False)
+        customer.set_password('foo')
+        customer.save()
+
+    _sso_login(client, provider, 'new@example.net')
+
+    customer.refresh_from_db()
+    assert customer.provider
+    assert customer.identifier
+    assert not customer.has_usable_password()
+
+
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", [
     "account/change",
