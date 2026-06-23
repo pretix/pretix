@@ -90,7 +90,7 @@ dependencies = [
   "pytz-deprecation-shim==0.1.*",
   "pyuca",
   "qrcode==8.2",
-  "redis==7.4.*",
+  "redis==8.0.*",
   "reportlab==4.5.*",
   "requests==2.32.*",
   "sentry-sdk==2.63.*",
