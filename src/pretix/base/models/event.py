@@ -1841,7 +1841,6 @@ class EventMetaProperty(LoggedModel):
 
     class Meta:
         ordering = ("position", "name",)
-        unique_together = ('organizer', 'name')
 
     @property
     def choice_keys(self):
