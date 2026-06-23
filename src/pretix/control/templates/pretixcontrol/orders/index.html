@@ -108,7 +108,7 @@
                 </a>
             </p>
         {% endif %}
-        <form action="{% url "control:organizer.device.bulk_edit" organizer=request.organizer.slug %}" method="post">
+        <form action="#will-be-overridden" method="post">
             {% csrf_token %}
             {% for field in filter_form %}
                 {{ field.as_hidden }}

@@ -25,10 +25,11 @@ from zoneinfo import ZoneInfo
 
 import pytest
 from django.core import mail as djmail
+from django.db.models import F
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import InvoiceAddress, Order
+from pretix.base.models import Event, InvoiceAddress, Order
 from pretix.base.services.checkin import perform_checkin
 from pretix.plugins.sendmail.models import Rule, ScheduledMail
 from pretix.plugins.sendmail.signals import sendmail_run_rules
@@ -687,3 +688,41 @@ def test_sendmail_context_localization(event, order, pos):
 
     sendmail_run_rules(None)
     assert "Hallo Herr Mustermann" in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_event_clone_ignores_rules_with_subevent(event, order, pos):
+    event.has_subevents = True
+    event.save()
+    se1 = event.subevents.create(name="subevent 1", date_from=dt_now)
+
+    event.sendmail_rules.create(date_is_absolute=False, send_offset_days=1, send_offset_time=datetime.time(hour=12),
+                                subject='Mail To Subevent', template='TestBody', subevent=se1)
+    event.sendmail_rules.create(date_is_absolute=False, send_offset_days=1, send_offset_time=datetime.time(hour=12),
+                                subject='Mail To All', template='TestBody')
+
+    assert event.sendmail_rules.count() == 2
+    assert event.scheduledmail_set.count() == 2
+    for rule in event.sendmail_rules.all():
+        assert rule.scheduledmail_set.count() == 1
+
+    copied_event = Event.objects.create(
+        organizer=event.organizer, name='Dummy2', slug='dummy2',
+        date_from=datetime.datetime(2022, 4, 15, 9, 0, 0, tzinfo=datetime.timezone.utc),
+        has_subevents=True
+    )
+    copied_event.copy_data_from(event)
+    copied_event.refresh_from_db()
+    event.refresh_from_db()
+
+    assert copied_event.sendmail_rules.count() == 1
+    assert copied_event.sendmail_rules.first().scheduledmail_set.count() == 0
+    assert str(copied_event.sendmail_rules.first().subject) == "Mail To All"
+
+    copied_event.subevents.create(name="subevent 1 in copied", date_from=dt_now)
+    assert copied_event.sendmail_rules.first().scheduledmail_set.count() == 1
+
+    # Double-Check: no scheduled mails and rules exist where subevent.event and event do not align
+    assert ScheduledMail.objects.filter(rule__subevent__isnull=False).exclude(rule__subevent__event=F('rule__event')).count() == 0
+    assert Rule.objects.filter(subevent__isnull=False).exclude(subevent__event=F('event')).count() == 0

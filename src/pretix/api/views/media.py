@@ -53,10 +53,12 @@ with scopes_disabled():
         customer = django_filters.CharFilter(field_name='customer__identifier')
         updated_since = django_filters.IsoDateTimeFilter(field_name='updated', lookup_expr='gte')
         created_since = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='gte')
+        # backwards-compatible
+        linked_orderposition = django_filters.NumberFilter(field_name='linked_orderpositions__id')
 
         class Meta:
             model = ReusableMedium
-            fields = ['identifier', 'type', 'active', 'customer', 'linked_orderposition', 'linked_giftcard']
+            fields = ['identifier', 'type', 'active', 'customer', 'linked_orderpositions', 'linked_giftcard']
 
 
 class ReusableMediaViewSet(viewsets.ModelViewSet):
@@ -75,7 +77,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
         ).order_by().values('card').annotate(s=Sum('value')).values('s')
         return self.request.organizer.reusable_media.prefetch_related(
             Prefetch(
-                'linked_orderposition',
+                'linked_orderpositions',
                 queryset=OrderPosition.objects.select_related(
                     'order', 'order__event', 'order__event__organizer', 'seat',
                 ).prefetch_related(
@@ -117,14 +119,38 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic()
     def perform_update(self, serializer):
-        ReusableMedium.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
+        rm = ReusableMedium.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
+        prev_linked_ops_pks = list(rm.linked_orderpositions.values_list("pk", flat=True))
         inst = serializer.save(identifier=serializer.instance.identifier, type=serializer.instance.type)
-        inst.log_action(
-            'pretix.reusable_medium.changed',
-            user=self.request.user,
-            auth=self.request.auth,
-            data=self.request.data,
-        )
+        linked_ops_pks = inst.linked_orderpositions.values_list("pk", flat=True)
+        for op_pk in prev_linked_ops_pks:
+            if op_pk not in linked_ops_pks:
+                inst.log_action(
+                    'pretix.reusable_medium.linked_orderposition.removed',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'linked_orderposition': op_pk,
+                    }
+                )
+        for op_pk in linked_ops_pks:
+            if op_pk not in prev_linked_ops_pks:
+                inst.log_action(
+                    'pretix.reusable_medium.linked_orderposition.added',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'linked_orderposition': op_pk,
+                    }
+                )
+        data = {k: v for k, v in self.request.data.items() if k not in ('linked_orderposition', 'linked_orderpositions')}
+        if data:
+            inst.log_action(
+                'pretix.reusable_medium.changed',
+                user=self.request.user,
+                auth=self.request.auth,
+                data=data,
+            )
         return inst
 
     def perform_destroy(self, instance):
@@ -157,7 +183,6 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
                         type=s.validated_data["type"],
                         identifier=s.validated_data["identifier"],
                     )
-                m.linked_orderposition = None  # not relevant for cross-organizer
                 m.customer = None  # not relevant for cross-organizer
                 s = self.get_serializer(m)
                 return Response({"result": s.data})
@@ -171,7 +196,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
 
             return Response({"result": None})
 
-    @scopes_disabled()  # we are sure enough that get_queryset() is correct, so we save some perforamnce
+    @scopes_disabled()  # we are sure enough that get_queryset() is correct, so we save some performance
     def list(self, request, **kwargs):
         date = serializers.DateTimeField().to_representation(now())
         queryset = self.filter_queryset(self.get_queryset())

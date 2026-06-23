@@ -21,13 +21,13 @@
 #
 
 import os
-import shutil
 import subprocess
 
 from setuptools.command.build import build
 from setuptools.command.build_ext import build_ext
 
 here = os.path.abspath(os.path.dirname(__file__))
+project_root = os.path.abspath(os.path.join(here, '..', '..'))
 npm_installed = False
 
 
@@ -35,12 +35,12 @@ def npm_install():
     global npm_installed
 
     if not npm_installed:
-        # keep this in sync with Makefile!
-        node_prefix = os.path.join(here, 'static.dist', 'node_prefix')
-        os.makedirs(node_prefix, exist_ok=True)
-        shutil.copytree(os.path.join(here, 'static', 'npm_dir'), node_prefix, dirs_exist_ok=True)
-        subprocess.check_call('npm ci', shell=True, cwd=node_prefix)
+        subprocess.check_call('npm ci', shell=True, cwd=project_root)
         npm_installed = True
+
+
+def npm_build():
+    subprocess.check_call('npm run build', shell=True, cwd=project_root)
 
 
 class CustomBuild(build):
@@ -62,6 +62,7 @@ class CustomBuild(build):
         settings.COMPRESS_OFFLINE = True
 
         npm_install()
+        npm_build()
         management.call_command('compilemessages', verbosity=1)
         management.call_command('compilejsi18n', verbosity=1)
         management.call_command('collectstatic', verbosity=1, interactive=False)

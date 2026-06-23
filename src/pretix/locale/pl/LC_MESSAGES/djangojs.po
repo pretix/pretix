@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
 "PO-Revision-Date: 2025-04-28 01:00+0000\n"
 "Last-Translator: Anarion Dunedain <anarion80@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -132,7 +132,6 @@ msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "Kontynuuj"
@@ -186,173 +185,6 @@ msgstr "Razem"
 msgid "Contacting your bank …"
 msgstr "Łączenie z bankiem…"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "Wybierz listę odprawy"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "Nie znaleziono aktywnych list odpraw."
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "Wymień listę odpraw"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "Wyniki wyszukiwania"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "Nie znaleziono biletów"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "Wynik"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "Ten bilet wymaga szczególnej uwagi"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "Kierunek zmiany"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "Wejście"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "Wyjście"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "Zeskanuj bilet lub wyszukaj i naciśnij powrót…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "Załaduj więcej"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "Ważny"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "Niezapłacony"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "Anulowany"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr "Potwierdzono"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr "Zatwierdzenie w toku"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "Wykorzystany"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "Anuluj"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "Bilet nieopłacony"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr ""
-"Ten bilet nie jest jeszcze opłacony. Czy chcesz kontynuować pomimo tego?"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "Wymagane dodatkowe informacje"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "Ważny bilet"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "Wyjście zarejestrowane"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "Bilet już użyty"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "Wymagane informacje"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Unknown ticket"
-msgstr "Bilet nieznany"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Ticket type not allowed here"
-msgstr "Typ biletu niedozwolony tutaj"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "Wejście niedozwolone"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "Kod biletu cofnięty/zmieniony"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Ticket blocked"
-msgstr "Bilet zablokowany"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket not valid at this time"
-msgstr "Bilet nie jest obecnie ważny"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "Zamówienie anulowane"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr "Kod biletu jest niejednoznaczny na liście"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr "Zamówienie niezaakceptowane"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "Zameldowane bilety"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "Ważne bilety"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "Obecnie w środku"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "Tak"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "Nie"
-
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "zamknąć"
@@ -386,14 +218,14 @@ msgstr ""
 "przypadku czasu oczekiwania dłuższego niż dwie minuty prosimy o kontakt lub "
 "o cofnięcie się w przeglądarce i ponowienie próby."
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Wystąpił błąd typu {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -401,23 +233,23 @@ msgstr ""
 "Błąd komunikacji z serwerem, aplikacja ponowi próbę. Ostatni kod błędu: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "Procesowanie żądania trwało zbyt długo. Proszę spróbuj ponownie."
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Błąd komunikacji z serwerem. Prosimy spróbować ponownie. Kod błędu: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "Zapytanie jest przetwarzane…"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -427,11 +259,11 @@ msgstr ""
 "dłuższego niż minuta prosimy o sprawdzenie łączności z Internetem a "
 "następnie o przeładowanie strony i ponowienie próby."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "Zamknięcie wiadomości"
 
@@ -442,146 +274,6 @@ msgstr "Skopiowano!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "Wciśnij Ctrl-C żeby skopiować!"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "jest jednym z"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "jest wcześniej"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "jest później"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr "="
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "Produkt"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "Wariant produktu"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr "Bramka"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "Obecna data i godzina"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "Bieżący dzień tygodnia (1 = Poniedziałek, 7 = Niedziela)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr "Bieżący status wpisu"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "Liczba poprzednich wejść"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "Liczba poprzednich wejść od północy"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-msgid "Number of previous entries since"
-msgstr "Liczba poprzednich wejść od"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-msgid "Number of previous entries before"
-msgstr "Liczba poprzednich wejść po"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "Liczba dni z poprzednimi wejściami"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-msgid "Number of days with a previous entry since"
-msgstr "Liczba dni z poprzednimi wejściami od"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-msgid "Number of days with a previous entry before"
-msgstr "Liczba dni z poprzednimi wejściami przed"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr "Minuty od ostatniego wejścia (-1 przy pierwszym wejściu)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr "Minuty od pierwszego wejścia (-1 przy pierwszym wejściu)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "Wszystkie poniższe warunki (AND)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "Co najmniej jeden z poniższych warunków (OR)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "Rozpoczęcie wydarzenia"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "Koniec wydarzenia"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "Wstęp na wydarzenie"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "Niestandardowa data i godzina"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "czas niestandardowy"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "Tolerancja (minuty)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "Dodaj warunek"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "minut"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr "Duplikuj"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr "obecny"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr "nieobecny"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -721,6 +413,16 @@ msgstr "Inne"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "Ilość"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "Tak"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "Nie"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1220,6 +922,219 @@ msgstr "Listopad"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "Grudzień"
+
+#~ msgid "Select a check-in list"
+#~ msgstr "Wybierz listę odprawy"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "Nie znaleziono aktywnych list odpraw."
+
+#~ msgid "Switch check-in list"
+#~ msgstr "Wymień listę odpraw"
+
+#~ msgid "Search results"
+#~ msgstr "Wyniki wyszukiwania"
+
+#~ msgid "No tickets found"
+#~ msgstr "Nie znaleziono biletów"
+
+#~ msgid "Result"
+#~ msgstr "Wynik"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "Ten bilet wymaga szczególnej uwagi"
+
+#~ msgid "Switch direction"
+#~ msgstr "Kierunek zmiany"
+
+#~ msgid "Entry"
+#~ msgstr "Wejście"
+
+#~ msgid "Exit"
+#~ msgstr "Wyjście"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "Zeskanuj bilet lub wyszukaj i naciśnij powrót…"
+
+#~ msgid "Load more"
+#~ msgstr "Załaduj więcej"
+
+#~ msgid "Valid"
+#~ msgstr "Ważny"
+
+#~ msgid "Unpaid"
+#~ msgstr "Niezapłacony"
+
+#~ msgid "Canceled"
+#~ msgstr "Anulowany"
+
+#~ msgid "Confirmed"
+#~ msgstr "Potwierdzono"
+
+#~ msgid "Approval pending"
+#~ msgstr "Zatwierdzenie w toku"
+
+#~ msgid "Redeemed"
+#~ msgstr "Wykorzystany"
+
+#~ msgid "Cancel"
+#~ msgstr "Anuluj"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "Bilet nieopłacony"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr ""
+#~ "Ten bilet nie jest jeszcze opłacony. Czy chcesz kontynuować pomimo tego?"
+
+#~ msgid "Additional information required"
+#~ msgstr "Wymagane dodatkowe informacje"
+
+#~ msgid "Valid ticket"
+#~ msgstr "Ważny bilet"
+
+#~ msgid "Exit recorded"
+#~ msgstr "Wyjście zarejestrowane"
+
+#~ msgid "Ticket already used"
+#~ msgstr "Bilet już użyty"
+
+#~ msgid "Information required"
+#~ msgstr "Wymagane informacje"
+
+#~ msgid "Unknown ticket"
+#~ msgstr "Bilet nieznany"
+
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "Typ biletu niedozwolony tutaj"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "Wejście niedozwolone"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "Kod biletu cofnięty/zmieniony"
+
+#~ msgid "Ticket blocked"
+#~ msgstr "Bilet zablokowany"
+
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "Bilet nie jest obecnie ważny"
+
+#~ msgid "Order canceled"
+#~ msgstr "Zamówienie anulowane"
+
+#~ msgid "Ticket code is ambiguous on list"
+#~ msgstr "Kod biletu jest niejednoznaczny na liście"
+
+#~ msgid "Order not approved"
+#~ msgstr "Zamówienie niezaakceptowane"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "Zameldowane bilety"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "Ważne bilety"
+
+#~ msgid "Currently inside"
+#~ msgstr "Obecnie w środku"
+
+#~ msgid "is one of"
+#~ msgstr "jest jednym z"
+
+#~ msgid "is before"
+#~ msgstr "jest wcześniej"
+
+#~ msgid "is after"
+#~ msgstr "jest później"
+
+#~ msgid "="
+#~ msgstr "="
+
+#~ msgid "Product"
+#~ msgstr "Produkt"
+
+#~ msgid "Product variation"
+#~ msgstr "Wariant produktu"
+
+#~ msgid "Gate"
+#~ msgstr "Bramka"
+
+#~ msgid "Current date and time"
+#~ msgstr "Obecna data i godzina"
+
+#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+#~ msgstr "Bieżący dzień tygodnia (1 = Poniedziałek, 7 = Niedziela)"
+
+#~ msgid "Current entry status"
+#~ msgstr "Bieżący status wpisu"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "Liczba poprzednich wejść"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "Liczba poprzednich wejść od północy"
+
+#~ msgid "Number of previous entries since"
+#~ msgstr "Liczba poprzednich wejść od"
+
+#~ msgid "Number of previous entries before"
+#~ msgstr "Liczba poprzednich wejść po"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "Liczba dni z poprzednimi wejściami"
+
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "Liczba dni z poprzednimi wejściami od"
+
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "Liczba dni z poprzednimi wejściami przed"
+
+#~ msgid "Minutes since last entry (-1 on first entry)"
+#~ msgstr "Minuty od ostatniego wejścia (-1 przy pierwszym wejściu)"
+
+#~ msgid "Minutes since first entry (-1 on first entry)"
+#~ msgstr "Minuty od pierwszego wejścia (-1 przy pierwszym wejściu)"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "Wszystkie poniższe warunki (AND)"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "Co najmniej jeden z poniższych warunków (OR)"
+
+#~ msgid "Event start"
+#~ msgstr "Rozpoczęcie wydarzenia"
+
+#~ msgid "Event end"
+#~ msgstr "Koniec wydarzenia"
+
+#~ msgid "Event admission"
+#~ msgstr "Wstęp na wydarzenie"
+
+#~ msgid "custom date and time"
+#~ msgstr "Niestandardowa data i godzina"
+
+#~ msgid "custom time"
+#~ msgstr "czas niestandardowy"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "Tolerancja (minuty)"
+
+#~ msgid "Add condition"
+#~ msgstr "Dodaj warunek"
+
+#~ msgid "minutes"
+#~ msgstr "minut"
+
+#~ msgid "Duplicate"
+#~ msgstr "Duplikuj"
+
+#~ msgctxt "entry_status"
+#~ msgid "present"
+#~ msgstr "obecny"
+
+#~ msgctxt "entry_status"
+#~ msgid "absent"
+#~ msgstr "nieobecny"
 
 #~ msgid "iDEAL"
 #~ msgstr "iDEAL"

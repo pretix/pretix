@@ -58,10 +58,11 @@ from django.utils.translation import gettext_lazy as _  # NOQA
 
 _config = configparser.RawConfigParser()
 if 'PRETIX_CONFIG_FILE' in os.environ:
-    _config.read_file(open(os.environ.get('PRETIX_CONFIG_FILE'), encoding='utf-8'))
+    config_files = [os.environ['PRETIX_CONFIG_FILE']]
 else:
-    _config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
-                 encoding='utf-8')
+    config_files = ['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg']
+
+_config.read(config_files, encoding='utf-8')
 config = EnvOrParserConfig(_config)
 
 CONFIG_FILE = config
@@ -704,7 +705,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
     from sentry_sdk.integrations.logging import (
         LoggingIntegration, ignore_logger,
     )
-    from sentry_sdk.scrubber import EventScrubber, DEFAULT_DENYLIST
+    from sentry_sdk.scrubber import DEFAULT_DENYLIST, EventScrubber
 
     from .sentry import PretixSentryIntegration, setup_custom_filters
 
@@ -888,3 +889,21 @@ FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT = 1024 * 1024 * config.getint("pretix
 FILE_UPLOAD_MAX_SIZE_OTHER = 1024 * 1024 * config.getint("pretix_file_upload", "max_size_other", fallback=10)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+VITE_DEV_SERVER_PORT = 5173
+VITE_DEV_SERVER = f"http://localhost:{VITE_DEV_SERVER_PORT}"
+VITE_DEV_MODE = DEBUG
+VITE_IGNORE = False  # Used to ignore `collectstatic`/`rebuild`
+PRETIX_WIDGET_VITE = os.environ.get('PRETIX_WIDGET_VITE', '') not in ('', '0')
+
+if DEBUG:
+    # Reload if settings file changes
+    config_files_to_watch = [Path(x).absolute() for x in config_files]
+
+    from django.dispatch import receiver
+    from django.utils.autoreload import BaseReloader, autoreload_started
+
+    @receiver(autoreload_started, dispatch_uid="pretix_watch_config_file")
+    def watch_config_file(sender: BaseReloader, *args, **kwargs):
+        sender.extra_files.update(config_files_to_watch)

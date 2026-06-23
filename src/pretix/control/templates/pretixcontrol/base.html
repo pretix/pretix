@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load statici18n %}
+{% load vite %}
 {% load eventsignal %}
 {% load eventurl %}
 {% load dialog %}
@@ -66,6 +67,7 @@
             <script type="text/javascript" src="{% static "lightbox/js/lightbox.js" %}"></script>
             <script type="text/javascript" src="{% static "are-you-sure/jquery.are-you-sure.js" %}"></script>
             <script type="text/javascript" src="{% static "pretixbase/js/addressform.js" %}"></script>
+            <script type="text/javascript" src="{% static "pretixbase/js/errors.js" %}"></script>
 		{% endcompress %}
         {{ html_head|safe }}
 
@@ -85,6 +87,7 @@
         <meta name="theme-color" content="#3b1c4a">
         <meta name="referrer" content="origin">
 
+        {% vite_importmap %}
         {% block custom_header %}{% endblock %}
 	</head>
 	<body data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}"

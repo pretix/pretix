@@ -41,6 +41,8 @@ def test_private_ip_blocked():
         requests.get("http://10.0.0.1", timeout=0.1)
     with pytest.raises(HTTPError, match="Request to private address.*"):
         requests.get("https://10.0.0.1", timeout=0.1)
+    with pytest.raises(HTTPError, match="Request to RFC 6598 address.*"):
+        requests.get("https://100.100.100.100", timeout=0.1)
 
 
 @pytest.mark.django_db
@@ -50,6 +52,8 @@ def test_private_ip_blocked():
     [(AF_INET, SOCK_STREAM, 6, '', ('127.1.1.1', 443))],
     [(AF_INET, SOCK_STREAM, 6, '', ('192.168.5.3', 443))],
     [(AF_INET, SOCK_STREAM, 6, '', ('224.0.0.1', 443))],
+    [(AF_INET, SOCK_STREAM, 6, '', ('100.64.0.1', 443))],
+    [(AF_INET, SOCK_STREAM, 6, '', ('100.100.100.100', 443))],
     [(AF_INET6, SOCK_STREAM, 6, '', ('::1', 443, 0, 0))],
     [(AF_INET6, SOCK_STREAM, 6, '', ('fe80::1', 443, 0, 0))],
     [(AF_INET6, SOCK_STREAM, 6, '', ('ff00::1', 443, 0, 0))],
@@ -58,9 +62,9 @@ def test_private_ip_blocked():
 def test_dns_resolving_to_local_blocked(res):
     with mock.patch('socket.getaddrinfo') as mock_addr:
         mock_addr.return_value = res
-        with pytest.raises(HTTPError, match="Request to (multicast|private|local) address.*"):
+        with pytest.raises(HTTPError, match="Request to (multicast|private|local|RFC 6598) address.*"):
             requests.get("https://example.org", timeout=0.1)
-        with pytest.raises(HTTPError, match="Request to (multicast|private|local) address.*"):
+        with pytest.raises(HTTPError, match="Request to (multicast|private|local|RFC 6598) address.*"):
             requests.get("http://example.org", timeout=0.1)
 
 

@@ -45,6 +45,12 @@ class PrimaryKeyRelatedField(serializers.PrimaryKeyRelatedField):
             return value
         return super().to_representation(value)
 
+    def to_internal_value(self, data):
+        value = super().to_internal_value(data)
+        if value is not None:
+            return value.pk
+        return value
+
 
 class FormFieldWrapperField(serializers.Field):
     def __init__(self, *args, **kwargs):

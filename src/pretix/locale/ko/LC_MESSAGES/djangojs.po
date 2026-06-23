@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-28 09:04+0000\n"
+"POT-Creation-Date: 2026-05-27 14:47+0000\n"
 "PO-Revision-Date: 2026-02-01 21:00+0000\n"
 "Last-Translator: z3rrry <z3rrry@gmail.com>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -144,7 +144,6 @@ msgstr ""
 "용 다양한 금융 서비스 제공"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 msgid "Continue"
 msgstr "계속하기"
@@ -198,172 +197,6 @@ msgstr "합계"
 msgid "Contacting your bank …"
 msgstr "은행에 문의하기"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
-msgid "Select a check-in list"
-msgstr "확인 목록 선택"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
-msgid "No active check-in lists found."
-msgstr "현재 활성된 확인 목록을 찾을 수 없습니다."
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
-msgid "Switch check-in list"
-msgstr "확인 목록 전환"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
-msgid "Search results"
-msgstr "검색 결과"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-msgid "No tickets found"
-msgstr "티켓을 찾을 수 없습니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Result"
-msgstr "결과"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-msgid "This ticket requires special attention"
-msgstr "이 티켓은 특별한 주의가 필요합니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
-msgid "Switch direction"
-msgstr "방향 전환"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
-msgid "Entry"
-msgstr "항목"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
-msgid "Exit"
-msgstr "출구"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
-msgid "Scan a ticket or search and press return…"
-msgstr "티켓 스캔 또는 검색 후 반품 버튼을 누릅니다…"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
-msgid "Load more"
-msgstr "더 로드하기"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-msgid "Valid"
-msgstr "유효하다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
-msgid "Unpaid"
-msgstr "미지급"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
-msgid "Canceled"
-msgstr "취소하다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-msgid "Confirmed"
-msgstr "확정하다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
-msgid "Approval pending"
-msgstr "승인 대기중"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Redeemed"
-msgstr "상환하다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
-msgid "Cancel"
-msgstr "취소하기"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
-msgid "Ticket not paid"
-msgstr "미결제 티켓"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
-msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr "이 티켓은 아직 결제되지 않았습니다. 계속하시겠습니까?"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
-msgid "Additional information required"
-msgstr "추가 정보가 필요합니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
-msgid "Valid ticket"
-msgstr "유효한 티켓"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
-msgid "Exit recorded"
-msgstr "기록이 종료하다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Ticket already used"
-msgstr "이미 사용된 티켓입니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-msgid "Information required"
-msgstr "필수 정보"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
-msgid "Unknown ticket"
-msgstr "알 수 없는 티켓"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-msgid "Ticket type not allowed here"
-msgstr "여기에서는 티켓 형이 허용되지 않습니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Entry not allowed"
-msgstr "항목이 허용되지 않습니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code revoked/changed"
-msgstr "티켓코드가 변경/취소되었습니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
-msgid "Ticket blocked"
-msgstr "차단된 티켓입니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-msgid "Ticket not valid at this time"
-msgstr "현재 티켓이 유효하지 않습니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Order canceled"
-msgstr "취소된 주문"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Ticket code is ambiguous on list"
-msgstr "티켓코드가 명부에서 확인되지 않습니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-msgid "Order not approved"
-msgstr "승인되지 않은 주문입니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
-msgid "Checked-in Tickets"
-msgstr "체크인 티켓입니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
-msgid "Valid Tickets"
-msgstr "유효한 티켓입니다"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
-msgid "Currently inside"
-msgstr "내부적으로 유통되는"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:71
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "예"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:72
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "아니오"
-
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "마감"
@@ -395,36 +228,36 @@ msgstr ""
 "이 2분 이상 소요되는 경우 저희에게 연락하시거나 브라우저로 돌아가서 다시 시도"
 "해 주시기 바랍니다."
 
-#: pretix/static/pretixbase/js/asynctask.js:125
-#: pretix/static/pretixbase/js/asynctask.js:182
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:135
+#: pretix/static/pretixbase/js/asynctask.js:192
+#: pretix/static/pretixbase/js/asynctask.js:196
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "{code} 유형의 오류가 발생했습니다."
 
-#: pretix/static/pretixbase/js/asynctask.js:128
+#: pretix/static/pretixbase/js/asynctask.js:138
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
 "현재 서버에 연결할 수 없지만 계속 시도하고 있습니다. 마지막 오류 코드: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:162
+#: pretix/static/pretixbase/js/asynctask.js:172
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "요청이 너무 오래 걸렸습니다. 다시 시도해 주세요."
 
-#: pretix/static/pretixbase/js/asynctask.js:188
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "현재 서버에 연결할 수 없습니다. 다시 시도해 주세요. 오류 코드: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:226
 msgid "We are processing your request …"
 msgstr "귀하의 요청을 처리하고 있습니다"
 
-#: pretix/static/pretixbase/js/asynctask.js:219
+#: pretix/static/pretixbase/js/asynctask.js:229
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -433,11 +266,11 @@ msgstr ""
 "현재 귀하의 요청을 서버로 전송하고 있습니다. 이 작업이 1분 이상 소요되는 경"
 "우 인터넷 연결을 확인한 다음 이 페이지를 다시 로드한 후 다시 시도해 주세요."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:286
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "몇 분 이상 걸리시면 저희에게 연락해 주시기 바랍니다."
 
-#: pretix/static/pretixbase/js/asynctask.js:331
+#: pretix/static/pretixbase/js/asynctask.js:341
 msgid "Close message"
 msgstr "마지막 메시지입니다"
 
@@ -448,146 +281,6 @@ msgstr "복사하였습니다"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "복사하기 위해 콘트롤-C를 누르십시오"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:12
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:18
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:24
-msgid "is one of"
-msgstr "다음 중 하나입니다"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:30
-msgid "is before"
-msgstr "이전의 것입니다"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:34
-msgid "is after"
-msgstr "이후의 것입니다"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
-msgid "="
-msgstr "="
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-msgid "Product"
-msgstr "제품"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Product variation"
-msgstr "상품 변동"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
-msgid "Gate"
-msgstr "탑승구"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
-msgid "Current date and time"
-msgstr "현재 날짜와 시간"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
-msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr "현재 요일(1=월요일, 7=일요일)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
-msgid "Current entry status"
-msgstr "현재 진입 상태"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
-msgid "Number of previous entries"
-msgstr "이전 항목 수"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
-msgid "Number of previous entries since midnight"
-msgstr "자정 이후의 이전 항목 수"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-msgid "Number of previous entries since"
-msgstr "이후 이전 항목 수"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-msgid "Number of previous entries before"
-msgstr "이전 항목 수"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
-msgid "Number of days with a previous entry"
-msgstr "이전 항목이 있는 일수"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-msgid "Number of days with a previous entry since"
-msgstr "이전 항목이 포함된 일수"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-msgid "Number of days with a previous entry before"
-msgstr "이전 항목이 포함된 일수"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
-msgid "Minutes since last entry (-1 on first entry)"
-msgstr "마지막 항목(-1번째 항목) 이후 몇 분 동안"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
-msgid "Minutes since first entry (-1 on first entry)"
-msgstr "첫 번째 항목 이후 시간(-1번째 항목)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
-msgid "All of the conditions below (AND)"
-msgstr "아래의 모든 조건 (AND)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
-msgid "At least one of the conditions below (OR)"
-msgstr "아래 조건 중 하나 이상(OR)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
-msgid "Event start"
-msgstr "이벤트 시작"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
-msgid "Event end"
-msgstr "이벤트 종료"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
-msgid "Event admission"
-msgstr "이벤트 입장"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
-msgid "custom date and time"
-msgstr "사용자 지정 날짜 및 시간"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
-msgid "custom time"
-msgstr "맞춤 시간"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
-msgid "Tolerance (minutes)"
-msgstr "허용 오차(분)"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
-msgid "Add condition"
-msgstr "조건 추가"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
-msgid "minutes"
-msgstr "회의록"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
-msgid "Duplicate"
-msgstr "중복"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
-msgctxt "entry_status"
-msgid "present"
-msgstr "현재"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
-msgctxt "entry_status"
-msgid "absent"
-msgstr "부재"
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:289
-msgid "Error: Product not found!"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:296
-msgid "Error: Variation not found!"
-msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -722,6 +415,16 @@ msgstr "다른것"
 #: pretix/static/pretixcontrol/js/ui/question.js:81
 msgid "Count"
 msgstr "총계"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "예"
+
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "아니오"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
@@ -1213,6 +916,218 @@ msgstr "11월"
 #: pretix/static/pretixpresale/js/widget/widget.js:105
 msgid "December"
 msgstr "12일"
+
+#~ msgid "Select a check-in list"
+#~ msgstr "확인 목록 선택"
+
+#~ msgid "No active check-in lists found."
+#~ msgstr "현재 활성된 확인 목록을 찾을 수 없습니다."
+
+#~ msgid "Switch check-in list"
+#~ msgstr "확인 목록 전환"
+
+#~ msgid "Search results"
+#~ msgstr "검색 결과"
+
+#~ msgid "No tickets found"
+#~ msgstr "티켓을 찾을 수 없습니다"
+
+#~ msgid "Result"
+#~ msgstr "결과"
+
+#~ msgid "This ticket requires special attention"
+#~ msgstr "이 티켓은 특별한 주의가 필요합니다"
+
+#~ msgid "Switch direction"
+#~ msgstr "방향 전환"
+
+#~ msgid "Entry"
+#~ msgstr "항목"
+
+#~ msgid "Exit"
+#~ msgstr "출구"
+
+#~ msgid "Scan a ticket or search and press return…"
+#~ msgstr "티켓 스캔 또는 검색 후 반품 버튼을 누릅니다…"
+
+#~ msgid "Load more"
+#~ msgstr "더 로드하기"
+
+#~ msgid "Valid"
+#~ msgstr "유효하다"
+
+#~ msgid "Unpaid"
+#~ msgstr "미지급"
+
+#~ msgid "Canceled"
+#~ msgstr "취소하다"
+
+#~ msgid "Confirmed"
+#~ msgstr "확정하다"
+
+#~ msgid "Approval pending"
+#~ msgstr "승인 대기중"
+
+#~ msgid "Redeemed"
+#~ msgstr "상환하다"
+
+#~ msgid "Cancel"
+#~ msgstr "취소하기"
+
+#~ msgid "Ticket not paid"
+#~ msgstr "미결제 티켓"
+
+#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
+#~ msgstr "이 티켓은 아직 결제되지 않았습니다. 계속하시겠습니까?"
+
+#~ msgid "Additional information required"
+#~ msgstr "추가 정보가 필요합니다"
+
+#~ msgid "Valid ticket"
+#~ msgstr "유효한 티켓"
+
+#~ msgid "Exit recorded"
+#~ msgstr "기록이 종료하다"
+
+#~ msgid "Ticket already used"
+#~ msgstr "이미 사용된 티켓입니다"
+
+#~ msgid "Information required"
+#~ msgstr "필수 정보"
+
+#~ msgid "Unknown ticket"
+#~ msgstr "알 수 없는 티켓"
+
+#~ msgid "Ticket type not allowed here"
+#~ msgstr "여기에서는 티켓 형이 허용되지 않습니다"
+
+#~ msgid "Entry not allowed"
+#~ msgstr "항목이 허용되지 않습니다"
+
+#~ msgid "Ticket code revoked/changed"
+#~ msgstr "티켓코드가 변경/취소되었습니다"
+
+#~ msgid "Ticket blocked"
+#~ msgstr "차단된 티켓입니다"
+
+#~ msgid "Ticket not valid at this time"
+#~ msgstr "현재 티켓이 유효하지 않습니다"
+
+#~ msgid "Order canceled"
+#~ msgstr "취소된 주문"
+
+#~ msgid "Ticket code is ambiguous on list"
+#~ msgstr "티켓코드가 명부에서 확인되지 않습니다"
+
+#~ msgid "Order not approved"
+#~ msgstr "승인되지 않은 주문입니다"
+
+#~ msgid "Checked-in Tickets"
+#~ msgstr "체크인 티켓입니다"
+
+#~ msgid "Valid Tickets"
+#~ msgstr "유효한 티켓입니다"
+
+#~ msgid "Currently inside"
+#~ msgstr "내부적으로 유통되는"
+
+#~ msgid "is one of"
+#~ msgstr "다음 중 하나입니다"
+
+#~ msgid "is before"
+#~ msgstr "이전의 것입니다"
+
+#~ msgid "is after"
+#~ msgstr "이후의 것입니다"
+
+#~ msgid "="
+#~ msgstr "="
+
+#~ msgid "Product"
+#~ msgstr "제품"
+
+#~ msgid "Product variation"
+#~ msgstr "상품 변동"
+
+#~ msgid "Gate"
+#~ msgstr "탑승구"
+
+#~ msgid "Current date and time"
+#~ msgstr "현재 날짜와 시간"
+
+#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+#~ msgstr "현재 요일(1=월요일, 7=일요일)"
+
+#~ msgid "Current entry status"
+#~ msgstr "현재 진입 상태"
+
+#~ msgid "Number of previous entries"
+#~ msgstr "이전 항목 수"
+
+#~ msgid "Number of previous entries since midnight"
+#~ msgstr "자정 이후의 이전 항목 수"
+
+#~ msgid "Number of previous entries since"
+#~ msgstr "이후 이전 항목 수"
+
+#~ msgid "Number of previous entries before"
+#~ msgstr "이전 항목 수"
+
+#~ msgid "Number of days with a previous entry"
+#~ msgstr "이전 항목이 있는 일수"
+
+#~ msgid "Number of days with a previous entry since"
+#~ msgstr "이전 항목이 포함된 일수"
+
+#~ msgid "Number of days with a previous entry before"
+#~ msgstr "이전 항목이 포함된 일수"
+
+#~ msgid "Minutes since last entry (-1 on first entry)"
+#~ msgstr "마지막 항목(-1번째 항목) 이후 몇 분 동안"
+
+#~ msgid "Minutes since first entry (-1 on first entry)"
+#~ msgstr "첫 번째 항목 이후 시간(-1번째 항목)"
+
+#~ msgid "All of the conditions below (AND)"
+#~ msgstr "아래의 모든 조건 (AND)"
+
+#~ msgid "At least one of the conditions below (OR)"
+#~ msgstr "아래 조건 중 하나 이상(OR)"
+
+#~ msgid "Event start"
+#~ msgstr "이벤트 시작"
+
+#~ msgid "Event end"
+#~ msgstr "이벤트 종료"
+
+#~ msgid "Event admission"
+#~ msgstr "이벤트 입장"
+
+#~ msgid "custom date and time"
+#~ msgstr "사용자 지정 날짜 및 시간"
+
+#~ msgid "custom time"
+#~ msgstr "맞춤 시간"
+
+#~ msgid "Tolerance (minutes)"
+#~ msgstr "허용 오차(분)"
+
+#~ msgid "Add condition"
+#~ msgstr "조건 추가"
+
+#~ msgid "minutes"
+#~ msgstr "회의록"
+
+#~ msgid "Duplicate"
+#~ msgstr "중복"
+
+#~ msgctxt "entry_status"
+#~ msgid "present"
+#~ msgstr "현재"
+
+#~ msgctxt "entry_status"
+#~ msgid "absent"
+#~ msgstr "부재"
 
 #~ msgid "iDEAL"
 #~ msgstr "아이디얼 (네덜란드 온라인 뱅킹 결제 시스템)"

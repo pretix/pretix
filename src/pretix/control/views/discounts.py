@@ -44,7 +44,7 @@ from pretix.control.permissions import (
 from pretix.helpers.models import modelcopy
 
 from ...helpers.compat import CompatDeleteView
-from . import CreateView, PaginationMixin, UpdateView
+from . import CreateView, UpdateView
 
 
 class DiscountDelete(EventPermissionRequiredMixin, CompatDeleteView):
@@ -183,7 +183,7 @@ class DiscountCreate(EventPermissionRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class DiscountList(PaginationMixin, ListView):
+class DiscountList(ListView):
     model = Discount
     context_object_name = 'discounts'
     template_name = 'pretixcontrol/items/discounts.html'

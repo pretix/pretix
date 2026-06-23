@@ -110,9 +110,9 @@ class SubEventsTest(SoupTest):
             assert se.checkinlist_set.count() == 1
 
     def test_modify(self):
-        doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/' % self.subevent1.pk)
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/%d/edit' % self.subevent1.pk)
         assert doc.select("input[name=quotas-TOTAL_FORMS]")
-        doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/' % self.subevent1.pk, {
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/%d/edit' % self.subevent1.pk, {
             'name_0': 'SE2',
             'active': 'on',
             'date_from_0': '2017-07-01',

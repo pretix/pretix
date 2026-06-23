@@ -46,4 +46,7 @@ jobs:
       - name: Run build
         run: python -m build
       - name: Check files
-        run: unzip -l dist/pretix*whl | grep node_modules || exit 1
+        run: |
+          for pat in 'static.dist/vite/widget/widget.js' 'static.dist/vite/control/assets/checkinrules/main-' 'static.dist/vite/control/assets/webcheckin/main-'; do
+            unzip -l dist/pretix*whl | grep -q "$pat" || { echo "Missing: $pat"; exit 1; }
+          done
