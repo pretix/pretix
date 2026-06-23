@@ -46,9 +46,8 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class BaseChoice:
-    base: Literal["event", "order", "order.subevents"]
+    base: Literal["event", "order"]
     attribute: str
-    modifier: str
     text: Promise
     supports_before: bool
     supports_after: bool
@@ -56,8 +55,6 @@ class BaseChoice:
     @property
     def key(self) -> str:
         key = f"{self.base}__{self.attribute}"
-        if self.modifier:
-            key += f"__{self.modifier}"
         return key
 
     @staticmethod
@@ -75,19 +72,13 @@ class BaseChoice:
 
 
 BASE_CHOICES: List[BaseChoice] = [
-    BaseChoice('event', 'date_from', "", _('Event start'), True, True),
-    BaseChoice('event', 'date_to', "", _('Event end'), True, True),
-    BaseChoice('event', 'date_admission', "", _('Event admission'), True, True),
-    BaseChoice('event', 'presale_start', "", _('Presale start'), True, True),
-    BaseChoice('event', 'presale_end', "", _('Presale end'), True, True),
-    BaseChoice('order', 'datetime', "", _('Order creation'), False, True),
-    BaseChoice('order', 'expires', "", _('Order expiry'), True, True),
-    BaseChoice('order.subevents', 'date_from', "first", _('Subevent start (first subevent in order)'), True, True),
-    BaseChoice('order.subevents', 'date_from', "last", _('Subevent start (last subevent in order)'), True, True),
-    BaseChoice('order.subevents', 'date_to', "first", _('Subevent end (first subevent in order)'), True, True),
-    BaseChoice('order.subevents', 'date_to', "last", _('Subevent end (last subevent in order)'), True, True),
-    BaseChoice('order.subevents', 'date_admission', "first", _('Subevent admission (first subevent in order)'), True, True),
-    BaseChoice('order.subevents', 'date_admission', "last", _('Subevent admission (last subevent in order)'), True, True),
+    BaseChoice('event', 'date_from', _('Event start'), True, True),
+    BaseChoice('event', 'date_to', _('Event end'), True, True),
+    BaseChoice('event', 'date_admission', _('Event admission'), True, True),
+    BaseChoice('event', 'presale_start', _('Presale start'), True, True),
+    BaseChoice('event', 'presale_end', _('Presale end'), True, True),
+    BaseChoice('order', 'datetime', _('Order creation'), False, True),
+    BaseChoice('order', 'expires', _('Order expiry'), True, True),
 ]
 
 LIMIT_FALLBACKS = ['date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end']
@@ -98,10 +89,6 @@ EVENT_BASE_CHOICES = [
 
 ORDER_BASE_CHOICES = [
     x for x in BASE_CHOICES if x.base == 'order'
-]
-
-SUBEVENT_BASE_CHOICES = [
-    x for x in BASE_CHOICES if x.base == 'order.subevents'
 ]
 
 
@@ -157,23 +144,6 @@ class RelativeDate:
         if choice.base == "order" and isinstance(base, Order):
             event = base.event
             base_date = getattr(base, choice.attribute)
-        elif choice.base == "order.subevents" and isinstance(base, Order):
-            if not base.event.has_subevents:
-                raise ValueError("The order is for an event without subevents")
-            if choice.modifier == "first":
-                op = base.all_positions.order_by(f"subevent__{choice.attribute}").first()
-                if op is None:
-                    raise ValueError("The order has no positions for subevents")
-                event = op.event
-                base_date = getattr(op.subevent, choice.attribute)
-            elif choice.modifier == "last":
-                op = base.all_positions.order_by(f"subevent__{choice.attribute}").last()
-                if op is None:
-                    raise ValueError("The order has no positions for subevents")
-                event = op.event
-                base_date = getattr(op.subevent, choice.attribute)
-            else:
-                raise ValueError("The selected modifier does not exist")
         elif choice.base == "event" and isinstance(base, SubEvent):
             event = base.event
             base_date = (getattr(base, choice.attribute) or
@@ -470,13 +440,10 @@ class RelativeDateTimeField(forms.MultiValueField):
             ('relative_minutes', _('Relative time:')),
         ]
         self.relative_to_order = kwargs.pop('relative_to_order', False)
-        self.relative_to_subevent_positions = kwargs.pop('relative_to_subevent_positions', False)
 
         possible_choices = copy.deepcopy(EVENT_BASE_CHOICES)
         if self.relative_to_order:
             possible_choices.extend(ORDER_BASE_CHOICES)
-        if self.relative_to_subevent_positions:
-            possible_choices.extend(SUBEVENT_BASE_CHOICES)
 
         if kwargs.get('limit_choices'):
             limit = kwargs.pop('limit_choices')
@@ -548,8 +515,6 @@ class RelativeDateTimeField(forms.MultiValueField):
         possible_choices = copy.deepcopy(EVENT_BASE_CHOICES)
         if self.relative_to_order:
             possible_choices.extend(ORDER_BASE_CHOICES)
-        if self.relative_to_subevent_positions and event.has_subevents:
-            possible_choices.extend(SUBEVENT_BASE_CHOICES)
 
         possible_choices = possible_choices
         choices = _get_choices(possible_choices)
@@ -685,13 +650,10 @@ class RelativeDateField(RelativeDateTimeField):
             status_choices.insert(0, ('unset', _('Not set')))
 
         self.relative_to_order = kwargs.pop('relative_to_order', False)
-        self.relative_to_subevent_positions = kwargs.pop('relative_to_subevent_positions', False)
 
         possible_choices = copy.deepcopy(EVENT_BASE_CHOICES)
         if self.relative_to_order:
             possible_choices.extend(ORDER_BASE_CHOICES)
-        if self.relative_to_subevent_positions:
-            possible_choices.extend(SUBEVENT_BASE_CHOICES)
 
         choices = _get_choices(possible_choices)
 
@@ -728,8 +690,6 @@ class RelativeDateField(RelativeDateTimeField):
         ]
         if self.relative_to_order:
             choices += [(c.key, c.text) for c in ORDER_BASE_CHOICES]
-        if self.relative_to_subevent_positions and event.has_subevents:
-            choices += [(c.key, c.text) for c in SUBEVENT_BASE_CHOICES]
         self.widget.widgets[reldateparts.indizes.rel_days_relationto].choices = choices
 
     def compress(self, data_list):
