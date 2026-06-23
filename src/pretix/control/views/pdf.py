@@ -289,7 +289,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         ctx['pdf'] = self.get_current_background()
         ctx['variables'] = self.get_variables()
         ctx['images'] = self.get_images()
-        ctx['layout'] = json.dumps(self.get_current_layout())
+        ctx['layout'] = self.get_current_layout()
         ctx['title'] = self.title
         ctx['locales'] = [p for p in settings.LANGUAGES if p[0] in self.request.event.settings.locales]
         ctx['maxfilesize'] = self.maxfilesize
