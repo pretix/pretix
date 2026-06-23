@@ -870,18 +870,17 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                             customer = self.request.organizer.customers.get(
                                 email=profile['email'],
                             )
-                            update_fields = {
-                                'provider': self.provider.pk,
-                                'external_identifier': str(profile['uid']),
-                                'identifier': identifier,
-                                'is_active': True,
-                                'is_verified': True,
-                            }
+                            customer.set_unusable_password()
+                            customer.provider = self.provider
+                            customer.external_identifier = str(profile['uid'])
+                            customer.identifier = identifier
+                            customer.is_active = True
+                            customer.is_verified = True
                             if name_parts:
-                                update_fields['name_parts'] = name_parts
+                                customer.name_parts = name_parts
                             if profile.get('phone'):
-                                update_fields['phone'] = profile.get('phone')
-                            customer.update(**update_fields)
+                                customer.phone = profile.get('phone')
+                            customer.save()
                         except Customer.DoesNotExist:
                             # should actually never happen
                             return self._fail(
