@@ -72,7 +72,7 @@ from pretix.base.views.tasks import AsyncFormView
 from pretix.control.forms.filter import VoucherFilterForm, VoucherTagFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
-from pretix.control.signals import voucher_form_class
+from pretix.control.signals import voucher_filter_qs, voucher_form_class
 from pretix.control.views import PaginationMixin
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
@@ -93,6 +93,11 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
         ).select_related(
             'item', 'variation', 'seat'
         ))
+
+        qs = voucher_filter_qs.send_chained(
+            self.request.event, chain_kwarg_name='qs', qs=qs, request=self.request
+        )
+
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
@@ -162,6 +167,10 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
         qs = self.request.event.vouchers.order_by('tag').filter(
             tag__isnull=False,
             waitinglistentries__isnull=True
+        )
+
+        qs = voucher_filter_qs.send_chained(
+            self.request.event, chain_kwarg_name='qs', qs=qs, request=self.request
         )
 
         if self.filter_form.is_valid():

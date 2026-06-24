@@ -56,6 +56,7 @@ from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import (
     event_permission_required, organizer_permission_required,
 )
+from pretix.control.signals import voucher_filter_qs
 from pretix.helpers.daterange import daterange
 from pretix.helpers.i18n import i18ncomp, parse_date_localized
 
@@ -972,6 +973,27 @@ def subevent_meta_values(request, organizer, event):
                 set(event_matches.values_list('value', flat=True)[:10])
             )
         ]
+    })
+
+
+@event_permission_required('event.vouchers:read')
+def voucher_tag_typeahead(request, **kwargs):
+    q = request.GET.get('q', '')
+    qs = request.event.vouchers.filter(
+        tag__isnull=False,
+        waitinglistentries__isnull=True,
+    )
+
+    qs = voucher_filter_qs.send_chained(
+        request.event, chain_kwarg_name='qs', qs=qs, request=request
+    )
+
+    tags = qs.filter(
+        tag__icontains=q,
+    ).values_list('tag', flat=True).distinct().order_by('tag')[:10]
+
+    return JsonResponse({
+        'results': [{'name': t} for t in tags]
     })
 
 

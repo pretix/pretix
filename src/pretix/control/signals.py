@@ -166,6 +166,19 @@ should return a list of dictionaries, where each dictionary can have the keys:
 This is a regular django signal (no pretix event signal).
 """
 
+voucher_filter_qs = EventPluginSignal()
+"""
+Arguments: ``qs``, ``request``
+
+This signal is sent when building the voucher queryset for the voucher list page,
+the tag overview page, and the tag typeahead. Receivers are passed a voucher queryset
+in the ``qs`` argument and should return a filtered queryset excluding any vouchers
+that should be hidden.
+
+As with all event plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+
 voucher_form_html = EventPluginSignal()
 """
 Arguments: 'form'
