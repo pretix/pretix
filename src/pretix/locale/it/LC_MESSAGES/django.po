@@ -11016,7 +11016,7 @@ msgstr ""
 "backend."
 
 #: pretix/base/settings.py:1266
-msgid "Allow to update existing invoices"
+msgid "Allow updating existing invoices"
 msgstr "Consenti l'aggiornamento delle fatture esistenti"
 
 #: pretix/base/settings.py:1267

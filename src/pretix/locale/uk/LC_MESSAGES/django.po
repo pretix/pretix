@@ -11250,7 +11250,7 @@ msgstr ""
 "налаштування не впливає на будь-які зміни, що вносяться за допомогою бекенду."
 
 #: pretix/base/settings.py:1266
-msgid "Allow to update existing invoices"
+msgid "Allow updating existing invoices"
 msgstr "Дозволити оновити існуючі рахунки"
 
 #: pretix/base/settings.py:1267

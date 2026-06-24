@@ -10420,7 +10420,7 @@ msgstr ""
 "過後端所做的更改。"
 
 #: pretix/base/settings.py:1266
-msgid "Allow to update existing invoices"
+msgid "Allow updating existing invoices"
 msgstr "允許更新現有發票"
 
 #: pretix/base/settings.py:1267

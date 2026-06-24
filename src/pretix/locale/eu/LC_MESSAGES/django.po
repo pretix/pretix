@@ -11012,7 +11012,7 @@ msgstr ""
 "Konfigurazio honek ez die eragiten backend-aren bidez egindako aldaketei."
 
 #: pretix/base/settings.py:1266
-msgid "Allow to update existing invoices"
+msgid "Allow updating existing invoices"
 msgstr "Sortutako fakturak eguneratzeko baimena ematea"
 
 #: pretix/base/settings.py:1267
