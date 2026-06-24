@@ -1697,7 +1697,7 @@ class AbstractPosition(RoundingCorrectionMixin, models.Model):
             self.company,
             self.street,
             (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
-            self.country.name
+            self.country.name if self.country else ''
         ]
         lines = [r.strip() for r in lines if r]
         return '\n'.join(lines).strip()
