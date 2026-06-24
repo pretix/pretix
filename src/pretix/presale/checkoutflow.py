@@ -1201,7 +1201,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             for p in profiles:
                 data = {
                     "_pk": p.pk,
-                    "_country_for_address": p.country.name,
+                    "_country_for_address": getattr(p.country, "name", ""),
                     "_state_for_address": p.state_for_address,
                     "_attendee_name": p.attendee_name,
                 }
