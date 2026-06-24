@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load urlreplace %}
 {% load money %}
+{% load eventsignal %}
 {% block title %}{% trans "Vouchers" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Vouchers" %}</h1>
@@ -80,6 +81,7 @@
                 <a href="{% url "control:event.vouchers.import" organizer=request.event.organizer.slug event=request.event.slug %}"
                    class="btn btn-default btn-lg"><i class="fa fa-upload"></i> {% trans "Import vouchers" %}</a>
             {% endif %}
+            {% eventsignal request.event "pretix.control.signals.voucher_list_top_buttons" request=request empty=True %}
         </div>
     {% else %}
         <p>
@@ -96,6 +98,7 @@
             <a href="?{% url_replace request "download" "yes" %}"
                     class="btn btn-default"><i class="fa fa-download"></i>
                 {% trans "Download list" %}</a>
+            {% eventsignal request.event "pretix.control.signals.voucher_list_top_buttons" request=request empty=False %}
         </p>
         <form action="{% url "control:event.vouchers.bulkaction"  organizer=request.event.organizer.slug event=request.event.slug %}" method="post">
             {% csrf_token %}

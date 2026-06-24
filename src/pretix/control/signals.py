@@ -166,6 +166,25 @@ should return a list of dictionaries, where each dictionary can have the keys:
 This is a regular django signal (no pretix event signal).
 """
 
+voucher_list_top_buttons = EventPluginSignal()
+"""
+Arguments: ``request``, ``empty``
+
+This signal allows you to add additional buttons to the top of the voucher list page,
+next to the "Create a new voucher" and "Download list" buttons. You are expected to
+return HTML for one or more button elements.
+
+The ``empty`` argument is ``True`` when the voucher list has no results (either because
+no vouchers exist or because a search/filter matched nothing), and ``False`` otherwise.
+Pretix uses larger buttons in the empty state, so receivers may want to adjust their
+button styling accordingly.
+
+This signal is sent regardless of the user's permission level. Receivers should check
+permissions themselves via ``request`` before returning any HTML.
+
+As with all event plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 voucher_form_html = EventPluginSignal()
 """
 Arguments: 'form'
