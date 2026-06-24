@@ -55,7 +55,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import (
-    Case, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
+    Case, Count, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.db.models.signals import post_delete
@@ -134,6 +134,124 @@ class OrderQuerySet(models.QuerySet):
             raise Order.DoesNotExist
         return order
 
+    def filter_by_status(self, qs, status: list[str]):
+        from .invoices import Invoice
+
+        if not isinstance(status, list):
+            raise TypeError("`status` needs to be a list of strings")
+
+        filter = Q()
+
+        if any(s in status for s in ['overpaid', 'pendingpaid', 'partially_paid', 'underpaid']):
+            results = any(s in status for s in ['underpaid', 'overpaid'])
+            sums = any(s in status for s in ['pendingpaid', 'partially_paid'])
+            qs = Order.annotate_overpayments(qs, refunds=False, results=results, sums=sums)
+
+        if 'o' in status:
+            filter |= Q(status=Order.STATUS_PENDING, expires__lt=now().replace(hour=0, minute=0, second=0))
+        if 'np' in status:
+            filter |= Q(status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
+        if 'ne' in status:
+            filter |= Q(status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
+        if 'pv' in status:
+            filter |= Q(status=Order.STATUS_PAID) | Q(status=Order.STATUS_PENDING, valid_if_pending=True)
+        for s in ('p', 'n', 'e', 'c'):
+            if s in status:
+                filter |= Q(status=s)
+        if 'overpaid' in status:
+            qs = Order.annotate_overpayments(qs, refunds=False, results=True, sums=False)
+            filter |= Q(is_overpaid=True)
+        if 'rc' in status:
+            filter |= Q(cancellation_requests__isnull=False)
+            qs = qs.annotate(
+                cancellation_request_time=Max('cancellation_requests__created')
+            ).order_by(
+                '-cancellation_request_time'
+            )
+        if 'pendingpaid' in status:
+            filter |= (
+                Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING),
+                  pending_sum_t__lte=0,
+                  require_approval=False)
+            )
+        if 'pendingnopayment' in status:
+            filter |= Q(
+                ~Exists(
+                    OrderPayment.objects.filter(
+                        order=OuterRef('pk'),
+                        state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING)
+                    )
+                ),
+                status=Order.STATUS_PENDING,
+                require_approval=False,
+            )
+        if 'partially_paid' in status:
+            filter |= (
+                Q(
+                    computed_payment_refund_sum__lt=F('total'),
+                    computed_payment_refund_sum__gt=Decimal('0.00')
+                ) & ~Q(
+                    status=Order.STATUS_CANCELED
+                )
+            )
+        if 'underpaid' in status:
+            filter |= Q(is_underpaid=True)
+        if 'cni' in status:
+            i = Invoice.objects.filter(
+                order=OuterRef('pk'),
+                is_cancellation=False,
+                refered__isnull=True,
+            ).order_by().values('order').annotate(k=Count('id')).values('k')
+            qs = qs.annotate(
+                icnt=i
+            )
+            filter |= Q(
+                icnt__gt=0,
+                status=Order.STATUS_CANCELED,
+            )
+        if 'pa' in status:
+            filter |= Q(
+                status=Order.STATUS_PENDING,
+                require_approval=True
+            )
+        if 'na' in status:
+            filter |= Q(
+                status=Order.STATUS_PENDING,
+                require_approval=False
+            )
+        if 'valid_if_confirmed' in status:
+            filter |= Q(
+                status=Order.STATUS_PENDING,
+                require_approval=False,
+                valid_if_pending=True
+            )
+        if 'custom_followup_at' in status:
+            filter |= Q(
+                custom_followup_at__isnull=False
+            )
+        if 'custom_followup_due' in status:
+            filter |= Q(
+                custom_followup_at__lte=now().astimezone(get_current_timezone()).date()
+            )
+        if 'testmode' in status:
+            filter |= Q(testmode=True)
+        if 'cp' in status:
+            has_pc = OrderPosition.objects.filter(
+                order=OuterRef('pk')
+            )
+            filter |= (
+                Q(~Exists(has_pc), status=Order.STATUS_PAID)
+                | Q(status=Order.STATUS_CANCELED)
+            )
+        if 'cany' in status:
+            has_pc_c = OrderPosition.all.filter(
+                order=OuterRef('pk'),
+                canceled=True,
+            )
+            filter |= Q(Exists(has_pc_c)) | Q(status=Order.STATUS_CANCELED)
+
+        return qs.filter(filter)
+
 
 class Order(LockModel, LoggedModel):
     """
@@ -202,6 +320,68 @@ class Order(LockModel, LoggedModel):
         (STATUS_PAID, _("paid")),
         (STATUS_EXPIRED, _("expired")),
         (STATUS_CANCELED, _("canceled")),
+    )
+
+    STATUS_FILTERS = (
+        (_('Valid orders'), (
+            (STATUS_PAID, _('Paid (or canceled with paid fee)')),
+            (STATUS_PAID + 'v', _('Paid or confirmed')),
+            (STATUS_PENDING, _('Pending')),
+            (STATUS_PENDING + STATUS_PAID, _('Pending or paid')),
+            ('valid_if_confirmed', _('Pending but already confirmed')),
+        )),
+        (_('Cancellations'), (
+            (STATUS_CANCELED, _('Canceled (fully)')),
+            ('cp', _('Canceled (fully or with paid fee)')),
+            ('cany', _('Canceled (at least one position)')),
+            ('rc', _('Cancellation requested')),
+            ('cni', _('Fully canceled but invoice not canceled')),
+        )),
+        (_('Payment process'), (
+            (STATUS_EXPIRED, _('Expired')),
+            (STATUS_PENDING + STATUS_EXPIRED, _('Pending or expired')),
+            ('o', _('Pending (overdue)')),
+            ('overpaid', _('Overpaid')),
+            ('partially_paid', _('Partially paid')),
+            ('underpaid', _('Underpaid (but confirmed)')),
+            ('pendingpaid', _('Pending (but fully paid)')),
+            ('pendingnopayment', _('Pending (but no current payment)')),
+        )),
+        (_('Approval process'), (
+            ('na', _('Approved, payment pending')),
+            ('pa', _('Approval pending')),
+        )),
+        (_('Follow-up date'), (
+            ('custom_followup_at', _('Follow-up configured')),
+            ('custom_followup_due', _('Follow-up due')),
+        )),
+        ('testmode', _('Test mode')),
+    )
+
+    STATUS_FILTER_OPTIONS = (
+        (STATUS_PAID, _('Paid (or canceled with paid fee)')),
+        (STATUS_PAID + 'v', _('Paid or confirmed')),
+        ('valid_if_confirmed', _('Pending but already confirmed')),
+        (STATUS_PENDING, _('Pending')),
+        (STATUS_PENDING + STATUS_PAID, _('Pending or paid')),
+        (STATUS_CANCELED, _('Canceled (fully)')),
+        ('cp', _('Canceled (fully or with paid fee)')),
+        ('cany', _('Canceled (at least one position)')),
+        ('rc', _('Cancellation requested')),
+        ('cni', _('Fully canceled but invoice not canceled')),
+        (STATUS_EXPIRED, _('Expired')),
+        (STATUS_PENDING + STATUS_EXPIRED, _('Pending or expired')),
+        ('o', _('Pending (overdue)')),
+        ('overpaid', _('Overpaid')),
+        ('partially_paid', _('Partially paid')),
+        ('underpaid', _('Underpaid (but confirmed)')),
+        ('pendingpaid', _('Pending (but fully paid)')),
+        ('pendingnopayment', _('Pending (but no current payment)')),
+        ('na', _('Approved, payment pending')),
+        ('pa', _('Approval pending')),
+        ('custom_followup_at', _('Follow-up configured')),
+        ('custom_followup_due', _('Follow-up due')),
+        ('testmode', _('Test mode')),
     )
 
     code = models.CharField(
@@ -2304,7 +2484,8 @@ class OrderFee(RoundingCorrectionMixin, models.Model):
     :type value: Decimal
     :param order: Order this fee is charged with
     :type order: Order
-    :param fee_type: The type of the fee, currently ``payment``, ``shipping``, ``service``, ``giftcard``, or ``other``.
+    :param fee_type: The type of the fee, currently ``payment``, ``shipping``, ``service``, ``cancellation``, ``insurance``, ``late``,
+        ``giftcard``, or ``other``.
     :type fee_type: str
     :param description: A human-readable description of the fee
     :type description: str
