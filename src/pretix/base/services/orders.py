@@ -41,8 +41,9 @@ from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from functools import reduce
+from itertools import chain
 from time import sleep
-from typing import List, Optional
+from typing import Dict, List, Optional, Set
 
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
@@ -50,9 +51,10 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import (
-    Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Sum,
-    Value,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch, Q, QuerySet,
+    Sum, Value,
 )
+from django.db.models import Prefetch
 from django.db.models.functions import Coalesce, Greatest
 from django.db.transaction import get_connection
 from django.dispatch import receiver
@@ -67,9 +69,13 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    CartPosition, Device, Event, GiftCard, Item, ItemVariation, LogEntry,
+    CartPosition, Checkin, Device, Event, GiftCard, Item, ItemVariation,
     Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
     SeatCategoryMapping, User, Voucher,
+)
+from pretix.base.models.cancellation import (
+    CancellationCheckResult, CancellationCheckResultsById, CancellationRule,
+    Ruling, CancellationCheck
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
@@ -103,11 +109,11 @@ from pretix.base.signals import (
     order_approved, order_canceled, order_changed, order_denied, order_expired,
     order_expiry_changed, order_fee_calculation, order_paid, order_placed,
     order_reactivated, order_split, order_valid_if_pending, periodic_task,
-    validate_order,
+    self_service_cancellation_checks, validate_order,
 )
 from pretix.base.timemachine import time_machine_now, time_machine_now_assigned
 from pretix.celery_app import app
-from pretix.helpers import OF_SELF
+from pretix.helpers import OF_SELF, ensure_no_queries
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
 from pretix.testutils.middleware import debugflags_var
@@ -1619,7 +1625,7 @@ class OrderChangeManager:
     MembershipOperation = namedtuple('MembershipOperation', ('position', 'membership'))
     CancelOperation = namedtuple('CancelOperation', ('position', 'price_diff'))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership',
-                                               'valid_from', 'valid_until', 'is_bundled', 'result', 'count'))
+                                               'valid_from', 'valid_until', 'is_bundled', 'result'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
@@ -1633,24 +1639,16 @@ class OrderChangeManager:
     ForceRecomputeOperation = namedtuple('ForceRecomputeOperation', tuple())
 
     class AddPositionResult:
-        _positions: Optional[List[OrderPosition]]
+        _position: Optional[OrderPosition]
 
         def __init__(self):
-            self._positions = None
+            self._position = None
 
         @property
         def position(self) -> OrderPosition:
-            if self._positions is None:
+            if self._position is None:
                 raise RuntimeError("Order position has not been created yet. Call commit() first on OrderChangeManager.")
-            if len(self._positions) != 1:
-                raise RuntimeError("More than one position created.")
-            return self._positions[0]
-
-        @property
-        def positions(self) -> List[OrderPosition]:
-            if self._positions is None:
-                raise RuntimeError("Order position has not been created yet. Call commit() first on OrderChangeManager.")
-            return self._positions
+            return self._position
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True, allow_blocked_seats=False):
         self.order = order
@@ -1857,12 +1855,8 @@ class OrderChangeManager:
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: OrderPosition = None,
                      subevent: SubEvent = None, seat: Seat = None, membership: Membership = None,
-                     valid_from: datetime = None, valid_until: datetime = None, count: int = 1) -> 'OrderChangeManager.AddPositionResult':
-        if count < 1:
-            raise ValueError("Count must be positive")
+                     valid_from: datetime = None, valid_until: datetime = None) -> 'OrderChangeManager.AddPositionResult':
         if isinstance(seat, str):
-            if count > 1:
-                raise ValueError("Cannot combine count > 1 with seat")
             if not seat:
                 seat = None
             else:
@@ -1916,14 +1910,14 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00'):
             self._invoice_dirty = True
 
-        self._totaldiff_guesstimate += price.gross * count
-        self._quotadiff.update({q: count for q in new_quotas})
+        self._totaldiff_guesstimate += price.gross
+        self._quotadiff.update(new_quotas)
         if seat:
             self._seatdiff.update([seat])
 
         result = self.AddPositionResult()
         self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership,
-                                                  valid_from, valid_until, is_bundled, result, count))
+                                                  valid_from, valid_until, is_bundled, result))
         return result
 
     def split(self, position: OrderPosition):
@@ -2543,35 +2537,29 @@ class OrderChangeManager:
                     secret_dirty.remove(position)
                 position.save(update_fields=['canceled', 'secret'])
             elif isinstance(op, self.AddOperation):
-                new_pos = []
-                new_logs = []
-                for i in range(op.count):
-                    pos = OrderPosition.objects.create(
-                        item=op.item, variation=op.variation, addon_to=op.addon_to,
-                        price=op.price.gross, order=self.order, tax_rate=op.price.rate, tax_code=op.price.code,
-                        tax_value=op.price.tax, tax_rule=op.item.tax_rule,
-                        positionid=nextposid, subevent=op.subevent, seat=op.seat,
-                        used_membership=op.membership, valid_from=op.valid_from, valid_until=op.valid_until,
-                        is_bundled=op.is_bundled,
-                    )
-                    nextposid += 1
-                    new_pos.append(pos)
-                    new_logs.append(self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
-                        'position': pos.pk,
-                        'item': op.item.pk,
-                        'variation': op.variation.pk if op.variation else None,
-                        'addon_to': op.addon_to.pk if op.addon_to else None,
-                        'price': op.price.gross,
-                        'positionid': pos.positionid,
-                        'membership': pos.used_membership_id,
-                        'subevent': op.subevent.pk if op.subevent else None,
-                        'seat': op.seat.pk if op.seat else None,
-                        'valid_from': op.valid_from.isoformat() if op.valid_from else None,
-                        'valid_until': op.valid_until.isoformat() if op.valid_until else None,
-                    }, save=False))
-
-                op.result._positions = new_pos
-                LogEntry.bulk_create_and_postprocess(new_logs)
+                pos = OrderPosition.objects.create(
+                    item=op.item, variation=op.variation, addon_to=op.addon_to,
+                    price=op.price.gross, order=self.order, tax_rate=op.price.rate, tax_code=op.price.code,
+                    tax_value=op.price.tax, tax_rule=op.item.tax_rule,
+                    positionid=nextposid, subevent=op.subevent, seat=op.seat,
+                    used_membership=op.membership, valid_from=op.valid_from, valid_until=op.valid_until,
+                    is_bundled=op.is_bundled,
+                )
+                nextposid += 1
+                self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
+                    'position': pos.pk,
+                    'item': op.item.pk,
+                    'variation': op.variation.pk if op.variation else None,
+                    'addon_to': op.addon_to.pk if op.addon_to else None,
+                    'price': op.price.gross,
+                    'positionid': pos.positionid,
+                    'membership': pos.used_membership_id,
+                    'subevent': op.subevent.pk if op.subevent else None,
+                    'seat': op.seat.pk if op.seat else None,
+                    'valid_from': op.valid_from.isoformat() if op.valid_from else None,
+                    'valid_until': op.valid_until.isoformat() if op.valid_until else None,
+                })
+                op.result._position = pos
             elif isinstance(op, self.SplitOperation):
                 position = position_cache.setdefault(op.position.pk, op.position)
                 split_positions.append(position)
@@ -2896,7 +2884,7 @@ class OrderChangeManager:
         return total
 
     def _check_order_size(self):
-        if (len(self.order.positions.all()) + sum([op.count for op in self._operations if isinstance(op, self.AddOperation)])) > settings.PRETIX_MAX_ORDER_SIZE:
+        if (len(self.order.positions.all()) + len([op for op in self._operations if isinstance(op, self.AddOperation)])) > settings.PRETIX_MAX_ORDER_SIZE:
             raise OrderError(
                 self.error_messages['max_order_size'] % {
                     'max': settings.PRETIX_MAX_ORDER_SIZE,
@@ -2957,7 +2945,7 @@ class OrderChangeManager:
         ]) + len([
             o for o in self._operations if isinstance(o, self.SplitOperation)
         ])
-        adds = sum([o.count for o in self._operations if isinstance(o, self.AddOperation)])
+        adds = len([o for o in self._operations if isinstance(o, self.AddOperation)])
         if current > 0 and current - cancels + adds < 1:
             raise OrderError(self.error_messages['complete_cancel'])
 
@@ -3004,18 +2992,17 @@ class OrderChangeManager:
             elif isinstance(op, self.CancelOperation) and op.position in positions_to_fake_cart:
                 fake_cart.remove(positions_to_fake_cart[op.position])
             elif isinstance(op, self.AddOperation):
-                for i in range(op.count):
-                    cp = CartPosition(
-                        event=self.event,
-                        item=op.item,
-                        variation=op.variation,
-                        used_membership=op.membership,
-                        subevent=op.subevent,
-                        seat=op.seat,
-                    )
-                    cp.override_valid_from = op.valid_from
-                    cp.override_valid_until = op.valid_until
-                    fake_cart.append(cp)
+                cp = CartPosition(
+                    event=self.event,
+                    item=op.item,
+                    variation=op.variation,
+                    used_membership=op.membership,
+                    subevent=op.subevent,
+                    seat=op.seat,
+                )
+                cp.override_valid_from = op.valid_from
+                cp.override_valid_until = op.valid_until
+                fake_cart.append(cp)
         try:
             validate_memberships_in_order(self.order.customer, fake_cart, self.event, lock=True, ignored_order=self.order, testmode=self.order.testmode)
         except ValidationError as e:
@@ -3526,3 +3513,154 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
                         'customer': order.customer_id,
                     }
                 )
+
+
+class OrderPositionNotUsedCheck(CancellationCheck):
+    id = "SYSTEM_TICKET_NOT_USED"
+    prefetches = [
+        Prefetch(
+            'checkins',
+            queryset=Checkin.objects.filter(list__consider_tickets_used=True),
+            to_attr='used_checkins'  # stores result in a list attribute
+        )
+    ]
+    related_selects = []
+
+    def check(self, order: Order, keep: Set[OrderPosition], order_position: OrderPosition) -> CancellationCheckResultsById:
+        if order_position.checkins.filter(list__consider_tickets_used=True).exists():
+            return {self.id: CancellationCheckResult(
+                cancellation_possible=False,
+                reason="Order position was used",
+            )}
+        else:
+            return {self.id: CancellationCheckResult(
+                cancellation_possible=True,
+                reason="Order position not yet used",
+            )}
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_not_used")
+def cancellation_checks_not_used(sender: Event):
+    return OrderPositionNotUsedCheck()
+
+
+class NotDiscountedCheck(CancellationCheck):
+    """
+    Check that ensures that orders containing discounted order_positions cannot
+    be canceled partially.
+    This is a stop-gap solution until the `discount_grouper` attribute for
+    AbstractPositions is introduced, allowing us to be more grannular
+    """
+
+    id = "SYSTEM_NO_DISCOUNTED_ORDER_POSITIONS"
+    prefetches = [
+    ]
+    related_selects = []
+
+    def check(self, order: Order, keep: Set[OrderPosition], order_position: OrderPosition) -> CancellationCheckResultsById:
+        cancellations = Set(order.positions).difference(keep)
+
+        if order_position in cancellations:
+            if order_position.discount_id is None:
+                return {self.id: CancellationCheckResult(
+                    cancellation_possible=True,
+                    reason=_("Order position was bought without discount"),
+                )}
+            else:
+                return {self.id: CancellationCheckResult(
+                    cancellation_possible=False,
+                    reason=_("Order position was bought with a discount"),
+                )}
+        else:
+            return {self.id: CancellationCheckResult(
+                cancellation_possible=False,
+                reason=_("Order position not canceled - check not applicable"),
+            )}
+
+
+@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_not_discountend")
+def cancellation_checks_not_discounted(sender: Event):
+    return NotDiscountedCheck()
+
+
+# TODO weitere System Checks
+# OrderPositions mit Item.min_per_order dürfen nur storniert werden, wenn genug übrig bleiben oder alle des gleichen Items storniert werden
+# OrderPositions mit addon_to != None dürfen nur über den bestehenden Add-On-Flow storniert werden
+# OrderPositions mit is_bundled dürfen nur mit der Parent-Position zusammen storniert werden
+
+# TODO transaktion
+def self_service_cancel(order: Order, keep: Set[OrderPosition], dry_run: bool):
+    """
+
+    :param order:
+    :param keep:
+    :param dry_run:
+    :return:
+    """
+    cancellation_checks: List[CancellationCheck] = [resp for recv, resp in self_service_cancellation_checks.send(event=order.event)]
+
+    position_rules = CancellationRule.objects.filter(event=order.event).filter("fee_cancellation_process" == Decimal("0.00")).all()
+    process_rules = CancellationRule.objects.filter(event=order.event).filter("fee_cancellation_process" != Decimal("0.00")).all()
+
+    # Todo get prefetches/selects from rules as well
+    prefetches = list(chain.from_iterable([cc.prefetches for cc in cancellation_checks]))
+    related_selects = list(chain.from_iterable(cc.related_selects for cc in cancellation_checks))
+
+    per_position_rulings: Dict[int, List[Ruling]] = {}
+
+    prefetched_order = Order.objects.select_related(related_selects).prefetch_related(*prefetches).get(pk=order.pk)
+    # All queries should be done by now
+    with ensure_no_queries():
+        for position in prefetched_order.positions:
+            position_rulings = []
+
+            system_check_results = [cc.check(prefetched_order, keep, position) for cc in cancellation_checks]
+
+            for rule in position_rules:
+                check_results = [check(prefetched_order, keep, position) for check in rule.checks]
+
+                if rule.fee_percentage_per_item and rule.fee_absolute_per_item:
+                    raise NotImplementedError("Should never be reached")
+                elif rule.fee_absolute_per_item != Decimal(0.00):
+                    position_rulings.append(
+                        Ruling.from_absolute_fee(
+                            rule_id=rule.id,
+                            results=reduce(lambda a, b: a | b, [*system_check_results, *check_results], {}),
+                            fee_type='position_fee',
+                            absolute_fee=rule.fee_absolute_per_item
+                        )
+                    )
+                else:
+                    position_rulings.append(
+                        Ruling.from_relative_fee(
+                            rule_id=rule.id,
+                            results=reduce(lambda a, b: a | b, [*system_check_results, *check_results], {}),
+                            fee_type='position_fee',
+                            reference_price=position.price,
+                            percentage=rule.fee_absolute_per_item,
+                            currency=order.event.currency
+                        )
+                    )
+            position_rulings.sort()
+            per_position_rulings[position.id] = position_rulings
+        effective_position_rulings = [op_rulings[0] for op_rulings in per_position_rulings.values()]
+
+        process_rulings: List[Ruling] = []
+
+        for rule in process_rules:
+            check_results = [check(prefetched_order, keep, position) for check in rule.checks]
+
+            process_rulings.append(Ruling.from_absolute_fee(
+                rule_id=rule.id,
+                results=reduce(lambda a, b: a | b, [*check_results], {}),
+                fee_type='process_fee',
+                absolute_fee=rule.fee_cancellation_process
+            ))
+
+        process_rulings.sort()
+
+        effective_process_ruling = process_rulings[0]
+
+        cancellation_possible = all([r.cancellation_possible for r in effective_position_rulings])
+
+    # TODO zusammenführen der Rulings
