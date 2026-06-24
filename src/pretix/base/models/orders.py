@@ -3438,7 +3438,7 @@ class InvoiceAddress(models.Model):
             self.name,
             self.street,
             (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
-            self.country.name,
+            self.country.name if self.country else '',
             self.vat_id,
             self.custom_field,
             self.internal_reference,
