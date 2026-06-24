@@ -49,6 +49,7 @@ from django_scopes import ScopedManager
 
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.helpers.countries import FastCountryField
+from pretix.helpers.models import NormalizedDecimalField
 
 
 def invoice_filename(instance, filename: str) -> str:
@@ -450,7 +451,7 @@ class InvoiceLine(models.Model):
     description = models.TextField()
     gross_value = models.DecimalField(max_digits=13, decimal_places=2)
     tax_value = models.DecimalField(max_digits=13, decimal_places=2, default=Decimal('0.00'))
-    tax_rate = models.DecimalField(max_digits=7, decimal_places=2, default=Decimal('0.00'))
+    tax_rate = NormalizedDecimalField(max_digits=7, decimal_places=4, default=Decimal('0'))
     tax_name = models.CharField(max_length=190)
     tax_code = models.CharField(max_length=190, null=True, blank=True)
     subevent = models.ForeignKey('SubEvent', null=True, blank=True, on_delete=models.PROTECT)

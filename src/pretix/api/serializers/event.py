@@ -48,7 +48,7 @@ from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
 from pretix.api.serializers import (
-    CompatibleJSONField, SalesChannelMigrationMixin,
+    CompatDecimalField, CompatibleJSONField, SalesChannelMigrationMixin,
 )
 from pretix.api.serializers.fields import PluginsField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -681,6 +681,7 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
         required=False,
         allow_null=True,
     )
+    rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         model = TaxRule
