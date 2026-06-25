@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-27 15:47+0000\n"
-"PO-Revision-Date: 2026-04-30 18:00+0000\n"
-"Last-Translator: Paul Berschick <paul@plainschwarz.com>\n"
+"PO-Revision-Date: 2026-06-25 14:00+0000\n"
+"Last-Translator: Kim Lozano <joaquim.lozano@upc.edu>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html:670
 #: pretix/control/templates/pretixcontrol/events/index.html:166
@@ -9170,12 +9170,11 @@ msgstr ""
 "quantitat que heu seleccionat. Si us plau, mireu més abaix per a més detalls."
 
 #: pretix/base/services/cart.py:134 pretix/base/services/orders.py:152
-#, fuzzy, python-format
-#| msgid "You cannot select more than %s items per order."
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
 msgstr[0] "No podeu seleccionar més de %s element per comanda."
-msgstr[1] "No podeu seleccionar més de %s element per comanda."
+msgstr[1] "No podeu seleccionar més de %s elements per comanda."
 
 #: pretix/base/services/cart.py:138 pretix/base/services/orders.py:1603
 #, fuzzy, python-format
