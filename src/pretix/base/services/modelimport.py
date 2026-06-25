@@ -27,7 +27,7 @@ from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils.timezone import now
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, ngettext
 
 from pretix.base.i18n import language
 from pretix.base.modelimport import DataImportError, ImportColumn, parse_csv
@@ -297,6 +297,20 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
                 raise DataImportError(
                     _('Invalid data in row {row}: {message}').format(row=i+1, message=str(e))
                 )
+        existing_codes = Voucher.objects.filter(
+            event=event,
+            code__in=codes,
+        ).values_list("code", flat=True)
+        if len(existing_codes):
+            raise DataImportError(
+                ngettext(
+                    'Voucher codes must be unique. Import contains existing voucher code {code}.',
+                    'Voucher codes must be unique. Import contains existing voucher codes {code}.',
+                    len(existing_codes)
+                ).format(
+                    code=", ".join(existing_codes)
+                )
+            )
 
         with transaction.atomic():
             # We don't support quotas here, so we only need to lock if seats are in use
