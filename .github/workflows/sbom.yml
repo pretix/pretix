@@ -32,13 +32,21 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install system dependencies
         run: sudo apt update && sudo apt install -y gettext unzip
+      - name: Install node dependencies
+        run: sudo npm install --global @cyclonedx/cyclonedx-npm
       - name: Install Python dependencies
-        run: pip3 install -U uv cyclonedx-bom prisma-sbom-submit
+        run: pip3 install -U uv cyclonedx-bom prisma-sbom-submit sbommerge
       - name: Create empty environment
         run: uv venv sbom-env
       - name: Install package
         run: uv pip install --python ./sbom-env/bin/python  .
-      - name: Create SBOM
-        run: cyclonedx-py environment sbom-env > sbom.json
+      - name: Create Python SBOM
+        run: cyclonedx-py environment sbom-env > sbom-python.json
+      - name: Install node dependencies
+        run: npm ci
+      - name: Create JavaScript SBOM
+        run: cyclonedx-npm > sbom-npm.json
+      - name: Merge SBOMs
+        run: sbommerge sbom-python.json sbom-npm.json --format json -o sbom.json
       - name: Submit SBOM
         run: prisma-sbom-submit --server https://prisma.pretix.com sbom.json
