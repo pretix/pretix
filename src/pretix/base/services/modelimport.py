@@ -26,6 +26,7 @@ from typing import List
 from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.db.utils import IntegrityError
 from django.utils.timezone import now
 from django.utils.translation import gettext as _, ngettext
 
@@ -323,7 +324,13 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
 
             save_logentries = []
             for v in vouchers:
-                v.save()
+                try:
+                    v.save()
+                except IntegrityError:
+                    # should not happen as we check existing codes before, but we did not lock so we might have a race-condition
+                    raise DataImportError(
+                        _('Vouchers could not be imported, probably due to a voucher code already being in use.')
+                    )
                 save_logentries.append(v.log_action(
                     'pretix.voucher.added',
                     user=user,
