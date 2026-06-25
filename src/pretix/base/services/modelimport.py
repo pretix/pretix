@@ -296,7 +296,7 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
                     lock_seats.append(voucher.seat)
             except (ValidationError, ImportError) as e:
                 raise DataImportError(
-                    _('Invalid data in row {row}: {message}').format(row=i+1, message=str(e))
+                    _('Invalid data in row {row}: {message}').format(row=i + 1, message=str(e))
                 )
         existing_codes = Voucher.objects.filter(
             event=event,
