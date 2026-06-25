@@ -260,6 +260,7 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
         # Prepare model objects. Yes, this might consume lots of RAM, but allows us to make the actual SQL transaction
         # shorter. We'll see what works better in reality…
         vouchers = []
+        codes = set()
         lock_seats = []
         for i, record in enumerate(data):
             try:
@@ -268,6 +269,14 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
 
                 if not record.get("code"):
                     raise ValidationError(_('A voucher cannot be created without a code.'))
+                code = record.get("code")
+                if code.upper() in codes:
+                    raise ValidationError(
+                        _('Voucher codes must be unique. Code "{code}" already exists in this import.').format(
+                            code=code,
+                        )
+                    )
+                codes.add(code.upper())
                 Voucher.clean_item_properties(
                     record,
                     event,
@@ -286,7 +295,7 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
                     lock_seats.append(voucher.seat)
             except (ValidationError, ImportError) as e:
                 raise DataImportError(
-                    _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
+                    _('Invalid data in row {row}: {message}').format(row=i+1, message=str(e))
                 )
 
         with transaction.atomic():
