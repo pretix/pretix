@@ -34,8 +34,10 @@ jobs:
         run: sudo apt update && sudo apt install -y gettext unzip
       - name: Install node dependencies
         run: sudo npm install --global @cyclonedx/cyclonedx-npm
+      - name: Install CycloneDX CLI
+        run: wget https://github.com/CycloneDX/cyclonedx-cli/releases/download/v0.32.0/cyclonedx-linux-x64 && chmod +x cyclonedx-linux-x64
       - name: Install Python dependencies
-        run: pip3 install -U uv cyclonedx-bom prisma-sbom-submit sbommerge
+        run: pip3 install -U uv cyclonedx-bom prisma-sbom-submit
       - name: Create empty environment
         run: uv venv sbom-env
       - name: Install package
@@ -47,6 +49,8 @@ jobs:
       - name: Create JavaScript SBOM
         run: cyclonedx-npm > sbom-npm.json
       - name: Merge SBOMs
-        run: sbommerge sbom-python.json sbom-npm.json --format json -o sbom.json
+        run: ./cyclonedx-linux-x64 merge --input-files sbom-python.json sbom-npm.json --output-format json --output-file sbom.json
       - name: Submit SBOM
         run: prisma-sbom-submit --server https://prisma.pretix.com sbom.json
+        env:
+          PRISMA_UPLOAD_TOKEN: ${{ secrets.PRISMA_UPLOAD_TOKEN }}
