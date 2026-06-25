@@ -15,15 +15,12 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     name: Submission
-    strategy:
-      matrix:
-        python-version: ["3.13"]
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.13"
       - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
