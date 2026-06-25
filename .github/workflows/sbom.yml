@@ -1,0 +1,44 @@
+name: SBOM
+
+on:
+  push:
+    branches: [ master, sbom ]
+    tags: [ 'v.*' ]
+
+permissions:
+  contents: read  #  to fetch code (actions/checkout)
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    name: Submission
+    strategy:
+      matrix:
+        python-version: ["3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install system dependencies
+        run: sudo apt update && sudo apt install -y gettext unzip
+      - name: Install Python dependencies
+        run: pip3 install -U uv cyclonedx-bom prisma-sbom-submit
+      - name: Create empty environment
+        run: uv venv sbom-env
+      - name: Install package
+        run: uv pip install --python ./sbom-env/bin/python  .
+      - name: Create SBOM
+        run: cyclonedx-py environment sbom-env > sbom.json
+      - name: Submit SBOM
+        run: prisma-sbom-submit --server https://prisma.pretix.com sbom.json
