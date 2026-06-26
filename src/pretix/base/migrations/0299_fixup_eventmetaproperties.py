@@ -51,7 +51,6 @@ def make_eventmetaproperties_unique(apps, schema_editor):
         logger.info(f"Fixup duplicate property {dup['organizer__slug']} {dup['name']}")
         props = list(EventMetaProperty.objects.filter(organizer=dup['organizer'], name=dup['name']))
 
-        # TODO: any better idea than picking the property to keep more or less randomly (first in database order)?
         target = props[0]
         invalid = props[1:]
 
