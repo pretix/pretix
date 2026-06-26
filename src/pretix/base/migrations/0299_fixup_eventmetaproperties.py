@@ -48,7 +48,7 @@ def make_eventmetaproperties_unique(apps, schema_editor):
 
     duplicates = EventMetaProperty.objects.values('organizer', 'organizer__slug', 'name').annotate(count=Count('id')).filter(count__gt=1)
     for dup in duplicates:
-        logger.info(f"Fixup duplicate property {dup['organizer__slug']} {dup['name']}")
+        logger.warning("%s", f"Fixup duplicate property {dup['organizer__slug']} {dup['name']}")
         props = list(EventMetaProperty.objects.filter(organizer=dup['organizer'], name=dup['name']))
 
         target = props[0]
@@ -61,21 +61,21 @@ def make_eventmetaproperties_unique(apps, schema_editor):
                 ).update(
                     property=target
                 )
-                logger.info(f"  Switching {affected} value(s) over to {target.name}({target.id}@{target.organizer.slug})")
+                logger.warning("%s", f"  Switching {affected} value(s) over to {target.name}({target.id}@{target.organizer.slug})")
 
         except IntegrityError as e:
-            logger.info(f"  Failed to switch all value(s) over to {target.name}({target.id}@{target.organizer.slug})")
-            logger.info(f"  {e}")
+            logger.warning("%s", f"  Failed to switch all value(s) over to {target.name}({target.id}@{target.organizer.slug})")
+            logger.warning("%s", f"  {e}")
             for prop in invalid:
                 newname = f'{prop.name}_DUPLICATE_{prop.id}'
-                logger.info(f"  Renaming {prop.name}({prop.id}@{prop.organizer.slug}) to {newname}({prop.id}@{prop.organizer.slug})")
+                logger.warning("%s", f"  Renaming {prop.name}({prop.id}@{prop.organizer.slug}) to {newname}({prop.id}@{prop.organizer.slug})")
                 prop.name = newname
                 prop.filter_public = False
                 prop.save()
 
         else:
             for prop in invalid:
-                logger.info(f"  Deleting {prop.name}({prop.id}@{prop.organizer.slug})")
+                logger.warning("%s", f"  Deleting {prop.name}({prop.id}@{prop.organizer.slug})")
                 prop.delete()
 
 
