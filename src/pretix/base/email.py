@@ -57,6 +57,8 @@ logger = logging.getLogger('pretix.base.email')
 
 T = TypeVar("T", bound=EmailBackend)
 
+_cgnat_net = ipaddress.ip_network('100.64.0.0/10')
+
 
 def test_custom_smtp_backend(backend: T, from_addr: str) -> None:
     try:
@@ -253,12 +255,15 @@ def create_connection(address, timeout=socket.getdefaulttimeout(),
 
         if not getattr(settings, "MAIL_CUSTOM_SMTP_ALLOW_PRIVATE_NETWORKS", False):
             ip_addr = ipaddress.ip_address(sa[0])
+            check_ip4 = ip_addr.ipv4_mapped if getattr(ip_addr, "ipv4_mapped", None) else ip_addr
             if ip_addr.is_multicast:
                 raise socket.error(f"Request to multicast address {sa[0]} blocked")
             if ip_addr.is_loopback or ip_addr.is_link_local:
                 raise socket.error(f"Request to local address {sa[0]} blocked")
             if ip_addr.is_private:
                 raise socket.error(f"Request to private address {sa[0]} blocked")
+            if check_ip4 in _cgnat_net:
+                raise socket.error(f"Request to RFC 6598 address {sa[0]} blocked")
 
         sock = None
         try:

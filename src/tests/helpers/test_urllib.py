@@ -43,6 +43,8 @@ def test_private_ip_blocked():
         requests.get("https://10.0.0.1", timeout=0.1)
     with pytest.raises(HTTPError, match="Request to RFC 6598 address.*"):
         requests.get("https://100.100.100.100", timeout=0.1)
+    with pytest.raises(HTTPError, match="Request to RFC 6598 address.*"):
+        requests.get("https://[::ffff:100.64.0.1]", timeout=0.1)
 
 
 @pytest.mark.django_db
@@ -58,6 +60,7 @@ def test_private_ip_blocked():
     [(AF_INET6, SOCK_STREAM, 6, '', ('fe80::1', 443, 0, 0))],
     [(AF_INET6, SOCK_STREAM, 6, '', ('ff00::1', 443, 0, 0))],
     [(AF_INET6, SOCK_STREAM, 6, '', ('fc00::1', 443, 0, 0))],
+    [(AF_INET6, SOCK_STREAM, 6, "", ("::ffff:100.64.0.1", 443, 0, 0))],
 ])
 def test_dns_resolving_to_local_blocked(res):
     with mock.patch('socket.getaddrinfo') as mock_addr:
