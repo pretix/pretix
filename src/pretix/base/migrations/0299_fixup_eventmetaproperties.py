@@ -35,6 +35,7 @@ def fix_cross_organizer_eventmetavalues(apps, schema_editor):
             meta_prop = emv.property
             meta_prop.pk = None
             meta_prop.organizer = emv.event.organizer
+            meta_prop.filter_public = False
             meta_prop.save(force_insert=True)
             logger.warning("  %s", f"WARN: found no matching EventMetaProperty, creating")
             logger.warning("  %s", f"after: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {repr(emv.value)}")
