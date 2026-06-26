@@ -70,6 +70,7 @@ def make_eventmetaproperties_unique(apps, schema_editor):
                 newname = f'{prop.name}_DUPLICATE_{prop.id}'
                 logger.info(f"  Renaming {prop.name}({prop.id}@{prop.organizer.slug}) to {newname}({prop.id}@{prop.organizer.slug})")
                 prop.name = newname
+                prop.filter_public = False
                 prop.save()
 
         else:
