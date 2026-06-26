@@ -11,25 +11,34 @@ def fix_cross_organizer_eventmetavalues(apps, schema_editor):
     EventMetaProperty = apps.get_model("pretixbase", "EventMetaProperty")
     EventMetaValue = apps.get_model("pretixbase", "EventMetaValue")
 
-    cross_org_values = EventMetaValue.objects.filter(event__organizer__pk__ne=F('property__organizer__pk'))
+    cross_org_values = EventMetaValue.objects.filter(
+        event__organizer__pk__ne=F('property__organizer__pk')
+    ).order_by('event__organizer__slug', 'event__slug')
     for emv in cross_org_values:
-        logger.info(f"Fixup cross-organizer value {emv.event.organizer.slug}/{emv.event.slug}\n  before: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {emv.value}")
+        logger.warning("%s", f"Fixing cross-organizer EventMetaValue: {emv.event.organizer.slug}/{emv.event.slug}")
+        logger.warning("  %s", f"{emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {repr(emv.value)}")
         try:
-            emv.property = emv.event.organizer.meta_properties.filter(name=emv.property.name).first()
-            logger.info(f"  found existing EventMetaProperty in {emv.event.organizer.slug}")
+            emv.property = emv.event.organizer.meta_properties.get(name=emv.property.name)
             if EventMetaValue.objects.filter(event=emv.event, property=emv.property).exists():
-                logger.info(f"  EventMetaValue with property in correct organizer already exists, deleting the cross-organizer one")
+                correct = EventMetaValue.objects.get(event=emv.event, property=emv.property)
+                if correct.value != emv.value:
+                    logger.warning("  %s", f"WARN: conflicting EventMetaValue with property in correct organizer already exists, deleting the cross-organizer one")
+                else:
+                    logger.warning("  %s", f"OK: same-value EventMetaValue with property in correct organizer already exists, deleting the cross-organizer one")
+                logger.warning("  %s", f"keeping: {correct.property.name}({correct.property.id}@{correct.property.organizer.slug}) = {repr(correct.value)}")
                 emv.delete()
-                continue
+            else:
+                logger.warning("  %s", f"OK: found existing EventMetaProperty in {emv.event.organizer.slug}, updating reference")
+                logger.warning("  %s", f"after: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {repr(emv.value)}")
+                emv.save(update_fields=["property"])
         except EventMetaProperty.DoesNotExist:
             meta_prop = emv.property
             meta_prop.pk = None
             meta_prop.organizer = emv.event.organizer
             meta_prop.save(force_insert=True)
-            logger.info(f"  created new EventMetaProperty")
-            emv.property = meta_prop
-        logger.info(f"  after: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {emv.value}")
-        emv.save(update_fields=["property"])
+            logger.warning("  %s", f"WARN: found no matching EventMetaProperty, creating")
+            logger.warning("  %s", f"after: {emv.property.name}({emv.property.id}@{emv.property.organizer.slug}) = {repr(emv.value)}")
+            emv.save(update_fields=["property"])
 
 
 def make_eventmetaproperties_unique(apps, schema_editor):
