@@ -34,13 +34,11 @@
 
 import json
 import logging
-import urllib.parse
 
 import requests
 from django.contrib import messages
-from django.core import signing
 from django.db import transaction
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -64,7 +62,7 @@ from pretix.control.views.event import DecoupleMixin
 from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.helpers import OF_SELF
 from pretix.helpers.http import redirect_to_url
-from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
+from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
 from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.tasks import (
@@ -72,28 +70,6 @@ from pretix.plugins.stripe.tasks import (
 )
 
 logger = logging.getLogger('pretix.plugins.stripe')
-
-
-@xframe_options_exempt
-def redirect_view(request, *args, **kwargs):
-    try:
-        data = signing.loads(request.GET.get('data', ''), salt='safe-redirect')
-    except signing.BadSignature:
-        return HttpResponseBadRequest('Invalid parameter')
-
-    if 'go' in request.GET:
-        if 'session' in data:
-            for k, v in data['session'].items():
-                request.session[k] = v
-        return redirect(data['url'])
-    else:
-        params = request.GET.copy()
-        params['go'] = '1'
-        r = render(request, 'pretixplugins/stripe/redirect.html', {
-            'url': eventreverse_absolute(request.event, 'plugins:stripe:redirect') + '?' + urllib.parse.urlencode(params),
-        })
-        r._csp_ignore = True
-        return r
 
 
 @scopes_disabled()
@@ -514,11 +490,6 @@ class StripeOrderView:
         return self.request.event.get_payment_providers()[self.payment.provider]
 
     def _redirect_to_order(self):
-        if self.request.session.get('payment_stripe_order_secret') != self.order.secret and not self.payment.provider.startswith('stripe'):
-            messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
-                                           'in your emails to continue.'))
-            return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
-
         return redirect_to_url(eventreverse(self.request.event, 'presale:event.order', kwargs={
             'order': self.order.code,
             'secret': self.order.secret

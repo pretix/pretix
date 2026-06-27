@@ -45,8 +45,10 @@ def _is_samesite_referer(request):
 
 
 def redir_view(request):
+    framebreak = "framebreak" in request.GET
+    salt = 'framebreak-safelink-url' if framebreak else 'safelink-url'
     try:
-        url = signing.Signer(salt='safelink-url').unsign(request.GET.get('url', ''))
+        url = signing.Signer(salt=salt).unsign(request.GET.get('url', ''))
     except signing.BadSignature:
         try:
             # Backwards-compatibility for a change in 2026-06, remove after a while
@@ -61,15 +63,26 @@ def redir_view(request):
             'url': url,
         })
 
+    if framebreak:
+        r = render(request, 'pretixbase/framebreak.html', {
+            'url': url,
+        })
+        r.xframe_options_exempt = True
+        return r
+
     r = HttpResponseRedirect(url)
     r['X-Robots-Tag'] = 'noindex'
     return r
 
 
-def safelink(url):
+def safelink(url, framebreak=False):
     url = str(url)
     if not (url.startswith('https://') or url.startswith('http://') or url.startswith("/")):
         logger.warning('Invalid URL passed to safelink: %r', url)
         return '#invalid-url'
-    signer = signing.Signer(salt='safelink-url')
-    return reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
+    salt = 'framebreak-safelink-url' if framebreak else 'safelink-url'
+    signer = signing.Signer(salt=salt)
+    u = reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
+    if framebreak:
+        u += "&framebreak=true"
+    return u
