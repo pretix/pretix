@@ -23,8 +23,8 @@ import types
 from datetime import datetime
 from http import cookies
 
-from PIL import Image
 from django.core.exceptions import SuspiciousFileOperation
+from PIL import Image
 from requests.adapters import HTTPAdapter
 
 from pretix.helpers.reportlab import ThumbnailingImageReader

@@ -22,15 +22,13 @@
 from django.urls import include, re_path
 
 from .views import (
-    PayView, XHRView, abort, isu_disconnect, isu_return, redirect_view,
-    success, webhook,
+    PayView, XHRView, abort, isu_disconnect, isu_return, success, webhook,
 )
 
 event_patterns = [
     re_path(r'^paypal2/', include([
         re_path(r'^abort/$', abort, name='abort'),
         re_path(r'^return/$', success, name='return'),
-        re_path(r'^redirect/$', redirect_view, name='redirect'),
         re_path(r'^xhr/$', XHRView.as_view(), name='xhr'),
         re_path(r'^pay/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[^/]+)/$', PayView.as_view(), name='pay'),
         re_path(r'^(?P<order>[^/][^w]+)/(?P<secret>[A-Za-z0-9]+)/xhr/$', XHRView.as_view(), name='xhr'),

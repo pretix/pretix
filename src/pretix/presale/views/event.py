@@ -536,7 +536,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                     **pass_through_url_params,
                 })
             })
-            r._csp_ignore = True
             return r
 
         if not request.event.all_sales_channels and request.sales_channel.identifier not in (s.identifier for s in request.event.limit_sales_channels.all()):

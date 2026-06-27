@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% load urlreplace %}
+{% load static %}
 
 {% block content %}
     {% if cart_namespace %}
@@ -23,9 +24,8 @@
                class="btn btn-primary btn-lg" target="_blank">
                 {% trans "Continue in new tab" %}
             </a>
-            <script>
-                window.open('{{ url|escapejs }}');
-            </script>
+            {{ url|json_script:"framebreak-url" }}
+            <script type="text/javascript" src="{% static "pretixbase/js/framebreak.js" %}"></script>
         </div>
     {% else %}
         <h1>{% trans "Cookies not supported" %}</h1>
