@@ -19,12 +19,15 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
 import urllib.parse
 
 from django.core import signing
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+
+logger = logging.getLogger(__name__)
 
 
 def _is_samesite_referer(request):
@@ -42,11 +45,14 @@ def _is_samesite_referer(request):
 
 
 def redir_view(request):
-    signer = signing.Signer(salt='safe-redirect')
     try:
-        url = signer.unsign(request.GET.get('url', ''))
+        url = signing.Signer(salt='safelink-url').unsign(request.GET.get('url', ''))
     except signing.BadSignature:
-        return HttpResponseBadRequest('Invalid parameter')
+        try:
+            # Backwards-compatibility for a change in 2026-06, remove after a while
+            url = signing.Signer(salt='safe-redirect').unsign(request.GET.get('url', ''))
+        except signing.BadSignature:
+            return HttpResponseBadRequest('Invalid parameter')
 
     if not _is_samesite_referer(request):
         u = urllib.parse.urlparse(url)
@@ -61,5 +67,9 @@ def redir_view(request):
 
 
 def safelink(url):
-    signer = signing.Signer(salt='safe-redirect')
+    url = str(url)
+    if not (url.startswith('https://') or url.startswith('http://') or url.startswith("/")):
+        logger.warning('Invalid URL passed to safelink: %r', url)
+        return '#invalid-url'
+    signer = signing.Signer(salt='safelink-url')
     return reverse('redirect') + '?url=' + urllib.parse.quote(signer.sign(url))
