@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-28 14:44+0000\n"
+"POT-Creation-Date: 2026-06-28 15:49+0000\n"
 "PO-Revision-Date: 2021-12-03 08:37+0000\n"
 "Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -133,6 +133,7 @@ msgid "Mercado Pago"
 msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:54
 #: pretix/static/pretixpresale/js/ui/cart.js:89
 #, fuzzy
 #| msgctxt "widget"
@@ -188,6 +189,190 @@ msgstr "总计"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
 msgid "Contacting your bank …"
 msgstr "正在联系您的银行 …"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:34
+#, fuzzy
+#| msgid "Switch check-in list"
+msgid "Select a check-in list"
+msgstr "切换签到列表"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:35
+msgid "No active check-in lists found."
+msgstr "未找到活动的签到列表。"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:36
+msgid "Switch check-in list"
+msgstr "切换签到列表"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:37
+msgid "Search results"
+msgstr "搜索结果"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:38
+msgid "No tickets found"
+msgstr "找不到票"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:39
+msgid "Result"
+msgstr "结果"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:40
+msgid "This ticket requires special attention"
+msgstr "这张票需要特别注意"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:41
+#, fuzzy
+#| msgid "Switch check-in list"
+msgid "Switch direction"
+msgstr "切换签到列表"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:42
+msgid "Entry"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:43
+msgid "Exit"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:44
+msgid "Scan a ticket or search and press return…"
+msgstr "扫描一张票或搜索然后按返回…"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:45
+msgid "Load more"
+msgstr "加载更多"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:46
+msgid "Valid"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:47
+msgid "Unpaid"
+msgstr "未支付"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:48
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:49
+msgid "Canceled"
+msgstr "已被取消"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:50
+msgid "Confirmed"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:51
+msgid "Approval pending"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:52
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Redeem"
+msgid "Redeemed"
+msgstr "兑换"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:53
+msgid "Cancel"
+msgstr "取消"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:55
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:64
+msgid "Ticket not paid"
+msgstr "票未支付"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:56
+msgid "This ticket is not yet paid. Do you want to continue anyways?"
+msgstr "这张票尚未支付。无论如何你都要继续吗？"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:57
+msgid "Additional information required"
+msgstr "需要提供更多信息"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:58
+msgid "Valid ticket"
+msgstr "有效的票"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:59
+msgid "Exit recorded"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:60
+msgid "Ticket already used"
+msgstr "票已经被使用过"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:61
+#, fuzzy
+#| msgid "Additional information required"
+msgid "Information required"
+msgstr "需要提供更多信息"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:62
+msgid "Unknown ticket"
+msgstr "未知的票。"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:63
+msgid "Ticket type not allowed here"
+msgstr "不允许的票类型"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:65
+#, fuzzy
+#| msgid "Ticket type not allowed here"
+msgid "Entry not allowed"
+msgstr "不允许的票类型"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:66
+msgid "Ticket code revoked/changed"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:67
+#, fuzzy
+#| msgid "Ticket not paid"
+msgid "Ticket blocked"
+msgstr "票未支付"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:68
+#, fuzzy
+#| msgid "Ticket not paid"
+msgid "Ticket not valid at this time"
+msgstr "票未支付"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:69
+msgid "Order canceled"
+msgstr "订单已经取消"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:70
+msgid "Ticket code is ambiguous on list"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:71
+msgid "Order not approved"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:72
+msgid "Checked-in Tickets"
+msgstr "已签到的票"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:73
+msgid "Valid Tickets"
+msgstr "有效的票"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:74
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "currently available: %s"
+msgid "Currently inside"
+msgstr "当前可用: %s"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:75
+#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "Yes"
+msgstr "是"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts:76
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:271
+msgid "No"
+msgstr "否"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 #, fuzzy
@@ -276,6 +461,165 @@ msgstr "已复制!"
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
 msgstr "按Ctrl-C复制!"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue:80
+msgid "Edit"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue:86
+msgid "Visualize"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue:96
+msgid ""
+"Your rule always filters by product or variation, but the following products "
+"or variations are not contained in any of your rule parts so people with "
+"these tickets will not get in:"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue:99
+msgid "Please double-check if this was intentional."
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:4
+msgid "All of the conditions below (AND)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:5
+msgid "At least one of the conditions below (OR)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:6
+msgid "Event start"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:7
+msgid "Event end"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:8
+msgid "Event admission"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:9
+msgid "custom date and time"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:10
+msgid "custom time"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:11
+msgid "Tolerance (minutes)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:12
+msgid "Add condition"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:13
+msgid "minutes"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:14
+msgid "Duplicate"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:15
+msgctxt "entry_status"
+msgid "present"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:16
+msgctxt "entry_status"
+msgid "absent"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:29
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:35
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:41
+msgid "is one of"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:47
+msgid "is before"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:51
+msgid "is after"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:57
+msgid "="
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:117
+msgid "Product"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:121
+msgid "Product variation"
+msgstr "产品变化"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:125
+msgid "Gate"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:129
+msgid "Current date and time"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:133
+msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:137
+msgid "Current entry status"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:141
+msgid "Number of previous entries"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:145
+msgid "Number of previous entries since midnight"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:149
+msgid "Number of previous entries since"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:153
+msgid "Number of previous entries before"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:157
+msgid "Number of days with a previous entry"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:161
+msgid "Number of days with a previous entry since"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:165
+msgid "Number of days with a previous entry before"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:169
+msgid "Minutes since last entry (-1 on first entry)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:173
+msgid "Minutes since first entry (-1 on first entry)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/django-interop.ts:47
+msgid "Error: Product not found!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/django-interop.ts:54
+msgid "Error: Variation not found!"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:171
 msgid "Check-in QR"
@@ -425,16 +769,6 @@ msgstr "其他"
 msgid "Count"
 msgstr "数量"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "是"
-
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "否"
-
 #: pretix/static/pretixcontrol/js/ui/subevent.js:112
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
@@ -515,59 +849,70 @@ msgid "Google Pay"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
+#: pretix/static/pretixpresale/widget/src/i18n.ts:30
 msgctxt "widget"
 msgid "Quantity"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
+#: pretix/static/pretixpresale/widget/src/i18n.ts:31
 msgctxt "widget"
 msgid "Decrease quantity"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
+#: pretix/static/pretixpresale/widget/src/i18n.ts:32
 msgctxt "widget"
 msgid "Increase quantity"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
+#: pretix/static/pretixpresale/widget/src/i18n.ts:33
 msgctxt "widget"
 msgid "Filter events by"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
+#: pretix/static/pretixpresale/widget/src/i18n.ts:34
 msgctxt "widget"
 msgid "Filter"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
+#: pretix/static/pretixpresale/widget/src/i18n.ts:35
 msgctxt "widget"
 msgid "Price"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
+#: pretix/static/pretixpresale/widget/src/i18n.ts:36
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
+#: pretix/static/pretixpresale/widget/src/i18n.ts:37
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
+#: pretix/static/pretixpresale/widget/src/i18n.ts:38
 msgctxt "widget"
 msgid "Select"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
+#: pretix/static/pretixpresale/widget/src/i18n.ts:39
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
+#: pretix/static/pretixpresale/widget/src/i18n.ts:40
 #, fuzzy, javascript-format
 #| msgctxt "widget"
 #| msgid "See variations"
@@ -576,74 +921,89 @@ msgid "Select variant %s"
 msgstr "查看变化"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
+#: pretix/static/pretixpresale/widget/src/i18n.ts:41
 msgctxt "widget"
 msgid "Sold out"
 msgstr "已售空"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/widget/src/i18n.ts:42
 msgctxt "widget"
 msgid "Buy"
 msgstr "购买"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/widget/src/i18n.ts:43
 msgctxt "widget"
 msgid "Register"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/widget/src/i18n.ts:44
 msgctxt "widget"
 msgid "Reserved"
 msgstr "保留"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/widget/src/i18n.ts:45
 msgctxt "widget"
 msgid "FREE"
 msgstr "免费"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/widget/src/i18n.ts:46
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "由 %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:33
+#: pretix/static/pretixpresale/widget/src/i18n.ts:47
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
+#: pretix/static/pretixpresale/widget/src/i18n.ts:48
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "包含 %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
+#: pretix/static/pretixpresale/widget/src/i18n.ts:49
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "另加 %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
+#: pretix/static/pretixpresale/widget/src/i18n.ts:50
 msgctxt "widget"
 msgid "incl. taxes"
 msgstr "包含税"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
+#: pretix/static/pretixpresale/widget/src/i18n.ts:51
 msgctxt "widget"
 msgid "plus taxes"
 msgstr "税"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
+#: pretix/static/pretixpresale/widget/src/i18n.ts:52
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "当前可用: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
+#: pretix/static/pretixpresale/widget/src/i18n.ts:53
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "只能凭券购买"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
 #: pretix/static/pretixpresale/js/widget/widget.js:43
+#: pretix/static/pretixpresale/widget/src/i18n.ts:54
+#: pretix/static/pretixpresale/widget/src/i18n.ts:57
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "currently available: %s"
@@ -652,11 +1012,13 @@ msgid "Not yet available"
 msgstr "当前可用: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
+#: pretix/static/pretixpresale/widget/src/i18n.ts:55
 msgctxt "widget"
 msgid "Not available anymore"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
+#: pretix/static/pretixpresale/widget/src/i18n.ts:56
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "currently available: %s"
@@ -665,22 +1027,26 @@ msgid "Currently not available"
 msgstr "当前可用: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
+#: pretix/static/pretixpresale/widget/src/i18n.ts:58
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "最低订购量: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
+#: pretix/static/pretixpresale/widget/src/i18n.ts:59
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "关闭售票"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
+#: pretix/static/pretixpresale/widget/src/i18n.ts:60
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "无法加载售票厅。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
+#: pretix/static/pretixpresale/widget/src/i18n.ts:61
 msgctxt "widget"
 msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
@@ -688,6 +1054,7 @@ msgid ""
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
+#: pretix/static/pretixpresale/widget/src/i18n.ts:62
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Close ticket shop"
@@ -696,6 +1063,7 @@ msgid "Open ticket shop"
 msgstr "关闭售票"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/widget/src/i18n.ts:63
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Resume checkout"
@@ -704,11 +1072,13 @@ msgid "Checkout"
 msgstr "继续结账"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/widget/src/i18n.ts:64
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "无法创建购物车。请稍后再试"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/widget/src/i18n.ts:65
 msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
@@ -716,11 +1086,13 @@ msgid ""
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/widget/src/i18n.ts:66
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "候补列表"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/widget/src/i18n.ts:67
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -730,31 +1102,37 @@ msgstr ""
 "物车中。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
+#: pretix/static/pretixpresale/widget/src/i18n.ts:68
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "继续结账"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
+#: pretix/static/pretixpresale/widget/src/i18n.ts:69
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "兑换优惠券"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/widget/src/i18n.ts:70
 msgctxt "widget"
 msgid "Redeem"
 msgstr "兑换"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/widget/src/i18n.ts:71
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "优惠券代码"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/widget/src/i18n.ts:72
 msgctxt "widget"
 msgid "Close"
 msgstr "关闭"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/widget/src/i18n.ts:73
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Resume checkout"
@@ -763,16 +1141,19 @@ msgid "Close checkout"
 msgstr "继续结账"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/widget/src/i18n.ts:74
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/widget/src/i18n.ts:75
 msgctxt "widget"
 msgid "Continue"
 msgstr "继续"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/widget/src/i18n.ts:76
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "See variations"
@@ -781,6 +1162,7 @@ msgid "Show variants"
 msgstr "查看变化"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/widget/src/i18n.ts:77
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "See variations"
@@ -789,11 +1171,13 @@ msgid "Hide variants"
 msgstr "查看变化"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/widget/src/i18n.ts:78
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "选择一个不同的活动"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/widget/src/i18n.ts:79
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Choose a different event"
@@ -802,26 +1186,31 @@ msgid "Choose a different date"
 msgstr "选择一个不同的活动"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/widget/src/i18n.ts:80
 msgctxt "widget"
 msgid "Back"
 msgstr "后退"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/widget/src/i18n.ts:81
 msgctxt "widget"
 msgid "Next month"
 msgstr "下个月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:71
+#: pretix/static/pretixpresale/widget/src/i18n.ts:82
 msgctxt "widget"
 msgid "Previous month"
 msgstr "上个月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:72
+#: pretix/static/pretixpresale/widget/src/i18n.ts:83
 msgctxt "widget"
 msgid "Next week"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:73
+#: pretix/static/pretixpresale/widget/src/i18n.ts:84
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Previous month"
@@ -830,11 +1219,13 @@ msgid "Previous week"
 msgstr "上个月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:74
+#: pretix/static/pretixpresale/widget/src/i18n.ts:85
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:75
+#: pretix/static/pretixpresale/widget/src/i18n.ts:86
 msgctxt "widget"
 msgid ""
 "Some or all ticket categories are currently sold out. If you want, you can "
@@ -843,195 +1234,140 @@ msgid ""
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:76
+#: pretix/static/pretixpresale/widget/src/i18n.ts:87
 msgctxt "widget"
 msgid "Load more"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:78
+#: pretix/static/pretixpresale/widget/src/i18n.ts:89
 msgid "Mo"
 msgstr "周一"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:79
+#: pretix/static/pretixpresale/widget/src/i18n.ts:90
 msgid "Tu"
 msgstr "周二"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:80
+#: pretix/static/pretixpresale/widget/src/i18n.ts:91
 msgid "We"
 msgstr "周三"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:81
+#: pretix/static/pretixpresale/widget/src/i18n.ts:92
 msgid "Th"
 msgstr "周四"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:82
+#: pretix/static/pretixpresale/widget/src/i18n.ts:93
 msgid "Fr"
 msgstr "周五"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:83
+#: pretix/static/pretixpresale/widget/src/i18n.ts:94
 msgid "Sa"
 msgstr "周六"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:84
+#: pretix/static/pretixpresale/widget/src/i18n.ts:95
 msgid "Su"
 msgstr "周天"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:85
+#: pretix/static/pretixpresale/widget/src/i18n.ts:96
 msgid "Monday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:86
+#: pretix/static/pretixpresale/widget/src/i18n.ts:97
 msgid "Tuesday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:87
+#: pretix/static/pretixpresale/widget/src/i18n.ts:98
 msgid "Wednesday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:88
+#: pretix/static/pretixpresale/widget/src/i18n.ts:99
 msgid "Thursday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:89
+#: pretix/static/pretixpresale/widget/src/i18n.ts:100
 msgid "Friday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:90
+#: pretix/static/pretixpresale/widget/src/i18n.ts:101
 msgid "Saturday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:91
+#: pretix/static/pretixpresale/widget/src/i18n.ts:102
 msgid "Sunday"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:94
+#: pretix/static/pretixpresale/widget/src/i18n.ts:105
 msgid "January"
 msgstr "一月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:95
+#: pretix/static/pretixpresale/widget/src/i18n.ts:106
 msgid "February"
 msgstr "二月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:96
+#: pretix/static/pretixpresale/widget/src/i18n.ts:107
 msgid "March"
 msgstr "三月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:97
+#: pretix/static/pretixpresale/widget/src/i18n.ts:108
 msgid "April"
 msgstr "四月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:98
+#: pretix/static/pretixpresale/widget/src/i18n.ts:109
 msgid "May"
 msgstr "五月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:99
+#: pretix/static/pretixpresale/widget/src/i18n.ts:110
 msgid "June"
 msgstr "六月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:100
+#: pretix/static/pretixpresale/widget/src/i18n.ts:111
 msgid "July"
 msgstr "七月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:101
+#: pretix/static/pretixpresale/widget/src/i18n.ts:112
 msgid "August"
 msgstr "八月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:102
+#: pretix/static/pretixpresale/widget/src/i18n.ts:113
 msgid "September"
 msgstr "九月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:103
+#: pretix/static/pretixpresale/widget/src/i18n.ts:114
 msgid "October"
 msgstr "十月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:104
+#: pretix/static/pretixpresale/widget/src/i18n.ts:115
 msgid "November"
 msgstr "十一月"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:105
+#: pretix/static/pretixpresale/widget/src/i18n.ts:116
 msgid "December"
 msgstr "十二月"
-
-#~ msgid "No active check-in lists found."
-#~ msgstr "未找到活动的签到列表。"
-
-#~ msgid "Switch check-in list"
-#~ msgstr "切换签到列表"
-
-#~ msgid "Search results"
-#~ msgstr "搜索结果"
-
-#~ msgid "No tickets found"
-#~ msgstr "找不到票"
-
-#~ msgid "Result"
-#~ msgstr "结果"
-
-#~ msgid "This ticket requires special attention"
-#~ msgstr "这张票需要特别注意"
-
-#~ msgid "Scan a ticket or search and press return…"
-#~ msgstr "扫描一张票或搜索然后按返回…"
-
-#~ msgid "Load more"
-#~ msgstr "加载更多"
-
-#~ msgid "Unpaid"
-#~ msgstr "未支付"
-
-#~ msgid "Canceled"
-#~ msgstr "已被取消"
-
-#, fuzzy
-#~| msgctxt "widget"
-#~| msgid "Redeem"
-#~ msgid "Redeemed"
-#~ msgstr "兑换"
-
-#~ msgid "Cancel"
-#~ msgstr "取消"
-
-#~ msgid "Ticket not paid"
-#~ msgstr "票未支付"
-
-#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
-#~ msgstr "这张票尚未支付。无论如何你都要继续吗？"
-
-#~ msgid "Additional information required"
-#~ msgstr "需要提供更多信息"
-
-#~ msgid "Valid ticket"
-#~ msgstr "有效的票"
-
-#~ msgid "Ticket already used"
-#~ msgstr "票已经被使用过"
-
-#~ msgid "Unknown ticket"
-#~ msgstr "未知的票。"
-
-#~ msgid "Ticket type not allowed here"
-#~ msgstr "不允许的票类型"
-
-#, fuzzy
-#~| msgid "Ticket not paid"
-#~ msgid "Ticket blocked"
-#~ msgstr "票未支付"
-
-#, fuzzy
-#~| msgid "Ticket not paid"
-#~ msgid "Ticket not valid at this time"
-#~ msgstr "票未支付"
-
-#~ msgid "Order canceled"
-#~ msgstr "订单已经取消"
-
-#~ msgid "Checked-in Tickets"
-#~ msgstr "已签到的票"
-
-#~ msgid "Valid Tickets"
-#~ msgstr "有效的票"
-
-#~ msgid "Product variation"
-#~ msgstr "产品变化"
 
 #~ msgid ""
 #~ "Your color has bad contrast for text on white background, please choose a "

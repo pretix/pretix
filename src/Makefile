@@ -7,7 +7,7 @@ localecompile:
 
 localegen:
 	./manage.py makemessages --keep-pot --ignore "pretix/static/npm_dir/*" $(LNGS)
-	./manage.py makemessages --keep-pot -d djangojs --ignore "pretix/static/npm_dir/*" --ignore "pretix/helpers/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static.dist/*" --ignore "data/*" --ignore "pretix/static/rrule/*" --ignore "build/*" $(LNGS)
+	./manage.py makemessages --keep-pot -e js,ts,vue -d djangojs --ignore "pretix/static/npm_dir/*" --ignore "pretix/helpers/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static/jsi18n/*" --ignore "pretix/static.dist/*" --ignore "data/*" --ignore "pretix/static/rrule/*" --ignore "build/*" $(LNGS)
 
 staticfiles: npminstall npmbuild jsi18n
 	./manage.py collectstatic --noinput
