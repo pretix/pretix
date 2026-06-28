@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-06-28 14:44+0000\n"
 "PO-Revision-Date: 2026-03-26 14:29+0000\n"
 "Last-Translator: Linnea Thelander <linnea@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -220,8 +220,8 @@ msgstr ""
 "tillbaka i din webbläsare och försök igen."
 
 #: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:197
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Ett fel av typ {code} har hänt."
@@ -239,17 +239,17 @@ msgstr ""
 msgid "The request took too long. Please try again."
 msgstr "Förfrågan tog för lång tid. Vänligen försök igen."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:199
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "Just nu kan vi inte nå servern. Vänligen försök igen. Felkod: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js:227
 msgid "We are processing your request …"
 msgstr "Vi behandlar din förfrågan …"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -259,11 +259,11 @@ msgstr ""
 "kontrollera din internetanslutning och ladda sedan den här sidan och försök "
 "igen."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js:287
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js:342
 msgid "Close message"
 msgstr "Stäng meddelande"
 
@@ -381,23 +381,23 @@ msgstr "Ingen"
 msgid "Selected only"
 msgstr "Endast valda"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Ange sidnummer mellan 1 och %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Invalid page number."
 msgstr "Ogiltigt sidnummer."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js:1005
 msgid "Use a different name internally"
 msgstr "Använd ett annat namn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js:1045
 msgid "Click to close"
 msgstr "Klicka för att stänga"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js:1126
 msgid "You have unsaved changes!"
 msgstr "Du har osparade ändringar!"
 

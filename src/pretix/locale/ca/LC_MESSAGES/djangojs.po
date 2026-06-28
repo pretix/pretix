@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-06-28 14:44+0000\n"
 "PO-Revision-Date: 2025-10-31 17:00+0000\n"
 "Last-Translator: Núria Masclans <nuriamasclansserrat@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -217,8 +217,8 @@ msgstr ""
 "navegador i prova-ho de nou."
 
 #: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:197
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "S'ha produït un error de tipus {code}."
@@ -236,18 +236,18 @@ msgstr ""
 msgid "The request took too long. Please try again."
 msgstr "Temps d’espera esgotat. Torna-ho a provar."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:199
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "No es pot connectar amb el servidor. Torna-ho a provar. Codi d’error: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js:227
 msgid "We are processing your request …"
 msgstr "Estem processant la vostra sol·licitud …"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -256,11 +256,11 @@ msgstr ""
 "Hem enviat la teva petició al servidor. Si triga més d'1 minut, comprova la "
 "connexió, recarrega la pàgina i torna-ho a provar."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js:287
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "Si triga més de pocs minuts, contacta'ns."
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js:342
 msgid "Close message"
 msgstr "Tanca el missatge"
 
@@ -374,23 +374,23 @@ msgstr "Cap"
 msgid "Selected only"
 msgstr "Només seleccionats"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Introdueix un número de pàgina entre 1 i %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Invalid page number."
 msgstr "Número de pàgina no vàlid."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js:1005
 msgid "Use a different name internally"
 msgstr "Utilitza un nom diferent internament"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js:1045
 msgid "Click to close"
 msgstr "Prem per tancar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js:1126
 msgid "You have unsaved changes!"
 msgstr "Tens canvis sense desar!"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-06-28 14:44+0000\n"
 "PO-Revision-Date: 2026-03-18 14:50+0000\n"
 "Last-Translator: Ruud Hendrickx <ruud@leckxicon.eu>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -216,8 +216,8 @@ msgstr ""
 "browser en probeer het opnieuw."
 
 #: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:197
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Er is een fout opgetreden met code {code}."
@@ -235,7 +235,7 @@ msgstr ""
 msgid "The request took too long. Please try again."
 msgstr "De aanvraag duurde te lang, probeer het alsjeblieft opnieuw."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:199
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -243,11 +243,11 @@ msgstr ""
 "De server is op dit moment niet bereikbaar, probeer het alsjeblieft opnieuw. "
 "Foutcode: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js:227
 msgid "We are processing your request …"
 msgstr "We verwerken je aanvraag…"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -256,12 +256,12 @@ msgstr ""
 "Je aanvraag wordt naar de server verstuurd. Controleer je internetverbinding "
 "en probeer het opnieuw als dit langer dan een minuut duurt."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js:287
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 "Als dit langer dan een paar minuten duurt, neem dan contact met ons op."
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js:342
 msgid "Close message"
 msgstr "Sluit bericht"
 
@@ -378,23 +378,23 @@ msgstr "Geen"
 msgid "Selected only"
 msgstr "Alleen geselecteerde"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Voer een paginanummer in tussen 1 en %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Invalid page number."
 msgstr "Ongeldig paginanummer."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js:1005
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js:1045
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js:1126
 msgid "You have unsaved changes!"
 msgstr "Je hebt nog niet opgeslagen wijzigingen!"
 

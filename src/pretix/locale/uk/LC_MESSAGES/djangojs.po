@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-06-28 14:44+0000\n"
 "PO-Revision-Date: 2024-05-22 16:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -219,8 +219,8 @@ msgstr ""
 "поверніться назад у браузері та повторіть запит."
 
 #: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:197
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Виникла помилка типу {code}."
@@ -238,7 +238,7 @@ msgstr ""
 msgid "The request took too long. Please try again."
 msgstr "Запит тривав занадто довго. Будь ласка спробуйте ще раз."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:199
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -246,11 +246,11 @@ msgstr ""
 "Наразі ми не можемо підключитися до сервера. Будь ласка спробуйте ще раз. "
 "Код помилки: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js:227
 msgid "We are processing your request …"
 msgstr "Ми обробляємо ваш запит…"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -260,11 +260,11 @@ msgstr ""
 "хвилини, перевірте підключення до Інтернету, а потім перезавантажте цю "
 "сторінку та повторіть спробу."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js:287
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js:342
 msgid "Close message"
 msgstr "Закрити повідомлення"
 
@@ -384,23 +384,23 @@ msgstr "Жодного"
 msgid "Selected only"
 msgstr "Тільки вибрані"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Вкажіть номер сторінки між 1 та %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Invalid page number."
 msgstr "Недійсний номер сторінки."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js:1005
 msgid "Use a different name internally"
 msgstr "Використайте іншу внутрішню назву"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js:1045
 msgid "Click to close"
 msgstr "Натисніть, щоб закрити"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js:1126
 msgid "You have unsaved changes!"
 msgstr "У вас є незбережені зміни!"
 

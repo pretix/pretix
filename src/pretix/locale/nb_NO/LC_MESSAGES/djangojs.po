@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-06-28 14:44+0000\n"
 "PO-Revision-Date: 2024-03-10 03:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -216,8 +216,8 @@ msgstr ""
 "eller gå tilbake i nettleseren din og prøve på nytt."
 
 #: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:197
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "En feil av type {code} oppsto."
@@ -235,18 +235,18 @@ msgstr ""
 msgid "The request took too long. Please try again."
 msgstr "Forespørselen tok for lang tid. Prøv igjen."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:199
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Vi kan ikke nå serveren akkurat nå. Vennligst prøv igjen. Feilkode: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js:227
 msgid "We are processing your request …"
 msgstr "Vi gjennomfører forespørselen din…"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -255,11 +255,11 @@ msgstr ""
 "Vi sender forespørslene dine til serveren. Hvis dette tar langre tid en ett "
 "minutt, sjekk internett koblingen din og deretter last siden og prøv på nytt."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js:287
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js:342
 msgid "Close message"
 msgstr "Lukk melding"
 
@@ -377,23 +377,23 @@ msgstr "Ingen"
 msgid "Selected only"
 msgstr "Kun valgte"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js:1005
 msgid "Use a different name internally"
 msgstr "Bruk et annet navn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js:1045
 msgid "Click to close"
 msgstr "Klikk for å lukke"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js:1126
 msgid "You have unsaved changes!"
 msgstr "Du har ikke-lagrede endringer!"
 

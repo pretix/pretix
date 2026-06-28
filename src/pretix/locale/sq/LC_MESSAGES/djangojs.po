@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-06-28 14:44+0000\n"
 "PO-Revision-Date: 2025-12-14 00:00+0000\n"
 "Last-Translator: Lachlan Struthers <lachlan.struthers@om.org>\n"
 "Language-Team: Albanian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -237,8 +237,8 @@ msgstr ""
 "të provoni përsëri."
 
 #: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:197
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Një gabim të llojit {kodi} ka ndodhur."
@@ -256,7 +256,7 @@ msgstr ""
 msgid "The request took too long. Please try again."
 msgstr "Kërkesa juaj kërkonte tepër kohë. Ju lutemi të provoni përsëri."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:199
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -264,11 +264,11 @@ msgstr ""
 "Nuk mund t'a kontaktojmë serverin për momentin. Ju lutemi, provoni përsëri. "
 "Kodi gabimi i fundit: {kodi}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js:227
 msgid "We are processing your request …"
 msgstr "Ne po e proçesojmë kërkesën tuaj …"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -278,11 +278,11 @@ msgstr ""
 "minutë, ju lutemi t'a kontrolloni lidhjen tuaj në internet dhe pastak t'a "
 "rifreskoni këtë faqe që të provoni përsëri."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js:287
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "Nëse kalon më shumë se disa minuta, ju lutemi t'na kontaktoni."
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js:342
 msgid "Close message"
 msgstr "Mbyllni mesazhin"
 
@@ -399,23 +399,23 @@ msgstr "Asnjë"
 msgid "Selected only"
 msgstr "Vetëm të zghedhura"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Shkruani numrin e faqes midis 1 dhe %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Invalid page number."
 msgstr "Numër faqe i pavlefshëm."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js:1005
 msgid "Use a different name internally"
 msgstr "Përdorni një emër tjetër brenda sistemit"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js:1045
 msgid "Click to close"
 msgstr "Shtypni për të mbyllur"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js:1126
 msgid "You have unsaved changes!"
 msgstr "Ju keni ndryshime të paruajtur!"
 

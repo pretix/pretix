@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-06-28 14:44+0000\n"
 "PO-Revision-Date: 2026-02-01 21:00+0000\n"
 "Last-Translator: z3rrry <z3rrry@gmail.com>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -229,8 +229,8 @@ msgstr ""
 "해 주시기 바랍니다."
 
 #: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:197
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "{code} 유형의 오류가 발생했습니다."
@@ -247,17 +247,17 @@ msgstr ""
 msgid "The request took too long. Please try again."
 msgstr "요청이 너무 오래 걸렸습니다. 다시 시도해 주세요."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:199
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "현재 서버에 연결할 수 없습니다. 다시 시도해 주세요. 오류 코드: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js:227
 msgid "We are processing your request …"
 msgstr "귀하의 요청을 처리하고 있습니다"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -266,11 +266,11 @@ msgstr ""
 "현재 귀하의 요청을 서버로 전송하고 있습니다. 이 작업이 1분 이상 소요되는 경"
 "우 인터넷 연결을 확인한 다음 이 페이지를 다시 로드한 후 다시 시도해 주세요."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js:287
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr "몇 분 이상 걸리시면 저희에게 연락해 주시기 바랍니다."
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js:342
 msgid "Close message"
 msgstr "마지막 메시지입니다"
 
@@ -380,23 +380,23 @@ msgstr "아무것도 없다"
 msgid "Selected only"
 msgstr "선택된 경우에만"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Enter page number between 1 and %(max)s."
 msgstr "페이지 번호를 1에서 %(최대)초 사이로 입력합니다."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Invalid page number."
 msgstr "페이지 번호가 잘못되었습니다."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js:1005
 msgid "Use a different name internally"
 msgstr "내부적으로 다른 이름을 사용합니다"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js:1045
 msgid "Click to close"
 msgstr "종료를 클릭해 주세요"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js:1126
 msgid "You have unsaved changes!"
 msgstr "귀하는 변경을 저장하지 않았습니다"
 

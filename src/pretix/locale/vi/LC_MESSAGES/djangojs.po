@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-06-28 14:44+0000\n"
 "PO-Revision-Date: 2025-06-06 06:09+0000\n"
 "Last-Translator: Michael Dao <garudong89@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
@@ -215,8 +215,8 @@ msgstr ""
 "cho chúng tôi hoặc thực hiện lại nếu quá trình xử lý kéo dài hơn 2 phút."
 
 #: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:197
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Đã xảy ra lỗi {code}."
@@ -232,17 +232,17 @@ msgstr "Mất kết nối đến server, đang kết nối lại. Mã lỗi: {co
 msgid "The request took too long. Please try again."
 msgstr "Yêu cầu quá lâu. Vui lòng thực hiện lại."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixbase/js/asynctask.js:199
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "Không thể kết nối đến máy chủ. Vui lòng thử lại. Mã lỗi: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js:227
 msgid "We are processing your request …"
 msgstr "Chúng tôi đang xử lý yêu cầu …"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -251,13 +251,13 @@ msgstr ""
 "Đang gửi yêu cầu đến máy chủ. Nếu quá trình này kéo dài hơn 1 phút, vui lòng "
 "kiểm tra lại kết nối Internet, tải lại trang và thử lại."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js:287
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 "Yêu cầu của bạn hiện đang được xử lý. Tùy theo quy mô sự kiện, quá trình này "
 "có thể mất đến vài phút."
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js:342
 msgid "Close message"
 msgstr "Đóng tin nhắn"
 
@@ -373,23 +373,23 @@ msgstr "Không có"
 msgid "Selected only"
 msgstr "Chỉ được chọn"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js:844
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Nhập số trang từ 1 đến %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js:847
 msgid "Invalid page number."
 msgstr "Số trang không hợp lệ."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js:1005
 msgid "Use a different name internally"
 msgstr "Sử dụng tên khác ở bên trong"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js:1045
 msgid "Click to close"
 msgstr "Nhấn để đóng"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js:1126
 msgid "You have unsaved changes!"
 msgstr "Bạn có những thay đổi chưa được lưu!"
 
