@@ -90,7 +90,7 @@
                                 <dt>{% trans "ZIP code and city" %}</dt>
                                 <dd>{{ addr.zipcode }} {{ addr.city }}</dd>
                                 <dt>{% trans "Country" %}</dt>
-                                <dd>{{ addr.country.name }}</dd>
+                                <dd>{{ addr.country.name|default_if_none:"" }}</dd>
                                 {% if addr.state %}
                                     <dt>{% trans "State" context "address" as state_label %}{{ COUNTRY_STATE_LABEL|getitem:addr.country.code|default:state_label }}</dt>
                                     <dd>{{ addr.state_name }}</dd>

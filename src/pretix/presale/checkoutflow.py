@@ -1159,7 +1159,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 for a in addresses:
                     data = {
                         "_pk": a.pk,
-                        "_country_for_address": a.country.name,
+                        "_country_for_address": a.country.name if a.country else '',
                         "_state_for_address": a.state_for_address,
                         "_name": a.name,
                         "is_business": "business" if a.is_business else "individual",
@@ -1202,7 +1202,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             for p in profiles:
                 data = {
                     "_pk": p.pk,
-                    "_country_for_address": p.country.name,
+                    "_country_for_address": p.country.name if p.country else '',
                     "_state_for_address": p.state_for_address,
                     "_attendee_name": p.attendee_name,
                 }
