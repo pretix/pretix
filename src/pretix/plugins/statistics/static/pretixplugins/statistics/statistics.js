@@ -20,6 +20,18 @@ $(function () {
         behaveLikeLine: true
     });
     new Morris.Area({
+        element: 'obt_chart',
+        data: JSON.parse($("#obt-data").html()),
+        xkey: 'date',
+        ykeys: ['ordered', 'paid'],
+        labels: [gettext('Placed orders'), gettext('Paid orders')],
+        lineColors: ['#3b1c4a', '#50a167'],
+        smooth: false,
+        resize: true,
+        fillOpacity: 0.3,
+        behaveLikeLine: true
+    });
+    new Morris.Area({
         element: 'abd_chart',
         data: JSON.parse($("#abd-data").html()),
         xkey: 'date',

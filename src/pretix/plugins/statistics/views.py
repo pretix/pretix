@@ -91,9 +91,10 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             'm'
         ).order_by()
 
-        # Orders by day
+        # Orders by day/time
         ctx['obd_data'] = cache.get('statistics_obd_data' + ckey)
-        if not ctx['obd_data']:
+        ctx['obt_data'] = cache.get('statistics_obt_data' + ckey)
+        if not ctx['obd_data'] or not ctx['obt_data']:
             oqs = Order.objects.annotate(payment_date=Subquery(p_date, output_field=DateTimeField()))
             if subevent:
                 oqs = oqs.filter(all_positions__subevent_id=subevent, all_positions__canceled=False).distinct()
@@ -102,6 +103,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             for o in oqs.filter(event=self.request.event).values('datetime'):
                 day = o['datetime'].astimezone(tz).date()
                 ordered_by_day[day] = ordered_by_day.get(day, 0) + 1
+
             paid_by_day = {}
             for o in oqs.filter(
                 event=self.request.event, payment_date__isnull=False,
@@ -110,7 +112,8 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 day = o['payment_date'].astimezone(tz).date()
                 paid_by_day[day] = paid_by_day.get(day, 0) + 1
 
-            data = []
+            day_data = []
+            time_data = []
             for d in dateutil.rrule.rrule(
                     dateutil.rrule.DAILY,
                     dtstart=min(ordered_by_day.keys()) if ordered_by_day else datetime.date.today(),
@@ -119,14 +122,21 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                         max(paid_by_day.keys() if paid_by_day else [datetime.date(1970, 1, 1)])
                     )):
                 d = d.date()
-                data.append({
+                day_data.append({
                     'date': d.strftime('%Y-%m-%d'),
                     'ordered': ordered_by_day.get(d, 0),
                     'paid': paid_by_day.get(d, 0)
                 })
+                time_data.append({
+                    'date': d.strftime('%Y-%m-%d'),
+                    'ordered': (time_data[-1]["ordered"] if time_data else 0) + ordered_by_day.get(d, 0),
+                    'paid': (time_data[-1]["paid"] if time_data else 0) + paid_by_day.get(d, 0)
+                })
 
-            ctx['obd_data'] = json.dumps(data)
+            ctx['obd_data'] = json.dumps(day_data)
+            ctx['obt_data'] = json.dumps(time_data)
             cache.set('statistics_obd_data' + ckey, ctx['obd_data'])
+            cache.set('statistics_obt_data' + ckey, ctx['obt_data'])
 
         # Attendees by day/time
         ctx['abd_data'] = cache.get('statistics_abd_data' + ckey)
