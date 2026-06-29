@@ -212,7 +212,7 @@ class AuditLogMiddleware:
         if request.path.startswith(get_script_prefix() + 'control') and request.user.is_authenticated:
             if getattr(request.user, "is_hijacked", False):
                 hijack_history = request.session.get('hijack_history', False)
-                hijacker = get_object_or_404(User, pk=hijack_history[0])
+                hijacker = get_object_or_404(User, pk=hijack_history[0]["user"])
                 ss = hijacker.get_active_staff_session(request.session.get('hijacker_session'))
                 if ss:
                     ss.logs.create(
