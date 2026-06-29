@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-28 14:42+0000\n"
-"PO-Revision-Date: 2026-05-29 17:00+0000\n"
+"PO-Revision-Date: 2026-06-29 17:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.5\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html:670
 #: pretix/control/templates/pretixcontrol/events/index.html:166
@@ -467,10 +467,8 @@ msgid "Medium connected to other event"
 msgstr "Medio conectado a otro evento"
 
 #: pretix/api/views/checkin.py:814
-#, fuzzy
-#| msgid "You cannot change this order."
 msgid "You cannot exchange a medium for a medium."
-msgstr "No puedes cambiar este pedido."
+msgstr "No se puede cambiar un medio por otro."
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:777
 #, python-brace-format
@@ -4730,22 +4728,16 @@ msgid "Check-in annulled"
 msgstr "Check-in anulado"
 
 #: pretix/base/models/checkin.py:372
-#, fuzzy
-#| msgid "Ticket already used"
 msgid "Ticket already exchanged"
-msgstr "Esta entrada ya fue utilizada"
+msgstr "Entrada ya canjeada"
 
 #: pretix/base/models/checkin.py:373
-#, fuzzy
-#| msgid "Reusable media"
 msgid "Reusable medium invalid"
-msgstr "Medios reutilizables"
+msgstr "Soporte reutilizable no válido"
 
 #: pretix/base/models/checkin.py:374
-#, fuzzy
-#| msgid "Reusable media type"
 msgid "Reusable medium already exists"
-msgstr "Tipo de medio reusable"
+msgstr "El soporte reutilizable ya existe"
 
 #: pretix/base/models/customers.py:63
 msgid "Provider name"
@@ -5330,11 +5322,8 @@ msgstr ""
 "ambas cosas."
 
 #: pretix/base/models/event.py:1884
-#, fuzzy
-#| msgid "The bundled item must belong to the same event as the item."
 msgid "Property and event must belong to the same organizer."
-msgstr ""
-"La agrupación de artículos debe pertenecer al mismo evento que el artículo."
+msgstr "La propiedad y el evento deben pertenecer al mismo organizador."
 
 #: pretix/base/models/event.py:1928 pretix/base/models/organizer.py:627
 msgid "Link text"
@@ -5586,42 +5575,41 @@ msgid "Show product with info on why it’s unavailable"
 msgstr "Mostrar el producto con la razón que no está disponible"
 
 #: pretix/base/models/items.py:458 pretix/base/models/items.py:786
-#, fuzzy
-#| msgid "Don't use re-usable media, use regular one-off tickets"
 msgid "Don't use reusable media, use regular one-off tickets"
-msgstr "No usar medios reutilizables, usar entradas de un solo uso"
+msgstr ""
+"No utilizar soportes reutilizables, sino billetes normales de un solo uso"
 
 #: pretix/base/models/items.py:459
 msgid "Require a previously unknown medium to be newly added"
 msgstr "Exigir que un medio desconocido anteriormente se adicione de nuevo"
 
 #: pretix/base/models/items.py:460
-#, fuzzy
-#| msgid "Require an existing medium to be re-used"
 msgid "Require an existing medium to be reused, replacing any previous tickets"
-msgstr "Exigir que se reuse un medio ya existente"
+msgstr ""
+"Necesita que se reutilice un soporte ya existente, sustituyendo cualquier "
+"billete anterior"
 
 #: pretix/base/models/items.py:461
-#, fuzzy
-#| msgid "Require either an existing or a new medium to be used"
 msgid ""
 "Require either an existing or a new medium to be used, replacing any "
 "previous tickets"
-msgstr "Exigir que se use un medio existente o uno nuevo"
+msgstr ""
+"Se debe utilizar un soporte ya existente o uno nuevo, sustituyendo cualquier "
+"billete anterior"
 
 #: pretix/base/models/items.py:462
-#, fuzzy
-#| msgid "Require an existing medium to be re-used"
 msgid "Require an existing medium to be reused, adding to any previous tickets"
-msgstr "Exigir que se reuse un medio ya existente"
+msgstr ""
+"Exigir que se reutilice un soporte ya existente, añadiendo esta información "
+"a cualquier entrada anterior"
 
 #: pretix/base/models/items.py:464
-#, fuzzy
-#| msgid "Require either an existing or a new medium to be used"
 msgid ""
 "Require either an existing or a new medium to be used, adding to any "
 "previous tickets"
-msgstr "Exigir que se use un medio existente o uno nuevo"
+msgstr ""
+"Es necesario utilizar un medio ya existente o uno nuevo, que se sumará a los "
+"billetes anteriores"
 
 #: pretix/base/models/items.py:480 pretix/base/models/items.py:1468
 msgid "Category"
@@ -5981,14 +5969,6 @@ msgid "Reusable media policy"
 msgstr "Condiciones de utilización de medios"
 
 #: pretix/base/models/items.py:777
-#, fuzzy
-#| msgid ""
-#| "If this product should be stored on a re-usable physical medium, you can "
-#| "attach a physical media policy. This is not required for regular tickets, "
-#| "which just use a one-time barcode, but only for products like renewable "
-#| "season tickets or re-chargeable gift card wristbands. This is an advanced "
-#| "feature that also requires specific configuration of ticketing and "
-#| "printing settings."
 msgid ""
 "If this product should be stored on a reusable physical medium, you can "
 "attach a physical media policy. This is not required for regular tickets, "
@@ -6052,6 +6032,9 @@ msgid ""
 "prior to their usage. Therefore, the selected media policy does not make "
 "sense for this media type."
 msgstr ""
+"El tipo de soporte seleccionado requiere que todos los soportes se registren "
+"en el sistema antes de su uso. Por lo tanto, la política de soportes "
+"seleccionada no es aplicable a este tipo de soporte."
 
 #: pretix/base/models/items.py:1009
 msgid ""
@@ -6626,18 +6609,16 @@ msgstr "rebotado"
 #: pretix/base/models/media.py:77
 msgctxt "reusable_medium"
 msgid "Claim token"
-msgstr ""
+msgstr "Canjear el token"
 
 #: pretix/base/models/media.py:82
 msgctxt "reusable_medium"
 msgid "Label"
-msgstr ""
+msgstr "Designación"
 
 #: pretix/base/models/media.py:105
-#, fuzzy
-#| msgid "Linked ticket"
 msgid "Linked tickets"
-msgstr "Entrada vinculada"
+msgstr "Entradas vinculadas"
 
 #: pretix/base/models/media.py:107
 msgid ""
@@ -6645,6 +6626,9 @@ msgid ""
 "validity. If multiple tickets are valid at once, this will lead to failed "
 "check-ins."
 msgstr ""
+"Si enlaza más de un billete, asegúrese de que no haya solapamiento en la "
+"validez. Si varios billetes son válidos al mismo tiempo, esto provocará que "
+"no se puedan realizar el check-in."
 
 #: pretix/base/models/memberships.py:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_memberships.html:28
@@ -8390,14 +8374,10 @@ msgid "Atlantis"
 msgstr "Atlántida"
 
 #: pretix/base/pdf.py:376
-#, fuzzy
-#| msgid "Invoice recipient email"
 msgid "Invoice custom recipient field"
-msgstr "Correo electrónico del destinatario de la factura"
+msgstr "Campo personalizado de destinatario en la factura"
 
 #: pretix/base/pdf.py:377
-#, fuzzy
-#| msgid "Custom recipient field label"
 msgid "Custom recipient field"
 msgstr "Campo de destinatario personalizado"
 
@@ -9415,13 +9395,15 @@ msgstr "Necesitas responder preguntas para terminar el check-in."
 
 #: pretix/base/services/checkin.py:1121
 msgid "Ticket needs to be exchanged to a suitable medium."
-msgstr ""
+msgstr "El billete debe canjearse por un soporte adecuado."
 
 #: pretix/base/services/checkin.py:1128
 msgid ""
 "This ticket has already been exchanged for a reusable medium that now needs "
 "to be used instead."
 msgstr ""
+"Esta entrada ya se ha canjeado por un soporte reutilizable que ahora hay que "
+"utilizar en su lugar."
 
 #: pretix/base/services/checkin.py:1180
 msgid "This ticket has already been redeemed."
@@ -9587,64 +9569,46 @@ msgstr ""
 "{event}."
 
 #: pretix/base/services/media.py:93 pretix/base/services/media.py:95
-#, fuzzy
-#| msgid "Invalid input type."
 msgid "Invalid medium type."
-msgstr "Tipo de entrada no válido."
+msgstr "Tipo de soporte no válido."
 
 #: pretix/base/services/media.py:100 pretix/base/services/media.py:102
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid "Medium type is not enabled for organizer."
-msgstr ""
-"El tipo de medio seleccionado no está activo en tus ajustes de organizador/a/"
-"e."
+msgstr "Este tipo de medio no está habilitado para el organizador."
 
 #: pretix/base/services/media.py:107 pretix/base/services/media.py:109
 msgid "Incorrect medium type for product."
-msgstr ""
+msgstr "El tipo de soporte no es el adecuado para este producto."
 
 #: pretix/base/services/media.py:114 pretix/base/services/media.py:116
-#, fuzzy
-#| msgid "This ticket has already been redeemed."
 msgid "Ticket is already exchanged for reusable medium."
-msgstr "Esta entrada ya ha sido canjeada."
+msgstr "La entrada ya se ha canjeado por un soporte reutilizable."
 
 #: pretix/base/services/media.py:133 pretix/base/services/media.py:135
-#, fuzzy
-#| msgid "Reusable Medium ID"
 msgid "Reusable medium not found."
-msgstr "ID mediana reutilizable"
+msgstr "No se ha encontrado el soporte reutilizable."
 
 #: pretix/base/services/media.py:140 pretix/base/services/media.py:142
 #: pretix/base/services/media.py:168 pretix/base/services/media.py:170
-#, fuzzy
-#| msgid "The reusable medium has been created."
 msgid "Reusable medium is inactive or expired."
-msgstr "Se ha creado el medio reutilizable."
+msgstr "El medio reutilizable está inactivo o caducado."
 
 #: pretix/base/services/media.py:155 pretix/base/services/media.py:162
 #: pretix/base/services/media.py:176
-#, fuzzy
-#| msgid "The reusable medium has been created."
 msgid "Reusable medium not found and could not be created."
-msgstr "Se ha creado el medio reutilizable."
+msgstr "No se ha encontrado el soporte reutilizable y no se ha podido crear."
 
 #: pretix/base/services/media.py:183
-#, fuzzy
-#| msgid "Reusable media type"
 msgid "Reusable medium already exists."
-msgstr "Tipo de medio reusable"
+msgstr "Ya existe un soporte reutilizable."
 
 #: pretix/base/services/media.py:189
-#, fuzzy
-#| msgid "The reusable medium has been created."
 msgid "Reusable medium could not be created."
-msgstr "Se ha creado el medio reutilizable."
+msgstr "No se ha podido crear el soporte reutilizable."
 
 #: pretix/base/services/media.py:195 pretix/base/services/media.py:197
 msgid "Product does not support medium exchange."
-msgstr ""
+msgstr "Este producto no admite el cambio de medio."
 
 #: pretix/base/services/memberships.py:108
 #, python-brace-format
@@ -10368,17 +10332,10 @@ msgstr ""
 "inició sesión durante la compra."
 
 #: pretix/base/settings.py:214
-#, fuzzy
-#| msgid "Activate re-usable media"
 msgid "Activate reusable media"
 msgstr "Activar medios reutilizables"
 
 #: pretix/base/settings.py:215
-#, fuzzy
-#| msgid ""
-#| "The re-usable media feature allows you to connect tickets and gift cards "
-#| "with physical media such as wristbands or chip cards that may be re-used "
-#| "for different tickets or gift cards later."
 msgid ""
 "The reusable media feature allows you to connect tickets and gift cards with "
 "physical media such as wristbands or chip cards that may be reused for "
@@ -10390,7 +10347,7 @@ msgstr ""
 
 #: pretix/base/settings.py:226
 msgid "Enforce the usage of issued reusable media for check-in"
-msgstr ""
+msgstr "Exigir el uso de los soportes reutilizables para el check-in"
 
 #: pretix/base/settings.py:227
 msgid ""
@@ -10398,6 +10355,10 @@ msgid ""
 "medium has been created and linked to a ticket. Keeping this option turned "
 "off will treat the reusable medium and ticket as equals."
 msgstr ""
+"Si se activa esta opción, ya no se aceptarán los códigos de barras de los "
+"billetes cuando se haya creado un soporte reutilizable y se haya vinculado a "
+"un billete. Si se mantiene desactivada esta opción, el soporte reutilizable "
+"y el billete se tratarán como iguales."
 
 #: pretix/base/settings.py:254
 msgid "Length of barcodes"
@@ -18548,16 +18509,12 @@ msgid "The reusable medium has been changed."
 msgstr "El medio reutilizable ha sido modificado."
 
 #: pretix/control/logdisplay.py:746
-#, fuzzy
-#| msgid "The new member has been added to the team."
 msgid "A new ticket has been added to the medium."
-msgstr "El nuevo miembro ha sido añadido al equipo."
+msgstr "Se ha añadido un nuevo billete al medio."
 
 #: pretix/control/logdisplay.py:747
-#, fuzzy
-#| msgid "{user} has been removed from the team."
 msgid "A ticket has been removed from the medium."
-msgstr "{user} ha sido removido del equipo."
+msgstr "Se ha eliminado un billete del medio."
 
 #: pretix/control/logdisplay.py:748
 msgid "The medium has been connected to a new ticket."
@@ -18569,6 +18526,8 @@ msgid ""
 "The ticket #{positionid} was exchanged for reusable medium "
 "{medium_identifier}."
 msgstr ""
+"El billete n.º {positionid} se ha canjeado por un medio reutilizable "
+"{medium_identifier}."
 
 #: pretix/control/logdisplay.py:750
 msgid "The medium has been connected to a new gift card."
@@ -20483,10 +20442,8 @@ msgstr ""
 "check-in:"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:85
-#, fuzzy
-#| msgid "Special attention required"
 msgid "Media exchange required"
-msgstr "Atención especial requerida"
+msgstr "Es necesario intercambiar medios"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:87
 #, python-format
@@ -20494,6 +20451,8 @@ msgid ""
 "This ticket needs to be exchanged into a <strong>%(media_type)s</strong> "
 "reusable medium. <strong>%(media_policy)s</strong>."
 msgstr ""
+"Esta entrada debe canjearse por un soporte reutilizable <strong>%(media_type)"
+"s</strong>. <strong>%(media_policy)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:103
 msgid "Special attention required"
@@ -27038,6 +26997,9 @@ msgid ""
 "Even if a team has no access to a certain category of data, they might still "
 "be able to see parts of this data when it is linked to data they can see."
 msgstr ""
+"Aunque un equipo no tenga acceso a una determinada categoría de datos, es "
+"posible que pueda ver parte de esos datos cuando estén vinculados a datos a "
+"los que sí tiene acceso."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:35
 msgid ""
@@ -27045,6 +27007,10 @@ msgid ""
 "some information about gift cards linked to a customer account, even if they "
 "generally can't see gift cards directly."
 msgstr ""
+"Por ejemplo, una persona con acceso a las cuentas de los clientes podrá ver "
+"cierta información sobre las tarjetas regalo vinculadas a una cuenta de "
+"cliente, aunque, por lo general, no pueda ver las tarjetas regalo "
+"directamente."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:59
 msgid ""
@@ -27052,6 +27018,9 @@ msgid ""
 "information about vouchers used to create an order, even if they generally "
 "can't see vouchers directly."
 msgstr ""
+"Por ejemplo, una persona con acceso a los pedidos podrá ver cierta "
+"información sobre los vales utilizados para crear un pedido, aunque "
+"normalmente no pueda ver los vales directamente."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:21
 msgid "Member"
@@ -27912,30 +27881,22 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:9
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:13
-#, fuzzy, python-format
-#| msgid "Quota: %(name)s"
+#, python-format
 msgctxt "subevent"
 msgid "Date: %(name)s"
-msgstr "Cuota: %(name)s"
+msgstr "Fecha: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:234
-#, fuzzy
-#| msgid "Partially paid"
 msgid "partially canceled"
-msgstr "Pagado parcialmente"
+msgstr "cancelado parcialmente"
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:282
-#, fuzzy
-#| msgctxt "permission_level"
-#| msgid "View all"
 msgid "View all"
 msgstr "Ver todo"
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:289
-#, fuzzy
-#| msgid "No archived events found."
 msgid "No orders found."
-msgstr "No se han encontrado eventos archivados."
+msgstr "No se han encontrado pedidos."
 
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:302
 #: pretix/control/templates/pretixcontrol/subevents/edit.html:279
@@ -30708,10 +30669,8 @@ msgid "Voucher {}"
 msgstr "Vale de compra {}"
 
 #: pretix/control/views/typeahead.py:179 pretix/control/views/typeahead.py:180
-#, fuzzy
-#| msgid "Go to event"
 msgid "No event"
-msgstr "Ir al evento"
+msgstr "No hay eventos"
 
 #: pretix/control/views/user.py:169
 msgid "The password you entered was invalid, please try again."
