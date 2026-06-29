@@ -874,14 +874,6 @@ function setup_basics(el) {
         });
     });
 
-    el.find(".qrcode-canvas").each(function () {
-        $(this).qrcode(
-            {
-                text: $.trim($($(this).attr("data-qrdata")).html())
-            }
-        );
-    });
-
     el.find(".propagated-settings-box").find("input, textarea, select").not("[readonly]")
         .attr("data-propagated-locked", "true").prop("readonly", true);
 
