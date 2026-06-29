@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-28 15:49+0000\n"
-"PO-Revision-Date: 2026-03-18 12:23+0000\n"
+"PO-Revision-Date: 2026-06-29 17:00+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -443,11 +443,11 @@ msgstr "Appuyez sur Ctrl-C pour copier !"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue:80
 msgid "Edit"
-msgstr ""
+msgstr "Éditer"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue:86
 msgid "Visualize"
-msgstr ""
+msgstr "Visualiser"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue:96
 msgid ""
@@ -455,10 +455,14 @@ msgid ""
 "or variations are not contained in any of your rule parts so people with "
 "these tickets will not get in:"
 msgstr ""
+"Votre règle effectue toujours un filtrage par produit ou variante, mais les "
+"produits ou variantes suivants ne figurent dans aucune des parties de votre "
+"règle ; par conséquent, les personnes détenant ces billets ne seront pas "
+"admises :"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue:99
 msgid "Please double-check if this was intentional."
-msgstr ""
+msgstr "Veuillez vérifier si cela était intentionnel."
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts:4
 msgid "All of the conditions below (AND)"
