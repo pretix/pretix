@@ -215,7 +215,6 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
         prefetch_var,
         prefetch_bundles,
     ).annotate(
-        quotac=Count('quotas'),
         has_variations=Count('variations'),
         subevent_disabled=Exists(
             SubEventItem.objects.filter(
@@ -235,7 +234,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
         ),
         requires_seat=requires_seat,
     ).filter(
-        quotac__gt=0, subevent_disabled=False,
+        Exists(Quota.items.through.objects.filter(quota__subevent_id=subevent, item_id=OuterRef("pk"))),
+        subevent_disabled=False,
     ).order_by('category__position', 'category_id', 'position', 'name')
     if require_seat:
         items = items.filter(requires_seat__gt=0)

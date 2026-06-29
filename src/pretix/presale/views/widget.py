@@ -352,7 +352,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'picture': get_picture(self.request.event, item.picture, '60x60^') if item.picture else None,
                         'picture_fullsize': get_picture(self.request.event, item.picture) if item.picture else None,
                         'description': str(rich_text(item.description, safelinks=False)) if item.description else None,
-                        'has_variations': item.has_variations,
+                        'has_variations': bool(item.has_variations),
                         'current_unavailability_reason': item.current_unavailability_reason,
                         'order_min': item.min_per_order,
                         'order_max': item.order_max if not item.has_variations else None,
