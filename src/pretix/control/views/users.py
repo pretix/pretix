@@ -19,19 +19,22 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import hmac
 import json
 from contextlib import contextmanager
 
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import (
-    BACKEND_SESSION_KEY, get_user_model, load_backend, login,
+    BACKEND_SESSION_KEY, HASH_SESSION_KEY, get_user_model, load_backend, login,
+    logout,
 )
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import redirect_to_login
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
-from django.utils.crypto import get_random_string
+from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views import View
@@ -230,7 +233,15 @@ class UserImpersonateView(AdministratorPermissionRequiredMixin, RecentAuthentica
         hijacked = self.object
 
         hijack_history = request.session.get("hijack_history", [])
-        hijack_history.append(request.user._meta.pk.value_to_string(hijacker))
+        hijack_history.append({
+            "user": request.user.pk,
+            # We include the auth_hash, because it is unguessable. So should an attacker gain an attack vector to
+            # modify hijack_history, they can't just insert or change a user that shouldn't be there. We HMAC it
+            # again, though, since we also do not want the auth_hash of the admin user to be in the session of an
+            # unprivileged user to contain the risk if there is some leak of session data.
+            "auth_hash": salted_hmac(key_salt=b"hijack-history-hash", value=request.session[HASH_SESSION_KEY],
+                                     algorithm="sha256", secret=settings.SECRET_KEY).hexdigest(),
+        })
 
         backend = get_used_backend(request)
         backend = f"{backend.__module__}.{backend.__class__.__name__}"
@@ -259,8 +270,21 @@ class UserImpersonateStopView(LoginRequiredMixin, View):
         hijs = request.session['hijacker_session']
         hijack_history = request.session.get("hijack_history", [])
         hijacked = request.user
-        user_pk = hijack_history.pop()
-        hijacker = get_object_or_404(get_user_model(), pk=user_pk)
+        prev_session = hijack_history.pop()
+        hijacker = get_object_or_404(get_user_model(), pk=prev_session["user"])
+
+        expected_hash = salted_hmac(
+            key_salt=b"hijack-history-hash",
+            value=hijacker.get_session_auth_hash(),
+            algorithm="sha256",
+            secret=settings.SECRET_KEY
+        ).hexdigest()
+        if not hmac.compare_digest(expected_hash, prev_session["auth_hash"]):
+            # Could be an attacker-controlled hijack history, but could also be e.g. a password change of the admin user
+            # that happened during the hijack session
+            logout(request)
+            return redirect_to_login(request.get_full_path())
+
         backend = get_used_backend(request)
         backend = f"{backend.__module__}.{backend.__class__.__name__}"
         with signals.no_update_last_login(), keep_session_age(request.session):
