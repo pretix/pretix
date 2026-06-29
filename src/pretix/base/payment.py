@@ -936,7 +936,7 @@ class BasePaymentProvider:
         """
         Will be called if the *event administrator* views the details of a payment.
 
-        It should return HTML code containing information regarding the current payment
+        It should return a SafeString containing HTML code, with information regarding the current payment
         status and, if applicable, next steps.
 
         The default implementation returns an empty string.
@@ -961,7 +961,7 @@ class BasePaymentProvider:
         """
         Will be called if the *event administrator* views the details of a refund.
 
-        It should return HTML code containing information regarding the current refund
+        It should return a SafeString containing HTML code, with information regarding the current refund
         status and, if applicable, next steps.
 
         The default implementation returns an empty string.

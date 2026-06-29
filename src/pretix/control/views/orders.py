@@ -551,10 +551,10 @@ class OrderDetail(OrderView):
         ctx['refunds'] = self.order.refunds.select_related('payment').order_by('-created')
         for p in ctx['payments']:
             if p.payment_provider:
-                p.html_info = (p.payment_provider.payment_control_render(self.request, p) or "").strip()
+                p.html_info = p.payment_provider.payment_control_render(self.request, p) or ""
         for r in ctx['refunds']:
             if r.payment_provider:
-                r.html_info = (r.payment_provider.refund_control_render(self.request, r) or "").strip()
+                r.html_info = r.payment_provider.refund_control_render(self.request, r) or ""
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={
             'comment': self.order.comment,
