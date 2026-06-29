@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load static %}
 {% load compress %}
+{% load escapejson %}
 {% block title %}{% trans "Add a two-factor authentication device" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Add a two-factor authentication device" %}</h1>
@@ -26,9 +27,7 @@
         {% trans "Device registration failed." %}
     </div>
     <script type="text/json" id="webauthn-enroll">
-        {{ jsondata|safe }}
-
-
+        {{ jsondata|escapejson }}
     </script>
     {% compress js %}
         <script type="text/javascript" src="{% static "pretixcontrol/js/base64js.js" %}"></script>
