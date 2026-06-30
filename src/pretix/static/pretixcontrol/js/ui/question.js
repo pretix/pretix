@@ -1,4 +1,4 @@
-/*global $, Morris, gettext*/
+/*global $, Morris, Sortable, gettext*/
 $(function () {
     // Question view
     if (!$("#question_chart").length) {
@@ -96,6 +96,50 @@ $(function () {
     $("#id_type").change(question_page_toggle_view);
     $("#id_required").change(question_page_toggle_view);
     question_page_toggle_view();
+
+    const $questionForm = $("#answer-options").closest("form");
+    const $optionFormset = $("#answer-options").find("[data-formset]");
+    const $optionFormsetBody = $optionFormset.find("[data-formset-body]");
+    let shouldTrackDirtyState = false;
+
+    function getActiveOptionForms() {
+        return $optionFormsetBody.children("[data-formset-form]").not("[data-formset-form-deleted]");
+    }
+
+    function syncAnswerOptionOrder(markDirty) {
+        const $activeForms = getActiveOptionForms();
+
+        $activeForms.each(function (index) {
+            $(this).find('[name*="-ORDER"]').val(index + 1);
+        });
+
+        $optionFormsetBody.find(".question-option-drag-handle").prop("disabled", $activeForms.length < 2);
+
+        if (markDirty && shouldTrackDirtyState) {
+            $questionForm.trigger("checkform.areYouSure");
+        }
+    }
+
+    syncAnswerOptionOrder(false);
+
+    Sortable.create($optionFormsetBody.get(0), {
+        animation: 150,
+        draggable: '[data-formset-form]:not([data-formset-form-deleted])',
+        handle: '.question-option-drag-handle',
+        onEnd: function () {
+            syncAnswerOptionOrder(true);
+        }
+    });
+
+    $optionFormset.on("formAdded formDeleted", "[data-formset-form]", function () {
+        window.setTimeout(function () {
+            syncAnswerOptionOrder(true);
+        }, 0);
+    });
+
+    window.setTimeout(function () {
+        shouldTrackDirtyState = true;
+    }, 0);
 
     function question_page_toggle_view() {
         var show = $("#id_type").val() == "C" || $("#id_type").val() == "M";
