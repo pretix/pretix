@@ -100,6 +100,11 @@ SECRET_KEY_FALLBACKS = []
 for i in range(10):
     if config.has_option('django', f'secret_fallback{i}'):
         SECRET_KEY_FALLBACKS.append(config.get('django', f'secret_fallback{i}'))
+fallback_secret_file_key = config._file_envkey('django', 'secret_fallbacks')  # FILE__PRETIX_DJANGO_SECRET_FALLBACKS
+if fallback_secret_file_key in os.environ and os.path.exists(os.environ[fallback_secret_file_key]):
+    with open(os.environ[fallback_secret_file_key], 'r') as f:
+        for line in f:
+            SECRET_KEY_FALLBACKS.append(line.strip())
 
 
 # Adjustable settings
