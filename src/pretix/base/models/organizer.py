@@ -61,6 +61,7 @@ from ...helpers.permission_migration import (
 )
 from ..settings import settings_hierarkey
 from .auth import User
+
 if TYPE_CHECKING:
     from hierarkey.proxy import HierarkeyProxy
 
