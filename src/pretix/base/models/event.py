@@ -899,7 +899,7 @@ class Event(EventMixin, LoggedModel):
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
 
-        if hasattr(other, 'alternative_domain_assignment'):
+        if hasattr(other, 'alternative_domain_assignment') and not is_cross_organizer:
             other.alternative_domain_assignment.domain.event_assignments.create(event=self)
 
         if not self.all_sales_channels:
