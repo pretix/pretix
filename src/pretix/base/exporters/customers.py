@@ -40,11 +40,12 @@ from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
 
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
-from ..exporter import ListExporter, OrganizerLevelExportMixin
+from ..exporter import MultiSheetListExporter, OrganizerLevelExportMixin
+from ..models import Membership
 from ..signals import register_multievent_data_exporters
 
 
-class CustomerListExporter(OrganizerLevelExportMixin, ListExporter):
+class CustomerListExporter(OrganizerLevelExportMixin, MultiSheetListExporter):
     identifier = 'customerlist'
     verbose_name = gettext_lazy('Customer accounts')
     category = pgettext_lazy('export_category', 'Customer accounts')
@@ -55,12 +56,19 @@ class CustomerListExporter(OrganizerLevelExportMixin, ListExporter):
         return 'organizer.customers:write'
 
     @property
+    def sheets(self):
+        return (
+            ('customers', _('Customers')),
+            ('memberships', _('Memberships')),
+        )
+
+    @property
     def additional_form_fields(self):
         return OrderedDict(
             []
         )
 
-    def iterate_list(self, form_data):
+    def iterate_customers(self, form_data):
         qs = self.organizer.customers.prefetch_related('provider')
 
         headers = [
@@ -107,6 +115,52 @@ class CustomerListExporter(OrganizerLevelExportMixin, ListExporter):
                 obj.get_locale_display(),
                 obj.notes or '',
             ]
+            yield row
+
+    def iterate_memberships(self, form_data):
+        qs = Membership.objects.filter(
+            customer__organizer=self.organizer
+        ).prefetch_related('membership_type').select_related('customer', 'granted_in', 'granted_in__order')
+
+        headers = [
+            _('Customer ID'),
+            _('External identifier'),
+            _('Email'),
+            _('Test mode'),
+            _('Canceled'),
+            _('Membership type'),
+            _('Purchase ticket'),
+            _('Start date'),
+            _('Start time'),
+            _('End date'),
+            _('End time'),
+            _('Name'),
+        ]
+        name_scheme = PERSON_NAME_SCHEMES[self.organizer.settings.name_scheme]
+        if name_scheme and len(name_scheme['fields']) > 1:
+            for k, label, w in name_scheme['fields']:
+                headers.append(_('Name') + ': ' + str(label))
+        yield headers
+
+        tz = get_current_timezone()
+        for obj in qs:
+            row = [
+                obj.customer.identifier,
+                obj.customer.external_identifier,
+                obj.customer.email or '',
+                _('Yes') if obj.testmode else _('No'),
+                _('Yes') if obj.canceled else _('No'),
+                str(obj.membership_type.name),
+                f'{obj.granted_in.order.code}-{obj.granted_in.positionid}' if obj.granted_in else None,
+                obj.date_start.astimezone(tz).strftime('%Y-%m-%d'),
+                obj.date_start.astimezone(tz).strftime('%H:%M'),
+                obj.date_end.astimezone(tz).strftime('%Y-%m-%d'),
+                obj.date_end.astimezone(tz).strftime('%H:%M'),
+                obj.attendee_name or '',
+            ]
+            if name_scheme and len(name_scheme['fields']) > 1:
+                for k, label, w in name_scheme['fields']:
+                    row.append(obj.attendee_name_parts.get(k, ''))
             yield row
 
     def get_filename(self):
