@@ -35,6 +35,7 @@ import operator
 import string
 from datetime import date, datetime, time
 from functools import reduce
+from typing import TYPE_CHECKING
 
 import pytz_deprecation_shim
 from django.conf import settings
@@ -60,6 +61,8 @@ from ...helpers.permission_migration import (
 )
 from ..settings import settings_hierarkey
 from .auth import User
+if TYPE_CHECKING:
+    from hierarkey.proxy import HierarkeyProxy
 
 
 @settings_hierarkey.add(cache_namespace='organizer')
@@ -78,6 +81,9 @@ class Organizer(LoggedModel):
     """
 
     settings_namespace = 'organizer'
+    if TYPE_CHECKING:
+        settings: HierarkeyProxy
+
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
     slug = models.CharField(

@@ -40,6 +40,7 @@ import warnings
 from collections import Counter, OrderedDict, defaultdict
 from datetime import datetime, time, timedelta
 from operator import attrgetter
+from typing import TYPE_CHECKING
 from urllib.parse import urljoin
 from zoneinfo import ZoneInfo
 
@@ -79,10 +80,16 @@ from pretix.helpers.thumb import get_thumbnail
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
 
+if TYPE_CHECKING:
+    from hierarkey.proxy import HierarkeyProxy
+
 logger = logging.getLogger(__name__)
 
 
 class EventMixin:
+    if TYPE_CHECKING:
+        settings: HierarkeyProxy
+
     def clean(self):
         if self.presale_start and self.presale_end and self.presale_start > self.presale_end:
             raise ValidationError({'presale_end': _('The end of the presale period has to be later than its start.')})
