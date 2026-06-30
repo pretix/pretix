@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-28 14:42+0000\n"
-"PO-Revision-Date: 2026-06-20 17:00+0000\n"
+"PO-Revision-Date: 2026-06-30 16:52+0000\n"
 "Last-Translator: Nikita Mitasov <me@ch4og.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
@@ -35488,10 +35488,8 @@ msgstr "Введите промокод  ниже, чтобы купить эт�
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:14
-#, fuzzy
-#| msgid "Quota availabilities"
 msgid "Not available yet."
-msgstr "Наличие квот"
+msgstr "Еще недоступно."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:18
 msgid "Not available any more."
