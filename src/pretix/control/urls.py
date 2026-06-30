@@ -382,6 +382,7 @@ urlpatterns = [
         re_path(r'^vouchers/bulk_add$', vouchers.VoucherBulkCreate.as_view(), name='event.vouchers.bulk'),
         re_path(r'^vouchers/bulk_add/mail_preview$', vouchers.VoucherBulkMailPreview.as_view(), name='event.vouchers.bulk.mail_preview'),
         re_path(r'^vouchers/bulk_action$', vouchers.VoucherBulkAction.as_view(), name='event.vouchers.bulkaction'),
+        re_path(r'^vouchers/bulk_edit$', vouchers.VoucherBulkUpdateView.as_view(), name='event.vouchers.bulkedit'),
         re_path(r'^vouchers/import/$', modelimport.VoucherImportView.as_view(), name='event.vouchers.import'),
         re_path(r'^vouchers/import/(?P<file>[^/]+)/$', modelimport.VoucherProcessView.as_view(), name='event.vouchers.import.process'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/transition$', orders.OrderTransition.as_view(),
