@@ -671,6 +671,11 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
 
     base_context = {
         'frontpage_text': ['event'],
+        'presale_has_ended_text': ['event'],
+        'voucher_explanation_text': ['event'],
+        'banner_text': ['event'],
+        'banner_text_bottom': ['event'],
+        'event_info_text': ['event'],
     }
 
     def _resolve_virtual_keys_input(self, data, prefix=''):

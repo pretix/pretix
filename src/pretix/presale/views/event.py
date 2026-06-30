@@ -635,10 +635,15 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
 
         templating_context = PlaceholderContext(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
+
+        texts = context['texts']
+        for field in ('presale_has_ended_text', 'event_info_text'):
+            texts[field] = templating_context.format(str(self.request.event.settings[field]))
+
         if self.subevent:
-            context['frontpage_text'] = templating_context.format(str(self.subevent.frontpage_text))
+            texts['frontpage_text'] = templating_context.format(str(self.subevent.frontpage_text))
         else:
-            context['frontpage_text'] = templating_context.format(str(self.request.event.settings.frontpage_text))
+            texts['frontpage_text'] = templating_context.format(str(self.request.event.settings.frontpage_text))
 
         if self.request.event.has_subevents:
             context['subevent_list'] = SimpleLazyObject(self._subevent_list_context)
