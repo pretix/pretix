@@ -47,6 +47,17 @@ def test_organizer_page_shown(env, client):
 
 
 @pytest.mark.django_db
+def test_organizer_footer_contact_url_overrides_mailto(env, client):
+    env[0].settings.contact_mail = 'orga@example.org'
+    env[0].settings.contact_url = 'https://example.org/contact'
+
+    r = client.get('/mrmcd/')
+
+    assert '/redirect/?url=https%3A//example.org/contact' in r.rendered_content
+    assert 'mailto:orga@example.org' not in r.rendered_content
+
+
+@pytest.mark.django_db
 def test_public_event_on_page(env, client):
     env[1].is_public = True
     env[1].save()

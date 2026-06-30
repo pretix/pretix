@@ -81,6 +81,16 @@ class EventMiddlewareTest(EventTestMixin, SoupTest):
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn(str(self.event.name), doc.find("h1").text)
 
+    def test_footer_contact_url_overrides_mailto(self):
+        self.event.settings.contact_mail = 'orga@example.org'
+        self.event.settings.contact_url = 'https://example.org/contact'
+
+        doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
+        contact_link = doc.find('a', string='Contact')
+
+        self.assertIsNotNone(contact_link)
+        self.assertTrue(contact_link['href'].startswith('/redirect/?url=https%3A//example.org/contact'))
+
     def test_no_session_cookie_set_on_event_index_view(self):
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertEqual(resp.status_code, 200)
