@@ -46,6 +46,13 @@ class RequestIdFilter(logging.Filter):
         return True
 
 
+class SkipNotFoundFilter(logging.Filter):
+    # Drop the WARNING "Not Found: ..." records django.request emits for 404s
+    # We have different access logs for that
+    def filter(self, record):
+        return getattr(record, 'status_code', None) != 404
+
+
 class RequestIdMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
