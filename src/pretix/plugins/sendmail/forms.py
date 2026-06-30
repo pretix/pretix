@@ -158,7 +158,12 @@ class OrderMailForm(BaseMailForm):
         ),
         label=pgettext_lazy('sendmail_form', 'Restrict to products'),
         required=True,
-        queryset=Item.objects.none()
+        queryset=Item.objects.none(),
+        help_text=pgettext_lazy(
+            'sendmail_form',
+            'There may be multiple mails sent out to the same mail address if one order contains multiple attendee '
+            'products for it, if you restrict to products while also restricting mails to attendees only. '
+            'This is intended, as every one of those get linked to their own separate order page restricted to only that product.')
     )
     filter_checkins = forms.BooleanField(
         label=_('Filter check-in status'),
@@ -366,6 +371,11 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
             del self.fields['subevent']
 
         self.fields['limit_products'].queryset = Item.objects.filter(event=self.event)
+        self.fields['limit_products'].help_text = pgettext_lazy(
+            'sendmail_form',
+            'There may be multiple mails sent out to the same mail address if one order contains multiple attendee '
+            'products for it, if you restrict to products while also restricting mails to attendees only. '
+            'This is intended, as every one of those get linked to their own separate order page restricted to only that product.')
 
         self.fields['schedule_type'] = forms.ChoiceField(
             label=_('Type of schedule time'),

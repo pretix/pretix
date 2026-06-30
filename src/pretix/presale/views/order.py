@@ -174,7 +174,6 @@ class OrderPositionDetailMixin(NoSearchIndexViewMixin):
     def position(self):
         qs = OrderPosition.objects.filter(
             order__event=self.request.event,
-            addon_to__isnull=True,
             order__code=self.kwargs['order'],
             positionid=self.kwargs['position']
         ).select_related('order', 'order__event')
