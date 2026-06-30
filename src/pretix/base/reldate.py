@@ -25,13 +25,16 @@ import os
 import warnings
 from collections import namedtuple
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Iterable, List, Literal, Tuple, Union
+from typing import (
+    TYPE_CHECKING, Iterable, List, Literal, Optional, Tuple, Union, cast,
+)
 from zoneinfo import ZoneInfo
 
 from dateutil import parser
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.forms.widgets import Widget
 from django.utils.formats import get_format
 from django.utils.functional import Promise, lazy
 from django.utils.timezone import now
@@ -81,8 +84,6 @@ BASE_CHOICES: List[BaseChoice] = [
     BaseChoice('order', 'expires', _('Order expiry'), True, True),
 ]
 
-LIMIT_FALLBACKS = ['date_from', 'date_to', 'date_admission', 'presale_start', 'presale_end']
-
 EVENT_BASE_CHOICES = [
     x for x in BASE_CHOICES if x.base == 'event'
 ]
@@ -100,12 +101,12 @@ class RelativeDate:
     to calculate the date.
 
     The list of valid base date choices is defined in BASE_CHOICES.
-    If the base_date_key is not set, the date_from attribute of Event is used.
+    If the base_date_name is not set, the date_from attribute of Event is used.
     """
 
     days: int = 0
-    minutes: int = None
-    time: datetime.time = None
+    minutes: Optional[int] = None
+    time: Optional[datetime.time] = None
     is_after: bool = False
     base_date_name: str = 'event__date_from__'
 
@@ -131,10 +132,11 @@ class RelativeDate:
             return False
         return self.to_string() == o.to_string()
 
-    def _resolve_base_date(self, base: "Event | Order | SubEvent") -> Tuple[datetime.datetime, ZoneInfo]:
+    def _resolve_date(self, base: "Event | Order | SubEvent") -> Tuple[datetime.datetime, ZoneInfo]:
         """
+        Resolves the datetime and timezone information of this RelativeDate object in relation to the provided reference.
 
-        :param base:
+        :param base: the reference which should be used to resolve the relative date
         :return:
         """
         from .models import Event, Order, SubEvent
@@ -159,10 +161,16 @@ class RelativeDate:
         return base_date, tz
 
     def date(self, base: "Event | Order | SubEvent") -> datetime.date:
+        """
+        Resolves the effective date of this RelativeDate object in relation to the provided reference.
+
+        :param base: the reference which should be used to resolve the date
+        :return: datetime.date
+        """
         if self.minutes is not None:
             raise ValueError('A minute-based relative datetime can not be used as a date')
 
-        base_date, tz = self._resolve_base_date(base)
+        base_date, tz = self._resolve_date(base)
 
         if self.is_after:
             new_date = base_date.astimezone(tz) + datetime.timedelta(days=self.days)
@@ -171,7 +179,13 @@ class RelativeDate:
         return new_date.date()
 
     def datetime(self, base: "Event | Order | SubEvent") -> datetime.datetime:
-        base_date, tz = self._resolve_base_date(base)
+        """
+        Resolves the effective datetime of this RelativeDate object in relation to the provided reference.
+
+        :param base: the reference which should be used to resolve the datetime
+        :return: datetime.datetime
+        """
+        base_date, tz = self._resolve_date(base)
 
         if self.minutes is not None:
             if self.is_after:
@@ -265,6 +279,15 @@ class RelativeDateWrapper:
         self.data = data
 
     def date(self, base: "Event | Order | SubEvent") -> datetime.date:
+        """
+        If the RelativeDateWrapper wraps a RelativeDate object:
+            Resolves the effective date of this object in relation to the provided reference.
+        If the RelativeDateWrapper wraps an absolute date or datetime:
+            Returns the wrapped absolute date.
+
+        :param base: the reference which should be used to resolve the date in case it is a relative date.
+        :return: datetime.date
+        """
         if isinstance(self.data, datetime.datetime):
             return self.data.date()
         elif isinstance(self.data, datetime.date):
@@ -273,12 +296,25 @@ class RelativeDateWrapper:
             return self.data.date(base)
 
     def datetime(self, base: "Event | Order | SubEvent") -> datetime.datetime:
+        """
+        If the RelativeDateWrapper wraps a RelativeDate object:
+            Resolves the effective datetime of this object in relation to the provided reference.
+        If the RelativeDateWrapper wraps an absolute date or datetime:
+            Returns the wrapped absolute datetime.
+
+        :param base: the reference which should be used to resolve the datetime in case it is a relative datetime.
+        :return: datetime.datetime
+        """
         if isinstance(self.data, (datetime.datetime, datetime.date)):
             return self.data
         else:
             return self.data.datetime(base)
 
     def to_string(self) -> str:
+        """
+
+        :return:
+        """
         if isinstance(self.data, (datetime.datetime, datetime.date)):
             return self.data.isoformat()
         else:
@@ -286,6 +322,11 @@ class RelativeDateWrapper:
 
     @classmethod
     def from_string(cls, input: str):
+        """
+
+        :param input:
+        :return:
+        """
         if input.startswith('RELDATE/'):
             data = RelativeDate.from_string(input)
         else:
@@ -342,7 +383,7 @@ class RelativeDateTimeWidget(forms.MultiWidget):
             tf = get_format('TIME_INPUT_FORMATS')[0]
             return datetime.time(8, 30, 0).strftime(tf)
 
-        widgets = reldatetimeparts(
+        widgets = cast(dict[str, Widget | type[Widget]], cast(object, reldatetimeparts(
             status=forms.RadioSelect(choices=self.status_choices),
             absolute=forms.DateTimeInput(
                 attrs={'placeholder': lazy(placeholder_datetime_format, str), 'class': 'datetimepicker'}
@@ -364,7 +405,7 @@ class RelativeDateTimeWidget(forms.MultiWidget):
             ),
             rel_mins_relation=forms.Select(attrs={'data-relation-choice': True}, choices=BEFORE_AFTER_CHOICE),
             rel_days_relation=forms.Select(attrs={'data-relation-choice': True}, choices=BEFORE_AFTER_CHOICE),
-        )
+        )))
         super().__init__(widgets=widgets, *args, **kwargs)
 
     def decompress(self, value):
@@ -448,9 +489,9 @@ class RelativeDateTimeField(forms.MultiValueField):
         if kwargs.get('limit_choices'):
             limit = kwargs.pop('limit_choices')
             if any(["__" not in l for l in limit]):
-                _warn_skips = (os.path.dirname(__file__),)
+                _warn_skips = (str(os.path.dirname(__file__)),)
                 warnings.warn(
-                    "Please prefix limit_choices with the base the attributes refer to, for example event__date_from",
+                    message="Please prefix limit_choices with the base the attributes refer to, for example event__date_from",
                     skip_file_prefixes=_warn_skips
                 )
 
@@ -593,8 +634,7 @@ class RelativeDateWidget(RelativeDateTimeWidget):
     def __init__(self, *args, **kwargs):
         self.status_choices = kwargs.pop('status_choices')
         self.base_choices = kwargs.pop('base_choices')
-
-        widgets = reldateparts(
+        widgets = cast(dict[str, Widget | type[Widget]], cast(object, reldateparts(
             status=forms.RadioSelect(choices=self.status_choices),
             absolute=forms.DateInput(
                 attrs={'class': 'datepickerfield'}
@@ -606,7 +646,7 @@ class RelativeDateWidget(RelativeDateTimeWidget):
                 attrs={'data-relative-choice': True},
             ),
             rel_days_relation=forms.Select(choices=BEFORE_AFTER_CHOICE, attrs={'data-relation-choice': True},),
-        )
+        )))
         forms.MultiWidget.__init__(self, widgets=widgets, *args, **kwargs)
 
     def decompress(self, value):

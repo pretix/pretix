@@ -20,13 +20,12 @@
 # <https://www.gnu.org/licenses/>.
 #
 from datetime import datetime, time, timedelta
-from decimal import Decimal
 from zoneinfo import ZoneInfo
 
 import pytest
-from django_scopes import scope, scopes_disabled
+from django_scopes import scope
 
-from pretix.base.models import Event, Order, OrderPosition, Organizer
+from pretix.base.models import Event, Order, Organizer
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 
 TOKYO = ZoneInfo('Asia/Tokyo')
