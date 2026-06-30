@@ -51,6 +51,7 @@ from django.shortcuts import redirect, render
 from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.html import format_html
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -320,6 +321,8 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self) -> str:
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
+            return self.request.GET.get("next")
         return reverse('control:event.vouchers', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,

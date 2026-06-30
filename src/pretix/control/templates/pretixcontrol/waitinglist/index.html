@@ -251,7 +251,7 @@
                         </td>
                         <td>
                             {% if e.voucher %}
-                                <a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=e.voucher.pk %}">
+                                <a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=e.voucher.pk %}?next={{ request.get_full_path|urlencode }}">
                                     {{ e.voucher }}
                                 </a>
                             {% elif not e.voucher and e.availability.0 == 100 and e.availability.1|default_if_none:"none" != "none" %}
