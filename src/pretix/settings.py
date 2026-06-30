@@ -709,11 +709,21 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
 
     from .sentry import PretixSentryIntegration, setup_custom_filters
 
+    SENTRY_EVENT_LEVEL = config.get('sentry', 'event_level', fallback='')
     SENTRY_TOKEN = config.get('sentry', 'traces_sample_token', fallback='')
     pretix_denylist = DEFAULT_DENYLIST + [
         "access_token",
         "sentry_dsn",
     ]
+
+    def parse_log_level(value):
+        try:
+            return logging.getLevelNamesMapping()[value.upper()]
+        except KeyError:
+            raise ImproperlyConfigured(
+                f"Invalid log level: {value}. "
+                "It should be one of: DEBUG, INFO, WARNING, ERROR or CRITICAL"
+            )
 
     def traces_sampler(sampling_context):
         qs = sampling_context.get('wsgi_environ', {}).get('QUERY_STRING', '')
@@ -734,7 +744,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
             CeleryIntegration(),
             LoggingIntegration(
                 level=logging.INFO,
-                event_level=logging.CRITICAL
+                event_level=parse_log_level(SENTRY_EVENT_LEVEL) if SENTRY_EVENT_LEVEL else logging.CRITICAL
             )
         ],
         traces_sampler=traces_sampler,
