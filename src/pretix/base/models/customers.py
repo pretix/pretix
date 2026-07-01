@@ -73,6 +73,13 @@ class CustomerSSOProvider(LoggedModel):
         null=False, blank=False,
         choices=METHODS,
     )
+    allow_convert_to_sso = models.BooleanField(
+        default=False,
+        verbose_name=_("Convert existing customers to single-sign-on accounts on login"),
+        help_text=_(
+            "If enabled, when an existing customer registered with email and password tries to login through this SSO provider, pretix changes the account to single-sign-on. Otherwise pretix does not allow to log in."
+        ),
+    ),
     configuration = models.JSONField()
 
     def allow_delete(self):

@@ -865,7 +865,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                     )
                 except Customer.DoesNotExist:
                     # no race-condition, try to convert to oidc?
-                    if self.request.organizer.settings.customer_accounts_to_oidc:
+                    if self.provider.allow_convert_to_sso:
                         try:
                             customer = self.request.organizer.customers.get(
                                 email=profile['email'],
@@ -873,8 +873,8 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                             customer.set_unusable_password()
                             customer.provider = self.provider
                             customer.external_identifier = str(profile['uid'])
-                            customer.identifier = identifier
-                            customer.is_active = True
+                            #customer.identifier = identifier
+                            #customer.is_active = True
                             customer.is_verified = True
                             if name_parts:
                                 customer.name_parts = name_parts
