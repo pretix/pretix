@@ -42,8 +42,6 @@ from bleach import DEFAULT_CALLBACKS, html5lib_shim
 from bleach.linkifier import build_email_re
 from django import template
 from django.conf import settings
-from django.core import signing
-from django.urls import reverse
 from django.utils.functional import SimpleLazyObject
 from django.utils.html import escape
 from django.utils.http import url_has_allowed_host_and_scheme
