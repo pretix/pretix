@@ -370,8 +370,16 @@ class RejectInvalidInputMiddleware(MiddlewareMixin):
         if "\x00" in request.META['QUERY_STRING'] or "%00" in request.META['QUERY_STRING']:
             raise BadRequest("Invalid characters in input.")
         if request.method in ('POST', 'PUT', 'PATCH') and request.content_type == "application/x-www-form-urlencoded":
-            if any("\x00" in value for key, value_list in request.POST.lists() for value in value_list):
-                raise BadRequest("Invalid characters in input.")
+            try:
+                post_data = request.POST.lists()
+            except BadRequest:
+                # Reading request.POST wasn't possible, probably an invalid charset. Django will crash once we actually
+                # use request.POST, but if we don't, let's not crash it (required for some weird payment provider
+                # webhooks, e.g. computop).
+                pass
+            else:
+                if any("\x00" in value for key, value_list in post_data for value in value_list):
+                    raise BadRequest("Invalid characters in input.")
 
 
 class CustomCommonMiddleware(CommonMiddleware):
