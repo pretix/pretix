@@ -1566,7 +1566,7 @@ def send_download_reminders(sender, **kwargs):
                             )
 
 
-def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
+def notify_user_changed_order(order, user=None, auth=None, invoices=None):
     with language(order.locale, order.event.settings.region):
         email_template = order.event.settings.mail_text_order_changed
         email_context = get_email_context(event=order.event, order=order)
