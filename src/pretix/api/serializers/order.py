@@ -52,6 +52,7 @@ from pretix.api.signals import order_api_details, orderposition_api_details
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.invoicing.transmission import get_transmission_types
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Device, GiftCard, Invoice, InvoiceAddress,
     InvoiceLine, Item, ItemVariation, Order, OrderPosition, Question,
@@ -381,6 +382,7 @@ class PrintLogSerializer(serializers.ModelSerializer):
 class FailedCheckinSerializer(I18nAwareModelSerializer):
     error_reason = serializers.ChoiceField(choices=Checkin.REASONS, required=True, allow_null=False)
     raw_barcode = serializers.CharField(required=True, allow_null=False)
+    raw_source_type = serializers.ChoiceField(choices=[(k, v) for k, v in MEDIA_TYPES.items()], default='barcode')
     position = serializers.PrimaryKeyRelatedField(queryset=OrderPosition.all.none(), required=False, allow_null=True)
     raw_item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
     raw_variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
@@ -390,7 +392,7 @@ class FailedCheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
         fields = ('error_reason', 'error_explanation', 'raw_barcode', 'raw_item', 'raw_variation',
-                  'raw_subevent', 'nonce', 'datetime', 'type', 'position')
+                  'raw_subevent', 'raw_source_type', 'nonce', 'datetime', 'type', 'position')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
