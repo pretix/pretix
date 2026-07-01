@@ -6,6 +6,7 @@
 {% load money %}
 {% load expiresformat %}
 {% load eventurl %}
+{% load static %}
 {% load phone_format %}
 {% load rich_text %}
 {% load getitem %}
@@ -21,6 +22,10 @@
         {% endif %}
     {% endif %}
     {% trans "Order details" %}
+{% endblock %}
+{% block custom_header %}
+    {{ block.super }}
+     <script type="text/javascript" src="{% static "pretixpresale/js/csrfcookieretry.js" %}"></script>
 {% endblock %}
 {% block content %}
     {% if "thanks" in request.GET or "paid" in request.GET %}
