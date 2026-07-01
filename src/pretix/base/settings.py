@@ -1924,8 +1924,6 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Hide all past dates from calendar"),
-            help_text=_("This option currently only affects the calendar of this event series, not the organizer-wide "
-                        "calendar.")
         )
     },
     'allow_modifications': {

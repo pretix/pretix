@@ -650,6 +650,10 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, sales_channel, eve
             if hide:
                 continue
 
+        if s.event_calendar_future_only:
+            if (se.date_to or se.date_from) < time_machine_now():
+                continue
+
         timezones.add(s.timezone)
         tz = ZoneInfo(s.timezone)
         datetime_from = se.date_from.astimezone(tz)
