@@ -503,6 +503,7 @@ REST_FRAMEWORK = {
 
 MIDDLEWARE = [
     'pretix.helpers.logs.RequestIdMiddleware',
+    'pretix.base.middleware.BaseLocaleMiddleware',
     'pretix.api.middleware.IdempotencyMiddleware',
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
     'pretix.base.middleware.CustomCommonMiddleware',
