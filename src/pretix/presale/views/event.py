@@ -155,8 +155,8 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
         ).filter(
             variation_q,
             Q(all_sales_channels=True) | Q(limit_sales_channels=channel),
+            Exists(Quota.variations.through.objects.filter(quota__subevent_id=subevent, itemvariation_id=OuterRef("pk"))),
             active=True,
-            quotas__isnull=False,
             subevent_disabled=False
         ).prefetch_related(
             *prefetch_membership_types,
