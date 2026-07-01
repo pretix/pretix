@@ -1485,7 +1485,7 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         self.order.save()
         self._subevent_setup()
         self.event.settings.set('payment_term_last', RelativeDateWrapper(
-            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
+            RelativeDate(days=2, time=None, base_date_name='event__date_from', minutes=None)
         ))
 
         response = self.client.get(

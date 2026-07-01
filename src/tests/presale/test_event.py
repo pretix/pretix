@@ -1122,7 +1122,7 @@ class WaitingListTest(EventTestMixin, SoupTest):
     def test_auto_disable(self):
         self.event.settings.set('waiting_list_enabled', True)
         self.event.settings.waiting_list_auto_disable = RelativeDateWrapper(
-            RelativeDate(days=900, time=datetime.time(9, 0, 0), base_date_name='date_from', minutes=None, is_after=False)
+            RelativeDate(days=900, time=datetime.time(9, 0, 0), base_date_name='event__date_from', minutes=None, is_after=False)
         )
         response = self.client.get(
             '/%s/%s/' % (self.orga.slug, self.event.slug)
