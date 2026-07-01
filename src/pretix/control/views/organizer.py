@@ -69,7 +69,7 @@ from django.utils.functional import cached_property
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone, now
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.views import View
 from django.views.decorators.http import require_http_methods
 from django.views.generic import (
@@ -91,7 +91,9 @@ from pretix.base.models import (
     ReusableMedium, ScheduledOrganizerExport, Team, TeamInvite, User,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
-from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
+from pretix.base.models.event import (
+    Event, EventMetaProperty, EventMetaValue, SubEvent, SubEventMetaValue,
+)
 from pretix.base.models.giftcards import (
     GiftCardAcceptance, GiftCardTransaction, gen_giftcard_secret,
 )
@@ -2466,11 +2468,51 @@ class EventMetaPropertyEditorMixin:
 
     @cached_property
     def formset(self):
-        return EventMetaPropertyAllowedValueFormSet(
+        formset = EventMetaPropertyAllowedValueFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
             organizer=self.request.organizer,
             initial=(self.object.choices or []) if self.object else [],
         )
+        if self.event_value_counts or self.subevent_value_counts:
+            for form in formset.initial_forms:
+                uses = []
+                key = form.initial['key']
+                if key in self.event_value_counts:
+                    count = self.event_value_counts[key]
+                    uses += [ngettext("%d event", "%d events", count) % count]
+                if key in self.subevent_value_counts:
+                    count = self.subevent_value_counts[key]
+                    uses += [ngettext("%d subevent", "%d subevents", count) % count]
+                if uses:
+                    form.fields['key'].help_text = _("Value can not be changed because it is in use (%s).") % (", ".join(uses))
+                    form.fields['key'].widget.attrs['readonly'] = True
+        return formset
+
+    @cached_property
+    def event_value_counts(self):
+        if self.object:
+            return {
+                d['attr_value']: d['count']
+                for d in self.request.organizer.events.annotate(
+                    attr_value=Subquery(EventMetaValue.objects.filter(
+                        event=OuterRef('pk'),
+                        property__name=self.object.name
+                    ).values('value')), count=Count('attr_value')
+                ).values('attr_value', 'count')
+            }
+
+    @cached_property
+    def subevent_value_counts(self):
+        if self.object:
+            return {
+                d['attr_value']: d['count']
+                for d in SubEvent.objects.filter(event__organizer=self.request.organizer).annotate(
+                    attr_value=Subquery(SubEventMetaValue.objects.filter(
+                        subevent=OuterRef('pk'),
+                        property__name=self.object.name,
+                    ).values('value')), count=Count('attr_value')
+                ).values('attr_value', 'count')
+            }
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -2493,10 +2535,28 @@ class EventMetaPropertyEditorMixin:
             return False
         return True
 
+    def all_existing_values_valid(self):
+        if not self.event_value_counts and not self.subevent_value_counts:
+            return True
+        choice_keys = set(
+            f.cleaned_data.get("key") for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
+        )
+        if not choice_keys:
+            return True
+        existing_values = (self.event_value_counts.keys() | self.subevent_value_counts.keys()) - {None}
+        missing_choices = existing_values - choice_keys
+        if missing_choices:
+            messages.error(self.request, _(
+                "When restricting the allowed values, you need to allow all values that already exist "
+                "on your events. Missing values: %s"
+            ) % (", ".join(missing_choices)))
+            return False
+        return True
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object(self.get_queryset())
         self.form = self.get_form()
-        if self.form.is_valid() and self.formset.is_valid() and self.is_default_valid():
+        if self.form.is_valid() and self.formset.is_valid() and self.is_default_valid() and self.all_existing_values_valid():
             return self.form_valid(self.form)
         else:
             return self.form_invalid(self.form)
