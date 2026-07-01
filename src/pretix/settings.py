@@ -624,6 +624,9 @@ LOGGING = {
         'request_id': {
             '()': 'pretix.helpers.logs.RequestIdFilter'
         },
+        'skip_not_found': {
+            '()': 'pretix.helpers.logs.SkipNotFoundFilter',
+        }
     },
     'handlers': {
         'console': {
@@ -665,6 +668,7 @@ LOGGING = {
             'handlers': ['file', 'console', 'mail_admins'],
             'level': loglevel,
             'propagate': True,
+            'filters': ['skip_not_found'],
         },
         'pretix.security.csp': {
             'handlers': ['csp_file'],
