@@ -64,7 +64,7 @@ from django.urls import reverse
 from django.utils import formats
 from django.utils.formats import date_format, get_format
 from django.utils.functional import cached_property
-from django.utils.html import conditional_escape, escape
+from django.utils.html import conditional_escape, escape, format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
@@ -81,7 +81,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CachedTicket, Checkin, Invoice, InvoiceAddress, Item,
     ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
-    ScheduledEventExport, generate_secret,
+    ScheduledEventExport, generate_secret, GiftCard,
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
@@ -2261,6 +2261,12 @@ class OrderContactChange(OrderView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['form'] = self.form
+        if self.order.all_positions.filter(Exists(GiftCard.objects.filter(issued_in=OuterRef('pk')))).exists():
+            self.form.fields['regenerate_secrets'].help_text = format_html(
+                '{}<br><br><strong><span class="fa fa-warning"></span> {}</strong>',
+                self.form.fields['regenerate_secrets'].help_text,
+                _("Ticket secrets of order positions that have been used to issue a gift card can not be changed. Only the link will be changed in this case."),
+            )
         return ctx
 
     @cached_property
