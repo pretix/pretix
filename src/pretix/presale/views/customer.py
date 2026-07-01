@@ -873,8 +873,6 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                             customer.set_unusable_password()
                             customer.provider = self.provider
                             customer.external_identifier = str(profile['uid'])
-                            #customer.identifier = identifier
-                            #customer.is_active = True
                             customer.is_verified = True
                             if name_parts:
                                 customer.name_parts = name_parts
