@@ -79,7 +79,7 @@ class CustomerSSOProvider(LoggedModel):
         help_text=_(
             "If enabled, when an existing customer registered with email and password tries to login through this SSO provider, pretix changes the account to single-sign-on. Otherwise pretix does not allow to log in."
         ),
-    ),
+    )
     configuration = models.JSONField()
 
     def allow_delete(self):

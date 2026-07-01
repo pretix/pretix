@@ -1244,7 +1244,7 @@ class SSOProviderForm(I18nModelForm):
 
     class Meta:
         model = CustomerSSOProvider
-        fields = ['is_active', 'name', 'button_label', 'method']
+        fields = ['is_active', 'name', 'button_label', 'method', 'allow_convert_to_sso']
         widgets = {
             'method': forms.RadioSelect,
         }
