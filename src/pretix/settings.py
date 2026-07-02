@@ -440,6 +440,7 @@ CSRF_COOKIE_NAME = 'pretix_csrftoken'
 SESSION_COOKIE_HTTPONLY = True
 
 INSTALLED_APPS += [ # noqa
+    'django_querytagger',
     'django_filters',
     'django_markup',
     'django_otp',
@@ -505,6 +506,7 @@ MIDDLEWARE = [
     'pretix.helpers.logs.RequestIdMiddleware',
     'pretix.api.middleware.IdempotencyMiddleware',
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
+    'django_querytagger.middleware.SetTagMiddleware',  # after MultiDomainMiddleware for correct url resolving
     'pretix.base.middleware.CustomCommonMiddleware',
     'pretix.multidomain.middlewares.SessionMiddleware',
     'pretix.multidomain.middlewares.CsrfViewMiddleware',
