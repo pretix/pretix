@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import uuid
 
 from django.core.signals import request_finished
 from django.dispatch import receiver
@@ -65,7 +66,9 @@ class RequestIdMiddleware:
                 import sentry_sdk
                 sentry_sdk.set_tag("request_id", request.request_id)
         else:
-            local.request_id = request.request_id = None
+            # Web server did not pass a request ID, we still generate one to correlate between django logs and
+            # celery logs
+            local.request_id = request.request_id = str(uuid.uuid4())
 
         return self.get_response(request)
 
