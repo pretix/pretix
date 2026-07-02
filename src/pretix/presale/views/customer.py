@@ -864,11 +864,33 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                         identifier=identifier,
                     )
                 except Customer.DoesNotExist:
-                    return self._fail(
-                        _('We were unable to use your login since the email address {email} is already used for a '
-                          'different account in this system.').format(email=profile['email']),
-                        popup_origin,
-                    )
+                    # no race-condition, try to convert to oidc?
+                    if self.provider.allow_convert_to_sso:
+                        try:
+                            customer = self.request.organizer.customers.get(
+                                email=profile['email'],
+                            )
+                            customer.set_unusable_password()
+                            customer.provider = self.provider
+                            customer.external_identifier = str(profile['uid'])
+                            customer.is_verified = True
+                            if name_parts:
+                                customer.name_parts = name_parts
+                            if profile.get('phone'):
+                                customer.phone = profile.get('phone')
+                            customer.save()
+                        except Customer.DoesNotExist:
+                            # should actually never happen
+                            return self._fail(
+                                _('We were unable to use your login since either the email address is unknown in this system.'),
+                                popup_origin,
+                            )
+                    else:
+                        return self._fail(
+                            _('We were unable to use your login since the email address {email} is already used for a '
+                              'different account in this system.').format(email=profile['email']),
+                            popup_origin,
+                        )
         else:
             if customer.is_active and customer.email != profile['email']:
                 customer.email = profile['email']
