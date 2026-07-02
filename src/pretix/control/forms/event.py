@@ -1673,7 +1673,7 @@ class CountriesAndEUAndStates(CountriesAndEU):
 
 class TaxRuleLineForm(I18nForm):
     country = LazyTypedChoiceField(
-        choices=CountriesAndEUAndStates(),
+        choices=lazy(lambda: CountriesAndEUAndStates(), CountriesAndEUAndStates),
         required=False
     )
     address_type = forms.ChoiceField(
