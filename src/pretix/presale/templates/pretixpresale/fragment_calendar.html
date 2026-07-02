@@ -21,22 +21,21 @@
                             data-date="{{ day.date|date_fast:"SHORT_DATE_FORMAT" }}">
                             <p>
                             {% if day.events %}
-                                <a href="#selected-day" class="day-label event hidden-sm hidden-md hidden-lg">
+                                <a href="#selected-day" class="day-label event hidden-sm hidden-md hidden-lg" aria-describedby="nr-of-events-{{ day.date|date_fast:"Y-m-d" }}">
                                     <b aria-hidden="true">{{ day.day }}</b>
                                     <time datetime="{{ day.date|date_fast:"Y-m-d" }}" class="sr-only">
                                         {{ day.date|date_fast:"SHORT_DATE_FORMAT" }}
                                     </time>
-                                    <span class="sr-only">
-                                        ({% blocktrans trimmed count count=day.events|length %}
-                                            {{ count }} event
-                                        {% plural %}
-                                            {{ count }} events
-                                        {% endblocktrans %})
-                                    </span>
+                                    <span class="sr-only" id="nr-of-events-{{ day.date|date_fast:"Y-m-d" }}">{% blocktrans trimmed count count=day.events|length %}
+                                        {{ count }} event
+                                    {% plural %}
+                                        {{ count }} events
+                                    {% endblocktrans %}</span>
                                 </a>
                                 <time datetime="{{ day.date|date_fast:"Y-m-d" }}" class="hidden-xs">{{ day.day }}</time>
                             {% else %}
                                 <time datetime="{{ day.date|date_fast:"Y-m-d" }}" class="day-label">{{ day.day }}</time>
+                                <span class="sr-only">{% trans "No events" %}</span>
                             {% endif %}
                             </p>
                             <ul class="events">
