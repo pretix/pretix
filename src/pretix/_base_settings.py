@@ -120,6 +120,7 @@ ALL_LANGUAGES = [
     ('es-419', _('Spanish (Latin America)')),
     ('tr', _('Turkish')),
     ('uk', _('Ukrainian')),
+    ('th', _('Thai')),
 ]
 LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
