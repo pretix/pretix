@@ -952,7 +952,12 @@ class MailSettingsRendererPreview(MailSettingsPreview):
                     context=context,
                 )
                 r = HttpResponse(v, content_type='text/html')
-                r._csp_ignore = True
+                r['Content-Security-Policy'] = (
+                    # Plugin-provided email templates will contain inline styles or remote images
+                    # but emails should not contain JS
+                    "style-src 'unsafe-inline'; "
+                    "img-src https: data:"
+                )
                 return r
         else:
             raise Http404(_('Unknown email renderer.'))
