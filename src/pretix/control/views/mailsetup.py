@@ -192,10 +192,15 @@ class MailSettingsSetupView(TemplateView):
                 return super().get(request, *args, **kwargs)
 
             session_key = f'sender_mail_verification_code_{self.request.path}_{self.simple_form.cleaned_data.get("mail_from")}'
+            verify_dns = (
+                settings.MAIL_CUSTOM_SENDER_SPF_STRING or
+                (settings.MAIL_CUSTOM_SENDER_DKIM_CNAME and settings.MAIL_CUSTOM_SENDER_DMARC_REQUIRED) or
+                settings.MAIL_CUSTOM_SENDER_DMARC_REQUIRED
+            )
             allow_save = (
                 (not settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED or
                  ('verification' in self.request.POST and self.request.POST.get('verification', '') == self.request.session.get(session_key, None))) and
-                (not settings.MAIL_CUSTOM_SENDER_SPF_STRING or self.request.POST.get('state') == 'save')
+                (not verify_dns or self.request.POST.get('state') == 'save')
             )
 
             if allow_save:
@@ -238,7 +243,7 @@ class MailSettingsSetupView(TemplateView):
             dkim_hostname = None
             dkim_cname = None
             if settings.MAIL_CUSTOM_SENDER_DKIM_CNAME and settings.MAIL_CUSTOM_SENDER_DKIM_SELECTOR:
-                dkim_hostname = settings.MAIL_CUSTOM_SENDER_DKIM_SELECTOR + '.domainkey.' + hostname
+                dkim_hostname = settings.MAIL_CUSTOM_SENDER_DKIM_SELECTOR + '._domainkey.' + hostname
                 cname_target = get_cname_record(dkim_hostname)
                 dkim_cname = settings.MAIL_CUSTOM_SENDER_DKIM_CNAME
                 if not dkim_cname.endswith("."):
@@ -252,7 +257,7 @@ class MailSettingsSetupView(TemplateView):
                         'spam. We strongly recommend setting up DKIM through a CNAME record. You can do so through the '
                         'DNS settings at the provider you registered your domain with.'
                     )
-                elif cname_target != settings.MAIL_CUSTOM_SENDER_DKIM_CNAME:
+                elif cname_target != dkim_cname:
                     dkim_warning = _(
                         'We found a CNAME record for a DKIM key, but it is not pointing to the right location. '
                         'This means that there is a very high chance most of the emails will be rejected or marked as '
