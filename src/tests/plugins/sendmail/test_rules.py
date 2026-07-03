@@ -428,6 +428,43 @@ def test_sendmail_rule_checked_in_get_mail(event, order, item):
 
 @pytest.mark.django_db
 @scopes_disabled()
+def test_sendmail_rule_checked_in_mixed_order(event, order, item):
+    order.status = Order.STATUS_PAID
+    order.save()
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    p2 = order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')
+    clist = event.checkin_lists.create(name="Default", all_products=True)
+
+    # receives no mail when checked in
+    djmail.outbox = []
+    perform_checkin(p1, clist, {})
+    assert clist.checkin_count == 1
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="checked_in",
+                                subject='meow', template='meow meow meow')
+    sendmail_run_rules(None)
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_not_checked_in_mixed_order(event, order, item):
+    order.status = Order.STATUS_PAID
+    order.save()
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    p2 = order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')
+    clist = event.checkin_lists.create(name="Default", all_products=True)
+
+    # receives no mail when checked in
+    djmail.outbox = []
+    perform_checkin(p1, clist, {})
+    assert clist.checkin_count == 1
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="no_checkin",
+                                subject='meow', template='meow meow meow')
+    sendmail_run_rules(None)
+    assert len(djmail.outbox) == 1
+
+@pytest.mark.django_db
+@scopes_disabled()
 def run_restriction_test(event, order, restrictions_pass=[], restrictions_fail=[]):
     for r in restrictions_pass:
         djmail.outbox = []
