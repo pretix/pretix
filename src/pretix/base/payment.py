@@ -1706,6 +1706,55 @@ class GiftCardPayment(BasePaymentProvider):
         )
 
 
+class BaseHistoricalPaymentProvider(BasePaymentProvider):
+    """
+    Base class for payment providers that no longer exist but can't be deleted to make sure historical
+    payments are shown correctly.
+
+    Subclasses are recommended to only implement:
+    - payment_control_render
+    - payment_control_render_short
+    - refund_control_render
+    - refund_control_render_short
+    - render_invoice_text
+    - render_invoice_stamp
+    - api_payment_details
+    - api_refund_details
+    - shred_payment_info
+    - matching_id
+    - refund_matching_id
+    """
+
+    @property
+    def is_enabled(self) -> bool:
+        return False
+
+    @property
+    def settings_form_fields(self) -> dict:
+        return {}
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return False
+
+    def payment_is_valid_session(self, request: HttpRequest, payment: OrderPayment):
+        return False
+
+    def order_change_allowed(self, order: Order, request: HttpRequest=None) -> bool:
+        return False
+
+    def payment_refund_supported(self, payment: OrderPayment) -> bool:
+        return False
+
+    def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
+        return False
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        raise PaymentException(_("This payment provider exists for historical purposes only and is no longer usable."))
+
+    def execute_refund(self, refund: OrderRefund):
+        raise PaymentException(_("This payment provider exists for historical purposes only and is no longer usable."))
+
+
 @receiver(register_payment_providers, dispatch_uid="payment_free")
 def register_payment_provider(sender, **kwargs):
     return [FreeOrderProvider, BoxOfficeProvider, OffsettingProvider, ManualPayment, GiftCardPayment]
