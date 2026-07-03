@@ -1403,15 +1403,12 @@ class Event(EventMixin, LoggedModel):
 
         for mp in self.organizer.meta_properties.all():
             if mp.required and not self.meta_data.get(mp.name):
-                issues.append(
-                    ('<a {a_attr}>' + gettext('You need to fill the meta parameter "{property}".') + '</a>').format(
-                        property=mp.name,
-                        a_attr='href="%s#id_prop-%d-value"' % (
-                            reverse('control:event.settings', kwargs={'organizer': self.organizer.slug, 'event': self.slug}),
-                            mp.pk
-                        )
-                    )
-                )
+                issues.append(format_html(
+                    '<a href="{href}{href_hash}">{text}</a>',
+                    text=gettext('You need to fill the meta parameter "{property}".').format(property=mp.name),
+                    href=reverse('control:event.settings', kwargs={'organizer': self.organizer.slug, 'event': self.slug}),
+                    href_hash=f'#id_prop-{mp.pk}-value',
+                ))
 
         responses = event_live_issues.send(self)
         for receiver, response in sorted(responses, key=lambda r: str(r[0])):
