@@ -164,7 +164,6 @@ def widget_css(request, version, **kwargs):
     css = f"/* v{version} */\n" + theme_css + widget_css
 
     resp = FileResponse(css, content_type='text/css')
-    resp._csp_ignore = True
     resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
@@ -246,7 +245,6 @@ def widget_js(request, version, lang, **kwargs):
     cached_js = cache.get(cache_prefix)
     if cached_js and not settings.DEBUG:
         resp = HttpResponse(cached_js, content_type='text/javascript')
-        resp._csp_ignore = True
         resp['Access-Control-Allow-Origin'] = '*'
         return resp
 
@@ -278,7 +276,6 @@ def widget_js(request, version, lang, **kwargs):
             gs.settings.set(checksum_key, checksum)
             cache.set(cache_prefix, data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
-    resp._csp_ignore = True
     resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
@@ -414,7 +411,6 @@ class WidgetAPIProductList(EventListMixin, View):
         self.post_process(data)
         resp = JsonResponse(data)
         resp['Access-Control-Allow-Origin'] = '*'
-        resp._csp_ignore = True
         return resp
 
     def get(self, request, *args, **kwargs):

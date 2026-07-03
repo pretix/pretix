@@ -162,7 +162,6 @@ class XHRView(View):
 
         paypal_order = prov._create_paypal_order(request, None, cart_total)
         r = JsonResponse(paypal_order.dict() if paypal_order else {})
-        r._csp_ignore = True
         return r
 
 

@@ -266,6 +266,22 @@ def _merge_csp(a, b):
 
 
 class SecurityMiddleware(MiddlewareMixin):
+    SAFE_TYPES = (
+        # CSP policies are only used for:
+        # - HTML and SVG in top-level contexts
+        # - SVG or JS Workers delivered in embedded contexts
+        # See: https://www.w3.org/TR/CSP2/#which-policy-applies
+        # Therefore, we can save bandwidth on not including our (sometimes huge) policy
+        # on API responses or CSS. We do however include it with other types as a precaution
+        # (whitelist instead of blacklist) and we also do not whitelist JavaScript in
+        # we ever add service workers to not break the protection of this feature:
+        # https://www.w3.org/TR/CSP2/#sandboxing-and-workers
+        'application/json',
+        'text/css',
+        # We used to skip CSP for PDF since it was necessary for inline previews in Safari,
+        # but at the moment it does not seem to be an issue to just send it.
+    )
+
     def process_response(self, request, resp):
         if settings.DEBUG and resp.status_code >= 400:
             # Don't use CSP on debug error page as it breaks of Django's fancy error
@@ -276,6 +292,11 @@ class SecurityMiddleware(MiddlewareMixin):
         # https://blogs.msdn.microsoft.com/ieinternals/2013/09/17/a-quick-look-at-p3p/
         # https://github.com/pretix/pretix/issues/765
         resp['P3P'] = 'CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"'
+
+        if "Content-Type" in resp and resp["Content-Type"].split(";")[0] in self.SAFE_TYPES:
+            if 'Content-Security-Policy' in resp:
+                del resp['Content-Security-Policy']
+            return resp
 
         if not getattr(resp, '_csp_ignore', False):
             resp['Content-Security-Policy'] = _render_csp(self._build_csp(request, resp))
