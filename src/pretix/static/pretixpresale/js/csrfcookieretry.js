@@ -9,5 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!hasCookie && !sessionStorage.getItem(RELOAD_FLAG)) {
     sessionStorage.setItem(RELOAD_FLAG, "1");
     location.reload();
+  } else if (hasCookie && sessionStorage.getItem(RELOAD_FLAG)) {
+      sessionStorage.removeItem(RELOAD_FLAG);
   }
 });
