@@ -432,7 +432,7 @@ def test_sendmail_rule_checked_in_mixed_order(event, order, item):
     order.status = Order.STATUS_PAID
     order.save()
     p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
-    p2 = order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')
+    order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')  # p2
     clist = event.checkin_lists.create(name="Default", all_products=True)
 
     # receives no mail when checked in
@@ -451,7 +451,7 @@ def test_sendmail_rule_not_checked_in_mixed_order(event, order, item):
     order.status = Order.STATUS_PAID
     order.save()
     p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
-    p2 = order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')
+    order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')  # p2
     clist = event.checkin_lists.create(name="Default", all_products=True)
 
     # receives no mail when checked in
@@ -499,8 +499,8 @@ def test_sendmail_rule_not_checked_in_mixed_order_position_without_email(event, 
     order.save()
     p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
     p2 = order.all_positions.create(item=item, price=13, attendee_email='item2@dummy.test')
-    p3 = order.all_positions.create(item=item, price=13)
-    p4 = order.all_positions.create(item=item, price=13)
+    order.all_positions.create(item=item, price=13)  # p3
+    order.all_positions.create(item=item, price=13)  # p4
     clist = event.checkin_lists.create(name="Default", all_products=True)
 
     # receives no mail when checked in
@@ -515,6 +515,7 @@ def test_sendmail_rule_not_checked_in_mixed_order_position_without_email(event, 
     recipients = [m.to for m in djmail.outbox]
     assert [order.email] in recipients  # for p3 and p4
     assert [p2.attendee_email] in recipients  # for p2
+
 
 @pytest.mark.django_db
 @scopes_disabled()
