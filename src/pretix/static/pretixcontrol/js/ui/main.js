@@ -58,13 +58,16 @@ var i18nToString = function (i18nstring) {
 };
 
 $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
-    waitingDialog.hide();
     var c = $(jqXHR.responseText).filter('.container');
-    if (jqXHR.responseText && jqXHR.responseText.indexOf("<!-- pretix-login-marker -->") !== -1) {
-        location.href = '/control/login?next=' + encodeURIComponent(location.pathname + location.search + location.hash)
+    if (jqXHR.status === 401 && jqXHR.getResponseHeader("X-Login-Url")) {
+        // Append location.hash outside the next parameter so it is not unexpectedly sent to the server
+        // The browser will keep it in the redirect.
+        window.location = jqXHR.getResponseHeader("X-Login-Url") + "?next=" + encodeURIComponent(location.pathname + location.search) + location.hash;
     } else if (c.length > 0) {
+        waitingDialog.hide();
         ajaxErrDialog.show(c.first().html());
     } else if (thrownError !== "abort" && thrownError !== "") {
+        waitingDialog.hide();
         console.error(event, jqXHR, settings, thrownError);
         alert(gettext('Unknown error.'));
     }
