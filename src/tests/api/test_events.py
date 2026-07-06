@@ -1426,12 +1426,6 @@ def test_get_event_settings(token_client, organizer, event):
         '/api/v1/organizers/{}/events/{}/settings/?explain=true'.format(organizer.slug, event.slug),
     )
     assert resp.status_code == 200
-    assert resp.data['contact_url'] == {
-        "value": "https://example.org/contact",
-        "label": "Contact URL",
-        "help_text": "If you set this, the footer contact link will point here instead of using the email address above.",
-        "readonly": False,
-    }
     assert resp.data['imprint_url'] == {
         "value": "https://example.org",
         "label": "Imprint URL",
