@@ -647,25 +647,22 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             id__in=self.teams.filter(TeamQuerySet.organizer_permission_q(permission)).values_list('organizer', flat=True)
         )
 
-    def has_active_staff_session(self, session_key=None):
+    def has_active_staff_session(self, session_key):
         """
         Returns whether or not a user has an active staff session (formerly known as superuser session)
         with the given session key.
         """
         return self.get_active_staff_session(session_key) is not None
 
-    def get_active_staff_session(self, session_key=None):
-        if not self.is_staff:
+    def get_active_staff_session(self, session_key):
+        if not self.is_staff or not session_key:
             return None
         if not hasattr(self, '_staff_session_cache'):
             self._staff_session_cache = {}
         if session_key not in self._staff_session_cache:
-            qs = StaffSession.objects.filter(
-                user=self, date_end__isnull=True
-            )
-            if session_key:
-                qs = qs.filter(session_key=session_key)
-            sess = qs.first()
+            sess = StaffSession.objects.filter(
+                user=self, date_end__isnull=True, session_key=session_key
+            ).first()
             if sess:
                 if sess.date_start < now() - timedelta(seconds=settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE):
                     sess.date_end = now()

@@ -11365,7 +11365,7 @@ msgstr ""
 "innstillingen påvirker ikke endringer som gjøres via baksystemet."
 
 #: pretix/base/settings.py:1279
-msgid "Allow to update existing invoices"
+msgid "Allow updating existing invoices"
 msgstr "Tillat oppdatering av eksisterende fakturaer."
 
 #: pretix/base/settings.py:1280

@@ -123,7 +123,7 @@ def widget_css_etag(request, version, **kwargs):
 
 
 def _use_vite(request):
-    if getattr(settings, 'PRETIX_WIDGET_VITE', False):
+    if getattr(settings, 'PRETIX_WIDGET_VITE', False) or "beta" in request.GET:
         return True
     origin = request.META.get('HTTP_ORIGIN', '')
     gs = GlobalSettingsObject()
