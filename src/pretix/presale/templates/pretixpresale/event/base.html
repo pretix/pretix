@@ -184,18 +184,18 @@
             </div>
         {% endfor %}
     {% endif %}
-    {% if texts.banner_text %}
+    {% if event_texts.banner_text %}
         <div class="site-notice-top">
-            {{ texts.banner_text|rich_text }}
+            {{ event_texts.banner_text|rich_text }}
         </div>
     {% endif %}
     {% block content %}
     {% endblock %}
 {% endblock %}
 {% block footer %}
-    {% if texts.banner_text_bottom %}
+    {% if event_texts.banner_text_bottom %}
         <div class="site-notice-bottom">
-            {{ texts.banner_text_bottom|rich_text }}
+            {{ event_texts.banner_text_bottom|rich_text }}
         </div>
     {% endif %}
     {% if request.event.testmode %}
