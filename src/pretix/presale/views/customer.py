@@ -56,7 +56,7 @@ from pretix.base.signals import customer_created, customer_signed_in
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.models import KnownDomain
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.customer import (
     AuthenticationForm, ChangeInfoForm, ChangePasswordForm, RegistrationForm,
     ResetPasswordForm, SetPasswordForm, TokenGenerator,
@@ -316,8 +316,10 @@ class ResetPasswordView(FormView):
         customer.log_action('pretix.customer.password.resetrequested', {})
         ctx = customer.get_email_context()
         token = TokenGenerator().make_token(customer)
-        ctx['url'] = build_absolute_uri(self.request.organizer,
-                                        'presale:organizer.customer.recoverpw') + '?id=' + customer.identifier + '&token=' + token
+        ctx['url'] = eventreverse_absolute(
+            self.request.organizer,
+            'presale:organizer.customer.recoverpw'
+        ) + '?id=' + customer.identifier + '&token=' + token
         mail(
             customer.email,
             self.request.organizer.settings.mail_subject_customer_reset,
@@ -574,7 +576,7 @@ class ChangeInformationView(CustomerAccountBaseMixin, FormView):
             new_email = form.cleaned_data['email']
             form.cleaned_data['email'] = form.instance.email = self.initial_email
             ctx = form.instance.get_email_context()
-            ctx['url'] = build_absolute_uri(
+            ctx['url'] = eventreverse_absolute(
                 self.request.organizer,
                 'presale:organizer.customer.change.confirm'
             ) + '?token=' + dumps({
@@ -703,7 +705,7 @@ class SSOLoginView(RedirectBackMixin, View):
         request.session[f'pretix_customerauth_{self.provider.pk}_nonce'] = nonce
         request.session[f'pretix_customerauth_{self.provider.pk}_popup_origin'] = popup_origin
         request.session[f'pretix_customerauth_{self.provider.pk}_cross_domain_requested'] = self.request.GET.get("request_cross_domain_customer_auth") == "true"
-        redirect_uri = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return', kwargs={
+        redirect_uri = eventreverse_absolute(self.request.organizer, 'presale:organizer.customer.login.return', kwargs={
             'provider': self.provider.pk
         })
 
@@ -777,7 +779,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                     ),
                     popup_origin,
                 )
-            redirect_uri = build_absolute_uri(
+            redirect_uri = eventreverse_absolute(
                 self.request.organizer, 'presale:organizer.customer.login.return',
                 kwargs={
                     'provider': self.provider.pk

@@ -57,7 +57,7 @@ from django_otp.models import Device
 from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
-from pretix.helpers.urls import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
 
 from ...helpers.countries import FastCountryField
 from ...helpers.u2f import pub_key_from_der, websafe_decode
@@ -378,7 +378,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             {
                 'user': self,
                 'messages': msg,
-                'url': build_absolute_uri('control:user.settings'),
+                'url': mainreverse_absolute('control:user.settings'),
                 'instance': settings.PRETIX_INSTANCE_NAME,
             },
             event=None,
@@ -466,7 +466,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             {
                 'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
-                'url': (build_absolute_uri('control:auth.forgot.recover')
+                'url': (mainreverse_absolute('control:auth.forgot.recover')
                         + '?id=%d&token=%s' % (self.id, default_token_generator.make_token(self)))
             },
             None, locale=self.locale, user=self
@@ -647,25 +647,22 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
             id__in=self.teams.filter(TeamQuerySet.organizer_permission_q(permission)).values_list('organizer', flat=True)
         )
 
-    def has_active_staff_session(self, session_key=None):
+    def has_active_staff_session(self, session_key):
         """
         Returns whether or not a user has an active staff session (formerly known as superuser session)
         with the given session key.
         """
         return self.get_active_staff_session(session_key) is not None
 
-    def get_active_staff_session(self, session_key=None):
-        if not self.is_staff:
+    def get_active_staff_session(self, session_key):
+        if not self.is_staff or not session_key:
             return None
         if not hasattr(self, '_staff_session_cache'):
             self._staff_session_cache = {}
         if session_key not in self._staff_session_cache:
-            qs = StaffSession.objects.filter(
-                user=self, date_end__isnull=True
-            )
-            if session_key:
-                qs = qs.filter(session_key=session_key)
-            sess = qs.first()
+            sess = StaffSession.objects.filter(
+                user=self, date_end__isnull=True, session_key=session_key
+            ).first()
             if sess:
                 if sess.date_start < now() - timedelta(seconds=settings.PRETIX_SESSION_TIMEOUT_ABSOLUTE):
                     sess.date_end = now()

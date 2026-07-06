@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load l10n %}
+{% load static %}
 {% load eventurl %}
 {% load cache_large %}
 {% load money %}
@@ -39,6 +40,7 @@
     {% else %}
         <meta property="og:url" content="{% abseventurl request.event "presale:event.index" %}" />
     {% endif %}
+    <script type="text/javascript" src="{% static "pretixpresale/js/csrfcookieretry.js" %}"></script>
 {% endblock %}
 {% block content %}
 

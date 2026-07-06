@@ -180,7 +180,7 @@ g
 				br
 				span(v-if="varresult !== null") {{ varresult }}
 				strong
-					| {{ op.label }} {{ rightoperand }}
+					| {{ op?.label}} {{ rightoperand }}
 			span(v-else-if="vardata && vardata.type === 'int_by_datetime'")
 				span.fa.fa-sign-in(v-if="variable.startsWith('entries_')")
 				| {{ vardata.label }}
@@ -193,21 +193,21 @@ g
 				br
 				span(v-if="varresult !== null") {{ varresult }}
 				strong
-					| {{ op.label }} {{ rightoperand }}
+					| {{ op?.label }} {{ rightoperand }}
 			span(v-else-if="vardata && variable === 'now'")
 				span.fa.fa-clock-o
 				|  {{ vardata.label }}
 				br
 				span(v-if="varresult !== null") {{ varresult }}
 				strong
-					| {{ op.label }}
+					| {{ op?.label }}
 					br
-					span(v-if="rightoperand.buildTime[0] === 'custom'")
-						| {{ df(rightoperand.buildTime[1]) }}
-					span(v-else-if="rightoperand.buildTime[0] === 'customtime'")
-						| {{ tf(rightoperand.buildTime[1]) }}
+					span(v-if="rightoperand?.buildTime[0] === 'custom'")
+						| {{ df(rightoperand?.buildTime[1]) }}
+					span(v-else-if="rightoperand?.buildTime[0] === 'customtime'")
+						| {{ tf(rightoperand?.buildTime[1]) }}
 					span(v-else)
-						| {{ TEXTS[rightoperand.buildTime[0]] }}
+						| {{ TEXTS[rightoperand?.buildTime[0]] }}
 					span(v-if="operands[2]")
 						span(v-if="operator === 'isBefore'") +
 						span(v-else) -
@@ -220,14 +220,14 @@ g
 				span(v-if="varresult !== null")  ({{ varresult }})
 				br
 				strong
-					| {{ rightoperand.objectList.map((o: any) => o.lookup[2]).join(", ") }}
+					| {{ rightoperand?.objectList.map((o: any) => o.lookup[2]).join(", ") }}
 			span(v-else-if="vardata && vardata.type === 'enum_entry_status'")
 				span.fa.fa-check-circle-o
 				| {{ vardata.label }}
 				span(v-if="varresult !== null")  ({{ varresult }})
 				br
 				strong
-					| {{ op.label }} {{ rightoperand }}
+					| {{ op?.label }} {{ rightoperand }}
 
 	g(v-if="result === false", :transform="`translate(${x + boxWidth - 15}, ${y - 10})`")
 		ellipse(fill="#fff", cx="14.685823", cy="14.318233", rx="12.140151", ry="11.55523")

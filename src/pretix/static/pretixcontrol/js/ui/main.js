@@ -639,11 +639,13 @@ var form_handlers = function (el) {
                         ).append(" ").append($("<div>").text(res.organizer).html())
                     );
                 }
-                $ret.append(
-                    $("<span>").addClass("event-daterange").append(
-                        $("<span>").addClass("fa fa-calendar fa-fw")
-                    ).append(" ").append(res.date_range)
-                );
+                if (res.date_range) {
+                    $ret.append(
+                        $("<span>").addClass("event-daterange").append(
+                            $("<span>").addClass("fa fa-calendar fa-fw")
+                        ).append(" ").append(res.date_range)
+                    );
+                }
                 return $ret;
             },
         }).on("select2:select", function () {
@@ -664,10 +666,12 @@ var form_handlers = function (el) {
 
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");
+        var qrText = this.getAttribute("type") === "application/json" && this.textContent.startsWith('"') ?
+            JSON.parse(this.textContent) : $(this).html();
         $div.insertBefore($(this));
         $div.qrcode(
             {
-                text: $(this).html(),
+                text: qrText,
                 correctLevel: 0,  // M
                 width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
                 height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,

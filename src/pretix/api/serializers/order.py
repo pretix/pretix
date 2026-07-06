@@ -76,7 +76,7 @@ from pretix.base.settings import (
 )
 from pretix.base.signals import register_ticket_outputs
 from pretix.helpers.countries import CachedCountries
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -757,7 +757,7 @@ class PaymentURLField(serializers.URLField):
     def to_representation(self, instance: OrderPayment):
         if instance.state != OrderPayment.PAYMENT_STATE_CREATED:
             return None
-        return build_absolute_uri(instance.order.event, 'presale:event.order.pay', kwargs={
+        return eventreverse_absolute(instance.order.event, 'presale:event.order.pay', kwargs={
             'order': instance.order.code,
             'secret': instance.order.secret,
             'payment': instance.pk,
@@ -806,7 +806,7 @@ class OrderRefundSerializer(I18nAwareModelSerializer):
 
 class OrderURLField(serializers.URLField):
     def to_representation(self, instance: Order):
-        return build_absolute_uri(instance.event, 'presale:event.order', kwargs={
+        return eventreverse_absolute(instance.event, 'presale:event.order', kwargs={
             'order': instance.code,
             'secret': instance.secret,
         })
@@ -1149,6 +1149,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 {'discount': ['You can only specify a discount if you do the price computation, but price is not set.']}
             )
+
         return data
 
 
@@ -1588,7 +1589,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 pos_data['attendee_name_parts'] = {
                     '_legacy': attendee_name
                 }
-            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers' and k != '_quotas' and k != 'use_reusable_medium'})
+            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k not in ('answers', '_quotas', 'use_reusable_medium')})
             if simulate:
                 pos.order = order._wrapped
             else:
@@ -1703,15 +1704,25 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         answ.options.add(*options)
 
                 if use_reusable_medium:
-                    use_reusable_medium.linked_orderposition = pos
-                    use_reusable_medium.save(update_fields=['linked_orderposition'])
+                    if pos.item.media_policy not in (Item.MEDIA_POLICY_APPEND, Item.MEDIA_POLICY_APPEND_OR_NEW):
+                        for op_pk in use_reusable_medium.linked_orderpositions.values_list('pk', flat=True):
+                            use_reusable_medium.log_action(
+                                'pretix.reusable_medium.linked_orderposition.removed',
+                                data={
+                                    'linked_orderposition': op_pk,
+                                }
+                            )
+                        use_reusable_medium.linked_orderpositions.set([pos])
+                    else:
+                        use_reusable_medium.linked_orderpositions.add(pos)
                     use_reusable_medium.log_action(
-                        'pretix.reusable_medium.linked_orderposition.changed',
+                        'pretix.reusable_medium.linked_orderposition.added',
                         data={
                             'by_order': order.code,
                             'linked_orderposition': pos.pk,
                         }
                     )
+                    use_reusable_medium.touch()
 
         if not simulate:
             for cp in delete_cps:

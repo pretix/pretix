@@ -93,11 +93,11 @@ const showTaxline = computed(() => props.price.rate !== '0.00' && props.price.gr
 	span(v-if="!freePrice && !originalPrice", v-html="priceline")
 	span(v-if="!freePrice && originalPrice")
 		del.pretix-widget-pricebox-original-price(:aria-label="originalPriceAriaLabel", v-html="originalLine")
-		|
+		|!{' '}
 		ins.pretix-widget-pricebox-new-price(:aria-label="newPriceAriaLabel", v-html="priceline")
 	div(v-if="freePrice")
 		span.pretix-widget-pricebox-currency(:id="priceBoxId") {{ store.currency }}
-		|
+		|!{' '}
 		input.pretix-widget-pricebox-price-input(
 			type="number",
 			placeholder="0",

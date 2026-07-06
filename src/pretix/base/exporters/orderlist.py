@@ -68,7 +68,7 @@ from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
 from ...helpers.iter import chunked_iterable
 from ...helpers.safe_openpyxl import remove_invalid_excel_chars
-from ...multidomain.urlreverse import build_absolute_uri
+from ...multidomain.urlreverse import eventreverse_absolute
 from ..exporter import (
     ListExporter, MultiSheetListExporter, OrganizerLevelExportMixin,
 )
@@ -160,7 +160,7 @@ class OrderListExporter(MultiSheetListExporter):
 
     def _get_all_payment_methods(self, qs):
         pps = dict(get_all_payment_providers())
-        return sorted([(pp, pps[pp]) for pp in set(
+        return sorted([(pp, pps.get(pp, pp)) for pp in set(
             OrderPayment.objects.exclude(provider='free').filter(order__event__in=self.events).values_list(
                 'provider', flat=True
             ).distinct()
@@ -330,6 +330,7 @@ class OrderListExporter(MultiSheetListExporter):
                 taxsum=Sum('tax_value'), grosssum=Sum('value')
             )
         }
+        payment_methods = None
         if form_data.get('include_payment_amounts'):
             payment_sum_cache = {
                 (o['order__id'], o['provider']): o['grosssum'] for o in
@@ -347,6 +348,7 @@ class OrderListExporter(MultiSheetListExporter):
                     grosssum=Sum('amount')
                 )
             }
+            payment_methods = self._get_all_payment_methods(qs)
         sum_cache = {
             (o['order__id'], o['tax_rate']): o for o in
             OrderPosition.objects.values('tax_rate', 'order__id').order_by().annotate(
@@ -427,14 +429,13 @@ class OrderListExporter(MultiSheetListExporter):
             ]))
 
             row.append(
-                build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                eventreverse_absolute(order.event, 'presale:event.order', kwargs={
                     'order': order.code,
                     'secret': order.secret,
                 })
             )
 
             if form_data.get('include_payment_amounts'):
-                payment_methods = self._get_all_payment_methods(qs)
                 for id, vn in payment_methods:
                     row.append(
                         payment_sum_cache.get((order.id, id), Decimal('0.00')) -
@@ -854,7 +855,7 @@ class OrderListExporter(MultiSheetListExporter):
                 ]))
 
                 row.append(
-                    build_absolute_uri(order.event, 'presale:event.order.position', kwargs={
+                    eventreverse_absolute(order.event, 'presale:event.order.position', kwargs={
                         'order': order.code,
                         'secret': op.web_secret,
                         'position': op.positionid

@@ -64,7 +64,7 @@ from pretix.base.timeframes import (
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.filenames import safe_for_filename
 from pretix.helpers.iter import chunked_iterable
-from pretix.helpers.reportlab import FontFallbackParagraph
+from pretix.helpers.reportlab import PlainTextParagraph
 from pretix.helpers.templatetags.jsonfield import JSONExtract
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 
@@ -82,7 +82,8 @@ class CheckInListMixin(BaseExporter):
                      widget=forms.RadioSelect(
                          attrs={'class': 'scrolling-choice'}
                      ),
-                     initial=self.event.checkin_lists.first()
+                     initial=self.event.checkin_lists.first(),
+                     required=True
                  )),
                 ('date_range',
                  DateFrameField(
@@ -143,7 +144,6 @@ class CheckInListMixin(BaseExporter):
         if not self.event.has_subevents:
             del d['date_range']
 
-        d['list'].queryset = self.event.checkin_lists.all()
         d['list'].widget = Select2(
             attrs={
                 'data-model-select2': 'generic',
@@ -155,7 +155,6 @@ class CheckInListMixin(BaseExporter):
             }
         )
         d['list'].widget.choices = d['list'].choices
-        d['list'].required = True
 
         return d
 
@@ -344,7 +343,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
         ]
 
         story = [
-            FontFallbackParagraph(
+            PlainTextParagraph(
                 cl.name,
                 headlinestyle
             ),
@@ -352,7 +351,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
         if cl.subevent:
             story += [
                 Spacer(1, 3 * mm),
-                FontFallbackParagraph(
+                PlainTextParagraph(
                     '{} ({} {})'.format(
                         cl.subevent.name,
                         cl.subevent.get_date_range_display(),
@@ -382,10 +381,10 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
         headrowstyle.fontName = 'OpenSansBd'
         for q in questions:
             txt = str(q.question)
-            p = FontFallbackParagraph(txt, headrowstyle)
+            p = PlainTextParagraph(txt, headrowstyle)
             while p.wrap(colwidths[len(tdata[0])], 5000)[1] > 30 * mm:
                 txt = txt[:len(txt) - 50] + "..."
-                p = FontFallbackParagraph(txt, headrowstyle)
+                p = PlainTextParagraph(txt, headrowstyle)
             tdata[0].append(p)
 
         qs = self._get_queryset(cl, form_data)
@@ -432,8 +431,8 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 CBFlowable(bool(op.last_checked_in)) if not op.blocked else '—',
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
-                FontFallbackParagraph(name, self.get_style()),
-                FontFallbackParagraph(bleach.clean(str(item), tags={'br'}).strip().replace('<br>', '<br/>'), self.get_style()),
+                PlainTextParagraph(name, self.get_style()),
+                PlainTextParagraph(bleach.clean(str(item), tags={'br'}).strip().replace('<br>', '<br/>'), self.get_style()),
             ]
             acache = {}
             if op.addon_to:
@@ -444,10 +443,10 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
             for q in questions:
                 txt = acache.get(q.pk, '')
                 txt = bleach.clean(txt, tags={'br'}).strip().replace('<br>', '<br/>')
-                p = FontFallbackParagraph(txt, self.get_style())
+                p = PlainTextParagraph(txt, self.get_style())
                 while p.wrap(colwidths[len(row)], 5000)[1] > 50 * mm:
                     txt = txt[:len(txt) - 50] + "..."
-                    p = FontFallbackParagraph(txt, self.get_style())
+                    p = PlainTextParagraph(txt, self.get_style())
                 row.append(p)
             if op.order.status != Order.STATUS_PAID:
                 tstyledata += [

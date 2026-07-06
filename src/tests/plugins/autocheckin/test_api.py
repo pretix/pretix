@@ -43,7 +43,7 @@ RES_RULE = {
     "limit_products": [],
     "limit_variations": [],
     "all_payment_methods": True,
-    "limit_payment_methods": set(),
+    "limit_payment_methods": [],
 }
 
 

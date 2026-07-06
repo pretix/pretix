@@ -36,7 +36,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from requests import RequestException
 
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -313,7 +313,7 @@ def _get_or_create_server_keypair(organizer):
 
 def generate_id_token(customer, client, auth_time, nonce, scope, expires: datetime, scope_claims=False, with_code=None, with_access_token=None):
     payload = {
-        'iss': build_absolute_uri(client.organizer, 'presale:organizer.index').rstrip('/'),
+        'iss': eventreverse_absolute(client.organizer, 'presale:organizer.index').rstrip('/'),
         'aud': client.client_id,
         'exp': int(expires.timestamp()),
         'iat': int(time.time()),

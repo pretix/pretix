@@ -34,7 +34,6 @@
 
 import json
 import logging
-import urllib.parse
 from collections import OrderedDict
 from decimal import Decimal
 
@@ -42,7 +41,6 @@ import paypalrestsdk
 import paypalrestsdk.exceptions
 from django import forms
 from django.contrib import messages
-from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
@@ -58,7 +56,8 @@ from pretix.base.forms import SecretKeySettingsField
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.settings import SettingsSandbox
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.base.views.redirect import safelink
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.plugins.paypal.api import Api
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 
@@ -268,8 +267,8 @@ class Paypal(BasePaymentProvider):
                     "payment_method": "paypal",
                 },
                 "redirect_urls": {
-                    "return_url": build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
-                    "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
+                    "return_url": eventreverse_absolute(request.event, 'plugins:paypal:return', kwargs=kwargs),
+                    "cancel_url": eventreverse_absolute(request.event, 'plugins:paypal:abort', kwargs=kwargs),
                 },
                 "transactions": [
                     {
@@ -349,11 +348,7 @@ class Paypal(BasePaymentProvider):
             for link in payment.links:
                 if link.method == "REDIRECT" and link.rel == "approval_url":
                     if request.session.get('iframe_session', False):
-                        signer = signing.Signer(salt='safe-redirect')
-                        return (
-                            build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
-                            urllib.parse.quote(signer.sign(link.href))
-                        )
+                        return safelink(link.href, framebreak=True)
                     else:
                         return str(link.href)
         else:
@@ -613,8 +608,8 @@ class Paypal(BasePaymentProvider):
                     "payment_method": "paypal",
                 },
                 "redirect_urls": {
-                    "return_url": build_absolute_uri(request.event, 'plugins:paypal:return'),
-                    "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort'),
+                    "return_url": eventreverse_absolute(request.event, 'plugins:paypal:return'),
+                    "cancel_url": eventreverse_absolute(request.event, 'plugins:paypal:abort'),
                 },
                 "transactions": [
                     {

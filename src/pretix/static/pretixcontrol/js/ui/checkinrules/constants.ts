@@ -191,3 +191,8 @@ export const DATETIME_OPTIONS = {
 		close: 'fa fa-remove'
 	}
 }
+
+export const TIME_OPTIONS = {
+	...DATETIME_OPTIONS,
+	format: document.body.dataset.timeformat,
+}

@@ -27,7 +27,7 @@ from django.urls import NoReverseMatch
 from django.utils.encoding import smart_str
 from django.utils.html import conditional_escape
 
-from pretix.multidomain.urlreverse import build_absolute_uri, mainreverse
+from pretix.multidomain.urlreverse import eventreverse_absolute, mainreverse
 
 register = template.Library()
 
@@ -49,7 +49,7 @@ class EventURLNode(URLNode):
         url = ''
         try:
             if self.absolute:
-                url = build_absolute_uri(event, view_name, kwargs=kwargs)
+                url = eventreverse_absolute(event, view_name, kwargs=kwargs)
             elif self.event is False:
                 url = mainreverse(view_name, kwargs)
             else:

@@ -88,10 +88,18 @@ class CheckinRPCRedeemInputSerializer(serializers.Serializer):
     nonce = serializers.CharField(required=False, allow_null=True)
     datetime = serializers.DateTimeField(required=False, allow_null=True)
     answers = serializers.JSONField(required=False, allow_null=True)
+    exchange_medium_type = serializers.ChoiceField(required=False, choices=MEDIA_TYPES)
+    exchange_medium_identifier = serializers.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['lists'].child_relation.queryset = CheckinList.objects.filter(event__in=self.context['events']).select_related('event')
+
+    def validate(self, attrs):
+        exchange_fields = ["exchange_medium_type", "exchange_medium_identifier"]
+        if any(attrs.get(k) is None for k in exchange_fields) and not all(attrs.get(k) is None for k in exchange_fields):
+            raise ValidationError("If you set any of exchange_medium_type or exchange_medium_identifier, you need to set both of them.")
+        return attrs
 
 
 class MiniCheckinListSerializer(I18nAwareModelSerializer):
