@@ -2280,7 +2280,8 @@ DEFAULTS = {
         'form_class': forms.URLField,
         'form_kwargs': dict(
             label=_("Contact URL"),
-            help_text=_("If you set this, the footer contact link will point here instead of using the email address above.")
+            help_text=_("If you set this, the footer contact link will point here instead of using the email address above. "
+                        "Please note that you still need to add a contact email address that will be shared with all emails you send.")
         )
     },
     'imprint_url': {
