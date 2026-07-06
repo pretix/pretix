@@ -93,13 +93,12 @@ from pretix.presale.signals import (
     order_api_meta_from_request, order_meta_from_request, question_form_fields,
     question_form_fields_overrides,
 )
-from pretix.presale.utils import customer_login
+from pretix.presale.utils import customer_login, get_grouped_items
 from pretix.presale.views import CartMixin, get_cart, get_cart_is_free
 from pretix.presale.views.cart import (
     _items_from_post_data, cart_session, create_empty_cart_id,
     get_or_create_cart_id,
 )
-from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.questions import QuestionsViewMixin
 
 

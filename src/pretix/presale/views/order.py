@@ -93,10 +93,10 @@ from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.forms.order import OrderPositionChangeForm
 from pretix.presale.signals import question_form_fields_overrides
+from pretix.presale.utils import get_grouped_items
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
 )
-from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 logger = logging.getLogger(__name__)

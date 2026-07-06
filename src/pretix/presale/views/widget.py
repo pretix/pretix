@@ -68,10 +68,8 @@ from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.organizer import meta_filtersets
 from pretix.presale.style import get_theme_vars_css
+from pretix.presale.utils import get_grouped_items, item_group_by_category
 from pretix.presale.views.cart import get_or_create_cart_id
-from pretix.presale.views.event import (
-    get_grouped_items, item_group_by_category,
-)
 from pretix.presale.views.organizer import (
     EventListMixin, add_events_for_days, add_subevents_for_days,
     days_for_template, filter_qs_by_attr, filter_subevents_with_plugins,

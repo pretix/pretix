@@ -110,6 +110,7 @@ from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
+from pretix.presale.utils import get_grouped_items
 from pretix.testutils.middleware import debugflags_var
 
 
@@ -2106,6 +2107,13 @@ class OrderChangeManager:
                     for a in current_addons[cp][k][:current_num - input_num]:
                         if a.canceled:
                             continue
+                        items, _ = get_grouped_items(self.order.event,
+                                                     channel=self.order.sales_channel,
+                                                     subevent=a.subevent,
+                                                     has_voucher=True,
+                                                     base_qs=Item.objects.filter(pk=a.item.pk),
+                                                     allow_addons=True
+                                                     )
                         is_unavailable = (
                             # If an item is no longer available due to time, it should usually also be no longer
                             # user-removable, because e.g. the stock has already been ordered.
@@ -2115,10 +2123,11 @@ class OrderChangeManager:
                             # be part of the input.
                             (a.variation and a.variation.unavailability_reason(has_voucher=True, subevent=a.subevent))
                             or (a.variation and not a.variation.all_sales_channels and not a.variation.limit_sales_channels.contains(self.order.sales_channel))
-                            or a.item.unavailability_reason(has_voucher=True, subevent=a.subevent)
+                            or not items
+                            or items[0].unavailability_reason(has_voucher=True, subevent=a.subevent)
                             or (
-                                not a.item.all_sales_channels and
-                                not a.item.limit_sales_channels.contains(self.order.sales_channel)
+                                not items[0].all_sales_channels and
+                                not items[0].limit_sales_channels.contains(self.order.sales_channel)
                             )
                         )
                         if is_unavailable:

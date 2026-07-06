@@ -40,8 +40,8 @@ from pretix.presale.views import EventViewMixin, iframe_entry_view_wrapper
 from ...base.i18n import get_language_without_region
 from ...base.models import Voucher, WaitingListEntry
 from ..forms.waitinglist import WaitingListForm
+from ..utils import get_grouped_items
 from . import allow_frame_if_namespaced
-from .event import get_grouped_items
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
