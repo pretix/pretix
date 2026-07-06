@@ -20,14 +20,19 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import re
+import unicodedata
 
 from arabic_reshaper import ArabicReshaper
+from bidi import get_display
 from django.conf import settings
 from django.utils.functional import SimpleLazyObject
+from django.utils.html import escape
 from PIL import Image
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import Paragraph
 
 from pretix.presale.style import get_fonts
@@ -70,6 +75,20 @@ reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
 }))
 
 
+def normalize_text(text: str) -> str:
+    # reportlab does not support unicode combination characters
+    # It's important we do this before we use ArabicReshaper
+    text = unicodedata.normalize("NFKC", text)
+
+    # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
+    # to resolve all ligatures and python-bidi to switch RTL texts.
+    try:
+        text = "\n".join(get_display(reshaper.reshape(l)) for l in re.split("\n", text))
+    except:
+        logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
+    return text
+
+
 class FontFallbackParagraph(Paragraph):
     def __init__(self, text, style=None, *args, **kwargs):
         if style is None:
@@ -87,6 +106,8 @@ class FontFallbackParagraph(Paragraph):
         if not text:
             return True
         font = pdfmetrics.getFont(font_name)
+        if not isinstance(font, TTFont):
+            return True
         return all(
             ord(c) in font.face.charToGlyph or not c.isprintable()
             for c in text
@@ -100,6 +121,24 @@ class FontFallbackParagraph(Paragraph):
                 if (original_font.endswith("Bd") or original_font.endswith(" B")) and "bold" in styles:
                     return family + " B"
                 return family
+
+
+class PlainTextParagraph(FontFallbackParagraph):
+    def __init__(self, text, style=None, linebreaks=True, *args, **kwargs):
+        if not isinstance(text, str):
+            if hasattr(text, '__html__'):
+                raise ValueError("It is contradictory to pass escaped content to PlainTextParagraph")
+            text = str(text)
+
+        # Normalize unicode and apply reshaping
+        text = normalize_text(text)
+
+        # Escape any HTML in the text
+        text = escape(text)
+
+        if linebreaks:
+            text = text.strip().replace("\n", "<br />\n")
+        super().__init__(text, style, *args, **kwargs)
 
 
 def register_ttf_font_if_new(name, path):

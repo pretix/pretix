@@ -139,8 +139,8 @@ from pretix.helpers import OF_SELF, GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.format import SafeFormatter, format_map
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.customer import TokenGenerator
 
 logger = logging.getLogger(__name__)
@@ -1041,7 +1041,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                 'user': self,
                 'organizer': self.request.organizer.name,
                 'team': instance.team.name,
-                'url': build_global_uri('control:auth.invite', kwargs={
+                'url': mainreverse_absolute('control:auth.invite', kwargs={
                     'token': instance.token
                 })
             },
@@ -2853,10 +2853,12 @@ class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['redirect_uri'] = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return',
-                                                 kwargs={
-                                                     'provider': self.object.pk
-                                                 })
+        ctx['redirect_uri'] = eventreverse_absolute(
+            self.request.organizer, 'presale:organizer.customer.login.return',
+            kwargs={
+                'provider': self.object.pk
+            }
+        )
         return ctx
 
     def get_form_kwargs(self):
@@ -3087,7 +3089,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             self.customer.log_action('pretix.customer.password.resetrequested', {}, user=self.request.user)
             ctx = self.customer.get_email_context()
             token = TokenGenerator().make_token(self.customer)
-            ctx['url'] = build_absolute_uri(
+            ctx['url'] = eventreverse_absolute(
                 self.request.organizer,
                 'presale:organizer.customer.recoverpw'
             ) + '?id=' + self.customer.identifier + '&token=' + token
@@ -3386,8 +3388,10 @@ class ReusableMediaListView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_queryset(self):
         qs = self.request.organizer.reusable_media.select_related(
-            'customer', 'linked_orderposition', 'linked_orderposition__order', 'linked_orderposition__order__event',
-            'linked_giftcard'
+            'customer',
+            'linked_giftcard',
+        ).prefetch_related(
+            Prefetch('linked_orderpositions', queryset=OrderPosition.objects.select_related("order", "order__event"))
         )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
@@ -3435,10 +3439,14 @@ class ReusableMediumCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
     @transaction.atomic
     def form_valid(self, form):
         r = super().form_valid(form)
-        form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data={
+
+        data = {
             k: getattr(form.instance, k)
             for k in form.changed_data
-        })
+        }
+        if "linked_orderpositions" in data:
+            data["linked_orderpositions"] = data["linked_orderpositions"].values_list("pk", flat=True)
+        form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
         return r
 
@@ -3463,13 +3471,40 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 
     @transaction.atomic
     def form_valid(self, form):
+        prev_linked_ops_pks = list(getattr(self.object, "linked_orderpositions").values_list("pk", flat=True))
+        result = super().form_valid(form)
         if form.has_changed():
-            self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data={
+            data = {
                 k: getattr(self.object, k)
                 for k in form.changed_data
-            })
+            }
+            if "linked_orderpositions" in data:
+                # handle changes to linked_orderpositions separately
+                linked_ops_pks = data["linked_orderpositions"].values_list("pk", flat=True)
+                del data["linked_orderpositions"]
+                for op_pk in prev_linked_ops_pks:
+                    if op_pk not in linked_ops_pks:
+                        self.object.log_action(
+                            'pretix.reusable_medium.linked_orderposition.removed',
+                            user=self.request.user,
+                            data={
+                                'linked_orderposition': op_pk,
+                            }
+                        )
+                for op_pk in linked_ops_pks:
+                    if op_pk not in prev_linked_ops_pks:
+                        self.object.log_action(
+                            'pretix.reusable_medium.linked_orderposition.added',
+                            user=self.request.user,
+                            data={
+                                'linked_orderposition': op_pk,
+                            }
+                        )
+            if data:
+                # log change-action only for changes other than linked_orderpositions
+                self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
-        return super().form_valid(form)
+        return result
 
     def get_success_url(self):
         return reverse('control:organizer.reusable_medium', kwargs={

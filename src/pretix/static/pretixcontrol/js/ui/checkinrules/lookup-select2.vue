@@ -100,14 +100,19 @@ watch(() => props.value, (newval, oldval) => {
 	}
 })
 
+let rawSelectEl: HTMLSelectElement | null = null
+
 onMounted(() => {
+	rawSelectEl = select.value
 	build()
 })
 
 onUnmounted(() => {
-	$(select.value)
+	if (!rawSelectEl) return
+	$(rawSelectEl)
 		.off()
 		.select2('destroy')
+	rawSelectEl = null
 })
 </script>
 <template lang="pug">

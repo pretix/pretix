@@ -144,7 +144,7 @@ checkout_confirm_messages = EventPluginSignal()
 This signal is sent out to retrieve short messages that need to be acknowledged by the user before the
 order can be completed. This is typically used for something like "accept the terms and conditions".
 Receivers are expected to return a dictionary where the keys are globally unique identifiers for the
-message and the values can be arbitrary HTML.
+message and the values can be a SafeString containing arbitrary HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """

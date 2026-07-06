@@ -1398,7 +1398,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         elif self.validate_vat_id and vat_id_applicable:
             try:
                 normalized_id = validate_vat_id(data.get('vat_id'), str(data.get('country')))
-                self.instance.vat_id_validated = True
+                self.instance.vat_id_validated = bool(normalized_id)
                 self.instance.vat_id = data['vat_id'] = normalized_id
             except VATIDFinalError as e:
                 if self.all_optional:

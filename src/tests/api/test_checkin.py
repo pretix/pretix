@@ -1099,6 +1099,27 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
 
 
 @pytest.mark.django_db
+def test_question_upload_optional(token_client, organizer, clist, event, order, question):
+    with scopes_disabled():
+        p = order.positions.first()
+    question[0].type = 'F'
+    question[0].required = False
+    question[0].save()
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'incomplete'
+    with scopes_disabled():
+        assert resp.data['questions'] == [QuestionSerializer(question[0]).data]
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {'answers': {question[0].pk: ""}})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert not order.positions.first().answers.filter(question=question[0]).exists()
+
+
+@pytest.mark.django_db
 def test_store_failed(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()

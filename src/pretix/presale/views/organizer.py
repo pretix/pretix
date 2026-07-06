@@ -74,7 +74,7 @@ from pretix.helpers.formats.en.formats import (
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.i18n import parse_date_localized
 from pretix.helpers.thumb import get_thumbnail
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.organizer import EventListFilterForm
 from pretix.presale.ical import get_public_ical
 from pretix.presale.signals import filter_subevents
@@ -648,6 +648,10 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, sales_channel, eve
                 se.best_availability_state < Quota.AVAILABILITY_RESERVED
             )
             if hide:
+                continue
+
+        if s.event_calendar_future_only:
+            if (se.date_to or se.date_from) < time_machine_now():
                 continue
 
         timezones.add(s.timezone)
@@ -1380,7 +1384,7 @@ class OrganizerFavicon(View):
 
 class RedirectToOrganizerIndex(View):
     def get(self, *args, **kwargs):
-        return redirect_to_url(build_absolute_uri(self.request.organizer, "presale:organizer.index"))
+        return redirect_to_url(eventreverse_absolute(self.request.organizer, "presale:organizer.index"))
 
 
 class AccessibilityView(OrganizerViewMixin, EventListMixin, TemplateView):

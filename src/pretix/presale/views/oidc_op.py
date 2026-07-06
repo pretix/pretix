@@ -46,7 +46,7 @@ from pretix.base.models.customers import (
 )
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.middlewares import CsrfViewMiddleware
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.customer import AuthenticationForm
 from pretix.presale.utils import customer_login, get_customer_auth_time
 
@@ -519,17 +519,17 @@ class ConfigurationView(View):
 
     def get(self, request, *args, **kwargs):
         return JsonResponse({
-            'issuer': build_absolute_uri(request.organizer, 'presale:organizer.index').rstrip('/'),
-            'authorization_endpoint': build_absolute_uri(
+            'issuer': eventreverse_absolute(request.organizer, 'presale:organizer.index').rstrip('/'),
+            'authorization_endpoint': eventreverse_absolute(
                 request.organizer, 'presale:organizer.oauth2.v1.authorize'
             ),
-            'token_endpoint': build_absolute_uri(
+            'token_endpoint': eventreverse_absolute(
                 request.organizer, 'presale:organizer.oauth2.v1.token'
             ),
-            'userinfo_endpoint': build_absolute_uri(
+            'userinfo_endpoint': eventreverse_absolute(
                 request.organizer, 'presale:organizer.oauth2.v1.userinfo'
             ),
-            'jwks_uri': build_absolute_uri(
+            'jwks_uri': eventreverse_absolute(
                 request.organizer, 'presale:organizer.oauth2.v1.jwks'
             ),
             'scopes_supported': [k for k, v in CustomerSSOClient.SCOPE_CHOICES],

@@ -36,10 +36,12 @@ from django.db.models import (
 )
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
+from django.template.loader import render_to_string
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
@@ -56,7 +58,7 @@ from pretix.base.signals import customer_created, customer_signed_in
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.models import KnownDomain
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.customer import (
     AuthenticationForm, ChangeInfoForm, ChangePasswordForm, RegistrationForm,
     ResetPasswordForm, SetPasswordForm, TokenGenerator,
@@ -316,8 +318,10 @@ class ResetPasswordView(FormView):
         customer.log_action('pretix.customer.password.resetrequested', {})
         ctx = customer.get_email_context()
         token = TokenGenerator().make_token(customer)
-        ctx['url'] = build_absolute_uri(self.request.organizer,
-                                        'presale:organizer.customer.recoverpw') + '?id=' + customer.identifier + '&token=' + token
+        ctx['url'] = eventreverse_absolute(
+            self.request.organizer,
+            'presale:organizer.customer.recoverpw'
+        ) + '?id=' + customer.identifier + '&token=' + token
         mail(
             customer.email,
             self.request.organizer.settings.mail_subject_customer_reset,
@@ -574,7 +578,7 @@ class ChangeInformationView(CustomerAccountBaseMixin, FormView):
             new_email = form.cleaned_data['email']
             form.cleaned_data['email'] = form.instance.email = self.initial_email
             ctx = form.instance.get_email_context()
-            ctx['url'] = build_absolute_uri(
+            ctx['url'] = eventreverse_absolute(
                 self.request.organizer,
                 'presale:organizer.customer.change.confirm'
             ) + '?token=' + dumps({
@@ -703,7 +707,7 @@ class SSOLoginView(RedirectBackMixin, View):
         request.session[f'pretix_customerauth_{self.provider.pk}_nonce'] = nonce
         request.session[f'pretix_customerauth_{self.provider.pk}_popup_origin'] = popup_origin
         request.session[f'pretix_customerauth_{self.provider.pk}_cross_domain_requested'] = self.request.GET.get("request_cross_domain_customer_auth") == "true"
-        redirect_uri = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return', kwargs={
+        redirect_uri = eventreverse_absolute(self.request.organizer, 'presale:organizer.customer.login.return', kwargs={
             'provider': self.provider.pk
         })
 
@@ -772,12 +776,10 @@ class SSOLoginReturnView(RedirectBackMixin, View):
 
             if nonce != request.session.get(f'pretix_customerauth_{self.provider.pk}_nonce'):
                 return self._fail(
-                    _('Login was not successful. Error message: "{error}".').format(
-                        error='invalid one-time token',
-                    ),
+                    mark_safe(render_to_string("pretixpresale/organizers/customer_login_interrupted_message.html")),
                     popup_origin,
                 )
-            redirect_uri = build_absolute_uri(
+            redirect_uri = eventreverse_absolute(
                 self.request.organizer, 'presale:organizer.customer.login.return',
                 kwargs={
                     'provider': self.provider.pk

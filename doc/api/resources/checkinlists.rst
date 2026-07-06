@@ -602,7 +602,8 @@ Order position endpoints
 
       We no longer recommend using this API if you're building a ticket scanning application, as it has a few design
       flaws that can lead to `security issues`_ or compatibility issues due to barcode content characters that are not
-      URL-safe. We recommend to use our new :ref:`check-in API <rest-checkin>` instead.
+      URL-safe. We recommend to use our new :ref:`check-in API <rest-checkin>` instead. Advanced features like medium
+      exchange are only supported on the new API.
 
    :query boolean untrusted_input: If set to true, the lookup parameter is **always** interpreted as a ``secret``, never
                                    as an ``id``. This should be always set if you are passing through untrusted, scanned
@@ -741,6 +742,9 @@ Order position endpoints
    * ``ambiguous`` - Multiple tickets match scan, rejected.
    * ``revoked`` - Ticket code has been revoked.
    * ``unapproved`` - Order has not yet been approved.
+   * ``already_exchanged`` - Ticket already has been exchanged for a reusable medium that must now be used for check-in.
+   * ``medium_invalid`` - Reusable medium identifier given was not found and could not be automatically created.
+   * ``medium_exists`` - Reusable medium identifier already exists, but expected to be new.
 
    In case of reason ``rules`` or ``invalid_time``, there might be an additional response field ``reason_explanation``
    with a human-readable description of the violated rules. However, that field can also be missing or be ``null``.

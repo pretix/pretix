@@ -125,7 +125,6 @@ class WaitingView(EventViewMixin, FormView):
                     request.event, "presale:event.waitinglist", kwargs={'cart_namespace': kwargs.get('cart_namespace')}
                 ) + '?' + url_replace(request, 'require_cookie', '', 'iframe', '', 'locale', request.GET.get('locale', get_language_without_region()))
             })
-            r._csp_ignore = True
             return r
 
         if not self.itemvars:
