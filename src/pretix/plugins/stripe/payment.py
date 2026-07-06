@@ -46,7 +46,6 @@ import stripe
 from django import forms
 from django.conf import settings
 from django.contrib import messages
-from django.core import signing
 from django.db import transaction
 from django.http import HttpRequest
 from django.template.loader import get_template
@@ -72,6 +71,7 @@ from pretix.base.payment import (
 )
 from pretix.base.plugins import get_all_plugins
 from pretix.base.settings import SettingsSandbox
+from pretix.base.views.redirect import safelink
 from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.http import get_client_ip
@@ -745,15 +745,7 @@ class StripeMethod(BasePaymentProvider):
 
     def redirect(self, request, url):
         if request.session.get('iframe_session', False):
-            return (
-                eventreverse_absolute(request.event, 'plugins:stripe:redirect') +
-                '?data=' + signing.dumps({
-                    'url': url,
-                    'session': {
-                        'payment_stripe_order_secret': request.session['payment_stripe_order_secret'],
-                    },
-                }, salt='safe-redirect')
-            )
+            return safelink(url, framebreak=True)
         else:
             return str(url)
 
@@ -1053,11 +1045,7 @@ class StripeMethod(BasePaymentProvider):
             'hash': payment.order.tagged_secret('plugins:stripe'),
         })
         if not self.redirect_in_widget_allowed and request.session.get('iframe_session', False):
-            return eventreverse_absolute(self.event, 'plugins:stripe:redirect') + '?data=' + signing.dumps({
-                'url': url,
-                'session': {},
-            }, salt='safe-redirect')
-
+            return safelink(url, framebreak=True)
         return url
 
     def _confirm_payment_intent(self, request, payment):

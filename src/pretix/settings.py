@@ -100,6 +100,11 @@ SECRET_KEY_FALLBACKS = []
 for i in range(10):
     if config.has_option('django', f'secret_fallback{i}'):
         SECRET_KEY_FALLBACKS.append(config.get('django', f'secret_fallback{i}'))
+fallback_secret_file_key = config._file_envkey('django', 'secret_fallbacks')  # FILE__PRETIX_DJANGO_SECRET_FALLBACKS
+if fallback_secret_file_key in os.environ and os.path.exists(os.environ[fallback_secret_file_key]):
+    with open(os.environ[fallback_secret_file_key], 'r') as f:
+        for line in f:
+            SECRET_KEY_FALLBACKS.append(line.strip())
 
 
 # Adjustable settings
@@ -440,6 +445,7 @@ CSRF_COOKIE_NAME = 'pretix_csrftoken'
 SESSION_COOKIE_HTTPONLY = True
 
 INSTALLED_APPS += [ # noqa
+    'django_querytagger',
     'django_filters',
     'django_markup',
     'django_otp',
@@ -505,6 +511,7 @@ MIDDLEWARE = [
     'pretix.helpers.logs.RequestIdMiddleware',
     'pretix.api.middleware.IdempotencyMiddleware',
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
+    'django_querytagger.middleware.SetTagMiddleware',  # after MultiDomainMiddleware for correct url resolving
     'pretix.base.middleware.CustomCommonMiddleware',
     'pretix.multidomain.middlewares.SessionMiddleware',
     'pretix.multidomain.middlewares.CsrfViewMiddleware',
@@ -624,6 +631,9 @@ LOGGING = {
         'request_id': {
             '()': 'pretix.helpers.logs.RequestIdFilter'
         },
+        'skip_not_found': {
+            '()': 'pretix.helpers.logs.SkipNotFoundFilter',
+        }
     },
     'handlers': {
         'console': {
@@ -665,6 +675,7 @@ LOGGING = {
             'handlers': ['file', 'console', 'mail_admins'],
             'level': loglevel,
             'propagate': True,
+            'filters': ['skip_not_found'],
         },
         'pretix.security.csp': {
             'handlers': ['csp_file'],
@@ -710,6 +721,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
     from .sentry import PretixSentryIntegration, setup_custom_filters
 
     SENTRY_TOKEN = config.get('sentry', 'traces_sample_token', fallback='')
+    SENTRY_ENABLE_LOGS = config.getboolean('sentry', 'enable_logs', fallback=False)
     pretix_denylist = DEFAULT_DENYLIST + [
         "access_token",
         "sentry_dsn",
@@ -734,7 +746,8 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
             CeleryIntegration(),
             LoggingIntegration(
                 level=logging.INFO,
-                event_level=logging.CRITICAL
+                event_level=logging.CRITICAL,
+                sentry_logs_level=logging.INFO,
             )
         ],
         traces_sampler=traces_sampler,
@@ -742,6 +755,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
         release=__version__,
         event_scrubber=EventScrubber(denylist=pretix_denylist, recursive=True),
         send_default_pii=False,
+        enable_logs=SENTRY_ENABLE_LOGS,
         propagate_traces=False,  # see https://github.com/getsentry/sentry-python/issues/1717
     )
     ignore_logger('pretix.base.tasks')

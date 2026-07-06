@@ -9,7 +9,7 @@
 {% load anonymize_email %}
 {% block thetitle %}
     {% if messages %}
-        {{ messages|join:" " }} :: 
+        {{ messages|join:" " }} ::
     {% endif %}
     {% block title %}{% endblock %}{% if request.resolver_match.url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}

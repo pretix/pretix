@@ -1,0 +1,28 @@
+{% extends "error.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load static %}
+
+{% block content %}
+    <h1>{% trans "Please continue in a new tab" %}</h1>
+    <p class="larger">
+        {% blocktrans trimmed %}
+            For security reasons, the following step is only possible in a new tab.
+        {% endblocktrans %}
+    </p>
+    <p class="larger">
+        {% blocktrans trimmed %}
+            If the new tab did not open automatically, please click the following button:
+        {% endblocktrans %}
+    </p>
+    <div class="text-center">
+        <a href="{{ url }}"
+           class="btn btn-primary btn-lg" target="_blank">
+            <span class="fa fa-external-link-square"></span>
+            {% trans "Continue in new tab" %}
+        </a>
+        {{ url|json_script:"framebreak-url" }}
+        <script type="text/javascript" src="{% static "pretixbase/js/framebreak.js" %}"></script>
+    </div>
+{% endblock %}

@@ -395,7 +395,7 @@ class AttendeeProfile(models.Model):
             self.company,
             self.street,
             (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
-            self.country.name,
+            self.country.name if self.country else None,
         ]
         for a in self.answers:
             value = a.get('value')

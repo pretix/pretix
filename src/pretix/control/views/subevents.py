@@ -537,6 +537,7 @@ class SubEventDetail(EventPermissionRequiredMixin, DetailView):
             pcnt=Subquery(
                 OrderPosition.objects.filter(
                     subevent=self.object,
+                    order_id=OuterRef("id"),
                 ).values("subevent").annotate(c=Count("*")).values("c")
             ),
             has_cancellation_request=Exists(CancellationRequest.objects.filter(order=OuterRef("pk"))),

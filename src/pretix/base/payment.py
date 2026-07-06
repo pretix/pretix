@@ -834,7 +834,7 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
-    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str | None:
         """
         After the user has confirmed their purchase, this method will be called to complete
         the payment process. This is the place to actually move the money if applicable.
