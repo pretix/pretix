@@ -173,6 +173,7 @@ def create_thumbnail(source, size, formats=None):
     # filesystem path, this only works because _open() uses safe_join, which accepts absolute paths if they match the
     # expected base dir. For NanoCDN Files, this works because source.name is set to the storage path.
     source_rb = default_storage.open(source_name, mode='rb')
+    source_ext = os.path.splitext(source_name)[1].lower()
 
     image = Image.open(BytesIO(source_rb.read()), formats=formats or settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
     try:
@@ -183,11 +184,14 @@ def create_thumbnail(source, size, formats=None):
     frames = []
     durations = []
     for f in ImageSequence.Iterator(image):
+        if f.mode in ("P", "PA") and source_ext == '.png':
+            f = f.convert('RGBA')
+        if f.mode not in ("1", "L", "RGB", "RGBA"):
+            f = f.convert('RGB')
         durations.append(f.info.get("duration", 1000))
         frames.append(resize_image(f, size))
     image_out = frames[0]
     save_kwargs = {}
-    source_ext = os.path.splitext(source_name)[1].lower()
 
     if source_ext == '.jpg' or source_ext == '.jpeg':
         # Yields better file sizes for photos
@@ -211,10 +215,6 @@ def create_thumbnail(source, size, formats=None):
     checksum = hashlib.md5(image.tobytes()).hexdigest()
     name = checksum + '.' + size.replace('^', 'c') + '.' + target_ext
     buffer = BytesIO()
-    if image_out.mode == "P" and source_ext == '.png':
-        image_out = image_out.convert('RGBA')
-    if image_out.mode not in ("1", "L", "RGB", "RGBA"):
-        image_out = image_out.convert('RGB')
     image_out.save(fp=buffer, format=target_ext.upper(), quality=quality, **save_kwargs)
     imgfile = ContentFile(buffer.getvalue())
 

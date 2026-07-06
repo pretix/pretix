@@ -372,6 +372,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Atlantis"),
         "evaluate": lambda op, order, ev: str(getattr(order.invoice_address.country, 'name', '')) if getattr(order, 'invoice_address', None) else ''
     }),
+    ("invoice_custom_field", {
+        "label": _("Invoice custom recipient field"),
+        "editor_sample": _("Custom recipient field"),
+        "evaluate": lambda op, order, ev: order.invoice_address.custom_field if getattr(order, 'invoice_address', None) else ''
+    }),
     ("addons", {
         "label": _("List of Add-Ons"),
         "editor_sample": _("Add-on 1\n2x Add-on 2"),
@@ -498,9 +503,9 @@ DEFAULT_VARIABLES = OrderedDict((
         ) if op.valid_until else ""
     }),
     ("program_times", {
-        "label": _("Program times: date and time"),
+        "label": _("Program times"),
         "editor_sample": _(
-            "2017-05-31 10:00 – 12:00\n2017-05-31 14:00 – 16:00\n2017-05-31 14:00 – 2017-06-01 14:00"),
+            "2017-05-31 10:00 – 12:00, Room 1\n2017-05-31 14:00 – 16:00, Room 2\n2017-05-31 14:00 – 2017-06-01 14:00, Building A"),
         "evaluate": lambda op, order, ev: get_program_times(op, ev)
     }),
     ("medium_identifier", {
@@ -748,13 +753,19 @@ def get_seat(op: OrderPosition):
 
 
 def get_program_times(op: OrderPosition, ev: Event):
-    return '\n'.join([
-        datetimerange(
-            pt.start.astimezone(ev.timezone),
-            pt.end.astimezone(ev.timezone),
-            as_html=False
-        ) for pt in op.item.program_times.all()
-    ])
+    ptstr = []
+    for pt in op.item.program_times.all():
+        ptstr.append([
+            datetimerange(
+                pt.start.astimezone(ev.timezone),
+                pt.end.astimezone(ev.timezone),
+                as_html=False
+            ),
+            (', ' + ', '.join(
+                l.strip() for l in str(pt.location).splitlines() if l.strip())
+             ) if str(pt.location).strip() else ''
+        ])
+    return '\n'.join(''.join(l) for l in ptstr)
 
 
 def generate_compressed_addon_list(op, order, event, only_checked_in=False):
@@ -923,7 +934,7 @@ class Renderer:
 
             # We do not use str.format like in emails so we (a) can evaluate lazily and (b) can re-implement this
             # 1:1 on other platforms that render PDFs through our API (libpretixprint)
-            return re.sub(r'\{([a-zA-Z0-9:_]+)\}', replace, text)
+            return re.sub(r'\{([-a-zA-Z0-9:_]+)\}', replace, text)
 
         elif o['content'].startswith('itemmeta:'):
             if op.variation_id:
@@ -1056,7 +1067,7 @@ class Renderer:
         except:
             logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
 
-        p = Paragraph(text, style=style)
+        p = Paragraph(text, style=style)  # not using AutoEscapeParagraph is safe as we escape above
         return p, ad, lineheight
 
     def _draw_textcontainer(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):

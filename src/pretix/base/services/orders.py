@@ -733,8 +733,6 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
     _check_date(event, time_machine_now_dt)
 
     products_seen = Counter()
-    q_avail = Counter()
-    v_avail = Counter()
     v_usages = Counter()
     v_budget = {}
     deleted_positions = set()
@@ -798,6 +796,9 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
                 [op.seat for op in sorted_positions if op.seat],
                 shared_lock_objects=[event]
             )
+
+    q_avail = Counter()
+    v_avail = Counter()
 
     # Check maximum order size
     limit = min(int(event.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)
@@ -3492,7 +3493,7 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
     from pretix.base.models import ReusableMedium
 
     for p in order.positions.all():
-        if p.item.media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
+        if p.item.media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW, Item.MEDIA_POLICY_APPEND_OR_NEW):
             mt = MEDIA_TYPES[p.item.media_type]
             if mt.medium_created_by_server and not p.linked_media.exists():
                 rm = ReusableMedium.objects.create(
@@ -3501,8 +3502,8 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
                     identifier=mt.generate_identifier(sender.organizer),
                     active=True,
                     customer=order.customer,
-                    linked_orderposition=p,
                 )
+                rm.linked_orderpositions.add(p)
                 rm.log_action(
                     'pretix.reusable_medium.created',
                     data={

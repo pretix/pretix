@@ -24,9 +24,11 @@ import calendar
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rrulestr
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
+from django.core.validators import RegexValidator, validate_email
 from django.utils.deconstruct import deconstructible
 from django.utils.translation import gettext_lazy as _
+
+from pretix.base.templatetags.rich_text import URL_RE
 
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
@@ -111,6 +113,33 @@ def multimail_validate(val):
     for part in s:
         validate_email(part.strip())
     return s
+
+
+class RegexValidatorInverseMatchAndParam(RegexValidator):
+    inverse_match = True
+
+    def __call__(self, value):
+        regex_matches = self.regex.search(str(value))
+        if regex_matches:
+            raise ValidationError(
+                self.message,
+                code=self.code,
+                params={
+                    "value": value,
+                    "match": regex_matches.group(0) if regex_matches else "",
+                }
+            )
+
+
+class NoUrlValidator(RegexValidatorInverseMatchAndParam):
+    regex = URL_RE
+
+    def __init__(self, **kwargs):
+        if not kwargs.get("message"):
+            kwargs["message"] = _('You entered an URL, which is not allowed. Please remove %(match)s from your input.')
+        if not kwargs.get("code"):
+            kwargs["code"] = "contains_url"
+        super().__init__(**kwargs)
 
 
 class RRuleValidator:

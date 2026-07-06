@@ -35,7 +35,7 @@ from geoip2.errors import AddressNotFoundError
 from pretix.base.i18n import language
 from pretix.base.services.mail import mail
 from pretix.helpers.http import get_client_ip
-from pretix.helpers.urls import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -175,7 +175,7 @@ def handle_login_source(user, request):
                         'source': src,
                         'country': Country(str(country)).name if country else _('Unknown country'),
                         'instance': settings.PRETIX_INSTANCE_NAME,
-                        'url': build_absolute_uri('control:user.settings')
+                        'url': mainreverse_absolute('control:user.settings')
                     },
                     event=None,
                     user=user,

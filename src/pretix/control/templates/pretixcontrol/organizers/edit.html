@@ -222,6 +222,7 @@
                     <fieldset>
                         <legend>{% trans "Reusable media" %}</legend>
                         {% bootstrap_field sform.reusable_media_active layout="control" %}
+                        {% bootstrap_field sform.reusable_media_usage_enforced layout="control" %}
                         <div data-display-dependency="#{{ sform.reusable_media_active.id_for_label }}">
 
                             <div class="panel panel-default">

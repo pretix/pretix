@@ -145,11 +145,21 @@ def event_list(request):
     if 'can_copy' in request.GET:
         qs = EventWizardCopyForm.copy_from_queryset(request.user, request.session)
     else:
-        qs = request.user.get_events_with_any_permission(request)
+        permission = request.GET.get('permission')
+        if permission:
+            qs = request.user.get_events_with_permission(permission, request)
+        else:
+            qs = request.user.get_events_with_any_permission(request)
+
+    name_slug_q = Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
+    organizer = request.GET.get('organizer')
+    if organizer:
+        qs = qs.filter(organizer__slug=organizer)
+    else:
+        name_slug_q |= Q(organizer__name__icontains=i18ncomp(query)) | Q(organizer__slug__icontains=query)
 
     qs = qs.filter(
-        Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query) |
-        Q(organizer__name__icontains=i18ncomp(query)) | Q(organizer__slug__icontains=query)
+        name_slug_q
     ).annotate(
         min_from=Min('subevents__date_from'),
         max_from=Max('subevents__date_from'),
@@ -162,10 +172,19 @@ def event_list(request):
     total = qs.count()
     pagesize = 20
     offset = (page - 1) * pagesize
+    results = []
+    if page == 1 and 'include_none' in request.GET and not query:
+        results.append({
+            'id': "_none",
+            'text': _("No event"),
+            'name': _("No event"),
+            'type': "event",
+        })
+    results += [
+        serialize_event(e) for e in qs.select_related('organizer')[offset:offset + pagesize]
+    ]
     doc = {
-        'results': [
-            serialize_event(e) for e in qs.select_related('organizer')[offset:offset + pagesize]
-        ],
+        'results': results,
         'pagination': {
             "more": total >= (offset + pagesize)
         }
@@ -181,7 +200,7 @@ def giftcard_select2(request, **kwargs):
     except ValueError:
         page = 1
 
-    if request.user.has_organizer_permission(request.organizer, 'organizer.giftcards:write', request):
+    if request.user.has_organizer_permission(request.organizer, 'organizer.giftcards:read', request):
         qs = request.organizer.issued_gift_cards.filter(
             Q(secret__icontains=query)
         ).order_by('secret')
@@ -316,7 +335,7 @@ def nav_context_list(request):
         page = 1
 
     qs_events = request.user.get_events_with_any_permission(request).filter(
-        Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
+        Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query) | Q(domain__domainname__iexact=query)
     ).annotate(
         min_from=Min('subevents__date_from'),
         max_from=Max('subevents__date_from'),
@@ -331,7 +350,7 @@ def nav_context_list(request):
     else:
         qs_orga = Organizer.objects.filter(pk__in=request.user.teams.values_list('organizer', flat=True))
     if query:
-        qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query))
+        qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query) | Q(domains__domainname__iexact=query))
     qs_orga = qs_orga.annotate(
         n_events=Count("events")
     ).order_by("-n_events")
@@ -619,7 +638,7 @@ def checkinlist_select2(request, **kwargs):
 
     qs = request.event.checkin_lists.select_related('subevent').filter(
         qf
-    ).order_by('name')
+    ).order_by('subevent__date_from', 'name', 'pk')
 
     total = qs.count()
     pagesize = 20
@@ -953,6 +972,21 @@ def subevent_meta_values(request, organizer, event):
                 set(event_matches.values_list('value', flat=True)[:10])
             )
         ]
+    })
+
+
+@event_permission_required('event.vouchers:read')
+def voucher_tag_typeahead(request, **kwargs):
+    q = request.GET.get('q', '')
+    tags = request.event.vouchers.filter(
+        tag__isnull=False,
+        waitinglistentries__isnull=True,
+    ).filter(
+        tag__icontains=q,
+    ).values_list('tag', flat=True).distinct().order_by('tag')[:10]
+
+    return JsonResponse({
+        'results': [{'name': t} for t in tags]
     })
 
 

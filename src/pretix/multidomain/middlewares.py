@@ -32,7 +32,10 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import logging
 import time
+from datetime import datetime
+from http.cookies import Morsel
 from urllib.parse import urlparse
 
 from django.conf import settings
@@ -57,6 +60,8 @@ from django_scopes import scopes_disabled
 from pretix.base.models import Event, Organizer
 from pretix.helpers.cookies import set_cookie_without_samesite
 from pretix.multidomain.models import KnownDomain
+
+logger = logging.getLogger(__name__)
 
 LOCAL_HOST_NAMES = ('testserver', 'localhost')
 
@@ -254,6 +259,9 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
             if is_secure and settings.CSRF_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
                 response.delete_cookie(settings.CSRF_COOKIE_NAME)
                 response.delete_cookie(settings.CSRF_COOKIE_NAME, samesite="None")
+
+            handle_duplicated_csrftoken(request, response)
+
             set_cookie_without_samesite(
                 request, response,
                 '__Host-' + settings.CSRF_COOKIE_NAME if is_secure else settings.CSRF_COOKIE_NAME,
@@ -265,3 +273,55 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
             )
             # Content varies with the CSRF cookie, so set the Vary header.
             patch_vary_headers(response, ('Cookie',))
+
+
+def handle_duplicated_csrftoken(request, response):
+    # Due to a Safari bug, in some browser, two csrftoken cookies with different values
+    # exist: one unpartitioned, one partitioned. This function generates an additional
+    # Set-Cookie header to get rid of the unpartitioned one.
+
+    cookie_name = '__Host-' + settings.CSRF_COOKIE_NAME
+
+    if request.scheme == 'https' and cookie_name in request.COOKIES:
+        values = get_all_values_of_cookie(request.headers.get('Cookie'), cookie_name)
+        if len(values) > 1:
+            logger.info('Trying to remove duplicated %s cookies: %r', cookie_name, values)
+
+            # Make sure the set_cookie_without_samesite below will add a new item in the dictionary, placing
+            # it below our deletion header.
+            response.cookies.pop(cookie_name, None)
+
+            # Add the deletion Set-Cookie header to the cookie dict under a wrong name, so it doesn't get
+            # overwritten by the set_cookie_without_samesite call below.  This works because the code in
+            # django.core.handlers.wsgi/asgi, that generates the actual Set-Cookie headers, only iterates
+            # over cookie.values(), ignoring the keys.
+            response.cookies['___DELETECOOKIE___' + cookie_name] = make_delete_morsel(cookie_name)
+
+
+def get_all_values_of_cookie(cookie_header, cookie_name):
+    # like django.http.cookie.parse_cookie, but returns all values of duplicated cookies instead of only the last
+    values = list()
+    if not cookie_header:
+        return values
+    for chunk in cookie_header.split(";"):
+        if "=" in chunk:
+            key, val = chunk.split("=", 1)
+        else:
+            # Assume an empty name per
+            # https://bugzilla.mozilla.org/show_bug.cgi?id=169091
+            key, val = "", chunk
+        key, val = key.strip(), val.strip()
+        if key == cookie_name:
+            values.append(val)
+    return values
+
+
+def make_delete_morsel(name):
+    m = Morsel()
+    m.set(name, '', '')
+    m['expires'] = datetime.utcfromtimestamp(0).strftime("%a, %d %b %Y %H:%M:%S GMT")
+    m['samesite'] = 'None'
+    m['secure'] = True
+    m['path'] = settings.CSRF_COOKIE_PATH
+    m['httponly'] = settings.CSRF_COOKIE_HTTPONLY
+    return m

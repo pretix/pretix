@@ -26,7 +26,7 @@ from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Organizer
 from pretix.multidomain.models import KnownDomain
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.testutils.queries import assert_num_queries
 
 
@@ -248,20 +248,20 @@ def test_event_custom_domain_cache_clear(env):
 
 @pytest.mark.django_db
 def test_event_main_domain_absolute(env):
-    assert build_absolute_uri(env[1], 'presale:event.index') == 'http://example.com/mrmcd/2015/'
+    assert eventreverse_absolute(env[1], 'presale:event.index') == 'http://example.com/mrmcd/2015/'
 
 
 @pytest.mark.django_db
 def test_event_custom_domain_absolute(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     KnownDomain.objects.create(domainname='barfoo', organizer=env[0], event=env[1])
-    assert build_absolute_uri(env[1], 'presale:event.index') == 'http://barfoo/'
+    assert eventreverse_absolute(env[1], 'presale:event.index') == 'http://barfoo/'
 
 
 @pytest.mark.django_db
 def test_event_org_domain_absolute(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
-    assert build_absolute_uri(env[1], 'presale:event.index') == 'http://foobar/2015/'
+    assert eventreverse_absolute(env[1], 'presale:event.index') == 'http://foobar/2015/'
 
 
 @pytest.mark.django_db
@@ -269,4 +269,4 @@ def test_event_org_alt_domain_absolute(env):
     KnownDomain.objects.create(domainname='foobar', organizer=env[0])
     d = KnownDomain.objects.create(domainname='altfoo', organizer=env[0], mode=KnownDomain.MODE_ORG_ALT_DOMAIN)
     d.event_assignments.create(event=env[1])
-    assert build_absolute_uri(env[1], 'presale:event.index') == 'http://altfoo/2015/'
+    assert eventreverse_absolute(env[1], 'presale:event.index') == 'http://altfoo/2015/'

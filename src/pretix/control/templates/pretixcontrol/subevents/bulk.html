@@ -379,6 +379,8 @@
                         <i class="fa fa-calendar"></i> {% trans "Add many time slots" %}</button>
                 </p>
             </div>
+            <hr />
+            {% bootstrap_field form.skip_if_overlap layout="control" horizontal_label_class='sr-only' horizontal_field_class='col-md-12' %}
         </fieldset>
         <fieldset>
             <legend>{% trans "General information" %}</legend>

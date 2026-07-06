@@ -82,7 +82,11 @@ def test_full_clone_same_organizer():
     assert item1.meta_data
     ItemProgramTime.objects.create(item=item1,
                                    start=datetime.datetime(2017, 12, 27, 0, 0, 0, tzinfo=datetime.timezone.utc),
-                                   end=datetime.datetime(2017, 12, 28, 0, 0, 0, tzinfo=datetime.timezone.utc))
+                                   end=datetime.datetime(2017, 12, 28, 0, 0, 0, tzinfo=datetime.timezone.utc),
+                                   location={
+                                       "en": "Testlocation",
+                                       "de": "Testort"
+                                   })
     assert item1.program_times
     item2 = event.items.create(category=category, tax_rule=tax_rule, name="T-shirt", default_price=15,
                                hidden_if_item_available=item1)
@@ -169,6 +173,7 @@ def test_full_clone_same_organizer():
     assert copied_item1.meta_data == item1.meta_data
     assert copied_item1.program_times.first().start == item1.program_times.first().start
     assert copied_item1.program_times.first().end == item1.program_times.first().end
+    assert copied_item1.program_times.first().location == item1.program_times.first().location
     assert copied_item2.variations.get().meta_data == item2v.meta_data
     assert copied_item1.hidden_if_available == copied_q2
     assert copied_item1.grant_membership_type == membership_type
@@ -238,6 +243,9 @@ def test_full_clone_cross_organizer_differences():
     sc1_c = organizer.sales_channels.create(identifier="c")
     sc2_a = organizer2.sales_channels.get(identifier="web")
     sc2_c = organizer2.sales_channels.create(identifier="c")
+    o1_meta_prop_a = organizer.meta_properties.create(name="Prop to copy")
+    o1_meta_prop_b = organizer.meta_properties.create(name="Prop to find")
+    o2_meta_prop_b = organizer2.meta_properties.create(name="Prop to find")
 
     event = Event.objects.create(
         organizer=organizer, name='Dummy', slug='dummy',
@@ -262,6 +270,9 @@ def test_full_clone_cross_organizer_differences():
     event.settings.payment_giftcard__enabled = True
     event.settings.payment_giftcard__restrict_to_sales_channels = ['web', 'b', 'c']
 
+    event.meta_values.create(property=o1_meta_prop_a, value='a')
+    event.meta_values.create(property=o1_meta_prop_b, value='b')
+
     copied_event = Event.objects.create(
         organizer=organizer2, name='Dummy2', slug='dummy2',
         date_from=datetime.datetime(2022, 4, 15, 9, 0, 0, tzinfo=datetime.timezone.utc),
@@ -284,3 +295,9 @@ def test_full_clone_cross_organizer_differences():
 
     assert event.settings.get('payment_giftcard__restrict_to_sales_channels', as_type=list) == ['web', 'b', 'c']
     assert copied_event.settings.get('payment_giftcard__restrict_to_sales_channels', as_type=list) == ['web', 'c']
+
+    assert event.meta_values.get(property__name=o1_meta_prop_a.name).property.organizer == organizer
+    assert copied_event.meta_values.get(property__name=o1_meta_prop_a.name).value == 'a'
+    assert copied_event.meta_values.get(property__name=o1_meta_prop_a.name).property.organizer == organizer2
+    assert copied_event.meta_values.get(property=o2_meta_prop_b).value == 'b'
+    assert copied_event.meta_values.get(property=o2_meta_prop_b).property.organizer == organizer2

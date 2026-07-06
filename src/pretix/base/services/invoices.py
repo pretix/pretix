@@ -205,6 +205,19 @@ def build_invoice(invoice: Invoice) -> Invoice:
                         invoice.foreign_currency_rate = rate.rate.quantize(Decimal('0.0001'), ROUND_HALF_UP)
                         invoice.foreign_currency_rate_date = rate.source_date
                         invoice.foreign_currency_source = 'cz:cnb:rate-fixing-daily'
+            elif invoice.event.settings.invoice_eu_currencies == 'PLN' and invoice.event.currency != 'PLN':
+                invoice.foreign_currency_display = 'PLN'
+                if settings.FETCH_ECB_RATES:
+                    rate = ExchangeRate.objects.filter(
+                        source='pl:nbp:table-a',
+                        source_currency=invoice.event.currency,
+                        other_currency=invoice.foreign_currency_display,
+                        source_date__gt=now().date() - timedelta(days=7)
+                    ).first()
+                    if rate:
+                        invoice.foreign_currency_rate = rate.rate.quantize(Decimal('0.0001'), ROUND_HALF_UP)
+                        invoice.foreign_currency_rate_date = rate.source_date
+                        invoice.foreign_currency_source = 'pl:nbp:table-a'
 
         except InvoiceAddress.DoesNotExist:
             ia = None

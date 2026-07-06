@@ -212,4 +212,17 @@ def membership_type(organizer):
     return organizer.membership_types.create(name='foo')
 
 
+@pytest.fixture
+def clist(event, item):
+    c = event.checkin_lists.create(name="Default", all_products=False)
+    c.limit_products.add(item)
+    return c
+
+
+@pytest.fixture
+def clist_all(event, item):
+    c = event.checkin_lists.create(name="Default", all_products=True)
+    return c
+
+
 utils.setup_databases = scopes_disabled()(utils.setup_databases)

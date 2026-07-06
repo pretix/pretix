@@ -602,10 +602,13 @@ PRIVATE_IPS_RES = [
     [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('127.1.1.1', 443))],
     [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('192.168.5.3', 443))],
     [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('224.0.0.1', 443))],
+    [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('100.64.0.1', 443))],
+    [(socket.AF_INET, socket.SOCK_STREAM, 6, '', ('100.100.100.100', 443))],
     [(socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('::1', 443, 0, 0))],
     [(socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('fe80::1', 443, 0, 0))],
     [(socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('ff00::1', 443, 0, 0))],
     [(socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('fc00::1', 443, 0, 0))],
+    [(socket.AF_INET6, socket.SOCK_STREAM, 6, '', ('::ffff:100.64.0.1', 443, 0, 0))],
 ]
 
 

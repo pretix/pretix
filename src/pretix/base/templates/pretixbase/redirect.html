@@ -2,13 +2,14 @@
 {% load i18n %}
 {% load rich_text %}
 {% load static %}
+{% load wrap_in %}
 {% block title %}{% trans "Redirect" %}{% endblock %}
 {% block content %}
 <i class="fa fa-link fa-fw big-icon"></i>
 <div class="error-details">
     <h1>{% trans "Redirect" %}</h1>
     <h3>
-        {% blocktrans trimmed with host="<strong>"|add:hostname|add:"</strong>"|safe %}
+        {% blocktrans trimmed with host=hostname|wrap_in:'strong' %}
         The link you clicked on wants to redirect you to a destination on the website {{ host }}.
         {% endblocktrans %}
         {% blocktrans trimmed %}

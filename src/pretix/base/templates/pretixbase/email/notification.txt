@@ -14,5 +14,6 @@
 {% trans "You receive these emails based on your notification settings." %}
 {% trans "Click here to view and change your notification settings:" %}
 {{ settings_url }}
-{% trans "Click here disable all notifications immediately:" %}
+{% if disable_url %}{% trans "Click here disable all notifications immediately:" %}
 {{ disable_url }}
+{% endif %}

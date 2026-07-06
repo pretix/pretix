@@ -134,6 +134,39 @@
         </div>
     {% endif %}
 
+    {% if invoice_qualified and order.invoice_dirty %}
+        <div class="alert alert-warning">
+            <p>
+                {% blocktrans trimmed %}
+                    This order was changed after the last invoice was generated. A new invoice was not generated yet, because invoices are configured to be generated on payment or if required by the payment method.
+                    A new invoice will be generated once the customer pays the invoice or selects a payment method that requires an invoice.
+                {% endblocktrans %}
+            </p>
+            {% if "event.orders:write" in request.eventpermset %}
+                <p>
+                    {% if uncancelled_invoice %}
+                        <form action="{% url "control:event.order.reissueinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=uncancelled_invoice.pk %}"
+                                method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-default" type="submit">
+                                {% blocktrans trimmed %}
+                                    Reissue invoice
+                                {% endblocktrans %}
+                            </button>
+                        </form>
+                    {% elif can_generate_invoice %}
+                        <form method="post" action="{% url "control:event.order.geninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                            {% csrf_token %}
+                            <button class="btn btn-default">
+                                {% trans "Generate invoice" %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
+
     <div class="row">
         <div class="col-xs-12 col-lg-10">
             {% for cr in order.cancellation_requests.all %}
@@ -471,7 +504,9 @@
                                 {% endif %}
                                 {% if line.subevent %}
                                     <br/>
-                                    <span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display_with_times }}
+                                    <span class="fa fa-calendar fa-fw"></span>
+                                    <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=line.subevent_id %}">{{ line.subevent.name }}</a>
+                                    &middot; {{ line.subevent.get_date_range_display_with_times }}
                                 {% endif %}
                                 {% if line.used_membership %}
                                     <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span>
@@ -551,7 +586,7 @@
                                             <span class="fa fa-print"></span>
                                             {{ pl.datetime|date:"SHORT_DATETIME_FORMAT" }}
                                             {{ pl.get_type_display }}
-                                            ({{ pl.source }}{% if pl.device %}, #{{ pl.device.device_id }}{% endif %})
+                                            ({{ pl.source }}{% if pl.device %}, {{ pl.device.name }} - #{{ pl.device.device_id }}{% endif %})
                                             {% if not pl.successful %}<span class="fa fa-warning fa-fw"></span>{% endif %}
                                             <br>
                                         {% endfor %}
@@ -1043,7 +1078,7 @@
                                         <dt>{% trans "VAT ID" %}</dt>
                                         <dd>
                                             {{ order.invoice_address.vat_id }}
-                                            {% if order.invoice_address.vat_id_validated %}
+                                            {% if order.invoice_address.vat_id and order.invoice_address.vat_id_validated %}
                                                 <span class="fa fa-check" data-toggle="tooltip" title="{% blocktrans trimmed %}Valid EU VAT ID{% endblocktrans %}"></span>
                                             {% elif order.invoice_address.vat_id %}
                                                 <form class="form-inline helper-display-inline" method="post"

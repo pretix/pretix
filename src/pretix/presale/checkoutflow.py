@@ -37,6 +37,7 @@ import uuid
 from collections import defaultdict
 from decimal import Decimal
 
+from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.core.cache import caches
@@ -50,6 +51,7 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
+from django.utils.html import conditional_escape
 from django.utils.translation import (
     get_language, gettext_lazy as _, pgettext_lazy,
 )
@@ -69,6 +71,7 @@ from pretix.base.services.cart import (
 from pretix.base.services.cross_selling import CrossSellingService
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
+from pretix.base.services.pricing import get_price
 from pretix.base.services.tasks import EventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
@@ -529,6 +532,48 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         self._completed = True
         return True
 
+    def _get_initial_val_price(self, current_addon_products, cartpos, item, variation):
+        val = None
+        price = None
+
+        if self.request.POST:
+            if variation:
+                field = f'cp_{cartpos.pk}_variation_{item.pk}_{variation.pk}'
+            else:
+                field = f'cp_{cartpos.pk}_item_{item.pk}'
+
+            try:
+                val = int(self.request.POST.get(field) or '0')
+            except ValueError:
+                pass
+            if val and item.free_price:
+                custom_price = forms.DecimalField(localize=True).to_python(self.request.POST.get(f'{field}_price') or '0')
+                price = get_price(
+                    item, variation, voucher=cartpos.voucher, custom_price=custom_price, subevent=cartpos.subevent,
+                    custom_price_is_net=self.event.settings.display_net_prices,
+                    invoice_address=self.invoice_address,
+                )
+            else:
+                price = variation.suggested_price if variation else item.suggested_price
+
+        else:
+            current_products = current_addon_products[item.pk, variation.pk if variation else None]
+            val = len(current_products)
+            if current_products and item.free_price:
+                a = current_products[0]
+                price = TaxedPrice(
+                    net=a.price - a.tax_value,
+                    gross=a.price,
+                    tax=a.tax_value,
+                    name=a.item.tax_rule.name if a.item.tax_rule else "",
+                    rate=a.tax_rate,
+                    code=a.item.tax_rule.code if a.item.tax_rule else None,
+                )
+            else:
+                price = variation.suggested_price if variation else item.suggested_price
+
+        return val, price
+
     @cached_property
     def forms(self):
         """
@@ -587,34 +632,10 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
                     if i.has_variations:
                         for v in i.available_variations:
-                            v.initial = len(current_addon_products[i.pk, v.pk])
-                            if v.initial and i.free_price:
-                                a = current_addon_products[i.pk, v.pk][0]
-                                v.initial_price = TaxedPrice(
-                                    net=a.price - a.tax_value,
-                                    gross=a.price,
-                                    tax=a.tax_value,
-                                    name=a.item.tax_rule.name if a.item.tax_rule else "",
-                                    rate=a.tax_rate,
-                                    code=a.item.tax_rule.code if a.item.tax_rule else None,
-                                )
-                            else:
-                                v.initial_price = v.suggested_price
+                            v.initial, v.initial_price = self._get_initial_val_price(current_addon_products, cartpos, i, v)
                         i.expand = any(v.initial for v in i.available_variations)
                     else:
-                        i.initial = len(current_addon_products[i.pk, None])
-                        if i.initial and i.free_price:
-                            a = current_addon_products[i.pk, None][0]
-                            i.initial_price = TaxedPrice(
-                                net=a.price - a.tax_value,
-                                gross=a.price,
-                                tax=a.tax_value,
-                                name=a.item.tax_rule.name if a.item.tax_rule else "",
-                                rate=a.tax_rate,
-                                code=a.item.tax_rule.code if a.item.tax_rule else None,
-                            )
-                        else:
-                            i.initial_price = i.suggested_price
+                        i.initial, i.initial_price = self._get_initial_val_price(current_addon_products, cartpos, i, None)
 
                 if items:
                     formsetentry['categories'].append({
@@ -1138,7 +1159,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 for a in addresses:
                     data = {
                         "_pk": a.pk,
-                        "_country_for_address": a.country.name,
+                        "_country_for_address": a.country.name if a.country else '',
                         "_state_for_address": a.state_for_address,
                         "_name": a.name,
                         "is_business": "business" if a.is_business else "individual",
@@ -1181,7 +1202,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             for p in profiles:
                 data = {
                     "_pk": p.pk,
-                    "_country_for_address": p.country.name,
+                    "_country_for_address": p.country.name if p.country else '',
                     "_state_for_address": p.state_for_address,
                     "_attendee_name": p.attendee_name,
                 }
@@ -1614,7 +1635,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         meta_info = {
             'contact_form_data': self.cart_session.get('contact_form_data', {}),
             'confirm_messages': [
-                str(m) for m in self.confirm_messages.values()
+                conditional_escape(str(m)) for m in self.confirm_messages.values()
             ]
         }
         api_meta = {}

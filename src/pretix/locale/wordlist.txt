@@ -117,6 +117,7 @@ PayU
 Peppol
 PCI
 PKCE
+PLN
 PDFs
 percentual
 personalization

@@ -57,7 +57,7 @@ from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
 from pypdf import PageObject, PdfReader, PdfWriter, Transformation
 from pypdf.generic import RectangleObject
 from reportlab.lib import pagesizes
-from reportlab.lib.units import mm
+from reportlab.lib.units import inch, mm
 from reportlab.pdfgen import canvas
 
 from pretix.base.exporter import BaseExporter
@@ -132,6 +132,14 @@ OPTIONS = OrderedDict([
         'margins': [15.3 * mm, 7.15 * mm, 15.3 * mm, 7.15 * mm],
         'offsets': [66.1 * mm, 29.6 * mm],
         'pagesize': pagesizes.A4,
+    }),
+    ('avery_4inx3in', {
+        'name': 'Avery 4" x 3" (74459)',
+        'cols': 2,
+        'rows': 3,
+        'margins': [1 * inch, .25 * inch, 1 * inch, .25 * inch],
+        'offsets': [4 * inch, 3 * inch],
+        'pagesize': pagesizes.LETTER,
     }),
     ('avery_80x50', {
         'name': 'Avery Zweckform 80 x 50 mm (L4785)',

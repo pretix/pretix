@@ -302,6 +302,7 @@ Personalisierung
 P.IVA
 PKCE-Erweiterung
 Platzhalterzeichen
+PLN
 Play
 Plugin
 Plugins

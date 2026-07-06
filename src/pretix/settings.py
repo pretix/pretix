@@ -58,10 +58,11 @@ from django.utils.translation import gettext_lazy as _  # NOQA
 
 _config = configparser.RawConfigParser()
 if 'PRETIX_CONFIG_FILE' in os.environ:
-    _config.read_file(open(os.environ.get('PRETIX_CONFIG_FILE'), encoding='utf-8'))
+    config_files = [os.environ['PRETIX_CONFIG_FILE']]
 else:
-    _config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
-                 encoding='utf-8')
+    config_files = ['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg']
+
+_config.read(config_files, encoding='utf-8')
 config = EnvOrParserConfig(_config)
 
 CONFIG_FILE = config
@@ -265,7 +266,7 @@ EMAIL_USE_TLS = config.getboolean('mail', 'tls', fallback=False)
 EMAIL_USE_SSL = config.getboolean('mail', 'ssl', fallback=False)
 EMAIL_SUBJECT_PREFIX = '[pretix] '
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_CUSTOM_SMTP_BACKEND = 'pretixbase.email.CheckPrivateNetworkSmtpBackend'
+EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
 EMAIL_TIMEOUT = 60
 
 ADMINS = [('Admin', n) for n in config.get('mail', 'admins', fallback='').split(",") if n]
@@ -439,6 +440,7 @@ CSRF_COOKIE_NAME = 'pretix_csrftoken'
 SESSION_COOKIE_HTTPONLY = True
 
 INSTALLED_APPS += [ # noqa
+    'django_querytagger',
     'django_filters',
     'django_markup',
     'django_otp',
@@ -504,6 +506,7 @@ MIDDLEWARE = [
     'pretix.helpers.logs.RequestIdMiddleware',
     'pretix.api.middleware.IdempotencyMiddleware',
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
+    'django_querytagger.middleware.SetTagMiddleware',  # after MultiDomainMiddleware for correct url resolving
     'pretix.base.middleware.CustomCommonMiddleware',
     'pretix.multidomain.middlewares.SessionMiddleware',
     'pretix.multidomain.middlewares.CsrfViewMiddleware',
@@ -515,6 +518,7 @@ MIDDLEWARE = [
     'pretix.control.middleware.AuditLogMiddleware',
     'pretix.base.middleware.LocaleMiddleware',
     'pretix.base.middleware.SecurityMiddleware',
+    'pretix.base.middleware.RejectInvalidInputMiddleware',
     'pretix.presale.middleware.EventMiddleware',
     'pretix.api.middleware.ApiScopeMiddleware',
 ]
@@ -622,6 +626,9 @@ LOGGING = {
         'request_id': {
             '()': 'pretix.helpers.logs.RequestIdFilter'
         },
+        'skip_not_found': {
+            '()': 'pretix.helpers.logs.SkipNotFoundFilter',
+        }
     },
     'handlers': {
         'console': {
@@ -663,6 +670,7 @@ LOGGING = {
             'handlers': ['file', 'console', 'mail_admins'],
             'level': loglevel,
             'propagate': True,
+            'filters': ['skip_not_found'],
         },
         'pretix.security.csp': {
             'handlers': ['csp_file'],
@@ -703,11 +711,12 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
     from sentry_sdk.integrations.logging import (
         LoggingIntegration, ignore_logger,
     )
-    from sentry_sdk.scrubber import EventScrubber, DEFAULT_DENYLIST
+    from sentry_sdk.scrubber import DEFAULT_DENYLIST, EventScrubber
 
     from .sentry import PretixSentryIntegration, setup_custom_filters
 
     SENTRY_TOKEN = config.get('sentry', 'traces_sample_token', fallback='')
+    SENTRY_ENABLE_LOGS = config.getboolean('sentry', 'enable_logs', fallback=False)
     pretix_denylist = DEFAULT_DENYLIST + [
         "access_token",
         "sentry_dsn",
@@ -732,7 +741,8 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
             CeleryIntegration(),
             LoggingIntegration(
                 level=logging.INFO,
-                event_level=logging.CRITICAL
+                event_level=logging.CRITICAL,
+                sentry_logs_level=logging.INFO,
             )
         ],
         traces_sampler=traces_sampler,
@@ -740,6 +750,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
         release=__version__,
         event_scrubber=EventScrubber(denylist=pretix_denylist, recursive=True),
         send_default_pii=False,
+        enable_logs=SENTRY_ENABLE_LOGS,
         propagate_traces=False,  # see https://github.com/getsentry/sentry-python/issues/1717
     )
     ignore_logger('pretix.base.tasks')
@@ -887,3 +898,21 @@ FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT = 1024 * 1024 * config.getint("pretix
 FILE_UPLOAD_MAX_SIZE_OTHER = 1024 * 1024 * config.getint("pretix_file_upload", "max_size_other", fallback=10)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+VITE_DEV_SERVER_PORT = 5173
+VITE_DEV_SERVER = f"http://localhost:{VITE_DEV_SERVER_PORT}"
+VITE_DEV_MODE = DEBUG
+VITE_IGNORE = False  # Used to ignore `collectstatic`/`rebuild`
+PRETIX_WIDGET_VITE = os.environ.get('PRETIX_WIDGET_VITE', '') not in ('', '0')
+
+if DEBUG:
+    # Reload if settings file changes
+    config_files_to_watch = [Path(x).absolute() for x in config_files]
+
+    from django.dispatch import receiver
+    from django.utils.autoreload import BaseReloader, autoreload_started
+
+    @receiver(autoreload_started, dispatch_uid="pretix_watch_config_file")
+    def watch_config_file(sender: BaseReloader, *args, **kwargs):
+        sender.extra_files.update(config_files_to_watch)
