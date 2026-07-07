@@ -285,3 +285,12 @@ def get_deterministic_ordering(model, ordering):
             # on the primary key to provide total ordering.
             ordering.append("-pk")
     return ordering
+
+
+@contextlib.contextmanager
+def conditional_atomic(do_atomic, **kwargs):
+    if do_atomic:
+        with transaction.atomic(**kwargs):
+            yield
+    else:
+        yield

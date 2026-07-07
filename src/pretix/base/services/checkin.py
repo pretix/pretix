@@ -40,7 +40,7 @@ import dateutil
 import dateutil.parser
 from dateutil.tz import datetime_exists
 from django.core.files import File
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError
 from django.db.models import (
     BooleanField, Case, Count, ExpressionWrapper, F, IntegerField, Max, Min,
     OuterRef, Q, Subquery, TextField, Value, When,
@@ -59,6 +59,7 @@ from pretix.base.models import (
 )
 from pretix.base.signals import checkin_created, periodic_task
 from pretix.helpers import OF_SELF
+from pretix.helpers.database import conditional_atomic
 from pretix.helpers.jsonlogic import Logic
 from pretix.helpers.jsonlogic_boolalg import convert_to_dnf
 from pretix.helpers.jsonlogic_query import (
@@ -1043,10 +1044,10 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         if not simulate:
             _save_answers(op, answers, given_answers)
 
-    with transaction.atomic():
+    with conditional_atomic(not simulate):
         # Lock order positions, if it is an entry. We don't need it for exits, as a race condition wouldn't be problematic
         opqs = OrderPosition.all.select_related("order", "item")
-        if type != Checkin.TYPE_EXIT:
+        if type != Checkin.TYPE_EXIT and not simulate:
             opqs = opqs.select_for_update(of=OF_SELF)
         op = opqs.get(pk=op.pk)
 

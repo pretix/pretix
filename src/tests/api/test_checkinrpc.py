@@ -25,6 +25,7 @@ from unittest import mock
 
 import pytest
 from django.core.files.base import ContentFile
+from django.db import connection
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
@@ -36,6 +37,7 @@ from pretix.api.serializers.item import QuestionSerializer
 from pretix.base.models import (
     Checkin, InvoiceAddress, Item, Order, OrderPosition, ReusableMedium,
 )
+from pretix.testutils.db import readonly_db
 
 # Lots of this code is overlapping with test_checkin.py, and some of it is arguably redundant since it's triggering
 # the same backend code paths (for now). However, this is SUCH a critical part of pretix that we don't want to take
@@ -1739,3 +1741,41 @@ def test_exchange_create_gift_card(token_client, organizer, clist, event, order,
     with scopes_disabled():
         rm = ReusableMedium.objects.get(identifier="0412345")
         assert rm.linked_giftcard.currency == "EUR"
+
+
+@pytest.mark.django_db
+def test_simulate(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+    with connection.execute_wrapper(readonly_db):
+        resp = _redeem(token_client, organizer, clist, p.secret, {"simulate": True})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert not p.checkins.exists()
+
+
+@pytest.mark.django_db
+def test_simulate_no_exchange(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_NEW
+    item.save()
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+    with connection.execute_wrapper(readonly_db):
+        resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+            "source_type": "barcode",
+            "exchange_medium_type": "nfc_uid",
+            "exchange_medium_identifier": "12345678",
+            "simulate": True,
+        })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'error'
+    with scopes_disabled():
+        assert not rm.linked_orderpositions.exists()
