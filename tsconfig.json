@@ -3,7 +3,9 @@
 		"src/pretix/static/**/*",
 		"src/pretix/static/**/*.vue",
 		"src/pretix/plugins/webcheckin/**/*",
-		"src/pretix/plugins/webcheckin/**/*.vue"
+		"src/pretix/plugins/webcheckin/**/*.vue",
+		"src/pretix/plugins/wallet/**/*",
+		"src/pretix/plugins/wallet/**/*.vue"
 	],
 	"compilerOptions": {
 		"baseUrl": ".",
@@ -11,7 +13,7 @@
 		"strict": false,
 		"allowJs": true,
 		"checkJs": true,
-		"target": "esnext",
+		"target": "es2025",
 		"module": "esnext",
 		"moduleResolution": "bundler",
 		"resolveJsonModule": true,

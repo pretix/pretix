@@ -9,7 +9,7 @@ const props = defineProps<{
 	label?: string
 	choices: Array<[string, string]>
     errors?: string[],
-    class: string
+    class?: string
 }>()
 const modelValue = defineModel<string|null>();
 const id = useId()
