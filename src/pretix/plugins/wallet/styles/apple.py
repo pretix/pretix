@@ -44,7 +44,7 @@ class ApplePlatform(WalletPlatform):
             order.code,
             op.pk,
         )
-        breakpoint()
+
         context = {
             "placeholders": get_layout_variables(op.order.event),
             "evaluation_context": [op, order, order.event],
@@ -255,8 +255,9 @@ class AppleWalletEventTicket(AppleWalletStyle):
         TextFieldGroup(
             identifier="headers", name=_("Header"), max_entries=3
         ),
-        TextFieldGroup(identifier="auxillary", name=_("Auxillary"), max_entries=4),
+        TextFieldGroup(identifier="auxiliary", name=_("Auxiliary"), max_entries=4),
         TextFieldGroup(identifier="back", name=_("Back")),
+        TextFieldGroup(identifier="code", name=_("QR-Code"), max_entries=1),
     ]
     # preview_image = "apple/event_ticket.svg"
 
@@ -285,9 +286,10 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 "secondaryFields": self.convert_fields(
                     strings, fields["secondary"], "secondary"
                 ),
-                "auxillaryFields": self.convert_fields(
-                    strings, fields["auxillary"], "auxillary"
+                "auxiliaryFields": self.convert_fields(
+                    strings, fields["auxiliary"], "auxiliary"
                 ),
                 "backFields": self.convert_fields(strings, fields["back"], "back"),
             }
         }
+
