@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { computed, watchEffect } from "vue";
+import { computed, inject, watchEffect } from "vue";
 import PlaceholderFieldSettings from "./placeholder-field-settings.vue";
 import PredefinedFieldSettings from "./predefined-field-settings.vue";
 
 const gettext = (window as any).gettext;
 
 const props = defineProps<{
-    variables: VariableConfig
     style?: Style;
-    locales: Record<string, string>;
 }>();
 
 const layout = defineModel<LayoutData>();
@@ -32,8 +30,6 @@ watchEffect(() => {
             v-model="layout.fieldgroups[fieldgroup.identifier]"
             :fieldgroup="fieldgroup"
             :overflows="props.style.fieldgroups.slice(fieldgroupId + 1).filter(x => x.type == 'placeholder' && x.content_type === fieldgroup.content_type)"
-            :variables="variables[fieldgroup.content_type]"
-            :locales="locales"
         )
         PredefinedFieldSettings(v-else-if="fieldgroup.type == 'predefined'"
                     v-model="layout.fieldgroups[fieldgroup.identifier]"
