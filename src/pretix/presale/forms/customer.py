@@ -28,7 +28,7 @@ from django import forms
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import (
-    get_password_validators, password_validators_help_texts, validate_password,
+    MinimumLengthValidator, get_password_validators, validate_password,
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import signing
@@ -44,7 +44,7 @@ from pretix.base.forms.questions import (
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
 from pretix.helpers.http import get_client_ip
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 
 class TokenGenerator(PasswordResetTokenGenerator):
@@ -83,8 +83,8 @@ class AuthenticationForm(forms.Form):
         self.request = request
         self.customer_cache = None
         super().__init__(*args, **kwargs)
-        self.fields['password'].help_text = "<a href='{}'>{}</a>".format(
-            build_absolute_uri(False, 'presale:organizer.customer.resetpw', kwargs={
+        self.fields['password'].help_text = "<a target='_blank' href='{}'>{}</a>".format(
+            eventreverse_absolute(False, 'presale:organizer.customer.resetpw', kwargs={
                 'organizer': request.organizer.slug,
             }),
             _('Forgot your password?')
@@ -172,7 +172,7 @@ class RegistrationForm(forms.Form):
             )
 
         self.fields['name_parts'] = NamePartsFormField(
-            max_length=255,
+            max_length=70,
             required=True,
             scheme=request.organizer.settings.name_scheme,
             titles=request.organizer.settings.name_scheme_titles,
@@ -296,17 +296,17 @@ class SetPasswordForm(forms.Form):
     }
     email = forms.EmailField(
         label=_('Email'),
-        disabled=True
+        widget=forms.EmailInput(attrs={'autocomplete': 'username', 'readonly': 'readonly'}),
+        required=False,
     )
     password = forms.CharField(
         label=_('Password'),
-        widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
         max_length=4096,
-        required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
-        widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
         max_length=4096,
     )
 
@@ -315,6 +315,14 @@ class SetPasswordForm(forms.Form):
         kwargs.setdefault('initial', {})
         kwargs['initial']['email'] = self.customer.email
         super().__init__(*args, **kwargs)
+
+        pw_min_len_validators = [v for v in get_customer_password_validators() if isinstance(v, MinimumLengthValidator)]
+        if pw_min_len_validators:
+            self.fields['password'].widget.attrs['minlength'] = max(v.min_length for v in pw_min_len_validators)
+            self.fields['password_repeat'].widget.attrs['minlength'] = max(v.min_length for v in pw_min_len_validators)
+
+        if 'password' not in self.data:
+            self.fields['password'].help_text = ' '.join(v.get_help_text() for v in pw_min_len_validators)
 
     def clean(self):
         password1 = self.cleaned_data.get('password', '')
@@ -329,8 +337,7 @@ class SetPasswordForm(forms.Form):
 
     def clean_password(self):
         password1 = self.cleaned_data.get('password', '')
-        if validate_password(password1, user=self.customer, password_validators=get_customer_password_validators()) is not None:
-            raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
+        validate_password(password1, user=self.customer, password_validators=get_customer_password_validators())
         return password1
 
 
@@ -395,13 +402,13 @@ class ChangePasswordForm(forms.Form):
     )
     password = forms.CharField(
         label=_('New password'),
-        widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
         max_length=4096,
         required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
-        widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}),
         max_length=4096,
     )
 
@@ -410,6 +417,14 @@ class ChangePasswordForm(forms.Form):
         kwargs.setdefault('initial', {})
         kwargs['initial']['email'] = self.customer.email
         super().__init__(*args, **kwargs)
+
+        pw_min_len_validators = [v for v in get_customer_password_validators() if isinstance(v, MinimumLengthValidator)]
+        if pw_min_len_validators:
+            self.fields['password'].widget.attrs['minlength'] = max(v.min_length for v in pw_min_len_validators)
+            self.fields['password_repeat'].widget.attrs['minlength'] = max(v.min_length for v in pw_min_len_validators)
+
+        if 'password' not in self.data:
+            self.fields['password'].help_text = ' '.join(v.get_help_text() for v in pw_min_len_validators)
 
     def clean(self):
         password1 = self.cleaned_data.get('password', '')
@@ -424,8 +439,7 @@ class ChangePasswordForm(forms.Form):
 
     def clean_password(self):
         password1 = self.cleaned_data.get('password', '')
-        if validate_password(password1, user=self.customer, password_validators=get_customer_password_validators()) is not None:
-            raise forms.ValidationError(_(password_validators_help_texts()), code='pw_invalid')
+        validate_password(password1, user=self.customer, password_validators=get_customer_password_validators())
         return password1
 
     def clean_password_current(self):

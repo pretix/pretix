@@ -40,6 +40,7 @@ from pretix.base.models import (
     CachedFile, Device, Event, Organizer, ScheduledEventExport, TeamAPIToken,
     User, cachedfile_name,
 )
+from pretix.base.models.auth import UserWithStaffSession
 from pretix.base.models.exports import ScheduledOrganizerExport
 from pretix.base.services.mail import mail
 from pretix.base.services.tasks import (
@@ -50,7 +51,7 @@ from pretix.base.signals import (
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF, repeatable_reads_transaction
-from pretix.helpers.urls import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -211,7 +212,12 @@ def init_event_exporters(event, user=None, token=None, device=None, request=None
         if not perm_holder.has_event_permission(event.organizer, event, permission_name, request) and not staff_session:
             continue
 
-        exporter: BaseExporter = response(event=event, organizer=event.organizer, **kwargs)
+        exporter: BaseExporter = response(
+            event=event,
+            organizer=event.organizer,
+            permission_holder=token or device or (UserWithStaffSession(user) if staff_session else user),
+            **kwargs
+        )
 
         if not exporter.available_for_user(user if user and user.is_authenticated else None):
             continue
@@ -243,7 +249,12 @@ def init_organizer_exporters(
             continue
 
         if issubclass(response, OrganizerLevelExportMixin):
-            exporter: BaseExporter = response(event=Event.objects.none(), organizer=organizer, **kwargs)
+            exporter: BaseExporter = response(
+                event=Event.objects.none(),
+                organizer=organizer,
+                permission_holder=token or device or (UserWithStaffSession(user) if staff_session else user),
+                **kwargs,
+            )
 
             try:
                 if not perm_holder.has_organizer_permission(organizer, response.get_required_organizer_permission(), request) and not staff_session:
@@ -295,7 +306,12 @@ def init_organizer_exporters(
             if not _has_permission_on_any_team_cache[permission_name] and not staff_session:
                 continue
 
-            exporter: BaseExporter = response(event=_event_list_cache[permission_name], organizer=organizer, **kwargs)
+            exporter: BaseExporter = response(
+                event=_event_list_cache[permission_name],
+                organizer=organizer,
+                permission_holder=token or device or (UserWithStaffSession(user) if staff_session else user),
+                **kwargs,
+            )
 
         if not exporter.available_for_user(user if user and user.is_authenticated else None):
             continue
@@ -324,12 +340,13 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
             if schedule.owner.is_active:
                 mail(
                     email=schedule.owner.email,
-                    subject=gettext('Export failed'),
+                    subject=gettext('Scheduled export failed'),
                     template='pretixbase/email/export_failed.txt',
                     context={
                         'configuration_url': config_url,
                         'reason': msg,
                         'soft': soft,
+                        'instance': settings.PRETIX_INSTANCE_NAME,
                     },
                     event=context if isinstance(context, Event) else None,
                     organizer=context.organizer if isinstance(context, Event) else context,
@@ -439,7 +456,7 @@ def scheduled_organizer_export(self, organizer: Organizer, schedule: int) -> Non
         schedule,
         organizer,
         exporter,
-        build_absolute_uri(
+        mainreverse_absolute(
             'control:organizer.export',
             kwargs={
                 'organizer': organizer.slug,
@@ -465,7 +482,7 @@ def scheduled_event_export(self, event: Event, schedule: int) -> None:
         schedule,
         event,
         exporter,
-        build_absolute_uri(
+        mainreverse_absolute(
             'control:event.orders.export',
             kwargs={
                 'event': event.slug,

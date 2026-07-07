@@ -27,7 +27,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Q
 from django.utils.crypto import get_random_string
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -58,8 +58,8 @@ from pretix.helpers.permission_migration import (
     OLD_TO_NEW_EVENT_COMPAT, OLD_TO_NEW_EVENT_MIGRATION,
     OLD_TO_NEW_ORGANIZER_COMPAT, OLD_TO_NEW_ORGANIZER_MIGRATION,
 )
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +71,7 @@ class OrganizerSerializer(I18nAwareModelSerializer):
     slug = serializers.CharField(read_only=True)
 
     def get_organizer_url(self, organizer):
-        return build_absolute_uri(organizer, 'presale:organizer.index')
+        return eventreverse_absolute(organizer, 'presale:organizer.index')
 
     class Meta:
         model = Organizer
@@ -286,6 +286,19 @@ class GiftCardSerializer(I18nAwareModelSerializer):
                 )
         return data
 
+    def to_representation(self, instance):
+        r = super().to_representation(instance)
+        request = self.context.get('request')
+        # late permission evaluations for checks that depend on the actual linked events
+        if 'owner_ticket' in self.context['request'].query_params.getlist('expand'):
+            owner_ticket = instance.owner_ticket
+            if owner_ticket:
+                event = owner_ticket.order.event
+                perm_holder = request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user
+                if not perm_holder.has_event_permission(event.organizer, event, 'event.orders:read', request):
+                    r['owner_ticket'] = {'id': instance.owner_ticket.id}
+        return r
+
     class Meta:
         model = GiftCard
         fields = ('id', 'secret', 'issuance', 'value', 'currency', 'testmode', 'expires', 'conditions', 'owner_ticket',
@@ -479,14 +492,16 @@ class TeamInviteSerializer(serializers.ModelSerializer):
     def _send_invite(self, instance):
         mail(
             instance.email,
-            _('Account invitation'),
+            gettext('You\'ve been invited to join %(organizer)s') % {
+                'organizer': self.context['organizer'].name,
+            },
             'pretixcontrol/email/invitation.txt',
             {
                 'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
                 'organizer': self.context['organizer'].name,
                 'team': instance.team.name,
-                'url': build_global_uri('control:auth.invite', kwargs={
+                'url': mainreverse_absolute('control:auth.invite', kwargs={
                     'token': instance.token
                 })
             },
@@ -561,6 +576,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'customer_accounts_require_login_for_order_access',
         'invoice_regenerate_allowed',
         'contact_mail',
+        'contact_url',
         'imprint_url',
         'organizer_info_text',
         'event_list_type',
@@ -592,6 +608,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'cookie_consent_dialog_button_yes',
         'cookie_consent_dialog_button_no',
         'reusable_media_active',
+        'reusable_media_usage_enforced',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
         'reusable_media_type_nfc_uid',

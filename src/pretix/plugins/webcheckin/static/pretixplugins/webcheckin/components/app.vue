@@ -1,588 +1,593 @@
-<template>
-  <div id="app">
-    <div class="container">
-      <h1>
-        {{ $root.event_name }}
-      </h1>
+<script setup lang="ts">
+import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
+import { api } from '../api'
+import type { CheckinList, Position, RedeemResponse, CheckinStatus, AnswerQuestion } from '../api'
+import { STRINGS, i18nstringLocalize, formatSubevent, formatAnswer } from '../i18n'
 
-      <checkinlist-select v-if="!checkinlist" @selected="selectList($event)"></checkinlist-select>
+import CheckinlistSelect from './checkinlist-select.vue'
+import SearchresultItem from './searchresult-item.vue'
+import Datefield from './datefield.vue'
+import Timefield from './timefield.vue'
+import Datetimefield from './datetimefield.vue'
 
-      <input v-if="checkinlist" v-model="query" ref="input" :placeholder="$root.strings['input.placeholder']" @keyup="inputKeyup" class="form-control scan-input">
+const props = defineProps<{
+	eventName?: string
+}>()
 
-      <div v-if="checkResult !== null" class="panel panel-primary check-result">
-        <div class="panel-heading">
-          <a class="pull-right" @click.prevent="clear" href="#" tabindex="-1">
-            <span class="fa fa-close"></span>
-          </a>
-          <h3 class="panel-title">
-            {{ $root.strings['check.headline'] }}
-          </h3>
-        </div>
-        <div v-if="checkLoading" class="panel-body text-center">
-          <span class="fa fa-4x fa-cog fa-spin loading-icon"></span>
-        </div>
-        <div v-else-if="checkError" class="panel-body text-center">
-          {{ checkError }}
-        </div>
-        <div :class="'check-result-status check-result-' + checkResultColor">
-          <div class="check-result-text">{{ checkResultText }}</div>
-          <div class="check-result-item">{{ checkResultItemvar }}</div>
-          <div class="check-result-reason" v-if="checkResult.reason_explanation">{{ checkResult.reason_explanation }}</div>
+const COUNTRIES = JSON.parse(document.querySelector('#countries')?.textContent ?? '[]')
 
-        </div>
-        <div class="attention" v-if="checkResult && checkResult.require_attention">
-          <span class="fa fa-warning"></span>
-          {{ $root.strings['check.attention'] }}
-        </div>
-        <div class="panel-body" v-if="checkResult.position">
-          <div class="details">
-            <code>{{ checkResult.position.order }}-{{ checkResult.position.positionid }}</code>
-            <h4>{{ checkResult.position.attendee_name }}</h4>
-            <div v-if="checkResultAddons" class="addons">{{ checkResultAddons }}</div>
-            <span v-if="checkResultSubevent">{{ checkResultSubevent }}<br></span>
-            <span class="secret">{{ checkResult.position.secret }}</span>
-            <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
-            <span v-for="a in checkResult.position.answers">
-              <span v-if="a.question.show_during_checkin">
-                <br>
-                <strong>{{ a.question.question | i18nstring_localize }}:</strong>
-                {{ a.answer | answer(a.question, $root.timezone, $root.strings) }}
-              </span>
-            </span>
-            <strong v-for="t in checkResult.checkin_texts"><br>{{ t }}</strong>
-          </div>
-        </div>
-      </div>
+let clearTimeoutId: ReturnType<typeof setTimeout> | null = null
+const answers = ref<Record<string, string>>({})
 
-      <div v-else-if="searchResults !== null" class="panel panel-primary search-results">
-        <div class="panel-heading">
-          <a class="pull-right" @click.prevent="clear" href="#" tabindex="-1">
-            <span class="fa fa-close"></span>
-          </a>
-          <h3 class="panel-title">
-            {{ $root.strings['results.headline'] }}
-          </h3>
-        </div>
-        <ul class="list-group">
-          <searchresult-item ref="result" v-if="searchResults" v-for="p in searchResults" :position="p" :key="p.id" @selected="selectResult($event)"></searchresult-item>
-          <li v-if="!searchResults.length && !searchLoading" class="list-group-item text-center">
-            {{ $root.strings['results.none'] }}
-          </li>
-          <li v-if="searchLoading" class="list-group-item text-center">
-            <span class="fa fa-4x fa-cog fa-spin loading-icon"></span>
-          </li>
-          <li v-else-if="searchError" class="list-group-item text-center">
-            {{ searchError }}
-          </li>
-          <a v-else-if="searchNextUrl" class="list-group-item text-center" href="#" @click.prevent="searchNext">
-            {{ $root.strings['pagination.next'] }}
-          </a>
-        </ul>
-      </div>
+// Checkin list selection
+const checkinlist = ref<CheckinList | null>(null)
+const subevent = computed(() => formatSubevent(checkinlist.value?.subevent))
 
-      <div v-else-if="checkinlist">
-        <div class="panel panel-default">
-          <div class="panel-body meta">
-            <div class="row settings">
-              <div class="col-sm-6">
-                <div>
-                  <span :class="'fa fa-sign-' + (type === 'exit' ? 'out' : 'in')"></span>
-                  {{ $root.strings['scantype.' + type] }}<br>
-                  <button @click="switchType" class="btn btn-default"><span class="fa fa-refresh"></span> {{ $root.strings['scantype.switch'] }}</button>
-                </div>
-              </div>
-              <div class="col-sm-6">
-                <div v-if="checkinlist">
-                  {{ checkinlist.name }}<br>
-                  {{ subevent }}<br v-if="subevent">
-                  <button @click="switchList" type="button" class="btn btn-default">{{ $root.strings['checkinlist.switch'] }}</button>
-                </div>
-              </div>
-            </div>
-            <div v-if="status" class="row status">
-              <div class="col-sm-4">
-                <span class="statistic">{{ status.checkin_count }}</span>
-                {{ $root.strings['status.checkin'] }}
-              </div>
-              <div class="col-sm-4">
-                <span class="statistic">{{ status.position_count }}</span>
-                {{ $root.strings['status.position'] }}
-              </div>
-              <div class="col-sm-4">
-                <div class="pull-right">
-                  <button @click="fetchStatus" class="btn btn-default"><span :class="'fa fa-refresh' + (statusLoading ? ' fa-spin': '')"></span></button>
-                </div>
-                <span class="statistic">{{ status.inside_count }}</span>
-                {{ $root.strings['status.inside'] }}
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div :class="'modal modal-unpaid fade' + (showUnpaidModal ? ' in' : '')" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content" v-if="checkResult && checkResult.position">
-          <div class="modal-header">
-            <button type="button" class="close" @click="showUnpaidModal = false">
-              <span class="fa fa-close"></span>
-            </button>
-            <h4 class="modal-title">
-              {{ $root.strings['modal.unpaid.head'] }}
-            </h4>
-          </div>
-          <div class="modal-body">
-            <p>
-              {{ $root.strings['modal.unpaid.text'] }}
-            </p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, false, false, true)">
-              {{ $root.strings['modal.continue'] }}
-            </button>
-            <button type="button" class="btn btn-default" @click="showUnpaidModal = false">
-              {{ $root.strings['modal.cancel'] }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <form :class="'modal modal-questions fade' + (showQuestionsModal ? ' in' : '')" tabindex="-1" role="dialog" ref="questionsModal">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content" v-if="checkResult && checkResult.questions">
-          <div class="modal-header">
-            <button type="button" class="close" @click="showQuestionsModal = false">
-                <span class="fa fa-close"></span>
-            </button>
-            <h4 class="modal-title">
-              {{ $root.strings['modal.questions'] }}
-            </h4>
-          </div>
-          <div class="modal-body">
-            <div :class="q.type === 'M' ? '' : (q.type === 'B' ? 'checkbox' : 'form-group')" v-for="q in checkResult.questions">
-              <label :for="'q_' + q.id" v-if="q.type !== 'B'">
-                {{ q.question }}
-                {{ q.required ? ' *' : '' }}
-              </label>
-
-              <textarea v-if="q.type === 'T'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required"></textarea>
-              <input v-else-if="q.type === 'N'" type="number" v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required">
-              <datefield v-else-if="q.type === 'D'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" :required="q.required"></datefield>
-              <timefield v-else-if="q.type === 'H'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" :required="q.required"></timefield>
-              <datetimefield v-else-if="q.type === 'W'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" :required="q.required"></datetimefield>
-              <select v-else-if="q.type === 'C'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required">
-                <option v-if="!q.required"></option>
-                <option v-for="op in q.options" :value="op.id.toString()">{{ op.answer }}</option>
-              </select>
-              <div v-else-if="q.type === 'F'"><em>file input not supported</em></div>
-              <div v-else-if="q.type === 'M'">
-                <div class="checkbox" v-for="op in q.options">
-                  <label>
-                    <input type="checkbox" :checked="answers[q.id.toString()] && answers[q.id.toString()].split(',').includes(op.id.toString)" @input="answerSetM(q.id.toString(), op.id.toString(), $event.target.checked)">
-                    {{ op.answer }}
-                  </label>
-                </div>
-              </div>
-              <label v-else-if="q.type === 'B'">
-                <input type="checkbox" :checked="answers[q.id.toString()] === 'true'" @input="answers[q.id.toString()] = $event.target.checked.toString()" :required="q.required">
-                {{ q.question }}
-                {{ q.required ? ' *' : '' }}
-              </label>
-              <select v-else-if="q.type === 'CC'" v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required">
-                <option v-if="!q.required"></option>
-                <option v-for="op in countries" :value="op.key">{{ op.value }}</option>
-              </select>
-              <input v-else v-model="answers[q.id.toString()]" :id="'q_' + q.id" class="form-control" :required="q.required">
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, true, true)">
-              {{ $root.strings['modal.continue'] }}
-            </button>
-            <button type="button" class="btn btn-default" @click="showQuestionsModal = false">
-              {{ $root.strings['modal.cancel'] }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
-
-  </div>
-</template>
-<script>
-export default {
-  components: {
-    CheckinlistSelect: CheckinlistSelect.default,
-    SearchresultItem: SearchresultItem.default,
-    Datetimefield: Datetimefield.default,
-    Timefield: Timefield.default,
-    Datefield: Datefield.default,
-  },
-  data() {
-    return {
-      type: 'entry',
-      query: '',
-      searchLoading: false,
-      searchResults: null,
-      searchNextUrl: null,
-      searchError: null,
-      status: null,
-      statusLoading: 0,
-      statusInterval: null,
-      checkLoading: false,
-      checkError: null,
-      checkResult: null,
-      checkinlist: null,
-      clearTimeout: null,
-      showUnpaidModal: false,
-      showQuestionsModal: false,
-      answers: {},
-    }
-  },
-  mounted() {
-    window.addEventListener('focus', this.globalKeydown)
-    document.addEventListener("visibilitychange", this.globalKeydown)
-    document.addEventListener('keydown', this.globalKeydown)
-    this.statusInterval = window.setInterval(this.fetchStatus, 120 * 1000)
-  },
-  destroyed() {
-    window.removeEventListener('focus', this.globalKeydown)
-    document.removeEventListener("visibilitychange", this.globalKeydown)
-    document.removeEventListener('keydown', this.globalKeydown)
-    window.clearInterval(this.statusInterval)
-    window.clearInterval(this.clearTimeout)
-  },
-  computed: {
-    countries() {
-      return JSON.parse(document.querySelector("#countries").innerHTML);
-    },
-    subevent() {
-      if (!this.checkinlist) return ''
-      if (!this.checkinlist.subevent) return ''
-      const name = i18nstring_localize(this.checkinlist.subevent.name)
-      const date = moment.utc(this.checkinlist.subevent.date_from).tz(this.$root.timezone).format(this.$root.datetime_format)
-      return `${name} · ${date}`
-    },
-    checkResultAddons() {
-      if (!this.checkResult) return ''
-      if (!this.checkResult.position.addons) return ''
-      return this.checkResult.position.addons.map((addon) => {
-        if (addon.variation) {
-          return `+ ${addon.item.internal_name || i18nstring_localize(addon.item.name)} – ${i18nstring_localize(addon.variation.value)}`
-        }
-        return "+ " + (addon.item.internal_name || i18nstring_localize(addon.item.name));
-      }).join("\n")
-    },
-    checkResultSubevent() {
-      if (!this.checkResult) return ''
-      if (!this.checkResult.position.subevent) return ''
-      const name = i18nstring_localize(this.checkResult.position.subevent.name)
-      const date = moment.utc(this.checkResult.position.subevent.date_from).tz(this.$root.timezone).format(this.$root.datetime_format)
-      return `${name} · ${date}`
-    },
-    checkResultItemvar() {
-      if (!this.checkResult) return ''
-      if (this.checkResult.position.variation) {
-        return `${i18nstring_localize(this.checkResult.position.item.name)} – ${i18nstring_localize(this.checkResult.position.variation.value)}`
-      }
-      return i18nstring_localize(this.checkResult.position.item.name)
-    },
-    checkResultText () {
-      if (!this.checkResult) return ''
-      if (this.checkResult.status === 'ok') {
-        if (this.type === "exit") {
-          return this.$root.strings['result.exit']
-        }
-        return this.$root.strings['result.ok']
-      } else if (this.checkResult.status === 'incomplete') {
-        return this.$root.strings['result.questions']
-      } else if (this.$root.strings['result.' + this.checkResult.reason]) {
-        return this.$root.strings['result.' + this.checkResult.reason]
-      } else {
-        return this.checkResult.reason
-      }
-    },
-    checkResultColor () {
-      if (!this.checkResult) return ''
-      if (this.checkResult.status === 'ok') {
-        return "green";
-      } else if (this.checkResult.status === 'incomplete') {
-        return "purple";
-      } else {
-        if (this.checkResult.reason === 'already_redeemed') return "orange";
-        return "red";
-      }
-    },
-  },
-  filters: {
-    i18nstring_localize (value) {
-      return i18nstring_localize(value);
-    },
-    answer (value, question, timezone, strings) {
-      if (question.type === "B" && value === "True") {
-        return strings['yes']
-      } else if (question.type === "B" && value === "False") {
-        return strings['no']
-      } else if (question.type === "W" && !!value) {
-        return moment(value).tz(timezone).format("L LT")
-      } else if (question.type === "D" && !!value) {
-        return moment(value).format("L")
-      } else {
-        return value
-      }
-    },
-  },
-  methods: {
-    selectResult(res) {
-      this.check(res.id, false, false, false, false)
-    },
-    answerSetM(qid, opid, checked) {
-      let arr = this.answers[qid] ? this.answers[qid].split(',') : [];
-      if (checked && !arr.includes(opid)) {
-        arr.push(opid)
-      } else if (!checked) {
-        arr = arr.filter(o => opid !== o)
-      }
-      this.answers[qid] = arr.join(',')
-    },
-    clear() {
-      this.query = ''
-      this.searchLoading = false
-      this.searchResults = null
-      this.searchNextUrl = null
-      this.searchError = null
-      this.checkLoading = false
-      this.checkError = null
-      this.checkResult = null
-      this.showUnpaidModal = false
-      this.showQuestionsModal = false
-      this.answers = {}
-    },
-    check(id, ignoreUnpaid, keepAnswers, fallbackToSearch, untrusted) {
-      if (!keepAnswers) {
-        this.answers = {}
-      } else if (this.showQuestionsModal) {
-        if (!this.$refs.questionsModal.reportValidity()) {
-          return
-        }
-      }
-      this.showUnpaidModal = false
-      this.showQuestionsModal = false
-      this.checkLoading = true
-      this.checkError = null
-      this.checkResult = {}
-      window.clearInterval(this.clearTimeout)
-
-      this.$nextTick(() => {
-        this.$refs.input.blur()
-      })
-
-      let url = this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=subevent&expand=variation&expand=answers.question&expand=addons'
-      if (untrusted)  {
-        url += '&untrusted_input=true'
-      }
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'X-CSRFToken': document.querySelector("input[name=csrfmiddlewaretoken]").value,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          questions_supported: true,
-          canceled_supported: true,
-          ignore_unpaid: ignoreUnpaid || false,
-          type: this.type,
-          answers: this.answers,
-        })
-      })
-          .then(response => {
-            if (response.status === 404) {
-              return {
-                status: 'error',
-                reason: 'invalid',
-              }
-            }
-            if (!response.ok && [401, 403].includes(response.status)) {
-              window.location.href = '/control/login?next=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
-            }
-            if (!response.ok && response.status != 400) {
-              throw new Error("HTTP status " + response.status);
-            }
-            return response.json()
-          })
-          .then(data => {
-            this.checkLoading = false
-            this.checkResult = data
-            if (this.checkinlist.include_pending && data.status === 'error' && data.reason === 'unpaid') {
-              this.showUnpaidModal = true
-              this.$nextTick(() => {
-                document.querySelector(".modal-unpaid .btn-primary").focus()
-              })
-            } else if (data.status === 'incomplete') {
-              this.showQuestionsModal = true
-              for (const q of this.checkResult.questions) {
-                if (!this.answers[q.id.toString()]) {
-                  this.answers[q.id.toString()] = ""
-                }
-                q.question = i18nstring_localize(q.question)
-                for (const o of q.options) {
-                  o.answer = i18nstring_localize(o.answer)
-                }
-              }
-              this.$nextTick(() => {
-                document.querySelector(".modal-questions input, .modal-questions select, .modal-questions textarea").focus()
-              })
-            } else if (data.status === 'error' && data.reason === 'invalid' && fallbackToSearch) {
-              this.startSearch(false)
-            } else {
-              this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
-              this.fetchStatus()
-            }
-          })
-          .catch(reason => {
-            this.checkLoading = false
-            this.checkResult = {}
-            this.checkError = reason.toString()
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
-          })
-    },
-    globalKeydown(e) {
-      if (document.activeElement.classList.contains('searchresult') && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
-        if (e.key === 'ArrowDown') {
-          document.activeElement.nextElementSibling.focus()
-          e.preventDefault()
-          return true
-        }
-        if (e.key === 'ArrowUp') {
-          document.activeElement.previousElementSibling.focus()
-          e.preventDefault()
-          return true
-        }
-      }
-      if (document.activeElement.nodeName.toLowerCase() !== 'input' && document.activeElement.nodeName.toLowerCase() !== 'textarea') {
-        if (e.key && e.key.match(/^[a-z0-9A-Z+/=<>#]$/)) {
-          this.query = ''
-          this.refocus()
-        }
-      }
-    },
-    refocus() {
-      this.$nextTick(() => {
-        this.$refs.input.focus()
-      })
-    },
-    inputKeyup(e) {
-      if (e.key === "Enter") {
-        this.startSearch(true)
-      } else if (this.query === '') {
-        this.clear()
-      }
-    },
-    startSearch(fallbackToScan) {
-      if (this.query.length >= 32 && fallbackToScan) {
-        // likely a secret, not a search result
-        this.check(this.query, false, false, true, true)
-        return
-      }
-
-      this.checkResult = null
-      this.searchLoading = true
-      this.searchError = null
-      this.searchResults = []
-      this.answers = {}
-
-      window.clearInterval(this.clearTimeout)
-      fetch(this.$root.api.lists + this.checkinlist.id + '/positions/?ignore_status=true&expand=subevent&expand=item&expand=variation&check_rules=true&search=' + encodeURIComponent(this.query))
-          .then(response => {
-            if (!response.ok && [401, 403].includes(response.status)) {
-              window.location.href = '/control/login?next=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
-            }
-            return response.json()
-          })
-          .then(data => {
-            this.searchLoading = false
-            if (data.results) {
-              this.searchResults = data.results
-              this.searchNextUrl = data.next
-              if (data.results.length) {
-                if (data.results[0].secret === this.query) {
-                  this.$nextTick(() => {
-                    this.$refs.input.blur()
-                    this.$refs.result[0].$refs.a.click()
-                  })
-                } else {
-                  this.$nextTick(() => {
-                    this.$refs.result[0].$refs.a.focus()
-                  })
-                }
-              } else {
-                this.$nextTick(() => {
-                  this.$refs.input.blur()
-                })
-              }
-            } else {
-              this.searchError = data
-            }
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
-          })
-          .catch(reason => {
-            this.searchLoading = false
-            this.searchResults = []
-            this.searchError = reason
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
-          })
-    },
-    searchNext() {
-      this.searchLoading = true
-      this.searchError = null
-      window.clearInterval(this.clearTimeout)
-      fetch(this.searchNextUrl)
-          .then(response => response.json())
-          .then(data => {
-            this.searchLoading = false
-            if (data.results) {
-              this.searchResults.push(...data.results)
-              this.searchNextUrl = data.next
-            } else {
-              this.searchError = data
-            }
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
-          })
-          .catch(reason => {
-            this.searchLoading = false
-            this.searchError = reason
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
-          })
-    },
-    switchType() {
-      this.type = this.type === 'exit' ? 'entry' : 'exit'
-      this.refocus()
-    },
-    switchList() {
-      location.hash = ''
-      this.checkinlist = null
-    },
-    fetchStatus() {
-      this.statusLoading++
-      fetch(this.$root.api.lists + this.checkinlist.id + '/status/')
-              .then(response => response.json())
-              .then(data => {
-                this.statusLoading--
-                this.status = data
-              })
-              .catch(reason => {
-                this.statusLoading--
-              })
-    },
-    selectList(list) {
-      this.checkinlist = list
-      location.hash = '#' + list.id
-      this.refocus()
-      this.fetchStatus()
-    }
-  }
+function selectList (list: CheckinList) {
+	checkinlist.value = list
+	location.hash = '#' + list.id
+	refocus()
+	fetchStatus()
 }
+
+function switchList () {
+	location.hash = ''
+	checkinlist.value = null
+}
+
+// Entry/Exit type
+const type = ref<'entry' | 'exit'>('entry')
+
+function switchType () {
+	type.value = type.value === 'exit' ? 'entry' : 'exit'
+	refocus()
+}
+
+// Input/query
+const inputEl = ref<HTMLInputElement>()
+const query = ref('')
+
+function refocus () {
+	nextTick(() => {
+		inputEl.value?.focus()
+	})
+}
+
+function inputKeyup (e: KeyboardEvent) {
+	if (e.key === 'Enter') {
+		startSearch(true)
+	} else if (query.value === '') {
+		clear()
+	}
+}
+
+function globalKeydown (e: KeyboardEvent | Event) {
+	if (!(e instanceof KeyboardEvent)) {
+		refocus()
+		return
+	}
+
+	if (document.activeElement?.classList.contains('searchresult')) {
+		if (e.key === 'ArrowDown') {
+			(document.activeElement.nextElementSibling as HTMLElement)?.focus()
+			e.preventDefault()
+			return
+		}
+		if (e.key === 'ArrowUp') {
+			(document.activeElement.previousElementSibling as HTMLElement)?.focus()
+			e.preventDefault()
+			return
+		}
+	}
+
+	const nodeName = document.activeElement?.nodeName?.toLowerCase()
+	if (nodeName !== 'input' && nodeName !== 'textarea') {
+		if (e.key?.match(/^[a-z0-9A-Z+/=<>#]$/)) {
+			query.value = ''
+			refocus()
+		}
+	}
+}
+
+// Status
+const status = ref<CheckinStatus | null>(null)
+const statusLoading = ref(0)
+let statusInterval: ReturnType<typeof setInterval> | null = null
+
+async function fetchStatus () {
+	if (!checkinlist.value) return
+
+	statusLoading.value++
+	try {
+		status.value = await api.fetchStatus(checkinlist.value.id)
+	} finally {
+		statusLoading.value--
+	}
+}
+
+// Check/redeem
+const checkLoading = ref(false)
+const checkError = ref<string | null>(null)
+const checkResult = ref<RedeemResponse | null>(null)
+
+const checkResultAddons = computed(() => {
+	if (!checkResult.value?.position?.addons) return ''
+	return checkResult.value.position.addons.map((addon) => {
+		if (addon.variation) {
+			return `+ ${addon.item.internal_name || i18nstringLocalize(addon.item.name)} – ${i18nstringLocalize(addon.variation.value)}`
+		}
+		return '+ ' + (addon.item.internal_name || i18nstringLocalize(addon.item.name))
+	}).join('\n')
+})
+
+const checkResultSubevent = computed(() => formatSubevent(checkResult.value?.position?.subevent))
+
+const checkResultItemvar = computed(() => {
+	if (!checkResult.value?.position) return ''
+	if (checkResult.value.position.variation) {
+		return `${i18nstringLocalize(checkResult.value.position.item.name)} – ${i18nstringLocalize(checkResult.value.position.variation.value)}`
+	}
+	return i18nstringLocalize(checkResult.value.position.item.name)
+})
+
+const checkResultText = computed(() => {
+	if (!checkResult.value) return ''
+	if (checkResult.value.status === 'ok') {
+		return type.value === 'exit' ? STRINGS['result.exit'] : STRINGS['result.ok']
+	} else if (checkResult.value.status === 'incomplete') {
+		return STRINGS['result.questions']
+	} else if (checkResult.value.reason && STRINGS['result.' + checkResult.value.reason]) {
+		return STRINGS['result.' + checkResult.value.reason]
+	}
+	return checkResult.value.reason ?? ''
+})
+
+const checkResultColor = computed(() => {
+	if (!checkResult.value) return ''
+	if (checkResult.value.status === 'ok') return 'green'
+	if (checkResult.value.status === 'incomplete') return 'purple'
+	if (checkResult.value.reason === 'already_redeemed') return 'orange'
+	return 'red'
+})
+
+// Modals
+const showUnpaidModal = ref(false)
+const showQuestionsModal = ref(false)
+const questionsModalEl = ref<HTMLFormElement>()
+
+function answerSetM (qid: string, opid: string, checked: boolean) {
+	let arr = answers.value[qid] ? answers.value[qid].split(',') : []
+	if (checked && !arr.includes(opid)) {
+		arr.push(opid)
+	} else if (!checked) {
+		arr = arr.filter(o => opid !== o)
+	}
+	answers.value[qid] = arr.join(',')
+}
+
+// Search
+const searchLoading = ref(false)
+const searchResults = ref<Position[] | null>(null)
+const searchNextUrl = ref<string | null>(null)
+const searchError = ref<unknown>(null)
+const resultEls = ref<InstanceType<typeof SearchresultItem>[]>([])
+
+function selectResult (position: Position) {
+	check(position.secret, false, false, false, false)
+}
+
+async function startSearch (fallbackToScan: boolean) {
+	if (query.value.length >= 32 && fallbackToScan) {
+		check(query.value, false, false, true, true)
+		return
+	}
+
+	checkResult.value = null
+	searchLoading.value = true
+	searchError.value = null
+	searchResults.value = []
+	answers.value = {}
+
+	if (clearTimeoutId) {
+		clearTimeout(clearTimeoutId)
+		clearTimeoutId = null
+	}
+
+	try {
+		const data = await api.searchPositions(checkinlist.value!.id, query.value)
+		searchLoading.value = false
+
+		if (data.results) {
+			searchResults.value = data.results
+			searchNextUrl.value = data.next
+
+			if (data.results.length) {
+				if (data.results[0].secret === query.value) {
+					nextTick(() => {
+						inputEl.value?.blur()
+						resultEls.value[0]?.el?.click()
+					})
+				} else {
+					nextTick(() => {
+						resultEls.value[0]?.el?.focus()
+					})
+				}
+			} else {
+				nextTick(() => {
+					inputEl.value?.blur()
+				})
+			}
+		} else {
+			searchError.value = data
+		}
+
+		clearTimeoutId = setTimeout(clear, 30 * 1000)
+	} catch (e) {
+		searchLoading.value = false
+		searchResults.value = []
+		searchError.value = e
+		clearTimeoutId = setTimeout(clear, 30 * 1000)
+	}
+}
+
+async function searchNext () {
+	if (!searchNextUrl.value) return
+
+	searchLoading.value = true
+	searchError.value = null
+
+	if (clearTimeoutId) {
+		clearTimeout(clearTimeoutId)
+		clearTimeoutId = null
+	}
+
+	try {
+		const data = await api.fetchNextPage<Position>(searchNextUrl.value)
+		searchLoading.value = false
+
+		if (data.results) {
+			searchResults.value = [...(searchResults.value ?? []), ...data.results]
+			searchNextUrl.value = data.next
+		} else {
+			searchError.value = data
+		}
+
+		clearTimeoutId = setTimeout(clear, 30 * 1000)
+	} catch (e) {
+		searchLoading.value = false
+		searchError.value = e
+		clearTimeoutId = setTimeout(clear, 30 * 1000)
+	}
+}
+
+async function check (
+	id: string,
+	ignoreUnpaid: boolean,
+	keepAnswers: boolean,
+	fallbackToSearch: boolean,
+	untrusted: boolean
+) {
+	if (!keepAnswers) {
+		answers.value = {}
+	} else if (showQuestionsModal.value) {
+		if (!questionsModalEl.value?.reportValidity()) return
+	}
+
+	showUnpaidModal.value = false
+	showQuestionsModal.value = false
+	checkLoading.value = true
+	checkError.value = null
+	checkResult.value = {} as RedeemResponse
+
+	if (clearTimeoutId) {
+		clearTimeout(clearTimeoutId)
+		clearTimeoutId = null
+	}
+
+	nextTick(() => {
+		inputEl.value?.blur()
+	})
+
+	try {
+		const data = await api.redeemPosition(
+			checkinlist.value!.id,
+			id,
+			{
+				questions_supported: true,
+				canceled_supported: true,
+				ignore_unpaid: ignoreUnpaid,
+				type: type.value,
+				answers: answers.value,
+			},
+			untrusted
+		)
+
+		checkLoading.value = false
+		checkResult.value = data
+
+		if (checkinlist.value?.include_pending && data.status === 'error' && data.reason === 'unpaid') {
+			showUnpaidModal.value = true
+			nextTick(() => {
+				document.querySelector<HTMLButtonElement>('.modal-unpaid .btn-primary')?.focus()
+			})
+		} else if (data.status === 'incomplete' && data.questions) {
+			showQuestionsModal.value = true
+			for (const q of data.questions) {
+				if (!answers.value[q.id.toString()]) {
+					answers.value[q.id.toString()] = ''
+				}
+				;(q as AnswerQuestion).question = i18nstringLocalize(q.question)
+				for (const o of q.options) {
+					;(o as { answer: string }).answer = i18nstringLocalize(o.answer)
+				}
+			}
+			nextTick(() => {
+				document.querySelector<HTMLElement>('.modal-questions input, .modal-questions select, .modal-questions textarea')?.focus()
+			})
+		} else if (data.status === 'error' && data.reason === 'invalid' && fallbackToSearch) {
+			startSearch(false)
+		} else {
+			clearTimeoutId = setTimeout(clear, 30 * 1000)
+			fetchStatus()
+		}
+	} catch (e) {
+		checkLoading.value = false
+		checkResult.value = {} as RedeemResponse
+		checkError.value = String(e)
+		clearTimeoutId = setTimeout(clear, 30 * 1000)
+	}
+}
+
+function clear () {
+	query.value = ''
+	searchLoading.value = false
+	searchResults.value = null
+	searchNextUrl.value = null
+	searchError.value = null
+	checkLoading.value = false
+	checkError.value = null
+	checkResult.value = null
+	showUnpaidModal.value = false
+	showQuestionsModal.value = false
+	answers.value = {}
+}
+
+onMounted(() => {
+	window.addEventListener('focus', globalKeydown)
+	document.addEventListener('visibilitychange', globalKeydown)
+	document.addEventListener('keydown', globalKeydown)
+	statusInterval = setInterval(fetchStatus, 120 * 1000)
+})
+
+onUnmounted(() => {
+	window.removeEventListener('focus', globalKeydown)
+	document.removeEventListener('visibilitychange', globalKeydown)
+	document.removeEventListener('keydown', globalKeydown)
+	if (statusInterval) clearInterval(statusInterval)
+	if (clearTimeoutId) clearTimeout(clearTimeoutId)
+})
 </script>
+<template lang="pug">
+.container
+	h1 {{ props.eventName }}
+
+	CheckinlistSelect(v-if="!checkinlist", @selected="selectList")
+
+	input.form-control.scan-input(
+		v-if="checkinlist",
+		ref="inputEl",
+		v-model="query",
+		:placeholder="STRINGS['input.placeholder']",
+		@keyup="inputKeyup"
+	)
+
+	.panel.panel-primary.check-result(v-if="checkResult !== null")
+		.panel-heading
+			a.pull-right(href="#", tabindex="-1", @click.prevent="clear")
+				span.fa.fa-close
+			h3.panel-title {{ STRINGS['check.headline'] }}
+		.panel-body.text-center(v-if="checkLoading")
+			span.fa.fa-4x.fa-cog.fa-spin.loading-icon
+		.panel-body.text-center(v-else-if="checkError") {{ checkError }}
+		.check-result-status(:class="'check-result-' + checkResultColor")
+			.check-result-text {{ checkResultText }}
+			.check-result-item {{ checkResultItemvar }}
+			.check-result-reason(v-if="checkResult.reason_explanation") {{ checkResult.reason_explanation }}
+		.attention(v-if="checkResult && checkResult.require_attention")
+			span.fa.fa-warning
+			| {{ STRINGS['check.attention'] }}
+		.panel-body(v-if="checkResult.position")
+			.details
+				code {{ checkResult.position.order }}-{{ checkResult.position.positionid }}
+				h4 {{ checkResult.position.attendee_name }}
+				.addons(v-if="checkResultAddons") {{ checkResultAddons }}
+				span(v-if="checkResultSubevent") {{ checkResultSubevent }}
+					br
+				span.secret {{ checkResult.position.secret }}
+				span(v-if="checkResult.position.seat")
+					br
+					| {{ checkResult.position.seat.name }}
+				span(v-for="a in checkResult.position.answers")
+					span(v-if="a.question.show_during_checkin")
+						br
+						strong {{ i18nstringLocalize(a.question.question) }}:
+						|  {{ formatAnswer(a.answer, a.question) }}
+				strong(v-for="t in checkResult.checkin_texts")
+					br
+					| {{ t }}
+
+	.panel.panel-primary.search-results(v-else-if="searchResults !== null")
+		.panel-heading
+			a.pull-right(href="#", tabindex="-1", @click.prevent="clear")
+				span.fa.fa-close
+			h3.panel-title {{ STRINGS['results.headline'] }}
+		ul.list-group
+			SearchresultItem(
+				v-for="(p, idx) in searchResults",
+				:ref="el => { if (el) resultEls[idx] = el }",
+				:key="p.id",
+				:position="p",
+				@selected="selectResult"
+			)
+			li.list-group-item.text-center(v-if="!searchResults.length && !searchLoading")
+				| {{ STRINGS['results.none'] }}
+			li.list-group-item.text-center(v-if="searchLoading")
+				span.fa.fa-4x.fa-cog.fa-spin.loading-icon
+			li.list-group-item.text-center(v-else-if="searchError") {{ searchError }}
+			a.list-group-item.text-center(v-else-if="searchNextUrl", href="#", @click.prevent="searchNext")
+				| {{ STRINGS['pagination.next'] }}
+
+	div(v-else-if="checkinlist")
+		.panel.panel-default
+			.panel-body.meta
+				.row.settings
+					.col-sm-6
+						div
+							span.fa(:class="'fa-sign-' + (type === 'exit' ? 'out' : 'in')")
+							|  {{ STRINGS['scantype.' + type] }}
+							br
+							button.btn.btn-default(@click="switchType")
+								span.fa.fa-refresh
+								|  {{ STRINGS['scantype.switch'] }}
+					.col-sm-6
+						div(v-if="checkinlist")
+							| {{ checkinlist.name }}
+							br
+							template(v-if="subevent")
+								| {{ subevent }}
+								br
+							button.btn.btn-default(type="button", @click="switchList")
+								| {{ STRINGS['checkinlist.switch'] }}
+				.row.status(v-if="status")
+					.col-sm-4
+						span.statistic {{ status.checkin_count }}
+						|  {{ STRINGS['status.checkin'] }}
+					.col-sm-4
+						span.statistic {{ status.position_count }}
+						|  {{ STRINGS['status.position'] }}
+					.col-sm-4
+						.pull-right
+							button.btn.btn-default(@click="fetchStatus")
+								span.fa.fa-refresh(:class="{ 'fa-spin': statusLoading }")
+						span.statistic {{ status.inside_count }}
+						|  {{ STRINGS['status.inside'] }}
+
+	.modal.modal-unpaid.fade(:class="{ in: showUnpaidModal }", tabindex="-1", role="dialog")
+		.modal-dialog(role="document")
+			.modal-content(v-if="checkResult && checkResult.position")
+				.modal-header
+					button.close(type="button", @click="showUnpaidModal = false")
+						span.fa.fa-close
+					h4.modal-title {{ STRINGS['modal.unpaid.head'] }}
+				.modal-body
+					p {{ STRINGS['modal.unpaid.text'] }}
+				.modal-footer
+					button.btn.btn-primary.pull-right(
+						type="button",
+						@click="check(checkResult.position.secret, true, false, false, true)"
+					) {{ STRINGS['modal.continue'] }}
+					button.btn.btn-default(type="button", @click="showUnpaidModal = false")
+						| {{ STRINGS['modal.cancel'] }}
+
+	form.modal.modal-questions.fade(
+		ref="questionsModalEl",
+		:class="{ in: showQuestionsModal }",
+		tabindex="-1",
+		role="dialog"
+	)
+		.modal-dialog(role="document")
+			.modal-content(v-if="checkResult && checkResult.questions")
+				.modal-header
+					button.close(type="button", @click="showQuestionsModal = false")
+						span.fa.fa-close
+					h4.modal-title {{ STRINGS['modal.questions'] }}
+				.modal-body
+					div(
+						v-for="q in checkResult.questions",
+						:class="q.type === 'M' ? '' : (q.type === 'B' ? 'checkbox' : 'form-group')"
+					)
+						label(v-if="q.type !== 'B'", :for="'q_' + q.id")
+							| {{ q.question }}
+							| {{ q.required ? ' *' : '' }}
+
+						textarea.form-control(
+							v-if="q.type === 'T'",
+							:id="'q_' + q.id",
+							v-model="answers[q.id.toString()]",
+							:required="q.required"
+						)
+						input.form-control(
+							v-else-if="q.type === 'N'",
+							:id="'q_' + q.id",
+							v-model="answers[q.id.toString()]",
+							type="number",
+							:required="q.required"
+						)
+						Datefield(
+							v-else-if="q.type === 'D'",
+							:id="'q_' + q.id",
+							v-model="answers[q.id.toString()]",
+							:required="q.required"
+						)
+						Timefield(
+							v-else-if="q.type === 'H'",
+							:id="'q_' + q.id",
+							v-model="answers[q.id.toString()]",
+							:required="q.required"
+						)
+						Datetimefield(
+							v-else-if="q.type === 'W'",
+							:id="'q_' + q.id",
+							v-model="answers[q.id.toString()]",
+							:required="q.required"
+						)
+						select.form-control(
+							v-else-if="q.type === 'C'",
+							:id="'q_' + q.id",
+							v-model="answers[q.id.toString()]",
+							:required="q.required"
+						)
+							option(v-if="!q.required")
+							option(v-for="op in q.options", :value="op.id.toString()") {{ op.answer }}
+						div(v-else-if="q.type === 'F'")
+							em file input not supported
+						div(v-else-if="q.type === 'M'")
+							.checkbox(v-for="op in q.options")
+								label
+									input(
+										type="checkbox",
+										:checked="answers[q.id.toString()] && answers[q.id.toString()].split(',').includes(op.id.toString())",
+										@input="answerSetM(q.id.toString(), op.id.toString(), $event.target.checked)"
+									)
+									|  {{ op.answer }}
+						label(v-else-if="q.type === 'B'")
+							input(
+								type="checkbox",
+								:checked="answers[q.id.toString()] === 'true'",
+								:required="q.required",
+								@input="answers[q.id.toString()] = $event.target.checked.toString()"
+							)
+							|  {{ q.question }}
+							| {{ q.required ? ' *' : '' }}
+						select.form-control(
+							v-else-if="q.type === 'CC'",
+							:id="'q_' + q.id",
+							v-model="answers[q.id.toString()]",
+							:required="q.required"
+						)
+							option(v-if="!q.required")
+							option(v-for="op in COUNTRIES", :value="op.key") {{ op.value }}
+						input.form-control(
+							v-else,
+							:id="'q_' + q.id",
+							v-model="answers[q.id.toString()]",
+							:required="q.required"
+						)
+				.modal-footer
+					button.btn.btn-primary.pull-right(
+						type="button",
+						@click="check(checkResult.position.secret, true, true, false, false)"
+					) {{ STRINGS['modal.continue'] }}
+					button.btn.btn-default(type="button", @click="showQuestionsModal = false")
+						| {{ STRINGS['modal.cancel'] }}
+</template>

@@ -39,13 +39,10 @@ from decimal import Decimal
 import paypalrestsdk
 import paypalrestsdk.exceptions
 from django.contrib import messages
-from django.core import signing
 from django.db.models import Sum
-from django.http import HttpResponse, HttpResponseBadRequest
-from django.shortcuts import render
+from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django_scopes import scopes_disabled
@@ -59,21 +56,6 @@ from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.plugins.paypal.payment import Paypal
 
 logger = logging.getLogger('pretix.plugins.paypal')
-
-
-@xframe_options_exempt
-def redirect_view(request, *args, **kwargs):
-    signer = signing.Signer(salt='safe-redirect')
-    try:
-        url = signer.unsign(request.GET.get('url', ''))
-    except signing.BadSignature:
-        return HttpResponseBadRequest('Invalid parameter')
-
-    r = render(request, 'pretixplugins/paypal/redirect.html', {
-        'url': url,
-    })
-    r._csp_ignore = True
-    return r
 
 
 def success(request, *args, **kwargs):

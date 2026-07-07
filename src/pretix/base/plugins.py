@@ -49,14 +49,39 @@ class PluginType(Enum):
     EXPORT = 4
 
 
+def plugin_is_available(meta, event=None, organizer=None):
+    if not hasattr(meta.app, 'is_available'):
+        return True
+
+    level = getattr(meta, "level", PLUGIN_LEVEL_EVENT)
+    if level == PLUGIN_LEVEL_EVENT:
+        if event:
+            return meta.app.is_available(event)
+        elif organizer:
+            if not hasattr(organizer, '_plugin_availability_fallback_event'):
+                with scope(organizer=organizer):
+                    setattr(organizer, '_plugin_availability_fallback_event', organizer.events.first())
+            return (
+                organizer._plugin_availability_fallback_event
+                and meta.app.is_available(organizer._plugin_availability_fallback_event)
+            )
+    elif level == PLUGIN_LEVEL_ORGANIZER:
+        if organizer:
+            return meta.app.is_available(organizer)
+        elif event:
+            return meta.app.is_available(event.organizer)
+    elif level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID and (event or organizer):
+        return meta.app.is_available(event or organizer)
+
+    return True
+
+
 def get_all_plugins(*, event=None, organizer=None) -> List[type]:
     """
     Returns the PretixPluginMeta classes of all plugins found in the installed Django apps.
     """
     assert not event or not organizer
     plugins = []
-    event_fallback = None
-    event_fallback_used = False
     for app in apps.get_app_configs():
         if hasattr(app, 'PretixPluginMeta'):
             meta = app.PretixPluginMeta
@@ -65,28 +90,8 @@ def get_all_plugins(*, event=None, organizer=None) -> List[type]:
             if app.name in settings.PRETIX_PLUGINS_EXCLUDE:
                 continue
 
-            level = getattr(meta, "level", PLUGIN_LEVEL_EVENT)
-            if level == PLUGIN_LEVEL_EVENT:
-                if event and hasattr(app, 'is_available'):
-                    if not app.is_available(event):
-                        continue
-                elif organizer and hasattr(app, 'is_available'):
-                    if not event_fallback_used:
-                        with scope(organizer=organizer):
-                            event_fallback = organizer.events.first()
-                        event_fallback_used = True
-                    if not event_fallback or not app.is_available(event_fallback):
-                        continue
-            elif level == PLUGIN_LEVEL_ORGANIZER:
-                if organizer and hasattr(app, 'is_available'):
-                    if not app.is_available(organizer):
-                        continue
-                elif event and hasattr(app, 'is_available'):
-                    if not app.is_available(event.organizer):
-                        continue
-            elif level == PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID and (event or organizer) and hasattr(app, 'is_available'):
-                if not app.is_available(event or organizer):
-                    continue
+            if not plugin_is_available(meta, event, organizer):
+                continue
 
             plugins.append(meta)
     return sorted(

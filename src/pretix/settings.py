@@ -58,10 +58,11 @@ from django.utils.translation import gettext_lazy as _  # NOQA
 
 _config = configparser.RawConfigParser()
 if 'PRETIX_CONFIG_FILE' in os.environ:
-    _config.read_file(open(os.environ.get('PRETIX_CONFIG_FILE'), encoding='utf-8'))
+    config_files = [os.environ['PRETIX_CONFIG_FILE']]
 else:
-    _config.read(['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg'],
-                 encoding='utf-8')
+    config_files = ['/etc/pretix/pretix.cfg', os.path.expanduser('~/.pretix.cfg'), 'pretix.cfg']
+
+_config.read(config_files, encoding='utf-8')
 config = EnvOrParserConfig(_config)
 
 CONFIG_FILE = config
@@ -99,6 +100,11 @@ SECRET_KEY_FALLBACKS = []
 for i in range(10):
     if config.has_option('django', f'secret_fallback{i}'):
         SECRET_KEY_FALLBACKS.append(config.get('django', f'secret_fallback{i}'))
+fallback_secret_file_key = config._file_envkey('django', 'secret_fallbacks')  # FILE__PRETIX_DJANGO_SECRET_FALLBACKS
+if fallback_secret_file_key in os.environ and os.path.exists(os.environ[fallback_secret_file_key]):
+    with open(os.environ[fallback_secret_file_key], 'r') as f:
+        for line in f:
+            SECRET_KEY_FALLBACKS.append(line.strip())
 
 
 # Adjustable settings
@@ -157,7 +163,7 @@ DATABASES = {
         'HOST': config.get('database', 'host', fallback=''),
         'PORT': config.get('database', 'port', fallback=''),
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
-        'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',  # Will only be used from Django 4.1 onwards
+        'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',
         'DISABLE_SERVER_SIDE_CURSORS': db_disable_server_side_cursors,
         'OPTIONS': db_options,
         'TEST': {}
@@ -178,6 +184,21 @@ if config.has_section('replica'):
         'TEST': {}
     }
     DATABASE_ROUTERS = ['pretix.helpers.database.ReplicaRouter']
+
+if config.has_section('dbreadonly'):
+    DATABASES['readonly'] = {
+        'ENGINE': 'django.db.backends.' + db_backend,
+        'NAME': config.get('dbreadonly', 'name', fallback=DATABASES['default']['NAME']),
+        'USER': config.get('dbreadonly', 'user', fallback=DATABASES['default']['USER']),
+        'PASSWORD': config.get('dbreadonly', 'password', fallback=DATABASES['default']['PASSWORD']),
+        'HOST': config.get('dbreadonly', 'host', fallback=DATABASES['default']['HOST']),
+        'PORT': config.get('dbreadonly', 'port', fallback=DATABASES['default']['PORT']),
+        'CONN_MAX_AGE': 0,  # do not spam primary with open connections as long as readonly is only used occasionally
+        'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',
+        'DISABLE_SERVER_SIDE_CURSORS': db_disable_server_side_cursors,
+        'OPTIONS': db_options,
+        'TEST': {}
+    }
 
 STATIC_URL = config.get('urls', 'static', fallback='/static/')
 
@@ -208,6 +229,7 @@ CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).scheme + '://' + urlparse(SITE_URL).h
 
 TRUST_X_FORWARDED_FOR = config.getboolean('pretix', 'trust_x_forwarded_for', fallback=False)
 USE_X_FORWARDED_HOST = config.getboolean('pretix', 'trust_x_forwarded_host', fallback=False)
+ALLOW_HTTP_TO_PRIVATE_NETWORKS = config.getboolean('pretix', 'allow_http_to_private_networks', fallback=False)
 
 
 REQUEST_ID_HEADER = config.get('pretix', 'request_id_header', fallback=False)
@@ -248,7 +270,8 @@ EMAIL_HOST_PASSWORD = config.get('mail', 'password', fallback='')
 EMAIL_USE_TLS = config.getboolean('mail', 'tls', fallback=False)
 EMAIL_USE_SSL = config.getboolean('mail', 'ssl', fallback=False)
 EMAIL_SUBJECT_PREFIX = '[pretix] '
-EMAIL_BACKEND = EMAIL_CUSTOM_SMTP_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_CUSTOM_SMTP_BACKEND = 'pretix.base.email.CheckPrivateNetworkSmtpBackend'
 EMAIL_TIMEOUT = 60
 
 ADMINS = [('Admin', n) for n in config.get('mail', 'admins', fallback='').split(",") if n]
@@ -422,6 +445,7 @@ CSRF_COOKIE_NAME = 'pretix_csrftoken'
 SESSION_COOKIE_HTTPONLY = True
 
 INSTALLED_APPS += [ # noqa
+    'django_querytagger',
     'django_filters',
     'django_markup',
     'django_otp',
@@ -487,6 +511,7 @@ MIDDLEWARE = [
     'pretix.helpers.logs.RequestIdMiddleware',
     'pretix.api.middleware.IdempotencyMiddleware',
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
+    'django_querytagger.middleware.SetTagMiddleware',  # after MultiDomainMiddleware for correct url resolving
     'pretix.base.middleware.CustomCommonMiddleware',
     'pretix.multidomain.middlewares.SessionMiddleware',
     'pretix.multidomain.middlewares.CsrfViewMiddleware',
@@ -498,6 +523,7 @@ MIDDLEWARE = [
     'pretix.control.middleware.AuditLogMiddleware',
     'pretix.base.middleware.LocaleMiddleware',
     'pretix.base.middleware.SecurityMiddleware',
+    'pretix.base.middleware.RejectInvalidInputMiddleware',
     'pretix.presale.middleware.EventMiddleware',
     'pretix.api.middleware.ApiScopeMiddleware',
 ]
@@ -605,6 +631,9 @@ LOGGING = {
         'request_id': {
             '()': 'pretix.helpers.logs.RequestIdFilter'
         },
+        'skip_not_found': {
+            '()': 'pretix.helpers.logs.SkipNotFoundFilter',
+        }
     },
     'handlers': {
         'console': {
@@ -646,6 +675,7 @@ LOGGING = {
             'handlers': ['file', 'console', 'mail_admins'],
             'level': loglevel,
             'propagate': True,
+            'filters': ['skip_not_found'],
         },
         'pretix.security.csp': {
             'handlers': ['csp_file'],
@@ -686,11 +716,12 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
     from sentry_sdk.integrations.logging import (
         LoggingIntegration, ignore_logger,
     )
-    from sentry_sdk.scrubber import EventScrubber, DEFAULT_DENYLIST
+    from sentry_sdk.scrubber import DEFAULT_DENYLIST, EventScrubber
 
     from .sentry import PretixSentryIntegration, setup_custom_filters
 
     SENTRY_TOKEN = config.get('sentry', 'traces_sample_token', fallback='')
+    SENTRY_ENABLE_LOGS = config.getboolean('sentry', 'enable_logs', fallback=False)
     pretix_denylist = DEFAULT_DENYLIST + [
         "access_token",
         "sentry_dsn",
@@ -715,7 +746,8 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
             CeleryIntegration(),
             LoggingIntegration(
                 level=logging.INFO,
-                event_level=logging.CRITICAL
+                event_level=logging.CRITICAL,
+                sentry_logs_level=logging.INFO,
             )
         ],
         traces_sampler=traces_sampler,
@@ -723,6 +755,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
         release=__version__,
         event_scrubber=EventScrubber(denylist=pretix_denylist, recursive=True),
         send_default_pii=False,
+        enable_logs=SENTRY_ENABLE_LOGS,
         propagate_traces=False,  # see https://github.com/getsentry/sentry-python/issues/1717
     )
     ignore_logger('pretix.base.tasks')
@@ -870,3 +903,21 @@ FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT = 1024 * 1024 * config.getint("pretix
 FILE_UPLOAD_MAX_SIZE_OTHER = 1024 * 1024 * config.getint("pretix_file_upload", "max_size_other", fallback=10)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+VITE_DEV_SERVER_PORT = 5173
+VITE_DEV_SERVER = f"http://localhost:{VITE_DEV_SERVER_PORT}"
+VITE_DEV_MODE = DEBUG
+VITE_IGNORE = False  # Used to ignore `collectstatic`/`rebuild`
+PRETIX_WIDGET_VITE = os.environ.get('PRETIX_WIDGET_VITE', '') not in ('', '0')
+
+if DEBUG:
+    # Reload if settings file changes
+    config_files_to_watch = [Path(x).absolute() for x in config_files]
+
+    from django.dispatch import receiver
+    from django.utils.autoreload import BaseReloader, autoreload_started
+
+    @receiver(autoreload_started, dispatch_uid="pretix_watch_config_file")
+    def watch_config_file(sender: BaseReloader, *args, **kwargs):
+        sender.extra_files.update(config_files_to_watch)

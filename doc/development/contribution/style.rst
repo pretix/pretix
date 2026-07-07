@@ -1,5 +1,7 @@
 .. spelling:word-list:: Rebase rebasing
 
+.. _`codestyle`:
+
 Coding style and quality
 ========================
 
@@ -27,8 +29,6 @@ Code
 
 Commits and Pull Requests
 -------------------------
-
-
 
 Most commits should start as pull requests, therefore this applies to the titles of pull requests as well since
 the pull request title will become the commit message on merge. We prefer merging with GitHub's "Squash and merge"
@@ -86,7 +86,7 @@ individual commits, we use "Rebase and merge" instead. Merge commits should be a
 .. _PEP 8: https://legacy.python.org/dev/peps/pep-0008/
 .. _flake8: https://pypi.python.org/pypi/flake8
 .. _Django Coding Style: https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/
-.. _translation: https://docs.djangoproject.com/en/1.11/topics/i18n/translation/
-.. _class-based views: https://docs.djangoproject.com/en/1.11/topics/class-based-views/
+.. _translation: https://docs.djangoproject.com/en/6.0/topics/i18n/translation/
+.. _class-based views: https://docs.djangoproject.com/en/6.0/topics/class-based-views/
 .. _pytest-style: https://docs.pytest.org/en/latest/assert.html
 .. _fixtures: https://docs.pytest.org/en/latest/fixture.html

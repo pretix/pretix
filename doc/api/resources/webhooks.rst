@@ -70,6 +70,7 @@ The following values for ``action_types`` are valid with pretix core:
     * ``pretix.subevent.changed``
     * ``pretix.subevent.deleted``
     * ``pretix.event.item.*``
+    * ``pretix.event.quota.*``
     * ``pretix.event.live.activated``
     * ``pretix.event.live.deactivated``
     * ``pretix.event.testmode.activated``

@@ -19,9 +19,7 @@
         {% endif %}
     </h1>
 
-    <script type="application/json" id="editor-data">
-        {{ layout|safe }}
-    </script>
+    {{ layout|json_script:"editor-data" }}
     <div class="row">
         <div class="col-md-9">
             <div class="panel panel-default panel-pdf-editor">

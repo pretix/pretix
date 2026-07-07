@@ -102,7 +102,7 @@ from pretix.base.models.organizer import (
 from pretix.base.payment import PaymentException
 from pretix.base.plugins import (
     PLUGIN_LEVEL_EVENT, PLUGIN_LEVEL_EVENT_ORGANIZER_HYBRID,
-    PLUGIN_LEVEL_ORGANIZER,
+    PLUGIN_LEVEL_ORGANIZER, plugin_is_available,
 )
 from pretix.base.services.export import (
     init_organizer_exporters, multiexport, scheduled_organizer_export,
@@ -139,8 +139,8 @@ from pretix.helpers import OF_SELF, GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.format import SafeFormatter, format_map
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import mainreverse_absolute
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.customer import TokenGenerator
 
 logger = logging.getLogger(__name__)
@@ -597,6 +597,13 @@ class OrganizerCreate(CreateView):
         })
 
 
+def available_plugins(organizer):
+    from pretix.base.plugins import get_all_plugins
+
+    return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
+            and getattr(p, 'visible', True))
+
+
 class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, TemplateView, SingleObjectMixin):
     model = Organizer
     context_object_name = 'organizer'
@@ -605,12 +612,6 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
     def get_object(self, queryset=None) -> Organizer:
         return self.request.organizer
-
-    def available_plugins(self, organizer):
-        from pretix.base.plugins import get_all_plugins
-
-        return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
-                and getattr(p, 'visible', True))
 
     def prepare_links(self, pluginmeta, key):
         links = getattr(pluginmeta, key, [])
@@ -637,7 +638,7 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
         from pretix.base.plugins import CATEGORY_LABELS, CATEGORY_ORDER
 
         context = super().get_context_data(*args, **kwargs)
-        plugins = list(self.available_plugins(self.object))
+        plugins = list(available_plugins(self.object))
 
         active_counter = Counter()
         events_total = 0
@@ -685,7 +686,7 @@ class OrganizerPlugins(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
         self.object = self.get_object()
 
         plugins_available = {
-            p.module: p for p in self.available_plugins(self.object)
+            p.module: p for p in available_plugins(self.object)
         }
         choose_events_next = False
         with transaction.atomic():
@@ -786,12 +787,6 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
         }
         return kwargs
 
-    def available_plugins(self, organizer):
-        from pretix.base.plugins import get_all_plugins
-
-        return (p for p in get_all_plugins(organizer=organizer) if not p.name.startswith('.')
-                and getattr(p, 'visible', True))
-
     def get_context_data(self, **kwargs):
         return super().get_context_data(
             plugin=self.plugin,
@@ -799,12 +794,10 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
         )
 
     def dispatch(self, request, *args, **kwargs):
-        plugins_available = {
-            p.module: p for p in self.available_plugins(self.request.organizer)
-        }
-        if kwargs["plugin"] not in plugins_available:
+        try:
+            self.plugin = next(p for p in available_plugins(self.request.organizer) if p.module == kwargs["plugin"])
+        except StopIteration:
             raise Http404(_("Unknown plugin."))
-        self.plugin = plugins_available[kwargs["plugin"]]
         level = getattr(self.plugin, "level", PLUGIN_LEVEL_EVENT)
         if level == PLUGIN_LEVEL_ORGANIZER:
             raise Http404(_("This plugin can only be enabled for the entire organizer account."))
@@ -835,6 +828,9 @@ class OrganizerPluginEvents(OrganizerDetailViewMixin, OrganizerPermissionRequire
         logentries_to_save = []
 
         for e in self.request.organizer.events.filter(pk__in=events_to_enable):
+            if not plugin_is_available(self.plugin, organizer=self.request.organizer, event=e):
+                messages.warning(self.request, _("This plugin cannot be activated for event {}.").format(e.name))
+                continue
             logentries_to_save.append(
                 e.log_action('pretix.event.plugins.enabled', user=self.request.user, data={'plugin': self.plugin.module}, save=False)
             )
@@ -1036,14 +1032,16 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     def _send_invite(self, instance):
         mail(
             instance.email,
-            _('Account invitation'),
+            gettext('You\'ve been invited to join %(organizer)s') % {
+                'organizer': self.request.organizer.name,
+            },
             'pretixcontrol/email/invitation.txt',
             {
                 'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
                 'organizer': self.request.organizer.name,
                 'team': instance.team.name,
-                'url': build_global_uri('control:auth.invite', kwargs={
+                'url': mainreverse_absolute('control:auth.invite', kwargs={
                     'token': instance.token
                 })
             },
@@ -1322,7 +1320,7 @@ class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
     def form_valid(self, form):
         if form.has_changed():
             self.object.log_action('pretix.device.changed', user=self.request.user, data={
-                k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
+                k: form.cleaned_data[k] if k != 'limit_events' else [e.id for e in form.cleaned_data[k]]
                 for k in form.changed_data
             })
 
@@ -2855,10 +2853,12 @@ class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['redirect_uri'] = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return',
-                                                 kwargs={
-                                                     'provider': self.object.pk
-                                                 })
+        ctx['redirect_uri'] = eventreverse_absolute(
+            self.request.organizer, 'presale:organizer.customer.login.return',
+            kwargs={
+                'provider': self.object.pk
+            }
+        )
         return ctx
 
     def get_form_kwargs(self):
@@ -3089,7 +3089,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             self.customer.log_action('pretix.customer.password.resetrequested', {}, user=self.request.user)
             ctx = self.customer.get_email_context()
             token = TokenGenerator().make_token(self.customer)
-            ctx['url'] = build_absolute_uri(
+            ctx['url'] = eventreverse_absolute(
                 self.request.organizer,
                 'presale:organizer.customer.recoverpw'
             ) + '?id=' + self.customer.identifier + '&token=' + token
@@ -3388,8 +3388,10 @@ class ReusableMediaListView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_queryset(self):
         qs = self.request.organizer.reusable_media.select_related(
-            'customer', 'linked_orderposition', 'linked_orderposition__order', 'linked_orderposition__order__event',
-            'linked_giftcard'
+            'customer',
+            'linked_giftcard',
+        ).prefetch_related(
+            Prefetch('linked_orderpositions', queryset=OrderPosition.objects.select_related("order", "order__event"))
         )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
@@ -3437,10 +3439,14 @@ class ReusableMediumCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
     @transaction.atomic
     def form_valid(self, form):
         r = super().form_valid(form)
-        form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data={
+
+        data = {
             k: getattr(form.instance, k)
             for k in form.changed_data
-        })
+        }
+        if "linked_orderpositions" in data:
+            data["linked_orderpositions"] = data["linked_orderpositions"].values_list("pk", flat=True)
+        form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
         return r
 
@@ -3465,13 +3471,40 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
 
     @transaction.atomic
     def form_valid(self, form):
+        prev_linked_ops_pks = list(getattr(self.object, "linked_orderpositions").values_list("pk", flat=True))
+        result = super().form_valid(form)
         if form.has_changed():
-            self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data={
+            data = {
                 k: getattr(self.object, k)
                 for k in form.changed_data
-            })
+            }
+            if "linked_orderpositions" in data:
+                # handle changes to linked_orderpositions separately
+                linked_ops_pks = data["linked_orderpositions"].values_list("pk", flat=True)
+                del data["linked_orderpositions"]
+                for op_pk in prev_linked_ops_pks:
+                    if op_pk not in linked_ops_pks:
+                        self.object.log_action(
+                            'pretix.reusable_medium.linked_orderposition.removed',
+                            user=self.request.user,
+                            data={
+                                'linked_orderposition': op_pk,
+                            }
+                        )
+                for op_pk in linked_ops_pks:
+                    if op_pk not in prev_linked_ops_pks:
+                        self.object.log_action(
+                            'pretix.reusable_medium.linked_orderposition.added',
+                            user=self.request.user,
+                            data={
+                                'linked_orderposition': op_pk,
+                            }
+                        )
+            if data:
+                # log change-action only for changes other than linked_orderpositions
+                self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data=data)
         messages.success(self.request, _('Your changes have been saved.'))
-        return super().form_valid(form)
+        return result
 
     def get_success_url(self):
         return reverse('control:organizer.reusable_medium', kwargs={

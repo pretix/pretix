@@ -85,7 +85,7 @@ from pretix.helpers.format import (
     FormattedString, PlainHtmlAlternativeString, SafeFormatter, format_map,
 )
 from pretix.helpers.hierarkey import clean_filename
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.ical import get_private_icals
 
 logger = logging.getLogger('pretix.base.mail')
@@ -411,7 +411,7 @@ def mail_send_task(self, **kwargs) -> bool:
         try:
             outgoing_mail = OutgoingMail.objects.select_for_update(of=OF_SELF).get(pk=outgoing_mail)
         except OutgoingMail.DoesNotExist:
-            logger.info(f"Ignoring job for non existing email {outgoing_mail.guid}")
+            logger.info(f"Ignoring job for non existing email {outgoing_mail}")
             return False
         if outgoing_mail.status == OutgoingMail.STATUS_INFLIGHT:
             logger.info(f"Ignoring job for inflight email {outgoing_mail.guid}")
@@ -997,7 +997,7 @@ def _wrap_plain_body(content_plain, signature, event, order, position, no_order_
         body_plain += _(
             "You can view your order details at the following URL:\n{orderurl}."
         ).replace("\n", "\r\n").format(
-            orderurl=build_absolute_uri(
+            orderurl=eventreverse_absolute(
                 order.event, 'presale:event.order.position', kwargs={
                     'order': order.code,
                     'secret': position.web_secret,
@@ -1013,7 +1013,7 @@ def _wrap_plain_body(content_plain, signature, event, order, position, no_order_
         body_plain += _(
             "You can view your order details at the following URL:\n{orderurl}."
         ).replace("\n", "\r\n").format(
-            event=event.name, orderurl=build_absolute_uri(
+            event=event.name, orderurl=eventreverse_absolute(
                 order.event, 'presale:event.order.open', kwargs={
                     'order': order.code,
                     'secret': order.secret,

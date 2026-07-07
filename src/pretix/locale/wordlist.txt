@@ -12,6 +12,7 @@ anonymized
 Auth
 authentification
 authenticator
+Authenticator
 automatical
 availabilities
 backend
@@ -22,6 +23,7 @@ barcodes
 Bcc
 BCC
 BezahlCode
+biometric
 BLIK
 blocklist
 BN
@@ -56,6 +58,7 @@ EPS
 eps
 favicon
 filetype
+freeOTP
 frontend
 frontpage
 Galician
@@ -75,6 +78,7 @@ IBANs
 iCal
 ics
 iDEAL
+Instagram
 Itaú
 integrations
 intra
@@ -114,6 +118,7 @@ PayU
 Peppol
 PCI
 PKCE
+PLN
 PDFs
 percentual
 personalization

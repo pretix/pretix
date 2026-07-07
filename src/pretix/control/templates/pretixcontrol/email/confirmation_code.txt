@@ -1,13 +1,13 @@
-{% load i18n %}{% blocktrans with url=url|safe messages=messages|safe %}Hello,
+{% load i18n %}{% blocktrans with code=code reason=reason instance=instance %}Hello,
 
 {{ reason }}
 
     {{ code }}
 
-Please do never give this code to another person. Our support team will never ask for this code.
+Don't share this code with anyone. The {{ instance }} team will never ask you for it.
 
-If this code was not requested by you, please contact us immediately.
+If you didn't request this code, please contact us immediately.
 
-Best regards,
-Your {{ instance }} team
+Thanks,  
+The {{ instance }} Team
 {% endblocktrans %}

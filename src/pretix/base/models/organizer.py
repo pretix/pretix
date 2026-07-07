@@ -35,6 +35,7 @@ import operator
 import string
 from datetime import date, datetime, time
 from functools import reduce
+from typing import TYPE_CHECKING
 
 import pytz_deprecation_shim
 from django.conf import settings
@@ -61,6 +62,9 @@ from ...helpers.permission_migration import (
 from ..settings import settings_hierarkey
 from .auth import User
 
+if TYPE_CHECKING:
+    from hierarkey.proxy import HierarkeyProxy
+
 
 @settings_hierarkey.add(cache_namespace='organizer')
 class Organizer(LoggedModel):
@@ -78,6 +82,9 @@ class Organizer(LoggedModel):
     """
 
     settings_namespace = 'organizer'
+    if TYPE_CHECKING:
+        settings: HierarkeyProxy
+
     name = models.CharField(max_length=200,
                             verbose_name=_("Name"))
     slug = models.CharField(
@@ -319,6 +326,9 @@ class TeamQuerySet(models.QuerySet):
     def event_permission_q(cls, perm_name):
         from ..permissions import assert_valid_event_permission
 
+        if perm_name is None:
+            return Q()
+
         if perm_name.startswith('can_') and perm_name in OLD_TO_NEW_EVENT_COMPAT:  # legacy
             return reduce(operator.and_, [cls.event_permission_q(p) for p in OLD_TO_NEW_EVENT_COMPAT[perm_name]])
         assert_valid_event_permission(perm_name, allow_legacy=False)
@@ -330,6 +340,9 @@ class TeamQuerySet(models.QuerySet):
     @classmethod
     def organizer_permission_q(cls, perm_name):
         from ..permissions import assert_valid_organizer_permission
+
+        if perm_name is None:
+            return Q()
 
         if perm_name.startswith('can_') and perm_name in OLD_TO_NEW_ORGANIZER_COMPAT:  # legacy
             return reduce(operator.and_, [cls.organizer_permission_q(p) for p in OLD_TO_NEW_ORGANIZER_COMPAT[perm_name]])
@@ -550,7 +563,7 @@ class TeamAPIToken(models.Model):
         """
         return self.team.organizer_permission_set() if self.team.organizer == organizer else set()
 
-    def has_event_permission(self, organizer, event, perm_name=None, request=None) -> bool:
+    def has_event_permission(self, organizer, event, perm_name=None, request=None, session_key=None) -> bool:
         """
         Checks if this token is part of a team that grants access of type ``perm_name``
         to the event ``event``.
@@ -559,6 +572,7 @@ class TeamAPIToken(models.Model):
         :param event: The event to check
         :param perm_name: The permission, e.g. ``event.orders:read``
         :param request: This parameter is ignored and only defined for compatibility reasons.
+        :param session_key: This parameter is ignored and only defined for compatibility reasons.
         :return: bool
         """
         has_event_access = (self.team.all_events and organizer == self.team.organizer) or (

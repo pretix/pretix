@@ -28,7 +28,7 @@ from django.core.mail import get_connection
 from django.shortcuts import redirect
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 from django.views.generic import TemplateView
 
 from pretix.base import email
@@ -216,13 +216,14 @@ class MailSettingsSetupView(TemplateView):
                     messages.error(request, _('The verification code was incorrect, please try again.'))
                 else:
                     self.request.session[session_key] = get_random_string(length=6, allowed_chars='1234567890')
+                    sender_address = self.simple_form.cleaned_data.get('mail_from')
                     mail(
-                        self.simple_form.cleaned_data.get('mail_from'),
-                        _('Sender address verification'),
+                        sender_address,
+                        gettext('Confirm %(address)s as a sender address') % {'address': sender_address},
                         'pretixcontrol/email/email_setup.txt',
                         {
                             'code': self.request.session[session_key],
-                            'address': self.simple_form.cleaned_data.get('mail_from'),
+                            'address': sender_address,
                             'instance': settings.PRETIX_INSTANCE_NAME,
                         },
                         None,

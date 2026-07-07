@@ -692,7 +692,8 @@ class ItemsTest(ItemFormTest):
         self.item2.program_times.create(start=datetime.datetime(2017, 12, 27, 0, 0, 0,
                                                                 tzinfo=datetime.timezone.utc),
                                         end=datetime.datetime(2017, 12, 28, 0, 0, 0,
-                                                              tzinfo=datetime.timezone.utc))
+                                                              tzinfo=datetime.timezone.utc),
+                                        location={"en": "Testlocation", "de": "Testort"})
 
         doc = self.get_doc('/control/event/%s/%s/items/add?copy_from=%d' % (self.orga1.slug, self.event1.slug, self.item2.pk))
         data = extract_form_fields(doc.select("form")[0])
@@ -723,6 +724,7 @@ class ItemsTest(ItemFormTest):
             assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])
             assert i_old.program_times.first().start == i_new.program_times.first().start
             assert i_old.program_times.first().end == i_new.program_times.first().end
+            assert i_old.program_times.first().location == i_new.program_times.first().location
 
     def test_add_to_existing_quota(self):
         with scopes_disabled():

@@ -300,5 +300,4 @@ class SysReportView(AdministratorPermissionRequiredMixin, TemplateView):
             resp = HttpResponse(data)
             resp['Content-Type'] = mime
             resp['Content-Disposition'] = 'inline; filename="{}"'.format(name)
-            resp._csp_ignore = True
             return resp

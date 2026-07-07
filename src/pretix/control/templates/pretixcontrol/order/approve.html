@@ -1,4 +1,5 @@
 {% extends "pretixcontrol/event/base.html" %}
+{% load eventsignal %}
 {% load i18n %}
 {% block title %}
     {% trans "Approve order" %}
@@ -7,6 +8,9 @@
     <h1>
         {% trans "Approve order" %}
     </h1>
+
+    {% eventsignal request.event "pretix.control.signals.order_approve_info" order=order request=request %}
+
     <p>{% blocktrans trimmed %}
         Do you really want to approve this order?
     {% endblocktrans %}</p>

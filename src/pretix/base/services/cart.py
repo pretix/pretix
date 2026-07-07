@@ -162,12 +162,12 @@ error_messages = {
     'price_too_high': gettext_lazy('The entered price is to high.'),
     'voucher_invalid': gettext_lazy('This voucher code is not known in our database.'),
     'voucher_min_usages': ngettext_lazy(
-        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products.',
+        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching product.',
         'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products.',
         'number'
     ),
     'voucher_min_usages_removed': ngettext_lazy(
-        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products. '
+        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching product. '
         'We have therefore removed some positions from your cart that can no longer be purchased like this.',
         'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products. '
         'We have therefore removed some positions from your cart that can no longer be purchased like this.',
@@ -287,11 +287,11 @@ def _check_position_constraints(
         raise CartPositionError(error_messages['unavailable'])
 
     # Invalid media policy for online sale
-    if item.media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
+    if item.media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW, Item.MEDIA_POLICY_APPEND_OR_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
         mt = MEDIA_TYPES[item.media_type]
         if not mt.medium_created_by_server:
             raise CartPositionError(error_messages['media_usage_not_implemented'])
-    elif item.media_policy == Item.MEDIA_POLICY_REUSE:
+    elif item.media_policy in (Item.MEDIA_POLICY_REUSE, Item.MEDIA_POLICY_APPEND):
         raise CartPositionError(error_messages['media_usage_not_implemented'])
 
     # Item removed from sales channel

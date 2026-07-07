@@ -71,7 +71,7 @@ from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.format import format_map
 from pretix.helpers.money import DecimalTextInput
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.views import get_cart
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
@@ -379,7 +379,7 @@ class BasePaymentProvider:
 
         if not self.settings.get('_hidden_seed'):
             self.settings.set('_hidden_seed', get_random_string(64))
-        hidden_url = build_absolute_uri(self.event, 'presale:event.payment.unlock', kwargs={
+        hidden_url = eventreverse_absolute(self.event, 'presale:event.payment.unlock', kwargs={
             'hash': hashlib.sha256((self.settings._hidden_seed + self.event.slug).encode()).hexdigest(),
         })
 
@@ -834,7 +834,7 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
-    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str | None:
         """
         After the user has confirmed their purchase, this method will be called to complete
         the payment process. This is the place to actually move the money if applicable.

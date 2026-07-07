@@ -115,6 +115,11 @@ class VoucherForm(I18nModelForm):
         if not self.event and self.instance:
             self.event = self.instance.event
 
+        self.fields['tag'].widget.attrs['data-typeahead-url'] = reverse('control:event.vouchers.tags.typeahead', kwargs={
+            'event': instance.event.slug,
+            'organizer': instance.event.organizer.slug,
+        })
+
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
             self.fields['subevent'].widget = Select2(

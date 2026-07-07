@@ -54,7 +54,7 @@ from bidi import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
-from django.db.models import Max, Min
+from django.db.models import Exists, Max, Min, OuterRef
 from django.db.models.fields.files import FieldFile
 from django.dispatch import receiver
 from django.utils.deconstruct import deconstructible
@@ -76,7 +76,8 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
-from pretix.base.models import Event, Order, OrderPosition, Question
+from pretix.base.models import Checkin, Event, Order, OrderPosition, Question
+from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
@@ -372,11 +373,23 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Atlantis"),
         "evaluate": lambda op, order, ev: str(getattr(order.invoice_address.country, 'name', '')) if getattr(order, 'invoice_address', None) else ''
     }),
+    ("invoice_custom_field", {
+        "label": _("Invoice custom recipient field"),
+        "editor_sample": _("Custom recipient field"),
+        "evaluate": lambda op, order, ev: order.invoice_address.custom_field if getattr(order, 'invoice_address', None) else ''
+    }),
     ("addons", {
         "label": _("List of Add-Ons"),
         "editor_sample": _("Add-on 1\n2x Add-on 2"),
         "evaluate": lambda op, order, ev: "\n".join([
             str(p) for p in generate_compressed_addon_list(op, order, ev)
+        ])
+    }),
+    ("checked_in_addons", {
+        "label": _("List of Checked-In Add-Ons"),
+        "editor_sample": _("Add-on 1\n2x Add-on 2"),
+        "evaluate": lambda op, order, ev: "\n".join([
+            str(p) for p in generate_compressed_addon_list(op, order, ev, only_checked_in=True)
         ])
     }),
     ("organizer", {
@@ -389,11 +402,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("Event organizer info text"),
         "evaluate": lambda op, order, ev: str(order.event.settings.organizer_info_text)
     }),
-    ("event_info_text", {
-        "label": _("Event info text"),
-        "editor_sample": _("Event info text"),
-        "evaluate": lambda op, order, ev: str(order.event.settings.event_info_text)
-    }),
+    ("event_info_text", {}),  # Placeholder to "reserve" position, defined later in `get_variables`
     ("now_date", {
         "label": _("Printing date"),
         "editor_sample": _("2017-05-31"),
@@ -491,9 +500,9 @@ DEFAULT_VARIABLES = OrderedDict((
         ) if op.valid_until else ""
     }),
     ("program_times", {
-        "label": _("Program times: date and time"),
+        "label": _("Program times"),
         "editor_sample": _(
-            "2017-05-31 10:00 – 12:00\n2017-05-31 14:00 – 16:00\n2017-05-31 14:00 – 2017-06-01 14:00"),
+            "2017-05-31 10:00 – 12:00, Room 1\n2017-05-31 14:00 – 16:00, Room 2\n2017-05-31 14:00 – 2017-06-01 14:00, Building A"),
         "evaluate": lambda op, order, ev: get_program_times(op, ev)
     }),
     ("medium_identifier", {
@@ -658,6 +667,14 @@ def get_images(event):
 def get_variables(event):
     v = copy.copy(DEFAULT_VARIABLES)
 
+    templating_context = PlaceholderContext(event=event)
+    v['event_info_text'] = {
+        "label": _("Event info text"),
+        "editor_sample": _("Event info text"),
+        "evaluate": lambda op, order, ev:
+            templating_context.format(str(order.event.settings.event_info_text))
+    }
+
     scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
 
     concatenation_for_salutation = scheme.get("concatenation_for_salutation", scheme["concatenation"])
@@ -741,21 +758,31 @@ def get_seat(op: OrderPosition):
 
 
 def get_program_times(op: OrderPosition, ev: Event):
-    return '\n'.join([
-        datetimerange(
-            pt.start.astimezone(ev.timezone),
-            pt.end.astimezone(ev.timezone),
-            as_html=False
-        ) for pt in op.item.program_times.all()
-    ])
+    ptstr = []
+    for pt in op.item.program_times.all():
+        ptstr.append([
+            datetimerange(
+                pt.start.astimezone(ev.timezone),
+                pt.end.astimezone(ev.timezone),
+                as_html=False
+            ),
+            (', ' + ', '.join(
+                l.strip() for l in str(pt.location).splitlines() if l.strip())
+             ) if str(pt.location).strip() else ''
+        ])
+    return '\n'.join(''.join(l) for l in ptstr)
 
 
-def generate_compressed_addon_list(op, order, event):
+def generate_compressed_addon_list(op, order, event, only_checked_in=False):
     itemcount = defaultdict(int)
-    addons = [p for p in (
+    addon_qs = (
         op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
         else op.addons.select_related('item', 'variation')
-    ) if not p.canceled]
+    )
+    if only_checked_in:
+        addon_qs = addon_qs.filter(Exists(Checkin.objects.filter(position=OuterRef('pk'))), canceled=False)
+    addons = [p for p in addon_qs if not p.canceled]
+
     for pos in addons:
         itemcount[pos.item, pos.variation] += 1
 
@@ -912,7 +939,7 @@ class Renderer:
 
             # We do not use str.format like in emails so we (a) can evaluate lazily and (b) can re-implement this
             # 1:1 on other platforms that render PDFs through our API (libpretixprint)
-            return re.sub(r'\{([a-zA-Z0-9:_]+)\}', replace, text)
+            return re.sub(r'\{([-a-zA-Z0-9:_]+)\}', replace, text)
 
         elif o['content'].startswith('itemmeta:'):
             if op.variation_id:
@@ -1045,7 +1072,7 @@ class Renderer:
         except:
             logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
 
-        p = Paragraph(text, style=style)
+        p = Paragraph(text, style=style)  # not using AutoEscapeParagraph is safe as we escape above
         return p, ad, lineheight
 
     def _draw_textcontainer(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):

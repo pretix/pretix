@@ -966,6 +966,7 @@ $table-bg-accent: rgba(128, 128, 128, 0.05);
   width: 80vw;
   max-width: 1080px;
   height: 80vh;
+  max-height: 100dvh;
 }
 .pretix-widget-frame-inner iframe {
   width: 100% !important;

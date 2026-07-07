@@ -94,6 +94,9 @@ class DisableMigrations(object):
     def __getitem__(self, item):
         return None
 
+    def setdefault(self, key, default=None):
+        return
+
 
 if not os.environ.get("GITHUB_WORKFLOW", ""):
     MIGRATION_MODULES = DisableMigrations()

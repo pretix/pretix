@@ -41,7 +41,7 @@ from collections import OrderedDict, defaultdict
 from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
-from urllib.parse import urlparse, urlsplit
+from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
 import bleach
@@ -64,7 +64,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import NoReverseMatch, reverse
 from django.utils.functional import cached_property
 from django.utils.html import conditional_escape, format_html
-from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
@@ -97,7 +96,9 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
-from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
+from pretix.multidomain.urlreverse import (
+    eventreverse_absolute, get_event_domain,
+)
 from pretix.presale.views.widget import (
     version_default as widget_version_default,
 )
@@ -234,13 +235,21 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             self.request.event.log_action('pretix.event.footerlinks.changed', user=self.request.user, data={
                 'data': self.footer_links_formset.cleaned_data
             })
-        if form.has_changed():
-            self.request.event.log_action('pretix.event.changed', user=self.request.user, data={
-                k: (form.cleaned_data.get(k).name
-                    if isinstance(form.cleaned_data.get(k), File)
-                    else form.cleaned_data.get(k))
-                for k in form.changed_data
-            })
+
+        change_data = {
+            k: (form.cleaned_data.get(k).name
+                if isinstance(form.cleaned_data.get(k), File)
+                else form.cleaned_data.get(k))
+            for k in form.changed_data
+        }
+        meta_changed = {}
+        for f in self.meta_forms:
+            if f.has_changed():
+                meta_changed[f.property.name] = f.cleaned_data["value"]
+        if meta_changed:
+            change_data['meta_data'] = meta_changed
+        if change_data:
+            self.request.event.log_action('pretix.event.changed', user=self.request.user, data=change_data)
 
         tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk})
         messages.success(self.request, _('Your changes have been saved.'))
@@ -763,12 +772,7 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         fname, ftype, fcontent = build_preview_invoice_pdf(request.event)
         resp = HttpResponse(fcontent, content_type=ftype)
-        if settings.DEBUG:
-            # attachment is more secure as we're dealing with user-generated stuff here, but inline is much more convenient during debugging
-            resp['Content-Disposition'] = 'inline; filename="{}"'.format(fname)
-            resp._csp_ignore = True
-        else:
-            resp['Content-Disposition'] = 'attachment; filename="{}"'.format(fname)
+        resp['Content-Disposition'] = 'inline; filename="{}"'.format(fname)
         return resp
 
 
@@ -1145,8 +1149,11 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
             if request.POST.get("delete") == "yes":
                 try:
                     with transaction.atomic():
-                        for order in request.event.orders.filter(testmode=True):
-                            order.gracefully_delete(user=self.request.user)
+                        Order.gracefully_delete_bulk(
+                            request.event,
+                            request.event.orders.filter(testmode=True),
+                            user=self.request.user
+                        )
                 except ProtectedError:
                     messages.error(self.request, _('An order could not be deleted as some constraints (e.g. data '
                                                    'created by plug-ins) do not allow it.'))
@@ -1731,10 +1738,10 @@ class EventQRCode(EventPermissionRequiredMixin, View):
     permission = None
 
     def get(self, request, *args, filetype, **kwargs):
-        url = build_absolute_uri(request.event, 'presale:event.index')
+        url = eventreverse_absolute(request.event, 'presale:event.index')
 
         if "url" in request.GET:
-            if url_has_allowed_host_and_scheme(request.GET["url"], allowed_hosts=[urlparse(url).netloc]):
+            if request.GET["url"].startswith(url):
                 url = request.GET["url"]
             else:
                 raise PermissionDenied("Untrusted URL")

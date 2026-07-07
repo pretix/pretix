@@ -36,6 +36,7 @@ from urllib.parse import quote, urljoin, urlparse
 
 from django.conf import settings
 from django.contrib.auth import REDIRECT_FIELD_NAME, logout
+from django.contrib.auth.views import redirect_to_login
 from django.http import Http404
 from django.shortcuts import get_object_or_404, resolve_url
 from django.template.response import TemplateResponse
@@ -212,14 +213,17 @@ class AuditLogMiddleware:
         if request.path.startswith(get_script_prefix() + 'control') and request.user.is_authenticated:
             if getattr(request.user, "is_hijacked", False):
                 hijack_history = request.session.get('hijack_history', False)
-                hijacker = get_object_or_404(User, pk=hijack_history[0])
+                hijacker = get_object_or_404(User, pk=hijack_history[0]["user"])
                 ss = hijacker.get_active_staff_session(request.session.get('hijacker_session'))
-                if ss:
-                    ss.logs.create(
-                        url=request.path,
-                        method=request.method,
-                        impersonating=request.user
-                    )
+                if not ss:
+                    # Staff session expired or not found
+                    logout(request)
+                    return redirect_to_login(request.get_full_path())
+                ss.logs.create(
+                    url=request.path,
+                    method=request.method,
+                    impersonating=request.user
+                )
             else:
                 ss = request.user.get_active_staff_session(request.session.session_key)
                 if ss:

@@ -9,7 +9,7 @@
 {% load anonymize_email %}
 {% block thetitle %}
     {% if messages %}
-        {{ messages|join:" " }} :: 
+        {{ messages|join:" " }} ::
     {% endif %}
     {% block title %}{% endblock %}{% if request.resolver_match.url_name != "event.index" %} :: {% endif %}{{ event.name }}
 {% endblock %}
@@ -184,18 +184,18 @@
             </div>
         {% endfor %}
     {% endif %}
-    {% if request.event.settings.banner_text %}
+    {% if event_texts.banner_text %}
         <div class="site-notice-top">
-            {{ request.event.settings.banner_text|rich_text }}
+            {{ event_texts.banner_text|rich_text }}
         </div>
     {% endif %}
     {% block content %}
     {% endblock %}
 {% endblock %}
 {% block footer %}
-    {% if request.event.settings.banner_text_bottom %}
+    {% if event_texts.banner_text_bottom %}
         <div class="site-notice-bottom">
-            {{ request.event.settings.banner_text_bottom|rich_text }}
+            {{ event_texts.banner_text_bottom|rich_text }}
         </div>
     {% endif %}
     {% if request.event.testmode %}
@@ -219,8 +219,8 @@
     {% endif %}
 {% endblock %}
 {% block footernav %}
-    {% if request.event.settings.contact_mail %}
-        <li><a href="{{ 'mailto:'|add:request.event.settings.contact_mail|anon_email }}" target="_blank" rel="noopener">{% trans "Contact" %}</a></li>
+    {% if request.event.settings.contact_url or request.event.settings.contact_mail %}
+        <li><a href="{% if request.event.settings.contact_url %}{% safelink request.event.settings.contact_url %}{% else %}{{ 'mailto:'|add:request.event.settings.contact_mail|anon_email }}{% endif %}" target="_blank" rel="noopener">{% trans "Contact" %}</a></li>
     {% endif %}
     {% if request.event.settings.privacy_url %}
         <li><a href="{% safelink request.event.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a></li>

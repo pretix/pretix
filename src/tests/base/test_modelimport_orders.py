@@ -991,3 +991,30 @@ def test_import_mixed_order_size_consistency(user, event, item):
         ).get()
     assert ('Inconsistent data in row 2: Column Email address contains value "a2@example.com", but for this order, '
             'the value has already been set to "a1@example.com".') in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_line_endings_mix(event, item, user):
+    # Ensures import works with mixed file endings.
+    # See Ticket#23230806 where a file to import ends with \r\n
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+
+    cf = inputfile_factory()
+    file = cf.file
+    file.seek(0)
+    data = file.read()
+    data = data.replace(b'\n', b'\r')
+    data = data.rstrip(b'\r\r')
+    data = data + b'\r\n'
+
+    print(data)
+    cf.file.save("input.csv", ContentFile(data))
+    cf.save()
+
+    import_orders.apply(
+        args=(event.pk, cf.id, settings, 'en', user.pk)
+    )
+    assert event.orders.count() == 3
+    assert OrderPosition.objects.count() == 3

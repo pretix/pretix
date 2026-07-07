@@ -43,6 +43,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Max, Q
 from django.forms import ChoiceField, RadioSelect
 from django.forms.formsets import DELETION_FIELD_NAME
+from django.forms.utils import ErrorDict
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
@@ -375,6 +376,60 @@ class QuotaForm(I18nModelForm):
         return inst
 
 
+class QuotaBulkEditForm(QuotaForm):
+
+    def __init__(self, *args, **kwargs):
+        self.mixed_values = kwargs.pop('mixed_values')
+        self.queryset = kwargs.pop('queryset')
+        super().__init__(**kwargs)
+        self.fields.pop("subevent", None)  # Would add extra complexity and it's hard to imagine a use case for that
+        self.fields["name"].required = False
+        self.fields["itemvars"].required = False
+
+    def clean(self):
+        d = super().clean()
+        if self.prefix + "name" in self.data.getlist('_bulk') and not d.get("name"):
+            raise ValidationError({"name": _("This field is required.")})
+        if self.prefix + "itemvars" in self.data.getlist('_bulk') and not d.get("itemvars"):
+            raise ValidationError({"itemvars": _("This field is required.")})
+        return d
+
+    def save(self, commit=True):
+        objs = list(self.queryset)
+        fields = set()
+
+        for k in self.fields:
+            cb_val = self.prefix + k
+            if cb_val not in self.data.getlist('_bulk'):
+                continue
+
+            fields.add(k)
+            if k == 'itemvars':
+                selected_items = set(list(self.event.items.filter(id__in=[
+                    i.split('-')[0] for i in self.cleaned_data['itemvars']
+                ])))
+                selected_variations = list(ItemVariation.objects.filter(item__event=self.event, id__in=[
+                    i.split('-')[1] for i in self.cleaned_data['itemvars'] if '-' in i
+                ]))
+                for obj in objs:
+                    obj.items.set(selected_items)
+                    obj.variations.set(selected_variations)
+            else:
+                for obj in objs:
+                    setattr(obj, k, self.cleaned_data[k])
+
+        fields = [f for f in fields if f != 'itemvars']
+        if fields:
+            Quota.objects.bulk_update(objs, fields, 200)
+
+    def full_clean(self):
+        if len(self.data) == 0:
+            # form wasn't submitted
+            self._errors = ErrorDict()
+            return
+        super().full_clean()
+
+
 class ItemCreateForm(I18nModelForm):
     NONE = 'none'
     EXISTING = 'existing'
@@ -574,7 +629,7 @@ class ItemCreateForm(I18nModelForm):
                 instance.bundles.create(bundled_item=b.bundled_item, bundled_variation=b.bundled_variation,
                                         count=b.count, designated_price=b.designated_price)
             for pt in self.cleaned_data['copy_from'].program_times.all():
-                instance.program_times.create(start=pt.start, end=pt.end)
+                instance.program_times.create(start=pt.start, end=pt.end, location=pt.location)
 
             item_copy_data.send(sender=self.event, source=self.cleaned_data['copy_from'], target=instance)
 
@@ -1354,6 +1409,10 @@ class ItemProgramTimeForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['end'].widget.attrs['data-date-after'] = '#id_{prefix}-start_0'.format(prefix=self.prefix)
+        self.fields['location'].widget.attrs['rows'] = '3'
+        self.fields['location'].widget.attrs['placeholder'] = _(
+            'Sample Conference Center, Heidelberg, Germany'
+        )
 
     class Meta:
         model = ItemProgramTime
@@ -1361,6 +1420,7 @@ class ItemProgramTimeForm(I18nModelForm):
         fields = [
             'start',
             'end',
+            'location'
         ]
         field_classes = {
             'start': forms.SplitDateTimeField,
