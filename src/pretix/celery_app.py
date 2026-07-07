@@ -58,6 +58,7 @@ def on_task_received(sender, request, **kwargs):
 def on_task_prerun(sender, task_id, task, **kwargs):
     from pretix.helpers.logs import local
 
+    local.request_id = task_id
     if "X-Pretix-Trace" in task.request.headers:
         local.trace = task.request.headers["X-Pretix-Trace"].split(" ")
     else:
