@@ -1,17 +1,18 @@
 <script setup lang="ts">
-import { computed, reactive, watchEffect } from "vue";
+import { computed, inject, reactive, watchEffect } from "vue";
 import Select from "./input/select.vue";
 import Input from "./input/input.vue";
 import I18nInput from "./input/i18ninput.vue";
 import TextContent from "./text-content.vue";
+import { StoreKey } from "../walletStore";
+
+const store = inject(StoreKey)!
 
 const gettext = (window as any).gettext;
 
 const props = defineProps<{
 	fieldgroup: PlaceholderFieldGroupDefinition;
 	overflows: FieldGroupDefinition[];
-	variables: Variables;
-    locales: Record<string, string>;
 }>();
 const fieldConfig = defineModel<PlaceholderFieldGroupConfig>({ required: true });
 
@@ -58,15 +59,13 @@ watchEffect(() => {
                         tr(v-for="n,i in fieldConfig.entries.length" :key="i")
                             td(v-if="fieldgroup.labels")
                                 .i18n-form-group
-                                    I18nInput(v-model="fieldConfig.entries[n-1].label" :locales="locales")
+                                    I18nInput(v-model="fieldConfig.entries[n-1].label")
                             td
                                 TextContent(v-if='fieldgroup.content_type == "text"'
-                                            v-model="fieldConfig.entries[n-1]"
-                                            :variables="props.variables"
-                                            :locales="locales")
+                                            v-model="fieldConfig.entries[n-1]")
                                 Select(v-else-if='fieldgroup.content_type == "image"'
                                         v-model="fieldConfig.entries[n-1].content"
-                                        :choices="Object.entries(props.variables).map(([k,v]) => [k, v.label])"
+                                        :choices="Object.entries(store.variables.image).map(([k,v]) => [k, v.label])"
                                     )
                             td.text-right
                                 button.btn.btn-danger.form-control-static(type="button" @click="fieldConfig.entries.splice(n-1, 1)")
