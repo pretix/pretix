@@ -30,13 +30,13 @@ type PlaceholderFieldEntry = {
     content?: string;
 }
 
-type ContentFieldEntry = {
-    type: FieldContentType;
+type CustomFieldEntry = {
+    type: 'custom';
     label?: I18nString;
     content?: I18nString;
 }
 
-type FieldEntry = PlaceholderFieldEntry | ContentFieldEntry;
+type FieldEntry = PlaceholderFieldEntry | CustomFieldEntry;
 
 type Style = {
 	identifier: string;
@@ -57,7 +57,7 @@ type Platform = {
 type Styles = Record<string, Style>;
 type Variables = Record<string, Variable>;
 type VariableConfig = Record<string, Variables>;
-type Platforms = Record<string, Platform>;
+type Platforms = Platform[];
 
 
 type PlaceholderFieldGroupConfig = {
@@ -73,9 +73,20 @@ type LayoutData = {
 	fieldgroups: Record<string, FieldGroupConfig>;
 };
 
-type Layout = {
-	name?: string;
-	style?: string;
-	layout?: LayoutData;
+type PlatformLayout = {
+	platform: string;
+	style: string | null;
+	layout: LayoutData;
 };
 
+type WalletLayout = {
+	name?: string;
+	platform_layouts: PlatformLayout[];
+}
+type WalletStore = {
+	platforms: Platforms,
+	variables: VariableConfig,
+	locales: Record<string, string>,
+	csrfToken: String,
+	walletLayout: WalletLayout | null
+}
