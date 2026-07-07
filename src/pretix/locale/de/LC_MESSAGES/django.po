@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:48+0000\n"
-"PO-Revision-Date: 2026-06-29 17:00+0000\n"
-"Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
-"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
-">\n"
+"PO-Revision-Date: 2026-07-07 09:17+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -179,7 +179,7 @@ msgstr "Spanisch (Lateinamerika)"
 
 #: pretix/_base_settings.py
 msgid "Thai"
-msgstr ""
+msgstr "Thai"
 
 #: pretix/_base_settings.py
 msgid "Turkish"
@@ -436,7 +436,7 @@ msgstr ""
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 #, python-format
 msgid "You've been invited to join %(organizer)s"
-msgstr ""
+msgstr "Sie wurden eingeladen, %(organizer)s beizutreten"
 
 #: pretix/api/serializers/organizer.py pretix/control/views/organizer.py
 msgid "This user already has been invited for this team."
@@ -4072,43 +4072,31 @@ msgid "Users"
 msgstr "Benutzer"
 
 #: pretix/base/models/auth.py
-#, fuzzy
-#| msgid "Changes to your account at {organizer}"
 msgid "Changes to your account"
-msgstr "Änderungen an Ihrem Kundenkonto bei {organizer}"
+msgstr "Änderungen an Ihrem Konto"
 
 #: pretix/base/models/auth.py
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "to confirm changing your email address from {old_email}\n"
-#| "to {new_email}, use the following code:"
+#, python-brace-format
 msgid ""
 "To change your email address from {old_email} to {new_email}, use the "
 "following code:"
 msgstr ""
-"um zu bestätigen, dass Sie Ihre E-Mail-Adresse von {old_email}\n"
-"zu {new_email} ändern möchten, verwenden Sie den folgenden Code:"
+"um Ihre E-Mail-Adresse von {old_email} zu {new_email} zu ändern, verwenden "
+"Sie den folgenden Code:"
 
 #: pretix/base/models/auth.py
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "to confirm changing your email address from {old_email}\n"
-#| "to {new_email}, use the following code:"
+#, python-brace-format
 msgid ""
 "To verify your email address {email} on {instance}, use the following code:"
 msgstr ""
-"um zu bestätigen, dass Sie Ihre E-Mail-Adresse von {old_email}\n"
-"zu {new_email} ändern möchten, verwenden Sie den folgenden Code:"
+"um Ihre Absenderadresse {email} für {instance} zu bestätigen, verwenden Sie "
+"den folgenden Code:"
 
 #: pretix/base/models/auth.py
-#, fuzzy
-#| msgid "Enter confirmation code"
 msgid "Your confirmation code"
-msgstr "Bestätigungs-Code eingeben"
+msgstr "Ihr Bestätigungscode"
 
 #: pretix/base/models/auth.py
-#, fuzzy
-#| msgid "Reset password"
 msgid "Reset your password"
 msgstr "Passwort zurücksetzen"
 
@@ -8324,7 +8312,7 @@ msgstr "Veranstaltung abgesagt"
 
 #: pretix/base/services/cancelevent.py
 msgid "Confirm event cancellation and bulk refund"
-msgstr ""
+msgstr "Event-Absage und Rückerstattung bestätigen"
 
 #: pretix/base/services/cart.py pretix/base/services/modelimport.py
 #: pretix/base/services/orders.py
@@ -8905,10 +8893,8 @@ msgid "Your export did not contain any data."
 msgstr "Der Export enthielt keine Daten."
 
 #: pretix/base/services/export.py
-#, fuzzy
-#| msgid "Scheduled exports"
 msgid "Scheduled export failed"
-msgstr "Geplante Exporte"
+msgstr "Geplanter Export fehlgeschlagen"
 
 #: pretix/base/services/export.py
 msgid "Permission denied."
@@ -9244,6 +9230,8 @@ msgstr "Ein Gutschein kann ohne Code nicht erzeugt werden."
 msgid ""
 "Voucher codes must be unique. Code \"{code}\" already exists in this import."
 msgstr ""
+"Gutscheincodes müssen einmalig sein. Code \"{code}\" existiert bereits in "
+"diesem Import."
 
 #: pretix/base/services/modelimport.py
 #, python-brace-format
@@ -9252,13 +9240,19 @@ msgid ""
 msgid_plural ""
 "Voucher codes must be unique. Import contains existing voucher codes {code}."
 msgstr[0] ""
+"Gutscheincodes müssen eindeutig sein. Der Import enthält den existierenden "
+"Gutscheincode {code}."
 msgstr[1] ""
+"Gutscheincodes müssen eindeutig sein. Der Import enthält die existierenden "
+"Gutscheincodes {code}."
 
 #: pretix/base/services/modelimport.py
 msgid ""
 "Vouchers could not be imported, probably due to a voucher code already being "
 "in use."
 msgstr ""
+"Die Gutscheine konnten nicht importiert werden, vermutlich weil ein "
+"Gutscheincode bereits in Verwendung ist."
 
 #: pretix/base/services/orders.py
 msgid ""
@@ -9638,10 +9632,9 @@ msgstr ""
 "Bitte erneut versuchen."
 
 #: pretix/base/services/shredder.py
-#, fuzzy, python-format
-#| msgid "Data shredding completed"
+#, python-format
 msgid "Data shredding completed for %(event)s"
-msgstr "Löschen personenbezogener Daten abgeschlossen"
+msgstr "Löschen personenbezogener Daten abgeschlossen für %(event)s"
 
 #: pretix/base/services/stats.py
 msgid "Uncategorized"
@@ -13333,26 +13326,16 @@ msgstr ""
 "oder kontaktieren Sie uns."
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
-#, fuzzy
-#| msgid ""
-#| "You have requested us to cancel an event which includes a larger bulk-"
-#| "refund:"
 msgid "You requested to cancel an event that involves a large bulk refund:"
 msgstr ""
 "Sie haben angefordert, dass eine Veranstaltung abgesagt wird, wodurch eine "
 "größere Erstattung vorgenommen wird:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
-#, fuzzy
-#| msgid "Estimated refund amount"
 msgid "Estimated refund"
-msgstr "Voraussichtlicher Erstattungsbetrag"
+msgstr "Voraussichtliche Erstattung"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
-#, fuzzy
-#| msgid ""
-#| "Please confirm that you want to proceed by coping the following "
-#| "confirmation code into the cancellation form:"
 msgid "To confirm, paste the following code into the cancellation form:"
 msgstr ""
 "Bitte bestätigen Sie, dass Sie fortfahren wollen, indem Sie den folgenden "
@@ -13364,6 +13347,8 @@ msgid ""
 "Don't share this code with anyone. The %(instance)s team will never ask you "
 "for it."
 msgstr ""
+"Teilen Sie den Code mit niemandem. Das Team von %(instance)s wird nie danach "
+"fragen."
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #: pretix/base/templates/pretixbase/email/export_failed.txt
@@ -13372,6 +13357,8 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team"
 msgstr ""
+"Danke,  \n"
+"Das Team von %(instance)s"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html
 #, python-format
@@ -13379,10 +13366,8 @@ msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "powered by <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
-#, fuzzy
-#| msgid "Your export failed."
 msgid "Your scheduled export failed."
-msgstr "Der Export ist fehlgeschlagen."
+msgstr "Ihr geplanter Export ist fehlgeschlagen."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html
@@ -13390,39 +13375,29 @@ msgid "Reason"
 msgstr "Grund"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
-#, fuzzy
-#| msgid "If your export fails five times in a row, it will no longer be sent."
 msgid "If an export fails five times in a row, we'll stop sending it."
 msgstr ""
 "Wenn der Export fünf mal in Folge fehlschlägt, wird er nicht mehr verschickt."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
-#, fuzzy
-#| msgid "You can request to cancel this order."
 msgid "You can adjust or remove this export here:"
-msgstr "Sie können eine Stornierung dieser Bestellung anfragen."
+msgstr "Sie können diesen Export hier anpassen oder löschen:"
 
 #: pretix/base/templates/pretixbase/email/notification.html
 #: pretix/base/templates/pretixbase/email/notification.txt
-#, fuzzy
-#| msgid "You receive these emails based on your notification settings."
 msgid "You're receiving this email based on your notification settings."
 msgstr ""
-"Sie erhalten diese E-Mail aufgrund Ihrer Benachrichtigungseinstellungen."
+"Sie erhalten diese E-Mail auf Basis Ihrer Benachrichtigungs-Einstellungen."
 
 #: pretix/base/templates/pretixbase/email/notification.html
 #: pretix/base/templates/pretixbase/email/notification.txt
-#, fuzzy
-#| msgid "Change settings"
 msgid "Manage settings"
 msgstr "Einstellungen bearbeiten"
 
 #: pretix/base/templates/pretixbase/email/notification.html
 #: pretix/base/templates/pretixbase/email/notification.txt
-#, fuzzy
-#| msgid "Disable notifications"
 msgid "Disable all notifications"
-msgstr "Benachrichtigungen deaktivieren"
+msgstr "Alle Benachrichtigungen deaktivieren"
 
 #: pretix/base/templates/pretixbase/email/order_details.html
 msgid ""
@@ -13480,25 +13455,7 @@ msgid "Contact"
 msgstr "Kontakt"
 
 #: pretix/base/templates/pretixbase/email/shred_completed.txt
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we hereby confirm that the following data shredding job has been "
-#| "completed:\n"
-#| "\n"
-#| "Organizer: %(organizer)s\n"
-#| "\n"
-#| "Event: %(event)s\n"
-#| "\n"
-#| "Data selection: %(shredders)s\n"
-#| "\n"
-#| "Start time: %(start_time)s (new data added after this time might not have "
-#| "been deleted)\n"
-#| "\n"
-#| "Best regards,\n"
-#| "\n"
-#| "Your %(instance)s team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -13516,21 +13473,17 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"wir bestätigen hiermit, dass der folgende Lösch-Auftrag abgeschlossen "
-"wurde:\n"
+"der folgende Lösch-Auftrag wurde abgeschlossen:\n"
 "\n"
-"Veranstalter: %(organizer)s\n"
+"- Veranstalter: %(organizer)s\n"
+"- Veranstaltung: %(event)s\n"
+"- Datenauswahl: %(shredders)s\n"
+"- Startzeit: %(start_time)s\n"
 "\n"
-"Veranstaltung: %(event)s\n"
+"Daten, die nach dieser Startzeit entstanden sind, sind ggf. nicht gelöscht.\n"
 "\n"
-"Datenauswahl: %(shredders)s\n"
-"\n"
-"Startzeit: %(start_time)s (Daten, die nach diesem Zeitpunkt entstanden sind, "
-"sind ggf. nicht gelöscht)\n"
-"\n"
-"Freundliche Grüße\n"
-"\n"
-"Das %(instance)s-Team\n"
+"Danke,  \n"
+"Das Team von %(instance)s\n"
 
 #: pretix/base/templates/pretixbase/forms/widgets/checkbox_sales_channel_option.html
 msgid ""
@@ -13567,11 +13520,15 @@ msgstr "Bitte in neuem Tab fortfahren"
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid "For security reasons, the following step is only possible in a new tab."
 msgstr ""
+"Aus Sicherheitsgründen ist der folgende Schritt nur in einem neuen Tab "
+"möglich."
 
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid ""
 "If the new tab did not open automatically, please click the following button:"
 msgstr ""
+"Wenn der neue Tab sich nicht automatisch geöffnet hat, klicken Sie bitte den "
+"folgenden Button:"
 
 #: pretix/base/templates/pretixbase/framebreak.html
 #: pretix/presale/templates/pretixpresale/event/cookies.html
@@ -19943,21 +19900,7 @@ msgid "Add property"
 msgstr "Eigenschaft hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/email/confirmation_code.txt
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "%(reason)s\n"
-#| "\n"
-#| "    %(code)s\n"
-#| "\n"
-#| "Please do never give this code to another person. Our support team will "
-#| "never ask for this code.\n"
-#| "\n"
-#| "If this code was not requested by you, please contact us immediately.\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your %(instance)s team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -19979,14 +19922,14 @@ msgstr ""
 "\n"
 "    %(code)s\n"
 "\n"
-"Bitte geben Sie diesen Code nie an eine andere Person weiter. Unser Support-"
-"Team wird nie nach diesem Code fragen.\n"
+"Bitte geben Sie diesen Code an niemanden weiter. Das Team von %(instance)s "
+"wird nie danach fragen.\n"
 "\n"
 "Wenn Sie diesen Code nicht angefragt haben, kontaktieren Sie uns bitte "
 "sofort.\n"
 "\n"
-"Viele Grüße,\n"
-"Ihr %(instance)s-Team\n"
+"Danke,  \n"
+"Das Team von %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt
 #, fuzzy, python-format
@@ -20057,27 +20000,22 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team\n"
 msgstr ""
+"Hallo,\n"
+"\n"
+"wir haben eine Anfrage erhalten, das Passwort für Ihren Account bei %"
+"(instance)s zurückzusetzen. Um ein neues Passwort zu wählen, klicken Sie auf "
+"den folgenden Link:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Wenn Sie dies nicht angefordert haben, können Sie diese E-Mail ignorieren – "
+"Ihr Passwort wird nicht geändert.\n"
+"\n"
+"Danke,  \n"
+"Das Team von %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you have been invited to a team on %(instance)s, a platform to perform "
-#| "event\n"
-#| "ticket sales.\n"
-#| "\n"
-#| "Organizer: %(organizer)s\n"
-#| "Team: %(team)s\n"
-#| "\n"
-#| "If you want to join that team, just click on the following link:\n"
-#| "%(url)s\n"
-#| "\n"
-#| "If you do not want to join, you can safely ignore or delete this email.\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your %(instance)s team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20099,23 +20037,18 @@ msgstr ""
 "Hallo,\n"
 "\n"
 "Sie wurden in das Team eines Veranstalters auf %(instance)s eingeladen, "
-"einer Plattform zum\n"
-"Verkaufen von Veranstaltungstickets.\n"
+"einer Plattform zum Verkaufen von Veranstaltungstickets.\n"
 "\n"
-"Veranstalter: %(organizer)s\n"
+"- Veranstalter: %(organizer)s\n"
+"- Team: %(team)s\n"
 "\n"
-"Team: %(team)s\n"
-"\n"
-"Wenn Sie dem Team beitreten möchten, klicken Sie einfach auf den folgenden "
-"Link:\n"
+"Zum Akzeptieren klicken Sie auf den folgenden Link:\n"
 "%(url)s\n"
 "\n"
-"Wenn Sie dies nicht möchten, können Sie diese Mail problemlos ignorieren\n"
-"oder löschen.\n"
+"Wenn Sie dies nicht möchten, können Sie diese Mail ignorieren.\n"
 "\n"
-"Viele Grüße\n"
-"\n"
-"Das %(instance)s-Team\n"
+"Danke,  \n"
+"Das Team von  %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #, python-format
@@ -20124,14 +20057,17 @@ msgid ""
 "\n"
 "We noticed a new sign-in to your %(instance)s account:\n"
 msgstr ""
+"Hallo,\n"
+"\n"
+"wir haben einen neuen Login in Ihren Account bei %(instance)s festgestellt:\n"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 msgid "Browser"
-msgstr ""
+msgstr "Browser"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 msgid "Operating system"
-msgstr ""
+msgstr "Betriebssystem"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
 #, python-format
@@ -20146,26 +20082,18 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team\n"
 msgstr ""
+"Wenn Sie dies waren, ist keine Aktion erforderlich.\n"
+"\n"
+"Wenn Sie diesen Login nicht wiedererkennen, ändern Sie bitte sofort Ihr "
+"Passwort:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Danke,  \n"
+"Das Team von %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt
-#, fuzzy, python-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "this is to inform you that the account information of your %(instance)s "
-#| "account has been\n"
-#| "changed. In particular, the following changes have been performed:\n"
-#| "\n"
-#| "%(messages)s\n"
-#| "\n"
-#| "If this change was not performed by you, please contact us immediately.\n"
-#| "\n"
-#| "You can review and change your account settings here:\n"
-#| "\n"
-#| "%(url)s\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your %(instance)s team\n"
+#, python-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -20185,21 +20113,19 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"die Einstellungen Ihres %(instance)s-Kontos wurden verändert. Es wurden die "
-"folgenden Änderungen\n"
-"vorgenommen:\n"
+"die folgenden Einstellungen Ihres Kontos bei %(instance)s wurden verändert:\n"
 "\n"
 "%(messages)s\n"
 "\n"
-"Wenn diese Änderung nicht von Ihnen vorgenommen wurde, kontaktieren Sie uns "
-"bitte unverzüglich.\n"
+"Wenn diese Änderung nicht von Ihnen vorgenommen wurde, kontaktieren Sie das "
+"Team von %(instance)s bitte unverzüglich.\n"
 "\n"
 "Sie können Ihre Kontoeinstellungen hier einsehen und verändern:\n"
 "\n"
 "%(url)s\n"
 "\n"
-"Viele Grüße\n"
-"Ihr %(instance)s-Team\n"
+"Danke, \n"
+"Das Team von %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html
@@ -28817,7 +28743,7 @@ msgstr "Der Bestätigungscode war falsch, bitte erneut versuchen."
 #: pretix/control/views/mailsetup.py
 #, python-format
 msgid "Confirm %(address)s as a sender address"
-msgstr ""
+msgstr "Bestätigen Sie %(address)s als Absenderadresse"
 
 #: pretix/control/views/mailsetup.py
 #, python-format
@@ -30042,10 +29968,8 @@ msgid "Open BezahlCode in your banking app to start the payment process."
 msgstr "BezahlCode in Banking-App öffnen um den Zahlungsvorgang zu starten."
 
 #: pretix/helpers/security.py
-#, fuzzy
-#| msgid "Sign in to your account at %(org)s"
 msgid "New sign-in to your account"
-msgstr "Log-in in Ihr Kundenkonto bei %(org)s"
+msgstr "Neue Anmeldung in Ihrem Konto"
 
 #: pretix/multidomain/models.py
 msgid "Organizer domain"
@@ -36167,10 +36091,8 @@ msgstr[0] "%(count)s Veranstaltung"
 msgstr[1] "%(count)s Veranstaltungen"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
-#, fuzzy
-#| msgid "No event"
 msgid "No events"
-msgstr "Keine Veranstaltung"
+msgstr "Keine Veranstaltungen"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html
@@ -36516,10 +36438,8 @@ msgid "Create account"
 msgstr "Konto erstellen"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
-#, fuzzy
-#| msgid "The invoice could not be generated."
 msgid "Login could not be completed"
-msgstr "Die Rechnung konnte nicht erstellt werden."
+msgstr "Login konnte nicht durchgeführt werden"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -36528,43 +36448,53 @@ msgid ""
 "process.\n"
 "    "
 msgstr ""
+"\n"
+"        Wir konnten Ihren Login nicht durchführen, da der Prozess "
+"unterbrochen wurde.\n"
+"    "
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "Possible reasons for this:"
-msgstr ""
+msgstr "Mögliche Gründe:"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
 "You started logging in from a link opened inside an app (such as Instagram "
 "or an email app), and then continued the login in your main browser."
 msgstr ""
+"Sie haben den Login von einem Link in einer App (wie z.B. Instagram oder "
+"einer E-Mail-App) gestartet und dann in Ihrem normalen Browser fortgesetzt."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "You refreshed the page or used the back button during login."
 msgstr ""
+"Sie haben während des Logins die Seite neu geladen oder den Zurück-Button "
+"betätigt."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "The site was opened in more than one tab or window at the same time."
-msgstr ""
+msgstr "Die Seite war in mehr als einem Tab oder Fenster gleichzeitig geöffnet."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
 "There was a long delay between starting and completing the login process."
-msgstr ""
+msgstr "Es gab eine lange Pause zwischen Start und Ende des Loginvorgangs."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "How to fix this:"
-msgstr ""
+msgstr "Wie Sie dies beheben können:"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "Close this page."
-msgstr ""
+msgstr "Schließen Sie diese Seite."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
 "Open this website again directly in your main browser (for example Safari or "
 "Chrome)."
 msgstr ""
+"Öffnen Sie die Website erneut direkt mit Ihrem bevorzugten Browser (z.B. "
+"Safari oder Chrome)."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -36572,6 +36502,9 @@ msgid ""
 "browser window, without refreshing the page, opening new tabs, or switching "
 "apps part-way through."
 msgstr ""
+"Beginnen Sie den Kauf- oder Login-Vorgang erneut und führen Sie ihn im "
+"selben Browserfenster durch, ohne die Seite neu zu laden, neue Tabs zu "
+"öffnen oder zwischendurch Apps zu wechseln."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -36579,6 +36512,10 @@ msgid ""
 "before retrying can help. As a last step, try using a different browser or "
 "another device (for example, a desktop or laptop computer)."
 msgstr ""
+"Wenn das Problem fortbesteht, kann es helfen, alle Browser-Fenster zu "
+"schließen und Cookies zu löschen. Als letzten Schritt können Sie einen "
+"anderen Browser oder ein andres Gerät (z.B. ein Laptop oder Desktop-"
+"Computer) verwenden."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html
 msgid "Your membership"
