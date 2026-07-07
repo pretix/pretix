@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, inject, reactive } from 'vue'
 import Select from './input/select.vue'
 import I18nInput from './input/i18ninput.vue'
+import { StoreKey } from "../walletStore";
 
+const store = inject(StoreKey)!
 const gettext = (window as any).gettext
 
-const props = defineProps<{
-	variables: Variables
-    locales: Record<string, string>;
-}>()
 const entry = defineModel<FieldEntry>({ required: true })
 
 const selectChoices = computed(() =>{
-    const choices = Object.entries(props.variables).map(([k,v]): [string, string] => [k, v.label])
+    const choices = Object.entries(store.variables.text).map(([k,v]): [string, string] => [k, v.label])
     choices.push(["other", gettext("Other…")])
     return choices
 });
@@ -23,11 +21,9 @@ const selection = computed({
             return entry.value.content
         } else if (entry.value.type === 'custom') {
             return "other"
-        } else {
-            throw new Error(`Unknown entry type "${entry.value.type}"`);
         }
     },
-    set(newValue) { 
+    set(newValue) {
         if (newValue == "other") {
             entry.value.type = "custom"
             entry.value.content = {};
@@ -44,11 +40,9 @@ const textContent = computed({
             return ""
         } else if (entry.value.type === 'custom') {
             return entry.value.content
-        } else {
-            throw new Error(`Unknown entry type "${entry.value.type}"`);
         }
     },
-    set(newValue) { 
+    set(newValue) {
         entry.value.content = newValue
     }
 })
@@ -61,5 +55,5 @@ const textContent = computed({
             v-model="selection"
             :choices="selectChoices"
         )
-        I18nInput(v-model="textContent" v-if="selection === 'other'" :locales="locales")
+        I18nInput(v-model="textContent" v-if="selection === 'other'" :locales="store.locales")
 </template>
