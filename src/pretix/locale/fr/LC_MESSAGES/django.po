@@ -36403,8 +36403,6 @@ msgstr[0] "%(count)s élement"
 msgstr[1] "%(count)s élements"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
-#, fuzzy
-#| msgid "No event"
 msgid "No events"
 msgstr "Aucun événement"
 
