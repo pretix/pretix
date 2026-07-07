@@ -19,7 +19,7 @@ def clean_duplicate_secrets(apps, schema_editor):
         affected = OrderPosition.all.filter(
             **{k: v for k, v in row.items() if k != "c"}
         ).order_by("pk")
-        logger.error(f"Found {row['c']} tickets with with the same secret \"{row["secret"]}\" in organizer {row['order__event__organizer_id']}, all except one will be changed")
+        logger.error(f"Found {row['c']} tickets with with the same secret \"{row['secret']}\" in organizer {row['order__event__organizer_id']}, all except one will be changed")
         for i, a in enumerate(affected):
             if i > 0:
                 a.secret = a.secret + "__dupl__" + str(a.pk)
