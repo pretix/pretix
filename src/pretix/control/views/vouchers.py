@@ -40,7 +40,9 @@ import bleach
 from defusedcsv import csv
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied, ValidationError, BadRequest
+from django.core.exceptions import (
+    BadRequest, PermissionDenied, ValidationError,
+)
 from django.db import connection, transaction
 from django.db.models import Count, Exists, OuterRef, Sum
 from django.http import (

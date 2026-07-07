@@ -45,7 +45,7 @@ from tests.base import SoupTestMixin, extract_form_fields
 
 from pretix.base.models import (
     Event, Item, ItemVariation, Order, OrderPosition, Organizer, Quota,
-    SeatingPlan, Team, User, Voucher, WaitingListEntry
+    SeatingPlan, Team, User, Voucher, WaitingListEntry,
 )
 
 
@@ -808,7 +808,7 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
         assert 'walk-ins' in names
         assert 'waiting-list' not in names
 
-        
+
 class VoucherBulkEditFormTest(SoupTestMixin, TransactionTestCase):
     @scopes_disabled()
     def setUp(self):
