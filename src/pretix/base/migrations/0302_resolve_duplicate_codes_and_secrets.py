@@ -33,7 +33,7 @@ def clean_duplicate_secrets(apps, schema_editor):
         affected = Order.objects.filter(
             **{k: v for k, v in row.items() if k != "c"}
         ).order_by("pk")
-        logger.error(f"Found {row['c']} orders with with the same code \"{row["code"]}\" in organizer {row['event__organizer_id']}, all except one will be changed")
+        logger.error(f"Found {row['c']} orders with with the same code \"{row['code']}\" in organizer {row['event__organizer_id']}, all except one will be changed")
         for i, a in enumerate(affected):
             if i > 0:
                 if len(a.code) > 16 - len(str(a.pk)):
