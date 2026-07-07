@@ -885,26 +885,6 @@ class Item(LoggedModel):
             return False
         return True
 
-    def unavailability_reason(self, now_dt: datetime=None, has_voucher=False, subevent=None) -> Optional[str]:
-        now_dt = now_dt or time_machine_now()
-        subevent_item = subevent and subevent.item_overrides.get(self.pk)
-        if not self.active:
-            return 'active'
-        elif self.available_from and self.available_from > now_dt:
-            return 'available_from'
-        elif self.available_until and self.available_until < now_dt:
-            return 'available_until'
-        elif (self.require_voucher or self.hide_without_voucher) and not has_voucher:
-            return 'require_voucher'
-        elif subevent_item and subevent_item.available_from and subevent_item.available_from > now_dt:
-            return 'available_from'
-        elif subevent_item and subevent_item.available_until and subevent_item.available_until < now_dt:
-            return 'available_until'
-        elif self.hidden_if_item_available and self._dependency_available:
-            return 'hidden_if_item_available'
-        else:
-            return None
-
     def _get_quotas(self, ignored_quotas=None, subevent=None):
         check_quotas = set(getattr(
             self, '_subevent_quotas',  # Utilize cache in product list
@@ -1412,22 +1392,6 @@ class ItemVariation(models.Model):
         if not self.active or not self.is_available_by_time(now_dt):
             return False
         return True
-
-    def unavailability_reason(self, now_dt: datetime=None, has_voucher=False, subevent=None) -> Optional[str]:
-        now_dt = now_dt or time_machine_now()
-        subevent_var = subevent and subevent.var_overrides.get(self.pk)
-        if not self.active:
-            return 'active'
-        elif self.available_from and self.available_from > now_dt:
-            return 'available_from'
-        elif self.available_until and self.available_until < now_dt:
-            return 'available_until'
-        elif subevent_var and subevent_var.available_from and subevent_var.available_from > now_dt:
-            return 'available_from'
-        elif subevent_var and subevent_var.available_until and subevent_var.available_until < now_dt:
-            return 'available_until'
-        else:
-            return None
 
     @property
     def meta_data(self):

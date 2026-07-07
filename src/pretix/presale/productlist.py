@@ -265,7 +265,7 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
                 item._remove = True
                 continue
 
-        item.current_unavailability_reason = item.unavailability_reason(has_voucher=voucher, subevent=subevent)
+        item.current_unavailability_reason = _get_item_unavailability_reason(item, has_voucher=voucher, subevent=subevent)
 
         item.description = str(item.description)
         for recv, resp in item_description.send(sender=event, item=item, variation=None, subevent=subevent):
@@ -382,7 +382,7 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
                                 base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
                     ) if var.original_price or item.original_price else None
 
-                var.current_unavailability_reason = var.unavailability_reason(has_voucher=voucher, subevent=subevent)
+                var.current_unavailability_reason = _get_variant_unavailability_reason(var, has_voucher=voucher, subevent=subevent)
 
             item.original_price = (
                 item.tax(item.original_price, currency=event.currency, include_bundled=True,
@@ -420,3 +420,41 @@ def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=No
     items = [item for item in items
              if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
     return items, display_add_to_cart
+
+
+def _get_item_unavailability_reason(item, now_dt: Optional[datetime]=None, has_voucher=False, subevent=None) -> Optional[str]:
+    now_dt = now_dt or time_machine_now()
+    subevent_item = subevent and subevent.item_overrides.get(item.pk)
+    if not item.active:
+        return 'active'
+    elif item.available_from and item.available_from > now_dt:
+        return 'available_from'
+    elif item.available_until and item.available_until < now_dt:
+        return 'available_until'
+    elif (item.require_voucher or item.hide_without_voucher) and not has_voucher:
+        return 'require_voucher'
+    elif subevent_item and subevent_item.available_from and subevent_item.available_from > now_dt:
+        return 'available_from'
+    elif subevent_item and subevent_item.available_until and subevent_item.available_until < now_dt:
+        return 'available_until'
+    elif item.hidden_if_item_available and item._dependency_available:
+        return 'hidden_if_item_available'
+    else:
+        return None
+
+
+def _get_variant_unavailability_reason(variant, now_dt: Optional[datetime]=None, has_voucher=False, subevent=None) -> Optional[str]:
+    now_dt = now_dt or time_machine_now()
+    subevent_var = subevent and subevent.var_overrides.get(variant.pk)
+    if not variant.active:
+        return 'active'
+    elif variant.available_from and variant.available_from > now_dt:
+        return 'available_from'
+    elif variant.available_until and variant.available_until < now_dt:
+        return 'available_until'
+    elif subevent_var and subevent_var.available_from and subevent_var.available_from > now_dt:
+        return 'available_from'
+    elif subevent_var and subevent_var.available_until and subevent_var.available_until < now_dt:
+        return 'available_until'
+    else:
+        return None
