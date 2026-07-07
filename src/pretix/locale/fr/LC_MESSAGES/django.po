@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:48+0000\n"
-"PO-Revision-Date: 2026-07-07 09:17+0000\n"
+"PO-Revision-Date: 2026-07-07 09:22+0000\n"
 "Last-Translator: CVZ-es <damien.bremont@casadevelazquez.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/"
 "fr/>\n"
@@ -36751,10 +36751,8 @@ msgid "Create account"
 msgstr "Créer un compte"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
-#, fuzzy
-#| msgid "The invoice could not be generated."
 msgid "Login could not be completed"
-msgstr "La facture n'a pas pu être générée."
+msgstr "La connexion n'a pas pu être établie"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
@@ -36763,20 +36761,29 @@ msgid ""
 "process.\n"
 "    "
 msgstr ""
+"\n"
+"        Nous n'avons pas pu finaliser votre connexion car une interruption "
+"est survenue au cours du processus.\n"
+"    "
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "Possible reasons for this:"
-msgstr ""
+msgstr "Raisons possibles :"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid ""
 "You started logging in from a link opened inside an app (such as Instagram "
 "or an email app), and then continued the login in your main browser."
 msgstr ""
+"Vous avez commencé à vous connecter à partir d'un lien ouvert dans une "
+"application (comme Instagram ou une application de messagerie), puis vous "
+"avez poursuivi la procédure de connexion dans votre navigateur principal."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "You refreshed the page or used the back button during login."
 msgstr ""
+"Vous avez actualisé la page ou utilisé le bouton « Retour » pendant la "
+"procédure de connexion."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login_interrupted_message.html
 msgid "The site was opened in more than one tab or window at the same time."
