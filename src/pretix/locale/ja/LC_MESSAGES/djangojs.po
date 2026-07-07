@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:52+0000\n"
-"PO-Revision-Date: 2026-05-12 06:34+0000\n"
-"Last-Translator: Yasunobu YesNo Kawaguchi <kawaguti@gmail.com>\n"
+"PO-Revision-Date: 2026-07-07 09:17+0000\n"
+"Last-Translator: Hijiri Umemoto <hijiri@umemoto.org>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.6.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Marked as paid"
@@ -426,11 +426,11 @@ msgstr "Ctrl-Cを押してコピー！"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid "Edit"
-msgstr ""
+msgstr "編集"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid "Visualize"
-msgstr ""
+msgstr "ビジュアライズ"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid ""
@@ -438,10 +438,13 @@ msgid ""
 "or variations are not contained in any of your rule parts so people with "
 "these tickets will not get in:"
 msgstr ""
+"あなたのルールは常に製品またはバリエーションでフィルタリングされますが、以下"
+"の製品やバリエーションはいずれのルール部分にも含まれていないため、これらの"
+"チケットをお持ちの方は入れません。"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
 msgid "Please double-check if this was intentional."
-msgstr ""
+msgstr "意図的かどうか、再度ご確認ください。"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
 msgid "All of the conditions below (AND)"
