@@ -29,7 +29,7 @@ from typing import List
 from django.utils.functional import cached_property
 
 from pretix.base.models import CartPosition, ItemCategory, SalesChannel
-from pretix.presale.utils import get_grouped_items
+from pretix.presale.productlist import get_grouped_items
 
 
 class DummyCategory:

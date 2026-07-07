@@ -110,7 +110,7 @@ from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
-from pretix.presale.utils import get_grouped_items
+from pretix.presale.productlist import get_grouped_items
 from pretix.testutils.middleware import debugflags_var
 
 

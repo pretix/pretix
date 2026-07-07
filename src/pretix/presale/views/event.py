@@ -72,8 +72,10 @@ from pretix.helpers.formats.en.formats import (
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_public_ical
+from pretix.presale.productlist import (
+    get_grouped_items, item_group_by_category,
+)
 from pretix.presale.signals import seatingframe_html_head
-from pretix.presale.utils import get_grouped_items, item_group_by_category
 from pretix.presale.views.organizer import (
     EventListMixin, add_subevents_for_days, days_for_template,
     filter_qs_by_attr, filter_subevents_with_plugins, has_before_after,

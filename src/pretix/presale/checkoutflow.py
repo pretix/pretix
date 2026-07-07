@@ -87,13 +87,14 @@ from pretix.presale.forms.checkout import (
     ContactForm, InvoiceAddressForm, InvoiceNameForm, MembershipForm,
 )
 from pretix.presale.forms.customer import AuthenticationForm, RegistrationForm
+from pretix.presale.productlist import get_grouped_items
 from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
     contact_form_fields, contact_form_fields_overrides,
     order_api_meta_from_request, order_meta_from_request, question_form_fields,
     question_form_fields_overrides,
 )
-from pretix.presale.utils import customer_login, get_grouped_items
+from pretix.presale.utils import customer_login
 from pretix.presale.views import CartMixin, get_cart, get_cart_is_free
 from pretix.presale.views.cart import (
     _items_from_post_data, cart_session, create_empty_cart_id,
