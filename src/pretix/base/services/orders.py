@@ -1944,7 +1944,7 @@ class OrderChangeManager:
 
         :param addons: A list of dictionaries with the keys ``"addon_to"``, ``"item"``, ``"variation"`` (all ID values),
                        ``"count"``, and ``"price"``.
-        :param limit_main_positions: By default, the method works on all methods of the order. If you set this to a
+        :param limit_main_positions: By default, the method works on all positions of the order. If you set this to a
                                      queryset or a list of positions, all other positions and their add-ons will be kept
                                      untouched.
         """
