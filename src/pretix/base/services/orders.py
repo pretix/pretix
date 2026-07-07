@@ -2104,8 +2104,8 @@ class OrderChangeManager:
         def _addon_is_available(a):
             # If an item is no longer available due to time, it should usually also be no longer
             # user-removable, because e.g. the stock has already been ordered.
-            # We always set has_voucher=True because if a product now requires a voucher, it usually does
-            # not mean it should be unremovable for others.
+            # We always set voucher=None because that's what's done when generating the form in
+            # OrderChangeMixin (vouchers for addons are not supported).
             # This also prevents accidental removal through the UI because a hidden product will no longer
             # be part of the input.
             if not _allowed_on_order_sales_channel(a.item, self.order) or (
@@ -2117,7 +2117,7 @@ class OrderChangeManager:
                 self.order.event,
                 channel=self.order.sales_channel,
                 subevent=a.subevent,
-                has_voucher=True,
+                voucher=None,
                 base_qs=Item.objects.filter(pk=a.item.pk),
                 allow_addons=True
             )

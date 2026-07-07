@@ -57,7 +57,7 @@ def item_group_by_category(items):
 def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, voucher=None, require_seat=0, base_qs=None,
                                allow_addons=False, allow_cross_sell=False,
                                quota_cache=None, filter_items=None, filter_categories=None, memberships=None,
-                               ignore_hide_sold_out_for_item_ids=None, has_voucher=False):
+                               ignore_hide_sold_out_for_item_ids=None):
     base_qs_set = base_qs is not None
     base_qs = base_qs if base_qs is not None else event.items
 
@@ -74,7 +74,7 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
         Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()) | Q(available_from_mode='info')) &
         Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()) | Q(available_until_mode='info'))
     )
-    if not has_voucher and (not voucher or not voucher.show_hidden_items):
+    if not voucher or not voucher.show_hidden_items:
         variation_q &= Q(hide_without_voucher=False)
 
     if memberships is not None:
