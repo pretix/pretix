@@ -1428,11 +1428,16 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
         form.instance.custom_rules = json.dumps([
             f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
         ], cls=I18nJSONEncoder)
-        if form.has_changed():
+        if form.has_changed() or self.formset.has_changed():
+            change_data = {
+                k: form.cleaned_data.get(k) for k in form.changed_data
+            }
+            if self.formset.has_changed():
+                change_data["custom_rules"] = [
+                    f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
+                ]
             self.object.log_action(
-                'pretix.event.taxrule.changed', user=self.request.user, data={
-                    k: form.cleaned_data.get(k) for k in form.changed_data
-                }
+                'pretix.event.taxrule.changed', user=self.request.user, data=change_data
             )
         return super().form_valid(form)
 
