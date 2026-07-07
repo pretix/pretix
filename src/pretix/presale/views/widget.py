@@ -68,7 +68,7 @@ from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.forms.organizer import meta_filtersets
 from pretix.presale.productlist import (
-    prepare_item_list_for_shop, item_group_by_category,
+    item_group_by_category, prepare_item_list_for_shop,
 )
 from pretix.presale.style import get_theme_vars_css
 from pretix.presale.views.cart import get_or_create_cart_id

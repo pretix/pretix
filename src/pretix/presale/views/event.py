@@ -73,7 +73,7 @@ from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_public_ical
 from pretix.presale.productlist import (
-    prepare_item_list_for_shop, item_group_by_category,
+    item_group_by_category, prepare_item_list_for_shop,
 )
 from pretix.presale.signals import seatingframe_html_head
 from pretix.presale.views.organizer import (
@@ -86,6 +86,9 @@ from . import (
     CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
     iframe_entry_view_wrapper,
 )
+
+from pretix.presale.productlist import prepare_item_list_for_shop as get_grouped_items  # noqa
+
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 

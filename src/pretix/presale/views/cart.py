@@ -69,7 +69,7 @@ from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.productlist import (
-    prepare_item_list_for_shop, item_group_by_category,
+    item_group_by_category, prepare_item_list_for_shop,
 )
 from pretix.presale.views import (
     CartMixin, EventViewMixin, allow_cors_if_namespaced,
