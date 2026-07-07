@@ -2101,6 +2101,36 @@ class OrderChangeManager:
                     )
                     item_counts[item] += 1
 
+        def _addon_is_available(a):
+            # If an item is no longer available due to time, it should usually also be no longer
+            # user-removable, because e.g. the stock has already been ordered.
+            # We always set has_voucher=True because if a product now requires a voucher, it usually does
+            # not mean it should be unremovable for others.
+            # This also prevents accidental removal through the UI because a hidden product will no longer
+            # be part of the input.
+            if not _allowed_on_order_sales_channel(a.item, self.order) or (
+                a.variation and not _allowed_on_order_sales_channel(a.variation, self.order)
+            ):
+                return False
+
+            items, _ = prepare_item_list_for_shop(
+                self.order.event,
+                channel=self.order.sales_channel,
+                subevent=a.subevent,
+                has_voucher=True,
+                base_qs=Item.objects.filter(pk=a.item.pk),
+                allow_addons=True
+            )
+            if (not items) or items[0].current_unavailability_reason:
+                return False
+
+            if a.variation:
+                variations = [var for var in items[0].available_variations if var.pk == a.variation.pk]
+                if (not variations) or variations[0].current_unavailability_reason:
+                    return False
+
+            return True
+
         # Detect removed add-ons and create RemoveOperations
         for cp, al in list(current_addons.items()):
             for k, v in al.items():
@@ -2110,28 +2140,7 @@ class OrderChangeManager:
                     for a in current_addons[cp][k][:current_num - input_num]:
                         if a.canceled:
                             continue
-                        items, _ = prepare_item_list_for_shop(
-                            self.order.event,
-                            channel=self.order.sales_channel,
-                            subevent=a.subevent,
-                            has_voucher=True,
-                            base_qs=Item.objects.filter(pk=a.item.pk),
-                            allow_addons=True
-                        )
-                        is_unavailable = (
-                            # If an item is no longer available due to time, it should usually also be no longer
-                            # user-removable, because e.g. the stock has already been ordered.
-                            # We always pass has_voucher=True because if a product now requires a voucher, it usually does
-                            # not mean it should be unremovable for others.
-                            # This also prevents accidental removal through the UI because a hidden product will no longer
-                            # be part of the input.
-                            (a.variation and a.variation.unavailability_reason(has_voucher=True, subevent=a.subevent))
-                            or (a.variation and not _allowed_on_order_sales_channel(a.variation, self.order))
-                            or not items
-                            or items[0].current_unavailability_reason
-                            or not _allowed_on_order_sales_channel(items[0], self.order)
-                        )
-                        if is_unavailable:
+                        if not _addon_is_available(a):
                             # "Re-select" add-on
                             selected_addons[cp.id, a.item.category_id][a.item_id, a.variation_id] += 1
                             continue
