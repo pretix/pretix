@@ -1905,12 +1905,6 @@ class QuickSetupForm(I18nForm):
         required=False,
         help_text=_("We'll show this publicly to allow attendees to contact you.")
     )
-    contact_url = forms.URLField(
-        label=_("Contact URL"),
-        required=False,
-        help_text=_("If you set this, the footer contact link will point here instead of using the email address above. "
-                    "Please note that you still need to add a contact email address that will be shared with all emails you send.")
-    )
     total_quota = forms.IntegerField(
         label=_("Total capacity"),
         min_value=0,
