@@ -40,6 +40,7 @@ from django.core.cache import cache
 from django.core.management.base import BaseCommand
 from django.db import close_old_connections
 from django.dispatch.dispatcher import NO_RECEIVERS
+from django_querytagger.tagging import with_tag
 
 from pretix.helpers.periodic import SKIPPED
 
@@ -82,7 +83,8 @@ class Command(BaseCommand):
             try:
                 # Check if the DB connection is still good, it might be closed if the previous task took too long.
                 close_old_connections()
-                r = receiver(signal=periodic_task, sender=self)
+                with with_tag(f"periodictask={name}"):
+                    r = receiver(signal=periodic_task, sender=self)
             except Exception as err:
                 if isinstance(err, KeyboardInterrupt):
                     raise err

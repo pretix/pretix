@@ -19,14 +19,56 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
 import os
 
-from celery import Celery
+from celery import Celery, signals
+from django.dispatch import receiver
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
+logger = logging.getLogger(__name__)
 
 from django.conf import settings
 
 app = Celery('pretix')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+
+
+@receiver(signals.before_task_publish)
+def on_before_task_publish(sender, body, exchange, routing_key, headers, properties, declare, retry_policy, **kwargs):
+    from pretix.helpers.logs import local
+
+    trace = getattr(local, 'trace', [])
+    request_id = getattr(local, 'request_id', None)
+    if request_id:
+        trace.append(request_id)
+
+    headers["X-Pretix-Trace"] = " ".join(trace)
+
+
+@receiver(signals.task_received)
+def on_task_received(sender, request, **kwargs):
+    trace = request._request_dict.get("X-Pretix-Trace")
+    if trace:
+        logger.info(f"Task {request.id} has trace {trace}")
+
+
+@receiver(signals.task_prerun)
+def on_task_prerun(sender, task_id, task, **kwargs):
+    from pretix.helpers.logs import local
+
+    local.request_id = task_id
+    if "X-Pretix-Trace" in task.request.headers:
+        local.trace = task.request.headers["X-Pretix-Trace"].split(" ")
+    else:
+        local.trace = []
+    local.trace.append(task_id)
+
+
+@receiver(signals.task_postrun)
+def on_task_postrun(sender, task_id, task, **kwargs):
+    from pretix.helpers.logs import local
+
+    local.request_id = None
+    local.trace = []

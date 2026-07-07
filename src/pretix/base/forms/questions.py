@@ -53,6 +53,7 @@ from django.db.models import QuerySet
 from django.forms import Select, widgets
 from django.forms.widgets import FILE_INPUT_CONTRADICTION
 from django.utils.formats import date_format
+from django.utils.functional import lazy
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.text import format_lazy
@@ -324,16 +325,21 @@ class WrappedPhonePrefixSelect(Select):
     initial = None
 
     def __init__(self, initial=None):
-        choices = [("", "---------")]
+        def _get_choices():
+            choices = [("", "---------")]
 
-        if initial:
-            for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
-                if all(v == REGION_CODE_FOR_NON_GEO_ENTITY for v in values):
-                    continue
-                if initial in values:
-                    self.initial = "+%d" % prefix
-                    break
-        choices += get_phone_prefixes_sorted_and_localized()
+            if initial:
+                for prefix, values in COUNTRY_CODE_TO_REGION_CODE.items():
+                    if all(v == REGION_CODE_FOR_NON_GEO_ENTITY for v in values):
+                        continue
+                    if initial in values:
+                        self.initial = "+%d" % prefix
+                        break
+            choices += get_phone_prefixes_sorted_and_localized()
+            return choices
+
+        choices = lazy(_get_choices, list)()
+
         super().__init__(choices=choices, attrs={
             'aria-label': pgettext_lazy('phonenumber', 'International area code'),
             'autocomplete': 'tel-country-code',
@@ -1398,7 +1404,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         elif self.validate_vat_id and vat_id_applicable:
             try:
                 normalized_id = validate_vat_id(data.get('vat_id'), str(data.get('country')))
-                self.instance.vat_id_validated = True
+                self.instance.vat_id_validated = bool(normalized_id)
                 self.instance.vat_id = data['vat_id'] = normalized_id
             except VATIDFinalError as e:
                 if self.all_optional:

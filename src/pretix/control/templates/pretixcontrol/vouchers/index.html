@@ -99,6 +99,9 @@
         </p>
         <form action="{% url "control:event.vouchers.bulkaction"  organizer=request.event.organizer.slug event=request.event.slug %}" method="post">
             {% csrf_token %}
+            {% for field in filter_form %}
+                {{ field.as_hidden }}
+            {% endfor %}
             <div class="table-responsive">
                 <table class="table table-hover table-quotas">
                     <thead>
@@ -144,6 +147,18 @@
                         {% endif %}
                         <th></th>
                     </tr>
+                    {% if "event.vouchers:write" in request.eventpermset and page_obj.paginator.num_pages > 1 %}
+                        <tr class="table-select-all warning hidden">
+                            <td>
+                                <input type="checkbox" name="__ALL" id="__all" data-results-total="{{ page_obj.paginator.count }}">
+                            </td>
+                            <td colspan="5">
+                                <label for="__all">
+                                    {% trans "Select all results on other pages as well" %}
+                                </label>
+                            </td>
+                        </tr>
+                    {% endif %}
                     </thead>
                     <tbody>
                     {% for v in vouchers %}
@@ -210,6 +225,10 @@
                     <button type="submit" class="btn btn-danger" name="action" value="delete">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                         {% trans "Delete selected" %}
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-save" name="action" value="edit"
+                            formaction="{% url "control:event.vouchers.bulkedit"  organizer=request.event.organizer.slug event=request.event.slug %}">
+                        <i class="fa fa-edit"></i>{% trans "Edit selected" %}
                     </button>
                 </div>
             {% endif %}

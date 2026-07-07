@@ -32,8 +32,10 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import datetime
+from dataclasses import dataclass
 from decimal import ROUND_HALF_UP, Decimal
+from typing import Union
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -421,27 +423,33 @@ class Voucher(LoggedModel):
         return False
 
     @staticmethod
-    def clean_quota_get_ignored(old_instance):
-        quotas = set()
-        was_valid = old_instance and (
-            old_instance.valid_until is None or old_instance.valid_until >= now()
-        )
-        if old_instance and old_instance.block_quota and was_valid:
-            if old_instance.quota:
-                quotas.add(old_instance.quota)
-            elif old_instance.variation:
-                quotas |= set(old_instance.variation.quotas.filter(subevent=old_instance.subevent))
-            elif old_instance.item:
-                if old_instance.item.has_variations:
-                    quotas |= set(
-                        Quota.objects.filter(pk__in=Quota.variations.through.objects.filter(
-                            itemvariation__item=old_instance.item,
-                            quota__subevent=old_instance.subevent,
-                        ).values('quota_id'))
-                    )
-                else:
-                    quotas |= set(old_instance.item.quotas.filter(subevent=old_instance.subevent))
-        return quotas
+    def get_affected_quotas(quota, item, variation, subevent):
+        if quota:
+            return {quota}
+        elif item and variation:
+            return set(variation.quotas.filter(subevent=subevent))
+        elif item and not item.has_variations:
+            return set(item.quotas.filter(subevent=subevent))
+        elif item and item.has_variations:
+            return set(
+                Quota.objects.filter(
+                    pk__in=Quota.variations.through.objects.filter(
+                        itemvariation__item=item,
+                        quota__subevent=subevent,
+                    ).values('quota_id')
+                )
+            )
+        else:
+            return set()
+
+    @staticmethod
+    def clean_quota_get_ignored(voucher_data: Union["VoucherBulkData", "Voucher"]):
+        if voucher_data:
+            valid = voucher_data.valid_until is None or voucher_data.valid_until >= now()
+            if valid and voucher_data.block_quota and voucher_data.max_usages > voucher_data.redeemed:
+                return Voucher.get_affected_quotas(voucher_data.quota, voucher_data.item, voucher_data.variation, voucher_data.subevent)
+
+        return set()
 
     @staticmethod
     def clean_quota_check(data, cnt, old_instance, event, quota, item, variation):
@@ -453,22 +461,8 @@ class Voucher(LoggedModel):
         if event.has_subevents and data.get('block_quota') and not data.get('subevent'):
             raise ValidationError(_('If you want this voucher to block quota, you need to select a specific date.'))
 
-        if quota:
-            new_quotas = {quota}
-        elif item and variation:
-            new_quotas = set(variation.quotas.filter(subevent=data.get('subevent')))
-        elif item and not item.has_variations:
-            new_quotas = set(item.quotas.filter(subevent=data.get('subevent')))
-        elif item and item.has_variations:
-            new_quotas = set(
-                Quota.objects.filter(
-                    pk__in=Quota.variations.through.objects.filter(
-                        itemvariation__item=item,
-                        quota__subevent=data.get('subevent'),
-                    ).values('quota_id')
-                )
-            )
-        else:
+        new_quotas = Voucher.get_affected_quotas(quota, item, variation, data.get('subevent'))
+        if not new_quotas:
             raise ValidationError(_('You need to select a specific product or quota if this voucher should reserve '
                                     'tickets.'))
 
@@ -644,3 +638,16 @@ class Voucher(LoggedModel):
             ]
         ).aggregate(s=Sum('voucher_budget_use'))['s'] or Decimal('0.00')
         return ops
+
+
+@dataclass
+class VoucherBulkData:
+    item: object
+    variation: object
+    quota: object
+    block_quota: bool
+    valid_until: datetime.datetime
+    subevent: object
+    redeemed: int
+    max_usages: int
+    allow_ignore_quota: bool

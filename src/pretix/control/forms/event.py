@@ -625,6 +625,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'max_items_per_order',
         'reservation_time',
         'contact_mail',
+        'contact_url',
         'show_variations_expanded',
         'hide_sold_out',
         'meta_noindex',
@@ -671,6 +672,11 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
 
     base_context = {
         'frontpage_text': ['event'],
+        'presale_has_ended_text': ['event'],
+        'voucher_explanation_text': ['event'],
+        'banner_text': ['event'],
+        'banner_text_bottom': ['event'],
+        'event_info_text': ['event'],
     }
 
     def _resolve_virtual_keys_input(self, data, prefix=''):
@@ -1673,7 +1679,7 @@ class CountriesAndEUAndStates(CountriesAndEU):
 
 class TaxRuleLineForm(I18nForm):
     country = LazyTypedChoiceField(
-        choices=CountriesAndEUAndStates(),
+        choices=lazy(lambda: CountriesAndEUAndStates(), CountriesAndEUAndStates),
         required=False
     )
     address_type = forms.ChoiceField(
@@ -1898,6 +1904,12 @@ class QuickSetupForm(I18nForm):
         label=_("Contact address"),
         required=False,
         help_text=_("We'll show this publicly to allow attendees to contact you.")
+    )
+    contact_url = forms.URLField(
+        label=_("Contact URL"),
+        required=False,
+        help_text=_("If you set this, the footer contact link will point here instead of using the email address above. "
+                    "Please note that you still need to add a contact email address that will be shared with all emails you send.")
     )
     total_quota = forms.IntegerField(
         label=_("Total capacity"),

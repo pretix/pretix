@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load static %}
+{% load escapejson %}
 
 {% if payment_qr_codes %}
     <div class="tabcontainer col-md-6 col-sm-6 hidden-xs text-center js-only blank-after">
@@ -14,7 +15,7 @@
                     {% if code_info.link %}<a aria-label="{{ code_info.link_aria_label }}" href="{{ code_info.link }}">{% endif %}
                     <div class="{{ code_info.css_class }}" role="figure" aria-labelledby="banktransfer_qrcodes_{{ code_info.id }}_tab banktransfer_qrcodes_label">
                         {{ code_info.html_prefix }}
-                        <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">{{ code_info.qr_data }}</script>
+                        <script type="application/json" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">{{ code_info.qr_data|escapejson_dumps }}</script>
                     </div>
                     {% if code_info.link %}</a>{% endif %}
                 </div>

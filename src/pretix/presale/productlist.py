@@ -98,8 +98,8 @@ def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, v
         ).filter(
             variation_q,
             Q(all_sales_channels=True) | Q(limit_sales_channels=channel),
+            Exists(Quota.variations.through.objects.filter(quota__subevent_id=subevent, itemvariation_id=OuterRef("pk"))),
             active=True,
-            quotas__isnull=False,
             subevent_disabled=False
         ).prefetch_related(
             *prefetch_membership_types,

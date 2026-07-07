@@ -373,7 +373,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
         mail(
             email or self.email,
-            _('Account information changed'),
+            _('Changes to your account'),
             'pretixcontrol/email/security_notice.txt',
             {
                 'user': self,
@@ -400,12 +400,13 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
 
         with language(self.locale):
             if reason == 'email_change':
-                msg = str(_('to confirm changing your email address from {old_email}\nto {new_email}, use the following code:').format(
+                msg = str(_('To change your email address from {old_email} to {new_email}, use the following code:').format(
                     old_email=self.email, new_email=email,
                 ))
             elif reason == 'email_verify':
-                msg = str(_('to confirm that your email address {email} belongs to your pretix account, use the following code:').format(
+                msg = str(_('To verify your email address {email} on {instance}, use the following code:').format(
                     email=self.email,
+                    instance=settings.PRETIX_INSTANCE_NAME,
                 ))
             else:
                 raise Exception('Invalid confirmation code reason')
@@ -418,7 +419,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         }
         mail(
             email or self.email,
-            _('pretix confirmation code'),
+            _('Your confirmation code'),
             'pretixcontrol/email/confirmation_code.txt',
             {
                 'user': self,
@@ -462,7 +463,9 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         from pretix.base.services.mail import mail
 
         mail(
-            self.email, _('Password recovery'), 'pretixcontrol/email/forgot.txt',
+            self.email,
+            _('Reset your password'),
+            'pretixcontrol/email/forgot.txt',
             {
                 'instance': settings.PRETIX_INSTANCE_NAME,
                 'user': self,
