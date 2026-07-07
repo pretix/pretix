@@ -1951,6 +1951,11 @@ class OrderChangeManager:
         if self._operations:
             raise ValueError("Setting addons should be the first/only operation")
 
+        def _allowed_on_order_sales_channel(item_or_var, order):
+            return item_or_var.all_sales_channels or (
+                order.sales_channel.identifier in (s.identifier for s in item_or_var.limit_sales_channels.all())
+            )
+
         # Prepare containers for min/max check of products
         item_counts = Counter()
         for p in self.order.positions.all():
@@ -2044,12 +2049,10 @@ class OrderChangeManager:
             if not item.is_available() or (variation and not variation.is_available()):
                 raise OrderError(error_messages['unavailable'])
 
-            if not item.all_sales_channels:
-                if self.order.sales_channel.identifier not in (s.identifier for s in item.limit_sales_channels.all()):
+            if not _allowed_on_order_sales_channel(item, self.order):
                     raise OrderError(error_messages['unavailable'])
 
-            if variation and not variation.all_sales_channels:
-                if self.order.sales_channel.identifier not in (s.identifier for s in variation.limit_sales_channels.all()):
+            if variation and not _allowed_on_order_sales_channel(variation, self.order):
                     raise OrderError(error_messages['unavailable'])
 
             if subevent and item.pk in subevent.item_overrides and not subevent.item_overrides[item.pk].is_available():
@@ -2123,13 +2126,10 @@ class OrderChangeManager:
                             # This also prevents accidental removal through the UI because a hidden product will no longer
                             # be part of the input.
                             (a.variation and a.variation.unavailability_reason(has_voucher=True, subevent=a.subevent))
-                            or (a.variation and not a.variation.all_sales_channels and not a.variation.limit_sales_channels.contains(self.order.sales_channel))
+                            or (a.variation and not _allowed_on_order_sales_channel(a.variation, self.order))
                             or not items
-                            or items[0].unavailability_reason(has_voucher=True, subevent=a.subevent)
-                            or (
-                                not items[0].all_sales_channels and
-                                not items[0].limit_sales_channels.contains(self.order.sales_channel)
-                            )
+                            or items[0].current_unavailability_reason
+                            or not _allowed_on_order_sales_channel(items[0], self.order)
                         )
                         if is_unavailable:
                             # "Re-select" add-on
