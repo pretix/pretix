@@ -1,66 +1,18 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from "vue";
+import { computed, inject, ref, watchEffect } from "vue";
 import StyleSettings from "./style-settings.vue";
 import Select from "./input/select.vue";
 import Input from "./input/input.vue";
+import { StoreKey } from "../walletStore";
 
 const gettext = (window as any).gettext;
 
-const isLoading = ref<boolean>(true);
-const wallet_layout = ref<Layout | null>(null);
+const store = inject(StoreKey)!
 
-const PLATFORMS: Platforms = JSON.parse(
-    document.querySelector("#platforms")?.textContent ?? "{}",
-);
-const VARIABLES: VariableConfig = JSON.parse(
-    document.querySelector("#variables")?.textContent ?? "{}",
-);
-const LOCALES: Record<string, string> = JSON.parse(
-    document.querySelector("#locales")?.textContent ?? "{}",
-);
-const CSRF_TOKEN =
-    document.querySelector<HTMLInputElement>("input[name=csrfmiddlewaretoken]")
-        ?.value ?? "";
 
-const props = defineProps<{
-    layoutId: string;
-}>();
-
-watchEffect(() => {
-    // TODO: error handling / proper api client
-    isLoading.value = true;
-    fetch(
-        `/api/v1/organizers/demo/events/wallet/walletlayouts/${props.layoutId}/`,
-    )
-        .then((x) => x.json())
-        .then((x) => {
-            wallet_layout.value = x;
-            isLoading.value = false;
-        });
+const platformChoices = computed(() => {
+    return [[null, "Do not generate pass"], ...Object.values(store.currentPlatformStyles).map(x => [x.identifier, x.name])]
 });
-
-function saveLayout(e: SubmitEvent) {
-    e.preventDefault();
-    isLoading.value = true;
-    // TODO: error handling / proper api client
-    fetch(
-        `/api/v1/organizers/demo/events/wallet/walletlayouts/${props.layoutId}/`,
-        {
-            method: "PUT",
-            headers: {
-                "content-type": "application/json",
-                "X-CSRFToken": CSRF_TOKEN,
-            },
-            body: JSON.stringify(wallet_layout.value),
-        },
-    )
-        .then((x) => x.json())
-        .catch((x) => alert(x))
-        .then((x) => {
-            wallet_layout.value = x;
-            isLoading.value = false;
-        });
-}
 
 function openForm(url: string, data: Record<string, string>) {
 
@@ -82,33 +34,9 @@ function openForm(url: string, data: Record<string, string>) {
     document.body.removeChild(form);
 }
 
-
-const currentPlatform = ref(PLATFORMS[0].identifier);
-const currentLayout = computed(() => ({}));
-const platformStyles = computed(() => {
-    for (const platform of PLATFORMS) {
-        if (platform.identifier === currentPlatform.value) {
-            return platform.styles
-        }
-    }
-});
-const platformLayout = computed(() => {
-    for (const layout of wallet_layout.value.platform_layouts) {
-        if (layout.platform === currentPlatform.value) {
-            return layout
-        }
-    }
-    const newLayout = {platform: currentPlatform, style: null, layout: {}};
-    wallet_layout.value.platform_layouts.push(newLayout);
-    return newLayout
-});
-const platformChoices = computed(() => {
-    return [[null, "Do not generate pass"], ...Object.values(platformStyles.value).map(x => [x.identifier, x.name])]
-});
-
 function openPreview(e: SubmitEvent) {
     e.preventDefault();
-    openForm("../../preview/", {"csrfmiddlewaretoken": CSRF_TOKEN, "platform": currentPlatform.value, "style": platformLayout.value.style, "layout": JSON.stringify(platformLayout.value.layout)})
+    openForm("../../preview/", {"csrfmiddlewaretoken": store.csrfToken, "platform": store.currentPlatform, "style": store.currentPlatformLayout.style, "layout": JSON.stringify(store.currentPlatformLayout.layout)})
 }
 </script>
 
@@ -116,31 +44,41 @@ function openPreview(e: SubmitEvent) {
     // TODO: add :key for all `v-for`s
     // TODO: i18n textfields
     // TODO: proper spinner
-    template(v-if="isLoading") {{ gettext("Loading...") }}
-    form(v-else @submit="saveLayout")
+
+    template(v-if="!store.loaded") {{ gettext("Loading...") }}
+    form(v-else @submit.prevent="store.saveLayout")
         .form-group
-            Input(label="Name" v-model="wallet_layout.name")
+            Input(label="Name" v-model="store.walletLayout.name")
         nav
             ul.nav.nav-tabs
-                li(v-for="platform in PLATFORMS" :class="{'active': currentPlatform === platform.identifier}")
-                    a(role="tab" @click="currentPlatform = platform.identifier") {{ platform.name }}
+                li(v-for="platform in store.platforms" :class="{'active': store.currentPlatform === platform.identifier}")
+                    a(role="tab" @click="store.currentPlatform = platform.identifier") {{ platform.name }}
         .tabbed-form.tab-content
             .tab-pane.active.row
                 .col-md-8
-                    Select.form-group(label="Style" v-model="platformLayout.style" :choices="platformChoices")
+                    Select.form-group(label="Style" :modelValue="store.currentPlatformLayout.style" @update:modelValue="store.setCurrentPlatformStyle" :choices="platformChoices")
 
-                    StyleSettings(v-if="platformLayout.style" v-model="platformLayout.layout" :style="platformStyles[platformLayout.style]" :variables="VARIABLES" :locales="LOCALES")
+                    StyleSettings(v-if="store.currentPlatformLayout.style" v-model="store.currentPlatformLayout.layout" :style="store.currentPlatformStyles[store.currentPlatformLayout.style]")
                 .col-md-4
                     .panel.panel-default
                         .panel-heading Preview
                         .panel-body
+                            span.text-muted The preview below is only a rough representation of what the pass might look like. Please check the generated pass.
+                            div(style="margin-top: 1em; width: 10cm; height: 15cm; position: relative; border: solid 1px gray; border-radius: 1em;")
+                                div(style="position: absolute; background-color: red; top: 0.5cm; left: 0cm; height: 1cm; width: 2cm;") Logo
+                                div(style="position: absolute; background-color: red; top: 0.5cm; left: 2.25cm; height: 1cm; width: 5.5cm;") Logo Text
+                                div(style="position: absolute; background-color: red; top: 0.5cm; left: 8cm; height: 1cm; width: 2cm;") Header
+                                div(style="position: absolute; background-color: red; top: 2.5cm; left: 0cm; height: 2cm; width: 10cm;") Primary
+                                div(style="position: absolute; background-color: red; top: 4.75cm; left: 0cm; height: 1cm; width: 10cm;") Secondary
+                                div(style="position: absolute; background-color: red; top: 7cm; left: 0cm; height: 1cm; width: 10cm;") Auxiliary
+                                div(style="position: absolute; background-color: red; top: 10cm; left: 3cm; height: 4cm; width: 4cm;") Barcode
                             // TODO: Preview
                             pre
-                                code {{ platformLayout }}
-                            pre(v-if="wallet_layout.style")
-                                code {{ platformStyles[wallet_layout.style] }}
+                                code {{ store.currentPlatformLayout }}
+                            pre(v-if="store.currentPlatformLayout.style")
+                                code {{ store.currentPlatformStyles[store.currentPlatformLayout.style] }}
                             pre
-                                code {{ wallet_layout }}
+                                code {{ store.walletLayout }}
         .form-group.submit-group
             button.btn.btn-lg.btn-default(type="button" @click="openPreview") Preview
             button.btn.btn-primary.btn-save(type="submit") Submit
