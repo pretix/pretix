@@ -34,9 +34,7 @@
 
 import copy
 import csv
-import datetime
 from collections import Counter, namedtuple
-from dataclasses import dataclass
 from io import StringIO
 
 from django import forms
@@ -57,6 +55,7 @@ from pretix.base.forms import (
 from pretix.base.forms.widgets import format_placeholders_help_text
 from pretix.base.i18n import language
 from pretix.base.models import Item, ItemVariation, Quota, SubEvent, Voucher
+from pretix.base.models.vouchers import VoucherBulkData
 from pretix.base.services.locking import lock_objects
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
@@ -279,19 +278,6 @@ class VoucherForm(I18nModelForm):
 
     def save(self, commit=True):
         return super().save(commit)
-
-
-@dataclass
-class VoucherBulkData:
-    item: object
-    variation: object
-    quota: object
-    block_quota: bool
-    valid_until: datetime.datetime
-    subevent: object
-    redeemed: int
-    max_usages: int
-    allow_ignore_quota: bool
 
 
 class VoucherBulkEditForm(VoucherForm):

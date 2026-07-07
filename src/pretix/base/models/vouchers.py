@@ -19,7 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
+import datetime
+from dataclasses import dataclass
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
 #
@@ -34,6 +35,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from decimal import ROUND_HALF_UP, Decimal
+from typing import Union
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -441,7 +443,7 @@ class Voucher(LoggedModel):
             return set()
 
     @staticmethod
-    def clean_quota_get_ignored(voucher_data):
+    def clean_quota_get_ignored(voucher_data: Union["VoucherBulkData", "Voucher"]):
         if voucher_data:
             valid = voucher_data.valid_until is None or voucher_data.valid_until >= now()
             if valid and voucher_data.block_quota and voucher_data.max_usages > voucher_data.redeemed:
@@ -636,3 +638,16 @@ class Voucher(LoggedModel):
             ]
         ).aggregate(s=Sum('voucher_budget_use'))['s'] or Decimal('0.00')
         return ops
+
+
+@dataclass
+class VoucherBulkData:
+    item: object
+    variation: object
+    quota: object
+    block_quota: bool
+    valid_until: datetime.datetime
+    subevent: object
+    redeemed: int
+    max_usages: int
+    allow_ignore_quota: bool
