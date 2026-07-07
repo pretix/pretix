@@ -92,7 +92,7 @@ from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import eventreverse, eventreverse_absolute
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
 from pretix.presale.forms.order import OrderPositionChangeForm
-from pretix.presale.productlist import get_grouped_items
+from pretix.presale.productlist import prepare_item_list_for_shop
 from pretix.presale.signals import question_form_fields_overrides
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
@@ -1452,7 +1452,7 @@ class OrderChangeMixin:
 
                     if ckey not in item_cache:
                         # Get all items to possibly show
-                        items, _btn = get_grouped_items(
+                        items, _btn = prepare_item_list_for_shop(
                             self.request.event,
                             subevent=p.subevent,
                             voucher=None,

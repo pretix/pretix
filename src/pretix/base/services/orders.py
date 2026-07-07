@@ -110,7 +110,7 @@ from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
-from pretix.presale.productlist import get_grouped_items
+from pretix.presale.productlist import prepare_item_list_for_shop
 from pretix.testutils.middleware import debugflags_var
 
 
@@ -2107,13 +2107,14 @@ class OrderChangeManager:
                     for a in current_addons[cp][k][:current_num - input_num]:
                         if a.canceled:
                             continue
-                        items, _ = get_grouped_items(self.order.event,
-                                                     channel=self.order.sales_channel,
-                                                     subevent=a.subevent,
-                                                     has_voucher=True,
-                                                     base_qs=Item.objects.filter(pk=a.item.pk),
-                                                     allow_addons=True
-                                                     )
+                        items, _ = prepare_item_list_for_shop(
+                            self.order.event,
+                            channel=self.order.sales_channel,
+                            subevent=a.subevent,
+                            has_voucher=True,
+                            base_qs=Item.objects.filter(pk=a.item.pk),
+                            allow_addons=True
+                        )
                         is_unavailable = (
                             # If an item is no longer available due to time, it should usually also be no longer
                             # user-removable, because e.g. the stock has already been ordered.

@@ -54,10 +54,10 @@ def item_group_by_category(items):
     )
 
 
-def get_grouped_items(event, *, channel: SalesChannel, subevent=None, voucher=None, require_seat=0, base_qs=None,
-                      allow_addons=False, allow_cross_sell=False,
-                      quota_cache=None, filter_items=None, filter_categories=None, memberships=None,
-                      ignore_hide_sold_out_for_item_ids=None, has_voucher=False):
+def prepare_item_list_for_shop(event, *, channel: SalesChannel, subevent=None, voucher=None, require_seat=0, base_qs=None,
+                               allow_addons=False, allow_cross_sell=False,
+                               quota_cache=None, filter_items=None, filter_categories=None, memberships=None,
+                               ignore_hide_sold_out_for_item_ids=None, has_voucher=False):
     base_qs_set = base_qs is not None
     base_qs = base_qs if base_qs is not None else event.items
 
