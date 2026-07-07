@@ -2050,10 +2050,10 @@ class OrderChangeManager:
                 raise OrderError(error_messages['unavailable'])
 
             if not _allowed_on_order_sales_channel(item, self.order):
-                    raise OrderError(error_messages['unavailable'])
+                raise OrderError(error_messages['unavailable'])
 
             if variation and not _allowed_on_order_sales_channel(variation, self.order):
-                    raise OrderError(error_messages['unavailable'])
+                raise OrderError(error_messages['unavailable'])
 
             if subevent and item.pk in subevent.item_overrides and not subevent.item_overrides[item.pk].is_available():
                 raise OrderError(error_messages['not_for_sale'])
