@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:48+0000\n"
-"PO-Revision-Date: 2026-07-07 09:17+0000\n"
+"PO-Revision-Date: 2026-07-07 09:22+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -181,7 +181,7 @@ msgstr "Spanisch (Lateinamerika)"
 
 #: pretix/_base_settings.py
 msgid "Thai"
-msgstr "Thai"
+msgstr "Thailändisch"
 
 #: pretix/_base_settings.py
 msgid "Turkish"
@@ -20036,7 +20036,6 @@ msgstr ""
 "festgestellt:\n"
 
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
-#, fuzzy
 msgid "Browser"
 msgstr "Browser"
 
