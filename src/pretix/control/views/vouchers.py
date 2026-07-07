@@ -40,7 +40,7 @@ import bleach
 from defusedcsv import csv
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError, BadRequest
 from django.db import connection, transaction
 from django.db.models import Count, Exists, OuterRef, Sum
 from django.http import (
@@ -95,13 +95,15 @@ class VoucherQueryMixin:
         qs = self.request.event.vouchers.exclude(
             Exists(WaitingListEntry.objects.filter(voucher_id=OuterRef('pk')))
         )
-        if self.filter_form.is_valid():
-            qs = self.filter_form.filter_qs(qs)
-
         if 'voucher' in self.request_data and '__ALL' not in self.request_data:
             qs = qs.filter(
                 id__in=self.request_data.getlist('voucher')
             )
+        elif self.request.method == 'GET' or '__ALL' in self.request_data:
+            if self.filter_form.is_valid():
+                qs = self.filter_form.filter_qs(qs)
+        else:
+            raise BadRequest("No vouchers selected")
 
         return qs
 

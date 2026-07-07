@@ -796,6 +796,7 @@ class VoucherBulkEditFormTest(SoupTestMixin, TransactionTestCase):
         self.shirt_blue = ItemVariation.objects.create(item=self.shirt, value='Blue')
         self.quota_shirts.variations.add(self.shirt_red)
         self.quota_shirts.variations.add(self.shirt_blue)
+
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=2)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           default_price=23)
@@ -935,7 +936,7 @@ class VoucherBulkEditFormTest(SoupTestMixin, TransactionTestCase):
             for v in self.event.vouchers.all():
                 assert v.max_usages == 4
 
-    def _requires_one_more_quota(self, data: dict, quota=None, expect_error: str=None):
+    def _requires_one_more_quota(self, data: dict, quota=None):
         self._update_all(data, expect_error="no sufficient quota")
         quota = quota or self.quota_tickets
         quota.size += 1
