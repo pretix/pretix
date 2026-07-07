@@ -16,12 +16,14 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             "UPDATE pretixbase_order "
             "SET organizer_id = (SELECT e.organizer_id FROM pretixbase_event e WHERE e.id = pretixbase_order.event_id) "
-            "WHERE pretixbase_order.organizer_id IS NULL;"
+            "WHERE pretixbase_order.organizer_id IS NULL;",
+            migrations.RunSQL.noop,
         ),
         migrations.RunSQL(
             "UPDATE pretixbase_orderposition "
             "SET organizer_id = (SELECT e.organizer_id FROM pretixbase_order o LEFT JOIN pretixbase_event e ON e.id = o.event_id WHERE o.id = pretixbase_orderposition.order_id) "
-            "WHERE pretixbase_orderposition.organizer_id IS NULL;"
+            "WHERE pretixbase_orderposition.organizer_id IS NULL;",
+            migrations.RunSQL.noop,
         ),
         migrations.AlterField(
             model_name="order",
