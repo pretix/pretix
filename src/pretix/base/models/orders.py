@@ -327,7 +327,7 @@ class Order(LockModel, LoggedModel):
         default="line",
     )
 
-    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='event__organizer')
+    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='organizer')
 
     class Meta:
         verbose_name = _("Order")
@@ -2595,7 +2595,7 @@ class OrderPosition(AbstractPosition):
         blank=True,
     )
 
-    all = ScopedManager(organizer='order__event__organizer')
+    all = ScopedManager(organizer='organizer')
     objects = ActivePositionManager()
 
     def __init__(self, *args, **kwargs):
