@@ -60,9 +60,7 @@ var i18nToString = function (i18nstring) {
 $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     var c = $(jqXHR.responseText).filter('.container');
     if (jqXHR.status === 401 && jqXHR.getResponseHeader("X-Login-Url")) {
-        // Append location.hash outside the next parameter so it is not unexpectedly sent to the server
-        // The browser will keep it in the redirect.
-        window.location = jqXHR.getResponseHeader("X-Login-Url") + "?next=" + encodeURIComponent(location.pathname + location.search) + location.hash;
+        window.location = jqXHR.getResponseHeader("X-Login-Url") + "?next=" + encodeURIComponent(location.pathname + location.search + location.hash);
     } else if (c.length > 0) {
         waitingDialog.hide();
         ajaxErrDialog.show(c.first().html());

@@ -114,9 +114,7 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
     var respdom = $(jqXHR.responseText);
     var c = respdom.filter('.container');
     if (jqXHR.status === 401 && jqXHR.getResponseHeader("X-Login-Url")) {
-      // Append location.hash outside the next parameter so it is not unexpectedly sent to the server
-      // The browser will keep it in the redirect.
-      window.location = jqXHR.getResponseHeader("X-Login-Url") + "?next=" + encodeURIComponent(location.pathname + location.search) + location.hash;
+      window.location = jqXHR.getResponseHeader("X-Login-Url") + "?next=" + encodeURIComponent(location.pathname + location.search + location.hash);
       return;
     }
     if (respdom.filter('form') && (respdom.filter('.has-error') || respdom.filter('.alert-danger'))) {
@@ -174,9 +172,7 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
     "use strict";
     $("body").data('ajaxing', false);
     if (jqXHR.status === 401 && jqXHR.getResponseHeader("X-Login-Url")) {
-      // Append location.hash outside the next parameter so it is not unexpectedly sent to the server
-      // The browser will keep it in the redirect.
-      window.location = jqXHR.getResponseHeader("X-Login-Url") + "?next=" + encodeURIComponent(location.pathname + location.search) + location.hash;
+      window.location = jqXHR.getResponseHeader("X-Login-Url") + "?next=" + encodeURIComponent(location.pathname + location.search + location.hash);
       return;
     }
     waitingDialog.hide();
