@@ -810,6 +810,9 @@ tbody[data-dnd-url] {
     display: table-row;
     height: 0.5em;
 }
+.table-items thead + tbody[data-dnd-url]:not(:has(tr))::after {
+  height: 0;  /* no spacing before first header, if no items without category */
+}
 .sortable-sorting tbody:not(.sortable-dragarea) {
     opacity: .4;
 }
