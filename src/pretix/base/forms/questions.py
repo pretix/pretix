@@ -1116,6 +1116,13 @@ class BaseQuestionsForm(forms.Form):
             if q.dependency_question_id and not question_is_visible(q.dependency_question_id, q.dependency_values) and answer is not None:
                 d['question_%d' % q.pk] = None
 
+        # Strip False answers to required yes/no questions even if all_optional is set, as our data model assumes that
+        # required yes/no questions can only be answered with yes
+        for q in question_cache.values():
+            if q.required and q.type == Question.TYPE_BOOLEAN:
+                if 'question_%d' % q.pk in d and d['question_%d' % q.pk] is False:
+                    del d['question_%d' % q.pk]
+
         return d
 
 
