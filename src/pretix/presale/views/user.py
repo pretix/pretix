@@ -71,7 +71,7 @@ class ResendLinkView(EventViewMixin, TemplateView):
                                           'that you used the correct email address.').format(number=24))
                 return redirect_to_url(eventreverse(self.request.event, 'presale:event.resend_link'))
             else:
-                rc.setex('pretix_resend_{}_{}'.format(request.event.pk, user), '1', ex=3600 * 24)
+                rc.set('pretix_resend_{}_{}'.format(request.event.pk, user), '1', ex=3600 * 24)
 
         orders = self.request.event.orders.filter(email__iexact=user)
 
