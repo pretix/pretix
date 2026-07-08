@@ -41,7 +41,7 @@ from collections import OrderedDict, defaultdict
 from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
-from urllib.parse import urlsplit
+from urllib.parse import quote, urlsplit
 from zoneinfo import ZoneInfo
 
 import bleach
@@ -82,7 +82,7 @@ from pretix.base.models import Event, LogEntry, Order, TaxRule, Voucher
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
-from pretix.base.signals import register_ticket_outputs
+from pretix.base.signals import get_defining_app, register_ticket_outputs
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.control.forms.event import (
     CancelSettingsForm, CommentForm, ConfirmTextFormset, EventDeleteForm,
@@ -441,6 +441,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         plugins_available = {
             p.module: p for p in self.available_plugins(self.object)
         }
+        plugin_enabled = None
 
         with transaction.atomic():
             save_organizer = False
@@ -490,6 +491,7 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
                                 format_html(_('The plugin {} is now active.'),
                                             format_html("<strong>{}</strong>", pluginmeta.name)),
                             ]
+                        plugin_enabled = module
                         messages.success(self.request, mark_safe("".join(info)))
                     else:
                         self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
@@ -499,13 +501,19 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
             self.object.save()
             if save_organizer:
                 self.object.organizer.save()
-        return redirect(self.get_success_url())
+        return redirect(self.get_success_url(plugin_enabled))
 
-    def get_success_url(self) -> str:
-        return reverse('control:event.settings.plugins', kwargs={
-            'organizer': self.request.organizer.slug,
-            'event': self.request.event.slug,
-        })
+    def get_success_url(self, plugin_enabled) -> str:
+        if plugin_enabled and self.request.POST.get('go') == 'payment':
+            return reverse('control:event.settings.payment', kwargs={
+                'organizer': self.request.organizer.slug,
+                'event': self.request.event.slug,
+            }) + '?highlight=' + quote(plugin_enabled) + '#'
+        else:
+            return reverse('control:event.settings.plugins', kwargs={
+                'organizer': self.request.organizer.slug,
+                'event': self.request.event.slug,
+            })
 
 
 class PaymentProviderSettings(EventSettingsViewMixin, EventPermissionRequiredMixin, TemplateView, SingleObjectMixin):
@@ -671,6 +679,8 @@ class PaymentSettings(WritePermissionMixin, EventSettingsViewMixin, EventSetting
             p.sales_channels = [sales_channels[channel] for channel in p.settings.get('_restrict_to_sales_channels', as_type=list, default=['web'])]
             if p.is_meta:
                 p.show_enabled = p.settings._enabled in (True, 'True')
+            if self.request.GET.get('highlight') and getattr(get_defining_app(p), 'name', None) == self.request.GET.get('highlight'):
+                p.highlight = True
         return context
 
 

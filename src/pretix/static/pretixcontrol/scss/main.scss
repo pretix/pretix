@@ -646,7 +646,10 @@ ul.pagination {
 .table-payment-providers > tbody > tr > td {
     vertical-align: middle;
 }
-
+.success-left {
+  border-left: 3px solid $brand-success;
+  background: var(--pretix-brand-success-lighten-50);
+}
 
 details {
     list-style: none;
