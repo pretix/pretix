@@ -504,11 +504,11 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         return redirect(self.get_success_url(plugin_enabled))
 
     def get_success_url(self, plugin_enabled) -> str:
-        if plugin_enabled and self.request.POST.get('go') == 'payment':
+        if self.request.POST.get('go') == 'payment':
             return reverse('control:event.settings.payment', kwargs={
                 'organizer': self.request.organizer.slug,
                 'event': self.request.event.slug,
-            }) + '?highlight=' + quote(plugin_enabled) + '#'
+            }) + ('?highlight=' + quote(plugin_enabled) if plugin_enabled else '') + '#'
         else:
             return reverse('control:event.settings.plugins', kwargs={
                 'organizer': self.request.organizer.slug,
@@ -679,7 +679,8 @@ class PaymentSettings(WritePermissionMixin, EventSettingsViewMixin, EventSetting
             p.sales_channels = [sales_channels[channel] for channel in p.settings.get('_restrict_to_sales_channels', as_type=list, default=['web'])]
             if p.is_meta:
                 p.show_enabled = p.settings._enabled in (True, 'True')
-            if self.request.GET.get('highlight') and getattr(get_defining_app(p), 'name', None) == self.request.GET.get('highlight'):
+            p.plugin_name = getattr(get_defining_app(p), 'name', None)
+            if self.request.GET.get('highlight') and p.plugin_name == self.request.GET.get('highlight'):
                 p.highlight = True
         return context
 
