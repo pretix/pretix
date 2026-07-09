@@ -243,7 +243,8 @@ def invite(request, token):
     if request.user.is_authenticated:
         if inv.team.members.filter(pk=request.user.pk).exists():
             messages.error(request, _('You cannot accept the invitation for "{}" as you already are part of '
-                                      'this team.').format(inv.team.name))
+                                      'this team. If you want to add a different user or create a new account, '
+                                      'log out and click the invitation link again.').format(inv.team.name))
             return redirect('control:index')
         else:
             with transaction.atomic():
