@@ -26,12 +26,6 @@
                                     <span class="text-danger">
                                     <span class="fa fa-times"></span>
                                     {% trans "Disabled" %}
-                                    {% if provider.plugin_name %}
-                                        <a href="{% url 'control:event.settings.plugins' event=request.event.slug organizer=request.organizer.slug %}?q={{ provider.plugin_name }}&go=payment"
-                                                class="btn btn-link">
-                                            <span class="fa fa-trash"></span>
-                                        </a>
-                                    {% endif %}
                                 </span>
                                 {% endif %}
                             </td>
