@@ -50,11 +50,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.db.models import (
-    Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch, Q, QuerySet,
-    Sum, Value,
-)
-from django.db.models import Prefetch
+from django.db.models import Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Sum, Value
 from django.db.models.functions import Coalesce, Greatest
 from django.db.transaction import get_connection
 from django.dispatch import receiver
@@ -69,21 +65,18 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    CartPosition, Checkin, Device, Event, GiftCard, Item, ItemVariation,
+    CartPosition, Device, Event, GiftCard, Item, ItemVariation,
     Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
     SeatCategoryMapping, User, Voucher,
 )
-from pretix.base.models.cancellation import (
-    CancellationCheckResult, CancellationCheckResultsById, CancellationRule,
-    Ruling, CancellationCheck
-)
+from pretix.base.models.cancellation import (CancellationCheck, CancellationRule)
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
     BlockedTicketSecret, InvoiceAddress, OrderFee, OrderRefund,
     generate_secret,
 )
 from pretix.base.models.organizer import SalesChannel, TeamAPIToken
-from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
+from pretix.base.models.tax import TAXED_ZERO, TaxRule, TaxedPrice
 from pretix.base.payment import GiftCardPayment, PaymentException
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.secrets import assign_ticket_secret
@@ -3515,72 +3508,8 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
                 )
 
 
-class OrderPositionNotUsedCheck(CancellationCheck):
-    id = "SYSTEM_TICKET_NOT_USED"
-    prefetches = [
-        Prefetch(
-            'checkins',
-            queryset=Checkin.objects.filter(list__consider_tickets_used=True),
-            to_attr='used_checkins'  # stores result in a list attribute
-        )
-    ]
-    related_selects = []
-
-    def check(self, order: Order, keep: Set[OrderPosition], order_position: OrderPosition) -> CancellationCheckResultsById:
-        if order_position.checkins.filter(list__consider_tickets_used=True).exists():
-            return {self.id: CancellationCheckResult(
-                cancellation_possible=False,
-                reason="Order position was used",
-            )}
-        else:
-            return {self.id: CancellationCheckResult(
-                cancellation_possible=True,
-                reason="Order position not yet used",
-            )}
 
 
-@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_not_used")
-def cancellation_checks_not_used(sender: Event):
-    return OrderPositionNotUsedCheck()
-
-
-class NotDiscountedCheck(CancellationCheck):
-    """
-    Check that ensures that orders containing discounted order_positions cannot
-    be canceled partially.
-    This is a stop-gap solution until the `discount_grouper` attribute for
-    AbstractPositions is introduced, allowing us to be more grannular
-    """
-
-    id = "SYSTEM_NO_DISCOUNTED_ORDER_POSITIONS"
-    prefetches = [
-    ]
-    related_selects = []
-
-    def check(self, order: Order, keep: Set[OrderPosition], order_position: OrderPosition) -> CancellationCheckResultsById:
-        cancellations = Set(order.positions).difference(keep)
-
-        if order_position in cancellations:
-            if order_position.discount_id is None:
-                return {self.id: CancellationCheckResult(
-                    cancellation_possible=True,
-                    reason=_("Order position was bought without discount"),
-                )}
-            else:
-                return {self.id: CancellationCheckResult(
-                    cancellation_possible=False,
-                    reason=_("Order position was bought with a discount"),
-                )}
-        else:
-            return {self.id: CancellationCheckResult(
-                cancellation_possible=False,
-                reason=_("Order position not canceled - check not applicable"),
-            )}
-
-
-@receiver(self_service_cancellation_checks, dispatch_uid="pretixbase_not_discountend")
-def cancellation_checks_not_discounted(sender: Event):
-    return NotDiscountedCheck()
 
 
 # TODO weitere System Checks
