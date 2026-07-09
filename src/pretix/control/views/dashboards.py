@@ -132,7 +132,8 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
-            'content': None if lazy else format_html(NUM_WIDGET,
+            'content': None if lazy else format_html(
+                NUM_WIDGET,
                 num=money_filter(round_decimal(rev, sender.currency), sender.currency, hide_currency=True),
                 text=_('Total revenue ({currency})').format(currency=sender.currency)
             ),
@@ -209,8 +210,8 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
                             quota_cache[q.pk] = (quota_cache[q.pk][0], quota_cache[q.pk][1] - min(wlt['cnt'], row[1]))
 
         widgets.append({
-            'content': None if lazy else format_html(NUM_WIDGET,
-                num=intcomma(happy), text=_('available to give to people on waiting list')
+            'content': None if lazy else format_html(
+                NUM_WIDGET, num=intcomma(happy), text=_('available to give to people on waiting list')
             ),
             'lazy': 'waitinglist-avail',
             'priority': 50,
@@ -220,7 +221,9 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
             })
         })
         widgets.append({
-            'content': None if lazy else format_html(NUM_WIDGET, num=intcomma(wles.count()), text=_('total waiting list length')),
+            'content': None if lazy else format_html(
+                NUM_WIDGET, num=intcomma(wles.count()), text=_('total waiting list length')
+            ),
             'lazy': 'waitinglist-length',
             'display_size': 'small',
             'priority': 50,
@@ -247,7 +250,8 @@ def quota_widgets(sender, subevent=None, lazy=False, **kwargs):
         if not lazy:
             status, left = qa.results[q] if q in qa.results else q.availability(allow_cache=True)
         widgets.append({
-            'content': None if lazy else format_html(NUM_WIDGET,
+            'content': None if lazy else format_html(
+                NUM_WIDGET,
                 num='{}/{}'.format(intcomma(left), intcomma(q.size)) if q.size is not None else '\u221e',
                 text=_('{quota} left').format(quota=escape(q.name))
             ),
@@ -300,7 +304,8 @@ def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
     qs = sender.checkin_lists.filter(subevent=subevent)
     for cl in qs:
         widgets.append({
-            'content': None if lazy else format_html(NUM_WIDGET,
+            'content': None if lazy else format_html(
+                NUM_WIDGET,
                 num='{}/{}'.format(intcomma(cl.inside_count), intcomma(cl.position_count)),
                 text=_('Present – {list}').format(list=escape(cl.name))
             ),
@@ -556,7 +561,8 @@ def widgets_for_event_qs(request, qs, user, nmax, lazy=False):
                 status = ('success', _('On sale'))
 
         widgets.append({
-            'content': format_html(tpl,
+            'content': format_html(
+                tpl,
                 event=escape(event.name),
                 times=_('Event series') if event.has_subevents else (
                     ((date_format(event.date_admission.astimezone(tz), 'TIME_FORMAT') + ' / ')
