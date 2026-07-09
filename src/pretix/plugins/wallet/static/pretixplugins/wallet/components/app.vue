@@ -3,6 +3,7 @@ import { computed, inject, ref, watchEffect } from "vue";
 import StyleSettings from "./style-settings.vue";
 import Select from "./input/select.vue";
 import Input from "./input/input.vue";
+import PassPreview from "./pass-preview.vue";
 import { StoreKey } from "../walletStore";
 
 const gettext = (window as any).gettext;
@@ -64,14 +65,9 @@ function openPreview(e: SubmitEvent) {
                         .panel-heading Preview
                         .panel-body
                             span.text-muted The preview below is only a rough representation of what the pass might look like. Please check the generated pass.
-                            div(style="margin-top: 1em; width: 10cm; height: 15cm; position: relative; border: solid 1px gray; border-radius: 1em;")
-                                div(style="position: absolute; background-color: red; top: 0.5cm; left: 0cm; height: 1cm; width: 2cm;") Logo
-                                div(style="position: absolute; background-color: red; top: 0.5cm; left: 2.25cm; height: 1cm; width: 5.5cm;") Logo Text
-                                div(style="position: absolute; background-color: red; top: 0.5cm; left: 8cm; height: 1cm; width: 2cm;") Header
-                                div(style="position: absolute; background-color: red; top: 2.5cm; left: 0cm; height: 2cm; width: 10cm;") Primary
-                                div(style="position: absolute; background-color: red; top: 4.75cm; left: 0cm; height: 1cm; width: 10cm;") Secondary
-                                div(style="position: absolute; background-color: red; top: 7cm; left: 0cm; height: 1cm; width: 10cm;") Auxiliary
-                                div(style="position: absolute; background-color: red; top: 10cm; left: 3cm; height: 4cm; width: 4cm;") Barcode
+                            PassPreview
+                            div(style="margin-top: 1em; width: calc(10cm); height: 15cm; position: relative; outline: solid 1px gray; border-radius: 1em;")
+                                div(style="position: absolute; background-color: red; top: 0.5cm; left: 0.5cm; right: 0.5cm; height: 14cm;") Back
                             // TODO: Preview
                             pre
                                 code {{ store.currentPlatformLayout }}
