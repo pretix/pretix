@@ -22,6 +22,7 @@ from django.contrib.staticfiles import finders
 from pretix.base.models import OrderPosition
 from django.utils.encoding import force_bytes
 
+
 class ApplePlatform(WalletPlatform):
     identifier = "apple"
     name = _("Apple")
@@ -100,11 +101,19 @@ class StringResource:
 class SignedZipFile:
     """Generates a zip-file with manifest and signature as apple expects a pkpass file to be"""
 
-    def __init__(self, ca_certificate: str | bytes, certificate: str | bytes, key: str | bytes, password):
+    def __init__(
+        self,
+        ca_certificate: str | bytes,
+        certificate: str | bytes,
+        key: str | bytes,
+        password,
+    ):
         self.ca_certificate = cryptography.x509.load_pem_x509_certificate(
             force_bytes(ca_certificate)
         )
-        self.certificate = cryptography.x509.load_pem_x509_certificate(force_bytes(certificate))
+        self.certificate = cryptography.x509.load_pem_x509_certificate(
+            force_bytes(certificate)
+        )
         self.key = cryptography.hazmat.primitives.serialization.load_pem_private_key(
             force_bytes(key), force_bytes(password) if password else None
         )
@@ -237,6 +246,13 @@ class AppleWalletEventTicket(AppleWalletStyle):
             ],
         ),
         TextFieldGroup(
+            identifier="logo_text",
+            name=_("Logo text"),
+            max_entries=1,
+            labels=False,
+            default_entries=[],
+        ),
+        TextFieldGroup(
             identifier="primary",
             name=_("Primary"),
             min_entries=1,
@@ -252,12 +268,20 @@ class AppleWalletEventTicket(AppleWalletStyle):
         TextFieldGroup(
             identifier="secondary", name=_("Secondary"), max_entries=4
         ),  # TODO: validation of max field count if combined "Coupons, store cards, and generic passes with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
-        TextFieldGroup(
-            identifier="headers", name=_("Header"), max_entries=3
-        ),
+        TextFieldGroup(identifier="header", name=_("Header"), max_entries=3),
         TextFieldGroup(identifier="auxiliary", name=_("Auxiliary"), max_entries=4),
         TextFieldGroup(identifier="back", name=_("Back")),
-        TextFieldGroup(identifier="code", name=_("QR-Code"), max_entries=1),
+        TextFieldGroup(
+            identifier="code",
+            name=_("QR-Code"),
+            max_entries=1,
+            labels=False,
+            default_entries=[
+                PlaceholderFieldEntry(
+                    content="secret",
+                )
+            ],
+        ),
     ]
     # preview_image = "apple/event_ticket.svg"
 
@@ -278,7 +302,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
         return converted
 
     def pass_content(self, fields, strings):
-        return {
+        content = {
             "eventTicket": {
                 "primaryFields": self.convert_fields(
                     strings, fields["primary"], "primary"
@@ -290,6 +314,11 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     strings, fields["auxiliary"], "auxiliary"
                 ),
                 "backFields": self.convert_fields(strings, fields["back"], "back"),
-            }
+                "headerFields": self.convert_fields(strings, fields["header"], "header"),
+            },
         }
-
+        if fields["logo_text"]:
+            content["logoText"] = self.convert_fields(
+                strings, fields["logo_text"], "logo_text"
+            )[0]["value"]
+        return content
