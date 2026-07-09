@@ -49,7 +49,7 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.formats import date_format
-from django.utils.html import escape, format_html
+from django.utils.html import conditional_escape, escape, format_html
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, ngettext, pgettext
 
@@ -341,6 +341,12 @@ def welcome_wizard_widget(sender, **kwargs):
     }]
 
 
+def build_json_response(widgets):
+    for widget in widgets:
+        widget['content'] = conditional_escape(widget['content'])
+    return JsonResponse({'widgets': widgets})
+
+
 def event_index(request, organizer, event):
     from pretix.control.forms.event import CommentForm
 
@@ -419,7 +425,7 @@ def event_index_widgets_lazy(request, organizer, event):
     for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False):
         widgets.extend(result)
 
-    return JsonResponse({'widgets': widgets})
+    return build_json_response(widgets)
 
 
 def event_index_log_lazy(request, organizer, event):
@@ -634,7 +640,7 @@ def user_index_widgets_lazy(request):
         request.user,
         8
     )
-    return JsonResponse({'widgets': widgets})
+    return build_json_response(widgets)
 
 
 def user_index(request):
