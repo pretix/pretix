@@ -39,7 +39,8 @@ from pretix.base.signals import (
 html_page_start = GlobalSignal()
 """
 This signal allows you to put code in the beginning of the main page for every
-page in the backend. You are expected to return HTML.
+page in the backend. You are expected to return a SafeString containing HTML, or
+a string that will be HTML-escaped.
 
 The ``sender`` keyword argument will contain the request.
 """
@@ -129,7 +130,7 @@ event_dashboard_top = EventPluginSignal()
 Arguments: 'request'
 
 This signal is sent out to include custom HTML in the top part of the the event dashboard.
-Receivers should return HTML.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 An additional keyword argument ``subevent`` *can* contain a sub-event.
@@ -172,6 +173,7 @@ Arguments: 'form'
 
 This signal allows you to add additional HTML to the form that is used for modifying vouchers.
 You receive the form object in the ``form`` keyword argument.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -209,6 +211,7 @@ Arguments: 'quota'
 
 This signal allows you to append HTML to a Quota's detail view. You receive the
 quota as argument in the ``quota`` keyword argument.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -219,6 +222,7 @@ Arguments: 'subevent'
 
 This signal allows you to append HTML to a SubEvent's detail view. You receive the
 subevent as argument in the ``subevent`` keyword argument.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -265,7 +269,8 @@ order_info = EventPluginSignal()
 """
 Arguments: ``order``, ``request``
 
-This signal is sent out to display additional information on the order detail page
+This signal is sent out to display additional information on the order detail page.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 Additionally, the argument ``order`` and ``request`` are available.
@@ -275,7 +280,8 @@ order_approve_info = EventPluginSignal()
 """
 Arguments: ``order``, ``request``
 
-This signal is sent out to display additional information on the order approve page
+This signal is sent out to display additional information on the order approve page.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 Additionally, the argument ``order`` and ``request`` are available.
@@ -286,6 +292,7 @@ order_position_buttons = EventPluginSignal()
 Arguments: ``order``, ``position``, ``request``
 
 This signal is sent out to display additional buttons for a single position of an order.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 Additionally, the argument ``order`` and ``request`` are available.
@@ -315,6 +322,7 @@ Arguments: 'request'
 
 This signal is sent out to include template snippets on the settings page of an event
 that allows generating a pretix Widget code.
+Receivers should return a SafeString containing HTML, or a string that will be HTML-escaped.
 
 As with all event plugin signals, the ``sender`` keyword argument will contain the event.
 A second keyword argument ``request`` will contain the request object.
