@@ -141,7 +141,7 @@ event_dashboard_widgets = EventPluginSignal()
 This signal is sent out to include widgets in the event dashboard. Receivers
 should return a list of dictionaries, where each dictionary can have the keys:
 
-* content (str, containing HTML)
+* content (SafeString, containing HTML)
 * display_size (str, one of "full" (whole row), "big" (half a row) or "small"
   (quarter of a row). May be ignored on small displays, default is "small")
 * priority (int, used for ordering, higher comes first, default is 1)
@@ -158,7 +158,7 @@ Arguments: 'user'
 This signal is sent out to include widgets in the personal user dashboard. Receivers
 should return a list of dictionaries, where each dictionary can have the keys:
 
-* content (str, containing HTML)
+* content (SafeString, containing HTML)
 * display_size (str, one of "full" (whole row), "big" (half a row) or "small"
   (quarter of a row). May be ignored on small displays, default is "small")
 * priority (int, used for ordering, higher comes first, default is 1)
