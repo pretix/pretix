@@ -1,4 +1,4 @@
-from .base import PassStyle, PredefinedFieldGroup, TextFieldGroup, WalletPlatform
+from .base import FieldGroupDisplay, PassStyle, PredefinedFieldGroup, TextFieldGroup, WalletPlatform
 from django.utils.translation import gettext_lazy as _
 
 class GooglePlatform(WalletPlatform):
@@ -16,5 +16,5 @@ class GoogleWalletEventTicket(PassStyle):
     platform = GooglePlatform
     fieldgroups = [
         PredefinedFieldGroup(identifier="seating", name=_("Seating")),
-        TextFieldGroup(identifier="qrcode", name=_("QR-Code"), labels=False),
+        TextFieldGroup(identifier="qrcode", name=_("QR-Code"), display=FieldGroupDisplay.PLAIN),
     ]
