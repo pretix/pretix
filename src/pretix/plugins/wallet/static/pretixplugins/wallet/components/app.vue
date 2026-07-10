@@ -8,37 +8,63 @@ import { StoreKey } from "../walletStore";
 
 const gettext = (window as any).gettext;
 
-const store = inject(StoreKey)!
-
+const store = inject(StoreKey)!;
 
 const platformChoices = computed(() => {
-    return [[null, "Do not generate pass"], ...Object.values(store.currentPlatformStyles).map(x => [x.identifier, x.name])]
+	return [
+		[null, "Do not generate pass"],
+		...Object.values(store.currentPlatformStyles).map((x) => [
+			x.identifier,
+			x.name,
+		]),
+	];
 });
 
 function openForm(url: string, data: Record<string, string>) {
+	let form = document.createElement("form");
+	form.target = "_blank";
+	form.method = "POST";
+	form.action = url;
+	form.style.display = "none";
 
-    let form = document.createElement("form");
-    form.target = "_blank";
-    form.method = "POST";
-    form.action = url;
-    form.style.display = "none";
-
-    for (var key in data) {
-       var input = document.createElement("input");
-       input.type = "hidden";
-       input.name = key;
-       input.value = data[key];
-       form.appendChild(input);
-    }
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
+	for (var key in data) {
+		var input = document.createElement("input");
+		input.type = "hidden";
+		input.name = key;
+		input.value = data[key];
+		form.appendChild(input);
+	}
+	document.body.appendChild(form);
+	form.submit();
+	document.body.removeChild(form);
 }
 
 function openPreview(e: SubmitEvent) {
-    e.preventDefault();
-    openForm("../../preview/", {"csrfmiddlewaretoken": store.csrfToken, "platform": store.currentPlatform, "style": store.currentPlatformLayout.style, "layout": JSON.stringify(store.currentPlatformLayout.layout)})
+	e.preventDefault();
+	openForm("../../preview/", {
+		csrfmiddlewaretoken: store.csrfToken,
+		platform: store.currentPlatform,
+		style: store.currentPlatformLayout.style,
+		layout: JSON.stringify(store.currentPlatformLayout.layout),
+	});
 }
+
+const preview_layouts = [
+	[
+		{
+			children: [
+				{ fieldgroup: "logo", relSize: 1 },
+				{ fieldgroup: "logo_text", relSize: 3 },
+				{ fieldgroup: "header", relSize: 2 },
+			],
+		},
+		{ fieldgroup: "primary" },
+		{ fieldgroup: "secondary" },
+		{ fieldgroup: "auxiliary" },
+		{ fieldgroup: "code" },
+	],
+	[{ fieldgroup: "back", mode: "column" }],
+];
 </script>
 
 <template lang="pug">
@@ -65,10 +91,8 @@ function openPreview(e: SubmitEvent) {
                         .panel-heading Preview
                         .panel-body
                             span.text-muted The preview below is only a rough representation of what the pass might look like. Please check the generated pass.
-                            PassPreview
-                            div(style="margin-top: 1em; width: calc(10cm); height: 15cm; position: relative; outline: solid 1px gray; border-radius: 1em;")
-                                div(style="position: absolute; background-color: red; top: 0.5cm; left: 0.5cm; right: 0.5cm; height: 14cm;") Back
-                            // TODO: Preview
+                            PassPreview(v-for="layout in preview_layouts" :layout="layout")
+
                             pre
                                 code {{ store.currentPlatformLayout }}
                             pre(v-if="store.currentPlatformLayout.style")
