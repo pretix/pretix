@@ -52,12 +52,12 @@ watchEffect(() => {
                 table.table.table-hover
                     thead
                         tr
-                            th.col-md-5(v-if="fieldgroup.labels") {{ gettext('Label') }}
-                            th(:class="'col-md-' + (fieldgroup.labels ? '6' : '11')") {{ gettext('Content') }}
+                            th.col-md-5(v-if="fieldgroup.display == 'with_label'") {{ gettext('Label') }}
+                            th(:class="'col-md-' + (fieldgroup.display == 'with_label' ? '6' : '11')") {{ gettext('Content') }}
                             th.col-xs-1
                     tbody
                         tr(v-for="n,i in fieldConfig.entries.length" :key="i")
-                            td(v-if="fieldgroup.labels")
+                            td(v-if="fieldgroup.display == 'with_label'")
                                 .i18n-form-group
                                     I18nInput(v-model="fieldConfig.entries[n-1].label")
                             td
