@@ -1,5 +1,6 @@
 from .base import (
     FieldEntryType,
+    FieldGroupDisplay,
     ImageFieldGroup,
     PlaceholderFieldGroup,
     PredefinedFieldGroup,
@@ -216,7 +217,6 @@ class AppleWalletStyle(PassStyle):
         pkpass.add_file("pass.json", json.dumps(pass_json))
         return pkpass.finish()
 
-
 class AppleWalletEventTicket(AppleWalletStyle):
     identifier = "event_1"
     name = _("Event Ticket Layout 1")
@@ -226,7 +226,6 @@ class AppleWalletEventTicket(AppleWalletStyle):
             name=_("Icon"),
             min_entries=0,
             max_entries=1,
-            labels=False,
             default_entries=[
                 PlaceholderFieldEntry(
                     content="poweredby",
@@ -238,7 +237,6 @@ class AppleWalletEventTicket(AppleWalletStyle):
             name=_("Logo"),
             min_entries=0,
             max_entries=1,
-            labels=False,
             default_entries=[
                 PlaceholderFieldEntry(
                     content="poweredby",
@@ -249,7 +247,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
             identifier="logo_text",
             name=_("Logo text"),
             max_entries=1,
-            labels=False,
+            display=FieldGroupDisplay.PLAIN,
             default_entries=[],
         ),
         TextFieldGroup(
@@ -275,7 +273,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
             identifier="code",
             name=_("QR-Code"),
             max_entries=1,
-            labels=False,
+            display=FieldGroupDisplay.CODE,
             default_entries=[
                 PlaceholderFieldEntry(
                     content="secret",
