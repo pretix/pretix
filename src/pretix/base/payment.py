@@ -1712,6 +1712,9 @@ class BaseHistoricalPaymentProvider(BasePaymentProvider):
     payments are shown correctly.
 
     Subclasses are recommended to only implement:
+        - identifier
+        - verbose_name
+        - public_name
     - payment_control_render
     - payment_control_render_short
     - refund_control_render
