@@ -7,11 +7,13 @@ type BaseFieldGroupDefinition = {
 
 type FieldGroupDefinition = PlaceholderFieldGroupDefinition | PredefinedFieldGroupDefinition;
 
+type FieldGroupDisplay = 'plain' | 'with_label' | 'code';
+
 type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
 	type: 'placeholder';
 	content_type: FieldContentType;
 	default_entries: FieldEntry[];
-	labels: boolean;
+	display: FieldGroupDisplay;
 	min_entries: number|null;
 	max_entries: number|null;
 }
@@ -46,6 +48,7 @@ type Style = {
 
 type Variable = {
     label: string
+	editor_sample: I18nString;
 };
 
 type Platform = {
