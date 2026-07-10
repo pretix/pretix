@@ -3,7 +3,7 @@ import { computed, inject, ref, watchEffect } from "vue";
 import StyleSettings from "./style-settings.vue";
 import Select from "./input/select.vue";
 import Input from "./input/input.vue";
-import PassPreview from "./pass-preview.vue";
+import PassPreview from "./preview/pass-preview.vue";
 import { StoreKey } from "../walletStore";
 
 const gettext = (window as any).gettext;
