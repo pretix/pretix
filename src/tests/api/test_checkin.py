@@ -437,7 +437,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         p3["addon_to"] = p1["id"]
 
     # All items
-    with django_assert_num_queries(24):
+    with django_assert_num_queries(22):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
             organizer.slug, event.slug, clist_all.pk
         ))
