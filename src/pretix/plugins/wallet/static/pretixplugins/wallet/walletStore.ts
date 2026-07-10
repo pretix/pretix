@@ -1,3 +1,4 @@
+import { i18nstringLocalize } from "./helpers.js";
 import { createStore } from "./lib/store.ts";
 import { nextTick, type InjectionKey } from "vue";
 
@@ -28,7 +29,7 @@ export function createWalletStore(config: {
 				}
 				throw "Unknown platform";
 			},
-			currentPlatformLayout() {
+			currentPlatformLayout(): PlatformLayout {
 				if (!this.walletLayout) {
 					throw "currentPlatformLayout access before store was loaded";
 				}
@@ -44,6 +45,67 @@ export function createWalletStore(config: {
 				};
 				this.walletLayout.platform_layouts.push(newLayout);
 				return newLayout;
+			},
+
+			currentLayoutFieldContent() {
+				const content = {};
+				const group_defs =
+					this.currentPlatformStyles[this.currentPlatformLayout.style]
+						.fieldgroups;
+				for (const fieldgroup of group_defs) {
+					if (fieldgroup.type == "placeholder") {
+						content[fieldgroup.identifier] = [];
+						const layout_group: PlaceholderFieldGroupConfig =
+							this.currentPlatformLayout.layout.fieldgroups[
+								fieldgroup.identifier
+							];
+						for (const entry of layout_group.entries) {
+							const placeholder =
+								entry.type === "placeholder" ? this.variables[fieldgroup.content_type][entry.content] : null;
+
+							let label = i18nstringLocalize(entry.label);
+							if (placeholder && !label) {
+								label = i18nstringLocalize(placeholder.label);
+							}
+
+							let value = null;
+							if (entry.type == "custom") {
+								value = i18nstringLocalize(entry.content);
+							} else if (entry.type == "placeholder") {
+								value = placeholder.editor_sample;
+							}
+							content[fieldgroup.identifier].push({
+								entry,
+								label,
+								content: value,
+							});
+						}
+					}
+				}
+				for (const fieldgroup of group_defs) {
+					if (fieldgroup.type == "placeholder") {
+						const layout_group: PlaceholderFieldGroupConfig =
+							this.currentPlatformLayout.layout.fieldgroups[
+								fieldgroup.identifier
+							];
+						if (
+							fieldgroup.max_entries &&
+							content[fieldgroup.identifier].length > fieldgroup.max_entries
+						) {
+							const overflow = content[fieldgroup.identifier].slice(
+								fieldgroup.max_entries,
+							);
+							content[fieldgroup.identifier] = content[
+								fieldgroup.identifier
+							].slice(0, fieldgroup.max_entries);
+							if (layout_group.overflow) {
+								content[layout_group.overflow].splice(0, 0, ...overflow);
+							}
+						}
+					}
+				}
+
+				return content;
 			},
 		},
 		actions: {
@@ -118,7 +180,12 @@ export function createWalletStore(config: {
 
 					for (const key of keysToDefault) {
 						if (newFieldGroups[key].type == "placeholder") {
-							this.currentPlatformLayout.layout.fieldgroups[key] = {overflow: null, entries: JSON.parse(JSON.stringify(newFieldGroups[key].default_entries))};
+							this.currentPlatformLayout.layout.fieldgroups[key] = {
+								overflow: null,
+								entries: JSON.parse(
+									JSON.stringify(newFieldGroups[key].default_entries),
+								),
+							};
 						} else {
 							this.currentPlatformLayout.layout.fieldgroups[key] = {};
 						}
