@@ -12,6 +12,10 @@ class FieldGroupType(enum.Enum):
     PLACEHOLDER = "placeholder"
     PREDEFINED = "predefined"
 
+class FieldGroupDisplay(enum.Enum):
+    PLAIN = "plain"
+    WITH_LABEL = "with_label"
+    CODE = "code"
 
 class FieldGroup:
     type: FieldGroupType
@@ -106,7 +110,7 @@ class PlaceholderFieldGroup(FieldGroup):
     type = FieldGroupType.PLACEHOLDER
     content_type: FieldContentType
     default_entries: list[FieldEntry]
-    labels: bool
+    display: FieldGroupDisplay
     min_entries: int | None
     max_entries: int | None
 
@@ -115,19 +119,19 @@ class PlaceholderFieldGroup(FieldGroup):
         identifier: str,
         name: str,
         content_type: FieldContentType,
-        description: str=None,
+        description: str="",
         required=False,
         default_entries=None,
         min_entries=None,
         max_entries=None,
-        labels=True,
+        display=FieldGroupDisplay.WITH_LABEL,
     ):
         super().__init__(identifier, name, description, required)
         self.content_type = content_type
         self.default_entries = default_entries or []
         self.min_entries = min_entries
         self.max_entries = max_entries
-        self.labels = labels
+        self.display = display
 
         if self.required and (self.min_entries is None or self.min_entries < 1):
             self.min_entries = 1
@@ -137,7 +141,7 @@ class PlaceholderFieldGroup(FieldGroup):
             **super().asdict(),
             "content_type": self.content_type.value,
             "default_entries": [x.asdict() for x in self.default_entries],
-            "labels": self.labels,
+            "display": self.display.value,
             "min_entries": self.min_entries,
             "max_entries": self.max_entries,
         }
@@ -172,7 +176,7 @@ class PlaceholderFieldGroup(FieldGroup):
 
     def entries_schema(self, placeholders: list[str]):
         baseprops = {}
-        if self.labels:
+        if self.display == FieldGroupDisplay.WITH_LABEL:
             baseprops["label"] = {"$ref": "#/$defs/I18nString"}
 
         schema = {
@@ -198,7 +202,7 @@ class PlaceholderFieldGroup(FieldGroup):
                 "required": ["type", "content"],
             },
         }
-        if self.labels:
+        if self.display == FieldGroupDisplay.WITH_LABEL:
             schema["items"]["required"].append("label")
         if self.min_entries is not None:
             schema["minItems"] = self.min_entries
@@ -216,9 +220,10 @@ class TextFieldGroup(PlaceholderFieldGroup):
 
 class ImageFieldGroup(PlaceholderFieldGroup):
     content_type = FieldContentType.IMAGE
+    display = FieldGroupDisplay.PLAIN
 
     def __init__(self, **kwargs):
-        super().__init__(content_type=self.content_type, **kwargs)
+        super().__init__(content_type=self.content_type, display=self.display, **kwargs)
 
 
 class PassStyle:
@@ -299,11 +304,11 @@ class PassStyle:
                 if group.identifier in layout["fieldgroups"]:
                     for field in layout["fieldgroups"][group.identifier]["entries"]:
                         field_entry = {}
-                        if group.labels:
+                        if group.display == FieldGroupDisplay.WITH_LABEL:
                             field_entry["label"] = LazyI18nString(field["label"])
                         if field["type"] == FieldEntryType.PLACEHOLDER.value:
                             label, field_entry["value"] = self.render_placeholder(context, group.content_type.value, field['content'])
-                            if group.labels and not str(field_entry['label']) and label:
+                            if group.display == FieldGroupDisplay.WITH_LABEL and not str(field_entry['label']) and label:
                                 field_entry['label'] = LazyI18nString(label)
 
                         elif field["type"] == FieldEntryType.CUSTOM.value:
