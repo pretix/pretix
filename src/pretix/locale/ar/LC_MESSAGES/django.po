@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-07 09:30+0000\n"
 "PO-Revision-Date: 2026-07-11 18:00+0000\n"
-"Last-Translator: ahmed badr <ahmedbadr@oma.com.eg>\n"
+"Last-Translator: ahmed shabbat <ahmedshabbat13@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/"
 "ar/>\n"
 "Language: ar\n"
@@ -647,16 +647,12 @@ msgid "Waiting list entry deleted"
 msgstr "تم حذف قيد قائمة الانتظار"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Waiting list entry received voucher"
-msgstr "مدخلات قائمة الانتظار"
+msgstr "المسجلون في قائمة الانتظار الذين تلقوا قسيمة"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Voucher added"
-msgstr "رمز كود الخصم"
+msgstr "تمت إضافة القسيمة"
 
 #: pretix/api/webhooks.py
 #, fuzzy
@@ -679,40 +675,28 @@ msgid "Voucher deleted"
 msgstr "تم استخدام كود الخصم"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Customer actions"
 msgid "Customer account created"
-msgstr "إجراءات العملاء"
+msgstr "تم إنشاء حساب العميل"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Customer actions"
 msgid "Customer account changed"
-msgstr "إجراءات العملاء"
+msgstr "تم تغيير حساب العميل"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "This user has been anonymized."
 msgid "Customer account anonymized"
-msgstr "تم طمس هويتها لهذا المستخدم."
+msgstr "تم إخفاء هوية حساب العميل"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card added"
-msgstr "رمز بطاقة الهدية"
+msgstr "تمت إضافة بطاقة هدايا"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card modified"
-msgstr "رمز بطاقة الهدية"
+msgstr "تم تعديل بطاقة الهدية"
 
 #: pretix/api/webhooks.py
-#, fuzzy
-#| msgid "Gift card redemptions"
 msgid "Gift card used in transaction"
-msgstr "استرداد بطاقة هدية"
+msgstr "استخدام بطاقة هدايا في المعاملة"
 
 #: pretix/base/addressvalidation.py pretix/base/forms/questions.py
 #: pretix/base/payment.py pretix/control/forms/event.py
@@ -796,18 +780,14 @@ msgstr ""
 "استخدامها لإجراء عمليات تكامل مخصصة."
 
 #: pretix/base/context.py
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_name_attr}>powered by {name}</a> <a {a_attr}>based on pretix</a>"
-msgstr ""
-"{a_name_attr}{a_name_attr}{a_name_attr}مدعوم من {name} على أساس <a {a_attr}>"
-"pretix</a>"
+msgstr "a {a_name_attr}>مدعوم من {name}</a> <a {a_attr}>مستند إلى pretix</a>"
 
 #: pretix/base/context.py
-#, fuzzy, python-brace-format
-#| msgid "powered by {name} based on <a {a_attr}>pretix</a>"
+#, python-brace-format
 msgid "<a {a_attr}>powered by {name} based on pretix</a>"
-msgstr "مدعوم من {name} على أساس <a {a_attr}>pretix</a>"
+msgstr "<a {a_attr}>مدعوم من {name} استنادًا إلى pretix</a>"
 
 #: pretix/base/context.py
 #, python-format
@@ -835,10 +815,9 @@ msgid "Incompatible SSO provider: \"{error}\"."
 msgstr "مزود SSO غير متوافق: ”{error}“."
 
 #: pretix/base/customersso/oidc.py
-#, fuzzy, python-brace-format
-#| msgid "Your event registration: {code}"
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "تسجيل الفعالية الخاصة بك:{code}"
+msgstr "أنت لا تطلب ”{scope}“."
 
 #: pretix/base/customersso/oidc.py pretix/presale/views/customer.py
 #, python-brace-format
@@ -877,16 +856,12 @@ msgid ""
 msgstr "يرجى تحديث تعيين القيم للحقل ”{field_name}“ — الخيار ”{val}“ غير معيّن"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Order positions"
 msgid "Order position details"
-msgstr "حالات الطلب"
+msgstr "تفاصيل مركز التداول"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee details"
-msgstr "البريد الإلكتروني للحاضر"
+msgstr "بيانات المشاركين"
 
 #: pretix/base/datasync/sourcefields.py pretix/base/exporters/answers.py
 #: pretix/base/models/items.py pretix/control/navigation.py
@@ -895,10 +870,8 @@ msgid "Questions"
 msgstr "أسئلة"
 
 #: pretix/base/datasync/sourcefields.py
-#, fuzzy
-#| msgid "Product name"
 msgid "Product details"
-msgstr "اسم المنتج"
+msgstr "تفاصيل المنتج"
 
 #: pretix/base/datasync/sourcefields.py
 #: pretix/control/templates/pretixcontrol/event/settings.html
@@ -13646,7 +13619,7 @@ msgstr "بدء استرداد %(amount)s"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 msgid "To confirm, paste the following code into the cancellation form:"
-msgstr ""
+msgstr "للتأكيد، قم بلصق الكود التالي في نموذج الإلغاء:"
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #, python-format
@@ -13654,6 +13627,7 @@ msgid ""
 "Don't share this code with anyone. The %(instance)s team will never ask you "
 "for it."
 msgstr ""
+"لا تشارك هذا الرمز مع أي شخص. لن يطلب منك فريق %(instance)s هذا الرمز أبدًا."
 
 #: pretix/base/templates/pretixbase/email/cancel_confirm.txt
 #: pretix/base/templates/pretixbase/email/export_failed.txt
@@ -13662,6 +13636,9 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team"
 msgstr ""
+"شكرًا،  \n"
+"\n"
+"فريق %(instance)s"
 
 #: pretix/base/templates/pretixbase/email/email_footer.html
 #, python-format
@@ -13683,7 +13660,7 @@ msgstr "سبب استرداد الأموال"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
 msgid "If an export fails five times in a row, we'll stop sending it."
-msgstr ""
+msgstr "إذا فشل التصدير خمس مرات متتالية، فسنتوقف عن إرساله."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt
 #, fuzzy
@@ -13786,12 +13763,39 @@ msgid ""
 "Thanks,  \n"
 "The %(instance)s Team\n"
 msgstr ""
+"مرحبًا،\n"
+"\n"
+"\n"
+"\n"
+"تم الانتهاء من مهمة إتلاف البيانات التالية:\n"
+"\n"
+"\n"
+"\n"
+"- المنظم: %(organizer)s\n"
+"\n"
+"- الحدث: %(event)s\n"
+"\n"
+"- اختيار البيانات: %(shredders)s\n"
+"\n"
+"- وقت البدء: %(start_time)s\n"
+"\n"
+"\n"
+"\n"
+"قد لا تكون البيانات التي أُضيفت إلى الحدث بعد وقت البدء قد تم حذفها.\n"
+"\n"
+"\n"
+"\n"
+"شكرًا،  \n"
+"\n"
+"فريق %(instance)s\n"
 
 #: pretix/base/templates/pretixbase/forms/widgets/checkbox_sales_channel_option.html
 msgid ""
 "This sales channel cannot be used properly since the respective plugin is "
 "not active for this event."
 msgstr ""
+"لا يمكن استخدام قناة المبيعات هذه بشكل صحيح لأن المكون الإضافي المعني غير نشط "
+"لهذا الحدث."
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html
 msgid "Upload photo"
@@ -13800,17 +13804,17 @@ msgstr "حمل صورة"
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html
 #, python-format
 msgid "%(number)s days %(relation)s %(relation_to)s"
-msgstr ""
+msgstr "%(number)s يومًا %(relation)s %(relation_to)s"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html
 #, python-format
 msgid "%(number)s minutes %(relation)s %(relation_to)s"
-msgstr ""
+msgstr "%(number)s دقائق %(relation)s %(relation_to)s"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html
 #, python-format
 msgid "%(number)s days %(relation)s %(relation_to)s at %(time_of_day)s"
-msgstr ""
+msgstr "%(number)s أيام %(relation)s %(relation_to)s at %(time_of_day)s"
 
 #: pretix/base/templates/pretixbase/framebreak.html
 #: pretix/presale/templates/pretixpresale/event/cookies.html
@@ -13819,12 +13823,13 @@ msgstr "الرجاء الاستمرار في علامة تبويب جديدة"
 
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid "For security reasons, the following step is only possible in a new tab."
-msgstr ""
+msgstr "لأسباب أمنية، لا يمكن تنفيذ الخطوة التالية إلا في علامة تبويب جديدة."
 
 #: pretix/base/templates/pretixbase/framebreak.html
 msgid ""
 "If the new tab did not open automatically, please click the following button:"
 msgstr ""
+"إذا لم تفتح علامة التبويب الجديدة تلقائيًّا، يرجى النقر على الزر التالي:"
 
 #: pretix/base/templates/pretixbase/framebreak.html
 #: pretix/presale/templates/pretixpresale/event/cookies.html
@@ -13843,10 +13848,11 @@ msgid ""
 "The link you clicked on wants to redirect you to a destination on the "
 "website %(host)s."
 msgstr ""
+"الرابط الذي نقرت عليه يحاول إعادة توجيهك إلى وجهة على موقع الويب %(host)s."
 
 #: pretix/base/templates/pretixbase/redirect.html
 msgid "Please only proceed if you trust this website to be safe."
-msgstr ""
+msgstr "يرجى المتابعة فقط إذا كنت تثق في أن هذا الموقع آمن."
 
 #: pretix/base/templates/pretixbase/redirect.html
 #, fuzzy, python-format
@@ -13877,7 +13883,7 @@ msgstr "حمل تذكرة"
 #: pretix/base/timeframes.py
 msgctxt "reporting_timeframe"
 msgid "Today"
-msgstr ""
+msgstr "اليوم"
 
 #: pretix/base/timeframes.py
 #, fuzzy
@@ -13889,7 +13895,7 @@ msgstr "طلبات حسب اليوم"
 #: pretix/base/timeframes.py
 msgctxt "reporting_timeframe"
 msgid "Yesterday"
-msgstr ""
+msgstr "الامس"
 
 #: pretix/base/timeframes.py
 #, fuzzy
@@ -13899,30 +13905,24 @@ msgid "Last 7 days"
 msgstr "اخر موعد"
 
 #: pretix/base/timeframes.py
-#, fuzzy
-#| msgid "Last date"
 msgctxt "reporting_timeframe"
 msgid "Last 14 days"
-msgstr "اخر موعد"
+msgstr "الأيام الـ14 الماضية"
 
 #: pretix/base/timeframes.py
 msgctxt "reporting_timeframe"
 msgid "Tomorrow"
-msgstr ""
+msgstr "الغد"
 
 #: pretix/base/timeframes.py
-#, fuzzy
-#| msgid "Number of days"
 msgctxt "reporting_timeframe"
 msgid "Next 7 days"
-msgstr "عدد الأيام"
+msgstr "الايام السبع القادمة"
 
 #: pretix/base/timeframes.py
-#, fuzzy
-#| msgid "Number of days"
 msgctxt "reporting_timeframe"
 msgid "Next 14 days"
-msgstr "عدد الأيام"
+msgstr "الأيام الـ14 القادمة"
 
 #: pretix/base/timeframes.py
 #, fuzzy
@@ -13934,15 +13934,12 @@ msgstr "القيمة الحالية"
 #: pretix/base/timeframes.py
 msgctxt "reporting_timeframe"
 msgid "by week"
-msgstr ""
+msgstr "بالاسبوع"
 
 #: pretix/base/timeframes.py
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create date"
 msgctxt "reporting_timeframe"
 msgid "Current week to date"
-msgstr "تاريخ إنشاء"
+msgstr "من بداية الأسبوع الحالي حتى الآن"
 
 #: pretix/base/timeframes.py
 #, fuzzy
@@ -29515,7 +29512,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py pretix/presale/views/order.py
 msgid "Unknown order code or not authorized to access this order."
-msgstr "كود أجل غير معروف أو غير مخول للوصول إلى هذا النظام."
+msgstr "رمز الطلب غير معروف أو ليس لديك صلاحية الوصول إلى هذا الطلب."
 
 #: pretix/control/views/orders.py pretix/presale/views/order.py
 msgid "Ticket download is not enabled for this product."
