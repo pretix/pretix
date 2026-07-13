@@ -19,7 +19,10 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import datetime
+
 import pytest
+from django.utils.formats import date_format
 from django.utils.translation import get_language
 
 from pretix.base.i18n import (
@@ -35,6 +38,17 @@ def test_js_formats():
         assert get_javascript_format('DATE_INPUT_FORMATS') == 'YYYY-MM-DD'
     with language('en-US'):
         assert get_javascript_format('DATE_INPUT_FORMATS') == 'MM/DD/YYYY'
+
+
+def test_fr_ca_time_format_escapes_literal_h():
+    # Regression test for GH #6117: Django 5.2's fr_CA locale leaves the "h" in its time formats
+    # unescaped, so it is treated as the 12-hour-clock hour. At midnight a time like "00 h 20" was
+    # therefore rendered as "00 12 20", which showed up e.g. in the event_begin/event_begin_time
+    # placeholders on ticket PDFs. The override in pretix.helpers.formats.fr_CA fixes this.
+    dt = datetime.datetime(2026, 8, 23, 0, 20)
+    with language('fr', 'CA'):
+        assert date_format(dt, 'TIME_FORMAT') == '00\xa0h\xa020'
+        assert date_format(dt, 'SHORT_DATETIME_FORMAT') == '2026-08-23 00\xa0h\xa020'
 
 
 def test_get_locale():
