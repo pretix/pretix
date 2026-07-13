@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-07 09:30+0000\n"
-"PO-Revision-Date: 2026-01-23 15:00+0000\n"
-"Last-Translator: Vajda Tamás <vajda.tamas@szwg.hu>\n"
+"PO-Revision-Date: 2026-07-13 12:35+0000\n"
+"Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
 "Language: hu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 2026.7.1\n"
 
 #: htmlcov/d_daa1541d0cbf5e2b_dashboards_py.html
 #: pretix/control/templates/pretixcontrol/events/index.html
@@ -3792,7 +3792,7 @@ msgstr ""
 #: pretix/base/models/items.py pretix/base/models/vouchers.py
 #: pretix/base/models/waitinglist.py
 msgid "Product variation"
-msgstr ""
+msgstr "Termékváltozat"
 
 #: pretix/base/modelimport_orders.py
 msgid "The variation can be specified by its internal ID or full name."
@@ -4181,34 +4181,27 @@ msgstr ""
 
 #: pretix/base/models/checkin.py
 msgid "Entry"
-msgstr ""
+msgstr "Belépés"
 
 #: pretix/base/models/checkin.py
 msgid "Exit"
-msgstr ""
+msgstr "Kilépés"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Unknown date selected."
 msgid "Unknown ticket"
-msgstr "Ismeretlen dátum került kiválasztásra."
+msgstr "Ismeretlen jegy"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket not paid"
-msgstr "Elővétel nem kezdődött el"
+msgstr "A jegy nincs kifizetve"
 
 #: pretix/base/models/checkin.py
 msgid "Forbidden by custom rule"
 msgstr ""
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket code revoked/changed"
-msgstr "Jegy design"
+msgstr "A jegykód visszavonva/megváltozott"
 
 #: pretix/base/models/checkin.py
 msgid "Information required"
@@ -4216,39 +4209,31 @@ msgstr "Információ szükséges"
 
 #: pretix/base/models/checkin.py
 msgid "Ticket already used"
-msgstr ""
+msgstr "A jegy már fel lett használva"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket type not allowed here"
-msgstr "Elővétel nem kezdődött el"
+msgstr "A jegytípus itt nem érvényes"
 
 #: pretix/base/models/checkin.py
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "A jegykód nem egyértelmű a listán"
 
 #: pretix/base/models/checkin.py
 msgid "Server error"
 msgstr ""
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket blocked"
-msgstr "Jegy design"
+msgstr "A jegy le van tiltva"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "Order not approved"
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr "A rendelés nincs jóváhagyva"
 
 #: pretix/base/models/checkin.py
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket not valid at this time"
-msgstr "Elővétel nem kezdődött el"
+msgstr "A jegy jelenleg nem érvényes"
 
 #: pretix/base/models/checkin.py
 #, fuzzy
@@ -4400,7 +4385,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/gates.html
 #: pretix/plugins/checkinlists/exporters.py
 msgid "Gate"
-msgstr ""
+msgstr "Kapu"
 
 #: pretix/base/models/devices.py
 #: pretix/control/templates/pretixcontrol/organizers/devices.html
@@ -6653,7 +6638,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py pretix/control/views/vouchers.py
 msgid "Redeemed"
-msgstr ""
+msgstr "Beváltva"
 
 #: pretix/base/models/vouchers.py
 msgid ""
@@ -7410,7 +7395,7 @@ msgstr ""
 #: pretix/base/pdf.py pretix/base/services/checkin.py
 #: pretix/control/forms/filter.py
 msgid "Friday"
-msgstr ""
+msgstr "Péntek"
 
 #: pretix/base/pdf.py
 msgid "Event end date and time"
@@ -7895,15 +7880,15 @@ msgstr ""
 
 #: pretix/base/reldate.py
 msgid "Event start"
-msgstr ""
+msgstr "Esemény kezdete"
 
 #: pretix/base/reldate.py
 msgid "Event end"
-msgstr ""
+msgstr "Esemény vége"
 
 #: pretix/base/reldate.py
 msgid "Event admission"
-msgstr ""
+msgstr "Beengedés"
 
 #: pretix/base/reldate.py
 msgid "Presale start"
@@ -8341,27 +8326,27 @@ msgstr ""
 
 #: pretix/base/services/checkin.py pretix/control/forms/filter.py
 msgid "Monday"
-msgstr ""
+msgstr "Hétfő"
 
 #: pretix/base/services/checkin.py pretix/control/forms/filter.py
 msgid "Tuesday"
-msgstr ""
+msgstr "Kedd"
 
 #: pretix/base/services/checkin.py pretix/control/forms/filter.py
 msgid "Wednesday"
-msgstr ""
+msgstr "Szerda"
 
 #: pretix/base/services/checkin.py pretix/control/forms/filter.py
 msgid "Thursday"
-msgstr ""
+msgstr "Csütörtök"
 
 #: pretix/base/services/checkin.py pretix/control/forms/filter.py
 msgid "Saturday"
-msgstr ""
+msgstr "Szombat"
 
 #: pretix/base/services/checkin.py pretix/control/forms/filter.py
 msgid "Sunday"
-msgstr ""
+msgstr "Vasárnap"
 
 #: pretix/base/services/checkin.py
 #, python-brace-format
@@ -14039,7 +14024,7 @@ msgstr ""
 #: pretix/control/forms/filter.py
 #: pretix/presale/templates/pretixpresale/organizers/customer_giftcards.html
 msgid "Valid"
-msgstr ""
+msgstr "Érvényes"
 
 #: pretix/control/forms/filter.py
 msgid "Unredeemed"
@@ -18151,7 +18136,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html
 #: pretix/plugins/checkinlists/exporters.py
 msgid "Result"
-msgstr ""
+msgstr "Eredmény"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
 #: pretix/control/templates/pretixcontrol/order/index.html
@@ -19400,7 +19385,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html
 #: pretix/control/templates/pretixcontrol/organizers/logs.html
 msgid "No results"
-msgstr ""
+msgstr "Nincs találat"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 #: pretix/control/templates/pretixcontrol/organizers/mail.html
@@ -19439,7 +19424,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html
 msgid "Edit"
-msgstr ""
+msgstr "Szerkesztés"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html
 msgid "Calendar invites"
@@ -19595,7 +19580,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/plugins.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid "Search results"
-msgstr ""
+msgstr "Keresési találatok"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
@@ -20847,7 +20832,7 @@ msgstr "Időtartam"
 #: pretix/control/templates/pretixcontrol/item/index.html
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html
 msgid "minutes"
-msgstr ""
+msgstr "perc"
 
 #: pretix/control/templates/pretixcontrol/item/index.html
 msgid "hours"
@@ -21183,7 +21168,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 msgid "Count"
-msgstr "Számítás"
+msgstr "Darabszám"
 
 #: pretix/control/templates/pretixcontrol/items/question.html
 #, fuzzy, python-format
@@ -24379,7 +24364,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplikálás"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Undo"
@@ -30323,11 +30308,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA beszedés"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -30357,7 +30342,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Pay by bank"
@@ -30371,7 +30356,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "WeChat Pay"
-msgstr ""
+msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py
 msgid "Swish"
@@ -30518,7 +30503,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -30542,7 +30527,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py
 msgid "iDEAL | Wero"
-msgstr ""
+msgstr "iDEAL | Wero"
 
 #: pretix/plugins/stripe/payment.py
 msgid ""
@@ -32255,15 +32240,13 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"A kosárba helyezett tételek tovább már nincsenek lefoglalva. Még "
-"megpróbálhatod befejezni a rendelést, ha még elérhetőek."
+"A kosárba helyezett tételek fenntartása megszűnt. Ennek ellenére befejezheti "
+"a rendelését, amíg azok elérhetők."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #: pretix/presale/templates/pretixpresale/fragment_modals.html
-#, fuzzy
-#| msgid "Event description"
 msgid "Renew reservation"
-msgstr "Eseményleírás"
+msgstr "Foglalás megújítása"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 #, fuzzy
