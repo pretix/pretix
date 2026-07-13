@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:52+0000\n"
-"PO-Revision-Date: 2026-07-12 13:35+0000\n"
+"PO-Revision-Date: 2026-07-13 11:28+0000\n"
 "Last-Translator: ahmed badr <ahmedbadr@oma.com.eg>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ar/>\n"
@@ -79,7 +79,7 @@ msgstr "فوراً"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "eps"
-msgstr "نعم"
+msgstr "نقاط إضافية"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "MyBank"
@@ -190,7 +190,7 @@ msgstr "تبديل قائمة الدخول"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Search results"
-msgstr "البحث في النتائج"
+msgstr "نتائج البحث"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "No tickets found"
@@ -254,7 +254,7 @@ msgstr "إلغاء"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket not paid"
-msgstr "لم يتم دفع قيمة التذكرة"
+msgstr "التذكرة لم يتم دفع ثمنها"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
@@ -274,11 +274,11 @@ msgstr "تم تسجيل الخروج"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket already used"
-msgstr "تم استخدام التذكرة مسبقا"
+msgstr "تم استخدام التذكرة بالفعل"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Information required"
-msgstr "معلومات مطلوبة"
+msgstr "المعلومات المطلوبة"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Unknown ticket"
@@ -294,7 +294,7 @@ msgstr "إدخال غير مسموح"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket code revoked/changed"
-msgstr "تم إلغاء رمز التذكرة أو تبديله"
+msgstr "تم إلغاء/تغيير رمز التذكرة"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket blocked"
@@ -482,7 +482,7 @@ msgstr "أضف شرطا"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
 msgid "minutes"
-msgstr "الدقائق"
+msgstr "دقائق"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
 msgid "Duplicate"
@@ -1254,7 +1254,7 @@ msgstr "أبريل"
 #: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "May"
-msgstr "مايو"
+msgstr "هناك"
 
 #: pretix/static/pretixpresale/js/widget/widget.js
 #: pretix/static/pretixpresale/widget/src/i18n.ts
