@@ -10,7 +10,7 @@ import pretix.helpers.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0303_alter_order_organizer_alter_orderposition_organizer.py'),
+        ('pretixbase', '0303_alter_order_organizer_alter_orderposition_organizer'),
     ]
 
     operations = [
