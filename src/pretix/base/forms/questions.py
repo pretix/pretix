@@ -1121,7 +1121,7 @@ class BaseQuestionsForm(forms.Form):
         for q in question_cache.values():
             if q.required and q.type == Question.TYPE_BOOLEAN:
                 if 'question_%d' % q.pk in d and d['question_%d' % q.pk] is False:
-                    del d['question_%d' % q.pk]
+                    d['question_%d' % q.pk] = None
 
         return d
 
