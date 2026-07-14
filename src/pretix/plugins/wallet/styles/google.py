@@ -18,3 +18,4 @@ class GoogleWalletEventTicket(PassStyle):
         PredefinedFieldGroup(identifier="seating", name=_("Seating")),
         TextFieldGroup(identifier="qrcode", name=_("QR-Code"), display=FieldGroupDisplay.PLAIN),
     ]
+    preview_layout = None
