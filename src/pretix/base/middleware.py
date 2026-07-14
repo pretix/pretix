@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import base64
+import hashlib
 import logging
 import re
 from collections import OrderedDict
@@ -312,7 +314,28 @@ def _merge_csp(a, b):
     for k, v in a.items():
         if "'unsafe-inline'" in v:
             # If we need unsafe-inline, drop any hashes or nonce as they will be ignored otherwise
-            a[k] = [i for i in v if not i.startswith("'nonce-") and not i.startswith("'sha-")]
+            a[k] = [i for i in v if not i.startswith("'nonce-") and not i.startswith("'sha256-")]
+
+
+def add_to_response_csp(response, csp_to_merge):
+    if "Content-Security-Policy" in response:
+        csp = _parse_csp(response["Content-Security-Policy"])
+    else:
+        csp = {}
+
+    _merge_csp(csp, csp_to_merge)
+
+    if csp:
+        response["Content-Security-Policy"] = _render_csp(csp)
+
+
+def add_to_response_csp_via_request(request, csp_to_merge):
+    _merge_csp(request.csp_to_merge, csp_to_merge)
+
+
+def calculate_csp_hash(data):
+    hash_str = base64.b64encode(hashlib.sha256(data.encode("utf-8")).digest()).decode("ascii")
+    return f"'sha256-{hash_str}'"
 
 
 class SecurityMiddleware(MiddlewareMixin):
@@ -331,6 +354,9 @@ class SecurityMiddleware(MiddlewareMixin):
         # We used to skip CSP for PDF since it was necessary for inline previews in Safari,
         # but at the moment it does not seem to be an issue to just send it.
     )
+
+    def process_request(self, request):
+        request.csp_to_merge = {}
 
     def process_response(self, request, resp):
         if settings.DEBUG and resp.status_code >= 400:
@@ -387,13 +413,6 @@ class SecurityMiddleware(MiddlewareMixin):
             h['style-src'] += ["'unsafe-inline'"]
             h['connect-src'] += ["http://localhost:5173", "ws://localhost:5173"]
 
-        if hasattr(request, 'csp_nonce'):
-            nonce = f"'nonce-{request.csp_nonce}'"
-            h['script-src'].append(nonce)
-            if not settings.VITE_DEV_MODE:
-                # can't have 'unsafe-inline' and nonce at the same time
-                h['style-src'].append(nonce)
-
         # Only include pay.google.com for wallet detection purposes on the Payment selection page
         if (
                 url.url_name == "event.order.pay.change" or
@@ -405,6 +424,9 @@ class SecurityMiddleware(MiddlewareMixin):
 
         if settings.LOG_CSP:
             h['report-uri'] = ["/csp_report/"]
+
+        if request.csp_to_merge:
+            _merge_csp(h, request.csp_to_merge)
 
         if 'Content-Security-Policy' in resp:
             _merge_csp(h, _parse_csp(resp['Content-Security-Policy']))
