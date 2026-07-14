@@ -1,3 +1,5 @@
+from typing import Any
+
 from .base import (
     FieldEntryType,
     FieldGroupDisplay,
@@ -268,7 +270,6 @@ class AppleWalletEventTicket(AppleWalletStyle):
         ),  # TODO: validation of max field count if combined "Coupons, store cards, and generic passes with a square barcode can have a total of up to four secondary and auxiliary fields, combined."
         TextFieldGroup(identifier="header", name=_("Header"), max_entries=3),
         TextFieldGroup(identifier="auxiliary", name=_("Auxiliary"), max_entries=4),
-        TextFieldGroup(identifier="back", name=_("Back")),
         TextFieldGroup(
             identifier="code",
             name=_("QR-Code"),
@@ -280,8 +281,9 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 )
             ],
         ),
+        TextFieldGroup(identifier="back", name=_("Back")),
     ]
-    # preview_image = "apple/event_ticket.svg"
+    preview_layout = '[[{"children":[{"fieldgroup":"logo","relSize":1},{"fieldgroup":"logo_text","relSize":3,"display":["bold","large","centered"]},{"fieldgroup":"header","relSize":2,"display":["large", "tight"]}]},{"fieldgroup":"primary","display":"large"},{"fieldgroup":"secondary"},{"fieldgroup":"auxiliary"},{"fieldgroup":"code"}],[{"fieldgroup":"back","direction":"column"}]]'
 
     def convert_fields(self, strings, fields, prefix):
         converted = []
@@ -300,7 +302,7 @@ class AppleWalletEventTicket(AppleWalletStyle):
         return converted
 
     def pass_content(self, fields, strings):
-        content = {
+        content: dict[str, Any] = {
             "eventTicket": {
                 "primaryFields": self.convert_fields(
                     strings, fields["primary"], "primary"
@@ -319,4 +321,12 @@ class AppleWalletEventTicket(AppleWalletStyle):
             content["logoText"] = self.convert_fields(
                 strings, fields["logo_text"], "logo_text"
             )[0]["value"]
+
+        if fields['code']:
+            content["barcodes"] = [{
+                "format": "PKBarcodeFormatQR",
+                "message": str(fields["code"][0]["value"]),
+                "messageEncoding": "utf-8",
+                "altText": str(fields["code"][0]["value"])
+            }]
         return content

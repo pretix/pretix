@@ -3,40 +3,42 @@ type BaseFieldGroupDefinition = {
 	identifier: string;
 	name: string;
 	required: boolean;
-}
+};
 
-type FieldGroupDefinition = PlaceholderFieldGroupDefinition | PredefinedFieldGroupDefinition;
+type FieldGroupDefinition =
+	| PlaceholderFieldGroupDefinition
+	| PredefinedFieldGroupDefinition;
 
-type FieldGroupDisplay = 'plain' | 'with_label' | 'code';
+type FieldGroupDisplay = "plain" | "with_label" | "code";
 
 type PlaceholderFieldGroupDefinition = BaseFieldGroupDefinition & {
-	type: 'placeholder';
+	type: "placeholder";
 	content_type: FieldContentType;
 	default_entries: FieldEntry[];
 	display: FieldGroupDisplay;
-	min_entries: number|null;
-	max_entries: number|null;
-}
+	min_entries: number | null;
+	max_entries: number | null;
+};
 
 type PredefinedFieldGroupDefinition = BaseFieldGroupDefinition & {
-	type: 'predefined';
-}
+	type: "predefined";
+};
 
-type I18nString = string | Record<string, string>
+type I18nString = null | string | Record<string, string>;
 
-type FieldContentType = 'text' | 'image';
+type FieldContentType = "text" | "image";
 
 type PlaceholderFieldEntry = {
-    type: 'placeholder';
-    label?: I18nString;
-    content?: string;
-}
+	type: "placeholder";
+	label?: I18nString;
+	content?: string;
+};
 
 type CustomFieldEntry = {
-    type: 'custom';
-    label?: I18nString;
-    content?: I18nString;
-}
+	type: "custom";
+	label?: I18nString;
+	content?: I18nString;
+};
 
 type FieldEntry = PlaceholderFieldEntry | CustomFieldEntry;
 
@@ -47,7 +49,7 @@ type Style = {
 };
 
 type Variable = {
-    label: string
+	label: string;
 	editor_sample: I18nString;
 };
 
@@ -62,7 +64,6 @@ type Variables = Record<string, Variable>;
 type VariableConfig = Record<string, Variables>;
 type Platforms = Platform[];
 
-
 type PlaceholderFieldGroupConfig = {
 	entries: Array<FieldEntry>;
 	overflow: string | null;
@@ -70,7 +71,9 @@ type PlaceholderFieldGroupConfig = {
 
 type PredefinedFieldGroupConfig = {};
 
-type FieldGroupConfig = PlaceholderFieldGroupConfig | PredefinedFieldGroupConfig;
+type FieldGroupConfig =
+	| PlaceholderFieldGroupConfig
+	| PredefinedFieldGroupConfig;
 
 type LayoutData = {
 	fieldgroups: Record<string, FieldGroupConfig>;
@@ -85,11 +88,20 @@ type PlatformLayout = {
 type WalletLayout = {
 	name?: string;
 	platform_layouts: PlatformLayout[];
-}
+};
 type WalletStore = {
-	platforms: Platforms,
-	variables: VariableConfig,
-	locales: Record<string, string>,
-	csrfToken: String,
-	walletLayout: WalletLayout | null
-}
+	platforms: Platforms;
+	variables: VariableConfig;
+	locales: Record<string, string>;
+	csrfToken: String;
+	walletLayout: WalletLayout | null;
+};
+
+type PreviewLayout = Array<PreviewRow>;
+type PreviewRow = { children: Array<PreviewRow> } | PreviewFieldgroup;
+type PreviewFieldgroup = {
+	fieldgroup: string;
+	relSize?: number;
+	direction?: 'row' | 'column',
+	display?: Array<string>
+};
