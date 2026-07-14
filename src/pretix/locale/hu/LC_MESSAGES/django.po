@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-07 09:30+0000\n"
-"PO-Revision-Date: 2026-07-13 12:35+0000\n"
+"PO-Revision-Date: 2026-07-14 15:00+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -2347,22 +2347,16 @@ msgid "Seat ID"
 msgstr "Kliens ID"
 
 #: pretix/base/exporters/orderlist.py pretix/plugins/checkinlists/exporters.py
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat name"
-msgstr "Kliens ID"
+msgstr "Szék neve"
 
 #: pretix/base/exporters/orderlist.py pretix/plugins/checkinlists/exporters.py
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat zone"
-msgstr "Kliens ID"
+msgstr "Szék zónája"
 
 #: pretix/base/exporters/orderlist.py pretix/plugins/checkinlists/exporters.py
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat row"
-msgstr "Kliens ID"
+msgstr "Sor"
 
 #: pretix/base/exporters/orderlist.py pretix/plugins/checkinlists/exporters.py
 msgid "Seat number"
@@ -6287,10 +6281,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/organizer.py
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "All event permissions"
-msgstr "Átirányítási URI-k"
+msgstr "Esemény jogosultságai"
 
 #: pretix/base/models/organizer.py
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html
@@ -8019,9 +8011,9 @@ msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
 msgstr[0] ""
-"Legalább %(min)s darabot kell választanod ebből a termékből: %(product)s"
+"Legalább %(min)s darabot kell választanod ebből a termékből: %(product)s."
 msgstr[1] ""
-"Legalább %(min)s darabot kell választanod ebből a termékből: %(product)s"
+"Legalább %(min)s darabot kell választanod ebből a termékből: %(product)s."
 
 #: pretix/base/services/cart.py
 #, python-format
@@ -8077,17 +8069,19 @@ msgid "This voucher code is not known in our database."
 msgstr ""
 
 #: pretix/base/services/cart.py
-#, fuzzy, python-format
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching product."
 msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
-msgstr[0] "Válassz egy dátumot."
-msgstr[1] "Válassz egy dátumot."
+msgstr[0] ""
+"Az alábbi kupon csak akkor használható fel, ha legalább %(number)s azonos "
+"terméket választ ki: %(voucher)s."
+msgstr[1] ""
+"Az alábbi kupon csak akkor használható fel, ha legalább %(number)s azonos "
+"terméket választ ki: %(voucher)s."
 
 #: pretix/base/services/cart.py
 #, python-format
@@ -8199,10 +8193,10 @@ msgid_plural ""
 "the product %(base)s."
 msgstr[0] ""
 "Legalább %(min)s kiegészítőt kell választanod a %(cat)s kategóriából ehhez a "
-"termékhez: %(base)s"
+"termékhez: %(base)s."
 msgstr[1] ""
 "Legalább %(min)s kiegészítőt kell választanod a %(cat)s kategóriából ehhez a "
-"termékhez: %(base)s"
+"termékhez: %(base)s."
 
 #: pretix/base/services/cart.py pretix/base/services/orders.py
 #, python-format
@@ -10618,10 +10612,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html
 #: pretix/presale/templates/pretixpresale/organizers/accessibility.html
 #: pretix/presale/templates/pretixpresale/organizers/base.html
-#, fuzzy
-#| msgid "API meta information"
 msgid "Accessibility information"
-msgstr "API meta-információ"
+msgstr "Akadálymentesítési információk"
 
 #: pretix/base/settings.py
 #, fuzzy
@@ -10630,10 +10622,8 @@ msgid "Accessibility information title"
 msgstr "Több információ szükséges"
 
 #: pretix/base/settings.py
-#, fuzzy
-#| msgid "API meta information"
 msgid "Accessibility information text"
-msgstr "API meta-információ"
+msgstr "Akadálymentesítési szöveg"
 
 #: pretix/base/settings.py
 msgid "Attach ticket files"
@@ -12536,10 +12526,8 @@ msgid "Continue in new tab"
 msgstr "Folytatás új fülön"
 
 #: pretix/base/templates/pretixbase/redirect.html
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "Redirect"
-msgstr "Átirányítási URI-k"
+msgstr "Átirányítás"
 
 #: pretix/base/templates/pretixbase/redirect.html
 #, python-format
@@ -14107,10 +14095,8 @@ msgid "Scan type"
 msgstr ""
 
 #: pretix/control/forms/filter.py
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "All directions"
-msgstr "Átirányítási URI-k"
+msgstr "Irányok"
 
 #: pretix/control/forms/filter.py
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html
@@ -16868,10 +16854,8 @@ msgid "A payment has been performed."
 msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
 
 #: pretix/control/logdisplay.py
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "A refund has been performed. "
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr "A kiválasztott \"{seat}\" ülés nem elérhető. "
 
 #: pretix/control/logdisplay.py
 #, python-brace-format
@@ -19988,12 +19972,11 @@ msgid "Make default"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax.html
-#, fuzzy, python-format
-#| msgid "Upcoming events"
+#, python-format
 msgid "%(count)s product"
 msgid_plural "%(count)s products"
-msgstr[0] "Következő események"
-msgstr[1] "Következő események"
+msgstr[0] "%(count)s termék"
+msgstr[1] "%(count)s termék"
 
 #: pretix/control/templates/pretixcontrol/event/tax.html
 #, python-format
@@ -23914,12 +23897,11 @@ msgid "Active (all events)"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
-#, fuzzy, python-format
-#| msgid "Upcoming events"
+#, python-format
 msgid "Active (%(count)s event)"
 msgid_plural "Active (%(count)s events)"
-msgstr[0] "Következő események"
-msgstr[1] "Következő események"
+msgstr[0] "Aktuális (%(count)s esemény)"
+msgstr[1] "Aktuális (%(count)s esemény)"
 
 #: pretix/control/templates/pretixcontrol/organizers/plugins.html
 msgid ""
@@ -24219,12 +24201,11 @@ msgid "This page shows all calls to your webhook in the past 30 days."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
-#, fuzzy, python-format
-#| msgid "The selected seat \"{seat}\" is not available."
+#, python-format
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
-msgstr[0] "A kiválasztott \"{seat}\" ülés nem elérhető."
-msgstr[1] "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr[0] "Egy webhook ismétlésre van ütemezve."
+msgstr[1] "%(count)s webhook ismétlésre van ütemezve."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html
 msgid "Stop retrying"
@@ -24431,10 +24412,8 @@ msgid "Start editing"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
-#, fuzzy
-#| msgid "Client ID"
 msgid "Layout name"
-msgstr "Kliens ID"
+msgstr "Elrendezés neve"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html
 msgid "Preferred language"
@@ -27703,10 +27682,8 @@ msgid "Only including usage of payment providers"
 msgstr ""
 
 #: pretix/plugins/autocheckin/forms.py
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "All variations"
-msgstr "Átirányítási URI-k"
+msgstr "Variációk"
 
 #: pretix/plugins/autocheckin/forms.py
 msgid ""
@@ -31828,12 +31805,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html
-#, fuzzy, python-format
-#| msgid "%(num)s currently available"
+#, python-format
 msgid "(%(count)s available)"
 msgid_plural "(%(count)s available)"
-msgstr[0] "%(num)s maradt"
-msgstr[1] "%(num)s maradt"
+msgstr[0] "(%(count)s elérhető)"
+msgstr[1] "(%(count)s elérhető)"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html
 msgid "This sales channel does not provide support for test mode."
@@ -32090,10 +32066,8 @@ msgid "Price total"
 msgstr "Összeg"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat:"
-msgstr "Kliens ID"
+msgstr "Szék:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgctxt "subevent"
@@ -32124,12 +32098,11 @@ msgid "Usage:"
 msgstr "Felhasználás:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
-#, fuzzy, python-format
-#| msgid "The selected seat \"{seat}\" is not available."
+#, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
-msgstr[0] "A kiválasztott \"{seat}\" ülés nem elérhető."
-msgstr[1] "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr[0] "Ez a jegy fel lett már használva egyszer."
+msgstr[1] "Ez a jegy fel lett már használva ennyiszer: %(count)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html
 msgid "No attendee name provided"
@@ -32545,12 +32518,11 @@ msgid "Show full-size image of %(item)s"
 msgstr "Teljes kép mutatása erről: %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
-#, fuzzy, python-format
-#| msgid "Upcoming events"
+#, python-format
 msgid "%(amount)s× in your cart"
 msgid_plural "%(amount)s× in your cart"
-msgstr[0] "Következő események"
-msgstr[1] "Következő események"
+msgstr[0] "%(amount)s a kosaradban"
+msgstr[1] "%(amount)s a kosaradban"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html
 #: pretix/presale/templates/pretixpresale/event/voucher.html
@@ -33361,12 +33333,11 @@ msgid "Calendar"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
-#, fuzzy, python-format
-#| msgid "Upcoming events"
+#, python-format
 msgid "%(count)s event"
 msgid_plural "%(count)s events"
-msgstr[0] "Következő események"
-msgstr[1] "Következő események"
+msgstr[0] "%(count)s esemény"
+msgstr[1] "%(count)s esemény"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html
 #, fuzzy
@@ -33804,12 +33775,11 @@ msgid "You don’t have any memberships in your account yet."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html
-#, fuzzy, python-format
-#| msgid "Your items"
+#, python-format
 msgid "%(counter)s item"
 msgid_plural "%(counter)s items"
-msgstr[0] "A tételeid"
-msgstr[1] "A tételeid"
+msgstr[0] "%(counter)s tétel"
+msgstr[1] "%(counter)s tétel"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_orders.html
 msgid "You don’t have any orders in your account yet."
