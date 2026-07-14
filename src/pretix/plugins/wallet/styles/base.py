@@ -231,14 +231,15 @@ class PassStyle:
     name: str
     # order here limits in what order users can configure field "overspilling" (if too many fields are defined, where should the rest go) -> can only go down in the list
     # we evaluate the fields in this order, so they overspill in this order as well (fields from primary are appended to the overspilling field before fields from secondary are etc)
-
     fieldgroups: list[FieldGroup]
+    preview_layout: str | None
 
     def asdict(self):
         return {
             "identifier": self.identifier,
             "name": self.name,
             "fieldgroups": [x.asdict() for x in self.fieldgroups],
+            "preview_layout": self.preview_layout
         }
 
     def layout_schema(self, context):
