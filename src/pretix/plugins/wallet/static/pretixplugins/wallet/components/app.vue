@@ -6,65 +6,53 @@ import Input from "./input/input.vue";
 import PassPreview from "./preview/pass-preview.vue";
 import { StoreKey } from "../walletStore";
 
+const store = inject(StoreKey)!;
 const gettext = (window as any).gettext;
 
-const store = inject(StoreKey)!;
-
-const platformChoices = computed(() => {
-	return [
-		[null, "Do not generate pass"],
-		...Object.values(store.currentPlatformStyles).map((x) => [
-			x.identifier,
-			x.name,
-		]),
-	];
-});
-
 function openForm(url: string, data: Record<string, string>) {
-	let form = document.createElement("form");
-	form.target = "_blank";
-	form.method = "POST";
-	form.action = url;
-	form.style.display = "none";
+    let form = document.createElement("form");
+    form.target = "_blank";
+    form.method = "POST";
+    form.action = url;
+    form.style.display = "none";
 
-	for (var key in data) {
-		var input = document.createElement("input");
-		input.type = "hidden";
-		input.name = key;
-		input.value = data[key];
-		form.appendChild(input);
-	}
-	document.body.appendChild(form);
-	form.submit();
-	document.body.removeChild(form);
+    for (var key in data) {
+        var input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = data[key];
+        form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
 }
 
 function openPreview(e: SubmitEvent) {
-	e.preventDefault();
-	openForm("../../preview/", {
-		csrfmiddlewaretoken: store.csrfToken,
-		platform: store.currentPlatform,
-		style: store.currentPlatformLayout.style,
-		layout: JSON.stringify(store.currentPlatformLayout.layout),
-	});
+    e.preventDefault();
+    openForm("../../preview/", {
+        csrfmiddlewaretoken: store.csrfToken,
+        platform: store.currentPlatform,
+        style: store.currentPlatformLayout.style,
+        layout: JSON.stringify(store.currentPlatformLayout.layout),
+    });
 }
 
-const preview_layouts = [
-	[
-		{
-			children: [
-				{ fieldgroup: "logo", relSize: 1 },
-				{ fieldgroup: "logo_text", relSize: 3 },
-				{ fieldgroup: "header", relSize: 2 },
-			],
-		},
-		{ fieldgroup: "primary" },
-		{ fieldgroup: "secondary" },
-		{ fieldgroup: "auxiliary" },
-		{ fieldgroup: "code" },
-	],
-	[{ fieldgroup: "back", mode: "column" }],
-];
+
+
+const platformChoices = computed(() => {
+    return [
+        [null, "Do not generate pass"],
+        ...Object.values(store.currentPlatformStyles).map((x) => [
+            x.identifier,
+            x.name,
+        ]),
+    ];
+});
+
+const preview_layout = computed(() => {
+    return JSON.parse(store.currentPlatformStyles[store.currentPlatformLayout.style].preview_layout)
+})
 </script>
 
 <template lang="pug">
@@ -82,23 +70,25 @@ const preview_layouts = [
                     a(role="tab" @click="store.currentPlatform = platform.identifier") {{ platform.name }}
         .tabbed-form.tab-content
             .tab-pane.active.row
-                .col-md-8
+                .col-md-6.col-lg-8
                     Select.form-group(label="Style" :modelValue="store.currentPlatformLayout.style" @update:modelValue="store.setCurrentPlatformStyle" :choices="platformChoices")
 
                     StyleSettings(v-if="store.currentPlatformLayout.style" v-model="store.currentPlatformLayout.layout" :style="store.currentPlatformStyles[store.currentPlatformLayout.style]")
-                .col-md-4
+                .col-md-6.col-lg-4
                     .panel.panel-default
                         .panel-heading Preview
                         .panel-body
-                            span.text-muted The preview below is only a rough representation of what the pass might look like. Please check the generated pass.
-                            PassPreview(v-for="layout in preview_layouts" :layout="layout")
-
-                            pre
-                                code {{ store.currentPlatformLayout }}
-                            pre(v-if="store.currentPlatformLayout.style")
-                                code {{ store.currentPlatformStyles[store.currentPlatformLayout.style] }}
-                            pre
-                                code {{ store.walletLayout }}
+                            div(v-if="preview_layout")
+                                span.text-muted The preview below is only a rough representation of what the pass might look like. Please check the generated pass.
+                                div
+                                    PassPreview(v-for="layout in preview_layout" :layout="layout")
+                            div(v-else) Preview not supported
+                            //- pre
+                            //-     code {{ store.currentPlatformLayout }}
+                            //- pre(v-if="store.currentPlatformLayout.style")
+                            //-     code {{ store.currentPlatformStyles[store.currentPlatformLayout.style] }}
+                            //- pre
+                            //-     code {{ store.walletLayout }}
         .form-group.submit-group
             button.btn.btn-lg.btn-default(type="button" @click="openPreview") Preview
             button.btn.btn-primary.btn-save(type="submit") Submit
