@@ -1,6 +1,5 @@
 /*global $, gettext*/
 $(function () {
-    // Question view
     if (!$(".form-order-change").length) {
         return;
     }
