@@ -338,8 +338,13 @@ class OrderSendView(BaseSenderView):
         return initial
 
     def get_object_queryset(self, form):
+        # Filtering here is a bit intricate, as some filters relate to order positions, while others relate to the order itself
         qs = Order.objects.filter(event=self.request.event)
         orders = qs.filter_by_status(qs, form.cleaned_data['sendto'])
+        if form.cleaned_data.get('created_from'):
+            orders = orders.filter(datetime_gte=form.cleaned_data.get('created_to'))
+        if form.cleaned_data.get('created_to'):
+            orders = orders.filter(datetime__lt=form.cleaned_data.get('created_to'))
 
         opq = OrderPosition.objects.filter(
             Q(item_id__in=[i.pk for i in form.cleaned_data.get('items')]) | Q(Exists(
@@ -353,7 +358,7 @@ class OrderSendView(BaseSenderView):
         )
 
         if form.cleaned_data.get('filter_checkins'):
-            ql = []
+            ci_filter = Q(pk__in=[])  # return nothing
 
             if form.cleaned_data.get('not_checked_in'):
                 opq = opq.alias(
@@ -365,7 +370,7 @@ class OrderSendView(BaseSenderView):
                         )
                     )
                 )
-                ql.append(Q(any_checkins=False))
+                ci_filter |= Q(any_checkins=False)
             if form.cleaned_data.get('checkin_lists'):
                 opq = opq.alias(
                     matching_checkins=Exists(
@@ -376,13 +381,8 @@ class OrderSendView(BaseSenderView):
                         )
                     )
                 )
-                ql.append(Q(matching_checkins=True))
-            if len(ql) == 2:
-                opq = opq.filter(ql[0] | ql[1])
-            elif ql:
-                opq = opq.filter(ql[0])
-            else:
-                opq = opq.none()
+                ci_filter |= Q(matching_checkins=True)
+            opq.filter(ci_filter)
 
         if form.cleaned_data.get('subevent'):
             opq = opq.filter(subevent=form.cleaned_data.get('subevent'))
@@ -390,15 +390,16 @@ class OrderSendView(BaseSenderView):
             opq = opq.filter(subevent__date_from__gte=form.cleaned_data.get('subevents_from'))
         if form.cleaned_data.get('subevents_to'):
             opq = opq.filter(subevent__date_from__lt=form.cleaned_data.get('subevents_to'))
-        if form.cleaned_data.get('created_from'):
-            opq = opq.filter(order__datetime__gte=form.cleaned_data.get('created_from'))
-        if form.cleaned_data.get('created_to'):
-            opq = opq.filter(order__datetime__lt=form.cleaned_data.get('created_to'))
 
-        orders_without_positions = Order.objects.filter(~Exists(OrderPosition.objects.filter(canceled=False, order_id=OuterRef('pk'))))
-        # pk__in turns out to be faster than Exists(subquery) in many cases since we often filter on a large subset
-        # of orderpositions
-        return orders.filter(Q(pk__in=opq.values_list('order_id')) | Q(pk__in=orders_without_positions))
+        if form.cleaned_data.get('recipients') in ['orders', 'both']:
+            orders_without_positions = Order.objects.filter(~Exists(OrderPosition.objects.filter(canceled=False, order_id=OuterRef('pk'))))
+            # pk__in turns out to be faster than Exists(subquery) in many cases since we often filter on a large subset
+            # of orderpositions
+            return orders.filter(Q(pk__in=opq.values_list('order_id')) | Q(pk__in=orders_without_positions))
+        else:
+            # pk__in turns out to be faster than Exists(subquery) in many cases since we often filter on a large subset
+            # of orderpositions
+            return orders.filter(pk__in=opq.values_list('order_id'))
 
     def describe_match_size(self, cnt):
         return ngettext(

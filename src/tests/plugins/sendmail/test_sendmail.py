@@ -724,6 +724,22 @@ def test_sendmail_canceled(logged_in_client, sendmail_url, event, item):
 
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url + 'orders/',
+                                     {'sendto': 'cp',
+                                      'action': 'send',
+                                      'recipients': 'both',
+                                      'items': item.pk,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      },
+                                     follow=True)
+
+    assert 'alert-success' in response.rendered_content
+    # o2 has no active attendees
+    assert len(djmail.outbox) == 3
+    assert set(tuple(x.to) for x in djmail.outbox) == {(o1.email,), (o2.email,), (o1_p1.attendee_email,), }
+
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'cany',
                                       'action': 'send',
                                       'recipients': 'attendees',
@@ -736,3 +752,19 @@ def test_sendmail_canceled(logged_in_client, sendmail_url, event, item):
     assert 'alert-success' in response.rendered_content
     assert len(djmail.outbox) == 2
     assert set(tuple(x.to) for x in djmail.outbox) == {(o1_p1.attendee_email,), (o3_p1.attendee_email,)}
+
+    # Order cancelled with fee, should not receive mails for paid
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url + 'orders/',
+                                     {'sendto': 'p',
+                                      'action': 'send',
+                                      'recipients': 'orders',
+                                      'items': item.pk,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      },
+                                     follow=True)
+
+    assert 'alert-success' in response.rendered_content
+    assert len(djmail.outbox) == 1
+    assert set(tuple(x.to) for x in djmail.outbox) == {(o3.email,)}

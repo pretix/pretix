@@ -155,9 +155,16 @@ class OrderQuerySet(models.QuerySet):
             filter |= Q(status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
         if 'pv' in status:
             filter |= Q(status=Order.STATUS_PAID) | Q(status=Order.STATUS_PENDING, valid_if_pending=True)
-        for s in ('p', 'n', 'e', 'c'):
+        for s in ('n', 'e', 'c'):
             if s in status:
                 filter |= Q(status=s)
+        if 'p' in status:
+            has_pc = OrderPosition.objects.filter(
+                order=OuterRef('pk')
+            )
+            filter |= (
+                Q(Exists(has_pc), status=Order.STATUS_PAID)
+            )
         if 'overpaid' in status:
             qs = Order.annotate_overpayments(qs, refunds=False, results=True, sums=False)
             filter |= Q(is_overpaid=True)
@@ -215,6 +222,12 @@ class OrderQuerySet(models.QuerySet):
                 require_approval=True
             )
         if 'na' in status:
+            filter |= Q(
+                status=Order.STATUS_PENDING,
+                require_approval=False,
+                valid_if_pending=False
+            )
+        if 'na_all' in status:
             filter |= Q(
                 status=Order.STATUS_PENDING,
                 require_approval=False
@@ -346,9 +359,10 @@ class Order(LockModel, LoggedModel):
             ('underpaid', _('Underpaid (but confirmed)')),
             ('pendingpaid', _('Pending (but fully paid)')),
             ('pendingnopayment', _('Pending (but no current payment)')),
+            ('na', _('Payment pending (except unapproved or already confirmed)')),
         )),
         (_('Approval process'), (
-            ('na', _('Approved, payment pending')),
+            ('na_all', _('Approved, payment pending')),
             ('pa', _('Approval pending')),
         )),
         (_('Follow-up date'), (
@@ -358,30 +372,10 @@ class Order(LockModel, LoggedModel):
         ('testmode', _('Test mode')),
     )
 
-    STATUS_FILTER_OPTIONS = (
-        (STATUS_PAID, _('Paid (or canceled with paid fee)')),
-        (STATUS_PAID + 'v', _('Paid or confirmed')),
-        ('valid_if_confirmed', _('Pending but already confirmed')),
-        (STATUS_PENDING, _('Pending')),
-        (STATUS_PENDING + STATUS_PAID, _('Pending or paid')),
-        (STATUS_CANCELED, _('Canceled (fully)')),
-        ('cp', _('Canceled (fully or with paid fee)')),
-        ('cany', _('Canceled (at least one position)')),
-        ('rc', _('Cancellation requested')),
-        ('cni', _('Fully canceled but invoice not canceled')),
-        (STATUS_EXPIRED, _('Expired')),
-        (STATUS_PENDING + STATUS_EXPIRED, _('Pending or expired')),
-        ('o', _('Pending (overdue)')),
-        ('overpaid', _('Overpaid')),
-        ('partially_paid', _('Partially paid')),
-        ('underpaid', _('Underpaid (but confirmed)')),
-        ('pendingpaid', _('Pending (but fully paid)')),
-        ('pendingnopayment', _('Pending (but no current payment)')),
-        ('na', _('Approved, payment pending')),
-        ('pa', _('Approval pending')),
-        ('custom_followup_at', _('Follow-up configured')),
-        ('custom_followup_due', _('Follow-up due')),
-        ('testmode', _('Test mode')),
+    STATUS_FILTER_OPTIONS = tuple(
+        c
+        for cs in STATUS_FILTERS
+        for c in (cs[1] if isinstance(cs[1], tuple) else [cs])
     )
 
     code = models.CharField(
