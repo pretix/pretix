@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:52+0000\n"
-"PO-Revision-Date: 2026-07-13 12:35+0000\n"
+"PO-Revision-Date: 2026-07-15 07:39+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/hu/>\n"
@@ -145,11 +145,11 @@ msgstr "Fizetési mód nem elérhető"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Placed orders"
-msgstr "Megrendelések"
+msgstr "Leadott rendelések"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Paid orders"
-msgstr "Kifizetett megrendelések"
+msgstr "Kifizetett rendelések"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Attendees (ordered)"
@@ -249,7 +249,7 @@ msgstr "Beváltva"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Cancel"
-msgstr "Lemondás"
+msgstr "Mégse"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket not paid"
@@ -674,7 +674,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Search query"
-msgstr "Keresési lekérdezés"
+msgstr "Keresési kifejezés"
 
 #: pretix/static/pretixcontrol/js/ui/main.js
 msgid "All"
