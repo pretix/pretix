@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:52+0000\n"
-"PO-Revision-Date: 2026-07-15 07:39+0000\n"
+"PO-Revision-Date: 2026-07-15 09:36+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/hu/>\n"
@@ -169,7 +169,7 @@ msgstr "Kapcsolatfelvétel Stripe-pal…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Total"
-msgstr "Összeg"
+msgstr "Összesen"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Contacting your bank …"
@@ -398,7 +398,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js
 msgid "We are processing your request …"
-msgstr "A kérés feldolgozása folyamatban…"
+msgstr "Kérésének feldolgozása folyamatban…"
 
 #: pretix/static/pretixbase/js/asynctask.js
 msgid ""
@@ -413,8 +413,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
-"Amennyiben ez több időt vesz igénybe, mint néhány perc, kérjük jelezze "
-"felénk."
+"Ha ez néhány percnél tovább tart, kérjük, vegye fel velünk a kapcsolatot."
 
 #: pretix/static/pretixbase/js/asynctask.js
 msgid "Close message"
