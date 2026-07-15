@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-07 09:30+0000\n"
-"PO-Revision-Date: 2026-07-15 09:36+0000\n"
+"PO-Revision-Date: 2026-07-15 12:00+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -1420,7 +1420,7 @@ msgstr ""
 #: pretix/base/exporters/dekodi.py
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "Rendezvényjegy {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py pretix/base/exporters/invoices.py
 #: pretix/base/exporters/orderlist.py pretix/plugins/checkinlists/exporters.py
@@ -3234,7 +3234,7 @@ msgstr "Példa: %s"
 #: pretix/base/forms/widgets.py
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr ""
+msgstr "Elérhető helyőrzők: {list}"
 
 #: pretix/base/forms/widgets.py pretix/base/models/items.py
 #: pretix/control/templates/pretixcontrol/email/login_notice.txt
@@ -4189,7 +4189,7 @@ msgstr "A rendelés nincs jóváhagyva"
 
 #: pretix/base/models/checkin.py
 msgid "Ticket not valid at this time"
-msgstr "A jegy jelenleg nem érvényes"
+msgstr "A jegy jelen pillanatban nem érvényes"
 
 #: pretix/base/models/checkin.py
 #, fuzzy
@@ -5915,7 +5915,7 @@ msgstr "Nyelv"
 #: pretix/base/models/orders.py pretix/control/forms/filter.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "Total amount"
-msgstr ""
+msgstr "Teljes összeg"
 
 #: pretix/base/models/orders.py pretix/base/models/vouchers.py
 msgid ""
@@ -8317,26 +8317,22 @@ msgid "This order position has been canceled."
 msgstr ""
 
 #: pretix/base/services/checkin.py
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "This ticket has been blocked."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr "Ez a jegy le lett tiltva."
 
 #: pretix/base/services/checkin.py
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "This order is not yet approved."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr "Ez a rendelés még nincs jóváhagyva."
 
 #: pretix/base/services/checkin.py
 #, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr ""
+msgstr "Ez a jegy csak az alábbi dátum után érvényes: {datetime}."
 
 #: pretix/base/services/checkin.py
 #, python-brace-format
 msgid "This ticket was only valid before {datetime}."
-msgstr ""
+msgstr "Ez a jegy csak az alábbi dátum előtt érvényes: {datetime}."
 
 #: pretix/base/services/checkin.py
 msgid "This order position has an invalid product for this check-in list."
@@ -8375,7 +8371,7 @@ msgstr ""
 
 #: pretix/base/services/checkin.py
 msgid "This ticket has already been redeemed."
-msgstr ""
+msgstr "Ez a jegy már fel lett használva."
 
 #: pretix/base/services/currencies.py
 msgid "European Central Bank"
@@ -8427,6 +8423,11 @@ msgid ""
 "{i.zipcode} {i.city} {state}\n"
 "{country}"
 msgstr ""
+"{i.company}\n"
+"{i.name}\n"
+"{i.street}\n"
+"{i.zipcode} {i.city} {state}\n"
+"{country}"
 
 #: pretix/base/services/invoices.py
 #, python-brace-format
@@ -8444,7 +8445,7 @@ msgstr ""
 #, python-brace-format
 msgctxt "subevent"
 msgid "Date: {}"
-msgstr ""
+msgstr "Dátum: {}"
 
 #: pretix/base/services/invoices.py
 msgid "A payment provider specific text might appear here."
@@ -14736,7 +14737,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py
 msgid "Payment amount"
-msgstr "Fizetett összeg"
+msgstr "Fizetési összeg"
 
 #: pretix/control/forms/orders.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html
@@ -28001,14 +28002,14 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/new_refund_control_form.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 #: pretix/plugins/banktransfer/payment.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py
 msgid "Name of bank"
@@ -28105,7 +28106,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/views.py pretix/plugins/stripe/payment.py
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html
 msgid "Account holder"
-msgstr ""
+msgstr "Számlatulajdonos"
 
 #: pretix/plugins/banktransfer/payment.py
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html
@@ -28373,6 +28374,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "In test mode, your exports will only contain test mode orders."
 msgstr ""
+"Teszt módban az exportjai csak a teszt módú rendeléseket fogják tartalmazni."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid ""
@@ -28382,11 +28384,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "Go to organizer-level exports"
-msgstr ""
+msgstr "Ugrás a szervezői szintű exportokhoz"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "Create new export file"
-msgstr ""
+msgstr "Új exportfájl létrehozása"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "Aggregate transactions to the same bank account"
@@ -28408,11 +28410,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "Export date"
-msgstr ""
+msgstr "Export dátuma"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "Number of orders"
-msgstr ""
+msgstr "Rendelések száma"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
 msgid "not downloaded"
@@ -28427,10 +28429,8 @@ msgid "SEPA XML"
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "No exports have been created yet."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr "Még nem készült export."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html
 msgid "Export SEPA xml"
@@ -28578,10 +28578,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/views.py
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "No valid orders have been found."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr "Nem található érvényes rendelés."
 
 #: pretix/plugins/checkinlists/apps.py
 msgid "Check-in list exporter"
