@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:52+0000\n"
-"PO-Revision-Date: 2026-07-15 09:36+0000\n"
+"PO-Revision-Date: 2026-07-15 12:00+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/hu/>\n"
@@ -301,7 +301,7 @@ msgstr "A jegy le van tiltva"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Ticket not valid at this time"
-msgstr "A jegy jelenleg nem érvényes"
+msgstr "A jegy jelen pillanatban nem érvényes"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Order canceled"
