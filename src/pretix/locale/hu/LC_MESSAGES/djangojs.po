@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-06 15:52+0000\n"
-"PO-Revision-Date: 2026-07-15 12:00+0000\n"
+"PO-Revision-Date: 2026-07-15 14:20+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/hu/>\n"
@@ -233,7 +233,7 @@ msgstr "Kifizetetlen"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Canceled"
-msgstr "Lemondva"
+msgstr "Törölve"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
 msgid "Confirmed"
