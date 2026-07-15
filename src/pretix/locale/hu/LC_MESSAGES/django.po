@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-07 09:30+0000\n"
-"PO-Revision-Date: 2026-07-14 15:00+0000\n"
+"PO-Revision-Date: 2026-07-15 05:57+0000\n"
 "Last-Translator: szurofkamarciidfbe08444ef04788 <szurofkamarcii@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
@@ -306,10 +306,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Ismeretlen plugin: '{name}'."
 
 #: pretix/api/serializers/event.py pretix/api/serializers/organizer.py
-#, fuzzy, python-brace-format
-#| msgid "Unknown plugin: '{name}'."
+#, python-brace-format
 msgid "Restricted plugin: '{name}'."
-msgstr "Ismeretlen plugin: '{name}'."
+msgstr "Korlátozott plugin: '{name}'."
 
 #: pretix/api/serializers/item.py
 #, python-brace-format
@@ -325,38 +324,29 @@ msgid "The bundled item must not have bundles on its own."
 msgstr "A csomag-termék nem tartalmazhat csomagokat."
 
 #: pretix/api/serializers/item.py
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program start must not be empty."
-msgstr "A fizetés túl későn történt meg az elfogadáshoz."
+msgstr "Az esemény kezdete nem lehet üres."
 
 #: pretix/api/serializers/item.py
-#, fuzzy
-#| msgid "The payment is too late to be accepted."
 msgid "The program end must not be empty."
-msgstr "A fizetés túl későn történt meg az elfogadáshoz."
+msgstr "Az esemény vége nem lehet üres."
 
 #: pretix/api/serializers/item.py pretix/base/models/items.py
 msgid "The program end must not be before the program start."
 msgstr "A program vége időpont nem lehet a kezdő időpont előtt."
 
 #: pretix/api/serializers/item.py pretix/base/models/items.py
-#, fuzzy
-#| msgid "You cannot select a product that belongs to a different event."
 msgid "You cannot use program times on an event series."
-msgstr "Nem választhatsz egy terméket ami egy másik eseményhez tartozik."
+msgstr "Nem jelölhetsz időpontokat eseménysorozathoz."
 
 #: pretix/api/serializers/item.py
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
-#| "Please use the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, program times or variations via PATCH/PUT is not "
 "supported. Please use the dedicated nested endpoint."
 msgstr ""
-"A kiegészítők, csomagok vagy variációk frissítése PATCH/PUT használatával "
-"nem támogatott. Kérem használja a dedikált beágyazott végpontot."
+"A kiegészítők, csomagok, időpontok vagy variációk frissítése PATCH/PUT "
+"használatával nem támogatott. Kérem használja a dedikált beágyazott "
+"végpontot."
 
 #: pretix/api/serializers/item.py
 msgid "Only admission products can currently be personalized."
@@ -416,10 +406,9 @@ msgid "The selected seat \"{seat}\" is not available."
 msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
 
 #: pretix/api/serializers/order.py
-#, fuzzy, python-brace-format
-#| msgid "The product \"{}\" is not assigned to a quota."
+#, python-brace-format
 msgid "The product \"{}\" is not available on this date."
-msgstr "\"{}\" termékhez nincs kvóta rendelve."
+msgstr "\"{}\" termékhnem elérhető ezen a dátumon."
 
 #: pretix/api/serializers/order.py pretix/api/views/cart.py
 #, python-brace-format
