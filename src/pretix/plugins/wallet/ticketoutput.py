@@ -71,7 +71,9 @@ class WalletOutput(BaseTicketOutput):
             wallet_layout = op.item.walletlayout
         else:
             wallet_layout = op.event.wallet_layouts.get(default=True)
-        platform_layout = get_object_or_404(wallet_layout.platform_layouts, platform=self.platform.identifier)
+        platform_layout = get_object_or_404(
+            wallet_layout.platform_layouts, platform=self.platform.identifier
+        )
         return self.platform.generate(platform_layout.pass_layout, op)
 
 
@@ -80,6 +82,48 @@ class GoogleWalletTicketOutput(WalletOutput):
     verbose_name = _("Google")
     download_button_text = "Add to Google Wallet"
     platform = GooglePlatform
+
+    def get_global_settings(sender, **kwargs):
+        return OrderedDict(
+            [
+                (
+                    "wallet_google_issuer_id",
+                    forms.CharField(
+                        label=_("Google Wallet Issuer/Merchant ID"),
+                        help_text=_(
+                            "After getting accepted by Google into the Google Pay API for Passes program, "
+                            "your Issuer ID can be found in the Merchant center at "
+                            "https://wallet.google.com/merchant/walletobjects/"
+                        ),
+                        required=False,
+                    ),
+                ),
+                (
+                    "wallet_google_credentials",
+                    forms.FileField(
+                        label=_("Google Wallet Service Account Credentials"),
+                        help_text=_(
+                            "Please paste the contents of the JSON credentials file "
+                            "of the service account you tied to your Google Pay API "
+                            "for Passes Issuer ID"
+                        ),
+                        required=False,
+                        # validators=[validate_json_credentials]
+                    ),
+                ),
+                (
+                    "wallet_google_instance_uuid",
+                    forms.CharField(
+                        label=_("Google Wallet Pass Instance UUID"),
+                        help_text=_(
+                            "Instance-specific part to be added to the wallet ids"
+                        ),
+                        required=False,
+                    ),
+                ),
+
+            ]
+        )
 
 
 class AppleWalletTicketOutput(WalletOutput):
@@ -129,7 +173,7 @@ class AppleWalletTicketOutput(WalletOutput):
                         label=_("Apple Wallet Pass secret key"),
                         required=False,
                         validators=[validate_rsa_privkey],
-                        widget=ClearableBasenameFileInput
+                        widget=ClearableBasenameFileInput,
                     ),
                 ),
                 (
