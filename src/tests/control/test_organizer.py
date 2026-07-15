@@ -163,7 +163,7 @@ class OrganizerTest(SoupTest):
     def _fake_dmarc_record(hostname):
         return {
             'test.pretix.dev': 'v=DMARC1; p=quarantine; sp=none; adkim=r; aspf=r;',
-            'bad.pretix.dev': 'BLA',
+            'bad.pretix.dev': None,
             'none.pretix.dev': None,
         }[hostname]
 

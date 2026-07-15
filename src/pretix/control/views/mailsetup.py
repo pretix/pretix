@@ -194,7 +194,7 @@ class MailSettingsSetupView(TemplateView):
             session_key = f'sender_mail_verification_code_{self.request.path}_{self.simple_form.cleaned_data.get("mail_from")}'
             verify_dns = (
                 settings.MAIL_CUSTOM_SENDER_SPF_STRING or
-                (settings.MAIL_CUSTOM_SENDER_DKIM_CNAME and settings.MAIL_CUSTOM_SENDER_DMARC_REQUIRED) or
+                (settings.MAIL_CUSTOM_SENDER_DKIM_CNAME and settings.MAIL_CUSTOM_SENDER_DKIM_SELECTOR) or
                 settings.MAIL_CUSTOM_SENDER_DMARC_REQUIRED
             )
             allow_save = (
