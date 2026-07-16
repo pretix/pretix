@@ -41,6 +41,7 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.validators import EmailValidator
 from django.db.models.functions import Upper
 from django.urls import reverse
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelChoiceField
 
@@ -161,7 +162,7 @@ class VoucherForm(I18nModelForm):
                 required=False,
                 widget=forms.TextInput(attrs={'data-seat-guid-field': '1'}),
                 initial=self.instance.seat.seat_guid if self.instance.seat else '',
-                help_text=str(self.instance.seat) if self.instance.seat else '',
+                help_text=escape(str(self.instance.seat) if self.instance.seat else ''),
             )
 
     def clean(self):
