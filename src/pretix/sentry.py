@@ -130,4 +130,3 @@ class PretixEventScrubber(EventScrubber):
     def scrub_event(self, event: "Event") -> None:
         super().scrub_event(event)
         self.scrub_exception(event)
-        print(event)
