@@ -82,7 +82,7 @@ def make_eventmetaproperties_unique(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0301_reusablemedium_remove_orderposition"),
+        ("pretixbase", "0304_tax_rate_decimals"),
     ]
 
     operations = [

@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0302_fixup_eventmetaproperties"),
+        ("pretixbase", "0305_fixup_eventmetaproperties"),
     ]
 
     operations = [
