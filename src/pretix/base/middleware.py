@@ -369,17 +369,21 @@ class SecurityMiddleware(MiddlewareMixin):
         # https://github.com/pretix/pretix/issues/765
         resp['P3P'] = 'CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"'
 
-        if "Content-Type" in resp and resp["Content-Type"].split(";")[0] in self.SAFE_TYPES:
-            if 'Content-Security-Policy' in resp:
-                del resp['Content-Security-Policy']
-            return resp
-
-        if not getattr(resp, '_csp_ignore', False):
+        if self._needs_csp(request, resp):
             resp['Content-Security-Policy'] = _render_csp(self._build_csp(request, resp))
         elif 'Content-Security-Policy' in resp:
             del resp['Content-Security-Policy']
 
         return resp
+
+    def _needs_csp(self, request, resp):
+        if "Content-Type" in resp and resp["Content-Type"].split(";")[0] in self.SAFE_TYPES:
+            return False
+
+        if getattr(resp, '_csp_ignore', False):
+            return False
+
+        return True
 
     def _build_csp(self, request, resp):
         url = resolve(request.path_info)
