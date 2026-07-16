@@ -26,6 +26,7 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from pretix.base.logentrytype_registry import LogEntryType, log_entry_types
 from pretix.base.models import Checkin, OrderPayment
 from pretix.base.signals import (
     checkin_created, event_copy_data, item_copy_data, logentry_display,
@@ -64,19 +65,13 @@ def nav_event_receiver(sender, request, **kwargs):
     ]
 
 
-@receiver(signal=logentry_display)
-def logentry_display_receiver(sender, logentry, **kwargs):
-    plains = {
-        "pretix.plugins.autocheckin.rule.added": _("An auto check-in rule was created"),
-        "pretix.plugins.autocheckin.rule.changed": _(
-            "An auto check-in rule was updated"
-        ),
-        "pretix.plugins.autocheckin.rule.deleted": _(
-            "An auto check-in rule was deleted"
-        ),
-    }
-    if logentry.action_type in plains:
-        return plains[logentry.action_type]
+@log_entry_types.new_from_dict({
+    "pretix.plugins.autocheckin.rule.added": _("An auto check-in rule was created"),
+    "pretix.plugins.autocheckin.rule.changed": _("An auto check-in rule was updated"),
+    "pretix.plugins.autocheckin.rule.deleted": _("An auto check-in rule was deleted"),
+})
+class AutocheckinLogEntryType(LogEntryType):
+    pass
 
 
 @receiver(item_copy_data, dispatch_uid="autocheckin_item_copy")
