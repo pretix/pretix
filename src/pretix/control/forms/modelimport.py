@@ -22,7 +22,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.functional import lazy
-from django.utils.html import format_html
+from django.utils.html import conditional_escape, format_html
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.modelimport_orders import get_order_import_columns
@@ -66,7 +66,7 @@ class ProcessForm(forms.Form):
                 widget=forms.Select(
                     attrs={'data-static': 'true'}
                 ),
-                help_text=c.help_text,
+                help_text=conditional_escape(c.help_text),
             )
 
     def get_columns(self):

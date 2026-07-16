@@ -838,9 +838,10 @@ class CancelSettingsForm(SettingsForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.obj.settings.giftcard_expiry_years is not None:
-            self.fields['cancel_allow_user_paid_refund_as_giftcard'].help_text = gettext(
-                'You have configured gift cards to be valid {} years plus the year the gift card is issued in.'
-            ).format(self.obj.settings.giftcard_expiry_years)
+            self.fields['cancel_allow_user_paid_refund_as_giftcard'].help_text = format_html(
+                gettext('You have configured gift cards to be valid {} years plus the year the gift card is issued in.'),
+                self.obj.settings.giftcard_expiry_years
+            )
 
 
 class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
