@@ -364,7 +364,7 @@ class TeamForm(forms.ModelForm):
                     for opt in pg.options
                 ],
                 label=pg.label,
-                help_text=pg.help_text,
+                help_text=conditional_escape(pg.help_text),
                 initial=initial,
                 widget=forms.RadioSelect,
             )
@@ -389,7 +389,7 @@ class TeamForm(forms.ModelForm):
                     for opt in pg.options
                 ],
                 label=pg.label,
-                help_text=pg.help_text,
+                help_text=conditional_escape(pg.help_text),
                 initial=initial,
                 widget=forms.RadioSelect,
             )
