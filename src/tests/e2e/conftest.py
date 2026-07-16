@@ -731,11 +731,13 @@ def event_series(organizer):
     """Create an event series with multiple subevents, items, and quotas."""
     from pretix.base.models import ItemCategory
 
+    base_date = _future_dt(days=30, hour=19)
+
     event = Event.objects.create(
         organizer=organizer,
         name='Concert Series',
         slug='concert-series',
-        date_from=_future_dt(days=30, hour=19),
+        date_from=base_date,
         has_subevents=True,
         currency='EUR',
         live=True,
@@ -760,9 +762,8 @@ def event_series(organizer):
     )
 
     subevents = []
-    base_date = _future_dt(days=30, hour=19)
 
-    for i in range(15):
+    for i in range(20):
         se = SubEvent.objects.create(
             event=event,
             name=f'Concert Night {i + 1}',

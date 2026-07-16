@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load l10n %}
+{% load static %}
 {% load eventurl %}
 {% load cache_large %}
 {% load money %}
@@ -39,6 +40,7 @@
     {% else %}
         <meta property="og:url" content="{% abseventurl request.event "presale:event.index" %}" />
     {% endif %}
+    <script type="text/javascript" src="{% static "pretixpresale/js/csrfcookieretry.js" %}"></script>
 {% endblock %}
 {% block content %}
 
@@ -149,8 +151,8 @@
         {% if not ev.presale_is_running %}
             <div class="alert alert-info">
                 {% if ev.presale_has_ended %}
-                    {% if event.settings.presale_has_ended_text %}
-                        {{ event.settings.presale_has_ended_text|rich_text }}
+                    {% if presale_has_ended_text %}
+                        {{ presale_has_ended_text|rich_text }}
                     {% else %}
                         {% blocktrans trimmed %}
                             The booking period for this event is over.

@@ -19,9 +19,7 @@
         {% endif %}
     </h1>
 
-    <script type="application/json" id="editor-data">
-        {{ layout|safe }}
-    </script>
+    {{ layout|json_script:"editor-data" }}
     <div class="row">
         <div class="col-md-9">
             <div class="panel panel-default panel-pdf-editor">
@@ -562,11 +560,10 @@
             </div>
         </div>
     </div>
-    <script type="text/plain" id="schema-url">{% static "schema/pdf-layout.schema.json" %}</script>
     <script type="text/javascript" src="{% static "pdfjs/pdf.js" %}"></script>
-    <script type="text/javascript" src="{% static "ajv/ajv2020.bundle.min.js" %}"></script>
     <script type="text/javascript" src="{% static "fabric/fabric.min.js" %}"></script>
     <script type="text/javascript" src="{% static "pretixcontrol/js/ui/editor.js" %}"></script>
+    <script type="text/javascript" src="{% static "schema/pdf-layout.validate.js" %}"></script>
     <img src="{% static 'pretixpresale/pdf/powered_by_pretix_dark.png' %}" id="poweredby-dark" class="sr-only">
     <img src="{% static 'pretixpresale/pdf/powered_by_pretix_white.png' %}" id="poweredby-white" class="sr-only">
     {% for family, styles in fonts.items %}

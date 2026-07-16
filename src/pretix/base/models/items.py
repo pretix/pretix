@@ -452,11 +452,16 @@ class Item(LoggedModel):
     MEDIA_POLICY_REUSE = 'reuse'
     MEDIA_POLICY_NEW = 'new'
     MEDIA_POLICY_REUSE_OR_NEW = 'reuse_or_new'
+    MEDIA_POLICY_APPEND = 'append'
+    MEDIA_POLICY_APPEND_OR_NEW = 'append_or_new'
     MEDIA_POLICIES = (
-        (None, _("Don't use re-usable media, use regular one-off tickets")),
-        (MEDIA_POLICY_REUSE, _('Require an existing medium to be re-used')),
+        (None, _("Don't use reusable media, use regular one-off tickets")),
         (MEDIA_POLICY_NEW, _('Require a previously unknown medium to be newly added')),
-        (MEDIA_POLICY_REUSE_OR_NEW, _('Require either an existing or a new medium to be used')),
+        (MEDIA_POLICY_REUSE, _('Require an existing medium to be reused, replacing any previous tickets')),
+        (MEDIA_POLICY_REUSE_OR_NEW, _('Require either an existing or a new medium to be used, replacing any previous tickets')),
+        (MEDIA_POLICY_APPEND, _('Require an existing medium to be reused, adding to any previous tickets')),
+        (MEDIA_POLICY_APPEND_OR_NEW,
+         _('Require either an existing or a new medium to be used, adding to any previous tickets')),
     )
 
     objects = ItemQuerySetManager()
@@ -769,7 +774,7 @@ class Item(LoggedModel):
         null=True, blank=True, max_length=16,
         verbose_name=_('Reusable media policy'),
         help_text=_(
-            'If this product should be stored on a re-usable physical medium, you can attach a physical media policy. '
+            'If this product should be stored on a reusable physical medium, you can attach a physical media policy. '
             'This is not required for regular tickets, which just use a one-time barcode, but only for products like '
             'renewable season tickets or re-chargeable gift card wristbands. '
             'This is an advanced feature that also requires specific configuration of ticketing and printing settings.'
@@ -778,7 +783,7 @@ class Item(LoggedModel):
     media_type = models.CharField(
         max_length=100,
         null=True, blank=True,
-        choices=[(None, _("Don't use re-usable media, use regular one-off tickets"))] + [(k, v) for k, v in MEDIA_TYPES.items()],
+        choices=[(None, _("Don't use reusable media, use regular one-off tickets"))] + [(k, v) for k, v in MEDIA_TYPES.items()],
         verbose_name=_('Reusable media type'),
         help_text=_(
             'Select the type of physical medium that should be used for this product. Note that not all media types '
@@ -880,26 +885,6 @@ class Item(LoggedModel):
             return False
         return True
 
-    def unavailability_reason(self, now_dt: datetime=None, has_voucher=False, subevent=None) -> Optional[str]:
-        now_dt = now_dt or time_machine_now()
-        subevent_item = subevent and subevent.item_overrides.get(self.pk)
-        if not self.active:
-            return 'active'
-        elif self.available_from and self.available_from > now_dt:
-            return 'available_from'
-        elif self.available_until and self.available_until < now_dt:
-            return 'available_until'
-        elif (self.require_voucher or self.hide_without_voucher) and not has_voucher:
-            return 'require_voucher'
-        elif subevent_item and subevent_item.available_from and subevent_item.available_from > now_dt:
-            return 'available_from'
-        elif subevent_item and subevent_item.available_until and subevent_item.available_until < now_dt:
-            return 'available_until'
-        elif self.hidden_if_item_available and self._dependency_available:
-            return 'hidden_if_item_available'
-        else:
-            return None
-
     def _get_quotas(self, ignored_quotas=None, subevent=None):
         check_quotas = set(getattr(
             self, '_subevent_quotas',  # Utilize cache in product list
@@ -995,6 +980,11 @@ class Item(LoggedModel):
                 raise ValidationError(_('The selected media type does not support usage for tickets currently.'))
             if not mt.supports_giftcard and issue_giftcard:
                 raise ValidationError(_('The selected media type does not support usage for gift cards currently.'))
+            if media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_APPEND_OR_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
+                if not mt.medium_created_by_server and not mt.medium_created_from_unknown_supported:
+                    raise ValidationError(_('The selected media type requires all media to be registered in the system '
+                                            'prior to their usage. Therefore, the selected media policy does not make '
+                                            'sense for this media type.'))
             if issue_giftcard:
                 raise ValidationError(_('You currently cannot create gift cards with a reusable media policy. Instead, '
                                         'gift cards for some reusable media types can be created or re-charged directly '
@@ -1402,22 +1392,6 @@ class ItemVariation(models.Model):
         if not self.active or not self.is_available_by_time(now_dt):
             return False
         return True
-
-    def unavailability_reason(self, now_dt: datetime=None, has_voucher=False, subevent=None) -> Optional[str]:
-        now_dt = now_dt or time_machine_now()
-        subevent_var = subevent and subevent.var_overrides.get(self.pk)
-        if not self.active:
-            return 'active'
-        elif self.available_from and self.available_from > now_dt:
-            return 'available_from'
-        elif self.available_until and self.available_until < now_dt:
-            return 'available_until'
-        elif subevent_var and subevent_var.available_from and subevent_var.available_from > now_dt:
-            return 'available_from'
-        elif subevent_var and subevent_var.available_until and subevent_var.available_until < now_dt:
-            return 'available_until'
-        else:
-            return None
 
     @property
     def meta_data(self):
@@ -2220,7 +2194,7 @@ class Quota(LoggedModel):
 class ItemMetaProperty(LoggedModel):
     """
     An event can have ItemMetaProperty objects attached to define meta information fields
-    for its items. This information can be re-used for example in ticket layouts.
+    for its items. This information can be reused for example in ticket layouts.
 
     :param event: The event this property is defined for.
     :type event: Event

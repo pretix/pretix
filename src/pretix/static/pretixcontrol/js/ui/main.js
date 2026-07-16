@@ -58,13 +58,14 @@ var i18nToString = function (i18nstring) {
 };
 
 $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
-    waitingDialog.hide();
     var c = $(jqXHR.responseText).filter('.container');
-    if (jqXHR.responseText && jqXHR.responseText.indexOf("<!-- pretix-login-marker -->") !== -1) {
-        location.href = '/control/login?next=' + encodeURIComponent(location.pathname + location.search + location.hash)
+    if (jqXHR.status === 401 && jqXHR.getResponseHeader("X-Login-Url")) {
+        window.location = jqXHR.getResponseHeader("X-Login-Url") + "?next=" + encodeURIComponent(location.pathname + location.search + location.hash);
     } else if (c.length > 0) {
+        waitingDialog.hide();
         ajaxErrDialog.show(c.first().html());
     } else if (thrownError !== "abort" && thrownError !== "") {
+        waitingDialog.hide();
         console.error(event, jqXHR, settings, thrownError);
         alert(gettext('Unknown error.'));
     }
@@ -639,11 +640,13 @@ var form_handlers = function (el) {
                         ).append(" ").append($("<div>").text(res.organizer).html())
                     );
                 }
-                $ret.append(
-                    $("<span>").addClass("event-daterange").append(
-                        $("<span>").addClass("fa fa-calendar fa-fw")
-                    ).append(" ").append(res.date_range)
-                );
+                if (res.date_range) {
+                    $ret.append(
+                        $("<span>").addClass("event-daterange").append(
+                            $("<span>").addClass("fa fa-calendar fa-fw")
+                        ).append(" ").append(res.date_range)
+                    );
+                }
                 return $ret;
             },
         }).on("select2:select", function () {
@@ -664,10 +667,12 @@ var form_handlers = function (el) {
 
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");
+        var qrText = this.getAttribute("type") === "application/json" && this.textContent.startsWith('"') ?
+            JSON.parse(this.textContent) : $(this).html();
         $div.insertBefore($(this));
         $div.qrcode(
             {
-                text: $(this).html(),
+                text: qrText,
                 correctLevel: 0,  // M
                 width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
                 height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
@@ -867,14 +872,6 @@ function setup_basics(el) {
         $.getJSON(url, function (data) {
             $("#id_basics-slug").val(data.slug);
         });
-    });
-
-    el.find(".qrcode-canvas").each(function () {
-        $(this).qrcode(
-            {
-                text: $.trim($($(this).attr("data-qrdata")).html())
-            }
-        );
     });
 
     el.find(".propagated-settings-box").find("input, textarea, select").not("[readonly]")

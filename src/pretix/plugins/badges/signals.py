@@ -26,6 +26,7 @@ from collections import defaultdict
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.urls import resolve, reverse
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.logentrytypes import EventLogEntryType, log_entry_types
@@ -153,7 +154,7 @@ def control_order_position_info(sender: Event, position, request, order: Order, 
         'event': sender,
         'position': position
     }
-    return template.render(ctx, request=request).strip()
+    return mark_safe(template.render(ctx, request=request).strip())
 
 
 @receiver(order_info, dispatch_uid="badges_control_order_info")

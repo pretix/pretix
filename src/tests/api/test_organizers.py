@@ -151,6 +151,27 @@ def test_patch_settings(token_client, organizer):
     resp = token_client.patch(
         '/api/v1/organizers/{}/settings/'.format(organizer.slug),
         {
+            'contact_url': 'invalid'
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/settings/'.format(organizer.slug),
+        {
+            'contact_url': 'https://example.org/contact',
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['contact_url'] == 'https://example.org/contact'
+    organizer.settings.flush()
+    assert organizer.settings.contact_url == 'https://example.org/contact'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/settings/'.format(organizer.slug),
+        {
             'primary_color': '#ff0000'
         },
         format='json'

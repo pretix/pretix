@@ -49,7 +49,7 @@ from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils.formats import date_format
-from django.utils.html import escape
+from django.utils.html import conditional_escape, escape, format_html
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, ngettext, pgettext
 
@@ -112,7 +112,7 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
 
     return [
         {
-            'content': None if lazy else NUM_WIDGET.format(num=intcomma(tickc), text=_('Attendees (ordered)')),
+            'content': None if lazy else format_html(NUM_WIDGET, num=intcomma(tickc), text=_('Attendees (ordered)')),
             'lazy': 'attendees-ordered',
             'display_size': 'small',
             'priority': 100,
@@ -122,7 +122,7 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
-            'content': None if lazy else NUM_WIDGET.format(num=intcomma(paidc), text=_('Attendees (paid)')),
+            'content': None if lazy else format_html(NUM_WIDGET, num=intcomma(paidc), text=_('Attendees (paid)')),
             'lazy': 'attendees-paid',
             'display_size': 'small',
             'priority': 100,
@@ -132,7 +132,8 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
-            'content': None if lazy else NUM_WIDGET.format(
+            'content': None if lazy else format_html(
+                NUM_WIDGET,
                 num=money_filter(round_decimal(rev, sender.currency), sender.currency, hide_currency=True),
                 text=_('Total revenue ({currency})').format(currency=sender.currency)
             ),
@@ -145,7 +146,7 @@ def base_widgets(sender, subevent=None, lazy=False, **kwargs):
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         },
         {
-            'content': None if lazy else NUM_WIDGET.format(num=prodc, text=_('Active products')),
+            'content': None if lazy else format_html(NUM_WIDGET, num=prodc, text=_('Active products')),
             'lazy': 'active-products',
             'display_size': 'small',
             'priority': 100,
@@ -209,8 +210,8 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
                             quota_cache[q.pk] = (quota_cache[q.pk][0], quota_cache[q.pk][1] - min(wlt['cnt'], row[1]))
 
         widgets.append({
-            'content': None if lazy else NUM_WIDGET.format(
-                num=intcomma(happy), text=_('available to give to people on waiting list')
+            'content': None if lazy else format_html(
+                NUM_WIDGET, num=intcomma(happy), text=_('available to give to people on waiting list')
             ),
             'lazy': 'waitinglist-avail',
             'priority': 50,
@@ -220,7 +221,9 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
             })
         })
         widgets.append({
-            'content': None if lazy else NUM_WIDGET.format(num=intcomma(wles.count()), text=_('total waiting list length')),
+            'content': None if lazy else format_html(
+                NUM_WIDGET, num=intcomma(wles.count()), text=_('total waiting list length')
+            ),
             'lazy': 'waitinglist-length',
             'display_size': 'small',
             'priority': 50,
@@ -247,7 +250,8 @@ def quota_widgets(sender, subevent=None, lazy=False, **kwargs):
         if not lazy:
             status, left = qa.results[q] if q in qa.results else q.availability(allow_cache=True)
         widgets.append({
-            'content': None if lazy else NUM_WIDGET.format(
+            'content': None if lazy else format_html(
+                NUM_WIDGET,
                 num='{}/{}'.format(intcomma(left), intcomma(q.size)) if q.size is not None else '\u221e',
                 text=_('{quota} left').format(quota=escape(q.name))
             ),
@@ -268,7 +272,8 @@ def shop_state_widget(sender, **kwargs):
     return [{
         'display_size': 'small',
         'priority': 1000,
-        'content': '<div class="shopstate">{t1}<br><span class="{cls}"><span class="fa {icon}"></span> {state}</span>{t2}</div>'.format(
+        'content': format_html(
+            '<div class="shopstate">{t1}<br><span class="{cls}"><span class="fa {icon}"></span> {state}</span>{t2}</div>',
             t1=_('Your ticket shop is'), t2=_('Click here to change'),
             state=_('live') if sender.live and not sender.testmode else (
                 _('live and in test mode') if sender.live else (
@@ -299,7 +304,8 @@ def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
     qs = sender.checkin_lists.filter(subevent=subevent)
     for cl in qs:
         widgets.append({
-            'content': None if lazy else NUM_WIDGET.format(
+            'content': None if lazy else format_html(
+                NUM_WIDGET,
                 num='{}/{}'.format(intcomma(cl.inside_count), intcomma(cl.position_count)),
                 text=_('Present – {list}').format(list=escape(cl.name))
             ),
@@ -338,6 +344,12 @@ def welcome_wizard_widget(sender, **kwargs):
         'priority': 2000,
         'content': template.render(ctx)
     }]
+
+
+def build_json_response(widgets):
+    for widget in widgets:
+        widget['content'] = conditional_escape(widget['content'])
+    return JsonResponse({'widgets': widgets})
 
 
 def event_index(request, organizer, event):
@@ -418,7 +430,7 @@ def event_index_widgets_lazy(request, organizer, event):
     for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=False):
         widgets.extend(result)
 
-    return JsonResponse({'widgets': widgets})
+    return build_json_response(widgets)
 
 
 def event_index_log_lazy(request, organizer, event):
@@ -505,7 +517,7 @@ def widgets_for_event_qs(request, qs, user, nmax, lazy=False):
         <a href="{url}" class="event">
             <div class="name">{event}</div>
             <div class="daterange">{daterange}</div>
-            <div class="times">{times}</div>
+            <div class="times">{times}{timezone}</div>
         </a>
         <div class="bottomrow">
             {orders}
@@ -549,14 +561,16 @@ def widgets_for_event_qs(request, qs, user, nmax, lazy=False):
                 status = ('success', _('On sale'))
 
         widgets.append({
-            'content': tpl.format(
+            'content': format_html(
+                tpl,
                 event=escape(event.name),
                 times=_('Event series') if event.has_subevents else (
                     ((date_format(event.date_admission.astimezone(tz), 'TIME_FORMAT') + ' / ')
                      if event.date_admission and event.date_admission != event.date_from else '')
                     + (date_format(event.date_from.astimezone(tz), 'TIME_FORMAT') if event.date_from else '')
-                ) + (
-                    ' <span class="fa fa-globe text-muted" data-toggle="tooltip" title="{}"></span>'.format(tzname)
+                ),
+                timezone=(
+                    format_html(' <span class="fa fa-globe text-muted" data-toggle="tooltip" title="{}"></span>', tzname)
                     if tzname != request.timezone and not event.has_subevents else ''
                 ),
                 url=reverse('control:event.index', kwargs={
@@ -564,7 +578,8 @@ def widgets_for_event_qs(request, qs, user, nmax, lazy=False):
                     'organizer': event.organizer.slug
                 }),
                 orders=(
-                    '<a href="{orders_url}" class="orders">{orders_text}</a>'.format(
+                    format_html(
+                        '<a href="{orders_url}" class="orders">{orders_text}</a>',
                         orders_url=reverse('control:event.orders', kwargs={
                             'event': event.slug,
                             'organizer': event.organizer.slug
@@ -631,7 +646,7 @@ def user_index_widgets_lazy(request):
         request.user,
         8
     )
-    return JsonResponse({'widgets': widgets})
+    return build_json_response(widgets)
 
 
 def user_index(request):

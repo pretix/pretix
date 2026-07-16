@@ -48,7 +48,7 @@ from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
 from pretix.api.serializers import (
-    CompatibleJSONField, SalesChannelMigrationMixin,
+    CompatDecimalField, CompatibleJSONField, SalesChannelMigrationMixin,
 )
 from pretix.api.serializers.fields import PluginsField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
@@ -73,7 +73,7 @@ from pretix.base.settings import (
     LazyI18nStringList, validate_event_settings,
 )
 from pretix.base.signals import api_event_settings_fields
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 
 logger = logging.getLogger(__name__)
 
@@ -173,7 +173,7 @@ class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     )
 
     def get_event_url(self, event):
-        return build_absolute_uri(event, 'presale:event.index')
+        return eventreverse_absolute(event, 'presale:event.index')
 
     class Meta:
         model = Event
@@ -681,6 +681,7 @@ class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
         required=False,
         allow_null=True,
     )
+    rate = CompatDecimalField(max_digits=7, decimal_places=4)
 
     class Meta:
         model = TaxRule
@@ -747,6 +748,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'max_items_per_order',
         'reservation_time',
         'contact_mail',
+        'contact_url',
         'show_variations_expanded',
         'hide_sold_out',
         'meta_noindex',
@@ -871,6 +873,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'og_image',
         'name_scheme',
         'reusable_media_active',
+        'reusable_media_usage_enforced',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
         'reusable_media_type_nfc_uid',
@@ -885,6 +888,7 @@ class EventSettingsSerializer(SettingsSerializer):
     readonly_fields = [
         # These are read-only since they are currently only settable on organizers, not events
         'reusable_media_active',
+        'reusable_media_usage_enforced',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
         'reusable_media_type_nfc_uid',
@@ -970,6 +974,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'reusable_media_type_nfc_uid',
         'reusable_media_type_nfc_mf0aes',
         'reusable_media_type_nfc_mf0aes_random_uid',
+        'reusable_media_usage_enforced',
         'system_question_order',
         'tax_rule_payment',
         'tax_rule_cancellation',

@@ -66,13 +66,14 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        expand_nested = self.context['request'].query_params.getlist('expand')
 
-        if 'linked_giftcard' in self.context['request'].query_params.getlist('expand'):
+        if 'linked_giftcard' in expand_nested:
             if not self.context["can_read_giftcards"]:
                 raise PermissionDenied("No permission to access gift card details.")
 
             self.fields['linked_giftcard'] = NestedGiftCardSerializer(read_only=True, context=self.context)
-            if 'linked_giftcard.owner_ticket' in self.context['request'].query_params.getlist('expand'):
+            if 'linked_giftcard.owner_ticket' in expand_nested:
                 self.fields['linked_giftcard'].fields['owner_ticket'] = NestedOrderPositionSerializer(read_only=True, context=self.context)
         else:
             self.fields['linked_giftcard'] = serializers.PrimaryKeyRelatedField(
@@ -81,17 +82,27 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
                 queryset=self.context['organizer'].issued_gift_cards.all()
             )
 
-        if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
-            # Permission Check performed in to_representation
-            self.fields['linked_orderposition'] = NestedOrderPositionSerializer(read_only=True)
+        # keep linked_orderposition (singular) for backwards compatibility, will be overwritten in self.validate
+        self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
+            required=False,
+            allow_null=True,
+            queryset=OrderPosition.all.filter(order__event__organizer=self.context['organizer']),
+        )
+
+        if 'linked_orderposition' in expand_nested or 'linked_orderpositions' in expand_nested:
+            self.fields['linked_orderpositions'] = NestedOrderPositionSerializer(
+                many=True,
+                read_only=True
+            )
         else:
-            self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
+            self.fields['linked_orderpositions'] = serializers.PrimaryKeyRelatedField(
+                many=True,
                 required=False,
                 allow_null=True,
                 queryset=OrderPosition.all.filter(order__event__organizer=self.context['organizer']),
             )
 
-        if 'customer' in self.context['request'].query_params.getlist('expand'):
+        if 'customer' in expand_nested:
             if not self.context["can_read_customers"]:
                 raise PermissionDenied("No permission to access customer details.")
 
@@ -106,6 +117,21 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
+        if 'linked_orderposition' in data:
+            linked_orderposition = data['linked_orderposition']
+            # backwards-compatibility
+            if 'linked_orderpositions' in data:
+                raise ValidationError({
+                    'linked_orderposition': 'You cannot use linked_orderposition and linked_orderpositions at the same time.'
+                })
+            if self.instance and self.instance.linked_orderpositions.count() > 1:
+                raise ValidationError({
+                    'linked_orderposition': 'There are more than one linked_orderposition. You need to use linked_orderpositions.'
+                })
+
+            data['linked_orderpositions'] = [linked_orderposition] if linked_orderposition else []
+            del data['linked_orderposition']
+
         if 'type' in data and 'identifier' in data:
             qs = self.context['organizer'].reusable_media.filter(
                 identifier=data['identifier'], type=data['type']
@@ -121,14 +147,28 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
     def to_representation(self, instance):
         r = super().to_representation(instance)
         request = self.context.get('request')
+
+        ops = r.get('linked_orderpositions', [])
         # late permission evaluations for checks that depend on the actual linked events
         expand_nested = self.context['request'].query_params.getlist('expand')
         perm_holder = request.auth if isinstance(request.auth, (Device, TeamAPIToken)) else request.user
-        if 'linked_orderposition' in expand_nested:
-            if instance.linked_orderposition is not None:
-                event = instance.linked_orderposition.order.event
+        if ops and 'linked_orderposition' in expand_nested or 'linked_orderpositions' in expand_nested:
+            ops_noperm = []
+            for lop in instance.linked_orderpositions.all():
+                event = lop.order.event
                 if not perm_holder.has_event_permission(event.organizer, event, 'event.orders:read', request):
-                    r['linked_orderposition'] = {'id': instance.linked_orderposition.id}
+                    ops_noperm.append(lop.id)
+            if ops_noperm:
+                ops = [
+                    {'id': op['id']} if op['id'] in ops_noperm
+                    else op
+                    for op in ops
+                ]
+                r['linked_orderpositions'] = ops
+
+        # add linked_orderposition (singular) for backwards compatibility
+        if len(ops) < 2:
+            r['linked_orderposition'] = ops[0] if ops else None
 
         if 'linked_giftcard.owner_ticket' in expand_nested:
             gc = instance.linked_giftcard
@@ -148,10 +188,12 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             'updated',
             'type',
             'identifier',
+            'claim_token',
+            'label',
             'active',
             'expires',
             'customer',
-            'linked_orderposition',
+            'linked_orderpositions',
             'linked_giftcard',
             'info',
             'notes',

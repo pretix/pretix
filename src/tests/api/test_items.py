@@ -425,7 +425,7 @@ def test_item_list(token_client, organizer, event, team, item):
 
 @pytest.mark.django_db
 def test_item_list_queries(token_client, organizer, event, team, item, item3):
-    with assert_num_queries(18):
+    with assert_num_queries(16):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug))
         assert resp.status_code == 200
 

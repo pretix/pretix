@@ -68,7 +68,7 @@ from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
 from ...helpers.iter import chunked_iterable
 from ...helpers.safe_openpyxl import remove_invalid_excel_chars
-from ...multidomain.urlreverse import build_absolute_uri
+from ...multidomain.urlreverse import eventreverse_absolute
 from ..exporter import (
     ListExporter, MultiSheetListExporter, OrganizerLevelExportMixin,
 )
@@ -429,7 +429,7 @@ class OrderListExporter(MultiSheetListExporter):
             ]))
 
             row.append(
-                build_absolute_uri(order.event, 'presale:event.order', kwargs={
+                eventreverse_absolute(order.event, 'presale:event.order', kwargs={
                     'order': order.code,
                     'secret': order.secret,
                 })
@@ -855,7 +855,7 @@ class OrderListExporter(MultiSheetListExporter):
                 ]))
 
                 row.append(
-                    build_absolute_uri(order.event, 'presale:event.order.position', kwargs={
+                    eventreverse_absolute(order.event, 'presale:event.order.position', kwargs={
                         'order': order.code,
                         'secret': op.web_secret,
                         'position': op.positionid

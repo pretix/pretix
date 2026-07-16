@@ -646,7 +646,10 @@ ul.pagination {
 .table-payment-providers > tbody > tr > td {
     vertical-align: middle;
 }
-
+.success-left {
+  border-left: 3px solid $brand-success;
+  background: var(--pretix-brand-success-lighten-50);
+}
 
 details {
     list-style: none;
@@ -862,6 +865,9 @@ tbody th {
     background: $brand-success;
 }
 .checkin-sim-result-status-incomplete {
+    background: $brand-primary;
+}
+.checkin-sim-result-status-exchange {
     background: $brand-primary;
 }
 .checkin-sim-result-status-error {

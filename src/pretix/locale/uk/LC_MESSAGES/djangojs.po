@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-27 14:47+0000\n"
+"POT-Creation-Date: 2026-07-06 15:52+0000\n"
 "PO-Revision-Date: 2024-05-22 16:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -22,181 +22,336 @@ msgstr ""
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.5.5\n"
 
-#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
-#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
-#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
+#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Marked as paid"
 msgstr "Позначено як оплачене"
 
-#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
+#: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js
 msgid "Comment:"
 msgstr "Коментар:"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "PayPal"
 msgstr "PayPal"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:35
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Venmo"
 msgstr "Venmo"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
-#: pretix/static/pretixpresale/js/walletdetection.js:38
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
+#: pretix/static/pretixpresale/js/walletdetection.js
 msgid "Apple Pay"
 msgstr "Apple Pay"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:37
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Itaú"
 msgstr "Itaú"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:38
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "PayPal Credit"
 msgstr "PayPal Кредит"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:39
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Credit Card"
 msgstr "Кредитна картка"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:40
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "PayPal Pay Later"
 msgstr "PayPal Оплатити пізніше"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "iDEAL | Wero"
 msgstr ""
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "SEPA Direct Debit"
 msgstr "Прямий дебет SEPA"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Bancontact"
 msgstr "Bancontact"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "giropay"
 msgstr "giropay"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "SOFORT"
 msgstr "SOFORT"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "eps"
 msgstr "eps"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "MyBank"
 msgstr "MyBank"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Przelewy24"
 msgstr "Przelewy24"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Verkkopankki"
 msgstr "Verkkopankki"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "PayU"
 msgstr "PayU"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "BLIK"
 msgstr "BLIK"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Trustly"
 msgstr "Trustly"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Zimpler"
 msgstr "Zimpler"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Maxima"
 msgstr "Maxima"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:55
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "OXXO"
 msgstr "OXXO"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:56
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Boleto"
 msgstr "Boleto"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "WeChat Pay"
 msgstr "WeChat Pay"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
-#: pretix/static/pretixpresale/js/ui/cart.js:89
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Continue"
 msgstr "Продовжити"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:244
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:343
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Confirming your payment …"
 msgstr "Підтверджується ваш платіж…"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:254
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js
 msgid "Payment method unavailable"
 msgstr "Спосіб оплати недоступний"
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Placed orders"
 msgstr "Створені замовлення"
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:63
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Paid orders"
 msgstr "Сплачені замовлення"
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Attendees (ordered)"
 msgstr ""
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Attendees (paid)"
 msgstr ""
 
-#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:51
+#: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js
 msgid "Total revenue"
 msgstr "Загальний прибуток"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Contacting Stripe …"
 msgstr "З'єднуємося зі Stripe…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Total"
 msgstr "Загалом"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js
 msgid "Contacting your bank …"
 msgstr "З'єднуємося з Вашим банком …"
 
-#: pretix/static/lightbox/js/lightbox.js:96
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Select a check-in list"
+msgstr "Виберіть список реєстрації"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "No active check-in lists found."
+msgstr "Активних списків реєстрації не знайдено."
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Switch check-in list"
+msgstr "Змінити список реєстрації"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Search results"
+msgstr "Результати пошуку"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "No tickets found"
+msgstr "Квитків не знайдено"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Result"
+msgstr "Результат"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "This ticket requires special attention"
+msgstr "Цей квиток вимагає особливої уваги"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Switch direction"
+msgstr "Змінити напрямок"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Entry"
+msgstr "Вхід"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Exit"
+msgstr "Вихід"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Scan a ticket or search and press return…"
+msgstr "Зіскануйте квиток або шукайте та натисніть повернення…"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Load more"
+msgstr "Завантажити більше"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Valid"
+msgstr "Дійсний"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Unpaid"
+msgstr "Неоплаченo"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Canceled"
+msgstr "Скасовано"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Confirmed"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Approval pending"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Redeemed"
+msgstr "Викуплено"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket not paid"
+msgstr "Квиток не оплачено"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "This ticket is not yet paid. Do you want to continue anyways?"
+msgstr "Цей квиток ще не оплачений. Ви все одно хочете продовжити?"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Additional information required"
+msgstr "Необхідна додаткова інформація"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Valid ticket"
+msgstr "Дійсний квиток"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Exit recorded"
+msgstr "Вихід записано"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket already used"
+msgstr "Квиток уже використаний"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Information required"
+msgstr "Необхідна інформація"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Unknown ticket"
+msgstr "Квиток не знайдено"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket type not allowed here"
+msgstr "Тип квитка тут заборонений"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Entry not allowed"
+msgstr "Вхід заборонено"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket code revoked/changed"
+msgstr "Код квитка відкликаний/змінений"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket blocked"
+msgstr "Квиток заблокований"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket not valid at this time"
+msgstr "Квиток зараз не дійсний"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Order canceled"
+msgstr "Замовлення скасовано"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Ticket code is ambiguous on list"
+msgstr "Код квитка у списку не однозначний"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Order not approved"
+msgstr "Замовлення не узгоджене"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Checked-in Tickets"
+msgstr "Зареєстровані квитки"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Valid Tickets"
+msgstr "Дійсні квитки"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+msgid "Currently inside"
+msgstr "На даний момент всередині"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+#: pretix/static/pretixcontrol/js/ui/question.js
+#: pretix/static/pretixpresale/js/ui/questions.js
+msgid "Yes"
+msgstr "Так"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/i18n.ts
+#: pretix/static/pretixcontrol/js/ui/question.js
+#: pretix/static/pretixpresale/js/ui/questions.js
+msgid "No"
+msgstr "Ні"
+
+#: pretix/static/lightbox/js/lightbox.js
 msgid "close"
 msgstr "Закрити"
 
-#: pretix/static/pretixbase/js/addressform.js:108
-#: pretix/static/pretixpresale/js/ui/main.js:529
+#: pretix/static/pretixbase/js/addressform.js
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "required"
 msgstr "обов'язкове"
 
-#: pretix/static/pretixbase/js/asynctask.js:13
+#: pretix/static/pretixbase/js/asynctask.js
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
@@ -204,11 +359,11 @@ msgstr ""
 "Ваш запит наразі обробляється. Залежно від масштабу вашої події це може "
 "зайняти до кількох хвилин."
 
-#: pretix/static/pretixbase/js/asynctask.js:17
+#: pretix/static/pretixbase/js/asynctask.js
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr "Ваш запит поставлено в чергу на сервері і незабаром буде оброблено."
 
-#: pretix/static/pretixbase/js/asynctask.js:21
+#: pretix/static/pretixbase/js/asynctask.js
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -218,14 +373,12 @@ msgstr ""
 "Якщо це займе більше двох хвилин, будь ласка, зв'яжіться з нами або "
 "поверніться назад у браузері та повторіть запит."
 
-#: pretix/static/pretixbase/js/asynctask.js:135
-#: pretix/static/pretixbase/js/asynctask.js:192
-#: pretix/static/pretixbase/js/asynctask.js:196
-#: pretix/static/pretixcontrol/js/ui/mail.js:24
+#: pretix/static/pretixbase/js/asynctask.js
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid "An error of type {code} occurred."
 msgstr "Виникла помилка типу {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:138
+#: pretix/static/pretixbase/js/asynctask.js
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -233,24 +386,24 @@ msgstr ""
 "Не вдається зв'язатися із сервером, повторюємо спроби. Код останньої "
 "помилки: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:172
-#: pretix/static/pretixcontrol/js/ui/mail.js:21
+#: pretix/static/pretixbase/js/asynctask.js
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid "The request took too long. Please try again."
 msgstr "Запит тривав занадто довго. Будь ласка спробуйте ще раз."
 
-#: pretix/static/pretixbase/js/asynctask.js:198
-#: pretix/static/pretixcontrol/js/ui/mail.js:26
+#: pretix/static/pretixbase/js/asynctask.js
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Наразі ми не можемо підключитися до сервера. Будь ласка спробуйте ще раз. "
 "Код помилки: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:226
+#: pretix/static/pretixbase/js/asynctask.js
 msgid "We are processing your request …"
 msgstr "Ми обробляємо ваш запит…"
 
-#: pretix/static/pretixbase/js/asynctask.js:229
+#: pretix/static/pretixbase/js/asynctask.js
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -260,98 +413,256 @@ msgstr ""
 "хвилини, перевірте підключення до Інтернету, а потім перезавантажте цю "
 "сторінку та повторіть спробу."
 
-#: pretix/static/pretixbase/js/asynctask.js:286
+#: pretix/static/pretixbase/js/asynctask.js
 msgid "If this takes longer than a few minutes, please contact us."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:341
+#: pretix/static/pretixbase/js/asynctask.js
 msgid "Close message"
 msgstr "Закрити повідомлення"
 
-#: pretix/static/pretixcontrol/js/clipboard.js:23
+#: pretix/static/pretixcontrol/js/clipboard.js
 msgid "Copied!"
 msgstr "Скопійовано!"
 
-#: pretix/static/pretixcontrol/js/clipboard.js:29
+#: pretix/static/pretixcontrol/js/clipboard.js
 msgid "Press Ctrl-C to copy!"
 msgstr "Натисніть Ctrl+C щоб скопіювати!"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:171
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
+msgid "Edit"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
+msgid "Visualize"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
+msgid ""
+"Your rule always filters by product or variation, but the following products "
+"or variations are not contained in any of your rule parts so people with "
+"these tickets will not get in:"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/App.vue
+msgid "Please double-check if this was intentional."
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "All of the conditions below (AND)"
+msgstr "Усі наведені нижче умови (І)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "At least one of the conditions below (OR)"
+msgstr "Принаймні одна з наведених нижче умов (АБО)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Event start"
+msgstr "Початок події"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Event end"
+msgstr "Завершення події"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Event admission"
+msgstr "Вхід до події"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "custom date and time"
+msgstr "власні дата та час"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "custom time"
+msgstr "власний час"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Tolerance (minutes)"
+msgstr "Відхилення (хвил.)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Add condition"
+msgstr "Додайте умову"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+#, fuzzy
+msgid "minutes"
+msgstr "хвилини"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Duplicate"
+msgstr "Дублювати"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgctxt "entry_status"
+msgid "present"
+msgstr "присутній"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgctxt "entry_status"
+msgid "absent"
+msgstr "відсутній"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "is one of"
+msgstr "є одним із"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "is before"
+msgstr "є раніше"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "is after"
+msgstr "є після"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "="
+msgstr "="
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Product"
+msgstr "Продукт"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Product variation"
+msgstr "Варіанти продукту"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+#, fuzzy
+msgid "Gate"
+msgstr "Шлях"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Current date and time"
+msgstr "Поточна дата та час"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+msgstr "Поточний день тижня (1 = понеділок, 7 = неділя)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Current entry status"
+msgstr "Поточний стан запису"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of previous entries"
+msgstr "Кількість попередніх входів"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of previous entries since midnight"
+msgstr "Кількість попередніх входів з опівночі"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of previous entries since"
+msgstr "Кількість попередніх входів з"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of previous entries before"
+msgstr "Кількість попередніх входів до"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of days with a previous entry"
+msgstr "Кількість днів із попереднім входом"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of days with a previous entry since"
+msgstr "Кількість днів із попереднім входом з"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Number of days with a previous entry before"
+msgstr "Кількість днів із попереднім входом до"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Minutes since last entry (-1 on first entry)"
+msgstr "Хвилин з останнього входу (-1 при першому вході)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/constants.ts
+msgid "Minutes since first entry (-1 on first entry)"
+msgstr "Хвилин з першого входу (-1 при першому вході)"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/django-interop.ts
+msgid "Error: Product not found!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules/django-interop.ts
+msgid "Error: Variation not found!"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Check-in QR"
 msgstr "Реєстрація з QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:549
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Не вдалося завантажити фоновий файл PDF з наступної причини:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:904
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Group of objects"
 msgstr "Група об'єктів"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:909
+#: pretix/static/pretixcontrol/js/ui/editor.js
 #, fuzzy
 #| msgid "Text object"
 msgid "Text object (deprecated)"
 msgstr "Текстовий об’єкт"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:911
+#: pretix/static/pretixcontrol/js/ui/editor.js
 #, fuzzy
 #| msgid "Text object"
 msgid "Text box"
 msgstr "Текстовий об’єкт"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:913
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Barcode area"
 msgstr "Область штрих-коду"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:915
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Image area"
 msgstr "Область зображення"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:917
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Powered by pretix"
 msgstr "На базі pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:919
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Object"
 msgstr "Об'єкт"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:923
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Ticket design"
 msgstr "Дизайн квитка"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1292
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Saving failed."
 msgstr "Не вдалося зберегти."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1361
-#: pretix/static/pretixcontrol/js/ui/editor.js:1412
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Під час завантаження PDF-файлу сталася помилка. Повторіть спробу."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1395
+#: pretix/static/pretixcontrol/js/ui/editor.js
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Ви дійсно хочете вийти з редактора, не зберігаючи зміни?"
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:19
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid "An error has occurred."
 msgstr "Сталася помилка."
 
-#: pretix/static/pretixcontrol/js/ui/mail.js:52
+#: pretix/static/pretixcontrol/js/ui/mail.js
 msgid "Generating messages …"
 msgstr "Створюються повідомлення…"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:69
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Unknown error."
 msgstr "Невідома помилка."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:310
+#: pretix/static/pretixcontrol/js/ui/main.js
 #, fuzzy
 #| msgid "Your color has great contrast and is very easy to read!"
 msgid "Your color has great contrast and will provide excellent accessibility."
 msgstr "Ваш колір має великий контраст і його дуже легко читати!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:314
+#: pretix/static/pretixcontrol/js/ui/main.js
 #, fuzzy
 #| msgid "Your color has decent contrast and is probably good-enough to read!"
 msgid ""
@@ -361,78 +672,67 @@ msgstr ""
 "Ваш колір має достатню контрастність і, ймовірно, цілком підходить для "
 "читання!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:318
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid ""
 "Your color has insufficient contrast to white. Accessibility of your site "
 "will be impacted."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:446
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Search query"
 msgstr "Пошуковий запит"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:464
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "All"
 msgstr "Все"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:465
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "None"
 msgstr "Жодного"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:469
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Selected only"
 msgstr "Тільки вибрані"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:842
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Вкажіть номер сторінки між 1 та %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:845
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Invalid page number."
 msgstr "Недійсний номер сторінки."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1003
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Use a different name internally"
 msgstr "Використайте іншу внутрішню назву"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1043
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "Click to close"
 msgstr "Натисніть, щоб закрити"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1124
+#: pretix/static/pretixcontrol/js/ui/main.js
 msgid "You have unsaved changes!"
 msgstr "У вас є незбережені зміни!"
 
-#: pretix/static/pretixcontrol/js/ui/orderchange.js:25
+#: pretix/static/pretixcontrol/js/ui/orderchange.js
 msgid "Calculating default price…"
 msgstr "Розрахунок ціни за замовчуванням…"
 
-#: pretix/static/pretixcontrol/js/ui/plugins.js:69
+#: pretix/static/pretixcontrol/js/ui/plugins.js
 #, fuzzy
 #| msgid "Search results"
 msgid "No results"
 msgstr "Результати пошуку"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:41
+#: pretix/static/pretixcontrol/js/ui/question.js
 msgid "Others"
 msgstr "Інше"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:81
+#: pretix/static/pretixcontrol/js/ui/question.js
 msgid "Count"
 msgstr "Кількість"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "Yes"
-msgstr "Так"
-
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:271
-msgid "No"
-msgstr "Ні"
-
-#: pretix/static/pretixcontrol/js/ui/subevent.js:112
+#: pretix/static/pretixcontrol/js/ui/subevent.js
 #, fuzzy
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
@@ -441,7 +741,7 @@ msgstr[1] "(додати {num} дати)"
 msgstr[2] "(додати {num} дат)"
 msgstr[3] "(додати {num} дати)"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:47
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
@@ -449,16 +749,15 @@ msgstr ""
 "Товари у вашому кошику більше не зарезервовані для вас. Ви все ще можете "
 "завершити своє замовлення, поки вони доступні."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:49
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Cart expired"
 msgstr "Термін дії кошика закінчився"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:58
-#: pretix/static/pretixpresale/js/ui/cart.js:84
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Your cart is about to expire."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/cart.js:62
+#: pretix/static/pretixpresale/js/ui/cart.js
 #, fuzzy
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
@@ -467,13 +766,13 @@ msgstr[1] "Товари у Вашому кошику зарезервовані 
 msgstr[2] "Товари у Вашому кошику зарезервовані для Вас на {num} хвилин."
 msgstr[3] "Товари у Вашому кошику зарезервовані для Вас на {num} хвилин."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:83
+#: pretix/static/pretixpresale/js/ui/cart.js
 #, fuzzy
 #| msgid "Cart expired"
 msgid "Your cart has expired."
 msgstr "Термін дії кошика закінчився"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:86
+#: pretix/static/pretixpresale/js/ui/cart.js
 #, fuzzy
 #| msgid ""
 #| "The items in your cart are no longer reserved for you. You can still "
@@ -485,193 +784,223 @@ msgstr ""
 "Товари у вашому кошику більше не зарезервовані для вас. Ви все ще можете "
 "завершити своє замовлення, поки вони доступні."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:87
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Do you want to renew the reservation period?"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/cart.js:90
+#: pretix/static/pretixpresale/js/ui/cart.js
 msgid "Renew reservation"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:194
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "Організатор утримує %(amount)s %(currency)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:202
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Ви отримаєте в поверненні %(amount)s %(currency)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:218
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "Please enter the amount the organizer can keep."
 msgstr "Введіть суму, яку може залишити організатор."
 
-#: pretix/static/pretixpresale/js/ui/main.js:577
+#: pretix/static/pretixpresale/js/ui/main.js
 msgid "Your local time:"
 msgstr "Ваш місцевий час:"
 
-#: pretix/static/pretixpresale/js/walletdetection.js:39
+#: pretix/static/pretixpresale/js/walletdetection.js
 msgid "Google Pay"
 msgstr "Google Pay"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:16
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Quantity"
 msgstr "Кількість"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:17
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Decrease quantity"
 msgstr "Зменшити кількість"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:18
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Increase quantity"
 msgstr "Збільшити кількість"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:19
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Filter events by"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:20
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Filter"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:21
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Price"
 msgstr "Ціна"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:22
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Original price: %s"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:23
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "New price: %s"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:24
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Select"
 msgstr "Виберіть"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:25
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Select %s"
 msgstr "Виберіть %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:26
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
 msgstr "Виберіть варіант %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:27
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Sold out"
 msgstr "Розпродано"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:28
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Buy"
 msgstr "Купити"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:29
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Register"
 msgstr "Зареєструватись"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:30
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Reserved"
 msgstr "Зарезервовано"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:31
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "FREE"
 msgstr "БЕЗКОШТОВНО"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:32
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
 msgstr "від %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:33
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "Image of %s"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:34
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
 msgstr "вкл.%(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:35
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
 msgstr "плюс%(rate)s% %(taxname)s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:36
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "incl. taxes"
 msgstr "враховуючи податки"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:37
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "plus taxes"
 msgstr "плюс податки"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:38
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
 msgstr "доступно зараз: %s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:39
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "Доступно лише з ваучером"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:40
-#: pretix/static/pretixpresale/js/widget/widget.js:43
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Not yet available"
 msgstr "Зараз не доступно"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:41
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Not available anymore"
 msgstr "Більше не доступно"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:42
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Currently not available"
 msgstr "Зараз недоступно"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:44
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
 msgstr "мінімальна сума замовлення:%s"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:45
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close ticket shop"
 msgstr "Закрити квиткову крамницю"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:46
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
 msgstr "Не вдалося завантажити квиткову крамницю."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:47
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
@@ -680,12 +1009,14 @@ msgstr ""
 "Зараз у цій касі багато користувачів. Щоб продовжити, відкрийте вікно "
 "квитків у новій вкладці."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:49
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Open ticket shop"
 msgstr "Відкрити касу"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:50
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Resume checkout"
@@ -693,12 +1024,14 @@ msgctxt "widget"
 msgid "Checkout"
 msgstr "Відновити оформлення замовлення"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:51
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
 msgstr "Не вдалося створити кошик. Будь-ласка спробуйте пізніше"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:52
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
@@ -708,12 +1041,14 @@ msgstr ""
 "занадто багато користувачів. Натисніть «Продовжити», щоб повторити спробу у "
 "новій вкладці."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:54
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Waiting list"
 msgstr "Cписок очікування"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:55
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
@@ -722,32 +1057,38 @@ msgstr ""
 "Зараз у вас є активний кошик для цієї події. Якщо ви виберете більше "
 "продуктів, вони будуть додані до вашого наявного кошика."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:57
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Resume checkout"
 msgstr "Відновити оформлення замовлення"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:58
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Redeem a voucher"
 msgstr "Використати промокод"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Redeem"
 msgstr "Використати"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Voucher code"
 msgstr "Промокод"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Close"
 msgstr "Закрити"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Resume checkout"
@@ -755,67 +1096,80 @@ msgctxt "widget"
 msgid "Close checkout"
 msgstr "Відновити оформлення замовлення"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "You cannot cancel this operation. Please wait for loading to finish."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Continue"
 msgstr "Продовжити"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:65
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Show variants"
 msgstr "Показати варіанти"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Hide variants"
 msgstr "Сховати варіанти"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Choose a different event"
 msgstr "Обрати іншу подію"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Choose a different date"
 msgstr "Обрати іншу дату"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Back"
 msgstr "Назад"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Next month"
 msgstr "Наступний місяць"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:71
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Previous month"
 msgstr "Попередній місяць"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:72
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Next week"
 msgstr "Наступний тиждень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:73
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Previous week"
 msgstr "Попередній тиждень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:74
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Open seat selection"
 msgstr "Довільний вибір місця"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:75
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid ""
 "Some or all ticket categories are currently sold out. If you want, you can "
@@ -826,322 +1180,141 @@ msgstr ""
 "додатися до списку очікування. Тоді ми Вам повідомимо, коли місця знову "
 "будуть вільні."
 
-#: pretix/static/pretixpresale/js/widget/widget.js:76
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgctxt "widget"
 msgid "Load more"
 msgstr "Завантажити більше"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:78
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Mo"
 msgstr "Пн"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:79
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Tu"
 msgstr "Вт"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:80
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "We"
 msgstr "Ср"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:81
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Th"
 msgstr "Чт"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:82
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Fr"
 msgstr "Пт"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:83
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Sa"
 msgstr "Сб"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:84
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Su"
 msgstr "Нд"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:85
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Monday"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:86
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Tuesday"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:87
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Wednesday"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:88
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Thursday"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:89
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Friday"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:90
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Saturday"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:91
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "Sunday"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:94
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "January"
 msgstr "січень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:95
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "February"
 msgstr "лютий"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:96
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "March"
 msgstr "березень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:97
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "April"
 msgstr "квітень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:98
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "May"
 msgstr "травень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:99
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "June"
 msgstr "червень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:100
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "July"
 msgstr "липень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:101
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "August"
 msgstr "серпень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:102
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "September"
 msgstr "вересень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:103
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "October"
 msgstr "жовтень"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:104
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "November"
 msgstr "листопад"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:105
+#: pretix/static/pretixpresale/js/widget/widget.js
+#: pretix/static/pretixpresale/widget/src/i18n.ts
 msgid "December"
 msgstr "грудень"
-
-#~ msgid "Select a check-in list"
-#~ msgstr "Виберіть список реєстрації"
-
-#~ msgid "No active check-in lists found."
-#~ msgstr "Активних списків реєстрації не знайдено."
-
-#~ msgid "Switch check-in list"
-#~ msgstr "Змінити список реєстрації"
-
-#~ msgid "Search results"
-#~ msgstr "Результати пошуку"
-
-#~ msgid "No tickets found"
-#~ msgstr "Квитків не знайдено"
-
-#~ msgid "Result"
-#~ msgstr "Результат"
-
-#~ msgid "This ticket requires special attention"
-#~ msgstr "Цей квиток вимагає особливої уваги"
-
-#~ msgid "Switch direction"
-#~ msgstr "Змінити напрямок"
-
-#~ msgid "Entry"
-#~ msgstr "Вхід"
-
-#~ msgid "Exit"
-#~ msgstr "Вихід"
-
-#~ msgid "Scan a ticket or search and press return…"
-#~ msgstr "Зіскануйте квиток або шукайте та натисніть повернення…"
-
-#~ msgid "Load more"
-#~ msgstr "Завантажити більше"
-
-#~ msgid "Valid"
-#~ msgstr "Дійсний"
-
-#~ msgid "Unpaid"
-#~ msgstr "Неоплаченo"
-
-#~ msgid "Canceled"
-#~ msgstr "Скасовано"
-
-#~ msgid "Redeemed"
-#~ msgstr "Викуплено"
-
-#~ msgid "Cancel"
-#~ msgstr "Скасувати"
-
-#~ msgid "Ticket not paid"
-#~ msgstr "Квиток не оплачено"
-
-#~ msgid "This ticket is not yet paid. Do you want to continue anyways?"
-#~ msgstr "Цей квиток ще не оплачений. Ви все одно хочете продовжити?"
-
-#~ msgid "Additional information required"
-#~ msgstr "Необхідна додаткова інформація"
-
-#~ msgid "Valid ticket"
-#~ msgstr "Дійсний квиток"
-
-#~ msgid "Exit recorded"
-#~ msgstr "Вихід записано"
-
-#~ msgid "Ticket already used"
-#~ msgstr "Квиток уже використаний"
-
-#~ msgid "Information required"
-#~ msgstr "Необхідна інформація"
-
-#~ msgid "Unknown ticket"
-#~ msgstr "Квиток не знайдено"
-
-#~ msgid "Ticket type not allowed here"
-#~ msgstr "Тип квитка тут заборонений"
-
-#~ msgid "Entry not allowed"
-#~ msgstr "Вхід заборонено"
-
-#~ msgid "Ticket code revoked/changed"
-#~ msgstr "Код квитка відкликаний/змінений"
-
-#~ msgid "Ticket blocked"
-#~ msgstr "Квиток заблокований"
-
-#~ msgid "Ticket not valid at this time"
-#~ msgstr "Квиток зараз не дійсний"
-
-#~ msgid "Order canceled"
-#~ msgstr "Замовлення скасовано"
-
-#~ msgid "Ticket code is ambiguous on list"
-#~ msgstr "Код квитка у списку не однозначний"
-
-#~ msgid "Order not approved"
-#~ msgstr "Замовлення не узгоджене"
-
-#~ msgid "Checked-in Tickets"
-#~ msgstr "Зареєстровані квитки"
-
-#~ msgid "Valid Tickets"
-#~ msgstr "Дійсні квитки"
-
-#~ msgid "Currently inside"
-#~ msgstr "На даний момент всередині"
-
-#~ msgid "is one of"
-#~ msgstr "є одним із"
-
-#~ msgid "is before"
-#~ msgstr "є раніше"
-
-#~ msgid "is after"
-#~ msgstr "є після"
-
-#~ msgid "="
-#~ msgstr "="
-
-#~ msgid "Product"
-#~ msgstr "Продукт"
-
-#~ msgid "Product variation"
-#~ msgstr "Варіанти продукту"
-
-#, fuzzy
-#~ msgid "Gate"
-#~ msgstr "Шлях"
-
-#~ msgid "Current date and time"
-#~ msgstr "Поточна дата та час"
-
-#~ msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-#~ msgstr "Поточний день тижня (1 = понеділок, 7 = неділя)"
-
-#~ msgid "Current entry status"
-#~ msgstr "Поточний стан запису"
-
-#~ msgid "Number of previous entries"
-#~ msgstr "Кількість попередніх входів"
-
-#~ msgid "Number of previous entries since midnight"
-#~ msgstr "Кількість попередніх входів з опівночі"
-
-#~ msgid "Number of previous entries since"
-#~ msgstr "Кількість попередніх входів з"
-
-#~ msgid "Number of previous entries before"
-#~ msgstr "Кількість попередніх входів до"
-
-#~ msgid "Number of days with a previous entry"
-#~ msgstr "Кількість днів із попереднім входом"
-
-#~ msgid "Number of days with a previous entry since"
-#~ msgstr "Кількість днів із попереднім входом з"
-
-#~ msgid "Number of days with a previous entry before"
-#~ msgstr "Кількість днів із попереднім входом до"
-
-#~ msgid "Minutes since last entry (-1 on first entry)"
-#~ msgstr "Хвилин з останнього входу (-1 при першому вході)"
-
-#~ msgid "Minutes since first entry (-1 on first entry)"
-#~ msgstr "Хвилин з першого входу (-1 при першому вході)"
-
-#~ msgid "All of the conditions below (AND)"
-#~ msgstr "Усі наведені нижче умови (І)"
-
-#~ msgid "At least one of the conditions below (OR)"
-#~ msgstr "Принаймні одна з наведених нижче умов (АБО)"
-
-#~ msgid "Event start"
-#~ msgstr "Початок події"
-
-#~ msgid "Event end"
-#~ msgstr "Завершення події"
-
-#~ msgid "Event admission"
-#~ msgstr "Вхід до події"
-
-#~ msgid "custom date and time"
-#~ msgstr "власні дата та час"
-
-#~ msgid "custom time"
-#~ msgstr "власний час"
-
-#~ msgid "Tolerance (minutes)"
-#~ msgstr "Відхилення (хвил.)"
-
-#~ msgid "Add condition"
-#~ msgstr "Додайте умову"
-
-#, fuzzy
-#~ msgid "minutes"
-#~ msgstr "хвилини"
-
-#~ msgid "Duplicate"
-#~ msgstr "Дублювати"
-
-#~ msgctxt "entry_status"
-#~ msgid "present"
-#~ msgstr "присутній"
-
-#~ msgctxt "entry_status"
-#~ msgid "absent"
-#~ msgstr "відсутній"
 
 #~ msgid "iDEAL"
 #~ msgstr "iDEAL"

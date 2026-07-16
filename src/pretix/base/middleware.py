@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
+import re
 from collections import OrderedDict
 from urllib.parse import urlparse, urlsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
@@ -42,6 +44,8 @@ from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
 )
 from pretix.presale.style import get_fonts
+
+logger = logging.getLogger(__name__)
 
 _supported = None
 
@@ -74,6 +78,7 @@ class LocaleMiddleware(MiddlewareMixin):
 
     def process_request(self, request: HttpRequest):
         language = get_language_from_request(request)
+        region = None
         # Normally, this middleware runs *before* the event is set. However, on event frontend pages it
         # might be run a second time by pretix.presale.EventMiddleware and in this case the event is already
         # set and can be taken into account for the decision.
@@ -94,15 +99,16 @@ class LocaleMiddleware(MiddlewareMixin):
                 if '-' not in language and settings_holder.settings.region:
                     language += '-' + settings_holder.settings.region
                 if settings_holder.settings.region:
-                    set_region(settings_holder.settings.region)
+                    region = settings_holder.settings.region
         else:
             gs = global_settings_object(request)
             if '-' not in language and gs.settings.region:
                 language += '-' + gs.settings.region
             if gs.settings.region:
-                set_region(gs.settings.region)
+                region = gs.settings.region
 
         translation.activate(language)
+        set_region(region)
         request.LANGUAGE_CODE = get_language_without_region()
 
         tzname = None
@@ -221,7 +227,26 @@ def _parse_csp(header):
     return h
 
 
+VALID_CSP_DIRECTIVES = [
+    "child-src", "connect-src", "default-src", "fenced-frame-src", "font-src", "form-action", "frame-src", "img-src",
+    "manifest-src", "media-src", "object-src", "prefetch-src", "report-uri", "script-src", "script-src-elem",
+    "script-src-attr", "style-src", "style-src-elem", "style-src-attr", "worker-src",
+]
+
+CSP_ILLEGAL_CHARS = re.compile(r'[\s,;]')
+
+
+def _sanitize_csp(h):
+    for k, v in h.items():
+        if k not in VALID_CSP_DIRECTIVES:
+            raise ValueError("Invalid CSP directive " + k)
+        if any(CSP_ILLEGAL_CHARS.search(el) for el in v):
+            logger.warning("Stripping invalid component from CSP: %r", h)
+            h[k] = [el for el in v if not CSP_ILLEGAL_CHARS.search(el)]
+
+
 def _render_csp(h):
+    _sanitize_csp(h)
     return "; ".join(k + ' ' + ' '.join(v) for k, v in h.items() if v)
 
 
@@ -241,21 +266,23 @@ def _merge_csp(a, b):
 
 
 class SecurityMiddleware(MiddlewareMixin):
-    CSP_EXEMPT = (
-        '/api/v1/docs/',
+    SAFE_TYPES = (
+        # CSP policies are only used for:
+        # - HTML and SVG in top-level contexts
+        # - SVG or JS Workers delivered in embedded contexts
+        # See: https://www.w3.org/TR/CSP2/#which-policy-applies
+        # Therefore, we can save bandwidth on not including our (sometimes huge) policy
+        # on API responses or CSS. We do however include it with other types as a precaution
+        # (whitelist instead of blacklist) and we also do not whitelist JavaScript in
+        # we ever add service workers to not break the protection of this feature:
+        # https://www.w3.org/TR/CSP2/#sandboxing-and-workers
+        'application/json',
+        'text/css',
+        # We used to skip CSP for PDF since it was necessary for inline previews in Safari,
+        # but at the moment it does not seem to be an issue to just send it.
     )
 
     def process_response(self, request, resp):
-        def nested_dict_values(d):
-            for v in d.values():
-                if isinstance(v, dict):
-                    yield from nested_dict_values(v)
-                else:
-                    if isinstance(v, str):
-                        yield v
-
-        url = resolve(request.path_info)
-
         if settings.DEBUG and resp.status_code >= 400:
             # Don't use CSP on debug error page as it breaks of Django's fancy error
             # pages
@@ -266,18 +293,20 @@ class SecurityMiddleware(MiddlewareMixin):
         # https://github.com/pretix/pretix/issues/765
         resp['P3P'] = 'CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"'
 
-        img_src = []
-        gs = global_settings_object(request)
-        if gs.settings.leaflet_tiles:
-            img_src.append(gs.settings.leaflet_tiles[:gs.settings.leaflet_tiles.index("/", 10)].replace("{s}", "*"))
+        if "Content-Type" in resp and resp["Content-Type"].split(";")[0] in self.SAFE_TYPES:
+            if 'Content-Security-Policy' in resp:
+                del resp['Content-Security-Policy']
+            return resp
 
-        font_src = set()
-        if hasattr(request, 'event'):
-            for font in get_fonts(request.event, pdf_support_required=False).values():
-                for path in list(nested_dict_values(font)):
-                    font_location = urlparse(path)
-                    if font_location.scheme and font_location.netloc:
-                        font_src.add('{}://{}'.format(font_location.scheme, font_location.netloc))
+        if not getattr(resp, '_csp_ignore', False):
+            resp['Content-Security-Policy'] = _render_csp(self._build_csp(request, resp))
+        elif 'Content-Security-Policy' in resp:
+            del resp['Content-Security-Policy']
+
+        return resp
+
+    def _build_csp(self, request, resp):
+        url = resolve(request.path_info)
 
         h = {
             'default-src': ["{static}"],
@@ -285,9 +314,9 @@ class SecurityMiddleware(MiddlewareMixin):
             'object-src': ["'none'"],
             'frame-src': ['{static}'],
             'style-src': ["{static}", "{media}"],
-            'connect-src': ["{dynamic}", "{media}"],
-            'img-src': ["{static}", "{media}", "data:"] + img_src,
-            'font-src': ["{static}"] + list(font_src),
+            'connect-src': ["{static}", "{dynamic}", "{media}"],
+            'img-src': ["{static}", "{media}", "data:"],
+            'font-src': ["{static}"],
             'media-src': ["{static}", "data:"],
             # form-action is not only used to match on form actions, but also on URLs
             # form-actions redirect to. In the context of e.g. payment providers or
@@ -295,6 +324,13 @@ class SecurityMiddleware(MiddlewareMixin):
             # this. However, we'll restrict it to HTTPS.
             'form-action': ["{dynamic}", "https:"] + (['http:'] if settings.SITE_URL.startswith('http://') else []),
         }
+
+        gs = global_settings_object(request)
+        if gs.settings.leaflet_tiles:
+            h['img-src'].append(gs.settings.leaflet_tiles[:gs.settings.leaflet_tiles.index("/", 10)].replace("{s}", "*"))
+
+        if hasattr(request, 'event'):
+            h['font-src'] += list(self._get_font_origins(request.event))
 
         if settings.VITE_DEV_MODE:
             h['script-src'] += ["http://localhost:5173", "ws://localhost:5173"]
@@ -307,6 +343,7 @@ class SecurityMiddleware(MiddlewareMixin):
             if not settings.VITE_DEV_MODE:
                 # can't have 'unsafe-inline' and nonce at the same time
                 h['style-src'].append(nonce)
+
         # Only include pay.google.com for wallet detection purposes on the Payment selection page
         if (
                 url.url_name == "event.order.pay.change" or
@@ -315,27 +352,32 @@ class SecurityMiddleware(MiddlewareMixin):
             h['script-src'].append('https://pay.google.com')
             h['frame-src'].append('https://pay.google.com')
             h['connect-src'].append('https://google.com/pay')
+
         if settings.LOG_CSP:
             h['report-uri'] = ["/csp_report/"]
+
         if 'Content-Security-Policy' in resp:
             _merge_csp(h, _parse_csp(resp['Content-Security-Policy']))
+
         if settings.CSP_ADDITIONAL_HEADER:
             _merge_csp(h, _parse_csp(settings.CSP_ADDITIONAL_HEADER))
 
-        staticdomain = "'self'"
-        dynamicdomain = "'self'"
-        mediadomain = "'self'"
+        placeholders = {
+            "{static}": ["'self'"],
+            "{dynamic}": ["'self'"],
+            "{media}": ["'self'"],
+        }
         if settings.MEDIA_URL.startswith('http'):
-            mediadomain += " " + settings.MEDIA_URL[:settings.MEDIA_URL.find('/', 9)]
+            placeholders["{media}"].append(settings.MEDIA_URL[:settings.MEDIA_URL.find('/', 9)])
         if settings.STATIC_URL.startswith('http'):
-            staticdomain += " " + settings.STATIC_URL[:settings.STATIC_URL.find('/', 9)]
+            placeholders["{static}"].append(settings.STATIC_URL[:settings.STATIC_URL.find('/', 9)])
         if settings.SITE_URL.startswith('http'):
             if settings.SITE_URL.find('/', 9) > 0:
-                staticdomain += " " + settings.SITE_URL[:settings.SITE_URL.find('/', 9)]
-                dynamicdomain += " " + settings.SITE_URL[:settings.SITE_URL.find('/', 9)]
+                placeholders["{static}"].append(settings.SITE_URL[:settings.SITE_URL.find('/', 9)])
+                placeholders["{dynamic}"].append(settings.SITE_URL[:settings.SITE_URL.find('/', 9)])
             else:
-                staticdomain += " " + settings.SITE_URL
-                dynamicdomain += " " + settings.SITE_URL
+                placeholders["{static}"].append(settings.SITE_URL)
+                placeholders["{dynamic}"].append(settings.SITE_URL)
 
         if hasattr(request, 'organizer') and request.organizer:
             if hasattr(request, 'event') and request.event:
@@ -346,18 +388,29 @@ class SecurityMiddleware(MiddlewareMixin):
                 siteurlsplit = urlsplit(settings.SITE_URL)
                 if siteurlsplit.port and siteurlsplit.port not in (80, 443):
                     domain = '%s:%d' % (domain, siteurlsplit.port)
-                dynamicdomain += " " + domain
+                placeholders["{dynamic}"].append(domain)
 
-        if request.path not in self.CSP_EXEMPT and not getattr(resp, '_csp_ignore', False):
-            resp['Content-Security-Policy'] = _render_csp(h).format(static=staticdomain, dynamic=dynamicdomain,
-                                                                    media=mediadomain)
-            for k, v in h.items():
-                h[k] = sorted(set(' '.join(v).format(static=staticdomain, dynamic=dynamicdomain, media=mediadomain).split(' ')))
-            resp['Content-Security-Policy'] = _render_csp(h)
-        elif 'Content-Security-Policy' in resp:
-            del resp['Content-Security-Policy']
+        for k, v in h.items():
+            h[k] = sorted(set(result for part in v for result in placeholders.get(part, [part])))
 
-        return resp
+        return h
+
+    def _get_font_origins(self, event):
+        def nested_dict_values(d):
+            for v in d.values():
+                if isinstance(v, dict):
+                    yield from nested_dict_values(v)
+                else:
+                    if isinstance(v, str):
+                        yield v
+
+        font_src = set()
+        for font in get_fonts(event, pdf_support_required=False).values():
+            for path in list(nested_dict_values(font)):
+                font_location = urlparse(path)
+                if font_location.scheme and font_location.netloc:
+                    font_src.add('{}://{}'.format(font_location.scheme, font_location.netloc))
+        return font_src
 
 
 class RejectInvalidInputMiddleware(MiddlewareMixin):

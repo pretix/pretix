@@ -335,7 +335,7 @@ class CategoryCreate(EventPermissionRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class CategoryList(PaginationMixin, ListView):
+class CategoryList(ListView):
     model = ItemCategory
     context_object_name = 'categories'
     template_name = 'pretixcontrol/items/categories.html'

@@ -64,7 +64,7 @@ from django.urls import reverse
 from django.utils import formats
 from django.utils.formats import date_format, get_format
 from django.utils.functional import cached_property
-from django.utils.html import conditional_escape, escape
+from django.utils.html import conditional_escape, escape, format_html
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware, now
@@ -79,7 +79,7 @@ from pretix.base.email import get_email_context
 from pretix.base.exporter import MultiSheetListExporter
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, CachedTicket, Checkin, Invoice, InvoiceAddress, Item,
+    CachedFile, CachedTicket, Checkin, GiftCard, Invoice, InvoiceAddress, Item,
     ItemVariation, LogEntry, Order, QuestionAnswer, Quota,
     ScheduledEventExport, generate_secret,
 )
@@ -139,6 +139,7 @@ from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import SafeFormatter, format_map
 from pretix.helpers.hierarkey import clean_filename
+from pretix.helpers.iter import chunked_iterable
 from pretix.helpers.json import CustomJSONEncoder
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
@@ -240,7 +241,7 @@ class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, As
         raise NotImplementedError()
 
     def execute_bulk(self, queryset: QuerySet, form: forms.Form):
-        qs = self.allowed_for(self.allowed_for(self.get_queryset()))
+        qs = self.allowed_for(self.get_queryset())
         total = qs.count()
         orders_with_successful_action = 0
         for i, o in enumerate(qs):
@@ -394,8 +395,21 @@ class OrderDeleteBulkActionView(BaseOrderBulkActionView):
             testmode=True,
         )
 
-    def execute_single(self, instance, form: forms.Form):
-        instance.gracefully_delete(user=self.request.user)
+    def execute_bulk(self, queryset: QuerySet, form: forms.Form):
+        qs = self.allowed_for(self.get_queryset())
+        total = qs.count()
+        all_ids = list(qs.values_list("id", flat=True))
+
+        orders_with_successful_action = 0
+        for chunk in chunked_iterable(all_ids, 1000):
+            Order.gracefully_delete_bulk(
+                self.request.event,
+                qs.filter(id__in=chunk),
+                user=self.request.user,
+            )
+            orders_with_successful_action += len(chunk)
+            self.async_set_progress(orders_with_successful_action / total * 100)
+        return orders_with_successful_action, total
 
 
 class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin, ListView):
@@ -537,10 +551,10 @@ class OrderDetail(OrderView):
         ctx['refunds'] = self.order.refunds.select_related('payment').order_by('-created')
         for p in ctx['payments']:
             if p.payment_provider:
-                p.html_info = (p.payment_provider.payment_control_render(self.request, p) or "").strip()
+                p.html_info = p.payment_provider.payment_control_render(self.request, p) or ""
         for r in ctx['refunds']:
             if r.payment_provider:
-                r.html_info = (r.payment_provider.refund_control_render(self.request, r) or "").strip()
+                r.html_info = r.payment_provider.refund_control_render(self.request, r) or ""
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={
             'comment': self.order.comment,
@@ -1980,7 +1994,7 @@ class OrderChange(OrderView):
         positions = list(self.order.positions.select_related(
             'item', 'item__tax_rule', 'used_membership', 'used_membership__membership_type', 'tax_rule',
             'seat', 'subevent',
-        ).prefetch_related('granted_memberships'))
+        ).prefetch_related('granted_memberships', 'issued_gift_cards'))
         for p in positions:
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p, items=self.items,
                                              initial={'seat': p.seat.seat_guid if p.seat else None},
@@ -2247,6 +2261,12 @@ class OrderContactChange(OrderView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['form'] = self.form
+        if self.order.all_positions.filter(Exists(GiftCard.objects.filter(issued_in=OuterRef('pk')))).exists():
+            self.form.fields['regenerate_secrets'].help_text = format_html(
+                '{}<br><br><strong><span class="fa fa-warning"></span> {}</strong>',
+                self.form.fields['regenerate_secrets'].help_text,
+                _("Ticket secrets of order positions that have been used to issue a gift card can not be changed. Only the link will be changed in this case."),
+            )
         return ctx
 
     @cached_property

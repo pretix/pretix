@@ -71,7 +71,7 @@ from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.format import format_map
 from pretix.helpers.money import DecimalTextInput
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse_absolute
 from pretix.presale.views import get_cart
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
@@ -379,7 +379,7 @@ class BasePaymentProvider:
 
         if not self.settings.get('_hidden_seed'):
             self.settings.set('_hidden_seed', get_random_string(64))
-        hidden_url = build_absolute_uri(self.event, 'presale:event.payment.unlock', kwargs={
+        hidden_url = eventreverse_absolute(self.event, 'presale:event.payment.unlock', kwargs={
             'hash': hashlib.sha256((self.settings._hidden_seed + self.event.slug).encode()).hexdigest(),
         })
 
@@ -834,7 +834,7 @@ class BasePaymentProvider:
         """
         raise NotImplementedError()  # NOQA
 
-    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str | None:
         """
         After the user has confirmed their purchase, this method will be called to complete
         the payment process. This is the place to actually move the money if applicable.
@@ -936,7 +936,7 @@ class BasePaymentProvider:
         """
         Will be called if the *event administrator* views the details of a payment.
 
-        It should return HTML code containing information regarding the current payment
+        It should return a SafeString containing HTML code, with information regarding the current payment
         status and, if applicable, next steps.
 
         The default implementation returns an empty string.
@@ -961,7 +961,7 @@ class BasePaymentProvider:
         """
         Will be called if the *event administrator* views the details of a refund.
 
-        It should return HTML code containing information regarding the current refund
+        It should return a SafeString containing HTML code, with information regarding the current refund
         status and, if applicable, next steps.
 
         The default implementation returns an empty string.
@@ -1704,6 +1704,58 @@ class GiftCardPayment(BasePaymentProvider):
                 'text': refund.comment,
             }
         )
+
+
+class BaseHistoricalPaymentProvider(BasePaymentProvider):
+    """
+    Base class for payment providers that no longer exist but can't be deleted to make sure historical
+    payments are shown correctly.
+
+    Subclasses are recommended to only implement:
+        - identifier
+        - verbose_name
+        - public_name
+    - payment_control_render
+    - payment_control_render_short
+    - refund_control_render
+    - refund_control_render_short
+    - render_invoice_text
+    - render_invoice_stamp
+    - api_payment_details
+    - api_refund_details
+    - shred_payment_info
+    - matching_id
+    - refund_matching_id
+    """
+
+    @property
+    def is_enabled(self) -> bool:
+        return False
+
+    @property
+    def settings_form_fields(self) -> dict:
+        return {}
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return False
+
+    def payment_is_valid_session(self, request: HttpRequest, payment: OrderPayment):
+        return False
+
+    def order_change_allowed(self, order: Order, request: HttpRequest=None) -> bool:
+        return False
+
+    def payment_refund_supported(self, payment: OrderPayment) -> bool:
+        return False
+
+    def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
+        return False
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        raise PaymentException(_("This payment provider exists for historical purposes only and is no longer usable."))
+
+    def execute_refund(self, refund: OrderRefund):
+        raise PaymentException(_("This payment provider exists for historical purposes only and is no longer usable."))
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_free")

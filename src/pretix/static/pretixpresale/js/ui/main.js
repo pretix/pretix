@@ -131,10 +131,12 @@ var form_handlers = function (el) {
 
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");
+        var qrText = this.getAttribute("type") === "application/json" && this.textContent.startsWith('"') ?
+            JSON.parse(this.textContent) : $(this).html();
         $div.insertBefore($(this));
         $div.qrcode(
             {
-                text: $(this).html(),
+                text: qrText,
                 correctLevel: 0,  // M
                 width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
                 height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
@@ -345,7 +347,7 @@ function setup_basics(el) {
         }).on('click', function (event) {
             setCurrentTab(this);
         });
-        
+
         var firstTab = tabs.first().get(0);
         var lastTab = tabs.last().get(0);
         setCurrentTab(tabs.filter('[aria-selected=true]').get(0));
@@ -658,7 +660,7 @@ $(function () {
         var currentTimeDisplayParts = [];
         timeFormatParts.forEach(function(format) {
             currentTimeDisplayParts.push([format, $("<span></span>").appendTo(currentTimeDisplay)])
-        }); 
+        });
         var duration = this.getAttribute("data-duration").split(":").reduce(function(previousValue, currentValue, currentIndex) {
             return previousValue + (currentIndex ? parseInt(currentValue, 10) * 60 : parseInt(currentValue, 10) * 60 * 60);
         }, 0);
@@ -671,7 +673,7 @@ $(function () {
                 currentTimeBar.remove();
                 return;
             }
-            
+
             var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
             var dx = Math.round(offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration));
             currentTimeDisplayParts.forEach(function(part) {

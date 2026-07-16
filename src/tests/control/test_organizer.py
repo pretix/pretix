@@ -160,6 +160,22 @@ class OrganizerTest(SoupTest):
         assert "mail_from" not in self.orga1.settings._cache()
 
     @staticmethod
+    def _fake_dmarc_record(hostname):
+        return {
+            'test.pretix.dev': 'v=DMARC1; p=quarantine; sp=none; adkim=r; aspf=r;',
+            'bad.pretix.dev': None,
+            'none.pretix.dev': None,
+        }[hostname]
+
+    @staticmethod
+    def _fake_cname_record(hostname):
+        return {
+            'pretix._domainkey.test.pretix.dev': 'test-pretix-dev.dkim.pretix.eu.',
+            'pretix._domainkey.bad.pretix.dev': 'example.org',
+            'pretix._domainkey.none.pretix.dev': None,
+        }[hostname]
+
+    @staticmethod
     def _fake_spf_record(hostname):
         return {
             'test.pretix.dev': 'v=spf1 a mx include:level2.pretix.dev ~all',
@@ -172,9 +188,17 @@ class OrganizerTest(SoupTest):
             'spftest.pretix.dev': None,
         }[hostname]
 
-    @override_settings(MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED=False, MAIL_CUSTOM_SENDER_SPF_STRING="include:spftest.pretix.dev include:test2.pretix.dev")
-    def test_email_setup_no_verification_spf_success(self):
+    @override_settings(
+        MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED=False,
+        MAIL_CUSTOM_SENDER_SPF_STRING="include:spftest.pretix.dev include:test2.pretix.dev",
+        MAIL_CUSTOM_SENDER_DKIM_SELECTOR="pretix",
+        MAIL_CUSTOM_SENDER_DKIM_CNAME="dkim.pretix.eu.",
+        MAIL_CUSTOM_SENDER_DMARC_REQUIRED=True,
+    )
+    def test_email_setup_no_verification_spf_dmarc_dkim_success(self):
         self.monkeypatch.setattr("pretix.control.views.mailsetup.get_spf_record", OrganizerTest._fake_spf_record)
+        self.monkeypatch.setattr("pretix.control.views.mailsetup.get_cname_record", OrganizerTest._fake_cname_record)
+        self.monkeypatch.setattr("pretix.control.views.mailsetup.get_dmarc_record", OrganizerTest._fake_dmarc_record)
         doc = self.post_doc(
             '/control/organizer/%s/settings/email/setup' % self.orga1.slug,
             {
@@ -205,6 +229,43 @@ class OrganizerTest(SoupTest):
             {
                 'mode': 'simple',
                 'simple-mail_from': 'test@test.pretix.dev',
+            },
+            follow=True
+        )
+        assert doc.select('.alert-danger')
+        self.orga1.settings.flush()
+        # not yet saved
+        assert "mail_from" not in self.orga1.settings._cache()
+
+    @override_settings(MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED=False,
+                       MAIL_CUSTOM_SENDER_DKIM_SELECTOR="pretix",
+                       MAIL_CUSTOM_SENDER_DKIM_CNAME="dkim.pretix.eu.",
+                       MAIL_CUSTOM_SENDER_SPF_STRING="")
+    def test_email_setup_no_verification_dkim_warning(self):
+        self.monkeypatch.setattr("pretix.control.views.mailsetup.get_cname_record", OrganizerTest._fake_cname_record)
+        doc = self.post_doc(
+            '/control/organizer/%s/settings/email/setup' % self.orga1.slug,
+            {
+                'mode': 'simple',
+                'simple-mail_from': 'test@bad.pretix.dev',
+            },
+            follow=True
+        )
+        assert doc.select('.alert-danger')
+        self.orga1.settings.flush()
+        # not yet saved
+        assert "mail_from" not in self.orga1.settings._cache()
+
+    @override_settings(MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED=False,
+                       MAIL_CUSTOM_SENDER_DMARC_REQUIRED=True,
+                       MAIL_CUSTOM_SENDER_SPF_STRING="")
+    def test_email_setup_no_verification_dmarc_warning(self):
+        self.monkeypatch.setattr("pretix.control.views.mailsetup.get_dmarc_record", OrganizerTest._fake_dmarc_record)
+        doc = self.post_doc(
+            '/control/organizer/%s/settings/email/setup' % self.orga1.slug,
+            {
+                'mode': 'simple',
+                'simple-mail_from': 'test@bad.pretix.dev',
             },
             follow=True
         )

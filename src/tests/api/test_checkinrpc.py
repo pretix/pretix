@@ -34,7 +34,7 @@ from tests.const import SAMPLE_PNG
 
 from pretix.api.serializers.item import QuestionSerializer
 from pretix.base.models import (
-    Checkin, InvoiceAddress, Order, OrderPosition, ReusableMedium,
+    Checkin, InvoiceAddress, Item, Order, OrderPosition, ReusableMedium,
 )
 
 # Lots of this code is overlapping with test_checkin.py, and some of it is arguably redundant since it's triggering
@@ -286,12 +286,12 @@ def test_by_secret_special_chars(token_client, organizer, clist, event, order):
 @pytest.mark.django_db
 def test_by_medium(token_client, organizer, clist, event, order):
     with scopes_disabled():
-        ReusableMedium.objects.create(
+        rm = ReusableMedium.objects.create(
             type="barcode",
             identifier="abcdef",
             organizer=organizer,
-            linked_orderposition=order.positions.first(),
         )
+        rm.linked_orderpositions.add(order.positions.first())
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
@@ -299,6 +299,71 @@ def test_by_medium(token_client, organizer, clist, event, order):
         ci = clist.checkins.get(position=order.positions.first())
     assert ci.raw_barcode == "abcdef"
     assert ci.raw_source_type == "barcode"
+
+
+@pytest.mark.django_db
+def test_by_medium_multiple_orderpositions(token_client, organizer, clist_all, event, order):
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="barcode",
+            identifier="abcdef",
+            organizer=organizer,
+        )
+        op_item_first = order.positions.first()
+        rm.linked_orderpositions.add(op_item_first)
+        op_item_other = order.positions.all()[1]
+        rm.linked_orderpositions.add(op_item_other)
+
+    # multiple tickets are valid => no check-in
+    resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'ambiguous'
+
+    with scopes_disabled():
+        op_item_other.valid_from = datetime.datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
+        op_item_other.valid_until = datetime.datetime(2020, 1, 1, 15, 0, 0, tzinfo=event.timezone)
+        op_item_other.save()
+
+    with freeze_time("2020-01-01 13:45:00"):
+        # multiple tickets are valid => no check-in
+        resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 400
+        assert resp.data['status'] == 'error'
+        assert resp.data['reason'] == 'ambiguous'
+
+    with freeze_time("2020-01-01 10:45:00"):
+        resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 201
+        assert resp.data['status'] == 'ok'
+
+    with freeze_time("2020-01-01 15:45:00"):
+        resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 400
+        assert resp.data['status'] == 'error'
+        assert resp.data['reason'] == 'already_redeemed'
+
+    with scopes_disabled():
+        op_item_first.valid_from = datetime.datetime(2020, 1, 1, 10, 0, 0, tzinfo=event.timezone)
+        op_item_first.valid_until = datetime.datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
+        op_item_first.save()
+
+    with freeze_time("2020-01-01 15:45:00"):
+        resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
+        assert resp.status_code == 400
+        assert resp.data['status'] == 'error'
+        assert resp.data['reason'] == 'invalid_time'
+
+    with scopes_disabled():
+        op_item_first.canceled = True
+        op_item_first.save()
+        op_item_other.canceled = True
+        op_item_other.save()
+
+    resp = _redeem(token_client, organizer, clist_all, "abcdef", {"source_type": "barcode"})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'canceled'
 
 
 @pytest.mark.django_db
@@ -318,12 +383,12 @@ def test_by_medium_not_connected(token_client, organizer, clist, event, order):
 @pytest.mark.django_db
 def test_by_medium_wrong_event(token_client, organizer, clist, event, order2):
     with scopes_disabled():
-        ReusableMedium.objects.create(
+        rm = ReusableMedium.objects.create(
             type="barcode",
             identifier="abcdef",
             organizer=organizer,
-            linked_orderposition=order2.positions.first(),
         )
+        rm.linked_orderpositions.add(order2.positions.first())
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 404
     assert resp.data['status'] == 'error'
@@ -337,12 +402,12 @@ def test_by_medium_wrong_event(token_client, organizer, clist, event, order2):
 @pytest.mark.django_db
 def test_by_medium_wrong_type(token_client, organizer, clist, event, order):
     with scopes_disabled():
-        ReusableMedium.objects.create(
+        rm = ReusableMedium.objects.create(
             type="nfc_uid",
             identifier="abcdef",
             organizer=organizer,
-            linked_orderposition=order.positions.first(),
         )
+        rm.linked_orderpositions.add(order.positions.first())
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 404
     assert resp.data['status'] == 'error'
@@ -355,13 +420,13 @@ def test_by_medium_wrong_type(token_client, organizer, clist, event, order):
 @pytest.mark.django_db
 def test_by_medium_inactive(token_client, organizer, clist, event, order):
     with scopes_disabled():
-        ReusableMedium.objects.create(
+        rm = ReusableMedium.objects.create(
             type="barcode",
             identifier="abcdef",
             organizer=organizer,
             active=False,
-            linked_orderposition=order.positions.first(),
         )
+        rm.linked_orderpositions.add(order.positions.first())
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 404
     assert resp.data['status'] == 'error'
@@ -1188,3 +1253,489 @@ def test_annul_failures(device_client, team, organizer, clist, clist_event2, eve
     with scopes_disabled():
         ci = p.all_checkins.get()
         assert ci.successful
+
+
+@pytest.mark.django_db
+def test_exchange_incomplete_body(token_client, organizer, clist, event, order):
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid"
+    })
+    assert resp.status_code == 400
+    assert resp.data == {
+        'non_field_errors': ['If you set any of exchange_medium_type or exchange_medium_identifier, you need to set both of them.']
+    }
+
+
+@pytest.mark.django_db
+def test_exchange_medium_for_medium(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="barcode",
+            identifier="abcdef",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.first())
+    resp = _redeem(token_client, organizer, clist, "abcdef", {
+        "source_type": "barcode",
+        "exchange_medium_type": "barcode",
+        "exchange_medium_identifier": "hijkl",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'error'
+
+
+@pytest.mark.django_db
+def test_exchange_unknown_media_type(token_client, organizer, clist, event, order):
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "unknown",
+        "exchange_medium_identifier": "hijkl",
+    })
+    assert resp.status_code == 400
+    assert resp.data == {"exchange_medium_type": ["\"unknown\" is not a valid choice."]}
+
+
+@pytest.mark.django_db
+def test_exchange_disabled_media_type(token_client, organizer, clist, event, order):
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "hijkl",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'error'
+    assert resp.data['reason_explanation'] == 'Medium type is not enabled for organizer.'
+
+
+@pytest.mark.django_db
+def test_exchange_mismatch_media_type(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "barcode"
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'product'
+    assert resp.data['reason_explanation'] == 'Incorrect medium type for product.'
+
+
+@pytest.mark.django_db
+def test_exchange_no_item_policy(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'product'
+    assert resp.data['reason_explanation'] == 'Product does not support medium exchange.'
+
+
+@pytest.mark.django_db
+def test_exchange_reuse_or_new_new(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_REUSE_OR_NEW
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        rm = ReusableMedium.objects.get(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        assert rm.linked_orderpositions.get().secret == "z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+
+
+@pytest.mark.django_db
+def test_exchange_reuse_or_new_reuse_replace(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_REUSE_OR_NEW
+    item.save()
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.last())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    rm.refresh_from_db()
+    with scopes_disabled():
+        assert rm.linked_orderpositions.get().secret == "z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+
+
+@pytest.mark.django_db
+def test_exchange_reuse_or_new_reuse_append(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_APPEND_OR_NEW
+    item.save()
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.last())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    rm.refresh_from_db()
+    with scopes_disabled():
+        assert rm.linked_orderpositions.count() == 2
+        assert rm.linked_orderpositions.filter(secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w").exists()
+
+
+@pytest.mark.django_db
+def test_exchange_reuse_exists_append(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_APPEND_OR_NEW
+    item.save()
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.last())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    rm.refresh_from_db()
+    with scopes_disabled():
+        assert rm.linked_orderpositions.count() == 2
+        assert rm.linked_orderpositions.filter(secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w").exists()
+
+
+@pytest.mark.django_db
+def test_exchange_reuse_expired(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_REUSE
+    item.save()
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+            expires=now() - datetime.timedelta(hours=2),
+        )
+        rm.linked_orderpositions.add(order.positions.last())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'medium_invalid'
+
+
+@pytest.mark.django_db
+def test_exchange_reuse_not_exists(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_REUSE
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'medium_invalid'
+
+
+@pytest.mark.django_db
+def test_exchange_new_exists(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_NEW
+    item.save()
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.last())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+        "exchange_link_action": "append",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'medium_exists'
+
+
+@pytest.mark.django_db
+def test_exchange_new_not_exists(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_NEW
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "12345678",
+        "exchange_link_action": "replace",
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        rm = ReusableMedium.objects.get(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        assert rm.linked_orderpositions.get().secret == "z3fsn8jyufm5kpk768q69gkbyr5f4h6w"
+
+
+@pytest.mark.django_db
+def test_exchange_required(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_NEW
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'exchange'
+    assert resp.data['media_policy'] == 'new'
+    assert resp.data['media_type'] == 'nfc_uid'
+
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.first())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    # Force works
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "force": True,
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_exchanged_original_barcode_ok(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_NEW
+    item.save()
+
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.first())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_exchanged_original_barcode_not_ok(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    organizer.settings.reusable_media_usage_enforced = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_NEW
+    item.save()
+
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.first())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'already_exchanged'
+    # Force works
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "force": True,
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_exchanged_scan_medium_ok(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    organizer.settings.reusable_media_usage_enforced = True
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_NEW
+    item.save()
+
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.first())
+    resp = _redeem(token_client, organizer, clist, "12345678", {
+        "source_type": "nfc_uid",
+    })
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_exchanged_double_exchange(token_client, organizer, clist, event, order, item):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    organizer.settings.reusable_media_usage_enforced = False
+    item.media_type = "nfc_uid"
+    item.media_policy = Item.MEDIA_POLICY_NEW
+    item.save()
+
+    with scopes_disabled():
+        rm = ReusableMedium.objects.create(
+            type="nfc_uid",
+            identifier="12345678",
+            organizer=organizer,
+        )
+        rm.linked_orderpositions.add(order.positions.first())
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "87654321",
+        "exchange_link_action": "replace",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'already_exchanged'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "media_policy,media_type",
+    [
+        (Item.MEDIA_POLICY_NEW, "nfc_mf0aes"),
+        (Item.MEDIA_POLICY_REUSE_OR_NEW, "nfc_mf0aes"),
+        (Item.MEDIA_POLICY_APPEND_OR_NEW, "nfc_mf0aes"),
+        (Item.MEDIA_POLICY_NEW, "barcode"),
+        (Item.MEDIA_POLICY_REUSE_OR_NEW, "barcode"),
+        (Item.MEDIA_POLICY_APPEND_OR_NEW, "barcode"),
+    ]
+)
+def test_exchange_unsupported_media_type_for_new(token_client, organizer, clist, event, order, item, media_policy, media_type):
+    organizer.settings.set(f'reusable_media_type_{media_type}', True)
+    # Shouldn't be configurable, but test that the logic is solid anyway
+    item.media_type = media_type
+    item.media_policy = media_policy
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": media_type,
+        "exchange_medium_identifier": "12345678",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'medium_invalid'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "media_policy",
+    [
+        Item.MEDIA_POLICY_NEW,
+        Item.MEDIA_POLICY_REUSE_OR_NEW,
+        Item.MEDIA_POLICY_APPEND_OR_NEW,
+    ]
+)
+def test_exchange_rejected_media_identifier(token_client, organizer, clist, event, order, item, media_policy):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    item.media_type = "nfc_uid"
+    item.media_policy = media_policy
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "08RANDOM",
+    })
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'medium_invalid'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "media_policy",
+    [
+        Item.MEDIA_POLICY_NEW,
+        Item.MEDIA_POLICY_REUSE_OR_NEW,
+        Item.MEDIA_POLICY_APPEND_OR_NEW,
+    ]
+)
+def test_exchange_create_gift_card(token_client, organizer, clist, event, order, item, media_policy):
+    organizer.settings.reusable_media_type_nfc_uid = True
+    organizer.settings.reusable_media_type_nfc_uid_autocreate_giftcard = True
+    organizer.settings.reusable_media_type_nfc_uid_autocreate_giftcard_currency = "EUR"
+    item.media_type = "nfc_uid"
+    item.media_policy = media_policy
+    item.save()
+    resp = _redeem(token_client, organizer, clist, "z3fsn8jyufm5kpk768q69gkbyr5f4h6w", {
+        "source_type": "barcode",
+        "exchange_medium_type": "nfc_uid",
+        "exchange_medium_identifier": "0412345",
+    })
+    assert resp.status_code == 201
+    with scopes_disabled():
+        rm = ReusableMedium.objects.get(identifier="0412345")
+        assert rm.linked_giftcard.currency == "EUR"
