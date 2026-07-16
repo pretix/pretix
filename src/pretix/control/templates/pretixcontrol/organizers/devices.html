@@ -137,6 +137,15 @@
                             </td>
                             <td>
                                 {{ d.software_brand|default_if_none:"" }} {{ d.software_version|default_if_none:"" }}
+                                {% if staff_session %}
+                                    <details class="admin-only">
+                                        <summary>
+                                            <i class="fa fa-angle-down collapse-indicator"></i>
+                                            {% trans "Details" %}
+                                        </summary>
+                                        <pre class="admin-only">{{ d.info|pprint }}</pre>
+                                    </details>
+                                {% endif %}
                             </td>
                             <td>
                                 {% if d.initialized %}
