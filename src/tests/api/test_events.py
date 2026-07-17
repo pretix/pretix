@@ -1826,7 +1826,7 @@ def test_event_block_unblock_seat_bulk(token_client, organizer, event, seatingpl
     assert not s2.blocked
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_event_expand_seat_filter_and_querycount(token_client, organizer, event, seatingplan, item):
     event.settings.seating_minimal_distance = 2
 

@@ -28,6 +28,7 @@ from django.test import override_settings
 from django.utils import translation
 from django_scopes import scopes_disabled
 from fakeredis import FakeRedisConnection
+from hierarkey.proxy import dirty_cache_keys
 from xdist.dsession import DSession
 
 from pretix.testutils.mock import get_redis_connection
@@ -80,6 +81,11 @@ def pytest_fixture_setup(fixturedef, request):
 @pytest.fixture(autouse=True)
 def reset_locale():
     translation.activate("en")
+
+
+@pytest.fixture(autouse=True)
+def reset_hierarkey_cache_state():
+    dirty_cache_keys.set(set())
 
 
 @pytest.fixture

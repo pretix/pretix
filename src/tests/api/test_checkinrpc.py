@@ -214,7 +214,7 @@ def _redeem(token_client, org, clist, p, body=None, query='', headers={}):
     ), body, format='json', headers={})
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_query_load(token_client, organizer, clist, event, order, django_assert_max_num_queries):
     with scopes_disabled():
         p = order.positions.first()
@@ -996,7 +996,7 @@ def test_redeem_conflicting_lists(token_client, organizer, clist, clist_all, eve
     assert resp.data == ['Selecting two check-in lists from the same event is unsupported.']
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_search(token_client, organizer, event, clist, clist_all, item, other_item, order,
                 django_assert_max_num_queries):
     with scopes_disabled():
