@@ -80,7 +80,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.auth import get_u2f_appid, get_webauthn_rp_id
 from pretix.helpers.http import redirect_to_url
-from pretix.helpers.ratelimit import rate_limit
+from pretix.helpers.ratelimit import rate_limit, rate_limit_reset
 from pretix.helpers.security import session_reauth
 from pretix.helpers.u2f import websafe_encode
 
@@ -850,6 +850,7 @@ class UserPasswordChangeView(FormView):
             msgs = []
             msgs.append(_('Your password has been changed.'))
             self.request.user.send_security_notice(msgs)
+            rate_limit_reset("pwreset", self.request.user.pk)
 
             self.request.user.log_action('pretix.user.settings.changed', user=self.request.user, data={'new_pw': True})
 
