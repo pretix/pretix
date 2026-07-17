@@ -334,6 +334,11 @@ class ResetPasswordForm(forms.Form):
     def clean_email(self):
         if 'email' not in self.cleaned_data:
             return
+        if rate_limit("customer_pwreset_check", max_num=10, expire_time=600):
+            raise forms.ValidationError(
+                self.error_messages['rate_limit'],
+                code='rate_limit',
+            )
         try:
             self.customer = self.request.organizer.customers.get(email=self.cleaned_data['email'].lower(), provider__isnull=True)
             return self.customer.email

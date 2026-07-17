@@ -101,7 +101,6 @@ class LoginForm(forms.Form):
                     code='invalid_login'
                 )
             else:
-                rate_limit_reset("login", include_ip_from_request=self.request)
                 self.confirm_login_allowed(self.user_cache)
 
         return self.cleaned_data
