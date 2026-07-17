@@ -253,7 +253,7 @@ def quota_widgets(sender, subevent=None, lazy=False, **kwargs):
             'content': None if lazy else format_html(
                 NUM_WIDGET,
                 num='{}/{}'.format(intcomma(left), intcomma(q.size)) if q.size is not None else '\u221e',
-                text=_('{quota} left').format(quota=escape(q.name))
+                text=format_html(_('{quota} left'), quota=q.name)
             ),
             'lazy': 'quota-{}'.format(q.pk),
             'display_size': 'small',
@@ -307,7 +307,7 @@ def checkin_widget(sender, subevent=None, lazy=False, **kwargs):
             'content': None if lazy else format_html(
                 NUM_WIDGET,
                 num='{}/{}'.format(intcomma(cl.inside_count), intcomma(cl.position_count)),
-                text=_('Present – {list}').format(list=escape(cl.name))
+                text=format_html(_('Present – {list}'), list=cl.name)
             ),
             'lazy': 'checkin-{}'.format(cl.pk),
             'display_size': 'small',
