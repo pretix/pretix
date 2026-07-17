@@ -1058,7 +1058,7 @@ def test_orderposition_list_limited_read(
         ('/api/v1/organizers/{}/orderpositions/', "organizer")
     ],
 )
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_orderposition_list(
         endpoint_template,
         endpoint_type,
@@ -2036,7 +2036,7 @@ def test_blocked_secret_list(token_client, organizer, event):
     assert [res] == resp.data['results']
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_queries):
     # order detail
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?pdf_data=true'.format(

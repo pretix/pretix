@@ -252,7 +252,7 @@ TEST_HISTORY_RES = {
 }
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_list_list(token_client, organizer, event, clist, item, subevent, django_assert_num_queries):
     res = dict(TEST_LIST_RES)
     res["id"] = clist.pk
@@ -422,7 +422,7 @@ def test_list_update(token_client, organizer, event, clist):
     assert cl.name == "VIP"
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_list_all_items_positions(token_client, organizer, event, clist, clist_all, item, other_item, order, django_assert_num_queries):
     with scopes_disabled():
         p1 = dict(TEST_ORDERPOSITION1_RES)
@@ -680,7 +680,7 @@ def _redeem(token_client, org, clist, p, body=None):
     ), body or {}, format='json')
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_query_load(token_client, organizer, clist, event, order, django_assert_max_num_queries):
     with scopes_disabled():
         p = order.positions.first().pk
@@ -1346,7 +1346,7 @@ def test_redeem_addon_if_match_and_revoked_force(token_client, organizer, clist,
         assert ci.position == p
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_search(token_client, organizer, event, clist, clist_all, item, other_item, order, django_assert_max_num_queries):
     with scopes_disabled():
         p1 = dict(TEST_ORDERPOSITION1_RES)
@@ -1378,7 +1378,7 @@ def test_checkin_pdf_data_requires_permission(token_client, event, team, organiz
     assert not resp.data['results'][0].get('pdf_data')
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_expand(token_client, organizer, event, clist, clist_all, item, other_item, order, django_assert_max_num_queries):
     with scopes_disabled():
         op = order.positions.first()
