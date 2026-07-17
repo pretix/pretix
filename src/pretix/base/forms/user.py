@@ -196,7 +196,7 @@ class UserEmailChangeForm(forms.Form):
                 code='duplicate_identifier',
             )
 
-        if rate_limit("emailchange", self.user.pk, max_num=1, expire_time=300):
+        if rate_limit("emailchange", self.user.pk, max_num=2, expire_time=300):
             raise forms.ValidationError(
                 self.error_messages['rate_limit'],
                 code='rate_limit',
