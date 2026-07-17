@@ -791,6 +791,12 @@ def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: dateti
                 [op.seat for op in sorted_positions if op.seat],
                 shared_lock_objects=[event]
             )
+    elif any(cp.voucher and cp.voucher.budget for cp in sorted_positions):
+        # Voucher budgets are not guaranteed by the cart manager
+        lock_objects(
+            [op.voucher for op in sorted_positions if op.voucher and op.voucher.budget],
+            shared_lock_objects=[event]
+        )
 
     q_avail = Counter()
     v_avail = Counter()
