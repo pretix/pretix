@@ -473,8 +473,10 @@ class RelativeDateTimeField(forms.MultiValueField):
             limit = kwargs.pop('limit_choices')
             if any(["__" not in l for l in limit]):
                 _warn_skips = (str(os.path.dirname(__file__)),)
+
                 warnings.warn(
                     message="Please prefix limit_choices with the base the attributes refer to, for example event__date_from",
+                    category=DeprecationWarning,
                     skip_file_prefixes=_warn_skips
                 )
 
