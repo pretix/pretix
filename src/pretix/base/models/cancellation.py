@@ -1,8 +1,10 @@
-from abc import ABC
 from dataclasses import dataclass, field
 from decimal import Decimal
 from itertools import chain
-from typing import Callable, Dict, List, Literal, Optional, Protocol, Set, TYPE_CHECKING, TypeAlias
+from typing import (
+    TYPE_CHECKING, Any, Callable, Dict, List, Literal, Optional, Protocol, Set,
+    Tuple, TypeAlias,
+)
 
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -18,9 +20,9 @@ from pretix.base.signals import self_service_cancellation_checks
 """
 Supporting self-service cancellation requires us to do two main things:
 1. uphold the business logic of pretix and the installed plugins
-2. charge the customer the appropriate fees for their cancellation 
+2. charge the customer the appropriate fees for their cancellation
 
-Number 1 is a question of bringing enough checks into place and prevent a 
+Number 1 is a question of bringing enough checks into place and prevent a
 cancellation if one of them is violated.
 Checks need to subclass `CancellationCheck` and can be provided via the new
 `self_service_cancellation_checks` signal.
@@ -33,26 +35,26 @@ The cancellation fees are computed via `CancellationRules`.
 
 When a customer triggers a self service cancellation, we will:
 1. Positions
-    a. Evaluate all `CancellationChecks` that are concerned with individual positions 
+    a. Evaluate all `CancellationChecks` that are concerned with individual positions
     b. Evaluate all `CancellationRules` that are concerned with individual positions and compute the fees
     c. Choose for each position the cheapest `CancellationRules` position result available
-2. Process 
+2. Process
     a. Evaluate all `CancellationChecks` that are concerned with the process of cancellation
     b. Evaluate all `CancellationRules` that are concerned with the process of cancellation
     c. Choose the cheapest `CancellationRules` process result available
-3. Return all results for Checks and Rules 
+3. Return all results for Checks and Rules
 
-Step 1c. and 2c. are kept separate intentionally. 
-The alternative of finding the cheapest cancellation option overall (process and position) would 
+Step 1c. and 2c. are kept separate intentionally.
+The alternative of finding the cheapest cancellation option overall (process and position) would
 require us to check the full combinatorics of possible process and position fees, resulting
-in unfeasable runtime behaviour, and if we would optimize it in difficult to explain non-optimal
-situations.     
+in unfeasible runtime behaviour, and if we would optimize it in difficult to explain non-optimal
+situations.
 """
 
 
 class FeeType(models.TextChoices):
     """
-    Process fees can be added on top of all position fees or they
+    Process fees can be added on top of all position fees, or they
     can set a floor for the minimum cancellation fee that this will incur.
     """
     MINIMUM = "min_process_fee", _("Minimum total fee")
@@ -84,7 +86,7 @@ class RuleResult:
     Result of evaluating a CancellationRule.
     A rule can consist out of multiple different checks, each partial_result is recorded individually.
 
-    A RuleResult encodes both the feasibility of a cancellation via `cancellation_possible` as well as
+    A RuleResult encodes both the feasibility of a cancellation via `cancellation_possible` and
     the resulting consequences in form of fees which can be expressed as:
     - absolute position fees of a fixed amount
     - relative position fees of a percentage of the position price
@@ -139,13 +141,15 @@ class RuleResult:
             if reference_price < absolute_fee:
                 fee = absolute_fee - reference_price
             else:
-                fee = reference_price
+                fee = Decimal(0)
         elif fee_type == FeeType.ADDITIONAL:
             fee = absolute_fee
+        else:
+            raise ValueError("Unknown fee type")
 
         return RuleResult(id=id, partial_results=partial_results, fee_type=fee_type, fee=fee)
 
-    def __lt__(self, other):
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, RuleResult):
             return NotImplemented
 
@@ -168,20 +172,25 @@ class Checks:
     def related_selects(self) -> List[str]:
         return list(chain([check.related_selects for check in [*self.position, *self.process]]))
 
+
 PositionSet: TypeAlias = Set[OrderPosition]
 
+
 class PositionCheckFn(Protocol):
-    def __call__(self, order: Order, keep: PositionSet, position: OrderPosition) -> CheckResult: ...
+    def __call__(self, order: Order, keep: PositionSet, position: OrderPosition) -> CheckResult:
+        ...
+
 
 class ProcessCheckFn(Protocol):
-    def __call__(self, order: Order, keep: PositionSet) -> CheckResult: ...
+    def __call__(self, order: Order, keep: PositionSet) -> CheckResult:
+        ...
 
 
 @dataclass(frozen=True)
-class CancellationCheck(ABC):
+class CancellationCheck:
     id: str
     type: CheckTypes
-    check_fn: PositionCheckFn | ProcessCheckFn
+    check_fn: PositionCheckFn | ProcessCheckFn = field(compare=False)
     prefetches: List[Callable[[], Prefetch]] = field(default_factory=list)
     related_selects: List[str] = field(default_factory=list)
 
@@ -200,22 +209,24 @@ class PositionResult:
     position_check_results: Dict[int, List[CheckResult]]
     position_rule_results: Dict[int, List[RuleResult]]
 
+    @property
     def cancellation_possible(self) -> bool:
-        def ok(results: list) -> bool:
-            return results[0].cancellation_possible if results else True
+        def ok(results: List[CheckResult] | List[RuleResult]) -> bool:
+            return all([val.cancellation_possible for val in results]) if results else True
 
         return all(
             ok(results)
-            for d in (self.position_check_results, self.position_rule_results)
+            for d in
+            (self.position_check_results, {key: [min(pos_res)] for key, pos_res in self.position_rule_results.items()})
             for results in d.values()
         )
 
+    @property
     def fee_value(self) -> Decimal:
         fee_value = Decimal("0.00")
         for pos_id, results in self.position_rule_results.items():
             if len(results) > 0:
-                results.sort()
-                best_option = results[0]
+                best_option = min(results)
                 if best_option.cancellation_possible:
                     fee_value += best_option.fee
         return fee_value
@@ -226,8 +237,17 @@ class ProcessResult:
     process_check_results: List[CheckResult]
     process_rule_results: List[RuleResult]
 
+    @property
     def cancellation_possible(self) -> bool:
-        return all([res.cancellation_possible for res in [*self.process_check_results, *self.process_rule_results]])
+        best_option = min(self.process_rule_results)
+        return all([res.cancellation_possible for res in [*self.process_check_results, best_option]])
+
+    @property
+    def fee_value(self) -> Decimal:
+        best_option = min(self.process_rule_results)
+        if best_option.cancellation_possible:
+            return best_option.fee
+        return Decimal("0.00")
 
 
 @dataclass(frozen=True)
@@ -235,8 +255,9 @@ class CancellationResult:
     position_result: PositionResult
     process_result: ProcessResult
 
+    @property
     def cancellation_possible(self) -> bool:
-        return self.position_result.cancellation_possible() and self.process_result.cancellation_possible()
+        return self.position_result.cancellation_possible and self.process_result.cancellation_possible
 
     def remember_cancellation(self):
         # TODO: store the cancellation verdict in the session storage for X Minutes
@@ -245,6 +266,10 @@ class CancellationResult:
     def perform_cancellation(self, order: Order, keep: Set[int]):
         # TODO load the cancellation verdict from the session and perform the actions
         pass
+
+
+def _send_self_service_cancellation_checks(event: Event) -> List[Tuple[Any, Any]]:
+    return self_service_cancellation_checks.send(sender=event)
 
 
 class CancellationRule(models.Model):
@@ -269,13 +294,15 @@ class CancellationRule(models.Model):
     related_selects: List[str] = []
 
     @staticmethod
-    def _collect_checks(event: Event) -> Checks:
+    def _collect_checks(event: Event, send_fn: Callable[
+        [Event], List[Tuple[Any, Any]]
+    ] = _send_self_service_cancellation_checks) -> Checks:
         position_checks: List[CancellationCheck] = []
         process_checks: List[CancellationCheck] = []
 
         seen = set()
-        for recv, resp in self_service_cancellation_checks.send(sender=event):
-            if not isinstance(recv, CancellationCheck):
+        for recv, resp in send_fn(event):
+            if not isinstance(resp, CancellationCheck):
                 raise ValueError('self_service_cancellation_checks received response of wrong type')
             if resp.id in seen:
                 raise ValueError('self_service_cancellation_checks received multiple responses with the id')
@@ -295,15 +322,7 @@ class CancellationRule(models.Model):
         position_rules = PositionCancellationRule.objects.filter(event=event, type=CheckTypes.POSITION)
         process_rules = ProcessCancellationRule.objects.filter(event=event, type=CheckTypes.PROCESS)
 
-        # prefetch and join everything these rules want
-        prefetches = [*checks.prefetches,
-                      *PositionCancellationRule.prefetches,
-                      *ProcessCancellationRule.prefetches]
-        related_selects = list(set(*checks.related_selects,
-                                   *PositionCancellationRule.related_selects,
-                                   *ProcessCancellationRule.related_selects))
-        order = Order.objects.prefetch_related(*prefetches).select_related(*related_selects).get(event=event,
-                                                                                                 id=order.id)
+        order = CancellationRule._prefetch_order(event, order, checks)
 
         # keep track of all decisions so we can explain them in the logs
         position_check_results: Dict[int, List[CheckResult]] = {}
@@ -332,7 +351,7 @@ class CancellationRule(models.Model):
                                           position_rule_results=position_rule_results)
 
         # we need the current fee_value to select the cheapest process rule
-        temp_position_fees = position_results.fee_value()
+        temp_position_fees = position_results.fee_value
 
         # again keep track of all decisions so we can explain them in the logs
         process_check_results: List[CheckResult] = []
@@ -352,6 +371,20 @@ class CancellationRule(models.Model):
                                        process_rule_results=process_rule_results)
 
         return CancellationResult(position_result=position_results, process_result=process_result)
+
+    @staticmethod
+    def _prefetch_order(event: Event, order: Order, checks: Checks) -> Order:
+        prefetches = [pref() for pref in [*chain(*checks.prefetches),
+                                          *chain(*PositionCancellationRule.prefetches),
+                                          *chain(*ProcessCancellationRule.prefetches)]]
+
+        related_selects = {*chain(*checks.related_selects),
+                           *chain(*PositionCancellationRule.related_selects),
+                           *chain(*ProcessCancellationRule.related_selects)}
+
+        order = Order.objects.prefetch_related(*prefetches).select_related(*related_selects).get(event=event,
+                                                                                                 id=order.id)
+        return order
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -398,7 +431,8 @@ class PositionCancellationRule(CancellationRule):
         except_after = ModelRelativeDateTimeField(null=True, blank=True)
 
     def evaluate_position_rule(self, order: Order, keep: Set[OrderPosition], position: OrderPosition) -> Optional[
-        RuleResult]:
+        RuleResult
+    ]:
         if not self.all_products and position.item_id not in self.limit_products.values_list('pk', flat=True):
             return None
 

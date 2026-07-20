@@ -21,6 +21,7 @@
 #
 import contextlib
 import logging
+import os
 
 from django.conf import settings
 from django.core.exceptions import FieldDoesNotExist, ImproperlyConfigured
@@ -299,10 +300,9 @@ def ensure_no_queries():
     :return:
     """
     def blocker(*args, **kwargs):
-        if settings.DEBUG:
-            raise RuntimeError(f"Unexpected DB query: {args[0]}")
-        else:
-            logger.error("Unexpected DB query: %s", args[0])
+        if settings.DEBUG or "PYTEST_CURRENT_TEST" in os.environ:
+            raise RuntimeError(f"Unexpected DB query: {args[1]}")
+        logger.error("Unexpected DB query: %s", args[1])
 
     with connection.execute_wrapper(blocker):
         yield
