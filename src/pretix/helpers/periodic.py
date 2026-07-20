@@ -63,20 +63,20 @@ def minimum_interval(minutes_after_success, minutes_after_error=0, minutes_runni
             except Exception as e:
                 try:
                     cache.set(key_result, 'error', timeout=minutes_after_error * 60)
-                except:
+                except Exception:
                     logger.exception('Could not store result')
                 raise e
             else:
                 try:
                     cache.set(key_result, 'success', timeout=minutes_after_success * 60)
-                except:
+                except Exception:
                     logger.exception('Could not store result')
                 return retval
             finally:
                 try:
                     if cache.get(key_running) == uniqid:
                         cache.delete(key_running)
-                except:
+                except Exception:
                     logger.exception('Could not release lock')
 
         return wrapper
