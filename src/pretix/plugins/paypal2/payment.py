@@ -36,6 +36,7 @@ from django.template.loader import get_template
 from django.templatetags.static import static
 from django.urls import resolve, reverse
 from django.utils.crypto import get_random_string
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext as __, gettext_lazy as _
@@ -110,7 +111,8 @@ class PaypalSettingsHolder(BasePaymentProvider):
                      label=_('Client ID'),
                      max_length=80,
                      min_length=80,
-                     help_text=_('<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>').format(
+                     help_text=format_html(
+                         '<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>',
                          text=_('Click here for a tutorial on how to obtain the required keys'),
                          docs_url='https://docs.pretix.eu/en/latest/user/payments/paypal.html'
                      )
