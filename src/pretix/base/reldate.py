@@ -207,10 +207,6 @@ class RelativeDate:
             return new_date
 
     def to_string(self) -> str:
-        """
-
-        :return:
-        """
         if self.minutes is not None:
             return 'RELDATE/minutes/{}/{}/{}'.format(  #
                 self.minutes,
@@ -226,10 +222,6 @@ class RelativeDate:
 
     @classmethod
     def from_string(cls, input: str):
-        """
-
-        :param input:
-        """
         if not input.startswith('RELDATE/'):
             raise TypeError("Invalid input for RelativeDate.from_string()")
 
@@ -311,10 +303,6 @@ class RelativeDateWrapper:
             return self.data.datetime(base)
 
     def to_string(self) -> str:
-        """
-
-        :return:
-        """
         if isinstance(self.data, (datetime.datetime, datetime.date)):
             return self.data.isoformat()
         else:
@@ -322,11 +310,6 @@ class RelativeDateWrapper:
 
     @classmethod
     def from_string(cls, input: str):
-        """
-
-        :param input:
-        :return:
-        """
         if input.startswith('RELDATE/'):
             data = RelativeDate.from_string(input)
         else:
