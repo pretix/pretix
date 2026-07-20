@@ -42,7 +42,7 @@ class ReturnSettingsForm(SettingsForm):
         required=False,
         widget=forms.Textarea,
     )
-    line_regex = re.compile(r'^(https://.*/.*|http://localhost[:/].*)$')
+    line_regex = re.compile(r'^(https://.*/.*|http://localhost(:[0-9]+)?/.*)$')
 
     def clean_returnurl_prefix(self):
         val = self.cleaned_data['returnurl_prefix']
