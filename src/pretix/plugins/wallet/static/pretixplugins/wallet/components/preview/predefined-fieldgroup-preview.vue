@@ -7,11 +7,12 @@ const store = inject(StoreKey)!;
 
 const props = defineProps<{
 	config: PreviewFieldgroup;
-	style_def: PlaceholderFieldGroupDefinition;
+	style_def: PredefinedFieldGroupDefinition;
 }>();
 </script>
 
 <template lang="pug">
+    div {{ config.fieldgroup }}
     // TODO: support predefined group
     div.fieldgroup-container(:style="{'flex-grow': config.relSize, 'flex-direction': config.direction || 'row'}")
         div.fieldgroup-item(v-for="{ entry, label, content } of store.currentLayoutFieldContent[config.fieldgroup]")
@@ -60,6 +61,7 @@ const props = defineProps<{
     padding: 1em;
     overflow-wrap: anywhere;
 }
+
 .nowrap {
 	text-overflow: ellipsis;
 	overflow: hidden;

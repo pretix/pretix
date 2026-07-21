@@ -219,6 +219,7 @@ class AppleWalletStyle(PassStyle):
         pkpass.add_file("pass.json", json.dumps(pass_json))
         return pkpass.finish()
 
+
 class AppleWalletEventTicket(AppleWalletStyle):
     identifier = "event_1"
     name = _("Event Ticket Layout 1")
@@ -283,7 +284,30 @@ class AppleWalletEventTicket(AppleWalletStyle):
         ),
         TextFieldGroup(identifier="back", name=_("Back")),
     ]
-    preview_layout = '[[{"children":[{"fieldgroup":"logo","relSize":1},{"fieldgroup":"logo_text","relSize":3,"display":["bold","large","centered"]},{"fieldgroup":"header","relSize":2,"display":["large", "tight"]}]},{"fieldgroup":"primary","display":"large"},{"fieldgroup":"secondary"},{"fieldgroup":"auxiliary"},{"fieldgroup":"code"}],[{"fieldgroup":"back","direction":"column"}]]'
+    preview_layout = [
+        [
+            {
+                "children": [
+                    {"fieldgroup": "logo", "relSize": 1},
+                    {
+                        "fieldgroup": "logo_text",
+                        "relSize": 3,
+                        "display": ["bold", "large", "centered"],
+                    },
+                    {
+                        "fieldgroup": "header",
+                        "relSize": 2,
+                        "display": ["large", "tight"],
+                    },
+                ]
+            },
+            {"fieldgroup": "primary", "display": "large"},
+            {"fieldgroup": "secondary"},
+            {"fieldgroup": "auxiliary"},
+            {"fieldgroup": "code"},
+        ],
+        [{"fieldgroup": "back", "direction": "column"}],
+    ]
 
     def convert_fields(self, strings, fields, prefix):
         converted = []
@@ -314,7 +338,9 @@ class AppleWalletEventTicket(AppleWalletStyle):
                     strings, fields["auxiliary"], "auxiliary"
                 ),
                 "backFields": self.convert_fields(strings, fields["back"], "back"),
-                "headerFields": self.convert_fields(strings, fields["header"], "header"),
+                "headerFields": self.convert_fields(
+                    strings, fields["header"], "header"
+                ),
             },
         }
         if fields["logo_text"]:
@@ -322,11 +348,13 @@ class AppleWalletEventTicket(AppleWalletStyle):
                 strings, fields["logo_text"], "logo_text"
             )[0]["value"]
 
-        if fields['code']:
-            content["barcodes"] = [{
-                "format": "PKBarcodeFormatQR",
-                "message": str(fields["code"][0]["value"]),
-                "messageEncoding": "utf-8",
-                "altText": str(fields["code"][0]["value"])
-            }]
+        if fields["code"]:
+            content["barcodes"] = [
+                {
+                    "format": "PKBarcodeFormatQR",
+                    "message": str(fields["code"][0]["value"]),
+                    "messageEncoding": "utf-8",
+                    "altText": str(fields["code"][0]["value"]),
+                }
+            ]
         return content
